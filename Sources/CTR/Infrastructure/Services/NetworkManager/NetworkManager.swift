@@ -72,7 +72,7 @@ class NetworkManager: Logging {
 	///   - completion: completion handler with object, signed response, data, urlResponse or server error
 	private func decodeSignedJSONData<Object: Decodable>(
 		request: URLRequest,
-		strategy: SecurityStrategy,
+		strategy: SecurityStrategy = .data,
 		proceedToSuccessIfResponseIs400: Bool = false,
 		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
 
@@ -315,8 +315,6 @@ extension NetworkManager: NetworkManaging {
 
 		decodeSignedJSONData(
 			request: urlRequest,
-			strategy: SecurityStrategy.data,
-			proceedToSuccessIfResponseIs400: false,
 			completion: {(result: Result<(ArrayEnvelope<EventFlow.AccessToken>, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
 					completion(result.map { decodable, _, _, _ in (decodable.items) })
@@ -335,7 +333,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(request: urlRequest, strategy: SecurityStrategy.data, proceedToSuccessIfResponseIs400: false) { result in
+		decodeSignedJSONData(request: urlRequest) { result in
 			DispatchQueue.main.async {
 				completion(result.map { decodable, _, _, _ in (decodable) })
 			}
@@ -354,8 +352,6 @@ extension NetworkManager: NetworkManaging {
 
 		decodeSignedJSONData(
 			request: urlRequest,
-			strategy: SecurityStrategy.data,
-			proceedToSuccessIfResponseIs400: false,
 			completion: { (result: Result<(AnyCodable, SignedResponse, Data, URLResponse), ServerError>) in
 				// Not interested in the object (anycodable), we just want the data.
 				DispatchQueue.main.async {
@@ -374,16 +370,11 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(
-			request: urlRequest,
-			strategy: SecurityStrategy.data,
-			proceedToSuccessIfResponseIs400: false,
-			completion: { (result: Result<(RemoteConfiguration, SignedResponse, Data, URLResponse), ServerError>) in
-
-				DispatchQueue.main.async {
-					completion(result.map { decodable, _, data, urlResponse in (decodable, data, urlResponse) })
-				}
-			})
+		decodeSignedJSONData(request: urlRequest) { (result: Result<(RemoteConfiguration, SignedResponse, Data, URLResponse), ServerError>) in
+			DispatchQueue.main.async {
+				completion(result.map { decodable, _, data, urlResponse in (decodable, data, urlResponse) })
+			}
+		}
 	}
 
 	func fetchGreencards(
@@ -407,16 +398,11 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(
-			request: urlRequest,
-			strategy: SecurityStrategy.data,
-			proceedToSuccessIfResponseIs400: false,
-			completion: { (result: Result<(RemoteGreenCards.Response, SignedResponse, Data, URLResponse), ServerError>) in
-
+		decodeSignedJSONData(request: urlRequest) { (result: Result<(RemoteGreenCards.Response, SignedResponse, Data, URLResponse), ServerError>) in
 			DispatchQueue.main.async {
 				completion(result.map { decodable, _, _, _ in (decodable) })
 			}
-		})
+		}
 	}
 
 	/// Get the test providers
@@ -428,16 +414,11 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(
-			request: urlRequest,
-			strategy: SecurityStrategy.data,
-			proceedToSuccessIfResponseIs400: false,
-			completion: {(result: Result<(ArrayEnvelope<TestProvider>, SignedResponse, Data, URLResponse), ServerError>) in
-				DispatchQueue.main.async {
-					completion(result.map { decodable, _, _, _ in (decodable.items) })
-				}
+		decodeSignedJSONData(request: urlRequest) {(result: Result<(ArrayEnvelope<TestProvider>, SignedResponse, Data, URLResponse), ServerError>) in
+			DispatchQueue.main.async {
+				completion(result.map { decodable, _, _, _ in (decodable.items) })
 			}
-		)
+		}
 	}
 
 	/// Get the event providers
@@ -449,16 +430,11 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(
-			request: urlRequest,
-			strategy: SecurityStrategy.data,
-			proceedToSuccessIfResponseIs400: false,
-			completion: {(result: Result<(ArrayEnvelope<EventFlow.EventProvider>, SignedResponse, Data, URLResponse), ServerError>) in
-				DispatchQueue.main.async {
-					completion(result.map { decodable, _, _, _ in (decodable.items) })
-				}
+		decodeSignedJSONData(request: urlRequest) {(result: Result<(ArrayEnvelope<EventFlow.EventProvider>, SignedResponse, Data, URLResponse), ServerError>) in
+			DispatchQueue.main.async {
+				completion(result.map { decodable, _, _, _ in (decodable.items) })
 			}
-		)
+		}
 	}
 
 	/// Get a test result
@@ -555,7 +531,6 @@ extension NetworkManager: NetworkManaging {
 		decodeSignedJSONData(
 			request: urlRequest,
 			strategy: SecurityStrategy.provider(provider),
-			proceedToSuccessIfResponseIs400: false,
 			completion: { (result: Result<(EventFlow.EventInformationAvailable, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
 					completion(result.map { decodable, _, _, _ in (decodable) })
@@ -608,7 +583,6 @@ extension NetworkManager: NetworkManaging {
 		decodeSignedJSONData(
 			request: urlRequest,
 			strategy: SecurityStrategy.provider(provider),
-			proceedToSuccessIfResponseIs400: false,
 			completion: { (result: Result<(EventFlow.EventResultWrapper, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
 					completion(result.map { decodable, signedResponse, _, _ in (decodable, signedResponse) })
@@ -642,7 +616,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(request: urlRequest, strategy: SecurityStrategy.data, proceedToSuccessIfResponseIs400: false) { result in
+		decodeSignedJSONData(request: urlRequest) { result in
 			// Result<(Object, SignedResponse, Data, URLResponse), ServerError>
 			DispatchQueue.main.async {
 				completion(result.map { decodable, _, _, _ in (decodable) })
