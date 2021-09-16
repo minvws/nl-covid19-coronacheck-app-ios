@@ -14,9 +14,9 @@ class ProofManagingSpy: ProofManaging {
 
 	var invokedFetchIssuerPublicKeys = false
 	var invokedFetchIssuerPublicKeysCount = 0
-	var stubbedFetchIssuerPublicKeysOnCompletionResult: (Result<Data, NetworkError>, Void)?
+	var stubbedFetchIssuerPublicKeysOnCompletionResult: (Result<Data, ServerError>, Void)?
 
-	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, NetworkError>) -> Void)?) {
+	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?) {
 		invokedFetchIssuerPublicKeys = true
 		invokedFetchIssuerPublicKeysCount += 1
 		if let result = stubbedFetchIssuerPublicKeysOnCompletionResult {

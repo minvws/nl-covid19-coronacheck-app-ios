@@ -96,11 +96,11 @@ protocol NetworkManaging: AnyObject {
 	
 	/// Get the public keys
 	/// - Parameter completion: completion handler
-	func getPublicKeys(completion: @escaping (Result<Data, NetworkError>) -> Void)
+	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void)
 	
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void)
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void)
 	
 	/// Get the test providers
 	/// - Parameter completion: completion handler
