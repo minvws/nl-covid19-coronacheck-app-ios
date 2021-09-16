@@ -46,8 +46,8 @@ class BaseViewController: UIViewController {
 		)
 		backbutton.accessibilityLabel = L.generalBack()
 
-		navigationController?.navigationBar.backIndicatorImage = .backArrow
-		navigationController?.navigationBar.backIndicatorTransitionMaskImage = .backArrow
+		navigationController?.navigationBar.backIndicatorImage = .backArrow?.withAlignmentRectInsets(.left(-10))
+		navigationController?.navigationBar.backIndicatorTransitionMaskImage = .backArrow?.withAlignmentRectInsets(.left(-10))
 
 		backbutton.setTitleTextAttributes(
 			[
@@ -159,6 +159,7 @@ class BaseViewController: UIViewController {
 		button.accessibilityIdentifier = "BackButton"
 		button.accessibilityLabel = accessibilityLabel
 		button.accessibilityTraits = .button
+		button.imageInsets = .left(5)
 		navigationItem.hidesBackButton = true
 		navigationItem.leftBarButtonItem = button
 		navigationController?.navigationItem.leftBarButtonItem = button
