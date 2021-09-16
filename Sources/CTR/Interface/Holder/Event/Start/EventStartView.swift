@@ -51,6 +51,7 @@ class EventStartView: ScrolledStackWithButtonView {
 		stackView.distribution = .equalSpacing
 		showLineView = false
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
+		primaryButton.style = .roundedBlueImage
 	}
 
 	override func setupViewHierarchy() {
@@ -66,7 +67,7 @@ class EventStartView: ScrolledStackWithButtonView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		setupPrimaryButton(useFullWidth: true)
+		setupPrimaryButton()
 
 		bottomScrollViewConstraint?.isActive = false
 		bottomButtonConstraint?.isActive = false
@@ -120,6 +121,12 @@ class EventStartView: ScrolledStackWithButtonView {
 	var message: String? {
 		didSet {
 			contentTextView.html(message)
+		}
+	}
+	
+	var primaryButtonIcon: UIImage? {
+		didSet {
+			primaryButton.setImage(primaryButtonIcon, for: .normal)
 		}
 	}
 

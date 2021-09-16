@@ -19,10 +19,12 @@ class Button: UIButton {
 		case roundedClear
 		// Text only, blue text
         case textLabelBlue
+		// Rounded, blue background, white text, right image with label in center
+		case roundedBlueImage
 		
 		func backgroundColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
-				case .roundedBlue:
+				case .roundedBlue, .roundedBlueImage:
 					return isEnabled ? Theme.colors.primary : Theme.colors.tertiary
 				case .roundedWhite:
 					return isEnabled ? Theme.colors.secondary : Theme.colors.grey2
@@ -33,7 +35,7 @@ class Button: UIButton {
 		
 		func textColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
-				case .roundedBlue:
+				case .roundedBlue, .roundedBlueImage:
 					return isEnabled ? Theme.colors.viewControllerBackground : Theme.colors.gray
 				case .roundedWhite:
 					return Theme.colors.dark
@@ -47,7 +49,15 @@ class Button: UIButton {
 		var contentEdgeInsets: UIEdgeInsets {
 			switch self {
 				case .textLabelBlue: return .zero
+				case .roundedBlueImage: return .topBottom(15) + .left(56) + .right(44)
 				default: return .topBottom(13.5) + .leftRight(20)
+			}
+		}
+		
+		var imageEdgeInsets: UIEdgeInsets {
+			switch self {
+				case .roundedBlueImage: return .left(12) + .right(-12)
+				default: return .zero
 			}
 		}
 		
@@ -133,7 +143,8 @@ class Button: UIButton {
 		layer.cornerRadius = style.isRounded ? min(bounds.width, bounds.height) / 2 : 0
 		titleLabel?.preferredMaxLayoutWidth = titleLabel?.frame.size.width ?? 0
     }
-
+	
+	/// Calculates content size including insets for dynamic font size scaling
 	override var intrinsicContentSize: CGSize {
         let fittingSize = titleLabel?.sizeThatFits(
             CGSize(width: frame.width, height: .greatestFiniteMagnitude)
@@ -143,11 +154,16 @@ class Button: UIButton {
         let maxWidth = max(fittingSize.width, intrinsicSize.width)
         let maxHeight = max(fittingSize.height, intrinsicSize.height)
 
-        let horizontalPadding = contentEdgeInsets.left + contentEdgeInsets.right
-        let verticalPadding = contentEdgeInsets.top + contentEdgeInsets.bottom
+        let horizontalContentPadding = contentEdgeInsets.left + contentEdgeInsets.right
+        let verticalContentPadding = contentEdgeInsets.top + contentEdgeInsets.bottom
+		
+		let horizontalImagePadding = abs(imageEdgeInsets.left) + abs(imageEdgeInsets.right)
+		let verticalImagePadding = imageEdgeInsets.top + imageEdgeInsets.bottom
+		
+		let verticalPadding = max(verticalContentPadding, verticalImagePadding)
 
         return CGSize(
-            width: maxWidth + horizontalPadding,
+            width: maxWidth + horizontalContentPadding + horizontalImagePadding,
             height: maxHeight + verticalPadding
         )
 	}
@@ -159,6 +175,12 @@ class Button: UIButton {
 		setupColors()
 		contentEdgeInsets = style.contentEdgeInsets
 		layer.borderWidth = style.borderWidth
+		imageEdgeInsets = style.imageEdgeInsets
+		
+		if style.imageEdgeInsets.right > 0 {
+			// Position image to the right of the label
+			semanticContentAttribute = .forceRightToLeft
+		}
 		
 		setNeedsLayout()
 	}
