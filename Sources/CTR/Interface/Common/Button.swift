@@ -180,6 +180,8 @@ class Button: UIButton {
 		if style == .roundedBlueImage {
 			// Position image to the right of the label
 			semanticContentAttribute = .forceRightToLeft
+			// Increase size
+			imageView?.layer.transform = CATransform3DMakeScale(1.1, 1.1, 1.1)
 		}
 		
 		setNeedsLayout()
