@@ -313,6 +313,30 @@ class NetworkManager: Logging {
 			delegateQueue: nil
 		)
 	}
+
+	// MARK: - Helpers
+
+	private func bodyWithKeyValue(_ key: String, value: String?) -> Data? {
+
+		var body: Data?
+		if let unwrapped = value {
+			let dictionary: [String: AnyObject] = [key: unwrapped as AnyObject]
+
+			if JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
+			   let jsonBody = try? JSONSerialization.data(withJSONObject: dictionary) {
+				body = jsonBody
+			}
+		}
+		return body
+	}
+
+	private func headersWithAuthorizaionToken(_ token: String) -> [HTTPHeaderKey: String] {
+
+		return [
+			HTTPHeaderKey.authorization: "Bearer \(token)",
+			HTTPHeaderKey.tokenProtocolVersion: "3.0"
+		]
+	}
 }
 
 extension NetworkManager: NetworkManaging {
@@ -475,16 +499,7 @@ extension NetworkManager: NetworkManaging {
 			HTTPHeaderKey.tokenProtocolVersion: token.protocolVersion
 		]
 
-		var body: Data?
-		if let requiredCode = code {
-			let dictionary: [String: AnyObject] = ["verificationCode": requiredCode as AnyObject]
-			if JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
-			   let jsonBody = try? JSONSerialization.data(withJSONObject: dictionary) {
-				body = jsonBody
-			}
-		}
-
-		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers) else {
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: bodyWithKeyValue("verificationCode", value: code), headers: headers) else {
 			logError("NetworkManager - fetchTestResult: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -524,22 +539,8 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		let headers: [HTTPHeaderKey: String] = [
-			HTTPHeaderKey.authorization: "Bearer \(accessToken)",
-			HTTPHeaderKey.tokenProtocolVersion: "3.0"
-		]
-
-		var body: Data?
-		if let filter = filter {
-			let dictionary: [String: AnyObject] = ["filter": filter as AnyObject]
-
-			if JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
-			   let jsonBody = try? JSONSerialization.data(withJSONObject: dictionary) {
-				body = jsonBody
-			}
-		}
-
-		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers) else {
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: bodyWithKeyValue("filter", value: filter), headers: headersWithAuthorizaionToken(accessToken)) else {
+			logError("NetworkManager - fetchEventInformation: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -577,21 +578,8 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		let headers: [HTTPHeaderKey: String] = [
-			HTTPHeaderKey.authorization: "Bearer \(accessToken)",
-			HTTPHeaderKey.tokenProtocolVersion: "3.0"
-		]
-
-		var body: Data?
-		if let filter = filter {
-			let dictionary: [String: AnyObject] = ["filter": filter as AnyObject]
-			if JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
-			   let jsonBody = try? JSONSerialization.data(withJSONObject: dictionary) {
-				body = jsonBody
-			}
-		}
-
-		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers) else {
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: bodyWithKeyValue("filter", value: filter), headers: headersWithAuthorizaionToken(accessToken)) else {
+			logError("NetworkManager - fetchEvents: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
