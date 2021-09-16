@@ -427,30 +427,25 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void) {
 
-		guard let urlRequest = constructRequest(url: networkConfiguration.providersUrl) else {
-			logError("NetworkManager - fetchTestProviders: invalid request")
-			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
-			return
-		}
-
-		decodeSignedJSONData(request: urlRequest) {(result: Result<(ArrayEnvelope<TestProvider>, SignedResponse, Data, URLResponse), ServerError>) in
-			DispatchQueue.main.async {
-				completion(result.map { decodable, _, _, _ in (decodable.items) })
-			}
-		}
+		fetchProviders(completion: completion)
 	}
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
 	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
 
+		fetchProviders(completion: completion)
+	}
+
+	private func fetchProviders<T: Envelopable & Codable>(completion: @escaping (Result<[T], ServerError>) -> Void) {
+
 		guard let urlRequest = constructRequest(url: networkConfiguration.providersUrl) else {
-			logError("NetworkManager - fetchEventProviders: invalid request")
+			logError("NetworkManager - fetchProviders: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 
-		decodeSignedJSONData(request: urlRequest) {(result: Result<(ArrayEnvelope<EventFlow.EventProvider>, SignedResponse, Data, URLResponse), ServerError>) in
+		decodeSignedJSONData(request: urlRequest) {(result: Result<(ArrayEnvelope<T>, SignedResponse, Data, URLResponse), ServerError>) in
 			DispatchQueue.main.async {
 				completion(result.map { decodable, _, _, _ in (decodable.items) })
 			}
