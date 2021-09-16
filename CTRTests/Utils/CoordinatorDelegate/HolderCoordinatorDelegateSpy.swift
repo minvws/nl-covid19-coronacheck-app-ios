@@ -11,22 +11,6 @@ import XCTest
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
-	var invokedNavigateToAboutMakingAQR = false
-	var invokedNavigateToAboutMakingAQRCount = 0
-
-	func navigateToAboutMakingAQR() {
-		invokedNavigateToAboutMakingAQR = true
-		invokedNavigateToAboutMakingAQRCount += 1
-	}
-
-	var invokedNavigateToTokenScan = false
-	var invokedNavigateToTokenScanCount = 0
-
-	func navigateToTokenScan() {
-		invokedNavigateToTokenScan = true
-		invokedNavigateToTokenScanCount += 1
-	}
-
 	var invokedNavigateBackToStart = false
 	var invokedNavigateBackToStartCount = 0
 
@@ -37,14 +21,26 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedPresentInformationPage = false
 	var invokedPresentInformationPageCount = 0
-	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool)?
-	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool)]()
+	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)?
+	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)]()
 
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool) {
 		invokedPresentInformationPage = true
 		invokedPresentInformationPageCount += 1
-		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture)
-		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
+		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture, openURLsInApp)
+		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture, openURLsInApp))
+	}
+
+	var invokedPresentDCCQRDetails = false
+	var invokedPresentDCCQRDetailsCount = 0
+	var invokedPresentDCCQRDetailsParameters: (title: String, description: String, details: [DCCQRDetails], dateInformation: String)?
+	var invokedPresentDCCQRDetailsParametersList = [(title: String, description: String, details: [DCCQRDetails], dateInformation: String)]()
+
+	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String) {
+		invokedPresentDCCQRDetails = true
+		invokedPresentDCCQRDetailsCount += 1
+		invokedPresentDCCQRDetailsParameters = (title, description, details, dateInformation)
+		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
 	}
 
 	var invokedUserWishesToMakeQRFromNegativeTest = false
@@ -127,22 +123,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserDidScanRequestTokenParametersList.append((requestToken, ()))
 	}
 
-	var invokedUserWishesToChangeRegion = false
-	var invokedUserWishesToChangeRegionCount = 0
-	var invokedUserWishesToChangeRegionParameters: (currentRegion: QRCodeValidityRegion, Void)?
-	var invokedUserWishesToChangeRegionParametersList = [(currentRegion: QRCodeValidityRegion, Void)]()
-	var stubbedUserWishesToChangeRegionCompletionResult: (QRCodeValidityRegion, Void)?
-
-	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
-		invokedUserWishesToChangeRegion = true
-		invokedUserWishesToChangeRegionCount += 1
-		invokedUserWishesToChangeRegionParameters = (currentRegion, ())
-		invokedUserWishesToChangeRegionParametersList.append((currentRegion, ()))
-		if let result = stubbedUserWishesToChangeRegionCompletionResult {
-			completion(result.0)
-		}
-	}
-
 	var invokedUserWishesMoreInfoAboutUnavailableQR = false
 	var invokedUserWishesMoreInfoAboutUnavailableQRCount = 0
 	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)?
@@ -153,6 +133,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutUnavailableQRCount += 1
 		invokedUserWishesMoreInfoAboutUnavailableQRParameters = (originType, currentRegion, availableRegion)
 		invokedUserWishesMoreInfoAboutUnavailableQRParametersList.append((originType, currentRegion, availableRegion))
+	}
+
+	var invokedUserWishesMoreInfoAboutClockDeviation = false
+	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		invokedUserWishesMoreInfoAboutClockDeviation = true
+		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
 	}
 
 	var invokedOpenUrl = false
@@ -177,6 +165,30 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToViewQRCount += 1
 		invokedUserWishesToViewQRParameters = (greenCardObjectID, ())
 		invokedUserWishesToViewQRParametersList.append((greenCardObjectID, ()))
+	}
+
+	var invokedUserWishesToLaunchThirdPartyTicketApp = false
+	var invokedUserWishesToLaunchThirdPartyTicketAppCount = 0
+
+	func userWishesToLaunchThirdPartyTicketApp() {
+		invokedUserWishesToLaunchThirdPartyTicketApp = true
+		invokedUserWishesToLaunchThirdPartyTicketAppCount += 1
+	}
+
+	var invokedDisplayError = false
+	var invokedDisplayErrorCount = 0
+	var invokedDisplayErrorParameters: (content: Content, Void)?
+	var invokedDisplayErrorParametersList = [(content: Content, Void)]()
+	var shouldInvokeDisplayErrorBackAction = false
+
+	func displayError(content: Content, backAction: @escaping () -> Void) {
+		invokedDisplayError = true
+		invokedDisplayErrorCount += 1
+		invokedDisplayErrorParameters = (content, ())
+		invokedDisplayErrorParametersList.append((content, ()))
+		if shouldInvokeDisplayErrorBackAction {
+			backAction()
+		}
 	}
 
 	var invokedDismiss = false

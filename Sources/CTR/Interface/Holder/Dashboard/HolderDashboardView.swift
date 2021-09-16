@@ -7,11 +7,179 @@
 
 import UIKit
 
-class HolderDashboardView: ScrolledStackView {
+protocol HolderDashboardViewDelegate: AnyObject {
+	
+	func holderDashboardView(_ view: HolderDashboardView, didDisplay tab: DashboardTab)
+}
 
+final class HolderDashboardView: BaseView {
+	
+	weak var delegate: HolderDashboardViewDelegate?
+	
+	/// The display constants
+	private enum ViewTraits {
+		
+		enum Spacing {
+			static let stackView: CGFloat = 24
+		}
+	}
+	
+	private let tabBar: DashboardTabBar = {
+		let tabBar = DashboardTabBar()
+		tabBar.translatesAutoresizingMaskIntoConstraints = false
+		return tabBar
+	}()
+	
+	private let scrollView: UIScrollView = {
+		let scrollView = UIScrollView()
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		scrollView.isPagingEnabled = true
+		scrollView.showsHorizontalScrollIndicator = false
+		return scrollView
+	}()
+	
+	/// The scrolled stackview to display domestic cards
+	let domesticScrollView: ScrolledStackView = {
+		let scrollView = ScrolledStackView()
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		scrollView.stackView.spacing = ViewTraits.Spacing.stackView
+		scrollView.backgroundColor = Theme.colors.viewControllerBackground
+		return scrollView
+	}()
+	
+	/// The scrolled stackview to display international cards
+	let internationalScrollView: ScrolledStackView = {
+		let scrollView = ScrolledStackView()
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		scrollView.stackView.spacing = ViewTraits.Spacing.stackView
+		scrollView.backgroundColor = Theme.colors.viewControllerBackground
+		return scrollView
+	}()
+	
+	/// Footer view with primary button
+	let footerButtonView: DashboardFooterButtonView = {
+		let footerView = DashboardFooterButtonView()
+		footerView.translatesAutoresizingMaskIntoConstraints = false
+		return footerView
+	}()
+	
+	private var bottomScrollViewConstraint: NSLayoutConstraint?
+	
+	/// Setup all the views
 	override func setupViews() {
 		super.setupViews()
-		stackView.distribution = .fill
-		stackView.spacing = 40
+		
+		backgroundColor = Theme.colors.viewControllerBackground
+		
+		tabBar.delegate = self
+		scrollView.delegate = self
+		footerButtonView.isHidden = true
+	}
+	
+	/// Setup the view hierarchy
+	override func setupViewHierarchy() {
+		super.setupViewHierarchy()
+		
+		addSubview(tabBar)
+		addSubview(scrollView)
+		addSubview(footerButtonView)
+		scrollView.addSubview(domesticScrollView)
+		scrollView.addSubview(internationalScrollView)
+	}
+	
+	/// Setup all the constraints
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
+		
+		NSLayoutConstraint.activate([
+			tabBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			tabBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			tabBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			
+			scrollView.topAnchor.constraint(equalTo: tabBar.bottomAnchor),
+			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			{
+				let constraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+				bottomScrollViewConstraint = constraint
+				return constraint
+			}(),
+			
+			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			
+			domesticScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+			domesticScrollView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+			domesticScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			domesticScrollView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
+			{
+				let constraint = domesticScrollView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+				constraint.priority = .defaultLow
+				return constraint
+			}(),
+			
+			internationalScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+			internationalScrollView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			internationalScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			internationalScrollView.leftAnchor.constraint(equalTo: domesticScrollView.rightAnchor),
+			internationalScrollView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
+			{
+				let constraint = internationalScrollView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+				constraint.priority = .defaultLow
+				return constraint
+			}()
+		])
+	}
+	
+	/// Display primary button view
+	var shouldDisplayButtonView = false {
+		didSet {
+			footerButtonView.isHidden = !shouldDisplayButtonView
+			bottomScrollViewConstraint?.isActive = false
+			let anchor: NSLayoutYAxisAnchor = shouldDisplayButtonView ? footerButtonView.topAnchor : self.bottomAnchor
+			bottomScrollViewConstraint = scrollView.bottomAnchor.constraint(equalTo: anchor)
+			bottomScrollViewConstraint?.isActive = true
+		}
+	}
+
+	/// Updates selected tab position
+	func updateScrollPosition() {
+		let selectedTab = tabBar.selectedTab.rawValue
+		scrollView.contentOffset = CGPoint(x: scrollView.bounds.width * CGFloat(selectedTab), y: 0)
+	}
+	
+	/// Selects a tab view shown on start
+	/// - Parameter tab: The dashboard tab
+	func selectTab(tab: DashboardTab) {
+		tabBar.select(tab: tab, animated: false)
+		
+		updateScrollPosition()
+	}
+}
+
+extension HolderDashboardView: UIScrollViewDelegate {
+	
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		guard scrollView.isDragging else { return }
+		let scrollViewWidth = scrollView.bounds.width
+		let pageScroll = 1.5 * scrollViewWidth
+		let nextPage = scrollView.contentOffset.x + scrollViewWidth > pageScroll
+		let selectedTab: DashboardTab = nextPage ? .international : .domestic
+		let hasTabChanged = tabBar.selectedTab != selectedTab
+		tabBar.select(tab: selectedTab, animated: true)
+		
+		guard hasTabChanged else { return }
+		delegate?.holderDashboardView(self, didDisplay: selectedTab)
+	}
+}
+
+extension HolderDashboardView: DashboardTabBarDelegate {
+	
+	func dashboardTabBar(_ tabBar: DashboardTabBar, didSelect tab: DashboardTab) {
+		let scrollOffset = CGPoint(x: scrollView.bounds.width * CGFloat(tab.rawValue), y: 0)
+		scrollView.setContentOffset(scrollOffset, animated: true)
+		
+		delegate?.holderDashboardView(self, didDisplay: tab)
 	}
 }

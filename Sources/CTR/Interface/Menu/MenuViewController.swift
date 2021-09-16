@@ -35,7 +35,7 @@ class MenuViewController: BaseViewController {
 
 		super.viewDidLoad()
 		
-		configureTranslucentNavigationBar()
+		setupTranslucentNavigationBar()
 
 		viewModel.$topMenu.binding = { [weak self] items in
 
@@ -67,7 +67,7 @@ class MenuViewController: BaseViewController {
 			}
 		}
 
-		addMenuCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .closeMenu)
+		addMenuCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: L.generalMenuClose())
 	}
 
 	/// User tapped on the close button
@@ -91,8 +91,9 @@ class MenuViewController: BaseViewController {
 				target: self,
 				action: action
 			)
+            button.title = accessibilityLabel
+            button.accessibilityLabel = accessibilityLabel
 			button.accessibilityIdentifier = "CloseButton"
-			button.accessibilityLabel = accessibilityLabel
 			button.accessibilityTraits = .button
 			button.tintColor = Theme.colors.secondary
 			navigationItem.hidesBackButton = true

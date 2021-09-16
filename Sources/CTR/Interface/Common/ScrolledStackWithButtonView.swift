@@ -51,8 +51,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	/// the update button
 	let primaryButton: Button = {
 
-		let button = Button(title: "Button 1", style: .primary)
-		button.rounded = true
+		let button = Button(title: "Button 1", style: .roundedBlue)
 		button.titleLabel?.textAlignment = .center
 		return button
 	}()
@@ -86,8 +85,8 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		NSLayoutConstraint.activate([
 
 			// Line
-			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			lineView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			lineView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			lineView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
 			lineView.heightAnchor.constraint(equalToConstant: 1),
 
@@ -129,7 +128,15 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		} else {
 			NSLayoutConstraint.activate([
 
-				primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth)
+				primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
+				primaryButton.leadingAnchor.constraint(
+					greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
+					constant: ViewTraits.buttonMargin
+				),
+				primaryButton.trailingAnchor.constraint(
+					lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
+					constant: -ViewTraits.buttonMargin
+				)
 			])
 		}
 

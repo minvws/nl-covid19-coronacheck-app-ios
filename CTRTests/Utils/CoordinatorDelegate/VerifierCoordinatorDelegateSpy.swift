@@ -7,8 +7,21 @@
 
 import XCTest
 @testable import CTR
+import Clcore
 
 class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtocol, Dismissable {
+
+	var invokedDidFinish = false
+	var invokedDidFinishCount = 0
+	var invokedDidFinishParameters: (result: VerifierStartResult, Void)?
+	var invokedDidFinishParametersList = [(result: VerifierStartResult, Void)]()
+
+	func didFinish(_ result: VerifierStartResult) {
+		invokedDidFinish = true
+		invokedDidFinishCount += 1
+		invokedDidFinishParameters = (result, ())
+		invokedDidFinishParametersList.append((result, ()))
+	}
 
 	var invokedNavigateToVerifierWelcome = false
 	var invokedNavigateToVerifierWelcomeCount = 0
@@ -16,30 +29,6 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 	func navigateToVerifierWelcome() {
 		invokedNavigateToVerifierWelcome = true
 		invokedNavigateToVerifierWelcomeCount += 1
-	}
-
-	var invokedDidFinishVerifierStartResult = false
-	var invokedDidFinishVerifierStartResultCount = 0
-	var invokedDidFinishVerifierStartResultParameters: (result: VerifierStartResult, Void)?
-	var invokedDidFinishVerifierStartResultParametersList = [(result: VerifierStartResult, Void)]()
-
-	func didFinish(_ result: VerifierStartResult) {
-		invokedDidFinishVerifierStartResult = true
-		invokedDidFinishVerifierStartResultCount += 1
-		invokedDidFinishVerifierStartResultParameters = (result, ())
-		invokedDidFinishVerifierStartResultParametersList.append((result, ()))
-	}
-
-	var invokedDidFinishScanInstructionsResult = false
-	var invokedDidFinishScanInstructionsResultCount = 0
-	var invokedDidFinishScanInstructionsResultParameters: (result: ScanInstructionsResult, Void)?
-	var invokedDidFinishScanInstructionsResultParametersList = [(result: ScanInstructionsResult, Void)]()
-
-	func didFinish(_ result: ScanInstructionsResult) {
-		invokedDidFinishScanInstructionsResult = true
-		invokedDidFinishScanInstructionsResultCount += 1
-		invokedDidFinishScanInstructionsResultParameters = (result, ())
-		invokedDidFinishScanInstructionsResultParametersList.append((result, ()))
 	}
 
 	var invokedNavigateToScan = false
@@ -50,24 +39,32 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedNavigateToScanCount += 1
 	}
 
+	var invokedNavigateToScanInstruction = false
+	var invokedNavigateToScanInstructionCount = 0
+
+	func navigateToScanInstruction() {
+		invokedNavigateToScanInstruction = true
+		invokedNavigateToScanInstructionCount += 1
+	}
+
 	var invokedNavigateToScanResult = false
 	var invokedNavigateToScanResultCount = 0
-	var invokedNavigateToScanResultParameters: (scanResult: CryptoResult, Void)?
-	var invokedNavigateToScanResultParametersList = [(scanResult: CryptoResult, Void)]()
+	var invokedNavigateToScanResultParameters: (verificationResult: MobilecoreVerificationResult, Void)?
+	var invokedNavigateToScanResultParametersList = [(verificationResult: MobilecoreVerificationResult, Void)]()
 
-	func navigateToScanResult(_ scanResult: CryptoResult) {
+	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult) {
 		invokedNavigateToScanResult = true
 		invokedNavigateToScanResultCount += 1
-		invokedNavigateToScanResultParameters = (scanResult, ())
-		invokedNavigateToScanResultParametersList.append((scanResult, ()))
+		invokedNavigateToScanResultParameters = (verificationResult, ())
+		invokedNavigateToScanResultParametersList.append((verificationResult, ()))
 	}
 
 	var invokedDisplayContent = false
 	var invokedDisplayContentCount = 0
-	var invokedDisplayContentParameters: (title: String, content: [Content])?
-	var invokedDisplayContentParametersList = [(title: String, content: [Content])]()
+	var invokedDisplayContentParameters: (title: String, content: [DisplayContent])?
+	var invokedDisplayContentParametersList = [(title: String, content: [DisplayContent])]()
 
-	func displayContent(title: String, content: [Content]) {
+	func displayContent(title: String, content: [DisplayContent]) {
 		invokedDisplayContent = true
 		invokedDisplayContentCount += 1
 		invokedDisplayContentParameters = (title, content)

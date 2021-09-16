@@ -44,20 +44,21 @@ class EventStartViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$primaryButtonIcon.binding = { [weak self] in self?.sceneView.primaryButtonIcon = $0 }
 	}
 
 	private func setupInteraction() {
 
-		sceneView.primaryTitle = .holderEventStartAction
+		sceneView.primaryTitle = L.holderVaccinationStartAction()
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
 			self?.viewModel.primaryButtonTapped()
 		}
 
-		sceneView.secondaryButtonTitle = .holderEventStartNoDigiD
+		sceneView.secondaryButtonTitle = L.holderVaccinationStartNodigid()
 		sceneView.secondaryButtonTappedCommand = { [weak self] in
 
-			if let url = URL(string: .holderEventStartNoDigiDURL) {
+			if let url = URL(string: L.holderVaccinationStartNodigidUrl()) {
 				self?.viewModel.openUrl(url)
 			}
 		}
@@ -67,8 +68,8 @@ class EventStartViewController: BaseViewController {
 			self?.viewModel.openUrl(url)
 		}
 
-		addBackButton(action: #selector(backButtonTapped))
-		styleBackButton(buttonText: "")
+		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: L.generalBack())
+		styleBackButton()
 	}
 
 	@objc func backButtonTapped() {

@@ -17,10 +17,11 @@ class ShowQRViewControllerTests: XCTestCase {
 
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	var cryptoManagerSpy: CryptoManagerSpy!
-	var configSpy: ConfigurationGeneralSpy!
 	var dataStoreManager: DataStoreManaging!
+	var screenCaptureDetector: ScreenCaptureDetectorSpy!
+	var userSettingsSpy: UserSettingsSpy!
 	var viewModel: ShowQRViewModel!
-
+	var remoteConfigMangingSpy: RemoteConfigManagingSpy!
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
@@ -31,8 +32,11 @@ class ShowQRViewControllerTests: XCTestCase {
 		dataStoreManager = DataStoreManager(.inMemory)
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		configSpy = ConfigurationGeneralSpy()
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+		screenCaptureDetector = ScreenCaptureDetectorSpy()
+		userSettingsSpy = UserSettingsSpy()
+		remoteConfigMangingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
+		remoteConfigMangingSpy.stubbedGetConfigurationResult = .default
 
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createTestGreenCard(
@@ -45,8 +49,10 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			screenCaptureDetector: screenCaptureDetector,
+			userSettings: userSettingsSpy
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 		window = UIWindow()
@@ -75,7 +81,6 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.holderShowqrDomesticTitle()
-		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
 	}
 
 	func test_content_euGreenCard() throws {
@@ -91,8 +96,10 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			remoteConfigManager: remoteConfigMangingSpy,
+			userSettings: userSettingsSpy
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 
@@ -101,7 +108,6 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.holderShowqrEuTitle()
-		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
 	}
 
 	/// Test the validity of the credential without credential
@@ -118,8 +124,10 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			remoteConfigManager: remoteConfigMangingSpy,
+			userSettings: userSettingsSpy
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 		loadView()
@@ -139,7 +147,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// When
-		viewModel?.hideForCapture = true
+		screenCaptureDetector.invokedScreenCaptureDidChangeCallback?(true)
 
 		// Then
 		expect(self.sut.sceneView.largeQRimageView.isHidden) == true
@@ -156,29 +164,6 @@ class ShowQRViewControllerTests: XCTestCase {
 		sut?.sceneView.securityView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
 		expect(self.sut.sceneView.securityView.currentAnimation) == .domesticAnimation
-	}
-
-	/// Test showing the alert dialog for screen shots
-	func testAlertDialog() {
-
-		// Given
-		let alertVerifier = AlertVerifier()
-		loadView()
-
-		// When
-		viewModel.handleScreenShot()
-
-		// Then
-		alertVerifier.verify(
-			title: L.holderEnlargedScreenshotTitle(),
-			message: L.holderEnlargedScreenshotMessage(),
-			animated: true,
-			actions: [
-				.default(.ok)
-			],
-			presentingViewController: sut
-		)
 	}
 }

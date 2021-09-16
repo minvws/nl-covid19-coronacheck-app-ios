@@ -9,34 +9,92 @@ import UIKit
 
 /// A styled UIButton subclass
 class Button: UIButton {
-
+	
     enum ButtonType {
-        case primary
-        case secondary
-        case tertiary
+		// Rounded, blue background, white text
+        case roundedBlue
+		// Rounded, white background, dark text
+        case roundedWhite
+		// Rounded, clear background, dark border
+		case roundedClear
+		// Text only, blue text
+        case textLabelBlue
+		// Rounded, blue background, white text, right image with label in center
+		case roundedBlueImage
+		
+		func backgroundColor(isEnabled: Bool = true) -> UIColor {
+			switch self {
+				case .roundedBlue, .roundedBlueImage:
+					return isEnabled ? Theme.colors.primary : Theme.colors.tertiary
+				case .roundedWhite:
+					return isEnabled ? Theme.colors.secondary : Theme.colors.grey2
+				case .roundedClear, .textLabelBlue:
+					return .clear
+			}
+		}
+		
+		func textColor(isEnabled: Bool = true) -> UIColor {
+			switch self {
+				case .roundedBlue, .roundedBlueImage:
+					return isEnabled ? Theme.colors.viewControllerBackground : Theme.colors.gray
+				case .roundedWhite:
+					return Theme.colors.dark
+				case .roundedClear:
+					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+				case .textLabelBlue:
+					return isEnabled ? Theme.colors.iosBlue : Theme.colors.grey2
+			}
+		}
+		
+		var contentEdgeInsets: UIEdgeInsets {
+			switch self {
+				case .textLabelBlue: return .zero
+				case .roundedBlueImage: return .topBottom(15) + .left(56) + .right(44)
+				default: return .topBottom(13.5) + .leftRight(20)
+			}
+		}
+		
+		var imageEdgeInsets: UIEdgeInsets {
+			switch self {
+				case .roundedBlueImage: return .left(12) + .right(-12)
+				default: return .zero
+			}
+		}
+		
+		func borderColor(isEnabled: Bool = true) -> UIColor {
+			return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+		}
+		
+		var borderWidth: CGFloat {
+			switch self {
+				case .roundedClear: return 1
+				default: return 0
+			}
+		}
+		
+		var isRounded: Bool {
+			switch self {
+				case .textLabelBlue: return false
+				default: return true
+			}
+		}
     }
 
-    var style = ButtonType.primary {
+    var style = ButtonType.roundedBlue {
         didSet {
-            updateButtonType()
+			setupButtonType()
         }
     }
 
-    var rounded = false {
+	var title: String? = "" {
         didSet {
-            updateRoundedCorners()
-        }
-    }
-
-    var title = "" {
-        didSet {
-            self.setTitle(title, for: .normal)
+            setTitle(title, for: .normal)
         }
     }
 
     override var isEnabled: Bool {
         didSet {
-			updatePrimaryStyleColors()
+			setupColors()
         }
     }
 
@@ -44,30 +102,26 @@ class Button: UIButton {
 
     // MARK: - Init
 
-    required init(title: String = "", style: ButtonType = .primary) {
+    required init(title: String = "", style: ButtonType = .roundedBlue) {
 
         super.init(frame: .zero)
 
-        self.setTitle(title, for: .normal)
-        self.title = title
+		defer {
+			self.title = title
+			self.style = style
+		}
+		
         self.titleLabel?.font = Theme.fonts.bodySemiBold
 		// multiline
 		self.titleLabel?.lineBreakMode = .byWordWrapping
 		self.titleLabel?.numberOfLines = 0
 
-        self.layer.cornerRadius = 5
         self.clipsToBounds = true
 
-        self.addTarget(self, action: #selector(self.touchUpAnimation), for: .touchDragExit)
-        self.addTarget(self, action: #selector(self.touchUpAnimation), for: .touchCancel)
-        self.addTarget(self, action: #selector(self.touchUpAnimation), for: .touchUpInside)
+		self.addTarget(self, action: #selector(self.touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])
         self.addTarget(self, action: #selector(self.touchDownAnimation), for: .touchDown)
 
 		self.translatesAutoresizingMaskIntoConstraints = false
-
-        self.style = style
-
-        updateButtonType()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -86,62 +140,60 @@ class Button: UIButton {
     override func layoutSubviews() {
 
         super.layoutSubviews()
-        updateRoundedCorners()
+		layer.cornerRadius = style.isRounded ? min(bounds.width, bounds.height) / 2 : 0
 		titleLabel?.preferredMaxLayoutWidth = titleLabel?.frame.size.width ?? 0
     }
-
+	
+	/// Calculates content size including insets for dynamic font size scaling
 	override var intrinsicContentSize: CGSize {
-		let size = titleLabel?.intrinsicContentSize ?? CGSize.zero
-		let insets = contentEdgeInsets
+        let fittingSize = titleLabel?.sizeThatFits(
+            CGSize(width: frame.width, height: .greatestFiniteMagnitude)
+        ) ?? .zero
+        let intrinsicSize = titleLabel?.intrinsicContentSize ?? CGSize.zero
 
-		return CGSize(
-			width: size.width + insets.left + insets.right,
-			height: size.height + insets.top + insets.bottom
-		)
+        let maxWidth = max(fittingSize.width, intrinsicSize.width)
+        let maxHeight = max(fittingSize.height, intrinsicSize.height)
+
+        let horizontalContentPadding = contentEdgeInsets.left + contentEdgeInsets.right
+        let verticalContentPadding = contentEdgeInsets.top + contentEdgeInsets.bottom
+		
+		let horizontalImagePadding = abs(imageEdgeInsets.left) + abs(imageEdgeInsets.right)
+		let verticalImagePadding = imageEdgeInsets.top + imageEdgeInsets.bottom
+		
+		let verticalPadding = max(verticalContentPadding, verticalImagePadding)
+
+        return CGSize(
+            width: maxWidth + horizontalContentPadding + horizontalImagePadding,
+            height: maxHeight + verticalPadding
+        )
 	}
 
     // MARK: - Private
 
-	private func updateButtonType() {
+	private func setupButtonType() {
 		
-		switch style {
-			case .primary:
-				updatePrimaryStyleColors()
-				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
-			case .secondary:
-				backgroundColor = Theme.colors.secondary
-				setTitleColor(Theme.colors.dark, for: .normal)
-				self.titleLabel?.font = Theme.fonts.subheadBold
-				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
-			case .tertiary:
-				backgroundColor = .clear
-				setTitleColor(Theme.colors.iosBlue, for: .normal)
-				setTitleColor(Theme.colors.grey2, for: .disabled)
-				self.titleLabel?.font = Theme.fonts.bodyMedium
-				
+		setupColors()
+		contentEdgeInsets = style.contentEdgeInsets
+		layer.borderWidth = style.borderWidth
+		imageEdgeInsets = style.imageEdgeInsets
+		
+		if style == .roundedBlueImage {
+			// Position image to the right of the label
+			semanticContentAttribute = .forceRightToLeft
+			// Increase size
+			imageView?.layer.transform = CATransform3DMakeScale(1.1, 1.1, 1.1)
 		}
-		tintColor = Theme.colors.viewControllerBackground
+		
+		setNeedsLayout()
 	}
 	
-	private func updatePrimaryStyleColors() {
+	private func setupColors() {
 		
-		guard style == .primary else { return }
-		
-		if isEnabled {
-			backgroundColor = Theme.colors.primary
-			setTitleColor(Theme.colors.viewControllerBackground, for: .normal)
-		} else {
-			backgroundColor = Theme.colors.tertiary
-			setTitleColor(Theme.colors.gray, for: .normal)
-		}
+		backgroundColor = style.backgroundColor(isEnabled: isEnabled)
+		setTitleColor(style.textColor(isEnabled: true), for: .normal)
+		setTitleColor(style.textColor(isEnabled: false), for: .disabled)
+		layer.borderColor = style.borderColor(isEnabled: isEnabled).cgColor
 	}
-
-    private func updateRoundedCorners() {
-
-        if rounded {
-            layer.cornerRadius = min(bounds.width, bounds.height) / 2
-        }
-    }
 
     @objc private func touchDownAnimation() {
 
@@ -158,6 +210,4 @@ class Button: UIButton {
             self.transform = CGAffineTransform.identity
         })
     }
-
-    private var isFlashingTitle: Bool = false
 }

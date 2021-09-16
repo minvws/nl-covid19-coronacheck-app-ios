@@ -6,19 +6,20 @@
 */
 
 import UIKit
-import SafariServices
 
 enum EventMode: String {
 
 	case recovery
+	case paperflow
 	case test
 	case vaccination
 
 	var localized: String {
 		switch self {
-			case .recovery: return .recovery
-			case .test: return .testresult
-			case .vaccination: return .vaccination
+			case .recovery: return L.generalRecoverystatement()
+			case .paperflow: return L.generalPaperflow()
+			case .test: return L.generalTestresult()
+			case .vaccination: return L.generalVaccination()
 		}
 	}
 }
@@ -32,16 +33,21 @@ enum EventScreenResult: Equatable {
 	case stop
 
 	/// Skip back to the beginning of the flow
-	case errorRequiringRestart(error: Error?, eventMode: EventMode)
+	case errorRequiringRestart(eventMode: EventMode)
+
+	case error(content: Content, backAction: () -> Void)
 
 	/// Continue with the next step in the flow
 	case `continue`(value: String?, eventMode: EventMode)
 
 	/// Show the vaccination events
-	case showEvents(events: [RemoteEvent], eventMode: EventMode)
+	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
 
 	/// Show some more information
 	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
+	
+	/// Show event details
+	case showEventDetails(title: String, details: [EventDetails])
 
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
@@ -49,13 +55,9 @@ enum EventScreenResult: Equatable {
 				return true
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
-			case (let showEvents(lhsEvents, lhsMode), let showEvents(rhsEvents, rhsMode)):
+			case (let showEvents(lhsEvents, lhsMode, lhsComplete), let showEvents(rhsEvents, rhsMode, rhsComplete)):
 
-				if lhsEvents.count != rhsEvents.count {
-					return false
-				}
-
-				if lhsMode != rhsMode {
+				if lhsEvents.count != rhsEvents.count || lhsMode != rhsMode || lhsComplete != rhsComplete {
 					return false
 				}
 
@@ -67,6 +69,14 @@ enum EventScreenResult: Equatable {
 					}
 				}
 				return true
+			case (let showEventDetails(lhsTitle, lhsDetails), let showEventDetails(rhsTitle, rhsDetails)):
+				return (lhsTitle, lhsDetails) == (rhsTitle, rhsDetails)
+
+			case (let errorRequiringRestart(lhsMode), let errorRequiringRestart(rhsMode)):
+				return lhsMode == rhsMode
+
+			case (let error(lhsContent, _), let error(rhsContent, _)):
+				return lhsContent == rhsContent
 
 			default:
 				return false
@@ -93,7 +103,7 @@ protocol EventFlowDelegate: AnyObject {
 	func eventFlowDidCancel()
 }
 
-class EventCoordinator: Coordinator, Logging {
+class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 
@@ -103,7 +113,7 @@ class EventCoordinator: Coordinator, Logging {
 
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
-	/// Initiailzer
+	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
 	///   - delegate: the vaccination flow delegate
@@ -130,9 +140,14 @@ class EventCoordinator: Coordinator, Logging {
 		startWith(.recovery)
 	}
 
-	func startWithListTestEvents(_ testEvents: [RemoteEvent]) {
+	func startWithListTestEvents(_ events: [RemoteEvent]) {
 
-		navigateToListEvents(testEvents, eventMode: .test)
+		navigateToListEvents(events, eventMode: .test, eventsMightBeMissing: false)
+	}
+
+	func startWithScannedEvent(_ event: RemoteEvent) {
+
+		navigateToListEvents([event], eventMode: .paperflow, eventsMightBeMissing: false)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -184,14 +199,15 @@ class EventCoordinator: Coordinator, Logging {
 
 	private func navigateToListEvents(
 		_ remoteEvents: [RemoteEvent],
-		eventMode: EventMode) {
+		eventMode: EventMode,
+		eventsMightBeMissing: Bool) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				eventMode: eventMode,
 				remoteEvents: remoteEvents,
-				greenCardLoader: Services.greenCardLoader
+				eventsMightBeMissing: eventsMightBeMissing
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -211,6 +227,23 @@ class EventCoordinator: Coordinator, Logging {
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
+		presentAsBottomSheet(viewController)
+	}
+	
+	private func navigateToEventDetails(_ title: String, details: [EventDetails]) {
+		
+		let viewController = EventDetailsViewController(
+			viewModel: EventDetailsViewModel(
+				coordinator: self,
+				title: title,
+				details: details,
+				hideBodyForScreenCapture: true
+			)
+		)
+		presentAsBottomSheet(viewController)
+	}
+
+	private func presentAsBottomSheet(_ viewController: UIViewController) {
 
 		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
 		viewController.modalPresentationStyle = .custom
@@ -253,6 +286,17 @@ class EventCoordinator: Coordinator, Logging {
 			)
 		}
 	}
+
+	private func displayError(content: Content, backAction: @escaping () -> Void) {
+
+		let viewController = ErrorStateViewController(
+			viewModel: ErrorStateViewModel(
+				content: content,
+				backAction: backAction
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
+	}
 }
 
 extension EventCoordinator: EventCoordinatorDelegate {
@@ -280,8 +324,11 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					start()
 				}
 
-			case .errorRequiringRestart(let error, let eventMode):
-				handleErrorRequiringRestart(error: error, eventMode: eventMode)
+			case .errorRequiringRestart(let eventMode):
+				handleErrorRequiringRestart(eventMode: eventMode)
+
+			case let .error(content: content, backAction: backAction):
+				displayError(content: content, backAction: backAction)
 
 			case .back(let eventMode):
 				switch eventMode {
@@ -289,7 +336,11 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .vaccination, .recovery:
 						navigateBackToEventStart()
+					case .paperflow:
+					break
 				}
+			case .stop:
+				delegate?.eventFlowDidComplete()
 
 			default:
 				break
@@ -308,12 +359,16 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .recovery, .vaccination:
 						navigateBackToEventStart()
+					case .paperflow:
+						break
 				}
-			case let .showEvents(remoteEvents, eventMode):
-				navigateToListEvents(remoteEvents, eventMode: eventMode)
 
-			case .errorRequiringRestart(let error, let eventMode):
-				handleErrorRequiringRestart(error: error, eventMode: eventMode)
+			case let .error(content: content, backAction: backAction):
+				displayError(content: content, backAction: backAction)
+
+			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
+				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
+
 			default:
 				break
 		}
@@ -330,15 +385,21 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .recovery, .vaccination:
 						navigateBackToEventStart()
+					case .paperflow:
+						delegate?.eventFlowDidCancel()
 				}
+			case let .error(content: content, backAction: backAction):
+				displayError(content: content, backAction: backAction)
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
+			case let .showEventDetails(title, details):
+				navigateToEventDetails(title, details: details)
 			default:
 				break
 		}
 	}
 
-	private func handleErrorRequiringRestart(error: Error?, eventMode: EventMode) {
+	private func handleErrorRequiringRestart(eventMode: EventMode) {
 		let popback = navigationController.viewControllers.first {
 			// arrange `case`s in the order of matching priority
 			switch $0 {
@@ -352,22 +413,24 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		}
 
 		let presentError = {
-			let alertController: UIAlertController
+			let alertController = UIAlertController(
+				title: L.holderErrorstateLoginTitle(),
+				message: {
+					switch eventMode {
+						case .recovery:
+							return L.holderErrorstateLoginMessageRecovery()
+						case .paperflow:
+							return "" // HKVI is not a part of this flow
+						case .test:
+							return L.holderErrorstateLoginMessageTest()
+						case .vaccination:
+							return L.holderErrorstateLoginMessageVaccination()
+					}
+				}(),
+				preferredStyle: .alert
+			)
 
-			switch error {
-				case let error? where (error as NSError).domain.contains("org.openid.appauth"):
-					alertController = UIAlertController(
-						title: .holderGGDLoginFailureVaccineGeneralTitle,
-						message: .holderGGDLoginFailureGeneralMessage(localizedEventMode: eventMode.localized),
-						preferredStyle: .alert)
-				default:
-					alertController = UIAlertController(
-						title: .errorTitle,
-						message: String(format: .technicalErrorCustom, error?.localizedDescription ?? ""),
-						preferredStyle: .alert)
-			}
-
-			alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+			alertController.addAction(.init(title: L.generalClose(), style: .default, handler: nil))
 			self.navigationController.present(alertController, animated: true, completion: nil)
 		}
 
@@ -375,35 +438,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			navigationController.popToViewController(popback, animated: true, completion: presentError)
 		} else {
 			navigationController.popToRootViewController(animated: true, completion: presentError)
-		}
-	}
-}
-
-extension EventCoordinator: OpenUrlProtocol {
-
-	/// Open a url
-	/// - Parameters:
-	///   - url: The url to open
-	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
-	func openUrl(_ url: URL, inApp: Bool) {
-
-		var shouldOpenInApp = inApp
-		if url.scheme == "tel" {
-			// Do not open phone numbers in app, doesn't work & will crash.
-			shouldOpenInApp = false
-		}
-
-		if shouldOpenInApp {
-			let safariController = SFSafariViewController(url: url)
-			if let presentedViewController = navigationController.presentedViewController {
-				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
-					self.navigationController.viewControllers.last?.present(safariController, animated: true)
-				})
-			} else {
-				navigationController.viewControllers.last?.present(safariController, animated: true)
-			}
-		} else {
-			UIApplication.shared.open(url)
 		}
 	}
 }

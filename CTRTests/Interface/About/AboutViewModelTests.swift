@@ -39,12 +39,14 @@ class AboutViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == .holderAboutTitle
-		expect(self.sut.message) == .holderAboutText
-		expect(self.sut.listHeader) == .holderAboutReadMore
-		expect(self.sut.menu).to(haveCount(2))
-		expect(self.sut.menu.first?.identifier) == .privacyStatement
-		expect(self.sut.menu.last?.identifier) == .accessibility
+		expect(self.sut.title) == L.holderAboutTitle()
+		expect(self.sut.message) == L.holderAboutText()
+		expect(self.sut.listHeader) == L.holderAboutReadmore()
+		expect(self.sut.menu).to(haveCount(4))
+		expect(self.sut.menu[0].identifier) == .privacyStatement
+		expect(self.sut.menu[1].identifier) == AboutMenuIdentifier.accessibility
+		expect(self.sut.menu[2].identifier) == .colophon
+		expect(self.sut.menu[3].identifier) == .clearData
 		expect(self.sut.version.contains("testInitHolder")) == true
 	}
 
@@ -60,12 +62,13 @@ class AboutViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == .verifierAboutTitle
-		expect(self.sut.message) == .verifierAboutText
-		expect(self.sut.listHeader) == .verifierAboutReadMore
-		expect(self.sut.menu).to(haveCount(2))
+		expect(self.sut.title) == L.verifierAboutTitle()
+		expect(self.sut.message) == L.verifierAboutText()
+		expect(self.sut.listHeader) == L.verifierAboutReadmore()
+		expect(self.sut.menu).to(haveCount(3))
 		expect(self.sut.menu.first?.identifier) == .terms
-		expect(self.sut.menu.last?.identifier) == .accessibility
+		expect(self.sut.menu[1].identifier) == AboutMenuIdentifier.accessibility
+		expect(self.sut.menu.last?.identifier) == .colophon
 		expect(self.sut.version.contains("testInitVerifier")) == true
 	}
 
@@ -78,7 +81,7 @@ class AboutViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.holderUrlPrivacy
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holderUrlPrivacy()
 	}
 
 	func test_menuOptionSelected_terms() {
@@ -90,7 +93,7 @@ class AboutViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.verifierUrlPrivacy
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifierUrlPrivacy()
 	}
 
 	func test_menuOptionSelected_accessibility_forHolder() {
@@ -106,7 +109,23 @@ class AboutViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.holderUrlAccessibility
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holderUrlAccessibility()
+	}
+
+	func test_menuOptionSelected_colophon_forHolder() {
+
+		// Given
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
+			flavor: AppFlavor.holder
+		)
+		// When
+		sut.menuOptionSelected(.colophon)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holderUrlColophon()
 	}
 
 	func test_menuOptionSelected_accessibility_forVerifier() {
@@ -123,6 +142,54 @@ class AboutViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.verifierUrlAccessibility
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifierUrlAccessibility()
+	}
+
+	func test_menuOptionSelected_colophon_forVerifier() {
+
+		// Given
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
+			flavor: AppFlavor.verifier
+		)
+		// When
+		sut.menuOptionSelected(.colophon)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holderUrlColophon()
+	}
+
+	func test_menuOptionSelected_clearData_forHolder() {
+
+		// Given
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
+			flavor: AppFlavor.holder
+		)
+		// When
+		sut.menuOptionSelected(.clearData)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == false
+		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert?.title) == L.holderCleardataAlertTitle()
+		expect(self.sut.alert?.subTitle) == L.holderCleardataAlertSubtitle()
+	}
+
+	func test_clearData() {
+
+		// Given
+		let walletSpy = WalletManagerSpy()
+		sut.walletManager = walletSpy
+
+		// When
+		sut.clearData()
+
+		// Then
+		expect(walletSpy.invokedRemoveExistingGreenCards) == true
+		expect(walletSpy.invokedRemoveExistingEventGroups) == true
 	}
 }

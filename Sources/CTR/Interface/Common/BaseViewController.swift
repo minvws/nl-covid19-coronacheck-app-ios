@@ -36,14 +36,15 @@ class BaseViewController: UIViewController {
 		navigationController?.interactivePopGestureRecognizer?.delegate = self
 	}
 
-	func styleBackButton(buttonText: String = .previous) {
+	func styleBackButton() {
 
 		let backbutton = UIBarButtonItem(
-			title: buttonText,
+			title: nil,
 			style: .plain,
 			target: nil,
 			action: nil
 		)
+		backbutton.accessibilityLabel = L.generalBack()
 
 		navigationController?.navigationBar.backIndicatorImage = .backArrow
 		navigationController?.navigationBar.backIndicatorTransitionMaskImage = .backArrow
@@ -95,7 +96,7 @@ class BaseViewController: UIViewController {
 	///   - accessibilityLabel: the label for Voice Over
 	func addCloseButton(
 		action: Selector?,
-		accessibilityLabel: String = .close,
+		accessibilityLabel: String = L.generalClose(),
 		backgroundColor: UIColor = Theme.colors.viewControllerBackground,
 		tintColor: UIColor = Theme.colors.dark) {
 
@@ -105,8 +106,9 @@ class BaseViewController: UIViewController {
 			target: self,
 			action: action
 		)
+        button.title = accessibilityLabel
+        button.accessibilityLabel = accessibilityLabel
 		button.accessibilityIdentifier = "CloseButton"
-		button.accessibilityLabel = accessibilityLabel
 		button.accessibilityTraits = .button
 		button.tintColor = tintColor
 		navigationItem.hidesBackButton = true
@@ -131,16 +133,40 @@ class BaseViewController: UIViewController {
 			target: self,
 			action: backAction
 		)
+        button.title = accessibilityLabel
+        button.accessibilityLabel = accessibilityLabel
 		button.accessibilityIdentifier = "BackButton"
-		button.accessibilityLabel = .back
 		button.accessibilityTraits = .button
 		navigationItem.hidesBackButton = true
 		navigationItem.leftBarButtonItem = button
 		navigationController?.navigationItem.leftBarButtonItem = button
 	}
+	
+	/// Add a close button to the navigation bar.
+	/// - Parameters:
+	///   - action: the action when the users taps the close button
+	///   - accessibilityLabel: the label for Voice Over
+	func addCustomBackButton(
+		action: Selector?,
+		accessibilityLabel: String) {
+
+		let button = UIBarButtonItem(
+			image: .backArrow,
+			style: .plain,
+			target: self,
+			action: action
+		)
+		button.accessibilityIdentifier = "BackButton"
+		button.accessibilityLabel = accessibilityLabel
+		button.accessibilityTraits = .button
+		navigationItem.hidesBackButton = true
+		navigationItem.leftBarButtonItem = button
+		navigationController?.navigationItem.leftBarButtonItem = button
+		navigationController?.navigationBar.backgroundColor = Theme.colors.viewControllerBackground
+	}
 
 	/// Show alert
-	func showError(_ title: String = .errorTitle, message: String) {
+	func showError(_ title: String = L.generalErrorTitle(), message: String) {
 
 		let alertController = UIAlertController(
 			title: title,
@@ -149,7 +175,7 @@ class BaseViewController: UIViewController {
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: .ok,
+				title: L.generalOk(),
 				style: .default,
 				handler: nil
 			)

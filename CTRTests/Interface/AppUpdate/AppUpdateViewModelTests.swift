@@ -19,26 +19,9 @@ class AppUpdateViewModelTests: XCTestCase {
 	override func setUp() {
 
 		appCoordinatorSpy = AppCoordinatorSpy()
-		let appVersionInfo = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: "test message",
-			storeUrl: URL(string: "https://apple.com"),
-			deactivated: nil,
-			informationURL: nil,
-			configTTL: 3600,
-			euLaunchDate: "2021-06-03T14:00:00+00:00",
-			maxValidityHours: 48,
-			recoveryWaitingPeriodDays: 11,
-			requireUpdateBefore: nil,
-			temporarilyDisabled: false,
-			domesticValidityHours: 40,
-			vaccinationEventValidity: 14600,
-			recoveryEventValidity: 7300,
-			testEventValidity: 40,
-			isGGDEnabled: true,
-			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5
-		)
+		var appVersionInfo = RemoteConfiguration.default
+		appVersionInfo.appStoreURL = URL(string: "https://apple.com")
+
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 		super.setUp()
 	}
@@ -54,24 +37,21 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.message, "test message")
+		XCTAssertEqual(sut.message, "Je hebt de laatste versie van de app nodig om verder te gaan.")
 	}
 
 	/// Test the initializer without a message in the app information.
 	func testInitializerWithoutMessage() {
 
 		// Given
-		let appVersionInfo = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: nil
-		)
+		let appVersionInfo = RemoteConfiguration.default
 
 		// When
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.message, .updateAppContent)
+		XCTAssertEqual(sut.message, L.updateAppContent())
 	}
 
 	/// Test the update button tapped method with an url
@@ -90,26 +70,7 @@ class AppUpdateViewModelTests: XCTestCase {
 	func testUpdateButtonTappedWithoutUrl() {
 
 		// Given
-		let appVersionInfo = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: "test",
-			storeUrl: nil,
-			deactivated: nil,
-			informationURL: nil,
-			configTTL: 3600,
-			euLaunchDate: "2021-06-03T14:00:00+00:00",
-			maxValidityHours: 48,
-			recoveryWaitingPeriodDays: 11,
-			requireUpdateBefore: nil,
-			temporarilyDisabled: false,
-			domesticValidityHours: 40,
-			vaccinationEventValidity: 14600,
-			recoveryEventValidity: 7300,
-			testEventValidity: 40,
-			isGGDEnabled: true,
-			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5
-		)
+		let appVersionInfo = RemoteConfiguration.default
 
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 
@@ -125,66 +86,28 @@ class AppUpdateViewModelTests: XCTestCase {
 	func testInitializerEndOfLifeNoInformationUrl() {
 
 		// Given
-		let appVersionInfo = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: nil,
-			storeUrl: nil,
-			deactivated: true,
-			informationURL: nil,
-			configTTL: 3600,
-			euLaunchDate: "2021-06-03T14:00:00+00:00",
-			maxValidityHours: 48,
-			recoveryWaitingPeriodDays: 11,
-			requireUpdateBefore: nil,
-			temporarilyDisabled: false,
-			domesticValidityHours: 40,
-			vaccinationEventValidity: 14600,
-			recoveryEventValidity: 7300,
-			testEventValidity: 40,
-			isGGDEnabled: true,
-			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5
-		)
+		let appVersionInfo = RemoteConfiguration.default
 
 		// When
 		sut = EndOfLifeViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.message, .endOfLifeDescription)
+		XCTAssertEqual(sut.message, L.endOfLifeDescription())
 	}
 
 	/// Test the initializer for end of life
 	func testInitializerEndOfLifeWithInformationUrl() {
 
 		// Given
-		let appVersionInfo = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: nil,
-			storeUrl: nil,
-			deactivated: true,
-			informationURL: URL(string: "https://apple.com"),
-			configTTL: 3600,
-			euLaunchDate: "2021-06-03T14:00:00+00:00",
-			maxValidityHours: 48,
-			recoveryWaitingPeriodDays: 11,
-			requireUpdateBefore: nil,
-			temporarilyDisabled: false,
-			domesticValidityHours: 40,
-			vaccinationEventValidity: 14600,
-			recoveryEventValidity: 7300,
-			testEventValidity: 40,
-			isGGDEnabled: true,
-			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5
-		)
+		let appVersionInfo = RemoteConfiguration.default
 
 		// When
 		sut = EndOfLifeViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.errorMessage, .endOfLifeErrorMessage)
+		XCTAssertEqual(sut.errorMessage, L.endOfLifeErrorMessage())
 	}
 
 	func test_noInternet() {
@@ -195,9 +118,9 @@ class AppUpdateViewModelTests: XCTestCase {
 		sut = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
 
 		// Then
-		expect(self.sut.title) == .internetRequiredTitle
-		expect(self.sut.message) == .internetRequiredText
-		expect(self.sut.actionTitle) == .internetRequiredButton
+		expect(self.sut.title) == L.internetRequiredTitle()
+		expect(self.sut.message) == L.internetRequiredText()
+		expect(self.sut.actionTitle) == L.internetRequiredButton()
 		expect(self.sut.image) == .noInternet
 	}
 

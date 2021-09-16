@@ -40,8 +40,8 @@ class SnapshotViewModelTests: XCTestCase {
 
 		// Then
 		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.title, .holderLaunchTitle, "Title should match")
-		XCTAssertEqual(strongSut.appIcon, .holderAppIcon, "Icon should match")
+		XCTAssertEqual(strongSut.title, L.holderLaunchTitle(), "Title should match")
+		XCTAssertEqual(strongSut.appIcon, I.holderAppIcon(), "Icon should match")
 		XCTAssertTrue(strongSut.version.contains("1.0.0"))
 		XCTAssertTrue(strongSut.version.contains("test"))
 	}
@@ -59,7 +59,7 @@ class SnapshotViewModelTests: XCTestCase {
 
 		// Then
 		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.title, .verifierLaunchTitle, "Title should match")
-		XCTAssertEqual(strongSut.appIcon, .verifierAppIcon, "Icon should match")
+		XCTAssertEqual(strongSut.title, L.verifierLaunchTitle(), "Title should match")
+		XCTAssertEqual(strongSut.appIcon, I.verifierAppIcon(), "Icon should match")
 	}
 }

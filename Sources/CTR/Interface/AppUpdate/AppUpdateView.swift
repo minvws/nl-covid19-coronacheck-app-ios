@@ -13,11 +13,11 @@ class AppUpdateView: ScrolledStackWithButtonView {
 	private struct ViewTraits {
 
 		// Dimensions
-		static let imageHeightPercentage: CGFloat = 0.50
-		static let topSpacerHeight: CGFloat = 60
+		static let topSpacerHeightMultiplier: CGFloat = 0.07
 
 		// Margins
-		static let spacing: CGFloat = 24
+		static let labelSpacing: CGFloat = 24
+		static let imageToLabelSpacing: CGFloat = 43
 	}
 
 	/// The image view
@@ -36,7 +36,7 @@ class AppUpdateView: ScrolledStackWithButtonView {
 		view.axis = .vertical
 		view.alignment = .center
 		view.distribution = .fill
-		view.spacing = ViewTraits.spacing
+		view.spacing = ViewTraits.labelSpacing
 		return view
 	}()
 
@@ -56,7 +56,6 @@ class AppUpdateView: ScrolledStackWithButtonView {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = .clear
-		view.isHidden = true
 		return view
 	}()
 
@@ -88,6 +87,8 @@ class AppUpdateView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
 		stackView.addArrangedSubview(spacer)
+		
+		stackView.setCustomSpacing(ViewTraits.imageToLabelSpacing, after: imageView)
 	}
 
 	/// Setup the constraints
@@ -97,16 +98,10 @@ class AppUpdateView: ScrolledStackWithButtonView {
 
 		NSLayoutConstraint.activate([
 
-			// Image
-			imageView.heightAnchor.constraint(
-				equalTo: heightAnchor,
-				multiplier: ViewTraits.imageHeightPercentage
-			),
-
 			// Spacer
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor),
 
-			topSpacer.heightAnchor.constraint(equalToConstant: ViewTraits.topSpacerHeight)
+			topSpacer.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: ViewTraits.topSpacerHeightMultiplier)
 		])
 
 		setupPrimaryButton(useFullWidth: true)
@@ -139,13 +134,11 @@ class AppUpdateView: ScrolledStackWithButtonView {
 	func hideImage() {
 
 		imageView.isHidden = true
-		topSpacer.isHidden = false
 	}
 
 	/// Show the image
 	func showImage() {
 
 		imageView.isHidden = false
-		topSpacer.isHidden = true
 	}
 }

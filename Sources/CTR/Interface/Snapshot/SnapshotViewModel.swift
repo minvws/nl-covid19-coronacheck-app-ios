@@ -39,15 +39,12 @@ class SnapshotViewModel: Logging {
 
 		self.versionSupplier = versionSupplier
 
-		title = flavor == .holder ? .holderLaunchTitle : .verifierLaunchTitle
-		appIcon = flavor == .holder ? .holderAppIcon : .verifierAppIcon
+		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
+		appIcon = flavor == .holder ? I.holderAppIcon() : I.verifierAppIcon()
 
-		let versionString: String = flavor == .holder ? .holderLaunchVersion : .verifierLaunchVersion
-		version = String(
-			format: versionString,
-			versionSupplier.getCurrentVersion(),
-			versionSupplier.getCurrentBuild()
-		)
+		version = flavor == .holder
+			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
+			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
 
 		willEnterForegroundObserver = NotificationCenter.default.addObserver(
 			forName: UIApplication.willEnterForegroundNotification,

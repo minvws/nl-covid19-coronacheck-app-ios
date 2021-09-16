@@ -9,6 +9,8 @@ import XCTest
 @testable import CTR
 import SnapshotTesting
 import Nimble
+import Rswift
+import Clcore
 
 class VerifierResultViewControllerTests: XCTestCase {
 
@@ -17,6 +19,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: VerifierResultViewModel!
+	
+	var window = UIWindow()
 
 	// MARK: Test lifecycle
 	override func setUp() {
@@ -26,17 +30,15 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		viewModel = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoResults: CryptoResult(
-				attributes: nil,
-				errorMessage: nil
-			),
-			maxValidity: 48
+			verificationResult: MobilecoreVerificationResult()
 		)
 		sut = VerifierResultViewController(viewModel: viewModel)
 	}
 
 	func loadView() {
-		_ = sut.view
+		
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: - Tests
@@ -44,112 +46,69 @@ class VerifierResultViewControllerTests: XCTestCase {
 	func testDemo() throws {
 
 		// Given
-		viewModel.cryptoResults = CryptoResult(
-			attributes: CryptoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				credentialVersion: nil,
-				domesticDcc: "0",
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				specimen: "1"
-			),
-			errorMessage: nil
-		)
+		let details = MobilecoreVerificationDetails()
+		details.isSpecimen = "1"
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		viewModel.verificationResult = result
 		loadView()
 
 		// When
 		viewModel.checkAttributes()
 
 		// Then
-		expect(self.sut.sceneView.title) == .verifierResultDemoTitle
-		expect(self.sut.sceneView.message).to(beNil(), description: "Message should be nil")
-		expect(self.sut.sceneView.imageView.image) == UIImage.access
+		expect(self.sut.sceneView.title) == L.verifierResultDemoTitle()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 
 		// Snapshot
-		sut.assertImage()
+		assertSnapshot(matching: sut, as: .image(precision: 0.9))
 	}
 
 	func testDeniedInvalidQR() throws {
 
 		// Given
-		viewModel.cryptoResults = CryptoResult(
-			attributes: nil,
-			errorMessage: "Invalid QR"
-		)
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_FAILED_ERROR)
+		viewModel.verificationResult = result
 		loadView()
 
 		// When
 		viewModel.checkAttributes()
 
 		// Then
-		expect(self.sut.sceneView.title) == .verifierResultDeniedTitle
-		expect(self.sut.sceneView.message) == .verifierResultDeniedMessage
-		expect(self.sut.sceneView.imageView.image) == UIImage.denied
+		expect(self.sut.sceneView.title) == L.verifierResultDeniedTitle()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultDeniedReadmore()
 
 		// Snapshot
-		sut.assertImage()
-	}
-	
-	func testDeniedDomesticDcc() throws {
-		
-		// Given
-		viewModel.cryptoResults = CryptoResult(
-			attributes: CryptoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				credentialVersion: nil,
-				domesticDcc: "1",
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				specimen: nil
-			),
-			errorMessage: "Invalid QR"
-		)
-		loadView()
-
-		// When
-		viewModel.checkAttributes()
-
-		// Then
-		expect(self.sut.sceneView.title) == .verifierResultDeniedRegionTitle
-		expect(self.sut.sceneView.message) == .verifierResultDeniedRegionMessage
-		expect(self.sut.sceneView.imageView.image) == UIImage.denied
-
-		// Snapshot
-		sut.assertImage()
+		assertSnapshot(matching: sut, as: .image(precision: 0.9))
 	}
 
 	func testVerified() throws {
 
 		// Given
-		viewModel.cryptoResults = CryptoResult(
-			attributes: CryptoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				credentialVersion: nil,
-				domesticDcc: "0",
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				specimen: "0"
-			),
-			errorMessage: nil
-		)
+		let details = MobilecoreVerificationDetails()
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		viewModel.verificationResult = result
 		loadView()
 
 		// When
 		viewModel.checkAttributes()
 
 		// Then
-		expect(self.sut.sceneView.title) == .verifierResultAccessTitle
-		expect(self.sut.sceneView.message).to(beNil(), description: "Message should be nil")
-		expect(self.sut.sceneView.imageView.image) == UIImage.access
+		expect(self.sut.sceneView.title) == L.verifierResultAccessTitle()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 
 		// Snapshot
-		sut.assertImage()
+		assertSnapshot(matching: sut, as: .image(precision: 0.9))
 	}
 
-	func testDismiss() {
+	func test_dismiss_shouldNavigateToVerifierWelcome() {
 
 		// Given
 
@@ -160,24 +119,25 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome) == true
  	}
 
-    func testPrimaryButtonTapped() {
+    func test_scanNextTappedCommand_shouldNavigateToScan() {
 
         // Given
         loadView()
 
         // When
-        sut.sceneView.primaryButtonTapped()
+		sut.sceneView.scanNextTappedCommand?()
 
         // Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToScan) == true
     }
 
-	func testLinkTapped() {
+	func test_readMoreTappedCommand_shouldDisplayContent() {
 
 		// Given
+		loadView()
 
 		// When
-		sut.linkTapped()
+		sut.sceneView.readMoreTappedCommand?()
 
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDisplayContent) == true

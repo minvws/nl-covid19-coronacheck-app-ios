@@ -36,7 +36,7 @@ class ChooseTestLocationView: ScrolledStackView {
 
 	private let noTestButton: Button = {
 
-		let button = Button(title: "Button 1", style: .tertiary)
+		let button = Button(title: "Button 1", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentHorizontalAlignment = .leading
 		return button

@@ -36,9 +36,8 @@ struct OnboardingPage {
 protocol OnboardingFactoryProtocol {
 
 	/// Generate an array of onboarding steps
-	/// - Parameter maxValidity: the maximum validity of a test in hours
 	/// - Returns: an array of onboarding steps
-	func create(maxValidity: Int) -> [OnboardingPage]
+	func create() -> [OnboardingPage]
 
 	/// Get the Consent Title
 	func getConsentTitle() -> String
@@ -54,38 +53,43 @@ protocol OnboardingFactoryProtocol {
 
 	/// Get the consent Items
 	func getConsentItems() -> [String]
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool
+
+	/// Get the action Button Title
+	func getActionButtonTitle() -> String
 }
 
 struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 
 	/// Generate an array of onboarding steps
-	/// - Parameter maxValidity: the maximum validity of a test in hours
 	/// - Returns: an array of onboarding steps
-	func create(maxValidity: Int) -> [OnboardingPage] {
+	func create() -> [OnboardingPage] {
 
 		let pages = [
 			OnboardingPage(
-				title: .holderOnboardingTitleSafely,
-				message: .holderOnboardingMessageSafely,
-				image: .onboardingSafely,
+				title: L.holderOnboardingTitleSafely(),
+				message: L.holderOnboardingMessageSafely(),
+				image: I.onboarding.safely(),
 				step: .safelyOnTheRoad
 			),
 			OnboardingPage(
-				title: .holderOnboardingTitleYourQR,
-				message: .holderOnboardingMessageYourQR,
-				image: .onboardingYourQR,
+				title: L.holderOnboardingTitleYourqr(),
+				message: L.holderOnboardingMessageYourqr(),
+				image: I.onboarding.yourQR(),
 				step: .yourQR
 			),
 			OnboardingPage(
-				title: .holderOnboardingTitleValidity,
-				message: String(format: .holderOnboardingMessageValidity, "\(maxValidity)"),
-				image: .onboardingValidity,
+				title: L.holderOnboardingTitleValidity(),
+				message: L.holderOnboardingMessageValidity(),
+				image: I.onboarding.validity(),
 				step: .validity
 			),
 			OnboardingPage(
 				title: L.holderOnboardingTitlePrivacy(),
 				message: L.holderOnboardingMessagePrivacy(),
-				image: .onboardingInternational,
+				image: I.onboarding.international(),
 				step: .who
 			)
 		]
@@ -96,66 +100,74 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 	/// Get the Consent Title
 	func getConsentTitle() -> String {
 
-		return .holderConsentTitle
+		return L.holderConsentTitle()
 	}
 
 	/// Get the Consent message
 	func getConsentMessage() -> String {
 
-		return .holderConsentMessage
+		return L.holderConsentMessage()
 	}
 	/// Get the Consent underlined message
 	func getConsentLink() -> String {
 
-		return .holderConsentMessageUnderlined
+		return L.holderConsentMessageUnderlined()
 	}
 
 	/// Get the Consent Button Title
 	func getConsentButtonTitle() -> String {
 
-		return .holderConsentButtonTitle
+		return L.holderConsentButton()
 	}
 
 	/// Get the consent Items
 	func getConsentItems() -> [String] {
 
 		return [
-			.holderConsentItemOne,
-			.holderConsentItemTwo
+			L.holderConsentItem1(),
+			L.holderConsentItem2()
 		]
+	}
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool {
+		return false
+	}
+
+	func getActionButtonTitle() -> String {
+		return L.holderConsentAction()
 	}
 }
 
 struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 
 	/// Generate an array of onboarding steps
-	/// - Parameter maxValidity: the maximum validity of a test in hours
 	/// - Returns: an array of onboarding steps
-	func create(maxValidity: Int) -> [OnboardingPage] {
+	func create() -> [OnboardingPage] {
 
 		let pages = [
 			OnboardingPage(
-				title: .verifierOnboardingTitleSafely,
-				message: .verifierOnboardingMessageSafely,
-				image: .onboardingSafely,
+				title: L.verifierOnboardingTitleSafely(),
+				message: L.verifierOnboardingMessageSafely(),
+				image: I.onboarding.safely(),
 				step: .safelyOnTheRoad
 			),
 			OnboardingPage(
-				title: .verifierOnboardingTitleScanQR,
-				message: String(format: .verifierOnboardingMessageScanQR, "\(maxValidity)"),
-				image: .onboardingScan,
+				title: L.verifierOnboardingTitleScanqr(),
+				message: L.verifierOnboardingMessageScanqr(),
+				image: I.onboarding.scan(),
 				step: .yourQR
 			),
 			OnboardingPage(
-				title: .verifierOnboardingTitleAccess,
-				message: .verifierOnboardingMessageAccess,
-				image: .onboardingIdentity,
+				title: L.verifierOnboardingTitleAccess(),
+				message: L.verifierOnboardingMessageAccess(),
+				image: I.onboarding.identity(),
 				step: .access
 			),
 			OnboardingPage(
-				title: .verifierOnboardingTitleWho,
-				message: .verifierOnboardingMessageWho,
-				image: .onboardingWho,
+				title: L.verifierOnboardingTitleWho(),
+				message: L.verifierOnboardingMessageWho(),
+				image: I.onboarding.who(),
 				step: .privacy
 			)
 		]
@@ -166,33 +178,42 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 	/// Get the Consent Title
 	func getConsentTitle() -> String {
 
-		return .verifierConsentTitle
+		return L.verifierConsentTitle()
 	}
 
 	/// Get the Consent message
 	func getConsentMessage() -> String {
 
-		return .verifierConsentMessage
+		return L.verifierConsentMessage()
 	}
 	/// Get the Consent underlined message
 	func getConsentLink() -> String {
 
-		return .verifierConsentMessageUnderlined
+		return L.verifierConsentMessageUnderlined()
 	}
 
 	/// Get the Consent Button Title
 	func getConsentButtonTitle() -> String {
 
-		return .verifierConsentButtonTitle
+		return L.verifierConsentButton()
 	}
 
 	/// Get the consent Items
 	func getConsentItems() -> [String] {
 
 		return [
-			.verifierConsentItemOne,
-			.verifierConsentItemTwo,
-			.verifierConsentItemThree
+			L.verifierConsentItem1(),
+			L.verifierConsentItem2(),
+			L.verifierConsentItem3()
 		]
+	}
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool {
+		return true
+	}
+
+	func getActionButtonTitle() -> String {
+		return L.generalNext()
 	}
 }

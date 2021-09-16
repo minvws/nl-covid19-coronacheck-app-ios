@@ -20,7 +20,9 @@ class LaunchViewControllerTests: XCTestCase {
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
 	private var proofManagerSpy: ProofManagingSpy!
 	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
+	private var deviceAuthenticationSpy: DeviceAuthenticationSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var walletSpy: WalletManagerSpy!
 
 	var window = UIWindow()
 
@@ -31,24 +33,32 @@ class LaunchViewControllerTests: XCTestCase {
 
 		appCoordinatorSpy = AppCoordinatorSpy()
 		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
-		remoteConfigSpy = RemoteConfigManagingSpy()
+		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
+		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
 		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
+		deviceAuthenticationSpy = DeviceAuthenticationSpy()
 		userSettingsSpy = UserSettingsSpy()
+		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
+
+		Services.use(remoteConfigSpy)
+		Services.use(proofManagerSpy)
+		Services.use(deviceAuthenticationSpy)
+		Services.use(jailBreakProtocolSpy)
+		Services.use(walletSpy)
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			remoteConfigManager: remoteConfigSpy,
-			proofManager: proofManagerSpy,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy
 		)
 
 		sut = LaunchViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
+
+	let remoteConfig = RemoteConfiguration.default
 
 	override func tearDown() {
 
@@ -72,8 +82,8 @@ class LaunchViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == .holderLaunchTitle
-		expect(self.sut.sceneView.message) == .holderLaunchText
+		expect(self.sut.sceneView.title) == L.holderLaunchTitle()
+		expect(self.sut.sceneView.message) == L.holderLaunchText()
 		expect(self.sut.sceneView.version).toNot(beNil(), description: "Version should not be nil")
 		expect(self.sut.sceneView.version).toNot(beNil(), description: "AppIcon should not be nil")
 
@@ -84,15 +94,14 @@ class LaunchViewControllerTests: XCTestCase {
 
 		// Given
 		userSettingsSpy.stubbedJailbreakWarningShown = false
+		userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
+		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			remoteConfigManager: remoteConfigSpy,
-			proofManager: proofManagerSpy,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy
 		)
 		sut = LaunchViewController(viewModel: viewModel)
@@ -104,11 +113,46 @@ class LaunchViewControllerTests: XCTestCase {
 
 		// Then
 		alertVerifier.verify(
-			title: .jailbrokenTitle,
-			message: .jailbrokenMessage,
+			title: L.jailbrokenTitle(),
+			message: L.jailbrokenMessage(),
 			animated: true,
 			actions: [
-				.default(.ok)
+				.default(L.generalOk())
+			],
+			presentingViewController: sut
+		)
+
+		sut.assertImage()
+	}
+
+	func test_showDeviceAuthenticationAlert() {
+
+		// Given
+		userSettingsSpy.stubbedJailbreakWarningShown = false
+		userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
+		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = false
+
+		let viewModel = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
+		)
+		sut = LaunchViewController(viewModel: viewModel)
+
+		let alertVerifier = AlertVerifier()
+
+		// When
+		loadView()
+
+		// Then
+		alertVerifier.verify(
+			title: L.holderDeviceAuthenticationWarningTitle(),
+			message: L.holderDeviceAuthenticationWarningMessage(),
+			animated: true,
+			actions: [
+				.default(L.generalOk())
 			],
 			presentingViewController: sut
 		)

@@ -27,10 +27,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		appCoordinatorSpy = AppCoordinatorSpy()
 		let viewModel = AppUpdateViewModel(
 			coordinator: appCoordinatorSpy,
-			versionInformation: RemoteConfiguration(
-				minVersion: "1.0",
-				minVersionMessage: "AppUpdateViewControllerTests"
-			)
+			versionInformation: RemoteConfiguration.default
 		)
 
 		sut = AppUpdateViewController(viewModel: viewModel)
@@ -62,11 +59,11 @@ class AppUpdateViewControllerTests: XCTestCase {
 
 		// Then
 		alertVerifier.verify(
-			title: .errorTitle,
-			message: .updateAppErrorMessage,
+			title: L.generalErrorTitle(),
+			message: L.updateAppErrorMessage(),
 			animated: true,
 			actions: [
-				.default(.ok)
+				.default(L.generalOk())
 			],
 			presentingViewController: sut
 		)
@@ -77,10 +74,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		// Given
 		let viewModel = AppUpdateViewModel(
 			coordinator: appCoordinatorSpy,
-			versionInformation: RemoteConfiguration(
-				minVersion: "1.0",
-				minVersionMessage: nil
-			)
+			versionInformation: RemoteConfiguration.default
 		)
 		sut = AppUpdateViewController(viewModel: viewModel)
 
@@ -88,9 +82,9 @@ class AppUpdateViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == .updateAppTitle
-		expect(self.sut.sceneView.message) == .updateAppContent
-		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .updateAppButton
+		expect(self.sut.sceneView.title) == L.updateAppTitle()
+		expect(self.sut.sceneView.message) == L.updateAppContent()
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.updateAppButton()
 		expect(self.sut.sceneView.image) == .updateRequired
 
 		sut.assertImage()
@@ -101,11 +95,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		// Given
 		let viewModel = EndOfLifeViewModel(
 			coordinator: appCoordinatorSpy,
-			versionInformation: RemoteConfiguration(
-				minVersion: "1.0",
-				minVersionMessage: nil,
-				deactivated: true
-			)
+			versionInformation: RemoteConfiguration.default
 		)
 		sut = AppUpdateViewController(viewModel: viewModel)
 
@@ -113,9 +103,9 @@ class AppUpdateViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == .endOfLifeTitle
-		expect(self.sut.sceneView.message) == .endOfLifeDescription
-		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .endOfLifeButton
+		expect(self.sut.sceneView.title) == L.endOfLifeTitle()
+		expect(self.sut.sceneView.message) == L.endOfLifeDescription()
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.endOfLifeButton()
 		expect(self.sut.sceneView.image) == .endOfLife
 
 		sut.assertImage()
@@ -131,9 +121,9 @@ class AppUpdateViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == .internetRequiredTitle
-		expect(self.sut.sceneView.message) == .internetRequiredText
-		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .internetRequiredButton
+		expect(self.sut.sceneView.title) == L.internetRequiredTitle()
+		expect(self.sut.sceneView.message) == L.internetRequiredText()
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.internetRequiredButton()
 		expect(self.sut.sceneView.image) == .noInternet
 
 		sut.assertImage()

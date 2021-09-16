@@ -5,7 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import UIKit
 
 class EventStartViewModel: Logging {
 
@@ -19,6 +19,7 @@ class EventStartViewModel: Logging {
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
+	@Bindable private(set) var primaryButtonIcon: UIImage?
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
@@ -33,14 +34,17 @@ class EventStartViewModel: Logging {
 			case .vaccination:
 				self.title = L.holderVaccinationStartTitle()
 				self.message = L.holderVaccinationStartMessage()
+				self.primaryButtonIcon = I.digid()
 			case .recovery:
 				self.title = L.holderRecoveryStartTitle()
 				let validAfterDays = remoteConfigManager.getConfiguration().recoveryWaitingPeriodDays ?? 11
 				self.message = L.holderRecoveryStartMessage("\(validAfterDays)")
-			case .test:
+				self.primaryButtonIcon = I.digid()
+			case .test, .paperflow:
 				// Should be changed when we want test 3.0 to use this page. Skipped in the current flow.
 				self.title = ""
 				self.message = ""
+				self.primaryButtonIcon = nil
 		}
 	}
 

@@ -18,7 +18,7 @@ class ScrolledStackView: BaseView {
 		static let spacing: CGFloat = 32.0
 	}
 
-	/// bottom constraint for scroll view
+	/// Scroll view bottom constraint
 	var bottomScrollViewConstraint: NSLayoutConstraint?
 
 	var stackViewInset = UIEdgeInsets(
@@ -47,12 +47,20 @@ class ScrolledStackView: BaseView {
 		view.spacing = ViewTraits.spacing
 		return view
 	}()
+	
+	/// Content view to get proper size in scroll view
+	let contentScrollView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		scrollView.addSubview(stackView)
+		scrollView.addSubview(contentScrollView)
+		contentScrollView.addSubview(stackView)
 		addSubview(scrollView)
 	}
 
@@ -61,24 +69,34 @@ class ScrolledStackView: BaseView {
 
 		super.setupViewConstraints()
 
-		stackView.embed(in: scrollView, insets: stackViewInset)
+		stackView.preservesSuperviewLayoutMargins = true
 
 		NSLayoutConstraint.activate([
-
+			
 			// Scrollview
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-
+			{
+				let constraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+				bottomScrollViewConstraint = constraint
+				return constraint
+			}(),
+			
+			// Content view
+			contentScrollView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: stackViewInset.left),
+			contentScrollView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -stackViewInset.right),
+			contentScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: stackViewInset.top),
+			contentScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -stackViewInset.bottom),
+			contentScrollView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -stackViewInset.left - stackViewInset.right),
+			
 			// StackView
-			stackView.widthAnchor.constraint(
-				equalTo: scrollView.widthAnchor,
-				constant: -stackViewInset.left - stackViewInset.right
-			),
-			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
+			stackView.leadingAnchor.constraint(equalTo: contentScrollView.leadingAnchor),
+			stackView.trailingAnchor.constraint(equalTo: contentScrollView.trailingAnchor),
+			stackView.topAnchor.constraint(equalTo: contentScrollView.topAnchor),
+			stackView.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor),
+			stackView.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor),
+			stackView.centerXAnchor.constraint(equalTo: contentScrollView.centerXAnchor)
 		])
-
-		bottomScrollViewConstraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
-		bottomScrollViewConstraint?.isActive = true
 	}
 }

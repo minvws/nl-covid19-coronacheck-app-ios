@@ -50,12 +50,12 @@ final class ForcedInformationViewController: BaseViewController {
 			}
 			
 			self.pageViewController.pages = $0.compactMap { page in
-				guard let forcedInformationPageViewController = self.viewModel.getForcedInformatioStep(page) as? ForcedInformationPageViewController else { return nil }
+				guard let forcedInformationPageViewController = self.viewModel.getForcedInformationStep(page) as? ForcedInformationPageViewController else { return nil }
 				return forcedInformationPageViewController
 			}
 		}
 		
-		sceneView.primaryButton.setTitle(.next, for: .normal)
+		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 	

@@ -26,7 +26,7 @@ class OnboardingView: BaseView {
 	/// The government ribbon
 	private let ribbonView: UIImageView = {
 		
-		let view = UIImageView(image: .ribbon)
+		let view = UIImageView(image: I.onboarding.rijkslint())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -50,12 +50,7 @@ class OnboardingView: BaseView {
 	}()
 	
 	/// the update button
-	let primaryButton: Button = {
-		
-		let button = Button(title: "Button 1", style: .primary)
-		button.rounded = true
-		return button
-	}()
+	let primaryButton = Button()
 	
 	/// setup the views
 	override func setupViews() {
@@ -139,7 +134,7 @@ class OnboardingView: BaseView {
 		super.setupAccessibility()
 		// Ribbon view
 		ribbonView.isAccessibilityElement = true
-		ribbonView.accessibilityLabel = .governmentLogo
+		ribbonView.accessibilityLabel = L.generalGovernmentLogo()
 	}
 
 	override func layoutSubviews() {

@@ -13,113 +13,6 @@ env:
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
 
 jobs:
-  firebase-deploy-holder-test:
-    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
-    runs-on: macos-11
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2.3.4
-      with:
-        fetch-depth: 0
-    - name: Load certificate
-      env:
-        CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
-      run: |
-        mkdir fastlane/certificates
-        echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
-
-    - name: Setup Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-
-    - name: Setup CI environment
-      run: |
-        make ci
-
-    - name: Setup Imagemagick for icon overlays
-      run: |
-        make homebrew_ci_imagemagick
-
-    - name: Build and deploy
-      timeout-minutes: 45
-      env:
-        CERTIFICATE_PATH: fastlane/certificates/distribution.p12
-        CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        SLACK_URL: ${{ secrets.SLACK_URL }}
-      run: |
-        bundle exec fastlane ios deploy_holder_test_ci
-
-    - name: Archive App
-      uses: actions/upload-artifact@v2
-      with:
-        name: Test Holder App
-        path: CTR TEST.ipa
-        retention-days: 10
-
-    - name: Archive dSYMs
-      uses: actions/upload-artifact@v2
-      with:
-        name: Test Holder App dSYMs
-        path: CTR TEST.app.dSYM.zip
-        retention-days: 10
-
-
-  firebase-deploy-verifier-test:
-    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
-    runs-on: macos-11
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2.3.4
-      with:
-        fetch-depth: 0
-      
-    - name: Load certificate
-      env:
-        CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
-      run: |
-        mkdir fastlane/certificates
-        echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
-
-    - name: Setup Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-
-    - name: Setup CI environment
-      run: |
-        make ci
-
-    - name: Setup Imagemagick for icon overlays
-      run: |
-        make homebrew_ci_imagemagick
-
-    - name: Build and deploy
-      timeout-minutes: 45
-      env:
-        CERTIFICATE_PATH: fastlane/certificates/distribution.p12
-        CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        SLACK_URL: ${{ secrets.SLACK_URL }}
-      run: |
-        bundle exec fastlane ios deploy_verifier_test_ci    
-
-    - name: Archive App
-      uses: actions/upload-artifact@v2
-      with:
-        name: Test Verifier App
-        path: Verifier.ipa
-        retention-days: 10
-
-    - name: Archive dSYMs
-      uses: actions/upload-artifact@v2
-      with:
-        name: Test Verifier App dSYMs
-        path: Verifier.app.dSYM.zip
-        retention-days: 10
-
-
   firebase-deploy-holder-acc:
     if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-11
@@ -127,7 +20,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2.3.4
       with:
-        fetch-depth: 0      
+        fetch-depth: 0   
+    
+    - name: Log Build Number
+      run: |
+        ./Scripts/log-build-number.sh
 
     - name: Load certificate
       env:
@@ -156,6 +53,7 @@ jobs:
         CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
+        GITBRANCH: ${{ github.ref }}
       run: |
         bundle exec fastlane ios deploy_holder_acc_ci
 
@@ -182,7 +80,11 @@ jobs:
       uses: actions/checkout@v2.3.4
       with:
         fetch-depth: 0      
-      
+
+    - name: Log Build Number
+      run: |
+        ./Scripts/log-build-number.sh
+
     - name: Load certificate
       env:
         CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
@@ -210,6 +112,7 @@ jobs:
         CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
+        GITBRANCH: ${{ github.ref }}
       run: |
         bundle exec fastlane ios deploy_verifier_acc_ci
 
@@ -235,7 +138,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2.3.4
       with:
-        fetch-depth: 0      
+        fetch-depth: 0   
+
+    - name: Log Build Number
+      run: |
+        ./Scripts/log-build-number.sh
 
     - name: Load certificate
       env:
@@ -264,6 +171,7 @@ jobs:
         CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
+        GITBRANCH: ${{ github.ref }}
       run: |
         bundle exec fastlane ios deploy_holder_prod_ci
 
@@ -290,6 +198,10 @@ jobs:
       with:
         fetch-depth: 0      
 
+    - name: Log Build Number
+      run: |
+        ./Scripts/log-build-number.sh
+
     - name: Load certificate
       env:
         CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
@@ -317,6 +229,7 @@ jobs:
         CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
+        GITBRANCH: ${{ github.ref }}
       run: |
         bundle exec fastlane ios deploy_verifier_prod_ci
 

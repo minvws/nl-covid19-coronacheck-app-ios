@@ -7,72 +7,192 @@
 
 import UIKit
 
-class ScanInstructionsViewController: BaseViewController, Logging {
-
-	private let viewModel: ScanInstructionsViewModel
-
+class ScanInstructionsViewController: BaseViewController {
 	let sceneView = ScanInstructionsView()
 
+	private let viewModel: ScanInstructionsViewModel
+	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+
+	private let backButton: UIButton = {
+		// Create a button with a back arrow
+		let button = UIButton(type: .custom)
+		button.setImage(.backArrow, for: .normal)
+		button.accessibilityLabel = L.generalBack()
+		button.accessibilityIdentifier = "BackButton"
+		return button
+	}()
+
+	private let skipButton: UIButton = {
+		// Create a button with a back arrow and a .previous title
+		let button = UIButton(type: .custom)
+		button.setTitle(L.verifierScaninstructionsNavigationSkipbuttonTitle(), for: .normal)
+		button.setTitleColor(Theme.colors.iosBlue, for: .normal)
+		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
+		button.translatesAutoresizingMaskIntoConstraints = false
+
+		// Add a little spacing between the image and the title, shift the title 5 px right
+		button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -5)
+		// Increase the hit area, move the button 5 px to the left
+		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 10)
+
+		// Make sure the text won't be truncated if the user opts for bold texts
+		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
+		return button
+	}()
+
+	/// Initializer
+	/// - Parameter viewModel: view model
 	init(viewModel: ScanInstructionsViewModel) {
-
+		
 		self.viewModel = viewModel
-
 		super.init(nibName: nil, bundle: nil)
 	}
-
+	
+	/// Required initialzer
+	/// - Parameter coder: the code
 	required init?(coder: NSCoder) {
-
 		fatalError("init(coder:) has not been implemented")
 	}
-
+	
 	// MARK: View lifecycle
 	override func loadView() {
-
+		
 		view = sceneView
 	}
-
+	
 	override func viewDidLoad() {
-
+		
 		super.viewDidLoad()
+		
+		setupTranslucentNavigationBar()
+		
+		setupPageController()
 
-		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$pages.binding = { [weak self] in
 
-		viewModel.$content.binding = { [weak self] list in
-
-			self?.setupContent(list)
+			guard let self = self else {
+				return
+			}
+			
+			self.pageViewController.pages = $0.enumerated().compactMap { index, page in
+				let viewController = self.viewModel.scanInstructionsViewController(forPage: page)
+				viewController.delegate = self
+				viewController.sceneView.stepSubheading = L.verifierScaninstructionsStepTitle(String(index + 1))
+				
+				return viewController
+			}
+			self.sceneView.pageControl.numberOfPages = $0.count
+			self.sceneView.pageControl.currentPage = 0
 		}
 
-		sceneView.primaryTitle = .verifierStartButtonTitle
-		sceneView.primaryButtonTappedCommand = { [weak self] in
+		viewModel.$shouldShowSkipButton.binding = { [weak self] shouldShowSkipButton in
+			self?.skipButton.isHidden = !shouldShowSkipButton
+		}
 
-			self?.viewModel.primaryButtonTapped()
+		viewModel.$nextButtonTitle.binding = { [weak self] nextButtonTitle in
+			self?.sceneView.primaryButton.setTitle(nextButtonTitle, for: .normal)
+		}
+
+		title = L.verifierScaninstructionsNavigationTitle()
+		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+		
+		setupBackButton()
+		setupSkipButton()
+	}
+
+	/// Create a custom back button so we can catch the tapp on the back button.
+	private func setupBackButton() {
+
+		// hide the original back button
+		navigationItem.hidesBackButton = true
+
+		backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+
+		navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+	}
+
+	/// Create a custom back button so we can catch the tapped on the back button.
+	private func setupSkipButton() {
+
+		skipButton.addTarget(self, action: #selector(skipButtonTapped), for: .touchUpInside)
+
+		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: skipButton)
+	}
+
+	@objc func backButtonTapped() {
+
+		// Move to the previous page
+		guard pageViewController.currentIndex > 0 else {
+			viewModel.userTappedBackOnFirstPage()
+			return
+		}
+		pageViewController.previousPage()
+	}
+
+	@objc func skipButtonTapped() {
+		
+		viewModel.finishScanInstructions()
+	}
+    
+	/// Setup the page controller
+	private func setupPageController() {
+		
+		pageViewController.pageViewControllerDelegate = self
+		pageViewController.view.backgroundColor = .clear
+		
+		pageViewController.view.frame = sceneView.containerView.frame
+		sceneView.containerView.addSubview(pageViewController.view)
+		addChild(pageViewController)
+		pageViewController.didMove(toParent: self)
+		sceneView.pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
+	}
+	
+	/// User tapped on the button
+	@objc func primaryButtonTapped() {
+		
+		if pageViewController.isLastPage {
+			// We tapped on the last page
+			viewModel.finishScanInstructions()
+		} else {
+			// Move to the next page
+			pageViewController.nextPage()
 		}
 	}
 
-    private func setupContent(_ content: [ScanInstructions]) {
+	/// User tapped on the page control
+	@objc func pageControlValueChanged(_ pageControl: UIPageControl) {
 
-		for item in content {
-			if let image = item.image {
-				let imageView = UIImageView(image: image)
-                imageView.isAccessibilityElement = true
-                imageView.accessibilityLabel = item.imageDescription
-                imageView.translatesAutoresizingMaskIntoConstraints = false
-                imageView.contentMode = .center
-				sceneView.stackView.addArrangedSubview(imageView)
-				sceneView.stackView.setCustomSpacing(32, after: imageView)
-			}
-            
-            let label = Label(title3: item.title, montserrat: true).multiline().header()
-			sceneView.stackView.addArrangedSubview(label)
-			sceneView.stackView.setCustomSpacing(8, after: label)
-
-			let text = TextView(htmlText: item.text)
-			text.linkTouched { [weak self] url in
-				self?.logDebug("tapped on \(url)")
-				self?.viewModel.linkTapped(url)
-			}
-			sceneView.stackView.addArrangedSubview(text)
-			sceneView.stackView.setCustomSpacing(56, after: text)
+		if pageControl.currentPage > pageViewController.currentIndex {
+			pageViewController.nextPage()
+		} else {
+			pageViewController.previousPage()
 		}
 	}
+}
+
+// MARK: - PageViewControllerDelegate
+
+extension ScanInstructionsViewController: PageViewControllerDelegate {
+	
+	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
+		sceneView.pageControl.currentPage = index
+		viewModel.userDidChangeCurrentPage(toPageIndex: index)
+	}
+}
+
+// MARK: - ScanInstructionsPageViewControllerDelegate
+
+extension ScanInstructionsViewController: ScanInstructionsPageViewControllerDelegate {
+    
+    /// Enables swipe to navigate behaviour for assistive technologies
+    func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+        if direction == .right {
+            backButtonTapped()
+            return true
+        } else if direction == .left {
+            primaryButtonTapped()
+            return true
+        }
+        return false
+    }
 }

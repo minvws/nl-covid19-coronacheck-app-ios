@@ -19,12 +19,18 @@ protocol TokenValidatorProtocol {
 class TokenValidator: TokenValidatorProtocol {
 
 	private let tokenChars: [String.Element]
+	private let allowedCharacterSet: CharacterSet
+	private let isLuhnCheckEnabled: Bool
 
-	/// Initialize
-	/// - Parameter alphabet: the alphabet to use
-	init(alphabet: String = "BCFGJLQRSTUVXYZ23456789") {
+	/// Initializer
+	/// - Parameters:
+	///   - alphabet: the alphabet to use
+	///   - isLuhnCheckEnabled: True if we should use the Luhn Check
+	init( alphabet: String = "BCFGJLQRSTUVXYZ23456789", isLuhnCheckEnabled: Bool ) {
 
-		tokenChars = Array(alphabet)
+		self.tokenChars = Array(alphabet)
+		self.allowedCharacterSet = CharacterSet(charactersIn: alphabet)
+		self.isLuhnCheckEnabled = isLuhnCheckEnabled
 	}
 
 	/// Validate the token
@@ -44,26 +50,40 @@ class TokenValidator: TokenValidatorProtocol {
 
 			return false
 		}
+
+		guard codeSplit[1].unicodeScalars.allSatisfy({ allowedCharacterSet.contains($0) }) else {
+
+			return false
+		}
+
 		guard codeSplit[2].count == 2 else {
 
 			return false
 		}
+
+		guard let checksum = codeSplit[2].first, checksum.unicodeScalars.allSatisfy({ allowedCharacterSet.contains($0) }) else {
+
+			return false
+		}
+		
 		guard codeSplit[2].last == "2" else {
 
 			return false
 		}
 
-		return true
-
-		// Bypass the luhnModN checksum for now.
-//		let code = codeSplit[1] + codeSplit[2].prefix(1)
-//		return luhnModN(code)
+		guard isLuhnCheckEnabled == true else {
+			// Skip Luhn check if disabled
+			return true
+		}
+		
+		let code = codeSplit[1] + codeSplit[2].prefix(1)
+		return luhnModN(code)
 	}
 
 	/// Check the luhn mod N checksum
 	/// - Parameter token: the token to check
 	/// - Returns: True if this is a valid token
-	private func luhnModN(_ token: String) -> Bool {
+	func luhnModN(_ token: String) -> Bool {
 
 		// for more detail,
 		// see https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm

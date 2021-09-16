@@ -14,15 +14,15 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedStoreEventGroup = false
 	var invokedStoreEventGroupCount = 0
-	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)?
-	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)]()
+	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date)?
+	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date)]()
 	var stubbedStoreEventGroupResult: Bool! = false
 
-	func storeEventGroup(_ type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> Bool {
+	func storeEventGroup(_ type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date) -> Bool {
 		invokedStoreEventGroup = true
 		invokedStoreEventGroupCount += 1
-		invokedStoreEventGroupParameters = (type, providerIdentifier, signedResponse, issuedAt)
-		invokedStoreEventGroupParametersList.append((type, providerIdentifier, signedResponse, issuedAt))
+		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, issuedAt)
+		invokedStoreEventGroupParametersList.append((type, providerIdentifier, jsonData, issuedAt))
 		return stubbedStoreEventGroupResult
 	}
 
@@ -50,14 +50,10 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedRemoveExistingEventGroups = false
 	var invokedRemoveExistingEventGroupsCount = 0
-	var invokedRemoveExistingEventGroupsParameters: (type: EventMode, Void)?
-	var invokedRemoveExistingEventGroupsParametersList = [(type: EventMode, Void)]()
 
-	func removeExistingEventGroups(type: EventMode) {
+	func removeExistingEventGroups() {
 		invokedRemoveExistingEventGroups = true
 		invokedRemoveExistingEventGroupsCount += 1
-		invokedRemoveExistingEventGroupsParameters = (type, ())
-		invokedRemoveExistingEventGroupsParametersList.append((type, ()))
 	}
 
 	var invokedRemoveExistingGreenCards = false
@@ -96,18 +92,14 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedStoreEuGreenCardResult
 	}
 
-	var invokedImportExistingTestCredential = false
-	var invokedImportExistingTestCredentialCount = 0
-	var invokedImportExistingTestCredentialParameters: (data: Data, sampleDate: Date)?
-	var invokedImportExistingTestCredentialParametersList = [(data: Data, sampleDate: Date)]()
-	var stubbedImportExistingTestCredentialResult: Bool! = false
+	var invokedListEventGroups = false
+	var invokedListEventGroupsCount = 0
+	var stubbedListEventGroupsResult: [EventGroup]! = []
 
-	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool {
-		invokedImportExistingTestCredential = true
-		invokedImportExistingTestCredentialCount += 1
-		invokedImportExistingTestCredentialParameters = (data, sampleDate)
-		invokedImportExistingTestCredentialParametersList.append((data, sampleDate))
-		return stubbedImportExistingTestCredentialResult
+	func listEventGroups() -> [EventGroup] {
+		invokedListEventGroups = true
+		invokedListEventGroupsCount += 1
+		return stubbedListEventGroupsResult
 	}
 
 	var invokedListGreenCards = false
@@ -154,5 +146,25 @@ class WalletManagerSpy: WalletManaging {
 		invokedExpireEventGroupsCount += 1
 		invokedExpireEventGroupsParameters = (vaccinationValidity, recoveryValidity, testValidity)
 		invokedExpireEventGroupsParametersList.append((vaccinationValidity, recoveryValidity, testValidity))
+	}
+
+	var invokedGreencardsWithUnexpiredOrigins = false
+	var invokedGreencardsWithUnexpiredOriginsCount = 0
+	var invokedGreencardsWithUnexpiredOriginsParameters: (now: Date, Void)?
+	var invokedGreencardsWithUnexpiredOriginsParametersList = [(now: Date, Void)]()
+	var stubbedGreencardsWithUnexpiredOriginsResult: [GreenCard]! = []
+
+	func greencardsWithUnexpiredOrigins(now: Date) -> [GreenCard] {
+		invokedGreencardsWithUnexpiredOrigins = true
+		invokedGreencardsWithUnexpiredOriginsCount += 1
+		invokedGreencardsWithUnexpiredOriginsParameters = (now, ())
+		invokedGreencardsWithUnexpiredOriginsParametersList.append((now, ()))
+		return stubbedGreencardsWithUnexpiredOriginsResult
+	}
+}
+
+extension WalletManagerSpy {
+	convenience init() {
+		self.init(dataStoreManager: DataStoreManager(.inMemory))
 	}
 }

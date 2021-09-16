@@ -6,18 +6,22 @@
 */
 
 import UIKit
-typealias Content = (view: UIView, customSpacing: CGFloat)
+typealias DisplayContent = (view: UIView, customSpacing: CGFloat)
 
-class DisplayContentViewModel: PreventableScreenCapture {
+class DisplayContentViewModel {
 
 	/// Coordination Delegate
 	weak var coordinator: (Dismissable)?
 
 	/// The title of the scene
-	@Bindable private (set) var title: String
+	@Bindable private(set) var title: String
 
 	/// The array of content
-	@Bindable private (set) var content: [Content] = []
+	@Bindable private(set) var content: [DisplayContent] = []
+
+	@Bindable private(set) var hideForCapture: Bool = false
+
+	private let screenCaptureDetector = ScreenCaptureDetector()
 
 	/// Initializer
 	/// - Parameters:
@@ -27,12 +31,15 @@ class DisplayContentViewModel: PreventableScreenCapture {
 	init(
 		coordinator: Dismissable,
 		title: String,
-		content: [Content]) {
+		content: [DisplayContent]) {
 
 		self.coordinator = coordinator
 		self.content = content
 		self.title = title
-		super.init()
+
+		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
+			self?.hideForCapture = isBeingCaptured
+		}
 	}
 
 	/// User wants to dismiss the scene

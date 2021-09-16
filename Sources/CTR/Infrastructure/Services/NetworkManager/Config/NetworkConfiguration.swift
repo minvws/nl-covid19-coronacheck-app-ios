@@ -20,37 +20,21 @@ struct NetworkConfiguration {
     let api: EndpointConfiguration
 	let cdn: EndpointConfiguration
 
-    static let development = NetworkConfiguration(
-        name: "Development",
-        api: .init(
-            scheme: "https",
-            host: "api-ct.bananenhalen.nl",
-            port: nil,
-            path: ["v4"]
-        ),
-		cdn: .init(
-			scheme: "https",
-			host: "api-ct.bananenhalen.nl",
-			port: nil,
-			path: ["v4"]
-		)
-    )
-
-    static let test = NetworkConfiguration(
-        name: "Test",
+	static let development = NetworkConfiguration(
+		name: "DEV",
 		api: .init(
 			scheme: "https",
-			host: "api-ct.bananenhalen.nl",
+			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v4"]
+			path: ["v5"]
 		),
 		cdn: .init(
 			scheme: "https",
-			host: "api-ct.bananenhalen.nl",
+			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v4"]
+			path: ["v5"]
 		)
-    )
+	)
 
 	static let acceptance = NetworkConfiguration(
 		name: "ACC",
@@ -58,13 +42,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v4"]
+			path: ["v5"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v4"]
+			path: ["v5"]
 		)
 	)
 
@@ -74,13 +58,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.coronacheck.nl" : "verifier-api.coronacheck.nl",
 			port: nil,
-			path: ["v4"]
+			path: ["v5"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.coronacheck.nl" : "verifier-api.coronacheck.nl",
 			port: nil,
-			path: ["v4"]
+			path: ["v5"]
 		)
 	)
 
@@ -100,6 +84,12 @@ struct NetworkConfiguration {
 	var credentialUrl: URL? {
 
 		return self.combine(path: Endpoint.getCredentials, fromCdn: false)
+	}
+
+	/// The coupling url
+	var couplingUrl: URL? {
+
+		return self.combine(path: Endpoint.coupling, fromCdn: false)
 	}
 
 	/// The public keys url

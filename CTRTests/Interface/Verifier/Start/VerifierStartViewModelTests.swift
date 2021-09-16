@@ -8,16 +8,17 @@
 import XCTest
 @testable import CTR
 import Nimble
+import Rswift
 
 class VerifierStartViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: VerifierStartViewModel!
+	private var sut: VerifierStartViewModel!
 
-	var cryptoManagerSpy: CryptoManagerSpy!
-	var proofManagerSpy: ProofManagingSpy!
-	var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
-	var userSettingsSpy: UserSettingsSpy!
+	private var cryptoManagerSpy: CryptoManagerSpy!
+	private  var proofManagerSpy: ProofManagingSpy!
+	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
+	private var userSettingsSpy: UserSettingsSpy!
 
 	override func setUp() {
 
@@ -45,26 +46,13 @@ class VerifierStartViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.primaryButtonTitle)
-			.to(equal(.verifierStartButtonTitle), description: "Button title should match")
+			.to(equal(L.verifierStartButtonTitle()), description: "Button title should match")
 		expect(self.sut.title)
-			.to(equal(.verifierStartTitle), description: "Title should match")
+			.to(equal(L.verifierStartTitle()), description: "Title should match")
 		expect(self.sut.header)
-			.to(equal(.verifierStartHeader), description: "Header should match")
+			.to(equal(L.verifierStartHeader()), description: "Header should match")
 		expect(self.sut.message)
-			.to(equal(.verifierStartMessage), description: "Message should match")
-	}
-
-	func test_linkTapped() {
-
-		// Given
-
-		// When
-		sut.linkTapped()
-
-		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResult) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResultParameters?.result)
-			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
+			.to(equal(L.verifierStartMessage()), description: "Message should match")
 	}
 
 	func test_primaryButtonTapped_noScanInstructionsShown() {
@@ -76,8 +64,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResult) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResultParameters?.result)
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
 			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
 		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == true
 	}
@@ -92,8 +80,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResult) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResultParameters?.result)
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
 			.to(equal(.userTappedProceedToScan), description: "Result should match")
 	}
 
@@ -109,5 +97,20 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.sut.showError) == true
+	}
+
+	func test_showInstructionsButtonTapped() {
+
+		// Given
+		userSettingsSpy.stubbedScanInstructionShown = false
+
+		// When
+		sut.showInstructionsButtonTapped()
+
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
+			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
+		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == false
 	}
 }

@@ -12,12 +12,6 @@ class LoginTVSViewController: BaseViewController {
 	private let viewModel: LoginTVSViewModel
 	private let sceneView = FetchEventsView()
 
-	struct AlertContent {
-		let title: String
-		let subTitle: String
-		let okTitle: String
-	}
-
 	/// Initializer
 	/// - Parameter viewModel: view model
 	init(viewModel: LoginTVSViewModel) {
@@ -44,13 +38,8 @@ class LoginTVSViewController: BaseViewController {
 
 		// Hide button part
 		sceneView.showLineView = false
-		sceneView.primaryTitle = .cancel
-		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.cancel() }
 
 		// Binding
-
-		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 
 			if $0 {
@@ -60,28 +49,32 @@ class LoginTVSViewController: BaseViewController {
 			}
 		}
 
+		viewModel.$content.binding = { [weak self] in self?.displayContent($0) }
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
-		viewModel.login(self)
+		viewModel.login()
 	}
 
-	func showAlert(_ alertContent: AlertContent?) {
+	private func displayContent(_ content: Content) {
 
-		guard let content = alertContent else {
-			return
+		// Texts
+		sceneView.title = content.title
+		sceneView.message = content.subTitle
+
+		// Button
+		sceneView.showLineView = false
+		if let actionTitle = content.primaryActionTitle {
+			sceneView.primaryTitle = actionTitle
+			sceneView.footerBackground.isHidden = false
+			sceneView.primaryButton.isHidden = false
+			sceneView.footerGradientView.isHidden = false
+		} else {
+			sceneView.primaryTitle = nil
+			sceneView.footerBackground.isHidden = true
+			sceneView.primaryButton.isHidden = true
+			sceneView.footerGradientView.isHidden = true
 		}
-
-		let alertController = UIAlertController(
-			title: content.title,
-			message: content.subTitle,
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: content.okTitle,
-				style: .default,
-				handler: nil
-			)
-		)
-		present(alertController, animated: true, completion: nil)
+		sceneView.primaryButtonTappedCommand = content.primaryAction
+		sceneView.secondaryButtonTappedCommand = content.secondaryAction
+		sceneView.secondaryButtonTitle = content.secondaryActionTitle
 	}
 }

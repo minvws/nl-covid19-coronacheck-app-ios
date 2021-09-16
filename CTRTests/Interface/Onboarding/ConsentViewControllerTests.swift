@@ -7,6 +7,8 @@
 
 import XCTest
 @testable import CTR
+import Nimble
+import SnapshotTesting
 
 class ConsentViewControllerTests: XCTestCase {
 
@@ -41,24 +43,53 @@ class ConsentViewControllerTests: XCTestCase {
 	func loadView() {
 
 		_ = sut.view
-
 	}
 
 	// MARK: Test
 
-	/// Test all the content without consent
-	func testContent() {
+	/// Test all the content for the holder
+	func testContent_holder() {
 
 		// Given
+		sut = OnboardingConsentViewController(
+			viewModel: OnboardingConsentViewModel(
+				coordinator: coordinatorSpy,
+				factory: HolderOnboardingFactory(),
+				shouldHideBackButton: true
+			)
+		)
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == L.holderConsentTitle()
+		expect(self.sut.sceneView.message) == L.holderConsentMessage()
+		expect(self.sut.sceneView.itemStackView.arrangedSubviews).to(haveCount(2))
+
+		sut.assertImage()
+	}
+
+	/// Test all the content for the verifier
+	func testContent_verifier() {
+
+		// Given
+		sut = OnboardingConsentViewController(
+			viewModel: OnboardingConsentViewModel(
+				coordinator: coordinatorSpy,
+				factory: VerifierOnboardingFactory(),
+				shouldHideBackButton: true
+			)
+		)
 
 		// When
 		loadView()
 
 		// Then
-		XCTAssertEqual(sut.sceneView.title, .holderConsentTitle, "Title should match")
-		XCTAssertEqual(sut.sceneView.message, .holderConsentMessage, "Message should match")
-		XCTAssertEqual(sut.sceneView.consent, .holderConsentButtonTitle, "Consent should match")
-		XCTAssertEqual(sut.sceneView.itemStackView.arrangedSubviews.count, 2, "There should be 2 items")
+		expect(self.sut.sceneView.title) == L.verifierConsentTitle()
+		expect(self.sut.sceneView.message) == L.verifierConsentMessage()
+		expect(self.sut.sceneView.itemStackView.arrangedSubviews).to(haveCount(3))
+
+		sut.assertImage()
 	}
 
 	/// Test the user tapped on the link
@@ -71,7 +102,7 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.linkTapped()
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.invokedShowPrivacyPage, "Method should be called")
+		expect(self.coordinatorSpy.invokedShowPrivacyPage) == true
 	}
 
 	/// Test the user tapped on the consent button
@@ -86,7 +117,7 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.consentValueChanged(button)
 
 		// Then
-		XCTAssertTrue(sut.viewModel.isContinueButtonEnabled, "Button should be enabled")
+		expect(self.sut.viewModel.isContinueButtonEnabled) == true
 	}
 
 	/// Test the user tapped on the consent button
@@ -101,7 +132,7 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.consentValueChanged(button)
 
 		// Then
-		XCTAssertFalse(sut.viewModel.isContinueButtonEnabled, "Button should not be enabled")
+		expect(self.sut.viewModel.isContinueButtonEnabled) == false
 	}
 
 	/// Test the user tapped on the enabled primary button
@@ -115,7 +146,7 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.invokedConsentGiven, "Method should be called")
+		expect(self.coordinatorSpy.invokedConsentGiven) == true
 	}
 
 	/// Test the user tapped on the enabled primary button
@@ -129,6 +160,6 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertFalse(coordinatorSpy.invokedConsentGiven, "Method should not be called")
+		expect(self.coordinatorSpy.invokedConsentGiven) == false
 	}
 }

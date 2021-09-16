@@ -47,10 +47,6 @@ class SharedCoordinator: Coordinator, Logging {
 	var dashboardNavigationController: UINavigationController?
 	var aboutNavigationController: UINavigationController?
 
-	var maxValidity: Int {
-		remoteConfigManager.getConfiguration().maxValidityHours ?? 40
-	}
-
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
 
@@ -70,6 +66,42 @@ class SharedCoordinator: Coordinator, Logging {
     func consume(universalLink: UniversalLink) -> Bool {
         return false
     }
+}
+
+// MARK: - Shared
+
+extension SharedCoordinator {
+
+	/// Handle the onboarding
+	/// - Parameters:
+	///   - factory: the onboarding factory for the content
+	///   - onCompletion: the completion handler when onboarding is done
+	func handleOnboarding(factory: OnboardingFactoryProtocol, onCompletion: () -> Void) {
+
+		if onboardingManager.needsOnboarding {
+			/// Start with the onboarding
+			let coordinator = OnboardingCoordinator(
+				navigationController: navigationController,
+				onboardingDelegate: self,
+				factory: factory
+			)
+			startChildCoordinator(coordinator)
+			return
+
+		} else if onboardingManager.needsConsent {
+			// Show the consent page
+			let coordinator = OnboardingCoordinator(
+				navigationController: navigationController,
+				onboardingDelegate: self,
+				factory: factory
+			)
+			addChildCoordinator(coordinator)
+			coordinator.navigateToConsent(shouldHideBackButton: true)
+			return
+
+		}
+		onCompletion()
+	}
 }
 
 // MARK: - Dismissable

@@ -10,23 +10,13 @@ import XCTest
 
 class RemoteConfigManagingSpy: RemoteConfigManaging {
 
-	required init() {}
-
-	var invokedAppVersionGetter = false
-	var invokedAppVersionGetterCount = 0
-	var stubbedAppVersion: String! = ""
-
-	var appVersion: String {
-		invokedAppVersionGetter = true
-		invokedAppVersionGetterCount += 1
-		return stubbedAppVersion
-	}
+	required init(networkManager: NetworkManaging?) {}
 
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
-	var stubbedUpdateCompletionResult: (LaunchState, Void)?
+	var stubbedUpdateCompletionResult: (Result<(RemoteConfiguration, Data, URLResponse), ServerError>, Void)?
 
-	func update(completion: @escaping (LaunchState) -> Void) {
+	func update(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
 		if let result = stubbedUpdateCompletionResult {

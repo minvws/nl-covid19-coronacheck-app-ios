@@ -9,8 +9,8 @@ import UIKit
 
 extension UIViewController {
 	
-	/// Configure translucent navigation bar. By default, navigation bar has an opaque background
-	func configureTranslucentNavigationBar() {
+	/// Set up translucent navigation bar. By default, navigation bar has an opaque background
+	func setupTranslucentNavigationBar() {
 		navigationController?.navigationBar.isTranslucent = true
 		navigationController?.navigationBar.backgroundColor = .clear
 		navigationController?.navigationBar.barTintColor = .clear

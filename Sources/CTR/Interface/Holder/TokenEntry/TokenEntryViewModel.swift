@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 
@@ -72,13 +73,12 @@ class TokenEntryViewModel {
 
 	// MARK: - Bindables, other
 
-	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
-	@Bindable private(set) var serverTooBusyAlert: AlertContent?
+	@Bindable private(set) var networkErrorAlert: AlertContent?
 
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let proofManager: ProofManaging?
+	private let networkManager: NetworkManaging?
 	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:
@@ -132,16 +132,15 @@ class TokenEntryViewModel {
 
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - proofManager: the proof manager
 	///   - requestToken: an optional existing request token
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		proofManager: ProofManaging,
+		networkManager: NetworkManaging,
 		requestToken: RequestToken?,
-		tokenValidator: TokenValidatorProtocol = TokenValidator()) {
+		tokenValidator: TokenValidatorProtocol) {
 
 		self.coordinator = coordinator
-		self.proofManager = proofManager
+		self.networkManager = networkManager
 		self.requestToken = requestToken
 		self.tokenValidator = tokenValidator
 		self.message = nil
@@ -221,6 +220,7 @@ class TokenEntryViewModel {
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
 	func nextButtonTapped(_ tokenInput: String?, verificationInput: String?) {
+
 		guard progressIndicationCounter.isInactive else { return }
 
 		switch initializationMode {
@@ -243,12 +243,14 @@ class TokenEntryViewModel {
 	}
 
 	func userHasNoTokenButtonTapped() {
+
 		guard progressIndicationCounter.isInactive else { return }
 
 		coordinator?.presentInformationPage(
-			title: .holderTokenEntryModalNoTokenTitle,
-			body: .holderTokenEntryModalNoTokenDetails,
-			hideBodyForScreenCapture: false
+			title: L.holderTokenentryModalNotokenTitle(),
+			body: L.holderTokenentryModalNotokenDetails(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
 		)
 	}
 
@@ -296,98 +298,108 @@ class TokenEntryViewModel {
 
 		progressIndicationCounter.increment()
 
-		proofManager?.fetchCoronaTestProviders(
-			onCompletion: { [weak self] in
+		networkManager?.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
 
-				self?.fetchResult(requestToken, verificationCode: verificationCode)
-				self?.progressIndicationCounter.decrement()
+			guard let self = self else { return }
 
-			}, onError: { [weak self] error in
-
-				if let networkError = error as? NetworkError,
-				   networkError == .serverBusy {
-					self?.showServerTooBusyError()
-				} else {
-					self?.showTechnicalErrorAlert = true
-				}
-				self?.decideWhetherToAbortRequestTokenProvidedMode()
-				self?.progressIndicationCounter.decrement()
+			switch result {
+				case let .success(providers):
+					self.fetchResult(requestToken, verificationCode: verificationCode, providers: providers)
+					self.progressIndicationCounter.decrement()
+				case let .failure(serverError):
+					if case let .error(_, _, error) = serverError {
+						switch error {
+							case .noInternetConnection:
+								self.displayNoInternet(requestToken, verificationCode: verificationCode)
+							case .serverUnreachableInvalidHost, .serverUnreachableTimedOut, .serverUnreachableConnectionLost:
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled)
+								self.displayServerUnreachable(errorCode)
+							default:
+								self.displayError(serverError)
+						}
+					}
+					self.progressIndicationCounter.decrement()
+					self.decideWhetherToAbortRequestTokenProvidedMode()
 			}
-		)
-	}
-
-	private func showServerTooBusyError() {
-
-		self.serverTooBusyAlert = AlertContent(
-			title: .serverTooBusyErrorTitle,
-			subTitle: .serverTooBusyErrorText,
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.coordinator?.navigateBackToStart()
-			},
-			okTitle: .serverTooBusyErrorButton
-		)
+		}
 	}
 
 	/// Fetch a test result
 	/// - Parameter requestToken: the request token
-	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?) {
-		guard let provider = proofManager?.getTestProvider(requestToken) else {
+	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?, providers: [TestProvider]) {
+
+		let provider = providers.filter { $0.identifier.lowercased() == requestToken.providerIdentifier.lowercased() }
+		guard let provider = provider.first else {
 			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
+			self.decideWhetherToAbortRequestTokenProvidedMode()
+			return
+		}
+		logVerbose("fetching result with \(provider.resultURLString)")
+
+		if provider.resultURL == nil {
+			fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
 
 		progressIndicationCounter.increment()
 
-		proofManager?.fetchTestResult(
-			requestToken,
+		networkManager?.fetchTestResult(
+			provider: provider,
+			token: requestToken,
 			code: verificationCode,
-			provider: provider) {  [weak self] response in
-			guard let self = self else { return }
+			completion: { [weak self] (result: Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) in
 
-			self.fieldErrorMessage = nil
+				guard let self = self else { return }
+				self.fieldErrorMessage = nil
 
-			switch response {
-				case let .success(remoteEvent):
-					switch remoteEvent.wrapper.status {
-						case .complete, .pending:
-							self.screenHasCompleted = true
-							self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
-						case .verificationRequired:
-							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
-								// the user has just submitted a wrong verification code & should see an error message
+				switch result {
+					case let .success(remoteEvent):
+						switch remoteEvent.0.status {
+							case .complete, .pending:
+								self.screenHasCompleted = true
+								self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
+							case .verificationRequired:
+								if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
+									// the user has just submitted a wrong verification code & should see an error message
+									self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+								}
+								self.allowEnablingOfNextButton = false
+								self.verificationCodeIsKnownToBeRequired = true
+
+							case .invalid:
 								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-							}
-							self.allowEnablingOfNextButton = false
-							self.verificationCodeIsKnownToBeRequired = true
+								self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
-						case .invalid:
-							self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+							default:
+								self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
+								self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
+								self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+						}
 
-						default:
-							self.logDebug("Unhandled test result status: \(remoteEvent.wrapper.status)")
-							self.fieldErrorMessage = "Unhandled: \(remoteEvent.wrapper.status)"
-							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
-					}
+					case let .failure(.error(statusCode, serverResponse, networkError)),
+						 let .failure(.provider(_, statusCode, serverResponse, networkError)):
 
-				case let .failure(error):
-					if let castedError = error as? ProofError, castedError == .invalidUrl {
-						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
-						self.showServerTooBusyError()
-					} else {
-						// For now, display the network error.
-						self.fieldErrorMessage = error.localizedDescription
-						self.showTechnicalErrorAlert = true
-					}
-					self.decideWhetherToAbortRequestTokenProvidedMode()
+						switch networkError {
+							case .noInternetConnection:
+								self.displayNoInternet(requestToken, verificationCode: verificationCode)
+							case .serverUnreachableInvalidHost, .serverUnreachableConnectionLost, .serverUnreachableTimedOut:
+								self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
+							case .invalidRequest:
+								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+							default:
+								self.displayError(ServerError.provider(
+									provider: provider.identifier,
+									statusCode: statusCode,
+									response: serverResponse,
+									error: networkError
+								))
+						}
+						self.decideWhetherToAbortRequestTokenProvidedMode()
+				}
+				self.progressIndicationCounter.decrement()
 			}
-
-			self.progressIndicationCounter.decrement()
-		}
+		)
 	}
 
 	/// If the path where `.withRequestTokenProvided` fails due to networking,
@@ -477,7 +489,7 @@ class TokenEntryViewModel {
 		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
 		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
 		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
-		userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
+		userNeedsATokenButtonTitle = L.holderTokenentryButtonNotoken()
 		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
 		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
 		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
@@ -489,10 +501,7 @@ class TokenEntryViewModel {
 	/// Sanitize userInput of token & validation
 	private func sanitize(_ input: String) -> String {
 
-		return input
-			.trimmingCharacters(in: .whitespacesAndNewlines)
-			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
-			.uppercased()
+		return input.strippingWhitespace().uppercased()
 	}
 }
 
@@ -533,100 +542,101 @@ extension TokenEntryViewModel {
 		fileprivate static func title(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowTitle
+					return L.holderTokenentryRegularflowTitle()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowTitle
+					return L.holderTokenentryUniversallinkflowTitle()
 			}
 		}
 
 		fileprivate static func text(forMode initializationMode: InitializationMode, inputMode: InputMode) -> String? {
 			switch (initializationMode, inputMode) {
+
 				case (_, .none):
 					return nil
 				case (.regular, _):
-					return .holderTokenEntryRegularFlowText
+					return L.holderTokenentryRegularflowText()
 				case (.withRequestTokenProvided, _):
-					return .holderTokenEntryUniversalLinkFlowText
+					return L.holderTokenentryUniversallinkflowText()
 			}
 		}
 
 		fileprivate static func resendVerificationButtonTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowRetryTitle
+					return L.holderTokenentryRegularflowRetryTitle()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowRetryTitle
+					return L.holderTokenentryUniversallinkflowRetryTitle()
 			}
 		}
 
 		fileprivate static func errorInvalidCode(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowErrorInvalidCode
+					return L.holderTokenentryRegularflowErrorInvalidCode()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowErrorInvalidCode
+					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
 			}
 		}
 
 		fileprivate static func tokenEntryHeaderTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowTokenTitle
+					return L.holderTokenentryRegularflowTokenTitle()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowTokenTitle
+					return L.holderTokenentryUniversallinkflowTokenTitle()
 			}
 		}
 
 		fileprivate static func tokenEntryPlaceholder(forMode mode: InitializationMode) -> String {
-            switch mode {
-                case .regular:
-                    if UIAccessibility.isVoiceOverRunning {
-                        return .holderTokenEntryRegularFlowTokenPlaceholderForScreenReader
-                    } else {
-                        return .holderTokenEntryRegularFlowTokenPlaceholder
-                    }
-                case .withRequestTokenProvided:
-                    if UIAccessibility.isVoiceOverRunning {
-                        return .holderTokenEntryUniversalLinkFlowTokenPlaceholderForScreenReader
-                    } else {
-                        return .holderTokenEntryUniversalLinkFlowTokenPlaceholder
-                    }
-            }
+			switch mode {
+				case .regular:
+					if UIAccessibility.isVoiceOverRunning {
+						return L.holderTokenentryRegularflowTokenPlaceholderScreenreader()
+					} else {
+						return L.holderTokenentryRegularflowTokenPlaceholder()
+					}
+				case .withRequestTokenProvided:
+					if UIAccessibility.isVoiceOverRunning {
+						return L.holderTokenentryUniversallinkflowTokenPlaceholderScreenreader()
+					} else {
+						return L.holderTokenentryUniversallinkflowTokenPlaceholder()
+					}
+			}
 		}
 
 		fileprivate static func verificationEntryHeaderTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowVerificationTitle
+					return L.holderTokenentryRegularflowVerificationTitle()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowVerificationTitle
+					return L.holderTokenentryUniversallinkflowVerificationTitle()
 			}
 		}
 
 		fileprivate static func verificationInfo(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowVerificationInfo
+					return L.holderTokenentryRegularflowVerificationInfo()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowVerificationInfo
+					return L.holderTokenentryUniversallinkflowVerificationInfo()
 			}
 		}
 
 		fileprivate static func verificationPlaceholder(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowVerificationPlaceholder
+					return L.holderTokenentryRegularflowVerificationPlaceholder()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowVerificationPlaceholder
+					return L.holderTokenentryUniversallinkflowVerificationPlaceholder()
 			}
 		}
 
 		fileprivate static func primaryTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowNext
+					return L.holderTokenentryRegularflowNext()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowNext
+					return L.holderTokenentryUniversallinkflowNext()
 			}
 		}
 
@@ -635,45 +645,36 @@ extension TokenEntryViewModel {
 		fileprivate static func confirmResendVerificationAlertTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertTitle
+					return L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertTitle
+					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertTitle()
 			}
 		}
 
 		fileprivate static func confirmResendVerificationAlertMessage(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertMessage
+					return L.holderTokenentryRegularflowConfirmresendverificationalertMessage()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertMessage
+					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertMessage()
 			}
 		}
 
 		fileprivate static func confirmResendVerificationAlertOkayButton(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertOkayButton
+					return L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertOkayButton
+					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertOkaybutton()
 			}
 		}
 
 		fileprivate static func confirmResendVerificationAlertCancelButton(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowConfirmResendVerificationCancelButton
+					return L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationCancelButton
-			}
-		}
-
-		fileprivate static func userNeedsATokenButtonTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return .holderTokenEntryRegularFlowNoTokenButton
-				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowNoTokenButton
+					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertCancelbutton()
 			}
 		}
 	}
@@ -689,4 +690,145 @@ extension TokenEntryViewModel: Logging {
 /// Returns the `enabled` state to be used for `shouldEnableNextButton`
 private func nextButtonEnabledState(allowEnablingOfNextButton: Bool, shouldShowProgress: Bool, screenHasCompleted: Bool) -> Bool {
 	return allowEnablingOfNextButton && !shouldShowProgress && !screenHasCompleted
+}
+
+// MARK: - Error States
+
+extension TokenEntryViewModel {
+
+	private func displayNoInternet(_ requestToken: RequestToken, verificationCode: String?) {
+
+		// this is a retry-able situation
+		self.networkErrorAlert = AlertContent(
+			title: L.generalErrorNointernetTitle(),
+			subTitle: L.generalErrorNointernetText(),
+			cancelAction: nil,
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
+			okTitle: L.generalRetry()
+		)
+	}
+
+	private func displayServerUnreachable(_ requestToken: RequestToken, verificationCode: String?) {
+
+		// this is a retry-able situation
+		self.networkErrorAlert = AlertContent(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachable(),
+			cancelAction: nil,
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
+			okTitle: L.generalRetry()
+		)
+	}
+
+	func displayServerUnreachable(_ errorCode: ErrorCode) {
+
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.navigateBackToStart()
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
+		)
+		coordinator?.displayError(content: content) { [weak self] in
+			self?.coordinator?.navigateBackToStart()
+		}
+	}
+
+	private func getTitleForError(_ serverError: ServerError) -> String {
+
+		switch serverError {
+			case let .error(_, _, error), let .provider(_, _, _, error):
+				switch error {
+					case .serverBusy:
+						return L.generalNetworkwasbusyTitle()
+					case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
+						 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+						return L.holderErrorstateTitle()
+					default:
+						break
+				}
+		}
+		return ""
+	}
+
+	private func getBodyForError(_ serverError: ServerError) -> String {
+
+		if case let .error(statusCode, serverResponse, error) = serverError {
+			// this is an error fetching the providers
+			switch error {
+				case .serverBusy:
+					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: .commercialTest, step: .providers, errorCode: "429"))")
+				case .responseCached, .redirection, .resourceNotFound, .serverError:
+					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+					return L.holderErrorstateServerMessage("\(errorCode)")
+				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
+					return L.holderErrorstateClientMessage("\(errorCode)")
+				default:
+					break
+			}
+		}
+		if case let .provider(provider, statusCode, serverResponse, error) = serverError {
+			// this is an error getting the test result.
+			switch error {
+				case .serverBusy:
+					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "429"))")
+				case .responseCached, .redirection, .resourceNotFound, .serverError:
+					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+					return L.holderErrorstateTestMessage("\(errorCode)")
+				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
+					return L.holderErrorstateTestMessage("\(errorCode)")
+				default:
+					break
+			}
+		}
+		return ""
+	}
+
+	private func getActionTitleForError(_ serverError: ServerError) -> String {
+
+		switch serverError {
+			case let .error(_, _, error), let .provider(_, _, _, error):
+				switch error {
+					case .serverBusy:
+						return L.generalNetworkwasbusyButton()
+					case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
+						 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+						return L.holderErrorstateOverviewAction()
+					default:
+						break
+				}
+		}
+		return ""
+	}
+
+	private func displayError(_ serverError: ServerError) {
+
+		let content = Content(
+			title: getTitleForError(serverError),
+			subTitle: getBodyForError(serverError),
+			primaryActionTitle: getActionTitleForError(serverError),
+			primaryAction: { [weak self] in
+				self?.coordinator?.navigateBackToStart()
+			},
+			secondaryActionTitle: "",
+			secondaryAction: nil
+		)
+
+		coordinator?.displayError(content: content) { [weak self] in
+			self?.coordinator?.navigateBackToStart()
+		}
+	}
 }

@@ -7,16 +7,11 @@
 
 import UIKit
 import CoreData
+import Reachability
 
 protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
-
-	/// Navigate to About Making a QR
-	func navigateToAboutMakingAQR()
-
-	/// Navigate to the token scanner
-	func navigateToTokenScan()
 
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
@@ -26,7 +21,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - title: the title of the page
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
+	
+	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 
 	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent)
 
@@ -46,13 +43,17 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userDidScanRequestToken(requestToken: RequestToken)
 
-	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void)
-
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
+
+	func userWishesMoreInfoAboutClockDeviation()
 	
 	func openUrl(_ url: URL, inApp: Bool)
 
-	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) // probably some other params also.
+	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID)
+
+	func userWishesToLaunchThirdPartyTicketApp()
+
+	func displayError(content: Content, backAction: @escaping () -> Void)
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -63,6 +64,15 @@ class HolderCoordinator: SharedCoordinator {
 	var openIdManager: OpenIdManaging = Services.openIdManager
 	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
+
+	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
+	///	display a "return to Ticket App" button on the ShowQR screen
+	/// Docs: https://shrtm.nu/oc45
+	private var thirdpartyTicketApp: (name: String, returnURL: URL)?
+
+	/// If set, this should be handled at the first opportunity:
+	private var unhandledUniversalLink: UniversalLink?
+
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
 	/// Restricts access to GGD test provider login
@@ -73,143 +83,84 @@ class HolderCoordinator: SharedCoordinator {
 	// Designated starter method
 	override func start() {
 
-		if onboardingManager.needsOnboarding {
-			// Start with the onboarding
-			let coordinator = OnboardingCoordinator(
-				navigationController: navigationController,
-				onboardingDelegate: self,
-				factory: onboardingFactory,
-				maxValidity: maxValidity
-			)
-			startChildCoordinator(coordinator)
+		handleOnboarding(factory: onboardingFactory) {
 
-		} else if onboardingManager.needsConsent {
-			// Show the consent page
-			let coordinator = OnboardingCoordinator(
-				navigationController: navigationController,
-				onboardingDelegate: self,
-				factory: onboardingFactory,
-				maxValidity: maxValidity
-			)
-			addChildCoordinator(coordinator)
-			coordinator.navigateToConsent(shouldHideBackButton: true)
-		} else if forcedInformationManager.needsUpdating {
-			// Show Forced Information
-			let coordinator = ForcedInformationCoordinator(
-				navigationController: navigationController,
-				forcedInformationManager: forcedInformationManager,
-				delegate: self
-			)
-			startChildCoordinator(coordinator)
-        } else if hasFaultyVaccinationOn28June() {
+			if forcedInformationManager.needsUpdating {
+				// Show Forced Information
+				let coordinator = ForcedInformationCoordinator(
+					navigationController: navigationController,
+					forcedInformationManager: forcedInformationManager,
+					delegate: self
+				)
+				startChildCoordinator(coordinator)
+			} else if let unhandledUniversalLink = unhandledUniversalLink {
 
-			//	Is so, delete all greencards and credentials
-			Services.walletManager.removeExistingGreenCards()
-
-			//	If so, send all events to the signer and retrieve new greencards/credentials.
-			Services.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials { (result: Result<Void, GreenCardLoader.Error>) in
-
-				self.userSettings.executedJun28Patch = true
-
-				let alertController: UIAlertController
-
-				switch result {
-					case .failure:
-						alertController = UIAlertController(
-							title: String.holderFaultyVaccination28JuneFailedToReloadAlertTitle,
-							message: String.holderFaultyVaccination28JuneFailedToReloadAlertMessage,
-							preferredStyle: .alert
-						)
-
-					case .success:
-						alertController = UIAlertController(
-							title: String.holderFaultyVaccination28JuneSuccessfullyReloadedAlertTitle,
-							message: String.holderFaultyVaccination28JuneSuccessfullyReloadedAlertMessage,
-							preferredStyle: .alert
-						)
+				// Attempt to consume the universal link again:
+				self.unhandledUniversalLink = nil // prevent potential infinite loops
+				navigateToHolderStart {
+					self.consume(universalLink: unhandledUniversalLink)
 				}
-				alertController.addAction(.init(title: String.close, style: .default, handler: { _ in
-					self.start()
-				}))
 
-				self.navigationController.present(alertController, animated: true, completion: nil)
+			} else {
+
+				// Start with the holder app
+				navigateToHolderStart()
 			}
-		} else if let unhandledUniversalLink = unhandledUniversalLink {
-
-            // Attempt to consume the universal link again:
-            self.unhandledUniversalLink = nil // prevent potential infinite loops
-            navigateToHolderStart {
-                self.consume(universalLink: unhandledUniversalLink)
-            }
-
-        } else {
-
-			// Start with the holder app
-			navigateToHolderStart()
 		}
-	}
-
-	func hasFaultyVaccinationOn28June() -> Bool {
-
-		guard !userSettings.executedJun28Patch else {
-			return false
-		}
-
-		// check if there is a domestic green card with origins 'vaccination' AND 'negativetest'...
-		let domesticTestOrigins = Services.walletManager.listOrigins(type: .test).filter { $0.greenCard?.getType() == .domestic }
-		let domesticVaccineOrigins = Services.walletManager.listOrigins(type: .vaccination).filter { $0.greenCard?.getType() == .domestic }
-
-		guard !domesticTestOrigins.isEmpty && !domesticVaccineOrigins.isEmpty
-		else { return false }
-
-		// ... where any of the origins are older than June 28 11:00 AM GMT+1:
-
-		// Find the earliest origin:
-		let allOrigins = (domesticTestOrigins + domesticVaccineOrigins)
-		
-		guard let oldestOrigin = allOrigins
-			.sorted(by: { ($0.validFromDate ?? .distantPast) < ($1.validFromDate ?? .distantPast) })
-			.first
-		else {
-			return false
-		}
-
-		guard let oldestOriginValidFrom = oldestOrigin.validFromDate else { return false }
-
-		// Having any origins older than this triggers a refresh:
-		let thresholdValidityDate = Date(timeIntervalSince1970: 1624870800)
-
-		return oldestOriginValidFrom < thresholdValidityDate
 	}
 
     // MARK: - Universal Links
-
-    /// If set, this should be handled at the first opportunity:
-    private var unhandledUniversalLink: UniversalLink?
 
     /// Try to consume the Activity
     /// returns: bool indicating whether it was possible.
     @discardableResult
     override func consume(universalLink: UniversalLink) -> Bool {
-        switch universalLink {
-            case .redeemHolderToken(let requestToken):
+		switch universalLink {
+			case .redeemHolderToken(let requestToken):
 
-                // Need to handle two situations:
-                // - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
-                //   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
-                //      that after the user has completed these screens.
-                // - the user is somewhere in the Holder app, and the nav stack can just be replaced.
+				// Need to handle two situations:
+				// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
+				//   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
+				//      that after the user has completed these screens.
+				// - the user is somewhere in the Holder app, and the nav stack can just be replaced.
 
-                if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
-                    self.unhandledUniversalLink = universalLink
-                } else {
-                    // Do it on the next runloop, to standardise all the entry points to this function:
-                    DispatchQueue.main.async { [self] in
-                        navigateToTokenEntry(requestToken)
-                    }
-                }
-            return true
-        }
+				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
+					self.unhandledUniversalLink = universalLink
+				} else {
+					// Do it on the next runloop, to standardise all the entry points to this function:
+					DispatchQueue.main.async { [self] in
+						navigateToTokenEntry(requestToken)
+					}
+				}
+				return true
+
+			case .thirdPartyTicketApp(let returnURL):
+				guard let returnURL = returnURL,
+					  let matchingMetadata = remoteConfigManager.getConfiguration().universalLinkPermittedDomains?.first(where: { permittedDomain in
+						  permittedDomain.url == returnURL.host
+					  })
+				else {
+					return true
+				}
+
+				thirdpartyTicketApp = (name: matchingMetadata.name, returnURL: returnURL)
+
+				// Reset the dashboard back to the domestic tab:
+				if let dashboardViewController = dashboardNavigationController?.viewControllers.last as? HolderDashboardViewController {
+					dashboardViewController.viewModel.selectTab = .domestic
+				}
+				return true
+				
+			case .tvsAuth(let returnURL):
+				
+				if let url = returnURL,
+				   let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+				   let authorizationFlow = appDelegate.currentAuthorizationFlow,
+				   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+					appDelegate.currentAuthorizationFlow = nil
+				}
+				return true
+		}
     }
 
 	private func startEventFlowForVaccination() {
@@ -242,8 +193,9 @@ class HolderCoordinator: SharedCoordinator {
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
-				proofManager: proofManager,
-				requestToken: token
+				networkManager: networkManager,
+				requestToken: token,
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false)
 			)
 		)
 
@@ -259,14 +211,47 @@ class HolderCoordinator: SharedCoordinator {
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
-
-	func presentChangeRegionBottomSheet(currentRegion: QRCodeValidityRegion, callback: @escaping (QRCodeValidityRegion) -> Void) {
-		let viewController = ToggleRegionViewController(viewModel: ToggleRegionViewModel(currentRegion: currentRegion, didChangeCallback: callback))
+	
+	private func navigateToDashboard() {
+		
+		let dashboardViewController = HolderDashboardViewController(
+			viewModel: HolderDashboardViewModel(
+				coordinator: self,
+				cryptoManager: cryptoManager,
+				datasource: HolderDashboardDatasource(
+					cryptoManaging: Services.cryptoManager,
+					walletManager: Services.walletManager,
+					now: { Date() }
+				),
+				strippenRefresher: DashboardStrippenRefresher(
+					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
+					walletManager: Services.walletManager,
+					greencardLoader: Services.greenCardLoader,
+					reachability: try? Reachability(),
+					now: { Date() }
+				),
+				userSettings: UserSettings(),
+				remoteConfigManager: Services.remoteConfigManager,
+				now: { Date() }
+			)
+		)
+		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
+		sidePanel?.selectedViewController = dashboardNavigationController
+	}
+	
+	private func removeChildCoordinator() {
+		
+		guard let coordinator = childCoordinators.last else { return }
+		removeChildCoordinator(coordinator)
+	}
+	
+	private func presentAsBottomSheet(_ viewController: UIViewController) {
+		
 		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
 		viewController.modalPresentationStyle = .custom
 		viewController.modalTransitionStyle = .coverVertical
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.present(viewController, animated: true, completion: nil)
+		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.present(viewController, animated: true, completion: nil)
 	}
 }
 
@@ -284,17 +269,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
-		let dashboardViewController = HolderDashboardViewController(
-			viewModel: HolderDashboardViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager,
-				proofManager: proofManager,
-				configuration: generalConfiguration,
-				dataStoreManager: Services.dataStoreManager
-			)
-		)
-		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
-		sidePanel?.selectedViewController = dashboardNavigationController
+		navigateToDashboard()
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
@@ -311,32 +286,14 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCard: greenCard,
+				thirdPartyTicketAppName: thirdpartyTicketApp?.name,
 				cryptoManager: cryptoManager,
-				configuration: generalConfiguration
+				remoteConfigManager: Services.remoteConfigManager,
+				userSettings: UserSettings(),
+				now: Date.init
 			)
 		)
 		destination.modalPresentationStyle = .fullScreen
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to choose provider
-	func navigateToAboutMakingAQR() {
-
-		let destination = AboutMakingAQRViewController(
-			viewModel: AboutMakingAQRViewModel(coordinator: self)
-		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to the token scanner
-	func navigateToTokenScan() {
-
-		let destination = TokenScanViewController(
-			viewModel: TokenScanViewModel(
-				coordinator: self
-			)
-		)
-
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
@@ -362,7 +319,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	///   - title: the title of the page
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
@@ -371,17 +328,26 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				message: body,
 				linkTapHander: { [weak self] url in
 
-					self?.openUrl(url, inApp: true)
+					self?.openUrl(url, inApp: openURLsInApp)
 				},
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
-			.present(viewController, animated: true, completion: nil)
+		presentAsBottomSheet(viewController)
+	}
+	
+	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String) {
+		
+		let viewController = DCCQRDetailsViewController(
+			viewModel: DCCQRDetailsViewModel(
+				coordinator: self,
+				title: title,
+				description: description,
+				details: details,
+				dateInformation: dateInformation
+			)
+		)
+		presentAsBottomSheet(viewController)
 	}
 
 	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
@@ -414,17 +380,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewController = MakeTestAppointmentViewController(
 			viewModel: MakeTestAppointmentViewModel(
 				coordinator: self,
-				title: .holderNoTestTitle,
-				message: String(format: .holderNoTestBody),
-				buttonTitle: .holderNoTestButtonTitle
+				title: L.holderNotestTitle(),
+				message: String(format: L.holderNotestBody()),
+				buttonTitle: L.holderNotestButtonTitle()
 			)
 		)
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
-			.present(viewController, animated: true, completion: nil)
+		presentAsBottomSheet(viewController)
 	}
 
 	func userWishesToCreateANegativeTestQRFromGGD() {
@@ -455,15 +416,17 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		navigateToTokenEntry(requestToken)
 	}
 
-	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
-		presentChangeRegionBottomSheet(currentRegion: currentRegion, callback: completion)
-	}
-
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
 
 		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
+	}
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		let title: String = L.holderClockDeviationDetectedTitle()
+		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
@@ -472,22 +435,38 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				navigateToShowQR(greenCard)
 			} else {
 				let alertController = UIAlertController(
-					title: .errorTitle,
-					message: String(format: .technicalErrorCustom, "150"),
+					title: L.generalErrorTitle(),
+					message: String(format: L.generalErrorTechnicalCustom("150")),
 					preferredStyle: .alert)
 
-				alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+				alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
 				(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 			}
 		} catch let error {
 			let alertController = UIAlertController(
-				title: .errorTitle,
-				message: String(format: .technicalErrorCustom, "CD_\((error as NSError).code))"),
+				title: L.generalErrorTitle(),
+				message: L.generalErrorTechnicalCustom("CD_\((error as NSError).code))"),
 				preferredStyle: .alert)
 
-			alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
 			(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 		}
+	}
+
+	func userWishesToLaunchThirdPartyTicketApp() {
+		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
+		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
+	}
+
+	func displayError(content: Content, backAction: @escaping () -> Void) {
+
+		let viewController = ErrorStateViewController(
+			viewModel: ErrorStateViewModel(
+				content: content,
+				backAction: backAction
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
 }
 
@@ -504,6 +483,11 @@ extension HolderCoordinator: MenuDelegate {
 	/// Open a menu item
 	/// - Parameter identifier: the menu identifier
 	func openMenuItem(_ identifier: MenuIdentifier) {
+		
+		// Clean up child coordinator. Faq is not replacing side panel view controller
+		if identifier != .faq {
+			removeChildCoordinator()
+		}
 
 		switch identifier {
 			case .overview:
@@ -511,7 +495,7 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = dashboardNavigationController
 
 			case .faq:
-				guard let faqUrl = URL(string: .holderUrlFAQ) else {
+				guard let faqUrl = URL(string: L.holderUrlFaq()) else {
 					logError("No holder FAQ url")
 					return
 				}
@@ -528,11 +512,21 @@ extension HolderCoordinator: MenuDelegate {
 				aboutNavigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
 
-			case .qrCodeMaken:
-				let destination = AboutMakingAQRViewController(
-					viewModel: AboutMakingAQRViewModel(coordinator: self)
+			case .addCertificate:
+				let destination = ChooseQRCodeTypeViewController(
+					viewModel: ChooseQRCodeTypeViewModel(
+						coordinator: self
+					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = navigationController
+				
+			case .addPaperCertificate:
+				let coordinator = PaperCertificateCoordinator(delegate: self)
+				let destination = PaperCertificateStartViewController(viewModel: .init(coordinator: coordinator))
+				navigationController = UINavigationController(rootViewController: destination)
+				coordinator.navigationController = navigationController
+				startChildCoordinator(coordinator)
 				sidePanel?.selectedViewController = navigationController
 
 			default:
@@ -558,7 +552,8 @@ extension HolderCoordinator: MenuDelegate {
 	func getTopMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .overview, title: .holderMenuDashboard)
+			MenuItem(identifier: .overview, title: L.holderMenuDashboard()),
+			MenuItem(identifier: .addCertificate, title: L.holderMenuProof())
 		]
 	}
 	/// Get the items for the bottom menu
@@ -566,7 +561,7 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .qrCodeMaken, title: L.holderAboutmakingaqrTitle()),
+			MenuItem(identifier: .addPaperCertificate, title: L.holderMenuPapercertificate()),
 			MenuItem(identifier: .faq, title: L.holderMenuFaq()),
 			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]
@@ -577,33 +572,29 @@ extension HolderCoordinator: EventFlowDelegate {
 
 	func eventFlowDidComplete() {
 
-		/// The user canceled the vaccination flow. Go back to the dashboard.
+		/// The user completed the event flow. Go back to the dashboard.
 
-		if let vaccinationCoordinator = childCoordinators.last {
-			removeChildCoordinator(vaccinationCoordinator)
-		}
+		removeChildCoordinator()
 
-		let dashboardViewController = HolderDashboardViewController(
-			viewModel: HolderDashboardViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager,
-				proofManager: proofManager,
-				configuration: generalConfiguration,
-				dataStoreManager: Services.dataStoreManager
-			)
-		)
-		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
-		sidePanel?.selectedViewController = dashboardNavigationController
+		navigateToDashboard()
 	}
 
 	func eventFlowDidCancel() {
 
 		/// The user cancelled the flow. Go back one page
 
-		if let vaccinationCoordinator = childCoordinators.last {
-			removeChildCoordinator(vaccinationCoordinator)
-		}
+		removeChildCoordinator()
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+	}
+}
+
+extension HolderCoordinator: PaperCertificateFlowDelegate {
+	
+	func addCertificateFlowDidFinish() {
+		
+		removeChildCoordinator()
+		
+		navigateToDashboard()
 	}
 }

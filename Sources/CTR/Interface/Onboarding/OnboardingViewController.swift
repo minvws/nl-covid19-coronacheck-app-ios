@@ -45,7 +45,7 @@ class OnboardingViewController: BaseViewController {
 		
 		super.viewDidLoad()
 		
-		configureTranslucentNavigationBar()
+		setupTranslucentNavigationBar()
 		
 		setupPageController()
 		viewModel.$pages.binding = { [weak self] in
@@ -63,7 +63,7 @@ class OnboardingViewController: BaseViewController {
 			self.sceneView.pageControl.currentPage = 0
 		}
 		
-		sceneView.primaryButton.setTitle(.next, for: .normal)
+		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		
 		viewModel.$enabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
@@ -77,26 +77,15 @@ class OnboardingViewController: BaseViewController {
 		// hide the original back button
 		navigationItem.hidesBackButton = true
 
-		// Create a button with a back arrow and a .previous title
+		// Create a button with a back arrow
 		let button = UIButton(type: .custom)
-		button.setTitle(.previous, for: .normal)
-		button.setTitleColor(Theme.colors.dark, for: .normal)
-		button.setTitleColor(Theme.colors.gray, for: .highlighted)
-		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
 		button.setImage(.backArrow, for: .normal)
-		button.translatesAutoresizingMaskIntoConstraints = false
-
-		// Add a little spacing between the image and the title, shift the title 5 px right
-		button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -5)
-		// Increase the hit area, move the button 5 px to the left
-		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 10)
+		button.accessibilityLabel = L.generalBack()
+		button.accessibilityIdentifier = "BackButton"
 
 		// Handle touches
 		button.addTarget(self, action: #selector(backbuttonTapped), for: .touchUpInside)
-
-		// Make sure the text won't be truncated if the user opts for bold texts
-		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
-		
+        
 		backButton = UIBarButtonItem(customView: button)
 	}
 	

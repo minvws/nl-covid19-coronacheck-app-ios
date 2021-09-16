@@ -38,15 +38,15 @@ class AppUpdateViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - versionInformation: the version information
-	init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteInformation?) {
+	init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteConfiguration?) {
 
 		self.coordinator = coordinator
-		title = .updateAppTitle
-		message = versionInformation?.minimumVersionMessage ?? .updateAppContent
-		actionTitle = .updateAppButton
+		title = L.updateAppTitle()
+		message = L.updateAppContent()
+		actionTitle = L.updateAppButton()
 		updateURL = versionInformation?.appStoreURL
 		showCannotOpenAlert = false
-		errorMessage = .updateAppErrorMessage
+		errorMessage = L.updateAppErrorMessage()
 		self.image = .updateRequired
 	}
 
@@ -57,7 +57,7 @@ class AppUpdateViewModel {
 			showCannotOpenAlert = true
 			return
 		}
-		coordinator?.openUrl(url)
+		coordinator?.openUrl(url, completionHandler: nil)
 	}
 }
 
@@ -68,16 +68,14 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - versionInformation: the version information
-	override init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteInformation?) {
+	override init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteConfiguration?) {
 
-		super.init(coordinator: coordinator, versionInformation: versionInformation)
+		super.init(coordinator: coordinator, versionInformation: nil)
 
-		self.title = .endOfLifeTitle
-		self.message = .endOfLifeDescription
-		self.errorMessage = .endOfLifeErrorMessage
-		self.actionTitle = .endOfLifeButton
-		self.updateURL = versionInformation?.informationURL
-		self.errorMessage = .endOfLifeErrorMessage
+		self.title = L.endOfLifeTitle()
+		self.message = L.endOfLifeDescription()
+		self.errorMessage = L.endOfLifeErrorMessage()
+		self.actionTitle = L.endOfLifeButton()
 		self.image = .endOfLife
 		self.updateURL = URL(string: "https://coronacheck.nl")
 	}
@@ -93,9 +91,9 @@ class InternetRequiredViewModel: AppUpdateViewModel {
 
 		super.init(coordinator: coordinator, versionInformation: nil)
 
-		self.title = .internetRequiredTitle
-		self.message = .internetRequiredText
-		self.actionTitle = .internetRequiredButton
+		self.title = L.internetRequiredTitle()
+		self.message = L.internetRequiredText()
+		self.actionTitle = L.internetRequiredButton()
 		self.image = .noInternet
 	}
 

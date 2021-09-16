@@ -35,3 +35,18 @@ class CredentialModel {
 		return nil
 	}
 }
+
+extension Array {
+
+	/// Filter, returning only Credentials where the expirationTime is still in the future (relative to a given `now`).
+	func filterValid(now: Date = Date()) -> [Credential] where Element == Credential {
+		filter { ($0.expirationTime ?? .distantPast) > now }
+	}
+
+	/// Find the Credential element with the latest expiry date (note: this could still be in the past).
+	func latestCredentialExpiryTime() -> Date? where Element == Credential {
+		sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) })
+			.last?
+			.expirationTime
+	}
+}

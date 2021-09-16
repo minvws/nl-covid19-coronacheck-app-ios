@@ -57,10 +57,54 @@ extension GreenCard {
 				.filter { $0.expirationTime != nil }
 				.filter { $0.validFrom != nil }
 				.filter { $0.expirationTime! > now }
-				.filter { $0.validFrom! < now }
+				.filter { $0.validFrom! <= now }
 				.sorted { $0.validFrom! < $1.validFrom! }
 				.last
 		}
 		return nil
+	}
+
+	func originsActiveNowOrBeforeThresholdFromNow(now: Date, thresholdDays: Int) -> [Origin]? {
+		let thresholdEndDate = now.addingTimeInterval(TimeInterval(60 * 60 * 24 * thresholdDays))
+
+		return castOrigins()?
+			.filter { origin in
+				(origin.validFromDate ?? .distantFuture) < thresholdEndDate
+			}
+			.filter { origin in
+				(origin.expirationTime ?? .distantPast) > now
+			}
+	}
+
+	func hasActiveCredentialNowOrInFuture(forDate now: Date = Date()) -> Bool {
+
+		return !activeCredentialsNowOrInFuture(forDate: now).isEmpty
+	}
+
+	func activeCredentialsNowOrInFuture(forDate now: Date = Date()) -> [Credential] {
+		guard let list = credentials?.allObjects as? [Credential] else { return [] }
+
+		let activeCredentialsNowOrInFuture = list
+			.filter { $0.expirationTime != nil }
+			.filter { $0.expirationTime! > now }
+
+		return activeCredentialsNowOrInFuture
+	}
+
+	func currentOrNextActiveCredential(forDate now: Date = Date()) -> Credential? {
+		let activeCrendentials = activeCredentialsNowOrInFuture(forDate: now)
+		return activeCrendentials.sorted(by: {
+			($0.validFrom ?? .distantFuture) < ($1.validFrom ?? .distantFuture)
+		}).first
+	}
+
+	/// Get the credentials, strongly typed.
+	func castCredentials() -> [Credential]? {
+		return credentials?.compactMap({ $0 as? Credential })
+	}
+
+	/// Get the origins, strongly typed.
+	func castOrigins() -> [Origin]? {
+		return origins?.compactMap({ $0 as? Origin })
 	}
 }

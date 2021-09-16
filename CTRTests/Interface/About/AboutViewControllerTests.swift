@@ -34,11 +34,6 @@ class AboutViewControllerTests: XCTestCase {
 		window = UIWindow()
 	}
 
-	override func tearDown() {
-
-		super.tearDown()
-	}
-
 	func loadView() {
 
 		window.addSubview(sut.view)
@@ -55,13 +50,34 @@ class AboutViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.title) == .holderAboutTitle
-		expect(self.sut.sceneView.message) == .holderAboutText
-		expect(self.sut.sceneView.listHeader) == .holderAboutReadMore
+		expect(self.sut.title) == L.holderAboutTitle()
+		expect(self.sut.sceneView.message) == L.holderAboutText()
+		expect(self.sut.sceneView.listHeader) == L.holderAboutReadmore()
 		expect(self.sut.sceneView.itemStackView.arrangedSubviews)
-			.to(haveCount(2))
+			.to(haveCount(4))
 		expect(self.sut.sceneView.version).toNot(beNil())
 
 		sut.assertImage()
+	}
+
+	func test_alertDialog() {
+
+		// Given
+		let alertVerifier = AlertVerifier()
+		loadView()
+
+		// When
+		(sut.sceneView.itemStackView.arrangedSubviews.last as? SimpleDisclosureButton)?.primaryButtonTapped()
+
+		// Then
+		alertVerifier.verify(
+			title: L.holderCleardataAlertTitle(),
+			message: L.holderCleardataAlertSubtitle(),
+			animated: true,
+			actions: [
+				.default(L.holderCleardataAlertRemove()),
+				.cancel(L.generalCancel())
+			]
+		)
 	}
 }

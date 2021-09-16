@@ -38,17 +38,16 @@ final class MakeTestAppointmentView: BaseView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
-	/// The message label
-	private let messageLabel: Label = {
+	/// The message text
+	private let messageTextView: TextView = {
 
-		return Label(body: nil).multiline()
+		return TextView()
 	}()
 	
 	let button: Button = {
 
-		let button = Button(title: "Button", style: .primary)
+		let button = Button(title: "Button", style: .roundedBlue)
 		button.titleLabel?.font = Theme.fonts.bodySemiBold
-		button.rounded = true
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentEdgeInsets = UIEdgeInsets(top: 15, left: 56, bottom: 15, right: 56)
 		return button
@@ -68,7 +67,7 @@ final class MakeTestAppointmentView: BaseView {
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.setCustomSpacing(ViewTraits.Spacing.title, after: titleLabel)
-		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(messageTextView)
 
 		addSubview(stackView)
 		addSubview(button)
@@ -128,7 +127,7 @@ final class MakeTestAppointmentView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
+			messageTextView.attributedText = .makeFromHtml(
 				text: message,
 				font: Theme.fonts.body,
 				textColor: Theme.colors.dark

@@ -23,16 +23,11 @@ The Xcode project file (`CTR.xcodeproj`) is not checked-in to git. Instead, we g
 
 Simply run `make dev` from the command line.  
 
-It will compile: 
-
-- XcodeGen 
-- SwiftLint
-
-and will install githooks for: 
+It will use [Homebrew](https://brew.sh) to install [these tools](./Brewfile), and will install githooks for: 
 
 - GitLFS (which will download the [snapshot](https://github.com/pointfreeco/swift-snapshot-testing) PNGs used in our unit tests) 
 - XcodeGen (which will update the Xcode project each time you change branches)
 
-and will run `bundle install` to setup your Ruby dependencies such as fastlane
+and it will run `bundle install` to setup your [Ruby dependencies](./Gemfile) such as fastlane.
 
-and lastly, will generate and open the Xcode Project for you.
+Lastly, it will generate and open the Xcode Project for you.

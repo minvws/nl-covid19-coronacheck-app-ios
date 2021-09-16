@@ -8,6 +8,12 @@
 import UIKit
 
 class VerifierScanViewController: ScanViewController {
+	
+	struct AlertContent {
+		let title: String
+		let subTitle: String
+		let okTitle: String
+	}
 
 	private let viewModel: VerifierScanViewModel
 
@@ -33,17 +39,22 @@ class VerifierScanViewController: ScanViewController {
 
 		super.viewDidLoad()
 		
-		configureTranslucentNavigationBar()
+		setupTranslucentNavigationBar()
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 
-		viewModel.$startScanning.binding = { [weak self] in
-			if $0, self?.captureSession?.isRunning == false {
-				self?.captureSession.startRunning()
+		viewModel.$moreInformationButtonText.binding = { [weak self] in self?.sceneView.moreInformationButtonText = $0 }
+		
+		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
+
+		viewModel.$shouldResumeScanning.binding = { [weak self] in
+			if let value = $0, value {
+				self?.resumeScanning()
 			}
 		}
+
 		viewModel.$torchLabels.binding = { [weak self] in
 			guard let strongSelf = self else { return }
             strongSelf.addTorchButton(
@@ -58,14 +69,19 @@ class VerifierScanViewController: ScanViewController {
 				self?.showPermissionError()
 			}
 		}
+
+		sceneView.moreInformationButtonCommand = { [viewModel] in
+			viewModel.didTapMoreInformationButton()
+		}
 		
 		addCloseButton(
 			action: #selector(closeButtonTapped),
 			backgroundColor: .clear,
 			tintColor: .white
 		)
+
 		// Only show an arrow as back button
-		styleBackButton(buttonText: "")
+		styleBackButton()
 	}
 
 	override func found(code: String) {
@@ -83,13 +99,13 @@ class VerifierScanViewController: ScanViewController {
 	func showPermissionError() {
 
 		let alertController = UIAlertController(
-			title: .verifierScanPermissionTitle,
-			message: .verifierScanPermissionMessage,
+			title: L.verifierScanPermissionTitle(),
+			message: L.verifierScanPermissionMessage(),
 			preferredStyle: .alert
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: .verifierScanPermissionSettings,
+				title: L.verifierScanPermissionSettings(),
 				style: .default,
 				handler: { [weak self] _ in
 					self?.viewModel.gotoSettings()
@@ -98,7 +114,7 @@ class VerifierScanViewController: ScanViewController {
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: .cancel,
+				title: L.generalCancel(),
 				style: .cancel,
 				handler: nil
 			)

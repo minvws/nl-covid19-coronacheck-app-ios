@@ -52,7 +52,8 @@ extension String {
 
 		let underlineRange = (self as NSString).range(of: underlined)
 		let attributes: [NSAttributedString.Key: Any] = [
-			.link: underlined
+			.foregroundColor: Theme.colors.iosBlue,
+			.underlineStyle: NSUnderlineStyle.single.rawValue
 		]
 		let attributedText = NSMutableAttributedString(
 			string: self
@@ -117,5 +118,29 @@ extension String {
 	mutating func capitalizeFirstLetter() {
 
 		self = self.capitalizingFirstLetter()
+	}
+}
+
+extension String {
+
+	func strippingWhitespace() -> String {
+
+		return trimmingCharacters(in: .whitespacesAndNewlines)
+			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
+	}
+}
+
+extension String {
+
+	/// Add line breaks at each column.
+	/// Assumes the string is currently a single line.
+	func breakingAtColumn(column: Int) -> String {
+		enumerated().reduce("") { result, tuple in
+			if (tuple.offset % column) == 0 && tuple.offset != 0 {
+				return "\(result)\n\(tuple.element)"
+			} else {
+				return "\(result)\(tuple.element)"
+			}
+		}
 	}
 }

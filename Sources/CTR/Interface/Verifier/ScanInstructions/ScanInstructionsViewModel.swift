@@ -7,70 +7,76 @@
 
 import UIKit
 
-enum ScanInstructionsResult {
-
-	// The user has read the scan instructions and pressed next
-	case scanInstructionsCompleted
-}
-
-typealias ScanInstructions = (title: String, text: String, image: UIImage?, imageDescription: String?)
-
-class ScanInstructionsViewModel: Logging {
-
+class ScanInstructionsViewModel {
+	
 	/// Coordination Delegate
-	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
+	weak var coordinator: ScanInstructionsCoordinatorDelegate?
 	
-	// MARK: - Bindable properties
-	
-	/// The title of the scene
-	@Bindable private(set) var title: String
-	
-	/// The content of the scene
-    @Bindable private(set) var content: [ScanInstructions]
-    
-	// MARK: - Initializer
+	/// The pages for onboarding
+	@Bindable private(set) var pages: [ScanInstructionsPage]
+
+	@Bindable private(set) var shouldShowSkipButton: Bool = true
+
+	@Bindable private(set) var nextButtonTitle: String?
+
+	private var currentPage: Int {
+		didSet {
+			updateState()
+		}
+	}
+
+	private let userSettings: UserSettingsProtocol
 
 	/// Initializer
 	/// - Parameters:
-	///   - coordinator: the verifier coordinator delegate
-	init(coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)) {
+	///   - coordinator: the coordinator delegate
+	///   - onboardingInfo: the container with onboarding info
+	///   - numberOfPages: the total number of pages
+	init(
+		coordinator: ScanInstructionsCoordinatorDelegate,
+		pages: [ScanInstructionsPage],
+		userSettings: UserSettingsProtocol) {
 		
 		self.coordinator = coordinator
-		self.title = .verifierScanInstructionsTitle
-		self.content = [
-			(
-				title: .verifierScanInstructionsDistanceTitle,
-				text: .verifierScanInstructionsDistanceText,
-				image: nil,
-                imageDescription: nil
-			), (
-				title: .verifierScanInstructionsScanTitle,
-				text: .verifierScanInstructionsScanText,
-				image: nil,
-                imageDescription: nil
-			), (
-				title: .verifierScanInstructionsAccessTitle,
-				text: .verifierScanInstructionsAccessText,
-				image: .greenScreen,
-                imageDescription: .verifierScanInstructionsAccessImage
-			), (
-				title: .verifierScanInstructionsDeniedTitle,
-				text: .verifierScanInstructionsDeniedText,
-				image: .redScreen,
-                imageDescription: .verifierScanInstructionsDeniedImage
-			)
-		]
+		self.pages = pages
+		self.userSettings = userSettings
+		self.currentPage = 0
+
+		updateState()
+	}
+	
+	func scanInstructionsViewController(forPage page: ScanInstructionsPage) -> ScanInstructionsPageViewController {
+		let viewController = ScanInstructionsPageViewController(
+			viewModel: ScanInstructionsPageViewModel(page: page)
+		)
+		viewController.isAccessibilityElement = true
+		return viewController
+	}
+	
+	func finishScanInstructions() {
+		
+		coordinator?.userDidCompletePages()
 	}
 
-	// MARK: - User Interaction
-
-	func primaryButtonTapped() {
-
-		coordinator?.didFinish(.scanInstructionsCompleted)
+	/// i.e. exit the Scan Instructions
+	func userTappedBackOnFirstPage() {
+		coordinator?.userDidCancelScanInstructions()
 	}
 
-	func linkTapped(_ url: URL) {
+	func userDidChangeCurrentPage(toPageIndex pageIndex: Int) {
+		currentPage = pageIndex
+	}
 
-		coordinator?.openUrl(url, inApp: true)
+	private func updateState() {
+		shouldShowSkipButton = {
+			guard !userSettings.scanInstructionShown else { return false }
+			return currentPage < (pages.count - 1)
+		}()
+
+		nextButtonTitle = {
+			currentPage < (pages.count - 1)
+				? L.generalNext()
+				: L.verifierScaninstructionsButtonStartscanning()
+		}()
 	}
 }

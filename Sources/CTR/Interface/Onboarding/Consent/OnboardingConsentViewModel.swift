@@ -22,8 +22,10 @@ final class OnboardingConsentViewModel {
 	@Bindable private(set) var message: String
 	@Bindable private(set) var underlinedText: String?
 	@Bindable private(set) var consentText: String?
+	@Bindable private(set) var actionTitle: String?
 	@Bindable private(set) var summary: [String]
 	@Bindable private(set) var shouldHideBackButton: Bool
+	@Bindable private(set) var shouldHideConsentButton: Bool
 
 	/// Initializer
 	/// - Parameters:
@@ -36,10 +38,18 @@ final class OnboardingConsentViewModel {
 		self.title = factory.getConsentTitle()
 		self.message = factory.getConsentMessage()
 		self.underlinedText = factory.getConsentLink()
-		self.consentText = factory.getConsentButtonTitle()
 		self.summary = factory.getConsentItems()
-		self.isContinueButtonEnabled = false
+		self.consentText = factory.getConsentButtonTitle()
 		self.shouldHideBackButton = shouldHideBackButton
+		self.actionTitle = factory.getActionButtonTitle()
+
+		if factory.useConsentButton() {
+			self.isContinueButtonEnabled = false
+			self.shouldHideConsentButton = false
+		} else {
+			self.isContinueButtonEnabled = true
+			self.shouldHideConsentButton = true
+		}
 	}
 
 	/// The user tapped on the consent button

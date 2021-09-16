@@ -19,16 +19,16 @@ class UserSettingsSpy: UserSettingsProtocol {
 	var stubbedScanInstructionShown: Bool! = false
 
 	var scanInstructionShown: Bool {
-		get {
-			invokedScanInstructionShownGetter = true
-			invokedScanInstructionShownGetterCount += 1
-			return stubbedScanInstructionShown
-		}
 		set {
 			invokedScanInstructionShownSetter = true
 			invokedScanInstructionShownSetterCount += 1
 			invokedScanInstructionShown = newValue
 			invokedScanInstructionShownList.append(newValue)
+		}
+		get {
+			invokedScanInstructionShownGetter = true
+			invokedScanInstructionShownGetterCount += 1
+			return stubbedScanInstructionShown
 		}
 	}
 
@@ -41,38 +41,148 @@ class UserSettingsSpy: UserSettingsProtocol {
 	var stubbedJailbreakWarningShown: Bool! = false
 
 	var jailbreakWarningShown: Bool {
-		get {
-			invokedJailbreakWarningShownGetter = true
-			invokedJailbreakWarningShownGetterCount += 1
-			return stubbedJailbreakWarningShown
-		}
 		set {
 			invokedJailbreakWarningShownSetter = true
 			invokedJailbreakWarningShownSetterCount += 1
 			invokedJailbreakWarningShown = newValue
 			invokedJailbreakWarningShownList.append(newValue)
 		}
+		get {
+			invokedJailbreakWarningShownGetter = true
+			invokedJailbreakWarningShownGetterCount += 1
+			return stubbedJailbreakWarningShown
+		}
 	}
 
-	var invokedExecutedJun28PatchSetter = false
-	var invokedExecutedJun28PatchSetterCount = 0
-	var invokedExecutedJun28Patch: Bool?
-	var invokedExecutedJun28PatchList = [Bool]()
-	var invokedExecutedJun28PatchGetter = false
-	var invokedExecutedJun28PatchGetterCount = 0
-	var stubbedExecutedJun28Patch: Bool! = false
+	var invokedDashboardRegionToggleValueSetter = false
+	var invokedDashboardRegionToggleValueSetterCount = 0
+	var invokedDashboardRegionToggleValue: QRCodeValidityRegion?
+	var invokedDashboardRegionToggleValueList = [QRCodeValidityRegion]()
+	var invokedDashboardRegionToggleValueGetter = false
+	var invokedDashboardRegionToggleValueGetterCount = 0
+	var stubbedDashboardRegionToggleValue: QRCodeValidityRegion!
 
-	var executedJun28Patch: Bool {
-		get {
-			invokedExecutedJun28PatchGetter = true
-			invokedExecutedJun28PatchGetterCount += 1
-			return stubbedExecutedJun28Patch
-		}
+	var dashboardRegionToggleValue: QRCodeValidityRegion {
 		set {
-			invokedExecutedJun28PatchSetter = true
-			invokedExecutedJun28PatchSetterCount += 1
-			invokedExecutedJun28Patch = newValue
-			invokedExecutedJun28PatchList.append(newValue)
+			invokedDashboardRegionToggleValueSetter = true
+			invokedDashboardRegionToggleValueSetterCount += 1
+			invokedDashboardRegionToggleValue = newValue
+			invokedDashboardRegionToggleValueList.append(newValue)
+		}
+		get {
+			invokedDashboardRegionToggleValueGetter = true
+			invokedDashboardRegionToggleValueGetterCount += 1
+			return stubbedDashboardRegionToggleValue
+		}
+	}
+
+	var invokedConfigFetchedTimestampSetter = false
+	var invokedConfigFetchedTimestampSetterCount = 0
+	var invokedConfigFetchedTimestamp: TimeInterval?
+	var invokedConfigFetchedTimestampList = [TimeInterval?]()
+	var invokedConfigFetchedTimestampGetter = false
+	var invokedConfigFetchedTimestampGetterCount = 0
+	var stubbedConfigFetchedTimestamp: TimeInterval!
+
+	var configFetchedTimestamp: TimeInterval? {
+		set {
+			invokedConfigFetchedTimestampSetter = true
+			invokedConfigFetchedTimestampSetterCount += 1
+			invokedConfigFetchedTimestamp = newValue
+			invokedConfigFetchedTimestampList.append(newValue)
+		}
+		get {
+			invokedConfigFetchedTimestampGetter = true
+			invokedConfigFetchedTimestampGetterCount += 1
+			return stubbedConfigFetchedTimestamp
+		}
+	}
+
+	var invokedLastScreenshotTimeSetter = false
+	var invokedLastScreenshotTimeSetterCount = 0
+	var invokedLastScreenshotTime: Date?
+	var invokedLastScreenshotTimeList = [Date?]()
+	var invokedLastScreenshotTimeGetter = false
+	var invokedLastScreenshotTimeGetterCount = 0
+	var stubbedLastScreenshotTime: Date!
+
+	var lastScreenshotTime: Date? {
+		set {
+			invokedLastScreenshotTimeSetter = true
+			invokedLastScreenshotTimeSetterCount += 1
+			invokedLastScreenshotTime = newValue
+			invokedLastScreenshotTimeList.append(newValue)
+		}
+		get {
+			invokedLastScreenshotTimeGetter = true
+			invokedLastScreenshotTimeGetterCount += 1
+			return stubbedLastScreenshotTime
+		}
+	}
+
+	var invokedIssuerKeysFetchedTimestampSetter = false
+	var invokedIssuerKeysFetchedTimestampSetterCount = 0
+	var invokedIssuerKeysFetchedTimestamp: TimeInterval?
+	var invokedIssuerKeysFetchedTimestampList = [TimeInterval?]()
+	var invokedIssuerKeysFetchedTimestampGetter = false
+	var invokedIssuerKeysFetchedTimestampGetterCount = 0
+	var stubbedIssuerKeysFetchedTimestamp: TimeInterval!
+
+	var issuerKeysFetchedTimestamp: TimeInterval? {
+		set {
+			invokedIssuerKeysFetchedTimestampSetter = true
+			invokedIssuerKeysFetchedTimestampSetterCount += 1
+			invokedIssuerKeysFetchedTimestamp = newValue
+			invokedIssuerKeysFetchedTimestampList.append(newValue)
+		}
+		get {
+			invokedIssuerKeysFetchedTimestampGetter = true
+			invokedIssuerKeysFetchedTimestampGetterCount += 1
+			return stubbedIssuerKeysFetchedTimestamp
+		}
+	}
+
+	var invokedLastRecommendUpdateDismissalTimestampSetter = false
+	var invokedLastRecommendUpdateDismissalTimestampSetterCount = 0
+	var invokedLastRecommendUpdateDismissalTimestamp: TimeInterval?
+	var invokedLastRecommendUpdateDismissalTimestampList = [TimeInterval?]()
+	var invokedLastRecommendUpdateDismissalTimestampGetter = false
+	var invokedLastRecommendUpdateDismissalTimestampGetterCount = 0
+	var stubbedLastRecommendUpdateDismissalTimestamp: TimeInterval!
+
+	var lastRecommendUpdateDismissalTimestamp: TimeInterval? {
+		set {
+			invokedLastRecommendUpdateDismissalTimestampSetter = true
+			invokedLastRecommendUpdateDismissalTimestampSetterCount += 1
+			invokedLastRecommendUpdateDismissalTimestamp = newValue
+			invokedLastRecommendUpdateDismissalTimestampList.append(newValue)
+		}
+		get {
+			invokedLastRecommendUpdateDismissalTimestampGetter = true
+			invokedLastRecommendUpdateDismissalTimestampGetterCount += 1
+			return stubbedLastRecommendUpdateDismissalTimestamp
+		}
+	}
+
+	var invokedDeviceAuthenticationWarningShownSetter = false
+	var invokedDeviceAuthenticationWarningShownSetterCount = 0
+	var invokedDeviceAuthenticationWarningShown: Bool?
+	var invokedDeviceAuthenticationWarningShownList = [Bool]()
+	var invokedDeviceAuthenticationWarningShownGetter = false
+	var invokedDeviceAuthenticationWarningShownGetterCount = 0
+	var stubbedDeviceAuthenticationWarningShown: Bool! = false
+
+	var deviceAuthenticationWarningShown: Bool {
+		set {
+			invokedDeviceAuthenticationWarningShownSetter = true
+			invokedDeviceAuthenticationWarningShownSetterCount += 1
+			invokedDeviceAuthenticationWarningShown = newValue
+			invokedDeviceAuthenticationWarningShownList.append(newValue)
+		}
+		get {
+			invokedDeviceAuthenticationWarningShownGetter = true
+			invokedDeviceAuthenticationWarningShownGetterCount += 1
+			return stubbedDeviceAuthenticationWarningShown
 		}
 	}
 }

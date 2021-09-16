@@ -18,12 +18,18 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	
 	/// Initialize core library
 	func initialize()
+
+	init(fileStorage: FileStorage, flavor: AppFlavor)
 	
 	/// Store data in documents directory
 	/// - Parameters:
 	///   - data: Data that needs to be saved
 	///   - file: File type
 	func store(_ data: Data, for file: CryptoLibUtility.File)
+
+	/// Check if a file exists. If true, initialize
+	/// - Parameter file: file type
+	func checkFile(_ file: CryptoLibUtility.File)
 }
 
 final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
@@ -99,7 +105,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	/// - Parameters:
 	///   - data: Data that needs to be saved
 	///   - file: File type
-	func store(_ data: Data, for file: File) {
+	func store(_ data: Data, for file: CryptoLibUtility.File) {
 		
 		do {
 			try fileStorage.store(data, as: file.name)
@@ -108,5 +114,14 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 			return
 		}
 		shouldInitialize.insert(file)
+	}
+
+	/// Check if a file exists. If true, initialize
+	/// - Parameter file: file type
+	func checkFile(_ file: CryptoLibUtility.File) {
+
+		if fileStorage.fileExists(file.name) {
+			shouldInitialize.insert(file)
+		}
 	}
 }

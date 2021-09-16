@@ -11,7 +11,7 @@ import Foundation
 enum LaunchState: Equatable {
 
 	/// The app should be updated
-	case actionRequired(RemoteInformation)
+	case actionRequired(RemoteConfiguration)
 
 	/// The app is fine.
 	case noActionNeeded
@@ -21,6 +21,9 @@ enum LaunchState: Equatable {
 	
 	/// The crypto library needs to be initialized
 	case cryptoLibNotInitialized
+
+	/// the previous fetch is still valid
+	case withinTTL
 
 	// MARK: Equatable
 
@@ -41,9 +44,10 @@ enum LaunchState: Equatable {
 					lhsVersion.appStoreURL == rhsVersion.appStoreURL &&
 					lhsVersion.informationURL == rhsVersion.informationURL &&
 					lhsVersion.appDeactivated == rhsVersion.appDeactivated &&
-					lhsVersion.configTTL == rhsVersion.configTTL &&
-					lhsVersion.maxValidityHours == rhsVersion.maxValidityHours
+					lhsVersion.configTTL == rhsVersion.configTTL
 			case (.cryptoLibNotInitialized, cryptoLibNotInitialized):
+				return true
+			case (withinTTL, withinTTL):
 				return true
 			default:
 				return false

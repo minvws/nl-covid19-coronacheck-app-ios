@@ -23,10 +23,32 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
     var torchEnableLabel: String?
     var torchDisableLabel: String?
 
+	// Actions to perform on the navigationController at the moment that we are removing this screen.
+	// 	Background:
+	// 		we use `dashboardNavigationController?.setViewControllers([dashboardViewController], animated: false)`
+	// 		when dismissing this screen, which removes the reference to `self.navigationController` even before
+	// 		`self.viewWillDisappear` is called. So we need to maintain a (weak) reference to the navigationController
+	// 		inside this closure, so that we can perform some teardown steps on it as we're dismissed.
+	private var navigationControllerTeardown: (() -> Void)?
+
 	// MARK: View lifecycle
 	override func loadView() {
 
 		view = sceneView
+	}
+
+	override func viewDidLoad() {
+		super.viewDidLoad()
+
+		navigationControllerTeardown = { [weak navigationController] in
+			// Reset navigation title color
+			let textAttributes = [
+				NSAttributedString.Key.foregroundColor: Theme.colors.dark,
+				NSAttributedString.Key.font: Theme.fonts.bodyMontserrat
+			]
+			navigationController?.navigationBar.titleTextAttributes = textAttributes
+			navigationController?.navigationBar.tintColor = Theme.colors.dark
+		}
 	}
 
 	func setupScan() {
@@ -111,13 +133,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			captureSession.stopRunning()
 		}
 
-		// Reset navigation title color
-		let textAttributes = [
-			NSAttributedString.Key.foregroundColor: Theme.colors.dark,
-			NSAttributedString.Key.font: Theme.fonts.bodyMontserrat
-		]
-		navigationController?.navigationBar.titleTextAttributes = textAttributes
-		navigationController?.navigationBar.tintColor = Theme.colors.dark
+		navigationControllerTeardown?()
 
 		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
 	}
@@ -128,7 +144,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			message: "Your device does not support scanning a code from an item. Please use a device with a camera.",
 			preferredStyle: .alert
 		)
-		ac.addAction(UIAlertAction(title: .ok, style: .default))
+		ac.addAction(UIAlertAction(title: L.generalOk(), style: .default))
 		present(ac, animated: true)
 		captureSession = nil
 	}
@@ -180,7 +196,9 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	}
     
     func torchChanged(enabled: Bool) {
-        torchButton?.accessibilityLabel = enabled ? torchDisableLabel : torchEnableLabel
+        let label = enabled ? torchDisableLabel : torchEnableLabel
+        torchButton?.accessibilityLabel = label
+        torchButton?.title = label
     }
 
 	/// Add a torch button to the navigation bar.
@@ -198,8 +216,9 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			target: self,
 			action: action
 		)
+        button.title = enableLabel
+        button.accessibilityLabel = enableLabel
 		button.accessibilityIdentifier = "TorchButton"
-		button.accessibilityLabel = enableLabel
 		button.accessibilityTraits = .button
 		navigationItem.rightBarButtonItem = button
 		navigationController?.navigationItem.rightBarButtonItem = button
@@ -207,5 +226,10 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
         self.torchButton = button
         self.torchEnableLabel = enableLabel
         self.torchDisableLabel = disableLabel
+	}
+	
+	/// Resume scanning after being stopped
+	func resumeScanning() {
+		captureSession.startRunning()
 	}
 }

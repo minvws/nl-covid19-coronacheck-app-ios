@@ -17,8 +17,12 @@ struct AlertContent {
 }
 
 extension UIViewController {
-	
-	func showAlert(_ alertContent: AlertContent?) {
+
+	/// Show an alert
+	/// - Parameters:
+	///   - alertContent: the content of the alert
+	///   - preferredAction: the title of the preferred action
+	func showAlert(_ alertContent: AlertContent?, preferredAction: String? = nil) {
 
 		guard let content = alertContent else {
 			return
@@ -29,24 +33,29 @@ extension UIViewController {
 			message: content.subTitle,
 			preferredStyle: .alert
 		)
-		alertController.addAction(
-			UIAlertAction(
+		let okAction = UIAlertAction(
 				title: content.okTitle,
 				style: .default,
 				handler: content.okAction
-			)
 		)
+		alertController.addAction(okAction)
+		if preferredAction == content.okTitle {
+			alertController.preferredAction = okAction
+		}
 
 		// Optional cancel button:
 		if let cancelTitle = content.cancelTitle {
-			alertController.addAction(
-				UIAlertAction(
+			let cancelAction = UIAlertAction(
 					title: cancelTitle,
 					style: .cancel,
 					handler: content.cancelAction
 				)
-			)
+			alertController.addAction(cancelAction)
+			if preferredAction == cancelTitle {
+				alertController.preferredAction = cancelAction
+			}
 		}
+
 		present(alertController, animated: true, completion: nil)
 	}
 }

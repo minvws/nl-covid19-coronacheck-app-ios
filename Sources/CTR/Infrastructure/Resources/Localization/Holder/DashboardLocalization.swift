@@ -18,44 +18,34 @@ extension String {
 	static func holderDashboardNotValidInThisRegionScreenTitle(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) -> String {
 		switch (originType, currentRegion) {
 			case (.vaccination, .domestic):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title")
+				return L.holderDashboardNotValidInThisRegionScreenDomesticVaccinationTitle()
 			case (.vaccination, .europeanUnion):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title")
+				return L.holderDashboardNotValidInThisRegionScreenEuVaccinationTitle()
 			case (.test, .domestic):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.test.title")
+				return L.holderDashboardNotValidInThisRegionScreenDomesticTestTitle()
 			case (.test, .europeanUnion):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.test.title")
+				return L.holderDashboardNotValidInThisRegionScreenEuTestTitle()
 			case (.recovery, .domestic):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title")
+				return L.holderDashboardNotValidInThisRegionScreenDomesticRecoveryTitle()
 			case (.recovery, .europeanUnion):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title")
+				return L.holderDashboardNotValidInThisRegionScreenEuRecoveryTitle()
 		}
 	}
 
 	static func holderDashboardNotValidInThisRegionScreenMessage(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) -> String {
 		switch (originType, currentRegion) {
 			case (.vaccination, .domestic):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message")
+				return L.holderDashboardNotValidInThisRegionScreenDomesticVaccinationMessage()
 			case (.vaccination, .europeanUnion):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message")
+				return L.holderDashboardNotValidInThisRegionScreenEuVaccinationMessage()
 			case (.test, .domestic):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.test.message")
+				return L.holderDashboardNotValidInThisRegionScreenDomesticTestMessage()
 			case (.test, .europeanUnion):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.test.message")
+				return L.holderDashboardNotValidInThisRegionScreenEuTestMessage()
 			case (.recovery, .domestic):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message")
+				return L.holderDashboardNotValidInThisRegionScreenDomesticRecoveryMessage()
 			case (.recovery, .europeanUnion):
-				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message")
+				return L.holderDashboardNotValidInThisRegionScreenEuRecoveryMessage()
 		}
-	}
-    
-	// Can be deleted after EU launch: 
-	static func qrEULaunchCardFooterMessage(forEULaunchDate date: Date) -> String {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "d MMMM"
-
-		let dateString = dateFormatter.string(from: date)
-
-		return Localization.string(for: "holder.dashboard.qr.eulaunchcardfootermessage", comment: "", [dateString])
 	}
 }

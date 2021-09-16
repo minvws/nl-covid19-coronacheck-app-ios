@@ -4,26 +4,49 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-  
+
 import UIKit
 
-class ShowQRViewModel: PreventableScreenCapture, Logging {
+class ShowQRViewModel: Logging {
 
+	// MARK: - Static
+	
 	static let domesticCorrectionLevel = "M"
 	static let internationalCorrectionLevel = "Q"
+	static let screenshotWarningMessageDuration: TimeInterval = 3 * 60
+
+	// MARK: - vars
 
 	var loggingCategory: String = "ShowQRViewModel"
 
 	weak private var coordinator: HolderCoordinatorDelegate?
 	weak private var cryptoManager: CryptoManaging?
 	weak private var remoteConfigManager: RemoteConfigManaging?
-	weak private var configuration: ConfigurationGeneralProtocol?
-
-	var previousBrightness: CGFloat?
 
 	weak var validityTimer: Timer?
+	weak private var screenshotWarningTimer: Timer?
 
+	private var previousBrightness: CGFloat?
 	private var greenCard: GreenCard
+	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
+
+	private var currentQRImage: UIImage? {
+		didSet {
+			updateQRVisibility()
+		}
+	}
+
+	private var screenIsBeingCaptured: Bool {
+		didSet {
+			updateQRVisibility()
+		}
+	}
+
+	private var screenIsBlockedForScreenshotWithSecondsRemaining: Int? {
+		didSet {
+			updateQRVisibility()
+		}
+	}
 
 	@Bindable private(set) var title: String?
     
@@ -31,11 +54,11 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
-	@Bindable private(set) var qrImage: UIImage?
-
-	@Bindable private(set) var showValidQR: Bool
+	@Bindable private(set) var visibilityState: ShowQRImageView.VisibilityState = .loading
 
 	@Bindable private(set) var showInternationalAnimation: Bool = false
+
+	@Bindable private(set) var thirdPartyTicketAppButtonTitle: String?
 
 	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
@@ -48,7 +71,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "d MMMM yyyy"
+		dateFormatter.dateFormat = "dd-MM-yyyy"
 		return dateFormatter
 	}()
 
@@ -60,42 +83,130 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		return dateFormatter
 	}()
 
+	private let userSettings: UserSettingsProtocol
+	private let now: () -> Date
+	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - cryptoManager: the crypto manager
-	///   - configuration: the configuration
-	///   - maxValidity: the maximum validity of a test in hours
+	///   - greenCard: a greencard to display
+	///   - cryptoManager: the crypto manager to check the green card
+	///   - remoteConfigManager: the remote configuration for mapping values
+	///   - screenCaptureDetector: the screen capture detector
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCard: GreenCard,
+		thirdPartyTicketAppName: String?,
 		cryptoManager: CryptoManaging,
-		configuration: ConfigurationGeneralProtocol,
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager) {
+		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector(),
+		userSettings: UserSettingsProtocol,
+		now: @escaping () -> Date = Date.init
+	) {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
 		self.cryptoManager = cryptoManager
-		self.configuration = configuration
 		self.remoteConfigManager = remoteConfigManager
-
-		// Start by showing nothing
-		self.showValidQR = false
-		self.qrImage = nil
+		self.screenCaptureDetector = screenCaptureDetector
+		self.userSettings = userSettings
+		self.now = now
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			title = L.holderShowqrDomesticTitle()
 			qrAccessibility = L.holderShowqrDomesticQrTitle()
 			infoButtonAccessibility = L.holderShowqrDomesticAboutTitle()
 			showInternationalAnimation = false
+			thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			title = L.holderShowqrEuTitle()
-            qrAccessibility = L.holderShowqrEuTitle()
+            qrAccessibility = L.holderShowqrEuQrTitle()
 			infoButtonAccessibility = L.holderShowqrEuAboutTitle()
 			showInternationalAnimation = true
 		}
 
-		super.init()
+		screenIsBeingCaptured = screenCaptureDetector.screenIsBeingCaptured
+
+		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
+			self?.screenIsBeingCaptured = isBeingCaptured
+		}
+
+		screenCaptureDetector.screenshotWasTakenCallback = { [weak self] in
+			guard self?.screenIsBlockedForScreenshotWithSecondsRemaining == nil else { return }
+			userSettings.lastScreenshotTime = now()
+			self?.screenshotWasTaken(blockQRUntil: now().addingTimeInterval(ShowQRViewModel.screenshotWarningMessageDuration))
+		}
+
+		if let lastScreenshotTime = userSettings.lastScreenshotTime {
+			let expiryDate = lastScreenshotTime.addingTimeInterval(ShowQRViewModel.screenshotWarningMessageDuration)
+			if expiryDate > now() {
+				screenshotWasTaken(blockQRUntil: expiryDate)
+			} else {
+				userSettings.lastScreenshotTime = nil
+			}
+		}
+
+		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+			self?.validityTimer?.fire()
+		}
+
+		updateQRVisibility()
+	}
+
+	deinit {
+		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
+	}
+
+	func updateQRVisibility() {
+		if let screenshotBlockTimeRemaining = screenIsBlockedForScreenshotWithSecondsRemaining {
+			let mins = screenshotBlockTimeRemaining / 60 % 60
+			let secs = screenshotBlockTimeRemaining % 60
+			let zeroPaddedSeconds = String(format: "%02d", secs)
+
+			let message = L.holderShowqrScreenshotwarningMessage("\(mins):\(zeroPaddedSeconds)")
+
+			// Attempt to make a nicer voiceover string:
+			let voiceoverTimeRemaining: String
+
+			let durationFormatter = DateComponentsFormatter()
+			durationFormatter.unitsStyle = . full
+			durationFormatter.maximumUnitCount = 2
+			durationFormatter.allowedUnits = [.minute, .second]
+
+			// e.g. "in ten seconds"
+			let relativeString = durationFormatter.string(from: Date(), to: Date().addingTimeInterval(TimeInterval(screenshotBlockTimeRemaining)))
+			voiceoverTimeRemaining = relativeString.map { L.holderShowqrScreenshotwarningMessage($0) } ?? message
+
+			self.visibilityState = .screenshotBlocking(timeRemainingText: message, voiceoverTimeRemainingText: voiceoverTimeRemaining)
+
+		} else if screenIsBeingCaptured {
+			self.visibilityState = .hiddenForScreenCapture
+		} else if let currentQRImage = self.currentQRImage {
+			self.visibilityState = .visible(qrImage: currentQRImage)
+		} else {
+			self.visibilityState = .loading
+		}
+	}
+
+	private func screenshotWasTaken(blockQRUntil: Date) {
+		// Cleanup the old timer
+		screenshotWarningTimer?.invalidate()
+		screenshotWarningTimer = nil
+
+		screenshotWarningTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+			guard let self = self else { return }
+
+			let timeRemaining = blockQRUntil.timeIntervalSince(self.now())
+
+			if timeRemaining <= 1 {
+				timer.invalidate()
+				self.screenIsBlockedForScreenshotWithSecondsRemaining = nil
+			} else {
+				self.screenIsBlockedForScreenshotWithSecondsRemaining = Int(timeRemaining)
+			}
+		}
+		screenshotWarningTimer?.fire() // don't wait 1s
 	}
 
 	/// Check the QR Validity
@@ -124,19 +235,22 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		} else {
 			DispatchQueue.global(qos: .userInitiated).async {
 				// International
-				let image = data.generateQRCode(correctionLevel: ShowQRViewModel.internationalCorrectionLevel)
-				DispatchQueue.main.async {
-					self.setQRValid(image: image)
+				if let image = data.generateQRCode(correctionLevel: ShowQRViewModel.internationalCorrectionLevel) {
+					DispatchQueue.main.async {
+						self.setQRValid(image: image)
+					}
 				}
 			}
 		}
 	}
 
+	func didTapThirdPartyAppButton() {
+		coordinator?.userWishesToLaunchThirdPartyTicketApp()
+	}
+
 	func showMoreInformation() {
 
-		guard let credential = greenCard.getActiveCredential(), let data = credential.data else {
-			return
-		}
+		guard let credential = greenCard.getActiveCredential(), let data = credential.data else { return }
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {
@@ -148,7 +262,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 				coordinator?.presentInformationPage(
 					title: L.holderShowqrDomesticAboutTitle(),
 					body: L.holderShowqrDomesticAboutMessage(identity),
-					hideBodyForScreenCapture: true
+					hideBodyForScreenCapture: true,
+					openURLsInApp: true
 				)
 			}
 		} else if greenCard.type == GreenCardType.eu.rawValue {
@@ -157,23 +272,21 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 				logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
 
 				if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
+					showVaccinationDetails(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
 				} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, test: test)
+					showTestDetails(euCredentialAttributes: euCredentialAttributes, test: test)
 				} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-					showMoreInformationRecovery(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
+					showRecoveryDetails(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
 				}
 			}
 		}
 	}
 
-	private func showMoreInformationVaccination(
-		euCredentialAttributes: EuCredentialAttributes,
-		vaccination: EuCredentialAttributes.Vaccination) {
+	private func showVaccinationDetails(euCredentialAttributes: EuCredentialAttributes, vaccination: EuCredentialAttributes.Vaccination) {
 
 		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
-			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
+			dosage = "\(doseNumber) / \(totalDose)"
 		}
 
 		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
@@ -182,37 +295,42 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			vaccination.medicalProduct) ?? vaccination.medicalProduct
 		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getVaccinationManufacturerMapping(
 			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
-
-		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
-			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+		
+		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
 
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
 			.map(printDateFormatter.string) ?? vaccination.dateOfVaccination
-
-		let body: String = L.holderShowqrEuAboutVaccinationMessage(
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
-			formattedBirthDate,
-			vaccineBrand,
-			vaccineType,
-			vaccineManufacturer,
-			dosage ?? " ",
-			formattedVaccinationDate,
-			vaccination.country,
-			vaccination.certificateIdentifier
-		)
-		coordinator?.presentInformationPage(
+		
+		let issuer = getDisplayIssuer(vaccination.issuer)
+		let country = getDisplayCountry(vaccination.country)
+		
+		let details: [DCCQRDetails] = [
+			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: name),
+			DCCQRDetails(field: DCCQRDetailsVaccination.dateOfBirth, value: formattedBirthDate),
+			DCCQRDetails(field: DCCQRDetailsVaccination.pathogen, value: L.holderShowqrEuAboutVaccinationPathogenvalue()),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineBrand, value: vaccineBrand),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineType, value: vaccineType),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
+			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: dosage),
+			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: formattedVaccinationDate),
+			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: country),
+			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: issuer),
+			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: vaccination.certificateIdentifier)
+		]
+		
+		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
-			body: body,
-			hideBodyForScreenCapture: true
+			description: L.holderShowqrEuAboutVaccinationDescription(),
+			details: details,
+			dateInformation: L.holderShowqrEuAboutVaccinationDateinformation()
 		)
 	}
 
-	private func showMoreInformationVaccination(
-		euCredentialAttributes: EuCredentialAttributes,
-		test: EuCredentialAttributes.TestEntry) {
+	private func showTestDetails(euCredentialAttributes: EuCredentialAttributes, test: EuCredentialAttributes.TestEntry) {
 
-		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
-			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
 
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
 			.map(printDateTimeFormatter.string) ?? test.sampleDate
@@ -230,32 +348,38 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		if test.testResult == "260373001" {
 			testResult = L.holderShowqrEuAboutTestPostive()
 		}
-
-		let body: String = L.holderShowqrEuAboutTestMessage(
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
-			formattedBirthDate,
-			testType,
-			test.name ?? "",
-			formattedTestDate,
-			testResult,
-			test.testCenter,
-			manufacturer,
-			test.country,
-			test.certificateIdentifier
-		)
-		coordinator?.presentInformationPage(
+		
+		let issuer = getDisplayIssuer(test.issuer)
+		let country = getDisplayCountry(test.country)
+		let facility = getDisplayFacility(test.testCenter)
+		
+		let details: [DCCQRDetails] = [
+			DCCQRDetails(field: DCCQRDetailsTest.name, value: name),
+			DCCQRDetails(field: DCCQRDetailsTest.dateOfBirth, value: formattedBirthDate),
+			DCCQRDetails(field: DCCQRDetailsTest.pathogen, value: L.holderShowqrEuAboutTestPathogenvalue()),
+			DCCQRDetails(field: DCCQRDetailsTest.testType, value: testType),
+			DCCQRDetails(field: DCCQRDetailsTest.testName, value: test.name),
+			DCCQRDetails(field: DCCQRDetailsTest.date, value: formattedTestDate),
+			DCCQRDetails(field: DCCQRDetailsTest.result, value: testResult),
+			DCCQRDetails(field: DCCQRDetailsTest.facility, value: facility),
+			DCCQRDetails(field: DCCQRDetailsTest.manufacturer, value: manufacturer),
+			DCCQRDetails(field: DCCQRDetailsTest.country, value: country),
+			DCCQRDetails(field: DCCQRDetailsTest.issuer, value: issuer),
+			DCCQRDetails(field: DCCQRDetailsTest.uniqueIdentifer, value: test.certificateIdentifier)
+		]
+		
+		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
-			body: body,
-			hideBodyForScreenCapture: true
+			description: L.holderShowqrEuAboutTestDescription(),
+			details: details,
+			dateInformation: L.holderShowqrEuAboutTestDateinformation()
 		)
 	}
 
-	private func showMoreInformationRecovery(
-		euCredentialAttributes: EuCredentialAttributes,
-		recovery: EuCredentialAttributes.RecoveryEntry) {
+	private func showRecoveryDetails(euCredentialAttributes: EuCredentialAttributes, recovery: EuCredentialAttributes.RecoveryEntry) {
 
-		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
-			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
 
 		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
 			.map(printDateFormatter.string) ?? recovery.firstPositiveTestDate
@@ -263,37 +387,41 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			.map(printDateFormatter.string) ?? recovery.validFrom
 		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
 			.map(printDateFormatter.string) ?? recovery.expiresAt
+		
+		let country = getDisplayCountry(recovery.country)
+		let issuer = getDisplayIssuer(recovery.issuer)
 
-		let body: String = L.holderShowqrEuAboutRecoveryMessage(
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
-			formattedBirthDate,
-			formattedFirstPostiveDate,
-			recovery.country,
-			recovery.issuer,
-			formattedValidFromDate,
-			formattedValidUntilDate,
-			recovery.certificateIdentifier
-		)
-		coordinator?.presentInformationPage(
+		let details: [DCCQRDetails] = [
+			DCCQRDetails(field: DCCQRDetailsRecovery.name, value: name),
+			DCCQRDetails(field: DCCQRDetailsRecovery.dateOfBirth, value: formattedBirthDate),
+			DCCQRDetails(field: DCCQRDetailsRecovery.pathogen, value: L.holderShowqrEuAboutRecoveryPathogenvalue()),
+			DCCQRDetails(field: DCCQRDetailsRecovery.date, value: formattedFirstPostiveDate),
+			DCCQRDetails(field: DCCQRDetailsRecovery.country, value: country),
+			DCCQRDetails(field: DCCQRDetailsRecovery.issuer, value: issuer),
+			DCCQRDetails(field: DCCQRDetailsRecovery.validFrom, value: formattedValidFromDate),
+			DCCQRDetails(field: DCCQRDetailsRecovery.validUntil, value: formattedValidUntilDate),
+			DCCQRDetails(field: DCCQRDetailsRecovery.uniqueIdentifer, value: recovery.certificateIdentifier)
+		]
+		
+		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
-			body: body,
-			hideBodyForScreenCapture: true
+			description: L.holderShowqrEuAboutRecoveryDescription(),
+			details: details,
+			dateInformation: L.holderShowqrEuAboutRecoveryDateinformation()
 		)
 	}
 
-	private func setQRValid(image: UIImage?) {
+	private func setQRValid(image: UIImage) {
 
 		logDebug("Credential is valid")
-		qrImage = image
-		showValidQR = true
+		currentQRImage = image
 		startValidityTimer()
 	}
 
 	private func setQRNotValid() {
 
 		logWarning("Credential is not valid")
-		qrImage = nil
-		showValidQR = false
+		currentQRImage = nil
 		stopValidityTimer()
 		coordinator?.navigateBackToStart()
 	}
@@ -313,12 +441,12 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	/// Start the validity timer, check every 90 seconds.
 	private func startValidityTimer() {
 
-		guard validityTimer == nil, let configuration = configuration else {
+		guard validityTimer == nil else {
 			return
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRRefreshPeriod()),
+			timeInterval: TimeInterval(remoteConfigManager?.getConfiguration().domesticQRRefreshSeconds ?? 60),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,
@@ -329,5 +457,36 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	func stopValidityTimer() {
 		validityTimer?.invalidate()
 		validityTimer = nil
+	}
+	
+	private func getDisplayIssuer(_ issuer: String) -> String {
+		guard issuer == "Ministry of Health Welfare and Sport" else {
+			return issuer
+		}
+		return L.holderVaccinationAboutIssuer()
+	}
+	
+	private func getDisplayCountry(_ country: String) -> String {
+		guard ["NL", "NLD"].contains(country) else {
+			return country
+		}
+		return L.holderVaccinationAboutCountry()
+	}
+	
+	private func getDisplayFacility(_ facility: String) -> String {
+		guard facility == "Facility approved by the State of The Netherlands" else {
+			return facility
+		}
+		return L.holderDccListFacility()
+	}
+}
+
+private extension EuCredentialAttributes {
+	
+	func dateOfBirth(_ dateFormatter: DateFormatter) -> String {
+		return Formatter
+			.getDateFrom(dateString8601: digitalCovidCertificate.dateOfBirth)
+			.map(dateFormatter.string)
+			?? digitalCovidCertificate.dateOfBirth
 	}
 }

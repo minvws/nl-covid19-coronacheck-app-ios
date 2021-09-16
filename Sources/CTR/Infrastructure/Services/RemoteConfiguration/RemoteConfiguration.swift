@@ -7,107 +7,73 @@
 
 import Foundation
 
-/// Protocol for app version information
-protocol RemoteInformation {
-
-	/// The minimum required version
-	var minimumVersion: String { get }
-
-	/// The message for the minimum required version
-	var minimumVersionMessage: String? { get }
-
-	/// The url to the appStore
-	var appStoreURL: URL? { get }
-
-	/// The url to the site
-	var informationURL: URL? { get }
-
-	/// Is the app deactivated?
-	var appDeactivated: Bool? { get }
-
-	/// What is the TTL of the config
-	var configTTL: Int? { get }
-
-	/// The launch date of the EU greencard functionality
-	var euLaunchDate: String? { get }
-
-	/// What is the validity of a test
-	var maxValidityHours: Int? { get }
-
-	/// What is the waiting period before a recovery is valid?
-	var recoveryWaitingPeriodDays: Int? { get }
-
-	/// When should we update
-	var requireUpdateBefore: TimeInterval? { get }
-
-	/// Is the app temporarily disabled?
-	var temporarilyDisabled: Bool? { get }
-
-	/// What is the validity of a domestic test / vaccination
-	var domesticValidityHours: Int? { get }
-
-	var vaccinationEventValidity: Int? { get }
-	var recoveryEventValidity: Int? { get }
-	var testEventValidity: Int? { get }
-
-	// The number of days before a recovery expires
-	var recoveryExpirationDays: Int? { get }
-
-	// What is the lower threshold for remaining Credentials on a Greencard before we fetch more? (StrippenKaart)
-	var credentialRenewalDays: Int? { get }
+struct HPKData: Codable {
+	
+	let code: String
+	
+	let name: String
+	
+	/// euVaccinationTypes lookup
+	let vp: String
+	
+	/// euBrands lookup
+	let mp: String
+	
+	/// euManufacturers lookup
+	let ma: String
 }
 
-extension RemoteInformation {
+struct Mapping: Codable {
 
-	/// Is the app deactivated?
-	var isDeactivated: Bool {
-
-		return appDeactivated ?? false
-	}
+	let code: String
+	
+	let name: String
 }
 
-struct RemoteConfiguration: RemoteInformation, Codable {
+struct UniversalLinkPermittedDomain: Codable {
 
-	struct Mapping: Codable {
-		let code: String
-		let name: String
-	}
+	let url: String
+
+	let name: String
+}
+
+struct RemoteConfiguration: Codable {
 
 	/// The minimum required version
-	let minimumVersion: String
+	var minimumVersion: String
 
 	/// The message for the minimum required version
-	let minimumVersionMessage: String?
+	var minimumVersionMessage: String?
+
+	/// The recommended version
+	var recommendedVersion: String?
+
+	/// The recommended version nag interval
+	var recommendedNagIntervalHours: Int?
 
 	/// The url to the appStore
-	let appStoreURL: URL?
+	var appStoreURL: URL?
 
 	/// The url to the site
-	let informationURL: URL?
+	var informationURL: URL?
 
 	/// Is the app deactivated?
-	let appDeactivated: Bool?
+	var appDeactivated: Bool?
 
 	/// What is the TTL of the config
-	let configTTL: Int?
-
-	/// The launch date of the EU greencard functionality
-	let euLaunchDate: String?
-
-	/// What is the validity of a test
-	let maxValidityHours: Int?
+	var configTTL: Int?
 
 	/// What is the waiting period before a recovery is valid?
-	let recoveryWaitingPeriodDays: Int?
+	var recoveryWaitingPeriodDays: Int?
 
 	/// When should we update
-	let requireUpdateBefore: TimeInterval?
+	var requireUpdateBefore: TimeInterval?
 
 	/// Is the app temporarily disabled?
-	let temporarilyDisabled: Bool?
+	var temporarilyDisabled: Bool?
 
 	/// What is the validity of a domestic  test / vaccination
-	let domesticValidityHours: Int?
+	var domesticValidityHours: Int?
 
 	/// Max validity of a vaccination
 	var vaccinationEventValidity: Int?
@@ -120,7 +86,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var recoveryExpirationDays: Int?
 
-	var hpkCodes: [Mapping]? = []
+	var domesticQRRefreshSeconds: Int?
+	
+	var hpkCodes: [HPKData]? = []
 
 	var nlTestTypes: [Mapping]? = []
 
@@ -134,24 +102,29 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var euTestManufacturers: [Mapping]? = []
 
-	var providerIdentifiers: [Mapping]? = []
-	
 	/// Restricts access to GGD test provider login
 	var isGGDEnabled: Bool?
 
 	var credentialRenewalDays: Int?
+
+	var universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?
+
+	var clockDeviationThresholdSeconds: Int?
+	
+	/// Enables luhn check for token validation
+	var isLuhnCheckEnabled: Bool?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
 		case minimumVersion = "iosMinimumVersion"
 		case minimumVersionMessage = "iosMinimumVersionMessage"
+		case recommendedVersion = "iosRecommendedVersion"
+		case recommendedNagIntervalHours = "upgradeRecommendationInterval"
 		case appStoreURL = "iosAppStoreURL"
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
 		case configTTL = "configTTL"
-		case euLaunchDate = "euLaunchDate"
-		case maxValidityHours = "maxValidityHours"
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case requireUpdateBefore = "requireUpdateBefore"
 		case temporarilyDisabled = "temporarilyDisabled"
@@ -167,20 +140,23 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euVaccinationTypes = "euVaccinations"
 		case euTestTypes = "euTestTypes"
 		case euTestManufacturers = "euTestManufacturers"
-		case providerIdentifiers = "providerIdentifiers"
 		case isGGDEnabled = "ggdEnabled"
 		case credentialRenewalDays = "credentialRenewalDays"
+		case domesticQRRefreshSeconds = "domesticQRRefreshSeconds"
+		case universalLinkPermittedDomains = "universalLinkDomains"
+		case clockDeviationThresholdSeconds = "clockDeviationThresholdSeconds"
+		case isLuhnCheckEnabled = "luhnCheckEnabled"
 	}
 
 	init(
 		minVersion: String,
 		minVersionMessage: String?,
+		recommendedVersion: String?,
+		recommendedNagIntervalHours: Int?,
 		storeUrl: URL?,
 		deactivated: Bool?,
 		informationURL: URL?,
 		configTTL: Int?,
-		euLaunchDate: String?,
-		maxValidityHours: Int?,
 		recoveryWaitingPeriodDays: Int?,
 		requireUpdateBefore: TimeInterval?,
 		temporarilyDisabled: Bool?,
@@ -190,16 +166,20 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		testEventValidity: Int?,
 		isGGDEnabled: Bool?,
 		recoveryExpirationDays: Int?,
-		credentialRenewalDays: Int?) {
+		credentialRenewalDays: Int?,
+		domesticQRRefreshSeconds: Int?,
+		universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?,
+		clockDeviationThresholdSeconds: Int?,
+		isLuhnCheckEnabled: Bool?) {
 
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
+		self.recommendedVersion = recommendedVersion
+		self.recommendedNagIntervalHours = recommendedNagIntervalHours
 		self.appStoreURL = storeUrl
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
 		self.configTTL = configTTL
-		self.euLaunchDate = euLaunchDate
-		self.maxValidityHours = maxValidityHours
 		self.recoveryWaitingPeriodDays = recoveryWaitingPeriodDays
 		self.requireUpdateBefore = requireUpdateBefore
 		self.temporarilyDisabled = temporarilyDisabled
@@ -210,19 +190,23 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.isGGDEnabled = isGGDEnabled
 		self.recoveryExpirationDays = recoveryExpirationDays
 		self.credentialRenewalDays = credentialRenewalDays
+		self.domesticQRRefreshSeconds = domesticQRRefreshSeconds
+		self.universalLinkPermittedDomains = universalLinkPermittedDomains
+		self.clockDeviationThresholdSeconds = clockDeviationThresholdSeconds
+		self.isLuhnCheckEnabled = isLuhnCheckEnabled
 	}
 
 	/// Default remote configuration
 	static var `default`: RemoteConfiguration {
-		return RemoteConfiguration(
+ 		return RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: nil,
+			recommendedVersion: "1.0.0",
+			recommendedNagIntervalHours: 24,
 			storeUrl: nil,
 			deactivated: false,
 			informationURL: nil,
 			configTTL: 3600,
-			euLaunchDate: nil,
-			maxValidityHours: 40,
 			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,
@@ -232,8 +216,18 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			testEventValidity: 40,
 			isGGDEnabled: true,
 			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5
+			credentialRenewalDays: 5,
+			domesticQRRefreshSeconds: 60,
+			universalLinkPermittedDomains: nil,
+			clockDeviationThresholdSeconds: 30,
+			isLuhnCheckEnabled: true
 		)
+	}
+
+	/// Is the app deactivated?
+	var isDeactivated: Bool {
+
+		return appDeactivated ?? false
 	}
 }
 
@@ -241,9 +235,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 extension RemoteConfiguration {
 
-	func getHpkMapping(_ code: String? ) -> String? {
+	func getHpkData(_ code: String? ) -> HPKData? {
 
-		return hpkCodes?.first(where: { $0.code == code })?.name
+		return hpkCodes?.first(where: { $0.code == code })
 	}
 
 	func getNlTestType(_ code: String? ) -> String? {
@@ -274,10 +268,5 @@ extension RemoteConfiguration {
 	func getTestManufacturerMapping(_ code: String? ) -> String? {
 
 		return euTestManufacturers?.first(where: { $0.code == code })?.name
-	}
-
-	func getProviderIdentifierMapping(_ code: String? ) -> String? {
-
-		return providerIdentifiers?.first(where: { $0.code == code })?.name
 	}
 }

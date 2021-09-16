@@ -7,30 +7,57 @@
 
 import Foundation
 
-enum NetworkResponseHandleError: Error {
-	case cannotUnzip
-	case invalidSignature
-	case cannotDeserialize
-	case invalidPublicKeys
-	case unexpectedCondition
+struct ServerResponse: Decodable, Equatable {
+	let status: String
+	let code: Int
 }
 
-enum NetworkError: Error {
+enum ServerError: Error, Equatable {
+	case error(statusCode: Int?, response: ServerResponse?, error: NetworkError)
+	case provider(provider: String?, statusCode: Int?, response: ServerResponse?, error: NetworkError)
+}
+
+enum NetworkError: String, Error, Equatable {
 	case invalidRequest
-	case serverNotReachable
+	case serverUnreachableTimedOut
+	case serverUnreachableInvalidHost
+	case serverUnreachableConnectionLost
+	case noInternetConnection
 	case invalidResponse
 	case responseCached
 	case serverError
 	case resourceNotFound
-	case encodingError
 	case redirection
 	case serverBusy
-}
+	case invalidSignature
+	case cannotSerialize
+	case cannotDeserialize
 
-extension NetworkResponseHandleError {
-	
-	var asNetworkError: NetworkError {
-		return .invalidResponse
+	func getClientErrorCode() -> ErrorCode.ClientCode? {
+
+		switch self {
+
+			case .invalidRequest:
+				return ErrorCode.ClientCode(value: "002")
+			case .serverUnreachableTimedOut:
+				return ErrorCode.ClientCode(value: "004")
+			case .serverUnreachableInvalidHost:
+				return ErrorCode.ClientCode(value: "002")
+			case .serverUnreachableConnectionLost:
+				return ErrorCode.ClientCode(value: "005")
+			case .invalidResponse:
+				return ErrorCode.ClientCode(value: "003")
+			case .invalidSignature:
+				return ErrorCode.ClientCode(value: "020")
+			case .cannotDeserialize:
+				return ErrorCode.ClientCode(value: "030")
+			case .cannotSerialize:
+				return ErrorCode.ClientCode(value: "031")
+			default:
+				// For noInternetConnection: not needed
+				// For responseCached, serverError, resourceNotFound, redirection, serverBusy: use the http status code
+				return nil
+		}
 	}
 }
 
@@ -47,7 +74,7 @@ enum HTTPContentType: String {
 }
 
 /// - Tag: NetworkManaging
-protocol NetworkManaging {
+protocol NetworkManaging: AnyObject {
 	
 	/// The network configuration
 	var networkConfiguration: NetworkConfiguration { get }
@@ -55,38 +82,41 @@ protocol NetworkManaging {
 	/// Initializer
 	/// - Parameters:
 	///   - configuration: the network configuration
-	///   - validator: the signature validator
-	init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol)
+	init(configuration: NetworkConfiguration)
 
 	/// Get the access tokens
 	/// - Parameters:
 	///   - tvsToken: the tvs token
 	///   - completion: completion handler
-	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void)
+	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void)
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
-	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void)
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void)
 	
 	/// Get the public keys
 	/// - Parameter completion: completion handler
-	func getPublicKeys(completion: @escaping (Result<(IssuerPublicKeys, Data), NetworkError>) -> Void)
+	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void)
 	
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void)
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void)
 	
 	/// Get the test providers
 	/// - Parameter completion: completion handler
-	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void)
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void)
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void)
+	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void)
 
+	/// Get the greenCards
+	/// - Parameters:
+	///   - dictionary: a dictionary of events
+	///   - completion: completion handler
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void)
+		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void)
 
 	/// Get a test result
 	/// - Parameters:
@@ -98,7 +128,7 @@ protocol NetworkManaging {
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void)
 
 	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
@@ -108,7 +138,7 @@ protocol NetworkManaging {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void)
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void)
 
 	/// Get  events from an event provider
 	/// - Parameters:
@@ -118,21 +148,13 @@ protocol NetworkManaging {
 	func fetchEvents(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
-}
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void)
 
-struct SignedResponse: Codable, Equatable {
-	
-	/// The payload
-	let payload: String
-	
-	/// The signature
-	let signature: String
-	
-	// Key mapping
-	enum CodingKeys: String, CodingKey {
-		
-		case payload
-		case signature
-	}
+	/// Check the coupling status
+	/// - Parameters:
+	///   - dictionary: the dcc and the coupling code as dictionary
+	///   - completion: completion handler
+	func checkCouplingStatus(
+		dictionary: [String: AnyObject],
+		completion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void)
 }

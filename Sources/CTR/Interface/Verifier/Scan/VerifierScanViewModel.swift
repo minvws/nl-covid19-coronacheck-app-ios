@@ -7,11 +7,12 @@
 
 import UIKit
 import AVFoundation
+import Clcore
 
 class VerifierScanViewModel: ScanPermissionViewModel {
 
 	/// The crypto manager
-	weak var cryptoManager: CryptoManaging?
+	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
@@ -22,28 +23,30 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	@Bindable private(set) var title: String
 
 	/// The message of the scene
-	@Bindable private(set) var message: String
+	@Bindable private(set) var message: String?
+
+	/// "Waar moet ik op letten?"
+	@Bindable private(set) var moreInformationButtonText: String?
 
 	/// The accessibility labels for the torch
 	@Bindable private(set) var torchLabels: [String]
+	
+	@Bindable private(set) var alert: AlertContent?
 
-	/// Start scanning
-	@Bindable private(set) var startScanning: Bool = false
+	@Bindable private(set) var shouldResumeScanning: Bool?
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - cryptoManager: the crypto manager
 	init(
-		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol),
-		cryptoManager: CryptoManaging) {
+		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)) {
 
 		self.theCoordinator = coordinator
-		self.cryptoManager = cryptoManager
 
-		self.title = .verifierScanTitle
-		self.message = .verifierScanMessage
-		self.torchLabels = [.verifierScanTorchEnable, .verifierScanTorchDisable]
+		self.title = L.verifierScanTitle()
+		self.message = nil
+		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
+		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
 
 		super.init(coordinator: coordinator)
 	}
@@ -52,13 +55,44 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		if let cryptoResults = cryptoManager?.verifyQRMessage(message) {
-			theCoordinator?.navigateToScanResult(cryptoResults)
+		if let verificationResult = cryptoManager?.verifyQRMessage(message) {
+			switch Int64(verificationResult.status) {
+				case MobilecoreVERIFICATION_FAILED_IS_NL_DCC:
+
+					displayAlert(title: L.verifierResultAlertDccTitle(), message: L.verifierResultAlertDccMessage())
+
+				case MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX:
+
+					displayAlert(title: L.verifierResultAlertUnknownTitle(), message: L.verifierResultAlertUnknownMessage())
+
+				default:
+					
+					theCoordinator?.navigateToScanResult(verificationResult)
+			}
 		}
+	}
+
+	private func displayAlert(title: String, message: String) {
+
+		alert = AlertContent(
+			title: title,
+			subTitle: message,
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.shouldResumeScanning = true
+			},
+			okTitle: L.generalOk()
+		)
 	}
 
 	func dismiss() {
 
 		theCoordinator?.navigateToVerifierWelcome()
+	}
+
+	func didTapMoreInformationButton() {
+
+		theCoordinator?.navigateToScanInstruction()
 	}
 }

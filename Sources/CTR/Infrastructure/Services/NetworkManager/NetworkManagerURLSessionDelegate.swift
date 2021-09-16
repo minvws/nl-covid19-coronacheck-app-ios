@@ -13,20 +13,14 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate {
 	/// The network configuration
 	private let networkConfiguration: NetworkConfiguration
 
-	/// The security strategy, defaults to none.
-	private (set) var securityStrategy: SecurityStrategy = .none
+	/// The security strategy
+	private (set) var securityStrategy: SecurityStrategy
 
 	/// Initialise session delegate with certificate used for SSL pinning
-	init(_ configuration: NetworkConfiguration) {
+	init(_ configuration: NetworkConfiguration, strategy: SecurityStrategy) {
 
 		self.networkConfiguration = configuration
-	}
-
-	/// Set the security strategy
-	/// - Parameter strategy: the security strategy
-	func setSecurityStrategy(_ strategy: SecurityStrategy) {
-
-		securityStrategy = strategy
+		self.securityStrategy = strategy
 	}
 
 	/// The security checker (certificate ssl check, PKSC7 signature check)

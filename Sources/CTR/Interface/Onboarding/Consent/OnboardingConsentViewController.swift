@@ -47,7 +47,7 @@ final class OnboardingConsentViewController: BaseViewController {
 		}
 
 		viewModel.$isContinueButtonEnabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
-		sceneView.primaryButton.setTitle(.next, for: .normal)
+		viewModel.$actionTitle.binding = { [weak self] in self?.sceneView.primaryButton.setTitle($0, for: .normal) }
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 
 		viewModel.$consentText.binding = { [weak self] in self?.sceneView.consent = $0 }
@@ -61,6 +61,7 @@ final class OnboardingConsentViewController: BaseViewController {
 			}
 		}
 		viewModel.$shouldHideBackButton.binding = { [weak self] in self?.navigationItem.hidesBackButton = $0 }
+		viewModel.$shouldHideConsentButton.binding = { [weak self] in self?.sceneView.consentButton.isHidden = $0 }
 	}
 
 	override func viewDidAppear(_ animated: Bool) {

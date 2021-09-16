@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Clcore
 
 /// The access options
 enum AccessAction {
@@ -15,7 +16,7 @@ enum AccessAction {
 	case demo
 }
 
-class VerifierResultViewModel: PreventableScreenCapture, Logging {
+class VerifierResultViewModel: Logging {
 
 	/// The logging category
 	var loggingCategory: String = "VerifierResultViewModel"
@@ -26,8 +27,8 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// The configuration
 	private var configuration: ConfigurationGeneralProtocol = Configuration()
 
-	/// The scanned attributes
-	internal var cryptoResults: (attributes: CryptoAttributes?, errorMessage: String?)
+	/// The scanned result
+	internal var verificationResult: MobilecoreVerificationResult
 
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
@@ -37,54 +38,48 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// The title of the scene
 	@Bindable private(set) var title: String = ""
 
-	/// The message of the scene
-	@Bindable private(set) var message: String?
-
 	/// The first name of the holder
-	@Bindable private(set) var firstName: String = "-"
+	@Bindable private(set) var firstName: String?
 
 	/// The last name of the holder
-	@Bindable private(set) var lastName: String = "-"
+	@Bindable private(set) var lastName: String?
 
 	/// The birth day of the holder
-	@Bindable private(set) var dayOfBirth: String = "-"
+	@Bindable private(set) var dayOfBirth: String?
 
 	/// The birth mont of the holder
-	@Bindable private(set) var monthOfBirth: String = "-"
-
-	/// The linked message of the scene
-	@Bindable var linkedMessage: String?
-
-	/// The title of the button
-	@Bindable private(set) var primaryButtonTitle: String
+	@Bindable private(set) var monthOfBirth: String?
+	
+	@Bindable private(set) var secondaryTitle: String = ""
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
+
+	@Bindable private(set) var hideForCapture: Bool = false
+
+	private let screenCaptureDetector = ScreenCaptureDetector()
 
 	/// Initialzier
 	/// - Parameters:
 	///   - coordinator: the dismissable delegate
 	///   - scanResults: the decrypted attributes
-	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		cryptoResults: (CryptoAttributes?, String?),
-		maxValidity: Int) {
+		verificationResult: MobilecoreVerificationResult) {
 
 		self.coordinator = coordinator
-		self.cryptoResults = cryptoResults
+		self.verificationResult = verificationResult
 
-		primaryButtonTitle = .verifierResultButtonTitle
-		super.init()
+		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
+			self?.hideForCapture = isBeingCaptured
+		}
 
+		addObservers()
 		checkAttributes()
 		startAutoCloseTimer()
 	}
 
-	override func addObservers() {
-
-		// super will handle the PreventableScreenCapture observers
-		super.addObservers()
+	func addObservers() {
 
 		NotificationCenter.default.addObserver(
 			self,
@@ -102,49 +97,51 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Check the attributes
 	internal func checkAttributes() {
 		
-		guard let attributes = cryptoResults.attributes else {
+		guard verificationResult.status == MobilecoreVERIFICATION_SUCCESS else {
 			allowAccess = .denied
 			showAccessDeniedInvalidQR()
 			return
 		}
 		
-		if attributes.isDomesticDcc {
-			// Domestic issued DCC is not valid
+		guard let details = verificationResult.details else {
 			allowAccess = .denied
-			showAccessDeniedDomesticDcc()
-		} else if attributes.isSpecimen {
+			showAccessDeniedInvalidQR()
+			return
+		}
+
+		if details.isSpecimen == "1" {
 			allowAccess = .demo
-			setHolderIdentity(attributes)
+			setHolderIdentity(details)
 			showAccessDemo()
 		} else {
 			allowAccess = .verified
-			setHolderIdentity(attributes)
+			setHolderIdentity(details)
 			showAccessAllowed()
 		}
 	}
 
-	func setHolderIdentity(_ attributes: CryptoAttributes) {
+	func setHolderIdentity(_ details: MobilecoreVerificationDetails) {
 
-		firstName = determineAttributeValue(attributes.firstNameInitial)
-		lastName = determineAttributeValue(attributes.lastNameInitial)
-		dayOfBirth = determineAttributeValue(attributes.birthDay)
-		monthOfBirth = determineMonthOfBirth(attributes.birthMonth)
+		firstName = determineAttributeValue(details.firstNameInitial)
+		lastName = determineAttributeValue(details.lastNameInitial)
+		dayOfBirth = determineAttributeValue(details.birthDay)
+		monthOfBirth = determineMonthOfBirth(details.birthMonth)
 	}
 
 	/// Determine the value for display
 	/// - Parameter value: the crypto attribute value
 	/// - Returns: the value of the attribute, or a hyphen if empty
-	private func determineAttributeValue(_ value: String?) -> String {
+	private func determineAttributeValue(_ value: String?) -> String? {
 
 		if let value = value, !value.isEmpty {
 			return value
 		}
-		return "-"
+		return nil
 	}
 
 	/// Set the monthOfBirth as MMM (mm)
 	/// - Parameter value: the possible month value
-	private func determineMonthOfBirth(_ value: String?) -> String {
+	private func determineMonthOfBirth(_ value: String?) -> String? {
 
 		if let birthMonthAsString = value, !birthMonthAsString.isEmpty {
 			if let birthMonthAsInt = Int(birthMonthAsString),
@@ -159,7 +156,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 				return birthMonthAsString
 			}
 		}
-		return "-"
+		return nil
 	}
 
 	private func mapMonth(month: Int, months: [String]) -> String? {
@@ -181,27 +178,20 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	private func showAccessAllowed() {
 
-		title = .verifierResultAccessTitle
-		message = nil
+		title = L.verifierResultAccessTitle()
+		secondaryTitle = L.verifierResultAccessReadmore()
 	}
 
 	private func showAccessDeniedInvalidQR() {
 
-		title = .verifierResultDeniedTitle
-		message = .verifierResultDeniedMessage
-		linkedMessage = .verifierResultDeniedLink
+		title = L.verifierResultDeniedTitle()
+		secondaryTitle = L.verifierResultDeniedReadmore()
 	}
 
 	private func showAccessDemo() {
 
-		title = .verifierResultDemoTitle
-		message = nil
-	}
-	
-	private func showAccessDeniedDomesticDcc() {
-		
-		title = .verifierResultDeniedRegionTitle
-		message = .verifierResultDeniedRegionMessage
+		title = L.verifierResultDemoTitle()
+		secondaryTitle = L.verifierResultAccessReadmore()
 	}
 
 	func dismiss() {
@@ -216,7 +206,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
         coordinator?.navigateToScan()
     }
 
-	func linkTapped() {
+	func showMoreInformation() {
 
 		switch allowAccess {
 			case .verified, .demo:
@@ -228,38 +218,32 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	private func showVerifiedInfo() {
 
-		let label = Label(body: nil).multiline()
-		label.attributedText = .makeFromHtml(
-			text: .verifierResultCheckText,
-			font: Theme.fonts.body,
-			textColor: Theme.colors.dark
-		)
+        let textView = TextView(htmlText: L.verifierResultCheckText(), font: Theme.fonts.body, textColor: Theme.colors.dark, boldTextColor: Theme.colors.dark)
 
 		coordinator?.displayContent(
-			title: .verifierResultCheckTitle,
-			content: [(label, 16)]
+			title: L.verifierResultCheckTitle(),
+			content: [(textView, 16)]
 		)
 	}
 
 	private func showDeniedInfo() {
 
-		let label = Label(body: nil).multiline()
-		label.attributedText = .makeFromHtml(
-			text: .verifierDeniedMessageOne,
-			font: Theme.fonts.body,
-			textColor: Theme.colors.dark
-		)
-
-		let label2 = Label(body: nil).multiline()
-		label2.attributedText = .makeFromHtml(
-			text: .verifierDeniedMessageTwo,
-			font: Theme.fonts.body,
-			textColor: Theme.colors.dark
-		)
+		let textViews = [L.verifierDeniedMessageOne(),
+			L.verifierDeniedMessageTwo(),
+			L.verifierDeniedMessageThree(),
+			L.verifierDeniedMessageFour()
+		] .map { text -> (TextView, CGFloat) in
+			(TextView(
+				htmlText: text,
+				font: Theme.fonts.body,
+				textColor: Theme.colors.dark,
+				boldTextColor: Theme.colors.dark
+			), 16)
+		}
 
 		coordinator?.displayContent(
-			title: .verifierDeniedTitle,
-			content: [(label, 16), (label2, 0)]
+			title: L.verifierDeniedTitle(),
+			content: textViews
 		)
 	}
 
