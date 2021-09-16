@@ -118,7 +118,7 @@ extension LoginTVSViewModel {
 				switch networkError {
 					case .serverUnreachableTimedOut, .serverUnreachableConnectionLost, .serverUnreachableInvalidHost:
 
-						let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled)
+						let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: networkError.getClientErrorCode() ?? .unhandled)
 						self.displayUnreachable(errorCode: errorCode)
 						return
 					default:

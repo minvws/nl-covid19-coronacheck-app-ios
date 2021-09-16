@@ -138,15 +138,16 @@ class PaperCertificateCheckViewModel: Logging {
 					showServerTooBusyError(ErrorCode(flow: .hkvi, step: .coupling, errorCode: "429"))
 				case .noInternetConnection:
 					displayNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
-				case .serverUnreachable, .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
-					displayServerUnreachable(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				case .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled)
+					displayServerUnreachable(errorCode)
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					// 304, 3xx, 4xx, 5xx
 					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					displayServerErrorCode(errorCode)
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
 					// Client side
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					displayClientErrorCode(errorCode)
 			}
 		}
@@ -173,17 +174,27 @@ class PaperCertificateCheckViewModel: Logging {
 		}
 	}
 
-	private func displayServerUnreachable(scannedDcc: String, couplingCode: String) {
+	func displayServerUnreachable(_ errorCode: ErrorCode) {
 
-		// this is a retry-able situation
-		alert = AlertContent(
+		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode) },
-			okTitle: L.generalRetry()
+			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in self?.coordinator?.userWantsToGoBackToDashboard() },
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			self.coordinator?.displayError(content: content) { [weak self] in
+				self?.coordinator?.userWishesToGoBackToScanCertificate()
+			}
+		}
 	}
 
 	private func displayNoInternet(scannedDcc: String, couplingCode: String) {

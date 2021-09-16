@@ -208,7 +208,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 
 		// Given
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
+			(.failure(.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
@@ -220,9 +220,15 @@ class PaperCertificateCheckModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
-		expect(self.sut.alert).toNot(beNil())
-		expect(self.sut.alert?.title) == L.holderErrorstateTitle()
-		expect(self.sut.alert?.subTitle) == L.generalErrorServerUnreachable()
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.generalErrorServerUnreachableErrorCode("i 510 000 004")
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_failure_responseCached() {
