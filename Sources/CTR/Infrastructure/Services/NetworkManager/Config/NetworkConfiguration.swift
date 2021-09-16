@@ -64,7 +64,7 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.coronacheck.nl" : "verifier-api.coronacheck.nl",
 			port: nil,
-			path: ["v5ZZZ-4G2ZTY3J6S83XF-82"]
+			path: ["v5"]
 		)
 	)
 
