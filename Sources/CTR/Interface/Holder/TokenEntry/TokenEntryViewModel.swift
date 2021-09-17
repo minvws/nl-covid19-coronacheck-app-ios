@@ -365,27 +365,7 @@ class TokenEntryViewModel {
 
 				switch result {
 					case let .success(remoteEvent):
-						switch remoteEvent.0.status {
-							case .complete, .pending:
-								self.screenHasCompleted = true
-								self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
-							case .verificationRequired:
-								if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
-									// the user has just submitted a wrong verification code & should see an error message
-									self.fieldErrorMessage = Strings.errorInvalidCombination(forMode: self.initializationMode)
-								}
-								self.allowEnablingOfNextButton = true
-								self.verificationCodeIsKnownToBeRequired = true
-
-							case .invalid:
-								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-								self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
-
-							default:
-								self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
-								self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
-								self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
-						}
+						self.handleSuccessFetchResult(remoteEvent, verificationCode: verificationCode)
 
 					case let .failure(.error(statusCode, serverResponse, networkError)),
 						 let .failure(.provider(_, statusCode, serverResponse, networkError)):
@@ -410,6 +390,31 @@ class TokenEntryViewModel {
 				self.progressIndicationCounter.decrement()
 			}
 		)
+	}
+
+	func handleSuccessFetchResult(_ remoteEvent: RemoteEvent, verificationCode: String?) {
+
+		switch remoteEvent.0.status {
+			case .complete, .pending:
+				self.screenHasCompleted = true
+				self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
+			case .verificationRequired:
+				if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
+					// the user has just submitted a wrong verification code & should see an error message
+					self.fieldErrorMessage = Strings.errorInvalidCombination(forMode: self.initializationMode)
+				}
+				self.allowEnablingOfNextButton = true
+				self.verificationCodeIsKnownToBeRequired = true
+
+			case .invalid:
+				self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+
+			default:
+				self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
+				self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
+				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+		}
 	}
 
 	/// If the path where `.withRequestTokenProvided` fails due to networking,
@@ -779,6 +784,7 @@ extension TokenEntryViewModel {
 			},
 			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
 			secondaryAction: { [weak self] in
+				// Open Malfunction url.
 				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
 					return
 				}
