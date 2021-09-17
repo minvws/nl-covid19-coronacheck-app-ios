@@ -86,7 +86,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	// MARK: - Handle Input
 	// `func handleInput(_ tokenInput: String?, verificationInput: String?) `
 
-	func test_withoutInitialRequestToken_handleInput_withNilTokenInput_disablesNextButton() {
+	func test_withoutInitialRequestToken_handleInput_withNilTokenInput_enablesNextButton() {
 
 		// Arrange
 		sut = mockedViewModel(withRequestToken: nil)
@@ -105,58 +105,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
-	func test_withoutInitialRequestToken_handleInput_withInvalidToken_disablesNextButtonAndHidesVerification() {
-
-		// Arrange
-		sut = mockedViewModel(withRequestToken: nil)
-		let invalidToken = "HELLO"
-
-		tokenValidatorSpy.stubbedValidateResult = false
-
-		// Act
-		sut.userDidUpdateTokenField(rawTokenInput: invalidToken, currentValueOfVerificationInput: nil)
-
-		// Assert
-		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidToken
-
-		expect(self.sut.shouldEnableNextButton) == true
-		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
-		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-
-		TokenEntryViewController(viewModel: sut).assertImage()
-	}
-
-	func test_withoutInitialRequestToken_handleInput_withValidToken_hidingVerification_enablesNextButtonAndHidesVerification() {
-
-		// Arrange
-		tokenValidatorSpy.stubbedValidateResult = true
-		let validToken = "XXX-YYYYYYYYYYYY-Z2"
-
-		sut = mockedViewModel(withRequestToken: nil)
-
-		// Act
-		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: nil)
-
-		// Assert
-		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validToken
-		expect(self.sut.shouldEnableNextButton) == true
-		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
-		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-
-		TokenEntryViewController(viewModel: sut).assertImage()
-	}
-
-	func test_withoutInitialRequestToken_handleInput_withEmptyTokenInput_withEmptyVerificationInput_disablesNextButton() {
+	func test_withoutInitialRequestToken_handleInput_withEmptyTokenInput_withEmptyVerificationInput_enablesNextButton() {
 
 		// Arrange
 		let emptyVerificationInput = ""
@@ -227,7 +176,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	// MARK: - Next Button Pressed
 	// `func nextButtonPressed(_ tokenInput: String?, verificationInput: String?)`
 
-	func test_withoutInitialRequestToken_nextButtonPressed_withNilTokenInput_doesNothing() {
+	func test_withoutInitialRequestToken_nextButtonPressed_withNilTokenInput_showsEmptyTokenError() {
 
 		// Arrange
 		sut = mockedViewModel(withRequestToken: nil)
@@ -240,6 +189,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
+		expect(self.sut.fieldErrorMessage) == L.holderTokenentryRegularflowErrorEmptytoken()
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
 
@@ -248,7 +198,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 	// MARK: - nextButtonPressed withNonemptyVerificationInput
 
-	func test_withoutInitialRequestToken_nextButtonPressed_withNonemptyVerificationInput_withNoPreviousRequestTokenSet_doesNothing() {
+	func test_withoutInitialRequestToken_nextButtonPressed_withNonemptyVerificationInput_withNoPreviousRequestTokenSet_showEmptyTokenError() {
 
 		// Arrange
 		sut = mockedViewModel(withRequestToken: nil)
@@ -258,7 +208,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == false
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == L.holderTokenentryRegularflowErrorEmptytoken()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
@@ -455,7 +405,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.holderTokenentryUniversallinkflowErrorInvalidCode()
+		expect(self.sut.fieldErrorMessage) == L.holderTokenentryUniversallinkflowErrorUnknownprovider()
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
@@ -566,7 +516,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message) == L.holderTokenentryUniversallinkflowText()
@@ -718,7 +668,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
 		networkManagerSpy.stubbedFetchTestResultCompletionResult =
-			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+			(.success((.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: "1234")
 
@@ -728,7 +678,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Nevertheless, the progress should be stopped.
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
@@ -886,6 +836,40 @@ class TokenEntryViewModelTests: XCTestCase {
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
+	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_codeIsNotEmpty_invalid_showsErrorAndResetsUIForVerification() {
+
+		// Arrange
+		tokenValidatorSpy.stubbedValidateResult = true
+		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		let validToken = RequestToken.fake.token
+		let verificationInput = "1234"
+
+		sut = mockedViewModel(withRequestToken: .fake)
+
+		networkManagerSpy.reset()
+		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
+
+		// Act
+		sut.nextButtonTapped(validToken, verificationInput: verificationInput)
+
+		// Assert
+		expect(self.sut.fieldErrorMessage) == L.holderTokenentryUniversallinkflowErrorInvalidCode()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryUniversallinkflowRetryTitle()
+		expect(self.sut.shouldShowTokenEntryField) == false
+		expect(self.sut.shouldShowVerificationEntryField) == true
+		expect(self.sut.shouldEnableNextButton) == true
+		expect(self.sut.shouldShowNextButton) == true
+		expect(self.sut.shouldShowTokenEntryField) == false
+		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
+		expect(self.sut.message) == L.holderTokenentryUniversallinkflowText()
+
+		TokenEntryViewController(viewModel: sut).assertImage()
+	}
+
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_codeIsNotEmpty_showsErrorAndResetsUIForVerification() {
 
 		// Arrange
@@ -907,11 +891,11 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.holderTokenentryUniversallinkflowErrorInvalidCode()
+		expect(self.sut.fieldErrorMessage) == L.holderTokenentryUniversallinkflowErrorInvalidCombination()
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryUniversallinkflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
@@ -1157,7 +1141,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.holderTokenentryRegularflowErrorInvalidCode()
+		expect(self.sut.fieldErrorMessage) == L.holderTokenentryRegularflowErrorUnknownprovider()
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
@@ -1275,7 +1259,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryUniversallinkflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
@@ -1508,7 +1492,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.message) == L.holderTokenentryUniversallinkflowText()
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryUniversallinkflowRetryTitle()

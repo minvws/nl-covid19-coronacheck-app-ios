@@ -338,7 +338,7 @@ class TokenEntryViewModel {
 
 		let provider = providers.filter { $0.identifier.lowercased() == requestToken.providerIdentifier.lowercased() }
 		guard let provider = provider.first else {
-			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
+			fieldErrorMessage = Strings.unknownProvider(forMode: initializationMode)
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
@@ -603,18 +603,27 @@ extension TokenEntryViewModel {
 		fileprivate static func tokenIsEmpty(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return L.holderTokenentryRegularflowEmptytoken()
+					return L.holderTokenentryRegularflowErrorEmptytoken()
 				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowEmptytoken()
+					return L.holderTokenentryUniversallinkflowErrorEmptytoken()
 			}
 		}
 
 		fileprivate static func codeIsEmpty(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return L.holderTokenentryRegularflowEmptycode()
+					return L.holderTokenentryRegularflowErrorEmptycode()
 				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowEmptycode()
+					return L.holderTokenentryUniversallinkflowErrorEmptycode()
+			}
+		}
+
+		fileprivate static func unknownProvider(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return L.holderTokenentryRegularflowErrorUnknownprovider()
+				case .withRequestTokenProvided:
+					return L.holderTokenentryUniversallinkflowErrorUnknownprovider()
 			}
 		}
 
