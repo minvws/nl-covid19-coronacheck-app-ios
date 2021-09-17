@@ -89,7 +89,6 @@ class TokenEntryViewControllerTests: XCTestCase {
 	private func mockedViewModel(withRequestToken requestToken: RequestToken?) -> TokenEntryViewModel {
 		return TokenEntryViewModel(
 			coordinator: holderCoordinatorSpy,
-			networkManager: networkManagerSpy,
 			requestToken: requestToken,
 			tokenValidator: tokenValidatorSpy
 		)

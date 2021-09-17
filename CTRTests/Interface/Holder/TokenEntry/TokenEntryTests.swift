@@ -27,6 +27,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		holderCoordinatorSpy = HolderCoordinatorDelegateSpy()
 		networkManagerSpy = NetworkSpy()
 		tokenValidatorSpy = TokenValidatorSpy()
+
+		Services.use(networkManagerSpy)
 	}
 
 	func test_withoutInitialRequestToken_initialState() {

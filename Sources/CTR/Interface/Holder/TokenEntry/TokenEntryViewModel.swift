@@ -78,7 +78,7 @@ class TokenEntryViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let networkManager: NetworkManaging?
+	private let networkManager: NetworkManaging? = Services.networkManager
 	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:
@@ -135,12 +135,10 @@ class TokenEntryViewModel {
 	///   - requestToken: an optional existing request token
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		networkManager: NetworkManaging,
 		requestToken: RequestToken?,
 		tokenValidator: TokenValidatorProtocol) {
 
 		self.coordinator = coordinator
-		self.networkManager = networkManager
 		self.requestToken = requestToken
 		self.tokenValidator = tokenValidator
 		self.message = nil
@@ -465,6 +463,12 @@ class TokenEntryViewModel {
 		guard newInputMode != currentInputMode else { return }
 		currentInputMode = newInputMode
 
+		updateShouldShowFielsForInputMode(newInputMode)
+		updateText(newInputMode)
+	}
+
+	private func updateShouldShowFielsForInputMode(_ newInputMode: InputMode) {
+
 		switch newInputMode {
 			case .none:
 				shouldShowTokenEntryField = false
@@ -494,6 +498,10 @@ class TokenEntryViewModel {
 				shouldShowResendVerificationButton = true
 				shouldShowUserNeedsATokenButton = false
 		}
+
+	}
+
+	private func updateText(_ newInputMode: InputMode) {
 
 		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
 		title = Strings.title(forMode: initializationMode)
