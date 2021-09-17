@@ -8,7 +8,7 @@
 import UIKit
 
 /// A grey full width button with a title and a disclosure icon
-class DisclosureButton: DisclosureSubTitleButton {
+class DisclosureButton: DisclosureSubtitleButton {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -21,7 +21,7 @@ class DisclosureButton: DisclosureSubTitleButton {
 	override func setupViews() {
 
 		super.setupViews()
-		subTitleLabel.isHidden = true
+		subtitleLabel.isHidden = true
 	}
 
 	override func setupViewConstraints() {

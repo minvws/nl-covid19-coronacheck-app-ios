@@ -1,17 +1,13 @@
 #!perl
 
-`which -s resign`;
-if ($?) {
-	print "Check out and compile/install https://github.com/ehn-dcc-development/x509-resign.git first\n";
-	exit(1);
-};
-
 my $ca = 'ca.pem';
 my $cader = $ca;
 $cader =~ s/\.pem/.crt/g;
 
 my $careal = $ca;
+my $cafake= $ca;
 $careal =~ s/\.pem/.real/g;
+$cafake =~ s/\.pem/.fake/g;
 
 # Fetch the root and resign it
 #
@@ -19,7 +15,8 @@ $careal =~ s/\.pem/.real/g;
 	openssl pkcs7 -inform DER -print_certs |\
 	openssl x509 -out $careal` unless -f $careal;
 
-`cat $careal | resign -Ksi > $ca` unless -f $ca;
+$cmd = "cat $careal | resign -Ksi > $ca; openssl x509 -in $ca -out $cafake";
+system($cmd);
 
 # Create version that can be imported into the emulator
 #
@@ -78,7 +75,9 @@ for my $cert (@chain) {
 	print FH $cert;
 	close(FH);
 
-	`resign -K -s -i $idx.real $ca $ca > $idx.pem`;
+	$cmd = "resign -Ksi $idx.real $ca $ca > $idx.pem && openssl x509 -days 365 -in $idx.pem -out $idx.fake";
+	print "$cmd\n";
+	system($cmd);
 	$ca = "$idx.pem";
 	push @filenames, $ca;
 
@@ -102,4 +101,8 @@ system($cmd);
 $cmd =~ s/.pem/.real/g;
 print "Check real with \n\t$cmd\n\n";
 system($cmd);
+
+# Output key identifier of leaf cerrt
+#`openssl x509 -in 1002.pem -ext authorityKeyIdentifier -noout | sed -e 's/.*Identifier://' -e 's/keyid/0x04, 0x14/g' -e 's/:/, 0x/g' | grep 0x | xxd -r -p >  leaf.issuer-keyid`;
+#`cat 1000.pem 1001.pem > chain.pem`
 

@@ -12,6 +12,7 @@ class ChooseTestLocationViewController: BaseViewController {
 	struct ButtonModel {
 		let title: String
 		let subtitle: String?
+		let subtitleIcon: UIImage?
 		let action: () -> Void
 	}
 
@@ -80,11 +81,12 @@ class ChooseTestLocationViewController: BaseViewController {
 			// Add new buttons:
 			buttons
 				.map { buttonModel -> UIView in
-					if let subTitle = buttonModel.subtitle {
+					if let subtitle = buttonModel.subtitle {
 
-						return DisclosureSubTitleButton.makeButton(
+						return DisclosureSubtitleButton.makeButton(
 							title: buttonModel.title,
-							subTitle: subTitle,
+							subtitle: subtitle,
+							subtitleIcon: buttonModel.subtitleIcon,
 							command: buttonModel.action
 						)
 					} else {
