@@ -228,7 +228,7 @@
 "holder.tokenentry.universallinkflow.verification.info" = "You get a code via text or email";
 "holder.tokenentry.universallinkflow.verification.title" = "Verification code";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "E.g. 123456";
-"holder.tokenentry.universallinkflow.error.invalid.code" = "Retrieval code has expired";
+"holder.tokenentry.universallinkflow.error.invalid.code" = "This retrieval code has expired";
 "holder.tokenentry.universallinkflow.error.invalid.combination" = "Invalid combination of retrieval code and verification code";
 "holder.tokenentry.universallinkflow.retry.title" = "I haven't received a code";
 "holder.tokenentry.universallinkflow.next" = "Next";
