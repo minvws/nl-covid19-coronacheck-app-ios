@@ -295,6 +295,8 @@ class TokenEntryViewModel {
 
 			fieldErrorMessage = nil
 			fetchProviders(requestToken, verificationCode: sanitizedVerification)
+		} else {
+			fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode)
 		}
 	}
 
