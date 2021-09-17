@@ -39,7 +39,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.networkErrorAlert).to(beNil())
@@ -96,7 +96,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
@@ -119,7 +119,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidToken
 
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
@@ -167,7 +167,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidate) == false
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
@@ -188,7 +188,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidate) == false
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
@@ -237,7 +237,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == false
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
@@ -259,7 +259,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == false
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
@@ -1025,7 +1025,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == false
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidTokenInput
 		expect(self.sut.fieldErrorMessage) == L.holderTokenentryRegularflowErrorInvalidCode()
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
@@ -1305,7 +1305,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryUniversallinkflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
@@ -1335,7 +1335,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryUniversallinkflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()

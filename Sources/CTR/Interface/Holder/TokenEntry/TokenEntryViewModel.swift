@@ -59,7 +59,7 @@ class TokenEntryViewModel {
 		}
 	}
 	/// Do not set directly. Instead, see `preventEnablingOfNextButton`.
-	@Bindable private(set) var shouldEnableNextButton: Bool = false {
+	@Bindable private(set) var shouldEnableNextButton: Bool = true {
 		didSet {
 			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
 		}
@@ -87,7 +87,7 @@ class TokenEntryViewModel {
 		didSet {
 			if requestToken == nil {
 				verificationCodeIsKnownToBeRequired = false
-				allowEnablingOfNextButton = false
+				allowEnablingOfNextButton = true
 			}
 		}
 	}
@@ -194,15 +194,16 @@ class TokenEntryViewModel {
 					return
 				}
 
-				allowEnablingOfNextButton = {
-					let validToken = tokenValidator.validate(sanitizedTokenInput)
-
-					if verificationCodeIsKnownToBeRequired {
-						return validToken && receivedNonemptyVerificationInput
-					} else {
-						return validToken
-					}
-				}()
+				allowEnablingOfNextButton = true
+//				allowEnablingOfNextButton = {
+//					let validToken = tokenValidator.validate(sanitizedTokenInput)
+//
+//					if verificationCodeIsKnownToBeRequired {
+//						return validToken && receivedNonemptyVerificationInput
+//					} else {
+//						return validToken
+//					}
+//				}()
 
 			case .withRequestTokenProvided:
 				// Then we don't care about the tokenInput parameter, because it's hidden
@@ -259,15 +260,22 @@ class TokenEntryViewModel {
 	private func handleNextButtonPressedDuringRegularFlow(_ tokenInput: String?, verificationInput: String?) {
 		fieldErrorMessage = nil
 
-		guard let tokenInput = tokenInput else { return }
-
-		if currentInputMode == .inputVerificationCode || currentInputMode == .inputTokenWithVerificationCode,
-		   let verification = verificationInput, !verification.isEmpty {
+		if currentInputMode == .inputVerificationCode || currentInputMode == .inputTokenWithVerificationCode {
+			guard let verification = verificationInput, !verification.isEmpty else {
+				fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode)
+				return
+			}
 			fieldErrorMessage = nil
 			if let token = requestToken {
 				fetchProviders(token, verificationCode: sanitize(verification))
 			}
 		} else {
+
+			guard let tokenInput = tokenInput, !tokenInput.isEmpty else {
+				fieldErrorMessage = Strings.tokenIsEmpty(forMode: initializationMode)
+				return
+			}
+
 			if let requestToken = RequestToken(input: sanitize(tokenInput), tokenValidator: tokenValidator) {
 				self.requestToken = requestToken
 				fetchProviders(requestToken, verificationCode: nil)
@@ -362,9 +370,9 @@ class TokenEntryViewModel {
 							case .verificationRequired:
 								if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
 									// the user has just submitted a wrong verification code & should see an error message
-									self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+									self.fieldErrorMessage = Strings.errorInvalidCombination(forMode: self.initializationMode)
 								}
-								self.allowEnablingOfNextButton = false
+								self.allowEnablingOfNextButton = true
 								self.verificationCodeIsKnownToBeRequired = true
 
 							case .invalid:
@@ -503,6 +511,11 @@ class TokenEntryViewModel {
 
 		return input.strippingWhitespace().uppercased()
 	}
+
+	/// Returns the `enabled` state to be used for `shouldEnableNextButton`
+	private func nextButtonEnabledState(allowEnablingOfNextButton: Bool, shouldShowProgress: Bool, screenHasCompleted: Bool) -> Bool {
+		return allowEnablingOfNextButton && !shouldShowProgress && !screenHasCompleted
+	}
 }
 
 extension TokenEntryViewModel.InitializationMode {
@@ -575,6 +588,33 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowErrorInvalidCode()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
+			}
+		}
+
+		fileprivate static func errorInvalidCombination(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return L.holderTokenentryRegularflowErrorInvalidCombination()
+				case .withRequestTokenProvided:
+					return L.holderTokenentryUniversallinkflowErrorInvalidCombination()
+			}
+		}
+
+		fileprivate static func tokenIsEmpty(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return L.holderTokenentryRegularflowEmptytoken()
+				case .withRequestTokenProvided:
+					return L.holderTokenentryUniversallinkflowEmptytoken()
+			}
+		}
+
+		fileprivate static func codeIsEmpty(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return L.holderTokenentryRegularflowEmptycode()
+				case .withRequestTokenProvided:
+					return L.holderTokenentryUniversallinkflowEmptycode()
 			}
 		}
 
@@ -685,11 +725,6 @@ extension TokenEntryViewModel: Logging {
 	var loggingCategory: String {
 		return "TokenEntryViewModel"
 	}
-}
-
-/// Returns the `enabled` state to be used for `shouldEnableNextButton`
-private func nextButtonEnabledState(allowEnablingOfNextButton: Bool, shouldShowProgress: Bool, screenHasCompleted: Bool) -> Bool {
-	return allowEnablingOfNextButton && !shouldShowProgress && !screenHasCompleted
 }
 
 // MARK: - Error States

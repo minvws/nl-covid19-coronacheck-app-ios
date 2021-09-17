@@ -213,8 +213,11 @@
 "holder.tokenentry.regularflow.verification.title" = "Verification code";
 "holder.tokenentry.regularflow.verification.placeholder" = "E.g. 123456";
 "holder.tokenentry.regularflow.error.invalid.code" = "Invalid retrieval code";
+"holder.tokenentry.universallinkflow.error.invalid.combination" = "No valid combination";
 "holder.tokenentry.regularflow.retry.title" = "I haven't received a code";
 "holder.tokenentry.regularflow.next" = "Next";
+"holder.tokenentry.regularflow.emptytoken" = "Please fill out a retrieval code first";
+"holder.tokenentry.regularflow.emptycode" = "Please fill out a verification code first";
 /* MARK: - Holder Token entry - Universal Link flow */
 "holder.tokenentry.universallinkflow.title" = "Retrieve test result";
 "holder.tokenentry.universallinkflow.text" = "Enter your verification code to retrieve your negative test result.";
@@ -225,8 +228,11 @@
 "holder.tokenentry.universallinkflow.verification.title" = "Verification code";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "E.g. 123456";
 "holder.tokenentry.universallinkflow.error.invalid.code" = "This retrieval code has expired";
+"holder.tokenentry.universallinkflow.error.invalid.combination" = "No valid combination";
 "holder.tokenentry.universallinkflow.retry.title" = "I haven't received a code";
 "holder.tokenentry.universallinkflow.next" = "Next";
+"holder.tokenentry.universallinkflow.emptytoken" = "Please fill out a retrieval code first";
+"holder.tokenentry.universallinkflow.emptycode" = "Please fill out a verification code first";
 
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
