@@ -213,12 +213,12 @@
 "holder.tokenentry.regularflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.regularflow.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.regularflow.error.invalid.code" = "Geen geldige ophaalcode";
-"holder.tokenentry.regularflow.error.invalid.combination" = "Geen geldige combinatie van ophaalcode en verificatiecode";
+"holder.tokenentry.regularflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.regularflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.regularflow.next" = "Volgende";
 "holder.tokenentry.regularflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
 "holder.tokenentry.regularflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
-"holder.tokenentry.regularflow.error.unknownprovider" = "Ophaalcode is van een onbekende testlocatie";
+"holder.tokenentry.regularflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 /* MARK: - Holder Token entry - Universal Link flow */
 "holder.tokenentry.universallinkflow.title" = "Testuitslag ophalen";
 "holder.tokenentry.universallinkflow.text" = "Vul jouw verificatiecode in om je negatieve testuitslag op te halen.";
@@ -229,12 +229,12 @@
 "holder.tokenentry.universallinkflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.universallinkflow.error.invalid.code" = "Ophaalcode is niet meer geldig";
-"holder.tokenentry.universallinkflow.error.invalid.combination" = "Geen geldige combinatie van ophaalcode en verificatiecode";
+"holder.tokenentry.universallinkflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.universallinkflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.universallinkflow.next" = "Volgende";
 "holder.tokenentry.universallinkflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
 "holder.tokenentry.universallinkflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
-"holder.tokenentry.universallinkflow.error.unknownprovider" = "Ophaalcode is van een onbekende testlocatie";
+"holder.tokenentry.universallinkflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "Geen lettercombinatie?";
