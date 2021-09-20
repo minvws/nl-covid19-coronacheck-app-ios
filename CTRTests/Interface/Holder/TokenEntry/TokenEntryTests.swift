@@ -318,7 +318,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowResendVerificationButton) == false
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -413,7 +413,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -544,7 +544,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -568,7 +568,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -591,7 +591,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
