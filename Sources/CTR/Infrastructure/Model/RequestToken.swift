@@ -38,7 +38,7 @@ struct RequestToken: Codable, Equatable {
         self.providerIdentifier = providerIdentifier
     }
 
-    init?(input: String, tokenValidator: TokenValidatorProtocol = TokenValidator()) {
+    init?(input: String, tokenValidator: TokenValidatorProtocol) {
         // Check the validity of the input
         guard tokenValidator.validate(input) else {
             return nil

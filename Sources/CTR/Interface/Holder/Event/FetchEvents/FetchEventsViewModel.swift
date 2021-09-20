@@ -121,7 +121,10 @@ final class FetchEventsViewModel: Logging {
 		let someServerUnreachableErrror: Bool = !serverErrors.filter { serverError in
 			switch serverError {
 				case let ServerError.error(_, _, error), let ServerError.provider(_, _, _, error):
-					return error == .serverBusy || error == .serverUnreachable
+					return error == .serverBusy ||
+						error == .serverUnreachableInvalidHost ||
+						error == .serverUnreachableConnectionLost ||
+						error == .serverUnreachableTimedOut
 			}
 		}.isEmpty
 
@@ -532,7 +535,7 @@ private extension FetchEventsViewModel {
 				return ErrorCode(
 					flow: flowCode,
 					step: step,
-					errorCode: networkError.getClientErrorCode() ?? "\(statusCode ?? 000)",
+					clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode(value: "\(statusCode ?? 000)"),
 					detailedCode: serverResponse?.code
 				)
 			case let ServerError.provider(provider: provider, statusCode, serverResponse, networkError):
@@ -540,7 +543,7 @@ private extension FetchEventsViewModel {
 					flow: flowCode,
 					step: step,
 					provider: provider,
-					errorCode: networkError.getClientErrorCode() ?? "\(statusCode ?? 000)",
+					clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode(value: "\(statusCode ?? 000)"),
 					detailedCode: serverResponse?.code
 				)
 		}
@@ -552,7 +555,7 @@ private extension FetchEventsViewModel {
 		let sessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeSessionExpired }.isEmpty
 		let serverUnreachable = !serverErrors.filter { serverError in
 			if case let ServerError.error(_, _, error) = serverError {
-				return error == .serverUnreachable
+				return error == .serverUnreachableTimedOut || error == .serverUnreachableInvalidHost || error == .serverUnreachableConnectionLost
 			}
 			return false
 		}.isEmpty
@@ -574,9 +577,9 @@ private extension FetchEventsViewModel {
 		} else if sessionExpired {
 			displaySessionExpired()
 		} else if serverUnreachable {
-			displayServerUnreachable()
+			displayServerUnreachable(errorCodes)
 		} else if serverBusy {
-			displayServerBusy()
+			displayServerBusy(errorCodes)
 		} else if noInternet {
 			displayNoInternet()
 		} else {
@@ -586,34 +589,32 @@ private extension FetchEventsViewModel {
 
 	func displayNoBSN() {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.holderErrorstateNobsnTitle(),
-				subTitle: L.holderErrorstateNobsnMessage(),
-				primaryActionTitle: L.holderErrorstateNobsnAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		let content = Content(
+			title: L.holderErrorstateNobsnTitle(),
+			subTitle: L.holderErrorstateNobsnMessage(),
+			primaryActionTitle: L.holderErrorstateNobsnAction(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
+		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	func displaySessionExpired() {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.holderErrorstateNosessionTitle(),
-				subTitle: L.holderErrorstateNosessionMessage(),
-				primaryActionTitle: L.holderErrorstateNosessionAction(),
-				primaryAction: { [weak self] in
-					self?.goBack()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		let content = Content(
+			title: L.holderErrorstateNosessionTitle(),
+			subTitle: L.holderErrorstateNosessionMessage(),
+			primaryActionTitle: L.holderErrorstateNosessionAction(),
+			primaryAction: { [weak self] in
+				self?.goBack()
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
+		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	func displayServerUnreachable() {
@@ -634,20 +635,47 @@ private extension FetchEventsViewModel {
 		)
 	}
 
-	func displayServerBusy() {
+	func displayServerUnreachable(_ errorCodes: [ErrorCode]) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.generalNetworkwasbusyTitle(),
-				subTitle: L.generalNetworkwasbusyText(),
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachableErrorCode(flattenErrorCodes(errorCodes)),
+			primaryActionTitle: L.holderErrorstateNobsnAction(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
+		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
+	}
+
+	func displayServerBusy(_ errorCodes: [ErrorCode]) {
+
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyErrorcode(flattenErrorCodes(errorCodes)),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
+		)
+		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
+	}
+
+	private func flattenErrorCodes(_ errorCodes: [ErrorCode]) -> String {
+
+		let lineBreak = "<br />"
+		let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
+		return String(errorString)
 	}
 
 	func displayErrorCodeForAccessTokenAndProviders(_ errorCodes: [ErrorCode]) {
@@ -661,9 +689,7 @@ private extension FetchEventsViewModel {
 				subTitle = L.holderErrorstateServerMessage("\(errorCodes[0])")
 			}
 		} else {
-			let lineBreak = "<br />"
-			let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
-			subTitle = L.holderErrorstateServerMessages("\(errorString)")
+			subTitle = L.holderErrorstateServerMessages(flattenErrorCodes(errorCodes))
 		}
 
 		displayErrorCode(subTitle: subTitle)
@@ -686,24 +712,23 @@ private extension FetchEventsViewModel {
 
 	func displayErrorCode(subTitle: String) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.holderErrorstateTitle(),
-				subTitle: subTitle,
-				primaryActionTitle: L.holderErrorstateOverviewAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-				secondaryAction: { [weak self] in
-					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-						return
-					}
-
-					self?.coordinator?.openUrl(url, inApp: true)
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: subTitle,
+			primaryActionTitle: L.holderErrorstateOverviewAction(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
 				}
-			)
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
+		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	func displayNoInternet() {

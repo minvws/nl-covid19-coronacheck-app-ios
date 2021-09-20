@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import SafariServices
 
 enum EventMode: String {
 
@@ -35,6 +34,8 @@ enum EventScreenResult: Equatable {
 
 	/// Skip back to the beginning of the flow
 	case errorRequiringRestart(eventMode: EventMode)
+
+	case error(content: Content, backAction: () -> Void)
 
 	/// Continue with the next step in the flow
 	case `continue`(value: String?, eventMode: EventMode)
@@ -71,6 +72,12 @@ enum EventScreenResult: Equatable {
 			case (let showEventDetails(lhsTitle, lhsDetails), let showEventDetails(rhsTitle, rhsDetails)):
 				return (lhsTitle, lhsDetails) == (rhsTitle, rhsDetails)
 
+			case (let errorRequiringRestart(lhsMode), let errorRequiringRestart(rhsMode)):
+				return lhsMode == rhsMode
+
+			case (let error(lhsContent, _), let error(rhsContent, _)):
+				return lhsContent == rhsContent
+
 			default:
 				return false
 		}
@@ -96,7 +103,7 @@ protocol EventFlowDelegate: AnyObject {
 	func eventFlowDidCancel()
 }
 
-class EventCoordinator: Coordinator, Logging {
+class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 
@@ -220,12 +227,7 @@ class EventCoordinator: Coordinator, Logging {
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
-
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
+		presentAsBottomSheet(viewController)
 	}
 	
 	private func navigateToEventDetails(_ title: String, details: [EventDetails]) {
@@ -238,6 +240,10 @@ class EventCoordinator: Coordinator, Logging {
 				hideBodyForScreenCapture: true
 			)
 		)
+		presentAsBottomSheet(viewController)
+	}
+
+	private func presentAsBottomSheet(_ viewController: UIViewController) {
 
 		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
 		viewController.modalPresentationStyle = .custom
@@ -280,6 +286,17 @@ class EventCoordinator: Coordinator, Logging {
 			)
 		}
 	}
+
+	private func displayError(content: Content, backAction: @escaping () -> Void) {
+
+		let viewController = ErrorStateViewController(
+			viewModel: ErrorStateViewModel(
+				content: content,
+				backAction: backAction
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
+	}
 }
 
 extension EventCoordinator: EventCoordinatorDelegate {
@@ -309,6 +326,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 			case .errorRequiringRestart(let eventMode):
 				handleErrorRequiringRestart(eventMode: eventMode)
+
+			case let .error(content: content, backAction: backAction):
+				displayError(content: content, backAction: backAction)
 
 			case .back(let eventMode):
 				switch eventMode {
@@ -342,6 +362,10 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					case .paperflow:
 						break
 				}
+
+			case let .error(content: content, backAction: backAction):
+				displayError(content: content, backAction: backAction)
+
 			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
 				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
 
@@ -364,6 +388,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					case .paperflow:
 						delegate?.eventFlowDidCancel()
 				}
+			case let .error(content: content, backAction: backAction):
+				displayError(content: content, backAction: backAction)
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
 			case let .showEventDetails(title, details):
@@ -412,35 +438,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			navigationController.popToViewController(popback, animated: true, completion: presentError)
 		} else {
 			navigationController.popToRootViewController(animated: true, completion: presentError)
-		}
-	}
-}
-
-extension EventCoordinator: OpenUrlProtocol {
-
-	/// Open a url
-	/// - Parameters:
-	///   - url: The url to open
-	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
-	func openUrl(_ url: URL, inApp: Bool) {
-
-		var shouldOpenInApp = inApp
-		if url.scheme == "tel" {
-			// Do not open phone numbers in app, doesn't work & will crash.
-			shouldOpenInApp = false
-		}
-
-		if shouldOpenInApp {
-			let safariController = SFSafariViewController(url: url)
-			if let presentedViewController = navigationController.presentedViewController {
-				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
-					self.navigationController.viewControllers.last?.present(safariController, animated: true)
-				})
-			} else {
-				navigationController.viewControllers.last?.present(safariController, animated: true)
-			}
-		} else {
-			UIApplication.shared.open(url)
 		}
 	}
 }

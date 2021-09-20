@@ -15,8 +15,6 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 
 	var sut: PaperCertificateCheckViewController!
 	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
-	var networkSpy: NetworkSpy!
-	var cryptoSpy: CryptoManagerSpy!
 	var couplingManagerSpy: CouplingManagerSpy!
 
 	var window = UIWindow()
@@ -24,9 +22,11 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
-		networkSpy = NetworkSpy(configuration: .development)
-		cryptoSpy = CryptoManagerSpy()
-		couplingManagerSpy = CouplingManagerSpy(cryptoManager: cryptoSpy, networkManager: networkSpy)
+		couplingManagerSpy = CouplingManagerSpy(
+			cryptoManager: CryptoManagerSpy(),
+			networkManager: NetworkSpy(configuration: .development)
+		)
+		Services.use(couplingManagerSpy)
 		window = UIWindow()
 	}
 
@@ -53,8 +53,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
+				couplingCode: "test"
 			)
 		)
 
@@ -79,8 +78,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
+				couplingCode: "test"
 			)
 		)
 		loadView()
@@ -102,8 +100,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
+				couplingCode: "test"
 			)
 		)
 
@@ -128,8 +125,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
+				couplingCode: "test"
 			)
 		)
 		loadView()
@@ -151,8 +147,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
+				couplingCode: "test"
 			)
 		)
 
@@ -177,8 +172,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
+				couplingCode: "test"
 			)
 		)
 		loadView()
@@ -188,53 +182,6 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToTokenEntry) == true
-	}
-
-	func test_alertServerBusy() {
-
-		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: 429, response: nil, error: .serverBusy)), ())
-
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
-				coordinator: coordinatorDelegateSpy,
-				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
-			)
-		)
-
-		// When
-		loadView()
-
-		// Then
-		expect(self.sut.sceneView.title) == L.generalNetworkwasbusyTitle()
-		expect(self.sut.sceneView.message) == L.generalNetworkwasbusyText()
-		expect(self.sut.sceneView.primaryTitle) == L.generalNetworkwasbusyButton()
-	}
-
-	func test_alertServerBusy_okAction() throws {
-
-		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: 429, response: nil, error: .serverBusy)), ())
-
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
-				coordinator: coordinatorDelegateSpy,
-				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
-			)
-		)
-		loadView()
-
-		// When
-		sut.sceneView.primaryButtonTapped()
-
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToDashboard) == true
 	}
 
 	func test_alertNoInternet() {
@@ -248,8 +195,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
+				couplingCode: "test"
 			)
 		)
 
@@ -281,8 +227,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
+				couplingCode: "test"
 			)
 		)
 		loadView()
@@ -305,8 +250,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
+				couplingCode: "test"
 			)
 		)
 		loadView()
@@ -316,147 +260,5 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.couplingManagerSpy.invokedCheckCouplingStatusCount).toEventually(equal(2))
-	}
-
-	func test_serverError() {
-
-		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: 404, response: ServerResponse(status: "error", code: 99707), error: .resourceNotFound)), ())
-
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
-				coordinator: coordinatorDelegateSpy,
-				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
-			)
-		)
-
-		// When
-		loadView()
-
-		// Then
-		expect(self.sut.sceneView.title) == L.holderErrorstateTitle()
-		expect(self.sut.sceneView.message) == L.holderErrorstateServerMessage("i 510 000 404 99707")
-		expect(self.sut.sceneView.primaryTitle) == L.generalNetworkwasbusyButton()
-		expect(self.sut.sceneView.secondaryButtonTitle) == L.holderErrorstateMalfunctionsTitle()
-	}
-
-	func test_serverError_primaryAction() {
-
-		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: 404, response: ServerResponse(status: "error", code: 99707), error: .resourceNotFound)), ())
-
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
-				coordinator: coordinatorDelegateSpy,
-				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
-			)
-		)
-		loadView()
-
-		// When
-		sut.sceneView.primaryButtonTapped()
-
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToDashboard) == true
-	}
-
-	func test_serverError_secondaryAction() {
-
-		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: 404, response: ServerResponse(status: "error", code: 99707), error: .resourceNotFound)), ())
-
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
-				coordinator: coordinatorDelegateSpy,
-				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
-			)
-		)
-		loadView()
-
-		// When
-		sut.sceneView.secondaryButtonTapped()
-
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedOpenUrl) == true
-	}
-
-	func test_clientError() {
-
-		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
-
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
-				coordinator: coordinatorDelegateSpy,
-				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
-			)
-		)
-
-		// When
-		loadView()
-
-		// Then
-		expect(self.sut.sceneView.title) == L.holderErrorstateTitle()
-		expect(self.sut.sceneView.message) == L.holderErrorstateClientMessage("i 510 000 002")
-		expect(self.sut.sceneView.primaryTitle) == L.generalNetworkwasbusyButton()
-		expect(self.sut.sceneView.secondaryButtonTitle) == L.holderErrorstateMalfunctionsTitle()
-	}
-
-	func test_clientError_primaryAction() {
-
-		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
-
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
-				coordinator: coordinatorDelegateSpy,
-				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
-			)
-		)
-		loadView()
-
-		// When
-		sut.sceneView.primaryButtonTapped()
-
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToDashboard) == true
-	}
-
-	func test_clientError_secondaryAction() {
-
-		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
-
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
-				coordinator: coordinatorDelegateSpy,
-				scannedDcc: "test",
-				couplingCode: "test",
-				couplingManager: couplingManagerSpy
-			)
-		)
-		loadView()
-
-		// When
-		sut.sceneView.secondaryButtonTapped()
-
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedOpenUrl) == true
 	}
 }

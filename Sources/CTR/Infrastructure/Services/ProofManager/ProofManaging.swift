@@ -14,5 +14,5 @@ protocol ProofManaging: AnyObject {
 	/// Fetch the issuer public keys
 	/// - Parameters:
 	///   - onCompletion: completion handler
-	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, NetworkError>) -> Void)?)
+	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?)
 }

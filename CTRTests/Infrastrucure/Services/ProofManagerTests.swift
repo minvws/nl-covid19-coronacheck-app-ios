@@ -53,7 +53,7 @@ class ProofManagerTests: XCTestCase {
 	func test_fetchIssuerPublicKeys_withErrorResponse() {
 
 		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest), ())
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .cannotSerialize)), ())
 
 		// When
 		sut.fetchIssuerPublicKeys(onCompletion: nil)

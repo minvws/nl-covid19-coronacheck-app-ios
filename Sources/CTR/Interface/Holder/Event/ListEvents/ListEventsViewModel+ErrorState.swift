@@ -45,20 +45,20 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func showServerTooBusyError() {
+	internal func showServerTooBusyError(errorCode: ErrorCode) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.generalNetworkwasbusyTitle(),
-				subTitle: L.generalNetworkwasbusyText(),
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.listEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
+
+		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	internal func showNoInternet(remoteEvents: [RemoteEvent]) {
@@ -80,67 +80,40 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func showServerUnreachable(remoteEvents: [RemoteEvent]) {
+	internal func showServerUnreachable(_ errorCode: ErrorCode) {
 
-		// this is a retry-able situation
-		alert = AlertContent(
-			title: L.holderErrorstateTitle(),
-			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
-					}
-				}
+		displayErrorCode(title: L.holderErrorstateTitle(), message: L.generalErrorServerUnreachableErrorCode("\(errorCode)"))
+	}
+
+	internal func displayClientErrorCode(_ errorCode: ErrorCode) {
+
+		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
+	}
+
+	internal func displayServerErrorCode(_ errorCode: ErrorCode) {
+
+		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateServerMessage("\(errorCode)"))
+	}
+
+	private func displayErrorCode(title: String, message: String) {
+
+		let content = Content(
+			title: title,
+			subTitle: message,
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.listEventsScreenDidFinish(.stop)
 			},
-			okTitle: L.generalRetry()
-		)
-	}
-
-	internal func displayClientErrorCode(_ errorCode: ErrorCode) -> ListEventsViewController.State {
-
-		return .feedback(
-			content: Content(
-				title: L.holderErrorstateTitle(),
-				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-				secondaryAction: { [weak self] in
-					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-						return
-					}
-
-					self?.coordinator?.openUrl(url, inApp: true)
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
 				}
-			)
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
-	}
-
-	internal func displayServerErrorCode(_ errorCode: ErrorCode) -> ListEventsViewController.State {
-
-		return .feedback(
-			content: Content(
-				title: L.holderErrorstateTitle(),
-				subTitle: L.holderErrorstateServerMessage("\(errorCode)"),
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-				secondaryAction: { [weak self] in
-					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-						return
-					}
-
-					self?.coordinator?.openUrl(url, inApp: true)
-				}
-			)
-		)
+		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	func determineErrorCodeFlow(remoteEvents: [RemoteEvent]) -> ErrorCode.Flow {

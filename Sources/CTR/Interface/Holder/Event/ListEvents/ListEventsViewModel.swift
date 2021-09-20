@@ -11,12 +11,11 @@ class ListEventsViewModel: Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	private var walletManager: WalletManaging
-	var remoteConfigManager: RemoteConfigManaging
-	private let greenCardLoader: GreenCardLoading
-	let cryptoManager: CryptoManaging?
-	private let couplingManager: CouplingManaging
-	let mappingManager: MappingManaging
+	private let walletManager: WalletManaging = Services.walletManager
+	let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+	private let greenCardLoader: GreenCardLoading = Services.greenCardLoader
+	let cryptoManager: CryptoManaging? = Services.cryptoManager
+	let mappingManager: MappingManaging = Services.mappingManager
 	private let identityChecker: IdentityCheckerProtocol
 
 	var eventMode: EventMode
@@ -76,25 +75,13 @@ class ListEventsViewModel: Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
 		remoteEvents: [RemoteEvent],
-		greenCardLoader: GreenCardLoading = Services.greenCardLoader,
-		walletManager: WalletManaging = Services.walletManager,
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
-		cryptoManager: CryptoManaging = Services.cryptoManager,
-		couplingManager: CouplingManaging = Services.couplingManager,
 		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
-		mappingManager: MappingManaging = Services.mappingManager,
 		eventsMightBeMissing: Bool = false
 	) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
-		self.walletManager = walletManager
-		self.remoteConfigManager = remoteConfigManager
-		self.greenCardLoader = greenCardLoader
-		self.cryptoManager = cryptoManager
-		self.couplingManager = couplingManager
 		self.identityChecker = identityChecker
-		self.mappingManager = mappingManager
 
 		viewState = .loading(
 			content: Content(
@@ -236,44 +223,51 @@ class ListEventsViewModel: Logging {
 
 			}, completion: { result in
 				self.progressIndicationCounter.decrement()
-
-				switch result {
-					case .success:
-						self.coordinator?.listEventsScreenDidFinish(
-							.continue(
-								value: nil,
-								eventMode: self.eventMode
-							)
-						)
-
-					case .failure(GreenCardLoader.Error.didNotEvaluate):
-						self.viewState = self.cannotCreateEventsState()
-						self.shouldPrimaryButtonBeEnabled = true
-
-					case .failure(GreenCardLoader.Error.noEvents):
-						self.shouldPrimaryButtonBeEnabled = true
-						completion(false)
-
-					case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
-						self.handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce, with: remoteEvents)
-
-					case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
-						self.handleServerError(serverError, for: .nonce, with: remoteEvents)
-
-					case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
-						self.handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce, with: remoteEvents)
-
-					case .failure(GreenCardLoader.Error.credentials(let serverError)):
-						self.handleServerError(serverError, for: .signer, with: remoteEvents)
-
-					case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
-						self.handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials, with: remoteEvents)
-
-					case .failure(let error):
-						self.logError("storeAndSign - unhandled: \(error)")
-						self.handleClientSideError(clientCode: .unhandled, for: .signer, with: remoteEvents)
-				}
+				self.handleGreenCardResult(result, remoteEvents: remoteEvents, completion: completion)
 			})
+		}
+	}
+
+	private func handleGreenCardResult(
+		_ result: Result<Void, Error>,
+		remoteEvents: [RemoteEvent],
+		completion: @escaping (Bool) -> Void) {
+
+		switch result {
+			case .success:
+				self.coordinator?.listEventsScreenDidFinish(
+					.continue(
+						value: nil,
+						eventMode: self.eventMode
+					)
+				)
+
+			case .failure(GreenCardLoader.Error.didNotEvaluate):
+				self.viewState = self.cannotCreateEventsState()
+				self.shouldPrimaryButtonBeEnabled = true
+
+			case .failure(GreenCardLoader.Error.noEvents):
+				self.shouldPrimaryButtonBeEnabled = true
+				completion(false)
+
+			case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
+				self.handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce, with: remoteEvents)
+
+			case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
+				self.handleServerError(serverError, for: .nonce, with: remoteEvents)
+
+			case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
+				self.handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce, with: remoteEvents)
+
+			case .failure(GreenCardLoader.Error.credentials(let serverError)):
+				self.handleServerError(serverError, for: .signer, with: remoteEvents)
+
+			case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
+				self.handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials, with: remoteEvents)
+
+			case .failure(let error):
+				self.logError("storeAndSign - unhandled: \(error)")
+				self.handleClientSideError(clientCode: .unhandled, for: .signer, with: remoteEvents)
 		}
 	}
 
@@ -286,7 +280,7 @@ class ListEventsViewModel: Logging {
 			errorCode: clientCode.value
 		)
 		logDebug("errorCode: \(errorCode)")
-		viewState = displayClientErrorCode(errorCode)
+		displayClientErrorCode(errorCode)
 		shouldPrimaryButtonBeEnabled = true
 	}
 
@@ -297,11 +291,11 @@ class ListEventsViewModel: Logging {
 
 			switch error {
 				case .serverBusy:
-					showServerTooBusyError()
+					showServerTooBusyError(errorCode: ErrorCode(flow: determineErrorCodeFlow(remoteEvents: remoteEvents), step: step, errorCode: "429"))
 					shouldPrimaryButtonBeEnabled = true
 					
-				case .serverUnreachable:
-					showServerUnreachable(remoteEvents: remoteEvents)
+				case .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
+					showServerUnreachable(ErrorCode(flow: determineErrorCodeFlow(remoteEvents: remoteEvents), step: step, clientCode: error.getClientErrorCode() ?? .unhandled))
 					shouldPrimaryButtonBeEnabled = true
 
 				case .noInternetConnection:
@@ -318,7 +312,7 @@ class ListEventsViewModel: Logging {
 						detailedCode: serverResponse?.code
 					)
 					logDebug("errorCode: \(errorCode)")
-					viewState = displayServerErrorCode(errorCode)
+					displayServerErrorCode(errorCode)
 					shouldPrimaryButtonBeEnabled = true
 
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
@@ -327,15 +321,14 @@ class ListEventsViewModel: Logging {
 						flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
 						step: step,
 						provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
-						errorCode: error.getClientErrorCode() ?? "000",
+						clientCode: error.getClientErrorCode() ?? .unhandled,
 						detailedCode: serverResponse?.code
 					)
 					logDebug("errorCode: \(errorCode)")
-					viewState = displayClientErrorCode(errorCode)
+					displayClientErrorCode(errorCode)
 					shouldPrimaryButtonBeEnabled = true
 			}
 		}
-
 	}
 
 	// MARK: Store events

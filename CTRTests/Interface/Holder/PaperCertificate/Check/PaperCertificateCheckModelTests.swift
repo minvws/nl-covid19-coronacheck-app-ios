@@ -13,17 +13,17 @@ class PaperCertificateCheckModelTests: XCTestCase {
 
 	var sut: PaperCertificateCheckViewModel!
 	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
-	var networkSpy: NetworkSpy!
-	var cryptoSpy: CryptoManagerSpy!
 	var couplingManagerSpy: CouplingManagerSpy!
 
 	override func setUp() {
 		super.setUp()
 
 		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
-		networkSpy = NetworkSpy(configuration: .development)
-		cryptoSpy = CryptoManagerSpy()
-		couplingManagerSpy = CouplingManagerSpy(cryptoManager: cryptoSpy, networkManager: networkSpy)
+		couplingManagerSpy = CouplingManagerSpy(
+			cryptoManager: CryptoManagerSpy(),
+			networkManager: NetworkSpy(configuration: .development)
+		)
+		Services.use(couplingManagerSpy)
 	}
 
 	func test_success_accepted_wrongDCC() {
@@ -37,14 +37,14 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).to(beNil())
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 052")
 			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
@@ -71,8 +71,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
@@ -91,8 +90,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
@@ -118,8 +116,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
@@ -145,8 +142,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
@@ -172,14 +168,14 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
-			expect(content.subTitle) == L.generalNetworkwasbusyText()
+			expect(content.subTitle) == L.generalNetworkwasbusyErrorcode("i 510 000 429")
 			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(content.secondaryActionTitle).to(beNil())
 		} else {
@@ -198,8 +194,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
@@ -213,22 +208,27 @@ class PaperCertificateCheckModelTests: XCTestCase {
 
 		// Given
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
+			(.failure(.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
-		expect(self.sut.alert).toNot(beNil())
-		expect(self.sut.alert?.title) == L.holderErrorstateTitle()
-		expect(self.sut.alert?.subTitle) == L.generalErrorServerUnreachable()
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.generalErrorServerUnreachableErrorCode("i 510 000 004")
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_failure_responseCached() {
@@ -242,12 +242,12 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 000 304")
 			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
@@ -268,12 +268,12 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 000 404 99707")
 			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
@@ -294,12 +294,12 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 000 500 99707")
 			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
@@ -320,12 +320,12 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 003")
 			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
@@ -346,12 +346,12 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 002")
 			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
@@ -372,12 +372,12 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 020")
 			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
@@ -398,12 +398,12 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 030")
 			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
@@ -424,12 +424,13 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		sut = PaperCertificateCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
-			couplingCode: "test",
-			couplingManager: couplingManagerSpy
+			couplingCode: "test"
 		)
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
+
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 031")
 			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()

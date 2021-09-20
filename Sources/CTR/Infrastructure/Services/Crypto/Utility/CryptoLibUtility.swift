@@ -18,6 +18,8 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	
 	/// Initialize core library
 	func initialize()
+
+	init(fileStorage: FileStorage, flavor: AppFlavor)
 	
 	/// Store data in documents directory
 	/// - Parameters:

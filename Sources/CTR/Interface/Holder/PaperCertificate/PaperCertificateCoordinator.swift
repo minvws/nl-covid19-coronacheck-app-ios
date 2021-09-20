@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import SafariServices
 
 protocol PaperCertificateFlowDelegate: AnyObject {
 	
@@ -30,9 +29,13 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 	func userWishesToScanCertificate()
 
 	func userWishesToCreateACertificate(message: String)
+
+	func displayError(content: Content, backAction: @escaping () -> Void)
+
+	func userWishesToGoBackToScanCertificate()
 }
 
-final class PaperCertificateCoordinator: Coordinator, Logging {
+final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 	
@@ -45,19 +48,13 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 	var scannedQR: String?
 
 	fileprivate var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
-	
-	/// The crypto manager
-	private weak var cryptoManager: CryptoManaging?
 
 	/// Initializer
 	/// - Parameters:
-	///   - navigationController: the navigation controller
-	init(
-		delegate: PaperCertificateFlowDelegate,
-		cryptoManager: CryptoManaging) {
+	///   - delegate: flow delegate
+	init(delegate: PaperCertificateFlowDelegate) {
 		
 		self.delegate = delegate
-		self.cryptoManager = cryptoManager
 	}
 	
 	/// Start the scene
@@ -144,6 +141,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userWishesToEnterToken() {
 
+//		userDidSubmitPaperCertificateToken(token: "NDREB5")
+
 		let destination = PaperCertificateTokenEntryViewController(
 			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
 		)
@@ -154,12 +153,11 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 	/// Navigate to the scanner
 	func userWishesToScanCertificate() {
 
-		//		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
+//		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
 
 		let destination = PaperCertificateScanViewController(
 			viewModel: PaperCertificateScanViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager
+				coordinator: self
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)
@@ -182,6 +180,29 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 			navigationController.pushViewController(viewController, animated: false)
 		}
 	}
+
+	func displayError(content: Content, backAction: @escaping () -> Void) {
+
+		let viewController = ErrorStateViewController(
+			viewModel: ErrorStateViewModel(
+				content: content,
+				backAction: backAction
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
+	}
+
+	func userWishesToGoBackToScanCertificate() {
+
+		if let scanViewController = navigationController.viewControllers
+			.first(where: { $0 is PaperCertificateScanViewController }) {
+
+			navigationController.popToViewController(
+				scanViewController,
+				animated: true
+			)
+		}
+	}
 }
 
 // MARK: - Dismissable
@@ -194,38 +215,6 @@ extension PaperCertificateCoordinator: Dismissable {
 			navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
 		} else {
 			navigationController.popViewController(animated: false)
-		}
-	}
-}
-
-// MARK: - OpenUrlProtocol
-
-extension PaperCertificateCoordinator: OpenUrlProtocol {
-
-	/// Open a url
-	/// - Parameters:
-	///   - url: The url to open
-	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
-	func openUrl(_ url: URL, inApp: Bool) {
-
-		var shouldOpenInApp = inApp
-		if url.scheme == "tel" {
-			// Do not open phone numbers in app, doesn't work & will crash.
-			shouldOpenInApp = false
-		}
-
-		if shouldOpenInApp {
-			let safariController = SFSafariViewController(url: url)
-
-			if let presentedViewController = navigationController.presentedViewController {
-				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
-					self.navigationController.present(safariController, animated: true)
-				})
-			} else {
-				navigationController.present(safariController, animated: true)
-			}
-		} else {
-			UIApplication.shared.open(url)
 		}
 	}
 }

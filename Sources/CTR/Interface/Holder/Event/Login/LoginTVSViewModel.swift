@@ -11,47 +11,45 @@ import AppAuth
 class LoginTVSViewModel: Logging {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var openIdManager: OpenIdManaging?
+	private weak var openIdManager: OpenIdManaging? = Services.openIdManager
 
 	private var eventMode: EventMode
 
-	@Bindable internal var viewState: LoginTVSViewController.State
+	private var title: String
 
-//	@Bindable private(set) var title: String
+	@Bindable internal var content: Content
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	@Bindable private(set) var alert: LoginTVSViewController.AlertContent?
+	@Bindable private(set) var alert: AlertContent?
 
 	init(
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
-		eventMode: EventMode,
-		openIdManager: OpenIdManaging = Services.openIdManager) {
+		eventMode: EventMode) {
 
 		self.coordinator = coordinator
-		self.openIdManager = openIdManager
 		self.eventMode = eventMode
 
-		viewState = .login(
-			content: Content(
-				title: {
-					switch eventMode {
-						case .recovery:
-							return L.holderRecoveryListTitle()
-						case .paperflow:
-							return L.holderDccListTitle()
-						case .test:
-							return L.holderTestListTitle()
-						case .vaccination:
-							return L.holderVaccinationListTitle()
-					}
-				}(),
-				subTitle: nil,
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		self.title = {
+			switch eventMode {
+				case .recovery:
+					return L.holderRecoveryListTitle()
+				case .paperflow:
+					return L.holderDccListTitle()
+				case .test:
+					return L.holderTestListTitle()
+				case .vaccination:
+					return L.holderVaccinationListTitle()
+			}
+		}()
+
+		content = Content(
+			title: title,
+			subTitle: nil,
+			primaryActionTitle: nil,
+			primaryAction: nil,
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
 	}
 
@@ -64,28 +62,15 @@ class LoginTVSViewModel: Logging {
 	func login() {
 
 		shouldShowProgress = true
-		viewState = .login(
-			content: Content(
-				title: {
-					switch eventMode {
-						case .recovery:
-							return L.holderRecoveryListTitle()
-						case .paperflow:
-							return L.holderDccListTitle()
-						case .test:
-							return L.holderTestListTitle()
-						case .vaccination:
-							return L.holderVaccinationListTitle()
-					}
-				}(),
-				subTitle: nil,
-				primaryActionTitle: L.generalClose(),
-				primaryAction: { [weak self] in
-					self?.cancel()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		content = Content(
+			title: title,
+			subTitle: nil,
+			primaryActionTitle: L.generalClose(),
+			primaryAction: { [weak self] in
+				self?.cancel()
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
 
 		openIdManager?.requestAccessToken() { accessToken in
@@ -95,9 +80,12 @@ class LoginTVSViewModel: Logging {
 			if let token = accessToken {
 				self.coordinator?.loginTVSScreenDidFinish(.continue(value: token, eventMode: self.eventMode))
 			} else {
-				self.alert = LoginTVSViewController.AlertContent(
+				self.alert = AlertContent(
 					title: L.generalErrorTitle(),
 					subTitle: L.generalErrorTechnicalText(),
+					cancelAction: nil,
+					cancelTitle: nil,
+					okAction: nil,
 					okTitle: L.generalOk()
 				)
 			}
@@ -117,15 +105,26 @@ extension LoginTVSViewModel {
 		self.logError("TVS error: \(error?.localizedDescription ?? "Unknown error")")
 		let clientCode = mapError(error)
 
-		if let error = error, error.localizedDescription.contains("login_required") {
-			logDebug("Server busy")
-			displayServerBusy()
-			return
-		}
-		if let error = error, error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
-			logDebug("User cancelled")
-			userCancelled()
-			return
+		if let error = error {
+			if  error.localizedDescription.contains("login_required") {
+				logDebug("Server busy")
+				displayServerBusy(errorCode: ErrorCode(flow: flow, step: .tvs, errorCode: "429"))
+				return
+			} else if error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
+				logDebug("User cancelled")
+				userCancelled()
+				return
+			} else if case let ServerError.error(_, _, networkError) = error {
+				switch networkError {
+					case .serverUnreachableTimedOut, .serverUnreachableConnectionLost, .serverUnreachableInvalidHost:
+
+						let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: networkError.getClientErrorCode() ?? .unhandled)
+						self.displayUnreachable(errorCode: errorCode)
+						return
+					default:
+						break
+				}
+			}
 		}
 
 		let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: clientCode ?? ErrorCode.ClientCode(value: "000"))
@@ -139,40 +138,59 @@ extension LoginTVSViewModel {
 
 	func displayErrorCode(errorCode: ErrorCode) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.holderErrorstateTitle(),
-				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
-				primaryActionTitle: L.holderErrorstateOverviewAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.loginTVSScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-				secondaryAction: { [weak self] in
-					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-						return
-					}
-
-					self?.coordinator?.openUrl(url, inApp: true)
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
+			primaryActionTitle: L.holderErrorstateOverviewAction(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.loginTVSScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
 				}
-			)
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
+		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
 	}
 
-	func displayServerBusy() {
+	func displayServerBusy(errorCode: ErrorCode) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.generalNetworkwasbusyTitle(),
-				subTitle: L.generalNetworkwasbusyText(),
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.loginTVSScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
+		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
+	}
+
+	func displayUnreachable(errorCode: ErrorCode) {
+
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.loginTVSScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
+		)
+		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
 	}
 
 	func mapError(_ error: Error?) -> ErrorCode.ClientCode? {
@@ -247,6 +265,7 @@ extension LoginTVSViewModel {
 
 			case OIDErrorCode.idTokenFailedValidationError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralInvalidIDToken
+
 			default:
 				return nil
 		}

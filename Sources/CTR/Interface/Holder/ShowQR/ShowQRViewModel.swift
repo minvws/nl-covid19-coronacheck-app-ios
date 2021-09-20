@@ -272,19 +272,17 @@ class ShowQRViewModel: Logging {
 				logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
 
 				if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
+					showVaccinationDetails(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
 				} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-					showMoreInformationTest(euCredentialAttributes: euCredentialAttributes, test: test)
+					showTestDetails(euCredentialAttributes: euCredentialAttributes, test: test)
 				} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-					showMoreInformationRecovery(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
+					showRecoveryDetails(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
 				}
 			}
 		}
 	}
 
-	private func showMoreInformationVaccination(
-		euCredentialAttributes: EuCredentialAttributes,
-		vaccination: EuCredentialAttributes.Vaccination) {
+	private func showVaccinationDetails(euCredentialAttributes: EuCredentialAttributes, vaccination: EuCredentialAttributes.Vaccination) {
 
 		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
@@ -297,7 +295,8 @@ class ShowQRViewModel: Logging {
 			vaccination.medicalProduct) ?? vaccination.medicalProduct
 		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getVaccinationManufacturerMapping(
 			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
-
+		
+		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
 
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
@@ -305,32 +304,32 @@ class ShowQRViewModel: Logging {
 		
 		let issuer = getDisplayIssuer(vaccination.issuer)
 		let country = getDisplayCountry(vaccination.country)
-
-		let body: String = L.holderShowqrEuAboutVaccinationMessage(
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
-			formattedBirthDate,
-			vaccineBrand,
-			vaccineType,
-			vaccineManufacturer,
-			dosage ?? " ",
-			formattedVaccinationDate,
-			country,
-			issuer,
-			vaccination.certificateIdentifier
-				.breakingAtColumn(column: 20) // hotfix for webview
-		)
-		coordinator?.presentInformationPage(
+		
+		let details: [DCCQRDetails] = [
+			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: name),
+			DCCQRDetails(field: DCCQRDetailsVaccination.dateOfBirth, value: formattedBirthDate),
+			DCCQRDetails(field: DCCQRDetailsVaccination.pathogen, value: L.holderShowqrEuAboutVaccinationPathogenvalue()),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineBrand, value: vaccineBrand),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineType, value: vaccineType),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
+			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: dosage),
+			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: formattedVaccinationDate),
+			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: country),
+			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: issuer),
+			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: vaccination.certificateIdentifier)
+		]
+		
+		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
-			body: body,
-			hideBodyForScreenCapture: true,
-			openURLsInApp: true
+			description: L.holderShowqrEuAboutVaccinationDescription(),
+			details: details,
+			dateInformation: L.holderShowqrEuAboutVaccinationDateinformation()
 		)
 	}
 
-	private func showMoreInformationTest(
-		euCredentialAttributes: EuCredentialAttributes,
-		test: EuCredentialAttributes.TestEntry) {
+	private func showTestDetails(euCredentialAttributes: EuCredentialAttributes, test: EuCredentialAttributes.TestEntry) {
 
+		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
 
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
@@ -353,33 +352,33 @@ class ShowQRViewModel: Logging {
 		let issuer = getDisplayIssuer(test.issuer)
 		let country = getDisplayCountry(test.country)
 		let facility = getDisplayFacility(test.testCenter)
-
-		let body: String = L.holderShowqrEuAboutTestMessage(
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
-			formattedBirthDate,
-			testType,
-			test.name ?? "",
-			formattedTestDate,
-			testResult,
-			facility,
-			manufacturer,
-			country,
-			issuer,
-			test.certificateIdentifier
-				.breakingAtColumn(column: 20) // hotfix for webview
-		)
-		coordinator?.presentInformationPage(
+		
+		let details: [DCCQRDetails] = [
+			DCCQRDetails(field: DCCQRDetailsTest.name, value: name),
+			DCCQRDetails(field: DCCQRDetailsTest.dateOfBirth, value: formattedBirthDate),
+			DCCQRDetails(field: DCCQRDetailsTest.pathogen, value: L.holderShowqrEuAboutTestPathogenvalue()),
+			DCCQRDetails(field: DCCQRDetailsTest.testType, value: testType),
+			DCCQRDetails(field: DCCQRDetailsTest.testName, value: test.name),
+			DCCQRDetails(field: DCCQRDetailsTest.date, value: formattedTestDate),
+			DCCQRDetails(field: DCCQRDetailsTest.result, value: testResult),
+			DCCQRDetails(field: DCCQRDetailsTest.facility, value: facility),
+			DCCQRDetails(field: DCCQRDetailsTest.manufacturer, value: manufacturer),
+			DCCQRDetails(field: DCCQRDetailsTest.country, value: country),
+			DCCQRDetails(field: DCCQRDetailsTest.issuer, value: issuer),
+			DCCQRDetails(field: DCCQRDetailsTest.uniqueIdentifer, value: test.certificateIdentifier)
+		]
+		
+		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
-			body: body,
-			hideBodyForScreenCapture: true,
-			openURLsInApp: true
+			description: L.holderShowqrEuAboutTestDescription(),
+			details: details,
+			dateInformation: L.holderShowqrEuAboutTestDateinformation()
 		)
 	}
 
-	private func showMoreInformationRecovery(
-		euCredentialAttributes: EuCredentialAttributes,
-		recovery: EuCredentialAttributes.RecoveryEntry) {
+	private func showRecoveryDetails(euCredentialAttributes: EuCredentialAttributes, recovery: EuCredentialAttributes.RecoveryEntry) {
 
+		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
 
 		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
@@ -392,22 +391,23 @@ class ShowQRViewModel: Logging {
 		let country = getDisplayCountry(recovery.country)
 		let issuer = getDisplayIssuer(recovery.issuer)
 
-		let body: String = L.holderShowqrEuAboutRecoveryMessage(
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
-			formattedBirthDate,
-			formattedFirstPostiveDate,
-			country,
-			issuer,
-			formattedValidFromDate,
-			formattedValidUntilDate,
-			recovery.certificateIdentifier
-				.breakingAtColumn(column: 20) // hotfix for webview
-		)
-		coordinator?.presentInformationPage(
+		let details: [DCCQRDetails] = [
+			DCCQRDetails(field: DCCQRDetailsRecovery.name, value: name),
+			DCCQRDetails(field: DCCQRDetailsRecovery.dateOfBirth, value: formattedBirthDate),
+			DCCQRDetails(field: DCCQRDetailsRecovery.pathogen, value: L.holderShowqrEuAboutRecoveryPathogenvalue()),
+			DCCQRDetails(field: DCCQRDetailsRecovery.date, value: formattedFirstPostiveDate),
+			DCCQRDetails(field: DCCQRDetailsRecovery.country, value: country),
+			DCCQRDetails(field: DCCQRDetailsRecovery.issuer, value: issuer),
+			DCCQRDetails(field: DCCQRDetailsRecovery.validFrom, value: formattedValidFromDate),
+			DCCQRDetails(field: DCCQRDetailsRecovery.validUntil, value: formattedValidUntilDate),
+			DCCQRDetails(field: DCCQRDetailsRecovery.uniqueIdentifer, value: recovery.certificateIdentifier)
+		]
+		
+		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
-			body: body,
-			hideBodyForScreenCapture: true,
-			openURLsInApp: true
+			description: L.holderShowqrEuAboutRecoveryDescription(),
+			details: details,
+			dateInformation: L.holderShowqrEuAboutRecoveryDateinformation()
 		)
 	}
 

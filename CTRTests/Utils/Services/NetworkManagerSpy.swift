@@ -52,9 +52,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedGetPublicKeys = false
 	var invokedGetPublicKeysCount = 0
-	var stubbedGetPublicKeysCompletionResult: (Result<Data, NetworkError>, Void)?
+	var stubbedGetPublicKeysCompletionResult: (Result<Data, ServerError>, Void)?
 
-	func getPublicKeys(completion: @escaping (Result<Data, NetworkError>) -> Void) {
+	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
 		invokedGetPublicKeys = true
 		invokedGetPublicKeysCount += 1
 		if let result = stubbedGetPublicKeysCompletionResult {
@@ -64,9 +64,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedGetRemoteConfiguration = false
 	var invokedGetRemoteConfigurationCount = 0
-	var stubbedGetRemoteConfigurationCompletionResult: (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>, Void)?
+	var stubbedGetRemoteConfigurationCompletionResult: (Result<(RemoteConfiguration, Data, URLResponse), ServerError>, Void)?
 
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void) {
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
 		invokedGetRemoteConfiguration = true
 		invokedGetRemoteConfigurationCount += 1
 		if let result = stubbedGetRemoteConfigurationCompletionResult {

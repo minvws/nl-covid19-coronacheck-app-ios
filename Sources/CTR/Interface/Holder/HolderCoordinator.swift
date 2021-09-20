@@ -22,6 +22,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
+	
+	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 
 	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent)
 
@@ -50,6 +52,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID)
 
 	func userWishesToLaunchThirdPartyTicketApp()
+
+	func displayError(content: Content, backAction: @escaping () -> Void)
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -190,7 +194,8 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				networkManager: networkManager,
-				requestToken: token
+				requestToken: token,
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false)
 			)
 		)
 
@@ -238,6 +243,15 @@ class HolderCoordinator: SharedCoordinator {
 		
 		guard let coordinator = childCoordinators.last else { return }
 		removeChildCoordinator(coordinator)
+	}
+	
+	private func presentAsBottomSheet(_ viewController: UIViewController) {
+		
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.present(viewController, animated: true, completion: nil)
 	}
 }
 
@@ -319,12 +333,21 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
-			.present(viewController, animated: true, completion: nil)
+		presentAsBottomSheet(viewController)
+	}
+	
+	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String) {
+		
+		let viewController = DCCQRDetailsViewController(
+			viewModel: DCCQRDetailsViewModel(
+				coordinator: self,
+				title: title,
+				description: description,
+				details: details,
+				dateInformation: dateInformation
+			)
+		)
+		presentAsBottomSheet(viewController)
 	}
 
 	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
@@ -362,12 +385,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				buttonTitle: L.holderNotestButtonTitle()
 			)
 		)
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
-			.present(viewController, animated: true, completion: nil)
+		presentAsBottomSheet(viewController)
 	}
 
 	func userWishesToCreateANegativeTestQRFromGGD() {
@@ -439,6 +457,17 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
 		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
 	}
+
+	func displayError(content: Content, backAction: @escaping () -> Void) {
+
+		let viewController = ErrorStateViewController(
+			viewModel: ErrorStateViewModel(
+				content: content,
+				backAction: backAction
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
 }
 
 // MARK: - MenuDelegate
@@ -493,7 +522,7 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = navigationController
 				
 			case .addPaperCertificate:
-				let coordinator = PaperCertificateCoordinator(delegate: self, cryptoManager: cryptoManager)
+				let coordinator = PaperCertificateCoordinator(delegate: self)
 				let destination = PaperCertificateStartViewController(viewModel: .init(coordinator: coordinator))
 				navigationController = UINavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController

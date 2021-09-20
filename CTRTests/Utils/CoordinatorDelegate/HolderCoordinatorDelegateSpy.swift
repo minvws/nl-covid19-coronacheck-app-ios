@@ -31,6 +31,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture, openURLsInApp))
 	}
 
+	var invokedPresentDCCQRDetails = false
+	var invokedPresentDCCQRDetailsCount = 0
+	var invokedPresentDCCQRDetailsParameters: (title: String, description: String, details: [DCCQRDetails], dateInformation: String)?
+	var invokedPresentDCCQRDetailsParametersList = [(title: String, description: String, details: [DCCQRDetails], dateInformation: String)]()
+
+	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String) {
+		invokedPresentDCCQRDetails = true
+		invokedPresentDCCQRDetailsCount += 1
+		invokedPresentDCCQRDetailsParameters = (title, description, details, dateInformation)
+		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
+	}
+
 	var invokedUserWishesToMakeQRFromNegativeTest = false
 	var invokedUserWishesToMakeQRFromNegativeTestCount = 0
 	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteEvent: RemoteEvent, Void)?
@@ -161,6 +173,22 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesToLaunchThirdPartyTicketApp() {
 		invokedUserWishesToLaunchThirdPartyTicketApp = true
 		invokedUserWishesToLaunchThirdPartyTicketAppCount += 1
+	}
+
+	var invokedDisplayError = false
+	var invokedDisplayErrorCount = 0
+	var invokedDisplayErrorParameters: (content: Content, Void)?
+	var invokedDisplayErrorParametersList = [(content: Content, Void)]()
+	var shouldInvokeDisplayErrorBackAction = false
+
+	func displayError(content: Content, backAction: @escaping () -> Void) {
+		invokedDisplayError = true
+		invokedDisplayErrorCount += 1
+		invokedDisplayErrorParameters = (content, ())
+		invokedDisplayErrorParametersList.append((content, ()))
+		if shouldInvokeDisplayErrorBackAction {
+			backAction()
+		}
 	}
 
 	var invokedDismiss = false

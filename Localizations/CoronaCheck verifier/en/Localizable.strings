@@ -1,7 +1,7 @@
 "verifier.scan.button.moreInformation" = "What should I pay attention to?";
 "verifier.scaninstructions.navigation.title" = "About scanning";
 "verifier.scaninstructions.scanQR.title" = "Scan the QR code";
-"verifier.scaninstructions.scanQR.content" = "The visitor shows a QR code in the CoronaCheck app or on paper. A tourist may show a QR code in a foreign app, or on paper.";
+"verifier.scaninstructions.scanQR.content" = "Ask the visitor to show a QR code in the CoronaCheck app or on paper. A tourist may show a QR code in a foreign app, or on paper. Scan the visitor's QR code with your phone camera.";
 "verifier.scaninstructions.checkthedetails.title" = "Always check the details";
 "verifier.scaninstructions.checkthedetails.message" = "Green screen? Verify if the details on your screen are the same as those on the identity document. This way you can ensure the QR code belongs to the visitor.";
 "verifier.scaninstructions.checkonlythevisibledata.title" = "Sometimes not all details are shown";

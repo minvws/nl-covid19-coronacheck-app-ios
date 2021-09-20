@@ -24,7 +24,8 @@ enum UniversalLink: Equatable {
         guard appFlavor == .holder else { return nil }
 
 		if url.path == "/app/redeem", let fragment = url.fragment {
-			guard let requestToken = RequestToken(input: fragment) else {
+			let tokenValidator = TokenValidator(isLuhnCheckEnabled: Services.remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false)
+			guard let requestToken = RequestToken(input: fragment, tokenValidator: tokenValidator) else {
 				return nil
 			}
 
@@ -41,8 +42,8 @@ enum UniversalLink: Equatable {
 
 				self = .thirdPartyTicketApp(returnURL: nil)
 			}
-		} else if url.path == "/app/auth" {
-			
+        } else if url.path.hasPrefix("/app/auth") {
+			// Currently '/app/auth2' path is in use
 			self = .tvsAuth(returnURL: url)
 		} else {
 			return nil

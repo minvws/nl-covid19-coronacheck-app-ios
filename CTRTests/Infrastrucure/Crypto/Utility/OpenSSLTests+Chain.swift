@@ -12,6 +12,7 @@ import Nimble
 class OpenSSLChainTests: XCTestCase {
 
 	var sut = OpenSSL()
+	let testBundle = Bundle(for: OpenSSLChainTests.self)
 
 	override func setUp() {
 
@@ -19,46 +20,28 @@ class OpenSSLChainTests: XCTestCase {
 		sut = OpenSSL()
 	}
 
-	// swiftlint:disable:next function_body_length
-	func needs_fixing_expired_certificates_test_cms_fake_chain() {
+	func test_fake_chain() {
 
-		let fakeChain = [ OpenSSLData.fakeChain02, OpenSSLData.fakeChain01 ]
+		guard let realRoot = try? Data(contentsOf: testBundle.url(forResource: "ca", withExtension: ".real")!) else { XCTFail("could not load"); return }
+		guard let realChain01  = try? Data(contentsOf: testBundle.url(forResource: "1000", withExtension: ".real")!) else { XCTFail("could not load"); return }
+		guard let realChain02  = try? Data(contentsOf: testBundle.url(forResource: "1001", withExtension: ".real")!) else { XCTFail("could not load"); return }
+		guard let realLeaf = try? Data(contentsOf: testBundle.url(forResource: "1002", withExtension: ".real")!) else { XCTFail("could not load"); return }
+
+		guard let fakeRoot = try? Data(contentsOf: testBundle.url(forResource: "ca", withExtension: ".fake")!) else { XCTFail("could not load"); return }
+		guard let fakeChain01  = try? Data(contentsOf: testBundle.url(forResource: "1000", withExtension: ".fake")!) else { XCTFail("could not load"); return }
+		guard let fakeChain02  = try? Data(contentsOf: testBundle.url(forResource: "1001", withExtension: ".fake")!) else { XCTFail("could not load"); return }
+		guard let fakeLeaf = try? Data(contentsOf: testBundle.url(forResource: "1002", withExtension: ".fake")!) else { XCTFail("could not load"); return }
+
+		guard let realCrossSigned = try? Data(contentsOf: testBundle.url(forResource: "realCrossSigned", withExtension: ".pem")!) else { XCTFail("could not load"); return }
+
+		let fakeChain = [ fakeChain02, fakeChain01 ]
 		let realChain = [
-			OpenSSLData.realCrossSigned, // Let's Encrypt has two roots; an older one by a third party and their own.
-			OpenSSLData.realChain01,
-			OpenSSLData.realChain02
+			realCrossSigned, // Let's Encrypt has two roots; an older one by a third party and their own.
+			realChain01,
+			realChain02
 		]
 
-		let openssl = OpenSSL()
-		XCTAssertNotNil(openssl)
-		XCTAssertNotNil(SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: TrustConfiguration.rootISRGX1))
-
-		// the auth identifier just above the leaf that signed.
-		// fake and real are identical
-		//
-		let authorityKeyIdentifier = Data(
-			[0x04, 0x14, 0x14, 0x2E, 0xB3, 0x17, 0xB7, 0x58, 0x56, 0xCB, 0xAE, 0x50, 0x09, 0x40, 0xE6, 0x1F, 0xAF, 0x9D, 0x8B, 0x14, 0xC2, 0xC6]
-		)
-
-		// this is a test against the fully fake root and should succeed.
-		//
-		XCTAssertEqual(true, openssl.validatePKCS7Signature(
-						OpenSSLData.fakeSignature,
-						contentData: OpenSSLData.fakePayload,
-						certificateData: OpenSSLData.fakeRoot,
-						authorityKeyIdentifier: authorityKeyIdentifier,
-						requiredCommonNameContent: "bananenhalen.nl"))
-
-		// Now test against our build in (real) root - and fail.
-		//
-		XCTAssertEqual(false, openssl.validatePKCS7Signature(
-						OpenSSLData.fakeSignature,
-						contentData: OpenSSLData.fakePayload,
-						certificateData: TrustConfiguration.rootISRGX1,
-						authorityKeyIdentifier: authorityKeyIdentifier,
-						requiredCommonNameContent: "bananenhalen.nl"))
-
-		let fakeLeafCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: OpenSSLData.fakeLeaf)
+		let fakeLeafCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: fakeLeaf)
 		XCTAssert(fakeLeafCert != nil)
 
 		var fakeCertArray = [SecCertificate]()
@@ -68,8 +51,8 @@ class OpenSSLChainTests: XCTestCase {
 			fakeCertArray.append(cert!)
 		}
 
-		let realLeafCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: OpenSSLData.realLeaf)
-		XCTAssert(realLeafCert != nil)
+		let realLeafCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: realLeaf)
+		XCTAssert(fakeLeafCert != nil)
 
 		var realCertArray = [SecCertificate]()
 		for certPem in realChain {
@@ -78,10 +61,10 @@ class OpenSSLChainTests: XCTestCase {
 			realCertArray.append(cert!)
 		}
 
-		// Create a 'worst case' kitchen sink chain with as much in it as we can think off.
+		// Create a 'wrorst case' kitchen sink chain with as much in it as we can think off.
 		//
-		let realRootCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: OpenSSLData.realRoot)
-		let fakeRootCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: OpenSSLData.fakeRoot)
+		let realRootCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: realRoot)
+		let fakeRootCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: fakeRoot)
 		let allChainCerts = realCertArray + fakeCertArray + [ realRootCert, fakeRootCert]
 
 		// This should fail - as the root is not build in. It may however
@@ -92,7 +75,7 @@ class OpenSSLChainTests: XCTestCase {
 			let policy = SecPolicyCreateSSL(true, "api-ct.bananenhalen.nl" as CFString)
 			var optionalRealTrust: SecTrust?
 
-			// the first certificate is the one to check - the rest is to aid validation.
+			// the first certifcate is the one to check - the rest is to aid validation.
 			//
 			XCTAssert(noErr == SecTrustCreateWithCertificates([ realLeafCert ] + realCertArray as CFArray,
 															  policy,
@@ -102,29 +85,28 @@ class OpenSSLChainTests: XCTestCase {
 
 			// This should success - as we rely on the build in well known root.
 			//
-			XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
-														   policies: [policy],
-														   trustedCertificates: []))
+			XCTAssertTrue(SecurityCheckerWorker().checkATS(
+							serverTrust: realServerTrust,
+							policies: [policy],
+							trustedCertificates: [])
+			)
 
-			// This should succeed - as we explicitly rely on the root.
+			// This should succeed - as we explictly rely on the root.
 			//
-			XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
-														   policies: [policy],
-														   trustedCertificates: [ OpenSSLData.realRoot ]))
+			XCTAssertTrue(SecurityCheckerWorker().checkATS(
+							serverTrust: realServerTrust,
+							policies: [policy],
+							trustedCertificates: [ realRoot ])
+			)
 
 			// This should fail - as we are giving it the wrong root.
 			//
-			XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
-															policies: [policy],
-															trustedCertificates: [OpenSSLData.fakeRoot]))
+			XCTAssertFalse(SecurityCheckerWorker().checkATS(
+							serverTrust: realServerTrust,
+							policies: [policy],
+							trustedCertificates: [fakeRoot])
+			)
 
-			let realRootString = String(decoding: OpenSSLData.realRoot, as: UTF8.self)
-			let lineEndingString = realRootString.replacingOccurrences(of: "\n", with: "\r\n")
-			let realRootLineEnding = lineEndingString.data(using: .ascii)!
-			expect(lineEndingString).to(contain("\r\n"))
-			XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
-														   policies: [policy],
-														   trustedCertificates: [realRootLineEnding]))
 		}
 
 		if true {
@@ -138,9 +120,11 @@ class OpenSSLChainTests: XCTestCase {
 
 			// This should succeed - as we have the fake root as part of our trust
 			//
-			XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
-														   policies: [policy],
-														   trustedCertificates: [OpenSSLData.fakeRoot ]))
+			XCTAssertTrue(SecurityCheckerWorker().checkATS(
+							serverTrust: fakeServerTrust,
+							policies: [policy],
+							trustedCertificates: [fakeRoot ])
+			)
 
 		}
 		if true {
@@ -164,21 +148,28 @@ class OpenSSLChainTests: XCTestCase {
 			// 4) Enabling it as trusted in Settings->About->Certificate Trust settings.
 			// but we've not gotten this to work reliably yet (just once).
 			//
-			XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
-															policies: [policy],
-															trustedCertificates: []))
+			XCTAssertFalse(SecurityCheckerWorker().checkATS(
+							serverTrust: fakeServerTrust,
+							policies: [policy],
+							trustedCertificates: [])
+			)
 
 			// This should fail - as we are giving it the wrong root to trust.
 			//
-			XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
-															policies: [policy],
-															trustedCertificates: [ OpenSSLData.realRoot ]))
+			XCTAssertFalse(SecurityCheckerWorker().checkATS(
+							serverTrust: fakeServerTrust,
+							policies: [policy],
+							trustedCertificates: [ realRoot ])
+			)
 
 			// This should succeed - as we are giving it the right root to trust.
 			//
-			XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
-														   policies: [policy],
-														   trustedCertificates: [ OpenSSLData.fakeRoot ]))
+			XCTAssertTrue(SecurityCheckerWorker().checkATS(
+							serverTrust: fakeServerTrust,
+							policies: [policy],
+							trustedCertificates: [ fakeRoot ])
+			)
+
 		}
 
 		// Try again - but now with anything we can think of cert wise.
@@ -196,15 +187,20 @@ class OpenSSLChainTests: XCTestCase {
 			// succeed if the user has somehow the fake root into the system trust
 			// chain -and- set it to 'trusted' (or was fooled/hacked into that).
 			//
-			XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
-															policies: [policy],
-															trustedCertificates: []))
+			XCTAssertFalse(SecurityCheckerWorker().checkATS(
+							serverTrust: fakeServerTrust,
+							policies: [policy],
+							trustedCertificates: [])
+			)
 
 			// This should fail - as we are giving it the wrong cert..
 			//
-			XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
-															policies: [policy],
-															trustedCertificates: [ OpenSSLData.realRoot ]))
+			XCTAssertFalse(SecurityCheckerWorker().checkATS(
+							serverTrust: fakeServerTrust,
+							policies: [policy],
+							trustedCertificates: [ realRoot ])
+			)
+
 		}
 	}
 }

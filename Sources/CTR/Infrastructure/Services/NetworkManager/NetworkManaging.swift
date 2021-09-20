@@ -19,7 +19,9 @@ enum ServerError: Error, Equatable {
 
 enum NetworkError: String, Error, Equatable {
 	case invalidRequest
-	case serverUnreachable
+	case serverUnreachableTimedOut
+	case serverUnreachableInvalidHost
+	case serverUnreachableConnectionLost
 	case noInternetConnection
 	case invalidResponse
 	case responseCached
@@ -31,32 +33,32 @@ enum NetworkError: String, Error, Equatable {
 	case cannotSerialize
 	case cannotDeserialize
 
-	func getClientErrorCode() -> String? {
+	func getClientErrorCode() -> ErrorCode.ClientCode? {
 
 		switch self {
 
 			case .invalidRequest:
-				return "002"
-			//			case .serverUnreachable:
-			//			case .noInternetConnection:
+				return ErrorCode.ClientCode(value: "002")
+			case .serverUnreachableTimedOut:
+				return ErrorCode.ClientCode(value: "004")
+			case .serverUnreachableInvalidHost:
+				return ErrorCode.ClientCode(value: "002")
+			case .serverUnreachableConnectionLost:
+				return ErrorCode.ClientCode(value: "005")
 			case .invalidResponse:
-				return "003"
-			//			case .responseCached:
-			//			case .serverError:
-			//			case .resourceNotFound:
-			//			case .redirection:
-			//			case .serverBusy:
+				return ErrorCode.ClientCode(value: "003")
 			case .invalidSignature:
-				return "020"
+				return ErrorCode.ClientCode(value: "020")
 			case .cannotDeserialize:
-				return "030"
+				return ErrorCode.ClientCode(value: "030")
 			case .cannotSerialize:
-				return "031"
+				return ErrorCode.ClientCode(value: "031")
 			default:
+				// For noInternetConnection: not needed
+				// For responseCached, serverError, resourceNotFound, redirection, serverBusy: use the http status code
 				return nil
 		}
 	}
-
 }
 
 enum HTTPHeaderKey: String {
@@ -94,11 +96,11 @@ protocol NetworkManaging: AnyObject {
 	
 	/// Get the public keys
 	/// - Parameter completion: completion handler
-	func getPublicKeys(completion: @escaping (Result<Data, NetworkError>) -> Void)
+	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void)
 	
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void)
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void)
 	
 	/// Get the test providers
 	/// - Parameter completion: completion handler

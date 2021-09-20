@@ -12,17 +12,6 @@ class LoginTVSViewController: BaseViewController {
 	private let viewModel: LoginTVSViewModel
 	private let sceneView = FetchEventsView()
 
-	struct AlertContent {
-		let title: String
-		let subTitle: String
-		let okTitle: String
-	}
-
-	enum State {
-		case login(content: Content)
-		case feedback(content: Content)
-	}
-
 	/// Initializer
 	/// - Parameter viewModel: view model
 	init(viewModel: LoginTVSViewModel) {
@@ -60,39 +49,9 @@ class LoginTVSViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$viewState.binding = { [weak self] in
-
-			switch $0 {
-				case let .login(content):
-					self?.displayContent(content)
-				case let .feedback(content):
-					self?.displayContent(content)
-			}
-		}
-
+		viewModel.$content.binding = { [weak self] in self?.displayContent($0) }
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 		viewModel.login()
-	}
-
-	func showAlert(_ alertContent: AlertContent?) {
-
-		guard let content = alertContent else {
-			return
-		}
-
-		let alertController = UIAlertController(
-			title: content.title,
-			message: content.subTitle,
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: content.okTitle,
-				style: .default,
-				handler: nil
-			)
-		)
-		present(alertController, animated: true, completion: nil)
 	}
 
 	private func displayContent(_ content: Content) {

@@ -35,7 +35,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(NetworkError.invalidRequest), ())
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
 
 			// When
 			self.sut.update { state in

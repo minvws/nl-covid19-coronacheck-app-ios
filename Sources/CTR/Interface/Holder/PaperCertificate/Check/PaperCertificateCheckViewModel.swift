@@ -11,7 +11,7 @@ class PaperCertificateCheckViewModel: Logging {
 
 	weak var coordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol)?
 
-	private let couplingManager: CouplingManaging
+	private let couplingManager: CouplingManaging = Services.couplingManager
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -35,12 +35,10 @@ class PaperCertificateCheckViewModel: Logging {
 	init(
 		coordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol),
 		scannedDcc: String,
-		couplingCode: String,
-		couplingManager: CouplingManaging = Services.couplingManager
+		couplingCode: String
 	) {
 
 		self.coordinator = coordinator
-		self.couplingManager = couplingManager
 
 		viewState = .loading(
 			content: Content(
@@ -137,18 +135,19 @@ class PaperCertificateCheckViewModel: Logging {
 		if case let .error(statusCode, serverResponse, error) = serverError {
 			switch error {
 				case .serverBusy:
-					showServerTooBusyError()
+					showServerTooBusyError(ErrorCode(flow: .hkvi, step: .coupling, errorCode: "429"))
 				case .noInternetConnection:
 					displayNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
-				case .serverUnreachable:
-					displayServerUnreachable(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				case .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled)
+					displayServerUnreachable(errorCode)
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					// 304, 3xx, 4xx, 5xx
 					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					displayServerErrorCode(errorCode)
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
 					// Client side
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					displayClientErrorCode(errorCode)
 			}
 		}
@@ -156,33 +155,46 @@ class PaperCertificateCheckViewModel: Logging {
 
 	// MARK: Errors
 
-	private func showServerTooBusyError() {
+	private func showServerTooBusyError(_ errorCode: ErrorCode) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.generalNetworkwasbusyTitle(),
-				subTitle: L.generalNetworkwasbusyText(),
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
-				primaryAction: {[weak self] in
-					self?.coordinator?.userWantsToGoBackToDashboard()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: {[weak self] in
+				self?.coordinator?.userWantsToGoBackToDashboard()
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			self.coordinator?.displayError(content: content) { [weak self] in
+				self?.coordinator?.userWishesToGoBackToScanCertificate()
+			}
+		}
 	}
 
-	private func displayServerUnreachable(scannedDcc: String, couplingCode: String) {
+	func displayServerUnreachable(_ errorCode: ErrorCode) {
 
-		// this is a retry-able situation
-		alert = AlertContent(
+		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode) },
-			okTitle: L.generalRetry()
+			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in self?.coordinator?.userWantsToGoBackToDashboard() },
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			self.coordinator?.displayError(content: content) { [weak self] in
+				self?.coordinator?.userWishesToGoBackToScanCertificate()
+			}
+		}
 	}
 
 	private func displayNoInternet(scannedDcc: String, couplingCode: String) {
@@ -200,46 +212,52 @@ class PaperCertificateCheckViewModel: Logging {
 
 	private func displayServerErrorCode(_ errorCode: ErrorCode) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.holderErrorstateTitle(),
-				subTitle: L.holderErrorstateServerMessage("\(errorCode)"),
-				primaryActionTitle: L.holderErrorstateOverviewAction(),
-				primaryAction: {[weak self] in
-					self?.coordinator?.userWantsToGoBackToDashboard()
-				},
-				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-				secondaryAction: { [weak self] in
-					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-						return
-					}
-
-					self?.coordinator?.openUrl(url, inApp: true)
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.holderErrorstateServerMessage("\(errorCode)"),
+			primaryActionTitle: L.holderErrorstateOverviewAction(),
+			primaryAction: {[weak self] in
+				self?.coordinator?.userWantsToGoBackToDashboard()
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
 				}
-			)
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			self.coordinator?.displayError(content: content) { [weak self] in
+				self?.coordinator?.userWishesToGoBackToScanCertificate()
+			}
+		}
 	}
 
 	private func displayClientErrorCode(_ errorCode: ErrorCode) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.holderErrorstateTitle(),
-				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
-				primaryActionTitle: L.holderErrorstateOverviewAction(),
-				primaryAction: {[weak self] in
-					self?.coordinator?.userWantsToGoBackToDashboard()
-				},
-				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-				secondaryAction: { [weak self] in
-					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-						return
-					}
-
-					self?.coordinator?.openUrl(url, inApp: true)
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
+			primaryActionTitle: L.holderErrorstateOverviewAction(),
+			primaryAction: {[weak self] in
+				self?.coordinator?.userWantsToGoBackToDashboard()
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
 				}
-			)
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			self.coordinator?.displayError(content: content) { [weak self] in
+				self?.coordinator?.userWishesToGoBackToScanCertificate()
+			}
+		}
 	}
 }
 

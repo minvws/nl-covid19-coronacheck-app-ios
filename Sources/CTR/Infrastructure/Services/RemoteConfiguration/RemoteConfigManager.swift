@@ -14,7 +14,7 @@ protocol RemoteConfigManaging: AnyObject {
 
 	/// Update the remote configuration
 	/// - Parameter completion: completion handler
-	func update(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void)
+	func update(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void)
 
 	/// Get the configuration
 	/// - Returns: the remote configuration
@@ -45,7 +45,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 	/// Update the remote configuration
 	/// - Parameter completion: completion handler
-	func update(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void) {
+	func update(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
 		
 		networkManager?.getRemoteConfiguration { [weak self] resultWrapper in
 			

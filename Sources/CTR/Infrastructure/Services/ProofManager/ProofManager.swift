@@ -23,7 +23,7 @@ class ProofManager: ProofManaging, Logging {
 	/// - Parameters:
 	///   - onCompletion: completion handler
 	///   - onError: error handler
-	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, NetworkError>) -> Void)?) {
+	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?) {
 
 		networkManager.getPublicKeys { result in
 			onCompletion?(result)

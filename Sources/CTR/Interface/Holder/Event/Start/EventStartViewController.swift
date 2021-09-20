@@ -44,6 +44,7 @@ class EventStartViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$primaryButtonIcon.binding = { [weak self] in self?.sceneView.primaryButtonIcon = $0 }
 	}
 
 	private func setupInteraction() {
