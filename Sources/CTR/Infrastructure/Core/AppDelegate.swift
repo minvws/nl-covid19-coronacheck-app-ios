@@ -93,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging {
     func application(_: UIApplication, continue userActivity: NSUserActivity, restorationHandler _: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
 
         // Parse an activity from the userActivity
-        guard let universalLink = UniversalLink(userActivity: userActivity) else { return false }
+		guard let universalLink = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: appCoordinator?.isLunhCheckEnabled ?? false) else { return false }
 
         return appCoordinator?.receive(universalLink: universalLink) ?? false
     }
