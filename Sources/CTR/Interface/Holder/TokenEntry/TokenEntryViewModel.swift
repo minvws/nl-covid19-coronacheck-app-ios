@@ -193,15 +193,6 @@ class TokenEntryViewModel {
 				}
 
 				allowEnablingOfNextButton = true
-//				allowEnablingOfNextButton = {
-//					let validToken = tokenValidator.validate(sanitizedTokenInput)
-//
-//					if verificationCodeIsKnownToBeRequired {
-//						return validToken && receivedNonemptyVerificationInput
-//					} else {
-//						return validToken
-//					}
-//				}()
 
 			case .withRequestTokenProvided:
 				// Then we don't care about the tokenInput parameter, because it's hidden
