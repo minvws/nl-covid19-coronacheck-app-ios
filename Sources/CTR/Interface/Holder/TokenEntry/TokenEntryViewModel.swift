@@ -59,7 +59,7 @@ class TokenEntryViewModel {
 		}
 	}
 	/// Do not set directly. Instead, see `preventEnablingOfNextButton`.
-	@Bindable private(set) var shouldEnableNextButton: Bool = false {
+	@Bindable private(set) var shouldEnableNextButton: Bool = true {
 		didSet {
 			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
 		}
@@ -78,7 +78,7 @@ class TokenEntryViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let networkManager: NetworkManaging?
+	private let networkManager: NetworkManaging? = Services.networkManager
 	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:
@@ -87,7 +87,7 @@ class TokenEntryViewModel {
 		didSet {
 			if requestToken == nil {
 				verificationCodeIsKnownToBeRequired = false
-				allowEnablingOfNextButton = false
+				allowEnablingOfNextButton = true
 			}
 		}
 	}
@@ -135,12 +135,10 @@ class TokenEntryViewModel {
 	///   - requestToken: an optional existing request token
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		networkManager: NetworkManaging,
 		requestToken: RequestToken?,
 		tokenValidator: TokenValidatorProtocol) {
 
 		self.coordinator = coordinator
-		self.networkManager = networkManager
 		self.requestToken = requestToken
 		self.tokenValidator = tokenValidator
 		self.message = nil
@@ -194,15 +192,7 @@ class TokenEntryViewModel {
 					return
 				}
 
-				allowEnablingOfNextButton = {
-					let validToken = tokenValidator.validate(sanitizedTokenInput)
-
-					if verificationCodeIsKnownToBeRequired {
-						return validToken && receivedNonemptyVerificationInput
-					} else {
-						return validToken
-					}
-				}()
+				allowEnablingOfNextButton = true
 
 			case .withRequestTokenProvided:
 				// Then we don't care about the tokenInput parameter, because it's hidden
@@ -259,15 +249,22 @@ class TokenEntryViewModel {
 	private func handleNextButtonPressedDuringRegularFlow(_ tokenInput: String?, verificationInput: String?) {
 		fieldErrorMessage = nil
 
-		guard let tokenInput = tokenInput else { return }
-
-		if currentInputMode == .inputVerificationCode || currentInputMode == .inputTokenWithVerificationCode,
-		   let verification = verificationInput, !verification.isEmpty {
+		if currentInputMode == .inputVerificationCode || currentInputMode == .inputTokenWithVerificationCode {
+			guard let verification = verificationInput, !verification.isEmpty else {
+				fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode)
+				return
+			}
 			fieldErrorMessage = nil
 			if let token = requestToken {
 				fetchProviders(token, verificationCode: sanitize(verification))
 			}
 		} else {
+
+			guard let tokenInput = tokenInput, !tokenInput.isEmpty else {
+				fieldErrorMessage = Strings.tokenIsEmpty(forMode: initializationMode)
+				return
+			}
+
 			if let requestToken = RequestToken(input: sanitize(tokenInput), tokenValidator: tokenValidator) {
 				self.requestToken = requestToken
 				fetchProviders(requestToken, verificationCode: nil)
@@ -287,6 +284,8 @@ class TokenEntryViewModel {
 
 			fieldErrorMessage = nil
 			fetchProviders(requestToken, verificationCode: sanitizedVerification)
+		} else {
+			fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode)
 		}
 	}
 
@@ -330,7 +329,7 @@ class TokenEntryViewModel {
 
 		let provider = providers.filter { $0.identifier.lowercased() == requestToken.providerIdentifier.lowercased() }
 		guard let provider = provider.first else {
-			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
+			fieldErrorMessage = Strings.unknownProvider(forMode: initializationMode)
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
@@ -355,27 +354,7 @@ class TokenEntryViewModel {
 
 				switch result {
 					case let .success(remoteEvent):
-						switch remoteEvent.0.status {
-							case .complete, .pending:
-								self.screenHasCompleted = true
-								self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
-							case .verificationRequired:
-								if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
-									// the user has just submitted a wrong verification code & should see an error message
-									self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-								}
-								self.allowEnablingOfNextButton = false
-								self.verificationCodeIsKnownToBeRequired = true
-
-							case .invalid:
-								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-								self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
-
-							default:
-								self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
-								self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
-								self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
-						}
+						self.handleSuccessFetchResult(remoteEvent, verificationCode: verificationCode)
 
 					case let .failure(.error(statusCode, serverResponse, networkError)),
 						 let .failure(.provider(_, statusCode, serverResponse, networkError)):
@@ -402,6 +381,31 @@ class TokenEntryViewModel {
 		)
 	}
 
+	func handleSuccessFetchResult(_ remoteEvent: RemoteEvent, verificationCode: String?) {
+
+		switch remoteEvent.0.status {
+			case .complete, .pending:
+				self.screenHasCompleted = true
+				self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
+			case .verificationRequired:
+				if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
+					// the user has just submitted a wrong verification code & should see an error message
+					self.fieldErrorMessage = Strings.errorInvalidCombination(forMode: self.initializationMode)
+				}
+				self.allowEnablingOfNextButton = true
+				self.verificationCodeIsKnownToBeRequired = true
+
+			case .invalid:
+				self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+
+			default:
+				self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
+				self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
+				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+		}
+	}
+
 	/// If the path where `.withRequestTokenProvided` fails due to networking,
 	/// we want to reset back to `.regular` mode, where the tokenEntry field is shown again
 	private func decideWhetherToAbortRequestTokenProvidedMode() {
@@ -418,7 +422,7 @@ class TokenEntryViewModel {
 					// The `.withRequestTokenProvided` mode failed at some point
 					// during `init`, so abort & reset to `.regular` mode.
 					self.initializationMode = .regular
-					self.allowEnablingOfNextButton = false
+					self.allowEnablingOfNextButton = true
 				}
 		}
 	}
@@ -450,6 +454,12 @@ class TokenEntryViewModel {
 		guard newInputMode != currentInputMode else { return }
 		currentInputMode = newInputMode
 
+		updateShouldShowFieldForInputMode(newInputMode)
+		updateText(newInputMode)
+	}
+
+	private func updateShouldShowFieldForInputMode(_ newInputMode: InputMode) {
+
 		switch newInputMode {
 			case .none:
 				shouldShowTokenEntryField = false
@@ -480,6 +490,10 @@ class TokenEntryViewModel {
 				shouldShowUserNeedsATokenButton = false
 		}
 
+	}
+
+	private func updateText(_ newInputMode: InputMode) {
+
 		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
 		title = Strings.title(forMode: initializationMode)
 		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode)
@@ -502,6 +516,11 @@ class TokenEntryViewModel {
 	private func sanitize(_ input: String) -> String {
 
 		return input.strippingWhitespace().uppercased()
+	}
+
+	/// Returns the `enabled` state to be used for `shouldEnableNextButton`
+	private func nextButtonEnabledState(allowEnablingOfNextButton: Bool, shouldShowProgress: Bool, screenHasCompleted: Bool) -> Bool {
+		return allowEnablingOfNextButton && !shouldShowProgress && !screenHasCompleted
 	}
 }
 
@@ -575,6 +594,42 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowErrorInvalidCode()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
+			}
+		}
+
+		fileprivate static func errorInvalidCombination(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return L.holderTokenentryRegularflowErrorInvalidCombination()
+				case .withRequestTokenProvided:
+					return L.holderTokenentryUniversallinkflowErrorInvalidCombination()
+			}
+		}
+
+		fileprivate static func tokenIsEmpty(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return L.holderTokenentryRegularflowErrorEmptytoken()
+				case .withRequestTokenProvided:
+					return L.holderTokenentryUniversallinkflowErrorEmptytoken()
+			}
+		}
+
+		fileprivate static func codeIsEmpty(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return L.holderTokenentryRegularflowErrorEmptycode()
+				case .withRequestTokenProvided:
+					return L.holderTokenentryUniversallinkflowErrorEmptycode()
+			}
+		}
+
+		fileprivate static func unknownProvider(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return L.holderTokenentryRegularflowErrorUnknownprovider()
+				case .withRequestTokenProvided:
+					return L.holderTokenentryUniversallinkflowErrorUnknownprovider()
 			}
 		}
 
@@ -687,11 +742,6 @@ extension TokenEntryViewModel: Logging {
 	}
 }
 
-/// Returns the `enabled` state to be used for `shouldEnableNextButton`
-private func nextButtonEnabledState(allowEnablingOfNextButton: Bool, shouldShowProgress: Bool, screenHasCompleted: Bool) -> Bool {
-	return allowEnablingOfNextButton && !shouldShowProgress && !screenHasCompleted
-}
-
 // MARK: - Error States
 
 extension TokenEntryViewModel {
@@ -733,6 +783,7 @@ extension TokenEntryViewModel {
 			},
 			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
 			secondaryAction: { [weak self] in
+				// Open Malfunction url.
 				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
 					return
 				}

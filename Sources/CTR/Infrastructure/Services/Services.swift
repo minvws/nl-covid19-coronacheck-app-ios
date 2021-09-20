@@ -54,9 +54,9 @@ final class Services {
 		forcedInformationManagingType = forcedInformationManager
 	}
 
-    static func use(_ networkManager: NetworkManaging.Type) {
+    static func use(_ networkManaging: NetworkManaging) {
 
-        networkManagingType = networkManager
+        networkManager = networkManaging
     }
 
     static func use(_ remoteConfigManaging: RemoteConfigManaging) {

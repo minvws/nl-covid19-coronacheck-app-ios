@@ -60,8 +60,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 class HolderCoordinator: SharedCoordinator {
 
-	var networkManager: NetworkManaging = Services.networkManager
-	var openIdManager: OpenIdManaging = Services.openIdManager
 	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 
@@ -193,7 +191,6 @@ class HolderCoordinator: SharedCoordinator {
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
-				networkManager: networkManager,
 				requestToken: token,
 				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false)
 			)
