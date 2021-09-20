@@ -13,7 +13,7 @@ enum UniversalLink: Equatable {
 	case thirdPartyTicketApp(returnURL: URL?)
 	case tvsAuth(returnURL: URL?)
 
-    init?(userActivity: NSUserActivity, appFlavor: AppFlavor = .flavor) {
+	init?(userActivity: NSUserActivity, appFlavor: AppFlavor = .flavor, isLunhCheckEnabled: Bool) {
 
         // Apple's docs specify to only handle universal links "with the activityType set to NSUserActivityTypeBrowsingWeb"
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
@@ -24,7 +24,7 @@ enum UniversalLink: Equatable {
         guard appFlavor == .holder else { return nil }
 
 		if url.path == "/app/redeem", let fragment = url.fragment {
-			let tokenValidator = TokenValidator(isLuhnCheckEnabled: Services.remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false)
+			let tokenValidator = TokenValidator(isLuhnCheckEnabled: isLunhCheckEnabled)
 			guard let requestToken = RequestToken(input: fragment, tokenValidator: tokenValidator) else {
 				return nil
 			}

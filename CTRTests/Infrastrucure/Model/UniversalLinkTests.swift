@@ -8,6 +8,7 @@
 import Foundation
 import XCTest
 @testable import CTR
+import Nimble
 
 class UniversalLinkTests: XCTestCase {
 
@@ -24,11 +25,43 @@ class UniversalLinkTests: XCTestCase {
         ))
 
         // Act
-        let link = UniversalLink(userActivity: activity, appFlavor: .holder)
+        let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 
         // Assert
-        XCTAssertEqual(link, expected)
+		expect(link) == expected
     }
+
+	func test_validHolderURL_withValidFragment_inHolderApp_withLunhCheckDisabled_doesNotPassLunhCheck_createsLink() {
+
+		// Arrange
+		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
+
+		let expected = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "YYYYYYYYYYYY",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+
+		// Act
+		let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: false)
+
+		// Assert
+		expect(link) == expected
+	}
+
+	func test_validHolderURL_withValidFragment_inHolderApp_withLunhCheckEnsabled_doesNotPassLunhCheck_doesNotCreateLink() {
+
+		// Arrange
+		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
+
+		// Act
+		let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+
+		// Assert
+		expect(link).to(beNil())
+	}
 
     func test_validHolderURL_inVerifierApp_doesNotCreateLink() {
 
@@ -36,7 +69,7 @@ class UniversalLinkTests: XCTestCase {
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
         activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
 
-        let link = UniversalLink(userActivity: activity, appFlavor: .verifier)
+        let link = UniversalLink(userActivity: activity, appFlavor: .verifier, isLunhCheckEnabled: true)
 
         XCTAssertNil(link)
     }
@@ -48,10 +81,10 @@ class UniversalLinkTests: XCTestCase {
         activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z_") // invalid token in URL fragment
 
         // Act
-        let link = UniversalLink(userActivity: activity, appFlavor: .holder)
+        let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 
         // Assert
-        XCTAssertNil(link)
+		expect(link).to(beNil())
     }
 
     func test_validHolderURL_withInvalidFragment2_doesNotCreateLink() {
@@ -61,10 +94,10 @@ class UniversalLinkTests: XCTestCase {
         activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#Xsdfsdf") // invalid token in URL fragment
 
         // Act
-        let link = UniversalLink(userActivity: activity, appFlavor: .holder)
+        let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 
         // Assert
-        XCTAssertNil(link)
+		expect(link).to(beNil())
     }
 
     func test_rejectsUserActivity_ifNotOfType_NSUserActivityTypeBrowsingWeb() {
@@ -74,9 +107,9 @@ class UniversalLinkTests: XCTestCase {
         activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
 
         // Act
-        let link = UniversalLink(userActivity: activity, appFlavor: .holder)
+        let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 
         // Assert
-        XCTAssertNil(link)
+		expect(link).to(beNil())
     }
 }
