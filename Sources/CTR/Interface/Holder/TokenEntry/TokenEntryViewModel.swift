@@ -422,7 +422,7 @@ class TokenEntryViewModel {
 					// The `.withRequestTokenProvided` mode failed at some point
 					// during `init`, so abort & reset to `.regular` mode.
 					self.initializationMode = .regular
-					self.allowEnablingOfNextButton = false
+					self.allowEnablingOfNextButton = true
 				}
 		}
 	}
@@ -454,11 +454,11 @@ class TokenEntryViewModel {
 		guard newInputMode != currentInputMode else { return }
 		currentInputMode = newInputMode
 
-		updateShouldShowFielsForInputMode(newInputMode)
+		updateShouldShowFieldForInputMode(newInputMode)
 		updateText(newInputMode)
 	}
 
-	private func updateShouldShowFielsForInputMode(_ newInputMode: InputMode) {
+	private func updateShouldShowFieldForInputMode(_ newInputMode: InputMode) {
 
 		switch newInputMode {
 			case .none:
