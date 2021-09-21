@@ -42,6 +42,10 @@ class ErrorStateViewController: BaseViewController {
 			self?.displayContent($0)
 		}
 	}
+	
+	override var enableSwipeBack: Bool {
+		return false
+	}
 
 	@objc func backButtonTapped() {
 

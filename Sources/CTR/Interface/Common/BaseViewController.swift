@@ -9,12 +9,9 @@ import UIKit
 
 class BaseViewController: UIViewController {
 	
-	/// Disable navigation back swiping. Disable in -viewDidAppear.
-	var enableSwipeBack: Bool = true {
-		didSet {
-			navigationController?.interactivePopGestureRecognizer?.delegate = enableSwipeBack ? self : nil
-			navigationController?.interactivePopGestureRecognizer?.isEnabled = enableSwipeBack
-		}
+	/// Enable/disable navigation back swiping. Default is true.
+	var enableSwipeBack: Bool {
+		return true
 	}
 
 	override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -42,7 +39,8 @@ class BaseViewController: UIViewController {
 
 		setupAccessibilityElements()
 		
-		enableSwipeBack = true
+		navigationController?.interactivePopGestureRecognizer?.delegate = enableSwipeBack ? self : nil
+		navigationController?.interactivePopGestureRecognizer?.isEnabled = enableSwipeBack
 	}
 
 	func setupAccessibilityElements() {

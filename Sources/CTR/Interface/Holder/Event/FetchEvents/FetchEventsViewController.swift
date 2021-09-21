@@ -71,6 +71,10 @@ class FetchEventsViewController: BaseViewController {
 			self?.viewModel.openUrl(url)
 		}
 	}
+	
+	override var enableSwipeBack: Bool {
+		return false
+	}
 
 	@objc func backButtonTapped() {
 

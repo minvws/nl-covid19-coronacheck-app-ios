@@ -89,6 +89,10 @@ class ListEventsViewController: BaseViewController {
 			self?.sceneView.hideForCapture = $0
 		}
 	}
+	
+	override var enableSwipeBack: Bool {
+		return false
+	}
 
 	@objc func backButtonTapped() {
 

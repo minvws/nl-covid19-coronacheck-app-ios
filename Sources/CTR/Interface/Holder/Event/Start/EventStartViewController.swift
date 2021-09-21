@@ -71,11 +71,9 @@ class EventStartViewController: BaseViewController {
 		addBackButton(customAction: #selector(backButtonTapped))
 	}
 	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-		
-		// Disable swipe back to have a callback to clean up coordinator
-		enableSwipeBack = false
+	/// Disable swipe back to have a callback to clean up coordinator
+	override var enableSwipeBack: Bool {
+		return false
 	}
 
 	@objc func backButtonTapped() {
