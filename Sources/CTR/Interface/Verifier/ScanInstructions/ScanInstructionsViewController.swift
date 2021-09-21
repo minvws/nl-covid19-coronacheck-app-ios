@@ -13,17 +13,7 @@ class ScanInstructionsViewController: BaseViewController {
 	private let viewModel: ScanInstructionsViewModel
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 
-	private let backButton: UIButton = {
-		// Create a button with a back arrow
-		let button = UIButton(type: .custom)
-		button.setImage(I.backArrow(), for: .normal)
-		button.accessibilityLabel = L.generalBack()
-		button.accessibilityIdentifier = "BackButton"
-		return button
-	}()
-
 	private let skipButton: UIButton = {
-		// Create a button with a back arrow and a .previous title
 		let button = UIButton(type: .custom)
 		button.setTitle(L.verifierScaninstructionsNavigationSkipbuttonTitle(), for: .normal)
 		button.setTitleColor(Theme.colors.iosBlue, for: .normal)
@@ -100,15 +90,13 @@ class ScanInstructionsViewController: BaseViewController {
 		setupSkipButton()
 	}
 
-	/// Create a custom back button so we can catch the tapp on the back button.
+	/// Create a custom back button so we can catch the tap on the back button.
 	private func setupBackButton() {
 
-		// hide the original back button
-		navigationItem.hidesBackButton = true
-
-		backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-
-		navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+		navigationItem.leftBarButtonItem = createBarButton(action: #selector(backButtonTapped),
+														   image: I.backArrow(),
+														   accessibilityIdentifier: "BackButton",
+														   accessibilityLabel: L.generalBack())
 	}
 
 	/// Create a custom back button so we can catch the tapped on the back button.

@@ -31,6 +31,9 @@ class BaseViewController: UIViewController {
 			// Always adopt a light interface style.
 			overrideUserInterfaceStyle = .light
 		}
+		
+		// Hide standard back button for customized left / back button.
+		navigationItem.hidesBackButton = true
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
