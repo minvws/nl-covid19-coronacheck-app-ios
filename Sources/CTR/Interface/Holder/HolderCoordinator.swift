@@ -276,8 +276,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				coordinator: self,
 				greenCard: greenCard,
 				thirdPartyTicketAppName: thirdpartyTicketApp?.name,
-				cryptoManager: cryptoManager,
-				remoteConfigManager: Services.remoteConfigManager,
 				userSettings: UserSettings(),
 				now: Date.init
 			)
