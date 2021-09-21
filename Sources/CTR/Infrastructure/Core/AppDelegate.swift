@@ -143,12 +143,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging {
 			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
 		]
 		UINavigationBar.appearance().tintColor = Theme.colors.dark
-		UINavigationBar.appearance().barTintColor = Theme.colors.viewControllerBackground
 		
-		// White navigation bar without bottom separator
-		UINavigationBar.appearance().isTranslucent = false
-		UINavigationBar.appearance().shadowImage = UIImage()
-		UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-		UINavigationBar.appearance().backgroundColor = Theme.colors.viewControllerBackground
+		if #available(iOS 15.0, *) {
+			// By default iOS 15 has no shadow bottom separator
+		} else {
+			// White navigation bar without bottom separator
+			UINavigationBar.appearance().isTranslucent = false
+			UINavigationBar.appearance().shadowImage = UIImage()
+			UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+			UINavigationBar.appearance().barTintColor = Theme.colors.viewControllerBackground
+		}
 	}
 }

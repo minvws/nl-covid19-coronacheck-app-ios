@@ -15,4 +15,14 @@ extension UIViewController {
 		navigationController?.navigationBar.backgroundColor = .clear
 		navigationController?.navigationBar.barTintColor = .clear
 	}
+	
+	func createBarButton(for action: Selector, image: UIImage?, tintColor: UIColor? = nil) -> UIBarButtonItem {
+		let button = UIButton(type: .custom)
+		button.setImage(image, for: .normal)
+		button.tintColor = tintColor
+		button.accessibilityTraits = .button
+		button.addTarget(self, action: action, for: .touchUpInside)
+		button.contentEdgeInsets = .leftRight(5)
+		return UIBarButtonItem(customView: button)
+	}
 }

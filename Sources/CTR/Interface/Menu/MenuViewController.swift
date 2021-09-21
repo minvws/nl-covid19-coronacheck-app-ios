@@ -67,7 +67,7 @@ class MenuViewController: BaseViewController {
 			}
 		}
 
-		addMenuCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: L.generalMenuClose())
+		addMenuCloseButton()
 	}
 
 	/// User tapped on the close button
@@ -77,27 +77,14 @@ class MenuViewController: BaseViewController {
 	}
 
 	/// Add a close button to the navigation bar.
-	/// - Parameters:
-	///   - action: the action when the users taps the close button
-	///   - accessibilityLabel: the label for Voice Over
-	func addMenuCloseButton(
-		action: Selector?,
-		accessibilityLabel: String) {
-
-		if let image: UIImage = .cross {
-			let button = UIBarButtonItem(
-				image: image.withRenderingMode(.alwaysTemplate),
-				style: .plain,
-				target: self,
-				action: action
-			)
-            button.title = accessibilityLabel
-            button.accessibilityLabel = accessibilityLabel
-			button.accessibilityIdentifier = "CloseButton"
-			button.accessibilityTraits = .button
-			button.tintColor = Theme.colors.secondary
-			navigationItem.hidesBackButton = true
-			navigationItem.leftBarButtonItem = button
-		}
+	private func addMenuCloseButton() {
+		
+		let button = createBarButton(for: #selector(closeButtonTapped),
+									 image: .cross?.withRenderingMode(.alwaysTemplate),
+									 tintColor: Theme.colors.secondary)
+		button.accessibilityLabel = L.generalMenuClose()
+		button.accessibilityIdentifier = "CloseButton"
+		navigationItem.hidesBackButton = true
+		navigationItem.leftBarButtonItem = button
 	}
 }

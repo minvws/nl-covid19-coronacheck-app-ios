@@ -57,8 +57,6 @@ class VerifierStartViewController: BaseViewController {
 		}
 
 		sceneView.headerImage = .scanStart
-		// Only show an arrow as back button
-		styleBackButton()
     }
 
 	// MARK: User interaction

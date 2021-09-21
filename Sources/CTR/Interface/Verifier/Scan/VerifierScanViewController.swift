@@ -79,9 +79,6 @@ class VerifierScanViewController: ScanViewController {
 			backgroundColor: .clear,
 			tintColor: .white
 		)
-
-		// Only show an arrow as back button
-		styleBackButton()
 	}
 
 	override func found(code: String) {

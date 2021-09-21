@@ -62,6 +62,8 @@ final class OnboardingConsentViewController: BaseViewController {
 		}
 		viewModel.$shouldHideBackButton.binding = { [weak self] in self?.navigationItem.hidesBackButton = $0 }
 		viewModel.$shouldHideConsentButton.binding = { [weak self] in self?.sceneView.consentButton.isHidden = $0 }
+		
+		styleBackButton()
 	}
 
 	override func viewDidAppear(_ animated: Bool) {

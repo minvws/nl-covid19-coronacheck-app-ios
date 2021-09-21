@@ -12,6 +12,7 @@ class BaseViewController: UIViewController {
 	var disableSwipeBack: Bool = false {
 		didSet {
 			navigationController?.interactivePopGestureRecognizer?.delegate = disableSwipeBack ? nil : self
+			navigationController?.interactivePopGestureRecognizer?.isEnabled = !disableSwipeBack
 		}
 	}
 
@@ -33,31 +34,11 @@ class BaseViewController: UIViewController {
 			overrideUserInterfaceStyle = .light
 		}
 		
-		navigationController?.interactivePopGestureRecognizer?.delegate = self
+		disableSwipeBack = false
 	}
 
 	func styleBackButton() {
-
-		let backbutton = UIBarButtonItem(
-			title: nil,
-			style: .plain,
-			target: nil,
-			action: nil
-		)
-		backbutton.accessibilityLabel = L.generalBack()
-
-		navigationController?.navigationBar.backIndicatorImage = .backArrow?.withAlignmentRectInsets(.left(-10))
-		navigationController?.navigationBar.backIndicatorTransitionMaskImage = .backArrow?.withAlignmentRectInsets(.left(-10))
-
-		backbutton.setTitleTextAttributes(
-			[
-				NSAttributedString.Key.font: Theme.fonts.bodyBoldFixed,
-				NSAttributedString.Key.foregroundColor: Theme.colors.dark
-			],
-			for: .normal
-		)
-
-		navigationItem.backBarButtonItem = backbutton
+		addCustomBackButton(action: #selector(onBack), accessibilityLabel: L.generalBack())
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -111,59 +92,24 @@ class BaseViewController: UIViewController {
 		button.accessibilityIdentifier = "CloseButton"
 		button.accessibilityTraits = .button
 		button.tintColor = tintColor
+		button.imageInsets = .left(5)
 		navigationItem.hidesBackButton = true
 		navigationItem.leftBarButtonItem = button
-		navigationController?.navigationItem.leftBarButtonItem = button
-		navigationController?.navigationBar.backgroundColor = backgroundColor
 	}
 
-	/// Add a close button to the navigation bar.
-	/// - Parameters:
-	///   - action: the action when the users taps the close button
-	func addBackButton(action: Selector? = nil) {
-		
-		var backAction = action
-		if backAction == nil {
-			backAction = #selector(onBack)
-		}
-
-		let button = UIBarButtonItem(
-			image: .backArrow,
-			style: .plain,
-			target: self,
-			action: backAction
-		)
-        button.title = accessibilityLabel
-        button.accessibilityLabel = accessibilityLabel
-		button.accessibilityIdentifier = "BackButton"
-		button.accessibilityTraits = .button
-		navigationItem.hidesBackButton = true
-		navigationItem.leftBarButtonItem = button
-		navigationController?.navigationItem.leftBarButtonItem = button
-	}
-	
 	/// Add a close button to the navigation bar.
 	/// - Parameters:
 	///   - action: the action when the users taps the close button
 	///   - accessibilityLabel: the label for Voice Over
 	func addCustomBackButton(
-		action: Selector?,
+		action: Selector,
 		accessibilityLabel: String) {
 
-		let button = UIBarButtonItem(
-			image: .backArrow,
-			style: .plain,
-			target: self,
-			action: action
-		)
+		let button = createBarButton(for: action, image: .backArrow)
 		button.accessibilityIdentifier = "BackButton"
 		button.accessibilityLabel = accessibilityLabel
-		button.accessibilityTraits = .button
-		button.imageInsets = .left(5)
 		navigationItem.hidesBackButton = true
 		navigationItem.leftBarButtonItem = button
-		navigationController?.navigationItem.leftBarButtonItem = button
-		navigationController?.navigationBar.backgroundColor = Theme.colors.viewControllerBackground
 	}
 
 	/// Show alert
@@ -187,16 +133,14 @@ class BaseViewController: UIViewController {
 
 private extension BaseViewController {
 	
-	@objc
-	func onBack() {
+	@objc func onBack() {
 		navigationController?.popViewController(animated: true)
 	}
 }
 
 extension BaseViewController: UIGestureRecognizerDelegate {
-	
+
 	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//		return !disableSwipeBack
 		return true
 	}
 }
