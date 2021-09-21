@@ -524,7 +524,7 @@
 "holder.vaccination.about.off" = "%@ van %@";
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.wrong.title" = "Er klopt iets niet";
-"holder.vaccination.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Of staat er onjuiste informatie over je vaccinatie? Op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a> vind je meer informatie over wat te doen.</p>";
+"holder.vaccination.wrong.body" = "<p>Kloppen er gegevens niet? Neem contact op met de zorgverlener waar je bent gevaccineerd. Zij kunnen de gegevens aanpassen.</p>";
 
 "holder.vaccination.start.nodigid" = "Ik heb geen DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/digid-aanvragen-activeren#hoe-vraag-ik-digid-aan";
@@ -577,7 +577,7 @@
 "holder.event.about.recovery.validuntil" = "Geldig tot:";
 "holder.event.about.recovery.identifier" = "Uniek testnummer:";
 
-"holder.testresults.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a> vind je meer informatie over wat te doen.</p>";
+"holder.testresults.wrong.body" = "<p>Kloppen er gegevens niet? Neem contact op met je testlocatie. Zij kunnen de gegevens aanpassen.</p>";
 
 "holder.event.element.subtitle.test2" = "<p>Testdatum: %@</p><p>Jouw gegevens: %@</p>";
 "holder.event.element.subtitle.test3" = "<p>Testdatum: %@</p><p>Naam: %@</p><p>Geboortedatum: %@</p>";
