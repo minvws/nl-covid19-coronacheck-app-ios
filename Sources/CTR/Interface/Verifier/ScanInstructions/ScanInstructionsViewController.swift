@@ -16,7 +16,7 @@ class ScanInstructionsViewController: BaseViewController {
 	private let backButton: UIButton = {
 		// Create a button with a back arrow
 		let button = UIButton(type: .custom)
-		button.setImage(.backArrow, for: .normal)
+		button.setImage(I.backArrow(), for: .normal)
 		button.accessibilityLabel = L.generalBack()
 		button.accessibilityIdentifier = "BackButton"
 		return button

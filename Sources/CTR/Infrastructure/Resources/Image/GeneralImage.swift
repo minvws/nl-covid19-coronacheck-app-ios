@@ -9,8 +9,6 @@ import UIKit
 
 extension UIImage {
 
-	static var disclosure: UIImage? { return UIImage(named: "Disclosure") }
-
 	static var error: UIImage? { return UIImage(named: "Error") }
 
 	static var endOfLife: UIImage? { return UIImage(named: "EndOfLife") }
