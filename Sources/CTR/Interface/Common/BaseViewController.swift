@@ -10,9 +10,7 @@ import UIKit
 class BaseViewController: UIViewController {
 	
 	/// Enable/disable navigation back swiping. Default is true.
-	var enableSwipeBack: Bool {
-		return true
-	}
+	var enableSwipeBack: Bool { true }
 
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 
@@ -53,20 +51,6 @@ class BaseViewController: UIViewController {
 		if let navBar = navigationController?.navigationBar {
 			accessibilityElements = [navBar, view as Any]
 		}
-	}
-
-	/// Announce a message
-	/// - Parameter message: the message to announce
-	func announce(_ message: String?) {
-
-		guard let message = message else {
-			return
-		}
-
-		UIAccessibility.post(
-			notification: .announcement,
-			argument: message
-		)
 	}
 
 	/// Add a close button to the navigation bar.
