@@ -49,6 +49,20 @@ echo -e "${GREEN}Pushing the sync branch to public repo${ENDCOL}"
 git push public-repo sync/$TIMESTAMP
 git lfs push public-repo --all
 
+
+# Push all (non-pushed) Release tags to public-repo
+#
+# This produces & executes commands like:
+# 	git push public-repo refs/tags/Holder-8.8.8
+# 	git push public-repo refs/tags/Holder-9.9.9
+
+git show-ref --tags \ 		# get all hash/tag in pairs like "62578f6 refs/tags/2.1.3-Holder"
+	| grep -v -F "$(git ls-remote --tags public-repo | grep -v '\^{}' | cut -f 2)" \ 		# Match only those that don't appear on `public-repo`
+	| grep -e "Holder-" -e "Verifier-" \ 		# Match only those that are in our release tag format
+	| grep -v "\-RC" \ 		# Strip out the RCs
+	| cut -f2 -d " " \ 		# Get the tag name, drop the hash.
+	| xargs -L1 git push public-repo # Finally push each tag to `public-repo` remote.
+
 echo -e "${GREEN}Constructing a PR request and opening it in the browser${ENDCOL}"
 PR_URL="https://github.com/minvws/$BASE_REPONAME/compare/sync/$TIMESTAMP?quick_pull=1&title=${PR_TITLE}&body=${PR_BODY}"
 
