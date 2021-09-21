@@ -14,8 +14,8 @@ final class FetchEventsViewModel: Logging {
 
 	private var tvsToken: String
 	private var eventMode: EventMode
-	private var networkManager: NetworkManaging
-	private let mappingManager: MappingManaging
+	private let networkManager: NetworkManaging = Services.networkManager
+	private let mappingManager: MappingManaging = Services.mappingManager
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -37,14 +37,10 @@ final class FetchEventsViewModel: Logging {
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		tvsToken: String,
-		eventMode: EventMode,
-		networkManager: NetworkManaging = Services.networkManager,
-		mappingManager: MappingManaging = Services.mappingManager) {
+		eventMode: EventMode) {
 		self.coordinator = coordinator
 		self.tvsToken = tvsToken
 		self.eventMode = eventMode
-		self.networkManager = networkManager
-		self.mappingManager = mappingManager
 
 		viewState = .loading(
 			content: Content(

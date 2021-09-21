@@ -137,17 +137,15 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		}
 	}
 
-	private let walletManager: WalletManaging
-	private let greencardLoader: GreenCardLoading
+	private let walletManager: WalletManaging = Services.walletManager
+	private let greencardLoader: GreenCardLoading = Services.greenCardLoader
 	private let reachability: ReachabilityProtocol?
 
 	private let now: () -> Date
 	private let minimumThresholdOfValidCredentialsTriggeringRefresh: Int // (values <= this number trigger refresh.)
 
-	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, greencardLoader: GreenCardLoading, reachability: ReachabilityProtocol?, now: @escaping () -> Date) {
+	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, reachability: ReachabilityProtocol?, now: @escaping () -> Date) {
 		self.minimumThresholdOfValidCredentialsTriggeringRefresh = minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh
-		self.walletManager = walletManager
-		self.greencardLoader = greencardLoader
 		self.now = now
 
 		let expiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(

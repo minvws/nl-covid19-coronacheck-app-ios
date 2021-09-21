@@ -172,7 +172,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		let viewController = EventStartViewController(
 			viewModel: EventStartViewModel(
 				coordinator: self,
-				eventMode: eventMode
+				eventMode: eventMode,
+				validAfterDays: Services.remoteConfigManager.getConfiguration().recoveryWaitingPeriodDays
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
@@ -337,14 +338,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				displayError(content: content, backAction: backAction)
 
 			case .back(let eventMode):
-				switch eventMode {
-					case .test:
-						navigateBackToTestStart()
-					case .vaccination, .recovery:
-						navigateBackToEventStart()
-					case .paperflow:
-					break
-				}
+				goBack(eventMode)
+	
 			case .stop:
 				delegate?.eventFlowDidComplete()
 
@@ -360,14 +355,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				delegate?.eventFlowDidComplete()
 				
 			case .back(let eventMode):
-				switch eventMode {
-					case .test:
-						navigateBackToTestStart()
-					case .recovery, .vaccination:
-						navigateBackToEventStart()
-					case .paperflow:
-						break
-				}
+				goBack(eventMode)
 
 			case let .error(content: content, backAction: backAction):
 				displayError(content: content, backAction: backAction)
@@ -380,20 +368,25 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		}
 	}
 
+	private func goBack(_ eventMode: EventMode) {
+
+		switch eventMode {
+			case .test:
+				navigateBackToTestStart()
+			case .recovery, .vaccination:
+				navigateBackToEventStart()
+			case .paperflow:
+				delegate?.eventFlowDidCancel()
+		}
+	}
+
 	func listEventsScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
 			case .stop, .continue:
 				delegate?.eventFlowDidComplete()
 			case .back(let eventMode):
-				switch eventMode {
-					case .test:
-						navigateBackToTestStart()
-					case .recovery, .vaccination:
-						navigateBackToEventStart()
-					case .paperflow:
-						delegate?.eventFlowDidCancel()
-				}
+				goBack(eventMode)
 			case let .error(content: content, backAction: backAction):
 				displayError(content: content, backAction: backAction)
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
