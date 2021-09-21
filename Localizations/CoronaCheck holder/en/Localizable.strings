@@ -133,7 +133,7 @@
 "holder.showqr.eu.about.recovery.validfrom" = "Valid from*:";
 "holder.showqr.eu.about.recovery.validuntil" = "Valid to*:";
 "holder.showqr.eu.about.recovery.identifier" = "Unique certificate identifier:";
-"holder.showqr.eu.about.recovery.dateinformation" = "Date noted in day-month-year";
+"holder.showqr.eu.about.recovery.dateinformation" = "*Date noted in day-month-year";
 "general.error.cryptolib.title" = "Sorry, something went wrong";
 "general.error.cryptolib.message" = "Contact our help desk and give them error code (%@) or try again later.";
 "general.error.cryptolib.retry" = "Try again";
@@ -425,7 +425,7 @@
 "holder.showqr.eu.about.vaccination.country" = "Member state of vaccination:";
 "holder.showqr.eu.about.vaccination.issuer" = "Certificate issuer:";
 "holder.showqr.eu.about.vaccination.identifier" = "Unique certificate identifier:";
-"holder.showqr.eu.about.vaccination.dateinformation" = "Date noted in day-month-year";
+"holder.showqr.eu.about.vaccination.dateinformation" = "*Date noted in day-month-year";
 
 "holder.showqr.eu.about.test.description" = "Travelling outside the Netherlands? Then more data is required. That's why the international QR code contains the following details:";
 "holder.showqr.eu.about.test.name" = "Name:";
@@ -441,7 +441,7 @@
 "holder.showqr.eu.about.test.country" = "Member state of test:";
 "holder.showqr.eu.about.test.issuer" = "Certificate issuer:";
 "holder.showqr.eu.about.test.identifier" = "Unique certificate identifier:";
-"holder.showqr.eu.about.test.dateinformation" = "Date noted in day-month-year";
+"holder.showqr.eu.about.test.dateinformation" = "*Date noted in day-month-year";
 "holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
 "holder.showqr.eu.about.test.postive" = "positive (coronavirus)";
 "holder.showqr.screenshotwarning.title" = "A screenshot is not a valid certificate";

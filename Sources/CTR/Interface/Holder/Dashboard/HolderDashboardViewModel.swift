@@ -54,8 +54,8 @@ final class HolderDashboardViewModel: Logging {
 	// MARK: - Private properties
 
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var cryptoManager: CryptoManaging?
-	private let remoteConfigManager: RemoteConfigManaging
+	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
+	private let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private var userSettings: UserSettingsProtocol
 
@@ -101,20 +101,16 @@ final class HolderDashboardViewModel: Logging {
 	// MARK: - Initializer
 	init(
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
-		cryptoManager: CryptoManaging,
 		datasource: HolderDashboardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
-		remoteConfigManager: RemoteConfigManaging,
 		now: @escaping () -> Date
 	) {
 
 		self.coordinator = coordinator
-		self.cryptoManager = cryptoManager
 		self.datasource = datasource
 		self.strippenRefresher = strippenRefresher
 		self.userSettings = userSettings
-		self.remoteConfigManager = remoteConfigManager
 		self.now = now
 
 		self.state = State(

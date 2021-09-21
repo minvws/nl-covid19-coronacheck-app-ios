@@ -20,8 +20,8 @@ class ShowQRViewModel: Logging {
 	var loggingCategory: String = "ShowQRViewModel"
 
 	weak private var coordinator: HolderCoordinatorDelegate?
-	weak private var cryptoManager: CryptoManaging?
-	weak private var remoteConfigManager: RemoteConfigManaging?
+	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
+	weak private var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
 
 	weak var validityTimer: Timer?
 	weak private var screenshotWarningTimer: Timer?
@@ -91,15 +91,11 @@ class ShowQRViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - greenCard: a greencard to display
-	///   - cryptoManager: the crypto manager to check the green card
-	///   - remoteConfigManager: the remote configuration for mapping values
 	///   - screenCaptureDetector: the screen capture detector
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCard: GreenCard,
 		thirdPartyTicketAppName: String?,
-		cryptoManager: CryptoManaging,
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
 		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector(),
 		userSettings: UserSettingsProtocol,
 		now: @escaping () -> Date = Date.init
@@ -107,8 +103,6 @@ class ShowQRViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
-		self.cryptoManager = cryptoManager
-		self.remoteConfigManager = remoteConfigManager
 		self.screenCaptureDetector = screenCaptureDetector
 		self.userSettings = userSettings
 		self.now = now

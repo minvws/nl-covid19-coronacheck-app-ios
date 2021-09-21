@@ -214,21 +214,13 @@ class HolderCoordinator: SharedCoordinator {
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
-				cryptoManager: cryptoManager,
-				datasource: HolderDashboardDatasource(
-					cryptoManaging: Services.cryptoManager,
-					walletManager: Services.walletManager,
-					now: { Date() }
-				),
+				datasource: HolderDashboardDatasource(now: { Date() }),
 				strippenRefresher: DashboardStrippenRefresher(
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
-					walletManager: Services.walletManager,
-					greencardLoader: Services.greenCardLoader,
 					reachability: try? Reachability(),
 					now: { Date() }
 				),
 				userSettings: UserSettings(),
-				remoteConfigManager: Services.remoteConfigManager,
 				now: { Date() }
 			)
 		)
@@ -284,8 +276,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				coordinator: self,
 				greenCard: greenCard,
 				thirdPartyTicketAppName: thirdpartyTicketApp?.name,
-				cryptoManager: cryptoManager,
-				remoteConfigManager: Services.remoteConfigManager,
 				userSettings: UserSettings(),
 				now: Date.init
 			)

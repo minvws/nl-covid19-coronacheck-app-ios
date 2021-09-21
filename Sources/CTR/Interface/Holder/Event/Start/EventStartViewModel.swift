@@ -24,7 +24,7 @@ class EventStartViewModel: Logging {
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+		validAfterDays: Int?
 	) {
 
 		self.coordinator = coordinator
@@ -37,7 +37,7 @@ class EventStartViewModel: Logging {
 				self.primaryButtonIcon = I.digid()
 			case .recovery:
 				self.title = L.holderRecoveryStartTitle()
-				let validAfterDays = remoteConfigManager.getConfiguration().recoveryWaitingPeriodDays ?? 11
+				let validAfterDays = validAfterDays ?? 11
 				self.message = L.holderRecoveryStartMessage("\(validAfterDays)")
 				self.primaryButtonIcon = I.digid()
 			case .test, .paperflow:

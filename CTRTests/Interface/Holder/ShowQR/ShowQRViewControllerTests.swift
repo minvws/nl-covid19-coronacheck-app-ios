@@ -38,6 +38,9 @@ class ShowQRViewControllerTests: XCTestCase {
 		remoteConfigMangingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
 		remoteConfigMangingSpy.stubbedGetConfigurationResult = .default
 
+		Services.use(cryptoManagerSpy)
+		Services.use(remoteConfigMangingSpy)
+
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createTestGreenCard(
 				dataStoreManager: dataStoreManager,
@@ -50,7 +53,6 @@ class ShowQRViewControllerTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -97,8 +99,6 @@ class ShowQRViewControllerTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			remoteConfigManager: remoteConfigMangingSpy,
 			userSettings: userSettingsSpy
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
@@ -125,8 +125,6 @@ class ShowQRViewControllerTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			remoteConfigManager: remoteConfigMangingSpy,
 			userSettings: userSettingsSpy
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
