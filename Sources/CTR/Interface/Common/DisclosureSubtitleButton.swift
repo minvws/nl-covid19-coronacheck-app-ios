@@ -17,6 +17,7 @@ class DisclosureSubtitleButton: BaseView {
 		static let cornerRadius: CGFloat = 9
 		static let shadowRadius: CGFloat = 6
 		static let shadowOpacity: Float = 0.2
+		static let disclosureHeight: CGFloat = 12
 
 		// Margins
 		static let textMargin: CGFloat = 4.0
@@ -41,7 +42,7 @@ class DisclosureSubtitleButton: BaseView {
 	/// The disclosure image
 	let disclosureView: UIImageView = {
 
-		let view = UIImageView(image: UIImage.disclosure)
+		let view = UIImageView(image: I.disclosure())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -151,8 +152,7 @@ class DisclosureSubtitleButton: BaseView {
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			disclosureView.heightAnchor.constraint(equalToConstant: 22),
-			disclosureView.widthAnchor.constraint(equalToConstant: 10),
+			disclosureView.heightAnchor.constraint(equalToConstant: ViewTraits.disclosureHeight),
 			disclosureView.centerYAnchor.constraint(equalTo: centerYAnchor)
 		])
 	}

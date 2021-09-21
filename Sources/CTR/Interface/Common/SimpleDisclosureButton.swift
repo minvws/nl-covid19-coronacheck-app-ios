@@ -15,6 +15,7 @@ class SimpleDisclosureButton: BaseView {
 
 		// Dimensions
 		static let lineHeight: CGFloat = 22
+		static let disclosureHeight: CGFloat = 12
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -28,7 +29,7 @@ class SimpleDisclosureButton: BaseView {
 
 	private let disclosureView: UIImageView = {
 
-		let view = UIImageView(image: UIImage.disclosure)
+		let view = UIImageView(image: I.disclosure())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -95,8 +96,7 @@ class SimpleDisclosureButton: BaseView {
 			lineView.heightAnchor.constraint(equalToConstant: 1),
 
 			disclosureView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			disclosureView.heightAnchor.constraint(equalToConstant: 22),
-			disclosureView.widthAnchor.constraint(equalToConstant: 10),
+			disclosureView.heightAnchor.constraint(equalToConstant: ViewTraits.disclosureHeight),
 			disclosureView.centerYAnchor.constraint(equalTo: centerYAnchor)
 		])
 	}
