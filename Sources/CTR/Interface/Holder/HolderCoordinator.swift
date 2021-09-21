@@ -204,7 +204,8 @@ class HolderCoordinator: SharedCoordinator {
 		let destination = ChooseQRCodeTypeViewController(
 			viewModel: ChooseQRCodeTypeViewModel(
 				coordinator: self
-			)
+			),
+			isRootViewController: false
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
@@ -513,7 +514,8 @@ extension HolderCoordinator: MenuDelegate {
 				let destination = ChooseQRCodeTypeViewController(
 					viewModel: ChooseQRCodeTypeViewModel(
 						coordinator: self
-					)
+					),
+					isRootViewController: true
 				)
 				navigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController

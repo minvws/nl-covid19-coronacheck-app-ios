@@ -14,6 +14,8 @@ final class OnboardingConsentViewController: BaseViewController {
 
 	/// The view
 	let sceneView = OnboardingConsentView()
+	
+	override var enableSwipeBack: Bool { !viewModel.shouldHideBackButton }
 
 	/// Initializer
 	/// - Parameter viewModel: view model

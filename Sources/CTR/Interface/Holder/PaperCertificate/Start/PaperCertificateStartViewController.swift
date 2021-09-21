@@ -35,8 +35,6 @@ final class PaperCertificateStartViewController: BaseViewController {
 		super.viewDidLoad()
 		
 		setupBinding()
-		
-		addBackButton()
 	}
 	
 	func setupBinding() {

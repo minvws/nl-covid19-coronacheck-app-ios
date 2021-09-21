@@ -18,6 +18,9 @@ class OnboardingViewController: BaseViewController {
 	/// The page controller
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 	
+	/// Disable swiping to launch screen
+	override var enableSwipeBack: Bool { false }
+	
 	/// Initializer
 	/// - Parameter viewModel: view model
 	init(viewModel: OnboardingViewModel) {

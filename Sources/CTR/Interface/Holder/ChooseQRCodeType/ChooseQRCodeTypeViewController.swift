@@ -16,12 +16,15 @@ class ChooseQRCodeTypeViewController: BaseViewController {
 	}
 
 	private let viewModel: ChooseQRCodeTypeViewModel
+	
+	private let isRootViewController: Bool
 
 	let sceneView = ChooseQRCodeTypeView()
 
-	init(viewModel: ChooseQRCodeTypeViewModel) {
+	init(viewModel: ChooseQRCodeTypeViewModel, isRootViewController: Bool) {
 
 		self.viewModel = viewModel
+		self.isRootViewController = isRootViewController
 
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -43,8 +46,10 @@ class ChooseQRCodeTypeViewController: BaseViewController {
 
 		setupBinding()
 
-		// Only show an arrow as back button
-		addBackButton()
+		if !isRootViewController {
+			// Show back button in navigation push
+			addBackButton()
+		}
 	}
 
 	func setupBinding() {
