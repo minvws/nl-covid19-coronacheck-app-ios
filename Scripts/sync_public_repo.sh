@@ -49,7 +49,6 @@ echo -e "${GREEN}Pushing the sync branch to public repo${ENDCOL}"
 git push public-repo sync/$TIMESTAMP
 git lfs push public-repo --all
 
-
 # Push all (non-pushed) Release tags to public-repo
 #
 # This produces & executes commands like:
