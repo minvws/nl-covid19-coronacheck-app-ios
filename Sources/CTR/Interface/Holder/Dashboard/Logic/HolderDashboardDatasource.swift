@@ -25,14 +25,12 @@ class HolderDashboardDatasource: HolderDashboardDatasourceProtocol {
 		}
 	}
 
-	private let cryptoManaging: CryptoManaging
-	private let walletManager: WalletManaging
+	private let cryptoManaging: CryptoManaging = Services.cryptoManager
+	private let walletManager: WalletManaging = Services.walletManager
 	private var reloadTimer: Timer?
 	private let now: () -> Date
 
-	init(cryptoManaging: CryptoManaging, walletManager: WalletManaging, now: @escaping () -> Date) {
-		self.cryptoManaging = cryptoManaging
-		self.walletManager = walletManager
+	init(now: @escaping () -> Date) {
 		self.now = now
 	}
 
