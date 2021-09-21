@@ -44,6 +44,8 @@ class ShowQRViewController: BaseViewController {
 		
 		setupBinding()
 		setupListeners()
+		
+		addBackButton()
 	}
 
 	private func setupBinding() {
