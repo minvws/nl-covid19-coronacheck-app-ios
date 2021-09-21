@@ -33,14 +33,12 @@ extension UIViewController {
 		accessibilityIdentifier: String,
 		accessibilityLabel: String) -> UIBarButtonItem {
 		
-		let button = UIButton(type: .custom)
-		button.setImage(image, for: .normal)
+		let button = UIBarButtonItem(image: image, style: .plain, target: target ?? self, action: action)
+		button.imageInsets = .leftRight(4)
 		button.tintColor = tintColor
 		button.accessibilityTraits = .button
-		button.addTarget(target ?? self, action: action, for: .touchUpInside)
-		button.contentEdgeInsets = .leftRight(4)
 		button.accessibilityIdentifier = accessibilityIdentifier
 		button.accessibilityLabel = accessibilityLabel
-		return UIBarButtonItem(customView: button)
+		return button
 	}
 }
