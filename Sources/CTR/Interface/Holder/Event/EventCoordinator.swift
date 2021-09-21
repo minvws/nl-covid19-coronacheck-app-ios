@@ -168,7 +168,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		let viewController = EventStartViewController(
 			viewModel: EventStartViewModel(
 				coordinator: self,
-				eventMode: eventMode
+				eventMode: eventMode,
+				validAfterDays: Services.remoteConfigManager.getConfiguration().recoveryWaitingPeriodDays
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
