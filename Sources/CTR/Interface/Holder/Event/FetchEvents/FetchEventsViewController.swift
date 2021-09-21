@@ -41,8 +41,7 @@ class FetchEventsViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		navigationItem.hidesBackButton = true
-		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: L.generalBack())
+		addBackButton(customAction: #selector(backButtonTapped))
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 

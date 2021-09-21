@@ -203,25 +203,19 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 	/// Add a torch button to the navigation bar.
 	/// - Parameters:
-	///   - action: the action when the users taps the torch button
-	///   - accessibilityLabel: the label for Voice Over
+	///   - action: The action when the users taps the torch button
+	///   - enableLabel: The label when enabled
+	///   - disableLabel: The label when disabled
 	func addTorchButton(
-		action: Selector?,
-		enableLabel: String?,
-		disableLabel: String?) {
+		action: Selector,
+		enableLabel: String,
+		disableLabel: String) {
 		
-		let button = UIBarButtonItem(
-			image: .torch,
-			style: .plain,
-			target: self,
-			action: action
-		)
-        button.title = enableLabel
-        button.accessibilityLabel = enableLabel
-		button.accessibilityIdentifier = "TorchButton"
-		button.accessibilityTraits = .button
+		let button = createBarButton(action: action,
+									 image: I.torch(),
+									 accessibilityIdentifier: "TorchButton",
+									 accessibilityLabel: enableLabel)
 		navigationItem.rightBarButtonItem = button
-		navigationController?.navigationItem.rightBarButtonItem = button
         
         self.torchButton = button
         self.torchEnableLabel = enableLabel

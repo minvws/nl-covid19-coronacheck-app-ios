@@ -64,17 +64,12 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
         let mainViewController = (selectedViewController as? UINavigationController)?.topViewController ?? selectedViewController
         if let navItem = mainViewController?.navigationItem,
             navItem.leftBarButtonItem == nil {
-            let hamburger = UIImage.hamburger
-            let button = UIBarButtonItem(
-                image: hamburger,
-                style: .plain,
-                target: self,
-                action: #selector(showSidePanel))
-            button.title = L.generalMenuOpen()
-            button.accessibilityLabel = button.title
-            button.accessibilityIdentifier = "OpenMenuButton"
-            navItem.leftBarButtonItem = button
-        }
+            
+			navItem.leftBarButtonItem = createBarButton(action: #selector(showSidePanel),
+														image: I.hamburger(),
+														accessibilityIdentifier: "OpenMenuButton",
+														accessibilityLabel: L.generalMenuOpen())
+		}
     }
 
 	override open func viewDidLoad() {

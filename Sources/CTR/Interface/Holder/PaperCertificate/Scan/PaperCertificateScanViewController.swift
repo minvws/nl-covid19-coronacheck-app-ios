@@ -50,11 +50,11 @@ class PaperCertificateScanViewController: ScanViewController {
 		}
 
 		viewModel.$torchLabels.binding = { [weak self] in
-			guard let strongSelf = self else { return }
+			guard let strongSelf = self, let enableLabel = $0.first, let disableLabel = $0.last else { return }
 			strongSelf.addTorchButton(
                 action: #selector(strongSelf.toggleTorch),
-                enableLabel: $0.first,
-                disableLabel: $0.last
+                enableLabel: enableLabel,
+                disableLabel: disableLabel
             )
 		}
 		viewModel.$showPermissionWarning.binding = { [weak self] in
@@ -64,7 +64,7 @@ class PaperCertificateScanViewController: ScanViewController {
 		}
 
 		// Only show an arrow as back button
-		styleBackButton()
+		addBackButton()
 	}
 
 	override func found(code: String) {

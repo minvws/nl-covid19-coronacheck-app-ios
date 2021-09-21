@@ -74,19 +74,12 @@ class OnboardingViewController: BaseViewController {
 	/// Create a custom back button so we can catch the tapped on the back button.
 	private func setupBackButton() {
 
-		// hide the original back button
-		navigationItem.hidesBackButton = true
-
 		// Create a button with a back arrow
-		let button = UIButton(type: .custom)
-		button.setImage(.backArrow, for: .normal)
-		button.accessibilityLabel = L.generalBack()
-		button.accessibilityIdentifier = "BackButton"
-
-		// Handle touches
-		button.addTarget(self, action: #selector(backbuttonTapped), for: .touchUpInside)
-        
-		backButton = UIBarButtonItem(customView: button)
+		let button = createBarButton(action: #selector(backbuttonTapped),
+									 image: I.backArrow(),
+									 accessibilityIdentifier: "BackButton",
+									 accessibilityLabel: L.generalBack())
+		backButton = button
 	}
 	
 	/// The user tapped on the back button

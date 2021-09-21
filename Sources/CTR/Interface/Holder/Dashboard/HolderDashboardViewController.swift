@@ -257,15 +257,11 @@ class HolderDashboardViewController: BaseViewController {
 	// MARK: Helper methods
 
 	func setupPlusButton() {
-		let plusbutton = UIBarButtonItem(
-			image: .plus,
-			style: .plain,
-			target: viewModel,
-			action: #selector(HolderDashboardViewModel.addProofTapped)
-		)
-		plusbutton.title = L.holderMenuProof()
-        plusbutton.accessibilityLabel = plusbutton.title
-		navigationItem.rightBarButtonItem = plusbutton
+		navigationItem.rightBarButtonItem = createBarButton(target: viewModel,
+															action: #selector(HolderDashboardViewModel.addProofTapped),
+															image: I.plus(),
+															accessibilityIdentifier: "PlusButton",
+															accessibilityLabel: L.holderMenuProof())
 	}
 }
 

@@ -9,10 +9,11 @@ import UIKit
 
 class BaseViewController: UIViewController {
 	
-	var disableSwipeBack: Bool = false {
+	/// Disable navigation back swiping. Disable in -viewDidAppear.
+	var enableSwipeBack: Bool = true {
 		didSet {
-			navigationController?.interactivePopGestureRecognizer?.delegate = disableSwipeBack ? nil : self
-			navigationController?.interactivePopGestureRecognizer?.isEnabled = !disableSwipeBack
+			navigationController?.interactivePopGestureRecognizer?.delegate = enableSwipeBack ? self : nil
+			navigationController?.interactivePopGestureRecognizer?.isEnabled = enableSwipeBack
 		}
 	}
 
@@ -33,12 +34,6 @@ class BaseViewController: UIViewController {
 			// Always adopt a light interface style.
 			overrideUserInterfaceStyle = .light
 		}
-		
-		disableSwipeBack = false
-	}
-
-	func styleBackButton() {
-		addCustomBackButton(action: #selector(onBack), accessibilityLabel: L.generalBack())
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -46,6 +41,8 @@ class BaseViewController: UIViewController {
 		super.viewDidAppear(animated)
 
 		setupAccessibilityElements()
+		
+		enableSwipeBack = true
 	}
 
 	func setupAccessibilityElements() {
@@ -73,42 +70,35 @@ class BaseViewController: UIViewController {
 
 	/// Add a close button to the navigation bar.
 	/// - Parameters:
-	///   - action: the action when the users taps the close button
-	///   - accessibilityLabel: the label for Voice Over
+	///   - action: The action when the users taps the close button
+	///   - tintColor: The button tint color
 	func addCloseButton(
-		action: Selector?,
-		accessibilityLabel: String = L.generalClose(),
-		backgroundColor: UIColor = Theme.colors.viewControllerBackground,
+		action: Selector,
 		tintColor: UIColor = Theme.colors.dark) {
-
-		let button = UIBarButtonItem(
-			image: .cross,
-			style: .plain,
-			target: self,
-			action: action
-		)
-        button.title = accessibilityLabel
-        button.accessibilityLabel = accessibilityLabel
-		button.accessibilityIdentifier = "CloseButton"
-		button.accessibilityTraits = .button
-		button.tintColor = tintColor
-		button.imageInsets = .left(5)
-		navigationItem.hidesBackButton = true
+		
+		let button = createBarButton(action: action,
+									 image: I.cross(),
+									 tintColor: tintColor,
+									 accessibilityIdentifier: "CloseButton",
+									 accessibilityLabel: L.generalClose())
 		navigationItem.leftBarButtonItem = button
 	}
 
-	/// Add a close button to the navigation bar.
+	/// Add a back button to the navigation bar.
 	/// - Parameters:
-	///   - action: the action when the users taps the close button
-	///   - accessibilityLabel: the label for Voice Over
-	func addCustomBackButton(
-		action: Selector,
-		accessibilityLabel: String) {
+	///   - customAction: The custom action for back navigation
+	func addBackButton(
+		customAction: Selector? = nil) {
 
-		let button = createBarButton(for: action, image: .backArrow)
-		button.accessibilityIdentifier = "BackButton"
-		button.accessibilityLabel = accessibilityLabel
-		navigationItem.hidesBackButton = true
+		var action = #selector(onBack)
+		if let customAction = customAction {
+			action = customAction
+		}
+		
+		let button = createBarButton(action: action,
+									 image: I.backArrow(),
+									 accessibilityIdentifier: "BackButton",
+									 accessibilityLabel: L.generalBack())
 		navigationItem.leftBarButtonItem = button
 	}
 

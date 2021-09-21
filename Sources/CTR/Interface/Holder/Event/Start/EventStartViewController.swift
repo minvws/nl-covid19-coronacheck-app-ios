@@ -68,8 +68,14 @@ class EventStartViewController: BaseViewController {
 			self?.viewModel.openUrl(url)
 		}
 
-		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: L.generalBack())
-		styleBackButton()
+		addBackButton(customAction: #selector(backButtonTapped))
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		// Disable swipe back to have a callback to clean up coordinator
+		enableSwipeBack = false
 	}
 
 	@objc func backButtonTapped() {

@@ -9,21 +9,9 @@ import UIKit
 
 extension UIImage {
 
-	static var backArrow: UIImage? { return UIImage(named: "BackArrow") }
-
-	static var cross: UIImage? { return UIImage(named: "Cross") }
-
-	static var hamburger: UIImage? { return UIImage(named: "Hamburger") }
-
-	static var plus: UIImage? { return UIImage(named: "Plus") }
-
 	static var disclosure: UIImage? { return UIImage(named: "Disclosure") }
 
 	static var error: UIImage? { return UIImage(named: "Error") }
-
-	static var torch: UIImage? { return UIImage(named: "Torch") }
-
-	static var questionMark: UIImage? { return UIImage(named: "QuestionMark") }
 
 	static var endOfLife: UIImage? { return UIImage(named: "EndOfLife") }
 

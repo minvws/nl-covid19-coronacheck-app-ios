@@ -52,7 +52,7 @@ class TokenEntryViewController: BaseViewController {
 		sceneView.verificationEntryView.inputField.tag = TextFieldTag.verificationEntry.rawValue
 		
 		// Only show an arrow as back button
-		styleBackButton()
+		addBackButton()
 	}
 	
 	func setupBinding() {
