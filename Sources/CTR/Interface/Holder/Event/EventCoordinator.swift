@@ -28,6 +28,8 @@ enum EventScreenResult: Equatable {
 
 	/// The user wants to go back a scene
 	case back(eventMode: EventMode)
+	
+	case backSwipe
 
 	/// Stop with vaccination flow,
 	case stop
@@ -101,6 +103,8 @@ protocol EventFlowDelegate: AnyObject {
 	func eventFlowDidComplete()
 
 	func eventFlowDidCancel()
+	
+	func eventFlowDidCancelFromBackSwipe()
 }
 
 class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
@@ -306,6 +310,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .back, .stop:
 				delegate?.eventFlowDidCancel()
+			case .backSwipe:
+				delegate?.eventFlowDidCancelFromBackSwipe()
 			case let .continue(_, eventMode):
 				navigateToLogin(eventMode: eventMode)
 			default:
