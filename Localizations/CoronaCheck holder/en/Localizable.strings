@@ -1,3 +1,10 @@
+"holder.tokenentry.regularflow.error.invalid.combination" = "No valid combination";
+"holder.tokenentry.regularflow.error.emptytoken" = "Please fill out a retrieval code first";
+"holder.tokenentry.regularflow.error.emptycode" = "Please fill out a verification code first";
+"holder.tokenentry.universallinkflow.error.invalid.combination" = "No valid combination";
+"holder.tokenentry.universallinkflow.error.emptytoken" = "Please fill out a retrieval code first";
+"holder.tokenentry.universallinkflow.error.emptycode" = "Please fill out a verification code first";
+"general.error.server.unreachable.errorCode" = "<p>We failed to reach the server. Can you check if you’re connected to the internet?</p><p><b>Error code:</b><br />%@</p>";
 "holder.cleardata.menu.title" = "Clear data";
 "holder.cleardata.alert.title" = "Clear data";
 "holder.cleardata.alert.subtitle" = "Are you sure you want to remove all the green cards and events?";
@@ -213,12 +220,8 @@
 "holder.tokenentry.regularflow.verification.title" = "Verification code";
 "holder.tokenentry.regularflow.verification.placeholder" = "E.g. 123456";
 "holder.tokenentry.regularflow.error.invalid.code" = "Invalid retrieval code";
-"holder.tokenentry.regularflow.error.invalid.combination" = "Invalid combination of retrieval code and verification code";
 "holder.tokenentry.regularflow.retry.title" = "I haven't received a code";
 "holder.tokenentry.regularflow.next" = "Next";
-"holder.tokenentry.regularflow.error.emptytoken" = "Please fill out a retrieval code first";
-"holder.tokenentry.regularflow.error.emptycode" = "Please fill out a verification code first";
-"holder.tokenentry.regularflow.error.unknownprovider" = "Retrieval code is from an unknown test location ";
 /* MARK: - Holder Token entry - Universal Link flow */
 "holder.tokenentry.universallinkflow.title" = "Retrieve test result";
 "holder.tokenentry.universallinkflow.text" = "Enter your verification code to retrieve your negative test result.";
@@ -229,12 +232,8 @@
 "holder.tokenentry.universallinkflow.verification.title" = "Verification code";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "E.g. 123456";
 "holder.tokenentry.universallinkflow.error.invalid.code" = "This retrieval code has expired";
-"holder.tokenentry.universallinkflow.error.invalid.combination" = "Invalid combination of retrieval code and verification code";
 "holder.tokenentry.universallinkflow.retry.title" = "I haven't received a code";
 "holder.tokenentry.universallinkflow.next" = "Next";
-"holder.tokenentry.universallinkflow.error.emptytoken" = "Please fill out a retrieval code first";
-"holder.tokenentry.universallinkflow.error.emptycode" = "Please fill out a verification code first";
-"holder.tokenentry.universallinkflow.error.unknownprovider" = "Retrieval code is from an unknown test location";
 
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
@@ -275,7 +274,6 @@
 "holder.errorstate.nosession.message" = "You’ve waited too long. For safety reasons, you were logged out. Login again with your DigiD to retrieve your details.";
 "holder.errorstate.nosession.action" = "Start over";
 "general.error.server.unreachable" = "We failed to reach the server. Can you check if you’re connected to the internet?";
-"general.error.server.unreachable.errorCode" = "<p>We failed to reach the server. Can you check if you’re connected to the internet?</p><p><b>Error code:</b><br />%@</p>";
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";
 "general.government.logo" = "Logo of Central Government";
@@ -409,7 +407,7 @@
 
 "holder.showqr.domestic.title" = "Dutch QR code";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
-"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p> The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you. </p><p>The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p></p>";
+"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code says whether or not the QR code is valid. It doesn't say whether or not you have a test certificate or vaccination.</p><p> The QR code also contains several of your details. This is to make sure the QR code belongs to you. The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth.</p><p>Your details: <b>%@</b></p><p><br />*To protect your privacy, some details may disappear. In this case you will see a hyphen (-).</p>";
 "holder.showqr.eu.title" = "International QR code";
 "holder.showqr.eu.about.title" = "About my international QR code";
 "holder.showqr.eu.about.vaccination.description" = "Travelling outside of the Netherlands? Then more data is required. That’s why the international QR code contains the following details:";

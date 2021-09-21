@@ -1,3 +1,12 @@
+"holder.tokenentry.regularflow.error.invalid.combination" = "Geen geldige combinatie";
+"holder.tokenentry.regularflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
+"holder.tokenentry.regularflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
+"holder.tokenentry.regularflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
+"holder.tokenentry.universallinkflow.error.invalid.combination" = "Geen geldige combinatie";
+"holder.tokenentry.universallinkflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
+"holder.tokenentry.universallinkflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
+"holder.tokenentry.universallinkflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
+"general.error.server.unreachable.errorCode" = "<p>Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?</p><p><b>Fout code:</b><br />%@</p>";
 "holder.cleardata.menu.title" = "Verwijder data";
 "holder.cleardata.alert.title" = "Verwijder data";
 "holder.cleardata.alert.subtitle" = "Weet je zeker dat je alle greencards en events wilt verwijderen?";
@@ -213,12 +222,8 @@
 "holder.tokenentry.regularflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.regularflow.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.regularflow.error.invalid.code" = "Geen geldige ophaalcode";
-"holder.tokenentry.regularflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.regularflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.regularflow.next" = "Volgende";
-"holder.tokenentry.regularflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
-"holder.tokenentry.regularflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
-"holder.tokenentry.regularflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 /* MARK: - Holder Token entry - Universal Link flow */
 "holder.tokenentry.universallinkflow.title" = "Testuitslag ophalen";
 "holder.tokenentry.universallinkflow.text" = "Vul jouw verificatiecode in om je negatieve testuitslag op te halen.";
@@ -229,12 +234,8 @@
 "holder.tokenentry.universallinkflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.universallinkflow.error.invalid.code" = "Deze ophaalcode is verlopen";
-"holder.tokenentry.universallinkflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.universallinkflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.universallinkflow.next" = "Volgende";
-"holder.tokenentry.universallinkflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
-"holder.tokenentry.universallinkflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
-"holder.tokenentry.universallinkflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "Geen lettercombinatie?";
@@ -275,7 +276,6 @@
 "holder.errorstate.nosession.message" = "Je hebt te lang gewacht. Voor de veiligheid ben je daarom uitgelogd. Log opnieuw in met DigiD om je gegevens op te halen.";
 "holder.errorstate.nosession.action" = "Begin opnieuw";
 "general.error.server.unreachable" = "Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?";
-"general.error.server.unreachable.errorCode" = "<p>Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?</p><p><b>Fout code:</b><br />%@</p>";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
 "general.government.logo" = "Logo Rijksoverheid";
@@ -383,7 +383,7 @@
 "holder.clockDeviationDetected.title" = "Controleer de tijd van je telefoon";
 "holder.clockDeviationDetected.message" = "<p>Mogelijk klopt de tijd van jouw telefoon niet. Het kan bijvoorbeeld zijn dat je telefoon een paar minuten voor loopt. Om de CoronaCheck-app goed te kunnen gebruiken is het belangrijk dat de tijd juist staat ingesteld.</p><p><a href=\"%@\">Ga naar de instellingen</a> van jouw telefoon en zet de datum en tijd op 'automatisch instellen'.</p>";
 
-"holder.dashboard.clockDeviationDetected.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
+"holder.dashboard.clockDeviationDetected.message" = "Controleer de tijd van je telefoon. Mogelijk staat het niet goed ingesteld.";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt wel een internationaal bewijs.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
@@ -409,7 +409,7 @@
 
 "holder.showqr.domestic.title" = "Nederlandse QR-code";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
-"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat niet of je een testbewijs of vaccinatie hebt. Maar wel of de QR-code geldig is.</p><p>Ook staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort. De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Om privacyredenen kunnen er gegevens wegvallen.</p><p>Jouw gegevens: <b>%@</b></p><p></p>";
+"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat dat je een geldig bewijs hebt. Niet of je een test of vaccinatie hebt gedaan.</p><p>Om zeker te zijn dat de QR-code bij jou hoort staan er enkele gegevens in de QR-code. Het gaat om de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand.</p><p>Jouw gegevens: <b>%@</b></p><p><br />*Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (-).</p>";
 "holder.showqr.eu.title" = "Internationale QR-code";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
 "holder.showqr.eu.about.vaccination.description" = "Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:";
