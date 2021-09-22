@@ -43,7 +43,7 @@ class PaperCertificateTokenEntryViewController: BaseViewController {
 		sceneView.tokenEntryView.inputField.delegate = self
 
 		// Only show an arrow as back button
-		styleBackButton()
+		addBackButton()
 	}
 	
 	func setupBinding() {
@@ -87,7 +87,7 @@ class PaperCertificateTokenEntryViewController: BaseViewController {
 			self?.viewModel.userHasNoTokenButtonTapped()
 		}
 
-		styleBackButton()
+		addBackButton()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

@@ -48,8 +48,7 @@ class ListEventsViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		navigationItem.hidesBackButton = true
-		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: L.generalBack())
+		addBackButton(customAction: #selector(backButtonTapped))
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 
@@ -90,6 +89,8 @@ class ListEventsViewController: BaseViewController {
 			self?.sceneView.hideForCapture = $0
 		}
 	}
+	
+	override var enableSwipeBack: Bool { false }
 
 	@objc func backButtonTapped() {
 

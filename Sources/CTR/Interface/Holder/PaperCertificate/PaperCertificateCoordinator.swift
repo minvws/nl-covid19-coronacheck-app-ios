@@ -223,17 +223,13 @@ extension PaperCertificateCoordinator: EventFlowDelegate {
 
 	func eventFlowDidComplete() {
 
-		removeChildCoordinator()
-		scannedQR = nil
-		token = nil
+		cleanup()
 		delegate?.addCertificateFlowDidFinish()
 	}
 
 	func eventFlowDidCancel() {
 
-		removeChildCoordinator()
-		scannedQR = nil
-		token = nil
+		cleanup()
 		if let viewController = navigationController.viewControllers
 			.first(where: { $0 is PaperCertificateStartViewController }) {
 
@@ -243,10 +239,21 @@ extension PaperCertificateCoordinator: EventFlowDelegate {
 			)
 		}
 	}
+	
+	func eventFlowDidCancelFromBackSwipe() {
+		
+		cleanup()
+	}
 
 	private func removeChildCoordinator() {
 
 		guard let coordinator = childCoordinators.last else { return }
 		removeChildCoordinator(coordinator)
+	}
+	
+	private func cleanup() {
+		removeChildCoordinator()
+		scannedQR = nil
+		token = nil
 	}
 }

@@ -81,8 +81,6 @@ class HolderDashboardViewController: BaseViewController {
 
 		setupBindings()
 
-		// Only show an arrow as back button
-		styleBackButton()
 		setupPlusButton()
 		
 		sceneView.delegate = self
@@ -259,15 +257,12 @@ class HolderDashboardViewController: BaseViewController {
 	// MARK: Helper methods
 
 	func setupPlusButton() {
-		let plusbutton = UIBarButtonItem(
-			image: I.plus(),
-			style: .plain,
-			target: viewModel,
-			action: #selector(HolderDashboardViewModel.addProofTapped)
-		)
-		plusbutton.title = L.holderMenuProof()
-        plusbutton.accessibilityLabel = plusbutton.title
-		navigationItem.rightBarButtonItem = plusbutton
+		let config = UIBarButtonItem.Configuration(target: viewModel,
+												   action: #selector(HolderDashboardViewModel.addProofTapped),
+												   image: I.plus(),
+												   accessibilityIdentifier: "PlusButton",
+												   accessibilityLabel: L.holderMenuProof())
+		navigationItem.rightBarButtonItem = .create(config)
 	}
 }
 

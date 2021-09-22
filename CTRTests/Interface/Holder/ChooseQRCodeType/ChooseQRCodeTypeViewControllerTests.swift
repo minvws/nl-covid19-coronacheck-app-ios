@@ -19,9 +19,12 @@ class ChooseQRCodeTypeViewControllerTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		sut = ChooseQRCodeTypeViewController(viewModel: ChooseQRCodeTypeViewModel(
-			coordinator: coordinatorDelegateSpy
-		))
+		sut = ChooseQRCodeTypeViewController(
+			viewModel: ChooseQRCodeTypeViewModel(
+				coordinator: coordinatorDelegateSpy
+			),
+			isRootViewController: true
+		)
 		window = UIWindow()
 	}
 

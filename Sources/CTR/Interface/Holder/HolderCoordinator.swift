@@ -204,7 +204,8 @@ class HolderCoordinator: SharedCoordinator {
 		let destination = ChooseQRCodeTypeViewController(
 			viewModel: ChooseQRCodeTypeViewModel(
 				coordinator: self
-			)
+			),
+			isRootViewController: false
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
@@ -503,7 +504,8 @@ extension HolderCoordinator: MenuDelegate {
 				let destination = ChooseQRCodeTypeViewController(
 					viewModel: ChooseQRCodeTypeViewModel(
 						coordinator: self
-					)
+					),
+					isRootViewController: true
 				)
 				navigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
@@ -568,11 +570,18 @@ extension HolderCoordinator: EventFlowDelegate {
 
 	func eventFlowDidCancel() {
 
-		/// The user cancelled the flow. Go back one page
+		/// The user cancelled the flow. Go back one page.
 
 		removeChildCoordinator()
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+	}
+	
+	func eventFlowDidCancelFromBackSwipe() {
+		
+		/// The user cancelled the flow from back swipe.
+		
+		removeChildCoordinator()
 	}
 }
 

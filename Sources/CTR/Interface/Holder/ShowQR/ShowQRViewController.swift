@@ -44,6 +44,8 @@ class ShowQRViewController: BaseViewController {
 		
 		setupBinding()
 		setupListeners()
+		
+		addBackButton()
 	}
 
 	private func setupBinding() {
@@ -134,24 +136,18 @@ class ShowQRViewController: BaseViewController {
 
 	/// Add an information button to the navigation bar.
 	/// - Parameters:
-	///   - action: the action when the users taps the information button
-	///   - accessibilityLabel: the label for Voice Over
+	///   - action: The action when the users taps the information button
+	///   - accessibilityLabel: The label for Voice Over
 	func addInfoButton(
-		action: Selector?,
+		action: Selector,
 		accessibilityLabel: String) {
-
-		let button = UIBarButtonItem(
-			image: I.questionMark(),
-			style: .plain,
-			target: self,
-			action: action
-		)
-        button.title = accessibilityLabel
-        button.accessibilityLabel = accessibilityLabel
-		button.accessibilityIdentifier = "InformationButton"
-		button.accessibilityTraits = .button
-		navigationItem.rightBarButtonItem = button
-		navigationController?.navigationItem.rightBarButtonItem = button
+		
+		let config = UIBarButtonItem.Configuration(target: self,
+												   action: action,
+												   image: I.questionMark(),
+												   accessibilityIdentifier: "InformationButton",
+												   accessibilityLabel: accessibilityLabel)
+		navigationItem.rightBarButtonItem = .create(config)
 	}
 
 	@objc func informationButtonTapped() {

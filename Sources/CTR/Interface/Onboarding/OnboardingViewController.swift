@@ -18,6 +18,9 @@ class OnboardingViewController: BaseViewController {
 	/// The page controller
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 	
+	/// Disable swiping to launch screen
+	override var enableSwipeBack: Bool { false }
+	
 	/// Initializer
 	/// - Parameter viewModel: view model
 	init(viewModel: OnboardingViewModel) {
@@ -71,22 +74,16 @@ class OnboardingViewController: BaseViewController {
 		setupBackButton()
 	}
 	
-	/// Create a custom back button so we can catch the tapped on the back button.
+	/// Create a custom back button so we can catch the tap on the back button.
 	private func setupBackButton() {
 
-		// hide the original back button
-		navigationItem.hidesBackButton = true
-
 		// Create a button with a back arrow
-		let button = UIButton(type: .custom)
-		button.setImage(.backArrow, for: .normal)
-		button.accessibilityLabel = L.generalBack()
-		button.accessibilityIdentifier = "BackButton"
-
-		// Handle touches
-		button.addTarget(self, action: #selector(backbuttonTapped), for: .touchUpInside)
-        
-		backButton = UIBarButtonItem(customView: button)
+		let config = UIBarButtonItem.Configuration(target: self,
+												   action: #selector(backbuttonTapped),
+												   image: I.backArrow(),
+												   accessibilityIdentifier: "BackButton",
+												   accessibilityLabel: L.generalBack())
+		backButton = .create(config)
 	}
 	
 	/// The user tapped on the back button

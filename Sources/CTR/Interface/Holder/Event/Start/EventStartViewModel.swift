@@ -52,6 +52,11 @@ class EventStartViewModel: Logging {
 		
 		coordinator?.eventStartScreenDidFinish(.back(eventMode: eventMode))
 	}
+	
+	func backSwipe() {
+		
+		coordinator?.eventStartScreenDidFinish(.backSwipe)
+	}
 
 	func primaryButtonTapped() {
 

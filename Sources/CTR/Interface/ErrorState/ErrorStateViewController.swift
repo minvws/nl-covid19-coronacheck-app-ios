@@ -36,13 +36,14 @@ class ErrorStateViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		navigationItem.hidesBackButton = true
-		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: L.generalBack())
+		addBackButton(customAction: #selector(backButtonTapped))
 
 		viewModel.$content.binding = { [weak self] in
 			self?.displayContent($0)
 		}
 	}
+	
+	override var enableSwipeBack: Bool { false }
 
 	@objc func backButtonTapped() {
 
