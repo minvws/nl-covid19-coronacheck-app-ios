@@ -131,7 +131,7 @@
 "holder.chooseqrcodetype.option.recovery.subtitle" = "The test proves I have had coronavirus";
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
-"holder.showqr.eu.about.recovery.description" = "Are you abroad, or planning to cross the border? Then more data is required. That's why the international QR code contains the following details:";
+"holder.showqr.eu.about.recovery.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
 "holder.showqr.eu.about.recovery.name" = "Name:";
 "holder.showqr.eu.about.recovery.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.recovery.pathogen" = "Disease recovered from:";
@@ -409,10 +409,10 @@
 
 "holder.showqr.domestic.title" = "Dutch QR code";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
-"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code says whether or not the QR code is valid. It doesn't say whether or not you have a test certificate or vaccination.</p><p> The QR code also contains several of your details. This is to make sure the QR code belongs to you. The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth.</p><p>Your details: <b>%@</b></p><p><br />*. To protect your privacy, some details may disappear. In this case you will see a hyphen (-).</p>";
+"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code says whether or not the QR code is valid. It doesn't say whether or not you have a test certificate or vaccination.</p><p> The QR code also contains several of your details. This is to make sure the QR code belongs to you. The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth.</p><p>Your details: <b>%@</b></p><p> </p><p>*. To protect your privacy, some details may disappear. In this case you will see a hyphen (-).</p>";
 "holder.showqr.eu.title" = "International QR code";
 "holder.showqr.eu.about.title" = "About my international QR code";
-"holder.showqr.eu.about.vaccination.description" = "Travelling outside of the Netherlands? Then more data is required. That’s why the international QR code contains the following details:";
+"holder.showqr.eu.about.vaccination.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
 "holder.showqr.eu.about.vaccination.name" = "Name:";
 "holder.showqr.eu.about.vaccination.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.vaccination.pathogen" = "Disease targeted:";
@@ -427,7 +427,7 @@
 "holder.showqr.eu.about.vaccination.identifier" = "Unique certificate identifier:";
 "holder.showqr.eu.about.vaccination.dateinformation" = "*Date noted in day-month-year";
 
-"holder.showqr.eu.about.test.description" = "Travelling outside the Netherlands? Then more data is required. That's why the international QR code contains the following details:";
+"holder.showqr.eu.about.test.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
 "holder.showqr.eu.about.test.name" = "Name:";
 "holder.showqr.eu.about.test.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.test.pathogen" = "Disease targeted:";
@@ -501,7 +501,7 @@
 "holder.about.link" = "Read the privacy statement here";
 
 "holder.vaccination.start.title" = "Retrieve vaccination details";
-"holder.vaccination.start.message" = "<p>Were you vaccinated? Login with DigiD. Details regarding your vaccination will be retrieved automatically.</p><p>For a Dutch QR code, you need to be fully vaccinated. You only need one injection to make an international QR code.</p><p>Please note: the validity of a QR code made after one vaccination depends on the rules of the country you’re visiting.</p>";
+"holder.vaccination.start.message" = "<p>Were you vaccinated? Login with DigiD. Details regarding your vaccination will be retrieved automatically.</p>";
 "holder.vaccination.start.action" = "Login with your DigiD";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.list.title" = "Your retrieved vaccinations";
@@ -577,7 +577,7 @@
 "holder.event.about.recovery.validuntil" = "Valid until:";
 "holder.event.about.recovery.identifier" = "Unique certificate number:";
 
-"holder.testresults.wrong.body" = "<p>Are your name and/or date of birth incorrect? Find more information on the <a href=\"https://coronacheck.nl/guidepost\"> Guidepost</a>.</p>";
+"holder.testresults.wrong.body" = "<p>Are these details incorrect? Contact your test location. They can edit your details.</p>";
 
 "holder.event.element.subtitle.test2" = "<p>Test date: %@</p><p>Your details: %@</p>";
 "holder.event.element.subtitle.test3" = "<p>Test date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
