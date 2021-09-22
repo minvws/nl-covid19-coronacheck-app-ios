@@ -409,7 +409,7 @@
 
 "holder.showqr.domestic.title" = "Dutch QR code";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
-"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code says whether or not the QR code is valid. It doesn't say whether or not you have a test certificate or vaccination.</p><p> The QR code also contains several of your details. This is to make sure the QR code belongs to you. The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth.</p><p>Your details: <b>%@</b></p><p> </p><p>*. To protect your privacy, some details may disappear. In this case you will see a hyphen (-).</p>";
+"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code says whether or not the QR code is valid. It doesn't say whether or not you have a test certificate or vaccination.</p><p> The QR code also contains several of your details. This is to make sure the QR code belongs to you. The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth.</p><p>Your details: <b>%@</b></p><p></p><p>*. To protect your privacy, some details may disappear. In this case you will see a hyphen (-).</p>";
 "holder.showqr.eu.title" = "International QR code";
 "holder.showqr.eu.about.title" = "About my international QR code";
 "holder.showqr.eu.about.vaccination.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
@@ -506,7 +506,7 @@
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.list.title" = "Your retrieved vaccinations";
 "holder.test.list.title" = "Retrieve test result";
-"holder.vaccination.list.message" = "You can make a QR code of a negative test result or of a vaccination.";
+"holder.vaccination.list.message" = "You can make a QR code of your vaccinations. This is your certificate.";
 "holder.vaccination.list.action" = "Make certificate";
 "holder.vaccination.element.title" = "Vaccination %@";
 "holder.vaccination.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
