@@ -275,7 +275,8 @@ class IdentityCheckerTests: XCTestCase {
 			"Rool": "R",
 			"rool": "R",
 			" rool": "R",
-			"-rool": "R"
+			"-rool": "R",
+			"Jan": "J"
 		]
 		for (value, expected) in values {
 			let identity = EventFlow.Identity(infix: nil, firstName: value, lastName: nil, birthDateString: nil)
