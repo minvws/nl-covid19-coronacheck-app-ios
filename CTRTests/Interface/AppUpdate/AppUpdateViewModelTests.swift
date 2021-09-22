@@ -121,7 +121,7 @@ class AppUpdateViewModelTests: XCTestCase {
 		expect(self.sut.title) == L.internetRequiredTitle()
 		expect(self.sut.message) == L.internetRequiredText()
 		expect(self.sut.actionTitle) == L.internetRequiredButton()
-		expect(self.sut.image) == .noInternet
+		expect(self.sut.image) == I.noInternet()
 	}
 
 	func test_noInternet_actionButtonTapped() {
