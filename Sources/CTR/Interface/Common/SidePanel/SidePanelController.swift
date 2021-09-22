@@ -64,9 +64,8 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
         let mainViewController = (selectedViewController as? UINavigationController)?.topViewController ?? selectedViewController
         if let navItem = mainViewController?.navigationItem,
             navItem.leftBarButtonItem == nil {
-            let hamburger = UIImage.hamburger
             let button = UIBarButtonItem(
-                image: hamburger,
+                image: I.hamburger(),
                 style: .plain,
                 target: self,
                 action: #selector(showSidePanel))

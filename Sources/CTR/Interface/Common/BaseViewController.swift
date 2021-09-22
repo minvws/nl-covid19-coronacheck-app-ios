@@ -94,7 +94,7 @@ class BaseViewController: UIViewController {
 		tintColor: UIColor = Theme.colors.dark) {
 
 		let button = UIBarButtonItem(
-			image: .cross,
+			image: I.cross(),
 			style: .plain,
 			target: self,
 			action: action

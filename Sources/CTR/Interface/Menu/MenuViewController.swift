@@ -84,7 +84,7 @@ class MenuViewController: BaseViewController {
 		action: Selector?,
 		accessibilityLabel: String) {
 
-		if let image: UIImage = .cross {
+		if let image = I.cross() {
 			let button = UIBarButtonItem(
 				image: image.withRenderingMode(.alwaysTemplate),
 				style: .plain,

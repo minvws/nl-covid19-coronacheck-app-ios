@@ -260,7 +260,7 @@ class HolderDashboardViewController: BaseViewController {
 
 	func setupPlusButton() {
 		let plusbutton = UIBarButtonItem(
-			image: .plus,
+			image: I.plus(),
 			style: .plain,
 			target: viewModel,
 			action: #selector(HolderDashboardViewModel.addProofTapped)

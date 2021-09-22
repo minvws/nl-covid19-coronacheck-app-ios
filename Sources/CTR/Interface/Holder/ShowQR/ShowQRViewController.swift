@@ -141,7 +141,7 @@ class ShowQRViewController: BaseViewController {
 		accessibilityLabel: String) {
 
 		let button = UIBarButtonItem(
-			image: .questionMark,
+			image: I.questionMark(),
 			style: .plain,
 			target: self,
 			action: action

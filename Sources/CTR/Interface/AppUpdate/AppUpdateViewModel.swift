@@ -47,7 +47,7 @@ class AppUpdateViewModel {
 		updateURL = versionInformation?.appStoreURL
 		showCannotOpenAlert = false
 		errorMessage = L.updateAppErrorMessage()
-		self.image = .updateRequired
+		self.image = I.updateRequired()
 	}
 
 	/// User tapped on the update button
@@ -76,7 +76,7 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 		self.message = L.endOfLifeDescription()
 		self.errorMessage = L.endOfLifeErrorMessage()
 		self.actionTitle = L.endOfLifeButton()
-		self.image = .endOfLife
+		self.image = I.endOfLife()
 		self.updateURL = URL(string: "https://coronacheck.nl")
 	}
 }
@@ -94,7 +94,7 @@ class InternetRequiredViewModel: AppUpdateViewModel {
 		self.title = L.internetRequiredTitle()
 		self.message = L.internetRequiredText()
 		self.actionTitle = L.internetRequiredButton()
-		self.image = .noInternet
+		self.image = I.noInternet()
 	}
 
 	/// User tapped on the update button
