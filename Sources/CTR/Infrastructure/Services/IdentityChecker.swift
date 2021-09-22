@@ -170,7 +170,7 @@ extension EventFlow.Identity {
 class Normalizer {
 
 	static let permittedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz ")
-	static let initialsCharacterSet = CharacterSet(charactersIn: "ABCDEFGHILKLMNOPQRSTUVWXYZ")
+	static let initialsCharacterSet = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	static let filterCharacterSet = CharacterSet(charactersIn: "-' ")
 
 	/// Normalize any input, transform to latin, remove all diacritics
