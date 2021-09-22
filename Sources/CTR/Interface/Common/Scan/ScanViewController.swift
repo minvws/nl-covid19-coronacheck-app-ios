@@ -211,7 +211,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		disableLabel: String?) {
 		
 		let button = UIBarButtonItem(
-			image: .torch,
+			image: I.torch(),
 			style: .plain,
 			target: self,
 			action: action

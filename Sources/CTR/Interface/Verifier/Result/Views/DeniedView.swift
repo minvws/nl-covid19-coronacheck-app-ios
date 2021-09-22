@@ -49,7 +49,7 @@ final class DeniedView: BaseView, AccessViewable {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
-		view.image = .denied
+		view.image = I.denied()
 		return view
 	}()
 	

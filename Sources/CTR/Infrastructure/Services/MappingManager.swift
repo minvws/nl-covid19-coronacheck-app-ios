@@ -40,3 +40,4 @@ class MappingManager: MappingManaging, Logging {
 		return providerIdentifiers.first(where: { $0.code == code })?.name
 	}
 }
+ 

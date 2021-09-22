@@ -85,7 +85,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.title) == L.updateAppTitle()
 		expect(self.sut.sceneView.message) == L.updateAppContent()
 		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.updateAppButton()
-		expect(self.sut.sceneView.image) == .updateRequired
+		expect(self.sut.sceneView.image) == I.updateRequired()
 
 		sut.assertImage()
 	}
@@ -106,7 +106,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.title) == L.endOfLifeTitle()
 		expect(self.sut.sceneView.message) == L.endOfLifeDescription()
 		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.endOfLifeButton()
-		expect(self.sut.sceneView.image) == .endOfLife
+		expect(self.sut.sceneView.image) == I.endOfLife()
 
 		sut.assertImage()
 	}
@@ -124,7 +124,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.title) == L.internetRequiredTitle()
 		expect(self.sut.sceneView.message) == L.internetRequiredText()
 		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.internetRequiredButton()
-		expect(self.sut.sceneView.image) == .noInternet
+		expect(self.sut.sceneView.image) == I.noInternet()
 
 		sut.assertImage()
 	}
