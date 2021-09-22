@@ -211,15 +211,17 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		enableLabel: String,
 		disableLabel: String) {
 		
-		let button = createBarButton(action: action,
-									 image: I.torch(),
-									 accessibilityIdentifier: "TorchButton",
-									 accessibilityLabel: enableLabel)
+		let config = UIBarButtonItem.Configuration(target: self,
+												   action: action,
+												   image: I.torch(),
+												   accessibilityIdentifier: "TorchButton",
+												   accessibilityLabel: enableLabel)
+		let button: UIBarButtonItem = .create(config)
 		navigationItem.rightBarButtonItem = button
-        
-        self.torchButton = button
-        self.torchEnableLabel = enableLabel
-        self.torchDisableLabel = disableLabel
+		
+		self.torchButton = button
+		self.torchEnableLabel = enableLabel
+		self.torchDisableLabel = disableLabel
 	}
 	
 	/// Resume scanning after being stopped

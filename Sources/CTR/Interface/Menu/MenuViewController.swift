@@ -79,11 +79,12 @@ class MenuViewController: BaseViewController {
 	/// Add a close button to the navigation bar.
 	private func addMenuCloseButton() {
 		
-		let button = createBarButton(action: #selector(closeButtonTapped),
-									 image: I.cross()?.withRenderingMode(.alwaysTemplate),
-									 tintColor: Theme.colors.secondary,
-									 accessibilityIdentifier: "CloseButton",
-									 accessibilityLabel: L.generalMenuClose())
-		navigationItem.leftBarButtonItem = button
+		let config = UIBarButtonItem.Configuration(target: self,
+												   action: #selector(closeButtonTapped),
+												   image: I.cross()?.withRenderingMode(.alwaysTemplate),
+												   tintColor: Theme.colors.secondary,
+												   accessibilityIdentifier: "CloseButton",
+												   accessibilityLabel: L.generalMenuClose())
+		navigationItem.leftBarButtonItem = .create(config)
 	}
 }

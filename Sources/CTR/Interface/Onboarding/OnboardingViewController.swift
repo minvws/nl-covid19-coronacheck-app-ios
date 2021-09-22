@@ -78,11 +78,12 @@ class OnboardingViewController: BaseViewController {
 	private func setupBackButton() {
 
 		// Create a button with a back arrow
-		let button = createBarButton(action: #selector(backbuttonTapped),
-									 image: I.backArrow(),
-									 accessibilityIdentifier: "BackButton",
-									 accessibilityLabel: L.generalBack())
-		backButton = button
+		let config = UIBarButtonItem.Configuration(target: self,
+												   action: #selector(backbuttonTapped),
+												   image: I.backArrow(),
+												   accessibilityIdentifier: "BackButton",
+												   accessibilityLabel: L.generalBack())
+		backButton = .create(config)
 	}
 	
 	/// The user tapped on the back button

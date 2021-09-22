@@ -61,12 +61,13 @@ class BaseViewController: UIViewController {
 		action: Selector,
 		tintColor: UIColor = Theme.colors.dark) {
 		
-		let button = createBarButton(action: action,
-									 image: I.cross(),
-									 tintColor: tintColor,
-									 accessibilityIdentifier: "CloseButton",
-									 accessibilityLabel: L.generalClose())
-		navigationItem.leftBarButtonItem = button
+		let config = UIBarButtonItem.Configuration(target: self,
+												   action: action,
+												   image: I.cross(),
+												   tintColor: tintColor,
+												   accessibilityIdentifier: "CloseButton",
+												   accessibilityLabel: L.generalClose())
+		navigationItem.leftBarButtonItem = .create(config)
 	}
 
 	/// Add a back button to the navigation bar.
@@ -80,11 +81,12 @@ class BaseViewController: UIViewController {
 			action = customAction
 		}
 		
-		let button = createBarButton(action: action,
-									 image: I.backArrow(),
-									 accessibilityIdentifier: "BackButton",
-									 accessibilityLabel: L.generalBack())
-		navigationItem.leftBarButtonItem = button
+		let config = UIBarButtonItem.Configuration(target: self,
+												   action: action,
+												   image: I.backArrow(),
+												   accessibilityIdentifier: "BackButton",
+												   accessibilityLabel: L.generalBack())
+		navigationItem.leftBarButtonItem = .create(config)
 	}
 
 	/// Show alert

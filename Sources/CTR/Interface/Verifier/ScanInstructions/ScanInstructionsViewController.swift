@@ -93,10 +93,12 @@ class ScanInstructionsViewController: BaseViewController {
 	/// Create a custom back button so we can catch the tap on the back button.
 	private func setupBackButton() {
 
-		navigationItem.leftBarButtonItem = createBarButton(action: #selector(backButtonTapped),
-														   image: I.backArrow(),
-														   accessibilityIdentifier: "BackButton",
-														   accessibilityLabel: L.generalBack())
+		let config = UIBarButtonItem.Configuration(target: self,
+												   action: #selector(backButtonTapped),
+												   image: I.backArrow(),
+												   accessibilityIdentifier: "BackButton",
+												   accessibilityLabel: L.generalBack())
+		navigationItem.leftBarButtonItem = .create(config)
 	}
 
 	/// Create a custom back button so we can catch the tapped on the back button.

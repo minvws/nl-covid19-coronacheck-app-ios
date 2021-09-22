@@ -15,30 +15,4 @@ extension UIViewController {
 		navigationController?.navigationBar.backgroundColor = .clear
 		navigationController?.navigationBar.barTintColor = .clear
 	}
-	
-	/// Bar button with updated size and margins
-	/// - Parameters:
-	///   - target: The target object—that is, the object whose action method is called
-	///   - action: A selector identifying the action method to be called.
-	///   - image: The button image
-	///   - tintColor: The button tint color
-	///   - accessibilityIdentifier: A string that identifies the button
-	///   - accessibilityLabel: The localized label for VoiceOver
-	/// - Returns: UIBarButtonItem. Should be set on as left or right navigation item.
-	func createBarButton(
-		target: Any? = nil,
-		action: Selector,
-		image: UIImage?,
-		tintColor: UIColor? = nil,
-		accessibilityIdentifier: String,
-		accessibilityLabel: String) -> UIBarButtonItem {
-		
-		let button = UIBarButtonItem(image: image, style: .plain, target: target ?? self, action: action)
-		button.imageInsets = .leftRight(4)
-		button.tintColor = tintColor
-		button.accessibilityTraits = .button
-		button.accessibilityIdentifier = accessibilityIdentifier
-		button.accessibilityLabel = accessibilityLabel
-		return button
-	}
 }

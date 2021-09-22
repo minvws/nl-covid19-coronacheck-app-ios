@@ -142,10 +142,12 @@ class ShowQRViewController: BaseViewController {
 		action: Selector,
 		accessibilityLabel: String) {
 		
-		navigationItem.rightBarButtonItem = createBarButton(action: action,
-															image: I.questionMark(),
-															accessibilityIdentifier: "InformationButton",
-															accessibilityLabel: accessibilityLabel)
+		let config = UIBarButtonItem.Configuration(target: self,
+												   action: action,
+												   image: I.questionMark(),
+												   accessibilityIdentifier: "InformationButton",
+												   accessibilityLabel: accessibilityLabel)
+		navigationItem.rightBarButtonItem = .create(config)
 	}
 
 	@objc func informationButtonTapped() {
