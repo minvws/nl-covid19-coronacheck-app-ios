@@ -101,7 +101,7 @@ class ScanInstructionsViewController: BaseViewController {
 		navigationItem.leftBarButtonItem = .create(config)
 	}
 
-	/// Create a custom back button so we can catch the tapped on the back button.
+	/// Create a custom skip button
 	private func setupSkipButton() {
 
 		skipButton.addTarget(self, action: #selector(skipButtonTapped), for: .touchUpInside)

@@ -74,7 +74,7 @@ class OnboardingViewController: BaseViewController {
 		setupBackButton()
 	}
 	
-	/// Create a custom back button so we can catch the tapped on the back button.
+	/// Create a custom back button so we can catch the tap on the back button.
 	private func setupBackButton() {
 
 		// Create a button with a back arrow
