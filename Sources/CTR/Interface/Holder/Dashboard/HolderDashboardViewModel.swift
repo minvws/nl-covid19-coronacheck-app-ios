@@ -88,7 +88,7 @@ final class HolderDashboardViewModel: Logging {
 	
 	var selectTab: DashboardTab = .domestic {
 		didSet {
-			dashboardRegionToggleValue = selectedTab == .domestic ? .domestic : .europeanUnion
+			dashboardRegionToggleValue = selectedTab.isDomestic ? .domestic : .europeanUnion
 			selectedTab = selectTab
 		}
 	}

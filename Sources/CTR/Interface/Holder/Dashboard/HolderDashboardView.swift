@@ -64,6 +64,7 @@ final class HolderDashboardView: BaseView {
 	}()
 	
 	private var bottomScrollViewConstraint: NSLayoutConstraint?
+	private var currentScrollViewContentOffsetObserver: NSKeyValueObservation?
 	
 	/// Setup all the views
 	override func setupViews() {
@@ -105,8 +106,8 @@ final class HolderDashboardView: BaseView {
 				return constraint
 			}(),
 			
-			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
 			domesticScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
@@ -155,6 +156,25 @@ final class HolderDashboardView: BaseView {
 		tabBar.select(tab: tab, animated: false)
 		
 		updateScrollPosition()
+		updateScrollViewContentOffsetObserver(for: tab)
+	}
+}
+
+private extension HolderDashboardView {
+	
+	func updateScrollViewContentOffsetObserver(for tab: DashboardTab) {
+		let scrollView = tab.isDomestic ? domesticScrollView.scrollView : internationalScrollView.scrollView
+		updateFooterViewAnimation(for: scrollView)
+		
+		currentScrollViewContentOffsetObserver?.invalidate()
+		currentScrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, change in
+			self?.updateFooterViewAnimation(for: scrollView)
+		}
+	}
+	
+	func updateFooterViewAnimation(for scrollView: UIScrollView) {
+		let currentEndOffset = scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.bounds.height)
+		footerButtonView.updateFadeAnimation(from: currentEndOffset)
 	}
 }
 
@@ -167,9 +187,11 @@ extension HolderDashboardView: UIScrollViewDelegate {
 		let nextPage = scrollView.contentOffset.x + scrollViewWidth > pageScroll
 		let selectedTab: DashboardTab = nextPage ? .international : .domestic
 		let hasTabChanged = tabBar.selectedTab != selectedTab
-		tabBar.select(tab: selectedTab, animated: true)
 		
 		guard hasTabChanged else { return }
+		tabBar.select(tab: selectedTab, animated: true)
+		
+		updateScrollViewContentOffsetObserver(for: selectedTab)
 		delegate?.holderDashboardView(self, didDisplay: selectedTab)
 	}
 }
@@ -179,7 +201,8 @@ extension HolderDashboardView: DashboardTabBarDelegate {
 	func dashboardTabBar(_ tabBar: DashboardTabBar, didSelect tab: DashboardTab) {
 		let scrollOffset = CGPoint(x: scrollView.bounds.width * CGFloat(tab.rawValue), y: 0)
 		scrollView.setContentOffset(scrollOffset, animated: true)
-		
+				
+		updateScrollViewContentOffsetObserver(for: tab)
 		delegate?.holderDashboardView(self, didDisplay: tab)
 	}
 }

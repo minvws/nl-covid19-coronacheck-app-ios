@@ -69,7 +69,7 @@ final class DashboardFooterButtonView: BaseView {
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 			primaryButton.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.Margin.edge),
 			primaryButton.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -ViewTraits.Margin.edge),
-			primaryButton.topAnchor.constraint(equalTo: topAnchor),
+			primaryButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge),
 			primaryButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -ViewTraits.Margin.edge)
 		])
 	}
@@ -87,9 +87,11 @@ final class DashboardFooterButtonView: BaseView {
 		let gradient = CAGradientLayer()
 		gradient.frame = gradientView.bounds
 		gradient.colors = [
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.0).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.5).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(1.0).cgColor
+			UIColor.black.withAlphaComponent(0.0).cgColor,
+			UIColor.black.withAlphaComponent(0.01).cgColor,
+			UIColor.black.withAlphaComponent(0.03).cgColor,
+			UIColor.black.withAlphaComponent(0.08).cgColor,
+			UIColor.black.withAlphaComponent(0.1).cgColor
 		]
 		gradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 		gradientView.layer.insertSublayer(gradient, at: 0)
@@ -108,5 +110,23 @@ final class DashboardFooterButtonView: BaseView {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
 		}
+	}
+	
+	func updateFadeAnimation(from scrollOffset: CGFloat) {
+		let maxRange: CGFloat = ViewTraits.Gradient.height
+		let distance = abs(clampScrollOffset(from: scrollOffset, maxRange: maxRange))
+		
+		gradientView.alpha = calculateReverseFade(maxRange: maxRange, currentPosition: distance, startPercentage: 0, stopPercentage: 1)
+	}
+	
+	func calculateReverseFade(maxRange: CGFloat, currentPosition: CGFloat, startPercentage: CGFloat, stopPercentage: CGFloat) -> CGFloat {
+		let percentage: CGFloat = currentPosition / maxRange
+		let fadePercentage: CGFloat = (percentage - startPercentage) / abs(startPercentage - stopPercentage)
+		return 1 - max(0, min(1, fadePercentage))
+	}
+	
+	func clampScrollOffset(from scrollOffset: CGFloat, maxRange: CGFloat) -> CGFloat {
+		let startingOffset: CGFloat = -ViewTraits.Gradient.height
+		return max(-maxRange, min(startingOffset - scrollOffset, 0))
 	}
 }
