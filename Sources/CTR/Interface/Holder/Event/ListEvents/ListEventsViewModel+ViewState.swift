@@ -161,18 +161,7 @@ extension ListEventsViewModel {
 		return .feedback(
 			content: Content(
 				title: L.holderEventOriginmismatchTitle(),
-				subTitle: {
-					switch eventMode {
-						case .recovery:
-							return L.holderEventOriginmismatchRecoveryBody()
-						case .paperflow:
-							return L.holderEventOriginmismatchDccBody()
-						case .test:
-							return L.holderEventOriginmismatchTestBody()
-						case .vaccination:
-							return L.holderEventOriginmismatchVaccinationBody()
-					}
-				}(),
+				subTitle: Strings.originsMismatchBody(forEventMode: eventMode),
 				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -206,45 +195,10 @@ extension ListEventsViewModel {
 			return emptyEventsState()
 		}
 
-		let title: String
-		let subTitle: String
-		let secondaryActionBody: String
-		switch eventMode {
-			case .vaccination:
-				title = L.holderVaccinationListTitle()
-				subTitle = L.holderVaccinationListMessage()
-				secondaryActionBody = L.holderVaccinationWrongBody()
-			case .recovery:
-				title = L.holderRecoveryListTitle()
-				subTitle = L.holderRecoveryListMessage()
-				secondaryActionBody = L.holderRecoveryWrongBody()
-			case .test:
-				title = L.holderTestresultsResultsTitle()
-				subTitle = L.holderTestresultsResultsText()
-				secondaryActionBody = L.holderTestresultsWrongBody()
-			case .paperflow:
-				title = L.holderDccListTitle()
-				subTitle = L.holderDccListMessage()
-				if let cryptoManager = cryptoManager,
-				   let euCredentialAttributes = dataSource.first?.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
-					if euCredentialAttributes.digitalCovidCertificate.vaccinations?.first != nil {
-						secondaryActionBody = L.holderVaccinationWrongBody()
-					} else if euCredentialAttributes.digitalCovidCertificate.recoveries?.first != nil {
-						secondaryActionBody = L.holderRecoveryWrongBody()
-					} else if euCredentialAttributes.digitalCovidCertificate.tests?.first != nil {
-						secondaryActionBody = L.holderTestresultsWrongBody()
-					} else {
-						secondaryActionBody = ""
-					}
-				} else {
-					secondaryActionBody = ""
-				}
-		}
-
 		return .listEvents(
 			content: Content(
-				title: title,
-				subTitle: subTitle,
+				title: EventStrings.title(forEventMode: eventMode),
+				subTitle: Strings.text(forEventMode: eventMode),
 				primaryActionTitle: L.holderVaccinationListAction(),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
@@ -255,10 +209,11 @@ extension ListEventsViewModel {
 				},
 				secondaryActionTitle: L.holderVaccinationListWrong(),
 				secondaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(
+					guard let self = self else { return }
+					self.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
 							title: L.holderVaccinationWrongTitle(),
-							body: secondaryActionBody,
+							body: Strings.somethingIsWrongBody(forEventMode: self.eventMode, dataSource: dataSource),
 							hideBodyForScreenCapture: false
 						)
 					)

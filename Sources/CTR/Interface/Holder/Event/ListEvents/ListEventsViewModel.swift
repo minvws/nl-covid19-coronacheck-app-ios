@@ -85,18 +85,7 @@ class ListEventsViewModel: Logging {
 
 		viewState = .loading(
 			content: Content(
-				title: {
-					switch eventMode {
-						case .recovery:
-							return L.holderRecoveryListTitle()
-						case .paperflow:
-							return L.holderDccListTitle()
-						case .test:
-							return L.holderTestresultsResultsTitle()
-						case .vaccination:
-							return L.holderVaccinationListTitle()
-					}
-				}(),
+				title: EventStrings.title(forEventMode: eventMode),
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -132,19 +121,7 @@ class ListEventsViewModel: Logging {
 
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
-			subTitle: {
-				switch eventMode {
-					case .recovery:
-						return L.holderRecoveryAlertMessage()
-					case .paperflow:
-						return L.holderDccAlertMessage()
-					case .test:
-						return L.holderTestAlertMessage()
-					case .vaccination:
-						return L.holderVaccinationAlertMessage()
-
-				}
-			}(),
+			subTitle: EventStrings.alertMessage(forEventMode: eventMode),
 			cancelAction: { [weak self] _ in
 				self?.goBack()
 			},

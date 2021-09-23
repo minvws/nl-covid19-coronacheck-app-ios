@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -44,18 +43,7 @@ final class FetchEventsViewModel: Logging {
 
 		viewState = .loading(
 			content: Content(
-				title: {
-					switch eventMode {
-						case .recovery:
-							return L.holderRecoveryListTitle()
-						case .test:
-							return L.holderTestListTitle()
-						case .vaccination:
-							return L.holderVaccinationListTitle()
-						case .paperflow:
-							return "" // Scanned Dcc not a part of this flow.
-					}
-				}(),
+				title: EventStrings.title(forEventMode: eventMode),
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -203,19 +191,7 @@ final class FetchEventsViewModel: Logging {
 
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
-			subTitle: {
-				switch eventMode {
-					case .recovery:
-						return L.holderRecoveryAlertMessage()
-					case .paperflow:
-						return L.holderDccAlertMessage()
-					case .test:
-						return L.holderTestAlertMessage()
-					case .vaccination:
-						return L.holderVaccinationAlertMessage()
-
-				}
-			}(),
+			subTitle: EventStrings.alertMessage(forEventMode: eventMode),
 			cancelAction: { _ in
 				self.goBack()
 			},
