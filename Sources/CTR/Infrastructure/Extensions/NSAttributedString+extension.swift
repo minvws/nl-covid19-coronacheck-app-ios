@@ -61,7 +61,6 @@ public extension NSAttributedString {
 		text: String?,
 		font: UIFont,
 		textColor: UIColor,
-		boldTextColor: UIColor? = nil,
 		textAlignment: NSTextAlignment = .left,
 		lineHeight: CGFloat = 22,
 		kern: CGFloat = -0.41,
@@ -122,7 +121,7 @@ public extension NSAttributedString {
 
 				if let boldFont = boldFont, currentFont.fontDescriptor.symbolicTraits.contains(.traitBold) {
 					newFont = boldFont
-					newColor = boldTextColor ?? textColor
+					newColor = textColor
 				} else {
 					newFont = font
 					newColor = textColor

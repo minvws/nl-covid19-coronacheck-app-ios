@@ -81,12 +81,11 @@ class TextView: UIStackView {
     init(
 		htmlText: String,
 		font: UIFont = Theme.fonts.body,
-		textColor: UIColor = Theme.colors.dark,
-		boldTextColor: UIColor = Theme.colors.dark) {
+		textColor: UIColor = Theme.colors.dark) {
         super.init(frame: .zero)
         setup()
         
-        html(htmlText, font: font, textColor: textColor, boldTextColor: boldTextColor)
+        html(htmlText, font: font, textColor: textColor)
     }
     
     //// Initializes the TextView with a string
@@ -116,8 +115,8 @@ class TextView: UIStackView {
         
     /// Sets the content to the supplied html string.
     @discardableResult
-	func html(_ htmlText: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = Theme.colors.dark, boldTextColor: UIColor = Theme.colors.dark) -> Self {
-        attributedText = .makeFromHtml(text: htmlText, font: font, textColor: textColor, boldTextColor: boldTextColor)
+	func html(_ htmlText: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = Theme.colors.dark) -> Self {
+        attributedText = .makeFromHtml(text: htmlText, font: font, textColor: textColor)
         return self
     }
     

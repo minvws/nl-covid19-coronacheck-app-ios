@@ -218,7 +218,7 @@ class VerifierResultViewModel: Logging {
 
 	private func showVerifiedInfo() {
 
-        let textView = TextView(htmlText: L.verifierResultCheckText(), font: Theme.fonts.body, textColor: Theme.colors.dark, boldTextColor: Theme.colors.dark)
+        let textView = TextView(htmlText: L.verifierResultCheckText(), font: Theme.fonts.body, textColor: Theme.colors.dark)
 
 		coordinator?.displayContent(
 			title: L.verifierResultCheckTitle(),
@@ -236,8 +236,7 @@ class VerifierResultViewModel: Logging {
 			(TextView(
 				htmlText: text,
 				font: Theme.fonts.body,
-				textColor: Theme.colors.dark,
-				boldTextColor: Theme.colors.dark
+				textColor: Theme.colors.dark
 			), 16)
 		}
 
