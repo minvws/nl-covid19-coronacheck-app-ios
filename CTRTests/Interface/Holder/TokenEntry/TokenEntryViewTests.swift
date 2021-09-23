@@ -51,7 +51,6 @@ class TokenEntryViewTests: XCTestCase {
 		sut.userNeedsATokenButton.isHidden = false
 		sut.userNeedsATokenButton.title = "userNeedsATokenButton"
 		sut.resendVerificationCodeButton.isHidden = true
-		sut.showLineView = false
 
 		assertSnapshot(matching: sut, as: .image)
 	}

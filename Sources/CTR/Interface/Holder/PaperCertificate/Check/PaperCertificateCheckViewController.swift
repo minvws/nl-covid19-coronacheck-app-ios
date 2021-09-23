@@ -88,7 +88,6 @@ class PaperCertificateCheckViewController: BaseViewController {
 		sceneView.message = content.subTitle
 
 		// Button
-		sceneView.showLineView = false
 		if let actionTitle = content.primaryActionTitle {
 			sceneView.primaryTitle = actionTitle
 			sceneView.footerBackground.isHidden = false

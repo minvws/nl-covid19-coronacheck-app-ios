@@ -49,7 +49,6 @@ class EventStartView: ScrolledStackWithButtonView {
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 		stackView.distribution = .equalSpacing
-		showLineView = false
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 		primaryButton.style = .roundedBlueImage
 	}
