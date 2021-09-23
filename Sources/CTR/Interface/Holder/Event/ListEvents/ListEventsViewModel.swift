@@ -163,8 +163,10 @@ class ListEventsViewModel: Logging {
 		var eventModeForStorage = eventMode
 
 		if let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
-			let cryptoManager = cryptoManager,
-			let dccEventType = dccEvent.getEventType(cryptoManager: cryptoManager) {
+			let credentialData = dccEvent.credential.data(using: .utf8),
+			let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
+			let dccEventType = euCredentialAttributes.eventMode {
+
 			eventModeForStorage = dccEventType
 			logVerbose("Setting eventModeForStorage to \(eventModeForStorage.rawValue)")
 		}

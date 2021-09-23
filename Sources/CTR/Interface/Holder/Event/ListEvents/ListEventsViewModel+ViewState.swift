@@ -330,8 +330,8 @@ extension ListEventsViewModel {
 			} else if currentRow.event.negativeTest != nil {
 				rows.append(getRowFromNegativeTestEvent(dataRow: currentRow))
 			} else if currentRow.event.dccEvent != nil {
-				if let cryptoManager = cryptoManager,
-				   let euCredentialAttributes = currentRow.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
+				if let credentialData = currentRow.event.dccEvent?.credential.data(using: .utf8),
+				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
 					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
 						rows.append(getRowFromDCCVaccinationEvent(dataRow: currentRow, vaccination: vaccination))
 					} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {

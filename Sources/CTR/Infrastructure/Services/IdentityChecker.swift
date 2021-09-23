@@ -96,8 +96,9 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 						identities.append(holder)
 					}
 				} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
-					if let identity = object.identity(cryptoManager: cryptoManager) {
-						identities.append(identity)
+					if let credentialData = object.credential.data(using: .utf8),
+					   let euCredentialAttributes = cryptoManager.readEuCredentials(credentialData) {
+						identities.append(euCredentialAttributes.identity)
 					}
 				}
 			}
