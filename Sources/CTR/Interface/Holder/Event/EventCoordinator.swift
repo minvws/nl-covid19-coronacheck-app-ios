@@ -22,6 +22,59 @@ enum EventMode: String {
 			case .vaccination: return L.generalVaccination()
 		}
 	}
+
+	var title: String {
+		switch self {
+			case .paperflow:
+				return L.holderDccListTitle()
+			case .recovery:
+				return L.holderRecoveryListTitle()
+			case .test:
+				return L.holderTestresultsResultsTitle()
+			case .vaccination:
+				return L.holderVaccinationListTitle()
+		}
+	}
+
+	var alertBody: String {
+
+		switch self {
+			case .paperflow:
+				return L.holderDccAlertMessage()
+			case .recovery:
+				return L.holderRecoveryAlertMessage()
+			case .test:
+				return L.holderTestAlertMessage()
+			case .vaccination:
+				return L.holderVaccinationAlertMessage()
+		}
+	}
+
+	var listMessage: String {
+		switch self {
+			case .paperflow:
+				return L.holderDccListMessage()
+			case .recovery:
+				return L.holderRecoveryListMessage()
+			case .test:
+				return L.holderTestresultsResultsText()
+			case .vaccination:
+				return L.holderVaccinationListMessage()
+		}
+	}
+
+	var originsMismatchBody: String {
+		switch self {
+			case .paperflow:
+				return L.holderEventOriginmismatchDccBody()
+			case .recovery:
+				return L.holderEventOriginmismatchRecoveryBody()
+			case .test:
+				return L.holderEventOriginmismatchTestBody()
+			case .vaccination:
+				return L.holderEventOriginmismatchVaccinationBody()
+		}
+	}
 }
 
 enum EventScreenResult: Equatable {

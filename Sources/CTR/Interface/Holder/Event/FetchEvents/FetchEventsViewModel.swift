@@ -43,7 +43,7 @@ final class FetchEventsViewModel: Logging {
 
 		viewState = .loading(
 			content: Content(
-				title: EventStrings.title(forEventMode: eventMode),
+				title: eventMode.title,
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -191,7 +191,7 @@ final class FetchEventsViewModel: Logging {
 
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
-			subTitle: EventStrings.alertMessage(forEventMode: eventMode),
+			subTitle: eventMode.alertBody,
 			cancelAction: { _ in
 				self.goBack()
 			},

@@ -85,7 +85,7 @@ class ListEventsViewModel: Logging {
 
 		viewState = .loading(
 			content: Content(
-				title: EventStrings.title(forEventMode: eventMode),
+				title: eventMode.title,
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -121,7 +121,7 @@ class ListEventsViewModel: Logging {
 
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
-			subTitle: EventStrings.alertMessage(forEventMode: eventMode),
+			subTitle: eventMode.alertBody,
 			cancelAction: { [weak self] _ in
 				self?.goBack()
 			},

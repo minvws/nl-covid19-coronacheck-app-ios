@@ -161,7 +161,7 @@ extension ListEventsViewModel {
 		return .feedback(
 			content: Content(
 				title: L.holderEventOriginmismatchTitle(),
-				subTitle: Strings.originsMismatchBody(forEventMode: eventMode),
+				subTitle: eventMode.originsMismatchBody,
 				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -197,8 +197,8 @@ extension ListEventsViewModel {
 
 		return .listEvents(
 			content: Content(
-				title: EventStrings.title(forEventMode: eventMode),
-				subTitle: Strings.text(forEventMode: eventMode),
+				title: eventMode.title,
+				subTitle: eventMode.listMessage,
 				primaryActionTitle: L.holderVaccinationListAction(),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in

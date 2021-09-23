@@ -30,7 +30,7 @@ class LoginTVSViewModel: Logging {
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 
-		self.title = EventStrings.title(forEventMode: eventMode)
+		self.title = eventMode.title
 
 		content = Content(
 			title: title,
