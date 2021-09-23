@@ -40,6 +40,7 @@ class EventStartView: ScrolledStackWithButtonView {
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentHorizontalAlignment = .center
+		button.contentEdgeInsets = Button.ButtonType.roundedBlue.contentEdgeInsets
 		return button
 	}()
 
@@ -79,11 +80,11 @@ class EventStartView: ScrolledStackWithButtonView {
 			secondaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 
 			secondaryButton.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
+				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			secondaryButton.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor,
+				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
 			secondaryButton.bottomAnchor.constraint(

@@ -50,7 +50,7 @@ class Button: UIButton {
 			switch self {
 				case .textLabelBlue: return .zero
 				case .roundedBlueImage: return .topBottom(15) + .left(56) + .right(44)
-				default: return .topBottom(13.5) + .leftRight(20)
+				default: return .topBottom(15) + .leftRight(56)
 			}
 		}
 		

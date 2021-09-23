@@ -64,7 +64,6 @@ final class FooterButtonView: BaseView {
 			gradientView.rightAnchor.constraint(equalTo: rightAnchor),
 			gradientView.heightAnchor.constraint(equalToConstant: ViewTraits.Gradient.height),
 			
-			primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.Button.width),
 			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 			primaryButton.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.Margin.edge),
