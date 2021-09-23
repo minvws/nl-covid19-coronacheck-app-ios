@@ -51,9 +51,7 @@ final class RoundedLabel: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(text: message,
-														font: Theme.fonts.body,
-														textColor: Theme.colors.dark)
+			messageLabel.attributedText = .makeFromHtml(text: message, style: .bodyDark)
 		}
 	}
 }

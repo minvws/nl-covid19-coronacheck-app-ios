@@ -228,7 +228,7 @@ final class OnboardingConsentView: BaseView {
 	/// - Parameter text: the privacy text
 	func addPrivacyItem(_ text: String, number: Int, total: Int) {
 
-        let textView = TextView(htmlText: text, font: Theme.fonts.body, textColor: Theme.colors.dark, boldTextColor: Theme.colors.dark)
+        let textView = TextView(htmlText: text)
 		var accessibiliyHint = ""
 		if number == 1 {
 			accessibiliyHint = L.generalListAccessibilityStart()

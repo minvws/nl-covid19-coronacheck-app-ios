@@ -262,8 +262,12 @@ class NetworkManager: Logging {
 	/// - Parameter json: the json data
 	/// - Returns: decoded json as Object, or a network error
 	private func decodeJson<Object: Decodable>(json: Data) -> Result<Object, NetworkError> {
+
+		let decoder = JSONDecoder()
+		decoder.dateDecodingStrategy = .iso8601
+
 		do {
-			let object = try self.jsonDecoder.decode(Object.self, from: json)
+			let object = try decoder.decode(Object.self, from: json)
 			self.logVerbose("Response Object: \(object)")
 			return .success(object)
 		} catch {
@@ -297,13 +301,6 @@ class NetworkManager: Logging {
 	}
 	
 	// MARK: - Private
-	
-	private lazy var jsonDecoder: JSONDecoder = {
-		let decoder = JSONDecoder()
-		decoder.dateDecodingStrategy = .iso8601
-		decoder.source = .api
-		return decoder
-	}()
 
 	private func createSession(strategy: SecurityStrategy) -> URLSession {
 
