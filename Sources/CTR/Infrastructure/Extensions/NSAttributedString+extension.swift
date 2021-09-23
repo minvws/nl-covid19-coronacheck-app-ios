@@ -32,33 +32,26 @@ extension NSAttributedString {
 		)
 		return attrString
 	}
+}
 
-	/// bold a part of the text
-	/// - Parameters:
-	///   - bold: the part to bold
-	///   - color: the color to bold with
-	/// - Returns: attributed string
-	func bold(_ bolds: [String], with font: UIFont) -> NSAttributedString {
+public extension NSAttributedString {
 
-		let output = NSMutableAttributedString(attributedString: self)
+	struct HTMLStyle {
+		let font: UIFont
+		let textColor: UIColor
+		let lineHeight: CGFloat?
+		let kern: CGFloat?
+		let paragraphSpacing: CGFloat?
 
-		for bold in bolds {
-
-			if let boldRange = self.string.range(of: bold) {
-				let attributes: [NSAttributedString.Key: Any] = [
-					.font: font
-				]
-
-				output.addAttributes(attributes, range: NSRange(boldRange, in: self.string))
-			}
+		init(font: UIFont, textColor: UIColor, lineHeight: CGFloat? = 22, kern: CGFloat = -0.41, paragraphSpacing: CGFloat = 8) {
+			self.font = font
+			self.textColor = textColor
+			self.lineHeight = lineHeight
+			self.kern = kern
+			self.paragraphSpacing = paragraphSpacing
 		}
 
-		return output
-	}
-
-	func rangeOf(string: String) -> Range<String.Index>? {
-		
-		return self.string.range(of: string)
+		static var bodyDark: HTMLStyle = HTMLStyle(font: Theme.fonts.body, textColor: Theme.colors.dark)
 	}
 }
 
