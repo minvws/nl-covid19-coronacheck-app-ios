@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DashboardFooterButtonView: BaseView {
+final class FooterButtonView: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -42,7 +42,7 @@ final class DashboardFooterButtonView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = .clear
+		backgroundColor = Theme.colors.viewControllerBackground
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -114,19 +114,24 @@ final class DashboardFooterButtonView: BaseView {
 	
 	func updateFadeAnimation(from scrollOffset: CGFloat) {
 		let maxRange: CGFloat = ViewTraits.Gradient.height
-		let distance = abs(clampScrollOffset(from: scrollOffset, maxRange: maxRange))
+		let distance = clamp(scrollOffset: scrollOffset, maxRange: maxRange)
 		
-		gradientView.alpha = calculateReverseFade(maxRange: maxRange, currentPosition: distance, startPercentage: 0, stopPercentage: 1)
+		gradientView.alpha = fadeOutPercentage(maxRange: maxRange, currentPosition: distance)
 	}
+}
+
+private extension FooterButtonView {
 	
-	func calculateReverseFade(maxRange: CGFloat, currentPosition: CGFloat, startPercentage: CGFloat, stopPercentage: CGFloat) -> CGFloat {
+	func fadeOutPercentage(maxRange: CGFloat, currentPosition: CGFloat) -> CGFloat {
+		let startPercentage: CGFloat = 0
+		let stopPercentage: CGFloat = 1
 		let percentage: CGFloat = currentPosition / maxRange
 		let fadePercentage: CGFloat = (percentage - startPercentage) / abs(startPercentage - stopPercentage)
 		return 1 - max(0, min(1, fadePercentage))
 	}
 	
-	func clampScrollOffset(from scrollOffset: CGFloat, maxRange: CGFloat) -> CGFloat {
+	func clamp(scrollOffset: CGFloat, maxRange: CGFloat) -> CGFloat {
 		let startingOffset: CGFloat = -ViewTraits.Gradient.height
-		return max(-maxRange, min(startingOffset - scrollOffset, 0))
+		return abs(max(-maxRange, min(startingOffset - scrollOffset, 0)))
 	}
 }

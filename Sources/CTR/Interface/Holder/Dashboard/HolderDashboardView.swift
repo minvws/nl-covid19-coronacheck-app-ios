@@ -57,14 +57,14 @@ final class HolderDashboardView: BaseView {
 	}()
 	
 	/// Footer view with primary button
-	let footerButtonView: DashboardFooterButtonView = {
-		let footerView = DashboardFooterButtonView()
+	let footerButtonView: FooterButtonView = {
+		let footerView = FooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false
 		return footerView
 	}()
 	
 	private var bottomScrollViewConstraint: NSLayoutConstraint?
-	private var currentScrollViewContentOffsetObserver: NSKeyValueObservation?
+	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
 	/// Setup all the views
 	override func setupViews() {
@@ -166,15 +166,15 @@ private extension HolderDashboardView {
 		let scrollView = tab.isDomestic ? domesticScrollView.scrollView : internationalScrollView.scrollView
 		updateFooterViewAnimation(for: scrollView)
 		
-		currentScrollViewContentOffsetObserver?.invalidate()
-		currentScrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, change in
+		scrollViewContentOffsetObserver?.invalidate()
+		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
 			self?.updateFooterViewAnimation(for: scrollView)
 		}
 	}
 	
 	func updateFooterViewAnimation(for scrollView: UIScrollView) {
-		let currentEndOffset = scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.bounds.height)
-		footerButtonView.updateFadeAnimation(from: currentEndOffset)
+		let adjustedOffset = scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.bounds.height)
+		footerButtonView.updateFadeAnimation(from: adjustedOffset)
 	}
 }
 
