@@ -74,11 +74,13 @@ final class ErrorDashboardView: BaseView {
 		didSet {
 			messageTextView.attributedText = .makeFromHtml(
 				text: message,
-				font: Theme.fonts.subhead,
-				textColor: ViewTraits.Color.tint,
-				lineHeight: ViewTraits.Font.lineHeight,
-				kern: ViewTraits.Font.kern,
-				paragraphSpacing: ViewTraits.Font.paragraphSpacing
+				style: NSAttributedString.HTMLStyle(
+					font: Theme.fonts.subhead,
+					textColor: ViewTraits.Color.tint,
+					lineHeight: ViewTraits.Font.lineHeight,
+					kern: ViewTraits.Font.kern,
+					paragraphSpacing: ViewTraits.Font.paragraphSpacing
+				)
 			)
 		}
 	}

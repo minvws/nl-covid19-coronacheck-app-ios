@@ -75,10 +75,14 @@ final class PaperCertificateAboutScanView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(text: message,
-														font: Theme.fonts.body,
-														textColor: Theme.colors.dark,
-														paragraphSpacing: 0)
+			messageTextView.attributedText = .makeFromHtml(
+				text: message,
+				style: NSAttributedString.HTMLStyle(
+					font: Theme.fonts.body,
+					textColor: Theme.colors.dark,
+					paragraphSpacing: 0
+				)
+			)
 		}
 	}
 }
