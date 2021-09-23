@@ -196,17 +196,17 @@ extension PaperCertificateTokenEntryViewController: UITextFieldDelegate {
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
 
 			// Standardise the frames of textField & the gradient line (above the Primary button) inside the frame of self.view:
-			let textfieldFrame = view.convert(textField.frame, from: textField.superview)
-			let gradientLineFrame = view.convert(sceneView.footerGradientView.frame, from: sceneView.footerGradientView.superview)
-
-			if textfieldFrame.maxY > gradientLineFrame.minY {
-				let correction = textfieldFrame.maxY - gradientLineFrame.minY
-
-				// Okay so shift the scrollView up by the correction:
-				UIView.animate(withDuration: 0.2) {
-					sceneView.scrollView.contentOffset.y += correction
-				}
-			}
+//			let textfieldFrame = view.convert(textField.frame, from: textField.superview)
+//			let gradientLineFrame = view.convert(sceneView.footerGradientView.frame, from: sceneView.footerGradientView.superview)
+//
+//			if textfieldFrame.maxY > gradientLineFrame.minY {
+//				let correction = textfieldFrame.maxY - gradientLineFrame.minY
+//
+//				// Okay so shift the scrollView up by the correction:
+//				UIView.animate(withDuration: 0.2) {
+//					sceneView.scrollView.contentOffset.y += correction
+//				}
+//			}
 		}
 	}
 

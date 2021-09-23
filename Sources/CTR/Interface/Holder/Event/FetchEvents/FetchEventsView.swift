@@ -76,19 +76,10 @@ class FetchEventsView: ScrolledStackWithButtonView {
 
 		super.setupViewConstraints()
 
-		// disable the bottom constraint of the scroll view, add our own
-		bottomScrollViewConstraint?.isActive = false
-
 		NSLayoutConstraint.activate([
-
-			// Scroll View
-			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
-
 			spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
 			spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
-		
-		setupPrimaryButton()
 	}
 
 	@objc func secondaryButtonTapped() {

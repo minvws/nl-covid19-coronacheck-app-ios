@@ -20,7 +20,6 @@ class EventStartView: ScrolledStackWithButtonView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let buttonMargin: CGFloat = 36.0
 	}
 
 	/// The title label
@@ -59,17 +58,13 @@ class EventStartView: ScrolledStackWithButtonView {
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(contentTextView)
-		footerBackground.addSubview(secondaryButton)
+		footerButtonView.addSubview(secondaryButton)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		setupPrimaryButton()
-
-		bottomScrollViewConstraint?.isActive = false
-		bottomButtonConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
 
@@ -85,19 +80,16 @@ class EventStartView: ScrolledStackWithButtonView {
 
 			secondaryButton.leadingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.buttonMargin
+				constant: ViewTraits.margin
 			),
 			secondaryButton.trailingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.buttonMargin
+				constant: -ViewTraits.margin
 			),
 			secondaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
-			),
-			
-			// Scroll View
-			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor)
+			)
 		])
 	}
 
