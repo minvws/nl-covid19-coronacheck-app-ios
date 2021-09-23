@@ -159,14 +159,17 @@ class VaccinationEventView: BaseView {
 	/// The message
 	var subTitle: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
-				text: subTitle,
-				font: Theme.fonts.subhead,
-				textColor: Theme.colors.grey1,
-				lineHeight: ViewTraits.messageLineHeight,
-				kern: ViewTraits.messageKerning,
-				paragraphSpacing: ViewTraits.messageParagraphSpacing
-			)
+			messageLabel.attributedText =
+				.makeFromHtml(
+					text: subTitle,
+					style: NSAttributedString.HTMLStyle(
+						font: Theme.fonts.subhead,
+						textColor: Theme.colors.grey1,
+						lineHeight: ViewTraits.messageLineHeight,
+						kern: ViewTraits.messageKerning,
+						paragraphSpacing: ViewTraits.messageParagraphSpacing
+					)
+				)
 			setAccessibilityLabel()
 		}
 	}
