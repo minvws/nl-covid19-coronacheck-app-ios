@@ -13,17 +13,12 @@ final class OnboardingConsentView: BaseView {
 	private struct ViewTraits {
 
 		// Dimensions
-		static let shadowRadius: CGFloat = 6
-		static let shadowOpacity: Float = 0.2
-		static let buttonHeight: CGFloat = 52
 		static let titleLineHeight: CGFloat = 26
 		static let messageLineHeight: CGFloat = 22
-		static let gradientHeight: CGFloat = 15.0
-		static let buttonWidth: CGFloat = 182.0
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let bottomMargin: CGFloat = 8.0
+		static let bottomConsentMargin: CGFloat = 8.0
 		static let itemSpacing: CGFloat = 24.0
 		static let iconToLabelSpacing: CGFloat = 16.0
 	}
@@ -59,6 +54,13 @@ final class OnboardingConsentView: BaseView {
 		view.spacing = ViewTraits.itemSpacing
 		return view
 	}()
+	
+	/// Footer view with primary button
+	let footerButtonView: FooterButtonView = {
+		let footerView = FooterButtonView()
+		footerView.translatesAutoresizingMaskIntoConstraints = false
+		return footerView
+	}()
 
 	/// The title label
 	private let titleLabel: Label = {
@@ -71,18 +73,11 @@ final class OnboardingConsentView: BaseView {
 
 		return Label(body: nil).multiline()
 	}()
-
+	
 	/// the update button
-	let primaryButton = Button()
-
-	let lineView: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.line
-		view.isHidden = true
-		return view
-	}()
+	var primaryButton: Button {
+		return footerButtonView.primaryButton
+	}
 
 	let consentButton: ConsentButton = {
 
@@ -90,12 +85,20 @@ final class OnboardingConsentView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		return button
 	}()
+	
+	private var bottomStackViewConstraint: NSLayoutConstraint?
+	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 
 	/// setup the views
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		
+		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
+			let adjustedOffset = scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.bounds.height)
+			self?.footerButtonView.updateFadeAnimation(from: adjustedOffset)
+		}
 	}
 
 	/// Setup the hierarchy
@@ -107,11 +110,9 @@ final class OnboardingConsentView: BaseView {
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(itemStackView)
 		scrollView.contentView.addSubview(stackView)
-		scrollView.contentView.addSubview(consentButton)
 
 		addSubview(scrollView)
-		addSubview(lineView)
-		addSubview(primaryButton)
+		addSubview(footerButtonView)
 	}
 
 	/// Setup the constraints
@@ -125,10 +126,7 @@ final class OnboardingConsentView: BaseView {
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-			scrollView.bottomAnchor.constraint(
-				equalTo: primaryButton.topAnchor,
-				constant: -ViewTraits.bottomMargin
-			),
+			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor),
 
 			// StackView
 			stackView.topAnchor.constraint(
@@ -148,43 +146,16 @@ final class OnboardingConsentView: BaseView {
 				constant: -2.0 * ViewTraits.margin
 			),
 			stackView.centerXAnchor.constraint(equalTo: scrollView.contentView.centerXAnchor),
-			
-			// Consent button
-			consentButton.topAnchor.constraint(
-				greaterThanOrEqualTo: stackView.bottomAnchor,
-				constant: ViewTraits.itemSpacing
-			),
-			consentButton.leftAnchor.constraint(
-				equalTo: scrollView.contentView.leftAnchor,
-				constant: ViewTraits.margin
-			),
-			consentButton.rightAnchor.constraint(
-				equalTo: scrollView.contentView.rightAnchor,
-				constant: -ViewTraits.margin
-			),
-			consentButton.bottomAnchor.constraint(
-				equalTo: scrollView.contentView.bottomAnchor,
-				constant: -ViewTraits.margin
-			),
+			{
+				let constraint = stackView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.contentView.bottomAnchor, constant: -ViewTraits.margin)
+				bottomStackViewConstraint = constraint
+				return constraint
+			}(),
 
-			// Line
-			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			lineView.bottomAnchor.constraint(
-				equalTo: primaryButton.topAnchor,
-				constant: -ViewTraits.bottomMargin
-			),
-			lineView.heightAnchor.constraint(equalToConstant: 1),
-
-			// Primary Button
-			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
-			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
-			primaryButton.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
-			primaryButton.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			)
+			// Footer view
+			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
 
@@ -249,5 +220,32 @@ final class OnboardingConsentView: BaseView {
 		)
 		.alignment(.center)
 		itemStackView.addArrangedSubview(stack)
+	}
+	
+	/// Setup the consent button. By default hidden.
+	func setupConsentButton() {
+		
+		scrollView.contentView.addSubview(consentButton)
+		bottomStackViewConstraint?.isActive = false
+		
+		NSLayoutConstraint.activate([
+			// Consent button
+			consentButton.topAnchor.constraint(
+				greaterThanOrEqualTo: stackView.bottomAnchor,
+				constant: ViewTraits.itemSpacing
+			),
+			consentButton.leftAnchor.constraint(
+				equalTo: scrollView.contentView.leftAnchor,
+				constant: ViewTraits.margin
+			),
+			consentButton.rightAnchor.constraint(
+				equalTo: scrollView.contentView.rightAnchor,
+				constant: -ViewTraits.margin
+			),
+			consentButton.bottomAnchor.constraint(
+				equalTo: scrollView.contentView.bottomAnchor,
+				constant: -ViewTraits.bottomConsentMargin
+			)
+		])
 	}
 }
