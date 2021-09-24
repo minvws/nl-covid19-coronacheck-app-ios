@@ -13,12 +13,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	private struct ViewTraits {
 
 		// Dimensions
-		static let buttonHeight: CGFloat = 52
-		static let buttonWidth: CGFloat = 212.0
 		static let spacing: CGFloat = 24.0
-
-		// Margins
-		static let margin: CGFloat = 20.0
 	}
 
 	/// the update button
