@@ -73,53 +73,6 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		])
 	}
 
-//	func setupPrimaryButton(useFullWidth: Bool = false) {
-//
-//		NSLayoutConstraint.activate([
-//
-//			// Primary button
-//			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
-//			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor)
-//		])
-//		primaryButton.setContentHuggingPriority(.required, for: .vertical)
-//
-//		if useFullWidth {
-//			NSLayoutConstraint.activate([
-//
-//				primaryButton.leadingAnchor.constraint(
-//					equalTo: safeAreaLayoutGuide.leadingAnchor,
-//					constant: ViewTraits.buttonMargin
-//				),
-//				primaryButton.trailingAnchor.constraint(
-//					equalTo: safeAreaLayoutGuide.trailingAnchor,
-//					constant: -ViewTraits.buttonMargin
-//				)
-//			])
-//		} else {
-//			NSLayoutConstraint.activate([
-//
-//				primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
-//				primaryButton.leadingAnchor.constraint(
-//					greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
-//					constant: ViewTraits.buttonMargin
-//				),
-//				primaryButton.trailingAnchor.constraint(
-//					lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
-//					constant: -ViewTraits.buttonMargin
-//				)
-//			])
-//		}
-//
-//		topButtonConstraint = primaryButton.topAnchor.constraint(equalTo: footerBackground.topAnchor)
-//		topButtonConstraint?.isActive = true
-//
-//		bottomButtonConstraint = primaryButton.bottomAnchor.constraint(
-//			equalTo: safeAreaLayoutGuide.bottomAnchor,
-//			constant: -ViewTraits.margin
-//		)
-//		bottomButtonConstraint?.isActive = true
-//	}
-
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
 
@@ -137,8 +90,4 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
-
-	/// bottom constraint for keyboard changes.
-	// Update
-	var bottomButtonConstraint: NSLayoutConstraint?
 }

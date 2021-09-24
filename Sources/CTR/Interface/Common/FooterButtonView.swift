@@ -27,7 +27,7 @@ final class FooterButtonView: BaseView {
 	}
 
 	/// The shadow gradient view
-	private let gradientView: UIView = {
+	let gradientView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
@@ -71,7 +71,11 @@ final class FooterButtonView: BaseView {
 			primaryButton.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.Margin.edge),
 			primaryButton.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -ViewTraits.Margin.edge),
 			primaryButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge),
-			primaryButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -ViewTraits.Margin.edge)
+			{
+				let constraint = primaryButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -ViewTraits.Margin.edge)
+				bottomButtonConstraint = constraint
+				return constraint
+			}()
 		])
 	}
 	
@@ -112,6 +116,9 @@ final class FooterButtonView: BaseView {
 			primaryButton.setTitle(primaryTitle, for: .normal)
 		}
 	}
+	
+	/// The bottom constraint for keyboard changes
+	var bottomButtonConstraint: NSLayoutConstraint?
 	
 	/// Fade shadow separator.
 	/// - Parameter scrollOffset: The scroll offset of the scroll view (animation range: -height to 0).

@@ -145,10 +145,8 @@ class PaperCertificateTokenEntryViewController: BaseViewController {
 			duration: animationDuration,
 			curve: UIView.AnimationCurve(rawValue: animationCurve) ?? .linear
 		) {
-			self.sceneView.scrollView.contentInset.bottom = keyboardHeight
-
 			let buttonOffset: CGFloat = UIDevice.current.hasNotch ? 20 : -10
-			self.sceneView.bottomButtonConstraint?.constant = -keyboardHeight + buttonOffset
+			self.sceneView.footerButtonView.bottomButtonConstraint?.constant = -keyboardHeight + buttonOffset
 
 			// Required to trigger NSLayoutConstraint changes
 			// to animate
@@ -175,8 +173,7 @@ class PaperCertificateTokenEntryViewController: BaseViewController {
 			duration: animationDuration,
 			curve: UIView.AnimationCurve(rawValue: animationCurve) ?? .linear
 		) {
-			self.sceneView.scrollView.contentInset.bottom = 0.0
-			self.sceneView.bottomButtonConstraint?.constant = -20
+			self.sceneView.footerButtonView.bottomButtonConstraint?.constant = -20
 
 			self.view?.layoutIfNeeded()
 		}
@@ -196,17 +193,17 @@ extension PaperCertificateTokenEntryViewController: UITextFieldDelegate {
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
 
 			// Standardise the frames of textField & the gradient line (above the Primary button) inside the frame of self.view:
-//			let textfieldFrame = view.convert(textField.frame, from: textField.superview)
-//			let gradientLineFrame = view.convert(sceneView.footerGradientView.frame, from: sceneView.footerGradientView.superview)
-//
-//			if textfieldFrame.maxY > gradientLineFrame.minY {
-//				let correction = textfieldFrame.maxY - gradientLineFrame.minY
-//
-//				// Okay so shift the scrollView up by the correction:
-//				UIView.animate(withDuration: 0.2) {
-//					sceneView.scrollView.contentOffset.y += correction
-//				}
-//			}
+			let textfieldFrame = view.convert(textField.frame, from: textField.superview)
+			let gradientLineFrame = view.convert(sceneView.footerButtonView.gradientView.frame, from: sceneView.footerButtonView.gradientView.superview)
+
+			if textfieldFrame.maxY > gradientLineFrame.minY {
+				let correction = textfieldFrame.maxY - gradientLineFrame.minY
+
+				// Okay so shift the scrollView up by the correction:
+				UIView.animate(withDuration: 0.2) {
+					sceneView.scrollView.contentOffset.y += correction
+				}
+			}
 		}
 	}
 
