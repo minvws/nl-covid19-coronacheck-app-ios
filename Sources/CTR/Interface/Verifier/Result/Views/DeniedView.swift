@@ -86,8 +86,8 @@ final class DeniedView: BaseView, AccessViewable {
 		footerButtonView.backgroundColor = Theme.colors.denied
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
-			let adjustedOffset = scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.bounds.height)
-			self?.footerButtonView.updateFadeAnimation(from: adjustedOffset)
+			let translatedOffset = scrollView.translatedBottomScrollOffset
+			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
 		}
 	}
 	

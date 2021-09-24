@@ -173,8 +173,8 @@ private extension HolderDashboardView {
 	}
 	
 	func updateFooterViewAnimation(for scrollView: UIScrollView) {
-		let adjustedOffset = scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.bounds.height)
-		footerButtonView.updateFadeAnimation(from: adjustedOffset)
+		let translatedOffset = scrollView.translatedBottomScrollOffset
+		footerButtonView.updateFadeAnimation(from: translatedOffset)
 	}
 }
 
