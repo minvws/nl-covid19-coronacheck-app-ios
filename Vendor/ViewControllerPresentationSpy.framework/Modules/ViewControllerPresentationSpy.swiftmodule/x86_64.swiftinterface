@@ -1,11 +1,12 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.4 (swiftlang-1205.0.26.9 clang-1205.0.19.55)
-// swift-module-flags: -target x86_64-apple-ios9.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name ViewControllerPresentationSpy
+// swift-compiler-version: Apple Swift version 5.5 (swiftlang-1300.0.31.1 clang-1300.0.29.1)
+// swift-module-flags: -target x86_64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name ViewControllerPresentationSpy
 import Foundation
 import Swift
 import UIKit
 @_exported import ViewControllerPresentationSpy
 import XCTest
+import _Concurrency
 @_inheritsConvenienceInitializers @objc(QCOPresentationVerifier) public class PresentationVerifier : ObjectiveC.NSObject {
   @objc public var presentedCount: Swift.Int
   @objc public var presentedViewController: UIKit.UIViewController?
@@ -16,7 +17,7 @@ import XCTest
   @objc override dynamic public init()
   @objc deinit
 }
-extension PresentationVerifier {
+extension ViewControllerPresentationSpy.PresentationVerifier {
   @discardableResult
   public func verify<VC>(animated: Swift.Bool, presentingViewController: UIKit.UIViewController? = nil, file: Swift.StaticString = #file, line: Swift.UInt = #line) -> VC? where VC : UIKit.UIViewController
 }
@@ -37,10 +38,10 @@ extension PresentationVerifier {
   @objc deinit
   @objc(executeActionForButton:andReturnError:) public func executeAction(forButton title: Swift.String) throws
 }
-extension AlertVerifier {
+extension ViewControllerPresentationSpy.AlertVerifier {
   public func verify(title: Swift.String?, message: Swift.String?, animated: Swift.Bool, actions: [ViewControllerPresentationSpy.AlertVerifier.Action], preferredStyle: UIKit.UIAlertController.Style = .alert, presentingViewController: UIKit.UIViewController? = nil, file: Swift.StaticString = #file, line: Swift.UInt = #line)
 }
-extension AlertVerifier {
+extension ViewControllerPresentationSpy.AlertVerifier {
   public enum Action : Swift.Equatable {
     case `default`(Swift.String?)
     case cancel(Swift.String?)
@@ -48,14 +49,13 @@ extension AlertVerifier {
     public static func == (a: ViewControllerPresentationSpy.AlertVerifier.Action, b: ViewControllerPresentationSpy.AlertVerifier.Action) -> Swift.Bool
   }
 }
-extension AlertVerifier.Action : Swift.CustomStringConvertible {
+extension ViewControllerPresentationSpy.AlertVerifier.Action : Swift.CustomStringConvertible {
   public var description: Swift.String {
     get
   }
 }
 @objc(QCOClosureContainer) public class ClosureContainer : ObjectiveC.NSObject {
   @objc public init(closure: (() -> Swift.Void)?)
-  @objc override dynamic public init()
   @objc deinit
 }
 @_inheritsConvenienceInitializers @objc(QCODismissalVerifier) public class DismissalVerifier : ObjectiveC.NSObject {
@@ -67,6 +67,6 @@ extension AlertVerifier.Action : Swift.CustomStringConvertible {
   @objc override dynamic public init()
   @objc deinit
 }
-extension DismissalVerifier {
+extension ViewControllerPresentationSpy.DismissalVerifier {
   public func verify(animated: Swift.Bool, dismissedViewController: UIKit.UIViewController? = nil, file: Swift.StaticString = #file, line: Swift.UInt = #line)
 }
