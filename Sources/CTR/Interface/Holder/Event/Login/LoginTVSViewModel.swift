@@ -30,18 +30,7 @@ class LoginTVSViewModel: Logging {
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 
-		self.title = {
-			switch eventMode {
-				case .recovery:
-					return L.holderRecoveryListTitle()
-				case .paperflow:
-					return L.holderDccListTitle()
-				case .test:
-					return L.holderTestListTitle()
-				case .vaccination:
-					return L.holderVaccinationListTitle()
-			}
-		}()
+		self.title = eventMode.title
 
 		content = Content(
 			title: title,

@@ -391,37 +391,10 @@ extension EventFlow.DccEvent {
 		return nil
 	}
 
-	func identity(cryptoManager: CryptoManaging = Services.cryptoManager) -> EventFlow.Identity? {
-
-		if let euCredentialAttributes = getAttributes(cryptoManager: cryptoManager) {
-			return EventFlow.Identity(
-				infix: nil,
-				firstName: euCredentialAttributes.digitalCovidCertificate.name.givenName,
-				lastName: euCredentialAttributes.digitalCovidCertificate.name.familyName,
-				birthDateString: euCredentialAttributes.digitalCovidCertificate.dateOfBirth
-			)
-		}
-		return nil
-	}
-
 	func getAttributes(cryptoManager: CryptoManaging = Services.cryptoManager) -> EuCredentialAttributes? {
 
 		if let credentialData = credential.data(using: .utf8) {
 			return cryptoManager.readEuCredentials(credentialData)
-		}
-		return nil
-	}
-
-	func getEventType(cryptoManager: CryptoManaging = Services.cryptoManager) -> EventMode? {
-
-		if let euCredentialAttributes = getAttributes(cryptoManager: cryptoManager) {
-			if euCredentialAttributes.digitalCovidCertificate.vaccinations?.first != nil {
-				return .vaccination
-			} else if euCredentialAttributes.digitalCovidCertificate.recoveries?.first != nil {
-				return .recovery
-			} else if euCredentialAttributes.digitalCovidCertificate.tests?.first != nil {
-				return .test
-			}
 		}
 		return nil
 	}
