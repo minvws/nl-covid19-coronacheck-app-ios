@@ -48,13 +48,14 @@ class CouplingManager: CouplingManaging, Logging {
 	func convert(_ dcc: String, couplingCode: String) -> EventFlow.EventResultWrapper? {
 
 		let dccEvent = EventFlow.DccEvent(credential: dcc, couplingCode: couplingCode)
-		if let identity = dccEvent.identity(cryptoManager: cryptoManager) {
-
+		if let credentialData = dccEvent.credential.data(using: .utf8),
+		   let euCredentialAttributes = cryptoManager.readEuCredentials(credentialData) {
+			
 			let wrapper =
 				EventFlow.EventResultWrapper(
 					providerIdentifier: "DCC",
 					protocolVersion: "3.0",
-					identity: identity,
+					identity: euCredentialAttributes.identity,
 					status: .complete,
 					result: nil,
 					events: [
