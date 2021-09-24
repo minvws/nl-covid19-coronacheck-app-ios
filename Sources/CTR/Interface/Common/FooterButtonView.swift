@@ -7,6 +7,8 @@
 
 import UIKit
 
+/// Footer view with primary button.
+/// It has a fade animation method to display a shadow separator when pinned to a scroll view.
 final class FooterButtonView: BaseView {
 	
 	/// The display constants
@@ -24,7 +26,7 @@ final class FooterButtonView: BaseView {
 		}
 	}
 
-	/// The footer gradient
+	/// The shadow gradient view
 	private let gradientView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -80,7 +82,7 @@ final class FooterButtonView: BaseView {
 	}
 	
 	/// Setup the gradient in the footer
-	private func setFooterGradient() {
+	private func setupShadowGradient() {
 
 		gradientView.backgroundColor = .clear
 		let gradient = CAGradientLayer()
@@ -98,7 +100,7 @@ final class FooterButtonView: BaseView {
 	
 	override func layoutSubviews() {
 		super.layoutSubviews()
-		setFooterGradient()
+		setupShadowGradient()
 	}
 	
 	/// The user tapped on the primary button
@@ -111,6 +113,8 @@ final class FooterButtonView: BaseView {
 		}
 	}
 	
+	/// Fade shadow separator.
+	/// - Parameter scrollOffset: The scroll offset of the scroll view (animation range: -height to 0).
 	func updateFadeAnimation(from scrollOffset: CGFloat) {
 		let maxRange: CGFloat = ViewTraits.Gradient.height
 		let distance = clamp(scrollOffset: scrollOffset, maxRange: maxRange)
