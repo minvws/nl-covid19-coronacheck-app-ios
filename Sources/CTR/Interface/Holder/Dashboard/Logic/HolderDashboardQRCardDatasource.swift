@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol HolderDashboardDatasourceProtocol: AnyObject {
+protocol HolderDashboardQRCardDatasourceProtocol: AnyObject {
 	typealias MyQRCard = HolderDashboardViewModel.MyQRCard
 	typealias ExpiredQR = HolderDashboardViewModel.ExpiredQR
 
@@ -16,7 +16,7 @@ protocol HolderDashboardDatasourceProtocol: AnyObject {
 	func reload()
 }
 
-class HolderDashboardDatasource: HolderDashboardDatasourceProtocol {
+class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 
 	var didUpdate: (([HolderDashboardViewModel.MyQRCard], [ExpiredQR]) -> Void)? {
 		didSet {

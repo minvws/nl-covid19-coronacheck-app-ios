@@ -8,7 +8,7 @@
 import Foundation
 @testable import CTR
 
-class HolderDashboardDatasourceSpy: HolderDashboardDatasourceProtocol {
+class HolderDashboardDatasourceSpy: HolderDashboardQRCardDatasourceProtocol {
 
 	var invokedDidUpdateSetter = false
 	var invokedDidUpdateSetterCount = 0

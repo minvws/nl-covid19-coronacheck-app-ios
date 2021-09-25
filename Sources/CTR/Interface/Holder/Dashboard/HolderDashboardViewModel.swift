@@ -10,7 +10,7 @@ import CoreData
 import Reachability
 
 final class HolderDashboardViewModel: Logging {
-	typealias Datasource = HolderDashboardDatasource
+	typealias Datasource = HolderDashboardQRCardDatasource
 
 	// MARK: - Public properties
 
@@ -93,7 +93,7 @@ final class HolderDashboardViewModel: Logging {
 		}
 	}
 
-	private let datasource: HolderDashboardDatasourceProtocol
+	private let datasource: HolderDashboardQRCardDatasourceProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private let now: () -> Date
@@ -101,7 +101,7 @@ final class HolderDashboardViewModel: Logging {
 	// MARK: - Initializer
 	init(
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
-		datasource: HolderDashboardDatasourceProtocol,
+		datasource: HolderDashboardQRCardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
 		now: @escaping () -> Date
