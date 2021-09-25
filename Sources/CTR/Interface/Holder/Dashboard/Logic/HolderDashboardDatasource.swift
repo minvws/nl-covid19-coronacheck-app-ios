@@ -91,10 +91,10 @@ class HolderDashboardDatasource: HolderDashboardDatasourceProtocol {
 				return (greencard, origins)
 			}
 			// map DB types to local types to have more control over optionality & avoid worrying about threading
-			.flatMap { (greencard: GreenCard, origins: [Origin]) -> [MyQRCard] in
+			.flatMap { (dbGreencard: GreenCard, dbOrigins: [Origin]) -> [MyQRCard] in
 
 				// Entries on the Card that represent an Origin.
-				let originEntries = origins
+				let origins = dbOrigins
 					.compactMap { origin -> MyQRCard.Origin? in
 						guard let typeRawValue = origin.type,
 							  let type = QRCodeOriginType(rawValue: typeRawValue),
@@ -118,18 +118,18 @@ class HolderDashboardDatasource: HolderDashboardDatasourceProtocol {
 					.sorted { $0.customSortIndex < $1.customSortIndex }
 
 				func evaluateButtonEnabledState(date: Date) -> Bool {
-					guard !greencard.isDeleted else { return false }
+					guard !dbGreencard.isDeleted else { return false }
 
-					let activeCredential: Credential? = greencard.getActiveCredential(forDate: date)
-					let enabled = !(activeCredential == nil || originEntries.isEmpty) && originEntries.contains(where: { $0.isCurrentlyValid(now: date) })
+					let activeCredential: Credential? = dbGreencard.getActiveCredential(forDate: date)
+					let enabled = !(activeCredential == nil || origins.isEmpty) && origins.contains(where: { $0.isCurrentlyValid(now: date) })
 					return enabled
 				}
 
 				func evaluateDigitalCovidCertificate(now: Date) -> EuCredentialAttributes.DigitalCovidCertificate? {
-					guard !greencard.isDeleted else { return nil }
+					guard !dbGreencard.isDeleted else { return nil }
 
-					guard greencard.type == GreenCardType.eu.rawValue,
-						  let credential = greencard.currentOrNextActiveCredential(forDate: now),
+					guard dbGreencard.type == GreenCardType.eu.rawValue,
+						  let credential = dbGreencard.currentOrNextActiveCredential(forDate: now),
 						  let data = credential.data,
 						  let euCredentialAttributes = cryptoManaging.readEuCredentials(data)
 					else {
@@ -139,21 +139,21 @@ class HolderDashboardDatasource: HolderDashboardDatasourceProtocol {
 					return euCredentialAttributes.digitalCovidCertificate
 				}
 
-				switch greencard.getType() {
+				switch dbGreencard.getType() {
 					case .domestic:
 						return [MyQRCard.netherlands(
-							greenCardObjectID: greencard.objectID,
-							origins: originEntries,
-							shouldShowErrorBeneathCard: !greencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
+							greenCardObjectID: dbGreencard.objectID,
+							origins: origins,
+							shouldShowErrorBeneathCard: !dbGreencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
 							evaluateEnabledState: evaluateButtonEnabledState
 						)]
 					case .eu:
 						// The EU cards should only have one entry per card, so let's divide them up:
-						return originEntries.map {originEntry in
+						return origins.map {originEntry in
 							MyQRCard.europeanUnion(
-								greenCardObjectID: greencard.objectID,
+								greenCardObjectID: dbGreencard.objectID,
 								origins: [originEntry],
-								shouldShowErrorBeneathCard: !greencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
+								shouldShowErrorBeneathCard: !dbGreencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
 								evaluateEnabledState: evaluateButtonEnabledState,
 								evaluateDCC: evaluateDigitalCovidCertificate
 							)
