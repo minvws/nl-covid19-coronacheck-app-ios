@@ -193,7 +193,7 @@ private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsB
 	let formatter = HolderDashboardViewModel.dateWithDayAndTimeFormatter
 	let dateString = formatter.string(from: expirationTime)
 
-	let titleString = QRCodeOriginType.test.localizedProof.capitalizingFirstLetter() + ":"
+	let titleString = L.generalTestcertificate().capitalizingFirstLetter() + ":"
 	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
 		lines: [titleString, valueString],
@@ -207,7 +207,7 @@ private func validityText_hasBegun_domestic_recovery(expirationTime: Date, expir
 	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
 	let dateString = formatter.string(from: expirationTime)
 
-	let titleString = QRCodeOriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
+	let titleString = L.generalRecoverystatement().capitalizingFirstLetter() + ":"
 	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
 		lines: [titleString, valueString],
@@ -233,7 +233,7 @@ private func validityText_hasNotYetBegun_allRegions_recovery(validFrom: Date, ex
 // Caveats!
 // - "future validity" for a test probably won't happen..
 // - "future validity" for EU doesn't exist currently.
-private func validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: MyQRCard, origin: MyQRCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: MyQRCard, originType: QRCodeOriginType, validFromDate: Date, now: Date) -> HolderDashboardViewController.ValidityText {
 	var prefix: String {
 		switch qrCard {
 			case .netherlands:
@@ -244,9 +244,9 @@ private func validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: 
 		}
 	}
 
-	let validFromDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: origin.validFromDate)
+	let validFromDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: validFromDate)
 
-	let titleString = origin.type.localizedProof.capitalizingFirstLetter() + ":"
+	let titleString = originType.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = (prefix + " " + validFromDateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
 		lines: [titleString, valueString],
