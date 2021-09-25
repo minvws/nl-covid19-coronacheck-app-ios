@@ -10,11 +10,6 @@ import UIKit
 class HolderDashboardViewController: BaseViewController {
 
 	enum Card {
-		struct QRCardRow {
-			let typeText: String?
-			let validityText: (Date) -> ValidityText
-		}
-
 		case headerMessage(message: String)
 
 		case expiredQR(message: String, didTapClose: () -> Void)
@@ -25,9 +20,9 @@ class HolderDashboardViewController: BaseViewController {
 
 		case emptyState(image: UIImage?, title: String, message: String)
 
-		case domesticQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case domesticQR(validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
-		case europeanUnionQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case europeanUnionQR(validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
 		case errorMessage(message: String, didTapTryAgain: () -> Void)
 	}
@@ -42,7 +37,7 @@ class HolderDashboardViewController: BaseViewController {
 			case current
 		}
 
-		let texts: [String]
+		let lines: [String]
 		let kind: Kind
 	}
 
@@ -170,8 +165,8 @@ class HolderDashboardViewController: BaseViewController {
 						}
 						return emptyDashboardView
 						
-					case let .domesticQR(rows, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
-						 let .europeanUnionQR(rows, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
+					case let .domesticQR(validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
+						 let .europeanUnionQR(validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
 						
 						let qrCard = QRCardView()
 						qrCard.viewQRButtonCommand = didTapViewQR
@@ -187,10 +182,7 @@ class HolderDashboardViewController: BaseViewController {
 							default: break
 						}
 						
-						qrCard.originRows = rows.map { (qrCardRow: Card.QRCardRow) in
-							QRCardView.OriginRow(type: qrCardRow.typeText, validityString: qrCardRow.validityText)
-						}
-						
+						qrCard.validityTexts = validityTexts
 						qrCard.expiryEvaluator = expiryCountdownEvaluator
 						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
 						qrCard.isLoading = isLoading

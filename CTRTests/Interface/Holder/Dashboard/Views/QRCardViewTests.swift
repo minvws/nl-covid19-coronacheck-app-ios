@@ -17,28 +17,29 @@ class QRCardViewTests: XCTestCase {
 	}
 
 	func testThreeRowSampleContent() {
-		// Arrange
 
+		// Arrange
 		let sut = QRCardView()
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.region = "Region"
 
-		sut.originRows = [
-			// Isn't displayed
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Past"], kind: .past) }
-			),
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Current"], kind: .current) }
-			),
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Future"], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false)) }
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Past"
+				], kind: .past),
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Current"
+				], kind: .current),
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Future"
+				], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false))
+			]
+		}
 
 		sut.expiryEvaluator = { _ in "Expiry Date text" }
 		sut.buttonEnabledEvaluator = { _ in true }
@@ -56,13 +57,14 @@ class QRCardViewTests: XCTestCase {
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.region = "Region"
-
-		sut.originRows = [
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Current"], kind: .current) }
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Current"
+				], kind: .current)
+			]
+		}
 
 		sut.expiryEvaluator = { _ in "Expiry Date text" }
 		sut.buttonEnabledEvaluator = { _ in true }
@@ -80,13 +82,14 @@ class QRCardViewTests: XCTestCase {
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.region = "Region"
-
-		sut.originRows = [
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Current"], kind: .current) }
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Current"
+				], kind: .current)
+			]
+		}
 
 		sut.expiryEvaluator = { _ in "Expiry Date text" }
 
@@ -126,13 +129,14 @@ class QRCardViewTests: XCTestCase {
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.region = "Region"
-
-		sut.originRows = [
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Future"], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)) }
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Future"
+				], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true))
+			]
+		}
 
 		sut.expiryEvaluator = { _ in "Expiry Date text" }
 		sut.buttonEnabledEvaluator = { _ in false }
@@ -149,13 +153,14 @@ class QRCardViewTests: XCTestCase {
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.region = "Region"
-
-		sut.originRows = [
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Future"], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)) }
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Future"
+				], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true))
+			]
+		}
 
 		sut.expiryEvaluator = { _ in "Expiry Date text" }
 		sut.buttonEnabledEvaluator = { _ in true }
@@ -173,15 +178,13 @@ class QRCardViewTests: XCTestCase {
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.region = "Region"
 		sut.shouldStyleForEU = true
-		sut.originRows = [
-			QRCardView.OriginRow(
-				type: nil,
-				validityString: { _ in .init(
-					texts: ["Vaccinatiebewijs: dosis 2 van 2", "Vaccinatiedatum: 15 juli 2021"],
-					kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false))
-				}
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Vaccinatiebewijs: dosis 2 van 2", "Vaccinatiedatum: 15 juli 2021"
+				], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false))
+			]
+		}
 
 		sut.buttonEnabledEvaluator = { _ in true }
 		sut.isLoading = false
