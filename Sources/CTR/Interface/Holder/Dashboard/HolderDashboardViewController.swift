@@ -172,16 +172,13 @@ class HolderDashboardViewController: BaseViewController {
 						qrCard.viewQRButtonCommand = didTapViewQR
 						qrCard.title = L.holderDashboardQrTitle()
 						qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
-						
-						switch card {
-							case .domesticQR:
-								qrCard.region = L.generalNetherlands()
-							case .europeanUnionQR:
-								qrCard.region = L.generalEuropeanUnion()
-								qrCard.shouldStyleForEU = true
-							default: break
+
+						if case .europeanUnionQR = card {
+							qrCard.shouldStyleForEU = true
+						} else {
+							qrCard.shouldStyleForEU = false
 						}
-						
+
 						qrCard.validityTexts = validityTexts
 						qrCard.expiryEvaluator = expiryCountdownEvaluator
 						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
