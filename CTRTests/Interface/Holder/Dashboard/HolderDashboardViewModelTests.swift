@@ -911,7 +911,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 	}
-a
+
 	// MARK: - Single, Currently Valid, International
 
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_1_of_2() {
