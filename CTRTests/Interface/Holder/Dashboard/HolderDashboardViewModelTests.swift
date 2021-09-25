@@ -1307,20 +1307,21 @@ a
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: {
-			validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(
+			test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
-			// check isLoading
-			expect(isLoading) == false
+				// check isLoading
+				expect(isLoading) == false
 
-			let nowValidityTexts = validityTextEvaluator(now)
-			expect(nowValidityTexts).to(haveCount(3))
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
-			expect(nowValidityTexts[1].lines[0]) == L.generalTestcertificate().capitalized + ":"
-			expect(nowValidityTexts[2].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+				let nowValidityTexts = validityTextEvaluator(now)
+				expect(nowValidityTexts).to(haveCount(3))
+				expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+				expect(nowValidityTexts[1].lines[0]) == L.generalTestcertificate().capitalized + ":"
+				expect(nowValidityTexts[2].lines[0]) == L.generalRecoverystatement().capitalized + ":"
 
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
-		}))
+				expect(expiryCountdownEvaluator?(now)).to(beNil())
+			}
+		))
 	}
 
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_oneExpiringSoon() {
