@@ -7,9 +7,9 @@
 
 import Foundation
 
-typealias MyQRCard = HolderDashboardViewModel.MyQRCard
+typealias QRCard = HolderDashboardViewModel.QRCard
 
-extension MyQRCard {
+extension QRCard {
 
 	enum ValidityType {
 		case isExpired
@@ -30,14 +30,14 @@ extension MyQRCard {
 			}
 		}
 
-		func text(myQRCard: MyQRCard, origin: MyQRCard.Origin, now: Date, remoteConfigManager: RemoteConfigManaging) -> HolderDashboardViewController.ValidityText {
+		func text(qrCard: QRCard, origin: QRCard.Origin, now: Date, remoteConfigManager: RemoteConfigManaging) -> HolderDashboardViewController.ValidityText {
 
-			switch (self, myQRCard, origin.type) {
+			switch (self, qrCard, origin.type) {
 				case (.isExpired, _, _):
 					return validityText_isExpired()
 
 				case (.validityHasBegun, .europeanUnion, .vaccination):
-					if let euVaccination = myQRCard.digitalCovidCertificate(forDate: now)?.vaccinations?.first,
+					if let euVaccination = qrCard.digitalCovidCertificate(forDate: now)?.vaccinations?.first,
 					   let doseNumber = euVaccination.doseNumber,
 					   let totalDose = euVaccination.totalDose {
 						return validityText_hasBegun_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), validFrom: origin.validFromDate)
@@ -46,7 +46,7 @@ extension MyQRCard {
 					}
 
 				case (.validityHasBegun, .europeanUnion, .test):
-					if let euTest = myQRCard.digitalCovidCertificate(forDate: now)?.tests?.first {
+					if let euTest = qrCard.digitalCovidCertificate(forDate: now)?.tests?.first {
 						let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
 						return validityText_hasBegun_eu_test(testType: testType, validFrom: origin.validFromDate)
 					} else {
@@ -82,13 +82,13 @@ extension MyQRCard {
 					)
 
 				case (.validityHasNotYetBegun, _, _):
-					return validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: myQRCard, origin: origin, now: now)
+					return validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: qrCard, origin: origin, now: now)
 			}
 		}
 	}
 }
 
-private extension MyQRCard {
+private extension QRCard {
 
 	/// Handy accessor. Only has a value for .europeanUnion cases.
 	func digitalCovidCertificate(forDate now: Date) -> EuCredentialAttributes.DigitalCovidCertificate? {
@@ -125,7 +125,7 @@ private func validityText_hasBegun_eu_test(testType: String, validFrom: Date) ->
 
 /// For when e.g. we can't retrieve exactly what we needed from the DCC for proper display,
 /// this one provides a fallback for display.
-private func validityText_hasBegun_eu_fallback(origin: MyQRCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_eu_fallback(origin: QRCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
 	var formatter: DateFormatter {
 		switch origin.type {
 			case .vaccination, .recovery:
@@ -233,7 +233,7 @@ private func validityText_hasNotYetBegun_allRegions_recovery(validFrom: Date, ex
 // Caveats!
 // - "future validity" for a test probably won't happen..
 // - "future validity" for EU doesn't exist currently.
-private func validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: MyQRCard, origin: MyQRCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: QRCard, origin: QRCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
 	var prefix: String {
 		switch qrCard {
 			case .netherlands:

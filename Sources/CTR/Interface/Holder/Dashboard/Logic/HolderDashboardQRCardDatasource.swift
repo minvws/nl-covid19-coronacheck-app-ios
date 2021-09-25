@@ -8,17 +8,17 @@
 import Foundation
 
 protocol HolderDashboardQRCardDatasourceProtocol: AnyObject {
-	typealias MyQRCard = HolderDashboardViewModel.MyQRCard
+	typealias QRCard = HolderDashboardViewModel.QRCard
 	typealias ExpiredQR = HolderDashboardViewModel.ExpiredQR
 
-	var didUpdate: (([HolderDashboardViewModel.MyQRCard], [ExpiredQR]) -> Void)? { get set }
+	var didUpdate: (([HolderDashboardViewModel.QRCard], [ExpiredQR]) -> Void)? { get set }
 
 	func reload()
 }
 
 class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 
-	var didUpdate: (([HolderDashboardViewModel.MyQRCard], [ExpiredQR]) -> Void)? {
+	var didUpdate: (([HolderDashboardViewModel.QRCard], [ExpiredQR]) -> Void)? {
 		didSet {
 			guard didUpdate != nil else { return }
 			reload()
@@ -44,7 +44,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 		reloadTimer = nil
 
 		let expiredGreenCards: [ExpiredQR] = removeExpiredGreenCards()
-		let cards: [HolderDashboardViewModel.MyQRCard] = fetchMyQRCards(cryptoManaging: cryptoManaging)
+		let cards: [HolderDashboardViewModel.QRCard] = fetchMyQRCards(cryptoManaging: cryptoManaging)
 
 		// Callback
 		didUpdate(cards, expiredGreenCards)
@@ -57,11 +57,11 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 		}
 	}
 
-	private func calculateNextReload(cards: [HolderDashboardViewModel.MyQRCard]) -> TimeInterval? {
+	private func calculateNextReload(cards: [HolderDashboardViewModel.QRCard]) -> TimeInterval? {
 		// Calculate when the next reload is needed:
 		let nextFetchInterval: TimeInterval = cards
 			.flatMap { $0.origins }
-			.reduce(Date.distantFuture) { (result: Date, origin: HolderDashboardViewModel.MyQRCard.Origin) -> Date in
+			.reduce(Date.distantFuture) { (result: Date, origin: HolderDashboardViewModel.QRCard.Origin) -> Date in
 				origin.expirationTime < result ? origin.expirationTime : result
 			}.timeIntervalSinceNow
 
@@ -79,7 +79,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 
 	/// Fetch the Greencards+Origins from Database
 	/// and convert to UI-appropriate model types.
-	private func fetchMyQRCards(cryptoManaging: CryptoManaging) -> [HolderDashboardViewModel.MyQRCard] {
+	private func fetchMyQRCards(cryptoManaging: CryptoManaging) -> [HolderDashboardViewModel.QRCard] {
 		let walletManager = walletManager
 		let greencards = walletManager.listGreenCards()
 
@@ -90,9 +90,9 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 				let origins = untypedOrigins.compactMap({ $0 as? Origin })
 				return (greencard, origins)
 			}
-			.flatMap { (dbGreencard: GreenCard, dbOrigins: [Origin]) -> [MyQRCard] in
+			.flatMap { (dbGreencard: GreenCard, dbOrigins: [Origin]) -> [QRCard] in
 				// map DB types to local types to have more control over optionality & avoid worrying about threading
-				MyQRCard.qrCards(forGreencard: dbGreencard, withOrigins: dbOrigins, cryptoManaging: cryptoManaging, now: now)
+				QRCard.qrCards(forGreencard: dbGreencard, withOrigins: dbOrigins, cryptoManaging: cryptoManaging, now: now)
 			}
 			.filter {
 				// When a GreenCard has no more origins with a
@@ -107,10 +107,10 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	}
 }
 
-// Needed for referring to the CoreData Origin from within MyQRCard (which has it's own Origin type)
+// Needed for referring to the CoreData Origin from within QRCard (which has it's own Origin type)
 private typealias DBOrigin = Origin
 
-extension MyQRCard {
+extension QRCard {
 
 	/// Collection of functions which get repeatedly evaluated (by an external UI timer trigger) to update state
 	/// We use closures here to avoid surfacing internal types & implementation to that UI layer.
@@ -144,14 +144,14 @@ extension MyQRCard {
 		withOrigins dbOrigins: [DBOrigin],
 		cryptoManaging: CryptoManaging,
 		now: () -> Date
-	) -> [MyQRCard] {
+	) -> [QRCard] {
 
 		// Entries on the Card that represent an Origin.
-		let origins = MyQRCard.Origin.origins(fromDBOrigins: dbOrigins, now: now())
+		let origins = QRCard.Origin.origins(fromDBOrigins: dbOrigins, now: now())
 
 		switch dbGreencard.getType() {
 			case .domestic:
-				return [MyQRCard.netherlands(
+				return [QRCard.netherlands(
 					greenCardObjectID: dbGreencard.objectID,
 					origins: origins,
 					shouldShowErrorBeneathCard: !dbGreencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
@@ -162,7 +162,7 @@ extension MyQRCard {
 			case .eu:
 				// The EU cards should only have one entry per card, so let's divide them up:
 				return origins.map {originEntry in
-					MyQRCard.europeanUnion(
+					QRCard.europeanUnion(
 						greenCardObjectID: dbGreencard.objectID,
 						origins: [originEntry],
 						shouldShowErrorBeneathCard: !dbGreencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
@@ -180,12 +180,12 @@ extension MyQRCard {
 	}
 }
 
-extension MyQRCard.Origin {
+extension QRCard.Origin {
 
-	fileprivate static func origins(fromDBOrigins dbOrigins: [Origin], now: Date) -> [MyQRCard.Origin] {
+	fileprivate static func origins(fromDBOrigins dbOrigins: [Origin], now: Date) -> [QRCard.Origin] {
 
 		dbOrigins
-			.compactMap { origin -> MyQRCard.Origin? in
+			.compactMap { origin -> QRCard.Origin? in
 				guard let typeRawValue = origin.type,
 					  let type = QRCodeOriginType(rawValue: typeRawValue),
 					  let eventDate = origin.eventDate,
@@ -193,7 +193,7 @@ extension MyQRCard.Origin {
 					  let validFromDate = origin.validFromDate
 				else { return nil }
 
-				return MyQRCard.Origin(
+				return QRCard.Origin(
 					type: type,
 					eventDate: eventDate,
 					expirationTime: expirationTime,

@@ -54,7 +54,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		sut = HolderDashboardQRCardDatasource(now: { now })
 
 		// Act
-		var cards = [HolderDashboardViewModel.MyQRCard]()
+		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
 		sut.didUpdate = {
 			cards = $0
@@ -76,7 +76,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		// Act
 		sut = HolderDashboardQRCardDatasource(now: { now })
 
-		var cards = [HolderDashboardViewModel.MyQRCard]()
+		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
 		sut.didUpdate = {
 			cards = $0
@@ -108,7 +108,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		// Act
 		sut = HolderDashboardQRCardDatasource(now: { now })
 
-		var cards = [HolderDashboardViewModel.MyQRCard]()
+		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
 		sut.didUpdate = {
 			cards = $0
@@ -140,7 +140,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		// Act
 		sut = HolderDashboardQRCardDatasource(now: { now })
 
-		var cards = [HolderDashboardViewModel.MyQRCard]()
+		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
 		sut.didUpdate = {
 			cards = $0
@@ -185,7 +185,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		// Act
 		sut = HolderDashboardQRCardDatasource(now: { now })
 
-		var cards = [HolderDashboardViewModel.MyQRCard]()
+		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
 		sut.didUpdate = {
 			cards = $0

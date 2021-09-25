@@ -192,7 +192,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
@@ -236,7 +236,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
@@ -280,13 +280,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
 			),
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
@@ -362,7 +362,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
@@ -493,7 +493,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
@@ -531,13 +531,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
 			),
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
@@ -585,7 +585,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
@@ -623,7 +623,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
@@ -687,7 +687,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
@@ -723,7 +723,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -772,7 +772,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.valid30DaysAgo_vaccination_expires60SecondsFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -821,7 +821,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneHourAgo_test_expires23HoursFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -871,7 +871,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneHourAgo_recovery_expires300DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -920,7 +920,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -973,7 +973,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.valid30DaysAgo_vaccination_expires60SecondsFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -1025,7 +1025,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -1072,7 +1072,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -1125,7 +1125,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneHourAgo_test_expires23HoursFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -1176,7 +1176,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneHourAgo_recovery_expires300DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -1225,7 +1225,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [
 					.validOneDayAgo_vaccination_expires3DaysFromNow(),
@@ -1286,7 +1286,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [
 					.validOneDayAgo_vaccination_expires3DaysFromNow(),
@@ -1329,7 +1329,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [
 					.valid30DaysAgo_vaccination_expires60SecondsFromNow(),
@@ -1369,7 +1369,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [
 					.valid30DaysAgo_vaccination_expires60SecondsFromNow(),
@@ -1416,7 +1416,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let recoveryGreenCardID = NSManagedObjectID()
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: vaccineGreenCardID,
 				origins: [
 					.validOneDayAgo_vaccination_expires3DaysFromNow()
@@ -1425,7 +1425,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 				evaluateEnabledState: { _ in true },
 				evaluateDCC: { _ in nil }
 			),
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: recoveryGreenCardID,
 				origins: [
 					.validOneHourAgo_recovery_expires300DaysFromNow()
@@ -1434,7 +1434,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 				evaluateEnabledState: { _ in true },
 				evaluateDCC: { _ in nil }
 			),
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: testGreenCardID,
 				origins: [
 					.validOneHourAgo_test_expires23HoursFromNow()
@@ -1501,7 +1501,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [
 					.validOneDayAgo_vaccination_expires3DaysFromNow(),
@@ -1548,7 +1548,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let recoveryGreenCardID = NSManagedObjectID()
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: vaccineGreenCardID,
 				origins: [
 					.validOneDayAgo_vaccination_expires3DaysFromNow()
@@ -1557,7 +1557,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 				evaluateEnabledState: { _ in true },
 				evaluateDCC: { _ in nil }
 			),
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: recoveryGreenCardID,
 				origins: [
 					.validOneHourAgo_recovery_expires300DaysFromNow()
@@ -1566,7 +1566,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 				evaluateEnabledState: { _ in true },
 				evaluateDCC: { _ in nil }
 			),
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: testGreenCardID,
 				origins: [
 					.validOneHourAgo_test_expires23HoursFromNow()
@@ -1608,7 +1608,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let vaccineGreenCardID = NSManagedObjectID()
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: vaccineGreenCardID,
 				origins: [
 					.validOneDayAgo_vaccination_expires3DaysFromNow()
@@ -1642,7 +1642,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validIn48Hours_vaccination_expires30DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -1692,7 +1692,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validIn48Hours_recovery_expires300DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -1743,7 +1743,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validIn48Hours_vaccination_expires30DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
@@ -1788,7 +1788,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.europeanUnion(
+			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validIn48Hours_recovery_expires300DaysFromNow()],
 				shouldShowErrorBeneathCard: false,

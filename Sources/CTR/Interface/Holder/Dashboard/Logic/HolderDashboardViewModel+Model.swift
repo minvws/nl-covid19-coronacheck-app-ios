@@ -13,10 +13,10 @@ import CoreData
 extension HolderDashboardViewModel {
 
 	/// Represents a Greencard in the UI,
-	/// Contains an array of `MyQRCard.Origin`.
+	/// Contains an array of `QRCard.Origin`.
 
 	// Future: it's turned out that this can be converted to a struct with a `.region` enum instead
-	enum MyQRCard {
+	enum QRCard {
 		case europeanUnion(greenCardObjectID: NSManagedObjectID, origins: [Origin], shouldShowErrorBeneathCard: Bool, evaluateEnabledState: (Date) -> Bool, evaluateDCC: (Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
 		case netherlands(greenCardObjectID: NSManagedObjectID, origins: [Origin], shouldShowErrorBeneathCard: Bool, evaluateEnabledState: (Date) -> Bool)
 
