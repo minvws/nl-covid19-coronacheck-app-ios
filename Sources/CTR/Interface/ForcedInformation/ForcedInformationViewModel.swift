@@ -31,6 +31,7 @@ final class ForcedInformationViewModel {
 				forcedInfo: info
 			)
 		)
+		viewController.isAccessibilityElement = true
 		return viewController
 	}
 	
