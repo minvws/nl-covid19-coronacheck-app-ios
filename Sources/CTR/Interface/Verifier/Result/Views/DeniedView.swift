@@ -13,7 +13,7 @@ final class DeniedView: BaseView, AccessViewable {
 		
 		enum Margin {
 			static let top: CGFloat = 4
-			static let secondaryButtonBottom: CGFloat = 24
+			static let secondaryButtonBottom: CGFloat = 8
 			static let button: CGFloat = 36
 		}
 		enum Spacing {
@@ -68,12 +68,14 @@ final class DeniedView: BaseView, AccessViewable {
 		return button
 	}()
 	
-	let footerButtonView: VerifierFooterButtonView = {
+	let footerButtonView: FooterButtonView = {
 		
-		let footerView = VerifierFooterButtonView()
+		let footerView = FooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false
 		return footerView
 	}()
+	
+	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
 	override func setupViews() {
 		super.setupViews()
@@ -81,7 +83,12 @@ final class DeniedView: BaseView, AccessViewable {
 		backgroundColor = Theme.colors.denied
 		scrollView.backgroundColor = Theme.colors.denied
 		footerButtonView.primaryButton.style = .roundedWhite
-		footerButtonView.footerActionColor = Theme.colors.denied
+		footerButtonView.backgroundColor = Theme.colors.denied
+		
+		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
+			let translatedOffset = scrollView.translatedBottomScrollOffset
+			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
+		}
 	}
 	
 	override func setupViewHierarchy() {
@@ -124,8 +131,8 @@ final class DeniedView: BaseView, AccessViewable {
 			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Size.buttonHeight),
 						
 			// Footer view
-			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}

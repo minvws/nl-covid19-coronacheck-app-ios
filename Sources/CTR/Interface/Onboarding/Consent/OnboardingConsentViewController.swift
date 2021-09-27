@@ -63,13 +63,7 @@ final class OnboardingConsentViewController: BaseViewController {
 			}
 		}
 		viewModel.$shouldHideBackButton.binding = { [weak self] in if !$0 { self?.addBackButton() } }
-		viewModel.$shouldHideConsentButton.binding = { [weak self] in self?.sceneView.consentButton.isHidden = $0 }
-	}
-
-	override func viewDidAppear(_ animated: Bool) {
-
-		super.viewDidAppear(animated)
-		sceneView.lineView.isHidden = !sceneView.scrollView.canScroll()
+		viewModel.$shouldHideConsentButton.binding = { [weak self] in if !$0 { self?.sceneView.setupConsentButton() } }
 	}
 
 	/// Setup a gesture recognizer for underlined text
@@ -98,14 +92,5 @@ final class OnboardingConsentViewController: BaseViewController {
 		if sceneView.primaryButton.isEnabled {
 			viewModel.primaryButtonTapped()
 		}
-	}
-}
-
-extension UIScrollView {
-
-	func canScroll() -> Bool {
-
-		let totalHeight = contentSize.height
-		return totalHeight > frame.size.height
 	}
 }

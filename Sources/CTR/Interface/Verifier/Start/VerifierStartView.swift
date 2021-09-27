@@ -13,12 +13,9 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	private struct ViewTraits {
 
 		// Dimensions
-		static let buttonHeight: CGFloat = 52
-		static let buttonWidth: CGFloat = 212.0
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
-		static let gradientHeight: CGFloat = 30.0
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -39,9 +36,6 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		return view
 	}()
 
-	/// the update button
-	private let primaryButton = Button()
-
 	private let showInstructionsButton: Button = {
 
 		let button = Button(title: "Button 2", style: .textLabelBlue)
@@ -57,26 +51,28 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		return view
 	}()
 
-	private let footerBackground: UIView = {
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground
-		return view
+	/// Footer view with primary button
+	let footerButtonView: FooterButtonView = {
+		let footerView = FooterButtonView()
+		footerView.translatesAutoresizingMaskIntoConstraints = false
+		return footerView
 	}()
-
-	let footerGradientView: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
+	
+	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 
 	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
-		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+		backgroundColor = Theme.colors.viewControllerBackground
+		
+		footerButtonView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		showInstructionsButton.touchUpInside(self, action: #selector(showInstructionsButtonTapped))
+		
+		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
+			let translatedOffset = scrollView.translatedBottomScrollOffset
+			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
+		}
 	}
 
 	/// Setup the hierarchy
@@ -87,15 +83,15 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		contentView.addSubview(contentTextView)
 		contentView.addSubview(showInstructionsButton)
 		contentView.addSubview(spacer)
-		addSubview(footerGradientView)
-		footerBackground.addSubview(primaryButton)
-		addSubview(footerBackground)
+		addSubview(footerButtonView)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
+		
+		bottomScrollViewConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
 
@@ -142,47 +138,16 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-
-			// Spacer
-			spacer.topAnchor.constraint(
-				equalTo: showInstructionsButton.bottomAnchor,
-				constant: ViewTraits.margin
-			),
-			spacer.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			spacer.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			spacer.heightAnchor.constraint(equalToConstant: 2 * ViewTraits.buttonHeight),
-			spacer.bottomAnchor.constraint(
+			showInstructionsButton.bottomAnchor.constraint(
 				equalTo: contentView.bottomAnchor,
 				constant: -ViewTraits.margin
 			),
 
-			// Footer background
-			footerGradientView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			footerGradientView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			footerGradientView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
-			footerGradientView.heightAnchor.constraint(equalToConstant: ViewTraits.gradientHeight),
-
-			// Footer background
-			footerBackground.leadingAnchor.constraint(equalTo: leadingAnchor),
-			footerBackground.trailingAnchor.constraint(equalTo: trailingAnchor),
-			footerBackground.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-			// Primary button
-			primaryButton.topAnchor.constraint(equalTo: footerBackground.topAnchor),
-			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
-			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
-			primaryButton.widthAnchor.constraint(lessThanOrEqualTo: footerBackground.widthAnchor),
-			primaryButton.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			)
+			// Footer view
+			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
 
@@ -197,28 +162,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 
 		showInstructionsButtonTappedCommand?()
 	}
-
-	private func setFooterGradient() {
-
-		footerGradientView.backgroundColor = .clear
-		let gradient = CAGradientLayer()
-		gradient.frame = footerGradientView.bounds
-		gradient.colors = [
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.0).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.5).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(1.0).cgColor
-		]
-		footerGradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-		footerGradientView.layer.insertSublayer(gradient, at: 0)
-	}
-
-	override func layoutSubviews() {
-
-		super.layoutSubviews()
-
-		setFooterGradient()
-	}
-
+	
 	// MARK: Public Access
 
 	/// The title
@@ -241,7 +185,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	/// The title of the primary button
 	var primaryTitle: String = "" {
 		didSet {
-			primaryButton.setTitle(primaryTitle, for: .normal)
+			footerButtonView.primaryButton.setTitle(primaryTitle, for: .normal)
 		}
 	}
 

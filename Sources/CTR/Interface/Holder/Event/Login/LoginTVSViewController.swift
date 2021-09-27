@@ -36,9 +36,6 @@ class LoginTVSViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		// Hide button part
-		sceneView.showLineView = false
-
 		// Binding
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 
@@ -63,17 +60,12 @@ class LoginTVSViewController: BaseViewController {
 		sceneView.message = content.subTitle
 
 		// Button
-		sceneView.showLineView = false
 		if let actionTitle = content.primaryActionTitle {
 			sceneView.primaryTitle = actionTitle
-			sceneView.footerBackground.isHidden = false
-			sceneView.primaryButton.isHidden = false
-			sceneView.footerGradientView.isHidden = false
+			sceneView.footerButtonView.isHidden = false
 		} else {
 			sceneView.primaryTitle = nil
-			sceneView.footerBackground.isHidden = true
-			sceneView.primaryButton.isHidden = true
-			sceneView.footerGradientView.isHidden = true
+			sceneView.footerButtonView.isHidden = true
 		}
 		sceneView.primaryButtonTappedCommand = content.primaryAction
 		sceneView.secondaryButtonTappedCommand = content.secondaryAction
