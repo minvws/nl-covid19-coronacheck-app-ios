@@ -14,12 +14,10 @@ final class ForcedInformationView: BaseView {
 		
 		// Dimensions
 		static let buttonHeight: CGFloat = 52
-		static let buttonWidth: CGFloat = 182.0
 		
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let pageControlMargin: CGFloat = 12.0
-		static let buttonMargin: CGFloat = 36.0
 	}
 	
 	/// The container for the the onboarding views
@@ -58,42 +56,18 @@ final class ForcedInformationView: BaseView {
 			// ImageContainer
 			containerView.topAnchor.constraint(equalTo: topAnchor),
 			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			containerView.trailingAnchor.constraint(equalTo: trailingAnchor)
-		])
-
-		setupPrimaryButton(useFullWidth: {
-			switch traitCollection.preferredContentSizeCategory {
-				case .unspecified: return true
-				case let size where size > .extraLarge: return true
-				default: return false
-			}
-		}())
-	}
-	
-	func setupPrimaryButton(useFullWidth: Bool = false) {
-		if useFullWidth {
-			NSLayoutConstraint.activate([
-
-				primaryButton.leadingAnchor.constraint(
-					equalTo: safeAreaLayoutGuide.leadingAnchor,
-					constant: ViewTraits.buttonMargin
-				),
-				primaryButton.trailingAnchor.constraint(
-					equalTo: safeAreaLayoutGuide.trailingAnchor,
-					constant: -ViewTraits.buttonMargin
-				)
-			])
-		} else {
-			NSLayoutConstraint.activate([
-				primaryButton.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
-				primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth)
-			])
-		}
-
-		NSLayoutConstraint.activate([
+			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			
 			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.topAnchor.constraint(equalTo: containerView.bottomAnchor),
+			primaryButton.leadingAnchor.constraint(
+				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			primaryButton.trailingAnchor.constraint(
+				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
+				constant: -ViewTraits.margin
+			),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
