@@ -68,6 +68,7 @@ final class ForcedInformationView: BaseView {
 				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
+			primaryButton.topAnchor.constraint(equalTo: containerView.bottomAnchor),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
