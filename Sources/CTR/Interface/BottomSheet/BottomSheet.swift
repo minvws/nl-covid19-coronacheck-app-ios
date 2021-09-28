@@ -21,7 +21,7 @@ present(modalViewController, animated: true, completion: nil)
 ```
 */
 
-final class BottomSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
+final class BottomSheetTransitionDelegate: NSObject, UIViewControllerTransitioningDelegate {
 
 	func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
 		return BottomSheetPresenter(presentedViewController: presented, presenting: presenting)
