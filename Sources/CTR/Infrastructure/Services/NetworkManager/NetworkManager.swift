@@ -350,7 +350,7 @@ extension NetworkManager: NetworkManaging {
 		completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 
 		guard let urlRequest = constructRequest(
-			url: networkConfiguration.vaccinationAccessTokensUrl,
+			url: networkConfiguration.eventAccessTokensUrl,
 			method: .POST,
 			headers: [HTTPHeaderKey.authorization: "Bearer \(tvsToken)"]
 		) else {
