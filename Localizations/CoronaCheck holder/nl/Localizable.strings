@@ -1,3 +1,4 @@
+"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "De app heeft af en toe verbinding met de server nodig om je QR-code te vernieuwen. Dat is niet gelukt door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
 "holder.tokenentry.regularflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.regularflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
 "holder.tokenentry.regularflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
@@ -105,16 +106,13 @@
 
 "holder.recovery.wrong.body" = "<p>Kloppen er gegevens niet? Neem contact op met je testlocatie. Zij kunnen de gegevens aanpassen.</p>";
 "general.retry" = "Probeer opnieuw";
-"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "<p>Je kunt de QR-code niet gebruiken door een fout op de server. <a href=\"%@\">Probeer opnieuw</a></p>";
-"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Je kunt de QR-code niet gebruiken door een fout op de server. <a href=\"%@\">Probeer opnieuw</a> of bel de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis)</p>";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, het is niet gelukt de QR-code te vernieuwen. Open de app opnieuw over 10 minuten.<br />Helpt dat niet? Bel dan de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis) en geef de foutcode (%@) door.</p>";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "Je hebt internet nodig om je QR-code te kunnen gebruiken.";
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Kan je binnenkort verbinding maken met het internet?";
 "holder.dashboard.strippen.expiring.nointernet.alert.message" = "De QR-code heeft af en toe internet nodig. Zonder internetverbinding kan je jouw QR-code nog %@ dagen gebruiken. Ook daarna kun je de QR-code weer gebruiken wanneer je internet hebt.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Maak verbinding met het internet";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "Om toegang tot je QR-codes te houden heb je internet nodig. Maak nu verbinding.";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Fout op de server";
-"holder.dashboard.strippen.expired.servererror.alert.message" = "Om je QR-code te gebruiken heeft de app verbinding met de server nodig. Helaas is er nu een fout op de server (foutcode: %@). Probeer opnieuw of kom later terug.";
-
 "holder.recovery.tooOld.title" = "Positieve testuitslag niet meer geldig";
 "holder.recovery.tooOld.message" = "Is het langer dan 180 dagen geleden dat je getest bent? Dan is je testuitslag niet meer geldig. Je kunt dan geen herstelbewijs maken.";
 "holder.recovery.list.message" = "Met de opgehaalde gegevens kun je een herstelbewijs maken.";
