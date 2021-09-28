@@ -383,18 +383,9 @@ extension HolderDashboardViewModel.MyQRCard {
 
 		switch self {
 			case let .netherlands(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState):
-				let rows = origins.map { origin in
-					HolderDashboardViewController.Card.QRCardRow(
-						typeText: origin.type.localizedProof.capitalizingFirstLetter(),
-						validityText: { now in
-							let validityType = MyQRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
-							return validityType.text(myQRCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
-						}
-					)
-				}
 
 				var cards = [HolderDashboardViewController.Card.domesticQR(
-					rows: rows,
+					validityTexts: validityTextsGenerator(origins: origins, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
 					buttonEnabledEvaluator: evaluateEnabledState,
@@ -433,23 +424,8 @@ extension HolderDashboardViewModel.MyQRCard {
 				return cards
 
 			case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState, _):
-				let rows = origins.map { origin in
-					HolderDashboardViewController.Card.QRCardRow(
-						typeText: {
-							switch origin.type {
-								case .vaccination, .test: return nil
-								default: return origin.type.localizedProof.capitalizingFirstLetter()
-							}
-						}(),
-						validityText: { now in
-							let validityType = MyQRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
-							return validityType.text(myQRCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
-						}
-					)
-				}
-
 				var cards = [HolderDashboardViewController.Card.europeanUnionQR(
-					rows: rows,
+					validityTexts: validityTextsGenerator(origins: origins, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
 					buttonEnabledEvaluator: evaluateEnabledState,
@@ -462,6 +438,17 @@ extension HolderDashboardViewModel.MyQRCard {
 
 				return cards
 		}
+	}
+
+	// Returns a closure that, given a Date, will return the groups of text ("ValidityText") that should be shown per-origin on the QR Card.
+	private func validityTextsGenerator(origins: [HolderDashboardViewModel.MyQRCard.Origin], remoteConfigManager: RemoteConfigManaging) -> (Date) -> [HolderDashboardViewController.ValidityText] {
+		return { now in
+			return origins.map { origin in
+				let validityType = MyQRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
+				let first = validityType.text(myQRCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
+				return first
+			}
+		 }
 	}
 }
 

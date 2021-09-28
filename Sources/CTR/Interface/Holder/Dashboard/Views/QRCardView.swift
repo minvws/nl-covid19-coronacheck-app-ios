@@ -9,12 +9,6 @@ import UIKit
 
 class QRCardView: BaseView {
 
-	// MARK: - Public types
-	struct OriginRow {
-		let type: String?
-		let validityString: (Date) -> HolderDashboardViewController.ValidityText
-	}
-
 	// MARK: - Private types
 
 	/// The display constants
@@ -170,25 +164,25 @@ class QRCardView: BaseView {
 
 	var originDesiresToShowAutomaticallyBecomesValidFooter = false
 
-	private func reapplyLabels() {
+	private func reapplyLabels(now: Date = Date()) {
 
 		// Remove previous labels
 		verticalLabelsStackView.arrangedSubviews.forEach { arrangedView in
 			verticalLabelsStackView.removeArrangedSubview(arrangedView)
 			arrangedView.removeFromSuperview()
 		}
+ 
+		guard let validityTexts = validityTexts?(now) else { return }
 
-		originRows?.forEach { row in
-			let validityText = row.validityString(Date())
+		// Each "Row" corresponds to an origin.
+		// Each Row contains an *array* of texts (simply to force newlines when needed)
+		// and they are rendered as grouped together.
+
+		validityTexts.forEach { validityText in
+
 			guard validityText.kind != .past else { return }
 
-			if let type = row.type {
-				let qrTypeLabel = Label(body: type + (validityText.texts.isEmpty ? "" : ":"))
-				qrTypeLabel.numberOfLines = 0
-				verticalLabelsStackView.addArrangedSubview(qrTypeLabel)
-			}
-
-			validityText.texts.forEach { text in
+			validityText.lines.forEach { text in
 				let label = Label(body: text)
 				label.numberOfLines = 0
 				verticalLabelsStackView.addArrangedSubview(label)
@@ -215,7 +209,6 @@ class QRCardView: BaseView {
 			if let lastLabel = verticalLabelsStackView.arrangedSubviews.last as? Label {
 				verticalLabelsStackView.setCustomSpacing(22, after: lastLabel)
 			}
-
 		}
 
 		if let expiryEvaluator = expiryEvaluator {
@@ -281,7 +274,7 @@ class QRCardView: BaseView {
 
 	// MARK: Public Access
 
-	var originRows: [OriginRow]? {
+	var validityTexts: ((Date) -> [HolderDashboardViewController.ValidityText])? {
 		didSet {
 			reapplyLabels()
 		}
