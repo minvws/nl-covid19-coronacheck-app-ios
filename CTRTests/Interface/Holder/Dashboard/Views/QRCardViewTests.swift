@@ -22,7 +22,6 @@ class QRCardViewTests: XCTestCase {
 		let sut = QRCardView()
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
 
 		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
 			return [
@@ -56,7 +55,6 @@ class QRCardViewTests: XCTestCase {
 		let sut = QRCardView()
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
 		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
 			return [
 				HolderDashboardViewController.ValidityText(lines: [
@@ -81,7 +79,6 @@ class QRCardViewTests: XCTestCase {
 		let sut = QRCardView()
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
 		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
 			return [
 				HolderDashboardViewController.ValidityText(lines: [
@@ -128,7 +125,6 @@ class QRCardViewTests: XCTestCase {
 		let sut = QRCardView()
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
 		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
 			return [
 				HolderDashboardViewController.ValidityText(lines: [
@@ -152,7 +148,6 @@ class QRCardViewTests: XCTestCase {
 		let sut = QRCardView()
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
 		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
 			return [
 				HolderDashboardViewController.ValidityText(lines: [
@@ -176,7 +171,6 @@ class QRCardViewTests: XCTestCase {
 		let sut = QRCardView()
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
 		sut.shouldStyleForEU = true
 		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
 			return [
