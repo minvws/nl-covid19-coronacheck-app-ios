@@ -7,6 +7,7 @@
 
 import Foundation
 import Reachability
+import UIKit
 
 protocol DashboardStrippenRefreshing: AnyObject {
 	func load()
@@ -21,13 +22,13 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		case unknownErrorA
 		case logicalErrorA
 		case greencardLoaderError(error: GreenCardLoader.Error)
-		case networkError(error: NetworkError)
+		case networkError(error: NetworkError, timestamp: Date)
 
 		var errorDescription: String? {
 			switch self {
 				case .greencardLoaderError(let error):
 					return error.errorDescription
-				case .networkError(let error):
+				case .networkError(let error, _):
 					return error.rawValue
 				case .logicalErrorA:
 					return "Logical error A"
@@ -97,7 +98,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 				case let error as NetworkError:
 					state.errorOccurenceCount += 1
-					state.loadingState = .failed(error: .networkError(error: error))
+					state.loadingState = .failed(error: .networkError(error: error, timestamp: Date()))
 
 				// Catch the specific case of a wrapped NetworkError.noInternetConnection and recurse it
 				case GreenCardLoader.Error.credentials(.error(_, _, let networkError)),
@@ -168,6 +169,27 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 			self.load()
 		}
 		try? reachability?.startNotifier()
+
+		// Hotfix for 2.3.3:
+		NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+			guard let self = self else { return }
+
+			// We've returned from the background.
+			// Is the StrippenRefresher currently in a failed state due to a network error?
+			// Is it also at least 10 minutes since the error occurred?
+			// Then: reload the strippen refresher again.
+			switch (self.state.loadingState, self.state.greencardsCredentialExpiryState) {
+				case (.failed(DashboardStrippenRefresher.Error.networkError(_, timestamp: let failureDate)), .expired):
+					let delay: Double = 10 * 60 // Threshold of time to wait until retrying: 10 minutes
+
+					if self.now().timeIntervalSince(failureDate) > delay {
+						self.load()
+					}
+
+				default:
+					break
+			}
+		}
 	}
 
 	func load() {
