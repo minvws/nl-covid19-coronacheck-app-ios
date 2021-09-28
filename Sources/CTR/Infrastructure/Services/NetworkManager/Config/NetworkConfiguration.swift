@@ -62,14 +62,14 @@ struct NetworkConfiguration {
 		),
 		cdn: .init(
 			scheme: "https",
-			host: AppFlavor.flavor == .holder ? "holder-api.coronacheck.nl" : "verifier-api.coronacheck.nl",
+			host: AppFlavor.flavor == .holder ? "holder-api-cdn.coronacheck.nl" : "verifier-api-cdn.coronacheck.nl",
 			port: nil,
 			path: ["v5"]
 		)
 	)
 
 	/// The access tokens url
-	var vaccinationAccessTokensUrl: URL? {
+	var eventAccessTokensUrl: URL? {
 
 		return self.combine(path: Endpoint.accessTokens, fromCdn: false)
 	}
@@ -80,7 +80,7 @@ struct NetworkConfiguration {
 		return self.combine(path: Endpoint.prepareIssue, fromCdn: false)
 	}
 
-	/// The nonce url
+	/// The signer url
 	var credentialUrl: URL? {
 
 		return self.combine(path: Endpoint.getCredentials, fromCdn: false)
@@ -95,19 +95,19 @@ struct NetworkConfiguration {
 	/// The public keys url
 	var publicKeysUrl: URL? {
 
-		return self.combine(path: Endpoint.publicKeys, fromCdn: false)
+		return self.combine(path: Endpoint.publicKeys, fromCdn: true)
 	}
 
 	/// The remote configuration url
     var remoteConfigurationUrl: URL? {
 
-		return self.combine(path: Endpoint.remoteConfiguration, fromCdn: false)
+		return self.combine(path: Endpoint.remoteConfiguration, fromCdn: true)
     }
 
 	/// The providers url
 	var providersUrl: URL? {
 
-		return self.combine(path: Endpoint.providers, fromCdn: false)
+		return self.combine(path: Endpoint.providers, fromCdn: true)
 	}
 
 	/// Combine the endpoint info into an url
