@@ -38,7 +38,6 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 	
 	private let scrollView: UIScrollView = {
 		let scrollView = UIScrollView()
-		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		scrollView.showsHorizontalScrollIndicator = false
 		scrollView.bounces = false
 		return scrollView
@@ -83,6 +82,8 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		scrollView.isScrollEnabled = scrollViewHeight > maxHeight
 		height = min(maxHeight, scrollViewHeight)
 		
+		resizeScrollView(frame: frame)
+		
 		preferredContentSize = .init(width: frame.width, height: height)
 	}
 }
@@ -106,17 +107,13 @@ private extension BottomSheetModalViewController {
 		scrollView.addSubview(childViewController.view)
 		view.addSubview(closeButton)
 		
-		childViewController.view.translatesAutoresizingMaskIntoConstraints = false
 		closeButton.addTarget(self, action: #selector(dismissModal), for: .touchUpInside)
 	}
 	
 	func setupViewConstraints() {
+		childViewController.view.translatesAutoresizingMaskIntoConstraints = false
+		
 		NSLayoutConstraint.activate([
-			scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: ViewTraits.Margin.top),
-			scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
-			scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-			
 			childViewController.view.topAnchor.constraint(equalTo: scrollView.topAnchor),
 			childViewController.view.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
 			childViewController.view.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
@@ -131,5 +128,12 @@ private extension BottomSheetModalViewController {
 	@objc
 	func dismissModal() {
 		dismiss(animated: true)
+	}
+	
+	func resizeScrollView(frame: CGRect) {
+		scrollView.frame = .init(origin: .init(x: 0,
+											   y: ViewTraits.Margin.top),
+								 size: .init(width: frame.width,
+											 height: frame.height - ViewTraits.Margin.top))
 	}
 }
