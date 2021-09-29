@@ -125,7 +125,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 				&& lhs.userHasPreviouslyDismissedALoadingError == rhs.userHasPreviouslyDismissedALoadingError
 				&& lhs.hasLoadingEverFailed == rhs.hasLoadingEverFailed
 				&& lhs.errorOccurenceCount == rhs.errorOccurenceCount
-				// && lhs.now() == rhs.now()
+				&& lhs.now() == rhs.now()
 		}
 	}
 
