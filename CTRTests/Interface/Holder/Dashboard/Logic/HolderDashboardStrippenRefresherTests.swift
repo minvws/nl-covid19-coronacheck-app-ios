@@ -138,7 +138,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expiring(deadline: now.addingTimeInterval(3 * days * fromNow))
-		expect(self.sut.state.loadingState) == .failed(error: .networkError(error: .serverBusy))
+		expect(self.sut.state.loadingState) == .failed(error: .networkError(error: .serverBusy, timestamp: now))
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 1
 
@@ -211,7 +211,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expiring(deadline: now.addingTimeInterval(3 * days * fromNow))
-		expect(self.sut.state.loadingState) == .failed(error: .networkError(error: .serverBusy))
+		expect(self.sut.state.loadingState) == .failed(error: .networkError(error: .serverBusy, timestamp: now))
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 1
 
@@ -249,7 +249,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expiring(deadline: now.addingTimeInterval(3 * days * fromNow))
-		expect(self.sut.state.loadingState) == .failed(error: DashboardStrippenRefresher.Error.networkError(error: .invalidSignature))
+		expect(self.sut.state.loadingState) == .failed(error: DashboardStrippenRefresher.Error.networkError(error: .invalidSignature, timestamp: now))
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 1
 

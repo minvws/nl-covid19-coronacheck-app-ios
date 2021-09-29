@@ -64,8 +64,8 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 		// MARK: - Vars
 		private(set) var loadingState: LoadingState = .idle
+		private(set) var now: () -> Date
 		var greencardsCredentialExpiryState: GreencardsCredentialExpiryState
-
 		// purpose: until a user dismisses the error, it should be presented via an alert.
 		// thereafter, it should be displayed non-modally in the UI instead.
 		var userHasPreviouslyDismissedALoadingError: Bool = false
@@ -98,7 +98,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 				case let error as NetworkError:
 					state.errorOccurenceCount += 1
-					state.loadingState = .failed(error: .networkError(error: error, timestamp: Date()))
+					state.loadingState = .failed(error: .networkError(error: error, timestamp: now()))
 
 				// Catch the specific case of a wrapped NetworkError.noInternetConnection and recurse it
 				case GreenCardLoader.Error.credentials(.error(_, _, let networkError)),
@@ -117,6 +117,15 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 					state.loadingState = .failed(error: .unknownErrorA)
 			}
 			self = state
+		}
+
+		static func == (lhs: DashboardStrippenRefresher.State, rhs: DashboardStrippenRefresher.State) -> Bool {
+			return lhs.loadingState == rhs.loadingState
+				&& lhs.greencardsCredentialExpiryState == rhs.greencardsCredentialExpiryState
+				&& lhs.userHasPreviouslyDismissedALoadingError == rhs.userHasPreviouslyDismissedALoadingError
+				&& lhs.hasLoadingEverFailed == rhs.hasLoadingEverFailed
+				&& lhs.errorOccurenceCount == rhs.errorOccurenceCount
+				// && lhs.now() == rhs.now()
 		}
 	}
 
@@ -157,7 +166,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 			now: now()
 		)
 
-		state = State(greencardsCredentialExpiryState: expiryState)
+		state = State(now: now, greencardsCredentialExpiryState: expiryState)
 
 		// Start updates for network access availablity:
 		self.reachability = reachability
