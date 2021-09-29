@@ -15,4 +15,15 @@ extension UIViewController {
 		navigationController?.navigationBar.backgroundColor = .clear
 		navigationController?.navigationBar.barTintColor = .clear
 	}
+	
+	/// Presents a view controller as bottom sheet modal
+	/// - Parameters:
+	///   - viewControllerToPresent: The view controller to display over the current view controller’s content
+	///   - transitioningDelegate: Initialize and hold a reference to `BottomSheetTransitioningDelegate`
+	func presentBottomSheet(_ viewControllerToPresent: UIViewController, transitioningDelegate: BottomSheetTransitioningDelegate) {
+		let bottomSheetViewController = BottomSheetModalViewController(childViewController: viewControllerToPresent)
+		bottomSheetViewController.transitioningDelegate = transitioningDelegate
+		bottomSheetViewController.modalPresentationStyle = .custom
+		present(bottomSheetViewController, animated: true)
+	}
 }

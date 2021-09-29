@@ -46,11 +46,9 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 	var interactiveTransition: BottomSheetInteractiveTransition?
 	
 	private let childViewController: UIViewController
-	private weak var presentingFromViewController: UIViewController?
 	
-	init(childViewController: UIViewController, presentingFromViewController: UIViewController?) {
+	init(childViewController: UIViewController) {
 		self.childViewController = childViewController
-		self.presentingFromViewController = presentingFromViewController
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -60,15 +58,12 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setupViewProperties()
 		setupViews()
+		setupViewHierarchy()
 		setupViewConstraints()
 		calculatePreferredContentSize(frame: view.frame)
+		
 		interactiveTransition = BottomSheetInteractiveTransition(presentingViewController: self)
-	}
-	
-	override var preferredStatusBarStyle: UIStatusBarStyle {
-		return presentingFromViewController?.preferredStatusBarStyle ?? .default
 	}
 	
 	override func viewSafeAreaInsetsDidChange() {
@@ -95,7 +90,7 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 
 private extension BottomSheetModalViewController {
 	
-	func setupViewProperties() {
+	func setupViews() {
 		view.backgroundColor = .white
 		view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
 		view.layer.cornerRadius = 10
@@ -103,16 +98,16 @@ private extension BottomSheetModalViewController {
 		view.layer.shadowOpacity = 0.1
 		view.layer.shadowRadius = 10
 		view.clipsToBounds = true
+		
+		closeButton.addTarget(self, action: #selector(dismissModal), for: .touchUpInside)
 	}
 	
-	func setupViews() {
+	func setupViewHierarchy() {
 		addChild(childViewController)
 		childViewController.didMove(toParent: self)
 		view.addSubview(scrollView)
 		scrollView.addSubview(childViewController.view)
 		view.addSubview(closeButton)
-		
-		closeButton.addTarget(self, action: #selector(dismissModal), for: .touchUpInside)
 	}
 	
 	func setupViewConstraints() {

@@ -237,11 +237,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	private func presentAsBottomSheet(_ viewController: UIViewController) {
 		
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.present(viewController, animated: true, completion: nil)
+		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.presentBottomSheet(viewController, transitioningDelegate: bottomSheetTransitioningDelegate)
 	}
 }
 

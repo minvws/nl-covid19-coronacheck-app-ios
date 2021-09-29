@@ -102,11 +102,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		navigationController.viewControllers.last?.present(viewController, animated: true, completion: nil)
+		navigationController.viewControllers.last?.presentBottomSheet(viewController, transitioningDelegate: bottomSheetTransitioningDelegate)
 	}
 
 	func userWantsToGoBackToDashboard() {

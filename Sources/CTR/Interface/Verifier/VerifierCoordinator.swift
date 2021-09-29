@@ -122,12 +122,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				content: content
 			)
 		)
-
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		sidePanel?.selectedViewController?.present(viewController, animated: true, completion: nil)
+		sidePanel?.selectedViewController?.presentBottomSheet(viewController, transitioningDelegate: bottomSheetTransitioningDelegate)
 	}
 
 	func navigateToScanInstruction() {

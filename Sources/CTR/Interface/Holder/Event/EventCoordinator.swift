@@ -303,11 +303,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	private func presentAsBottomSheet(_ viewController: UIViewController) {
 
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
+		navigationController.visibleViewController?.presentBottomSheet(viewController, transitioningDelegate: bottomSheetTransitioningDelegate)
 	}
 
 	private func navigateBackToEventStart() {
