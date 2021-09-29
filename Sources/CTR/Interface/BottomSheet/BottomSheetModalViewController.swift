@@ -23,7 +23,6 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 	}
 	
 	var modalScrollView: UIScrollView? {
-//		return (childViewController as? BottomSheetScrollable)?.modalScrollView
 		return scrollView
 	}
 	
