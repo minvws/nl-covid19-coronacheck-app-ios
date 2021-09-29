@@ -44,7 +44,7 @@ private extension BottomSheetInteractiveTransition {
 				isInteractionInProgress = true
 				presentingViewController.dismiss(animated: true)
 			case .changed:
-				shouldCompleteTransition = (velocity.x > highVelocity && transitionPercentage > 0.2) || transitionPercentage > 0.5
+				shouldCompleteTransition = (velocity.x > highVelocity && transitionPercentage > 0.2) || transitionPercentage > 0.3
 				update(transitionPercentage)
 			case .ended, .cancelled:
 				isInteractionInProgress = false
@@ -87,7 +87,7 @@ extension BottomSheetInteractiveTransition: UIGestureRecognizerDelegate {
 	}
 }
 
-extension UIScrollView {
+private extension UIScrollView {
 	
 	func cancelScrolling() {
 		guard isScrollEnabled else { return }
