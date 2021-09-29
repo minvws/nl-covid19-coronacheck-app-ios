@@ -230,6 +230,42 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 2
 	}
 
+	func test_serverError_shouldRetryIfAppReturnsFromBackgroundAfterTenMinutes() {
+
+		// Arrange `expiring` starting state
+		walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: dataStoreManager)
+		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
+			(.failure(GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: 429, response: nil, error: .serverBusy))), ())
+
+		var fakeNow: Date = now
+
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			walletManager: walletManagerSpy,
+			greencardLoader: greencardLoaderSpy,
+			reachability: reachabilitySpy,
+			now: { fakeNow }
+		)
+
+		// Act & Assert
+		sut.load()
+		expect(self.greencardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentialsCount) == 1
+		expect(self.sut.state.greencardsCredentialExpiryState) == .expired
+		expect(self.sut.state.loadingState) == .failed(error: .networkError(error: .serverBusy, timestamp: now))
+
+		// Simulate return from the background after five minutes:
+		fakeNow = now.addingTimeInterval(5 * minutes * fromNow)
+		NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
+
+		// Should not have retried
+		expect(self.greencardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentialsCount) == 1
+
+		// Simulate return from the background after more than ten minutes:
+		fakeNow = now.addingTimeInterval(11 * minutes * fromNow)
+		NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
+		expect(self.greencardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentialsCount) == 2
+	}
+
 	func test_serverError_invalidSignature() {
 
 		// Arrange `expiring` starting state
