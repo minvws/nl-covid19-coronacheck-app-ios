@@ -64,7 +64,7 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		setupViewProperties()
 		setupViews()
 		setupViewConstraints()
-		calculatePreferredContentSize()
+		calculatePreferredContentSize(frame: view.frame)
 		interactiveTransition = BottomSheetInteractiveTransition(presentingViewController: self)
 	}
 	
@@ -72,13 +72,9 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		return presentingFromViewController?.preferredStatusBarStyle ?? .default
 	}
 	
-	func calculateSize() {
-		preferredContentSize = .init(width: view.bounds.width, height: 500)
-	}
-	
-	func calculatePreferredContentSize() {
+	func calculatePreferredContentSize(frame: CGRect) {
 		let safeAreaInsets = UIApplication.shared.windows.first?.safeAreaInsets ?? .zero
-		let maxHeight = view.bounds.height - safeAreaInsets.top
+		let maxHeight = frame.height - safeAreaInsets.top
 		var height = maxHeight
 		let additionalHeight = ViewTraits.Margin.top + safeAreaInsets.bottom
 		
@@ -87,7 +83,7 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		scrollView.isScrollEnabled = scrollViewHeight > maxHeight
 		height = min(maxHeight, scrollViewHeight)
 		
-		preferredContentSize = .init(width: view.bounds.width, height: height)
+		preferredContentSize = .init(width: frame.width, height: height)
 	}
 }
 
@@ -128,7 +124,7 @@ private extension BottomSheetModalViewController {
 			childViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
 			
 			closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: ViewTraits.Margin.closeButton),
-			closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ViewTraits.Margin.closeButton)
+			closeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ViewTraits.Margin.closeButton)
 		])
 	}
 	

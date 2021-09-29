@@ -23,19 +23,12 @@ final class BottomSheetPresentationController: UIPresentationController {
 	}
 	
 	override func presentationTransitionWillBegin() {
-		guard let coordinator = presentedViewController.transitionCoordinator, let containerView = containerView else {
+		guard let coordinator = presentedViewController.transitionCoordinator else {
 			self.overlayView.alpha = 1
 			return
 		}
 		
-		containerView.insertSubview(overlayView, at: 0)
-		overlayView.translatesAutoresizingMaskIntoConstraints = false
-		NSLayoutConstraint.activate([
-			overlayView.topAnchor.constraint(equalTo: containerView.topAnchor),
-			overlayView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-			overlayView.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-			overlayView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-		])
+		setupOverlay()
 		
 		coordinator.animate { _ in
 			self.overlayView.alpha = 1
@@ -64,10 +57,16 @@ final class BottomSheetPresentationController: UIPresentationController {
 		let yPoint = containerView!.bounds.height - height
 		return CGRect(x: 0, y: yPoint, width: size.width, height: height)
 	}
+	
+	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+		super.viewWillTransition(to: size, with: coordinator)
 
-	override func containerViewDidLayoutSubviews() {
-		super.containerViewDidLayoutSubviews()
-		presentedView?.frame = frameOfPresentedViewInContainerView
+		coordinator.animate { [weak self] _ in
+			guard let self = self else { return }
+			guard let bottomSheetModalViewController = self.presentedViewController as? BottomSheetModalViewController else { return }
+			bottomSheetModalViewController.calculatePreferredContentSize(frame: self.containerView?.frame ?? .zero)
+			self.presentedView?.frame = self.frameOfPresentedViewInContainerView
+		}
 	}
 }
 
@@ -76,5 +75,18 @@ private extension BottomSheetPresentationController {
 	@objc
 	func handleTap(_ recognizer: UITapGestureRecognizer) {
 		presentingViewController.dismiss(animated: true)
+	}
+	
+	func setupOverlay() {
+		guard let containerView = containerView else { return }
+		
+		containerView.insertSubview(overlayView, at: 0)
+		overlayView.translatesAutoresizingMaskIntoConstraints = false
+		NSLayoutConstraint.activate([
+			overlayView.topAnchor.constraint(equalTo: containerView.topAnchor),
+			overlayView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+			overlayView.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+			overlayView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+		])
 	}
 }
