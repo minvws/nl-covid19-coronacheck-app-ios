@@ -46,11 +46,6 @@ struct SecurityCheckerFactory {
 		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate]
 		var checkForAuthorityKeyIdentifierAndNameAndSuffix = true
 
-		if networkConfiguration.name == "Development" || networkConfiguration.name == "Test" {
-			trustedNames.append(TrustConfiguration.testNameContent)
-			trustedCertificates.append(TrustConfiguration.rootISRGX1)
-		}
-
 		if case SecurityStrategy.data = strategy {
 			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
 			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
