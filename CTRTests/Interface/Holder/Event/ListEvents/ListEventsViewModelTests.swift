@@ -1622,7 +1622,6 @@ class ListEventsViewModelTests: XCTestCase {
 		]
 	)
 
-
 	private let remoteGreenCardsNoOrigin = RemoteGreenCards.Response(
 		domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
 			origins: [],
