@@ -106,7 +106,7 @@
 
 "holder.recovery.wrong.body" = "<p>Are these details incorrect? Please contact your test location. They can edit your details.</p>";
 "general.retry" = "Try again";
-"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br />No success? Please call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free) and provide the following error code: (ServerError).</p>";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br /><br />Still not working? Please call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free) and provide the following error code: (i 075).</p>";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Are you able to connect to the internet soon?";
 "holder.dashboard.strippen.expiring.nointernet.alert.message" = "The app periodically needs an internet connection. Without reconnecting you can use the QR code for %@ days more. Beyond that, you will need to connect to the internet to access the QR code.";
