@@ -71,6 +71,11 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		return presentingFromViewController?.preferredStatusBarStyle ?? .default
 	}
 	
+	override func viewSafeAreaInsetsDidChange() {
+		super.viewSafeAreaInsetsDidChange()
+		scrollView.contentInset.bottom = view.safeAreaInsets.bottom
+	}
+	
 	func calculatePreferredContentSize(frame: CGRect) {
 		let safeAreaInsets = UIApplication.shared.windows.first?.safeAreaInsets ?? .zero
 		let maxHeight = frame.height - safeAreaInsets.top
