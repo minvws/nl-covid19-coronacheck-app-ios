@@ -1,3 +1,4 @@
+"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR code. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
 "holder.tokenentry.regularflow.error.invalid.combination" = "No valid combination";
 "holder.tokenentry.regularflow.error.emptytoken" = "Please fill out a retrieval code first";
 "holder.tokenentry.regularflow.error.emptycode" = "Please fill out a verification code first";
@@ -105,16 +106,13 @@
 
 "holder.recovery.wrong.body" = "<p>Are these details incorrect? Please contact your test location. They can edit your details.</p>";
 "general.retry" = "Try again";
-"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a>";
-"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a><br />or call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free)";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br />No success? Please call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free) and provide the following error code: (ServerError).</p>";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Are you able to connect to the internet soon?";
 "holder.dashboard.strippen.expiring.nointernet.alert.message" = "The app periodically needs an internet connection. Without reconnecting you can use the QR code for %@ days more. Beyond that, you will need to connect to the internet to access the QR code.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Connect to the internet";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Server error";
-"holder.dashboard.strippen.expired.servererror.alert.message" = "To use the QR code, the app must make a connection to the server. Unfortunately there is currently a server issue (error: %@). Retry now or try again later.";
-
 "holder.recovery.tooOld.title" = "Positive test result is not valid";
 "holder.recovery.tooOld.message" = "Have you been tested more than 180 days ago? Then your test result is no longer valid. In this case, you cannot create a recovery certificate.";
 "holder.recovery.list.message" = "You can create a recovery certificate from the retrieved details.";

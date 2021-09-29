@@ -204,16 +204,12 @@ final class HolderDashboardViewModel: Logging {
 
 			// ❤️‍🩹 NETWORK ERROR: Refresher has entered a failed state (i.e. Server Error)
 
-			case (.failed, .expired, true):
+			case (.failed, .expired, _):
 				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
 
 				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
-					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(AppAction.tryAgain)
+					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 					: L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
-
-			case (.failed(error: let error), .expired, false):
-				logDebug("StrippenRefresh: Need refreshing now, but server error. Presenting alert.")
-				currentlyPresentedAlert = AlertContent.strippenExpiringServerError(strippenRefresher: strippenRefresher, error: error)
 
 			case (.failed, .expiring, _):
 				// In this case we just swallow the server errors.
@@ -557,21 +553,6 @@ extension AlertContent {
 		return AlertContent(
 			title: L.holderDashboardStrippenExpiringNointernetAlertTitle(),
 			subTitle: L.holderDashboardStrippenExpiringNointernetAlertMessage(localizedTimeRemainingUntilExpiry),
-			cancelAction: { _ in
-				strippenRefresher.userDismissedALoadingError()
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { _ in
-				strippenRefresher.load()
-			},
-			okTitle: L.generalRetry()
-		)
-	}
-
-	fileprivate static func strippenExpiringServerError(strippenRefresher: DashboardStrippenRefreshing, error: DashboardStrippenRefresher.Error) -> AlertContent {
-		AlertContent(
-			title: L.holderDashboardStrippenExpiredServererrorAlertTitle(),
-			subTitle: L.holderDashboardStrippenExpiredServererrorAlertMessage(error.localizedDescription),
 			cancelAction: { _ in
 				strippenRefresher.userDismissedALoadingError()
 			},
