@@ -185,9 +185,16 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 			self?.retryAfterNetworkFailureIfNeeded()
 		}
 
-		retryAfterNetworkFailureTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+		// Hotfix for 2.3.3:
+		// Every minute it will check if it needs to refresh (note: the gate inside `retryAfterNetworkFailureIfNeeded` is set at 10 minutes)
+		retryAfterNetworkFailureTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
 			self?.retryAfterNetworkFailureIfNeeded()
 		}
+	}
+
+	deinit {
+		retryAfterNetworkFailureTimer?.invalidate()
+		retryAfterNetworkFailureTimer = nil
 	}
 
 	func retryAfterNetworkFailureIfNeeded() {
@@ -198,9 +205,10 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		// Then: reload the strippen refresher again.
 		switch (self.state.loadingState, self.state.greencardsCredentialExpiryState) {
 			case (.failed(DashboardStrippenRefresher.Error.networkError(_, timestamp: let failureDate)), .expired):
-				let delay: Double = 10 * 60 // Threshold of time to wait until retrying: 10 minutes
 
-				if self.now().timeIntervalSince(failureDate) > delay {
+				let tenMinuteDelay: Double = 10 * 60 // Threshold of time to wait until retrying
+
+				if self.now().timeIntervalSince(failureDate) > tenMinuteDelay {
 					self.load()
 				}
 
