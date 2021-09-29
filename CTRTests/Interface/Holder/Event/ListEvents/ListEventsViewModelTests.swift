@@ -1061,7 +1061,47 @@ class ListEventsViewModelTests: XCTestCase {
 			.toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
-	
+
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveGreencardNoError_multipleDCC() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [defaultRemoteVaccinationEvent()]
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedStoreEuGreenCardResult = true
+		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCardsMultipleDCC), ())
+		networkSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
+			.toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
+		expect(self.sut.alert).toEventually(beNil())
+	}
+
 	func test_vaccinationrow_completionStatus_unknown() {
 
 		// Given
@@ -1543,6 +1583,45 @@ class ListEventsViewModelTests: XCTestCase {
 			)
 		]
 	)
+
+	private let remoteGreenCardsMultipleDCC = RemoteGreenCards.Response(
+		domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+			origins: [
+				RemoteGreenCards.Origin(
+					type: "vaccination",
+					eventTime: Date(),
+					expirationTime: Date(),
+					validFrom: Date()
+				)
+			],
+			createCredentialMessages: "test"
+		),
+		euGreenCards: [
+			RemoteGreenCards.EuGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "vaccination",
+						eventTime: Date(),
+						expirationTime: Date(),
+						validFrom: Date()
+					)
+				],
+				credential: "test credential1"
+			),
+			RemoteGreenCards.EuGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "vaccination",
+						eventTime: Date(),
+						expirationTime: Date(),
+						validFrom: Date()
+					)
+				],
+				credential: "test credential2"
+			)
+		]
+	)
+
 
 	private let remoteGreenCardsNoOrigin = RemoteGreenCards.Response(
 		domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
