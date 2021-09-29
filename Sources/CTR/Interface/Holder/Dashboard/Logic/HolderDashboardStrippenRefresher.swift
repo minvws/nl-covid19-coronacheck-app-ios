@@ -153,6 +153,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 	private let now: () -> Date
 	private let minimumThresholdOfValidCredentialsTriggeringRefresh: Int // (values <= this number trigger refresh.)
+	private var retryAfterNetworkFailureTimer: Timer?
 
 	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, greencardLoader: GreenCardLoading, reachability: ReachabilityProtocol?, now: @escaping () -> Date) {
 		self.minimumThresholdOfValidCredentialsTriggeringRefresh = minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh
@@ -181,23 +182,38 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 		// Hotfix for 2.3.3:
 		NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
-			guard let self = self else { return }
+			self?.retryAfterNetworkFailureIfNeeded()
+		}
 
-			// We've returned from the background.
-			// Is the StrippenRefresher currently in a failed state due to a network error?
-			// Is it also at least 10 minutes since the error occurred?
-			// Then: reload the strippen refresher again.
-			switch (self.state.loadingState, self.state.greencardsCredentialExpiryState) {
-				case (.failed(DashboardStrippenRefresher.Error.networkError(_, timestamp: let failureDate)), .expired):
-					let delay: Double = 10 * 60 // Threshold of time to wait until retrying: 10 minutes
+		// Hotfix for 2.3.3:
+		// Every minute it will check if it needs to refresh (note: the gate inside `retryAfterNetworkFailureIfNeeded` is set at 10 minutes)
+		retryAfterNetworkFailureTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+			self?.retryAfterNetworkFailureIfNeeded()
+		}
+	}
 
-					if self.now().timeIntervalSince(failureDate) > delay {
-						self.load()
-					}
+	deinit {
+		retryAfterNetworkFailureTimer?.invalidate()
+		retryAfterNetworkFailureTimer = nil
+	}
 
-				default:
-					break
-			}
+	func retryAfterNetworkFailureIfNeeded() {
+
+		// We've returned from the background, or a timer has fired.
+		// Is the StrippenRefresher currently in a failed state due to a network error?
+		// Is it also at least 10 minutes since the error occurred?
+		// Then: reload the strippen refresher again.
+		switch (self.state.loadingState, self.state.greencardsCredentialExpiryState) {
+			case (.failed(DashboardStrippenRefresher.Error.networkError(_, timestamp: let failureDate)), .expired):
+
+				let tenMinuteDelay: Double = 10 * 60 // Threshold of time to wait until retrying
+
+				if self.now().timeIntervalSince(failureDate) > tenMinuteDelay {
+					self.load()
+				}
+
+			default:
+				break
 		}
 	}
 
