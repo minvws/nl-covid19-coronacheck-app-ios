@@ -208,7 +208,7 @@ final class HolderDashboardViewModel: Logging {
 				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
 
 				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
-					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(AppAction.tryAgain)
+					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 					: L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
 
 			case (.failed, .expiring, _):
