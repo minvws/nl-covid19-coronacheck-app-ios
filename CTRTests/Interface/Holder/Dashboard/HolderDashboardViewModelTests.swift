@@ -485,7 +485,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: false,
 			hasLoadingEverFailed: false,
-			errorOccurenceCount: 0
+			errorOccurenceCount: 1
 		)
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
@@ -534,7 +534,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: true,
-			errorOccurenceCount: 1
+			errorOccurenceCount: 2
 		)
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
@@ -551,7 +551,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		}))
 	}
 
-	func test_strippen_domesticandinternational_expired_serverError_secondTime_shouldDisplayError() {
+	func test_strippen_domesticandinternational_expired_serverError_firstTime_shouldDisplayError() {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
@@ -741,9 +741,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards).toEventually(haveCount(3))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
-//		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-//			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk("ctr.action:try_again")
-//		}))
+		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
+		}))
 	}
 
 	// MARK: - Single, Currently Valid, Domestic
