@@ -218,7 +218,8 @@ class NetworkConfigurationTests: XCTestCase {
 		let url = sut.publicKeysUrl
 
 		// Then
-		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == true
+		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == false
+		expect(url?.absoluteString.contains("https://holder-api-cdn.coronacheck.nl")) == true
 		expect(url?.absoluteString.contains("v5")) == true
 		expect(url?.absoluteString.contains("holder/public_keys")) == true
 	}
@@ -260,7 +261,8 @@ class NetworkConfigurationTests: XCTestCase {
 		let url = sut.remoteConfigurationUrl
 
 		// Then
-		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == true
+		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == false
+		expect(url?.absoluteString.contains("https://holder-api-cdn.coronacheck.nl")) == true
 		expect(url?.absoluteString.contains("v5")) == true
 		expect(url?.absoluteString.contains("holder/config")) == true
 	}
@@ -302,7 +304,8 @@ class NetworkConfigurationTests: XCTestCase {
 		let url = sut.providersUrl
 
 		// Then
-		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == true
+		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == false
+		expect(url?.absoluteString.contains("https://holder-api-cdn.coronacheck.nl")) == true
 		expect(url?.absoluteString.contains("v5")) == true
 		expect(url?.absoluteString.contains("holder/config_providers")) == true
 	}
