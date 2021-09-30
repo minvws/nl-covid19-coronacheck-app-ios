@@ -52,21 +52,23 @@ final class BottomSheetPresentationController: UIPresentationController {
 	}
 	
 	override var frameOfPresentedViewInContainerView: CGRect {
+		guard let containerView = containerView else { return .zero }
+		
 		let size = presentedViewController.preferredContentSize
 		let height = size.height
-		let yPoint = containerView!.bounds.height - height
+		let yPoint = containerView.bounds.height - height
 		return CGRect(x: 0, y: yPoint, width: size.width, height: height)
 	}
 	
-	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-		super.viewWillTransition(to: size, with: coordinator)
-
-		coordinator.animate { [weak self] _ in
-			guard let self = self else { return }
-			guard let bottomSheetModalViewController = self.presentedViewController as? BottomSheetModalViewController else { return }
-			bottomSheetModalViewController.calculatePreferredContentSize(frame: self.containerView?.frame ?? .zero)
-			self.presentedView?.frame = self.frameOfPresentedViewInContainerView
-		}
+	override func containerViewDidLayoutSubviews() {
+		super.containerViewDidLayoutSubviews()
+		guard let containerView = containerView else { return }
+		guard let bottomSheetModalViewController = presentedViewController as? BottomSheetModalViewController else { return }
+		bottomSheetModalViewController.calculatePreferredContentSize(frame: containerView.frame)
+	}
+	
+	override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
+		presentedView?.frame = frameOfPresentedViewInContainerView
 	}
 }
 

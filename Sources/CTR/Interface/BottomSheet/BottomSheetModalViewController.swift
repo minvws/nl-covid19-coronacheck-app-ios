@@ -72,17 +72,17 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 	}
 	
 	func calculatePreferredContentSize(frame: CGRect) {
-		let safeAreaInsets = UIApplication.shared.windows.first?.safeAreaInsets ?? .zero
+		let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets ?? .zero
 		let maxHeight = frame.height - safeAreaInsets.top
 		var height = maxHeight
 		let additionalHeight = ViewTraits.Margin.top + safeAreaInsets.bottom
+		
+		resizeScrollView(frame: frame, safeAreaInsets: safeAreaInsets)
 		
 		scrollView.layoutIfNeeded()
 		let scrollViewHeight = scrollView.contentSize.height + additionalHeight
 		scrollView.isScrollEnabled = scrollViewHeight > maxHeight
 		height = min(maxHeight, scrollViewHeight)
-		
-		resizeScrollView(frame: frame)
 		
 		preferredContentSize = .init(width: frame.width, height: height)
 	}
@@ -118,7 +118,7 @@ private extension BottomSheetModalViewController {
 			childViewController.view.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
 			childViewController.view.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
 			childViewController.view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-			childViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
+			childViewController.view.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 			
 			closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: ViewTraits.Margin.closeButton),
 			closeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: ViewTraits.Margin.closeButton)
@@ -130,10 +130,11 @@ private extension BottomSheetModalViewController {
 		dismiss(animated: true)
 	}
 	
-	func resizeScrollView(frame: CGRect) {
+	func resizeScrollView(frame: CGRect, safeAreaInsets: UIEdgeInsets) {
+		// Setting the frame instead of layout constraint will improve rotation animation
 		scrollView.frame = .init(origin: .init(x: 0,
 											   y: ViewTraits.Margin.top),
 								 size: .init(width: frame.width,
-											 height: frame.height - ViewTraits.Margin.top))
+											 height: frame.height - ViewTraits.Margin.top - safeAreaInsets.top))
 	}
 }
