@@ -12,7 +12,8 @@ extension UIBarButtonItem {
 	struct Configuration {
 		let target: Any?
 		let action: Selector
-		let image: UIImage?
+		var image: UIImage?
+		var text: String?
 		var tintColor: UIColor?
 		let accessibilityIdentifier: String
 		let accessibilityLabel: String
@@ -28,12 +29,23 @@ extension UIBarButtonItem {
 	///   - accessibilityLabel: The localized label for Voice Over.
 	/// - Returns: UIBarButtonItem. Should be set on as left or right navigation item.
 	static func create(_ config: Configuration) -> UIBarButtonItem {
-		
-		let button = UIBarButtonItem(image: config.image,
-									 style: .plain,
-									 target: config.target,
-									 action: config.action)
-		button.imageInsets = .leftRight(4)
+
+		let button: UIBarButtonItem
+
+		if let text = config.text {
+			button = UIBarButtonItem(
+				title: text,
+				style: .plain,
+				target: config.target,
+				action: config.action)
+		} else {
+			button = UIBarButtonItem(
+				image: config.image,
+				style: .plain,
+				target: config.target,
+				action: config.action)
+			button.imageInsets = .leftRight(4)
+		}
 		button.tintColor = config.tintColor
 		button.accessibilityTraits = .button
 		button.accessibilityIdentifier = config.accessibilityIdentifier
