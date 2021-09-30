@@ -54,7 +54,7 @@ class ShowQRItemViewModel: Logging {
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
-	@Bindable private(set) var visibilityState: ShowQRImageView.VisibilityState = .loading
+	@Bindable private(set) var visibilityState: ShowQRItemView.VisibilityState = .loading
 
 	@Bindable private(set) var showInternationalAnimation: Bool = false
 
