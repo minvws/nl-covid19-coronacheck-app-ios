@@ -24,6 +24,7 @@ extension UIViewController {
 		let bottomSheetViewController = BottomSheetModalViewController(childViewController: viewControllerToPresent)
 		bottomSheetViewController.transitioningDelegate = transitioningDelegate
 		bottomSheetViewController.modalPresentationStyle = .custom
+		bottomSheetViewController.modalPresentationCapturesStatusBarAppearance = true
 		present(bottomSheetViewController, animated: true)
 	}
 }
