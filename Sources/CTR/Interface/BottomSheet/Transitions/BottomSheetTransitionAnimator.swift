@@ -28,7 +28,7 @@ final class BottomSheetTransitionAnimator: NSObject {
 extension BottomSheetTransitionAnimator: UIViewControllerAnimatedTransitioning {
 	
 	func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-		return 0.2
+		return 0.22
 	}
 	
 	func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
