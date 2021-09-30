@@ -40,7 +40,7 @@ class ShowQRItemViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		sceneView.backgroundColor = .white
+//		sceneView.backgroundColor = .white
 		
 		setupBinding()
 		setupListeners()

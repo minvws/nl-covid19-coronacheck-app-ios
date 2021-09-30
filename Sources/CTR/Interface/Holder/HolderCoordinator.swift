@@ -272,15 +272,26 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to enlarged QR
 	private func navigateToShowQR(_ greenCard: GreenCard) {
 
-		let destination = ShowQRItemViewController(
-			viewModel: ShowQRItemViewModel(
-				coordinator: self,
-				greenCard: greenCard,
-				thirdPartyTicketAppName: thirdpartyTicketApp?.name,
-				userSettings: UserSettings(),
-				now: Date.init
-			)
-		)
+//		let destination = ShowQRItemViewController(
+//			viewModel: ShowQRItemViewModel(
+//				coordinator: self,
+//				greenCard: greenCard,
+//				thirdPartyTicketAppName: thirdpartyTicketApp?.name,
+//				userSettings: UserSettings(),
+//				now: Date.init
+//			)
+//		)
+
+				let destination = ShowQRViewController(
+					viewModel: ShowQRViewModel(
+						coordinator: self,
+						greenCards: [greenCard, greenCard, greenCard],
+						thirdPartyTicketAppName: thirdpartyTicketApp?.name
+//						userSettings: UserSettings(),
+//						now: Date.init
+					)
+				)
+
 		destination.modalPresentationStyle = .fullScreen
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
