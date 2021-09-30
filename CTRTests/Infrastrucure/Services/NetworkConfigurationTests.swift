@@ -181,7 +181,7 @@ class NetworkConfigurationTests: XCTestCase {
 		expect(url?.absoluteString.contains("holder/coupling")) == true
 	}
 
-	func test_development_publicKeys() {
+	func test_development_publicKeys_usesCDN() {
 
 		// Given
 		sut = NetworkConfiguration.development
@@ -190,12 +190,13 @@ class NetworkConfigurationTests: XCTestCase {
 		let url = sut.publicKeysUrl
 
 		// Then
-		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == true
+		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == false
+		expect(url?.absoluteString.contains("https://holder-api-cdn.acc.coronacheck.nl")) == true
 		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/public_keys")) == true
 	}
 
-	func test_acceptance_publicKeys() {
+	func test_acceptance_publicKeys_usesCDN() {
 
 		// Given
 		sut = NetworkConfiguration.acceptance
@@ -204,12 +205,13 @@ class NetworkConfigurationTests: XCTestCase {
 		let url = sut.publicKeysUrl
 
 		// Then
-		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == true
+		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == false
+		expect(url?.absoluteString.contains("https://holder-api-cdn.acc.coronacheck.nl")) == true
 		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/public_keys")) == true
 	}
 
-	func test_production_publicKeys() {
+	func test_production_publicKeys_usesCDN() {
 
 		// Given
 		sut = NetworkConfiguration.production
@@ -224,7 +226,7 @@ class NetworkConfigurationTests: XCTestCase {
 		expect(url?.absoluteString.contains("holder/public_keys")) == true
 	}
 
-	func test_development_remoteConfig() {
+	func test_development_remoteConfig_usesCDN() {
 
 		// Given
 		sut = NetworkConfiguration.development
@@ -233,12 +235,13 @@ class NetworkConfigurationTests: XCTestCase {
 		let url = sut.remoteConfigurationUrl
 
 		// Then
-		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == true
+		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == false
+		expect(url?.absoluteString.contains("https://holder-api-cdn.acc.coronacheck.nl")) == true
 		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/config")) == true
 	}
 
-	func test_acceptance_remoteConfig() {
+	func test_acceptance_remoteConfig_usesCDN() {
 
 		// Given
 		sut = NetworkConfiguration.acceptance
@@ -247,12 +250,13 @@ class NetworkConfigurationTests: XCTestCase {
 		let url = sut.remoteConfigurationUrl
 
 		// Then
-		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == true
+		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == false
+		expect(url?.absoluteString.contains("https://holder-api-cdn.acc.coronacheck.nl")) == true
 		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/config")) == true
 	}
 
-	func test_production_remoteConfig() {
+	func test_production_remoteConfig_usesCDN() {
 
 		// Given
 		sut = NetworkConfiguration.production
@@ -267,7 +271,7 @@ class NetworkConfigurationTests: XCTestCase {
 		expect(url?.absoluteString.contains("holder/config")) == true
 	}
 
-	func test_development_providers() {
+	func test_development_providers_usesCDN() {
 
 		// Given
 		sut = NetworkConfiguration.development
@@ -276,12 +280,13 @@ class NetworkConfigurationTests: XCTestCase {
 		let url = sut.providersUrl
 
 		// Then
-		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == true
+		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == false
+		expect(url?.absoluteString.contains("https://holder-api-cdn.acc.coronacheck.nl")) == true
 		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/config_providers")) == true
 	}
 
-	func test_acceptance_providers() {
+	func test_acceptance_providers_usesCDN() {
 
 		// Given
 		sut = NetworkConfiguration.acceptance
@@ -290,12 +295,13 @@ class NetworkConfigurationTests: XCTestCase {
 		let url = sut.providersUrl
 
 		// Then
-		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == true
+		expect(url?.absoluteString.contains("https://holder-api.acc.coronacheck.nl")) == false
+		expect(url?.absoluteString.contains("https://holder-api-cdn.acc.coronacheck.nl")) == true
 		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/config_providers")) == true
 	}
 
-	func test_production_providers() {
+	func test_production_providers_usesCDN() {
 
 		// Given
 		sut = NetworkConfiguration.production
