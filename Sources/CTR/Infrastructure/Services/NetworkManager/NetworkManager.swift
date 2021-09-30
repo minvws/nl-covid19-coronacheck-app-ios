@@ -26,6 +26,7 @@ class NetworkManager: Logging {
 		url: URL?,
 		method: HTTPMethod = .GET,
 		body: Encodable? = nil,
+		timeOutInterval: TimeInterval = 30,
 		headers: [HTTPHeaderKey: String] = [:]) -> URLRequest? {
 
 		guard let url = url else {
@@ -35,7 +36,7 @@ class NetworkManager: Logging {
 		var request = URLRequest(
 			url: url,
 			cachePolicy: .useProtocolCachePolicy,
-			timeoutInterval: 30
+			timeoutInterval: timeOutInterval
 		)
 		request.httpMethod = method.rawValue
 		
@@ -327,7 +328,7 @@ class NetworkManager: Logging {
 		return body
 	}
 
-	private func headersWithAuthorizaionToken(_ token: String) -> [HTTPHeaderKey: String] {
+	private func headersWithAuthorizationToken(_ token: String) -> [HTTPHeaderKey: String] {
 
 		return [
 			HTTPHeaderKey.authorization: "Bearer \(token)",
@@ -347,7 +348,7 @@ extension NetworkManager: NetworkManaging {
 		completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 
 		guard let urlRequest = constructRequest(
-			url: networkConfiguration.vaccinationAccessTokensUrl,
+			url: networkConfiguration.eventAccessTokensUrl,
 			method: .POST,
 			headers: [HTTPHeaderKey.authorization: "Bearer \(tvsToken)"]
 		) else {
@@ -383,7 +384,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
 
-		guard let urlRequest = constructRequest(url: networkConfiguration.publicKeysUrl) else {
+		guard let urlRequest = constructRequest(url: networkConfiguration.publicKeysUrl, timeOutInterval: 10.0) else {
 			logError("NetworkManager - getPublicKeys: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -396,14 +397,15 @@ extension NetworkManager: NetworkManaging {
 				DispatchQueue.main.async {
 					completion(result.map { _, _, data, _ in (data) })
 				}
-			})
+			}
+		)
 	}
 
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
 	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
 
-		guard let urlRequest = constructRequest(url: networkConfiguration.remoteConfigurationUrl) else {
+		guard let urlRequest = constructRequest(url: networkConfiguration.remoteConfigurationUrl, timeOutInterval: 10.0) else {
 			logError("NetworkManager - getRemoteConfiguration: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -536,7 +538,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: bodyWithKeyValue("filter", value: filter), headers: headersWithAuthorizaionToken(accessToken)) else {
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: bodyWithKeyValue("filter", value: filter), headers: headersWithAuthorizationToken(accessToken)) else {
 			logError("NetworkManager - fetchEventInformation: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -575,7 +577,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: bodyWithKeyValue("filter", value: filter), headers: headersWithAuthorizaionToken(accessToken)) else {
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: bodyWithKeyValue("filter", value: filter), headers: headersWithAuthorizationToken(accessToken)) else {
 			logError("NetworkManager - fetchEvents: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
