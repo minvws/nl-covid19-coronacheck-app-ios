@@ -10,7 +10,7 @@ import CoreData
 import Reachability
 
 final class HolderDashboardViewModel: Logging {
-	typealias Datasource = HolderDashboardDatasource
+	typealias Datasource = HolderDashboardQRCardDatasource
 
 	// MARK: - Public properties
 
@@ -37,7 +37,7 @@ final class HolderDashboardViewModel: Logging {
 	/// that allows us to use a `didSet{}` to
 	/// get a callback if any of them are mutated.
 	fileprivate struct State {
-		var myQRCards: [MyQRCard]
+		var qrCards: [QRCard]
 		var expiredGreenCards: [ExpiredQR]
 		var showCreateCard: Bool
 		var isRefreshingStrippen: Bool
@@ -54,8 +54,8 @@ final class HolderDashboardViewModel: Logging {
 	// MARK: - Private properties
 
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var cryptoManager: CryptoManaging?
-	private let remoteConfigManager: RemoteConfigManaging
+	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
+	private let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private var userSettings: UserSettingsProtocol
 
@@ -82,18 +82,18 @@ final class HolderDashboardViewModel: Logging {
 				now: self.now()
 			)
 			
-			hasAddCertificateMode = state.myQRCards.isEmpty
+			hasAddCertificateMode = state.qrCards.isEmpty
 		}
 	}
 	
 	var selectTab: DashboardTab = .domestic {
 		didSet {
-			dashboardRegionToggleValue = selectedTab == .domestic ? .domestic : .europeanUnion
+			dashboardRegionToggleValue = selectedTab.isDomestic ? .domestic : .europeanUnion
 			selectedTab = selectTab
 		}
 	}
 
-	private let datasource: HolderDashboardDatasourceProtocol
+	private let datasource: HolderDashboardQRCardDatasourceProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private let now: () -> Date
@@ -101,24 +101,20 @@ final class HolderDashboardViewModel: Logging {
 	// MARK: - Initializer
 	init(
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
-		cryptoManager: CryptoManaging,
-		datasource: HolderDashboardDatasourceProtocol,
+		datasource: HolderDashboardQRCardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
-		remoteConfigManager: RemoteConfigManaging,
 		now: @escaping () -> Date
 	) {
 
 		self.coordinator = coordinator
-		self.cryptoManager = cryptoManager
 		self.datasource = datasource
 		self.strippenRefresher = strippenRefresher
 		self.userSettings = userSettings
-		self.remoteConfigManager = remoteConfigManager
 		self.now = now
 
 		self.state = State(
-			myQRCards: [],
+			qrCards: [],
 			expiredGreenCards: [],
 			showCreateCard: true,
 			isRefreshingStrippen: false,
@@ -127,9 +123,9 @@ final class HolderDashboardViewModel: Logging {
 
 		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
 
-		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [MyQRCard], expiredGreenCards: [ExpiredQR]) in
+		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
 			DispatchQueue.main.async {
-				self?.state.myQRCards = qrCardDataItems
+				self?.state.qrCards = qrCardDataItems
 				self?.state.expiredGreenCards += expiredGreenCards
 			}
 		}
@@ -204,16 +200,12 @@ final class HolderDashboardViewModel: Logging {
 
 			// ❤️‍🩹 NETWORK ERROR: Refresher has entered a failed state (i.e. Server Error)
 
-			case (.failed, .expired, true):
+			case (.failed, .expired, _):
 				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
 
 				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
-					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(AppAction.tryAgain)
+					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 					: L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
-
-			case (.failed(error: let error), .expired, false):
-				logDebug("StrippenRefresh: Need refreshing now, but server error. Presenting alert.")
-				currentlyPresentedAlert = AlertContent.strippenExpiringServerError(strippenRefresher: strippenRefresher, error: error)
 
 			case (.failed, .expiring, _):
 				// In this case we just swallow the server errors.
@@ -278,9 +270,9 @@ final class HolderDashboardViewModel: Logging {
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 
-		let allQRCards = state.myQRCards
-		let regionFilteredMyQRCards = state.myQRCards.filter { (myQRCard: MyQRCard) in
-			switch (myQRCard, validityRegion) {
+		let allQRCards = state.qrCards
+		let regionFilteredMyQRCards = state.qrCards.filter { (qrCard: QRCard) in
+			switch (qrCard, validityRegion) {
 				case (.netherlands, .domestic): return true
 				case (.europeanUnion, .europeanUnion): return true
 				default: return false
@@ -357,9 +349,9 @@ final class HolderDashboardViewModel: Logging {
 				}
 			}
 
-		// Map a `MyQRCard` to a `VC.Card`:
+		// Map a `QRCard` to a `VC.Card`:
 		viewControllerCards += regionFilteredMyQRCards
-			.flatMap { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> [HolderDashboardViewController.Card] in
+			.flatMap { (qrcardDataItem: HolderDashboardViewModel.QRCard) -> [HolderDashboardViewController.Card] in
 				qrcardDataItem.toViewControllerCards(
 					state: state,
 					coordinatorDelegate: coordinatorDelegate,
@@ -373,9 +365,9 @@ final class HolderDashboardViewModel: Logging {
 	}
 }
 
-// MARK: HolderDashboardViewModel.MyQRCard extension
+// MARK: HolderDashboardViewModel.QRCard extension
 
-extension HolderDashboardViewModel.MyQRCard {
+extension HolderDashboardViewModel.QRCard {
 
 	fileprivate func toViewControllerCards(
 		state: HolderDashboardViewModel.State,
@@ -387,18 +379,9 @@ extension HolderDashboardViewModel.MyQRCard {
 
 		switch self {
 			case let .netherlands(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState):
-				let rows = origins.map { origin in
-					HolderDashboardViewController.Card.QRCardRow(
-						typeText: origin.type.localizedProof.capitalizingFirstLetter(),
-						validityText: { now in
-							let validityType = MyQRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
-							return validityType.text(myQRCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
-						}
-					)
-				}
 
 				var cards = [HolderDashboardViewController.Card.domesticQR(
-					rows: rows,
+					validityTexts: validityTextsGenerator(origins: origins, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
 					buttonEnabledEvaluator: evaluateEnabledState,
@@ -437,23 +420,8 @@ extension HolderDashboardViewModel.MyQRCard {
 				return cards
 
 			case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState, _):
-				let rows = origins.map { origin in
-					HolderDashboardViewController.Card.QRCardRow(
-						typeText: {
-							switch origin.type {
-								case .vaccination, .test: return nil
-								default: return origin.type.localizedProof.capitalizingFirstLetter()
-							}
-						}(),
-						validityText: { now in
-							let validityType = MyQRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
-							return validityType.text(myQRCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
-						}
-					)
-				}
-
 				var cards = [HolderDashboardViewController.Card.europeanUnionQR(
-					rows: rows,
+					validityTexts: validityTextsGenerator(origins: origins, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
 					buttonEnabledEvaluator: evaluateEnabledState,
@@ -466,6 +434,17 @@ extension HolderDashboardViewModel.MyQRCard {
 
 				return cards
 		}
+	}
+
+	// Returns a closure that, given a Date, will return the groups of text ("ValidityText") that should be shown per-origin on the QR Card.
+	private func validityTextsGenerator(origins: [HolderDashboardViewModel.QRCard.Origin], remoteConfigManager: RemoteConfigManaging) -> (Date) -> [HolderDashboardViewController.ValidityText] {
+		return { now in
+			return origins.map { origin in
+				let validityType = QRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
+				let first = validityType.text(qrCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
+				return first
+			}
+		 }
 	}
 }
 
@@ -493,7 +472,7 @@ extension HolderDashboardViewModel {
 private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashboardViewModel.State, thisRegion: QRCodeValidityRegion, now: Date) -> [(originType: QRCodeOriginType, message: String)] {
 
 	// Calculate origins which exist in the other region but are not in this region:
-	let originTypesForCurrentRegion = Set(state.myQRCards
+	let originTypesForCurrentRegion = Set(state.qrCards
 											.filter { $0.isOfRegion(region: thisRegion) }
 											.flatMap { $0.origins }
 											.filter {
@@ -502,7 +481,7 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashbo
 											.compactMap { $0.type }
 	)
 
-	let originTypesForOtherRegion = Set(state.myQRCards
+	let originTypesForOtherRegion = Set(state.qrCards
 											.filter { !$0.isOfRegion(region: thisRegion) }
 											.flatMap { $0.origins }
 											.filter {
@@ -557,21 +536,6 @@ extension AlertContent {
 		return AlertContent(
 			title: L.holderDashboardStrippenExpiringNointernetAlertTitle(),
 			subTitle: L.holderDashboardStrippenExpiringNointernetAlertMessage(localizedTimeRemainingUntilExpiry),
-			cancelAction: { _ in
-				strippenRefresher.userDismissedALoadingError()
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { _ in
-				strippenRefresher.load()
-			},
-			okTitle: L.generalRetry()
-		)
-	}
-
-	fileprivate static func strippenExpiringServerError(strippenRefresher: DashboardStrippenRefreshing, error: DashboardStrippenRefresher.Error) -> AlertContent {
-		AlertContent(
-			title: L.holderDashboardStrippenExpiredServererrorAlertTitle(),
-			subTitle: L.holderDashboardStrippenExpiredServererrorAlertMessage(error.localizedDescription),
 			cancelAction: { _ in
 				strippenRefresher.userDismissedALoadingError()
 			},

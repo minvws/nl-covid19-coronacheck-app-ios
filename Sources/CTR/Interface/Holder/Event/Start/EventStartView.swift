@@ -20,7 +20,6 @@ class EventStartView: ScrolledStackWithButtonView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let buttonMargin: CGFloat = 36.0
 	}
 
 	/// The title label
@@ -41,6 +40,7 @@ class EventStartView: ScrolledStackWithButtonView {
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentHorizontalAlignment = .center
+		button.contentEdgeInsets = Button.ButtonType.roundedBlue.contentEdgeInsets
 		return button
 	}()
 
@@ -49,7 +49,6 @@ class EventStartView: ScrolledStackWithButtonView {
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 		stackView.distribution = .equalSpacing
-		showLineView = false
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 		primaryButton.style = .roundedBlueImage
 	}
@@ -60,17 +59,13 @@ class EventStartView: ScrolledStackWithButtonView {
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(contentTextView)
-		footerBackground.addSubview(secondaryButton)
+		footerButtonView.addSubview(secondaryButton)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		setupPrimaryButton()
-
-		bottomScrollViewConstraint?.isActive = false
-		bottomButtonConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
 
@@ -85,20 +80,17 @@ class EventStartView: ScrolledStackWithButtonView {
 			secondaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 
 			secondaryButton.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.buttonMargin
+				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
+				constant: ViewTraits.margin
 			),
 			secondaryButton.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.buttonMargin
+				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
+				constant: -ViewTraits.margin
 			),
 			secondaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
-			),
-			
-			// Scroll View
-			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor)
+			)
 		])
 	}
 

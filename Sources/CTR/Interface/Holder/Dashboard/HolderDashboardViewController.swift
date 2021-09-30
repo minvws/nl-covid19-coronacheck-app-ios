@@ -10,11 +10,6 @@ import UIKit
 class HolderDashboardViewController: BaseViewController {
 
 	enum Card {
-		struct QRCardRow {
-			let typeText: String?
-			let validityText: (Date) -> ValidityText
-		}
-
 		case headerMessage(message: String)
 
 		case expiredQR(message: String, didTapClose: () -> Void)
@@ -25,9 +20,9 @@ class HolderDashboardViewController: BaseViewController {
 
 		case emptyState(image: UIImage?, title: String, message: String)
 
-		case domesticQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case domesticQR(validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
-		case europeanUnionQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case europeanUnionQR(validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
 		case errorMessage(message: String, didTapTryAgain: () -> Void)
 	}
@@ -42,7 +37,7 @@ class HolderDashboardViewController: BaseViewController {
 			case current
 		}
 
-		let texts: [String]
+		let lines: [String]
 		let kind: Kind
 	}
 
@@ -81,8 +76,6 @@ class HolderDashboardViewController: BaseViewController {
 
 		setupBindings()
 
-		// Only show an arrow as back button
-		styleBackButton()
 		setupPlusButton()
 		
 		sceneView.delegate = self
@@ -172,27 +165,21 @@ class HolderDashboardViewController: BaseViewController {
 						}
 						return emptyDashboardView
 						
-					case let .domesticQR(rows, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
-						 let .europeanUnionQR(rows, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
+					case let .domesticQR(validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
+						 let .europeanUnionQR(validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
 						
 						let qrCard = QRCardView()
 						qrCard.viewQRButtonCommand = didTapViewQR
 						qrCard.title = L.holderDashboardQrTitle()
 						qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
-						
-						switch card {
-							case .domesticQR:
-								qrCard.region = L.generalNetherlands()
-							case .europeanUnionQR:
-								qrCard.region = L.generalEuropeanUnion()
-								qrCard.shouldStyleForEU = true
-							default: break
+
+						if case .europeanUnionQR = card {
+							qrCard.shouldStyleForEU = true
+						} else {
+							qrCard.shouldStyleForEU = false
 						}
-						
-						qrCard.originRows = rows.map { (qrCardRow: Card.QRCardRow) in
-							QRCardView.OriginRow(type: qrCardRow.typeText, validityString: qrCardRow.validityText)
-						}
-						
+
+						qrCard.validityTexts = validityTexts
 						qrCard.expiryEvaluator = expiryCountdownEvaluator
 						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
 						qrCard.isLoading = isLoading
@@ -259,22 +246,19 @@ class HolderDashboardViewController: BaseViewController {
 	// MARK: Helper methods
 
 	func setupPlusButton() {
-		let plusbutton = UIBarButtonItem(
-			image: .plus,
-			style: .plain,
-			target: viewModel,
-			action: #selector(HolderDashboardViewModel.addProofTapped)
-		)
-		plusbutton.title = L.holderMenuProof()
-        plusbutton.accessibilityLabel = plusbutton.title
-		navigationItem.rightBarButtonItem = plusbutton
+		let config = UIBarButtonItem.Configuration(target: viewModel,
+												   action: #selector(HolderDashboardViewModel.addProofTapped),
+												   image: I.plus(),
+												   accessibilityIdentifier: "PlusButton",
+												   accessibilityLabel: L.holderMenuProof())
+		navigationItem.rightBarButtonItem = .create(config)
 	}
 }
 
 extension HolderDashboardViewController: HolderDashboardViewDelegate {
 	
 	func holderDashboardView(_ view: HolderDashboardView, didDisplay tab: DashboardTab) {
-		let changedRegion: QRCodeValidityRegion = tab == .domestic ? .domestic : .europeanUnion
+		let changedRegion: QRCodeValidityRegion = tab.isDomestic ? .domestic : .europeanUnion
 		viewModel.dashboardRegionToggleValue = changedRegion
 	}
 }

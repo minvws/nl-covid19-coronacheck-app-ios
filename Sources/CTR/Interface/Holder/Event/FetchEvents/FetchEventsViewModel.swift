@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -14,8 +13,8 @@ final class FetchEventsViewModel: Logging {
 
 	private var tvsToken: String
 	private var eventMode: EventMode
-	private var networkManager: NetworkManaging
-	private let mappingManager: MappingManaging
+	private let networkManager: NetworkManaging = Services.networkManager
+	private let mappingManager: MappingManaging = Services.mappingManager
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -37,29 +36,14 @@ final class FetchEventsViewModel: Logging {
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		tvsToken: String,
-		eventMode: EventMode,
-		networkManager: NetworkManaging = Services.networkManager,
-		mappingManager: MappingManaging = Services.mappingManager) {
+		eventMode: EventMode) {
 		self.coordinator = coordinator
 		self.tvsToken = tvsToken
 		self.eventMode = eventMode
-		self.networkManager = networkManager
-		self.mappingManager = mappingManager
 
 		viewState = .loading(
 			content: Content(
-				title: {
-					switch eventMode {
-						case .recovery:
-							return L.holderRecoveryListTitle()
-						case .test:
-							return L.holderTestListTitle()
-						case .vaccination:
-							return L.holderVaccinationListTitle()
-						case .paperflow:
-							return "" // Scanned Dcc not a part of this flow.
-					}
-				}(),
+				title: eventMode.title,
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -207,19 +191,7 @@ final class FetchEventsViewModel: Logging {
 
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
-			subTitle: {
-				switch eventMode {
-					case .recovery:
-						return L.holderRecoveryAlertMessage()
-					case .paperflow:
-						return L.holderDccAlertMessage()
-					case .test:
-						return L.holderTestAlertMessage()
-					case .vaccination:
-						return L.holderVaccinationAlertMessage()
-
-				}
-			}(),
+			subTitle: eventMode.alertBody,
 			cancelAction: { _ in
 				self.goBack()
 			},
@@ -623,15 +595,12 @@ private extension FetchEventsViewModel {
 		alert = AlertContent(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: { _ in
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { _ in
 				self.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				guard let self = self else { return }
-				self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
-			},
-			okTitle: L.generalRetry()
+			okTitle: L.generalClose()
 		)
 	}
 

@@ -103,8 +103,6 @@ class AppUpdateView: ScrolledStackWithButtonView {
 
 			topSpacer.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: ViewTraits.topSpacerHeightMultiplier)
 		])
-
-		setupPrimaryButton(useFullWidth: true)
 	}
 
 	// MARK: Public Access

@@ -124,17 +124,17 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(tokenEntryView)
 		stackView.setCustomSpacing(8, after: tokenEntryView)
 
-		stackView.addArrangedSubview(userNeedsATokenButton)
-		stackView.setCustomSpacing(0, after: userNeedsATokenButton)
-
 		stackView.addArrangedSubview(verificationEntryView)
 		stackView.setCustomSpacing(8, after: verificationEntryView)
 
 		stackView.addArrangedSubview(errorView)
-		stackView.setCustomSpacing(0, after: errorView)
+		stackView.setCustomSpacing(22, after: errorView)
 
 		stackView.addArrangedSubview(textLabel)
 		stackView.setCustomSpacing(8, after: textLabel)
+
+		stackView.addArrangedSubview(userNeedsATokenButton)
+		stackView.setCustomSpacing(0, after: userNeedsATokenButton)
 
 		stackView.addArrangedSubview(resendVerificationCodeButton)
 		stackView.addArrangedSubview(spacer)
@@ -147,14 +147,6 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		NSLayoutConstraint.activate([
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
-
-		setupPrimaryButton(useFullWidth: {
-			switch traitCollection.preferredContentSizeCategory {
-				case .unspecified: return true
-				case let size where size > .extraLarge: return true
-				default: return false
-			}
-		}())
 	}
 
 	@objc func userNeedsATokenButtonTapped() {

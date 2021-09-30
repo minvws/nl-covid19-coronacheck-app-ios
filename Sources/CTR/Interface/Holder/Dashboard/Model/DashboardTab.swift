@@ -10,4 +10,8 @@ import Foundation
 enum DashboardTab: Int {
 	case domestic
 	case international
+	
+	var isDomestic: Bool {
+		return self == .domestic
+	}
 }

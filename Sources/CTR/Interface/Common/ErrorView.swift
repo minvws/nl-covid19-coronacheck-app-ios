@@ -14,17 +14,18 @@ class ErrorView: BaseView {
 		
 		// Dimension
 		static let imageSize: CGFloat = 12.0
-		static let errorKerning: CGFloat = -0.24
+		static let errorKerning: CGFloat = 0.25
 		
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let fontOffset: CGFloat = 2.0
+		static let textLeadingMargin: CGFloat = 8.0
+		static let imageTopMargin: CGFloat = 5.0
 	}
 	
 	/// The error image
 	private let errorImageView: UIImageView = {
 		
-		let view = UIImageView(image: .error)
+		let view = UIImageView(image: I.error())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.tintColor = Theme.colors.utilityError
 		return view
@@ -61,16 +62,16 @@ class ErrorView: BaseView {
 			errorImageView.leadingAnchor.constraint( equalTo: leadingAnchor),
 			errorImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageSize),
 			errorImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageSize),
-			errorImageView.centerYAnchor.constraint(
-				equalTo: errorLabel.centerYAnchor,
-				constant: ViewTraits.fontOffset
+			errorImageView.topAnchor.constraint(
+				equalTo: topAnchor,
+				constant: ViewTraits.imageTopMargin
 			),
 			
 			// Title
 			errorLabel.topAnchor.constraint(equalTo: topAnchor),
 			errorLabel.leadingAnchor.constraint(
 				equalTo: errorImageView.trailingAnchor,
-				constant: 5
+				constant: ViewTraits.textLeadingMargin
 			),
 			errorLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 			errorLabel.bottomAnchor.constraint(equalTo: bottomAnchor)

@@ -7,6 +7,7 @@
 
 import Foundation
 import Reachability
+import UIKit
 
 protocol DashboardStrippenRefreshing: AnyObject {
 	func load()
@@ -21,13 +22,13 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		case unknownErrorA
 		case logicalErrorA
 		case greencardLoaderError(error: GreenCardLoader.Error)
-		case networkError(error: NetworkError)
+		case networkError(error: NetworkError, timestamp: Date)
 
 		var errorDescription: String? {
 			switch self {
 				case .greencardLoaderError(let error):
 					return error.errorDescription
-				case .networkError(let error):
+				case .networkError(let error, _):
 					return error.rawValue
 				case .logicalErrorA:
 					return "Logical error A"
@@ -63,8 +64,8 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 		// MARK: - Vars
 		private(set) var loadingState: LoadingState = .idle
+		private(set) var now: () -> Date
 		var greencardsCredentialExpiryState: GreencardsCredentialExpiryState
-
 		// purpose: until a user dismisses the error, it should be presented via an alert.
 		// thereafter, it should be displayed non-modally in the UI instead.
 		var userHasPreviouslyDismissedALoadingError: Bool = false
@@ -97,7 +98,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 				case let error as NetworkError:
 					state.errorOccurenceCount += 1
-					state.loadingState = .failed(error: .networkError(error: error))
+					state.loadingState = .failed(error: .networkError(error: error, timestamp: now()))
 
 				// Catch the specific case of a wrapped NetworkError.noInternetConnection and recurse it
 				case GreenCardLoader.Error.credentials(.error(_, _, let networkError)),
@@ -116,6 +117,15 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 					state.loadingState = .failed(error: .unknownErrorA)
 			}
 			self = state
+		}
+
+		static func == (lhs: DashboardStrippenRefresher.State, rhs: DashboardStrippenRefresher.State) -> Bool {
+			return lhs.loadingState == rhs.loadingState
+				&& lhs.greencardsCredentialExpiryState == rhs.greencardsCredentialExpiryState
+				&& lhs.userHasPreviouslyDismissedALoadingError == rhs.userHasPreviouslyDismissedALoadingError
+				&& lhs.hasLoadingEverFailed == rhs.hasLoadingEverFailed
+				&& lhs.errorOccurenceCount == rhs.errorOccurenceCount
+				&& lhs.now() == rhs.now()
 		}
 	}
 
@@ -137,17 +147,16 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		}
 	}
 
-	private let walletManager: WalletManaging
-	private let greencardLoader: GreenCardLoading
+	private let walletManager: WalletManaging = Services.walletManager
+	private let greencardLoader: GreenCardLoading = Services.greenCardLoader
 	private let reachability: ReachabilityProtocol?
 
 	private let now: () -> Date
 	private let minimumThresholdOfValidCredentialsTriggeringRefresh: Int // (values <= this number trigger refresh.)
+	private var retryAfterNetworkFailureTimer: Timer?
 
-	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, greencardLoader: GreenCardLoading, reachability: ReachabilityProtocol?, now: @escaping () -> Date) {
+	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, reachability: ReachabilityProtocol?, now: @escaping () -> Date) {
 		self.minimumThresholdOfValidCredentialsTriggeringRefresh = minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh
-		self.walletManager = walletManager
-		self.greencardLoader = greencardLoader
 		self.now = now
 
 		let expiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
@@ -156,7 +165,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 			now: now()
 		)
 
-		state = State(greencardsCredentialExpiryState: expiryState)
+		state = State(now: now, greencardsCredentialExpiryState: expiryState)
 
 		// Start updates for network access availablity:
 		self.reachability = reachability
@@ -168,6 +177,42 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 			self.load()
 		}
 		try? reachability?.startNotifier()
+
+		// Hotfix for 2.3.3:
+		NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.retryAfterNetworkFailureIfNeeded()
+		}
+
+		// Hotfix for 2.3.3:
+		// Every minute it will check if it needs to refresh (note: the gate inside `retryAfterNetworkFailureIfNeeded` is set at 10 minutes)
+		retryAfterNetworkFailureTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+			self?.retryAfterNetworkFailureIfNeeded()
+		}
+	}
+
+	deinit {
+		retryAfterNetworkFailureTimer?.invalidate()
+		retryAfterNetworkFailureTimer = nil
+	}
+
+	func retryAfterNetworkFailureIfNeeded() {
+
+		// We've returned from the background, or a timer has fired.
+		// Is the StrippenRefresher currently in a failed state due to a network error?
+		// Is it also at least 10 minutes since the error occurred?
+		// Then: reload the strippen refresher again.
+		switch (self.state.loadingState, self.state.greencardsCredentialExpiryState) {
+			case (.failed(DashboardStrippenRefresher.Error.networkError(_, timestamp: let failureDate)), .expired):
+
+				let tenMinuteDelay: Double = 10 * 60 // Threshold of time to wait until retrying
+
+				if self.now().timeIntervalSince(failureDate) > tenMinuteDelay {
+					self.load()
+				}
+
+			default:
+				break
+		}
 	}
 
 	func load() {

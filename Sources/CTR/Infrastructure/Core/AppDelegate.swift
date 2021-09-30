@@ -93,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging {
     func application(_: UIApplication, continue userActivity: NSUserActivity, restorationHandler _: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
 
         // Parse an activity from the userActivity
-        guard let universalLink = UniversalLink(userActivity: userActivity) else { return false }
+		guard let universalLink = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: appCoordinator?.isLunhCheckEnabled ?? false) else { return false }
 
         return appCoordinator?.receive(universalLink: universalLink) ?? false
     }
@@ -145,10 +145,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging {
 		UINavigationBar.appearance().tintColor = Theme.colors.dark
 		UINavigationBar.appearance().barTintColor = Theme.colors.viewControllerBackground
 		
-		// White navigation bar without bottom separator
-		UINavigationBar.appearance().isTranslucent = false
-		UINavigationBar.appearance().shadowImage = UIImage()
-		UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-		UINavigationBar.appearance().backgroundColor = Theme.colors.viewControllerBackground
+		if #available(iOS 15.0, *) {
+			// By default iOS 15 has no shadow bottom separator
+		} else {
+			// White navigation bar without bottom separator
+			UINavigationBar.appearance().isTranslucent = false
+			UINavigationBar.appearance().shadowImage = UIImage()
+			UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+		}
 	}
 }

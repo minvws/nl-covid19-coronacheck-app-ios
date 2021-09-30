@@ -127,11 +127,7 @@ final class MakeTestAppointmentView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(
-				text: message,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark
-			)
+			messageTextView.attributedText = .makeFromHtml(text: message, style: .bodyDark)
 		}
 	}
 	

@@ -9,12 +9,6 @@ import UIKit
 
 class QRCardView: BaseView {
 
-	// MARK: - Public types
-	struct OriginRow {
-		let type: String?
-		let validityString: (Date) -> HolderDashboardViewController.ValidityText
-	}
-
 	// MARK: - Private types
 
 	/// The display constants
@@ -30,16 +24,10 @@ class QRCardView: BaseView {
 		static let imageMargin: CGFloat = 32
 		
 		// Spacing
-		static let topVerticalLabelSpacing: CGFloat = 24
+		static let topVerticalLabelSpacing: CGFloat = 18
 	}
 
 	// MARK: - Private properties
-
-	private let regionLabel: Label = {
-		let label = Label(title3: nil).multiline().header()
-		label.textColor = Theme.colors.primary
-		return label
-	}()
 
 	private let titleLabel: Label = {
 		return Label(title3: nil, montserrat: true).multiline()
@@ -109,7 +97,6 @@ class QRCardView: BaseView {
 
 		super.setupViewHierarchy()
 
-		addSubview(regionLabel)
 		addSubview(titleLabel)
 		addSubview(largeIconImageView)
 		addSubview(verticalLabelsStackView)
@@ -129,27 +116,23 @@ class QRCardView: BaseView {
 		largeIconImageView.setContentHuggingPriority(.required, for: .vertical)
 
 		NSLayoutConstraint.activate([
-			regionLabel.topAnchor.constraint(equalTo: topAnchor, constant: 28),
-			regionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-			regionLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: -16),
-
 			largeIconImageView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.imageMargin),
 			largeIconImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.imageMargin),
 			largeIconImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
 			largeIconImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageDimension),
 			largeIconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageDimension),
 
-			titleLabel.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
-			titleLabel.topAnchor.constraint(equalTo: regionLabel.bottomAnchor, constant: 8),
+			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+			titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 36),
 			titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: -16),
 
 			verticalLabelsStackView.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: ViewTraits.topVerticalLabelSpacing),
-			verticalLabelsStackView.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
+			verticalLabelsStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
 			verticalLabelsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 
-			viewQRButton.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
+			viewQRButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
 			viewQRButton.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.trailingAnchor),
-			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 38),
+			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 30),
 			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
 
 			loadingButtonOverlay.leadingAnchor.constraint(equalTo: viewQRButton.leadingAnchor),
@@ -170,25 +153,25 @@ class QRCardView: BaseView {
 
 	var originDesiresToShowAutomaticallyBecomesValidFooter = false
 
-	private func reapplyLabels() {
+	private func reapplyLabels(now: Date = Date()) {
 
 		// Remove previous labels
 		verticalLabelsStackView.arrangedSubviews.forEach { arrangedView in
 			verticalLabelsStackView.removeArrangedSubview(arrangedView)
 			arrangedView.removeFromSuperview()
 		}
+ 
+		guard let validityTexts = validityTexts?(now) else { return }
 
-		originRows?.forEach { row in
-			let validityText = row.validityString(Date())
+		// Each "Row" corresponds to an origin.
+		// Each Row contains an *array* of texts (simply to force newlines when needed)
+		// and they are rendered as grouped together.
+
+		validityTexts.forEach { validityText in
+
 			guard validityText.kind != .past else { return }
 
-			if let type = row.type {
-				let qrTypeLabel = Label(body: type + (validityText.texts.isEmpty ? "" : ":"))
-				qrTypeLabel.numberOfLines = 0
-				verticalLabelsStackView.addArrangedSubview(qrTypeLabel)
-			}
-
-			validityText.texts.forEach { text in
+			validityText.lines.forEach { text in
 				let label = Label(body: text)
 				label.numberOfLines = 0
 				verticalLabelsStackView.addArrangedSubview(label)
@@ -215,7 +198,6 @@ class QRCardView: BaseView {
 			if let lastLabel = verticalLabelsStackView.arrangedSubviews.last as? Label {
 				verticalLabelsStackView.setCustomSpacing(22, after: lastLabel)
 			}
-
 		}
 
 		if let expiryEvaluator = expiryEvaluator {
@@ -281,7 +263,7 @@ class QRCardView: BaseView {
 
 	// MARK: Public Access
 
-	var originRows: [OriginRow]? {
+	var validityTexts: ((Date) -> [HolderDashboardViewController.ValidityText])? {
 		didSet {
 			reapplyLabels()
 		}
@@ -298,12 +280,6 @@ class QRCardView: BaseView {
 		didSet {
 			guard buttonEnabledEvaluator != nil else { return }
 			reapplyButtonEnabledState()
-		}
-	}
-
-	var region: String? {
-		didSet {
-			regionLabel.text = region
 		}
 	}
 
