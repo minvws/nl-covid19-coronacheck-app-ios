@@ -230,8 +230,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { fakeNow }
 		)

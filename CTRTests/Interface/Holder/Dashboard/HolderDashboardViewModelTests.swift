@@ -489,7 +489,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			errorOccurenceCount: 1
 		)
 		let qrCards = [
-			HolderDashboardViewModel.MyQRCard.netherlands(
+			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
