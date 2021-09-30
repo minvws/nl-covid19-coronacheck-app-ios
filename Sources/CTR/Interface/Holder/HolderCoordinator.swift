@@ -49,7 +49,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func openUrl(_ url: URL, inApp: Bool)
 
-	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID)
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
 
 	func userWishesToLaunchThirdPartyTicketApp()
 
@@ -411,7 +411,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 
-	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
+		guard let greenCardObjectID = greenCardObjectIDs.first else { return } // Temporary
+
 		do {
 			if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: greenCardObjectID) as? GreenCard {
 				navigateToShowQR(greenCard)
