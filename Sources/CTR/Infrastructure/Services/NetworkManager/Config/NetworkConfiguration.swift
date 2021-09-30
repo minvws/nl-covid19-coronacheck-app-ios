@@ -26,13 +26,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v5"]
+			path: ["v6"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v5"]
+			path: ["v6"]
 		)
 	)
 
@@ -42,13 +42,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v5"]
+			path: ["v6"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v5"]
+			path: ["v6"]
 		)
 	)
 
@@ -116,7 +116,7 @@ struct NetworkConfiguration {
 	///   - fromCdn: True if we use a cdn for this path
 	///   - params: optional query parameters
 	/// - Returns: an url to the enpoint
-	private func combine(path: Path, fromCdn: Bool, params: [String: String] = [:]) -> URL? {
+	private func combine(path: Path, fromCdn: Bool) -> URL? {
 
 		let endpointConfig = fromCdn ? cdn : api
         var urlComponents = URLComponents()
@@ -126,23 +126,6 @@ struct NetworkConfiguration {
 		urlComponents.path = "/" + (endpointConfig.path + path.components).joined(separator: "/")
 		urlComponents.path = urlComponents.path.replacingOccurrences(of: "//", with: "/")
 
-        if !params.isEmpty {
-			urlComponents.path += "/"
-            urlComponents.percentEncodedQueryItems = params.compactMap { parameter in
-                guard let name = parameter.key.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet),
-                    let value = parameter.value.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet) else {
-                    return nil
-                }
-                return URLQueryItem(name: name, value: value)
-            }
-        }
         return urlComponents.url
     }
-
-    private var urlQueryEncodedCharacterSet: CharacterSet = {
-        // WARNING: Do not remove this code, this will break signature validation on the backend.
-        // specify characters which are allowed to be unespaced in the queryString, note the `inverted`
-        let characterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
-        return characterSet
-    }()
 }

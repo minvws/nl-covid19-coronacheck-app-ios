@@ -25,7 +25,7 @@ class ErrorView: BaseView {
 	/// The error image
 	private let errorImageView: UIImageView = {
 		
-		let view = UIImageView(image: .error)
+		let view = UIImageView(image: I.error())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.tintColor = Theme.colors.utilityError
 		return view

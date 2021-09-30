@@ -58,7 +58,7 @@ private final class CloseButtonRowView: UIView {
 
 	init() {
 		button = UIButton(type: .custom)
-		button.setImage(.cross, for: .normal)
+		button.setImage(I.cross(), for: .normal)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.accessibilityIdentifier = "CloseButton"
 		button.accessibilityLabel = L.generalClose()

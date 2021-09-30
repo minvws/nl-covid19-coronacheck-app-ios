@@ -23,12 +23,10 @@ class EventStartViewModelTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		remoteConfigManagingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
-		remoteConfigManagingSpy.stubbedGetConfigurationResult = remoteConfig
 		sut = EventStartViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteConfigManager: remoteConfigManagingSpy
+			validAfterDays: 11
 		)
 	}
 
@@ -46,12 +44,12 @@ class EventStartViewModelTests: XCTestCase {
 	func test_content_recoveryMode() {
 
 		// Given
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery, validAfterDays: 11)
 		// When
 
 		// Then
 		expect(self.sut.title) == L.holderRecoveryStartTitle()
-		expect(self.sut.message) == L.holderRecoveryStartMessage("\(remoteConfig.recoveryWaitingPeriodDays!)")
+		expect(self.sut.message) == L.holderRecoveryStartMessage("11")
 	}
 
 	func test_backButtonTapped() {
@@ -81,7 +79,7 @@ class EventStartViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_recoveryMode() {
 
 		// Given
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery, validAfterDays: 11)
 
 		// When
 		sut.primaryButtonTapped()

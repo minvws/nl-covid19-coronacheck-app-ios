@@ -204,7 +204,8 @@ class HolderCoordinator: SharedCoordinator {
 		let destination = ChooseQRCodeTypeViewController(
 			viewModel: ChooseQRCodeTypeViewModel(
 				coordinator: self
-			)
+			),
+			isRootViewController: false
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
@@ -214,21 +215,13 @@ class HolderCoordinator: SharedCoordinator {
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
-				cryptoManager: cryptoManager,
-				datasource: HolderDashboardDatasource(
-					cryptoManaging: Services.cryptoManager,
-					walletManager: Services.walletManager,
-					now: { Date() }
-				),
+				datasource: HolderDashboardQRCardDatasource(now: { Date() }),
 				strippenRefresher: DashboardStrippenRefresher(
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
-					walletManager: Services.walletManager,
-					greencardLoader: Services.greenCardLoader,
 					reachability: try? Reachability(),
 					now: { Date() }
 				),
 				userSettings: UserSettings(),
-				remoteConfigManager: Services.remoteConfigManager,
 				now: { Date() }
 			)
 		)
@@ -284,8 +277,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				coordinator: self,
 				greenCard: greenCard,
 				thirdPartyTicketAppName: thirdpartyTicketApp?.name,
-				cryptoManager: cryptoManager,
-				remoteConfigManager: Services.remoteConfigManager,
 				userSettings: UserSettings(),
 				now: Date.init
 			)
@@ -513,7 +504,8 @@ extension HolderCoordinator: MenuDelegate {
 				let destination = ChooseQRCodeTypeViewController(
 					viewModel: ChooseQRCodeTypeViewModel(
 						coordinator: self
-					)
+					),
+					isRootViewController: true
 				)
 				navigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
@@ -578,11 +570,18 @@ extension HolderCoordinator: EventFlowDelegate {
 
 	func eventFlowDidCancel() {
 
-		/// The user cancelled the flow. Go back one page
+		/// The user cancelled the flow. Go back one page.
 
 		removeChildCoordinator()
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+	}
+	
+	func eventFlowDidCancelFromBackSwipe() {
+		
+		/// The user cancelled the flow from back swipe.
+		
+		removeChildCoordinator()
 	}
 }
 

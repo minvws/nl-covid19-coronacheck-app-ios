@@ -31,6 +31,10 @@ class ShowQRViewModelTests: XCTestCase {
 		screenCaptureDetector = ScreenCaptureDetectorSpy()
 		userSettingsSpy = UserSettingsSpy()
 		remoteConfigManagingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
+		remoteConfigManagingSpy.stubbedGetConfigurationResult = .default
+
+		Services.use(cryptoManagerSpy)
+		Services.use(remoteConfigManagingSpy)
 	}
 
 	// MARK: - Tests
@@ -52,7 +56,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -80,7 +83,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -111,7 +113,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -137,7 +138,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -164,7 +164,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -194,7 +193,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -224,7 +222,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -252,8 +249,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			remoteConfigManager: remoteConfigManagingSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy,
 			now: { now }
@@ -283,8 +278,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			remoteConfigManager: remoteConfigManagingSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy,
 			now: { now }
@@ -310,7 +303,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -343,7 +335,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -368,7 +359,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -406,7 +396,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -432,7 +421,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -506,7 +494,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: "RollerDiscoParties",
-			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)

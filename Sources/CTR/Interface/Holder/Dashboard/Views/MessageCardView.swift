@@ -35,7 +35,7 @@ class MessageCardView: BaseView {
 
 		let button = UIButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.setImage(.questionMark, for: .normal)
+		button.setImage(I.questionMark(), for: .normal)
 		return button
 	}()
 

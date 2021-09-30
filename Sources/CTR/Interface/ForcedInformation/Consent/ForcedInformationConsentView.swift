@@ -214,11 +214,7 @@ class ForcedInformationConsentView: BaseView {
 	/// The highlight
 	var highlight: String? {
 		didSet {
-			highlightTextView.attributedText = .makeFromHtml(
-				text: highlight,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark
-			)
+			highlightTextView.attributedText = .makeFromHtml(text: highlight, style: .bodyDark)
 		}
 	}
 

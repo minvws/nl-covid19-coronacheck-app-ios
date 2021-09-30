@@ -147,14 +147,6 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		NSLayoutConstraint.activate([
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
-
-		setupPrimaryButton(useFullWidth: {
-			switch traitCollection.preferredContentSizeCategory {
-				case .unspecified: return true
-				case let size where size > .extraLarge: return true
-				default: return false
-			}
-		}())
 	}
 
 	@objc func userNeedsATokenButtonTapped() {

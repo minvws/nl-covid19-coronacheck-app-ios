@@ -48,8 +48,7 @@ class ListEventsViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		navigationItem.hidesBackButton = true
-		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: L.generalBack())
+		addBackButton(customAction: #selector(backButtonTapped))
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 
@@ -90,6 +89,8 @@ class ListEventsViewController: BaseViewController {
 			self?.sceneView.hideForCapture = $0
 		}
 	}
+	
+	override var enableSwipeBack: Bool { false }
 
 	@objc func backButtonTapped() {
 
@@ -147,17 +148,12 @@ class ListEventsViewController: BaseViewController {
 		sceneView.message = content.subTitle
 
 		// Button
-		sceneView.showLineView = false
 		if let actionTitle = content.primaryActionTitle {
 			sceneView.primaryTitle = actionTitle
-			sceneView.footerBackground.isHidden = false
-			sceneView.primaryButton.isHidden = false
-			sceneView.footerGradientView.isHidden = false
+			sceneView.footerButtonView.isHidden = false
 		} else {
 			sceneView.primaryTitle = nil
-			sceneView.footerBackground.isHidden = true
-			sceneView.primaryButton.isHidden = true
-			sceneView.footerGradientView.isHidden = true
+			sceneView.footerButtonView.isHidden = true
 		}
 		sceneView.primaryButtonTappedCommand = content.primaryAction
 		sceneView.somethingIsWrongTappedCommand = content.secondaryAction

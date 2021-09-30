@@ -77,7 +77,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.content.title) == L.holderTestListTitle()
+		expect(self.sut.content.title) == L.holderTestresultsResultsTitle()
 		expect(self.sut.content.subTitle).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())

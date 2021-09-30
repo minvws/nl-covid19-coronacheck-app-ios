@@ -35,6 +35,8 @@ class EventStartViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+		
+		navigationController?.delegate = self
 
 		setupBinding()
 		setupInteraction()
@@ -68,12 +70,25 @@ class EventStartViewController: BaseViewController {
 			self?.viewModel.openUrl(url)
 		}
 
-		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: L.generalBack())
-		styleBackButton()
+		addBackButton(customAction: #selector(backButtonTapped))
 	}
 
 	@objc func backButtonTapped() {
 
 		viewModel.backButtonTapped()
+	}
+}
+
+extension EventStartViewController: UINavigationControllerDelegate {
+	
+	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+
+		if let coordinator = navigationController.topViewController?.transitionCoordinator {
+			coordinator.notifyWhenInteractionChanges { [weak self] context in
+				guard !context.isCancelled else { return }
+				// Clean up coordinator when swiping back
+				self?.viewModel.backSwipe()
+			}
+		}
 	}
 }

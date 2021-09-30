@@ -145,7 +145,7 @@ final class DashboardTabBar: BaseView {
 		domesticButton.isSelected = false
 		internationalButton.isSelected = false
 		
-		let button = tab == .domestic ? domesticButton : internationalButton
+		let button = tab.isDomestic ? domesticButton : internationalButton
 		button.isSelected = true
 		
 		selectionLineLeftConstraint = selectionLineView.leftAnchor.constraint(equalTo: button.leftAnchor)

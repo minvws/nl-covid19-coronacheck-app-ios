@@ -36,7 +36,7 @@ final class PaperCertificateAboutScanViewController: BaseViewController {
 		
 		setupBinding()
 		
-		styleBackButton()
+		addBackButton()
 	}
 	
 	func setupBinding() {

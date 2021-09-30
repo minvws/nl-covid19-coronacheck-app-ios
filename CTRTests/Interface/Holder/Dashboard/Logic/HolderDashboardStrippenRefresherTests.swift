@@ -29,6 +29,9 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		greencardLoaderSpy = GreenCardLoaderSpy()
 		dataStoreManager = DataStoreManager(.inMemory)
 		reachabilitySpy = ReachabilitySpy()
+
+		Services.use(greencardLoaderSpy)
+		Services.use(walletManagerSpy)
 	}
 
 	// MARK: - Test calculations
@@ -40,8 +43,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -61,8 +62,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -82,8 +81,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -106,8 +103,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -128,8 +123,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -165,8 +158,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -201,8 +192,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -275,8 +264,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -313,8 +300,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -352,8 +337,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -389,8 +372,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)
@@ -413,8 +394,6 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			walletManager: walletManagerSpy,
-			greencardLoader: greencardLoaderSpy,
 			reachability: reachabilitySpy,
 			now: { now }
 		)

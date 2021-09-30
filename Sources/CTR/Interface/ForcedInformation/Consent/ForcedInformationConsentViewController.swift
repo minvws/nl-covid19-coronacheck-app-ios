@@ -42,8 +42,6 @@ class ForcedInformationConsentViewController: BaseViewController {
 		setupContent()
 		setupBindings()
 		setupActions()
-
-		navigationItem.hidesBackButton = true
 	}
 
 	/// setup the bindings

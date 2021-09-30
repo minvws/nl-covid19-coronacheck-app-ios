@@ -121,11 +121,7 @@ final class ForcedInformationPageView: ScrolledStackView {
 	
 	var content: String? {
 		didSet {
-			contentTextView.attributedText = .makeFromHtml(
-				text: content,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark
-			)
+			contentTextView.attributedText = .makeFromHtml(text: content, style: .bodyDark)
 		}
 	}
 	
