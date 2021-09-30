@@ -10,35 +10,35 @@ import UIKit
 import SnapshotTesting
 import XCTest
 
-class ShowQRViewTests: XCTestCase {
+class ShowQRItemViewTests: XCTestCase {
 
 	override func setUp() {
 		super.setUp()
 	}
 
 	func testLoading() {
-		let sut = ShowQRImageView()
+		let sut = ShowQRItemView()
 		sut.visibilityState = .loading
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
 		sut.assertImage()
 	}
 
 	func testHidden() {
-		let sut = ShowQRImageView()
+		let sut = ShowQRItemView()
 		sut.visibilityState = .hiddenForScreenCapture
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
 		sut.assertImage()
 	}
 
 	func testScreenshotBlocking() {
-		let sut = ShowQRImageView()
+		let sut = ShowQRItemView()
 		sut.visibilityState = .screenshotBlocking(timeRemainingText: "0:02", voiceoverTimeRemainingText: "in twee seconden")
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
 		sut.assertImage()
 	}
 
 	func testVisible() {
-		let sut = ShowQRImageView()
+		let sut = ShowQRItemView()
 
 		sut.visibilityState = .visible(
 			qrImage: UIImage.withColor(.blue, size: CGSize(width: 200, height: 200))

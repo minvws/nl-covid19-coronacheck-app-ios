@@ -11,10 +11,10 @@ import XCTest
 @testable import CTR
 import Nimble
 
-class ShowQRViewModelTests: XCTestCase {
+class ShowQRItemViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: ShowQRViewModel!
+	var sut: ShowQRItemViewModel!
 
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	var cryptoManagerSpy: CryptoManagerSpy!
@@ -52,7 +52,7 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 
 		// When
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -79,7 +79,7 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 
 		// When
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -94,9 +94,9 @@ class ShowQRViewModelTests: XCTestCase {
 	}
 
 	func test_constants() {
-		expect(ShowQRViewModel.domesticCorrectionLevel) == "M"
-		expect(ShowQRViewModel.internationalCorrectionLevel) == "Q"
-		expect(ShowQRViewModel.screenshotWarningMessageDuration) == 180
+		expect(ShowQRItemViewModel.domesticCorrectionLevel) == "M"
+		expect(ShowQRItemViewModel.internationalCorrectionLevel) == "Q"
+		expect(ShowQRItemViewModel.screenshotWarningMessageDuration) == 180
 	}
 
 	func test_validity_withDomesticGreenCard_withoutCredential() throws {
@@ -109,7 +109,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: false
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -134,7 +134,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: false
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -160,7 +160,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: true
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -189,7 +189,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: true
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -218,7 +218,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: false
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -245,7 +245,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: false
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -274,7 +274,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: false
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -299,7 +299,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: true
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -331,7 +331,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: false
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -355,7 +355,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: true
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -392,7 +392,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: true
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -417,7 +417,7 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: true
 			)
 		)
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
@@ -490,7 +490,7 @@ class ShowQRViewModelTests: XCTestCase {
 			)
 		)
 
-		sut = ShowQRViewModel(
+		sut = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: "RollerDiscoParties",
@@ -538,7 +538,7 @@ extension GreenCardModel {
 	}
 }
 
-private func beVisible(test: @escaping (UIImage) -> Void = { _ in }) -> Predicate<ShowQRImageView.VisibilityState> {
+private func beVisible(test: @escaping (UIImage) -> Void = { _ in }) -> Predicate<ShowQRItemView.VisibilityState> {
 	return Predicate.define("be .expiredQR with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .visible(qrImage: image) = actual {
@@ -548,7 +548,7 @@ private func beVisible(test: @escaping (UIImage) -> Void = { _ in }) -> Predicat
 		return PredicateResult(status: .fail, message: message)
 	}
 }
-private func beScreenshotBlocking(test: @escaping (String, String) -> Void = { _, _ in }) -> Predicate<ShowQRImageView.VisibilityState> {
+private func beScreenshotBlocking(test: @escaping (String, String) -> Void = { _, _ in }) -> Predicate<ShowQRItemView.VisibilityState> {
 	return Predicate.define("be .expiredQR with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .screenshotBlocking(timeRemainingText, voiceoverTimeRemainingText) = actual {

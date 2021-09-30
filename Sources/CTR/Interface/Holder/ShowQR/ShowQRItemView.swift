@@ -7,7 +7,7 @@
   
 import UIKit
 
-class ShowQRImageView: BaseView {
+class ShowQRItemView: BaseView {
 
 	enum VisibilityState: Equatable {
 		case loading

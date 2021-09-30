@@ -10,17 +10,17 @@ import ViewControllerPresentationSpy
 @testable import CTR
 import Nimble
 
-class ShowQRViewControllerTests: XCTestCase {
+class ShowQRViewItemControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: ShowQRViewController!
+	var sut: ShowQRItemViewController!
 
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	var cryptoManagerSpy: CryptoManagerSpy!
 	var dataStoreManager: DataStoreManaging!
 	var screenCaptureDetector: ScreenCaptureDetectorSpy!
 	var userSettingsSpy: UserSettingsSpy!
-	var viewModel: ShowQRViewModel!
+	var viewModel: ShowQRItemViewModel!
 	var remoteConfigMangingSpy: RemoteConfigManagingSpy!
 	var window = UIWindow()
 
@@ -49,14 +49,14 @@ class ShowQRViewControllerTests: XCTestCase {
 			)
 		)
 
-		viewModel = ShowQRViewModel(
+		viewModel = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
-		sut = ShowQRViewController(viewModel: viewModel)
+		sut = ShowQRItemViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
 
@@ -95,13 +95,13 @@ class ShowQRViewControllerTests: XCTestCase {
 				withValidCredential: true
 			)
 		)
-		viewModel = ShowQRViewModel(
+		viewModel = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
 			userSettings: userSettingsSpy
 		)
-		sut = ShowQRViewController(viewModel: viewModel)
+		sut = ShowQRItemViewController(viewModel: viewModel)
 
 		// When
 		loadView()
@@ -121,13 +121,13 @@ class ShowQRViewControllerTests: XCTestCase {
 				withValidCredential: false
 			)
 		)
-		viewModel = ShowQRViewModel(
+		viewModel = ShowQRItemViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			thirdPartyTicketAppName: nil,
 			userSettings: userSettingsSpy
 		)
-		sut = ShowQRViewController(viewModel: viewModel)
+		sut = ShowQRItemViewController(viewModel: viewModel)
 		loadView()
 
 		// When

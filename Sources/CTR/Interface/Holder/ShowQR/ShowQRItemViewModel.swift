@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ShowQRViewModel: Logging {
+class ShowQRItemViewModel: Logging {
 
 	// MARK: - Static
 	
@@ -129,11 +129,11 @@ class ShowQRViewModel: Logging {
 		screenCaptureDetector.screenshotWasTakenCallback = { [weak self] in
 			guard self?.screenIsBlockedForScreenshotWithSecondsRemaining == nil else { return }
 			userSettings.lastScreenshotTime = now()
-			self?.screenshotWasTaken(blockQRUntil: now().addingTimeInterval(ShowQRViewModel.screenshotWarningMessageDuration))
+			self?.screenshotWasTaken(blockQRUntil: now().addingTimeInterval(ShowQRItemViewModel.screenshotWarningMessageDuration))
 		}
 
 		if let lastScreenshotTime = userSettings.lastScreenshotTime {
-			let expiryDate = lastScreenshotTime.addingTimeInterval(ShowQRViewModel.screenshotWarningMessageDuration)
+			let expiryDate = lastScreenshotTime.addingTimeInterval(ShowQRItemViewModel.screenshotWarningMessageDuration)
 			if expiryDate > now() {
 				screenshotWasTaken(blockQRUntil: expiryDate)
 			} else {
@@ -216,7 +216,7 @@ class ShowQRViewModel: Logging {
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			DispatchQueue.global(qos: .userInitiated).async {
 				if let message = self.cryptoManager?.generateQRmessage(data),
-				   let image = message.generateQRCode(correctionLevel: ShowQRViewModel.domesticCorrectionLevel) {
+				   let image = message.generateQRCode(correctionLevel: ShowQRItemViewModel.domesticCorrectionLevel) {
 					DispatchQueue.main.async {
 						self.setQRValid(image: image)
 					}
@@ -229,7 +229,7 @@ class ShowQRViewModel: Logging {
 		} else {
 			DispatchQueue.global(qos: .userInitiated).async {
 				// International
-				if let image = data.generateQRCode(correctionLevel: ShowQRViewModel.internationalCorrectionLevel) {
+				if let image = data.generateQRCode(correctionLevel: ShowQRItemViewModel.internationalCorrectionLevel) {
 					DispatchQueue.main.async {
 						self.setQRValid(image: image)
 					}

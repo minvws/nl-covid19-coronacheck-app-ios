@@ -7,17 +7,17 @@
 
 import UIKit
 
-class ShowQRViewController: BaseViewController {
+class ShowQRItemViewController: BaseViewController {
 
-	private let viewModel: ShowQRViewModel
+	private let viewModel: ShowQRItemViewModel
 
-	let sceneView = ShowQRImageView()
+	let sceneView = ShowQRItemView()
 
 	var previousOrientation: UIInterfaceOrientation?
 
 	// MARK: Initializers
 
-	init(viewModel: ShowQRViewModel) {
+	init(viewModel: ShowQRItemViewModel) {
 
 		self.viewModel = viewModel
 
