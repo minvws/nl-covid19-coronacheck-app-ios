@@ -521,8 +521,8 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.cancelTitle).toEventually(beNil())
 	}
 
 	func test_unomiOK_eventServerBusy() {
@@ -545,8 +545,8 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.cancelTitle).toEventually(beNil())
 	}
 
 	// MARK: Default values

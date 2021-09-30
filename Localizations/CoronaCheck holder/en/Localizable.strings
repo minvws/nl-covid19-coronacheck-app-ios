@@ -1,3 +1,13 @@
+"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR code. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
+"holder.tokenentry.regularflow.error.invalid.combination" = "No valid combination";
+"holder.tokenentry.regularflow.error.emptytoken" = "Please fill out a retrieval code first";
+"holder.tokenentry.regularflow.error.emptycode" = "Please fill out a verification code first";
+"holder.tokenentry.regularflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
+"holder.tokenentry.universallinkflow.error.invalid.combination" = "No valid combination";
+"holder.tokenentry.universallinkflow.error.emptytoken" = "Please fill out a retrieval code first";
+"holder.tokenentry.universallinkflow.error.emptycode" = "Please fill out a verification code first";
+"holder.tokenentry.universallinkflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
+"general.error.server.unreachable.errorCode" = "<p>We failed to reach the server. Can you check if you’re connected to the internet?</p><p><b>Error code:</b><br />%@</p>";
 "holder.cleardata.menu.title" = "Clear data";
 "holder.cleardata.alert.title" = "Clear data";
 "holder.cleardata.alert.subtitle" = "Are you sure you want to remove all the green cards and events?";
@@ -94,18 +104,15 @@
 "holder.dcc.test.issuer" = "Certificate issuer:";
 "holder.dcc.test.identifier" = "Unique certificate identifier:";
 
-"holder.recovery.wrong.body" = "<p>Are these details incorrect? Contact your test location. They can edit your details.</p>";
+"holder.recovery.wrong.body" = "<p>Are these details incorrect? Please contact your test location. They can edit your details.</p>";
 "general.retry" = "Try again";
-"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a>";
-"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a><br />or call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free)";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br /><br />Still not working? Please call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free) and provide the following error code: (i 075).</p>";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Are you able to connect to the internet soon?";
 "holder.dashboard.strippen.expiring.nointernet.alert.message" = "The app periodically needs an internet connection. Without reconnecting you can use the QR code for %@ days more. Beyond that, you will need to connect to the internet to access the QR code.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Connect to the internet";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Server error";
-"holder.dashboard.strippen.expired.servererror.alert.message" = "To use the QR code, the app must make a connection to the server. Unfortunately there is currently a server issue (error: %@). Retry now or try again later.";
-
 "holder.recovery.tooOld.title" = "Positive test result is not valid";
 "holder.recovery.tooOld.message" = "Have you been tested more than 180 days ago? Then your test result is no longer valid. In this case, you cannot create a recovery certificate.";
 "holder.recovery.list.message" = "You can create a recovery certificate from the retrieved details.";
@@ -122,7 +129,7 @@
 "holder.chooseqrcodetype.option.recovery.subtitle" = "The test proves I have had coronavirus";
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
-"holder.showqr.eu.about.recovery.description" = "Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:";
+"holder.showqr.eu.about.recovery.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
 "holder.showqr.eu.about.recovery.name" = "Name:";
 "holder.showqr.eu.about.recovery.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.recovery.pathogen" = "Disease recovered from:";
@@ -213,12 +220,8 @@
 "holder.tokenentry.regularflow.verification.title" = "Verification code";
 "holder.tokenentry.regularflow.verification.placeholder" = "E.g. 123456";
 "holder.tokenentry.regularflow.error.invalid.code" = "Invalid retrieval code";
-"holder.tokenentry.regularflow.error.invalid.combination" = "Invalid combination of retrieval code and verification code";
 "holder.tokenentry.regularflow.retry.title" = "I haven't received a code";
 "holder.tokenentry.regularflow.next" = "Next";
-"holder.tokenentry.regularflow.error.emptytoken" = "Please fill out a retrieval code first";
-"holder.tokenentry.regularflow.error.emptycode" = "Please fill out a verification code first";
-"holder.tokenentry.regularflow.error.unknownprovider" = "Retrieval code is from an unknown test location ";
 /* MARK: - Holder Token entry - Universal Link flow */
 "holder.tokenentry.universallinkflow.title" = "Retrieve test result";
 "holder.tokenentry.universallinkflow.text" = "Enter your verification code to retrieve your negative test result.";
@@ -229,12 +232,8 @@
 "holder.tokenentry.universallinkflow.verification.title" = "Verification code";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "E.g. 123456";
 "holder.tokenentry.universallinkflow.error.invalid.code" = "This retrieval code has expired";
-"holder.tokenentry.universallinkflow.error.invalid.combination" = "Invalid combination of retrieval code and verification code";
 "holder.tokenentry.universallinkflow.retry.title" = "I haven't received a code";
 "holder.tokenentry.universallinkflow.next" = "Next";
-"holder.tokenentry.universallinkflow.error.emptytoken" = "Please fill out a retrieval code first";
-"holder.tokenentry.universallinkflow.error.emptycode" = "Please fill out a verification code first";
-"holder.tokenentry.universallinkflow.error.unknownprovider" = "Retrieval code is from an unknown test location";
 
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
@@ -275,7 +274,6 @@
 "holder.errorstate.nosession.message" = "You’ve waited too long. For safety reasons, you were logged out. Login again with your DigiD to retrieve your details.";
 "holder.errorstate.nosession.action" = "Start over";
 "general.error.server.unreachable" = "We failed to reach the server. Can you check if you’re connected to the internet?";
-"general.error.server.unreachable.errorCode" = "<p>We failed to reach the server. Can you check if you’re connected to the internet?</p><p><b>Error code:</b><br />%@</p>";
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";
 "general.government.logo" = "Logo of Central Government";
@@ -409,10 +407,10 @@
 
 "holder.showqr.domestic.title" = "Dutch QR code";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
-"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p> The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you. </p><p>The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p></p>";
+"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code says whether or not the QR code is valid. It doesn't say whether or not you have a test certificate or vaccination.</p><p> The QR code also contains several of your details. This is to make sure the QR code belongs to you. The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth.</p><p>Your details: <b>%@</b></p><p></p><p>*. To protect your privacy, some details may disappear. In this case you will see a hyphen (-).</p>";
 "holder.showqr.eu.title" = "International QR code";
 "holder.showqr.eu.about.title" = "About my international QR code";
-"holder.showqr.eu.about.vaccination.description" = "Travelling outside of the Netherlands? Then more data is required. That’s why the international QR code contains the following details:";
+"holder.showqr.eu.about.vaccination.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
 "holder.showqr.eu.about.vaccination.name" = "Name:";
 "holder.showqr.eu.about.vaccination.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.vaccination.pathogen" = "Disease targeted:";
@@ -427,7 +425,7 @@
 "holder.showqr.eu.about.vaccination.identifier" = "Unique certificate identifier:";
 "holder.showqr.eu.about.vaccination.dateinformation" = "*Date noted in day-month-year";
 
-"holder.showqr.eu.about.test.description" = "Travelling outside the Netherlands? Then more data is required. That's why the international QR code contains the following details:";
+"holder.showqr.eu.about.test.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
 "holder.showqr.eu.about.test.name" = "Name:";
 "holder.showqr.eu.about.test.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.test.pathogen" = "Disease targeted:";
@@ -501,12 +499,12 @@
 "holder.about.link" = "Read the privacy statement here";
 
 "holder.vaccination.start.title" = "Retrieve vaccination details";
-"holder.vaccination.start.message" = "<p>Were you vaccinated? Login with DigiD. Details regarding your vaccination will be retrieved automatically.</p><p>For a Dutch QR code, you need to be fully vaccinated. You only need one injection to make an international QR code.</p><p>Please note: the validity of a QR code made after one vaccination depends on the rules of the country you’re visiting.</p>";
+"holder.vaccination.start.message" = "<p>Were you vaccinated? Login with DigiD. Details regarding your vaccination will be retrieved automatically.</p>";
 "holder.vaccination.start.action" = "Login with your DigiD";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.list.title" = "Your retrieved vaccinations";
 "holder.test.list.title" = "Retrieve test result";
-"holder.vaccination.list.message" = "You can make a QR code of a negative test result or of a vaccination.";
+"holder.vaccination.list.message" = "You can make a QR code of your vaccinations. This is your certificate.";
 "holder.vaccination.list.action" = "Make certificate";
 "holder.vaccination.element.title" = "Vaccination %@";
 "holder.vaccination.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
@@ -524,7 +522,7 @@
 "holder.vaccination.about.off" = "%@ of %@";
 "holder.vaccination.list.wrong" = "Is something wrong?";
 "holder.vaccination.wrong.title" = "Something is wrong";
-"holder.vaccination.wrong.body" = "<p>Is your name or date of birth incorrect? Or are your vaccination details incorrect? Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a> </p>";
+"holder.vaccination.wrong.body" = "<p>Are these details incorrect? Please contact the healthcare provider who vaccinated you. They can edit your details.</p>";
 
 "holder.vaccination.start.nodigid" = "I don't have DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/en/apply-or-activate-digid";
@@ -577,7 +575,7 @@
 "holder.event.about.recovery.validuntil" = "Valid until:";
 "holder.event.about.recovery.identifier" = "Unique certificate number:";
 
-"holder.testresults.wrong.body" = "<p>Are your name and/or date of birth incorrect? Find more information on the <a href=\"https://coronacheck.nl/guidepost\"> Guidepost</a>.</p>";
+"holder.testresults.wrong.body" = "<p>Are these details incorrect? Contact your test location. They can edit your details.</p>";
 
 "holder.event.element.subtitle.test2" = "<p>Test date: %@</p><p>Your details: %@</p>";
 "holder.event.element.subtitle.test3" = "<p>Test date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";

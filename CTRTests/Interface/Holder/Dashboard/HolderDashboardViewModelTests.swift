@@ -170,6 +170,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let oldStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .loading(silently: true),
+			now: { now },
 			greencardsCredentialExpiryState: .noActionNeeded,
 			userHasPreviouslyDismissedALoadingError: false,
 			hasLoadingEverFailed: false,
@@ -177,6 +178,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		)
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .idle,
+			now: { now },
 			greencardsCredentialExpiryState: .noActionNeeded,
 			userHasPreviouslyDismissedALoadingError: false,
 			hasLoadingEverFailed: false,
@@ -203,6 +205,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: false,
@@ -219,6 +222,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Apply loading state:
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .loading(silently: false),
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: false,
@@ -248,6 +252,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: false,
@@ -264,6 +269,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Apply loading state:
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .loading(silently: false),
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: false,
@@ -298,6 +304,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: false,
@@ -317,6 +324,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Apply loading state:
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .loading(silently: false),
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: false,
@@ -337,6 +345,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: false,
 			hasLoadingEverFailed: false,
@@ -375,6 +384,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: false,
@@ -400,6 +410,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
+			now: { now },
 			greencardsCredentialExpiryState: .expiring(deadline: now.addingTimeInterval(3 * hours * fromNow)),
 			userHasPreviouslyDismissedALoadingError: false,
 			hasLoadingEverFailed: false,
@@ -426,6 +437,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
+			now: { now },
 			greencardsCredentialExpiryState: .expiring(deadline: now.addingTimeInterval(1 * hour * ago)),
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: false,
@@ -443,10 +455,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_strippenkaart_serverError_expiring_shouldDoNothing() {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
+		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: error),
+			now: { now },
 			greencardsCredentialExpiryState: .expiring(deadline: now.addingTimeInterval(2 * days * fromNow)),
 			userHasPreviouslyDismissedALoadingError: false,
 			hasLoadingEverFailed: false,
@@ -463,35 +476,47 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 	}
 
-	func test_strippen_expired_serverError_firstTime_shouldPresentAlert() {
+	func test_strippen_expired_serverError_firstTime_shouldDisplayErrorWithRetry() {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
-		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
+		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: error),
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: false,
 			hasLoadingEverFailed: false,
-			errorOccurenceCount: 0
+			errorOccurenceCount: 1
 		)
+		let qrCards = [
+			HolderDashboardViewModel.QRCard.netherlands(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
+				shouldShowErrorBeneathCard: true,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		strippenRefresherSpy.invokedDidUpdate?(nil, newStrippenState)
 
-		expect(self.sut.currentlyPresentedAlert?.title) == L.holderDashboardStrippenExpiredServererrorAlertTitle()
-		expect(self.sut.currentlyPresentedAlert?.subTitle) == L.holderDashboardStrippenExpiredServererrorAlertMessage(error.localizedDescription)
-		expect(self.sut.currentlyPresentedAlert?.cancelTitle) == L.generalClose()
-		expect(self.sut.currentlyPresentedAlert?.okTitle) == L.generalRetry()
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroDomestic()
+		}))
 
-		self.sut.currentlyPresentedAlert?.cancelAction?(UIAlertAction())
-		expect(self.strippenRefresherSpy.invokedUserDismissedALoadingError) == true
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
 
-		self.sut.currentlyPresentedAlert?.okAction?(UIAlertAction())
-		expect(self.strippenRefresherSpy.invokedLoad) == true
+		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
+		}))
 	}
 
-	func test_strippen_expired_serverError_secondTime_shouldDisplayError() {
+	func test_strippen_expired_serverError_secondTime_shouldDisplayErrorWithHelpdesk() {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
+		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
@@ -506,10 +531,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: error),
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: true,
-			errorOccurenceCount: 1
+			errorOccurenceCount: 2
 		)
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
@@ -522,14 +548,14 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
 
 		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 		}))
 	}
 
-	func test_strippen_domesticandinternational_expired_serverError_secondTime_shouldDisplayError() {
+	func test_strippen_domesticandinternational_expired_serverError_firstTime_shouldDisplayError() {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
+		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
@@ -551,6 +577,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: error),
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: true,
@@ -583,7 +610,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_strippen_domestic_expired_serverError_thirdTime_shouldDisplayHelpdeskError() {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
+		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
@@ -598,6 +625,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: error),
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: true,
@@ -614,14 +642,14 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
 
 		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(AppAction.tryAgain)
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 		}))
 	}
 
 	func test_strippen_international_expired_serverError_thirdTime_shouldDisplayHelpdeskError() {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
-		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
+		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
@@ -637,6 +665,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: error),
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: true,
@@ -653,7 +682,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard())
 
 		expect(self.sut.internationalCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(AppAction.tryAgain)
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 		}))
 	}
 
@@ -663,6 +692,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .idle,
+			now: { now },
 			greencardsCredentialExpiryState: .noActionNeeded,
 			userHasPreviouslyDismissedALoadingError: false,
 			hasLoadingEverFailed: false,
@@ -699,7 +729,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		let strippenState = DashboardStrippenRefresher.State(
-			loadingState: .failed(error: DashboardStrippenRefresher.Error.networkError(error: .invalidRequest)),
+			loadingState: .failed(error: DashboardStrippenRefresher.Error.networkError(error: .invalidRequest, timestamp: now)),
+			now: { now },
 			greencardsCredentialExpiryState: .expired,
 			userHasPreviouslyDismissedALoadingError: true,
 			hasLoadingEverFailed: true,
@@ -712,7 +743,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
 		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk("ctr.action:try_again")
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 		}))
 	}
 

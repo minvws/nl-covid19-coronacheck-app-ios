@@ -595,15 +595,12 @@ private extension FetchEventsViewModel {
 		alert = AlertContent(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: { _ in
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { _ in
 				self.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				guard let self = self else { return }
-				self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
-			},
-			okTitle: L.generalRetry()
+			okTitle: L.generalClose()
 		)
 	}
 
