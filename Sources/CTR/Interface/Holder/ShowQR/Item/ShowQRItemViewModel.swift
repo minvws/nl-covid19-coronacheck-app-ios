@@ -78,10 +78,8 @@ class ShowQRItemViewModel: Logging {
 		self.now = now
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
-			title = L.holderShowqrDomesticTitle()
 			qrAccessibility = L.holderShowqrDomesticQrTitle()
 		} else if greenCard.type == GreenCardType.eu.rawValue {
-			title = L.holderShowqrEuTitle()
             qrAccessibility = L.holderShowqrEuQrTitle()
 		}
 
@@ -201,6 +199,17 @@ class ShowQRItemViewModel: Logging {
 					}
 				}
 			}
+			setTitleForVaccinationDosage(data)
+		}
+	}
+
+	private func setTitleForVaccinationDosage(_ data: Data) {
+
+		if let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
+		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
+		   let doseNumber = euVaccination.doseNumber,
+		   let totalDose = euVaccination.totalDose {
+			title = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 		}
 	}
 

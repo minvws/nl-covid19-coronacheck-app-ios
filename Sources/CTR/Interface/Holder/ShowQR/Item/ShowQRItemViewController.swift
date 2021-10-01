@@ -48,10 +48,10 @@ class ShowQRItemViewController: BaseViewController, Logging {
 
 	private func setupBinding() {
 
-//		viewModel.$title.binding = { [weak self] in
-//
-//			self?.title = $0
-//		}
+		viewModel.$title.binding = { [weak self] in
+
+			self?.sceneView.title = $0
+		}
         
         viewModel.$qrAccessibility.binding = { [weak self] in
             
@@ -62,8 +62,6 @@ class ShowQRItemViewController: BaseViewController, Logging {
 			self?.sceneView.visibilityState = $0
 			self?.viewModel.setBrightness()
 		}
-
-		sceneView.title = "Dosis 1/2"
 	}
 
 	private func setupListeners() {

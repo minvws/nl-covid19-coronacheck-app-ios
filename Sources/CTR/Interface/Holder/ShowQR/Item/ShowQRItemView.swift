@@ -60,7 +60,7 @@ class ShowQRItemView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(body: nil).multiline()
+		return Label(headlineBold: nil, montserrat: true).multiline()
 	}()
 
 	private let screenshotBlockingView: ShowQRScreenshotBlockingView = {
@@ -75,7 +75,6 @@ class ShowQRItemView: BaseView {
 
 		super.setupViews()
 		spinner.startAnimating()
-		titleLabel.backgroundColor = .brown
 	}
 	
 	/// Setup the hierarchy
@@ -96,10 +95,7 @@ class ShowQRItemView: BaseView {
 		NSLayoutConstraint.activate([
 
 			// QR View
-			largeQRimageView.topAnchor.constraint(
-				equalTo: topAnchor,
-				constant: ViewTraits.margin
-			),
+			largeQRimageView.topAnchor.constraint(equalTo: topAnchor),
 			largeQRimageView.heightAnchor.constraint(equalTo: largeQRimageView.widthAnchor),
 			largeQRimageView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,

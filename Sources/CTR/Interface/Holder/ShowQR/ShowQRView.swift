@@ -86,14 +86,12 @@ class ShowQRView: BaseView {
 				constant: ViewTraits.margin
 			),
 //			containerView.heightAnchor.constraint(greaterThanOrEqualTo: containerView.widthAnchor), // Might need to go
-//			containerView.heightAnchor.constraint(equalToConstant: 400),
+			containerView.heightAnchor.constraint(equalToConstant: 430),
 			containerView.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.margin
+				equalTo: safeAreaLayoutGuide.leadingAnchor
 			),
 			containerView.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.margin
+				equalTo: safeAreaLayoutGuide.trailingAnchor
 			),
 
 			pageControl.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 20),
