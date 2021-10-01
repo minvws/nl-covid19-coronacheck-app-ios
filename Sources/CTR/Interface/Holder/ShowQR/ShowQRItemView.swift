@@ -54,23 +54,6 @@ class ShowQRItemView: BaseView {
 		return view
 	}()
 
-	/// The security features
-	let securityView: SecurityFeaturesView = {
-
-		let view = SecurityFeaturesView()
-		view.contentMode = .bottom
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
-	let returnToThirdPartyAppButton: Button = {
-
-		let button = Button(title: "", style: .textLabelBlue)
-		button.translatesAutoresizingMaskIntoConstraints = false
-		button.isHidden = true
-		return button
-	}()
-
 	private let screenshotBlockingView: ShowQRScreenshotBlockingView = {
 
 		let view = ShowQRScreenshotBlockingView()
@@ -82,7 +65,6 @@ class ShowQRItemView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		spinner.startAnimating()
 	}
 	
@@ -90,10 +72,8 @@ class ShowQRItemView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
-		addSubview(securityView)
 		addSubview(spinner)
 		addSubview(largeQRimageView)
-		addSubview(returnToThirdPartyAppButton)
 		addSubview(screenshotBlockingView)
 	}
 
@@ -125,22 +105,9 @@ class ShowQRItemView: BaseView {
 			screenshotBlockingView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
 
 			spinner.centerYAnchor.constraint(equalTo: largeQRimageView.centerYAnchor),
-			spinner.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor),
+			spinner.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor)
 
-			// Security
-			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
-			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-			returnToThirdPartyAppButton.topAnchor.constraint(equalTo: largeQRimageView.bottomAnchor, constant: 24),
-			returnToThirdPartyAppButton.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor, constant: 4)
 		])
-
-		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
-			equalTo: bottomAnchor,
-			constant: ViewTraits.domesticSecurityMargin
-		)
-		securityViewBottomConstraint?.isActive = true
 
 		bringSubviewToFront(largeQRimageView)
 	}
@@ -156,11 +123,6 @@ class ShowQRItemView: BaseView {
         accessibilityElements = [largeQRimageView]
 	}
 
-	@objc func didTapThirdPartyAppButton() {
-
-		didTapThirdPartyAppButtonCommand?()
-	}
-
 	// MARK: Public Access
 
 	var visibilityState: VisibilityState = .loading {
@@ -168,14 +130,12 @@ class ShowQRItemView: BaseView {
 
 			switch visibilityState {
 				case .hiddenForScreenCapture:
-					returnToThirdPartyAppButton.isHidden = true
 					spinner.stopAnimating()
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
 					spinner.isHidden = true
 
 				case .loading:
-					returnToThirdPartyAppButton.isHidden = true
 					spinner.startAnimating()
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
@@ -183,14 +143,12 @@ class ShowQRItemView: BaseView {
                     
 				case .screenshotBlocking(let timeRemainingText, let voiceoverTimeRemainingText):
 					spinner.stopAnimating()
-					returnToThirdPartyAppButton.isHidden = true
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.setCountdown(text: timeRemainingText, voiceoverText: voiceoverTimeRemainingText)
 					screenshotBlockingView.isHidden = false
 					spinner.isHidden = true
 
 				case .visible(let qrImage):
-					returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil
 					spinner.stopAnimating()
 					largeQRimageView.isHidden = false
 					largeQRimageView.image = qrImage
@@ -222,32 +180,5 @@ class ShowQRItemView: BaseView {
 		didSet {
             largeQRimageView.accessibilityLabel = accessibilityDescription
 		}
-	}
-
-	var returnToThirdPartyAppButtonTitle: String? {
-		didSet {
-			returnToThirdPartyAppButton.title = returnToThirdPartyAppButtonTitle
-			returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil || !self.visibilityState.isVisible
-		}
-	}
-
-	var didTapThirdPartyAppButtonCommand: (() -> Void)?
-
-	/// Play the animation
-	func play() {
-
-		securityView.play()
-	}
-
-	/// Resume the animation
-	func resume() {
-
-		securityView.resume()
-	}
-
-	func setupForInternational() {
-
-		securityView.setupForInternational()
-		securityViewBottomConstraint?.constant = ViewTraits.internationalSecurityMargin
 	}
 }

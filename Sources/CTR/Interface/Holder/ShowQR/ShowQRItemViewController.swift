@@ -40,50 +40,28 @@ class ShowQRItemViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-//		sceneView.backgroundColor = .white
+		sceneView.backgroundColor = .white
 		
 		setupBinding()
 		setupListeners()
-		
-		addBackButton()
 	}
 
 	private func setupBinding() {
 
-		viewModel.$title.binding = { [weak self] in
-            
-			self?.title = $0
-		}
+//		viewModel.$title.binding = { [weak self] in
+//
+//			self?.title = $0
+//		}
         
         viewModel.$qrAccessibility.binding = { [weak self] in
             
             self?.sceneView.accessibilityDescription = $0
         }
 
-		viewModel.$infoButtonAccessibility.binding = { [weak self] in
-
-			self?.addInfoButton(action: #selector(self?.informationButtonTapped), accessibilityLabel: $0 ?? "")
-		}
-
 		viewModel.$visibilityState.binding = { [weak self] in
 			self?.sceneView.visibilityState = $0
 			self?.viewModel.setBrightness()
 		}
-
-		viewModel.$showInternationalAnimation.binding = { [weak self] in
-			if $0 {
-				self?.sceneView.setupForInternational()
-			}
-		}
-
-		viewModel.$thirdPartyTicketAppButtonTitle.binding = { [weak self] in
-			self?.sceneView.returnToThirdPartyAppButtonTitle = $0
-		}
-
-		sceneView.didTapThirdPartyAppButtonCommand = { [viewModel] in
-			viewModel.didTapThirdPartyAppButton()
-		}
-
 	}
 
 	private func setupListeners() {
@@ -108,14 +86,11 @@ class ShowQRItemViewController: BaseViewController {
 
 		// Check the Validity of the QR
 		viewModel.checkQRValidity()
-
-		sceneView.resume()
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		sceneView.play()
 		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 	}
@@ -132,27 +107,5 @@ class ShowQRItemViewController: BaseViewController {
 		viewModel.setBrightness(reset: true)
 		viewModel.stopValidityTimer()
 		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
-	}
-
-	/// Add an information button to the navigation bar.
-	/// - Parameters:
-	///   - action: The action when the users taps the information button
-	///   - accessibilityLabel: The label for Voice Over
-	func addInfoButton(
-		action: Selector,
-		accessibilityLabel: String) {
-		
-		let config = UIBarButtonItem.Configuration(target: self,
-												   action: action,
-												   text: L.holderShowqrDetails(),
-												   tintColor: Theme.colors.iosBlue,
-												   accessibilityIdentifier: "InformationButton",
-												   accessibilityLabel: accessibilityLabel)
-		navigationItem.rightBarButtonItem = .create(config)
-	}
-
-	@objc func informationButtonTapped() {
-
-		viewModel.showMoreInformation()
 	}
 }

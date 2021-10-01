@@ -9,17 +9,6 @@ import UIKit
 
 class ShowQRView: BaseView {
 
-	enum VisibilityState: Equatable {
-		case loading
-		case visible(qrImage: UIImage)
-		case hiddenForScreenCapture
-		case screenshotBlocking(timeRemainingText: String, voiceoverTimeRemainingText: String)
-
-		var isVisible: Bool {
-			if case .visible = self { return true }
-			return false
-		}
-	}
 	/// The display constants
 	private struct ViewTraits {
 
@@ -35,8 +24,17 @@ class ShowQRView: BaseView {
 	let containerView: UIView = {
 
 		let view = UIView()
-		view.backgroundColor = .purple
 		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
+	/// The control buttons
+	let pageControl: UIPageControl = {
+
+		let view = UIPageControl()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.pageIndicatorTintColor = Theme.colors.grey2
+		view.currentPageIndicatorTintColor = Theme.colors.primary
 		return view
 	}()
 
@@ -70,6 +68,7 @@ class ShowQRView: BaseView {
 
 		addSubview(securityView)
 		addSubview(containerView)
+		addSubview(pageControl)
 		addSubview(returnToThirdPartyAppButton)
 	}
 
@@ -94,6 +93,8 @@ class ShowQRView: BaseView {
 				equalTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
+
+			pageControl.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 20),
 
 			// Security
 			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
@@ -131,7 +132,7 @@ class ShowQRView: BaseView {
 	var returnToThirdPartyAppButtonTitle: String? {
 		didSet {
 			returnToThirdPartyAppButton.title = returnToThirdPartyAppButtonTitle
-			returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil // || !self.visibilityState.isVisible
+			returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil
 		}
 	}
 
