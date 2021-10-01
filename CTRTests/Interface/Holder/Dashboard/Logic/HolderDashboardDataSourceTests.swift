@@ -91,7 +91,9 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(self.walletManagingSpy.invokedRemoveExpiredGreenCards) == true
 		expect(expiredQRs.count) == 2
 		expect(expiredQRs.first?.type) == .vaccination
+		expect(expiredQRs.first?.region) == .europeanUnion
 		expect(expiredQRs.last?.type) == .vaccination
+		expect(expiredQRs.last?.region) == .europeanUnion
 		expect(cards.count) == 0
 	}
 
