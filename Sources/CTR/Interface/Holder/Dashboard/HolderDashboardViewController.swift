@@ -248,7 +248,7 @@ class HolderDashboardViewController: BaseViewController {
 	func setupPlusButton() {
 		let config = UIBarButtonItem.Configuration(target: viewModel,
 												   action: #selector(HolderDashboardViewModel.addProofTapped),
-												   image: I.plus(),
+												   content: .image( I.plus()),
 												   accessibilityIdentifier: "PlusButton",
 												   accessibilityLabel: L.holderMenuProof())
 		navigationItem.rightBarButtonItem = .create(config)
