@@ -72,18 +72,21 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 	/// - Parameter frame: The frame used to calculate the size
 	func calculatePreferredContentSize(frame: CGRect) {
 		let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets ?? .zero
+		let width = frame.width
 		let maxHeight = frame.height - safeAreaInsets.top
 		var height = maxHeight
 		let additionalHeight = ViewTraits.Margin.top + safeAreaInsets.bottom
 		
-		resizeScrollView(frame: frame, safeAreaInsets: safeAreaInsets)
+		resizeScrollView(size: frame.size)
 		
 		scrollView.layoutIfNeeded()
 		let scrollViewHeight = scrollView.contentSize.height + additionalHeight
 		scrollView.isScrollEnabled = scrollViewHeight > maxHeight
 		height = min(maxHeight, scrollViewHeight)
 		
-		preferredContentSize = .init(width: frame.width, height: height)
+		resizeScrollView(size: .init(width: width, height: height))
+		
+		preferredContentSize = .init(width: width, height: height)
 	}
 }
 
@@ -129,11 +132,11 @@ private extension BottomSheetModalViewController {
 		dismiss(animated: true)
 	}
 	
-	func resizeScrollView(frame: CGRect, safeAreaInsets: UIEdgeInsets) {
+	func resizeScrollView(size: CGSize) {
 		// Setting the frame instead of layout constraint will improve rotation animation
 		scrollView.frame = .init(origin: .init(x: 0,
 											   y: ViewTraits.Margin.top),
-								 size: .init(width: frame.width,
-											 height: frame.height - ViewTraits.Margin.top - safeAreaInsets.top))
+								 size: .init(width: size.width,
+											 height: size.height - ViewTraits.Margin.top))
 	}
 }
