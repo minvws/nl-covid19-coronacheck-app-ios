@@ -25,14 +25,10 @@ extension HolderDashboardViewModel {
 	struct QRCard {
 
 		/// Represents the region that the Greencard applies to
-		let region: Region // A QR Card only has one region
-
 		enum Region {
 			case netherlands
 			case europeanUnion(evaluateDCC: (Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
 		}
-
-		let greencards: [GreenCard]
 
 		struct GreenCard {
 			let id: NSManagedObjectID
@@ -69,6 +65,8 @@ extension HolderDashboardViewModel {
 			}
 		}
 
+		let region: Region // A QR Card only has one region
+		let greencards: [GreenCard]
 		let shouldShowErrorBeneathCard: Bool
 		let evaluateEnabledState: (Date) -> Bool
 
