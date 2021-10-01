@@ -61,8 +61,8 @@ class ShowQRViewController: BaseViewController {
 		viewModel.$thirdPartyTicketAppButtonTitle.binding = { [weak self] in self?.sceneView.returnToThirdPartyAppButtonTitle = $0 }
 		sceneView.didTapThirdPartyAppButtonCommand = { [viewModel] in viewModel.didTapThirdPartyAppButton() }
 
-		sceneView.didTapPreviousButtonCommand = { self.pageViewController.previousPage() }
-		sceneView.didTapNextButtonCommand = { self.pageViewController.nextPage() }
+		sceneView.didTapPreviousButtonCommand = { [weak self] in self?.pageViewController.previousPage() }
+		sceneView.didTapNextButtonCommand = { [weak self] in self?.pageViewController.nextPage() }
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
