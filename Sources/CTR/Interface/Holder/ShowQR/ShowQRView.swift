@@ -56,11 +56,31 @@ class ShowQRView: BaseView {
 		return button
 	}()
 
+	/// The info button
+	let nextButton: UIButton = {
+
+		let button = UIButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.setImage(I.pageIndicatorNext(), for: .normal)
+		return button
+	}()
+
+	/// The info button
+	let previousButton: UIButton = {
+
+		let button = UIButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.setImage(I.pageIndicatorBack(), for: .normal)
+		return button
+	}()
+
 	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
+		previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
+		nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
 	}
 	
 	/// Setup the hierarchy
@@ -71,6 +91,8 @@ class ShowQRView: BaseView {
 		addSubview(containerView)
 		addSubview(pageControl)
 		addSubview(returnToThirdPartyAppButton)
+		addSubview(nextButton)
+		addSubview(previousButton)
 	}
 
 	/// Setup the constraints
@@ -103,7 +125,17 @@ class ShowQRView: BaseView {
 			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
 			returnToThirdPartyAppButton.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 24),
-			returnToThirdPartyAppButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 4)
+			returnToThirdPartyAppButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 4),
+
+			nextButton.widthAnchor.constraint(equalToConstant: 60),
+			nextButton.heightAnchor.constraint(equalToConstant: 60),
+			nextButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+			nextButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+
+			previousButton.widthAnchor.constraint(equalToConstant: 60),
+			previousButton.heightAnchor.constraint(equalToConstant: 60),
+			previousButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+			previousButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
 		])
 
 		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
@@ -113,6 +145,8 @@ class ShowQRView: BaseView {
 		securityViewBottomConstraint?.isActive = true
 
 		bringSubviewToFront(containerView)
+		bringSubviewToFront(nextButton)
+		bringSubviewToFront(previousButton)
 	}
 
 	/// Setup all the accessibility traits
@@ -125,7 +159,17 @@ class ShowQRView: BaseView {
 
 	@objc func didTapThirdPartyAppButton() {
 
-		didTapThirdPartyAppButtonCommand?()
+		didTapPreviousButtonCommand?()
+	}
+
+	@objc func didTapPreviousButton() {
+
+		didTapPreviousButtonCommand?()
+	}
+
+	@objc func didTapNextButton() {
+
+		didTapNextButtonCommand?()
 	}
 
 	// MARK: Public Access
@@ -138,6 +182,10 @@ class ShowQRView: BaseView {
 	}
 
 	var didTapThirdPartyAppButtonCommand: (() -> Void)?
+
+	var didTapPreviousButtonCommand: (() -> Void)?
+
+	var didTapNextButtonCommand: (() -> Void)?
 
 	/// Play the animation
 	func play() {

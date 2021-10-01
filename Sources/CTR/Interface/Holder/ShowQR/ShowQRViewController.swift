@@ -60,6 +60,9 @@ class ShowQRViewController: BaseViewController {
 		}
 		viewModel.$thirdPartyTicketAppButtonTitle.binding = { [weak self] in self?.sceneView.returnToThirdPartyAppButtonTitle = $0 }
 		sceneView.didTapThirdPartyAppButtonCommand = { [viewModel] in viewModel.didTapThirdPartyAppButton() }
+
+		sceneView.didTapPreviousButtonCommand = { self.pageViewController.previousPage() }
+		sceneView.didTapNextButtonCommand = { self.pageViewController.nextPage() }
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -123,6 +126,7 @@ extension ShowQRViewController {
 			}
 			self.sceneView.pageControl.numberOfPages = $0.count
 			self.sceneView.pageControl.currentPage = 0
+			self.updateControlVisibility()
 		}
 	}
 
@@ -148,6 +152,12 @@ extension ShowQRViewController {
 			pageViewController.previousPage()
 		}
 	}
+
+	func updateControlVisibility() {
+
+		sceneView.nextButton.isHidden = pageViewController.isLastPage
+		sceneView.previousButton.isHidden = pageViewController.currentIndex == 0
+	}
 }
 
 // MARK: - PageViewControllerDelegate
@@ -157,5 +167,6 @@ extension ShowQRViewController: PageViewControllerDelegate {
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
 		sceneView.pageControl.currentPage = index
 		viewModel.userDidChangeCurrentPage(toPageIndex: index)
+		updateControlVisibility()
 	}
 }
