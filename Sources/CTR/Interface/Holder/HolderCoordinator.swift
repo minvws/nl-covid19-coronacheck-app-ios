@@ -276,7 +276,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCards: [greenCard, greenCard, greenCard],
-				thirdPartyTicketAppName: "Rolus" // thirdpartyTicketApp?.name
+				thirdPartyTicketAppName: thirdpartyTicketApp?.name
 			)
 		)
 

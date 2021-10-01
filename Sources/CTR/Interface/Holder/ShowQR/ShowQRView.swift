@@ -20,7 +20,7 @@ class ShowQRView: BaseView {
 
 	private var securityViewBottomConstraint: NSLayoutConstraint?
 
-	/// The container for the the qr views
+	/// The container for the the QR view controllers
 	let containerView: UIView = {
 
 		let view = UIView()
@@ -35,6 +35,7 @@ class ShowQRView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.pageIndicatorTintColor = Theme.colors.grey2
 		view.currentPageIndicatorTintColor = Theme.colors.primary
+		view.hidesForSinglePage = true
 		return view
 	}()
 
@@ -84,7 +85,8 @@ class ShowQRView: BaseView {
 				equalTo: safeAreaLayoutGuide.topAnchor,
 				constant: ViewTraits.margin
 			),
-			containerView.heightAnchor.constraint(equalTo: containerView.widthAnchor), // Might need to go
+//			containerView.heightAnchor.constraint(greaterThanOrEqualTo: containerView.widthAnchor), // Might need to go
+//			containerView.heightAnchor.constraint(equalToConstant: 400),
 			containerView.leadingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.leadingAnchor,
 				constant: ViewTraits.margin
@@ -95,6 +97,7 @@ class ShowQRView: BaseView {
 			),
 
 			pageControl.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 20),
+			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
 
 			// Security
 			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),

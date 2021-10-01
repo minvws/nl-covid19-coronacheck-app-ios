@@ -208,7 +208,7 @@ class ShowQRItemViewModel: Logging {
 
 		logDebug("Credential is valid")
 		currentQRImage = image
-		startValidityTimer()
+//		startValidityTimer()
 	}
 
 	private func setQRNotValid() {
@@ -248,6 +248,7 @@ class ShowQRItemViewModel: Logging {
 	}
 
 	func stopValidityTimer() {
+		
 		validityTimer?.invalidate()
 		validityTimer = nil
 	}

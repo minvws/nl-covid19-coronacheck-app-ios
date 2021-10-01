@@ -10,9 +10,18 @@ import UIKit
 
 class ShowQRViewModel: Logging {
 
-	private var greenCards = [GreenCard]()
+	// MARK: - private variables
 
 	weak private var coordinator: HolderCoordinatorDelegate?
+
+	private var currentPage: Int {
+		didSet {
+			logInfo("current page set to \(currentPage)")
+//			updateState()
+		}
+	}
+
+	// MARK: - Bindable
 
 	@Bindable private(set) var title: String?
 
@@ -34,24 +43,29 @@ class ShowQRViewModel: Logging {
 	) {
 
 		self.coordinator = coordinator
-		self.greenCards = greenCards
-
+		self.currentPage = 0
 		self.items = greenCards.map { return ShowQRItem(greenCard: $0) }
 
-//		if greenCard.type == GreenCardType.domestic.rawValue {
-//			title = L.holderShowqrDomesticTitle()
-//			qrAccessibility = L.holderShowqrDomesticQrTitle()
-//			infoButtonAccessibility = L.holderShowqrDomesticAboutTitle()
-//			showInternationalAnimation = false
-			thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
-//		} else if greenCard.type == GreenCardType.eu.rawValue {
-			title = L.holderShowqrEuTitle()
-			infoButtonAccessibility = L.holderShowqrEuAboutTitle()
-			showInternationalAnimation = true
-//		}
+		if let greenCard = greenCards.first {
+			if greenCard.type == GreenCardType.domestic.rawValue {
+				title = L.holderShowqrDomesticTitle()
+				infoButtonAccessibility = L.holderShowqrDomesticAboutTitle()
+				showInternationalAnimation = false
+				thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
+			} else if greenCard.type == GreenCardType.eu.rawValue {
+				title = L.holderShowqrEuTitle()
+				infoButtonAccessibility = L.holderShowqrEuAboutTitle()
+				showInternationalAnimation = true
+			}
+		}
+	}
+
+	func userDidChangeCurrentPage(toPageIndex pageIndex: Int) {
+		currentPage = pageIndex
 	}
 
 	func didTapThirdPartyAppButton() {
+
 		coordinator?.userWishesToLaunchThirdPartyTicketApp()
 	}
 
@@ -286,164 +300,5 @@ private extension EuCredentialAttributes {
 			.getDateFrom(dateString8601: digitalCovidCertificate.dateOfBirth)
 			.map(dateFormatter.string)
 		?? digitalCovidCertificate.dateOfBirth
-	}
-}
-
-struct ShowQRItem {
-	let greenCard: GreenCard
-}
-
-class ShowQRViewController: BaseViewController {
-
-	let sceneView = ShowQRView()
-
-	private let viewModel: ShowQRViewModel
-	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-	var previousOrientation: UIInterfaceOrientation?
-
-	/// Initializer
-	/// - Parameter viewModel: view model
-	init(viewModel: ShowQRViewModel) {
-
-		self.viewModel = viewModel
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	/// Required initialzer
-	/// - Parameter coder: the code
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-	override func loadView() {
-
-		view = sceneView
-	}
-
-	override func viewDidLoad() {
-
-		super.viewDidLoad()
-
-		sceneView.backgroundColor = .white
-
-		setupPageController()
-		setupPages()
-		setupBinding()
-		addBackButton()
-	}
-
-	private func setupBinding() {
-
-		viewModel.$title.binding = { [weak self] in self?.title = $0 }
-		viewModel.$infoButtonAccessibility.binding = { [weak self] in
-			self?.addInfoButton(action: #selector(self?.informationButtonTapped), accessibilityLabel: $0 ?? "")
-		}
-		viewModel.$showInternationalAnimation.binding = { [weak self] in
-			if $0 {
-				self?.sceneView.setupForInternational()
-			}
-		}
-		viewModel.$thirdPartyTicketAppButtonTitle.binding = { [weak self] in self?.sceneView.returnToThirdPartyAppButtonTitle = $0 }
-		sceneView.didTapThirdPartyAppButtonCommand = { [viewModel] in viewModel.didTapThirdPartyAppButton() }
-	}
-
-	override func viewWillAppear(_ animated: Bool) {
-
-		super.viewWillAppear(animated)
-		sceneView.play()
-		previousOrientation = OrientationUtility.currentOrientation()
-		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
-	}
-
-	override func viewWillDisappear(_ animated: Bool) {
-
-		super.viewWillDisappear(animated)
-		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
-	}
-}
-
-// MARK: Details
-
-extension ShowQRViewController {
-
-	/// Add an information button to the navigation bar.
-	/// - Parameters:
-	///   - action: The action when the users taps the information button
-	///   - accessibilityLabel: The label for Voice Over
-	func addInfoButton(
-		action: Selector,
-		accessibilityLabel: String) {
-
-			let config = UIBarButtonItem.Configuration(
-				target: self,
-				action: action,
-				text: L.holderShowqrDetails(),
-				tintColor: Theme.colors.iosBlue,
-				accessibilityIdentifier: "InformationButton",
-				accessibilityLabel: accessibilityLabel
-			)
-			navigationItem.rightBarButtonItem = .create(config)
-		}
-
-	@objc func informationButtonTapped() {
-
-		viewModel.showMoreInformation()
-	}
-}
-
-// MARK: PageController
-
-extension ShowQRViewController {
-
-	private func setupPages() {
-
-		viewModel.$items.binding = { [weak self] in
-
-			guard let self = self else {
-				return
-			}
-
-			self.pageViewController.pages = $0.enumerated().compactMap { index, item in
-				let viewController = self.viewModel.showQRItemViewController(forItem: item)
-//				viewController.delegate = self
-				return viewController
-			}
-			self.sceneView.pageControl.numberOfPages = $0.count
-			self.sceneView.pageControl.currentPage = 0
-		}
-	}
-
-	/// Setup the page controller
-	private func setupPageController() {
-
-		pageViewController.pageViewControllerDelegate = self
-		pageViewController.view.backgroundColor = .clear
-
-		pageViewController.view.frame = sceneView.containerView.frame
-		sceneView.containerView.addSubview(pageViewController.view)
-		addChild(pageViewController)
-		pageViewController.didMove(toParent: self)
-		sceneView.pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
-	}
-
-	/// User tapped on the page control
-	@objc func pageControlValueChanged(_ pageControl: UIPageControl) {
-
-		if pageControl.currentPage > pageViewController.currentIndex {
-			pageViewController.nextPage()
-		} else {
-			pageViewController.previousPage()
-		}
-	}
-}
-
-// MARK: - PageViewControllerDelegate
-
-extension ShowQRViewController: PageViewControllerDelegate {
-
-	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
-		sceneView.pageControl.currentPage = index
-//		viewModel.userDidChangeCurrentPage(toPageIndex: index)
 	}
 }

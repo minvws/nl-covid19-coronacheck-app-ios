@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ShowQRItemViewController: BaseViewController {
+class ShowQRItemViewController: BaseViewController, Logging {
 
 	private let viewModel: ShowQRItemViewModel
 
@@ -40,7 +40,7 @@ class ShowQRItemViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		sceneView.backgroundColor = .white
+		sceneView.backgroundColor = .green // .white
 		
 		setupBinding()
 		setupListeners()
@@ -62,6 +62,8 @@ class ShowQRItemViewController: BaseViewController {
 			self?.sceneView.visibilityState = $0
 			self?.viewModel.setBrightness()
 		}
+
+		sceneView.title = "Dosis 1/2"
 	}
 
 	private func setupListeners() {
