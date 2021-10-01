@@ -47,8 +47,6 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	var scannedQR: String?
 
-	fileprivate var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
-
 	/// Initializer
 	/// - Parameters:
 	///   - delegate: flow delegate
@@ -102,7 +100,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
-		navigationController.viewControllers.last?.presentBottomSheet(viewController, transitioningDelegate: bottomSheetTransitioningDelegate)
+		navigationController.viewControllers.last?.presentBottomSheet(viewController)
 	}
 
 	func userWantsToGoBackToDashboard() {

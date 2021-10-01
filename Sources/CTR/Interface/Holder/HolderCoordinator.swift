@@ -71,8 +71,6 @@ class HolderCoordinator: SharedCoordinator {
 	/// If set, this should be handled at the first opportunity:
 	private var unhandledUniversalLink: UniversalLink?
 
-	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
-
 	/// Restricts access to GGD test provider login
 	private var isGGDEnabled: Bool {
 		return remoteConfigManager.getConfiguration().isGGDEnabled == true
@@ -237,7 +235,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	private func presentAsBottomSheet(_ viewController: UIViewController) {
 		
-		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.presentBottomSheet(viewController, transitioningDelegate: bottomSheetTransitioningDelegate)
+		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.presentBottomSheet(viewController)
 	}
 }
 

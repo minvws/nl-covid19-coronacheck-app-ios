@@ -7,7 +7,15 @@
 
 import UIKit
 
-final class BottomSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
+final class BottomSheetTransitioningDelegate: NSObject {
+	
+	/// Returns an instance of the delegate. It is retained for the duration of presentation
+	static var `default`: BottomSheetTransitioningDelegate = {
+		return BottomSheetTransitioningDelegate()
+	}()
+}
+
+extension BottomSheetTransitioningDelegate: UIViewControllerTransitioningDelegate {
 	
 	func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
 		return BottomSheetPresentationController(presentedViewController: presented, presenting: presenting)

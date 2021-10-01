@@ -19,10 +19,9 @@ extension UIViewController {
 	/// Presents a view controller as bottom sheet modal
 	/// - Parameters:
 	///   - viewControllerToPresent: The view controller to display over the current view controller’s content
-	///   - transitioningDelegate: Initialize and hold a reference to `BottomSheetTransitioningDelegate`
-	func presentBottomSheet(_ viewControllerToPresent: UIViewController, transitioningDelegate: BottomSheetTransitioningDelegate) {
+	func presentBottomSheet(_ viewControllerToPresent: UIViewController) {
 		let bottomSheetViewController = BottomSheetModalViewController(childViewController: viewControllerToPresent)
-		bottomSheetViewController.transitioningDelegate = transitioningDelegate
+		bottomSheetViewController.transitioningDelegate = BottomSheetTransitioningDelegate.default
 		bottomSheetViewController.modalPresentationStyle = .custom
 		bottomSheetViewController.modalPresentationCapturesStatusBarAppearance = true
 		present(bottomSheetViewController, animated: true)
