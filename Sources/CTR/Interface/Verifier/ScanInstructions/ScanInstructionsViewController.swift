@@ -95,7 +95,7 @@ class ScanInstructionsViewController: BaseViewController {
 
 		let config = UIBarButtonItem.Configuration(target: self,
 												   action: #selector(backButtonTapped),
-												   image: I.backArrow(),
+												   content: .image(I.backArrow()),
 												   accessibilityIdentifier: "BackButton",
 												   accessibilityLabel: L.generalBack())
 		navigationItem.leftBarButtonItem = .create(config)

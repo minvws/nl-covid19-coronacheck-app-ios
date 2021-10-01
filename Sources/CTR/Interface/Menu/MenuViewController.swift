@@ -81,7 +81,7 @@ class MenuViewController: BaseViewController {
 		
 		let config = UIBarButtonItem.Configuration(target: self,
 												   action: #selector(closeButtonTapped),
-												   image: I.cross()?.withRenderingMode(.alwaysTemplate),
+												   content: .image(I.cross()?.withRenderingMode(.alwaysTemplate)),
 												   tintColor: Theme.colors.secondary,
 												   accessibilityIdentifier: "CloseButton",
 												   accessibilityLabel: L.generalMenuClose())

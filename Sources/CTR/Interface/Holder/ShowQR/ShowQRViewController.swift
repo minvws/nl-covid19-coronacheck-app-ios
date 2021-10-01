@@ -144,7 +144,7 @@ class ShowQRViewController: BaseViewController {
 		
 		let config = UIBarButtonItem.Configuration(target: self,
 												   action: action,
-												   text: L.holderShowqrDetails(),
+												   content: .text(L.holderShowqrDetails()),
 												   tintColor: Theme.colors.iosBlue,
 												   accessibilityIdentifier: "InformationButton",
 												   accessibilityLabel: accessibilityLabel)
