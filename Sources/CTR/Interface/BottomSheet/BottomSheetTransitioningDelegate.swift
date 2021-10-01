@@ -9,7 +9,7 @@ import UIKit
 
 final class BottomSheetTransitioningDelegate: NSObject {
 	
-	/// Returns an instance of the delegate. It is retained for the duration of presentation
+	/// Returns an instance of the delegate. It is retained for the duration of the presentation
 	static var `default`: BottomSheetTransitioningDelegate = {
 		return BottomSheetTransitioningDelegate()
 	}()

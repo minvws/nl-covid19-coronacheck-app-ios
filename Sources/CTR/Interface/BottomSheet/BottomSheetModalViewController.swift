@@ -9,7 +9,8 @@ import UIKit
 
 protocol BottomSheetScrollable: AnyObject {
 	
-	var modalScrollView: UIScrollView? { get }
+	/// Used by BottomSheetInteractiveTransition
+	var scrollView: UIScrollView { get }
 }
 
 final class BottomSheetModalViewController: BaseViewController, BottomSheetScrollable {
@@ -22,9 +23,12 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		}
 	}
 	
-	var modalScrollView: UIScrollView? {
+	var scrollView: UIScrollView = {
+		let scrollView = UIScrollView()
+		scrollView.showsHorizontalScrollIndicator = false
+		scrollView.bounces = false
 		return scrollView
-	}
+	}()
 	
 	private let closeButton: UIButton = {
 		let button = UIButton(type: .custom)
@@ -34,13 +38,6 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		button.accessibilityLabel = L.generalClose()
 		button.tintColor = Theme.colors.dark
 		return button
-	}()
-	
-	private let scrollView: UIScrollView = {
-		let scrollView = UIScrollView()
-		scrollView.showsHorizontalScrollIndicator = false
-		scrollView.bounces = false
-		return scrollView
 	}()
 	
 	var interactiveTransition: BottomSheetInteractiveTransition?
@@ -71,6 +68,8 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		scrollView.contentInset.bottom = view.safeAreaInsets.bottom
 	}
 	
+	/// Set preferredContentSize, used by UIPresentationController
+	/// - Parameter frame: The frame used to calculate the size
 	func calculatePreferredContentSize(frame: CGRect) {
 		let safeAreaInsets = UIApplication.shared.keyWindow?.safeAreaInsets ?? .zero
 		let maxHeight = frame.height - safeAreaInsets.top

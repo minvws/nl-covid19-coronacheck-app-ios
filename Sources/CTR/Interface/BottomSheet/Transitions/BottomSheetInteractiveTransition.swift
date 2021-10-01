@@ -9,6 +9,7 @@ import UIKit
 
 final class BottomSheetInteractiveTransition: UIPercentDrivenInteractiveTransition {
 	
+	/// A check for UIViewControllerTransitioningDelegate
 	var isInteractionInProgress = false
 	
 	private weak var presentingViewController: UIViewController?
@@ -71,7 +72,7 @@ extension BottomSheetInteractiveTransition: UIGestureRecognizerDelegate {
 	
 	func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
 		// First check if scrollView is present, if not, allow pan gesture recognizer
-		guard let scrollView = (presentingViewController as? BottomSheetScrollable)?.modalScrollView else { return true }
+		guard let scrollView = (presentingViewController as? BottomSheetScrollable)?.scrollView else { return true }
 		guard panGestureRecognizer == gestureRecognizer else { return false }
 		
 		let recognizerView = panGestureRecognizer.view?.superview

@@ -24,7 +24,7 @@ final class BottomSheetPresentationController: UIPresentationController {
 	
 	override func presentationTransitionWillBegin() {
 		guard let coordinator = presentedViewController.transitionCoordinator else {
-			self.overlayView.alpha = 1
+			overlayView.alpha = 1
 			return
 		}
 		
@@ -37,7 +37,7 @@ final class BottomSheetPresentationController: UIPresentationController {
 	
 	override func dismissalTransitionWillBegin() {
 		guard let coordinator = presentedViewController.transitionCoordinator else {
-			self.overlayView.alpha = 0
+			overlayView.alpha = 0
 			return
 		}
 		
@@ -63,6 +63,7 @@ final class BottomSheetPresentationController: UIPresentationController {
 	override func containerViewDidLayoutSubviews() {
 		super.containerViewDidLayoutSubviews()
 		guard let containerView = containerView else { return }
+		
 		guard let bottomSheetModalViewController = presentedViewController as? BottomSheetModalViewController else { return }
 		bottomSheetModalViewController.calculatePreferredContentSize(frame: containerView.frame)
 	}
