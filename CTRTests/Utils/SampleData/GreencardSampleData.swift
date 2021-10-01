@@ -226,6 +226,21 @@ extension GreenCard {
 
 		return [testGreencard, vaccineGreencard]
 	}
+
+	static func sampleInternationalMultipleExpiredDCC(dataStoreManager: DataStoreManager) -> [GreenCard] {
+		let vaccineGreencard1 = GreenCard(context: dataStoreManager.managedObjectContext())
+		vaccineGreencard1.type = GreenCardType.eu.rawValue
+		vaccineGreencard1.origins = [
+			Origin.sampleVaccination(eventTime: 40 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager)
+		]
+		let vaccineGreencard2 = GreenCard(context: dataStoreManager.managedObjectContext())
+		vaccineGreencard2.type = GreenCardType.eu.rawValue
+		vaccineGreencard2.origins = [
+			Origin.sampleVaccination(eventTime: 40 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager)
+		]
+
+		return [vaccineGreencard1, vaccineGreencard2]
+	}
 }
 
 extension Origin {

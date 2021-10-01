@@ -343,7 +343,7 @@ class ListEventsViewModel: Logging {
 			)
 
 			// Store the new events
-			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
+			if let maxIssuedAt = getMaxIssuedAt(wrapper: response.wrapper),
 			   let jsonData = data {
 				success = success && walletManager.storeEventGroup(
 					eventModeForStorage,
@@ -359,6 +359,46 @@ class ListEventsViewModel: Logging {
 			}
 		}
 		onCompletion(success)
+	}
+
+	private func getMaxIssuedAt(wrapper: EventFlow.EventResultWrapper) -> Date? {
+
+		// 2.0
+		if let result = wrapper.result,
+		   let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) {
+			return sampleDate
+		}
+
+		// 3.0
+		let maxIssuedAt: Date? = wrapper.events?
+			.compactMap {
+				if $0.vaccination != nil {
+					return $0.vaccination?.dateString
+				} else if $0.negativeTest != nil {
+					return $0.negativeTest?.sampleDateString
+				} else if $0.recovery != nil {
+					return $0.recovery?.sampleDate
+				} else if $0.dccEvent != nil {
+					if let credentialData = $0.dccEvent?.credential.data(using: .utf8) {
+						return cryptoManager?.readEuCredentials(credentialData)?.maxIssuedAt
+					}
+					return nil
+				}
+				return $0.positiveTest?.sampleDateString
+			}
+			.compactMap(Formatter.getDateFrom)
+			.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
+
+				switch latestDateFound {
+					case let latestDateFound? where nextDate > latestDateFound:
+						return nextDate
+					case .none:
+						return nextDate
+					default:
+						return latestDateFound
+				}
+			}
+		return maxIssuedAt
 	}
 }
 

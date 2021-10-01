@@ -68,6 +68,35 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(cards.count) == 0
 	}
 
+	func test_fetching_removes_expired_multiple_greencards() {
+
+		// Arrange
+		_ = GreenCard.sampleInternationalMultipleExpiredDCC(dataStoreManager: dataStoreManager)
+		self.walletManagingSpy.stubbedRemoveExpiredGreenCardsResult = [
+			(greencardType: "eu", originType: "vaccination"),
+			(greencardType: "eu", originType: "vaccination")
+		]
+
+		sut = HolderDashboardQRCardDatasource(now: { now })
+
+		// Act
+		var cards = [HolderDashboardViewModel.QRCard]()
+		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
+		sut.didUpdate = {
+			cards = $0
+			expiredQRs = $1
+		}
+
+		// Assert
+		expect(self.walletManagingSpy.invokedRemoveExpiredGreenCards) == true
+		expect(expiredQRs.count) == 2
+		expect(expiredQRs.first?.type) == .vaccination
+		expect(expiredQRs.first?.region) == .europeanUnion
+		expect(expiredQRs.last?.type) == .vaccination
+		expect(expiredQRs.last?.region) == .europeanUnion
+		expect(cards.count) == 0
+	}
+
 	func test_fetching_fetchesExpiringDomesticGreencard() {
 		// Arrange
 		let greencard = GreenCard.sampleDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
