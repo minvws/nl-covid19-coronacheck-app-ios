@@ -1218,16 +1218,14 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
-			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].lines).to(haveCount(1))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-			expect(nowValidityTexts[0].lines[1]) == "geldig tot 11 mei 2022"
+			expect(nowValidityTexts[0].lines[0]) == "geldig tot 11 mei 2022"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-			expect(futureValidityTexts[0].lines[1]) == "geldig tot 11 mei 2022"
+			expect(futureValidityTexts[0].lines[0]) == "geldig tot 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
@@ -1485,9 +1483,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
-			expect(nowValidityTexts[0].lines.count) == 2
-			expect(nowValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-			expect(nowValidityTexts[0].lines[1]) == "geldig tot 11 mei 2022"
+			expect(nowValidityTexts[0].lines.count) == 1
+			expect(nowValidityTexts[0].lines[0]) == "geldig tot 11 mei 2022"
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))

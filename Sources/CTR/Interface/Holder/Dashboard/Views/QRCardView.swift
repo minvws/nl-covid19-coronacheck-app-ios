@@ -16,8 +16,9 @@ class QRCardView: BaseView {
 
 		// Dimensions
 		static let cornerRadius: CGFloat = 15
-		static let shadowRadius: CGFloat = 24
+		static let shadowRadius: CGFloat = 15
 		static let shadowOpacity: Float = 0.15
+		static let shadowOpacityBottomSquashedView: Float = 0.1
 		static let imageDimension: CGFloat = 40
 		
 		// Margins
@@ -28,6 +29,13 @@ class QRCardView: BaseView {
 	}
 
 	// MARK: - Private properties
+
+	private let stackSize: Int
+
+	private let squashedCards: [UIView]
+
+	// Contains the main QRCard (i.e. the top layer of the visual stack)
+	private let hostView = UIView()
 
 	private let titleLabel: Label = {
 		return Label(title3: nil, montserrat: true).multiline()
@@ -68,8 +76,12 @@ class QRCardView: BaseView {
 
 	// MARK: - init
 
-	init() {
+	init(stackSize: Int) {
+		self.stackSize = stackSize
+		squashedCards = (0 ..< stackSize - 1).map { _ in UIView() }
+
 		super.init(frame: .zero)
+
 		reloadTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
 			self?.reapplyLabels()
 			self?.reapplyButtonEnabledState()
@@ -87,9 +99,15 @@ class QRCardView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		view?.backgroundColor = .white
-		layer.cornerRadius = ViewTraits.cornerRadius
-		createShadow()
+
+		squashedCards.forEach { squashedCardView in
+			squashedCardView.translatesAutoresizingMaskIntoConstraints = false
+			squashedCardView.clipsToBounds = false
+			squashedCardView.backgroundColor = .white
+		}
+
+		hostView.backgroundColor = .white
+		hostView.translatesAutoresizingMaskIntoConstraints = false
 	}
 
 	/// Setup the hierarchy
@@ -97,11 +115,21 @@ class QRCardView: BaseView {
 
 		super.setupViewHierarchy()
 
-		addSubview(titleLabel)
-		addSubview(largeIconImageView)
-		addSubview(verticalLabelsStackView)
-		addSubview(viewQRButton)
-		addSubview(loadingButtonOverlay)
+		squashedCards.reversed().forEach { squashedCardView in
+			addSubview(squashedCardView)
+			squashedCardView.layer.cornerRadius = ViewTraits.cornerRadius
+			createShadow(view: squashedCardView, forBottomSquashedView: squashedCardView == squashedCards.last)
+		}
+
+		addSubview(hostView)
+		hostView.layer.cornerRadius = ViewTraits.cornerRadius
+		createShadow(view: hostView, forBottomSquashedView: false)
+
+		hostView.addSubview(titleLabel)
+		hostView.addSubview(largeIconImageView)
+		hostView.addSubview(verticalLabelsStackView)
+		hostView.addSubview(viewQRButton)
+		hostView.addSubview(loadingButtonOverlay)
 
 		// This has a edge-case bug if you set it in the `let viewQRButton: Button = {}` declaration, so setting it here instead.
 		// (was only applicable when Settings->Accessibility->Keyboard->Full Keyboard Access was enabled)
@@ -112,18 +140,57 @@ class QRCardView: BaseView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		
+
+		// Setup Stack constraints:
+
+		NSLayoutConstraint.activate([
+			hostView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			hostView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			hostView.topAnchor.constraint(equalTo: topAnchor)
+		])
+
+		if squashedCards.isEmpty {
+
+			NSLayoutConstraint.activate([
+				hostView.bottomAnchor.constraint(equalTo: bottomAnchor)
+			])
+		} else {
+
+			var nextBottomAnchor: NSLayoutYAxisAnchor? = hostView.bottomAnchor
+			squashedCards.forEach { squashedCardView in
+				if let nextBottomAnchor = nextBottomAnchor {
+					NSLayoutConstraint.activate([
+						nextBottomAnchor.constraint(equalTo: squashedCardView.topAnchor, constant: hostView.bottomAnchor == nextBottomAnchor ? 30 : 30)
+					])
+				}
+				NSLayoutConstraint.activate([
+					squashedCardView.leadingAnchor.constraint(equalTo: leadingAnchor),
+					squashedCardView.trailingAnchor.constraint(equalTo: trailingAnchor),
+					squashedCardView.heightAnchor.constraint(equalToConstant: 40)
+				])
+				nextBottomAnchor = squashedCardView.bottomAnchor
+			}
+
+			if let nextBottomAnchor = nextBottomAnchor {
+				NSLayoutConstraint.activate([
+					nextBottomAnchor.constraint(equalTo: bottomAnchor)
+				])
+			}
+		}
+
+		// Setup HostingView constraints:
+
 		largeIconImageView.setContentHuggingPriority(.required, for: .vertical)
 
 		NSLayoutConstraint.activate([
-			largeIconImageView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.imageMargin),
-			largeIconImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.imageMargin),
-			largeIconImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+			largeIconImageView.topAnchor.constraint(equalTo: hostView.topAnchor, constant: ViewTraits.imageMargin),
+			largeIconImageView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -ViewTraits.imageMargin),
+			largeIconImageView.bottomAnchor.constraint(lessThanOrEqualTo: hostView.bottomAnchor),
 			largeIconImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageDimension),
 			largeIconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageDimension),
 
-			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-			titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 36),
+			titleLabel.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: 20),
+			titleLabel.topAnchor.constraint(equalTo: hostView.topAnchor, constant: 36),
 			titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: -16),
 
 			verticalLabelsStackView.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: ViewTraits.topVerticalLabelSpacing),
@@ -133,7 +200,7 @@ class QRCardView: BaseView {
 			viewQRButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
 			viewQRButton.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.trailingAnchor),
 			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 30),
-			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
+			viewQRButton.bottomAnchor.constraint(equalTo: hostView.bottomAnchor, constant: -24),
 
 			loadingButtonOverlay.leadingAnchor.constraint(equalTo: viewQRButton.leadingAnchor),
 			loadingButtonOverlay.trailingAnchor.constraint(equalTo: viewQRButton.trailingAnchor),
@@ -237,17 +304,16 @@ class QRCardView: BaseView {
 		}
 	}
 
-	/// Create the shadow around the view
-	private func createShadow() {
-
+	/// Create the shadow around a view
+	private func createShadow(view: UIView, forBottomSquashedView: Bool) {
 		// Shadow
-		layer.shadowColor = Theme.colors.shadow.cgColor
-		layer.shadowOpacity = ViewTraits.shadowOpacity
-		layer.shadowOffset = .zero
-		layer.shadowRadius = ViewTraits.shadowRadius
+		view.layer.shadowColor = UIColor.black.cgColor
+		view.layer.shadowOpacity = forBottomSquashedView ? ViewTraits.shadowOpacityBottomSquashedView : ViewTraits.shadowOpacity
+		view.layer.shadowOffset = .zero
+		view.layer.shadowRadius = ViewTraits.shadowRadius
 		// Cache Shadow
-		layer.shouldRasterize = true
-		layer.rasterizationScale = UIScreen.main.scale
+		view.layer.shouldRasterize = true
+		view.layer.rasterizationScale = UIScreen.main.scale
 	}
 
 	private func applyEUStyle() {
@@ -309,12 +375,6 @@ class QRCardView: BaseView {
 		didSet {
 			guard shouldStyleForEU else { return }
 			applyEUStyle()
-		}
-	}
-
-	var stackSize: Int = 1 {
-		didSet {
-			// UI needs implementing
 		}
 	}
 }

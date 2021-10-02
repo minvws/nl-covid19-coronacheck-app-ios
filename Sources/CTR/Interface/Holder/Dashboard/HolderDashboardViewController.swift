@@ -167,19 +167,20 @@ class HolderDashboardViewController: BaseViewController {
 						
 					case let .domesticQR(title, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
 						 let .europeanUnionQR(title, _, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
-						
-						let qrCard = QRCardView()
-						qrCard.viewQRButtonCommand = didTapViewQR
-						qrCard.title = title
-						qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
+
+						let qrCard: QRCardView
 
 						if case let .europeanUnionQR(_, stackSize, _, _, _, _, _) = card {
+							qrCard = QRCardView(stackSize: stackSize)
 							qrCard.shouldStyleForEU = true
-							qrCard.stackSize = stackSize
 						} else {
+							qrCard = QRCardView(stackSize: 1)
 							qrCard.shouldStyleForEU = false
 						}
 
+						qrCard.viewQRButtonCommand = didTapViewQR
+						qrCard.title = title
+						qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
 						qrCard.validityTexts = validityTexts
 						qrCard.expiryEvaluator = expiryCountdownEvaluator
 						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator

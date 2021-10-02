@@ -19,7 +19,7 @@ class QRCardViewTests: XCTestCase {
 	func testThreeRowSampleContent() {
 
 		// Arrange
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 
@@ -52,7 +52,7 @@ class QRCardViewTests: XCTestCase {
 	func testOneRowSampleContent() {
 		// Arrange
 
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
@@ -76,7 +76,7 @@ class QRCardViewTests: XCTestCase {
 	func testButtonEnabledWithLoadingStatesContent() {
 		// Arrange
 
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
@@ -122,7 +122,7 @@ class QRCardViewTests: XCTestCase {
 
 	func testBecomesAutomaticallyValidRowFooter() {
 		// Arrange
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
@@ -145,7 +145,7 @@ class QRCardViewTests: XCTestCase {
 
 	func testHidesAutomaticallyValidRowFooterIfButtonIsEnabled() {
 		// Arrange
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
@@ -168,7 +168,7 @@ class QRCardViewTests: XCTestCase {
 
 	func testSubtextField() {
 		// Arrange
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
 		sut.shouldStyleForEU = true
@@ -182,6 +182,50 @@ class QRCardViewTests: XCTestCase {
 
 		sut.buttonEnabledEvaluator = { _ in true }
 		sut.isLoading = false
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage()
+	}
+
+	func testStackAppearance_level1() {
+		let sut = QRCardView(stackSize: 1)
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.shouldStyleForEU = true
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage()
+	}
+
+	func testStackAppearance_level2() {
+		let sut = QRCardView(stackSize: 2)
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.shouldStyleForEU = true
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage()
+	}
+
+	func testStackAppearance_level3() {
+		let sut = QRCardView(stackSize: 3)
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.shouldStyleForEU = true
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage()
+	}
+
+	func testStackAppearance_level4() {
+		let sut = QRCardView(stackSize: 4)
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.shouldStyleForEU = true
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
