@@ -60,8 +60,9 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	private func calculateNextReload(cards: [HolderDashboardViewModel.QRCard]) -> TimeInterval? {
 		// Calculate when the next reload is needed:
 		let nextFetchInterval: TimeInterval = cards
+			.flatMap { $0.greencards }
 			.flatMap { $0.origins }
-			.reduce(Date.distantFuture) { (result: Date, origin: HolderDashboardViewModel.QRCard.Origin) -> Date in
+			.reduce(Date.distantFuture) { (result: Date, origin: HolderDashboardViewModel.QRCard.GreenCard.Origin) -> Date in
 				origin.expirationTime < result ? origin.expirationTime : result
 			}.timeIntervalSinceNow
 
@@ -109,6 +110,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 
 // Needed for referring to the CoreData Origin from within QRCard (which has it's own Origin type)
 private typealias DBOrigin = Origin
+private typealias DBGreenCard = GreenCard
 
 extension QRCard {
 
@@ -116,7 +118,7 @@ extension QRCard {
 	/// We use closures here to avoid surfacing internal types & implementation to that UI layer.
 	private enum Evaluators {
 
-		static func evaluateButtonEnabledState(date: Date, dbGreencard: GreenCard, origins: [Origin]) -> Bool {
+		static func evaluateButtonEnabledState(date: Date, dbGreencard: DBGreenCard, origins: [GreenCard.Origin]) -> Bool {
 			guard !dbGreencard.isDeleted else { return false }
 
 			let activeCredential: Credential? = dbGreencard.getActiveCredential(forDate: date)
@@ -124,7 +126,7 @@ extension QRCard {
 			return enabled
 		}
 
-		static func evaluateDigitalCovidCertificate(date: Date, dbGreencard: GreenCard, cryptoManaging: CryptoManaging) -> EuCredentialAttributes.DigitalCovidCertificate? {
+		static func evaluateDigitalCovidCertificate(date: Date, dbGreencard: DBGreenCard, cryptoManaging: CryptoManaging) -> EuCredentialAttributes.DigitalCovidCertificate? {
 			guard !dbGreencard.isDeleted else { return nil }
 
 			guard dbGreencard.type == GreenCardType.eu.rawValue,
@@ -140,37 +142,38 @@ extension QRCard {
 	}
 
 	fileprivate static func qrCards(
-		forGreencard dbGreencard: GreenCard,
+		forGreencard dbGreencard: DBGreenCard,
 		withOrigins dbOrigins: [DBOrigin],
 		cryptoManaging: CryptoManaging,
 		now: () -> Date
 	) -> [QRCard] {
 
 		// Entries on the Card that represent an Origin.
-		let origins = QRCard.Origin.origins(fromDBOrigins: dbOrigins, now: now())
+		let origins = QRCard.GreenCard.Origin.origins(fromDBOrigins: dbOrigins, now: now())
 
 		switch dbGreencard.getType() {
 			case .domestic:
-				return [QRCard.netherlands(
-					greenCardObjectID: dbGreencard.objectID,
-					origins: origins,
+				return [QRCard(
+					region: .netherlands,
+					greencards: [GreenCard(id: dbGreencard.objectID, origins: origins)],
 					shouldShowErrorBeneathCard: !dbGreencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
 					evaluateEnabledState: { date in
 						Evaluators.evaluateButtonEnabledState(date: date, dbGreencard: dbGreencard, origins: origins)
 					}
 				)]
+
 			case .eu:
 				// The EU cards should only have one entry per card, so let's divide them up:
 				return origins.map {originEntry in
-					QRCard.europeanUnion(
-						greenCardObjectID: dbGreencard.objectID,
-						origins: [originEntry],
+
+					return QRCard(
+						region: .europeanUnion(evaluateDCC: { date in
+							Evaluators.evaluateDigitalCovidCertificate(date: date, dbGreencard: dbGreencard, cryptoManaging: cryptoManaging)
+						}),
+						greencards: [GreenCard(id: dbGreencard.objectID, origins: [originEntry])],
 						shouldShowErrorBeneathCard: !dbGreencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
 						evaluateEnabledState: { date in
 							Evaluators.evaluateButtonEnabledState(date: date, dbGreencard: dbGreencard, origins: origins)
-						},
-						evaluateDCC: { date in
-							Evaluators.evaluateDigitalCovidCertificate(date: date, dbGreencard: dbGreencard, cryptoManaging: cryptoManaging)
 						}
 					)
 				}
@@ -180,12 +183,12 @@ extension QRCard {
 	}
 }
 
-extension QRCard.Origin {
+extension QRCard.GreenCard.Origin {
 
-	fileprivate static func origins(fromDBOrigins dbOrigins: [Origin], now: Date) -> [QRCard.Origin] {
+	fileprivate static func origins(fromDBOrigins dbOrigins: [Origin], now: Date) -> [QRCard.GreenCard.Origin] {
 
 		dbOrigins
-			.compactMap { origin -> QRCard.Origin? in
+			.compactMap { origin -> QRCard.GreenCard.Origin? in
 				guard let typeRawValue = origin.type,
 					  let type = QRCodeOriginType(rawValue: typeRawValue),
 					  let eventDate = origin.eventDate,
@@ -193,7 +196,7 @@ extension QRCard.Origin {
 					  let validFromDate = origin.validFromDate
 				else { return nil }
 
-				return QRCard.Origin(
+				return QRCard.GreenCard.Origin(
 					type: type,
 					eventDate: eventDate,
 					expirationTime: expirationTime,

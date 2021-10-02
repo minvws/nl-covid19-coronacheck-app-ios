@@ -272,7 +272,7 @@ final class HolderDashboardViewModel: Logging {
 
 		let allQRCards = state.qrCards
 		let regionFilteredMyQRCards = state.qrCards.filter { (qrCard: QRCard) in
-			switch (qrCard, validityRegion) {
+			switch (qrCard.region, validityRegion) {
 				case (.netherlands, .domestic): return true
 				case (.europeanUnion, .europeanUnion): return true
 				default: return false
@@ -377,13 +377,13 @@ extension HolderDashboardViewModel.QRCard {
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 
-		switch self {
-			case let .netherlands(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState):
+		switch self.region {
+			case .netherlands:
 
 				var cards = [HolderDashboardViewController.Card.domesticQR(
 					validityTexts: validityTextsGenerator(origins: origins, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
-					didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
+					didTapViewQR: { coordinatorDelegate.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id }) },
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: { now in
 						let mostDistantFutureExpiryDate = origins.reduce(now) { result, nextOrigin in
@@ -414,22 +414,22 @@ extension HolderDashboardViewModel.QRCard {
 				)]
 
 				if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
-					cards += [.errorMessage(message: error, didTapTryAgain: strippenRefresher.load)]
+					cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: strippenRefresher.load)]
 				}
 
 				return cards
 
-			case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState, _):
+			case .europeanUnion:
 				var cards = [HolderDashboardViewController.Card.europeanUnionQR(
 					validityTexts: validityTextsGenerator(origins: origins, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
-					didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
+					didTapViewQR: { coordinatorDelegate.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id }) },
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: nil
 				)]
 
 				if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
-					cards += [.errorMessage(message: error, didTapTryAgain: strippenRefresher.load)]
+					cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: strippenRefresher.load)]
 				}
 
 				return cards
@@ -437,7 +437,7 @@ extension HolderDashboardViewModel.QRCard {
 	}
 
 	// Returns a closure that, given a Date, will return the groups of text ("ValidityText") that should be shown per-origin on the QR Card.
-	private func validityTextsGenerator(origins: [HolderDashboardViewModel.QRCard.Origin], remoteConfigManager: RemoteConfigManaging) -> (Date) -> [HolderDashboardViewController.ValidityText] {
+	private func validityTextsGenerator(origins: [HolderDashboardViewModel.QRCard.GreenCard.Origin], remoteConfigManager: RemoteConfigManaging) -> (Date) -> [HolderDashboardViewController.ValidityText] {
 		return { now in
 			return origins.map { origin in
 				let validityType = QRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
