@@ -30,8 +30,6 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 		}
 	}
 
-	private let cryptoManaging: CryptoManaging = Services.cryptoManager
-	private let walletManager: WalletManaging = Services.walletManager
 	private var reloadTimer: Timer?
 	private let now: () -> Date
 
@@ -49,7 +47,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 		reloadTimer = nil
 
 		let expiredGreenCards: [ExpiredQR] = removeExpiredGreenCards()
-		let cards: [HolderDashboardViewModel.QRCard] = fetchMyQRCards(cryptoManaging: cryptoManaging)
+		let cards: [HolderDashboardViewModel.QRCard] = fetchMyQRCards()
 
 		// Callback
 		didUpdate(cards, expiredGreenCards)
@@ -76,7 +74,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	}
 
 	private func removeExpiredGreenCards() -> [ExpiredQR] {
-		return walletManager.removeExpiredGreenCards().compactMap { (greencardType: String, originType: String) -> ExpiredQR? in
+		return Services.walletManager.removeExpiredGreenCards().compactMap { (greencardType: String, originType: String) -> ExpiredQR? in
 			guard let region = QRCodeValidityRegion(rawValue: greencardType) else { return nil }
 			guard let originType = QRCodeOriginType(rawValue: originType) else { return nil }
 			return ExpiredQR(region: region, type: originType)
@@ -85,9 +83,8 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 
 	/// Fetch the Greencards+Origins from Database
 	/// and convert to UI-appropriate model types.
-	private func fetchMyQRCards(cryptoManaging: CryptoManaging) -> [HolderDashboardViewModel.QRCard] {
-		let walletManager = walletManager
-		let dbGreencards = walletManager.listGreenCards()
+	private func fetchMyQRCards() -> [HolderDashboardViewModel.QRCard] {
+		let dbGreencards = Services.walletManager.listGreenCards()
 
 		let dbGreencardsWithDBOrigins = dbGreencards
 			.compactMap { (greencard: DBGreenCard) -> (DBGreenCard, [DBOrigin])? in
@@ -110,11 +107,11 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 
 					// For each domestic greencard (Note: there should only be one), convert it to a domestic QRCard:
 					return greencardsGroup.flatMap { greencard, origins in
-						QRCard.domesticQRCards(forGreencard: greencard, withOrigins: origins, cryptoManaging: cryptoManaging, now: now)
+						QRCard.domesticQRCards(forGreencard: greencard, withOrigins: origins, now: now)
 					}
 				} else {
 					// For the international greencards, the group gets wrangled into a set of international QR Cards:
-					return QRCard.euQRCards(forGreencardGroup: greencardsGroup, cryptoManaging: cryptoManaging, now: now)
+					return QRCard.euQRCards(forGreencardGroup: greencardsGroup, now: now)
 				}
 			}
 
@@ -162,13 +159,13 @@ extension QRCard {
 		}
 
 		/// For a given date and greencard, return the DCC:
-		static func evaluateDigitalCovidCertificate(date: Date, dbGreencard: DBGreenCard, cryptoManaging: CryptoManaging) -> EuCredentialAttributes.DigitalCovidCertificate? {
+		static func evaluateDigitalCovidCertificate(date: Date, dbGreencard: DBGreenCard) -> EuCredentialAttributes.DigitalCovidCertificate? {
 			guard !dbGreencard.isDeleted else { return nil }
 
 			guard dbGreencard.type == GreenCardType.eu.rawValue,
 				  let credential = dbGreencard.currentOrNextActiveCredential(forDate: date),
 				  let data = credential.data,
-				  let euCredentialAttributes = cryptoManaging.readEuCredentials(data)
+				  let euCredentialAttributes = Services.cryptoManager.readEuCredentials(data)
 			else {
 				return nil
 			}
@@ -181,7 +178,6 @@ extension QRCard {
 	fileprivate static func domesticQRCards(
 		forGreencard dbGreencard: DBGreenCard,
 		withOrigins dbOrigins: [DBOrigin],
-		cryptoManaging: CryptoManaging,
 		now: () -> Date
 	) -> [QRCard] {
 		guard dbGreencard.getType() == .domestic else { return [] }
@@ -201,7 +197,6 @@ extension QRCard {
 
 	fileprivate static func euQRCards(
 		forGreencardGroup dbGreencardGroup: [(DBGreenCard, [DBOrigin])],
-		cryptoManaging: CryptoManaging,
 		now: () -> Date
 	) -> [QRCard] {
 
@@ -221,7 +216,7 @@ extension QRCard {
 				else { return nil }
 
 				let dbGreencard = dbGreenCardOriginPair.0
-				return Evaluators.evaluateDigitalCovidCertificate(date: date, dbGreencard: dbGreencard, cryptoManaging: cryptoManaging)
+				return Evaluators.evaluateDigitalCovidCertificate(date: date, dbGreencard: dbGreencard)
 			}),
 			greencards: uiGreencards,
 			shouldShowErrorBeneathCard: { // This one doesn't need to be (and isn't) dynamically evaluated
