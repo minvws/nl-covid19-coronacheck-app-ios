@@ -312,4 +312,9 @@ class QRCardView: BaseView {
 		}
 	}
 
+	var stackSize: Int = 1 {
+		didSet {
+			// UI needs implementing
+		}
+	}
 }
