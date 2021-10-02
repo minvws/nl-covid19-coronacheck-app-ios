@@ -381,7 +381,7 @@ extension HolderDashboardViewModel.QRCard {
 			case .netherlands:
 
 				var cards = [HolderDashboardViewController.Card.domesticQR(
-					validityTexts: validityTextsGenerator(origins: origins, remoteConfigManager: remoteConfigManager),
+					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { coordinatorDelegate.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id }) },
 					buttonEnabledEvaluator: evaluateEnabledState,
@@ -421,7 +421,7 @@ extension HolderDashboardViewModel.QRCard {
 
 			case .europeanUnion:
 				var cards = [HolderDashboardViewController.Card.europeanUnionQR(
-					validityTexts: validityTextsGenerator(origins: origins, remoteConfigManager: remoteConfigManager),
+					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { coordinatorDelegate.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id }) },
 					buttonEnabledEvaluator: evaluateEnabledState,
@@ -437,11 +437,19 @@ extension HolderDashboardViewModel.QRCard {
 	}
 
 	// Returns a closure that, given a Date, will return the groups of text ("ValidityText") that should be shown per-origin on the QR Card.
-	private func validityTextsGenerator(origins: [HolderDashboardViewModel.QRCard.GreenCard.Origin], remoteConfigManager: RemoteConfigManaging) -> (Date) -> [HolderDashboardViewController.ValidityText] {
+	private func validityTextsGenerator(greencards: [HolderDashboardViewModel.QRCard.GreenCard], remoteConfigManager: RemoteConfigManaging) -> (Date) -> [HolderDashboardViewController.ValidityText] {
 		return { now in
-			return origins.map { origin in
+			return greencards
+				// Make a list of all origins paired with their greencard
+				.flatMap { greencard in
+					greencard.origins.map { (greencard, $0) }
+				}
+				// Sort by the customSortIndex, and then by origin eventDate (desc)
+				.sorted { $0.1.customSortIndex < $1.1.customSortIndex && $0.1.eventDate > $1.1.eventDate }
+				// Map to the ValidityText
+				.map { greencard, origin -> HolderDashboardViewController.ValidityText in
 				let validityType = QRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
-				let first = validityType.text(qrCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
+					let first = validityType.text(qrCard: self, greencard: greencard, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
 				return first
 			}
 		 }
