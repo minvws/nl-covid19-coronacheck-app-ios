@@ -445,7 +445,12 @@ extension HolderDashboardViewModel.QRCard {
 					greencard.origins.map { (greencard, $0) }
 				}
 				// Sort by the customSortIndex, and then by origin eventDate (desc)
-				.sorted { $0.1.customSortIndex < $1.1.customSortIndex && $0.1.eventDate > $1.1.eventDate }
+				.sorted { lhs, rhs in
+					if lhs.1.customSortIndex == rhs.1.customSortIndex {
+						return lhs.1.eventDate > rhs.1.eventDate
+					}
+					return lhs.1.customSortIndex < rhs.1.customSortIndex
+				}
 				// Map to the ValidityText
 				.map { greencard, origin -> HolderDashboardViewController.ValidityText in
 				let validityType = QRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
