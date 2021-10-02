@@ -1337,8 +1337,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 				let nowValidityTexts = validityTextEvaluator(now)
 				expect(nowValidityTexts).to(haveCount(3))
 				expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
-				expect(nowValidityTexts[1].lines[0]) == L.generalTestcertificate().capitalized + ":"
-				expect(nowValidityTexts[2].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+				expect(nowValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+				expect(nowValidityTexts[2].lines[0]) == L.generalTestcertificate().capitalized + ":"
 
 				expect(expiryCountdownEvaluator?(now)).to(beNil())
 			}
@@ -1378,8 +1378,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(3))
 			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
-			expect(nowValidityTexts[1].lines[0]) == L.generalTestcertificate().capitalized + ":"
-			expect(nowValidityTexts[2].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+			expect(nowValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+			expect(nowValidityTexts[2].lines[0]) == L.generalTestcertificate().capitalized + ":"
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
@@ -1418,8 +1418,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(3))
 			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
-			expect(nowValidityTexts[1].lines[0]) == L.generalTestcertificate().capitalized + ":"
-			expect(nowValidityTexts[2].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+			expect(nowValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+			expect(nowValidityTexts[2].lines[0]) == L.generalTestcertificate().capitalized + ":"
 
 			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 2 uur"
 		}))
