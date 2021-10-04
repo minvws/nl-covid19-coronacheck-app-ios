@@ -412,6 +412,7 @@
 "holder.showqr.eu.title" = "Internationale QR-code";
 "holder.showqr.qr.eu.vaccinecertificatedoses" = "Dosis %@/%@";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
+"holder.showqr.eu.about.vaccination.title" = "Over dosis %@/%@";
 "holder.showqr.eu.about.vaccination.description" = "Ben je in het buitenland of ga je de grens over? Dan zijn er meer gegevens nodig dan in Nederland. Daarom staan in jouw internationale QR-code de volgende gegevens:";
 "holder.showqr.eu.about.vaccination.name" = "Naam / Name:";
 "holder.showqr.eu.about.vaccination.dateofbirth" = "Geboortedatum / Date of birth*:";
