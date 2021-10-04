@@ -133,7 +133,7 @@ extension ShowQRViewController {
 	private func setupPageController() {
 
 		pageViewController.pageViewControllerDelegate = self
-		pageViewController.view.backgroundColor = .blue // .clear
+		pageViewController.view.backgroundColor = .clear
 
 		pageViewController.view.frame = sceneView.containerView.frame
 		sceneView.containerView.addSubview(pageViewController.view)
