@@ -26,7 +26,7 @@ class ShowQRItemViewModel: Logging {
 	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
 	weak private var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
 
-	weak private var validityTimer: Timer?
+	weak var validityTimer: Timer?
 	weak private var screenshotWarningTimer: Timer?
 
 	private var previousBrightness: CGFloat?

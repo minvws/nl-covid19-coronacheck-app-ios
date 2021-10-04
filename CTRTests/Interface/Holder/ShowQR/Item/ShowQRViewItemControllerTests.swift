@@ -6,7 +6,6 @@
 */
 
 import XCTest
-import ViewControllerPresentationSpy
 @testable import CTR
 import Nimble
 
@@ -15,7 +14,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 	// MARK: Subject under test
 	var sut: ShowQRItemViewController!
 
-	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
+	var delegateSpy: ShowQRItemViewModelDelegateSpy!
 	var cryptoManagerSpy: CryptoManagerSpy!
 	var dataStoreManager: DataStoreManaging!
 	var screenCaptureDetector: ScreenCaptureDetectorSpy!
@@ -30,7 +29,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 
 		try super.setUpWithError()
 		dataStoreManager = DataStoreManager(.inMemory)
-		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
+		delegateSpy = ShowQRItemViewModelDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 		screenCaptureDetector = ScreenCaptureDetectorSpy()
@@ -50,9 +49,8 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		)
 
 		viewModel = ShowQRItemViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
+			delegate: delegateSpy,
 			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
 		)
@@ -71,20 +69,33 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		RunLoop.current.run(until: Date())
 	}
 
-	// MARK: - Tests
+//	// MARK: - Tests
 
-	/// Test all the default content
-	func test_content_domesticGreenCard() {
+	func test_content_domestic() throws {
 
 		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+		viewModel = ShowQRItemViewModel(
+			delegate: delegateSpy,
+			greenCard: greenCard,
+			userSettings: userSettingsSpy
+		)
+		sut = ShowQRItemViewController(viewModel: viewModel)
 
 		// When
 		loadView()
 
 		// Then
-		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.sceneView.accessibilityDescription) == L.holderShowqrDomesticQrTitle()
 	}
 
+	/// Test the validity of the credential without credential
 	func test_content_euGreenCard() throws {
 
 		// Given
@@ -96,9 +107,8 @@ class ShowQRViewItemControllerTests: XCTestCase {
 			)
 		)
 		viewModel = ShowQRItemViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
+			delegate: delegateSpy,
 			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
 			userSettings: userSettingsSpy
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)
@@ -107,34 +117,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.title) == L.holderShowqrEuTitle()
-	}
-
-	/// Test the validity of the credential without credential
-	func test_withoutCredential() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
-				type: .eu,
-				withValidCredential: false
-			)
-		)
-		viewModel = ShowQRItemViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			userSettings: userSettingsSpy
-		)
-		sut = ShowQRItemViewController(viewModel: viewModel)
-		loadView()
-
-		// When
-		sut?.checkValidity()
-
-		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == true
+		expect(self.sut.sceneView.accessibilityDescription) == L.holderShowqrEuQrTitle()
 	}
 
 	/// Test the validity of the credential with valid credential while screencapturing
@@ -149,19 +132,5 @@ class ShowQRViewItemControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.largeQRimageView.isHidden) == true
-	}
-
-	/// Test the security features
-	func testSecurityFeaturesAnimation() {
-
-		// Given
-		loadView()
-		sut?.checkValidity()
-
-		// When
-		sut?.sceneView.securityView.primaryButton.sendActions(for: .touchUpInside)
-
-		// Then
-		expect(self.sut.sceneView.securityView.currentAnimation) == .domesticAnimation
 	}
 }
