@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol ShowQRItemViewModelDelegate: AnyObject {
+
+	func itemIsNotValid()
+}
+
 class ShowQRItemViewModel: Logging {
 
 	// MARK: - Static
@@ -17,13 +22,11 @@ class ShowQRItemViewModel: Logging {
 
 	// MARK: - vars
 
-	var loggingCategory: String = "ShowQRViewModel"
-
-	weak private var coordinator: HolderCoordinatorDelegate?
+	weak private var delegate: ShowQRItemViewModelDelegate?
 	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
 	weak private var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
 
-	weak var validityTimer: Timer?
+	weak private var validityTimer: Timer?
 	weak private var screenshotWarningTimer: Timer?
 
 	private var previousBrightness: CGFloat?
@@ -64,14 +67,14 @@ class ShowQRItemViewModel: Logging {
 	///   - greenCard: a greencard to display
 	///   - screenCaptureDetector: the screen capture detector
 	init(
-		coordinator: HolderCoordinatorDelegate,
+		delegate: ShowQRItemViewModelDelegate,
 		greenCard: GreenCard,
 		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector(),
 		userSettings: UserSettingsProtocol = UserSettings(),
 		now: @escaping () -> Date = Date.init
 	) {
 
-		self.coordinator = coordinator
+		self.delegate = delegate
 		self.greenCard = greenCard
 		self.screenCaptureDetector = screenCaptureDetector
 		self.userSettings = userSettings
@@ -217,7 +220,7 @@ class ShowQRItemViewModel: Logging {
 
 		logDebug("Credential is valid")
 		currentQRImage = image
-//		startValidityTimer()
+		startValidityTimer()
 	}
 
 	private func setQRNotValid() {
@@ -225,7 +228,7 @@ class ShowQRItemViewModel: Logging {
 		logWarning("Credential is not valid")
 		currentQRImage = nil
 		stopValidityTimer()
-		coordinator?.navigateBackToStart()
+		delegate?.itemIsNotValid()
 	}
 
 	/// Adjust the brightness

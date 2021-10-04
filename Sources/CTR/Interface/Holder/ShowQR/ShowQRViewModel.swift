@@ -111,7 +111,7 @@ class ShowQRViewModel: Logging {
 
 		if let euCredentialAttributes = cryptoManager?.readEuCredentials(data) {
 
-			logDebug("euCredentialAttributes: \(euCredentialAttributes)")
+			logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
 
 			if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
 				showVaccinationDetails(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
@@ -248,7 +248,7 @@ class ShowQRViewModel: Logging {
 
 		let viewController = ShowQRItemViewController(
 			viewModel: ShowQRItemViewModel(
-				coordinator: coordinator!,
+				delegate: self,
 				greenCard: item.greenCard
 			)
 		)
@@ -278,7 +278,15 @@ class ShowQRViewModel: Logging {
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
+}
 
+// MARK: - ShowQRItemViewModelDelegate
+
+extension ShowQRViewModel: ShowQRItemViewModelDelegate {
+
+	func itemIsNotValid() {
+		coordinator?.navigateBackToStart()
+	}
 }
 
 private extension EuCredentialAttributes {
