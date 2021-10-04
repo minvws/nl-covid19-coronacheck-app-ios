@@ -115,18 +115,20 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		// Assert
 		expect(expiredQRs).to(beEmpty())
 
-		guard case let .netherlands(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState) = cards.first else { fail(); return }
-		expect(greenCardObjectID) == greencard.objectID
+		guard let qrcard = cards.first, case .netherlands = qrcard.region, let firstGreencard = qrcard.greencards.first
+		else { fail(); return }
 
-		expect(origins.count) == 1
-		expect(origins.first!.eventDate) == now.addingTimeInterval(8 * days * ago)
-		expect(origins.first!.expirationTime) == now.addingTimeInterval(30 * days * fromNow)
-		expect(origins.first!.customSortIndex) == 0
-		expect(origins.first!.expiryIsBeyondThreeYearsFromNow(now: now)) == false
-		expect(origins.first!.isCurrentlyValid(now: now)) == true
-		expect(origins.first!.isNotYetExpired(now: now)) == true
-		expect(shouldShowErrorBeneathCard) == false
-		expect(evaluateEnabledState(now)) == true
+		expect(firstGreencard.id) == greencard.objectID
+
+		expect(firstGreencard.origins.count) == 1
+		expect(firstGreencard.origins.first!.eventDate) == now.addingTimeInterval(8 * days * ago)
+		expect(firstGreencard.origins.first!.expirationTime) == now.addingTimeInterval(30 * days * fromNow)
+		expect(firstGreencard.origins.first!.customSortIndex) == 0
+		expect(firstGreencard.origins.first!.expiryIsBeyondThreeYearsFromNow(now: now)) == false
+		expect(firstGreencard.origins.first!.isCurrentlyValid(now: now)) == true
+		expect(firstGreencard.origins.first!.isNotYetExpired(now: now)) == true
+		expect(qrcard.shouldShowErrorBeneathCard) == false
+		expect(qrcard.evaluateEnabledState(now)) == true
 	}
 
 	func test_fetching_expiredWithMoreToFetchDomesticGreencard() {
@@ -147,18 +149,20 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		// Assert
 		expect(expiredQRs).to(beEmpty())
 
-		guard case let .netherlands(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState) = cards.first else { fail(); return }
-		expect(greenCardObjectID) == greencard.objectID
+		guard let qrcard = cards.first, case .netherlands = qrcard.region, let firstGreencard = qrcard.greencards.first
+		else { fail(); return }
 
-		expect(origins.count) == 1
-		expect(origins.first!.eventDate) == now.addingTimeInterval(8 * days * ago)
-		expect(origins.first!.expirationTime) == now.addingTimeInterval(30 * days * fromNow)
-		expect(origins.first!.customSortIndex) == 0
-		expect(origins.first!.expiryIsBeyondThreeYearsFromNow(now: now)) == false
-		expect(origins.first!.isCurrentlyValid(now: now)) == true
-		expect(origins.first!.isNotYetExpired(now: now)) == true
-		expect(shouldShowErrorBeneathCard) == true
-		expect(evaluateEnabledState(now)) == false
+		expect(firstGreencard.id) == greencard.objectID
+
+		expect(firstGreencard.origins.count) == 1
+		expect(firstGreencard.origins.first!.eventDate) == now.addingTimeInterval(8 * days * ago)
+		expect(firstGreencard.origins.first!.expirationTime) == now.addingTimeInterval(30 * days * fromNow)
+		expect(firstGreencard.origins.first!.customSortIndex) == 0
+		expect(firstGreencard.origins.first!.expiryIsBeyondThreeYearsFromNow(now: now)) == false
+		expect(firstGreencard.origins.first!.isCurrentlyValid(now: now)) == true
+		expect(firstGreencard.origins.first!.isNotYetExpired(now: now)) == true
+		expect(qrcard.shouldShowErrorBeneathCard) == true
+		expect(qrcard.evaluateEnabledState(now)) == false
 	}
 
 	func test_fetching_domestic_cards_are_grouped() {
@@ -180,13 +184,15 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(expiredQRs).to(beEmpty())
 		expect(cards.count) == 1 // two origins, but grouped in one card.
 
-		guard case let .netherlands(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState) = cards.first else { fail(); return }
-		expect(greenCardObjectID) == greencard.objectID
+		guard let qrcard = cards.first, case .netherlands = qrcard.region, let firstGreencard = qrcard.greencards.first
+		else { fail(); return }
 
-		expect(origins.count) == 2
+		expect(firstGreencard.id) == greencard.objectID
 
-		let vaccinationOrigin = origins.first(where: { $0.type == .vaccination })
-		let testOrigin = origins.first(where: { $0.type == .test })
+		expect(firstGreencard.origins.count) == 2
+
+		let vaccinationOrigin = firstGreencard.origins.first(where: { $0.type == .vaccination })
+		let testOrigin = firstGreencard.origins.first(where: { $0.type == .test })
 
 		expect(vaccinationOrigin?.eventDate) == now.addingTimeInterval(8 * days * ago)
 		expect(vaccinationOrigin?.expirationTime) == now.addingTimeInterval(40 * days * fromNow)
@@ -202,8 +208,8 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(testOrigin?.isCurrentlyValid(now: now)) == true
 		expect(testOrigin?.isNotYetExpired(now: now)) == true
 
-		expect(shouldShowErrorBeneathCard) == false
-		expect(evaluateEnabledState(now)) == true
+		expect(qrcard.shouldShowErrorBeneathCard) == false
+		expect(qrcard.evaluateEnabledState(now)) == true
 	}
 
 	func test_fetching_international_cards_are_not_grouped() {
@@ -225,31 +231,37 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(expiredQRs).to(beEmpty())
 		expect(cards.count) == 2 // two origins, but grouped in one card.
 
-		guard case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState, _) = cards[0] else { fail(); return }
-		expect(greenCardObjectID) == greencards[1].objectID
+		let firstQRCard = cards[0]
+		guard case .europeanUnion = firstQRCard.region else { fail(); return }
 
-		expect(origins.count) == 1
-		expect(origins.first!.eventDate) == now.addingTimeInterval(8 * days * ago)
-		expect(origins.first!.expirationTime) == now.addingTimeInterval(40 * days * fromNow)
-		expect(origins.first!.customSortIndex) == 0
-		expect(origins.first!.expiryIsBeyondThreeYearsFromNow(now: now)) == false
-		expect(origins.first!.isCurrentlyValid(now: now)) == true
-		expect(origins.first!.isNotYetExpired(now: now)) == true
-		expect(shouldShowErrorBeneathCard) == false
-		expect(evaluateEnabledState(now)) == true
+		let firstGreencard = firstQRCard.greencards[0]
+		expect(firstGreencard.id) == greencards[1].objectID
+
+		expect(firstGreencard.origins.count) == 1
+		expect(firstGreencard.origins.first?.eventDate) == now.addingTimeInterval(8 * days * ago)
+		expect(firstGreencard.origins.first?.expirationTime) == now.addingTimeInterval(40 * days * fromNow)
+		expect(firstGreencard.origins.first?.customSortIndex) == 0
+		expect(firstGreencard.origins.first?.expiryIsBeyondThreeYearsFromNow(now: now)) == false
+		expect(firstGreencard.origins.first?.isCurrentlyValid(now: now)) == true
+		expect(firstGreencard.origins.first?.isNotYetExpired(now: now)) == true
+		expect(firstQRCard.shouldShowErrorBeneathCard) == false
+		expect(firstQRCard.evaluateEnabledState(now)) == true
 
 		// unwrap next index to same variables
-		guard case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState, _) = cards[1] else { fail(); return }
-		expect(greenCardObjectID) == greencards[0].objectID
+		let secondQRCard = cards[1]
+		guard case .europeanUnion = secondQRCard.region else { fail(); return }
 
-		expect(origins.count) == 1
-		expect(origins.first!.eventDate) == now.addingTimeInterval(4 * hours * ago)
-		expect(origins.first!.expirationTime) == now.addingTimeInterval(20 * hours * fromNow)
-		expect(origins.first!.customSortIndex) == 2
-		expect(origins.first!.expiryIsBeyondThreeYearsFromNow(now: now)) == false
-		expect(origins.first!.isCurrentlyValid(now: now)) == true
-		expect(origins.first!.isNotYetExpired(now: now)) == true
-		expect(shouldShowErrorBeneathCard) == false
-		expect(evaluateEnabledState(now)) == true
+		let secondGreencard = secondQRCard.greencards[0]
+		expect(secondGreencard.id) == greencards[0].objectID
+
+		expect(secondGreencard.origins.count) == 1
+		expect(secondGreencard.origins.first?.eventDate) == now.addingTimeInterval(4 * hours * ago)
+		expect(secondGreencard.origins.first?.expirationTime) == now.addingTimeInterval(20 * hours * fromNow)
+		expect(secondGreencard.origins.first?.customSortIndex) == 2
+		expect(secondGreencard.origins.first?.expiryIsBeyondThreeYearsFromNow(now: now)) == false
+		expect(secondGreencard.origins.first?.isCurrentlyValid(now: now)) == true
+		expect(secondGreencard.origins.first?.isNotYetExpired(now: now)) == true
+		expect(secondQRCard.shouldShowErrorBeneathCard) == false
+		expect(secondQRCard.evaluateEnabledState(now)) == true
 	}
 }
