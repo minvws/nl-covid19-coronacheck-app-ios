@@ -39,6 +39,7 @@ class ShowQRItemViewTests: XCTestCase {
 
 	func testVisible() {
 		let sut = ShowQRItemView()
+		sut.title = "testVisible"
 
 		sut.visibilityState = .visible(
 			qrImage: UIImage.withColor(.blue, size: CGSize(width: 200, height: 200))
