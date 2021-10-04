@@ -92,16 +92,15 @@ extension ShowQRViewController {
 		action: Selector,
 		accessibilityLabel: String) {
 
-			let config = UIBarButtonItem.Configuration(
-				target: self,
-				action: action,
-				text: L.holderShowqrDetails(),
-				tintColor: Theme.colors.iosBlue,
-				accessibilityIdentifier: "InformationButton",
-				accessibilityLabel: accessibilityLabel
-			)
-			navigationItem.rightBarButtonItem = .create(config)
-		}
+		let config = UIBarButtonItem.Configuration(
+			target: self,
+			action: action,
+			content: .text(L.holderShowqrDetails()),
+			tintColor: Theme.colors.iosBlue,
+			accessibilityIdentifier: "InformationButton",
+			accessibilityLabel: accessibilityLabel)
+		navigationItem.rightBarButtonItem = .create(config)
+	}
 
 	@objc func informationButtonTapped() {
 

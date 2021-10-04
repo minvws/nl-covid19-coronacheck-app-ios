@@ -67,7 +67,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
             
 			let config = UIBarButtonItem.Configuration(target: self,
 													   action: #selector(showSidePanel),
-													   image: I.hamburger(),
+													   content: .image( I.hamburger()),
 													   accessibilityIdentifier: "OpenMenuButton",
 													   accessibilityLabel: L.generalMenuOpen())
 			navItem.leftBarButtonItem = .create(config)
