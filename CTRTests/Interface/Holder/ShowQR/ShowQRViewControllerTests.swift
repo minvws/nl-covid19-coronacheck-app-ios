@@ -6,162 +6,240 @@
 */
 
 import XCTest
-import ViewControllerPresentationSpy
 @testable import CTR
 import Nimble
 
-class ShowQRViewItemControllerTests: XCTestCase {
+class ShowQRViewControllerTests: XCTestCase {
 
-//	// MARK: Subject under test
-//	var sut: ShowQRItemViewController!
-//
-//	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
-//	var cryptoManagerSpy: CryptoManagerSpy!
-//	var dataStoreManager: DataStoreManaging!
-//	var screenCaptureDetector: ScreenCaptureDetectorSpy!
-//	var userSettingsSpy: UserSettingsSpy!
-//	var viewModel: ShowQRItemViewModel!
-//	var remoteConfigMangingSpy: RemoteConfigManagingSpy!
-//	var window = UIWindow()
-//
-//	// MARK: Test lifecycle
-//
-//	override func setUpWithError() throws {
-//
-//		try super.setUpWithError()
-//		dataStoreManager = DataStoreManager(.inMemory)
-//		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-//		cryptoManagerSpy = CryptoManagerSpy()
-//		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
-//		screenCaptureDetector = ScreenCaptureDetectorSpy()
-//		userSettingsSpy = UserSettingsSpy()
-//		remoteConfigMangingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
-//		remoteConfigMangingSpy.stubbedGetConfigurationResult = .default
-//
-//		Services.use(cryptoManagerSpy)
-//		Services.use(remoteConfigMangingSpy)
-//
-//		let greenCard = try XCTUnwrap(
-//			GreenCardModel.createTestGreenCard(
-//				dataStoreManager: dataStoreManager,
-//				type: .domestic,
-//				withValidCredential: true
-//			)
-//		)
-//
-//		viewModel = ShowQRItemViewModel(
-//			coordinator: holderCoordinatorDelegateSpy,
-//			greenCard: greenCard,
-//			thirdPartyTicketAppName: nil,
-//			screenCaptureDetector: screenCaptureDetector,
-//			userSettings: userSettingsSpy
-//		)
-//		sut = ShowQRItemViewController(viewModel: viewModel)
-//		window = UIWindow()
-//	}
-//
-//	override func tearDown() {
-//
-//		super.tearDown()
-//	}
-//
-//	func loadView() {
-//
-//		window.addSubview(sut.view)
-//		RunLoop.current.run(until: Date())
-//	}
-//
-//	// MARK: - Tests
-//
-//	/// Test all the default content
-//	func test_content_domesticGreenCard() {
-//
-//		// Given
-//
-//		// When
-//		loadView()
-//
-//		// Then
-//		expect(self.sut.title) == L.holderShowqrDomesticTitle()
-//	}
-//
-//	func test_content_euGreenCard() throws {
-//
-//		// Given
-//		let greenCard = try XCTUnwrap(
-//			GreenCardModel.createTestGreenCard(
-//				dataStoreManager: dataStoreManager,
-//				type: .eu,
-//				withValidCredential: true
-//			)
-//		)
-//		viewModel = ShowQRItemViewModel(
-//			coordinator: holderCoordinatorDelegateSpy,
-//			greenCard: greenCard,
-//			thirdPartyTicketAppName: nil,
-//			userSettings: userSettingsSpy
-//		)
-//		sut = ShowQRItemViewController(viewModel: viewModel)
-//
-//		// When
-//		loadView()
-//
-//		// Then
-//		expect(self.sut.title) == L.holderShowqrEuTitle()
-//	}
-//
-//	/// Test the validity of the credential without credential
-//	func test_withoutCredential() throws {
-//
-//		// Given
-//		let greenCard = try XCTUnwrap(
-//			GreenCardModel.createTestGreenCard(
-//				dataStoreManager: dataStoreManager,
-//				type: .eu,
-//				withValidCredential: false
-//			)
-//		)
-//		viewModel = ShowQRItemViewModel(
-//			coordinator: holderCoordinatorDelegateSpy,
-//			greenCard: greenCard,
-//			thirdPartyTicketAppName: nil,
-//			userSettings: userSettingsSpy
-//		)
-//		sut = ShowQRItemViewController(viewModel: viewModel)
-//		loadView()
-//
-//		// When
-//		sut?.checkValidity()
-//
-//		// Then
-//		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == true
-//	}
-//
-//	/// Test the validity of the credential with valid credential while screencapturing
-//	func testValidityCredentialValidWithScreenCapture() {
-//
-//		// Given
-//		loadView()
-//		sut?.checkValidity()
-//
-//		// When
-//		screenCaptureDetector.invokedScreenCaptureDidChangeCallback?(true)
-//
-//		// Then
-//		expect(self.sut.sceneView.largeQRimageView.isHidden) == true
-//	}
-//
-//	/// Test the security features
-//	func testSecurityFeaturesAnimation() {
-//
-//		// Given
-//		loadView()
-//		sut?.checkValidity()
-//
-//		// When
-//		sut?.sceneView.securityView.primaryButton.sendActions(for: .touchUpInside)
-//
-//		// Then
-//		expect(self.sut.sceneView.securityView.currentAnimation) == .domesticAnimation
-//	}
+	// MARK: Subject under test
+	var sut: ShowQRViewController!
+
+	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
+	var cryptoManagerSpy: CryptoManagerSpy!
+	var dataStoreManager: DataStoreManaging!
+	var viewModel: ShowQRViewModel!
+	var remoteConfigMangingSpy: RemoteConfigManagingSpy!
+	var window = UIWindow()
+
+	// MARK: Test lifecycle
+
+	override func setUpWithError() throws {
+
+		try super.setUpWithError()
+		dataStoreManager = DataStoreManager(.inMemory)
+		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
+		cryptoManagerSpy = CryptoManagerSpy()
+		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+
+		remoteConfigMangingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
+		remoteConfigMangingSpy.stubbedGetConfigurationResult = .default
+
+		Services.use(cryptoManagerSpy)
+		Services.use(remoteConfigMangingSpy)
+
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
+		)
+		sut = ShowQRViewController(viewModel: viewModel)
+		window = UIWindow()
+	}
+
+	override func tearDown() {
+
+		super.tearDown()
+	}
+
+	func loadView() {
+
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
+	}
+
+	// MARK: - Tests
+
+	/// Test all the default content
+	func test_content_domesticGreenCard() {
+
+		// Given
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.sceneView.returnToThirdPartyAppButton.isHidden) == true
+		expect(self.sut.sceneView.nextButton.isHidden) == true
+		expect(self.sut.sceneView.previousButton.isHidden) == true
+		expect(self.sut.sceneView.pageControl.isHidden) == true
+	}
+
+	/// Test all the default content
+	func test_content_domesticGreenCard_withThirdPartyApp() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: "RollerDiscoParties"
+		)
+		sut = ShowQRViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.sceneView.returnToThirdPartyAppButton.isHidden) == false
+		expect(self.sut.sceneView.nextButton.isHidden) == true
+		expect(self.sut.sceneView.previousButton.isHidden) == true
+		expect(self.sut.sceneView.pageControl.isHidden) == true
+	}
+
+	func test_content_euGreenCard() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
+		)
+		sut = ShowQRViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.sceneView.nextButton.isHidden) == true
+		expect(self.sut.sceneView.previousButton.isHidden) == true
+		expect(self.sut.sceneView.pageControl.isHidden) == true
+	}
+
+	/// Test all the default content
+	func test_content_euGreenCard_withThirdPartyApp() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: "RollerDiscoParties"
+		)
+		sut = ShowQRViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.sceneView.returnToThirdPartyAppButton.isHidden) == true
+		expect(self.sut.sceneView.nextButton.isHidden) == true
+		expect(self.sut.sceneView.previousButton.isHidden) == true
+		expect(self.sut.sceneView.pageControl.isHidden) == true
+		expect(self.sut.sceneView.pageControl.numberOfPages) == 1
+	}
+
+	func test_content_euGreenCard_multipleGreenCards() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard, greenCard],
+			thirdPartyTicketAppName: nil
+		)
+		sut = ShowQRViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.sceneView.nextButton.isHidden) == false
+		expect(self.sut.sceneView.previousButton.isHidden) == true
+		expect(self.sut.sceneView.pageControl.isHidden) == false
+		expect(self.sut.sceneView.pageControl.currentPage) == 0
+		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
+	}
+
+	func test_nextButtonTapped_euGreenCard_multipleGreenCards() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard, greenCard],
+			thirdPartyTicketAppName: nil
+		)
+		sut = ShowQRViewController(viewModel: viewModel)
+		loadView()
+
+		// When
+		sut.sceneView.didTapNextButton()
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.sceneView.nextButton.isHidden).toEventually(beTrue())
+		expect(self.sut.sceneView.previousButton.isHidden).toEventually(beFalse())
+		expect(self.sut.sceneView.pageControl.isHidden) == false
+		expect(self.sut.sceneView.pageControl.currentPage).toEventually(equal(1))
+		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
+	}
+
+	/// Test the security features
+	func test_securityFeaturesAnimation() {
+
+		// Given
+		loadView()
+
+		// When
+		sut?.sceneView.securityView.primaryButton.sendActions(for: .touchUpInside)
+
+		// Then
+		expect(self.sut.sceneView.securityView.currentAnimation) == .domesticAnimation
+	}
 }
