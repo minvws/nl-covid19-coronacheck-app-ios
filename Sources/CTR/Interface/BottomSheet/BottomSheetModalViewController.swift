@@ -30,8 +30,8 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		return scrollView
 	}()
 	
-	private let closeButton: UIButton = {
-		let button = UIButton(type: .custom)
+	private let closeButton: TappableButton = {
+		let button = TappableButton()
 		button.setImage(I.cross(), for: .normal)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.accessibilityIdentifier = "CloseButton"

@@ -40,9 +40,9 @@ class ExpiredQRView: BaseView {
 	}()
 
 	/// The close button
-	private let closeButton: UIButton = {
+	private let closeButton: TappableButton = {
 
-		let button = UIButton()
+		let button = TappableButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.smallCross(), for: .normal)
 		return button
