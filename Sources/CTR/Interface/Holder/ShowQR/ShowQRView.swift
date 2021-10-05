@@ -11,11 +11,23 @@ class ShowQRView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
+		
+		enum Dimension {
+			static let titleLineHeight: CGFloat = 22
+			static let pageButton: CGFloat = 60
+		}
 
-		// Margins
-		static let margin: CGFloat = 10.0
-		static let domesticSecurityMargin: CGFloat = 56.0
-		static let internationalSecurityMargin: CGFloat = 49.0
+		enum Margin {
+			static let edge: CGFloat = 10
+			static let domesticSecurity: CGFloat = 56
+			static let internationalSecurity: CGFloat = 49
+			static let returnToThirdPartyAppButton: CGFloat = 4
+		}
+		enum Spacing {
+			static let dosageToButton: CGFloat = 10
+			static let buttonToPageControl: CGFloat = 10
+			static let containerToReturnToThirdPartyAppButton: CGFloat = 24
+		}
 	}
 
 	private var securityViewBottomConstraint: NSLayoutConstraint?
@@ -73,11 +85,19 @@ class ShowQRView: BaseView {
 		button.setImage(I.pageIndicatorBack(), for: .normal)
 		return button
 	}()
+	
+	/// The title label
+	private let dosageLabel: Label = {
+
+		return Label(headlineBold: nil, montserrat: true).multiline()
+	}()
 
 	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
+		backgroundColor = Theme.colors.viewControllerBackground
+		
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
 		nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
@@ -93,6 +113,7 @@ class ShowQRView: BaseView {
 		addSubview(returnToThirdPartyAppButton)
 		addSubview(nextButton)
 		addSubview(previousButton)
+		addSubview(dosageLabel)
 	}
 
 	/// Setup the constraints
@@ -105,18 +126,20 @@ class ShowQRView: BaseView {
 			// QR View
 			containerView.topAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.margin
+				constant: ViewTraits.Margin.edge
 			),
-//			containerView.heightAnchor.constraint(greaterThanOrEqualTo: containerView.widthAnchor), // Might need to go
-			containerView.heightAnchor.constraint(equalToConstant: 430),
 			containerView.leadingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.leadingAnchor
 			),
 			containerView.trailingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.trailingAnchor
 			),
+			containerView.heightAnchor.constraint(equalTo: widthAnchor),
 
-			pageControl.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 20),
+			pageControl.topAnchor.constraint(
+				equalTo: dosageLabel.bottomAnchor,
+				constant: ViewTraits.Spacing.buttonToPageControl
+			),
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
 
 			// Security
@@ -124,29 +147,49 @@ class ShowQRView: BaseView {
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-			returnToThirdPartyAppButton.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 24),
-			returnToThirdPartyAppButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 4),
+			returnToThirdPartyAppButton.topAnchor.constraint(
+				equalTo: containerView.bottomAnchor,
+				constant: ViewTraits.Spacing.containerToReturnToThirdPartyAppButton
+			),
+			returnToThirdPartyAppButton.leadingAnchor.constraint(
+				equalTo: containerView.leadingAnchor,
+				constant: ViewTraits.Margin.returnToThirdPartyAppButton
+			),
 
-			nextButton.widthAnchor.constraint(equalToConstant: 60),
-			nextButton.heightAnchor.constraint(equalToConstant: 60),
-			nextButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+			nextButton.widthAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
+			nextButton.heightAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
+			nextButton.centerYAnchor.constraint(equalTo: dosageLabel.centerYAnchor),
 			nextButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
-			previousButton.widthAnchor.constraint(equalToConstant: 60),
-			previousButton.heightAnchor.constraint(equalToConstant: 60),
-			previousButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-			previousButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+			previousButton.widthAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
+			previousButton.heightAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
+			previousButton.centerYAnchor.constraint(equalTo: dosageLabel.centerYAnchor),
+			previousButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+			
+			dosageLabel.topAnchor.constraint(
+				equalTo: containerView.bottomAnchor
+			),
+			dosageLabel.leadingAnchor.constraint(
+				greaterThanOrEqualTo: previousButton.trailingAnchor,
+				constant: ViewTraits.Spacing.dosageToButton
+			),
+			dosageLabel.trailingAnchor.constraint(
+				lessThanOrEqualTo: nextButton.leadingAnchor,
+				constant: -ViewTraits.Spacing.dosageToButton
+			),
+			dosageLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 
 		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
 			equalTo: bottomAnchor,
-			constant: ViewTraits.domesticSecurityMargin
+			constant: ViewTraits.Margin.domesticSecurity
 		)
 		securityViewBottomConstraint?.isActive = true
 
 		bringSubviewToFront(containerView)
 		bringSubviewToFront(nextButton)
 		bringSubviewToFront(previousButton)
+		bringSubviewToFront(dosageLabel)
 	}
 
 	/// Setup all the accessibility traits
@@ -173,6 +216,13 @@ class ShowQRView: BaseView {
 	}
 
 	// MARK: Public Access
+	
+	/// The dosage
+	var dosage: String? {
+		didSet {
+			dosageLabel.attributedText = dosage?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
+		}
+	}
 
 	var returnToThirdPartyAppButtonTitle: String? {
 		didSet {
@@ -202,6 +252,6 @@ class ShowQRView: BaseView {
 	func setupForInternational() {
 
 		securityView.setupForInternational()
-		securityViewBottomConstraint?.constant = ViewTraits.internationalSecurityMargin
+		securityViewBottomConstraint?.constant = ViewTraits.Margin.internationalSecurity
 	}
 }
