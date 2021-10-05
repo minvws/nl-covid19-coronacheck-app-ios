@@ -109,16 +109,17 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 					return greencardsGroup.flatMap { greencard, origins in
 						QRCard.domesticQRCards(forGreencard: greencard, withOrigins: origins, now: now)
 					}
+
+				// Otherwise, (for international greencards) the group gets wrangled into a set of europeanUnion QR Cards:
 				} else {
-					// For the international greencards, the group gets wrangled into a set of international QR Cards:
 					return QRCard.euQRCards(forGreencardGroup: greencardsGroup, now: now)
 				}
 			}
 
 		return qrCards
+			// When a GreenCard has no more origins with a
+			// current/future validity, hide the Card
 			.filter {
-				// When a GreenCard has no more origins with a
-				// current/future validity, hide the Card
 				!$0.origins.isEmpty
 			}
 			.sorted { qrCardA, qrCardB in
@@ -129,12 +130,16 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	/// Groups greencards based on the type of their (single) origin
 	/// (Greencards with multiple origin types are returned ungrouped)
 	fileprivate static func groupDBGreenCards(dbGreencards: [(DBGreenCard, [DBOrigin])]) -> [[(DBGreenCard, [DBOrigin])]] {
+
+		// Group using a temporal String key
+		// (which is immediately thrown away when we return just the .values of the dictionary)
+
 		let grouped = Dictionary(
 			grouping: dbGreencards,
 			by: { (dbGreencard: DBGreenCard, origins: [DBOrigin]) -> String in
 				guard dbGreencard.getType() != .domestic, // we don't currently group domestic QR Cards
 					  origins.count == 1, let type = origins.first?.type
-				else { return UUID().uuidString } // random string i.e. forces own group
+				else { return UUID().uuidString } // use a random string as grouping key, - i.e. forces own group
 
 				return type
 			})
@@ -149,7 +154,7 @@ extension QRCard {
 	/// We use closures here to avoid surfacing internal types & implementation to that UI layer.
 	private enum Evaluators {
 
-		/// For a given date and greencard, return if the UI can show that as "enabled" (i.e. has an active credential):
+		/// For a given date and greencard, return whether the UI can show that as "enabled" (i.e. it has an active credential):
 		static func evaluateButtonEnabledState(date: Date, dbGreencard: DBGreenCard, origins: [GreenCard.Origin]) -> Bool {
 			guard !dbGreencard.isDeleted else { return false }
 
@@ -158,7 +163,7 @@ extension QRCard {
 			return enabled
 		}
 
-		/// For a given date and greencard, return the DCC:
+		/// For a given date and greencard, return the DCC (used to calculate "X of Y doses" labels in the UI):
 		static func evaluateDigitalCovidCertificate(date: Date, dbGreencard: DBGreenCard) -> EuCredentialAttributes.DigitalCovidCertificate? {
 			guard !dbGreencard.isDeleted else { return nil }
 
@@ -174,7 +179,8 @@ extension QRCard {
 		}
 	}
 
-	// (should only be one but coding defensively)
+	// (should only be one index in the array,
+	// but better to code defensively..)
 	fileprivate static func domesticQRCards(
 		forGreencard dbGreencard: DBGreenCard,
 		withOrigins dbOrigins: [DBOrigin],
