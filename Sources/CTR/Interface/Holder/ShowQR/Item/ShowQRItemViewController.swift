@@ -45,6 +45,7 @@ class ShowQRItemViewController: BaseViewController, Logging {
 
 		sceneView.irrelevantView.title = L.holderShowqrQrhidden()
 		sceneView.irrelevantView.action = L.holderShowqrShowqr()
+		sceneView.irrelevantView.actionButtonCommand = { [weak self] in self?.viewModel.revealIrrelevantQR() }
 	}
 
 	private func setupBinding() {
