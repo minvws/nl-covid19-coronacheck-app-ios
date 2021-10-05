@@ -21,7 +21,7 @@ class ShowQRViewModel: Logging {
 	private var currentPage: Int {
 		didSet {
 			logInfo("current page set to \(currentPage)")
-//			updateState()
+			setTitleForVaccinationDosage()
 		}
 	}
 
@@ -49,8 +49,9 @@ class ShowQRViewModel: Logging {
 	) {
 
 		self.coordinator = coordinator
-		self.currentPage = 0
 		self.items = greenCards.map { return ShowQRItem(greenCard: $0) }
+		self.currentPage = 0
+		setTitleForVaccinationDosage()
 
 		if let greenCard = greenCards.first {
 			if greenCard.type == GreenCardType.domestic.rawValue {
@@ -77,20 +78,44 @@ class ShowQRViewModel: Logging {
 
 	func showMoreInformation() {
 
-		guard currentPage < items.count else {
-			return
+		guard let greenCard = getActiveGreenCard(),
+			  let credential = greenCard.getActiveCredential(),
+			  let data = credential.data else {
+				return
 		}
-
-		let greenCard = items[currentPage].greenCard
-
-		guard let credential = greenCard.getActiveCredential(), let data = credential.data else { return }
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			showDomesticDetails(data)
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			showInternationalDetails(data)
-			setTitleForVaccinationDosage(data)
 		}
+	}
+
+	func setTitleForVaccinationDosage() {
+
+		guard let greenCard = getActiveGreenCard(),
+			  let credential = greenCard.getActiveCredential(),
+			  let data = credential.data else {
+			return
+		}
+
+		if greenCard.type == GreenCardType.eu.rawValue {
+			if let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
+			   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
+			   let doseNumber = euVaccination.doseNumber,
+			   let totalDose = euVaccination.totalDose {
+				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
+			}
+		}
+	}
+
+	private func getActiveGreenCard() -> GreenCard? {
+		
+		guard currentPage < items.count else {
+			return nil
+		}
+
+		return items[currentPage].greenCard
 	}
 
 	private func showDomesticDetails(_ data: Data) {
@@ -123,16 +148,6 @@ class ShowQRViewModel: Logging {
 			} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
 				showRecoveryDetails(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
 			}
-		}
-	}
-	
-	private func setTitleForVaccinationDosage(_ data: Data) {
-
-		if let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
-		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
-		   let doseNumber = euVaccination.doseNumber,
-		   let totalDose = euVaccination.totalDose {
-			dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 		}
 	}
 
