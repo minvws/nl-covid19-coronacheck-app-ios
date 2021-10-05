@@ -30,14 +30,14 @@ extension QRCard {
 			}
 		}
 
-		func text(qrCard: QRCard, origin: QRCard.GreenCard.Origin, now: Date, remoteConfigManager: RemoteConfigManaging) -> HolderDashboardViewController.ValidityText {
+		func text(qrCard: QRCard, greencard: QRCard.GreenCard, origin: QRCard.GreenCard.Origin, now: Date, remoteConfigManager: RemoteConfigManaging) -> HolderDashboardViewController.ValidityText {
 
 			switch (self, qrCard.region, origin.type) {
 				case (.isExpired, _, _):
 					return validityText_isExpired()
 
-				case (.validityHasBegun, .europeanUnion, .vaccination):
-					if let euVaccination = qrCard.digitalCovidCertificate(forDate: now)?.vaccinations?.first,
+				case (.validityHasBegun, .europeanUnion(let dccEvaluator), .vaccination):
+					if let euVaccination = dccEvaluator(greencard, now)?.vaccinations?.first,
 					   let doseNumber = euVaccination.doseNumber,
 					   let totalDose = euVaccination.totalDose {
 						return validityText_hasBegun_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), validFrom: origin.validFromDate)
@@ -45,8 +45,8 @@ extension QRCard {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
 					}
 
-				case (.validityHasBegun, .europeanUnion, .test):
-					if let euTest = qrCard.digitalCovidCertificate(forDate: now)?.tests?.first {
+				case (.validityHasBegun, .europeanUnion(let dccEvaluator), .test):
+					if let euTest = dccEvaluator(greencard, now)?.tests?.first {
 						let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
 						return validityText_hasBegun_eu_test(testType: testType, validFrom: origin.validFromDate)
 					} else {
@@ -85,15 +85,6 @@ extension QRCard {
 					return validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: qrCard, origin: origin, now: now)
 			}
 		}
-	}
-}
-
-private extension QRCard {
-
-	/// Handy accessor. Only has a value for .europeanUnion cases.
-	func digitalCovidCertificate(forDate now: Date) -> EuCredentialAttributes.DigitalCovidCertificate? {
-		guard case let .europeanUnion(evaluateDCC) = self.region else { return nil }
-		return evaluateDCC(now)
 	}
 }
 
