@@ -26,7 +26,6 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 	var scrollView: UIScrollView = {
 		let scrollView = UIScrollView()
 		scrollView.showsHorizontalScrollIndicator = false
-		scrollView.bounces = false
 		return scrollView
 	}()
 	
