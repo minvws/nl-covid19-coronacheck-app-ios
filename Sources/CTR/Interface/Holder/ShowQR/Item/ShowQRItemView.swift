@@ -12,7 +12,7 @@ class ShowQRItemView: BaseView {
 	enum VisibilityState: Equatable {
 		case loading
 		case visible(qrImage: UIImage)
-//		case irrelevant(qrImage: UIImage)
+		case irrelevant(qrImage: UIImage)
 		case hiddenForScreenCapture
 		case screenshotBlocking(timeRemainingText: String, voiceoverTimeRemainingText: String)
 
@@ -58,11 +58,9 @@ class ShowQRItemView: BaseView {
 		return view
 	}()
 
-	private let irrelevantView: ShowQRIrrelevantView = {
+	let irrelevantView: ShowQRIrrelevantView = {
 
 		let view = ShowQRIrrelevantView()
-		view.title = "QR-code verborgen"
-		view.action = "Laat toch zien"
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -82,7 +80,6 @@ class ShowQRItemView: BaseView {
 		addSubview(largeQRimageView)
 		addSubview(screenshotBlockingView)
 		addSubview(irrelevantView)
-		addSubview(titleLabel)
 	}
 
 	/// Setup the constraints
@@ -145,7 +142,6 @@ class ShowQRItemView: BaseView {
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
 					irrelevantView.isHidden = true
-					titleLabel.isHidden = true
 					spinner.isHidden = true
 
 				case .loading:
@@ -153,7 +149,6 @@ class ShowQRItemView: BaseView {
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
 					irrelevantView.isHidden = true
-					titleLabel.isHidden = false
 					spinner.isHidden = false
                     
 				case .screenshotBlocking(let timeRemainingText, let voiceoverTimeRemainingText):
@@ -162,7 +157,6 @@ class ShowQRItemView: BaseView {
 					screenshotBlockingView.setCountdown(text: timeRemainingText, voiceoverText: voiceoverTimeRemainingText)
 					screenshotBlockingView.isHidden = false
 					irrelevantView.isHidden = true
-					titleLabel.isHidden = true
 					spinner.isHidden = true
 
 				case .visible(let qrImage):
@@ -170,8 +164,15 @@ class ShowQRItemView: BaseView {
 					largeQRimageView.isHidden = false
 					largeQRimageView.image = qrImage
 					screenshotBlockingView.isHidden = true
+					irrelevantView.isHidden = true
+					spinner.isHidden = true
+
+				case .irrelevant(let qrImage):
+					spinner.stopAnimating()
+					largeQRimageView.isHidden = false
+					largeQRimageView.image = qrImage
+					screenshotBlockingView.isHidden = true
 					irrelevantView.isHidden = false
-					titleLabel.isHidden = false
 					spinner.isHidden = true
 			}
 

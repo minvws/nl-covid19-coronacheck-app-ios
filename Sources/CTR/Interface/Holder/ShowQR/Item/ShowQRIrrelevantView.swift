@@ -42,6 +42,13 @@ class ShowQRIrrelevantView: BaseView {
 		return Label(bodySemiBold: nil)
 	}()
 
+	let actionButton: UIButton = {
+
+		let button = UIButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		return button
+	}()
+
 	/// The display constants
 	private struct ViewTraits {
 
@@ -53,46 +60,13 @@ class ShowQRIrrelevantView: BaseView {
 		static let margin: CGFloat = 20.0
 		static let actionTitleMargin: CGFloat = 24.0
 	}
-//
-//	private var securityViewBottomConstraint: NSLayoutConstraint?
-//
-//	/// The spinner
-//	private let spinner: UIActivityIndicatorView = {
-//
-//		let view = UIActivityIndicatorView()
-//		view.translatesAutoresizingMaskIntoConstraints = false
-//		if #available(iOS 13.0, *) {
-//			view.style = .large
-//		} else {
-//			view.style = .whiteLarge
-//		}
-//		view.color = Theme.colors.primary
-//		view.hidesWhenStopped = true
-//		return view
-//	}()
-//
-//	/// The image view for the QR image
-//	let largeQRimageView: UIImageView = {
-//
-//		let view = UIImageView()
-//		view.translatesAutoresizingMaskIntoConstraints = false
-//		return view
-//	}()
-//
 
-//
-//	private let screenshotBlockingView: ShowQRScreenshotBlockingView = {
-//
-//		let view = ShowQRScreenshotBlockingView()
-//		view.translatesAutoresizingMaskIntoConstraints = false
-//		return view
-//	}()
-//
 	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
 		titleLabel.textAlignment = .center
+		actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
 	}
 
 	/// Setup the hierarchy
@@ -104,6 +78,7 @@ class ShowQRIrrelevantView: BaseView {
 		addSubview(iconView)
 		addSubview(titleLabel)
 		addSubview(actionLabel)
+		addSubview(actionButton)
 	}
 
 	/// Setup the constraints
@@ -149,8 +124,20 @@ class ShowQRIrrelevantView: BaseView {
 			actionLabel.topAnchor.constraint(
 				equalTo: titleLabel.bottomAnchor,
 				constant: ViewTraits.actionTitleMargin
-			)
+			),
+
+			actionButton.topAnchor.constraint(equalTo: innerView.topAnchor),
+			actionButton.bottomAnchor.constraint(equalTo: innerView.bottomAnchor),
+			actionButton.leadingAnchor.constraint(equalTo: innerView.leadingAnchor),
+			actionButton.trailingAnchor.constraint(equalTo: innerView.trailingAnchor)
 		])
+	}
+
+	// MARK: - Callbacks
+
+	@objc func actionButtonTapped() {
+
+		actionButtonCommand?()
 	}
 
 	// MARK: Public Access
@@ -172,4 +159,6 @@ class ShowQRIrrelevantView: BaseView {
 			)
 		}
 	}
+
+	var actionButtonCommand: (() -> Void)?
 }

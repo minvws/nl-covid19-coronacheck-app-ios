@@ -42,6 +42,9 @@ class ShowQRItemViewController: BaseViewController, Logging {
 		
 		setupBinding()
 		setupListeners()
+
+		sceneView.irrelevantView.title = L.holderShowqrQrhidden()
+		sceneView.irrelevantView.action = L.holderShowqrShowqr()
 	}
 
 	private func setupBinding() {
