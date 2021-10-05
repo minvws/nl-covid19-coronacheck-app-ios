@@ -21,7 +21,7 @@ class ShowQRViewModel: Logging {
 	private var currentPage: Int {
 		didSet {
 			logInfo("current page set to \(currentPage)")
-			setTitleForVaccinationDosage()
+			handleVaccinationDosageInformation()
 		}
 	}
 
@@ -30,6 +30,8 @@ class ShowQRViewModel: Logging {
 	@Bindable private(set) var title: String?
 	
 	@Bindable private(set) var dosage: String?
+
+	@Bindable private(set) var overVaccinated: String?
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
@@ -51,7 +53,7 @@ class ShowQRViewModel: Logging {
 		self.coordinator = coordinator
 		self.items = greenCards.map { return ShowQRItem(greenCard: $0) }
 		self.currentPage = 0
-		setTitleForVaccinationDosage()
+		handleVaccinationDosageInformation()
 
 		if let greenCard = greenCards.first {
 			if greenCard.type == GreenCardType.domestic.rawValue {
@@ -91,7 +93,7 @@ class ShowQRViewModel: Logging {
 		}
 	}
 
-	func setTitleForVaccinationDosage() {
+	func handleVaccinationDosageInformation() {
 
 		guard let greenCard = getActiveGreenCard(),
 			  let credential = greenCard.getActiveCredential(),
@@ -105,6 +107,7 @@ class ShowQRViewModel: Logging {
 			   let doseNumber = euVaccination.doseNumber,
 			   let totalDose = euVaccination.totalDose {
 				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
+				overVaccinated = euVaccination.isOverVaccinated ? L.holderShowqrNotneeded() : nil
 			}
 		}
 	}
@@ -325,5 +328,15 @@ private extension EuCredentialAttributes {
 			.getDateFrom(dateString8601: digitalCovidCertificate.dateOfBirth)
 			.map(dateFormatter.string)
 		?? digitalCovidCertificate.dateOfBirth
+	}
+}
+
+private extension EuCredentialAttributes.Vaccination {
+
+	var isOverVaccinated: Bool {
+		guard let doseNumber = doseNumber, let totalDose = totalDose else {
+			return false
+		}
+		return doseNumber > totalDose
 	}
 }

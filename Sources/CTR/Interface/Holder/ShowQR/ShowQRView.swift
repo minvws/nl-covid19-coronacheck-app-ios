@@ -92,6 +92,12 @@ class ShowQRView: BaseView {
 		return Label(headlineBold: nil, montserrat: true).multiline()
 	}()
 
+	/// The info label
+	private let infoLabel: Label = {
+
+		return Label(body: nil).multiline()
+	}()
+
 	/// Setup all the views
 	override func setupViews() {
 
@@ -114,6 +120,7 @@ class ShowQRView: BaseView {
 		addSubview(nextButton)
 		addSubview(previousButton)
 		addSubview(dosageLabel)
+		addSubview(infoLabel)
 	}
 
 	/// Setup the constraints
@@ -177,7 +184,20 @@ class ShowQRView: BaseView {
 				lessThanOrEqualTo: nextButton.leadingAnchor,
 				constant: -ViewTraits.Spacing.dosageToButton
 			),
-			dosageLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
+			dosageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+
+			infoLabel.topAnchor.constraint(
+				equalTo: pageControl.bottomAnchor
+			),
+			infoLabel.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.Margin.edge
+			),
+			infoLabel.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.Margin.edge
+			),
+			infoLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 
 		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
@@ -190,6 +210,7 @@ class ShowQRView: BaseView {
 		bringSubviewToFront(nextButton)
 		bringSubviewToFront(previousButton)
 		bringSubviewToFront(dosageLabel)
+		bringSubviewToFront(infoLabel)
 	}
 
 	/// Setup all the accessibility traits
@@ -221,6 +242,13 @@ class ShowQRView: BaseView {
 	var dosage: String? {
 		didSet {
 			dosageLabel.attributedText = dosage?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
+		}
+	}
+
+	/// The info
+	var info: String? {
+		didSet {
+			infoLabel.attributedText = info?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
 		}
 	}
 
