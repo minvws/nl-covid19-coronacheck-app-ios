@@ -50,8 +50,6 @@ class ShowQRItemViewModel: Logging {
 			updateQRVisibility()
 		}
 	}
-
-	@Bindable private(set) var title: String?
     
     @Bindable private(set) var qrAccessibility: String?
 
@@ -202,17 +200,6 @@ class ShowQRItemViewModel: Logging {
 					}
 				}
 			}
-			setTitleForVaccinationDosage(data)
-		}
-	}
-
-	private func setTitleForVaccinationDosage(_ data: Data) {
-
-		if let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
-		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
-		   let doseNumber = euVaccination.doseNumber,
-		   let totalDose = euVaccination.totalDose {
-			title = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 		}
 	}
 

@@ -39,8 +39,6 @@ class ShowQRViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		sceneView.backgroundColor = .red // .white
-
 		setupPageController()
 		setupPages()
 		setupBinding()
@@ -58,6 +56,7 @@ class ShowQRViewController: BaseViewController {
 				self?.sceneView.setupForInternational()
 			}
 		}
+		viewModel.$dosage.binding = { [weak self] in self?.sceneView.dosage = $0 }
 		viewModel.$thirdPartyTicketAppButtonTitle.binding = { [weak self] in self?.sceneView.returnToThirdPartyAppButtonTitle = $0 }
 		sceneView.didTapThirdPartyAppButtonCommand = { [viewModel] in viewModel.didTapThirdPartyAppButton() }
 

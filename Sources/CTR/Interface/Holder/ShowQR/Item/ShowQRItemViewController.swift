@@ -39,19 +39,12 @@ class ShowQRItemViewController: BaseViewController, Logging {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
-
-		sceneView.backgroundColor = .green // .white
 		
 		setupBinding()
 		setupListeners()
 	}
 
 	private func setupBinding() {
-
-		viewModel.$title.binding = { [weak self] in
-
-			self?.sceneView.title = $0
-		}
         
         viewModel.$qrAccessibility.binding = { [weak self] in
             
