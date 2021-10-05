@@ -61,7 +61,6 @@ class ShowQRItemView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
 		spinner.startAnimating()
 	}
 	

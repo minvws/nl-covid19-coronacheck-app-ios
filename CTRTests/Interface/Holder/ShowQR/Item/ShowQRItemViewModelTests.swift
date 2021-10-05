@@ -60,7 +60,6 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.visibilityState) == .loading
-		expect(self.sut.title).to(beNil())
 		expect(self.sut.qrAccessibility) == L.holderShowqrDomesticQrTitle()
 	}
 
@@ -86,7 +85,6 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.visibilityState) == .loading
-		expect(self.sut.title).to(beNil())
 		expect(self.sut.qrAccessibility) == L.holderShowqrEuQrTitle()
 	}
 
