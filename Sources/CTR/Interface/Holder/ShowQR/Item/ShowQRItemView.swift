@@ -23,16 +23,9 @@ class ShowQRItemView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
-		static let titleLineHeight: CGFloat = 22
-
 		// Margins
 		static let margin: CGFloat = 10.0
-		static let domesticSecurityMargin: CGFloat = 56.0
-		static let internationalSecurityMargin: CGFloat = 49.0
 	}
-
-	private var securityViewBottomConstraint: NSLayoutConstraint?
 
 	/// The spinner
 	private let spinner: UIActivityIndicatorView = {
@@ -57,12 +50,6 @@ class ShowQRItemView: BaseView {
 		return view
 	}()
 
-	/// The title label
-	private let titleLabel: Label = {
-
-		return Label(headlineBold: nil, montserrat: true).multiline()
-	}()
-
 	private let screenshotBlockingView: ShowQRScreenshotBlockingView = {
 
 		let view = ShowQRScreenshotBlockingView()
@@ -74,6 +61,7 @@ class ShowQRItemView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
+		backgroundColor = Theme.colors.viewControllerBackground
 		spinner.startAnimating()
 	}
 	
@@ -84,7 +72,6 @@ class ShowQRItemView: BaseView {
 		addSubview(spinner)
 		addSubview(largeQRimageView)
 		addSubview(screenshotBlockingView)
-		addSubview(titleLabel)
 	}
 
 	/// Setup the constraints
@@ -105,21 +92,8 @@ class ShowQRItemView: BaseView {
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-
-			titleLabel.topAnchor.constraint(
-				equalTo: largeQRimageView.bottomAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
+			largeQRimageView.bottomAnchor.constraint(
+				lessThanOrEqualTo: bottomAnchor,
 				constant: -ViewTraits.margin
 			),
 
@@ -140,19 +114,11 @@ class ShowQRItemView: BaseView {
 
         largeQRimageView.isAccessibilityElement = true
         largeQRimageView.accessibilityTraits = .image
-		titleLabel.isAccessibilityElement = true
         
-        accessibilityElements = [largeQRimageView, titleLabel]
+        accessibilityElements = [largeQRimageView]
 	}
 
 	// MARK: Public Access
-
-	/// The  title
-	var title: String? {
-		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight, alignment: .center)
-		}
-	}
 
 	var visibilityState: VisibilityState = .loading {
 		didSet {
@@ -162,14 +128,12 @@ class ShowQRItemView: BaseView {
 					spinner.stopAnimating()
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
-					titleLabel.isHidden = true
 					spinner.isHidden = true
 
 				case .loading:
 					spinner.startAnimating()
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
-					titleLabel.isHidden = false
 					spinner.isHidden = false
                     
 				case .screenshotBlocking(let timeRemainingText, let voiceoverTimeRemainingText):
@@ -177,7 +141,6 @@ class ShowQRItemView: BaseView {
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.setCountdown(text: timeRemainingText, voiceoverText: voiceoverTimeRemainingText)
 					screenshotBlockingView.isHidden = false
-					titleLabel.isHidden = true
 					spinner.isHidden = true
 
 				case .visible(let qrImage):
@@ -185,7 +148,6 @@ class ShowQRItemView: BaseView {
 					largeQRimageView.isHidden = false
 					largeQRimageView.image = qrImage
 					screenshotBlockingView.isHidden = true
-					titleLabel.isHidden = false
 					spinner.isHidden = true
 			}
 

@@ -28,6 +28,8 @@ class ShowQRViewModel: Logging {
 	// MARK: - Bindable
 
 	@Bindable private(set) var title: String?
+	
+	@Bindable private(set) var dosage: String?
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
@@ -87,6 +89,7 @@ class ShowQRViewModel: Logging {
 			showDomesticDetails(data)
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			showInternationalDetails(data)
+			setTitleForVaccinationDosage(data)
 		}
 	}
 
@@ -120,6 +123,16 @@ class ShowQRViewModel: Logging {
 			} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
 				showRecoveryDetails(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
 			}
+		}
+	}
+	
+	private func setTitleForVaccinationDosage(_ data: Data) {
+
+		if let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
+		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
+		   let doseNumber = euVaccination.doseNumber,
+		   let totalDose = euVaccination.totalDose {
+			dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 		}
 	}
 
