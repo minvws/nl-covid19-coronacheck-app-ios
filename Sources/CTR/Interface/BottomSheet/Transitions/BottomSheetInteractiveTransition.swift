@@ -18,7 +18,7 @@ final class BottomSheetInteractiveTransition: UIPercentDrivenInteractiveTransiti
 		panGestureRecognizer.delegate = self
 		return panGestureRecognizer
 	}()
-	private var shouldCompleteTransition = false
+	private var translationStart: CGFloat = 0
 	
 	init(presentingViewController: UIViewController) {
 		self.presentingViewController = presentingViewController
@@ -39,21 +39,22 @@ private extension BottomSheetInteractiveTransition {
 		
 		let velocity = gestureRecognizer.velocity(in: recognizerView)
 		let highVelocity: CGFloat = 300
+		let delta: CGFloat = 75
 		
 		switch gestureRecognizer.state {
 			case .began:
 				isInteractionInProgress = true
+				translationStart = translation.y
 				presentingViewController.dismiss(animated: true)
 			case .changed:
-				shouldCompleteTransition = (velocity.x > highVelocity && transitionPercentage > 0.2) || transitionPercentage > 0.3
 				update(transitionPercentage)
 			case .ended, .cancelled:
 				isInteractionInProgress = false
 				if velocity.x < highVelocity {
 					// Taper off completion speed for smoother transition finish
-					completionSpeed = 0.5 * sin(transitionPercentage * CGFloat.pi)
+					completionSpeed = 0.4 * sin(transitionPercentage + 2)
 				}
-				if shouldCompleteTransition, gestureRecognizer.state != .cancelled {
+				if translation.y - translationStart > delta, gestureRecognizer.state != .cancelled {
 					finish()
 				} else {
 					cancel()
