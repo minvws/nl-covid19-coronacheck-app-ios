@@ -422,25 +422,24 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		switch result {
 			case let .success(greenCards):
 				if greenCards.isEmpty {
-					let alertController = UIAlertController(
-						title: L.generalErrorTitle(),
-						message: String(format: L.generalErrorTechnicalCustom("1 610 000 061")),
-						preferredStyle: .alert)
-
-					alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
-					(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
+					showAlertWithErrorCode("i 610 000 061")
 			} else {
 				navigateToShowQRs(greenCards)
 			}
 			case .failure:
-				let alertController = UIAlertController(
-					title: L.generalErrorTitle(),
-					message: String(format: L.generalErrorTechnicalCustom("1 610 000 062")),
-					preferredStyle: .alert)
-
-				alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
-				(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
+			showAlertWithErrorCode("i 610 000 062")
 		}
+	}
+
+	private func showAlertWithErrorCode(_ code: String) {
+		
+		let alertController = UIAlertController(
+			title: L.generalErrorTitle(),
+			message: String(format: L.generalErrorTechnicalCustom(code)),
+			preferredStyle: .alert)
+
+		alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
+		(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 	}
 
 	func userWishesToLaunchThirdPartyTicketApp() {
