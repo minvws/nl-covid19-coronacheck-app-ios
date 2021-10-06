@@ -15,6 +15,8 @@ protocol ShowQRDatasourceProtocol {
 	init(greenCards: [GreenCard])
 
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
+
+	func shouldBeHidden(greenCard: GreenCard) -> Bool
 }
 
 class ShowQRDatasource: ShowQRDatasourceProtocol {
@@ -49,6 +51,10 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 
 		return items[index].greenCard
 	}
+
+	func shouldBeHidden(greenCard: GreenCard) -> Bool {
+		return false
+	}
 }
 
 class ShowQRViewModel: Logging {
@@ -66,7 +72,7 @@ class ShowQRViewModel: Logging {
 	private var currentPage: Int {
 		didSet {
 			logInfo("current page set to \(currentPage)")
-			setTitleForVaccinationDosage()
+			handleVaccinationDosageInformation()
 		}
 	}
 
@@ -75,6 +81,8 @@ class ShowQRViewModel: Logging {
 	@Bindable private(set) var title: String?
 	
 	@Bindable private(set) var dosage: String?
+
+	@Bindable private(set) var relevancyInformation: String?
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
@@ -97,7 +105,7 @@ class ShowQRViewModel: Logging {
 		self.dataSource = ShowQRDatasource(greenCards: greenCards)
 		self.items = dataSource.items
 		self.currentPage = 0
-		setTitleForVaccinationDosage()
+		handleVaccinationDosageInformation()
 
 		if let greenCard = greenCards.first {
 			if greenCard.type == GreenCardType.domestic.rawValue {
@@ -137,7 +145,7 @@ class ShowQRViewModel: Logging {
 		}
 	}
 
-	func setTitleForVaccinationDosage() {
+	func handleVaccinationDosageInformation() {
 
 		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
 			  let credential = greenCard.getActiveCredential(),
@@ -151,6 +159,12 @@ class ShowQRViewModel: Logging {
 			   let doseNumber = euVaccination.doseNumber,
 			   let totalDose = euVaccination.totalDose {
 				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
+				if euVaccination.isOverVaccinated {
+					relevancyInformation = L.holderShowqrOvervaccinated("\(totalDose)", "\(totalDose)")
+				}
+				if dataSource.shouldBeHidden(greenCard: greenCard) {
+					relevancyInformation = L.holderShowqrNotneeded()
+				}
 			}
 		}
 	}
@@ -315,7 +329,7 @@ class ShowQRViewModel: Logging {
 			viewModel: ShowQRItemViewModel(
 				delegate: self,
 				greenCard: item.greenCard,
-				qrShouldInitiallyBeHidden: false
+				qrShouldInitiallyBeHidden: dataSource.shouldBeHidden(greenCard: item.greenCard)
 			)
 		)
 		viewController.isAccessibilityElement = true
@@ -362,5 +376,15 @@ private extension EuCredentialAttributes {
 			.getDateFrom(dateString8601: digitalCovidCertificate.dateOfBirth)
 			.map(dateFormatter.string)
 		?? digitalCovidCertificate.dateOfBirth
+	}
+}
+
+private extension EuCredentialAttributes.Vaccination {
+
+	var isOverVaccinated: Bool {
+		guard let doseNumber = doseNumber, let totalDose = totalDose else {
+			return false
+		}
+		return doseNumber > totalDose
 	}
 }
