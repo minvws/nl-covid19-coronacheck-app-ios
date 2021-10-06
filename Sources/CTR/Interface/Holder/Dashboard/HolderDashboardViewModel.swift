@@ -381,6 +381,7 @@ extension HolderDashboardViewModel.QRCard {
 			case .netherlands:
 
 				var cards = [HolderDashboardViewController.Card.domesticQR(
+					title: L.holderDashboardQrTitle(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { coordinatorDelegate.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id }) },
@@ -421,6 +422,12 @@ extension HolderDashboardViewModel.QRCard {
 
 			case .europeanUnion:
 				var cards = [HolderDashboardViewController.Card.europeanUnionQR(
+					title: (self.origins.first?.type.localizedProof ?? L.holderDashboardQrTitle()).capitalized,
+					stackSize: {
+						let minStackSize = 1
+						let maxStackSize = 3
+						return min(maxStackSize, max(minStackSize, greencards.count))
+					}(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { coordinatorDelegate.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id }) },
@@ -457,7 +464,7 @@ extension HolderDashboardViewModel.QRCard {
 					let first = validityType.text(qrCard: self, greencard: greencard, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
 					return first
 				}
-		 }
+		}
 	}
 }
 

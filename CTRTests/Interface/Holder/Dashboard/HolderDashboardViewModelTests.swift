@@ -767,7 +767,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -816,7 +816,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -864,7 +864,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -914,7 +914,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
@@ -966,7 +966,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -974,13 +974,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == "Vaccinatiebewijs: dosis 1 van 2"
+			expect(nowValidityTexts[0].lines[0]) == "Dosis 1/2"
 			expect(nowValidityTexts[0].lines[1]) == "Vaccinatiedatum: 14 juli 2021"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == "Vaccinatiebewijs: dosis 1 van 2"
+			expect(futureValidityTexts[0].lines[0]) == "Dosis 1/2"
 			expect(futureValidityTexts[0].lines[1]) == "Vaccinatiedatum: 14 juli 2021"
 
 			// check didTapViewQR
@@ -1018,7 +1018,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1026,7 +1026,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == "Vaccinatiebewijs: dosis 1 van 2"
+			expect(nowValidityTexts[0].lines[0]) == "Dosis 1/2"
 			expect(nowValidityTexts[0].lines[1]) == "Vaccinatiedatum: 15 juni 2021"
 
 			// Exercise the validityText with different sample dates:
@@ -1069,7 +1069,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1077,7 +1077,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == "Vaccinatiebewijs: dosis 0 van 2"
+			expect(nowValidityTexts[0].lines[0]) == "Dosis 0/2"
 			expect(nowValidityTexts[0].lines[1]) == "Vaccinatiedatum: 14 juli 2021"
 
 			// check didTapViewQR
@@ -1115,7 +1115,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1166,7 +1166,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1214,20 +1214,18 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
-		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
-			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].lines).to(haveCount(1))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-			expect(nowValidityTexts[0].lines[1]) == "geldig tot 11 mei 2022"
+			expect(nowValidityTexts[0].lines[0]) == "geldig tot 11 mei 2022"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-			expect(futureValidityTexts[0].lines[1]) == "geldig tot 11 mei 2022"
+			expect(futureValidityTexts[0].lines[0]) == "geldig tot 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
@@ -1266,7 +1264,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1329,7 +1327,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(
-			test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
 				// check isLoading
 				expect(isLoading) == false
@@ -1371,7 +1369,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1411,7 +1409,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1466,7 +1464,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1479,20 +1477,19 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 
-		expect(self.sut.internationalCards[2]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
-			expect(nowValidityTexts[0].lines.count) == 2
-			expect(nowValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-			expect(nowValidityTexts[0].lines[1]) == "geldig tot 11 mei 2022"
+			expect(nowValidityTexts[0].lines.count) == 1
+			expect(nowValidityTexts[0].lines[0]) == "geldig tot 11 mei 2022"
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 
-		expect(self.sut.internationalCards[3]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1658,7 +1655,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1707,7 +1704,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
@@ -1759,7 +1756,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1802,7 +1799,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
-		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
@@ -1963,23 +1960,23 @@ private func beHeaderMessageCard(test: @escaping (String) -> Void = { _ in }) ->
 	}
 }
 
-private func beDomesticQRCard(test: @escaping ((Date) -> [HolderDashboardViewController.ValidityText], Bool, () -> Void, ((Date) -> String?)?) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+private func beDomesticQRCard(test: @escaping (String, (Date) -> [HolderDashboardViewController.ValidityText], Bool, () -> Void, ((Date) -> String?)?) -> Void = { _, _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .domesticQR with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   // Skip buttonEnabledEvaluator because it always comes from the `HolderDashboardViewModel.MyQRCard` itself (which means it is stubbed in the test)
-		   case let .domesticQR(validityTextEvaluator, isLoading, didTapViewQR, _, expiryCountdownEvaluator) = actual {
-			test(validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator)
+		   case let .domesticQR(title, validityTextEvaluator, isLoading, didTapViewQR, _, expiryCountdownEvaluator) = actual {
+			test(title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)
 	}
 }
 
-private func beEuropeanUnionQRCard(test: @escaping ((Date) -> [HolderDashboardViewController.ValidityText], Bool, () -> Void, ((Date) -> String?)?) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+private func beEuropeanUnionQRCard(test: @escaping (String, Int, (Date) -> [HolderDashboardViewController.ValidityText], Bool, () -> Void, ((Date) -> String?)?) -> Void = { _, _, _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .europeanUnionQR with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
-		   case let .europeanUnionQR(validityTextEvaluator, isLoading, didTapViewQR, _, expiryCountdownEvaluator) = actual {
-			test(validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator)
+		   case let .europeanUnionQR(title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, _, expiryCountdownEvaluator) = actual {
+			test(title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)

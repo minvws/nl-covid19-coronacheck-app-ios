@@ -158,10 +158,9 @@ private func validityText_hasBegun_eu_recovery(isCurrentlyValid: Bool, expiratio
 	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
 	let dateString = formatter.string(from: expirationTime)
 
-	let titleString = QRCodeOriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
-		lines: [titleString, valueString],
+		lines: [valueString],
 		kind: .current
 	)
 }
