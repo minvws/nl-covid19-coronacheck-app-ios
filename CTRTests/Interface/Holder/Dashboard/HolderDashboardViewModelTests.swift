@@ -1935,6 +1935,156 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.internationalCards).toEventually(haveCount(1))
 		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateCard())
 	}
+
+	func test_datasourceupdate_multipleDCC_1of2_2of2() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+
+		let oneOfTwoGreencardObjectID = NSManagedObjectID()
+		let twoOfTwoGreencardObjectID = NSManagedObjectID()
+
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
+					if greencard.id === oneOfTwoGreencardObjectID {
+						return .sampleWithVaccine(doseNumber: 1, totalDose: 2)
+					} else if greencard.id === twoOfTwoGreencardObjectID {
+						return .sampleWithVaccine(doseNumber: 2, totalDose: 2)
+					} else {
+						fail("Unrecognised greencard received in closure")
+						return nil
+					}
+				}),
+				greencards: [
+					.init(id: oneOfTwoGreencardObjectID, origins: [.valid30DaysAgo_vaccination_expires60SecondsFromNow()]),
+					.init(id: twoOfTwoGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires30DaysFromNow()])
+				],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroInternational()
+		}))
+
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			expect(stackSize) == 2
+
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(2))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == "Dosis 2/2"
+			expect(nowValidityTexts[0].lines[1]) == "Vaccinatiedatum: 14 juli 2021"
+			expect(nowValidityTexts[1].lines).to(haveCount(2))
+			expect(nowValidityTexts[1].kind) == .current
+			expect(nowValidityTexts[1].lines[0]) == "Dosis 1/2"
+			expect(nowValidityTexts[1].lines[1]) == "Vaccinatiedatum: 15 juni 2021"
+
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs[0]) === oneOfTwoGreencardObjectID
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs[1]) === twoOfTwoGreencardObjectID
+
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+	}
+
+	func test_datasourceupdate_multipleDCC_1of2_2of2_3of2_3of3() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+
+		let oneOfTwoGreencardObjectID = NSManagedObjectID()
+		let twoOfTwoGreencardObjectID = NSManagedObjectID()
+		let threeOfTwoGreencardObjectID = NSManagedObjectID()
+		let threeOfThreeGreencardObjectID = NSManagedObjectID()
+
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
+					if greencard.id === oneOfTwoGreencardObjectID {
+						return .sampleWithVaccine(doseNumber: 1, totalDose: 2)
+					} else if greencard.id === twoOfTwoGreencardObjectID {
+						return .sampleWithVaccine(doseNumber: 2, totalDose: 2)
+					} else if greencard.id === threeOfTwoGreencardObjectID {
+						return .sampleWithVaccine(doseNumber: 3, totalDose: 2)
+					} else if greencard.id === threeOfThreeGreencardObjectID {
+						return .sampleWithVaccine(doseNumber: 3, totalDose: 3)
+					} else {
+						fail("Unrecognised greencard received in closure")
+						return nil
+					}
+				}),
+				greencards: [
+					.init(id: oneOfTwoGreencardObjectID, origins: [.valid30DaysAgo_vaccination_expires60SecondsFromNow()]),
+					.init(id: twoOfTwoGreencardObjectID, origins: [.valid15DaysAgo_vaccination_expires14DaysFromNow()]),
+					.init(id: threeOfTwoGreencardObjectID, origins: [.valid5DaysAgo_vaccination_expires25DaysFromNow()]),
+					.init(id: threeOfThreeGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires30DaysFromNow()])
+				],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroInternational()
+		}))
+
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			expect(stackSize) == 3 // max value here is 3 - shouldn't be 4.
+
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(4))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == "Dosis 3/3"
+			expect(nowValidityTexts[0].lines[1]) == "Vaccinatiedatum: 14 juli 2021"
+			expect(nowValidityTexts[1].lines).to(haveCount(2))
+			expect(nowValidityTexts[1].kind) == .current
+			expect(nowValidityTexts[1].lines[0]) == "Dosis 3/2"
+			expect(nowValidityTexts[1].lines[1]) == "Vaccinatiedatum: 10 juli 2021"
+			expect(nowValidityTexts[2].lines).to(haveCount(2))
+			expect(nowValidityTexts[2].kind) == .current
+			expect(nowValidityTexts[2].lines[0]) == "Dosis 2/2"
+			expect(nowValidityTexts[2].lines[1]) == "Vaccinatiedatum: 30 juni 2021"
+			expect(nowValidityTexts[3].lines).to(haveCount(2))
+			expect(nowValidityTexts[3].kind) == .current
+			expect(nowValidityTexts[3].lines[0]) == "Dosis 1/2"
+			expect(nowValidityTexts[3].lines[1]) == "Vaccinatiedatum: 15 juni 2021"
+
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs[0]) === oneOfTwoGreencardObjectID
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs[1]) === twoOfTwoGreencardObjectID
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs[2]) === threeOfTwoGreencardObjectID
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs[3]) === threeOfThreeGreencardObjectID
+
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+	}
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
