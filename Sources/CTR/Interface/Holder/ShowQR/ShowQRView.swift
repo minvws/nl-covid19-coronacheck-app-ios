@@ -19,6 +19,7 @@ class ShowQRView: BaseView {
 
 		enum Margin {
 			static let edge: CGFloat = 10
+			static let infoEdge: CGFloat = 20
 			static let domesticSecurity: CGFloat = 56
 			static let internationalSecurity: CGFloat = 49
 			static let returnToThirdPartyAppButton: CGFloat = 4
@@ -92,6 +93,14 @@ class ShowQRView: BaseView {
 		return Label(headlineBold: nil, montserrat: true).multiline()
 	}()
 
+	/// The scrollview
+	let scrollView: UIScrollView = {
+
+		let view = UIScrollView(frame: .zero)
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	/// The info label
 	private let infoLabel: Label = {
 
@@ -103,10 +112,20 @@ class ShowQRView: BaseView {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		infoLabel.backgroundColor = Theme.colors.viewControllerBackground.withAlphaComponent(0.8)
 		
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
 		nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
+
+		// ScrollView is blocking the Security Animation Reversal
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(scrollViewTapped))
+		scrollView.addGestureRecognizer(tapGesture)
+	}
+
+	@objc func scrollViewTapped() {
+		// Reverse the security animation
+		securityView.primaryButtonTapped()
 	}
 	
 	/// Setup the hierarchy
@@ -120,7 +139,8 @@ class ShowQRView: BaseView {
 		addSubview(nextButton)
 		addSubview(previousButton)
 		addSubview(dosageLabel)
-		addSubview(infoLabel)
+		addSubview(scrollView)
+		scrollView.addSubview(infoLabel)
 	}
 
 	/// Setup the constraints
@@ -186,18 +206,27 @@ class ShowQRView: BaseView {
 			),
 			dosageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 
-			infoLabel.topAnchor.constraint(
-				equalTo: pageControl.bottomAnchor
-			),
+			infoLabel.topAnchor.constraint( equalTo: scrollView.topAnchor),
 			infoLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.Margin.edge
+				equalTo: scrollView.leadingAnchor,
+				constant: ViewTraits.Margin.infoEdge
 			),
 			infoLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.Margin.edge
+				equalTo: scrollView.trailingAnchor,
+				constant: -ViewTraits.Margin.infoEdge
 			),
-			infoLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
+			// Extra constraints to make the infoLabel scrollable
+			infoLabel.widthAnchor.constraint(
+				equalTo: scrollView.widthAnchor,
+				constant: -2 * ViewTraits.Margin.infoEdge
+			),
+			infoLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			infoLabel.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor),
+
+			scrollView.topAnchor.constraint(equalTo: pageControl.bottomAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 
 		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
@@ -210,7 +239,7 @@ class ShowQRView: BaseView {
 		bringSubviewToFront(nextButton)
 		bringSubviewToFront(previousButton)
 		bringSubviewToFront(dosageLabel)
-		bringSubviewToFront(infoLabel)
+		bringSubviewToFront(scrollView)
 	}
 
 	/// Setup all the accessibility traits
@@ -249,6 +278,7 @@ class ShowQRView: BaseView {
 	var info: String? {
 		didSet {
 			infoLabel.attributedText = info?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
+			scrollView.isHidden = info == nil
 		}
 	}
 
