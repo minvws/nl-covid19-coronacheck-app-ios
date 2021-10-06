@@ -173,14 +173,18 @@ class HolderDashboardViewController: BaseViewController {
 						if case let .europeanUnionQR(_, stackSize, _, _, _, _, _) = card {
 							qrCard = QRCardView(stackSize: stackSize)
 							qrCard.shouldStyleForEU = true
+							qrCard.viewQRButtonTitle = stackSize == 1
+								? L.holderDashboardQrButtonViewQR()
+								: L.holderDashboardQrButtonViewQRs()
 						} else {
 							qrCard = QRCardView(stackSize: 1)
 							qrCard.shouldStyleForEU = false
+							qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
 						}
 
 						qrCard.viewQRButtonCommand = didTapViewQR
 						qrCard.title = title
-						qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
+
 						qrCard.validityTexts = validityTexts
 						qrCard.expiryEvaluator = expiryCountdownEvaluator
 						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator

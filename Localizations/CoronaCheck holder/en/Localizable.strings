@@ -1,3 +1,4 @@
+"holder.dashboard.qr.button.viewQRs" = "View QR codes";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR code. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
 "holder.tokenentry.regularflow.error.invalid.combination" = "No valid combination";
 "holder.tokenentry.regularflow.error.emptytoken" = "Please fill out a retrieval code first";
