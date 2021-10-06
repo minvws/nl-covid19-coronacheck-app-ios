@@ -26,6 +26,8 @@ class QRCardView: BaseView {
 		
 		// Spacing
 		static let topVerticalLabelSpacing: CGFloat = 18
+		static let interSquashedCardSpacing: CGFloat = 30
+		static let squashedCardHeight: CGFloat = 40
 	}
 
 	// MARK: - Private properties
@@ -149,6 +151,8 @@ class QRCardView: BaseView {
 			hostView.topAnchor.constraint(equalTo: topAnchor)
 		])
 
+		// Setup the squashed cards (the QR Cards that are apparently layered beneath this one):
+
 		if squashedCards.isEmpty {
 
 			NSLayoutConstraint.activate([
@@ -160,13 +164,13 @@ class QRCardView: BaseView {
 			squashedCards.forEach { squashedCardView in
 				if let nextBottomAnchor = nextBottomAnchor {
 					NSLayoutConstraint.activate([
-						nextBottomAnchor.constraint(equalTo: squashedCardView.topAnchor, constant: hostView.bottomAnchor == nextBottomAnchor ? 30 : 30)
+						nextBottomAnchor.constraint(equalTo: squashedCardView.topAnchor, constant: ViewTraits.interSquashedCardSpacing)
 					])
 				}
 				NSLayoutConstraint.activate([
 					squashedCardView.leadingAnchor.constraint(equalTo: leadingAnchor),
 					squashedCardView.trailingAnchor.constraint(equalTo: trailingAnchor),
-					squashedCardView.heightAnchor.constraint(equalToConstant: 40)
+					squashedCardView.heightAnchor.constraint(equalToConstant: ViewTraits.squashedCardHeight)
 				])
 				nextBottomAnchor = squashedCardView.bottomAnchor
 			}
