@@ -27,7 +27,7 @@ extension HolderDashboardViewModel {
 		/// Represents the region that the Greencard applies to
 		enum Region {
 			case netherlands
-			case europeanUnion(evaluateDCC: (Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
+			case europeanUnion(evaluateDCC: (QRCard.GreenCard, Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
 		}
 
 		struct GreenCard {
