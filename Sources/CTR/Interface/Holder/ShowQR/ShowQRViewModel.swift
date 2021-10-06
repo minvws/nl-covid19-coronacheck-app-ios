@@ -8,6 +8,49 @@
 import Foundation
 import UIKit
 
+protocol ShowQRDatasourceProtocol {
+
+	var items: [ShowQRItem] { get }
+
+	init(greenCards: [GreenCard])
+
+	func getGreenCardForIndex(_ index: Int) -> GreenCard?
+}
+
+class ShowQRDatasource: ShowQRDatasourceProtocol {
+
+	private(set) var items = [ShowQRItem]()
+
+	required init(greenCards: [GreenCard]) {
+
+		self.items = greenCards
+			.compactMap { greenCard in
+				// map on greenCard, sorted origins.
+				greenCard.castOrigins().map { (greenCard: greenCard, origins: $0.sorted { lhsOrigin, rhsOrigin in
+					// Sort the origins ascending
+					lhsOrigin.eventDate ?? .distantFuture < rhsOrigin.eventDate ?? .distantFuture
+				}) }
+			}
+			.sorted { lhs, rhs in
+				// Sort the greenCards ascending (on the first origin)
+				if let lhsEventDate = lhs.origins.first?.eventDate, let rhsEventDate = rhs.origins.first?.eventDate {
+					return lhsEventDate < rhsEventDate
+				}
+				return false
+			}
+			.map { ShowQRItem(greenCard: $0.greenCard) }
+	}
+
+	func getGreenCardForIndex(_ index: Int) -> GreenCard? {
+
+		guard index < items.count else {
+			return nil
+		}
+
+		return items[index].greenCard
+	}
+}
+
 class ShowQRViewModel: Logging {
 
 	// MARK: - private variables
@@ -17,6 +60,8 @@ class ShowQRViewModel: Logging {
 	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
 	weak private var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
 	private var mappingManager: MappingManaging? = Services.mappingManager
+
+	var dataSource: ShowQRDatasourceProtocol
 
 	private var currentPage: Int {
 		didSet {
@@ -49,7 +94,8 @@ class ShowQRViewModel: Logging {
 	) {
 
 		self.coordinator = coordinator
-		self.items = greenCards.map { return ShowQRItem(greenCard: $0) }
+		self.dataSource = ShowQRDatasource(greenCards: greenCards)
+		self.items = dataSource.items
 		self.currentPage = 0
 		setTitleForVaccinationDosage()
 
@@ -78,7 +124,7 @@ class ShowQRViewModel: Logging {
 
 	func showMoreInformation() {
 
-		guard let greenCard = getActiveGreenCard(),
+		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
 			  let credential = greenCard.getActiveCredential(),
 			  let data = credential.data else {
 				return
@@ -93,7 +139,7 @@ class ShowQRViewModel: Logging {
 
 	func setTitleForVaccinationDosage() {
 
-		guard let greenCard = getActiveGreenCard(),
+		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
 			  let credential = greenCard.getActiveCredential(),
 			  let data = credential.data else {
 			return
@@ -107,15 +153,6 @@ class ShowQRViewModel: Logging {
 				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 			}
 		}
-	}
-
-	private func getActiveGreenCard() -> GreenCard? {
-		
-		guard currentPage < items.count else {
-			return nil
-		}
-
-		return items[currentPage].greenCard
 	}
 
 	private func showDomesticDetails(_ data: Data) {
