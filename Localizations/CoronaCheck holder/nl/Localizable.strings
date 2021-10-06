@@ -145,6 +145,7 @@
 "holder.showqr.qrhidden" = "QR-code verborgen";
 "holder.showqr.showqr" = "Laat toch zien";
 "holder.showqr.notneeded" = "Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.";
+"holder.showqr.overvaccinated" = "Deze QR-code is mogelijk niet overal geldig. Je kan dan dosis %@/%@ gebruiken";
 "general.error.cryptolib.title" = "Sorry, er gaat iets mis";
 "general.error.cryptolib.message" = "Neem contact op met onze helpdesk en geef de foutcode (%@) door.";
 "general.error.cryptolib.retry" = "Probeer opnieuw";

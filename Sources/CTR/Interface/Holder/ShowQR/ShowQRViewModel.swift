@@ -15,6 +15,8 @@ protocol ShowQRDatasourceProtocol {
 	init(greenCards: [GreenCard])
 
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
+
+	func shouldBeHidden(greenCard: GreenCard) -> Bool
 }
 
 class ShowQRDatasource: ShowQRDatasourceProtocol {
@@ -49,6 +51,10 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 
 		return items[index].greenCard
 	}
+
+	func shouldBeHidden(greenCard: GreenCard) -> Bool {
+		return false
+	}
 }
 
 class ShowQRViewModel: Logging {
@@ -76,7 +82,7 @@ class ShowQRViewModel: Logging {
 	
 	@Bindable private(set) var dosage: String?
 
-	@Bindable private(set) var overVaccinated: String?
+	@Bindable private(set) var relevancyInformation: String?
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
@@ -153,7 +159,12 @@ class ShowQRViewModel: Logging {
 			   let doseNumber = euVaccination.doseNumber,
 			   let totalDose = euVaccination.totalDose {
 				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
-				overVaccinated = euVaccination.isOverVaccinated ? L.holderShowqrNotneeded() : nil
+				if euVaccination.isOverVaccinated {
+					relevancyInformation = L.holderShowqrOvervaccinated("\(totalDose)", "\(totalDose)")
+				}
+				if dataSource.shouldBeHidden(greenCard: greenCard) {
+					relevancyInformation = L.holderShowqrNotneeded()
+				}
 			}
 		}
 	}
@@ -318,7 +329,7 @@ class ShowQRViewModel: Logging {
 			viewModel: ShowQRItemViewModel(
 				delegate: self,
 				greenCard: item.greenCard,
-				qrShouldInitiallyBeHidden: false
+				qrShouldInitiallyBeHidden: dataSource.shouldBeHidden(greenCard: item.greenCard)
 			)
 		)
 		viewController.isAccessibilityElement = true
