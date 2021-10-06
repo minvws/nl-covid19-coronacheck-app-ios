@@ -12,6 +12,7 @@ class ShowQRItemView: BaseView {
 	enum VisibilityState: Equatable {
 		case loading
 		case visible(qrImage: UIImage)
+		case irrelevant(qrImage: UIImage)
 		case hiddenForScreenCapture
 		case screenshotBlocking(timeRemainingText: String, voiceoverTimeRemainingText: String)
 
@@ -57,6 +58,13 @@ class ShowQRItemView: BaseView {
 		return view
 	}()
 
+	let irrelevantView: ShowQRIrrelevantView = {
+
+		let view = ShowQRIrrelevantView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	/// Setup all the views
 	override func setupViews() {
 
@@ -71,6 +79,7 @@ class ShowQRItemView: BaseView {
 		addSubview(spinner)
 		addSubview(largeQRimageView)
 		addSubview(screenshotBlockingView)
+		addSubview(irrelevantView)
 	}
 
 	/// Setup the constraints
@@ -101,6 +110,11 @@ class ShowQRItemView: BaseView {
 			screenshotBlockingView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
 			screenshotBlockingView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
 
+			irrelevantView.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor),
+			irrelevantView.trailingAnchor.constraint(equalTo: largeQRimageView.trailingAnchor),
+			irrelevantView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
+			irrelevantView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
+
 			spinner.centerYAnchor.constraint(equalTo: largeQRimageView.centerYAnchor),
 			spinner.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor)
 		])
@@ -127,12 +141,14 @@ class ShowQRItemView: BaseView {
 					spinner.stopAnimating()
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
+					irrelevantView.isHidden = true
 					spinner.isHidden = true
 
 				case .loading:
 					spinner.startAnimating()
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
+					irrelevantView.isHidden = true
 					spinner.isHidden = false
                     
 				case .screenshotBlocking(let timeRemainingText, let voiceoverTimeRemainingText):
@@ -140,6 +156,7 @@ class ShowQRItemView: BaseView {
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.setCountdown(text: timeRemainingText, voiceoverText: voiceoverTimeRemainingText)
 					screenshotBlockingView.isHidden = false
+					irrelevantView.isHidden = true
 					spinner.isHidden = true
 
 				case .visible(let qrImage):
@@ -147,6 +164,15 @@ class ShowQRItemView: BaseView {
 					largeQRimageView.isHidden = false
 					largeQRimageView.image = qrImage
 					screenshotBlockingView.isHidden = true
+					irrelevantView.isHidden = true
+					spinner.isHidden = true
+
+				case .irrelevant(let qrImage):
+					spinner.stopAnimating()
+					largeQRimageView.isHidden = false
+					largeQRimageView.image = qrImage
+					screenshotBlockingView.isHidden = true
+					irrelevantView.isHidden = false
 					spinner.isHidden = true
 			}
 

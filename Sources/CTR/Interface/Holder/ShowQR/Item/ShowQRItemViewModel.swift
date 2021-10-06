@@ -32,6 +32,7 @@ class ShowQRItemViewModel: Logging {
 	private var previousBrightness: CGFloat?
 	private var greenCard: GreenCard
 	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
+	private var qrShouldBeHidden: Bool
 
 	private var currentQRImage: UIImage? {
 		didSet {
@@ -63,10 +64,12 @@ class ShowQRItemViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - greenCard: a greencard to display
+	///   - qrShouldInitiallyBeHidden: boolean indicating if the QR should initially be hidden.
 	///   - screenCaptureDetector: the screen capture detector
 	init(
 		delegate: ShowQRItemViewModelDelegate,
 		greenCard: GreenCard,
+		qrShouldInitiallyBeHidden: Bool = false,
 		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector(),
 		userSettings: UserSettingsProtocol = UserSettings(),
 		now: @escaping () -> Date = Date.init
@@ -75,6 +78,7 @@ class ShowQRItemViewModel: Logging {
 		self.delegate = delegate
 		self.greenCard = greenCard
 		self.screenCaptureDetector = screenCaptureDetector
+		self.qrShouldBeHidden = qrShouldInitiallyBeHidden
 		self.userSettings = userSettings
 		self.now = now
 
@@ -142,7 +146,11 @@ class ShowQRItemViewModel: Logging {
 		} else if screenIsBeingCaptured {
 			self.visibilityState = .hiddenForScreenCapture
 		} else if let currentQRImage = self.currentQRImage {
-			self.visibilityState = .visible(qrImage: currentQRImage)
+			if qrShouldBeHidden {
+				self.visibilityState = .irrelevant(qrImage: currentQRImage)
+			} else {
+				self.visibilityState = .visible(qrImage: currentQRImage)
+			}
 		} else {
 			self.visibilityState = .loading
 		}
@@ -250,5 +258,11 @@ class ShowQRItemViewModel: Logging {
 		
 		validityTimer?.invalidate()
 		validityTimer = nil
+	}
+
+	func revealIrrelevantQR() {
+
+		qrShouldBeHidden = false
+		updateQRVisibility()
 	}
 }

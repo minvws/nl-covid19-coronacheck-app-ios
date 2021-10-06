@@ -314,7 +314,8 @@ class ShowQRViewModel: Logging {
 		let viewController = ShowQRItemViewController(
 			viewModel: ShowQRItemViewModel(
 				delegate: self,
-				greenCard: item.greenCard
+				greenCard: item.greenCard,
+				qrShouldInitiallyBeHidden: false
 			)
 		)
 		viewController.isAccessibilityElement = true
