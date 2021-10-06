@@ -34,6 +34,21 @@ class GreenCardModel {
 		}
 		return nil
 	}
+
+	class func fetchByIds(objectIDs: [NSManagedObjectID]) -> Result<[GreenCard], Error> {
+
+		var result = [GreenCard]()
+		for objectID in objectIDs {
+			do {
+				if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: objectID) as? GreenCard {
+					result.append(greenCard)
+				}
+			} catch let error {
+				return .failure(error)
+			}
+		}
+		return .success(result)
+	}
 }
 
 extension GreenCard {

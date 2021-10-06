@@ -7,50 +7,47 @@
   
 import UIKit
 
-class ShowQRImageView: BaseView {
+class ShowQRView: BaseView {
 
-	enum VisibilityState: Equatable {
-		case loading
-		case visible(qrImage: UIImage)
-		case hiddenForScreenCapture
-		case screenshotBlocking(timeRemainingText: String, voiceoverTimeRemainingText: String)
-
-		var isVisible: Bool {
-			if case .visible = self { return true }
-			return false
-		}
-	}
 	/// The display constants
 	private struct ViewTraits {
+		
+		enum Dimension {
+			static let titleLineHeight: CGFloat = 22
+			static let pageButton: CGFloat = 60
+		}
 
-		// Margins
-		static let margin: CGFloat = 10.0
-		static let domesticSecurityMargin: CGFloat = 56.0
-		static let internationalSecurityMargin: CGFloat = 49.0
+		enum Margin {
+			static let edge: CGFloat = 10
+			static let domesticSecurity: CGFloat = 56
+			static let internationalSecurity: CGFloat = 49
+			static let returnToThirdPartyAppButton: CGFloat = 4
+		}
+		enum Spacing {
+			static let dosageToButton: CGFloat = 10
+			static let buttonToPageControl: CGFloat = 10
+			static let containerToReturnToThirdPartyAppButton: CGFloat = 24
+		}
 	}
 
 	private var securityViewBottomConstraint: NSLayoutConstraint?
 
-	/// The spinner
-	private let spinner: UIActivityIndicatorView = {
+	/// The container for the the QR view controllers
+	let containerView: UIView = {
 
-		let view = UIActivityIndicatorView()
+		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		if #available(iOS 13.0, *) {
-			view.style = .large
-		} else {
-			view.style = .whiteLarge
-		}
-		view.color = Theme.colors.primary
-		view.hidesWhenStopped = true
 		return view
 	}()
 
-	/// The image view for the QR image
-	let largeQRimageView: UIImageView = {
+	/// The control buttons
+	let pageControl: UIPageControl = {
 
-		let view = UIImageView()
+		let view = UIPageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.pageIndicatorTintColor = Theme.colors.grey2
+		view.currentPageIndicatorTintColor = Theme.colors.primary
+		view.hidesForSinglePage = true
 		return view
 	}()
 
@@ -71,19 +68,39 @@ class ShowQRImageView: BaseView {
 		return button
 	}()
 
-	private let screenshotBlockingView: ShowQRScreenshotBlockingView = {
+	/// The info button
+	let nextButton: UIButton = {
 
-		let view = ShowQRScreenshotBlockingView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
+		let button = UIButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.setImage(I.pageIndicatorNext(), for: .normal)
+		return button
+	}()
+
+	/// The info button
+	let previousButton: UIButton = {
+
+		let button = UIButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.setImage(I.pageIndicatorBack(), for: .normal)
+		return button
+	}()
+	
+	/// The title label
+	private let dosageLabel: Label = {
+
+		return Label(headlineBold: nil, montserrat: true).multiline()
 	}()
 
 	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
+		backgroundColor = Theme.colors.viewControllerBackground
+		
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
-		spinner.startAnimating()
+		previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
+		nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
 	}
 	
 	/// Setup the hierarchy
@@ -91,10 +108,12 @@ class ShowQRImageView: BaseView {
 		super.setupViewHierarchy()
 
 		addSubview(securityView)
-		addSubview(spinner)
-		addSubview(largeQRimageView)
+		addSubview(containerView)
+		addSubview(pageControl)
 		addSubview(returnToThirdPartyAppButton)
-		addSubview(screenshotBlockingView)
+		addSubview(nextButton)
+		addSubview(previousButton)
+		addSubview(dosageLabel)
 	}
 
 	/// Setup the constraints
@@ -105,133 +124,118 @@ class ShowQRImageView: BaseView {
 		NSLayoutConstraint.activate([
 
 			// QR View
-			largeQRimageView.topAnchor.constraint(
+			containerView.topAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.margin
+				constant: ViewTraits.Margin.edge
 			),
-			largeQRimageView.heightAnchor.constraint(equalTo: largeQRimageView.widthAnchor),
-			largeQRimageView.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.margin
+			containerView.leadingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.leadingAnchor
 			),
-			largeQRimageView.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.margin
+			containerView.trailingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.trailingAnchor
 			),
+			containerView.heightAnchor.constraint(equalTo: widthAnchor),
 
-			screenshotBlockingView.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor),
-			screenshotBlockingView.trailingAnchor.constraint(equalTo: largeQRimageView.trailingAnchor),
-			screenshotBlockingView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
-			screenshotBlockingView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
-
-			spinner.centerYAnchor.constraint(equalTo: largeQRimageView.centerYAnchor),
-			spinner.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor),
+			pageControl.topAnchor.constraint(
+				equalTo: dosageLabel.bottomAnchor,
+				constant: ViewTraits.Spacing.buttonToPageControl
+			),
+			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
 
 			// Security
 			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-			returnToThirdPartyAppButton.topAnchor.constraint(equalTo: largeQRimageView.bottomAnchor, constant: 24),
-			returnToThirdPartyAppButton.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor, constant: 4)
+			returnToThirdPartyAppButton.topAnchor.constraint(
+				equalTo: containerView.bottomAnchor,
+				constant: ViewTraits.Spacing.containerToReturnToThirdPartyAppButton
+			),
+			returnToThirdPartyAppButton.leadingAnchor.constraint(
+				equalTo: containerView.leadingAnchor,
+				constant: ViewTraits.Margin.returnToThirdPartyAppButton
+			),
+
+			nextButton.widthAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
+			nextButton.heightAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
+			nextButton.centerYAnchor.constraint(equalTo: dosageLabel.centerYAnchor),
+			nextButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+
+			previousButton.widthAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
+			previousButton.heightAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
+			previousButton.centerYAnchor.constraint(equalTo: dosageLabel.centerYAnchor),
+			previousButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+			
+			dosageLabel.topAnchor.constraint(
+				equalTo: containerView.bottomAnchor
+			),
+			dosageLabel.leadingAnchor.constraint(
+				greaterThanOrEqualTo: previousButton.trailingAnchor,
+				constant: ViewTraits.Spacing.dosageToButton
+			),
+			dosageLabel.trailingAnchor.constraint(
+				lessThanOrEqualTo: nextButton.leadingAnchor,
+				constant: -ViewTraits.Spacing.dosageToButton
+			),
+			dosageLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 
 		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
 			equalTo: bottomAnchor,
-			constant: ViewTraits.domesticSecurityMargin
+			constant: ViewTraits.Margin.domesticSecurity
 		)
 		securityViewBottomConstraint?.isActive = true
 
-		bringSubviewToFront(largeQRimageView)
+		bringSubviewToFront(containerView)
+		bringSubviewToFront(nextButton)
+		bringSubviewToFront(previousButton)
+		bringSubviewToFront(dosageLabel)
 	}
 
 	/// Setup all the accessibility traits
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
-
-        largeQRimageView.isAccessibilityElement = true
-        largeQRimageView.accessibilityTraits = .image
         
-        accessibilityElements = [largeQRimageView]
+        accessibilityElements = [containerView]
 	}
 
 	@objc func didTapThirdPartyAppButton() {
 
-		didTapThirdPartyAppButtonCommand?()
+		didTapPreviousButtonCommand?()
+	}
+
+	@objc func didTapPreviousButton() {
+
+		didTapPreviousButtonCommand?()
+	}
+
+	@objc func didTapNextButton() {
+
+		didTapNextButtonCommand?()
 	}
 
 	// MARK: Public Access
-
-	var visibilityState: VisibilityState = .loading {
+	
+	/// The dosage
+	var dosage: String? {
 		didSet {
-
-			switch visibilityState {
-				case .hiddenForScreenCapture:
-					returnToThirdPartyAppButton.isHidden = true
-					spinner.stopAnimating()
-					largeQRimageView.isHidden = true
-					screenshotBlockingView.isHidden = true
-					spinner.isHidden = true
-
-				case .loading:
-					returnToThirdPartyAppButton.isHidden = true
-					spinner.startAnimating()
-					largeQRimageView.isHidden = true
-					screenshotBlockingView.isHidden = true
-					spinner.isHidden = false
-                    
-				case .screenshotBlocking(let timeRemainingText, let voiceoverTimeRemainingText):
-					spinner.stopAnimating()
-					returnToThirdPartyAppButton.isHidden = true
-					largeQRimageView.isHidden = true
-					screenshotBlockingView.setCountdown(text: timeRemainingText, voiceoverText: voiceoverTimeRemainingText)
-					screenshotBlockingView.isHidden = false
-					spinner.isHidden = true
-
-				case .visible(let qrImage):
-					returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil
-					spinner.stopAnimating()
-					largeQRimageView.isHidden = false
-					largeQRimageView.image = qrImage
-					screenshotBlockingView.isHidden = true
-					spinner.isHidden = true
-			}
-
-			// Update accessibility at the moment that it becomes .screenshotBlocking from another state:
-			switch (oldValue, visibilityState) {
-				case (.screenshotBlocking, .screenshotBlocking): break // ignore
-				case (_, .screenshotBlocking):
-					accessibilityElements = [screenshotBlockingView]
-
-					UIAccessibility.post(notification: .layoutChanged, argument: screenshotBlockingView)
-
-					DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-						UIAccessibility.post(
-							notification: .announcement,
-							argument: L.holderShowqrScreenshotwarningTitle()
-						)
-					}
-				default: break
-			}
-		}
-	}
-
-	/// The accessibility description
-	var accessibilityDescription: String? {
-		didSet {
-            largeQRimageView.accessibilityLabel = accessibilityDescription
+			dosageLabel.attributedText = dosage?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
 		}
 	}
 
 	var returnToThirdPartyAppButtonTitle: String? {
 		didSet {
 			returnToThirdPartyAppButton.title = returnToThirdPartyAppButtonTitle
-			returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil || !self.visibilityState.isVisible
+			returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil
 		}
 	}
 
 	var didTapThirdPartyAppButtonCommand: (() -> Void)?
+
+	var didTapPreviousButtonCommand: (() -> Void)?
+
+	var didTapNextButtonCommand: (() -> Void)?
 
 	/// Play the animation
 	func play() {
@@ -248,6 +252,6 @@ class ShowQRImageView: BaseView {
 	func setupForInternational() {
 
 		securityView.setupForInternational()
-		securityViewBottomConstraint?.constant = ViewTraits.internationalSecurityMargin
+		securityViewBottomConstraint?.constant = ViewTraits.Margin.internationalSecurity
 	}
 }

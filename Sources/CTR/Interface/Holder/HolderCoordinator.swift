@@ -270,17 +270,16 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	/// Navigate to enlarged QR
-	private func navigateToShowQR(_ greenCard: GreenCard) {
+	private func navigateToShowQRs(_ greenCards: [GreenCard]) {
 
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
 				coordinator: self,
-				greenCard: greenCard,
-				thirdPartyTicketAppName: thirdpartyTicketApp?.name,
-				userSettings: UserSettings(),
-				now: Date.init
+				greenCards: greenCards,
+				thirdPartyTicketAppName: thirdpartyTicketApp?.name
 			)
 		)
+
 		destination.modalPresentationStyle = .fullScreen
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
@@ -418,29 +417,29 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
-		guard let greenCardObjectID = greenCardObjectIDs.first else { return } // Temporary
 
-		do {
-			if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: greenCardObjectID) as? GreenCard {
-				navigateToShowQR(greenCard)
+		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
+		switch result {
+			case let .success(greenCards):
+				if greenCards.isEmpty {
+					showAlertWithErrorCode("i 610 000 061")
 			} else {
-				let alertController = UIAlertController(
-					title: L.generalErrorTitle(),
-					message: String(format: L.generalErrorTechnicalCustom("150")),
-					preferredStyle: .alert)
-
-				alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
-				(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
+				navigateToShowQRs(greenCards)
 			}
-		} catch let error {
-			let alertController = UIAlertController(
-				title: L.generalErrorTitle(),
-				message: L.generalErrorTechnicalCustom("CD_\((error as NSError).code))"),
-				preferredStyle: .alert)
-
-			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
-			(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
+			case .failure:
+			showAlertWithErrorCode("i 610 000 062")
 		}
+	}
+
+	private func showAlertWithErrorCode(_ code: String) {
+		
+		let alertController = UIAlertController(
+			title: L.generalErrorTitle(),
+			message: String(format: L.generalErrorTechnicalCustom(code)),
+			preferredStyle: .alert)
+
+		alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
+		(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 	}
 
 	func userWishesToLaunchThirdPartyTicketApp() {
