@@ -220,15 +220,4 @@ class QRCardViewTests: XCTestCase {
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
 		sut.assertImage()
 	}
-
-	func testStackAppearance_level4() {
-		let sut = QRCardView(stackSize: 4)
-		sut.title = "Title"
-		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.shouldStyleForEU = true
-
-		// Assert
-		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage()
-	}
 }
