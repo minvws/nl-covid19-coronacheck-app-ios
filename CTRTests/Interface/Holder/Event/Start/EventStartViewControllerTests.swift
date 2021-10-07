@@ -24,7 +24,7 @@ class EventStartViewControllerTests: XCTestCase {
 
 		super.setUp()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
+		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination, validAfterDays: 11)
 		sut = EventStartViewController(viewModel: viewModel)
 		window = UIWindow()
 	}

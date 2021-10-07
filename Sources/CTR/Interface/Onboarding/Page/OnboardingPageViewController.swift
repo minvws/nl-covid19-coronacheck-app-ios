@@ -24,6 +24,9 @@ class OnboardingPageViewController: BaseViewController {
     /// The delegate
     weak var delegate: OnboardingPageViewControllerDelegate?
 	
+	/// Disable swiping to launch screen
+	override var enableSwipeBack: Bool { false }
+	
 	/// Initializer
 	/// - Parameter viewModel: view model
 	init(viewModel: OnboardingPageViewModel) {

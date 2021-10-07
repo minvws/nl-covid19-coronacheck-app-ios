@@ -50,16 +50,6 @@ final class PaperCertificateAboutScanView: ScrolledStackWithButtonView {
 		stackView.setCustomSpacing(ViewTraits.Spacing.title, after: titleLabel)
 	}
 	
-	override func setupViewConstraints() {
-		super.setupViewConstraints()
-		
-		// Disable the bottom constraint of the scroll view, add our own
-		bottomScrollViewConstraint?.isActive = false
-		scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor).isActive = true
-		
-		setupPrimaryButton()
-	}
-	
 	// MARK: Public Access
 
 	/// The title
@@ -75,10 +65,14 @@ final class PaperCertificateAboutScanView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(text: message,
-														font: Theme.fonts.body,
-														textColor: Theme.colors.dark,
-														paragraphSpacing: 0)
+			messageTextView.attributedText = .makeFromHtml(
+				text: message,
+				style: NSAttributedString.HTMLStyle(
+					font: Theme.fonts.body,
+					textColor: Theme.colors.dark,
+					paragraphSpacing: 0
+				)
+			)
 		}
 	}
 }

@@ -1,3 +1,4 @@
+"holder.dashboard.qr.button.viewQRs" = "Bekijk QR-codes";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "De app heeft af en toe verbinding met de server nodig om je QR-code te vernieuwen. Dat is niet gelukt door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
 "holder.tokenentry.regularflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.regularflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
@@ -106,7 +107,7 @@
 
 "holder.recovery.wrong.body" = "<p>Kloppen er gegevens niet? Neem contact op met je testlocatie. Zij kunnen de gegevens aanpassen.</p>";
 "general.retry" = "Probeer opnieuw";
-"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, het is niet gelukt de QR-code te vernieuwen. Open de app opnieuw over 10 minuten.<br />Helpt dat niet? Bel dan de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis) en geef de foutcode (ServerError) door.</p>";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, het is niet gelukt de QR-code te vernieuwen. Open de app opnieuw over 10 minuten.<br /><br />Helpt dat niet? Bel dan de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis) en geef de foutcode (i 075) door.</p>";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "Je hebt internet nodig om je QR-code te kunnen gebruiken.";
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Kan je binnenkort verbinding maken met het internet?";
 "holder.dashboard.strippen.expiring.nointernet.alert.message" = "De QR-code heeft af en toe internet nodig. Zonder internetverbinding kan je jouw QR-code nog %@ dagen gebruiken. Ook daarna kun je de QR-code weer gebruiken wanneer je internet hebt.";
@@ -127,6 +128,7 @@
 "holder.recovery.start.message" = "<p>Heb je corona gehad? Dan kun je van de positieve testuitslag van de GGD een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
 "holder.chooseqrcodetype.option.recovery.title" = "Een herstelbewijs";
 "holder.chooseqrcodetype.option.recovery.subtitle" = "Uit de test blijkt dat ik corona heb gehad";
+"holder.showqr.details" = "Details";
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
 "holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
 "holder.showqr.eu.about.recovery.description" = "Ben je in het buitenland of ga je de grens over? Dan zijn er meer gegevens nodig dan in Nederland. Daarom staan in jouw internationale QR-code de volgende gegevens:";
@@ -141,6 +143,10 @@
 "holder.showqr.eu.about.recovery.validuntil" = "Geldig tot / Valid to*:";
 "holder.showqr.eu.about.recovery.identifier" = "Uniek certificaatnummer / Unique certificate identifier:";
 "holder.showqr.eu.about.recovery.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
+"holder.showqr.qrhidden" = "QR-code verborgen";
+"holder.showqr.showqr" = "Laat toch zien";
+"holder.showqr.notneeded" = "Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.";
+"holder.showqr.overvaccinated" = "Deze QR-code is mogelijk niet overal geldig. Je kan dan dosis %@/%@ gebruiken";
 "general.error.cryptolib.title" = "Sorry, er gaat iets mis";
 "general.error.cryptolib.message" = "Neem contact op met onze helpdesk en geef de foutcode (%@) door.";
 "general.error.cryptolib.retry" = "Probeer opnieuw";
@@ -375,7 +381,7 @@
 "holder.dashboard.qr.title" = "Mijn bewijs";
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Je internationale QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
-"holder.dashboard.qr.eu.vaccinecertificatedoses" = "Vaccinatiebewijs: dosis %@ van %@";
+"holder.dashboard.qr.eu.vaccinecertificatedoses" = "Dosis %@/%@";
 "holder.dashboard.qr.backToThirdPartyApp" = "Terug naar de %@";
 
 "holder.clockDeviationDetected.title" = "Controleer de tijd van je telefoon";
@@ -409,7 +415,9 @@
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat dat je een geldig bewijs hebt. Niet of je een test of vaccinatie hebt gedaan.</p><p>Om zeker te zijn dat de QR-code bij jou hoort staan er enkele gegevens in de QR-code. Het gaat om de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand.</p><p>Jouw gegevens: <b>%@</b></p><p></p><p>*Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (-).</p>";
 "holder.showqr.eu.title" = "Internationale QR-code";
+"holder.showqr.qr.eu.vaccinecertificatedoses" = "Dosis %@/%@";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
+"holder.showqr.eu.about.vaccination.title" = "Over dosis %@/%@";
 "holder.showqr.eu.about.vaccination.description" = "Ben je in het buitenland of ga je de grens over? Dan zijn er meer gegevens nodig dan in Nederland. Daarom staan in jouw internationale QR-code de volgende gegevens:";
 "holder.showqr.eu.about.vaccination.name" = "Naam / Name:";
 "holder.showqr.eu.about.vaccination.dateofbirth" = "Geboortedatum / Date of birth*:";

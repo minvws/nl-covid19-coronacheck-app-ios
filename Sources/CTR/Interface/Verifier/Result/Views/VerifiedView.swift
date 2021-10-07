@@ -31,7 +31,7 @@ final class VerifiedView: BaseView, AccessViewable {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
-		view.image = .access
+		view.image = I.access()
 		return view
 	}()
 	

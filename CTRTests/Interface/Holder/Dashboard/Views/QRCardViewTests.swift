@@ -17,28 +17,28 @@ class QRCardViewTests: XCTestCase {
 	}
 
 	func testThreeRowSampleContent() {
-		// Arrange
 
-		let sut = QRCardView()
+		// Arrange
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
 
-		sut.originRows = [
-			// Isn't displayed
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Past"], kind: .past) }
-			),
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Current"], kind: .current) }
-			),
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Future"], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false)) }
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Past"
+				], kind: .past),
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Current"
+				], kind: .current),
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Future"
+				], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false))
+			]
+		}
 
 		sut.expiryEvaluator = { _ in "Expiry Date text" }
 		sut.buttonEnabledEvaluator = { _ in true }
@@ -52,17 +52,17 @@ class QRCardViewTests: XCTestCase {
 	func testOneRowSampleContent() {
 		// Arrange
 
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
-
-		sut.originRows = [
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Current"], kind: .current) }
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Current"
+				], kind: .current)
+			]
+		}
 
 		sut.expiryEvaluator = { _ in "Expiry Date text" }
 		sut.buttonEnabledEvaluator = { _ in true }
@@ -76,17 +76,17 @@ class QRCardViewTests: XCTestCase {
 	func testButtonEnabledWithLoadingStatesContent() {
 		// Arrange
 
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
-
-		sut.originRows = [
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Current"], kind: .current) }
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Current"
+				], kind: .current)
+			]
+		}
 
 		sut.expiryEvaluator = { _ in "Expiry Date text" }
 
@@ -122,17 +122,17 @@ class QRCardViewTests: XCTestCase {
 
 	func testBecomesAutomaticallyValidRowFooter() {
 		// Arrange
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
-
-		sut.originRows = [
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Future"], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)) }
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Future"
+				], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true))
+			]
+		}
 
 		sut.expiryEvaluator = { _ in "Expiry Date text" }
 		sut.buttonEnabledEvaluator = { _ in false }
@@ -145,17 +145,17 @@ class QRCardViewTests: XCTestCase {
 
 	func testHidesAutomaticallyValidRowFooterIfButtonIsEnabled() {
 		// Arrange
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
-
-		sut.originRows = [
-			QRCardView.OriginRow(
-				type: "Type of Proof",
-				validityString: { _ in .init(texts: ["Future"], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)) }
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Type of Proof:",
+					"Future"
+				], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true))
+			]
+		}
 
 		sut.expiryEvaluator = { _ in "Expiry Date text" }
 		sut.buttonEnabledEvaluator = { _ in true }
@@ -168,23 +168,53 @@ class QRCardViewTests: XCTestCase {
 
 	func testSubtextField() {
 		// Arrange
-		let sut = QRCardView()
+		let sut = QRCardView(stackSize: 1)
 		sut.title = "Title"
 		sut.viewQRButtonTitle = "viewQRButtonTitle"
-		sut.region = "Region"
 		sut.shouldStyleForEU = true
-		sut.originRows = [
-			QRCardView.OriginRow(
-				type: nil,
-				validityString: { _ in .init(
-					texts: ["Vaccinatiebewijs: dosis 2 van 2", "Vaccinatiedatum: 15 juli 2021"],
-					kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false))
-				}
-			)
-		]
+		sut.validityTexts = { (date: Date) -> [HolderDashboardViewController.ValidityText] in
+			return [
+				HolderDashboardViewController.ValidityText(lines: [
+					"Vaccinatiebewijs: dosis 2 van 2", "Vaccinatiedatum: 15 juli 2021"
+				], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false))
+			]
+		}
 
 		sut.buttonEnabledEvaluator = { _ in true }
 		sut.isLoading = false
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage()
+	}
+
+	func testStackAppearance_level1() {
+		let sut = QRCardView(stackSize: 1)
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.shouldStyleForEU = true
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage()
+	}
+
+	func testStackAppearance_level2() {
+		let sut = QRCardView(stackSize: 2)
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.shouldStyleForEU = true
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage()
+	}
+
+	func testStackAppearance_level3() {
+		let sut = QRCardView(stackSize: 3)
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.shouldStyleForEU = true
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)

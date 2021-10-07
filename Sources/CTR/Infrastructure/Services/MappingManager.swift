@@ -15,6 +15,11 @@ protocol MappingManaging {
 
 	func getProviderIdentifierMapping(_ code: String? ) -> String?
 
+	func getDisplayIssuer(_ issuer: String) -> String
+
+	func getDisplayCountry(_ country: String) -> String
+	
+	func getDisplayFacility(_ facility: String) -> String
 }
 
 class MappingManager: MappingManaging, Logging {
@@ -39,4 +44,26 @@ class MappingManager: MappingManaging, Logging {
 
 		return providerIdentifiers.first(where: { $0.code == code })?.name
 	}
+
+	func getDisplayIssuer(_ issuer: String) -> String {
+		guard issuer == "Ministry of Health Welfare and Sport" else {
+			return issuer
+		}
+		return L.holderVaccinationAboutIssuer()
+	}
+
+	func getDisplayCountry(_ country: String) -> String {
+		guard ["NL", "NLD"].contains(country) else {
+			return country
+		}
+		return L.holderVaccinationAboutCountry()
+	}
+
+	func getDisplayFacility(_ facility: String) -> String {
+		guard facility == "Facility approved by the State of The Netherlands" else {
+			return facility
+		}
+		return L.holderDccListFacility()
+	}
+
 }

@@ -78,9 +78,11 @@ final class EmptyDashboardView: BaseView {
 		didSet {
 			contentTextView.attributedText = .makeFromHtml(
 				text: message,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark,
-				paragraphSpacing: 0
+				style: NSAttributedString.HTMLStyle(
+					font: Theme.fonts.body,
+					textColor: Theme.colors.dark,
+					paragraphSpacing: 0
+				)
 			)
 		}
 	}

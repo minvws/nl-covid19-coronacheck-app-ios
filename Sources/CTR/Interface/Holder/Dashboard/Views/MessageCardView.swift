@@ -31,11 +31,11 @@ class MessageCardView: BaseView {
 	}()
 
 	/// The info button
-	private let infoButton: UIButton = {
+	private let infoButton: TappableButton = {
 
-		let button = UIButton()
+		let button = TappableButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.setImage(.questionMark, for: .normal)
+		button.setImage(I.questionMark(), for: .normal)
 		return button
 	}()
 

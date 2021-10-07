@@ -23,7 +23,9 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		networkSpy = NetworkSpy(configuration: .development)
-		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination, networkManager: networkSpy)
+		Services.use(networkSpy)
+
+		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination)
 	}
 
 	func test_backButtonTapped_loadingState() {
@@ -62,8 +64,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -96,8 +97,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -131,8 +131,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -165,8 +164,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -188,8 +186,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -212,8 +209,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -235,8 +231,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -270,8 +265,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -304,8 +298,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -338,8 +331,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -372,8 +364,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -406,8 +397,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -441,8 +431,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -477,8 +466,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -506,8 +494,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -527,8 +514,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then
@@ -552,8 +538,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
+			eventMode: .vaccination
 		)
 
 		// Then

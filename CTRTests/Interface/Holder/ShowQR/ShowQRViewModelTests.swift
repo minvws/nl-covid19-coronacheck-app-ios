@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import UIKit
 import XCTest
@@ -17,20 +16,16 @@ class ShowQRViewModelTests: XCTestCase {
 	var sut: ShowQRViewModel!
 
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
-	var cryptoManagerSpy: CryptoManagerSpy!
 	var dataStoreManager: DataStoreManaging!
-	var screenCaptureDetector: ScreenCaptureDetectorSpy!
-	var userSettingsSpy: UserSettingsSpy!
-	var remoteConfigManagingSpy: RemoteConfigManagingSpy!
+	var cryptoManagerSpy: CryptoManagerSpy!
 
 	override func setUp() {
 		super.setUp()
 		dataStoreManager = DataStoreManager(.inMemory)
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		screenCaptureDetector = ScreenCaptureDetectorSpy()
-		userSettingsSpy = UserSettingsSpy()
-		remoteConfigManagingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
+
+		Services.use(cryptoManagerSpy)
 	}
 
 	// MARK: - Tests
@@ -50,17 +45,40 @@ class ShowQRViewModelTests: XCTestCase {
 		// When
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
 		)
 
 		// Then
-		expect(self.sut.visibilityState) == .loading
 		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.dosage).to(beNil())
 		expect(self.sut.infoButtonAccessibility) == L.holderShowqrDomesticAboutTitle()
+		expect(self.sut.items).toEventually(haveCount(1))
+	}
+
+	func test_multiple_domesticGreenCards() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+
+		// When
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard, greenCard, greenCard],
+			thirdPartyTicketAppName: nil
+		)
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.dosage).to(beNil())
+		expect(self.sut.infoButtonAccessibility) == L.holderShowqrDomesticAboutTitle()
+		expect(self.sut.items).toEventually(haveCount(3))
 	}
 
 	/// Test all the default content
@@ -78,256 +96,31 @@ class ShowQRViewModelTests: XCTestCase {
 		// When
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
 		)
 
 		// Then
-		expect(self.sut.visibilityState) == .loading
 		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.dosage).to(beNil())
 		expect(self.sut.infoButtonAccessibility) == L.holderShowqrEuAboutTitle()
+		expect(self.sut.items).toEventually(haveCount(1))
 	}
 
-	func test_constants() {
-		expect(ShowQRViewModel.domesticCorrectionLevel) == "M"
-		expect(ShowQRViewModel.internationalCorrectionLevel) == "Q"
-		expect(ShowQRViewModel.screenshotWarningMessageDuration) == 180
-	}
-
-	func test_validity_withDomesticGreenCard_withoutCredential() throws {
+	func test_delegate_itemIsNotValid() {
 
 		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
-				type: .domestic,
-				withValidCredential: false
-			)
-		)
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			greenCards: [],
+			thirdPartyTicketAppName: nil
 		)
 
 		// When
-		sut?.checkQRValidity()
+		sut.itemIsNotValid()
 
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == true
-	}
-
-	func test_validity_withEuGreenCard_withoutCredential() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
-				type: .eu,
-				withValidCredential: false
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
-		)
-
-		// When
-		sut?.checkQRValidity()
-
-		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == true
-	}
-
-	func test_validity_withDomesticGreenCard_withValidCredential() throws {
-		remoteConfigManagingSpy.stubbedGetConfigurationResult = .default
-		
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
-		)
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
-
-		// When
-		sut?.checkQRValidity()
-
-		// Then
-		expect(self.cryptoManagerSpy.invokedGenerateQRmessage).toEventually(beTrue())
-		expect(self.sut.visibilityState).toEventually(beVisible())
-		expect(self.sut.validityTimer).toEventuallyNot(beNil())
-		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == false
-	}
-
-	func test_validity_withEuGreenCard_withValidCredential() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
-				type: .eu,
-				withValidCredential: true
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
-		)
-
-		// When
-		sut?.checkQRValidity()
-
-		// Then
-		expect(self.cryptoManagerSpy.invokedGenerateQRmessage).toEventually(beFalse())
-		expect(self.sut.visibilityState).toEventually(beVisible())
-		expect(self.sut.validityTimer).toEventuallyNot(beNil())
-		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == false
-	}
-
-	/// Test taking a screenshot
-	func testScreenshot() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
-				type: .domestic,
-				withValidCredential: false
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
-		)
-
-		// When
-		screenCaptureDetector.invokedScreenshotWasTakenCallback?()
-
-		// Then
-		expect(self.sut.visibilityState).to(beScreenshotBlocking())
-	}
-
-	func testTakingAScreenshotPersistsDate() throws {
-
-		// Given
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
-
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
-				type: .domestic,
-				withValidCredential: false
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			remoteConfigManager: remoteConfigManagingSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy,
-			now: { now }
-		)
-
-		// When
-		screenCaptureDetector.invokedScreenshotWasTakenCallback?()
-
-		// Then
-		expect(self.userSettingsSpy.invokedLastScreenshotTime).toEventually(equal(now))
-	}
-
-	func testHavingAPriorUnexpiredScreenshotStartsScreenshotBlocker() throws {
-
-		// Given
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
-		userSettingsSpy.stubbedLastScreenshotTime = now.addingTimeInterval(-10)
-
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
-				type: .domestic,
-				withValidCredential: false
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			remoteConfigManager: remoteConfigManagingSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy,
-			now: { now }
-		)
-
-		// Then
-		expect(self.sut.visibilityState).toEventually(beScreenshotBlocking(test: { message, voiceoverMessage in
-			expect(message) == "Je QR-code komt terug in 2:50"
-			expect(voiceoverMessage) == "Je QR-code komt terug in 2 minuten en 50 seconden"
-		}))
-	}
-
-	func testHideForCapture() throws {
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
-		)
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
-
-		// When
-		sut?.checkQRValidity()
-
-		// Then
-		expect(self.sut.visibilityState).toEventually(beVisible())
-
-		screenCaptureDetector.invokedScreenCaptureDidChangeCallback?(true)
-		expect(self.sut.visibilityState) == .hiddenForScreenCapture
-
-		// And disable again:
-		screenCaptureDetector.invokedScreenCaptureDidChangeCallback?(false)
-		expect(self.sut.visibilityState).toEventually(beVisible())
 	}
 
 	func test_moreInformation_noValidCredential() throws {
@@ -341,11 +134,8 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
 		)
 
 		// When
@@ -366,11 +156,8 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
 		)
 		cryptoManagerSpy.stubbedReadDomesticCredentialsResult = DomesticCredentialAttributes(
 			birthDay: "30",
@@ -404,11 +191,8 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
 		)
 		cryptoManagerSpy.stubbedReadDomesticCredentialsResult = nil
 
@@ -430,11 +214,8 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
 		)
 		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes(
 			credentialVersion: 1,
@@ -485,7 +266,7 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetails) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetailsParameters?.title) == L.holderShowqrEuAboutTitle()
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetailsParameters?.title) == L.holderShowqrEuAboutVaccinationTitle("2", "2")
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetailsParameters?.description) == L.holderShowqrEuAboutVaccinationDescription()
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetailsParameters?.details) == expectedDetails
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetailsParameters?.dateInformation) == L.holderShowqrEuAboutVaccinationDateinformation()
@@ -501,14 +282,10 @@ class ShowQRViewModelTests: XCTestCase {
 				withValidCredential: true
 			)
 		)
-
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: "RollerDiscoParties",
-			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: "RollerDiscoParties"
 		)
 
 		// Act
@@ -517,57 +294,5 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyTicketApp) == true
-	}
-}
-
-extension GreenCardModel {
-
-	static func createTestGreenCard(dataStoreManager: DataStoreManaging, type: GreenCardType, withValidCredential: Bool) -> GreenCard? {
-
-		var result: GreenCard?
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-
-			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				result = GreenCardModel.create(
-					type: type,
-					wallet: wallet,
-					managedContext: context
-				)
-				if withValidCredential, let greenCard = result {
-					let now = Date().timeIntervalSince1970 - 200
-					let expiration = now + 3600
-					CredentialModel.create(
-						data: Data(),
-						validFrom: Date(timeIntervalSince1970: now),
-						expirationTime: Date(timeIntervalSince1970: expiration),
-						greenCard: greenCard,
-						managedContext: context
-					)
-				}
-			}
-		}
-		return result
-	}
-}
-
-private func beVisible(test: @escaping (UIImage) -> Void = { _ in }) -> Predicate<ShowQRImageView.VisibilityState> {
-	return Predicate.define("be .expiredQR with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .visible(qrImage: image) = actual {
-			test(image)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-private func beScreenshotBlocking(test: @escaping (String, String) -> Void = { _, _ in }) -> Predicate<ShowQRImageView.VisibilityState> {
-	return Predicate.define("be .expiredQR with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .screenshotBlocking(timeRemainingText, voiceoverTimeRemainingText) = actual {
-			test(timeRemainingText, voiceoverTimeRemainingText)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
 	}
 }

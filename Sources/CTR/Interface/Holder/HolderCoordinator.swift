@@ -49,7 +49,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func openUrl(_ url: URL, inApp: Bool)
 
-	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID)
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
 
 	func userWishesToLaunchThirdPartyTicketApp()
 
@@ -70,8 +70,6 @@ class HolderCoordinator: SharedCoordinator {
 
 	/// If set, this should be handled at the first opportunity:
 	private var unhandledUniversalLink: UniversalLink?
-
-	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
 	/// Restricts access to GGD test provider login
 	private var isGGDEnabled: Bool {
@@ -204,7 +202,8 @@ class HolderCoordinator: SharedCoordinator {
 		let destination = ChooseQRCodeTypeViewController(
 			viewModel: ChooseQRCodeTypeViewModel(
 				coordinator: self
-			)
+			),
+			isRootViewController: false
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
@@ -214,21 +213,13 @@ class HolderCoordinator: SharedCoordinator {
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
-				cryptoManager: cryptoManager,
-				datasource: HolderDashboardDatasource(
-					cryptoManaging: Services.cryptoManager,
-					walletManager: Services.walletManager,
-					now: { Date() }
-				),
+				datasource: HolderDashboardQRCardDatasource(now: { Date() }),
 				strippenRefresher: DashboardStrippenRefresher(
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
-					walletManager: Services.walletManager,
-					greencardLoader: Services.greenCardLoader,
 					reachability: try? Reachability(),
 					now: { Date() }
 				),
 				userSettings: UserSettings(),
-				remoteConfigManager: Services.remoteConfigManager,
 				now: { Date() }
 			)
 		)
@@ -244,11 +235,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	private func presentAsBottomSheet(_ viewController: UIViewController) {
 		
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.present(viewController, animated: true, completion: nil)
+		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.presentBottomSheet(viewController)
 	}
 }
 
@@ -277,19 +264,16 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	/// Navigate to enlarged QR
-	private func navigateToShowQR(_ greenCard: GreenCard) {
+	private func navigateToShowQRs(_ greenCards: [GreenCard]) {
 
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
 				coordinator: self,
-				greenCard: greenCard,
-				thirdPartyTicketAppName: thirdpartyTicketApp?.name,
-				cryptoManager: cryptoManager,
-				remoteConfigManager: Services.remoteConfigManager,
-				userSettings: UserSettings(),
-				now: Date.init
+				greenCards: greenCards,
+				thirdPartyTicketAppName: thirdpartyTicketApp?.name
 			)
 		)
+
 		destination.modalPresentationStyle = .fullScreen
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
@@ -426,28 +410,30 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 
-	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
-		do {
-			if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: greenCardObjectID) as? GreenCard {
-				navigateToShowQR(greenCard)
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
+
+		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
+		switch result {
+			case let .success(greenCards):
+				if greenCards.isEmpty {
+					showAlertWithErrorCode("i 610 000 061")
 			} else {
-				let alertController = UIAlertController(
-					title: L.generalErrorTitle(),
-					message: String(format: L.generalErrorTechnicalCustom("150")),
-					preferredStyle: .alert)
-
-				alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
-				(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
+				navigateToShowQRs(greenCards)
 			}
-		} catch let error {
-			let alertController = UIAlertController(
-				title: L.generalErrorTitle(),
-				message: L.generalErrorTechnicalCustom("CD_\((error as NSError).code))"),
-				preferredStyle: .alert)
-
-			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
-			(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
+			case .failure:
+			showAlertWithErrorCode("i 610 000 062")
 		}
+	}
+
+	private func showAlertWithErrorCode(_ code: String) {
+		
+		let alertController = UIAlertController(
+			title: L.generalErrorTitle(),
+			message: String(format: L.generalErrorTechnicalCustom(code)),
+			preferredStyle: .alert)
+
+		alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
+		(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 	}
 
 	func userWishesToLaunchThirdPartyTicketApp() {
@@ -513,7 +499,8 @@ extension HolderCoordinator: MenuDelegate {
 				let destination = ChooseQRCodeTypeViewController(
 					viewModel: ChooseQRCodeTypeViewModel(
 						coordinator: self
-					)
+					),
+					isRootViewController: true
 				)
 				navigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
@@ -578,11 +565,18 @@ extension HolderCoordinator: EventFlowDelegate {
 
 	func eventFlowDidCancel() {
 
-		/// The user cancelled the flow. Go back one page
+		/// The user cancelled the flow. Go back one page.
 
 		removeChildCoordinator()
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+	}
+	
+	func eventFlowDidCancelFromBackSwipe() {
+		
+		/// The user cancelled the flow from back swipe.
+		
+		removeChildCoordinator()
 	}
 }
 

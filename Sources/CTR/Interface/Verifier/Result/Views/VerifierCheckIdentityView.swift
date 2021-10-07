@@ -51,9 +51,9 @@ class VerifierCheckIdentityView: BaseView {
 		return view
 	}()
 	
-	let footerButtonView: VerifierFooterButtonView = {
+	let footerButtonView: FooterButtonView = {
 		
-		let footerView = VerifierFooterButtonView()
+		let footerView = FooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false
 		return footerView
 	}()
@@ -63,6 +63,18 @@ class VerifierCheckIdentityView: BaseView {
 		button.contentHorizontalAlignment = .leading
 		return button
 	}()
+	
+	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
+	
+	/// Setup the views
+	override func setupViews() {
+		super.setupViews()
+		
+		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
+			let translatedOffset = scrollView.translatedBottomScrollOffset
+			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
+		}
+	}
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {

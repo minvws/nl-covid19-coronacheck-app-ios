@@ -85,18 +85,7 @@ class ListEventsViewModel: Logging {
 
 		viewState = .loading(
 			content: Content(
-				title: {
-					switch eventMode {
-						case .recovery:
-							return L.holderRecoveryListTitle()
-						case .paperflow:
-							return L.holderDccListTitle()
-						case .test:
-							return L.holderTestresultsResultsTitle()
-						case .vaccination:
-							return L.holderVaccinationListTitle()
-					}
-				}(),
+				title: eventMode.title,
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -132,19 +121,7 @@ class ListEventsViewModel: Logging {
 
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
-			subTitle: {
-				switch eventMode {
-					case .recovery:
-						return L.holderRecoveryAlertMessage()
-					case .paperflow:
-						return L.holderDccAlertMessage()
-					case .test:
-						return L.holderTestAlertMessage()
-					case .vaccination:
-						return L.holderVaccinationAlertMessage()
-
-				}
-			}(),
+			subTitle: eventMode.alertBody,
 			cancelAction: { [weak self] _ in
 				self?.goBack()
 			},
@@ -186,8 +163,10 @@ class ListEventsViewModel: Logging {
 		var eventModeForStorage = eventMode
 
 		if let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
-			let cryptoManager = cryptoManager,
-			let dccEventType = dccEvent.getEventType(cryptoManager: cryptoManager) {
+			let credentialData = dccEvent.credential.data(using: .utf8),
+			let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
+			let dccEventType = euCredentialAttributes.eventMode {
+
 			eventModeForStorage = dccEventType
 			logVerbose("Setting eventModeForStorage to \(eventModeForStorage.rawValue)")
 		}
@@ -364,7 +343,7 @@ class ListEventsViewModel: Logging {
 			)
 
 			// Store the new events
-			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
+			if let maxIssuedAt = getMaxIssuedAt(wrapper: response.wrapper),
 			   let jsonData = data {
 				success = success && walletManager.storeEventGroup(
 					eventModeForStorage,
@@ -380,6 +359,46 @@ class ListEventsViewModel: Logging {
 			}
 		}
 		onCompletion(success)
+	}
+
+	private func getMaxIssuedAt(wrapper: EventFlow.EventResultWrapper) -> Date? {
+
+		// 2.0
+		if let result = wrapper.result,
+		   let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) {
+			return sampleDate
+		}
+
+		// 3.0
+		let maxIssuedAt: Date? = wrapper.events?
+			.compactMap {
+				if $0.vaccination != nil {
+					return $0.vaccination?.dateString
+				} else if $0.negativeTest != nil {
+					return $0.negativeTest?.sampleDateString
+				} else if $0.recovery != nil {
+					return $0.recovery?.sampleDate
+				} else if $0.dccEvent != nil {
+					if let credentialData = $0.dccEvent?.credential.data(using: .utf8) {
+						return cryptoManager?.readEuCredentials(credentialData)?.maxIssuedAt
+					}
+					return nil
+				}
+				return $0.positiveTest?.sampleDateString
+			}
+			.compactMap(Formatter.getDateFrom)
+			.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
+
+				switch latestDateFound {
+					case let latestDateFound? where nextDate > latestDateFound:
+						return nextDate
+					case .none:
+						return nextDate
+					default:
+						return latestDateFound
+				}
+			}
+		return maxIssuedAt
 	}
 }
 

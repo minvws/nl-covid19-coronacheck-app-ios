@@ -128,43 +128,6 @@ struct EventFlow {
 		let result: TestResult? // 2.0
 		var events: [Event]? = [] // 3.0
 
-		func getMaxIssuedAt() -> Date? {
-
-			// 2.0
-			if let result = result,
-			   let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) {
-				return sampleDate
-			}
-
-			// 3.0
-			let maxIssuedAt: Date? = events?
-				.compactMap {
-					if $0.vaccination != nil {
-						return $0.vaccination?.dateString
-					} else if $0.negativeTest != nil {
-						return $0.negativeTest?.sampleDateString
-					} else if $0.recovery != nil {
-						return $0.recovery?.sampleDate
-					} else if $0.dccEvent != nil {
-						return $0.dccEvent?.dateString()
-					}
-					return $0.positiveTest?.sampleDateString
-				}
-				.compactMap(Formatter.getDateFrom)
-				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
-
-					switch latestDateFound {
-						case let latestDateFound? where nextDate > latestDateFound:
-							return nextDate
-						case .none:
-							return nextDate
-						default:
-							return latestDateFound
-					}
-				}
-			return maxIssuedAt
-		}
-
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
 
@@ -372,58 +335,6 @@ struct EventFlow {
 			}
 			return nil
 		}
-	}
-}
-
-extension EventFlow.DccEvent {
-
-	func dateString(cryptoManager: CryptoManaging = Services.cryptoManager) -> String? {
-
-		if let euCredentialAttributes = getAttributes(cryptoManager: cryptoManager) {
-			if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-				return vaccination.dateOfVaccination
-			} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-				return recovery.firstPositiveTestDate
-			} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-				return test.sampleDate
-			}
-		}
-		return nil
-	}
-
-	func identity(cryptoManager: CryptoManaging = Services.cryptoManager) -> EventFlow.Identity? {
-
-		if let euCredentialAttributes = getAttributes(cryptoManager: cryptoManager) {
-			return EventFlow.Identity(
-				infix: nil,
-				firstName: euCredentialAttributes.digitalCovidCertificate.name.givenName,
-				lastName: euCredentialAttributes.digitalCovidCertificate.name.familyName,
-				birthDateString: euCredentialAttributes.digitalCovidCertificate.dateOfBirth
-			)
-		}
-		return nil
-	}
-
-	func getAttributes(cryptoManager: CryptoManaging = Services.cryptoManager) -> EuCredentialAttributes? {
-
-		if let credentialData = credential.data(using: .utf8) {
-			return cryptoManager.readEuCredentials(credentialData)
-		}
-		return nil
-	}
-
-	func getEventType(cryptoManager: CryptoManaging = Services.cryptoManager) -> EventMode? {
-
-		if let euCredentialAttributes = getAttributes(cryptoManager: cryptoManager) {
-			if euCredentialAttributes.digitalCovidCertificate.vaccinations?.first != nil {
-				return .vaccination
-			} else if euCredentialAttributes.digitalCovidCertificate.recoveries?.first != nil {
-				return .recovery
-			} else if euCredentialAttributes.digitalCovidCertificate.tests?.first != nil {
-				return .test
-			}
-		}
-		return nil
 	}
 }
 

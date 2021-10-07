@@ -137,4 +137,39 @@ struct EuCredentialAttributes: Codable {
 		case issuedAt
 		case issuer
 	}
+
+	var identity: EventFlow.Identity {
+
+		return EventFlow.Identity(
+			infix: nil,
+
+			firstName: digitalCovidCertificate.name.givenName,
+			lastName: digitalCovidCertificate.name.familyName,
+			birthDateString: digitalCovidCertificate.dateOfBirth
+		)
+	}
+
+	var eventMode: EventMode? {
+
+		if digitalCovidCertificate.vaccinations?.first != nil {
+			return .vaccination
+		} else if digitalCovidCertificate.recoveries?.first != nil {
+			return .recovery
+		} else if digitalCovidCertificate.tests?.first != nil {
+			return .test
+		}
+		return nil
+	}
+
+	var maxIssuedAt: String? {
+
+		if let vaccination = digitalCovidCertificate.vaccinations?.first {
+			return vaccination.dateOfVaccination
+		} else if let recovery = digitalCovidCertificate.recoveries?.first {
+			return recovery.firstPositiveTestDate
+		} else if let test = digitalCovidCertificate.tests?.first {
+			return test.sampleDate
+		}
+		return nil
+	}
 }

@@ -22,12 +22,67 @@ enum EventMode: String {
 			case .vaccination: return L.generalVaccination()
 		}
 	}
+
+	var title: String {
+		switch self {
+			case .paperflow:
+				return L.holderDccListTitle()
+			case .recovery:
+				return L.holderRecoveryListTitle()
+			case .test:
+				return L.holderTestresultsResultsTitle()
+			case .vaccination:
+				return L.holderVaccinationListTitle()
+		}
+	}
+
+	var alertBody: String {
+
+		switch self {
+			case .paperflow:
+				return L.holderDccAlertMessage()
+			case .recovery:
+				return L.holderRecoveryAlertMessage()
+			case .test:
+				return L.holderTestAlertMessage()
+			case .vaccination:
+				return L.holderVaccinationAlertMessage()
+		}
+	}
+
+	var listMessage: String {
+		switch self {
+			case .paperflow:
+				return L.holderDccListMessage()
+			case .recovery:
+				return L.holderRecoveryListMessage()
+			case .test:
+				return L.holderTestresultsResultsText()
+			case .vaccination:
+				return L.holderVaccinationListMessage()
+		}
+	}
+
+	var originsMismatchBody: String {
+		switch self {
+			case .paperflow:
+				return L.holderEventOriginmismatchDccBody()
+			case .recovery:
+				return L.holderEventOriginmismatchRecoveryBody()
+			case .test:
+				return L.holderEventOriginmismatchTestBody()
+			case .vaccination:
+				return L.holderEventOriginmismatchVaccinationBody()
+		}
+	}
 }
 
 enum EventScreenResult: Equatable {
 
 	/// The user wants to go back a scene
 	case back(eventMode: EventMode)
+	
+	case backSwipe
 
 	/// Stop with vaccination flow,
 	case stop
@@ -101,6 +156,8 @@ protocol EventFlowDelegate: AnyObject {
 	func eventFlowDidComplete()
 
 	func eventFlowDidCancel()
+	
+	func eventFlowDidCancelFromBackSwipe()
 }
 
 class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
@@ -110,8 +167,6 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	var navigationController: UINavigationController
 
 	weak var delegate: EventFlowDelegate?
-
-	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
 	/// Initializer
 	/// - Parameters:
@@ -168,7 +223,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		let viewController = EventStartViewController(
 			viewModel: EventStartViewModel(
 				coordinator: self,
-				eventMode: eventMode
+				eventMode: eventMode,
+				validAfterDays: Services.remoteConfigManager.getConfiguration().recoveryWaitingPeriodDays
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
@@ -245,11 +301,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	private func presentAsBottomSheet(_ viewController: UIViewController) {
 
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
+		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 
 	private func navigateBackToEventStart() {
@@ -306,6 +358,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .back, .stop:
 				delegate?.eventFlowDidCancel()
+			case .backSwipe:
+				delegate?.eventFlowDidCancelFromBackSwipe()
 			case let .continue(_, eventMode):
 				navigateToLogin(eventMode: eventMode)
 			default:
@@ -331,14 +385,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				displayError(content: content, backAction: backAction)
 
 			case .back(let eventMode):
-				switch eventMode {
-					case .test:
-						navigateBackToTestStart()
-					case .vaccination, .recovery:
-						navigateBackToEventStart()
-					case .paperflow:
-					break
-				}
+				goBack(eventMode)
+	
 			case .stop:
 				delegate?.eventFlowDidComplete()
 
@@ -354,14 +402,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				delegate?.eventFlowDidComplete()
 				
 			case .back(let eventMode):
-				switch eventMode {
-					case .test:
-						navigateBackToTestStart()
-					case .recovery, .vaccination:
-						navigateBackToEventStart()
-					case .paperflow:
-						break
-				}
+				goBack(eventMode)
 
 			case let .error(content: content, backAction: backAction):
 				displayError(content: content, backAction: backAction)
@@ -374,20 +415,25 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		}
 	}
 
+	private func goBack(_ eventMode: EventMode) {
+
+		switch eventMode {
+			case .test:
+				navigateBackToTestStart()
+			case .recovery, .vaccination:
+				navigateBackToEventStart()
+			case .paperflow:
+				delegate?.eventFlowDidCancel()
+		}
+	}
+
 	func listEventsScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
 			case .stop, .continue:
 				delegate?.eventFlowDidComplete()
 			case .back(let eventMode):
-				switch eventMode {
-					case .test:
-						navigateBackToTestStart()
-					case .recovery, .vaccination:
-						navigateBackToEventStart()
-					case .paperflow:
-						delegate?.eventFlowDidCancel()
-				}
+				goBack(eventMode)
 			case let .error(content: content, backAction: backAction):
 				displayError(content: content, backAction: backAction)
 			case let .moreInformation(title, body, hideBodyForScreenCapture):

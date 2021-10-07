@@ -47,8 +47,6 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	var scannedQR: String?
 
-	fileprivate var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
-
 	/// Initializer
 	/// - Parameters:
 	///   - delegate: flow delegate
@@ -102,11 +100,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		navigationController.viewControllers.last?.present(viewController, animated: true, completion: nil)
+		navigationController.viewControllers.last?.presentBottomSheet(viewController)
 	}
 
 	func userWantsToGoBackToDashboard() {
@@ -223,17 +217,13 @@ extension PaperCertificateCoordinator: EventFlowDelegate {
 
 	func eventFlowDidComplete() {
 
-		removeChildCoordinator()
-		scannedQR = nil
-		token = nil
+		cleanup()
 		delegate?.addCertificateFlowDidFinish()
 	}
 
 	func eventFlowDidCancel() {
 
-		removeChildCoordinator()
-		scannedQR = nil
-		token = nil
+		cleanup()
 		if let viewController = navigationController.viewControllers
 			.first(where: { $0 is PaperCertificateStartViewController }) {
 
@@ -243,10 +233,21 @@ extension PaperCertificateCoordinator: EventFlowDelegate {
 			)
 		}
 	}
+	
+	func eventFlowDidCancelFromBackSwipe() {
+		
+		cleanup()
+	}
 
 	private func removeChildCoordinator() {
 
 		guard let coordinator = childCoordinators.last else { return }
 		removeChildCoordinator(coordinator)
+	}
+	
+	private func cleanup() {
+		removeChildCoordinator()
+		scannedQR = nil
+		token = nil
 	}
 }

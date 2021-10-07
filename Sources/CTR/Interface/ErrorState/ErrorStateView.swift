@@ -56,23 +56,6 @@ class ErrorStateView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(secondaryButton)
 	}
 
-	/// Setup the constraints
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-
-		// disable the bottom constraint of the scroll view, add our own
-		bottomScrollViewConstraint?.isActive = false
-
-		NSLayoutConstraint.activate([
-
-			// Scroll View
-			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor)
-		])
-		
-		setupPrimaryButton()
-	}
-
 	@objc func secondaryButtonTapped() {
 
 		secondaryButtonTappedCommand?()
