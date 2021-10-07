@@ -33,7 +33,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 	required init(greenCards: [GreenCard], internationalQRRelevancyDays: TimeInterval) {
 
-		self.internationalQRRelevancyDays = 15 // internationalQRRelevancyDays
+		self.internationalQRRelevancyDays = internationalQRRelevancyDays
 
 		self.items = greenCards
 			.compactMap { greenCard in
