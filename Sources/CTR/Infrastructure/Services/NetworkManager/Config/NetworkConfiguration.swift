@@ -30,7 +30,7 @@ struct NetworkConfiguration {
 		),
 		cdn: .init(
 			scheme: "https",
-			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
+			host: AppFlavor.flavor == .holder ? "holder-api-cdn.acc.coronacheck.nl" : "verifier-api-cdn.acc.coronacheck.nl",
 			port: nil,
 			path: ["v6"]
 		)
@@ -46,7 +46,7 @@ struct NetworkConfiguration {
 		),
 		cdn: .init(
 			scheme: "https",
-			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
+			host: AppFlavor.flavor == .holder ? "holder-api-cdn.acc.coronacheck.nl" : "verifier-api-cdn.acc.coronacheck.nl",
 			port: nil,
 			path: ["v6"]
 		)

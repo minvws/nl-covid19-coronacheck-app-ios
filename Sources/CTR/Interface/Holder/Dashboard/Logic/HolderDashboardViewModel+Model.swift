@@ -12,47 +12,66 @@ import CoreData
 
 extension HolderDashboardViewModel {
 
-	/// Represents a Greencard in the UI,
-	/// Contains an array of `QRCard.Origin`.
+	// Domestic:
+	//  - A single greencard
+	//  - An array of Origins
 
-	// Future: it's turned out that this can be converted to a struct with a `.region` enum instead
-	enum QRCard {
-		case europeanUnion(greenCardObjectID: NSManagedObjectID, origins: [Origin], shouldShowErrorBeneathCard: Bool, evaluateEnabledState: (Date) -> Bool, evaluateDCC: (Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
-		case netherlands(greenCardObjectID: NSManagedObjectID, origins: [Origin], shouldShowErrorBeneathCard: Bool, evaluateEnabledState: (Date) -> Bool)
+	// International:
+	//  - Multiple greencards
+	//  - each with an array of origins
 
-		/// Represents an Origin
-		struct Origin {
+	/// Represents a (set of) Greencard(s) in the UI,
+	/// Can be a single card or a stack, depending if it contains greencards which have been grouped together.
+	struct QRCard {
 
-			let type: QRCodeOriginType // vaccination | test | recovery
-			let eventDate: Date
-			let expirationTime: Date
-			let validFromDate: Date
+		/// Represents the region that the Greencard applies to
+		enum Region {
+			case netherlands
+			case europeanUnion(evaluateDCC: (QRCard.GreenCard, Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
+		}
 
-			/// There is a particular order to sort these onscreen
-			var customSortIndex: Int {
-				type.customSortIndex
-			}
+		struct GreenCard {
+			let id: NSManagedObjectID
+			let origins: [Origin]
 
-			func isNotYetExpired(now: Date) -> Bool {
-				expirationTime > now
-			}
+			struct Origin { // swiftlint:disable:this nesting
 
-			func isCurrentlyValid(now: Date) -> Bool {
-				isValid(duringDate: now)
-			}
+				let type: QRCodeOriginType // vaccination | test | recovery
+				let eventDate: Date
+				let expirationTime: Date
+				let validFromDate: Date
 
-			func isValid(duringDate date: Date) -> Bool {
-				date.isWithinTimeWindow(from: validFromDate, to: expirationTime)
-			}
+				/// There is a particular order to sort these onscreen
+				var customSortIndex: Int {
+					type.customSortIndex
+				}
 
-			func expiryIsBeyondThreeYearsFromNow(now: Date) -> Bool {
-				let threeYearsFromNow: TimeInterval = 60 * 60 * 24 * 365 * 3
-				return expirationTime > now.addingTimeInterval(threeYearsFromNow)
+				func isNotYetExpired(now: Date) -> Bool {
+					expirationTime > now
+				}
+
+				func isCurrentlyValid(now: Date) -> Bool {
+					isValid(duringDate: now)
+				}
+
+				func isValid(duringDate date: Date) -> Bool {
+					date.isWithinTimeWindow(from: validFromDate, to: expirationTime)
+				}
+
+				func expiryIsBeyondThreeYearsFromNow(now: Date) -> Bool {
+					let threeYearsFromNow: TimeInterval = 60 * 60 * 24 * 365 * 3
+					return expirationTime > now.addingTimeInterval(threeYearsFromNow)
+				}
 			}
 		}
 
+		let region: Region // A QR Card only has one region
+		let greencards: [GreenCard]
+		let shouldShowErrorBeneathCard: Bool
+		let evaluateEnabledState: (Date) -> Bool
+
 		func isOfRegion(region: QRCodeValidityRegion) -> Bool {
-			switch (self, region) {
+			switch (self.region, region) {
 				case (.europeanUnion, .europeanUnion): return true
 				case (.netherlands, .domestic): return true
 				default: return false
@@ -61,32 +80,28 @@ extension HolderDashboardViewModel {
 
 		/// There is a particular order to sort these onscreen
 		var customSortIndex: Int {
-			guard let firstOrigin = origins.first else { return .max }
+			guard let firstGreenCard = greencards.first, // assumption: when multiple greencards, should all have same origin type.
+				  let firstOrigin = firstGreenCard.origins.first
+			else { return .max }
+
 			return firstOrigin.customSortIndex
 		}
 
-		var greencardID: NSManagedObjectID {
-			switch self {
-				case let .europeanUnion(greenCardObjectID, _, _, _, _), let .netherlands(greenCardObjectID, _, _, _):
-					return greenCardObjectID
-			}
+		var origins: [GreenCard.Origin] {
+			greencards.flatMap { $0.origins }
 		}
 
 		/// If at least one origin('s date range) is valid:
 		func isCurrentlyValid(now: Date) -> Bool {
-			origins.contains(where: { $0.isCurrentlyValid(now: now) })
-		}
-
-		/// Without distinguishing NL/EU, just give me the origins:
-		var origins: [Origin] {
-			switch self {
-				case .europeanUnion(_, let origins, _, _, _), .netherlands(_, let origins, _, _):
-					return origins
-			}
+			origins
+				.contains(where: { $0.isCurrentlyValid(now: now) })
 		}
 
 		var effectiveExpiratedAt: Date {
-			return origins.compactMap { $0.expirationTime }.sorted().last ?? .distantPast
+			origins
+				.compactMap { $0.expirationTime }
+				.sorted()
+				.last ?? .distantPast
 		}
 	}
 

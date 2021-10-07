@@ -80,7 +80,7 @@ class OnboardingViewController: BaseViewController {
 		// Create a button with a back arrow
 		let config = UIBarButtonItem.Configuration(target: self,
 												   action: #selector(backbuttonTapped),
-												   image: I.backArrow(),
+												   content: .image(I.backArrow()),
 												   accessibilityIdentifier: "BackButton",
 												   accessibilityLabel: L.generalBack())
 		backButton = .create(config)

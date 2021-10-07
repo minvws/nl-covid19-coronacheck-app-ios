@@ -6,7 +6,6 @@
 */
 
 import XCTest
-import ViewControllerPresentationSpy
 @testable import CTR
 import Nimble
 
@@ -18,8 +17,6 @@ class ShowQRViewControllerTests: XCTestCase {
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	var cryptoManagerSpy: CryptoManagerSpy!
 	var dataStoreManager: DataStoreManaging!
-	var screenCaptureDetector: ScreenCaptureDetectorSpy!
-	var userSettingsSpy: UserSettingsSpy!
 	var viewModel: ShowQRViewModel!
 	var remoteConfigMangingSpy: RemoteConfigManagingSpy!
 	var window = UIWindow()
@@ -33,8 +30,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
-		screenCaptureDetector = ScreenCaptureDetectorSpy()
-		userSettingsSpy = UserSettingsSpy()
+
 		remoteConfigMangingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
 		remoteConfigMangingSpy.stubbedGetConfigurationResult = .default
 
@@ -51,10 +47,8 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 		window = UIWindow()
@@ -83,6 +77,40 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.sceneView.returnToThirdPartyAppButton.isHidden) == true
+		expect(self.sut.sceneView.nextButton.isHidden) == true
+		expect(self.sut.sceneView.previousButton.isHidden) == true
+		expect(self.sut.sceneView.pageControl.isHidden) == true
+	}
+
+	/// Test all the default content
+	func test_content_domesticGreenCard_withThirdPartyApp() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: "RollerDiscoParties"
+		)
+		sut = ShowQRViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.sceneView.returnToThirdPartyAppButton.isHidden) == false
+		expect(self.sut.sceneView.nextButton.isHidden) == true
+		expect(self.sut.sceneView.previousButton.isHidden) == true
+		expect(self.sut.sceneView.pageControl.isHidden) == true
 	}
 
 	func test_content_euGreenCard() throws {
@@ -97,9 +125,8 @@ class ShowQRViewControllerTests: XCTestCase {
 		)
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			userSettings: userSettingsSpy
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 
@@ -108,55 +135,106 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.sceneView.nextButton.isHidden) == true
+		expect(self.sut.sceneView.previousButton.isHidden) == true
+		expect(self.sut.sceneView.pageControl.isHidden) == true
 	}
 
-	/// Test the validity of the credential without credential
-	func test_withoutCredential() throws {
+	/// Test all the default content
+	func test_content_euGreenCard_withThirdPartyApp() throws {
 
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createTestGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
-				withValidCredential: false
+				withValidCredential: true
+			)
+		)
+
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: "RollerDiscoParties"
+		)
+		sut = ShowQRViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.sceneView.returnToThirdPartyAppButton.isHidden) == true
+		expect(self.sut.sceneView.nextButton.isHidden) == true
+		expect(self.sut.sceneView.previousButton.isHidden) == true
+		expect(self.sut.sceneView.pageControl.isHidden) == true
+		expect(self.sut.sceneView.pageControl.numberOfPages) == 1
+	}
+
+	func test_content_euGreenCard_multipleGreenCards() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .eu,
+				withValidCredential: true
 			)
 		)
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCard: greenCard,
-			thirdPartyTicketAppName: nil,
-			userSettings: userSettingsSpy
+			greenCards: [greenCard, greenCard],
+			thirdPartyTicketAppName: nil
+		)
+		sut = ShowQRViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.sceneView.nextButton.isHidden) == false
+		expect(self.sut.sceneView.previousButton.isHidden) == true
+		expect(self.sut.sceneView.pageControl.isHidden) == false
+		expect(self.sut.sceneView.pageControl.currentPage) == 0
+		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
+	}
+
+	func test_nextButtonTapped_euGreenCard_multipleGreenCards() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard, greenCard],
+			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 		loadView()
 
 		// When
-		sut?.checkValidity()
+		sut.sceneView.didTapNextButton()
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == true
-	}
-
-	/// Test the validity of the credential with valid credential while screencapturing
-	func testValidityCredentialValidWithScreenCapture() {
-
-		// Given
-		loadView()
-		sut?.checkValidity()
-
-		// When
-		screenCaptureDetector.invokedScreenCaptureDidChangeCallback?(true)
-
-		// Then
-		expect(self.sut.sceneView.largeQRimageView.isHidden) == true
+		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.sceneView.nextButton.isHidden).toEventually(beTrue())
+		expect(self.sut.sceneView.previousButton.isHidden).toEventually(beFalse())
+		expect(self.sut.sceneView.pageControl.isHidden) == false
+		expect(self.sut.sceneView.pageControl.currentPage).toEventually(equal(1))
+		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
 	}
 
 	/// Test the security features
-	func testSecurityFeaturesAnimation() {
+	func test_securityFeaturesAnimation() {
 
 		// Given
 		loadView()
-		sut?.checkValidity()
 
 		// When
 		sut?.sceneView.securityView.primaryButton.sendActions(for: .touchUpInside)

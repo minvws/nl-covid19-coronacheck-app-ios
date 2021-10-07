@@ -30,14 +30,14 @@ extension QRCard {
 			}
 		}
 
-		func text(qrCard: QRCard, origin: QRCard.Origin, now: Date, remoteConfigManager: RemoteConfigManaging) -> HolderDashboardViewController.ValidityText {
+		func text(qrCard: QRCard, greencard: QRCard.GreenCard, origin: QRCard.GreenCard.Origin, now: Date, remoteConfigManager: RemoteConfigManaging) -> HolderDashboardViewController.ValidityText {
 
-			switch (self, qrCard, origin.type) {
+			switch (self, qrCard.region, origin.type) {
 				case (.isExpired, _, _):
 					return validityText_isExpired()
 
-				case (.validityHasBegun, .europeanUnion, .vaccination):
-					if let euVaccination = qrCard.digitalCovidCertificate(forDate: now)?.vaccinations?.first,
+				case (.validityHasBegun, .europeanUnion(let dccEvaluator), .vaccination):
+					if let euVaccination = dccEvaluator(greencard, now)?.vaccinations?.first,
 					   let doseNumber = euVaccination.doseNumber,
 					   let totalDose = euVaccination.totalDose {
 						return validityText_hasBegun_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), validFrom: origin.validFromDate)
@@ -45,8 +45,8 @@ extension QRCard {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
 					}
 
-				case (.validityHasBegun, .europeanUnion, .test):
-					if let euTest = qrCard.digitalCovidCertificate(forDate: now)?.tests?.first {
+				case (.validityHasBegun, .europeanUnion(let dccEvaluator), .test):
+					if let euTest = dccEvaluator(greencard, now)?.tests?.first {
 						let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
 						return validityText_hasBegun_eu_test(testType: testType, validFrom: origin.validFromDate)
 					} else {
@@ -88,15 +88,6 @@ extension QRCard {
 	}
 }
 
-private extension QRCard {
-
-	/// Handy accessor. Only has a value for .europeanUnion cases.
-	func digitalCovidCertificate(forDate now: Date) -> EuCredentialAttributes.DigitalCovidCertificate? {
-		guard case let .europeanUnion(_, _, _, _, evaluateDCC) = self else { return nil }
-		return evaluateDCC(now)
-	}
-}
-
 private func validityText_isExpired() -> HolderDashboardViewController.ValidityText {
 	.init(lines: [], kind: .past)
 }
@@ -125,7 +116,7 @@ private func validityText_hasBegun_eu_test(testType: String, validFrom: Date) ->
 
 /// For when e.g. we can't retrieve exactly what we needed from the DCC for proper display,
 /// this one provides a fallback for display.
-private func validityText_hasBegun_eu_fallback(origin: QRCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_eu_fallback(origin: QRCard.GreenCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
 	var formatter: DateFormatter {
 		switch origin.type {
 			case .vaccination, .recovery:
@@ -167,10 +158,9 @@ private func validityText_hasBegun_eu_recovery(isCurrentlyValid: Bool, expiratio
 	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
 	let dateString = formatter.string(from: expirationTime)
 
-	let titleString = QRCodeOriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
-		lines: [titleString, valueString],
+		lines: [valueString],
 		kind: .current
 	)
 }
@@ -233,9 +223,9 @@ private func validityText_hasNotYetBegun_allRegions_recovery(validFrom: Date, ex
 // Caveats!
 // - "future validity" for a test probably won't happen..
 // - "future validity" for EU doesn't exist currently.
-private func validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: QRCard, origin: QRCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: QRCard, origin: QRCard.GreenCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
 	var prefix: String {
-		switch qrCard {
+		switch qrCard.region {
 			case .netherlands:
 				return L.holderDashboardQrValidityDatePrefixValidFrom()
 

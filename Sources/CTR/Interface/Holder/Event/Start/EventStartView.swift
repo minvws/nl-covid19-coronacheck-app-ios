@@ -66,6 +66,8 @@ class EventStartView: ScrolledStackWithButtonView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
+		
+		footerButtonView.bottomButtonConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
 

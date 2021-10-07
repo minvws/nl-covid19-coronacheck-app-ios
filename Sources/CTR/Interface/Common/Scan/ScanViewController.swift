@@ -213,7 +213,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		
 		let config = UIBarButtonItem.Configuration(target: self,
 												   action: action,
-												   image: I.torch(),
+												   content: .image(I.torch()),
 												   accessibilityIdentifier: "TorchButton",
 												   accessibilityLabel: enableLabel)
 		let button: UIBarButtonItem = .create(config)

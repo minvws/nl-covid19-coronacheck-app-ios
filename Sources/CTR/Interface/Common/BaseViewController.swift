@@ -63,7 +63,7 @@ class BaseViewController: UIViewController {
 		
 		let config = UIBarButtonItem.Configuration(target: self,
 												   action: action,
-												   image: I.cross(),
+												   content: .image(I.cross()),
 												   tintColor: tintColor,
 												   accessibilityIdentifier: "CloseButton",
 												   accessibilityLabel: L.generalClose())
@@ -83,7 +83,7 @@ class BaseViewController: UIViewController {
 		
 		let config = UIBarButtonItem.Configuration(target: self,
 												   action: action,
-												   image: I.backArrow(),
+												   content: .image(I.backArrow()),
 												   accessibilityIdentifier: "BackButton",
 												   accessibilityLabel: L.generalBack())
 		navigationItem.leftBarButtonItem = .create(config)
