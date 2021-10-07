@@ -53,7 +53,10 @@ class ShowQRViewModel: Logging {
 	) {
 
 		self.coordinator = coordinator
-		self.dataSource = ShowQRDatasource(greenCards: greenCards)
+		self.dataSource = ShowQRDatasource(
+			greenCards: greenCards,
+			internationalQRRelevancyDays: TimeInterval(remoteConfigManager?.getConfiguration().internationalQRRelevancyDays ?? 28)
+		)
 		self.items = dataSource.items
 		self.currentPage = 0
 		handleVaccinationDosageInformation()

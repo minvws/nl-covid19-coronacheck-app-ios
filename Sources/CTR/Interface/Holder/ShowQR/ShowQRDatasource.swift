@@ -12,7 +12,7 @@ protocol ShowQRDatasourceProtocol {
 
 	var items: [ShowQRItem] { get }
 
-	init(greenCards: [GreenCard])
+	init(greenCards: [GreenCard], internationalQRRelevancyDays: TimeInterval)
 
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
 
@@ -21,15 +21,17 @@ protocol ShowQRDatasourceProtocol {
 
 class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
-	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
+	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
 
-	static let days: TimeInterval = 25
+	private let internationalQRRelevancyDays: TimeInterval
 
 	private(set) var items = [ShowQRItem]()
 
 	private var highestFullyVaccinatedGreenCard: (greenCard: GreenCard, doseNumber: Int, totalDose: Int)?
 
-	required init(greenCards: [GreenCard]) {
+	required init(greenCards: [GreenCard], internationalQRRelevancyDays: TimeInterval) {
+
+		self.internationalQRRelevancyDays = internationalQRRelevancyDays
 
 		self.items = greenCards
 			.compactMap { greenCard in
@@ -96,7 +98,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 		// Filter older than 25 days
 		let oldEnough = fullyVaccinated.filter {
-			return $0.date < Date().addingTimeInterval(ShowQRDatasource.days * 24 * 60 * 60 * -1)
+			return $0.date < Date().addingTimeInterval(internationalQRRelevancyDays * 24 * 60 * 60 * -1)
 		}
 
 		// Get the fully vaccinated with the highest dosage
