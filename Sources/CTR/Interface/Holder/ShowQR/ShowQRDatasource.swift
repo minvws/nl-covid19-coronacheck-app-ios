@@ -117,7 +117,8 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 			let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
 			let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
 			let doseNumber = euVaccination.doseNumber,
-			let totalDose = euVaccination.totalDose else {
+			let totalDose = euVaccination.totalDose,
+			totalDose != doseNumber else {
 			return false
 		}
 
