@@ -12,7 +12,7 @@ protocol ClockDeviationManaging: AnyObject {
 
 	init()
 
-	func update(serverHeaderDate: String)
+	func update(serverHeaderDate: String, ageHeader: String?)
 	func update(serverResponseDateTime: Date, localResponseDateTime: Date, localResponseSystemUptime: __darwin_time_t)
 
 	func appendDeviationChangeObserver(_ observer: @escaping (Bool) -> Void) -> ClockDeviationManager.ObserverToken
@@ -93,10 +93,17 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 
 	/// Update using the Server Response Header string
 	/// e.g. "Sat, 07 Aug 2021 12:12:57 GMT"
-	func update(serverHeaderDate: String) {
-		guard let serverDate = serverHeaderDateFormatter.date(from: serverHeaderDate),
+	func update(serverHeaderDate: String, ageHeader: String?) {
+		guard var serverDate = serverHeaderDateFormatter.date(from: serverHeaderDate),
 			  let systemUptime = currentSystemUptime()
 		else { return }
+
+		if let ageHeader = ageHeader {
+			// CDN has a stale Date, but adds an Age field in seconds.
+			let age = TimeInterval(ageHeader) ?? 0
+			logVerbose("Added \(age) seconds to stale CDN date \(serverDate)")
+			serverDate = serverDate.addingTimeInterval(age)
+		}
 
 		update(
 			serverResponseDateTime: serverDate,
