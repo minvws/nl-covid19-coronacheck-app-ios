@@ -43,7 +43,7 @@ class ClockDeviationManagerTests: XCTestCase {
 		// Arrange
 
 		// Act
-		sut.update(serverHeaderDate: "Sat, 07 Aug 2021 12:12:57 GMT")
+		sut.update(serverHeaderDate: "Sat, 07 Aug 2021 12:12:57 GMT", ageHeader: nil)
 
 		// Assert
 		expect(self.sut.hasSignificantDeviation) == true
@@ -53,7 +53,17 @@ class ClockDeviationManagerTests: XCTestCase {
 		// Arrange
 
 		// Act
-		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:30 GMT")
+		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:30 GMT", ageHeader: nil)
+
+		// Assert
+		expect(self.sut.hasSignificantDeviation) == false
+	}
+
+	func test_updateWithServerDateString_withSignificantDeviation_withAgeHeader() {
+		// Arrange
+
+		// Act
+		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:00 GMT", ageHeader: "30")
 
 		// Assert
 		expect(self.sut.hasSignificantDeviation) == false
@@ -67,7 +77,7 @@ class ClockDeviationManagerTests: XCTestCase {
 		}
 
 		// Act
-		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:30 GMT")
+		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:30 GMT", ageHeader: nil)
 
 		// Assert
 		expect(receivedValue) == false
@@ -81,7 +91,7 @@ class ClockDeviationManagerTests: XCTestCase {
 		}
 
 		// Act
-		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:30 GMT")
+		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:30 GMT", ageHeader: nil)
 		expect(receivedCount) == 1
 
 		NotificationCenter.default.post(name: .NSSystemClockDidChange, object: nil)
