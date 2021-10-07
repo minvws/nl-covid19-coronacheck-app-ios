@@ -57,6 +57,10 @@ class UpgradeEUVaccinationViewController: BaseViewController {
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.primaryButtonTapped()
 		}
+
+		viewModel.$alert.binding = { [weak self] in
+			self?.showAlert($0, preferredAction: $0?.okTitle)
+		}
 	}
 	
 	override var enableSwipeBack: Bool { true }

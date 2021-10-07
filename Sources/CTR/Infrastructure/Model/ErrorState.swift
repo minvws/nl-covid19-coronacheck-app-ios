@@ -68,6 +68,7 @@ extension ErrorCode.Flow {
 	static let recovery = ErrorCode.Flow(value: "3")
 	static let ggdTest = ErrorCode.Flow(value: "4")
 	static let hkvi = ErrorCode.Flow(value: "5")
+	static let upgradeEUVaccination = ErrorCode.Flow(value: "7")
 }
 
 // MARK: ErrorCode.Step (Startup)
