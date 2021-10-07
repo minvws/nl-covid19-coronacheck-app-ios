@@ -213,7 +213,7 @@ class ShowQRItemViewModel: Logging {
 
 	private func setQRValid(image: UIImage) {
 
-		logDebug("Credential is valid")
+		logVerbose("Credential is valid")
 		currentQRImage = image
 		startValidityTimer()
 	}

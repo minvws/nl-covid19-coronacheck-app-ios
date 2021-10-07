@@ -8,128 +8,6 @@
 import Foundation
 import UIKit
 
-protocol ShowQRDatasourceProtocol {
-
-	var items: [ShowQRItem] { get }
-
-	init(greenCards: [GreenCard])
-
-	func getGreenCardForIndex(_ index: Int) -> GreenCard?
-
-	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool
-}
-
-class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
-
-	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
-
-	static let days: TimeInterval = 2
-
-	private(set) var items = [ShowQRItem]()
-
-	private var cardsWithSortedOrigins = [(greenCard: GreenCard, origins: [Origin])]()
-
-	private var highestFullyVaccinatedGreenCard: (greenCard: GreenCard, doseNumber: Int, totalDose: Int)?
-
-	required init(greenCards: [GreenCard]) {
-
-		self.cardsWithSortedOrigins = greenCards
-			.compactMap { greenCard in
-				// map on greenCard, sorted origins.
-				greenCard.castOrigins().map { (greenCard: greenCard, origins: $0.sorted { lhsOrigin, rhsOrigin in
-					// Sort the origins ascending
-					lhsOrigin.eventDate ?? .distantFuture < rhsOrigin.eventDate ?? .distantFuture
-				}) }
-			}
-			.sorted { lhs, rhs in
-				// Sort the greenCards ascending (on the first origin)
-				if let lhsEventDate = lhs.origins.first?.eventDate, let rhsEventDate = rhs.origins.first?.eventDate {
-					return lhsEventDate < rhsEventDate
-				}
-				return false
-			}
-		self.items = cardsWithSortedOrigins
-			.map { ShowQRItem(greenCard: $0.greenCard) }
-
-		self.highestFullyVaccinatedGreenCard = findHighestFullyVaccinatedGreenCard()
-	}
-
-	func getGreenCardForIndex(_ index: Int) -> GreenCard? {
-
-		guard index < items.count else {
-			return nil
-		}
-
-		return items[index].greenCard
-	}
-
-	private func findHighestFullyVaccinatedGreenCard() -> (greenCard: GreenCard, doseNumber: Int, totalDose: Int)? {
-
-		let vaccinationGreenCardsWithAttributes: [(greenCard: GreenCard, attributes: EuCredentialAttributes)] = cardsWithSortedOrigins
-		// only international
-			.filter { $0.greenCard.type == GreenCardType.eu.rawValue }
-		// only with attributes
-			.compactMap { cardsWithSortedOrigin in
-				if let credential = cardsWithSortedOrigin.greenCard.getActiveCredential(),
-				   let data = credential.data,
-				   let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data) {
-
-					return (cardsWithSortedOrigin.greenCard, attributes: euCredentialAttributes)
-				}
-				return nil
-			}
-		// only with vaccinations
-			.filter { $0.attributes.digitalCovidCertificate.vaccinations?.first != nil }
-
-		// Map with dosage and date information
-		let greencardsWithDateAndDosage: [(greenCard: GreenCard, date: Date, doseNumber: Int, totalDose: Int)] = vaccinationGreenCardsWithAttributes
-			.compactMap {
-				if let euVaccination = $0.attributes.digitalCovidCertificate.vaccinations?.first,
-				   let eventDate = Formatter.getDateFrom(dateString8601: euVaccination.dateOfVaccination),
-				   let doseNumber = euVaccination.doseNumber,
-				   let totalDose = euVaccination.totalDose {
-
-					return ($0.greenCard, date: eventDate, doseNumber: doseNumber, totalDose: totalDose)
-				}
-				return nil
-			}
-
-		// Get the ones that are fully vaccinated
-		let fullyVaccinated = greencardsWithDateAndDosage.filter { $0.doseNumber == $0.totalDose }.sorted { lhs, rhs in lhs.totalDose > rhs.totalDose }
-
-		let oldEnough = fullyVaccinated.filter {
-			return $0.date < Date().addingTimeInterval(ShowQRDatasource.days * 24 * 60 * 60 * -1)
-		}
-
-		if let topDog = oldEnough.first {
-			logDebug("topDog: \(topDog.date) \(topDog.doseNumber) \(topDog.totalDose)")
-			return (topDog.greenCard, topDog.doseNumber, topDog.totalDose)
-		}
-		return nil
-	}
-
-	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool {
-
-		guard self.items.count > 1 else {
-			return false
-		}
-
-		guard greenCard.type == GreenCardType.eu.rawValue,
-			let highestFullyVaccinatedGreenCard = highestFullyVaccinatedGreenCard,
-			let credential = greenCard.getActiveCredential(),
-			let data = credential.data,
-			let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
-			let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
-			let doseNumber = euVaccination.doseNumber,
-			let totalDose = euVaccination.totalDose else {
-			return false
-		}
-
-		logDebug("We are \(doseNumber) / \(totalDose) : \(highestFullyVaccinatedGreenCard.totalDose)")
-		return doseNumber < highestFullyVaccinatedGreenCard.totalDose
-	}
-}
-
 class ShowQRViewModel: Logging {
 
 	// MARK: - private variables
@@ -144,7 +22,7 @@ class ShowQRViewModel: Logging {
 
 	private var currentPage: Int {
 		didSet {
-			logInfo("current page set to \(currentPage)")
+			logVerbose("current page set to \(currentPage)")
 			handleVaccinationDosageInformation()
 		}
 	}
@@ -263,9 +141,6 @@ class ShowQRViewModel: Logging {
 	private func showInternationalDetails(_ data: Data) {
 
 		if let euCredentialAttributes = cryptoManager?.readEuCredentials(data) {
-
-			logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
-
 			if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
 				showVaccinationDetails(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
 			} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
