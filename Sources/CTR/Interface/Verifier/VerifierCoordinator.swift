@@ -37,8 +37,6 @@ class VerifierCoordinator: SharedCoordinator {
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
 
-	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
-
 	// Designated starter method
 	override func start() {
 
@@ -122,12 +120,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				content: content
 			)
 		)
-
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		sidePanel?.selectedViewController?.present(viewController, animated: true, completion: nil)
+		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
 	}
 
 	func navigateToScanInstruction() {

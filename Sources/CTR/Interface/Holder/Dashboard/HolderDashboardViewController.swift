@@ -20,9 +20,9 @@ class HolderDashboardViewController: BaseViewController {
 
 		case emptyState(image: UIImage?, title: String, message: String)
 
-		case domesticQR(validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
-		case europeanUnionQR(validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
 		case errorMessage(message: String, didTapTryAgain: () -> Void)
 	}
@@ -165,19 +165,25 @@ class HolderDashboardViewController: BaseViewController {
 						}
 						return emptyDashboardView
 						
-					case let .domesticQR(validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
-						 let .europeanUnionQR(validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
-						
-						let qrCard = QRCardView()
-						qrCard.viewQRButtonCommand = didTapViewQR
-						qrCard.title = L.holderDashboardQrTitle()
-						qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
+					case let .domesticQR(title, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
+						 let .europeanUnionQR(title, _, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
 
-						if case .europeanUnionQR = card {
+						let qrCard: QRCardView
+
+						if case let .europeanUnionQR(_, stackSize, _, _, _, _, _) = card {
+							qrCard = QRCardView(stackSize: stackSize)
 							qrCard.shouldStyleForEU = true
+							qrCard.viewQRButtonTitle = stackSize == 1
+								? L.holderDashboardQrButtonViewQR()
+								: L.holderDashboardQrButtonViewQRs()
 						} else {
+							qrCard = QRCardView(stackSize: 1)
 							qrCard.shouldStyleForEU = false
+							qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
 						}
+
+						qrCard.viewQRButtonCommand = didTapViewQR
+						qrCard.title = title
 
 						qrCard.validityTexts = validityTexts
 						qrCard.expiryEvaluator = expiryCountdownEvaluator

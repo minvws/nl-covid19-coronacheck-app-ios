@@ -13,9 +13,6 @@ class InformationView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
-		static let buttonHeight: CGFloat = 52
-
 		// Margins
 		static let margin: CGFloat = 20.0
 	}
@@ -30,19 +27,16 @@ class InformationView: BaseView {
 		view.spacing = ViewTraits.margin
 		return view
 	}()
-
+	
+	/// The title label
 	private let titleLabel: Label = {
         return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
-	private lazy var webView: WKWebView = {
-		let webView = WKWebView()
-		webView.navigationDelegate = self
-		webView.scrollView.showsHorizontalScrollIndicator = false
-		return webView
+	/// The message label
+	private let messageLabel: TextView = {
+		return TextView()
 	}()
-
-	var bottomConstraint: NSLayoutConstraint?
 
 	override func setupViews() {
 
@@ -56,7 +50,7 @@ class InformationView: BaseView {
 		super.setupViewHierarchy()
 
 		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(webView)
+		stackView.addArrangedSubview(messageLabel)
 
 		addSubview(stackView)
 	}
@@ -82,8 +76,7 @@ class InformationView: BaseView {
 			stackView.trailingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
-			),
-			stackView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.height * 0.6) // HOTFIX hack, bottomsheet forced to 60% height.
+			)
 		])
 	}
 
@@ -99,58 +92,19 @@ class InformationView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			guard let message = message else { return }
-
-			let style = """
-				body {
-					 margin:0px;
-					 word-wrap: break-word;
-				}
-				 p {
-					 font-family: -apple-system;
-					 color: #383836;
-					 font-size: 17px;
-				}
-			"""
-
-			let html = """
-				<html>
-					<head>
-						<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'>
-						<style>
-							\(style)
-						</style>
-					</head>
-					<body>\(message)</body>
-				</html>
-			"""
-
-			webView.loadHTMLString(html, baseURL: nil)
+			messageLabel.attributedText = .makeFromHtml(text: message, style: .bodyDark)
 		}
 	}
 
-	var linkTapHandler: ((URL) -> Void)?
+	var linkTapHandler: ((URL) -> Void)? {
+		didSet {
+			guard let linkTapHandler = linkTapHandler else { return }
+			messageLabel.linkTouched(handler: linkTapHandler)
+		}
+	}
 
 	func handleScreenCapture(shouldHide: Bool) {
-		webView.isHidden = shouldHide
+		messageLabel.isHidden = shouldHide
 	}
 
-}
-
-extension InformationView: WKNavigationDelegate {
-
-	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: ((WKNavigationActionPolicy) -> Void)) {
-
-		guard let url = navigationAction.request.url else {
-			decisionHandler(.cancel)
-			return
-		}
-
-		if url.absoluteURL.absoluteString == "about:blank" {
-			decisionHandler(.allow)
-		} else {
-			linkTapHandler?(url)
-			decisionHandler(.cancel)
-		}
-	}
 }
