@@ -114,6 +114,8 @@ struct RemoteConfiguration: Codable {
 	/// Enables luhn check for token validation
 	var isLuhnCheckEnabled: Bool?
 
+	var internationalQRRelevancyDays: Int?
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -146,82 +148,42 @@ struct RemoteConfiguration: Codable {
 		case universalLinkPermittedDomains = "universalLinkDomains"
 		case clockDeviationThresholdSeconds = "clockDeviationThresholdSeconds"
 		case isLuhnCheckEnabled = "luhnCheckEnabled"
+		case internationalQRRelevancyDays = "internationalQRRelevancyDays"
 	}
 
-	init(
-		minVersion: String,
-		minVersionMessage: String?,
-		recommendedVersion: String?,
-		recommendedNagIntervalHours: Int?,
-		storeUrl: URL?,
-		deactivated: Bool?,
-		informationURL: URL?,
-		configTTL: Int?,
-		recoveryWaitingPeriodDays: Int?,
-		requireUpdateBefore: TimeInterval?,
-		temporarilyDisabled: Bool?,
-		domesticValidityHours: Int?,
-		vaccinationEventValidity: Int?,
-		recoveryEventValidity: Int?,
-		testEventValidity: Int?,
-		isGGDEnabled: Bool?,
-		recoveryExpirationDays: Int?,
-		credentialRenewalDays: Int?,
-		domesticQRRefreshSeconds: Int?,
-		universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?,
-		clockDeviationThresholdSeconds: Int?,
-		isLuhnCheckEnabled: Bool?) {
+	init(minVersion: String) {
 
 		self.minimumVersion = minVersion
-		self.minimumVersionMessage = minVersionMessage
-		self.recommendedVersion = recommendedVersion
-		self.recommendedNagIntervalHours = recommendedNagIntervalHours
-		self.appStoreURL = storeUrl
-		self.appDeactivated = deactivated
-		self.informationURL = informationURL
-		self.configTTL = configTTL
-		self.recoveryWaitingPeriodDays = recoveryWaitingPeriodDays
-		self.requireUpdateBefore = requireUpdateBefore
-		self.temporarilyDisabled = temporarilyDisabled
-		self.domesticValidityHours = domesticValidityHours
-		self.vaccinationEventValidity = vaccinationEventValidity
-		self.recoveryEventValidity = recoveryEventValidity
-		self.testEventValidity = testEventValidity
-		self.isGGDEnabled = isGGDEnabled
-		self.recoveryExpirationDays = recoveryExpirationDays
-		self.credentialRenewalDays = credentialRenewalDays
-		self.domesticQRRefreshSeconds = domesticQRRefreshSeconds
-		self.universalLinkPermittedDomains = universalLinkPermittedDomains
-		self.clockDeviationThresholdSeconds = clockDeviationThresholdSeconds
-		self.isLuhnCheckEnabled = isLuhnCheckEnabled
 	}
 
 	/// Default remote configuration
 	static var `default`: RemoteConfiguration {
- 		return RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: nil,
-			recommendedVersion: "1.0.0",
-			recommendedNagIntervalHours: 24,
-			storeUrl: nil,
-			deactivated: false,
-			informationURL: nil,
-			configTTL: 3600,
-			recoveryWaitingPeriodDays: 11,
-			requireUpdateBefore: nil,
-			temporarilyDisabled: false,
-			domesticValidityHours: 40,
-			vaccinationEventValidity: 14600,
-			recoveryEventValidity: 7300,
-			testEventValidity: 40,
-			isGGDEnabled: true,
-			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60,
-			universalLinkPermittedDomains: nil,
-			clockDeviationThresholdSeconds: 30,
-			isLuhnCheckEnabled: true
-		)
+
+		var config = RemoteConfiguration(minVersion: "1.0.0")
+		config.minimumVersionMessage = nil
+		config.recommendedVersion = "1.0.0"
+		config.recommendedNagIntervalHours = 24
+		config.appStoreURL = nil
+		config.appDeactivated = false
+		config.informationURL = nil
+		config.configTTL = 3600
+		config.recoveryWaitingPeriodDays = 11
+		config.requireUpdateBefore = nil
+		config.temporarilyDisabled = false
+		config.domesticValidityHours = 40
+		config.vaccinationEventValidity = 14600
+		config.recoveryEventValidity = 7300
+		config.testEventValidity = 40
+		config.isGGDEnabled = true
+		config.recoveryExpirationDays = 180
+		config.credentialRenewalDays = 5
+		config.domesticQRRefreshSeconds = 60
+		config.universalLinkPermittedDomains = nil
+		config.clockDeviationThresholdSeconds = 30
+		config.isLuhnCheckEnabled = true
+		config.internationalQRRelevancyDays = 28
+
+		return config
 	}
 
 	/// Is the app deactivated?
