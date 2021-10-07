@@ -8,55 +8,6 @@
 import Foundation
 import UIKit
 
-protocol ShowQRDatasourceProtocol {
-
-	var items: [ShowQRItem] { get }
-
-	init(greenCards: [GreenCard])
-
-	func getGreenCardForIndex(_ index: Int) -> GreenCard?
-
-	func shouldBeHidden(greenCard: GreenCard) -> Bool
-}
-
-class ShowQRDatasource: ShowQRDatasourceProtocol {
-
-	private(set) var items = [ShowQRItem]()
-
-	required init(greenCards: [GreenCard]) {
-
-		self.items = greenCards
-			.compactMap { greenCard in
-				// map on greenCard, sorted origins.
-				greenCard.castOrigins().map { (greenCard: greenCard, origins: $0.sorted { lhsOrigin, rhsOrigin in
-					// Sort the origins ascending
-					lhsOrigin.eventDate ?? .distantFuture < rhsOrigin.eventDate ?? .distantFuture
-				}) }
-			}
-			.sorted { lhs, rhs in
-				// Sort the greenCards ascending (on the first origin)
-				if let lhsEventDate = lhs.origins.first?.eventDate, let rhsEventDate = rhs.origins.first?.eventDate {
-					return lhsEventDate < rhsEventDate
-				}
-				return false
-			}
-			.map { ShowQRItem(greenCard: $0.greenCard) }
-	}
-
-	func getGreenCardForIndex(_ index: Int) -> GreenCard? {
-
-		guard index < items.count else {
-			return nil
-		}
-
-		return items[index].greenCard
-	}
-
-	func shouldBeHidden(greenCard: GreenCard) -> Bool {
-		return false
-	}
-}
-
 class ShowQRViewModel: Logging {
 
 	// MARK: - private variables
@@ -71,7 +22,7 @@ class ShowQRViewModel: Logging {
 
 	private var currentPage: Int {
 		didSet {
-			logInfo("current page set to \(currentPage)")
+			logVerbose("current page set to \(currentPage)")
 			handleVaccinationDosageInformation()
 		}
 	}
@@ -161,9 +112,10 @@ class ShowQRViewModel: Logging {
 				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 				if euVaccination.isOverVaccinated {
 					relevancyInformation = L.holderShowqrOvervaccinated("\(totalDose)", "\(totalDose)")
-				}
-				if dataSource.shouldBeHidden(greenCard: greenCard) {
+				} else if dataSource.shouldGreenCardBeHidden(greenCard) {
 					relevancyInformation = L.holderShowqrNotneeded()
+				} else {
+					relevancyInformation = nil
 				}
 			}
 		}
@@ -189,9 +141,6 @@ class ShowQRViewModel: Logging {
 	private func showInternationalDetails(_ data: Data) {
 
 		if let euCredentialAttributes = cryptoManager?.readEuCredentials(data) {
-
-			logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
-
 			if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
 				showVaccinationDetails(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
 			} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
@@ -329,7 +278,7 @@ class ShowQRViewModel: Logging {
 			viewModel: ShowQRItemViewModel(
 				delegate: self,
 				greenCard: item.greenCard,
-				qrShouldInitiallyBeHidden: dataSource.shouldBeHidden(greenCard: item.greenCard)
+				qrShouldInitiallyBeHidden: dataSource.shouldGreenCardBeHidden(item.greenCard)
 			)
 		)
 		viewController.isAccessibilityElement = true
