@@ -57,7 +57,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 	func getGreenCardForIndex(_ index: Int) -> GreenCard? {
 
-		guard index < items.count else {
+		guard items.count > index, index >= 0 else {
 			return nil
 		}
 
