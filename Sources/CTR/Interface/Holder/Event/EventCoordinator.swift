@@ -168,8 +168,6 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	weak var delegate: EventFlowDelegate?
 
-	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
-
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
@@ -303,11 +301,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	private func presentAsBottomSheet(_ viewController: UIViewController) {
 
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
+		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 
 	private func navigateBackToEventStart() {
