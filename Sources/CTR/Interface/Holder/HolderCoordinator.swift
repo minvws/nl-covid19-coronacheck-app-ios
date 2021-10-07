@@ -413,6 +413,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
+		let viewController = UpgradeEUVaccinationViewController(viewModel: UpgradeEUVaccinationViewModel())
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
