@@ -1,4 +1,16 @@
+"holder.dashboard.card.upgradeeuvaccination.message" = "You can renew your international vaccination certificate";
+"holder.dashboard.card.upgradeeuvaccination.button" = "Read more";
+"holder.upgradeeuvaccination.title" = "Renew vaccination certificate";
+"holder.upgradeeuvaccination.message" = "<p>Soon we will renew everyone's vaccination certificate. As a result, you'll get access to QR codes of earlier vaccinations.</p><p>This can be useful for people who want to go to a place where their latest vaccination is not yet valid.</p><p>If you want to, you can also renew your certificate now.</p>";
+"holder.upgradeeuvaccination.button" = "Renew certificate";
+"holder.showqr.overvaccinated" = "This QR code may not be valid everywhere. If that’s the case, you can use dose %@/%@. ";
 "holder.dashboard.qr.button.viewQRs" = "View QR codes";
+"holder.showqr.notneeded" = "You probably won't need this QR code because you have a more recent dose.";
+"holder.showqr.qrhidden" = "QR code hidden";
+"holder.showqr.showqr" = "Show anyway";
+"holder.showqr.eu.about.vaccination.title" = "About dose %@/%@";
+"holder.showqr.qr.eu.vaccinecertificatedoses" = "Dose %@/%@";
+"holder.showqr.details" = "Details";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR code. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
 "holder.tokenentry.regularflow.error.invalid.combination" = "No valid combination";
 "holder.tokenentry.regularflow.error.emptytoken" = "Please fill out a retrieval code first";
@@ -128,7 +140,6 @@
 "holder.recovery.start.message" = "<p>Have you had coronavirus? Then you can make a recovery certificate of the positive test result from the GGD. Login with DigiD to retrieve your test result.</p><p>Your recovery certificate will be valid %@ days after the positive test result. You also need to be free of symptoms.</p>";
 "holder.chooseqrcodetype.option.recovery.title" = "A certificate of recovery";
 "holder.chooseqrcodetype.option.recovery.subtitle" = "The test proves I have had coronavirus";
-"holder.showqr.details" = "Details";
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
 "holder.showqr.eu.about.recovery.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
@@ -363,7 +374,7 @@
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
 "holder.dashboard.intro.domestic" = "Visiting a location within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance of the location you're visiting.";
-"holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Is my certificate valid where I’m heading?</a></p>";
+"holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Which certificate is needed where I’m heading?</a></p>";
 "holder.dashboard.qr.expired" = "Your QR code has expired.";
 "holder.dashboard.qr.hour" = "hour(s)";
 "holder.dashboard.qr.minute" = "min";
@@ -410,10 +421,8 @@
 "holder.showqr.domestic.title" = "Dutch QR code";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
 "holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code says whether or not the QR code is valid. It doesn't say whether or not you have a test certificate or vaccination.</p><p> The QR code also contains several of your details. This is to make sure the QR code belongs to you. The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth.</p><p>Your details: <b>%@</b></p><p></p><p>*. To protect your privacy, some details may disappear. In this case you will see a hyphen (-).</p>";
-"holder.showqr.eu.title" = "International QR code";
+"holder.showqr.eu.title" = "International QR";
 "holder.showqr.eu.about.title" = "About my international QR code";
-"holder.showqr.qr.eu.vaccinecertificatedoses" = "Dose %@/%@";
-"holder.showqr.eu.about.vaccination.title" = "About dose %@/%@";
 "holder.showqr.eu.about.vaccination.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
 "holder.showqr.eu.about.vaccination.name" = "Name:";
 "holder.showqr.eu.about.vaccination.dateofbirth" = "Date of birth*:";
