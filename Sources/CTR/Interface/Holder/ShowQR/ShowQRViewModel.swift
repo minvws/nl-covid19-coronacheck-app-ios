@@ -43,6 +43,8 @@ class ShowQRViewModel: Logging {
 
 	@Bindable private(set) var items = [ShowQRItem]()
 
+	@Bindable private(set) var startingPage: Int
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -58,7 +60,9 @@ class ShowQRViewModel: Logging {
 			internationalQRRelevancyDays: TimeInterval(remoteConfigManager?.getConfiguration().internationalQRRelevancyDays ?? 28)
 		)
 		self.items = dataSource.items
-		self.currentPage = 0
+		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
+		self.startingPage = mostRelevantPage
+		self.currentPage = mostRelevantPage
 		handleVaccinationDosageInformation()
 
 		if let greenCard = greenCards.first {

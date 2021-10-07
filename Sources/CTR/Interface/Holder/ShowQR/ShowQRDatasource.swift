@@ -17,6 +17,8 @@ protocol ShowQRDatasourceProtocol {
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
 
 	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool
+
+	func getIndexForMostRelevantGreenCard() -> Int
 }
 
 class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
@@ -126,5 +128,10 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 		logVerbose("We are \(doseNumber) / \(totalDose) : \(highestFullyVaccinatedGreenCard.totalDose)")
 		return doseNumber < highestFullyVaccinatedGreenCard.totalDose
+	}
+
+	func getIndexForMostRelevantGreenCard() -> Int {
+
+		return items.count - 1 
 	}
 }

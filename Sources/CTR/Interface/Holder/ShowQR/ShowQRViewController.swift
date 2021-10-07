@@ -124,7 +124,17 @@ extension ShowQRViewController {
 				return self.viewModel.showQRItemViewController(forItem: item)
 			}
 			self.sceneView.pageControl.numberOfPages = $0.count
-			self.sceneView.pageControl.currentPage = 0
+			self.updateControlVisibility()
+		}
+
+		viewModel.$startingPage.binding = { [weak self] in
+
+			guard let self = self else {
+				return
+			}
+
+			self.sceneView.pageControl.currentPage = $0
+			self.pageViewController.startAtIndex($0)
 			self.updateControlVisibility()
 		}
 	}
