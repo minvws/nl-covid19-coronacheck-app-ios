@@ -374,7 +374,9 @@
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn bewijzen";
 "holder.dashboard.intro.domestic" = "Bezoek je een locatie binnen Nederland? Laat je Nederlandse QR-code en je identiteitsbewijs zien bij de ingang van de locatie die je bezoekt.";
-"holder.dashboard.intro.international" = "<p>Ben je in het buitenland of ga je de grens over? Gebruik dan altijd de internationale QR-code hieronder. Controleer voor vertrek welk bewijs je nodig hebt.</p><p><a href=\"https://www.nederlandwereldwijd.nl/reizen/reisadviezen\">Welk bewijs is nodig op mijn bestemming?</a></p>";
+"holder.dashboard.intro.international" = "<p>Ben je in het buitenland of ga je de grens over? Gebruik dan altijd de internationale QR-code hieronder. Controleer voor vertrek welk bewijs je nodig hebt.</p>";
+"holder.dashboard.intro.international.button" = "Welk bewijs is nodig op mijn bestemming?";
+"holder.dashboard.intro.international.url" = "https://www.nederlandwereldwijd.nl/reizen/reisadviezen";
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.";
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
@@ -412,7 +414,9 @@
 "holder.dashboard.empty.domestic.title" = "Hier komt jouw Nederlandse bewijs";
 "holder.dashboard.empty.domestic.message" = "<p>Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>. De app maakt een Nederlands en een internationaal bewijs.</p>";
 "holder.dashboard.empty.international.title" = "Hier komt jouw internationale bewijs";
-"holder.dashboard.empty.international.message" = "<p>Ben je in het buitenland of ga je de grens over? Gebruik dan altijd jouw internationale bewijs. Controleer voor vertrek welk bewijs je nodig hebt.</p><p><a href=\"https://www.nederlandwereldwijd.nl/reizen/reisadviezen\">Welk bewijs is nodig op mijn bestemming?</a></p>";
+"holder.dashboard.empty.international.message" = "<p>Ben je in het buitenland of ga je de grens over? Gebruik dan altijd jouw internationale bewijs. Controleer voor vertrek welk bewijs je nodig hebt.</p>";
+"holder.dashboard.empty.international.button" = "Welk bewijs is nodig op mijn bestemming?";
+"holder.dashboard.empty.international.url" = "https://www.nederlandwereldwijd.nl/reizen/reisadviezen";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";

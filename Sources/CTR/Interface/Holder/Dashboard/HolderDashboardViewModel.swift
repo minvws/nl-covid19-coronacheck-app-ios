@@ -323,13 +323,15 @@ final class HolderDashboardViewModel: Logging {
 							return HolderDashboardViewController.Card.emptyState(
 								image: I.dashboard.domestic(),
 								title: L.holderDashboardEmptyDomesticTitle(),
-								message: L.holderDashboardEmptyDomesticMessage()
+								message: L.holderDashboardEmptyDomesticMessage(),
+								buttonTitle: nil
 							)
 						case .europeanUnion:
 							return HolderDashboardViewController.Card.emptyState(
 								image: I.dashboard.international(),
 								title: L.holderDashboardEmptyInternationalTitle(),
-								message: L.holderDashboardEmptyInternationalMessage()
+								message: L.holderDashboardEmptyInternationalMessage(),
+								buttonTitle: L.holderDashboardEmptyInternationalButton()
 							)
 					}
 				}()

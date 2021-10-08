@@ -101,15 +101,17 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards).toEventually(haveCount(1))
 		expect(self.sut.internationalCards).toEventually(haveCount(1))
 
-		expect(self.sut.domesticCards.first).to(beEmptyStateCard(test: { image, title, message in
+		expect(self.sut.domesticCards.first).to(beEmptyStateCard(test: { image, title, message, buttonTitle in
 			expect(image) == I.dashboard.domestic()
 			expect(title) == L.holderDashboardEmptyDomesticTitle()
 			expect(message) == L.holderDashboardEmptyDomesticMessage()
+			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.internationalCards.first).to(beEmptyStateCard(test: { image, title, message in
+		expect(self.sut.internationalCards.first).to(beEmptyStateCard(test: { image, title, message, buttonTitle in
 			expect(image) == I.dashboard.international()
 			expect(title) == L.holderDashboardEmptyInternationalTitle()
 			expect(message) == L.holderDashboardEmptyInternationalMessage()
+			expect(buttonTitle) == L.holderDashboardEmptyInternationalButton()
 		}))
 	}
 
@@ -2088,11 +2090,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
-private func beEmptyStateCard(test: @escaping (UIImage?, String, String) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+private func beEmptyStateCard(test: @escaping (UIImage?, String, String, String?) -> Void = { _, _, _, _  in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .emptyState with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
-		   case let .emptyState(image, title1, message1) = actual {
-			test(image, title1, message1)
+		   case let .emptyState(image, title1, message1, buttonTitle1) = actual {
+			test(image, title1, message1, buttonTitle1)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)

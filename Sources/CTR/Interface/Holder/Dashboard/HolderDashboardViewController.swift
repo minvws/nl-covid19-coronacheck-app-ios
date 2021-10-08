@@ -18,7 +18,7 @@ class HolderDashboardViewController: BaseViewController {
 
 		case deviceHasClockDeviation(message: String, didTapMoreInfo: () -> Void)
 
-		case emptyState(image: UIImage?, title: String, message: String)
+		case emptyState(image: UIImage?, title: String, message: String, buttonTitle: String?)
 
 		case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
@@ -155,12 +155,17 @@ class HolderDashboardViewController: BaseViewController {
 						messageCard.infoButtonTappedCommand = didTapMoreInfo
 						return messageCard
 
-					case let .emptyState(image, title, message):
+					case let .emptyState(image, title, message, buttonTitle):
 						let emptyDashboardView = EmptyDashboardView()
 						emptyDashboardView.image = image
 						emptyDashboardView.title = title
 						emptyDashboardView.message = message
+						emptyDashboardView.buttonTitle = buttonTitle
 						emptyDashboardView.contentTextView.linkTouched { url in
+							self?.viewModel.openUrl(url)
+						}
+						emptyDashboardView.buttonTappedCommand = {
+							guard let url = URL(string: L.holderDashboardEmptyInternationalUrl()) else { return }
 							self?.viewModel.openUrl(url)
 						}
 						return emptyDashboardView
