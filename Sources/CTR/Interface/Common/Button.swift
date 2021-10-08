@@ -46,6 +46,13 @@ class Button: UIButton {
 			}
 		}
 		
+		var font: UIFont {
+			switch self {
+				case .textLabelBlue: return Theme.fonts.bodyMedium
+				default: return Theme.fonts.bodySemiBold
+			}
+		}
+		
 		var contentEdgeInsets: UIEdgeInsets {
 			switch self {
 				case .textLabelBlue: return .zero
@@ -111,7 +118,6 @@ class Button: UIButton {
 			self.style = style
 		}
 		
-        self.titleLabel?.font = Theme.fonts.bodySemiBold
 		// multiline
 		self.titleLabel?.lineBreakMode = .byWordWrapping
 		self.titleLabel?.numberOfLines = 0
@@ -173,6 +179,7 @@ class Button: UIButton {
 	private func setupButtonType() {
 		
 		setupColors()
+		titleLabel?.font = style.font
 		contentEdgeInsets = style.contentEdgeInsets
 		layer.borderWidth = style.borderWidth
 		imageEdgeInsets = style.imageEdgeInsets
