@@ -30,13 +30,41 @@ class MessageCardView: BaseView {
         return Label(body: nil).multiline().header()
 	}()
 
-	/// The info button
-	private let infoButton: TappableButton = {
+	/// The close button
+	private let closeButton: TappableButton = {
 
 		let button = TappableButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.setImage(I.questionMark(), for: .normal)
+		button.setImage(I.smallCross(), for: .normal)
+		button.contentHorizontalAlignment = .trailing
+		button.isHidden = true
 		return button
+	}()
+
+	/// The callToAction button
+	private let callToActionButton: Button = {
+
+		let button = Button(title: "CTA!", style: Button.ButtonType.textLabelBlue)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.contentHorizontalAlignment = .leading
+		button.isHidden = true
+		return button
+	}()
+
+	private let messageWithCloseButtonStackView: UIStackView = {
+
+		let stackView = UIStackView()
+		stackView.alignment = .top
+		stackView.translatesAutoresizingMaskIntoConstraints = false
+		stackView.spacing = 8
+		return stackView
+	}()
+
+	private let callToActionButtonStackView: UIStackView = {
+
+		let stackView = UIStackView()
+		stackView.translatesAutoresizingMaskIntoConstraints = false
+		return stackView
 	}()
 
 	/// Setup all the views
@@ -46,7 +74,9 @@ class MessageCardView: BaseView {
 		view?.backgroundColor = .white
 		layer.cornerRadius = ViewTraits.cornerRadius
 		createShadow()
-		infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+
+		closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+		callToActionButton.addTarget(self, action: #selector(callToActionButtonTapped), for: .touchUpInside)
 	}
 
 	/// Create the shadow around the view
@@ -66,8 +96,14 @@ class MessageCardView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		addSubview(titleLabel)
-		addSubview(infoButton)
+
+		addSubview(messageWithCloseButtonStackView)
+		addSubview(callToActionButtonStackView)
+
+		messageWithCloseButtonStackView.addArrangedSubview(titleLabel)
+		messageWithCloseButtonStackView.addArrangedSubview(closeButton)
+
+		callToActionButtonStackView.addArrangedSubview(callToActionButton)
 	}
 
 	/// Setup the constraints
@@ -76,43 +112,31 @@ class MessageCardView: BaseView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
+			messageWithCloseButtonStackView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
+			messageWithCloseButtonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+			messageWithCloseButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 
-			titleLabel.topAnchor.constraint(
-				equalTo: topAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: infoButton.leadingAnchor,
-				constant: -16
-			),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
-				constant: -ViewTraits.margin
-			),
+			messageWithCloseButtonStackView.bottomAnchor.constraint(equalTo: callToActionButtonStackView.topAnchor, constant: -10),
 
-			infoButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin),
-			infoButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin),
-			infoButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonSize),
-			infoButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonSize)
+			callToActionButtonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
+			callToActionButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
+			callToActionButtonStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
+
+			closeButton.widthAnchor.constraint(equalToConstant: 42),
+			closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 42)
 		])
 	}
 
-//	/// Setup all the accessibility traits
-//	override func setupAccessibility() {
-//
-//		super.setupAccessibility()
-//		// Button
-//		infoButton.accessibilityLabel = .info
-//	}
+	/// User tapped on the close button
+	@objc func closeButtonTapped() {
 
-	/// User tapped on the info button
-	@objc func infoButtonTapped() {
+		closeButtonTappedCommand?()
+	}
 
-		infoButtonTappedCommand?()
+	/// User tapped on the callToAction button
+	@objc func callToActionButtonTapped() {
+
+		callToActionButtonTappedCommand?()
 	}
 
 	// MARK: Public Access
@@ -124,6 +148,24 @@ class MessageCardView: BaseView {
 		}
 	}
 
-	/// The user tapped on the info button
-	var infoButtonTappedCommand: (() -> Void)?
+	/// The title
+	var callToActionButtonText: String? {
+		didSet {
+			callToActionButton.title = callToActionButtonText
+		}
+	}
+
+	/// The user tapped on the close button
+	var closeButtonTappedCommand: (() -> Void)? {
+		didSet {
+			closeButton.isHidden = closeButtonTappedCommand == nil
+		}
+	}
+
+	/// The user tapped on the callToAction button
+	var callToActionButtonTappedCommand: (() -> Void)? {
+		didSet {
+			callToActionButton.isHidden = callToActionButtonTappedCommand == nil
+		}
+	}
 }

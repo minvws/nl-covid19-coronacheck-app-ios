@@ -303,9 +303,13 @@ final class HolderDashboardViewModel: Logging {
 
 		if state.deviceHasClockDeviation && !allQRCards.isEmpty {
 			viewControllerCards += [
-				.deviceHasClockDeviation(message: L.holderDashboardClockDeviationDetectedMessage(), didTapMoreInfo: {
-					coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
-				})
+				.deviceHasClockDeviation(
+					message: L.holderDashboardClockDeviationDetectedMessage(),
+					callToActionButtonText: L.generalReadmore(),
+					didTapCallToAction: {
+						coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
+					}
+				)
 			]
 		}
 
@@ -343,7 +347,8 @@ final class HolderDashboardViewModel: Logging {
 					viewControllerCards += [
 						.upgradeYourInternationalVaccinationCertificate(
 							message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
-							didTapMoreInfo: { [weak coordinatorDelegate] in
+							callToActionButtonText: L.generalReadmore(),
+							didTapCallToAction: { [weak coordinatorDelegate] in
 								coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
 							}
 						)
@@ -392,12 +397,14 @@ final class HolderDashboardViewModel: Logging {
 		viewControllerCards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state, thisRegion: validityRegion, now: now)
 			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
 			.map { originType, message in
-				return .originNotValidInThisRegion(message: message) {
-					coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
-						originType: originType,
-						currentRegion: validityRegion,
-						availableRegion: validityRegion.opposite)
-				}
+				return .originNotValidInThisRegion(
+					message: message,
+					callToActionButtonText: L.generalReadmore()) {
+						coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
+							originType: originType,
+							currentRegion: validityRegion,
+							availableRegion: validityRegion.opposite)
+					}
 			}
 
 		// Map a `QRCard` to a `VC.Card`:
