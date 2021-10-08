@@ -78,7 +78,6 @@ class ForcedInformationConsentView: BaseView {
 	let secondaryButton: Button = {
 
 		let button = Button(title: "Button 2", style: .textLabelBlue)
-		button.titleLabel?.font = Theme.fonts.bodySemiBold
 		button.isHidden = true
 		return button
 	}()
