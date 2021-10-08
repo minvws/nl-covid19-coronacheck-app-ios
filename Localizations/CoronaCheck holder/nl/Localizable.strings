@@ -1,3 +1,9 @@
+"general.readmore" = "Lees meer";
+"holder.dashboard.intro.international.button" = "Welk bewijs is nodig op mijn bestemming?";
+"holder.dashboard.intro.international.url" = "https://www.nederlandwereldwijd.nl/reizen/reisadviezen";
+"holder.dashboard.empty.international.button" = "Welk bewijs is nodig op mijn bestemming?";
+"holder.dashboard.empty.international.url" = "https://www.nederlandwereldwijd.nl/reizen/reisadviezen";
+
 "holder.dashboard.card.euvaccinationswereupgraded.message" = "Je internationale vaccinatiebewijs is vernieuwd";
 "holder.dashboard.card.euvaccinationswereupgraded.button" = "Lees meer";
 "holder.euvaccinationswereupgraded.title" = "Vernieuwd vaccinatiebewijs";
