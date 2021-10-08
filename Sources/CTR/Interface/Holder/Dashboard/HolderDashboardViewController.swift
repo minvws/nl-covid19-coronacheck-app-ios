@@ -177,7 +177,6 @@ class HolderDashboardViewController: BaseViewController {
 						messageCard.closeButtonTappedCommand = didTapCloseAction
 						return messageCard
 
-
 					case let .emptyState(image, title, message, buttonTitle):
 						let emptyDashboardView = EmptyDashboardView()
 						emptyDashboardView.image = image

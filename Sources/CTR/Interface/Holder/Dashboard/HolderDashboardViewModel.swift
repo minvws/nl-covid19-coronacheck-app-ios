@@ -266,6 +266,8 @@ final class HolderDashboardViewModel: Logging {
 		return (domestic: domesticCards, international: internationalCards)
 	}
 
+	// Temporary swiftlint disable.. 
+	// swiftlint:disable:next function_parameter_count
 	private static func assembleCards(
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
