@@ -421,21 +421,22 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		switch result {
 			case let .success(greenCards):
 				if greenCards.isEmpty {
-					showAlertWithErrorCode("i 610 000 061")
-			} else {
-				navigateToShowQRs(greenCards)
-			}
+					showAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .noGreenCardsAvailable))
+				} else {
+					navigateToShowQRs(greenCards)
+				}
 			case .failure:
-			showAlertWithErrorCode("i 610 000 062")
+				showAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .coreDataFetchError))
 		}
 	}
 
-	private func showAlertWithErrorCode(_ code: String) {
+	private func showAlertWithErrorCode(_ code: ErrorCode) {
 		
 		let alertController = UIAlertController(
 			title: L.generalErrorTitle(),
-			message: String(format: L.generalErrorTechnicalCustom(code)),
-			preferredStyle: .alert)
+			message: String(format: L.generalErrorTechnicalCustom("\(code)")),
+			preferredStyle: .alert
+		)
 
 		alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
 		(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
@@ -593,4 +594,12 @@ extension HolderCoordinator: PaperCertificateFlowDelegate {
 		
 		navigateToDashboard()
 	}
+}
+
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+
+	static let noGreenCardsAvailable = ErrorCode.ClientCode(value: "061")
+	static let coreDataFetchError = ErrorCode.ClientCode(value: "062")
 }
