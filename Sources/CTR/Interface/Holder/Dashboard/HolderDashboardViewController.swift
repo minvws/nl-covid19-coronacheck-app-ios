@@ -91,6 +91,16 @@ class HolderDashboardViewController: BaseViewController {
 		// Forces VoiceOver focus on menu button instead of tab bar on start up
 		UIAccessibility.post(notification: .screenChanged, argument: navigationItem.leftBarButtonItem)
 	}
+
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+	}
+
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
