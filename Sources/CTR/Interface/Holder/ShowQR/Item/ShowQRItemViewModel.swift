@@ -32,6 +32,7 @@ class ShowQRItemViewModel: Logging {
 	private var greenCard: GreenCard
 	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
 	private var qrShouldBeHidden: Bool
+	private let qrShouldInitiallyBeHidden: Bool
 
 	private var currentQRImage: UIImage? {
 		didSet {
@@ -77,6 +78,7 @@ class ShowQRItemViewModel: Logging {
 		self.greenCard = greenCard
 		self.screenCaptureDetector = screenCaptureDetector
 		self.qrShouldBeHidden = qrShouldInitiallyBeHidden
+		self.qrShouldInitiallyBeHidden = qrShouldInitiallyBeHidden
 		self.userSettings = userSettings
 		self.now = now
 
@@ -250,5 +252,10 @@ class ShowQRItemViewModel: Logging {
 
 		qrShouldBeHidden = false
 		updateQRVisibility()
+	}
+
+	func resetIrrelevancy() {
+
+		qrShouldBeHidden = qrShouldInitiallyBeHidden
 	}
 }
