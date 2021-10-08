@@ -10,7 +10,7 @@ import UIKit
 class HolderDashboardViewController: BaseViewController {
 
 	enum Card {
-		case headerMessage(message: String)
+		case headerMessage(message: String, buttonTitle: String?)
 
 		case expiredQR(message: String, didTapClose: () -> Void)
 
@@ -135,13 +135,19 @@ class HolderDashboardViewController: BaseViewController {
 				
 				switch card {
 					
-					case let .headerMessage(message):
+					case let .headerMessage(message, buttonTitle):
 						
-						let text = TextView(htmlText: message)
-						text.linkTouched { url in
+						let headerMessageView = HeaderMessageView()
+						headerMessageView.message = message
+						headerMessageView.buttonTitle = buttonTitle
+						headerMessageView.contentTextView.linkTouched { url in
 							self?.viewModel.openUrl(url)
 						}
-						return text
+						headerMessageView.buttonTappedCommand = {
+							guard let url = URL(string: L.holderDashboardIntroInternationalUrl()) else { return }
+							self?.viewModel.openUrl(url)
+						}
+						return headerMessageView
 						
 					case let .expiredQR(message, didTapCloseAction):
 						let expiredQRCard = ExpiredQRView()

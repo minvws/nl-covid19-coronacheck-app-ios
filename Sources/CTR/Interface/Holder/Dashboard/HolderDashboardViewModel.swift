@@ -286,12 +286,16 @@ final class HolderDashboardViewModel: Logging {
 
 		if !allQRCards.isEmpty || !regionFilteredExpiredCards.isEmpty {
 			viewControllerCards += [
-				.headerMessage(message: {
+				{
 					switch validityRegion {
-						case .domestic: return L.holderDashboardIntroDomestic()
-						case .europeanUnion: return L.holderDashboardIntroInternational()
+						case .domestic:
+							return .headerMessage(message: L.holderDashboardIntroDomestic(),
+												  buttonTitle: nil)
+						case .europeanUnion:
+							return .headerMessage(message: L.holderDashboardIntroInternational(),
+												  buttonTitle: L.holderDashboardEmptyInternationalButton())
 					}
-				}())
+				}()
 			]
 		}
 
