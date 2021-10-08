@@ -137,7 +137,7 @@
 "holder.recovery.nolist.action" = "Naar mijn bewijzen";
 "holder.recovery.list.title" = "Jouw opgehaalde positieve testuitslag";
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
-"holder.recovery.start.message" = "<p>Heb je corona gehad? Dan kun je van de positieve testuitslag van de GGD een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
+"holder.recovery.start.message" = "<p>Heb je corona gehad? Dan kun je van de positieve testuitslag een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
 "holder.chooseqrcodetype.option.recovery.title" = "Een herstelbewijs";
 "holder.chooseqrcodetype.option.recovery.subtitle" = "Uit de test blijkt dat ik corona heb gehad";
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
@@ -410,7 +410,7 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "Over je herstelbewijs";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "<p>Je herstelbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.</p><p>Dit komt doordat het type test niet voldoet in Nederland.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "Over je herstelbewijs";
-"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Je herstelbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit komt doordat het type test niet voldoet. Alleen van een PCR-test kan een internationaal bewijs gemaakt worden.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Je herstelbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit kan bijvoorbeeld komen doordat je type test niet voldoet. Alleen van een PCR-test kan een internationaal bewijs gemaakt worden. Lees meer over de mogelijke oorzaken op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a></p>";
 "holder.dashboard.empty.domestic.title" = "Hier komt jouw Nederlandse bewijs";
 "holder.dashboard.empty.domestic.message" = "<p>Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>. De app maakt een Nederlands en een internationaal bewijs.</p>";
 "holder.dashboard.empty.international.title" = "Hier komt jouw internationale bewijs";
@@ -584,7 +584,7 @@
 "holder.event.about.vaccination.identifier" = "Uniek vaccinatienummer:";
 
 /* MARK: - Recovery Event */
-"holder.event.about.recovery.subtitle" = "De volgende gegevens zijn opgehaald bij de testlocatie:";
+"holder.event.about.recovery.subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder.event.about.recovery.name" = "Naam:";
 "holder.event.about.recovery.dateofbirth" = "Geboortedatum:";
 "holder.event.about.recovery.date" = "Testdatum:";

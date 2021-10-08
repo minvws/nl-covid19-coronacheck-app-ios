@@ -303,6 +303,34 @@ final class HolderDashboardViewModel: Logging {
 			]
 		}
 
+		if validityRegion == .europeanUnion {
+
+			// Check if there is is currently a SINGLE eu vaccination green card with dose number (dn) set to 2 (999991267):
+			let euVaccineGreenCardsWithDoseNumberOf2 = regionFilteredMyQRCards
+				.filter({ (qrCard: QRCard) in
+					guard case .europeanUnion(let evaluateDCC) = qrCard.region,
+						qrCard.greencards.count == 1,
+						let singleGreencard = qrCard.greencards.first,
+						let dcc = evaluateDCC(singleGreencard, now),
+						let euVaccination = dcc.vaccinations?.first,
+						let doseNumber = euVaccination.doseNumber
+					else { return false }
+
+					return doseNumber == 2
+				})
+
+			if euVaccineGreenCardsWithDoseNumberOf2.count == 1 {
+				viewControllerCards += [
+					.upgradeYourInternationalVaccinationCertificate(
+						message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
+						didTapMoreInfo: { [weak coordinatorDelegate] in
+							coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
+						}
+					)
+				]
+			}
+		}
+
 		viewControllerCards += regionFilteredExpiredCards
 			.compactMap { expiredQR -> HolderDashboardViewController.Card? in
 				let message = String.holderDashboardQRExpired(
@@ -386,7 +414,9 @@ extension HolderDashboardViewModel.QRCard {
 					title: L.holderDashboardQrTitle(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
-					didTapViewQR: { coordinatorDelegate.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id }) },
+					didTapViewQR: { [weak coordinatorDelegate] in
+						coordinatorDelegate?.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id })
+					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: { now in
 						let mostDistantFutureExpiryDate = origins.reduce(now) { result, nextOrigin in
@@ -432,7 +462,9 @@ extension HolderDashboardViewModel.QRCard {
 					}(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
-					didTapViewQR: { coordinatorDelegate.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id }) },
+					didTapViewQR: { [weak coordinatorDelegate] in
+						coordinatorDelegate?.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id })
+					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: nil
 				)]
