@@ -185,4 +185,26 @@ class UserSettingsSpy: UserSettingsProtocol {
 			return stubbedDeviceAuthenticationWarningShown
 		}
 	}
+
+	var invokedShouldNotifyThatEUVaccinationsWereUpgradedSetter = false
+	var invokedShouldNotifyThatEUVaccinationsWereUpgradedSetterCount = 0
+	var invokedShouldNotifyThatEUVaccinationsWereUpgraded: Bool?
+	var invokedShouldNotifyThatEUVaccinationsWereUpgradedList = [Bool]()
+	var invokedShouldNotifyThatEUVaccinationsWereUpgradedGetter = false
+	var invokedShouldNotifyThatEUVaccinationsWereUpgradedGetterCount = 0
+	var stubbedShouldNotifyThatEUVaccinationsWereUpgraded: Bool! = false
+
+	var shouldNotifyThatEUVaccinationsWereUpgraded: Bool {
+		set {
+			invokedShouldNotifyThatEUVaccinationsWereUpgradedSetter = true
+			invokedShouldNotifyThatEUVaccinationsWereUpgradedSetterCount += 1
+			invokedShouldNotifyThatEUVaccinationsWereUpgraded = newValue
+			invokedShouldNotifyThatEUVaccinationsWereUpgradedList.append(newValue)
+		}
+		get {
+			invokedShouldNotifyThatEUVaccinationsWereUpgradedGetter = true
+			invokedShouldNotifyThatEUVaccinationsWereUpgradedGetterCount += 1
+			return stubbedShouldNotifyThatEUVaccinationsWereUpgraded
+		}
+	}
 }

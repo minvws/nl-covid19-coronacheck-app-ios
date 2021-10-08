@@ -49,6 +49,8 @@ final class HolderDashboardViewModel: Logging {
 		var errorForQRCardsMissingCredentials: String?
 
 		var deviceHasClockDeviation: Bool = false
+
+		var shouldNotifyThatEUVaccinationsWereUpgraded: Bool = false
 	}
 
 	// MARK: - Private properties
@@ -309,29 +311,44 @@ final class HolderDashboardViewModel: Logging {
 
 		if validityRegion == .europeanUnion {
 
-			// Check if there is is currently a SINGLE eu vaccination green card with dose number (dn) set to 2 (999991267):
-			let euVaccineGreenCardsWithDoseNumberOf2 = regionFilteredMyQRCards
-				.filter({ (qrCard: QRCard) in
-					guard case .europeanUnion(let evaluateDCC) = qrCard.region,
-						qrCard.greencards.count == 1,
-						let singleGreencard = qrCard.greencards.first,
-						let dcc = evaluateDCC(singleGreencard, now),
-						let euVaccination = dcc.vaccinations?.first,
-						let doseNumber = euVaccination.doseNumber
-					else { return false }
+			// If there is more than one eu vaccination greencard:
+			if state.shouldNotifyThatEUVaccinationsWereUpgraded
+				&& regionFilteredMyQRCards.flatMap({ $0.greencards }).count > 1 {
 
-					return doseNumber == 2
-				})
-
-			if euVaccineGreenCardsWithDoseNumberOf2.count == 1 {
 				viewControllerCards += [
-					.upgradeYourInternationalVaccinationCertificate(
-						message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
-						didTapMoreInfo: { [weak coordinatorDelegate] in
-							coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
+					.upgradingYourInternationalVaccinationCertificateDidComplete(
+						message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
+						didTapMoreInfo: {
+							// coming soon 
 						}
 					)
 				]
+			} else {
+
+				// Check if there is is currently a SINGLE eu vaccination green card with dose number (dn) set to 2 (999991267):
+				let euVaccineGreenCardsWithDoseNumberOf2 = regionFilteredMyQRCards
+					.filter({ (qrCard: QRCard) in
+						guard case .europeanUnion(let evaluateDCC) = qrCard.region,
+							qrCard.greencards.count == 1,
+							let singleGreencard = qrCard.greencards.first,
+							let dcc = evaluateDCC(singleGreencard, now),
+							let euVaccination = dcc.vaccinations?.first,
+							let doseNumber = euVaccination.doseNumber
+						else { return false }
+
+						return doseNumber == 2
+					})
+
+				if euVaccineGreenCardsWithDoseNumberOf2.count == 1 {
+					viewControllerCards += [
+						.upgradeYourInternationalVaccinationCertificate(
+							message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
+							didTapMoreInfo: { [weak coordinatorDelegate] in
+								coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
+							}
+						)
+					]
+				}
 			}
 		}
 
@@ -518,10 +535,23 @@ extension HolderDashboardViewModel {
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
+
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(userDefaultsDidChange),
+			name: Foundation.UserDefaults.didChangeNotification,
+			object: nil
+		)
 	}
 
 	@objc func receiveDidBecomeActiveNotification() {
 		datasource.reload()
+	}
+
+	@objc func userDefaultsDidChange() {
+		DispatchQueue.main.async {
+			self.state.shouldNotifyThatEUVaccinationsWereUpgraded = self.userSettings.shouldNotifyThatEUVaccinationsWereUpgraded
+		}
 	}
 }
 

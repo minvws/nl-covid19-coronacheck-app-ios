@@ -419,7 +419,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			backAction: { [weak self] in
 				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 			},
-			greencardLoader: GreenCardLoader()
+			greencardLoader: GreenCardLoader(),
+			userSettings: userSettings
 		)
 		viewModel.coordinator = self
 		let viewController = UpgradeEUVaccinationViewController(viewModel: viewModel)

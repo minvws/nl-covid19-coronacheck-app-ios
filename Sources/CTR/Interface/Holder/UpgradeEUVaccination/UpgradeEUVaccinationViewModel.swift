@@ -8,75 +8,78 @@
 import Foundation
 
 final class UpgradeEUVaccinationViewModel: Logging {
-	
+
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var primaryButtonTitle: String
 	@Bindable private(set) var isLoading: Bool = false
 	@Bindable private(set) var alert: AlertContent?
-	
+
 	weak var coordinator: HolderCoordinatorDelegate?
-	
+
 	private var backbuttonAction: () -> Void
 	private let greencardLoader: GreenCardLoading
+	private let userSettings: UserSettingsProtocol
 	
-	init(backAction: @escaping () -> Void, greencardLoader: GreenCardLoading) {
+	init(backAction: @escaping () -> Void, greencardLoader: GreenCardLoading, userSettings: UserSettingsProtocol) {
 		self.greencardLoader = greencardLoader
+		self.userSettings = userSettings
 		self.title = L.holderUpgradeeuvaccinationTitle()
 		self.message = L.holderUpgradeeuvaccinationMessage()
 		self.primaryButtonTitle = L.holderUpgradeeuvaccinationButton()
 		self.backbuttonAction = backAction
 	}
-	
+
 	func primaryButtonTapped() {
 		load()
 	}
-	
+
 	func backButtonTapped() {
 		backbuttonAction()
 	}
-	
+
 	private func load() {
 		guard !isLoading else { return }
 		isLoading = true
-		
+
 		greencardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: nil) { [weak self] result in
 			guard let self = self else { return }
 			self.isLoading = false
-			self.handleGreenCardResult(result, completion: { success in
+			self.handleGreenCardResult(result, onSuccess: {
+				self.userSettings.shouldNotifyThatEUVaccinationsWereUpgraded = true
 				self.coordinator?.upgradeEUVaccinationDidComplete()
 			})
 		}
 	}
-	
+
 	private func handleGreenCardResult(
 		_ result: Result<Void, Error>,
-		completion: @escaping (Bool) -> Void) {
-			
+		onSuccess: @escaping () -> Void) {
+
 			switch result {
 				case .success:
 					// Call back to the coordinator to dismiss this view
-					completion(true)
-					
+					onSuccess()
+
 				case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
 					self.handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce)
-					
+
 				case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
 					self.handleServerError(serverError, for: .nonce)
-					
+
 				case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
 					self.handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce)
-					
+
 				case .failure(GreenCardLoader.Error.credentials(let serverError)):
 					self.handleServerError(serverError, for: .signer)
-					
+
 				case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
 					self.handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials)
-					
+
 				case .failure(let error):
 					self.logError("upgradeEUVaccinationViewModel - unhandled: \(error)")
 					fallthrough
-					
+
 				default:
 					self.handleClientSideError(clientCode: .unhandled, for: .signer) // todo: `for: .signer` is this right?
 			}
@@ -87,11 +90,11 @@ final class UpgradeEUVaccinationViewModel: Logging {
 // Taiga task: 2072
 
 extension UpgradeEUVaccinationViewModel {
-	
+
 	// MARK: Errors
-	
+
 	func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step) {
-		
+
 		let errorCode = ErrorCode(
 			flow: .upgradeEUVaccination,
 			step: step,
@@ -100,22 +103,22 @@ extension UpgradeEUVaccinationViewModel {
 		logDebug("errorCode: \(errorCode)")
 		displayClientErrorCode(errorCode)
 	}
-	
+
 	func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step) {
-		
+
 		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
 			self.logDebug("handleServerError \(serverError)")
-			
+
 			switch error {
 				case .serverBusy:
 					displayServerTooBusyError(errorCode: ErrorCode(flow: .upgradeEUVaccination, step: step, errorCode: "429"))
-					
+
 				case .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
 					displayServerUnreachable(ErrorCode(flow: .upgradeEUVaccination, step: step, clientCode: error.getClientErrorCode() ?? .unhandled))
-					
+
 				case .noInternetConnection:
 					presentNoInternet()
-					
+
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					// 304, 3xx, 4xx, 5xx
 					let errorCode = ErrorCode(
@@ -126,7 +129,7 @@ extension UpgradeEUVaccinationViewModel {
 					)
 					logDebug("errorCode: \(errorCode)")
 					displayServerErrorCode(errorCode)
-					
+
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
 					// Client side
 					let errorCode = ErrorCode(
@@ -140,11 +143,11 @@ extension UpgradeEUVaccinationViewModel {
 			}
 		}
 	}
-	
+
 	// MARK: - Presenting Error dialogs
-	
+
 	fileprivate func presentNoInternet() {
-		
+
 		// this is a retry-able situation
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
@@ -157,11 +160,11 @@ extension UpgradeEUVaccinationViewModel {
 			okTitle: L.generalRetry()
 		)
 	}
-	
+
 	// MARK: - Navigating to Error screens
-	
+
 	fileprivate func displayServerTooBusyError(errorCode: ErrorCode) {
-		
+
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
 			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
@@ -172,27 +175,27 @@ extension UpgradeEUVaccinationViewModel {
 			secondaryActionTitle: nil,
 			secondaryAction: nil
 		)
-		
+
 		coordinator?.displayError(content: content, backAction: { self.coordinator?.navigateBackToStart() })
 	}
-	
+
 	fileprivate func displayServerUnreachable(_ errorCode: ErrorCode) {
-		
+
 		displayErrorCode(title: L.holderErrorstateTitle(), message: L.generalErrorServerUnreachableErrorCode("\(errorCode)"))
 	}
-	
+
 	fileprivate func displayClientErrorCode(_ errorCode: ErrorCode) {
-		
+
 		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}
-	
+
 	fileprivate func displayServerErrorCode(_ errorCode: ErrorCode) {
-		
+
 		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateServerMessage("\(errorCode)"))
 	}
-	
+
 	private func displayErrorCode(title: String, message: String) {
-		
+
 		let content = Content(
 			title: title,
 			subTitle: message,
@@ -205,7 +208,7 @@ extension UpgradeEUVaccinationViewModel {
 				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
 					return
 				}
-				
+
 				self?.coordinator?.openUrl(url, inApp: true)
 			}
 		)
