@@ -20,6 +20,8 @@ class HolderDashboardViewController: BaseViewController {
 
 		case upgradeYourInternationalVaccinationCertificate(message: String, didTapMoreInfo: () -> Void)
 
+		case upgradingYourInternationalVaccinationCertificateDidComplete(message: String, didTapMoreInfo: () -> Void)
+
 		case emptyState(image: UIImage?, title: String, message: String, buttonTitle: String?)
 
 		case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
@@ -134,7 +136,6 @@ class HolderDashboardViewController: BaseViewController {
 			.compactMap { [weak self] card -> UIView? in
 				
 				switch card {
-					
 					case let .headerMessage(message, buttonTitle):
 						
 						let headerMessageView = HeaderMessageView()
@@ -157,7 +158,8 @@ class HolderDashboardViewController: BaseViewController {
 						
 					case let .originNotValidInThisRegion(message, didTapMoreInfo),
 						 let .deviceHasClockDeviation(message, didTapMoreInfo),
-						 let .upgradeYourInternationalVaccinationCertificate(message: message, didTapMoreInfo):
+						 let .upgradeYourInternationalVaccinationCertificate(message: message, didTapMoreInfo),
+						 let .upgradingYourInternationalVaccinationCertificateDidComplete(message, didTapMoreInfo):
 
 						let messageCard = MessageCardView()
 						messageCard.title = message

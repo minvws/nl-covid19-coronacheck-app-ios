@@ -24,6 +24,8 @@ protocol UserSettingsProtocol: AnyObject {
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? { get set }
 
 	var deviceAuthenticationWarningShown: Bool { get set }
+
+	var shouldNotifyThatEUVaccinationsWereUpgraded: Bool { get set }
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -51,4 +53,7 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "shouldNotifyThatEUVaccinationsWereUpgraded", defaultValue: false)
+	var shouldNotifyThatEUVaccinationsWereUpgraded: Bool // swiftlint:disable:this let_var_whitespace
 }
