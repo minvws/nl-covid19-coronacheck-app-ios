@@ -429,7 +429,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func upgradeEUVaccinationDidComplete() {
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {
-			// TODO:
+			// (will be added in upcoming PR)
 		})
 	}
 
@@ -463,8 +463,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
 		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
 	}
-
-
 
 	func displayError(content: Content, backAction: @escaping () -> Void) {
 
