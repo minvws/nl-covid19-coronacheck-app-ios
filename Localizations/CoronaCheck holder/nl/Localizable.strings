@@ -1,3 +1,7 @@
+"holder.dashboard.card.euvaccinationswereupgraded.message" = "Je internationale vaccinatiebewijs is vernieuwd";
+"holder.dashboard.card.euvaccinationswereupgraded.button" = "Lees meer";
+"holder.euvaccinationswereupgraded.title" = "Vernieuwd vaccinatiebewijs";
+"holder.euvaccinationswereupgraded.message" = "<p>We hebben voor iedereen het vaccinatiebewijs vernieuwd. Je hebt nu ook toegang tot QR-codes van eerdere prikken.</p><p>Dat is bijvoorbeeld handig voor mensen die ergens heen willen waar hun laatste prik nog niet geldig is.</p><p><a href=\"https://coronacheck.nl/nl/faq/3-5-waarom-heb-ik-voor-elke-prik-een-internationale-QR-code/\">Lees hier meer over je vernieuwde vaccinatiebewijs</a>.</p>";
 "holder.dashboard.card.upgradeeuvaccination.message" = "Je kan je internationale vaccinatiebewijs vernieuwen";
 "holder.dashboard.card.upgradeeuvaccination.button" = "Lees meer";
 "holder.upgradeeuvaccination.title" = "Vaccinatiebewijs vernieuwen";

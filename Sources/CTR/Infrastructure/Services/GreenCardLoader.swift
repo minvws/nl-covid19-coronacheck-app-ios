@@ -89,8 +89,8 @@ class GreenCardLoader: GreenCardLoading, Logging {
 						switch response {
 							case .failure(let error):
 								completion(.failure(error))
-							case .success(let greenCardResponse):
 
+							case .success(let greenCardResponse):
 								if let evaluator = responseEvaluator, !evaluator(greenCardResponse) {
 									completion(.failure(Error.didNotEvaluate))
 									return

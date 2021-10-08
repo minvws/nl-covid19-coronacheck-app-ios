@@ -199,6 +199,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		}
 	}
 
+	var invokedUpgradeEUVaccinationDidComplete = false
+	var invokedUpgradeEUVaccinationDidCompleteCount = 0
+
+	func upgradeEUVaccinationDidComplete() {
+		invokedUpgradeEUVaccinationDidComplete = true
+		invokedUpgradeEUVaccinationDidCompleteCount += 1
+	}
+
 	var invokedDismiss = false
 	var invokedDismissCount = 0
 
