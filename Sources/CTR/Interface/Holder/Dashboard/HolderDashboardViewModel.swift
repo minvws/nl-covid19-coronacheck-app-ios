@@ -81,7 +81,8 @@ final class HolderDashboardViewModel: Logging {
 				coordinatorDelegate: coordinator,
 				strippenRefresher: strippenRefresher,
 				remoteConfigManager: remoteConfigManager,
-				now: self.now()
+				now: self.now(),
+				userSettings: userSettings
 			)
 			
 			hasAddCertificateMode = state.qrCards.isEmpty
@@ -238,7 +239,8 @@ final class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: (HolderCoordinatorDelegate),
 		strippenRefresher: DashboardStrippenRefreshing,
 		remoteConfigManager: RemoteConfigManaging,
-		now: Date
+		now: Date,
+		userSettings: UserSettingsProtocol
 	) -> (domestic: [HolderDashboardViewController.Card], international: [HolderDashboardViewController.Card]) {
 
 		let domesticCards = assembleCards(
@@ -248,7 +250,8 @@ final class HolderDashboardViewModel: Logging {
 			coordinatorDelegate: coordinatorDelegate,
 			strippenRefresher: strippenRefresher,
 			remoteConfigManager: remoteConfigManager,
-			now: now)
+			now: now,
+			userSettings: userSettings)
 
 		let internationalCards = assembleCards(
 			forValidityRegion: .europeanUnion,
@@ -257,11 +260,14 @@ final class HolderDashboardViewModel: Logging {
 			coordinatorDelegate: coordinatorDelegate,
 			strippenRefresher: strippenRefresher,
 			remoteConfigManager: remoteConfigManager,
-			now: now)
+			now: now,
+			userSettings: userSettings)
 
 		return (domestic: domesticCards, international: internationalCards)
 	}
 
+	// Temporary swiftlint disable.. 
+	// swiftlint:disable:next function_parameter_count
 	private static func assembleCards(
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
@@ -269,7 +275,8 @@ final class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: HolderCoordinatorDelegate,
 		strippenRefresher: DashboardStrippenRefreshing,
 		remoteConfigManager: RemoteConfigManaging,
-		now: Date
+		now: Date,
+		userSettings: UserSettingsProtocol
 	) -> [HolderDashboardViewController.Card] {
 
 		let allQRCards = state.qrCards
@@ -303,9 +310,13 @@ final class HolderDashboardViewModel: Logging {
 
 		if state.deviceHasClockDeviation && !allQRCards.isEmpty {
 			viewControllerCards += [
-				.deviceHasClockDeviation(message: L.holderDashboardClockDeviationDetectedMessage(), didTapMoreInfo: {
-					coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
-				})
+				.deviceHasClockDeviation(
+					message: L.holderDashboardClockDeviationDetectedMessage(),
+					callToActionButtonText: L.generalReadmore(),
+					didTapCallToAction: {
+						coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
+					}
+				)
 			]
 		}
 
@@ -318,8 +329,16 @@ final class HolderDashboardViewModel: Logging {
 				viewControllerCards += [
 					.upgradingYourInternationalVaccinationCertificateDidComplete(
 						message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
-						didTapMoreInfo: {
-							// coming soon 
+						callToActionButtonText: L.generalReadmore(),
+						didTapCallToAction: { [weak coordinatorDelegate] in
+							coordinatorDelegate?.presentInformationPage(
+								title: L.holderEuvaccinationswereupgradedTitle(),
+								body: L.holderEuvaccinationswereupgradedMessage(),
+								hideBodyForScreenCapture: false,
+								openURLsInApp: true)
+						},
+						didTapClose: {
+							userSettings.shouldNotifyThatEUVaccinationsWereUpgraded = false
 						}
 					)
 				]
@@ -343,7 +362,8 @@ final class HolderDashboardViewModel: Logging {
 					viewControllerCards += [
 						.upgradeYourInternationalVaccinationCertificate(
 							message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
-							didTapMoreInfo: { [weak coordinatorDelegate] in
+							callToActionButtonText: L.generalReadmore(),
+							didTapCallToAction: { [weak coordinatorDelegate] in
 								coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
 							}
 						)
@@ -392,12 +412,14 @@ final class HolderDashboardViewModel: Logging {
 		viewControllerCards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state, thisRegion: validityRegion, now: now)
 			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
 			.map { originType, message in
-				return .originNotValidInThisRegion(message: message) {
-					coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
-						originType: originType,
-						currentRegion: validityRegion,
-						availableRegion: validityRegion.opposite)
-				}
+				return .originNotValidInThisRegion(
+					message: message,
+					callToActionButtonText: L.generalReadmore()) {
+						coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
+							originType: originType,
+							currentRegion: validityRegion,
+							availableRegion: validityRegion.opposite)
+					}
 			}
 
 		// Map a `QRCard` to a `VC.Card`:

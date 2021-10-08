@@ -14,13 +14,13 @@ class HolderDashboardViewController: BaseViewController {
 
 		case expiredQR(message: String, didTapClose: () -> Void)
 
-		case originNotValidInThisRegion(message: String, didTapMoreInfo: () -> Void)
+		case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 
-		case deviceHasClockDeviation(message: String, didTapMoreInfo: () -> Void)
+		case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 
-		case upgradeYourInternationalVaccinationCertificate(message: String, didTapMoreInfo: () -> Void)
+		case upgradeYourInternationalVaccinationCertificate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 
-		case upgradingYourInternationalVaccinationCertificateDidComplete(message: String, didTapMoreInfo: () -> Void)
+		case upgradingYourInternationalVaccinationCertificateDidComplete(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 
 		case emptyState(image: UIImage?, title: String, message: String, buttonTitle: String?)
 
@@ -145,25 +145,36 @@ class HolderDashboardViewController: BaseViewController {
 							self?.viewModel.openUrl(url)
 						}
 						headerMessageView.buttonTappedCommand = {
+
 							guard let url = URL(string: L.holderDashboardIntroInternationalUrl()) else { return }
 							self?.viewModel.openUrl(url)
 						}
 						return headerMessageView
 						
+					// Message Cards with only a message + close button
 					case let .expiredQR(message, didTapCloseAction):
-						let expiredQRCard = ExpiredQRView()
-						expiredQRCard.title = message
-						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
-						return expiredQRCard
-						
-					case let .originNotValidInThisRegion(message, didTapMoreInfo),
-						 let .deviceHasClockDeviation(message, didTapMoreInfo),
-						 let .upgradeYourInternationalVaccinationCertificate(message: message, didTapMoreInfo),
-						 let .upgradingYourInternationalVaccinationCertificateDidComplete(message, didTapMoreInfo):
+						let messageCard = MessageCardView()
+						messageCard.title = message
+						messageCard.closeButtonTappedCommand = didTapCloseAction
+						return messageCard
+
+					// Message Cards with a message + CTA button
+					case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
+						 let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
+						 let .upgradeYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction):
 
 						let messageCard = MessageCardView()
 						messageCard.title = message
-						messageCard.infoButtonTappedCommand = didTapMoreInfo
+						messageCard.callToActionButtonText = callToActionButtonText
+						messageCard.callToActionButtonTappedCommand = didTapCallToAction
+						return messageCard
+
+					case let .upgradingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+						let messageCard = MessageCardView()
+						messageCard.title = message
+						messageCard.callToActionButtonText = callToActionButtonText
+						messageCard.callToActionButtonTappedCommand = didTapCallToAction
+						messageCard.closeButtonTappedCommand = didTapCloseAction
 						return messageCard
 
 					case let .emptyState(image, title, message, buttonTitle):
