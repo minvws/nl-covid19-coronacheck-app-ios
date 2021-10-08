@@ -43,6 +43,7 @@ class ShowQRViewController: BaseViewController {
 		setupPages()
 		setupBinding()
 		addBackButton()
+		viewModel.setBrightness()
 	}
 
 	private func setupBinding() {
@@ -76,6 +77,7 @@ class ShowQRViewController: BaseViewController {
 	override func viewWillDisappear(_ animated: Bool) {
 
 		super.viewWillDisappear(animated)
+		viewModel.setBrightness(reset: true)
 		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
 	}
 }

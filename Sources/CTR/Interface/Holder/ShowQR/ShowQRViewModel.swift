@@ -17,8 +17,11 @@ class ShowQRViewModel: Logging {
 	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
 	weak private var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
 	private var mappingManager: MappingManaging? = Services.mappingManager
+	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
-	var dataSource: ShowQRDatasourceProtocol
+	private var previousBrightness: CGFloat?
+
+	private var dataSource: ShowQRDatasourceProtocol
 
 	private var currentPage: Int {
 		didSet {
@@ -63,7 +66,17 @@ class ShowQRViewModel: Logging {
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
 		self.startingPage = mostRelevantPage
 		self.currentPage = mostRelevantPage
+
 		handleVaccinationDosageInformation()
+		setupContent(greenCards: greenCards, thirdPartyTicketAppName: thirdPartyTicketAppName)
+		setupListeners()
+	}
+
+	deinit {
+		notificationCenter.removeObserver(self)
+	}
+
+	private func setupContent(greenCards: [GreenCard], thirdPartyTicketAppName: String?) {
 
 		if let greenCard = greenCards.first {
 			if greenCard.type == GreenCardType.domestic.rawValue {
@@ -77,6 +90,33 @@ class ShowQRViewModel: Logging {
 				showInternationalAnimation = true
 			}
 		}
+	}
+
+	private func setupListeners() {
+
+		notificationCenter.addObserver(
+			self,
+			selector: #selector(onDidBecomeActiveNotification),
+			name: UIApplication.didBecomeActiveNotification,
+			object: nil
+		)
+	}
+
+	/// Handle the event the application did become active
+	@objc func onDidBecomeActiveNotification() {
+		setBrightness()
+	}
+
+	/// Adjust the brightness
+	/// - Parameter reset: True if we reset to previous value
+	func setBrightness(reset: Bool = false) {
+
+		let currentBrightness = UIScreen.main.brightness
+		if currentBrightness < 1 {
+			previousBrightness = currentBrightness
+		}
+
+		UIScreen.main.brightness = reset ? previousBrightness ?? 1 : 1
 	}
 
 	func userDidChangeCurrentPage(toPageIndex pageIndex: Int) {

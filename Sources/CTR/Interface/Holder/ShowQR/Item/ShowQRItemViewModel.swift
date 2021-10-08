@@ -29,7 +29,6 @@ class ShowQRItemViewModel: Logging {
 	weak var validityTimer: Timer?
 	weak private var screenshotWarningTimer: Timer?
 
-	private var previousBrightness: CGFloat?
 	private var greenCard: GreenCard
 	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
 	private var qrShouldBeHidden: Bool
@@ -39,7 +38,6 @@ class ShowQRItemViewModel: Logging {
 			updateQRVisibility()
 		}
 	}
-
 	private var screenIsBeingCaptured: Bool {
 		didSet {
 			updateQRVisibility()
@@ -224,18 +222,6 @@ class ShowQRItemViewModel: Logging {
 		currentQRImage = nil
 		stopValidityTimer()
 		delegate?.itemIsNotValid()
-	}
-
-	/// Adjust the brightness
-	/// - Parameter reset: True if we reset to previous value
-	func setBrightness(reset: Bool = false) {
-
-		let currentBrightness = UIScreen.main.brightness
-		if currentBrightness < 1 {
-			previousBrightness = currentBrightness
-		}
-
-		UIScreen.main.brightness = reset ? previousBrightness ?? 1 : 1
 	}
 
 	/// Start the validity timer, check every 90 seconds.
