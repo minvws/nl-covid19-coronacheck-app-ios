@@ -319,7 +319,7 @@ final class HolderDashboardViewModel: Logging {
 					.upgradingYourInternationalVaccinationCertificateDidComplete(
 						message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
 						didTapMoreInfo: { [weak coordinatorDelegate] in
-							print("did tap")
+							// coming soon 
 						}
 					)
 				]
