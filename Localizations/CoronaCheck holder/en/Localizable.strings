@@ -1,3 +1,7 @@
+"holder.dashboard.card.euvaccinationswereupgraded.message" = "Your international vaccination certificate has been renewed";
+"holder.dashboard.card.euvaccinationswereupgraded.button" = "Read more";
+"holder.euvaccinationswereupgraded.title" = "Renewed vaccination certificate";
+"holder.euvaccinationswereupgraded.message" = "<p>We have renewed everyone's vaccination certificate. From now on, you have access to QR codes of earlier vaccinations.</p><p>This can be useful for people who want to go to a place where their latest vaccination is not yet valid.</p><p><a href=\"https://coronacheck.nl/en/faq/3-5-waarom-heb-ik-voor-elke-prik-een-internationale-QR-code/\">Read more about your renewed vaccination certificate here</a>.</p>";
 "holder.dashboard.card.upgradeeuvaccination.message" = "You can renew your international vaccination certificate";
 "holder.dashboard.card.upgradeeuvaccination.button" = "Read more";
 "holder.upgradeeuvaccination.title" = "Renew vaccination certificate";

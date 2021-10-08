@@ -56,6 +56,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToLaunchThirdPartyTicketApp()
 
 	func displayError(content: Content, backAction: @escaping () -> Void)
+
+	func upgradeEUVaccinationDidComplete()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -413,6 +415,22 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
+		let viewModel = UpgradeEUVaccinationViewModel(
+			backAction: { [weak self] in
+				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+			},
+			greencardLoader: GreenCardLoader()
+		)
+		viewModel.coordinator = self
+		let viewController = UpgradeEUVaccinationViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+
+	func upgradeEUVaccinationDidComplete() {
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {
+			// (will be added in upcoming PR)
+		})
 	}
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
