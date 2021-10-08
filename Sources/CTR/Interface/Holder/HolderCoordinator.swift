@@ -46,7 +46,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
 
 	func userWishesMoreInfoAboutClockDeviation()
-	
+
+	func userWishesMoreInfoAboutUpgradingEUVaccinations()
+
 	func openUrl(_ url: URL, inApp: Bool)
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
@@ -408,6 +410,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+
+	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
 	}
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
