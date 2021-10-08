@@ -101,15 +101,17 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards).toEventually(haveCount(1))
 		expect(self.sut.internationalCards).toEventually(haveCount(1))
 
-		expect(self.sut.domesticCards.first).to(beEmptyStateCard(test: { image, title, message in
+		expect(self.sut.domesticCards.first).to(beEmptyStateCard(test: { image, title, message, buttonTitle in
 			expect(image) == I.dashboard.domestic()
 			expect(title) == L.holderDashboardEmptyDomesticTitle()
 			expect(message) == L.holderDashboardEmptyDomesticMessage()
+			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.internationalCards.first).to(beEmptyStateCard(test: { image, title, message in
+		expect(self.sut.internationalCards.first).to(beEmptyStateCard(test: { image, title, message, buttonTitle in
 			expect(image) == I.dashboard.international()
 			expect(title) == L.holderDashboardEmptyInternationalTitle()
 			expect(message) == L.holderDashboardEmptyInternationalMessage()
+			expect(buttonTitle) == L.holderDashboardEmptyInternationalButton()
 		}))
 	}
 
@@ -392,8 +394,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(3))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
@@ -500,8 +503,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, newStrippenState)
 
 		expect(self.sut.domesticCards).toEventually(haveCount(3))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
@@ -539,8 +543,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(3))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
@@ -586,11 +591,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards).toEventually(haveCount(3))
 
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
@@ -632,8 +639,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(3))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
@@ -671,8 +679,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(3))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard())
@@ -763,8 +772,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -812,8 +822,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -861,8 +872,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
@@ -911,8 +923,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
@@ -962,8 +975,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1014,8 +1028,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1065,8 +1080,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1111,8 +1127,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1162,8 +1179,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1211,8 +1229,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
@@ -1260,8 +1279,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1322,8 +1342,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(
@@ -1365,8 +1386,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1405,8 +1427,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1460,8 +1483,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(4))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1526,8 +1550,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(4))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
@@ -1581,8 +1606,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(4))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
@@ -1651,8 +1677,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1701,8 +1728,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
@@ -1752,8 +1780,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -1796,8 +1825,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
@@ -1843,8 +1873,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(4))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
 		}))
 		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
@@ -1903,8 +1934,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(4))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		})
 		expect(self.sut.internationalCards[1]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
@@ -1970,8 +2002,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -2044,8 +2077,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
@@ -2088,22 +2122,22 @@ class HolderDashboardViewModelTests: XCTestCase {
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
-private func beEmptyStateCard(test: @escaping (UIImage?, String, String) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+private func beEmptyStateCard(test: @escaping (UIImage?, String, String, String?) -> Void = { _, _, _, _  in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .emptyState with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
-		   case let .emptyState(image, title1, message1) = actual {
-			test(image, title1, message1)
+		   case let .emptyState(image, title1, message1, buttonTitle1) = actual {
+			test(image, title1, message1, buttonTitle1)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)
 	}
 }
 
-private func beHeaderMessageCard(test: @escaping (String) -> Void = { _ in }) -> Predicate<HolderDashboardViewController.Card> {
+private func beHeaderMessageCard(test: @escaping (String, String?) -> Void = { _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .headerMessage with matching value") { expression, message in
 		if let actual = try expression.evaluate(),
-		   case let .headerMessage(message1) = actual {
-			test(message1)
+		   case let .headerMessage(message1, buttonTitle1) = actual {
+			test(message1, buttonTitle1)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)

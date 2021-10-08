@@ -10,7 +10,7 @@ import UIKit
 class HolderDashboardViewController: BaseViewController {
 
 	enum Card {
-		case headerMessage(message: String)
+		case headerMessage(message: String, buttonTitle: String?)
 
 		case expiredQR(message: String, didTapClose: () -> Void)
 
@@ -20,7 +20,7 @@ class HolderDashboardViewController: BaseViewController {
 
 		case upgradeYourInternationalVaccinationCertificate(message: String, didTapMoreInfo: () -> Void)
 
-		case emptyState(image: UIImage?, title: String, message: String)
+		case emptyState(image: UIImage?, title: String, message: String, buttonTitle: String?)
 
 		case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
@@ -135,13 +135,19 @@ class HolderDashboardViewController: BaseViewController {
 				
 				switch card {
 					
-					case let .headerMessage(message):
+					case let .headerMessage(message, buttonTitle):
 						
-						let text = TextView(htmlText: message)
-						text.linkTouched { url in
+						let headerMessageView = HeaderMessageView()
+						headerMessageView.message = message
+						headerMessageView.buttonTitle = buttonTitle
+						headerMessageView.contentTextView.linkTouched { url in
 							self?.viewModel.openUrl(url)
 						}
-						return text
+						headerMessageView.buttonTappedCommand = {
+							guard let url = URL(string: L.holderDashboardIntroInternationalUrl()) else { return }
+							self?.viewModel.openUrl(url)
+						}
+						return headerMessageView
 						
 					case let .expiredQR(message, didTapCloseAction):
 						let expiredQRCard = ExpiredQRView()
@@ -158,12 +164,17 @@ class HolderDashboardViewController: BaseViewController {
 						messageCard.infoButtonTappedCommand = didTapMoreInfo
 						return messageCard
 
-					case let .emptyState(image, title, message):
+					case let .emptyState(image, title, message, buttonTitle):
 						let emptyDashboardView = EmptyDashboardView()
 						emptyDashboardView.image = image
 						emptyDashboardView.title = title
 						emptyDashboardView.message = message
+						emptyDashboardView.buttonTitle = buttonTitle
 						emptyDashboardView.contentTextView.linkTouched { url in
+							self?.viewModel.openUrl(url)
+						}
+						emptyDashboardView.buttonTappedCommand = {
+							guard let url = URL(string: L.holderDashboardEmptyInternationalUrl()) else { return }
 							self?.viewModel.openUrl(url)
 						}
 						return emptyDashboardView
