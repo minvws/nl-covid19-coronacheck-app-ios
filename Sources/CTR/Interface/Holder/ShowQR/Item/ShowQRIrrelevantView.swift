@@ -118,6 +118,8 @@ class ShowQRIrrelevantView: BaseView {
 
 			titleLabel.centerYAnchor.constraint(equalTo: innerView.centerYAnchor),
 			titleLabel.centerXAnchor.constraint(equalTo: innerView.centerXAnchor),
+			titleLabel.leadingAnchor.constraint(equalTo: innerView.leadingAnchor),
+			titleLabel.trailingAnchor.constraint(equalTo: innerView.trailingAnchor),
 
 			actionLabel.leadingAnchor.constraint(equalTo: innerView.leadingAnchor),
 			actionLabel.trailingAnchor.constraint(equalTo: innerView.trailingAnchor),
