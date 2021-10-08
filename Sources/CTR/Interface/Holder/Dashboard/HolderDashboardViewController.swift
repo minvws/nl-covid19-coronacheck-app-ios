@@ -18,6 +18,8 @@ class HolderDashboardViewController: BaseViewController {
 
 		case deviceHasClockDeviation(message: String, didTapMoreInfo: () -> Void)
 
+		case upgradeYourInternationalVaccinationCertificate(message: String, didTapMoreInfo: () -> Void)
+
 		case emptyState(image: UIImage?, title: String, message: String)
 
 		case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
@@ -148,7 +150,8 @@ class HolderDashboardViewController: BaseViewController {
 						return expiredQRCard
 						
 					case let .originNotValidInThisRegion(message, didTapMoreInfo),
-						 let .deviceHasClockDeviation(message, didTapMoreInfo):
+						 let .deviceHasClockDeviation(message, didTapMoreInfo),
+						 let .upgradeYourInternationalVaccinationCertificate(message: message, didTapMoreInfo):
 
 						let messageCard = MessageCardView()
 						messageCard.title = message

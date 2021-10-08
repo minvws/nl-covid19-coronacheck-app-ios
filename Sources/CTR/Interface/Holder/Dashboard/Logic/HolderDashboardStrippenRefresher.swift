@@ -325,10 +325,13 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		switch (expiredGreencards.count, expiringGreencards.count) {
 			case (0, 0): return .noActionNeeded
 			case (0, _):
-				let earliestExpiryDate = expiringGreencards.map({ $1 }).reduce(.distantFuture) { result, date in
-					return date < result ? date : result
-				}
+				let earliestExpiryDate = expiringGreencards
+					.map({ $1 })
+					.reduce(.distantFuture) { result, date in
+						return date < result ? date : result
+					}
 				return .expiring(deadline: earliestExpiryDate)
+
 			case (_, _): return .expired
 		}
 	}
