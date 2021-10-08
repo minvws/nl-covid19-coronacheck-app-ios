@@ -39,7 +39,7 @@ class VaccinationEventView: BaseView {
 	/// The link label
 	private let linkLabel: Label = {
 
-		return Label(bodySemiBold: nil).multiline()
+		return Label(bodyMedium: nil).multiline()
 	}()
 
 	private let detailsButton: UIButton = {
