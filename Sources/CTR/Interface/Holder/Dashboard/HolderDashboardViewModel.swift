@@ -81,7 +81,8 @@ final class HolderDashboardViewModel: Logging {
 				coordinatorDelegate: coordinator,
 				strippenRefresher: strippenRefresher,
 				remoteConfigManager: remoteConfigManager,
-				now: self.now()
+				now: self.now(),
+				userSettings: userSettings
 			)
 			
 			hasAddCertificateMode = state.qrCards.isEmpty
@@ -238,7 +239,8 @@ final class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: (HolderCoordinatorDelegate),
 		strippenRefresher: DashboardStrippenRefreshing,
 		remoteConfigManager: RemoteConfigManaging,
-		now: Date
+		now: Date,
+		userSettings: UserSettingsProtocol
 	) -> (domestic: [HolderDashboardViewController.Card], international: [HolderDashboardViewController.Card]) {
 
 		let domesticCards = assembleCards(
@@ -248,7 +250,8 @@ final class HolderDashboardViewModel: Logging {
 			coordinatorDelegate: coordinatorDelegate,
 			strippenRefresher: strippenRefresher,
 			remoteConfigManager: remoteConfigManager,
-			now: now)
+			now: now,
+			userSettings: userSettings)
 
 		let internationalCards = assembleCards(
 			forValidityRegion: .europeanUnion,
@@ -257,7 +260,8 @@ final class HolderDashboardViewModel: Logging {
 			coordinatorDelegate: coordinatorDelegate,
 			strippenRefresher: strippenRefresher,
 			remoteConfigManager: remoteConfigManager,
-			now: now)
+			now: now,
+			userSettings: userSettings)
 
 		return (domestic: domesticCards, international: internationalCards)
 	}
@@ -269,7 +273,8 @@ final class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: HolderCoordinatorDelegate,
 		strippenRefresher: DashboardStrippenRefreshing,
 		remoteConfigManager: RemoteConfigManaging,
-		now: Date
+		now: Date,
+		userSettings: UserSettingsProtocol
 	) -> [HolderDashboardViewController.Card] {
 
 		let allQRCards = state.qrCards
@@ -322,8 +327,16 @@ final class HolderDashboardViewModel: Logging {
 				viewControllerCards += [
 					.upgradingYourInternationalVaccinationCertificateDidComplete(
 						message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
-						didTapMoreInfo: {
-							// coming soon 
+						callToActionButtonText: L.generalReadmore(),
+						didTapCallToAction: { [weak coordinatorDelegate] in
+							coordinatorDelegate?.presentInformationPage(
+								title: L.holderEuvaccinationswereupgradedTitle(),
+								body: L.holderEuvaccinationswereupgradedMessage(),
+								hideBodyForScreenCapture: false,
+								openURLsInApp: true)
+						},
+						didTapClose: {
+							userSettings.shouldNotifyThatEUVaccinationsWereUpgraded = false
 						}
 					)
 				]
