@@ -347,7 +347,7 @@ final class HolderDashboardViewModel: Logging {
 						}
 					)
 				]
-			} else {
+			} else if !userSettings.didCompleteEUVaccinationUpgrade {
 
 				// Check if there is is currently a SINGLE eu vaccination green card with dose number (dn) set to 2 (999991267):
 				let euVaccineGreenCardsWithDoseNumberOf2 = regionFilteredMyQRCards
