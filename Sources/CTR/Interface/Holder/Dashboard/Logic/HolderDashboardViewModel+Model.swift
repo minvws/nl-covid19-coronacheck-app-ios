@@ -30,11 +30,11 @@ extension HolderDashboardViewModel {
 			case europeanUnion(evaluateDCC: (QRCard.GreenCard, Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
 		}
 
-		struct GreenCard {
+		struct GreenCard: Equatable {
 			let id: NSManagedObjectID
 			let origins: [Origin]
 
-			struct Origin { // swiftlint:disable:this nesting
+			struct Origin: Equatable { // swiftlint:disable:this nesting
 
 				let type: QRCodeOriginType // vaccination | test | recovery
 				let eventDate: Date
@@ -105,9 +105,34 @@ extension HolderDashboardViewModel {
 		}
 	}
 
-	struct ExpiredQR {
+	struct ExpiredQR: Equatable {
 		let id = UUID().uuidString
 		let region: QRCodeValidityRegion
 		let type: QRCodeOriginType
+	}
+}
+
+// MARK: - Custom Equatable conformances
+
+extension QRCard.Region: Equatable {
+	static func == (lhs: HolderDashboardViewModel.QRCard.Region, rhs: HolderDashboardViewModel.QRCard.Region) -> Bool {
+		switch (lhs, rhs) {
+			case (.netherlands, .netherlands): return true
+			case (.europeanUnion, .europeanUnion):
+				// No need to compare the evaluateDCC function
+				return true
+			default:
+				return false
+		}
+	}
+}
+
+extension QRCard: Equatable {
+	static func == (lhs: HolderDashboardViewModel.QRCard, rhs: HolderDashboardViewModel.QRCard) -> Bool {
+		let regionsMatch = lhs.region == rhs.region
+		let greencardsMatch = lhs.greencards == rhs.greencards
+		let shouldShowErrorBeneathCardMatch = lhs.shouldShowErrorBeneathCard == rhs.shouldShowErrorBeneathCard
+
+		return regionsMatch && greencardsMatch && shouldShowErrorBeneathCardMatch
 	}
 }

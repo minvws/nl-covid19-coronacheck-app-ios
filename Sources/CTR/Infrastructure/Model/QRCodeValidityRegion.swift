@@ -8,7 +8,7 @@
 import Foundation
 
 // Remove this - see QRCard.Region
-enum QRCodeValidityRegion: String, Codable {
+enum QRCodeValidityRegion: String, Codable, Equatable {
 	case domestic
 	case europeanUnion
 

@@ -36,7 +36,7 @@ final class HolderDashboardViewModel: Logging {
 	/// Wrapper around some state variables
 	/// that allows us to use a `didSet{}` to
 	/// get a callback if any of them are mutated.
-	fileprivate struct State {
+	fileprivate struct State: Equatable {
 		var qrCards: [QRCard]
 		var expiredGreenCards: [ExpiredQR]
 		var showCreateCard: Bool
@@ -71,7 +71,9 @@ final class HolderDashboardViewModel: Logging {
 
 	private var state: State {
 		didSet {
-			guard let coordinator = coordinator else { return }
+			guard let coordinator = coordinator,
+				  state != oldValue // save recomputation effort if `==`
+			else { return }
 
 			(domesticCards, internationalCards) = HolderDashboardViewModel.assembleCards(
 				state: state,

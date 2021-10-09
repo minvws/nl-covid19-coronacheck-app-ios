@@ -274,7 +274,6 @@ class QRCardView: BaseView {
 		if let expiryEvaluator = expiryEvaluator {
 			let expiryLabel = Label(bodyBold: expiryEvaluator(Date()))
 			expiryLabel.numberOfLines = 0
-			verticalLabelsStackView.addArrangedSubview(expiryLabel)
 
 			if let text = expiryEvaluator(Date()) {
 				expiryLabel.isHidden = false
@@ -282,6 +281,8 @@ class QRCardView: BaseView {
 			} else {
 				expiryLabel.isHidden = true
 			}
+
+			verticalLabelsStackView.addArrangedSubview(expiryLabel)
 		}
         
         // Group accessibility labels together for two reasons:
