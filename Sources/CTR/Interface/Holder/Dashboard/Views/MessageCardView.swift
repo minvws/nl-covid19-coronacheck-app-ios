@@ -14,7 +14,7 @@ class MessageCardView: BaseView {
 
 		// Dimensions
 		static let cornerRadius: CGFloat = 15
-		static let shadowRadius: CGFloat = 24
+		static let shadowRadius: CGFloat = 10
 		static let shadowOpacity: Float = 0.15
 		static let buttonSize: CGFloat = 20
 		static let imageWidth: CGFloat = 30
