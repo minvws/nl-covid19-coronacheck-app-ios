@@ -197,7 +197,7 @@ class QRCardView: BaseView {
 			largeIconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageDimension),
 
 			titleLabel.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: 20),
-			titleLabel.topAnchor.constraint(equalTo: hostView.topAnchor, constant: 36),
+			titleLabel.topAnchor.constraint(equalTo: hostView.topAnchor, constant: 32),
 			titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: -16),
 
 			verticalLabelsStackView.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: ViewTraits.topVerticalLabelSpacing),
