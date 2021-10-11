@@ -81,8 +81,8 @@ final class ErrorDashboardView: BaseView {
 					paragraphSpacing: ViewTraits.Font.paragraphSpacing
 				)
 			)
-            // Apply link color
-            messageTextView.linkTextAttributes = [.foregroundColor: ViewTraits.Color.tint]
+			// Apply link color
+			messageTextView.linkTextAttributes = [.foregroundColor: ViewTraits.Color.tint]
 		}
 	}
 }
