@@ -40,7 +40,6 @@ final class ErrorDashboardView: BaseView {
 	let messageTextView: TextView = {
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.linkTextAttributes = [.foregroundColor: ViewTraits.Color.tint]
 		return view
 	}()
 	
@@ -82,6 +81,8 @@ final class ErrorDashboardView: BaseView {
 					paragraphSpacing: ViewTraits.Font.paragraphSpacing
 				)
 			)
+            // Apply link color
+            messageTextView.linkTextAttributes = [.foregroundColor: ViewTraits.Color.tint]
 		}
 	}
 }
