@@ -195,10 +195,10 @@ public extension NSAttributedString {
 
 	private static func replaceBullets(in text: NSMutableAttributedString, style: HTMLStyle) {
 
-		let bulletFont = style.font.withSize(10)
+		let bulletFont = style.font.withSize(5)
 		let bulletAttributes: [NSAttributedString.Key: Any] = [
 			.font: bulletFont,
-			.foregroundColor: Theme.colors.primary,
+			.foregroundColor: Theme.colors.dark,
 			.baselineOffset: (style.font.xHeight - bulletFont.xHeight) / 2
 		]
 
