@@ -58,7 +58,7 @@ final class DCCQRDetailsView: BaseView {
 		
 		stackView.embed(
 			in: safeAreaLayoutGuide,
-			insets: UIEdgeInsets.all(ViewTraits.margin)
+            insets: .bottom(ViewTraits.margin) + .leftRight(ViewTraits.margin)
 		)
 	}
 	

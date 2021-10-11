@@ -18,7 +18,7 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 	private enum ViewTraits {
 		
 		enum Margin {
-			static let top: CGFloat = 44
+			static let top: CGFloat = 62
 			static let closeButton: CGFloat = 22
 		}
 	}

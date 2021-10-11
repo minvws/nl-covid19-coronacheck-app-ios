@@ -13,7 +13,6 @@ final class MakeTestAppointmentView: BaseView {
 	private enum ViewTraits {
 		
 		enum Margin {
-			static let top: CGFloat = 6
 			static let edge: CGFloat = 20
 		}
 		
@@ -80,8 +79,7 @@ final class MakeTestAppointmentView: BaseView {
 		NSLayoutConstraint.activate([
 
 			stackView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.Margin.top
+				equalTo: safeAreaLayoutGuide.topAnchor
 			),
 			stackView.leadingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.leadingAnchor,
