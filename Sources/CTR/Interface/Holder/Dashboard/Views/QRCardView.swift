@@ -16,7 +16,7 @@ class QRCardView: BaseView {
 
 		// Dimensions
 		static let cornerRadius: CGFloat = 15
-		static let shadowRadius: CGFloat = 15
+		static let shadowRadius: CGFloat = 10
 		static let shadowOpacity: Float = 0.15
 		static let shadowOpacityBottomSquashedView: Float = 0.1
 		static let imageDimension: CGFloat = 40
@@ -26,7 +26,7 @@ class QRCardView: BaseView {
 		
 		// Spacing
 		static let topVerticalLabelSpacing: CGFloat = 18
-		static let interSquashedCardSpacing: CGFloat = 30
+		static let interSquashedCardSpacing: CGFloat = 10
 		static let squashedCardHeight: CGFloat = 40
 	}
 
@@ -120,12 +120,12 @@ class QRCardView: BaseView {
 		squashedCards.reversed().forEach { squashedCardView in
 			addSubview(squashedCardView)
 			squashedCardView.layer.cornerRadius = ViewTraits.cornerRadius
-			createShadow(view: squashedCardView, forBottomSquashedView: squashedCardView == squashedCards.last)
+			createShadow(view: squashedCardView, forSquashedViewIndex: squashedCards.firstIndex(of: squashedCardView)!, forTotalSquashedViewCount: squashedCards.count)
 		}
 
 		addSubview(hostView)
 		hostView.layer.cornerRadius = ViewTraits.cornerRadius
-		createShadow(view: hostView, forBottomSquashedView: false)
+		createShadow(view: hostView, hasSquashedViews: !squashedCards.isEmpty)
 
 		hostView.addSubview(titleLabel)
 		hostView.addSubview(largeIconImageView)
@@ -160,18 +160,21 @@ class QRCardView: BaseView {
 			])
 		} else {
 
-			var nextBottomAnchor: NSLayoutYAxisAnchor? = hostView.bottomAnchor
+			var nextTopAnchor: NSLayoutYAxisAnchor? = hostView.topAnchor
+			var nextBottomAnchor: NSLayoutYAxisAnchor?
+
 			squashedCards.forEach { squashedCardView in
-				if let nextBottomAnchor = nextBottomAnchor {
+				if let nextTopAnchor = nextTopAnchor {
 					NSLayoutConstraint.activate([
-						nextBottomAnchor.constraint(equalTo: squashedCardView.topAnchor, constant: ViewTraits.interSquashedCardSpacing)
+						nextTopAnchor.constraint(equalTo: squashedCardView.topAnchor, constant: -1 * ViewTraits.interSquashedCardSpacing)
 					])
 				}
 				NSLayoutConstraint.activate([
 					squashedCardView.leadingAnchor.constraint(equalTo: leadingAnchor),
 					squashedCardView.trailingAnchor.constraint(equalTo: trailingAnchor),
-					squashedCardView.heightAnchor.constraint(equalToConstant: ViewTraits.squashedCardHeight)
+					squashedCardView.heightAnchor.constraint(equalTo: hostView.heightAnchor)
 				])
+				nextTopAnchor = squashedCardView.topAnchor
 				nextBottomAnchor = squashedCardView.bottomAnchor
 			}
 
@@ -310,12 +313,32 @@ class QRCardView: BaseView {
 	}
 
 	/// Create the shadow around a view
-	private func createShadow(view: UIView, forBottomSquashedView: Bool) {
+	private func createShadow(view: UIView, hasSquashedViews: Bool) {
 		// Shadow
 		view.layer.shadowColor = UIColor.black.cgColor
-		view.layer.shadowOpacity = forBottomSquashedView ? ViewTraits.shadowOpacityBottomSquashedView : ViewTraits.shadowOpacity
+
+		// If there is a stack of squashed views, then halve the shadow opacity on the main `hostView`:
+		view.layer.shadowOpacity = hasSquashedViews ? ViewTraits.shadowOpacity / 2 : ViewTraits.shadowOpacity
 		view.layer.shadowOffset = .zero
 		view.layer.shadowRadius = ViewTraits.shadowRadius
+
+		// Cache Shadow
+		view.layer.shouldRasterize = true
+		view.layer.rasterizationScale = UIScreen.main.scale
+	}
+
+	private func createShadow(view: UIView, forSquashedViewIndex squashedViewIndex: Int, forTotalSquashedViewCount totalSquashedViewCount: Int) {
+		// Shadow
+		view.layer.shadowColor = UIColor.black.cgColor
+
+		// Fade the shadow in (in 0.05 increments) across the stacked views (they don't all need the same shadow opacity).
+		let index = (squashedViewIndex - totalSquashedViewCount) * -1
+		let opacity: Float = 0.05 * Float(index)
+		view.layer.shadowOpacity = opacity
+
+		view.layer.shadowOffset = .zero
+		view.layer.shadowRadius = ViewTraits.shadowRadius
+
 		// Cache Shadow
 		view.layer.shouldRasterize = true
 		view.layer.rasterizationScale = UIScreen.main.scale
