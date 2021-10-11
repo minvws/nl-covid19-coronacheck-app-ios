@@ -79,10 +79,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		expect(self.sut.title) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle) == L.holderMenuProof()
-		expect(self.sut.hasAddCertificateMode) == false
+		expect(self.sut.hasAddCertificateMode) == true
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
-		expect(self.sut.domesticCards).to(beEmpty())
-		expect(self.sut.internationalCards).to(beEmpty())
+		expect(self.sut.domesticCards.first).to(beEmptyStateCard())
+		expect(self.sut.internationalCards.first).to(beEmptyStateCard())
 	}
 
 	func test_initialStateAfterFirstEmptyLoad() {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum QRCodeOriginType: String, Codable {
+enum QRCodeOriginType: String, Codable, Equatable {
 	case test
 	case vaccination
 	case recovery

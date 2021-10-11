@@ -222,9 +222,9 @@ class HolderDashboardViewController: BaseViewController {
 						qrCard.viewQRButtonCommand = didTapViewQR
 						qrCard.title = title
 
+						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
 						qrCard.validityTexts = validityTexts
 						qrCard.expiryEvaluator = expiryCountdownEvaluator
-						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
 						qrCard.isLoading = isLoading
 						
 						return qrCard

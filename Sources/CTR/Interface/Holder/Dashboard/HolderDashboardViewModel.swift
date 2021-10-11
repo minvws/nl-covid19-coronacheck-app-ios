@@ -36,10 +36,9 @@ final class HolderDashboardViewModel: Logging {
 	/// Wrapper around some state variables
 	/// that allows us to use a `didSet{}` to
 	/// get a callback if any of them are mutated.
-	fileprivate struct State {
+	fileprivate struct State: Equatable {
 		var qrCards: [QRCard]
 		var expiredGreenCards: [ExpiredQR]
-		var showCreateCard: Bool
 		var isRefreshingStrippen: Bool
 
 		// Related to strippen refreshing.
@@ -71,21 +70,7 @@ final class HolderDashboardViewModel: Logging {
 
 	private var state: State {
 		didSet {
-			guard let coordinator = coordinator else { return }
-
-			(domesticCards, internationalCards) = HolderDashboardViewModel.assembleCards(
-				state: state,
-				didTapCloseExpiredQR: { expiredQR in
-					self.state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
-				},
-				coordinatorDelegate: coordinator,
-				strippenRefresher: strippenRefresher,
-				remoteConfigManager: remoteConfigManager,
-				now: self.now(),
-				userSettings: userSettings
-			)
-			
-			hasAddCertificateMode = state.qrCards.isEmpty
+			didUpdate(oldState: oldValue, newState: state)
 		}
 	}
 	
@@ -115,16 +100,16 @@ final class HolderDashboardViewModel: Logging {
 		self.strippenRefresher = strippenRefresher
 		self.userSettings = userSettings
 		self.now = now
+		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
 
 		self.state = State(
 			qrCards: [],
 			expiredGreenCards: [],
-			showCreateCard: true,
 			isRefreshingStrippen: false,
 			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false
 		)
 
-		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
+		didUpdate(oldState: nil, newState: state)
 
 		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
 			DispatchQueue.main.async {
@@ -161,6 +146,26 @@ final class HolderDashboardViewModel: Logging {
 
 	func viewWillAppear() {
 		datasource.reload()
+	}
+
+	/// Don't call directly, apart from within `init` and from within `var state: State { didSet { ... } }`
+	fileprivate func didUpdate(oldState: State?, newState: State) {
+		guard let coordinator = coordinator, state != oldState // save recomputation effort if `==`
+		else { return }
+
+		(domesticCards, internationalCards) = HolderDashboardViewModel.assembleCards(
+			state: state,
+			didTapCloseExpiredQR: { expiredQR in
+				self.state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
+			},
+			coordinatorDelegate: coordinator,
+			strippenRefresher: strippenRefresher,
+			remoteConfigManager: remoteConfigManager,
+			now: self.now(),
+			userSettings: userSettings
+		)
+
+		hasAddCertificateMode = state.qrCards.isEmpty
 	}
 
 	fileprivate func strippenRefresherDidUpdate(oldRefresherState: DashboardStrippenRefresher.State?, refresherState: DashboardStrippenRefresher.State) {
