@@ -148,7 +148,7 @@
 "holder.recovery.list.title" = "Jouw opgehaalde positieve testuitslag";
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
 "holder.recovery.start.message" = "<p>Heb je corona gehad? Dan kun je van de positieve testuitslag een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
-"holder.chooseqrcodetype.option.recovery.title" = "Een herstelbewijs";
+"holder.chooseqrcodetype.option.recovery.title" = "Herstelbewijs";
 "holder.chooseqrcodetype.option.recovery.subtitle" = "Uit de test blijkt dat ik corona heb gehad";
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
 "holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
@@ -371,9 +371,9 @@
 /* MARK: - Choose QR Code Type */
 "holder.chooseqrcodetype.title" = "Welk bewijs wil je toevoegen?";
 "holder.chooseqrcodetype.message" = "Geef aan wat voor bewijs je wil toevoegen. Je kunt meerdere bewijzen tegelijk hebben.";
-"holder.chooseqrcodetype.option.negativetest.title" = "Een testbewijs";
+"holder.chooseqrcodetype.option.negativetest.title" = "Testbewijs";
 "holder.chooseqrcodetype.option.negativetest.subtitle" = "Uit de test blijkt dat ik geen corona heb";
-"holder.chooseqrcodetype.option.vaccine.title" = "Een vaccinatiebewijs";
+"holder.chooseqrcodetype.option.vaccine.title" = "Vaccinatiebewijs";
 "holder.chooseqrcodetype.option.vaccine.subtitle" = "Ik heb mijn prik of prikken gehad";
 
 /* MARK: - About Making a QR */
@@ -427,7 +427,7 @@
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
 "holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
 
-"holder.showqr.domestic.title" = "Nederlandse QR-code";
+"holder.showqr.domestic.title" = "Nederlandse QR";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat dat je een geldig bewijs hebt. Niet of je een test of vaccinatie hebt gedaan.</p><p>Om zeker te zijn dat de QR-code bij jou hoort staan er enkele gegevens in de QR-code. Het gaat om de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand.</p><p>Jouw gegevens: <b>%@</b></p><p></p><p>*Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (-).</p>";
 "holder.showqr.eu.title" = "Internationale QR";
