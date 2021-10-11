@@ -21,7 +21,8 @@ class ShowQRView: BaseView {
 			static let edge: CGFloat = 10
 			static let infoEdge: CGFloat = 20
 			static let domesticSecurity: CGFloat = 56
-			static let internationalSecurity: CGFloat = 49
+			static let internationalSecurity: CGFloat = 52
+            static let internationalSecurityExtraSafeAreaInset: CGFloat = 20
 			static let returnToThirdPartyAppButton: CGFloat = 4
 		}
 		enum Spacing {
@@ -263,6 +264,12 @@ class ShowQRView: BaseView {
         
         accessibilityElements = [containerView]
 	}
+    
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        guard securityView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
+        securityViewBottomConstraint?.constant = safeAreaInsets.bottom + ViewTraits.Margin.internationalSecurityExtraSafeAreaInset
+    }
 
 	@objc func didTapThirdPartyAppButton() {
 
