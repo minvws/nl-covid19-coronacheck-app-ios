@@ -46,7 +46,6 @@ final class UpgradeEUVaccinationViewModel: Logging {
 			guard let self = self else { return }
 			self.isLoading = false
 			self.handleGreenCardResult(result, onSuccess: {
-				self.userSettings.shouldNotifyThatEUVaccinationsWereUpgraded = true
 				self.userSettings.didCompleteEUVaccinationUpgrade = true
 				self.coordinator?.upgradeEUVaccinationDidComplete()
 			})
