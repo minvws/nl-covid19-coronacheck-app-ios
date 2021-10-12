@@ -36,7 +36,7 @@ class MessageCardView: BaseView {
 		let button = TappableButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.smallCross(), for: .normal)
-		button.contentHorizontalAlignment = .trailing
+		button.contentHorizontalAlignment = .center
 		button.isHidden = true
 		return button
 	}()
@@ -114,7 +114,7 @@ class MessageCardView: BaseView {
 		NSLayoutConstraint.activate([
 			messageWithCloseButtonStackView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
 			messageWithCloseButtonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-			messageWithCloseButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
+			messageWithCloseButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
 
 			messageWithCloseButtonStackView.bottomAnchor.constraint(equalTo: callToActionButtonStackView.topAnchor, constant: -10),
 
@@ -122,8 +122,7 @@ class MessageCardView: BaseView {
 			callToActionButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 			callToActionButtonStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
 
-			closeButton.widthAnchor.constraint(equalToConstant: 42),
-			closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 42)
+			closeButton.widthAnchor.constraint(equalToConstant: 42)
 		])
 	}
 
