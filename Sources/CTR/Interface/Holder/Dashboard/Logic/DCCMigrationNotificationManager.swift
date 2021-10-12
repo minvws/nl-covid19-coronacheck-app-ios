@@ -7,7 +7,14 @@
 
 import Foundation
 
-class DCCMigrationNotificationManager {
+protocol DCCMigrationNotificationManagerProtocol {
+	var showMigrationAvailableBanner: (() -> Void)? { get set }
+	var showMigrationCompletedBanner: (() -> Void)? { get set }
+
+	func reload()
+}
+
+final class DCCMigrationNotificationManager: DCCMigrationNotificationManagerProtocol {
 
 	// Callbacks:
 	var showMigrationAvailableBanner: (() -> Void)?

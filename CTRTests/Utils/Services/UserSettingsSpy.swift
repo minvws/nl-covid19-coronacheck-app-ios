@@ -186,25 +186,47 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedShouldNotifyThatEUVaccinationsWereUpgradedSetter = false
-	var invokedShouldNotifyThatEUVaccinationsWereUpgradedSetterCount = 0
-	var invokedShouldNotifyThatEUVaccinationsWereUpgraded: Bool?
-	var invokedShouldNotifyThatEUVaccinationsWereUpgradedList = [Bool]()
-	var invokedShouldNotifyThatEUVaccinationsWereUpgradedGetter = false
-	var invokedShouldNotifyThatEUVaccinationsWereUpgradedGetterCount = 0
-	var stubbedShouldNotifyThatEUVaccinationsWereUpgraded: Bool! = false
+	var invokedDidCompleteEUVaccinationMigrationSetter = false
+	var invokedDidCompleteEUVaccinationMigrationSetterCount = 0
+	var invokedDidCompleteEUVaccinationMigration: Bool?
+	var invokedDidCompleteEUVaccinationMigrationList = [Bool]()
+	var invokedDidCompleteEUVaccinationMigrationGetter = false
+	var invokedDidCompleteEUVaccinationMigrationGetterCount = 0
+	var stubbedDidCompleteEUVaccinationMigration: Bool! = false
 
-	var shouldNotifyThatEUVaccinationsWereUpgraded: Bool {
+	var didCompleteEUVaccinationMigration: Bool {
 		set {
-			invokedShouldNotifyThatEUVaccinationsWereUpgradedSetter = true
-			invokedShouldNotifyThatEUVaccinationsWereUpgradedSetterCount += 1
-			invokedShouldNotifyThatEUVaccinationsWereUpgraded = newValue
-			invokedShouldNotifyThatEUVaccinationsWereUpgradedList.append(newValue)
+			invokedDidCompleteEUVaccinationMigrationSetter = true
+			invokedDidCompleteEUVaccinationMigrationSetterCount += 1
+			invokedDidCompleteEUVaccinationMigration = newValue
+			invokedDidCompleteEUVaccinationMigrationList.append(newValue)
 		}
 		get {
-			invokedShouldNotifyThatEUVaccinationsWereUpgradedGetter = true
-			invokedShouldNotifyThatEUVaccinationsWereUpgradedGetterCount += 1
-			return stubbedShouldNotifyThatEUVaccinationsWereUpgraded
+			invokedDidCompleteEUVaccinationMigrationGetter = true
+			invokedDidCompleteEUVaccinationMigrationGetterCount += 1
+			return stubbedDidCompleteEUVaccinationMigration
+		}
+	}
+
+	var invokedDidDismissEUVaccinationMigrationSuccessBannerSetter = false
+	var invokedDidDismissEUVaccinationMigrationSuccessBannerSetterCount = 0
+	var invokedDidDismissEUVaccinationMigrationSuccessBanner: Bool?
+	var invokedDidDismissEUVaccinationMigrationSuccessBannerList = [Bool]()
+	var invokedDidDismissEUVaccinationMigrationSuccessBannerGetter = false
+	var invokedDidDismissEUVaccinationMigrationSuccessBannerGetterCount = 0
+	var stubbedDidDismissEUVaccinationMigrationSuccessBanner: Bool! = false
+
+	var didDismissEUVaccinationMigrationSuccessBanner: Bool {
+		set {
+			invokedDidDismissEUVaccinationMigrationSuccessBannerSetter = true
+			invokedDidDismissEUVaccinationMigrationSuccessBannerSetterCount += 1
+			invokedDidDismissEUVaccinationMigrationSuccessBanner = newValue
+			invokedDidDismissEUVaccinationMigrationSuccessBannerList.append(newValue)
+		}
+		get {
+			invokedDidDismissEUVaccinationMigrationSuccessBannerGetter = true
+			invokedDidDismissEUVaccinationMigrationSuccessBannerGetterCount += 1
+			return stubbedDidDismissEUVaccinationMigrationSuccessBanner
 		}
 	}
 }

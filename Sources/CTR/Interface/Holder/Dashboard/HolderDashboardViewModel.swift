@@ -85,7 +85,7 @@ final class HolderDashboardViewModel: Logging {
 
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
-	private let dccUpgradeNotificationManager: DCCMigrationNotificationManager
+	private var dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private let now: () -> Date
 
@@ -95,7 +95,7 @@ final class HolderDashboardViewModel: Logging {
 		datasource: HolderDashboardQRCardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
-		dccUpgradeNotificationManager: DCCMigrationNotificationManager,
+		dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol,
 		now: @escaping () -> Date
 	) {
 
@@ -104,8 +104,8 @@ final class HolderDashboardViewModel: Logging {
 		self.strippenRefresher = strippenRefresher
 		self.userSettings = userSettings
 		self.now = now
-		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue 
-		self.dccUpgradeNotificationManager = dccUpgradeNotificationManager
+		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
+		self.dccMigrationNotificationManager = dccMigrationNotificationManager
 
 		self.state = State(
 			qrCards: [],
@@ -121,7 +121,7 @@ final class HolderDashboardViewModel: Logging {
 				self?.state.qrCards = qrCardDataItems
 				self?.state.expiredGreenCards += expiredGreenCards
 
-				self?.dccUpgradeNotificationManager.reload()
+				self?.dccMigrationNotificationManager.reload()
 			}
 		}
 
@@ -138,16 +138,17 @@ final class HolderDashboardViewModel: Logging {
 			self?.datasource.reload() // this could cause some QR code states to change, so reload.
 		}
 
-		dccUpgradeNotificationManager.showMigrationAvailableBanner = { [weak self] in
+		// Setup the dcc
+		self.dccMigrationNotificationManager.showMigrationAvailableBanner = { [weak self] in
 			self?.state.shouldShowEUVaccinationUpdateBanner = true
 		}
-		dccUpgradeNotificationManager.showMigrationCompletedBanner = { [weak self] in
+		self.dccMigrationNotificationManager.showMigrationCompletedBanner = { [weak self] in
 			guard var state = self?.state else { return }
 			state.shouldShowEUVaccinationUpdateBanner = false
 			state.shouldShowEUVaccinationUpdateCompletedBanner = true
 			self?.state = state
 		}
-		dccUpgradeNotificationManager.reload()
+		dccMigrationNotificationManager.reload()
 
 //		#if DEBUG
 //		DispatchQueue.main.asyncAfter(deadline: .now()) {

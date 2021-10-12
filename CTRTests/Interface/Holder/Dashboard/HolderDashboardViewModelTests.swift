@@ -24,7 +24,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var userSettingsSpy: UserSettingsSpy!
 	private var sampleGreencardObjectID: NSManagedObjectID!
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
-	
+	private var migrationNotificationManagerSpy: DCCMigrationNotificationManagerSpy!
 	private static var initialTimeZone: TimeZone?
 
 	override class func setUp() {
@@ -53,6 +53,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
 		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration.default
+		migrationNotificationManagerSpy = DCCMigrationNotificationManagerSpy()
 
 		Services.use(cryptoManagerSpy)
 		Services.use(remoteConfigSpy)
@@ -69,6 +70,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			datasource: datasourceSpy,
 			strippenRefresher: strippenRefresherSpy,
 			userSettings: userSettingsSpy,
+			dccMigrationNotificationManager: migrationNotificationManagerSpy,
 			now: { now }
 		)
 	}
