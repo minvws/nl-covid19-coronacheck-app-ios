@@ -30,7 +30,7 @@ extension NSAttributedString {
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byWordWrapping
 		paragraphStyle.alignment = alignment
-		paragraphStyle.minimumLineHeight = lineHeight
+		paragraphStyle.minimumLineHeightAdjustedForContentSize(lineHeight)
 
 		let attrString = NSMutableAttributedString(attributedString: self)
 		attrString.addAttributes(
@@ -134,7 +134,7 @@ public extension NSAttributedString {
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.alignment = .natural
 		paragraphStyle.paragraphSpacing = style.paragraphSpacing
-		paragraphStyle.minimumLineHeight = style.lineHeight
+		paragraphStyle.minimumLineHeightAdjustedForContentSize(style.lineHeight)
 
 		let attributes: [Key: Any] = [
 			.foregroundColor: style.textColor,
@@ -160,7 +160,7 @@ public extension NSAttributedString {
 		listParagraphStyle.tabStops = tabStops
 		listParagraphStyle.headIndent = tabInterval
 		listParagraphStyle.firstLineHeadIndent = 0
-		listParagraphStyle.minimumLineHeight = style.lineHeight
+		listParagraphStyle.minimumLineHeightAdjustedForContentSize(style.lineHeight)
 
 		return listParagraphStyle
 	}
@@ -250,5 +250,12 @@ public extension NSAttributedString {
 			let range = NSRange(location: text.string.count - 1, length: 1)
 			text.replaceCharacters(in: range, with: "")
 		}
+	}
+}
+
+extension NSMutableParagraphStyle {
+	
+	func minimumLineHeightAdjustedForContentSize(_ lineHeight: CGFloat) {
+		minimumLineHeight = lineHeight * UIContentSizeCategory.currentSizeMultiplier
 	}
 }

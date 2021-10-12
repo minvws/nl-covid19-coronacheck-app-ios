@@ -92,7 +92,7 @@ extension String {
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byWordWrapping
 		paragraphStyle.alignment = alignment
-		paragraphStyle.minimumLineHeight = lineHeight
+		paragraphStyle.minimumLineHeightAdjustedForContentSize(lineHeight)
 
 		let attributedString = NSAttributedString(
 			string: self,
