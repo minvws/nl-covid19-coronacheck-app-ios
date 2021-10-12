@@ -224,6 +224,7 @@ class HolderCoordinator: SharedCoordinator {
 					now: { Date() }
 				),
 				userSettings: UserSettings(),
+				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
 				now: { Date() }
 			)
 		)
@@ -415,7 +416,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
-		let viewModel = UpgradeEUVaccinationViewModel(
+		let viewModel = MigrateEUVaccinationViewModel(
 			backAction: { [weak self] in
 				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 			},
