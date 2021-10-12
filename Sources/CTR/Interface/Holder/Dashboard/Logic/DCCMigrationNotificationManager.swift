@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -8,11 +7,11 @@
 
 import Foundation
 
-class DCCUpgradeNotificationManager {
+class DCCMigrationNotificationManager {
 
-	// Settable callbacks:
-	var showUpgradeAvailableBanner: (() -> Void)?
-	var showUpgradeCompletedBanner: (() -> Void)?
+	// Callbacks:
+	var showMigrationAvailableBanner: (() -> Void)?
+	var showMigrationCompletedBanner: (() -> Void)?
 
 	private let userSettings: UserSettingsProtocol
 
@@ -21,13 +20,13 @@ class DCCUpgradeNotificationManager {
 	}
 
 	func reload() {
-		guard let showUpgradeAvailableBanner = showUpgradeAvailableBanner,
-			  let showUpgradeCompletedBanner = showUpgradeCompletedBanner
+		guard let showUpgradeAvailableBanner = showMigrationAvailableBanner,
+			  let showUpgradeCompletedBanner = showMigrationCompletedBanner
 		else { return }
 
 		// If we already completed it, show the completed banner
-		guard !userSettings.didCompleteEUVaccinationUpgrade else {
-			if !userSettings.didDismissEUVaccinationUpgradeSuccessBanner {
+		guard !userSettings.didCompleteEUVaccinationMigration else {
+			if !userSettings.didDismissEUVaccinationMigrationSuccessBanner {
 				showUpgradeCompletedBanner()
 			}
 			return
@@ -36,8 +35,8 @@ class DCCUpgradeNotificationManager {
 		guard !Services.walletManager.canSkipMultiDCCUpgrade() else {
 
 			// next time skip check.
-			userSettings.didCompleteEUVaccinationUpgrade = true
-			userSettings.didDismissEUVaccinationUpgradeSuccessBanner = true
+			userSettings.didCompleteEUVaccinationMigration = true
+			userSettings.didDismissEUVaccinationMigrationSuccessBanner = true
 
 			// don't show banner
 			return

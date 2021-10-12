@@ -9,12 +9,12 @@ import UIKit
 
 class UpgradeEUVaccinationViewController: BaseViewController {
 
-	private let viewModel: UpgradeEUVaccinationViewModel
+	private let viewModel: MigrateEUVaccinationViewModel
 	private let sceneView = UpgradeEUVaccinationView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: UpgradeEUVaccinationViewModel) {
+	init(viewModel: MigrateEUVaccinationViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

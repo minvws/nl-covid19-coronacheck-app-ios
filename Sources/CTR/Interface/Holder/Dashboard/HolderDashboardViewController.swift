@@ -18,9 +18,9 @@ class HolderDashboardViewController: BaseViewController {
 
 		case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 
-		case upgradeYourInternationalVaccinationCertificate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case migrateYourInternationalVaccinationCertificate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 
-		case upgradingYourInternationalVaccinationCertificateDidComplete(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		case migratingYourInternationalVaccinationCertificateDidComplete(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 
 		case emptyState(image: UIImage?, title: String, message: String, buttonTitle: String?)
 
@@ -171,7 +171,7 @@ class HolderDashboardViewController: BaseViewController {
 					// Message Cards with a message + CTA button
 					case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
 						 let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
-						 let .upgradeYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction):
+						 let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction):
 
 						let messageCard = MessageCardView()
 						messageCard.title = message
@@ -179,7 +179,7 @@ class HolderDashboardViewController: BaseViewController {
 						messageCard.callToActionButtonTappedCommand = didTapCallToAction
 						return messageCard
 
-					case let .upgradingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+					case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 						let messageCard = MessageCardView()
 						messageCard.title = message
 						messageCard.callToActionButtonText = callToActionButtonText

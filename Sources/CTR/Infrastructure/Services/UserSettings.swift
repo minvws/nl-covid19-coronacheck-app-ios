@@ -26,8 +26,8 @@ protocol UserSettingsProtocol: AnyObject {
 	var deviceAuthenticationWarningShown: Bool { get set }
 
 	// Flags for upgrading to Multiple DCCs:
-	var didCompleteEUVaccinationUpgrade: Bool { get set }
-	var didDismissEUVaccinationUpgradeSuccessBanner: Bool { get set }
+	var didCompleteEUVaccinationMigration: Bool { get set }
+	var didDismissEUVaccinationMigrationSuccessBanner: Bool { get set }
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -56,9 +56,9 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
 
-	@UserDefaults(key: "didCompleteEUVaccinationUpgrade", defaultValue: false)
-	var didCompleteEUVaccinationUpgrade: Bool // swiftlint:disable:this let_var_whitespace
+	@UserDefaults(key: "didCompleteEUVaccinationMigration", defaultValue: false)
+	var didCompleteEUVaccinationMigration: Bool // swiftlint:disable:this let_var_whitespace
 
-	@UserDefaults(key: "didDismissEUVaccinationUpgradeSuccessBanner", defaultValue: false)
-	var didDismissEUVaccinationUpgradeSuccessBanner: Bool // swiftlint:disable:this let_var_whitespace
+	@UserDefaults(key: "didDismissEUVaccinationMigrationSuccessBanner", defaultValue: false)
+	var didDismissEUVaccinationMigrationSuccessBanner: Bool // swiftlint:disable:this let_var_whitespace
 }

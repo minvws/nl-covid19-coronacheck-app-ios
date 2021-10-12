@@ -556,7 +556,7 @@ class WalletManager: WalletManaging, Logging {
 			// no greencards so user still needs to load them:
 			return false
 		}
-		guard !userSettings.didCompleteEUVaccinationUpgrade else {
+		guard !userSettings.didCompleteEUVaccinationMigration else {
 			// do nothing
 			return false
 		}

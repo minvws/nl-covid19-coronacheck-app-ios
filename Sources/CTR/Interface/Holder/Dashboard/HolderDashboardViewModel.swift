@@ -85,7 +85,7 @@ final class HolderDashboardViewModel: Logging {
 
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
-	private let dccUpgradeNotificationManager: DCCUpgradeNotificationManager
+	private let dccUpgradeNotificationManager: DCCMigrationNotificationManager
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private let now: () -> Date
 
@@ -95,7 +95,7 @@ final class HolderDashboardViewModel: Logging {
 		datasource: HolderDashboardQRCardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
-		dccUpgradeNotificationManager: DCCUpgradeNotificationManager,
+		dccUpgradeNotificationManager: DCCMigrationNotificationManager,
 		now: @escaping () -> Date
 	) {
 
@@ -138,10 +138,10 @@ final class HolderDashboardViewModel: Logging {
 			self?.datasource.reload() // this could cause some QR code states to change, so reload.
 		}
 
-		dccUpgradeNotificationManager.showUpgradeAvailableBanner = { [weak self] in
+		dccUpgradeNotificationManager.showMigrationAvailableBanner = { [weak self] in
 			self?.state.shouldShowEUVaccinationUpdateBanner = true
 		}
-		dccUpgradeNotificationManager.showUpgradeCompletedBanner = { [weak self] in
+		dccUpgradeNotificationManager.showMigrationCompletedBanner = { [weak self] in
 			guard var state = self?.state else { return }
 			state.shouldShowEUVaccinationUpdateBanner = false
 			state.shouldShowEUVaccinationUpdateCompletedBanner = true
@@ -348,7 +348,7 @@ final class HolderDashboardViewModel: Logging {
 		if validityRegion == .europeanUnion {
 			if state.shouldShowEUVaccinationUpdateBanner {
 				viewControllerCards += [
-					.upgradeYourInternationalVaccinationCertificate(
+					.migrateYourInternationalVaccinationCertificate(
 						message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
 						callToActionButtonText: L.generalReadmore(),
 						didTapCallToAction: { [weak coordinatorDelegate] in
@@ -358,7 +358,7 @@ final class HolderDashboardViewModel: Logging {
 				]
 			} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
 				viewControllerCards += [
-					.upgradingYourInternationalVaccinationCertificateDidComplete(
+					.migratingYourInternationalVaccinationCertificateDidComplete(
 						message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
 						callToActionButtonText: L.generalReadmore(),
 						didTapCallToAction: { [weak coordinatorDelegate] in
@@ -369,7 +369,7 @@ final class HolderDashboardViewModel: Logging {
 								openURLsInApp: true)
 						},
 						didTapClose: {
-							userSettings.didDismissEUVaccinationUpgradeSuccessBanner = true
+							userSettings.didDismissEUVaccinationMigrationSuccessBanner = true
 						}
 					)
 				]
@@ -579,7 +579,7 @@ extension HolderDashboardViewModel {
 
 			// If it's already presented and dismiss is not true, then continue to show it:
 			self.state.shouldShowEUVaccinationUpdateCompletedBanner
-				= self.state.shouldShowEUVaccinationUpdateCompletedBanner && !self.userSettings.didDismissEUVaccinationUpgradeSuccessBanner
+				= self.state.shouldShowEUVaccinationUpdateCompletedBanner && !self.userSettings.didDismissEUVaccinationMigrationSuccessBanner
 		}
 	}
 }
