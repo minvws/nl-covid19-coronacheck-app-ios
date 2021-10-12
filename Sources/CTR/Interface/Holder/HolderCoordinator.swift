@@ -515,7 +515,8 @@ extension HolderCoordinator: MenuDelegate {
 					viewModel: AboutViewModel(
 						coordinator: self,
 						versionSupplier: versionSupplier,
-						flavor: AppFlavor.flavor
+						flavor: AppFlavor.flavor,
+						userSettings: UserSettings()
 					)
 				)
 				aboutNavigationController = UINavigationController(rootViewController: destination)

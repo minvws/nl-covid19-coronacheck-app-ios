@@ -107,7 +107,7 @@ private func validityText_hasBegun_eu_test(testType: String, validFrom: Date) ->
 	let formatter = HolderDashboardViewModel.dateWithDayAndTimeFormatter
 	return .init(
 		lines: [
-			"\(L.generalTestcertificate().capitalizingFirstLetter()): \(testType)",
+			"\(L.generalTesttype().capitalizingFirstLetter()): \(testType)",
 			"\(L.generalTestdate()): \(formatter.string(from: validFrom))"
 		],
 		kind: .current

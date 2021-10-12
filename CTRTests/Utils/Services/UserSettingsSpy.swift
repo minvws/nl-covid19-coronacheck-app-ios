@@ -229,4 +229,12 @@ class UserSettingsSpy: UserSettingsProtocol {
 			return stubbedDidDismissEUVaccinationMigrationSuccessBanner
 		}
 	}
+
+	var invokedReset = false
+	var invokedResetCount = 0
+
+	func reset() {
+		invokedReset = true
+		invokedResetCount += 1
+	}
 }

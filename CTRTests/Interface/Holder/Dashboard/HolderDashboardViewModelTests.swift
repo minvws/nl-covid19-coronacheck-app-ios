@@ -1194,13 +1194,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == "Testbewijs: PCR (NAAT)"
+			expect(nowValidityTexts[0].lines[0]) == "Type test: PCR (NAAT)"
 			expect(nowValidityTexts[0].lines[1]) == "Testdatum: donderdag 15 juli 16:02"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == "Testbewijs: PCR (NAAT)"
+			expect(futureValidityTexts[0].lines[0]) == "Type test: PCR (NAAT)"
 			expect(futureValidityTexts[0].lines[1]) == "Testdatum: donderdag 15 juli 16:02"
 
 			// check didTapViewQR
