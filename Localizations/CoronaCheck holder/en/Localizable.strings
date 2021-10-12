@@ -13,12 +13,12 @@
 "holder.upgradeeuvaccination.title" = "Renew vaccination certificate";
 "holder.upgradeeuvaccination.message" = "<p>Soon we will renew everyone's vaccination certificate. As a result, you'll get access to QR codes of earlier vaccinations.</p><p>This can be useful for people who want to go to a place where their latest vaccination is not yet valid.</p><p>If you want to, you can also renew your certificate now.</p>";
 "holder.upgradeeuvaccination.button" = "Renew certificate";
-"holder.showqr.overvaccinated" = "This QR code may not be valid everywhere. If that’s the case, you can use dose %@/%@. ";
+"holder.showqr.overvaccinated" = "This QR code is not yet valid everywhere. In which case, use one of a previous dose.";
 "holder.dashboard.qr.button.viewQRs" = "View QR codes";
 "holder.showqr.notneeded" = "You probably won't need this QR code because you have a more recent dose.";
 "holder.showqr.qrhidden" = "QR code hidden";
 "holder.showqr.showqr" = "Show anyway";
-"holder.showqr.eu.about.vaccination.title" = "About dose %@/%@";
+"holder.showqr.eu.about.vaccination.title" = "About your dose %@/%@";
 "holder.showqr.qr.eu.vaccinecertificatedoses" = "Dose %@/%@";
 "holder.showqr.details" = "Details";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR code. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
