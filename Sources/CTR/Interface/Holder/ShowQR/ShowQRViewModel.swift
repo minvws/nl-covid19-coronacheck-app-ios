@@ -158,7 +158,7 @@ class ShowQRViewModel: Logging {
 			   let totalDose = euVaccination.totalDose {
 				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 				if euVaccination.isOverVaccinated {
-					relevancyInformation = L.holderShowqrOvervaccinated("\(totalDose)", "\(totalDose)")
+					relevancyInformation = L.holderShowqrOvervaccinated()
 				} else if dataSource.shouldGreenCardBeHidden(greenCard) {
 					relevancyInformation = L.holderShowqrNotneeded()
 				} else {
