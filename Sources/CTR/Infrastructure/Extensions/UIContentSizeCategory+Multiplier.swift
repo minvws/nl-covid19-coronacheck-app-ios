@@ -21,7 +21,7 @@ extension UIContentSizeCategory {
 		
 		switch self {
 			case .extraSmall,
-				 .small:
+					.small:
 				return size(-2)
 			case .medium:
 				return size(-1)
@@ -34,10 +34,10 @@ extension UIContentSizeCategory {
 			case .extraExtraExtraLarge:
 				return size(3)
 			case .accessibilityMedium,
-				 .accessibilityLarge,
-				 .accessibilityExtraLarge,
-				 .accessibilityExtraExtraLarge,
-				 .accessibilityExtraExtraExtraLarge:
+					.accessibilityLarge,
+					.accessibilityExtraLarge,
+					.accessibilityExtraExtraLarge,
+					.accessibilityExtraExtraExtraLarge:
 				return size(4)
 			default:
 				return size(0)
