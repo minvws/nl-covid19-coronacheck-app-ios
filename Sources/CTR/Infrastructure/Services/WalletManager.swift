@@ -529,9 +529,9 @@ class WalletManager: WalletManaging, Logging {
 		let vaccinationEventGroups = listEventGroups().filter { $0.type == "vaccination" }
 		let hkviVaccinationEvents = vaccinationEventGroups.filter { $0.providerIdentifier?.uppercased() == "DCC" }
 
-		let regularVaccinationEvents = vaccinationEventGroups
-			.filter { $0.providerIdentifier?.uppercased() != "DCC" }
-			.flatMap { vaccineEventGroup -> [EventFlow.Event] in
+		let regularVaccinationEvents: [EventFlow.Event] = vaccinationEventGroups
+			.filter({ $0.providerIdentifier?.uppercased() != "DCC" })
+			.flatMap({ vaccineEventGroup -> [EventFlow.Event] in
 
 				// convert back to a network response and get the payload:
 				guard let jsonData = vaccineEventGroup.jsonData,
@@ -545,6 +545,19 @@ class WalletManager: WalletManaging, Logging {
 				}
 
 				return events
+			})
+			//	Deduplicate vaccine events based on date:
+			.reduce([EventFlow.Event]()) { pile, next in
+				guard let nextDateString = next.vaccination?.dateString else { return pile }
+
+				if pile
+					.compactMap({ $0.vaccination?.dateString })
+					.contains(where: { $0 == nextDateString }) {
+						// do nothing
+						return pile
+					} else {
+						return pile + [next]
+					}
 			}
 
 		// If we only have a single event (e.g. hkvi) we'll never get more cards so the upgrade can be skipped.
