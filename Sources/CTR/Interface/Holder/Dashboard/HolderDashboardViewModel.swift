@@ -49,7 +49,9 @@ final class HolderDashboardViewModel: Logging {
 
 		var deviceHasClockDeviation: Bool = false
 
-		var shouldNotifyThatEUVaccinationsWereUpgraded: Bool = false
+		var shouldShowEUVaccinationUpdateBanner: Bool = false
+
+		var shouldShowEUVaccinationUpdateCompletedBanner: Bool = false
 	}
 
 	// MARK: - Private properties
@@ -83,6 +85,7 @@ final class HolderDashboardViewModel: Logging {
 
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
+	private let dccUpgradeNotificationManager: DCCUpgradeNotificationManager
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private let now: () -> Date
 
@@ -92,6 +95,7 @@ final class HolderDashboardViewModel: Logging {
 		datasource: HolderDashboardQRCardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
+		dccUpgradeNotificationManager: DCCUpgradeNotificationManager,
 		now: @escaping () -> Date
 	) {
 
@@ -100,7 +104,8 @@ final class HolderDashboardViewModel: Logging {
 		self.strippenRefresher = strippenRefresher
 		self.userSettings = userSettings
 		self.now = now
-		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
+		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue 
+		self.dccUpgradeNotificationManager = dccUpgradeNotificationManager
 
 		self.state = State(
 			qrCards: [],
@@ -115,6 +120,8 @@ final class HolderDashboardViewModel: Logging {
 			DispatchQueue.main.async {
 				self?.state.qrCards = qrCardDataItems
 				self?.state.expiredGreenCards += expiredGreenCards
+
+				self?.dccUpgradeNotificationManager.reload()
 			}
 		}
 
@@ -130,6 +137,17 @@ final class HolderDashboardViewModel: Logging {
 			self?.state.deviceHasClockDeviation = hasClockDeviation
 			self?.datasource.reload() // this could cause some QR code states to change, so reload.
 		}
+
+		dccUpgradeNotificationManager.showUpgradeAvailableBanner = { [weak self] in
+			self?.state.shouldShowEUVaccinationUpdateBanner = true
+		}
+		dccUpgradeNotificationManager.showUpgradeCompletedBanner = { [weak self] in
+			guard var state = self?.state else { return }
+			state.shouldShowEUVaccinationUpdateBanner = false
+			state.shouldShowEUVaccinationUpdateCompletedBanner = true
+			self?.state = state
+		}
+		dccUpgradeNotificationManager.reload()
 
 //		#if DEBUG
 //		DispatchQueue.main.asyncAfter(deadline: .now()) {
@@ -325,12 +343,20 @@ final class HolderDashboardViewModel: Logging {
 			]
 		}
 
+		// Multiple DCC migration banners:
+
 		if validityRegion == .europeanUnion {
-
-			// If there is more than one eu vaccination greencard:
-			if state.shouldNotifyThatEUVaccinationsWereUpgraded
-				&& regionFilteredMyQRCards.flatMap({ $0.greencards }).count > 1 {
-
+			if state.shouldShowEUVaccinationUpdateBanner {
+				viewControllerCards += [
+					.upgradeYourInternationalVaccinationCertificate(
+						message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
+						callToActionButtonText: L.generalReadmore(),
+						didTapCallToAction: { [weak coordinatorDelegate] in
+							coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
+						}
+					)
+				]
+			} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
 				viewControllerCards += [
 					.upgradingYourInternationalVaccinationCertificateDidComplete(
 						message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
@@ -343,37 +369,10 @@ final class HolderDashboardViewModel: Logging {
 								openURLsInApp: true)
 						},
 						didTapClose: {
-							userSettings.shouldNotifyThatEUVaccinationsWereUpgraded = false
+							userSettings.didDismissEUVaccinationUpgradeSuccessBanner = true
 						}
 					)
 				]
-			} else if !userSettings.didCompleteEUVaccinationUpgrade {
-
-				// Check if there is is currently a SINGLE eu vaccination green card with dose number (dn) set to 2 (999991267):
-				let euVaccineGreenCardsWithDoseNumberOf2 = regionFilteredMyQRCards
-					.filter({ (qrCard: QRCard) in
-						guard case .europeanUnion(let evaluateDCC) = qrCard.region,
-							qrCard.greencards.count == 1,
-							let singleGreencard = qrCard.greencards.first,
-							let dcc = evaluateDCC(singleGreencard, now),
-							let euVaccination = dcc.vaccinations?.first,
-							let doseNumber = euVaccination.doseNumber
-						else { return false }
-
-						return doseNumber == 2
-					})
-
-				if euVaccineGreenCardsWithDoseNumberOf2.count == 1 {
-					viewControllerCards += [
-						.upgradeYourInternationalVaccinationCertificate(
-							message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
-							callToActionButtonText: L.generalReadmore(),
-							didTapCallToAction: { [weak coordinatorDelegate] in
-								coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
-							}
-						)
-					]
-				}
 			}
 		}
 
@@ -577,7 +576,10 @@ extension HolderDashboardViewModel {
 
 	@objc func userDefaultsDidChange() {
 		DispatchQueue.main.async {
-			self.state.shouldNotifyThatEUVaccinationsWereUpgraded = self.userSettings.shouldNotifyThatEUVaccinationsWereUpgraded
+
+			// If it's already presented and dismiss is not true, then continue to show it:
+			self.state.shouldShowEUVaccinationUpdateCompletedBanner
+				= self.state.shouldShowEUVaccinationUpdateCompletedBanner && !self.userSettings.didDismissEUVaccinationUpgradeSuccessBanner
 		}
 	}
 }
