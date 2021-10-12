@@ -26,8 +26,8 @@ protocol UserSettingsProtocol: AnyObject {
 	var deviceAuthenticationWarningShown: Bool { get set }
 
 	// Flags for upgrading to Multiple DCCs:
-	var shouldNotifyThatEUVaccinationsWereUpgraded: Bool { get set }
 	var didCompleteEUVaccinationUpgrade: Bool { get set }
+	var didDismissEUVaccinationUpgradeSuccessBanner: Bool { get set }
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -56,9 +56,9 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
 
-	@UserDefaults(key: "shouldNotifyThatEUVaccinationsWereUpgraded", defaultValue: false)
-	var shouldNotifyThatEUVaccinationsWereUpgraded: Bool // swiftlint:disable:this let_var_whitespace
-
 	@UserDefaults(key: "didCompleteEUVaccinationUpgrade", defaultValue: false)
 	var didCompleteEUVaccinationUpgrade: Bool // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "didDismissEUVaccinationUpgradeSuccessBanner", defaultValue: false)
+	var didDismissEUVaccinationUpgradeSuccessBanner: Bool // swiftlint:disable:this let_var_whitespace
 }
