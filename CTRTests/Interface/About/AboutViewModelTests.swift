@@ -13,15 +13,18 @@ class AboutViewModelTests: XCTestCase {
 
 	private var sut: AboutViewModel!
 	private var coordinatorSpy: OpenUrlProtocolSpy!
+	private var userSettingsSpy: UserSettingsSpy!
 
 	override func setUp() {
 		super.setUp()
 
 		coordinatorSpy = OpenUrlProtocolSpy()
+		userSettingsSpy = UserSettingsSpy()
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 	}
 
@@ -35,7 +38,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -58,7 +62,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -102,7 +107,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 		// When
 		sut.menuOptionSelected(.accessibility)
@@ -118,7 +124,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 		// When
 		sut.menuOptionSelected(.colophon)
@@ -134,7 +141,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
 		)
 
 		// When
@@ -151,7 +159,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
-			flavor: AppFlavor.verifier
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
 		)
 		// When
 		sut.menuOptionSelected(.colophon)
@@ -167,7 +176,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 		// When
 		sut.menuOptionSelected(.clearData)

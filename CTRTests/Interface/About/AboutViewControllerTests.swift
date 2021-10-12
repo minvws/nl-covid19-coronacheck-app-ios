@@ -16,7 +16,8 @@ class AboutViewControllerTests: XCTestCase {
 	// MARK: Subject under test
 	private var sut: AboutViewController!
 	private var coordinatorSpy: OpenUrlProtocolSpy!
-
+	private var userSettingsSpy: UserSettingsSpy!
+	
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
@@ -24,10 +25,12 @@ class AboutViewControllerTests: XCTestCase {
 
 		super.setUp()
 		coordinatorSpy = OpenUrlProtocolSpy()
+		userSettingsSpy = UserSettingsSpy()
 		let viewModel = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 
 		sut = AboutViewController(viewModel: viewModel)

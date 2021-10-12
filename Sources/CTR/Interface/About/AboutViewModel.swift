@@ -40,6 +40,8 @@ class AboutViewModel: Logging {
 
 	weak var walletManager: WalletManaging? = Services.walletManager
 
+	private let userSettings: UserSettingsProtocol
+
 	// MARK: - Bindable
 
 	@Bindable private(set) var title: String
@@ -59,10 +61,12 @@ class AboutViewModel: Logging {
 	init(
 		coordinator: OpenUrlProtocol,
 		versionSupplier: AppVersionSupplierProtocol,
-		flavor: AppFlavor) {
+		flavor: AppFlavor,
+		userSettings: UserSettingsProtocol) {
 
 		self.coordinator = coordinator
 		self.flavor = flavor
+		self.userSettings = userSettings
 
 		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
 		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
@@ -141,12 +145,6 @@ class AboutViewModel: Logging {
 		walletManager?.removeExistingEventGroups()
 		walletManager?.removeExistingGreenCards()
 
-		// Clear user defaults:
-		let userDefaults = Foundation.UserDefaults.standard
-
-		userDefaults
-			.dictionaryRepresentation()
-			.keys
-			.forEach(userDefaults.removeObject(forKey:))
+		userSettings.reset()
 	}
 }

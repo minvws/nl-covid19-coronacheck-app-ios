@@ -28,6 +28,8 @@ protocol UserSettingsProtocol: AnyObject {
 	// Flags for upgrading to Multiple DCCs:
 	var didCompleteEUVaccinationMigration: Bool { get set }
 	var didDismissEUVaccinationMigrationSuccessBanner: Bool { get set }
+
+	func reset()
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -61,4 +63,14 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "didDismissEUVaccinationMigrationSuccessBanner", defaultValue: false)
 	var didDismissEUVaccinationMigrationSuccessBanner: Bool // swiftlint:disable:this let_var_whitespace
+
+	func reset() {
+		// Clear user defaults:
+		let userDefaults = Foundation.UserDefaults.standard
+
+		userDefaults
+			.dictionaryRepresentation()
+			.keys
+			.forEach(userDefaults.removeObject(forKey:))
+	}
 }
