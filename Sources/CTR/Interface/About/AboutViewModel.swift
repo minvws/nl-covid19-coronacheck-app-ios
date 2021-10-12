@@ -137,8 +137,16 @@ class AboutViewModel: Logging {
 	}
 
 	func clearData() {
-
+		// Reset wallet manager
 		walletManager?.removeExistingEventGroups()
 		walletManager?.removeExistingGreenCards()
+
+		// Clear user defaults:
+		let userDefaults = Foundation.UserDefaults.standard
+
+		userDefaults
+			.dictionaryRepresentation()
+			.keys
+			.forEach(userDefaults.removeObject(forKey:))
 	}
 }
