@@ -57,6 +57,10 @@ protocol WalletManaging: AnyObject {
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
 	func greencardsWithUnexpiredOrigins(now: Date) -> [GreenCard]
+
+	func canSkipMultiDCCUpgrade() -> Bool
+	
+	func shouldShowMultiDCCUpgradeBanner(userSettings: UserSettingsProtocol) -> Bool
 }
 
 class WalletManager: WalletManaging, Logging {
@@ -509,5 +513,67 @@ class WalletManager: WalletManaging, Logging {
 		}
 
 		return result
+	}
+
+	/// Calculates whether the device can skip the MultiDCC migration
+	/// (either because no greencards available yet, or because there's
+	/// only a HKVI event)
+	func canSkipMultiDCCUpgrade() -> Bool {
+
+		guard !listGreenCards().isEmpty else {
+			// no greencards so can skip migration for now:
+			return false
+		}
+
+		// Check if we should show the banner.
+		let vaccinationEventGroups = listEventGroups().filter { $0.type == "vaccination" }
+		let hkviVaccinationEvents = vaccinationEventGroups.filter { $0.providerIdentifier?.uppercased() == "DCC" }
+
+		let regularVaccinationEvents = vaccinationEventGroups
+			.filter { $0.providerIdentifier?.uppercased() != "DCC" }
+			.flatMap { vaccineEventGroup -> [EventFlow.Event] in
+
+				// convert back to a network response and get the payload:
+				guard let jsonData = vaccineEventGroup.jsonData,
+					let payloadJSON = try? JSONDecoder().decode(SignedResponse.self, from: jsonData).decodedPayload,
+
+					// gives a list of remote vaccination events
+					let eventResultWrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: payloadJSON),
+					let events = eventResultWrapper.events
+				else {
+					return []
+				}
+
+				return events
+			}
+
+		// If we only have a single event (e.g. hkvi) we'll never get more cards so the upgrade can be skipped.
+		return (hkviVaccinationEvents.count + regularVaccinationEvents.count) <= 1
+	}
+
+	func shouldShowMultiDCCUpgradeBanner(userSettings: UserSettingsProtocol) -> Bool {
+		guard !listGreenCards().isEmpty else {
+			// no greencards so user still needs to load them:
+			return false
+		}
+		guard !userSettings.didCompleteEUVaccinationUpgrade else {
+			// do nothing
+			return false
+		}
+		guard !canSkipMultiDCCUpgrade() else {
+			// do nothing
+			return false
+		}
+
+		let allEUVaccinationGreencards = listGreenCards()
+			.filter { $0.getType() == .eu }
+			.filter { greencard in
+				guard let origins = greencard.castOrigins() else { return false }
+				return !origins.filter({ $0.type == "vaccination" }).isEmpty
+			}
+
+		// if there are more than 1 vaccination events but 1 or less greencards,
+		// show the banner to offer people an upgrade
+		return allEUVaccinationGreencards.count == 1 // show the banner
 	}
 }
