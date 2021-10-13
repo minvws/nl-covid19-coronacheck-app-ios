@@ -61,6 +61,7 @@ class ShowQRViewController: BaseViewController {
 		viewModel.$relevancyInformation.binding = { [weak self] in self?.sceneView.info = $0 }
 		viewModel.$thirdPartyTicketAppButtonTitle.binding = { [weak self] in self?.sceneView.returnToThirdPartyAppButtonTitle = $0 }
 		sceneView.didTapThirdPartyAppButtonCommand = { [viewModel] in viewModel.didTapThirdPartyAppButton() }
+		viewModel.$pageButtonAccessibility.binding = { [weak self] in self?.sceneView.pageButtonAccessibility = $0 }
 
 		sceneView.didTapPreviousButtonCommand = { [weak self] in self?.pageViewController.previousPage() }
 		sceneView.didTapNextButtonCommand = { [weak self] in self?.pageViewController.nextPage() }

@@ -263,6 +263,8 @@ class ShowQRView: BaseView {
 		super.setupAccessibility()
         
 		securityView.primaryButton.isAccessibilityElement = false
+		previousButton.accessibilityIdentifier = "BackButton"
+		nextButton.accessibilityIdentifier = "NextButton"
 	}
     
     override func safeAreaInsetsDidChange() {
@@ -307,6 +309,13 @@ class ShowQRView: BaseView {
 		didSet {
 			returnToThirdPartyAppButton.title = returnToThirdPartyAppButtonTitle
 			returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil
+		}
+	}
+	
+	var pageButtonAccessibility: (previous: String, next: String)? {
+		didSet {
+			previousButton.accessibilityLabel = pageButtonAccessibility?.previous
+			nextButton.accessibilityLabel = pageButtonAccessibility?.next
 		}
 	}
 
