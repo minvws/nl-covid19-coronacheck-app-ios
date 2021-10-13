@@ -262,7 +262,7 @@ class ShowQRView: BaseView {
 
 		super.setupAccessibility()
         
-        accessibilityElements = [containerView]
+		securityView.primaryButton.isAccessibilityElement = false
 	}
     
     override func safeAreaInsetsDidChange() {
