@@ -23,7 +23,7 @@ class ShowQRView: BaseView {
 			static let domesticSecurity: CGFloat = 56
 			static let internationalSecurity: CGFloat = 52
             static let internationalSecurityExtraSafeAreaInset: CGFloat = 20
-			static let returnToThirdPartyAppButton: CGFloat = 4
+			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
 		enum Spacing {
 			static let dosageToButton: CGFloat = 10
