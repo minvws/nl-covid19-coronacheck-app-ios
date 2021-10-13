@@ -140,7 +140,7 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreErrorResult(NSError* _Nu
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreGenerateHolderSk(void);
 
-// skipped function GetDomesticVerifier with unsupported parameter or return types
+// skipped function GetVerifiersForCLI with unsupported parameter or return types
 
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreInitializeHolder(NSString* _Nullable configDirectoryPath);
