@@ -160,6 +160,8 @@ class HolderCoordinator: SharedCoordinator {
 					appDelegate.currentAuthorizationFlow = nil
 				}
 				return true
+			default:
+				return false
 		}
     }
 

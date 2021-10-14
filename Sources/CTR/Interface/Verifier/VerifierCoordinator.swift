@@ -57,6 +57,10 @@ class VerifierCoordinator: SharedCoordinator {
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
 	}
+	
+	override func consume(universalLink: UniversalLink) -> Bool {
+		return false
+	}
 }
 
 // MARK: - VerifierCoordinatorDelegate
