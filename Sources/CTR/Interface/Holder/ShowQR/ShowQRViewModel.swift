@@ -47,6 +47,8 @@ class ShowQRViewModel: Logging {
 	@Bindable private(set) var items = [ShowQRItem]()
 
 	@Bindable private(set) var startingPage: Int
+	
+	@Bindable private(set) var pageButtonAccessibility: (previous: String, next: String)?
 
 	/// Initializer
 	/// - Parameters:
@@ -90,6 +92,8 @@ class ShowQRViewModel: Logging {
 				showInternationalAnimation = true
 			}
 		}
+		
+		pageButtonAccessibility = (L.holderShowqrPreviousbutton(), L.holderShowqrNextbutton())
 	}
 
 	private func setupListeners() {
