@@ -36,6 +36,8 @@ class VerifierCoordinator: SharedCoordinator {
 
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
+	
+	private var thirdPartyScannerApp: (name: String, returnURL: URL)?
 
 	// Designated starter method
 	override func start() {
@@ -59,7 +61,24 @@ class VerifierCoordinator: SharedCoordinator {
 	}
 	
 	override func consume(universalLink: UniversalLink) -> Bool {
-		return false
+		switch universalLink {
+			case .thirdPartyScannerApp(let returnURL):
+				guard let returnURL = returnURL,
+					  let matchingMetadata = remoteConfigManager.getConfiguration().universalLinkPermittedDomains?.first(where: { permittedDomain in
+						  permittedDomain.url == returnURL.host
+					  })
+				else {
+					return true
+				}
+				
+				thirdPartyScannerApp = (name: matchingMetadata.name, returnURL: returnURL)
+				
+				navigateToScan()
+				
+				return true
+			default:
+				return false
+		}
 	}
 }
 
