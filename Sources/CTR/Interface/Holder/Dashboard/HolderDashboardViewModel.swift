@@ -36,10 +36,9 @@ final class HolderDashboardViewModel: Logging {
 	/// Wrapper around some state variables
 	/// that allows us to use a `didSet{}` to
 	/// get a callback if any of them are mutated.
-	fileprivate struct State {
+	fileprivate struct State: Equatable {
 		var qrCards: [QRCard]
 		var expiredGreenCards: [ExpiredQR]
-		var showCreateCard: Bool
 		var isRefreshingStrippen: Bool
 
 		// Related to strippen refreshing.
@@ -49,6 +48,10 @@ final class HolderDashboardViewModel: Logging {
 		var errorForQRCardsMissingCredentials: String?
 
 		var deviceHasClockDeviation: Bool = false
+
+		var shouldShowEUVaccinationUpdateBanner: Bool = false
+
+		var shouldShowEUVaccinationUpdateCompletedBanner: Bool = false
 	}
 
 	// MARK: - Private properties
@@ -69,20 +72,7 @@ final class HolderDashboardViewModel: Logging {
 
 	private var state: State {
 		didSet {
-			guard let coordinator = coordinator else { return }
-
-			(domesticCards, internationalCards) = HolderDashboardViewModel.assembleCards(
-				state: state,
-				didTapCloseExpiredQR: { expiredQR in
-					self.state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
-				},
-				coordinatorDelegate: coordinator,
-				strippenRefresher: strippenRefresher,
-				remoteConfigManager: remoteConfigManager,
-				now: self.now()
-			)
-			
-			hasAddCertificateMode = state.qrCards.isEmpty
+			didUpdate(oldState: oldValue, newState: state)
 		}
 	}
 	
@@ -95,6 +85,7 @@ final class HolderDashboardViewModel: Logging {
 
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
+	private var dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private let now: () -> Date
 
@@ -104,6 +95,7 @@ final class HolderDashboardViewModel: Logging {
 		datasource: HolderDashboardQRCardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
+		dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol,
 		now: @escaping () -> Date
 	) {
 
@@ -112,21 +104,24 @@ final class HolderDashboardViewModel: Logging {
 		self.strippenRefresher = strippenRefresher
 		self.userSettings = userSettings
 		self.now = now
+		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
+		self.dccMigrationNotificationManager = dccMigrationNotificationManager
 
 		self.state = State(
 			qrCards: [],
 			expiredGreenCards: [],
-			showCreateCard: true,
 			isRefreshingStrippen: false,
 			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false
 		)
 
-		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
+		didUpdate(oldState: nil, newState: state)
 
 		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
 			DispatchQueue.main.async {
 				self?.state.qrCards = qrCardDataItems
 				self?.state.expiredGreenCards += expiredGreenCards
+
+				self?.dccMigrationNotificationManager.reload()
 			}
 		}
 
@@ -143,6 +138,18 @@ final class HolderDashboardViewModel: Logging {
 			self?.datasource.reload() // this could cause some QR code states to change, so reload.
 		}
 
+		// Setup the dcc
+		self.dccMigrationNotificationManager.showMigrationAvailableBanner = { [weak self] in
+			self?.state.shouldShowEUVaccinationUpdateBanner = true
+		}
+		self.dccMigrationNotificationManager.showMigrationCompletedBanner = { [weak self] in
+			guard var state = self?.state else { return }
+			state.shouldShowEUVaccinationUpdateBanner = false
+			state.shouldShowEUVaccinationUpdateCompletedBanner = true
+			self?.state = state
+		}
+		dccMigrationNotificationManager.reload()
+
 //		#if DEBUG
 //		DispatchQueue.main.asyncAfter(deadline: .now()) {
 //			self.injectSampleData(dataStoreManager: Services.dataStoreManager)
@@ -158,6 +165,26 @@ final class HolderDashboardViewModel: Logging {
 
 	func viewWillAppear() {
 		datasource.reload()
+	}
+
+	/// Don't call directly, apart from within `init` and from within `var state: State { didSet { ... } }`
+	fileprivate func didUpdate(oldState: State?, newState: State) {
+		guard let coordinator = coordinator, state != oldState // save recomputation effort if `==`
+		else { return }
+
+		(domesticCards, internationalCards) = HolderDashboardViewModel.assembleCards(
+			state: state,
+			didTapCloseExpiredQR: { expiredQR in
+				self.state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
+			},
+			coordinatorDelegate: coordinator,
+			strippenRefresher: strippenRefresher,
+			remoteConfigManager: remoteConfigManager,
+			now: self.now(),
+			userSettings: userSettings
+		)
+
+		hasAddCertificateMode = state.qrCards.isEmpty
 	}
 
 	fileprivate func strippenRefresherDidUpdate(oldRefresherState: DashboardStrippenRefresher.State?, refresherState: DashboardStrippenRefresher.State) {
@@ -236,7 +263,8 @@ final class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: (HolderCoordinatorDelegate),
 		strippenRefresher: DashboardStrippenRefreshing,
 		remoteConfigManager: RemoteConfigManaging,
-		now: Date
+		now: Date,
+		userSettings: UserSettingsProtocol
 	) -> (domestic: [HolderDashboardViewController.Card], international: [HolderDashboardViewController.Card]) {
 
 		let domesticCards = assembleCards(
@@ -246,7 +274,8 @@ final class HolderDashboardViewModel: Logging {
 			coordinatorDelegate: coordinatorDelegate,
 			strippenRefresher: strippenRefresher,
 			remoteConfigManager: remoteConfigManager,
-			now: now)
+			now: now,
+			userSettings: userSettings)
 
 		let internationalCards = assembleCards(
 			forValidityRegion: .europeanUnion,
@@ -255,11 +284,14 @@ final class HolderDashboardViewModel: Logging {
 			coordinatorDelegate: coordinatorDelegate,
 			strippenRefresher: strippenRefresher,
 			remoteConfigManager: remoteConfigManager,
-			now: now)
+			now: now,
+			userSettings: userSettings)
 
 		return (domestic: domesticCards, international: internationalCards)
 	}
 
+	// Temporary swiftlint disable.. 
+	// swiftlint:disable:next function_parameter_count
 	private static func assembleCards(
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
@@ -267,7 +299,8 @@ final class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: HolderCoordinatorDelegate,
 		strippenRefresher: DashboardStrippenRefreshing,
 		remoteConfigManager: RemoteConfigManaging,
-		now: Date
+		now: Date,
+		userSettings: UserSettingsProtocol
 	) -> [HolderDashboardViewController.Card] {
 
 		let allQRCards = state.qrCards
@@ -286,21 +319,62 @@ final class HolderDashboardViewModel: Logging {
 
 		if !allQRCards.isEmpty || !regionFilteredExpiredCards.isEmpty {
 			viewControllerCards += [
-				.headerMessage(message: {
+				{
 					switch validityRegion {
-						case .domestic: return L.holderDashboardIntroDomestic()
-						case .europeanUnion: return L.holderDashboardIntroInternational()
+						case .domestic:
+							return .headerMessage(message: L.holderDashboardIntroDomestic(),
+												  buttonTitle: nil)
+						case .europeanUnion:
+							return .headerMessage(message: L.holderDashboardIntroInternational(),
+												  buttonTitle: L.holderDashboardEmptyInternationalButton())
 					}
-				}())
+				}()
 			]
 		}
 
 		if state.deviceHasClockDeviation && !allQRCards.isEmpty {
 			viewControllerCards += [
-				.deviceHasClockDeviation(message: L.holderDashboardClockDeviationDetectedMessage(), didTapMoreInfo: {
-					coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
-				})
+				.deviceHasClockDeviation(
+					message: L.holderDashboardClockDeviationDetectedMessage(),
+					callToActionButtonText: L.generalReadmore(),
+					didTapCallToAction: {
+						coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
+					}
+				)
 			]
+		}
+
+		// Multiple DCC migration banners:
+
+		if validityRegion == .europeanUnion {
+			if state.shouldShowEUVaccinationUpdateBanner {
+				viewControllerCards += [
+					.migrateYourInternationalVaccinationCertificate(
+						message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
+						callToActionButtonText: L.generalReadmore(),
+						didTapCallToAction: { [weak coordinatorDelegate] in
+							coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
+						}
+					)
+				]
+			} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
+				viewControllerCards += [
+					.migratingYourInternationalVaccinationCertificateDidComplete(
+						message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
+						callToActionButtonText: L.generalReadmore(),
+						didTapCallToAction: { [weak coordinatorDelegate] in
+							coordinatorDelegate?.presentInformationPage(
+								title: L.holderEuvaccinationswereupgradedTitle(),
+								body: L.holderEuvaccinationswereupgradedMessage(),
+								hideBodyForScreenCapture: false,
+								openURLsInApp: true)
+						},
+						didTapClose: {
+							userSettings.didDismissEUVaccinationMigrationSuccessBanner = true
+						}
+					)
+				]
+			}
 		}
 
 		viewControllerCards += regionFilteredExpiredCards
@@ -323,13 +397,15 @@ final class HolderDashboardViewModel: Logging {
 							return HolderDashboardViewController.Card.emptyState(
 								image: I.dashboard.domestic(),
 								title: L.holderDashboardEmptyDomesticTitle(),
-								message: L.holderDashboardEmptyDomesticMessage()
+								message: L.holderDashboardEmptyDomesticMessage(),
+								buttonTitle: nil
 							)
 						case .europeanUnion:
 							return HolderDashboardViewController.Card.emptyState(
 								image: I.dashboard.international(),
 								title: L.holderDashboardEmptyInternationalTitle(),
-								message: L.holderDashboardEmptyInternationalMessage()
+								message: L.holderDashboardEmptyInternationalMessage(),
+								buttonTitle: L.holderDashboardEmptyInternationalButton()
 							)
 					}
 				}()
@@ -341,12 +417,14 @@ final class HolderDashboardViewModel: Logging {
 		viewControllerCards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state, thisRegion: validityRegion, now: now)
 			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
 			.map { originType, message in
-				return .originNotValidInThisRegion(message: message) {
-					coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
-						originType: originType,
-						currentRegion: validityRegion,
-						availableRegion: validityRegion.opposite)
-				}
+				return .originNotValidInThisRegion(
+					message: message,
+					callToActionButtonText: L.generalReadmore()) {
+						coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
+							originType: originType,
+							currentRegion: validityRegion,
+							availableRegion: validityRegion.opposite)
+					}
 			}
 
 		// Map a `QRCard` to a `VC.Card`:
@@ -384,7 +462,9 @@ extension HolderDashboardViewModel.QRCard {
 					title: L.holderDashboardQrTitle(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
-					didTapViewQR: { coordinatorDelegate.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id }) },
+					didTapViewQR: { [weak coordinatorDelegate] in
+						coordinatorDelegate?.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id })
+					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: { now in
 						let mostDistantFutureExpiryDate = origins.reduce(now) { result, nextOrigin in
@@ -430,7 +510,9 @@ extension HolderDashboardViewModel.QRCard {
 					}(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
-					didTapViewQR: { coordinatorDelegate.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id }) },
+					didTapViewQR: { [weak coordinatorDelegate] in
+						coordinatorDelegate?.userWishesToViewQRs(greenCardObjectIDs: greencards.compactMap { $0.id })
+					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: nil
 				)]
@@ -480,10 +562,26 @@ extension HolderDashboardViewModel {
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
+
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(userDefaultsDidChange),
+			name: Foundation.UserDefaults.didChangeNotification,
+			object: nil
+		)
 	}
 
 	@objc func receiveDidBecomeActiveNotification() {
 		datasource.reload()
+	}
+
+	@objc func userDefaultsDidChange() {
+		DispatchQueue.main.async {
+
+			// If it's already presented and dismiss is not true, then continue to show it:
+			self.state.shouldShowEUVaccinationUpdateCompletedBanner
+				= self.state.shouldShowEUVaccinationUpdateCompletedBanner && !self.userSettings.didDismissEUVaccinationMigrationSuccessBanner
+		}
 	}
 }
 

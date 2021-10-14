@@ -43,6 +43,7 @@ class ShowQRViewController: BaseViewController {
 		setupPages()
 		setupBinding()
 		addBackButton()
+		viewModel.setBrightness()
 	}
 
 	private func setupBinding() {
@@ -60,6 +61,7 @@ class ShowQRViewController: BaseViewController {
 		viewModel.$relevancyInformation.binding = { [weak self] in self?.sceneView.info = $0 }
 		viewModel.$thirdPartyTicketAppButtonTitle.binding = { [weak self] in self?.sceneView.returnToThirdPartyAppButtonTitle = $0 }
 		sceneView.didTapThirdPartyAppButtonCommand = { [viewModel] in viewModel.didTapThirdPartyAppButton() }
+		viewModel.$pageButtonAccessibility.binding = { [weak self] in self?.sceneView.pageButtonAccessibility = $0 }
 
 		sceneView.didTapPreviousButtonCommand = { [weak self] in self?.pageViewController.previousPage() }
 		sceneView.didTapNextButtonCommand = { [weak self] in self?.pageViewController.nextPage() }
@@ -76,6 +78,7 @@ class ShowQRViewController: BaseViewController {
 	override func viewWillDisappear(_ animated: Bool) {
 
 		super.viewWillDisappear(animated)
+		viewModel.setBrightness(reset: true)
 		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
 	}
 }
@@ -124,7 +127,17 @@ extension ShowQRViewController {
 				return self.viewModel.showQRItemViewController(forItem: item)
 			}
 			self.sceneView.pageControl.numberOfPages = $0.count
-			self.sceneView.pageControl.currentPage = 0
+			self.updateControlVisibility()
+		}
+
+		viewModel.$startingPage.binding = { [weak self] in
+
+			guard let self = self else {
+				return
+			}
+
+			self.sceneView.pageControl.currentPage = $0
+			self.pageViewController.startAtIndex($0)
 			self.updateControlVisibility()
 		}
 	}

@@ -21,8 +21,9 @@ class ShowQRView: BaseView {
 			static let edge: CGFloat = 10
 			static let infoEdge: CGFloat = 20
 			static let domesticSecurity: CGFloat = 56
-			static let internationalSecurity: CGFloat = 49
-			static let returnToThirdPartyAppButton: CGFloat = 4
+			static let internationalSecurity: CGFloat = 52
+            static let internationalSecurityExtraSafeAreaInset: CGFloat = 20
+			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
 		enum Spacing {
 			static let dosageToButton: CGFloat = 10
@@ -107,12 +108,19 @@ class ShowQRView: BaseView {
 		return Label(body: nil).multiline()
 	}()
 
+	private let scrollContentView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.viewControllerBackground.withAlphaComponent(0.8)
+		return view
+	}()
+
 	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
-		infoLabel.backgroundColor = Theme.colors.viewControllerBackground.withAlphaComponent(0.8)
 		
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
@@ -140,7 +148,7 @@ class ShowQRView: BaseView {
 		addSubview(previousButton)
 		addSubview(dosageLabel)
 		addSubview(scrollView)
-		scrollView.addSubview(infoLabel)
+		scrollView.addSubview(scrollContentView)
 	}
 
 	/// Setup the constraints
@@ -204,29 +212,7 @@ class ShowQRView: BaseView {
 				lessThanOrEqualTo: nextButton.leadingAnchor,
 				constant: -ViewTraits.Spacing.dosageToButton
 			),
-			dosageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-
-			infoLabel.topAnchor.constraint( equalTo: scrollView.topAnchor),
-			infoLabel.leadingAnchor.constraint(
-				equalTo: scrollView.leadingAnchor,
-				constant: ViewTraits.Margin.infoEdge
-			),
-			infoLabel.trailingAnchor.constraint(
-				equalTo: scrollView.trailingAnchor,
-				constant: -ViewTraits.Margin.infoEdge
-			),
-			// Extra constraints to make the infoLabel scrollable
-			infoLabel.widthAnchor.constraint(
-				equalTo: scrollView.widthAnchor,
-				constant: -2 * ViewTraits.Margin.infoEdge
-			),
-			infoLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-			infoLabel.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor),
-
-			scrollView.topAnchor.constraint(equalTo: pageControl.bottomAnchor),
-			scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+			dosageLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 
 		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
@@ -239,6 +225,35 @@ class ShowQRView: BaseView {
 		bringSubviewToFront(nextButton)
 		bringSubviewToFront(previousButton)
 		bringSubviewToFront(dosageLabel)
+
+		setupScrollViewConstraints()
+	}
+
+	func setupScrollViewConstraints() {
+
+		infoLabel.embed(
+			in: scrollContentView,
+			insets: UIEdgeInsets(
+				top: 0,
+				left: ViewTraits.Margin.infoEdge,
+				bottom: ViewTraits.Margin.infoEdge,
+				right: ViewTraits.Margin.infoEdge
+			)
+		)
+
+		NSLayoutConstraint.activate([
+			scrollContentView.topAnchor.constraint( equalTo: scrollView.topAnchor),
+			scrollContentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+			scrollContentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+			scrollContentView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor),
+			scrollContentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+			scrollContentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+
+			scrollView.topAnchor.constraint(equalTo: pageControl.bottomAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+		])
 		bringSubviewToFront(scrollView)
 	}
 
@@ -247,8 +262,16 @@ class ShowQRView: BaseView {
 
 		super.setupAccessibility()
         
-        accessibilityElements = [containerView]
+		securityView.primaryButton.isAccessibilityElement = false
+		previousButton.accessibilityIdentifier = "BackButton"
+		nextButton.accessibilityIdentifier = "NextButton"
 	}
+    
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        guard securityView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
+        securityViewBottomConstraint?.constant = safeAreaInsets.bottom + ViewTraits.Margin.internationalSecurityExtraSafeAreaInset
+    }
 
 	@objc func didTapThirdPartyAppButton() {
 
@@ -286,6 +309,13 @@ class ShowQRView: BaseView {
 		didSet {
 			returnToThirdPartyAppButton.title = returnToThirdPartyAppButtonTitle
 			returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil
+		}
+	}
+	
+	var pageButtonAccessibility: (previous: String, next: String)? {
+		didSet {
+			previousButton.accessibilityLabel = pageButtonAccessibility?.previous
+			nextButton.accessibilityLabel = pageButtonAccessibility?.next
 		}
 	}
 

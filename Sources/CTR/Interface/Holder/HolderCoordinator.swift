@@ -46,7 +46,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
 
 	func userWishesMoreInfoAboutClockDeviation()
-	
+
+	func userWishesMoreInfoAboutUpgradingEUVaccinations()
+
 	func openUrl(_ url: URL, inApp: Bool)
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
@@ -54,6 +56,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToLaunchThirdPartyTicketApp()
 
 	func displayError(content: Content, backAction: @escaping () -> Void)
+
+	func upgradeEUVaccinationDidComplete()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -220,6 +224,7 @@ class HolderCoordinator: SharedCoordinator {
 					now: { Date() }
 				),
 				userSettings: UserSettings(),
+				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
 				now: { Date() }
 			)
 		)
@@ -410,27 +415,48 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 
+	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
+		let viewModel = MigrateEUVaccinationViewModel(
+			backAction: { [weak self] in
+				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+			},
+			greencardLoader: GreenCardLoader(),
+			userSettings: userSettings
+		)
+		viewModel.coordinator = self
+		let viewController = UpgradeEUVaccinationViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+
+	func upgradeEUVaccinationDidComplete() {
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {
+			// (will be added in upcoming PR)
+		})
+	}
+
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
 
 		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
 		switch result {
 			case let .success(greenCards):
 				if greenCards.isEmpty {
-					showAlertWithErrorCode("i 610 000 061")
-			} else {
-				navigateToShowQRs(greenCards)
-			}
+					showAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .noGreenCardsAvailable))
+				} else {
+					navigateToShowQRs(greenCards)
+				}
 			case .failure:
-			showAlertWithErrorCode("i 610 000 062")
+				showAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .coreDataFetchError))
 		}
 	}
 
-	private func showAlertWithErrorCode(_ code: String) {
+	private func showAlertWithErrorCode(_ code: ErrorCode) {
 		
 		let alertController = UIAlertController(
 			title: L.generalErrorTitle(),
-			message: String(format: L.generalErrorTechnicalCustom(code)),
-			preferredStyle: .alert)
+			message: String(format: L.generalErrorTechnicalCustom("\(code)")),
+			preferredStyle: .alert
+		)
 
 		alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
 		(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
@@ -489,7 +515,8 @@ extension HolderCoordinator: MenuDelegate {
 					viewModel: AboutViewModel(
 						coordinator: self,
 						versionSupplier: versionSupplier,
-						flavor: AppFlavor.flavor
+						flavor: AppFlavor.flavor,
+						userSettings: UserSettings()
 					)
 				)
 				aboutNavigationController = UINavigationController(rootViewController: destination)
@@ -588,4 +615,12 @@ extension HolderCoordinator: PaperCertificateFlowDelegate {
 		
 		navigateToDashboard()
 	}
+}
+
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+
+	static let noGreenCardsAvailable = ErrorCode.ClientCode(value: "061")
+	static let coreDataFetchError = ErrorCode.ClientCode(value: "062")
 }

@@ -185,4 +185,56 @@ class UserSettingsSpy: UserSettingsProtocol {
 			return stubbedDeviceAuthenticationWarningShown
 		}
 	}
+
+	var invokedDidCompleteEUVaccinationMigrationSetter = false
+	var invokedDidCompleteEUVaccinationMigrationSetterCount = 0
+	var invokedDidCompleteEUVaccinationMigration: Bool?
+	var invokedDidCompleteEUVaccinationMigrationList = [Bool]()
+	var invokedDidCompleteEUVaccinationMigrationGetter = false
+	var invokedDidCompleteEUVaccinationMigrationGetterCount = 0
+	var stubbedDidCompleteEUVaccinationMigration: Bool! = false
+
+	var didCompleteEUVaccinationMigration: Bool {
+		set {
+			invokedDidCompleteEUVaccinationMigrationSetter = true
+			invokedDidCompleteEUVaccinationMigrationSetterCount += 1
+			invokedDidCompleteEUVaccinationMigration = newValue
+			invokedDidCompleteEUVaccinationMigrationList.append(newValue)
+		}
+		get {
+			invokedDidCompleteEUVaccinationMigrationGetter = true
+			invokedDidCompleteEUVaccinationMigrationGetterCount += 1
+			return stubbedDidCompleteEUVaccinationMigration
+		}
+	}
+
+	var invokedDidDismissEUVaccinationMigrationSuccessBannerSetter = false
+	var invokedDidDismissEUVaccinationMigrationSuccessBannerSetterCount = 0
+	var invokedDidDismissEUVaccinationMigrationSuccessBanner: Bool?
+	var invokedDidDismissEUVaccinationMigrationSuccessBannerList = [Bool]()
+	var invokedDidDismissEUVaccinationMigrationSuccessBannerGetter = false
+	var invokedDidDismissEUVaccinationMigrationSuccessBannerGetterCount = 0
+	var stubbedDidDismissEUVaccinationMigrationSuccessBanner: Bool! = false
+
+	var didDismissEUVaccinationMigrationSuccessBanner: Bool {
+		set {
+			invokedDidDismissEUVaccinationMigrationSuccessBannerSetter = true
+			invokedDidDismissEUVaccinationMigrationSuccessBannerSetterCount += 1
+			invokedDidDismissEUVaccinationMigrationSuccessBanner = newValue
+			invokedDidDismissEUVaccinationMigrationSuccessBannerList.append(newValue)
+		}
+		get {
+			invokedDidDismissEUVaccinationMigrationSuccessBannerGetter = true
+			invokedDidDismissEUVaccinationMigrationSuccessBannerGetterCount += 1
+			return stubbedDidDismissEUVaccinationMigrationSuccessBanner
+		}
+	}
+
+	var invokedReset = false
+	var invokedResetCount = 0
+
+	func reset() {
+		invokedReset = true
+		invokedResetCount += 1
+	}
 }

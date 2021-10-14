@@ -24,6 +24,12 @@ protocol UserSettingsProtocol: AnyObject {
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? { get set }
 
 	var deviceAuthenticationWarningShown: Bool { get set }
+
+	// Flags for upgrading to Multiple DCCs:
+	var didCompleteEUVaccinationMigration: Bool { get set }
+	var didDismissEUVaccinationMigrationSuccessBanner: Bool { get set }
+
+	func reset()
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -51,4 +57,20 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "didCompleteEUVaccinationMigration", defaultValue: false)
+	var didCompleteEUVaccinationMigration: Bool // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "didDismissEUVaccinationMigrationSuccessBanner", defaultValue: false)
+	var didDismissEUVaccinationMigrationSuccessBanner: Bool // swiftlint:disable:this let_var_whitespace
+
+	func reset() {
+		// Clear user defaults:
+		let userDefaults = Foundation.UserDefaults.standard
+
+		userDefaults
+			.dictionaryRepresentation()
+			.keys
+			.forEach(userDefaults.removeObject(forKey:))
+	}
 }

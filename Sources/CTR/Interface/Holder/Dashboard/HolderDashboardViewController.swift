@@ -10,15 +10,19 @@ import UIKit
 class HolderDashboardViewController: BaseViewController {
 
 	enum Card {
-		case headerMessage(message: String)
+		case headerMessage(message: String, buttonTitle: String?)
 
 		case expiredQR(message: String, didTapClose: () -> Void)
 
-		case originNotValidInThisRegion(message: String, didTapMoreInfo: () -> Void)
+		case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 
-		case deviceHasClockDeviation(message: String, didTapMoreInfo: () -> Void)
+		case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 
-		case emptyState(image: UIImage?, title: String, message: String)
+		case migrateYourInternationalVaccinationCertificate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+
+		case migratingYourInternationalVaccinationCertificateDidComplete(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+
+		case emptyState(image: UIImage?, title: String, message: String, buttonTitle: String?)
 
 		case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
@@ -87,6 +91,16 @@ class HolderDashboardViewController: BaseViewController {
 		// Forces VoiceOver focus on menu button instead of tab bar on start up
 		UIAccessibility.post(notification: .screenChanged, argument: navigationItem.leftBarButtonItem)
 	}
+
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+	}
+
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
@@ -132,35 +146,58 @@ class HolderDashboardViewController: BaseViewController {
 			.compactMap { [weak self] card -> UIView? in
 				
 				switch card {
-					
-					case let .headerMessage(message):
+					case let .headerMessage(message, buttonTitle):
 						
-						let text = TextView(htmlText: message)
-						text.linkTouched { url in
+						let headerMessageView = HeaderMessageView()
+						headerMessageView.message = message
+						headerMessageView.buttonTitle = buttonTitle
+						headerMessageView.contentTextView.linkTouched { url in
 							self?.viewModel.openUrl(url)
 						}
-						return text
+						headerMessageView.buttonTappedCommand = {
+
+							guard let url = URL(string: L.holderDashboardIntroInternationalUrl()) else { return }
+							self?.viewModel.openUrl(url)
+						}
+						return headerMessageView
 						
+					// Message Cards with only a message + close button
 					case let .expiredQR(message, didTapCloseAction):
-						let expiredQRCard = ExpiredQRView()
-						expiredQRCard.title = message
-						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
-						return expiredQRCard
-						
-					case let .originNotValidInThisRegion(message, didTapMoreInfo),
-						 let .deviceHasClockDeviation(message, didTapMoreInfo):
+						let messageCard = MessageCardView()
+						messageCard.title = message
+						messageCard.closeButtonTappedCommand = didTapCloseAction
+						return messageCard
+
+					// Message Cards with a message + CTA button
+					case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
+						 let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
+						 let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction):
 
 						let messageCard = MessageCardView()
 						messageCard.title = message
-						messageCard.infoButtonTappedCommand = didTapMoreInfo
+						messageCard.callToActionButtonText = callToActionButtonText
+						messageCard.callToActionButtonTappedCommand = didTapCallToAction
 						return messageCard
 
-					case let .emptyState(image, title, message):
+					case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+						let messageCard = MessageCardView()
+						messageCard.title = message
+						messageCard.callToActionButtonText = callToActionButtonText
+						messageCard.callToActionButtonTappedCommand = didTapCallToAction
+						messageCard.closeButtonTappedCommand = didTapCloseAction
+						return messageCard
+
+					case let .emptyState(image, title, message, buttonTitle):
 						let emptyDashboardView = EmptyDashboardView()
 						emptyDashboardView.image = image
 						emptyDashboardView.title = title
 						emptyDashboardView.message = message
+						emptyDashboardView.buttonTitle = buttonTitle
 						emptyDashboardView.contentTextView.linkTouched { url in
+							self?.viewModel.openUrl(url)
+						}
+						emptyDashboardView.buttonTappedCommand = {
+							guard let url = URL(string: L.holderDashboardEmptyInternationalUrl()) else { return }
 							self?.viewModel.openUrl(url)
 						}
 						return emptyDashboardView
@@ -185,9 +222,9 @@ class HolderDashboardViewController: BaseViewController {
 						qrCard.viewQRButtonCommand = didTapViewQR
 						qrCard.title = title
 
+						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
 						qrCard.validityTexts = validityTexts
 						qrCard.expiryEvaluator = expiryCountdownEvaluator
-						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
 						qrCard.isLoading = isLoading
 						
 						return qrCard

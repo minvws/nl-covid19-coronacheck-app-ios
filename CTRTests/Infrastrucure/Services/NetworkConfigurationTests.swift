@@ -51,7 +51,7 @@ class NetworkConfigurationTests: XCTestCase {
 
 		// Then
 		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == true
-		expect(url?.absoluteString.contains("v5")) == true
+		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/access_tokens")) == true
 	}
 
@@ -93,7 +93,7 @@ class NetworkConfigurationTests: XCTestCase {
 
 		// Then
 		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == true
-		expect(url?.absoluteString.contains("v5")) == true
+		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/prepare_issue")) == true
 	}
 
@@ -135,7 +135,7 @@ class NetworkConfigurationTests: XCTestCase {
 
 		// Then
 		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == true
-		expect(url?.absoluteString.contains("v5")) == true
+		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/credentials")) == true
 	}
 
@@ -177,7 +177,7 @@ class NetworkConfigurationTests: XCTestCase {
 
 		// Then
 		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == true
-		expect(url?.absoluteString.contains("v5")) == true
+		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/coupling")) == true
 	}
 
@@ -222,7 +222,7 @@ class NetworkConfigurationTests: XCTestCase {
 		// Then
 		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == false
 		expect(url?.absoluteString.contains("https://holder-api-cdn.coronacheck.nl")) == true
-		expect(url?.absoluteString.contains("v5")) == true
+		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/public_keys")) == true
 	}
 
@@ -267,7 +267,7 @@ class NetworkConfigurationTests: XCTestCase {
 		// Then
 		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == false
 		expect(url?.absoluteString.contains("https://holder-api-cdn.coronacheck.nl")) == true
-		expect(url?.absoluteString.contains("v5")) == true
+		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/config")) == true
 	}
 
@@ -312,7 +312,7 @@ class NetworkConfigurationTests: XCTestCase {
 		// Then
 		expect(url?.absoluteString.contains("https://holder-api.coronacheck.nl")) == false
 		expect(url?.absoluteString.contains("https://holder-api-cdn.coronacheck.nl")) == true
-		expect(url?.absoluteString.contains("v5")) == true
+		expect(url?.absoluteString.contains("v6")) == true
 		expect(url?.absoluteString.contains("holder/config_providers")) == true
 	}
 

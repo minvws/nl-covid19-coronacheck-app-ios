@@ -57,7 +57,6 @@ class ShowQRItemViewController: BaseViewController, Logging {
 
 		viewModel.$visibilityState.binding = { [weak self] in
 			self?.sceneView.visibilityState = $0
-			self?.viewModel.setBrightness()
 		}
 	}
 
@@ -88,6 +87,7 @@ class ShowQRItemViewController: BaseViewController, Logging {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
+		viewModel.updateQRVisibility()
 		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 	}
@@ -101,8 +101,13 @@ class ShowQRItemViewController: BaseViewController, Logging {
 	override func viewWillDisappear(_ animated: Bool) {
 
 		super.viewWillDisappear(animated)
-		viewModel.setBrightness(reset: true)
 		viewModel.stopValidityTimer()
 		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
+	}
+
+	override func viewDidDisappear(_ animated: Bool) {
+
+		super.viewDidDisappear(animated)
+		viewModel.resetIrrelevancy()
 	}
 }

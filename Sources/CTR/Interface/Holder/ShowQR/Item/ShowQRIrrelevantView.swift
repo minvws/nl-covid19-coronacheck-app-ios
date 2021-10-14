@@ -118,6 +118,8 @@ class ShowQRIrrelevantView: BaseView {
 
 			titleLabel.centerYAnchor.constraint(equalTo: innerView.centerYAnchor),
 			titleLabel.centerXAnchor.constraint(equalTo: innerView.centerXAnchor),
+			titleLabel.leadingAnchor.constraint(equalTo: innerView.leadingAnchor),
+			titleLabel.trailingAnchor.constraint(equalTo: innerView.trailingAnchor),
 
 			actionLabel.leadingAnchor.constraint(equalTo: innerView.leadingAnchor),
 			actionLabel.trailingAnchor.constraint(equalTo: innerView.trailingAnchor),
@@ -131,6 +133,16 @@ class ShowQRIrrelevantView: BaseView {
 			actionButton.leadingAnchor.constraint(equalTo: innerView.leadingAnchor),
 			actionButton.trailingAnchor.constraint(equalTo: innerView.trailingAnchor)
 		])
+	}
+	
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		accessibilityElements = [actionButton]
+		
+		guard let title = title, let action = action else { return }
+		actionButton.accessibilityLabel = title + action
 	}
 
 	// MARK: - Callbacks
@@ -146,6 +158,7 @@ class ShowQRIrrelevantView: BaseView {
 	var title: String? {
 		didSet {
 			titleLabel.text = title
+			setupAccessibility()
 		}
 	}
 
@@ -157,6 +170,7 @@ class ShowQRIrrelevantView: BaseView {
 				alignment: .center,
 				textColor: Theme.colors.iosBlue
 			)
+			setupAccessibility()
 		}
 	}
 

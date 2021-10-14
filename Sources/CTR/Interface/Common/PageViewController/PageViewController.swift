@@ -62,6 +62,12 @@ final class PageViewController: UIPageViewController {
         currentIndex -= 1
 		setViewControllers([previousViewController], direction: .reverse, animated: true)
 	}
+
+	func startAtIndex(_ index: Int) {
+		guard let pages = pages, pages.count > index else { return }
+		setViewControllers([pages[index]], direction: .forward, animated: false, completion: nil)
+		currentIndex = index
+	}
 }
 
 extension PageViewController: UIPageViewControllerDataSource {

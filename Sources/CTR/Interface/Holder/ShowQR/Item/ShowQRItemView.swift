@@ -127,8 +127,11 @@ class ShowQRItemView: BaseView {
 
         largeQRimageView.isAccessibilityElement = true
         largeQRimageView.accessibilityTraits = .image
-        
-        accessibilityElements = [largeQRimageView]
+	}
+	
+	private func updateAccessibilityState(for view: UIView) {
+		accessibilityElements = [view]
+		UIAccessibility.post(notification: .layoutChanged, argument: view)
 	}
 
 	// MARK: Public Access
@@ -178,11 +181,11 @@ class ShowQRItemView: BaseView {
 
 			// Update accessibility at the moment that it becomes .screenshotBlocking from another state:
 			switch (oldValue, visibilityState) {
-				case (.screenshotBlocking, .screenshotBlocking): break // ignore
+				case (.screenshotBlocking, .screenshotBlocking),
+					(.irrelevant, .irrelevant),
+					(.visible, .visible): break // ignore
 				case (_, .screenshotBlocking):
-					accessibilityElements = [screenshotBlockingView]
-
-					UIAccessibility.post(notification: .layoutChanged, argument: screenshotBlockingView)
+					updateAccessibilityState(for: screenshotBlockingView)
 
 					DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
 						UIAccessibility.post(
@@ -190,6 +193,10 @@ class ShowQRItemView: BaseView {
 							argument: L.holderShowqrScreenshotwarningTitle()
 						)
 					}
+				case (_, .irrelevant):
+					updateAccessibilityState(for: irrelevantView)
+				case (_, .visible):
+					updateAccessibilityState(for: largeQRimageView)
 				default: break
 			}
 		}

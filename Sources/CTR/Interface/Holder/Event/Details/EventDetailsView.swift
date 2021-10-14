@@ -44,8 +44,7 @@ final class EventDetailsView: BaseView {
 		NSLayoutConstraint.activate([
 
 			stackView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.margin
+				equalTo: safeAreaLayoutGuide.topAnchor
 			),
 			stackView.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,

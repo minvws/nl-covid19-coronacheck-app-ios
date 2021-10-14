@@ -173,7 +173,10 @@ class LaunchViewModel: Logging {
 					/// beyond a permitted time interval.
 					if let httpResponse = urlResponse as? HTTPURLResponse,
 					   let serverDateString = httpResponse.allHeaderFields["Date"] as? String {
-						Services.clockDeviationManager.update(serverHeaderDate: serverDateString)
+						Services.clockDeviationManager.update(
+							serverHeaderDate: serverDateString,
+							ageHeader: httpResponse.allHeaderFields["Age"] as? String
+						)
 					}
 
 					self.compare(remoteConfiguration, completion: completion)
