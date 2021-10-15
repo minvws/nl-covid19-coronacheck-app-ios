@@ -74,7 +74,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				viewModel: VerifierStartViewModel(
 					coordinator: self,
 					cryptoManager: cryptoManager,
-					proofManager: proofManager
+					proofManager: proofManager,
+					clockDeviationManager: Services.clockDeviationManager
 				)
 			)
 
