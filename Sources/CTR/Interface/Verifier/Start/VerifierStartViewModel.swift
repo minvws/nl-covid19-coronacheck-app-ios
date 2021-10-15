@@ -23,6 +23,7 @@ class VerifierStartViewModel: Logging {
 	weak private var proofManager: ProofManaging?
 	private var userSettings: UserSettingsProtocol
 	private let clockDeviationManager: ClockDeviationManaging
+	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 
 	// MARK: - Bindable properties
 
@@ -71,6 +72,13 @@ class VerifierStartViewModel: Logging {
 		message = L.verifierStartMessage()
 		showInstructionsTitle = L.verifierStartButtonShowinstructions()
 		shouldShowClockDeviationWarning = clockDeviationManager.hasSignificantDeviation ?? false
+
+		clockDeviationObserverToken = clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+			self?.shouldShowClockDeviationWarning = hasClockDeviation
+		}
+	}
+	deinit {
+		clockDeviationObserverToken.map(clockDeviationManager.removeDeviationChangeObserver)
 	}
 
 	func primaryButtonTapped() {
@@ -91,6 +99,10 @@ class VerifierStartViewModel: Logging {
 
 	func showInstructionsButtonTapped() {
 		coordinator?.didFinish(.userTappedProceedToScanInstructions)
+	}
+
+	func userDidTapClockDeviationWarningReadMore() {
+		coordinator?.userWishesMoreInfoAboutClockDeviation()
 	}
 
 	/// Update the public keys

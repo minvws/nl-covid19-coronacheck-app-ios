@@ -30,6 +30,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	///   - content: the content
 	func displayContent(title: String, content: [DisplayContent])
 
+	func userWishesMoreInfoAboutClockDeviation()
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -142,6 +143,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			let destination = VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: self))
 			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
 		}
+	}
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		let title: String = L.verifierClockDeviationDetectedTitle()
+		let message: String = L.verifierClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 }
 
