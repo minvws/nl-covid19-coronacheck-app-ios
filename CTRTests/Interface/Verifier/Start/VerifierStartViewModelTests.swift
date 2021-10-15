@@ -152,6 +152,7 @@ class VerifierStartViewModelTests: XCTestCase {
 
 		// Arrange
 		clockDeviationManagerSpy.stubbedHasSignificantDeviation = true
+		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (true, ())
 
 		// Act
 		sut = VerifierStartViewModel(

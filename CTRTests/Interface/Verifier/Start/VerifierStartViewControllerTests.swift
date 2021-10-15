@@ -33,6 +33,9 @@ class VerifierStartViewControllerTests: XCTestCase {
 		cryptoManagerSpy = CryptoManagerSpy()
 		proofManagerSpy = ProofManagingSpy()
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
+		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
+		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
+		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
 		userSettingsSpy = UserSettingsSpy()
 
 		viewModel = VerifierStartViewModel(
