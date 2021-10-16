@@ -219,6 +219,26 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 2
 	}
 
+	func test_serverResponseDidNotChangeExpiredOrExpiringState() {
+		// Arrange
+		walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: dataStoreManager)
+		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(()), ())
+
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy,
+			now: { now }
+		)
+
+		// Act
+		sut.load()
+
+		// Assert
+		expect(self.sut.state.greencardsCredentialExpiryState) == .expired
+		expect(self.sut.state.loadingState) == .failed(error: .serverResponseDidNotChangeExpiredOrExpiringState)
+		expect(self.sut.state.isNonsilentlyLoading) == false
+	}
+
 	func test_serverError_shouldRetryIfAppReturnsFromBackgroundAfterTenMinutes() {
 
 		// Arrange `expiring` starting state
