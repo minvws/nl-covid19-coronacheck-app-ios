@@ -62,7 +62,7 @@ class TextView: UIStackView {
                 }
                 
                 // Hide for assistive technologies?
-                if part.string.trimmingCharacters(in: .whitespaces).isEmpty {
+                if part.isBlank {
                     element.isAccessibilityElement = false
                 }
                 
@@ -248,6 +248,11 @@ extension NSAttributedString {
         }
         
         return height
+    }
+    
+    /// Determines if the attributed string is blank
+    var isBlank: Bool {
+        return string.trimmingCharacters(in: .whitespaces).isEmpty
     }
 }
 
