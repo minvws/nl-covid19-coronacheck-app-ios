@@ -55,9 +55,17 @@ class TextView: UIStackView {
                 
                 // 2. Add current TextElement
                 let element = TextElement(attributedText: part)
+                
+                // Mark as header?
                 if part.isHeader {
                     element.accessibilityTraits = .header
                 }
+                
+                // Hide for assistive technologies?
+                if part.string.trimmingCharacters(in: .whitespaces).isEmpty {
+                    element.isAccessibilityElement = false
+                }
+                
                 addArrangedSubview(element)
             }
         }
