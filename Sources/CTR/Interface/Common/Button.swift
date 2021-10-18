@@ -11,15 +11,15 @@ import UIKit
 class Button: UIButton {
 	
     enum ButtonType {
-		// Rounded, blue background, white text
+		/// Rounded, blue background, white text
         case roundedBlue
-		// Rounded, white background, dark text
+		/// Rounded, white background, dark text
         case roundedWhite
-		// Rounded, clear background, dark border
+		/// Rounded, clear background, dark border
 		case roundedClear
-		// Text only, blue text
+		/// Text only, blue text
         case textLabelBlue
-		// Rounded, blue background, white text, right image with label in center
+		/// Rounded, blue background, white text, right image with label in center
 		case roundedBlueImage
 		
 		func backgroundColor(isEnabled: Bool = true) -> UIColor {
