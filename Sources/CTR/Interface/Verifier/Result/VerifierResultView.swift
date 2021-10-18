@@ -29,7 +29,6 @@ class VerifierResultView: BaseView {
 
 		enum Animation {
 			static let duration: TimeInterval = 0.25
-			static let delay: TimeInterval = 0.8
 		}
 	}
 
@@ -39,6 +38,8 @@ class VerifierResultView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
+	
+	private let verifiedView = VerifiedView()
 	
 	private var accessView: AccessView?
 
@@ -52,16 +53,12 @@ class VerifierResultView: BaseView {
 	func setup(for result: Result) {
 		switch result {
 			case .verified, .demo:
-				let view = VerifiedView()
-				view.backgroundColor = result.colors
-				setup(view: view)
-				revealIdentityView(for: result)
-				accessView = view
+				setupViews(for: result)
 			case .denied:
 				let view = DeniedView()
 				view.footerButtonView.primaryButtonTappedCommand = { [weak self] in self?.scanNextTappedCommand?() }
 				view.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
-				setup(view: view)
+				view.embed(in: self)
 				accessView = view
 		}
 	}
@@ -97,27 +94,23 @@ class VerifierResultView: BaseView {
 
 private extension VerifierResultView {
 	
-	func setup(view: UIView) {
+	func setupViews(for result: Result) {
 		
-		view.embed(in: self)
+		verifiedView.backgroundColor = result.colors
+		accessView = verifiedView
+		
+		checkIdentityView.footerButtonView.primaryButtonTappedCommand = { [weak self] in self?.displayVerifiedView() }
+		checkIdentityView.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
+		checkIdentityView.embed(in: self)
 	}
 	
-	func revealIdentityView(for result: Result) {
+	func displayVerifiedView() {
 		
-		checkIdentityView.backgroundColor = result.colors
-		checkIdentityView.footerButtonView.primaryButtonTappedCommand = { [weak self] in self?.scanNextTappedCommand?() }
-		checkIdentityView.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
-		checkIdentityView.alpha = 0
-		setup(view: checkIdentityView)
-
-		UIView.animate(withDuration: ViewTraits.Animation.duration,
-					   delay: ViewTraits.Animation.delay,
-					   options: .curveLinear) {
-			
-			self.checkIdentityView.alpha = 1
-		} completion: { [weak self] _ in
-			
-			UIAccessibility.post(notification: .screenChanged, argument: self?.checkIdentityView)
+		verifiedView.alpha = 0
+		verifiedView.embed(in: self)
+		
+		UIView.animate(withDuration: ViewTraits.Animation.duration) {
+			self.verifiedView.alpha = 1
 		}
 	}
 	
