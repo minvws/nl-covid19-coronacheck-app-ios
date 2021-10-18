@@ -51,6 +51,8 @@ class VerifierResultViewModel: Logging {
 	@Bindable private(set) var monthOfBirth: String?
 	
 	@Bindable private(set) var secondaryTitle: String = ""
+	
+	@Bindable private(set) var checkIdentity: String = ""
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -180,6 +182,7 @@ class VerifierResultViewModel: Logging {
 
 		title = L.verifierResultAccessTitle()
 		secondaryTitle = L.verifierResultAccessReadmore()
+		checkIdentity = L.verifierResultAccessCheckidentity()
 	}
 
 	private func showAccessDeniedInvalidQR() {
@@ -192,6 +195,7 @@ class VerifierResultViewModel: Logging {
 
 		title = L.verifierResultDemoTitle()
 		secondaryTitle = L.verifierResultAccessReadmore()
+		checkIdentity = L.verifierResultAccessCheckidentity()
 	}
 
 	func dismiss() {

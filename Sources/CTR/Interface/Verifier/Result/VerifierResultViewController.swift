@@ -75,6 +75,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 		
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$secondaryTitle.binding = { [weak self] in self?.sceneView.secondaryTitle = $0 }
+		viewModel.$checkIdentity.binding = { [weak self] in self?.sceneView.checkIdentityView.checkIdentity = $0 }
 		
 		// Identity
 		setupIdentityView()
