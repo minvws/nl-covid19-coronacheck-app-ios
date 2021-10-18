@@ -22,6 +22,10 @@ class VerifierCheckIdentityView: BaseView {
 		}
 		enum Spacing {
 			static let identityToCheckIdentityLabel: CGFloat = 24
+			static let secondaryToPrimaryButton: CGFloat = 16
+		}
+		enum Button {
+			static let height: CGFloat = 52
 		}
 	}
 	
@@ -59,9 +63,8 @@ class VerifierCheckIdentityView: BaseView {
 	}()
 	
 	let secondaryButton: Button = {
-		// Change to new button type
-		let button = Button(style: .roundedWhite)
-		return button
+		
+		return Button(style: .roundedBlueBorder)
 	}()
 	
 	private let checkIdentityLabel: Label = {
@@ -94,12 +97,16 @@ class VerifierCheckIdentityView: BaseView {
 		addSubview(footerButtonView)
 		scrollView.addSubview(identityView)
 		scrollView.addSubview(checkIdentityLabel)
+		footerButtonView.addSubview(secondaryButton)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
+		
+		footerButtonView.topButtonConstraint?.isActive = false
+		
 		NSLayoutConstraint.activate([
 			
 			// Title
@@ -161,6 +168,26 @@ class VerifierCheckIdentityView: BaseView {
 				constant: -ViewTraits.Margin.edge
 			),
 			checkIdentityLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			
+			// Secondary button
+			secondaryButton.topAnchor.constraint(
+				equalTo: footerButtonView.topAnchor,
+				constant: ViewTraits.Margin.edge
+			),
+			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
+			secondaryButton.centerXAnchor.constraint(equalTo: footerButtonView.centerXAnchor),
+			secondaryButton.leftAnchor.constraint(
+				greaterThanOrEqualTo: footerButtonView.leftAnchor,
+				constant: ViewTraits.Margin.edge
+			),
+			secondaryButton.rightAnchor.constraint(
+				lessThanOrEqualTo: footerButtonView.rightAnchor,
+				constant: -ViewTraits.Margin.edge
+			),
+			secondaryButton.bottomAnchor.constraint(
+				equalTo: footerButtonView.primaryButton.topAnchor,
+				constant: -ViewTraits.Spacing.secondaryToPrimaryButton
+			),
 			
 			// Footer view
 			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),

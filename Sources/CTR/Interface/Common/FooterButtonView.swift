@@ -69,7 +69,11 @@ final class FooterButtonView: BaseView {
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 			primaryButton.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.Margin.edge),
 			primaryButton.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -ViewTraits.Margin.edge),
-			primaryButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge),
+			{
+				let constraint = primaryButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge)
+				topButtonConstraint = constraint
+				return constraint
+			}(),
 			{
 				let constraint = primaryButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -ViewTraits.Margin.edge)
 				bottomButtonConstraint = constraint
@@ -115,6 +119,8 @@ final class FooterButtonView: BaseView {
 			primaryButton.setTitle(primaryTitle, for: .normal)
 		}
 	}
+	
+	var topButtonConstraint: NSLayoutConstraint?
 	
 	/// The bottom constraint for keyboard changes
 	var bottomButtonConstraint: NSLayoutConstraint?

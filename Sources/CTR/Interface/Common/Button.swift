@@ -17,6 +17,8 @@ class Button: UIButton {
         case roundedWhite
 		/// Rounded, clear background, dark border
 		case roundedClear
+		/// Rounded, white background, blue text, blue border
+		case roundedBlueBorder
 		/// Text only, blue text
         case textLabelBlue
 		/// Rounded, blue background, white text, right image with label in center
@@ -26,7 +28,7 @@ class Button: UIButton {
 			switch self {
 				case .roundedBlue, .roundedBlueImage:
 					return isEnabled ? Theme.colors.primary : Theme.colors.tertiary
-				case .roundedWhite:
+				case .roundedWhite, .roundedBlueBorder:
 					return isEnabled ? Theme.colors.secondary : Theme.colors.grey2
 				case .roundedClear, .textLabelBlue:
 					return .clear
@@ -43,6 +45,8 @@ class Button: UIButton {
 					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
 				case .textLabelBlue:
 					return isEnabled ? Theme.colors.iosBlue : Theme.colors.grey2
+				case .roundedBlueBorder:
+					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
 			}
 		}
 		
@@ -69,12 +73,17 @@ class Button: UIButton {
 		}
 		
 		func borderColor(isEnabled: Bool = true) -> UIColor {
-			return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+			switch self {
+				case .roundedBlueBorder:
+					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
+				default:
+					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+			}
 		}
 		
 		var borderWidth: CGFloat {
 			switch self {
-				case .roundedClear: return 1
+				case .roundedClear, .roundedBlueBorder: return 1
 				default: return 0
 			}
 		}
