@@ -28,13 +28,15 @@ class TextElement: UITextView, UITextViewDelegate {
         
         self.attributedText = attributedText
         
-        // Improve accessibility for strings containg bullet points
-        if let label = attributedText.mutableCopy() as? NSMutableAttributedString {
-            let range = (label.string as NSString).range(of: "\t●\t")
-            if range.length > 0 {
-                label.deleteCharacters(in: range)
-                accessibilityAttributedValue = label
-            }
+        // Improve accessibility by removing tab characters
+        if let accessibilityValue = attributedText.mutableCopy() as? NSMutableAttributedString {
+            accessibilityValue.mutableString.replaceOccurrences(
+                of: "\t",
+                with: "",
+                options: .regularExpression,
+                range: NSRange(location: 0, length: accessibilityValue.mutableString.length)
+            )
+            accessibilityAttributedValue = accessibilityValue
         }
     }
     
