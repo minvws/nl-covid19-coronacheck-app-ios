@@ -48,7 +48,7 @@ enum UniversalLink: Equatable {
 			}
 		} else {
 			
-			if url.path == "/app/scan" {
+			if url.path == "/verifier/scan" {
 				
 				self = .thirdPartyScannerApp(returnURL: createReturnURL(url))
 			}
