@@ -24,14 +24,6 @@ class VerifierResultView: BaseView {
 		}
 	}
 
-	/// The display constants
-	private enum ViewTraits {
-
-		enum Animation {
-			static let duration: TimeInterval = 0.25
-		}
-	}
-
 	let checkIdentityView: VerifierCheckIdentityView = {
 
 		let view = VerifierCheckIdentityView()
@@ -90,6 +82,8 @@ class VerifierResultView: BaseView {
 	
 	/// The user tapped on the secondary button in the denied view
 	var readMoreTappedCommand: (() -> Void)?
+	
+	var verifiedTappedCommand: (() -> Void)?
 }
 
 private extension VerifierResultView {
@@ -99,7 +93,10 @@ private extension VerifierResultView {
 		verifiedView.backgroundColor = result.colors
 		accessView = verifiedView
 		
-		checkIdentityView.footerButtonView.primaryButtonTappedCommand = { [weak self] in self?.displayVerifiedView() }
+		checkIdentityView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
+			self?.displayVerifiedView()
+			self?.verifiedTappedCommand?()
+		}
 		checkIdentityView.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 		checkIdentityView.embed(in: self)
 	}
@@ -109,7 +106,7 @@ private extension VerifierResultView {
 		verifiedView.alpha = 0
 		verifiedView.embed(in: self)
 		
-		UIView.animate(withDuration: ViewTraits.Animation.duration) {
+		UIView.animate(withDuration: VerifierResultViewTraits.Animation.verifiedDuration) {
 			self.verifiedView.alpha = 1
 		}
 	}

@@ -61,6 +61,11 @@ class VerifierResultViewController: BaseViewController, Logging {
 			
 			self?.viewModel.showMoreInformation()
 		}
+		
+		sceneView.verifiedTappedCommand = { [weak self] in
+			
+			self?.viewModel.showVerified()
+		}
 
 		viewModel.$hideForCapture.binding = { [weak self] in
 

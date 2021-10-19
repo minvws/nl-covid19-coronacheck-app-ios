@@ -219,6 +219,19 @@ class VerifierResultViewModel: Logging {
 				showDeniedInfo()
 		}
 	}
+	
+	func showVerified() {
+		
+		stopAutoCloseTimer()
+		
+		let displayDuration: CGFloat = 0.8
+		let verifiedDuration = VerifierResultViewTraits.Animation.verifiedDuration
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + displayDuration + verifiedDuration) {
+			
+			self.scanAgain()
+		}
+	}
 
 	private func showVerifiedInfo() {
 
@@ -274,6 +287,6 @@ class VerifierResultViewModel: Logging {
 
 		logInfo("Auto closing the result view")
 		stopAutoCloseTimer()
-		dismiss()
+		scanAgain()
 	}
 }
