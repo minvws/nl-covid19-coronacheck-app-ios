@@ -55,6 +55,8 @@ class VerifierResultViewModel: Logging {
 	@Bindable private(set) var secondaryTitle: String = ""
 	
 	@Bindable private(set) var checkIdentity: String = ""
+	
+	@Bindable private(set) var primaryButtonIcon: UIImage?
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -186,6 +188,7 @@ class VerifierResultViewModel: Logging {
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
+		primaryButtonIcon = I.deeplinkScan()
 	}
 
 	private func showAccessDeniedInvalidQR() {
@@ -201,6 +204,7 @@ class VerifierResultViewModel: Logging {
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
+		primaryButtonIcon = I.deeplinkScan()
 	}
 
 	func dismiss() {

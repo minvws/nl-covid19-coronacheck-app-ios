@@ -81,6 +81,7 @@ class VerifierCheckIdentityView: BaseView {
 		super.setupViews()
 		
 		backgroundColor = Theme.colors.grey5
+		footerButtonView.primaryButton.style = .roundedBlueImage
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
 			let translatedOffset = scrollView.translatedBottomScrollOffset

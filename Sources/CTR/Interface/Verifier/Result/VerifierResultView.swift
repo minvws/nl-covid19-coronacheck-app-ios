@@ -77,6 +77,12 @@ class VerifierResultView: BaseView {
 		}
 	}
 	
+	var primaryButtonIcon: UIImage? {
+		didSet {
+			checkIdentityView.footerButtonView.primaryButton.setImage(primaryButtonIcon, for: .normal)
+		}
+	}
+	
 	/// The user tapped on the primary button
 	var scanNextTappedCommand: (() -> Void)?
 	
