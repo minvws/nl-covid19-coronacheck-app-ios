@@ -98,6 +98,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedConfigFetchedHashSetter = false
+	var invokedConfigFetchedHashSetterCount = 0
+	var invokedConfigFetchedHash: String?
+	var invokedConfigFetchedHashList = [String?]()
+	var invokedConfigFetchedHashGetter = false
+	var invokedConfigFetchedHashGetterCount = 0
+	var stubbedConfigFetchedHash: String!
+
+	var configFetchedHash: String? {
+		set {
+			invokedConfigFetchedHashSetter = true
+			invokedConfigFetchedHashSetterCount += 1
+			invokedConfigFetchedHash = newValue
+			invokedConfigFetchedHashList.append(newValue)
+		}
+		get {
+			invokedConfigFetchedHashGetter = true
+			invokedConfigFetchedHashGetterCount += 1
+			return stubbedConfigFetchedHash
+		}
+	}
+
 	var invokedLastScreenshotTimeSetter = false
 	var invokedLastScreenshotTimeSetterCount = 0
 	var invokedLastScreenshotTime: Date?

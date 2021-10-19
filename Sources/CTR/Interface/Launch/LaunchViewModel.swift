@@ -163,6 +163,11 @@ class LaunchViewModel: Logging {
 
 					// Update the last fetch time
 					self.userSettings?.configFetchedTimestamp = Date().timeIntervalSince1970
+					self.userSettings?.configFetchedHash = {
+						guard let string = String(data: data, encoding: .utf8) else { return nil }
+						return string.sha256
+					}()
+
 					// Store as JSON file
 					self.cryptoLibUtility?.store(data, for: .remoteConfiguration)
 					// Check the wallet
