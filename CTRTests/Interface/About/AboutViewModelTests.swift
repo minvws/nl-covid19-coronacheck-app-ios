@@ -14,6 +14,21 @@ class AboutViewModelTests: XCTestCase {
 	private var sut: AboutViewModel!
 	private var coordinatorSpy: OpenUrlProtocolSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private static var initialTimeZone: TimeZone?
+
+	override class func setUp() {
+		super.setUp()
+		initialTimeZone = NSTimeZone.default
+		NSTimeZone.default = TimeZone(abbreviation: "CEST")!
+	}
+
+	override class func tearDown() {
+		super.tearDown()
+
+		if let timeZone = initialTimeZone {
+			NSTimeZone.default = timeZone
+		}
+	}
 
 	override func setUp() {
 		super.setUp()
