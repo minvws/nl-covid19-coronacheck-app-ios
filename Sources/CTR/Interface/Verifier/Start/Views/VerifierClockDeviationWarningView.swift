@@ -33,6 +33,11 @@ class VerifierClockDeviationWarningView: BaseView {
 
 	// MARK: - Private properties
 
+	private let iconImageView: UIImageView = {
+		let imageView = UIImageView(image: I.clockwarning_icon())
+		imageView.translatesAutoresizingMaskIntoConstraints = false
+		return imageView
+	}()
 	private let messageLabel: Label = {
 		return Label(body: "", textColor: Theme.colors.dark).multiline()
 	}()
@@ -65,6 +70,7 @@ class VerifierClockDeviationWarningView: BaseView {
 
 		addSubview(messageLabel)
 		addSubview(button)
+		addSubview(iconImageView)
 
 		button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
 	}
@@ -75,8 +81,12 @@ class VerifierClockDeviationWarningView: BaseView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
-			messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-			messageLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -24),
+			iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 25),
+			iconImageView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -2),
+			iconImageView.trailingAnchor.constraint(lessThanOrEqualTo: messageLabel.leadingAnchor, constant: 8),
+			
+			messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 72),
+			messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 			messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: 24),
 
 			button.leadingAnchor.constraint(equalTo: messageLabel.leadingAnchor),
