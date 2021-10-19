@@ -28,15 +28,9 @@ class TextElement: UITextView, UITextViewDelegate {
         
         self.attributedText = attributedText
         
-        // Improve accessibility by removing tab characters
-        if let accessibilityValue = attributedText.mutableCopy() as? NSMutableAttributedString {
-            accessibilityValue.mutableString.replaceOccurrences(
-                of: "\t",
-                with: "",
-                options: .regularExpression,
-                range: NSRange(location: 0, length: accessibilityValue.mutableString.length)
-            )
-            accessibilityAttributedValue = accessibilityValue
+        // Improve accessibility by trimming whitespace and newline characters
+        if let mutableAttributedText = attributedText.mutableCopy() as? NSMutableAttributedString {
+            accessibilityAttributedValue = mutableAttributedText.trim()
         }
     }
     
