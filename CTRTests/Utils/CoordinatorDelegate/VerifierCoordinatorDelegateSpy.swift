@@ -87,6 +87,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedNavigateToVerifiedInfoCount += 1
 	}
 
+	var invokedUserWishesToLaunchThirdPartyScannerApp = false
+	var invokedUserWishesToLaunchThirdPartyScannerAppCount = 0
+
+	func userWishesToLaunchThirdPartyScannerApp() {
+		invokedUserWishesToLaunchThirdPartyScannerApp = true
+		invokedUserWishesToLaunchThirdPartyScannerAppCount += 1
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?

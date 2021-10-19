@@ -33,6 +33,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutClockDeviation()
 	
 	func navigateToVerifiedInfo()
+	
+	func userWishesToLaunchThirdPartyScannerApp()
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -128,7 +130,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
-				verificationResult: verificationResult
+				verificationResult: verificationResult,
+				isDeepLinkEnabled: thirdPartyScannerApp != nil
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
@@ -181,10 +184,16 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		
 		let viewController = VerifiedInfoViewController(
 			viewModel: VerifiedInfoViewModel(
-				coordinator: self
+				coordinator: self,
+				isDeepLinkEnabled: thirdPartyScannerApp != nil
 			)
 		)
 		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
+	}
+	
+	func userWishesToLaunchThirdPartyScannerApp() {
+		guard let thirdPartyScannerApp = thirdPartyScannerApp else { return }
+		openUrl(thirdPartyScannerApp.returnURL, inApp: false)
 	}
 }
 

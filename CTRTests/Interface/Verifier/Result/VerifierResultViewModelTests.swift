@@ -32,7 +32,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		sut = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			verificationResult: MobilecoreVerificationResult()
+			verificationResult: MobilecoreVerificationResult(),
+			isDeepLinkEnabled: true
 		)
 	}
 	
