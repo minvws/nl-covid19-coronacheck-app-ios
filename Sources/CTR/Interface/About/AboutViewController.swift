@@ -44,7 +44,8 @@ class AboutViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$listHeader.binding = { [weak self] in self?.sceneView.listHeader = $0 }
-		viewModel.$version.binding = { [weak self] in self?.sceneView.version = $0 }
+		viewModel.$appVersion.binding = { [weak self] in self?.sceneView.appVersion = $0 }
+		viewModel.$configVersion.binding = { [weak self] in self?.sceneView.configVersion = $0 }
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
 		setupMenuOptions()

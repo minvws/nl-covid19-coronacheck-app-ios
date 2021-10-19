@@ -46,7 +46,8 @@ class AboutViewModel: Logging {
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
-	@Bindable private(set) var version: String
+	@Bindable private(set) var appVersion: String
+	@Bindable private(set) var configVersion: String?
 	@Bindable private(set) var listHeader: String
 	@Bindable private(set) var alert: AlertContent?
 	@Bindable private(set) var menu: [AboutMenuOption] = []
@@ -72,9 +73,22 @@ class AboutViewModel: Logging {
 		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
 		self.listHeader = flavor == .holder ? L.holderAboutReadmore() : L.verifierAboutReadmore()
 
-		version = flavor == .holder
+		appVersion = flavor == .holder
 			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
 			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
+
+		configVersion = {
+			guard let timestamp = userSettings.configFetchedTimestamp,
+				  let hash = userSettings.configFetchedHash
+			else { return nil }
+
+			// 13-10-2021 00:00
+			let dateformatter = DateFormatter()
+			dateformatter.dateFormat = "dd-MM-yyyy HH:mm"
+			let dateString = dateformatter.string(from: Date(timeIntervalSince1970: timestamp))
+
+			return L.generalMenuConfigVersion(String(hash.prefix(7)), dateString)
+		}()
 
 		flavor == .holder ? setupMenuHolder() : setupMenuVerifier()
 	}

@@ -58,7 +58,7 @@ class AboutViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.listHeader) == L.holderAboutReadmore()
 		expect(self.sut.sceneView.itemStackView.arrangedSubviews)
 			.to(haveCount(4))
-		expect(self.sut.sceneView.version).toNot(beNil())
+		expect(self.sut.sceneView.appVersion).toNot(beNil())
 
 		sut.assertImage()
 	}
