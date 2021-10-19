@@ -40,7 +40,7 @@ class QRCardView: BaseView {
 	private let hostView = UIView()
 
 	private let titleLabel: Label = {
-		return Label(title3: nil, montserrat: true).multiline()
+        return Label(title3: nil, montserrat: true).multiline().header()
 	}()
 
 	private let verticalLabelsStackView: UIStackView = {
