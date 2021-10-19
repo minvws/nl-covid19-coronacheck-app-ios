@@ -188,6 +188,7 @@ class VerifierResultViewModel: Logging {
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
+		// Only show when deeplink is available (US 1344)
 		primaryButtonIcon = I.deeplinkScan()
 	}
 
@@ -204,6 +205,7 @@ class VerifierResultViewModel: Logging {
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
+		// Only show when deeplink is available (US 1344)
 		primaryButtonIcon = I.deeplinkScan()
 	}
 
