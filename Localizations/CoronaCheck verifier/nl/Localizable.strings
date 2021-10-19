@@ -1,18 +1,13 @@
-"verifier.start.clockdeviationwarning.message" = "Controleer de tijd van je telefoon. Mogelijk staat het niet goed ingesteld.";
-"verifier.start.clockdeviationwarning.button" = "Lees meer";
-"verifier.clockDeviationDetected.title" = "Controleer de tijd van je telefoon";
-"verifier.clockDeviationDetected.message" = "<p>Mogelijk klopt de tijd van jouw telefoon niet. Het kan bijvoorbeeld zijn dat je telefoon een paar minuten voor loopt. Om de CoronaCheck Scanner-app goed te kunnen gebruiken is het belangrijk dat de tijd juist staat ingesteld.</p><p><a href=\"%@\">Ga naar de instellingen</a> van jouw telefoon en zet de datum en tijd op 'automatisch instellen'.</p>";
-"verifier.menu.scaninstructions" = "Hoe het werkt";
 "verifier.scan.button.moreInformation" = "Waar moet ik op letten?";
 "verifier.scaninstructions.navigation.title" = "Over scannen";
 "verifier.scaninstructions.scanQR.title" = "Scan de QR-code";
 "verifier.scaninstructions.scanQR.content" = "Vraag de bezoeker naar een QR-code in de CoronaCheck-app of op papier. Een toerist kan een QR-code in een buitenlandse app of op papier tonen. Scan de QR-code met de camera van je telefoon.";
-"verifier.scaninstructions.checkthedetails.title" = "Controleer altijd de gegevens";
-"verifier.scaninstructions.checkthedetails.message" = "Groen scherm? Controleer of de gegevens op jouw scherm hetzelfde zijn als die op het identiteitsbewijs van de bezoeker. Zo weet je zeker dat de QR-code van de bezoeker is.";
+"verifier.scaninstructions.checkthedetails.title" = "Controleer het identiteitsbewijs";
+"verifier.scaninstructions.checkthedetails.message" = "Controleer bij bezoekers vanaf 14 jaar altijd of de gegevens op jouw scherm hetzelfde zijn als die op het identiteitsbewijs van de bezoeker. Zo weet je zeker dat de QR-code van de bezoeker is.";
 "verifier.scaninstructions.checkonlythevisibledata.title" = "Soms vallen gegevens weg";
 "verifier.scaninstructions.checkonlythevisibledata.message" = "Dat gebeurt om de privacy van de bezoeker te beschermen. Je ziet dan een streepje (-) staan. Controleer in dat geval alleen de gegevens die je wel ziet.";
 "verifier.scaninstructions.redscreennowwhat.title" = "Rood scherm, wat nu?";
-"verifier.scaninstructions.redscreennowwhat.message" = "Bij een rood scherm krijg je uitleg om de bezoeker te helpen. Blijft het scherm rood? Dan kun je de bezoeker geen toegang geven.";
+"verifier.scaninstructions.redscreennowwhat.message" = "Bij een rood scherm met kruis krijg je uitleg om de bezoeker te helpen. Blijft het scherm rood? Dan mag je de bezoeker geen toegang geven.";
 "verifier.scaninstructions.button.startscanning" = "Start scannen";
 "verifier.scaninstructions.step.title" = "Stap %@";
 "verifier.start.button.showinstructions" = "Waar moet ik op letten?";
@@ -34,7 +29,7 @@
 "verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
 
-"verifier.result.identity.title" = "Controleer gegevens";
+"verifier.result.identity.title" = "Controleer identiteitsbewijs";
 "verifier.result.identity.lastname" = "Achternaam";
 "verifier.result.identity.firstname" = "Voornaam";
 "verifier.result.identity.dayofbirth" = "Geboortedag";
@@ -53,18 +48,23 @@
 
 /* MARK: - Verifier Menu */
 "verifier.menu.dashboard" = "Scan QR-code";
+
+"verifier.start.clockdeviationwarning.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
+"verifier.start.clockdeviationwarning.button" = "Lees meer";
+"verifier.clockDeviationDetected.title" = "Controleer de tijd van je telefoon";
+"verifier.clockDeviationDetected.message" = "<p>Om de CoronaCheck Scanner-app goed te kunnen gebruiken, is het belangrijk dat de tijd op je telefoon goed staat ingesteld. Loopt je telefoon bijvoorbeeld een paar minuten voor? Dan kan er een fout ontstaan tijdens de controle van een coronabewijs.</p><p><a href=\"%@\">Ga naar de instellingen</a> van jouw telefoon en zet de datum en tijd op 'automatisch instellen'.</p>";
 "verifier.menu.scaninstructions" = "Hoe het werkt";
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "Over deze app";
 "verifier.menu.privacy" = "Gebruikersvoorwaarden";
 
 /* MARK: - Verifier Onboarding */
-"verifier.onboarding.title.safely" = "Alleen toegang met een bewijs";
-"verifier.onboarding.message.safely" = "Voor toegang tot sommige activiteiten of locaties moeten bezoekers zich laten testen of vaccineren. Laat de persoon bij de ingang een coronabewijs zien? Dan krijgt hij of zij toegang.";
+"verifier.onboarding.title.safely" = "Alleen toegang met bewijs";
+"verifier.onboarding.message.safely" = "Voor toegang tot sommige activiteiten of plekken moeten bezoekers een vaccinatiebewijs, testbewijs of herstelbewijs laten zien.";
 "verifier.onboarding.title.scanqr" = "Scan QR-code voor toegang";
-"verifier.onboarding.message.scanqr" = "Bezoekers maken eerst een bewijs van een vaccinatie, een negatieve testuitslag of als zij corona hebben gehad en hersteld zijn. Het bewijs is een QR-code. Met deze app check jij de QR-codes en zie je wie toegang mag krijgen.";
-"verifier.onboarding.title.access" = "Controle van identiteitsbewijs";
-"verifier.onboarding.message.access" = "Groen scherm? Vraag de bezoeker een identiteitsbewijs te laten zien. Controleer of de gegevens op jouw scherm hetzelfde zijn als op het identiteitsbewijs. Check? Dan kan de bezoeker naar binnen.";
+"verifier.onboarding.message.scanqr" = "Bezoekers maken eerst hun bewijs in de vorm van een QR-code. Met deze app check jij de QR-codes en zie je wie toegang mag krijgen. ";
+"verifier.onboarding.title.access" = "Verplichte controle identiteitsbewijs";
+"verifier.onboarding.message.access" = "Vraag bezoekers altijd om een identiteitsbewijs te laten zien. Controleer of de gegevens op jouw scherm hetzelfde zijn als op het identiteitsbewijs. Check? Dan mag de bezoeker naar binnen.";
 "verifier.onboarding.title.who" = "Voor wie is de scanner?";
 "verifier.onboarding.message.who" = "Met behulp van deze app kun je weer bezoekers ontvangen. Maar alleen als jouw locatie of activiteit onder de aangewezen locaties valt.";
 
@@ -85,7 +85,7 @@
 "verifier.start.ontimeinternet" = "De app heeft eenmalig internet nodig om de laatste gegevens op te halen.";
 
 "verifier.result.denied.readmore" = "Wat kan ik doen?";
-"verifier.result.access.readmore" = "Kloppen de gegevens niet?";
+"verifier.result.access.readmore" = "Er klopt iets niet";
 
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR-code";
@@ -94,12 +94,12 @@
 "verifier.scan.permission.settings" = "Naar instellingen";
 
 /* MARK: - Verifier Result */
-"verifier.result.access.title" = "Geldige QR-code";
+"verifier.result.access.title" = "Controle klaar";
 "verifier.result.demo.title" = "Demo QR-code gescand";
 "verifier.result.denied.title" = "Geen geldige QR-code";
 "verifier.result.next" = "Scan volgende";
-"verifier.result.access.checkidentity" = "De identiteitscontrole is verplicht";
-"verifier.result.access.identityverified" = "Gegevens correct";
+"verifier.result.access.checkidentity" = "Let op: identiteitscontrole is verplicht";
+"verifier.result.access.identityverified" = "Gegevens kloppen";
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "Deze QR-code bevat geen coronabewijs";
 "verifier.result.alert.unknown.message" = "Vraag de bezoeker een QR-code van een coronabewijs te laten zien.";
@@ -112,9 +112,9 @@
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Wat kan ik doen?";
 "verifier.denied.message.one" = "<p>Een rood scherm betekent dat de QR-code niet aan Nederlandse eisen voldoet.</p>";
-"verifier.denied.message.two" = "<p><b>Dit kun je doen:</b></p><ul><li>Controleer of de tijd op de telefoon van de bezoeker goed staat ingesteld. Zorg dat de datum en tijd op ‘automatisch instellen’ staan.</li><li>Controleer of de bezoeker een origineel bewijs laat zien. Een screenshot van een bewijs kan voor problemen zorgen.</li><li>Vraag de bezoeker om de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li></ul>";
+"verifier.denied.message.two" = "<p><b>Dit kun je doen:</b></p><ul><li>Controleer of de tijd op de telefoon van de bezoeker en die van jou goed staan ingesteld. Zorg dat de datum en tijd op ‘automatisch instellen’ staan.</li><li>Controleer of de bezoeker een origineel bewijs laat zien. Een screenshot van een bewijs kan voor problemen zorgen.</li><li>Vraag de bezoeker om de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li></ul>";
 "verifier.denied.message.three" = "<p><b>Blijft het scherm rood?</b><br />Vraag de bezoeker contact op te nemen met de helpdesk van CoronaCheck.</p>";
-"verifier.denied.message.four" = "<p><b>Zonder groen scherm mag de bezoeker niet toegelaten worden.</b></p>";
+"verifier.denied.message.four" = "<p><b>Zonder groen scherm met vinkje mag de bezoeker niet toegelaten worden.</b></p>";
 
 /* MARK: - Verifier About */
 "verifier.about.title" = "Over deze app";
