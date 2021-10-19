@@ -20,6 +20,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 	private var viewModel: VerifierStartViewModel!
 	private var cryptoManagerSpy: CryptoManagerSpy!
 	private var proofManagerSpy: ProofManagingSpy!
+	private var clockDeviationManagerSpy: ClockDeviationManagerSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	
 	var window = UIWindow()
@@ -31,12 +32,17 @@ class VerifierStartViewControllerTests: XCTestCase {
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
 		proofManagerSpy = ProofManagingSpy()
+		clockDeviationManagerSpy = ClockDeviationManagerSpy()
+		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
+		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
+		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
 		userSettingsSpy = UserSettingsSpy()
 
 		viewModel = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
+			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 		sut = VerifierStartViewController(viewModel: viewModel)

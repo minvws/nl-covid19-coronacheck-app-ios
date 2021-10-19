@@ -16,8 +16,9 @@ class VerifierStartViewModelTests: XCTestCase {
 	private var sut: VerifierStartViewModel!
 
 	private var cryptoManagerSpy: CryptoManagerSpy!
-	private  var proofManagerSpy: ProofManagingSpy!
+	private var proofManagerSpy: ProofManagingSpy!
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
+	private var clockDeviationManagerSpy: ClockDeviationManagerSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 
 	override func setUp() {
@@ -26,14 +27,12 @@ class VerifierStartViewModelTests: XCTestCase {
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
 		proofManagerSpy = ProofManagingSpy()
+		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		userSettingsSpy = UserSettingsSpy()
 
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			userSettings: userSettingsSpy
-		)
+		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
+		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
+		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
 	}
 
 	// MARK: - Tests
@@ -41,6 +40,13 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_defaultContent() {
 
 		// Given
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
+			clockDeviationManager: clockDeviationManagerSpy,
+			userSettings: userSettingsSpy
+		)
 
 		// When
 
@@ -59,6 +65,13 @@ class VerifierStartViewModelTests: XCTestCase {
 
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = false
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
+			clockDeviationManager: clockDeviationManagerSpy,
+			userSettings: userSettingsSpy
+		)
 
 		// When
 		sut.primaryButtonTapped()
@@ -75,6 +88,13 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = true
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
+			clockDeviationManager: clockDeviationManagerSpy,
+			userSettings: userSettingsSpy
+		)
 
 		// When
 		sut.primaryButtonTapped()
@@ -90,6 +110,13 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = false
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
+			clockDeviationManager: clockDeviationManagerSpy,
+			userSettings: userSettingsSpy
+		)
 
 		// When
 		sut.primaryButtonTapped()
@@ -103,6 +130,13 @@ class VerifierStartViewModelTests: XCTestCase {
 
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = false
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
+			clockDeviationManager: clockDeviationManagerSpy,
+			userSettings: userSettingsSpy
+		)
 
 		// When
 		sut.showInstructionsButtonTapped()
@@ -112,5 +146,84 @@ class VerifierStartViewModelTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
 			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
 		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == false
+	}
+
+	func test_clockDeviationWarning_isShown_whenHasClockDeviation() {
+
+		// Arrange
+		clockDeviationManagerSpy.stubbedHasSignificantDeviation = true
+		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (true, ())
+
+		// Act
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
+			clockDeviationManager: clockDeviationManagerSpy,
+			userSettings: userSettingsSpy
+		)
+
+		// Assert
+		expect(self.sut.shouldShowClockDeviationWarning) == true
+	}
+
+	func test_clockDeviationWarning_isNotShown_whenHasNoClockDeviation() {
+
+		// Arrange
+		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
+
+		// Act
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
+			clockDeviationManager: clockDeviationManagerSpy,
+			userSettings: userSettingsSpy
+		)
+
+		// Assert
+		expect(self.sut.shouldShowClockDeviationWarning) == false
+	}
+
+	func test_clockDeviationWarning_onUserTap_callsCoordinator() {
+
+		// Arrange
+		clockDeviationManagerSpy.stubbedHasSignificantDeviation = true
+
+		// Act
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
+			clockDeviationManager: clockDeviationManagerSpy,
+			userSettings: userSettingsSpy
+		)
+
+		expect(self.verifyCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutClockDeviation) == false
+		sut.userDidTapClockDeviationWarningReadMore()
+
+		// Assert
+		expect(self.verifyCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutClockDeviation) == true
+	}
+
+	func test_clockDeviationWarning_onManagerUpdate_changesProperty() {
+
+		// Arrange
+		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
+		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (true, ())
+		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
+
+		// Act
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
+			clockDeviationManager: clockDeviationManagerSpy,
+			userSettings: userSettingsSpy
+		)
+
+		// Assert
+		expect(self.clockDeviationManagerSpy.invokedAppendDeviationChangeObserverCount) == 1
+		expect(self.sut.shouldShowClockDeviationWarning) == true
 	}
 }
