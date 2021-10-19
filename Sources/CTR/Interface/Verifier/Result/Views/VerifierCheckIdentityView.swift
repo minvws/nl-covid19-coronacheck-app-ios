@@ -178,11 +178,11 @@ class VerifierCheckIdentityView: BaseView {
 			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
 			secondaryButton.centerXAnchor.constraint(equalTo: footerButtonView.centerXAnchor),
 			secondaryButton.leftAnchor.constraint(
-				greaterThanOrEqualTo: footerButtonView.leftAnchor,
+				greaterThanOrEqualTo: footerButtonView.safeAreaLayoutGuide.leftAnchor,
 				constant: ViewTraits.Margin.edge
 			),
 			secondaryButton.rightAnchor.constraint(
-				lessThanOrEqualTo: footerButtonView.rightAnchor,
+				lessThanOrEqualTo: footerButtonView.safeAreaLayoutGuide.rightAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
 			secondaryButton.bottomAnchor.constraint(

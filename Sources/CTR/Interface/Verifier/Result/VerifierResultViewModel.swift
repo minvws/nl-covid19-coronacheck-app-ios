@@ -246,12 +246,7 @@ class VerifierResultViewModel: Logging {
 
 	private func showVerifiedInfo() {
 
-        let textView = TextView(htmlText: L.verifierResultCheckText())
-
-		coordinator?.displayContent(
-			title: L.verifierResultCheckTitle(),
-			content: [(textView, 16)]
-		)
+		coordinator?.navigateToVerifiedInfo()
 	}
 
 	private func showDeniedInfo() {

@@ -107,6 +107,7 @@
 "verifier.result.alert.dcc.message" = "Je hebt een internationale QR-code gescand. Gebruikers van CoronaCheck moeten in Nederland hun Nederlandse QR-code laten zien.";
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Kloppen de gegevens niet?";
+"verifier.result.check.button" = "Controle afgerond";
 
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Wat kan ik doen?";

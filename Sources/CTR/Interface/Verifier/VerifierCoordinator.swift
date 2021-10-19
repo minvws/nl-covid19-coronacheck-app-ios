@@ -31,6 +31,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func displayContent(title: String, content: [DisplayContent])
 
 	func userWishesMoreInfoAboutClockDeviation()
+	
+	func navigateToVerifiedInfo()
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -150,6 +152,16 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let title: String = L.verifierClockDeviationDetectedTitle()
 		let message: String = L.verifierClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+	
+	func navigateToVerifiedInfo() {
+		
+		let viewController = VerifiedInfoViewController(
+			viewModel: VerifiedInfoViewModel(
+				coordinator: self
+			)
+		)
+		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
 	}
 }
 
