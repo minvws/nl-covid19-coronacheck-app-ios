@@ -12,7 +12,7 @@ class VerifierStartViewController: BaseViewController {
 	private let viewModel: VerifierStartViewModel
 
 	let sceneView = VerifierStartView()
-
+	
 	init(viewModel: VerifierStartViewModel) {
 
 		self.viewModel = viewModel
@@ -40,6 +40,15 @@ class VerifierStartViewController: BaseViewController {
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$showInstructionsTitle.binding = { [weak self] in self?.sceneView.showInstructionsTitle = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
+		viewModel.$shouldShowClockDeviationWarning.binding = { [weak self] in
+			self?.sceneView.clockDeviationWarningView.isHidden = !$0
+			self?.sceneView.clockDeviationWarningView.buttonCommand = {
+				self?.viewModel.userDidTapClockDeviationWarningReadMore()
+			}
+		}
+
+		sceneView.clockDeviationWarningView.message = L.verifierStartClockdeviationwarningMessage()
+		sceneView.clockDeviationWarningView.buttonTitle = L.verifierStartClockdeviationwarningButton()
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
@@ -58,8 +67,6 @@ class VerifierStartViewController: BaseViewController {
 
 		sceneView.headerImage = I.scanStart()
     }
-
-	// MARK: User interaction
 
 	override func viewWillAppear(_ animated: Bool) {
 

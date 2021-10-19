@@ -59,11 +59,11 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.verifierResultDemoTitle()
-		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultAccessIdentityverified()
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+		assertSnapshot(matching: sut, as: .image(precision: 0.98))
 	}
 
 	func testDeniedInvalidQR() throws {
@@ -83,7 +83,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultDeniedReadmore()
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+		assertSnapshot(matching: sut, as: .image(precision: 0.98))
 	}
 
 	func testVerified() throws {
@@ -101,11 +101,11 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.verifierResultAccessTitle()
-		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultAccessIdentityverified()
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+		assertSnapshot(matching: sut, as: .image(precision: 0.98))
 	}
 
 	func test_dismiss_shouldNavigateToVerifierWelcome() {

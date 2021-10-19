@@ -30,6 +30,9 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	///   - content: the content
 	func displayContent(title: String, content: [DisplayContent])
 
+	func userWishesMoreInfoAboutClockDeviation()
+	
+	func navigateToVerifiedInfo()
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -97,7 +100,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				viewModel: VerifierStartViewModel(
 					coordinator: self,
 					cryptoManager: cryptoManager,
-					proofManager: proofManager
+					proofManager: proofManager,
+					clockDeviationManager: Services.clockDeviationManager
 				)
 			)
 
@@ -150,7 +154,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 		let coordinator = ScanInstructionsCoordinator(
 			navigationController: dashboardNavigationController!,
-			delegate: self
+			delegate: self,
+			isOpenedFromMenu: false
 		)
 		startChildCoordinator(coordinator)
 	}
@@ -164,6 +169,22 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			let destination = VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: self))
 			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
 		}
+	}
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		let title: String = L.verifierClockDeviationDetectedTitle()
+		let message: String = L.verifierClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+	
+	func navigateToVerifiedInfo() {
+		
+		let viewController = VerifiedInfoViewController(
+			viewModel: VerifiedInfoViewModel(
+				coordinator: self
+			)
+		)
+		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
 	}
 }
 
@@ -212,6 +233,15 @@ extension VerifierCoordinator: MenuDelegate {
 			case .overview:
 				dashboardNavigationController?.popToRootViewController(animated: false)
 				sidePanel?.selectedViewController = dashboardNavigationController
+				
+			case .scanInstructions:
+				sidePanel?.selectedViewController = dashboardNavigationController
+				let coordinator = ScanInstructionsCoordinator(
+					navigationController: dashboardNavigationController!,
+					delegate: self,
+					isOpenedFromMenu: true
+				)
+				startChildCoordinator(coordinator)
 
 			case .support:
 				guard let faqUrl = URL(string: L.verifierUrlFaq()) else {
@@ -255,7 +285,8 @@ extension VerifierCoordinator: MenuDelegate {
 	func getTopMenuItems() -> [MenuItem] {
 		
 		return [
-			MenuItem(identifier: .overview, title: L.verifierMenuDashboard())
+			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
+			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions())
 		]
 	}
 	/// Get the items for the bottom menu

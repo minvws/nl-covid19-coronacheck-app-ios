@@ -17,6 +17,8 @@ protocol UserSettingsProtocol: AnyObject {
 
 	var configFetchedTimestamp: TimeInterval? { get set }
 
+	var configFetchedHash: String? { get set }
+
 	var lastScreenshotTime: Date? { get set }
 
 	var issuerKeysFetchedTimestamp: TimeInterval? { get set }
@@ -45,6 +47,9 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "configFetchedTimestamp", defaultValue: nil)
 	var configFetchedTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "configFetchedHash", defaultValue: nil)
+	var configFetchedHash: String? // swiftlint:disable:this let_var_whitespace
 
 	@UserDefaults(key: "issuerKeysFetchedTimestamp", defaultValue: nil)
 	var issuerKeysFetchedTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace

@@ -1,3 +1,5 @@
+/* Configuratie ABC123, 13-10-2021 00:00 */
+"general.menu.configVersion" = "Configuratie %@, %@";
 "general.testtype" = "Type test";
 "general.readmore" = "Lees meer";
 "holder.dashboard.intro.international.button" = "Welk bewijs is nodig op mijn bestemming?";

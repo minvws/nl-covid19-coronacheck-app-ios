@@ -61,6 +61,11 @@ class VerifierResultViewController: BaseViewController, Logging {
 			
 			self?.viewModel.showMoreInformation()
 		}
+		
+		sceneView.verifiedTappedCommand = { [weak self] in
+			
+			self?.viewModel.showVerified()
+		}
 
 		viewModel.$hideForCapture.binding = { [weak self] in
 
@@ -71,10 +76,11 @@ class VerifierResultViewController: BaseViewController, Logging {
             #endif
 		}
 		
-		sceneView.primaryTitle = L.verifierResultNext()
-		
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$primaryTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 		viewModel.$secondaryTitle.binding = { [weak self] in self?.sceneView.secondaryTitle = $0 }
+		viewModel.$checkIdentity.binding = { [weak self] in self?.sceneView.checkIdentityView.checkIdentity = $0 }
+		viewModel.$primaryButtonIcon.binding = { [weak self] in self?.sceneView.primaryButtonIcon = $0 }
 		
 		// Identity
 		setupIdentityView()

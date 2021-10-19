@@ -60,6 +60,33 @@ class SharedCoordinator: Coordinator, Logging {
 		// To be overwritten
 	}
 
+	/// Show an information page
+	/// - Parameters:
+	///   - title: the title of the page
+	///   - body: the body of the page
+	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
+
+		let viewController = InformationViewController(
+			viewModel: InformationViewModel(
+				coordinator: self,
+				title: title,
+				message: body,
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: openURLsInApp)
+				},
+				hideBodyForScreenCapture: hideBodyForScreenCapture
+			)
+		)
+		presentAsBottomSheet(viewController)
+	}
+
+	func presentAsBottomSheet(_ viewController: UIViewController) {
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.presentBottomSheet(viewController)
+	}
+
     // MARK: - Universal Link handling
 
     /// Override point for coordinators which wish to deal with universal links.

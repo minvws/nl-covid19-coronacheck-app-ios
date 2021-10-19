@@ -33,7 +33,7 @@ class ShowQRIrrelevantView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(title3: nil, montserrat: true).multiline()
+        return Label(title3: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The action label

@@ -44,7 +44,7 @@ class MenuViewController: BaseViewController {
 				let view = MenuItemView()
 				view.title = item.title
 				view.titleLabel.textColor = Theme.colors.secondary
-				view.titleLabel.font = Theme.fonts.title3Montserrat
+				view.titleLabel.font = Theme.fonts.headlineBoldMontserrat
 				view.primaryButtonTappedCommand  = { [weak self] in
 					self?.viewModel.menuItemTapped(item.identifier)
 				}
@@ -58,7 +58,7 @@ class MenuViewController: BaseViewController {
 
 				let view = MenuItemView()
 				view.title = item.title
-				view.titleLabel.textColor = Theme.colors.secondary.withAlphaComponent(0.8)
+				view.titleLabel.textColor = Theme.colors.secondary
 				view.titleLabel.font = Theme.fonts.subheadMontserrat
 				view.primaryButtonTappedCommand  = { [weak self] in
 					self?.viewModel.menuItemTapped(item.identifier)
