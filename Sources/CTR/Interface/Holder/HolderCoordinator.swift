@@ -237,11 +237,7 @@ class HolderCoordinator: SharedCoordinator {
 		guard let coordinator = childCoordinators.last else { return }
 		removeChildCoordinator(coordinator)
 	}
-	
-	private func presentAsBottomSheet(_ viewController: UIViewController) {
-		
-		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.presentBottomSheet(viewController)
-	}
+
 }
 
 // MARK: - HolderCoordinatorDelegate
@@ -298,28 +294,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 		(sidePanel?.selectedViewController as? UINavigationController)?.popToRootViewController(animated: true)
-	}
-
-	/// Show an information page
-	/// - Parameters:
-	///   - title: the title of the page
-	///   - body: the body of the page
-	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
-
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
-				coordinator: self,
-				title: title,
-				message: body,
-				linkTapHander: { [weak self] url in
-
-					self?.openUrl(url, inApp: openURLsInApp)
-				},
-				hideBodyForScreenCapture: hideBodyForScreenCapture
-			)
-		)
-		presentAsBottomSheet(viewController)
 	}
 	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String) {

@@ -71,6 +71,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedDisplayContentParametersList.append((title, content))
 	}
 
+	var invokedUserWishesMoreInfoAboutClockDeviation = false
+	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		invokedUserWishesMoreInfoAboutClockDeviation = true
+		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
