@@ -50,6 +50,8 @@ class VerifierResultViewModel: Logging {
 	/// The birth mont of the holder
 	@Bindable private(set) var monthOfBirth: String?
 	
+	@Bindable private(set) var primaryTitle: String = ""
+	
 	@Bindable private(set) var secondaryTitle: String = ""
 	
 	@Bindable private(set) var checkIdentity: String = ""
@@ -181,6 +183,7 @@ class VerifierResultViewModel: Logging {
 	private func showAccessAllowed() {
 
 		title = L.verifierResultAccessTitle()
+		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
 	}
@@ -188,12 +191,14 @@ class VerifierResultViewModel: Logging {
 	private func showAccessDeniedInvalidQR() {
 
 		title = L.verifierResultDeniedTitle()
+		primaryTitle = L.verifierResultNext()
 		secondaryTitle = L.verifierResultDeniedReadmore()
 	}
 
 	private func showAccessDemo() {
 
 		title = L.verifierResultDemoTitle()
+		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
 	}

@@ -94,6 +94,7 @@
 "verifier.result.denied.title" = "Geen geldige QR-code";
 "verifier.result.next" = "Scan volgende";
 "verifier.result.access.checkidentity" = "De identiteitscontrole is verplicht";
+"verifier.result.access.identityverified" = "Gegevens correct";
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "Deze QR-code bevat geen coronabewijs";
 "verifier.result.alert.unknown.message" = "Vraag de bezoeker een QR-code van een coronabewijs te laten zien.";
