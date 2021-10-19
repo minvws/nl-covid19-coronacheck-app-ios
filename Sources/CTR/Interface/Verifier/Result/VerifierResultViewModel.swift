@@ -221,6 +221,7 @@ class VerifierResultViewModel: Logging {
     func scanAgain() {
 
 		stopAutoCloseTimer()
+		coordinator?.userWishesToLaunchThirdPartyScannerApp()
         coordinator?.navigateToScan()
     }
 
