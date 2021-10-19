@@ -27,7 +27,7 @@ class VaccinationEventView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(bodyBold: nil).multiline()
+        return Label(bodyBold: nil).multiline().header()
 	}()
 
 	/// The message text
