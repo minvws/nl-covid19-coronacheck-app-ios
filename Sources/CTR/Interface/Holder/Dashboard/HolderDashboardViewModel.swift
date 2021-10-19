@@ -225,7 +225,14 @@ final class HolderDashboardViewModel: Logging {
 				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Presenting alert.")
 				currentlyPresentedAlert = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher, now: now())
 
-			// ❤️‍🩹 NETWORK ERROR: Refresher has entered a failed state (i.e. Server Error)
+			// ❤️‍🩹 NETWORK ERRORS: Refresher has entered a failed state (i.e. Server Error)
+
+			case (.failed(.serverResponseDidNotChangeExpiredOrExpiringState), _, _):
+				// This is a special case, and is caused by the user putting their system time
+				// so far into the future that it forces a strippen refresh, .. however the server time
+				// remains unchanged, so what it sends back does not resolve the `.expiring` or `.expired`
+				// state which the StrippenRefresher is currently in.
+				logDebug("StrippenRefresh: .serverResponseDidNotChangeExpiredOrExpiringState. Stopping.")
 
 			case (.failed, .expired, _):
 				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
