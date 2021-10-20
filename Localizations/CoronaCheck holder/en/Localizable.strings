@@ -350,6 +350,7 @@
 "holder.menu.privacy" = "Privacy statement";
 "holder.menu.papercertificate" = "Add paper certificate";
 "holder.menu.colophon" = "Colophon";
+"holder.menu.verifierdeeplink" = "Open scanner";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Only access with a certificate";
