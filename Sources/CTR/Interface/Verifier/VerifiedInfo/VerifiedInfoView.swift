@@ -107,7 +107,7 @@ final class VerifiedInfoView: BaseView {
 				constant: -ViewTraits.Margin.edge
 			),
 			primaryButton.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
+				lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
 			)
 		])
