@@ -136,6 +136,7 @@ extension OnboardingViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
 		sceneView.pageControl.currentPage = index
+        sceneView.ribbonView.isAccessibilityElement = index == 0
 		navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
 	}
 }
