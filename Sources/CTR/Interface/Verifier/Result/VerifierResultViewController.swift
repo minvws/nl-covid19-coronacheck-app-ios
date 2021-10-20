@@ -62,7 +62,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 			self?.viewModel.showMoreInformation()
 		}
 		
-		sceneView.verifiedTappedCommand = { [weak self] in
+		sceneView.verifiedInfoTappedCommand = { [weak self] in
 			
 			self?.viewModel.showVerified()
 		}

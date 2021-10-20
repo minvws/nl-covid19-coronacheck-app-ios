@@ -89,7 +89,8 @@ class VerifierResultView: BaseView {
 	/// The user tapped on the secondary button in the denied view
 	var readMoreTappedCommand: (() -> Void)?
 	
-	var verifiedTappedCommand: (() -> Void)?
+	/// The user tapped on the secondary button in the verified view
+	var verifiedInfoTappedCommand: (() -> Void)?
 }
 
 private extension VerifierResultView {
@@ -101,7 +102,7 @@ private extension VerifierResultView {
 		
 		checkIdentityView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
 			self?.displayVerifiedView()
-			self?.verifiedTappedCommand?()
+			self?.verifiedInfoTappedCommand?()
 		}
 		checkIdentityView.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 		checkIdentityView.embed(in: self)
