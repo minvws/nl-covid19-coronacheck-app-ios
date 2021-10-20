@@ -19,8 +19,6 @@ final class VerifiedViewTests: XCTestCase {
 		super.setUp()
 		sut = VerifiedView()
 		sut.frame.size = UIScreen.main.bounds.size
-		
-		isRecording = true
 	}
 	
 	func test_snapshot() {
