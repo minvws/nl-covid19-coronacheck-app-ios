@@ -61,7 +61,7 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.title) == L.holderAboutTitle()
 		expect(self.sut.message) == L.holderAboutText()
 		expect(self.sut.listHeader) == L.holderAboutReadmore()
-		expect(self.sut.menu).to(haveCount(4))
+		expect(self.sut.menu).to(haveCount(5))
 		expect(self.sut.menu[0].identifier) == .privacyStatement
 		expect(self.sut.menu[1].identifier) == AboutMenuIdentifier.accessibility
 		expect(self.sut.menu[2].identifier) == .colophon
