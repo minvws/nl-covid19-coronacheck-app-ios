@@ -135,7 +135,11 @@ class AboutViewModel: Logging {
 			case .clearData:
 				showClearDataAlert()
 			case .deeplink:
-				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
+				if Configuration().getEnvironment() == "acc" {
+					openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
+				} else {
+					openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://iandundas.github.io/app/open?returnUri=scanner-test", inApp: false)
+				}
 		}
 	}
 
