@@ -67,11 +67,34 @@ class VerifierCheckIdentityView: BaseView {
 		return Button(style: .roundedBlueBorder)
 	}()
 	
+	private let dccFlagLabel: Label = {
+		
+		let label = Label(title2: nil).multiline()
+		label.textColor = Theme.colors.secondaryText
+		return label
+	}()
+	
+	private let dccScannedLabel: Label = {
+		
+		let label = Label(subheadHeavyBold: nil).multiline()
+		label.textColor = Theme.colors.secondaryText
+		return label
+	}()
+	
 	private let checkIdentityLabel: Label = {
 		
 		let label = Label(subhead: nil).multiline()
 		label.textColor = Theme.colors.secondaryText
 		return label
+	}()
+	
+	private let labelStackView: UIStackView = {
+		
+		let stackView = UIStackView()
+		stackView.translatesAutoresizingMaskIntoConstraints = false
+		stackView.axis = .vertical
+		stackView.alignment = .center
+		return stackView
 	}()
 	
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
@@ -97,8 +120,11 @@ class VerifierCheckIdentityView: BaseView {
 		addSubview(scrollView)
 		addSubview(footerButtonView)
 		scrollView.addSubview(identityView)
-		scrollView.addSubview(checkIdentityLabel)
+		scrollView.addSubview(labelStackView)
 		footerButtonView.addSubview(secondaryButton)
+		labelStackView.addArrangedSubview(dccFlagLabel)
+		labelStackView.addArrangedSubview(dccScannedLabel)
+		labelStackView.addArrangedSubview(checkIdentityLabel)
 	}
 
 	/// Setup the constraints
@@ -152,23 +178,23 @@ class VerifierCheckIdentityView: BaseView {
 			),
 			
 			// Check identity label
-			checkIdentityLabel.topAnchor.constraint(
+			labelStackView.topAnchor.constraint(
 				equalTo: identityView.bottomAnchor,
 				constant: ViewTraits.Spacing.identityToCheckIdentityLabel
 			),
-			checkIdentityLabel.leadingAnchor.constraint(
-				greaterThanOrEqualTo: scrollView.leadingAnchor,
+			labelStackView.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.identitySide
 			),
-			checkIdentityLabel.trailingAnchor.constraint(
-				lessThanOrEqualTo: scrollView.trailingAnchor,
+			labelStackView.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.identitySide
 			),
-			checkIdentityLabel.bottomAnchor.constraint(
+			labelStackView.bottomAnchor.constraint(
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
-			checkIdentityLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			labelStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
 			
 			// Secondary button
 			secondaryButton.topAnchor.constraint(
@@ -268,6 +294,18 @@ class VerifierCheckIdentityView: BaseView {
 	var checkIdentity: String? {
 		didSet {
 			checkIdentityLabel.text = checkIdentity
+		}
+	}
+	
+	var dccFlag: String? {
+		didSet {
+			dccFlagLabel.text = dccFlag
+		}
+	}
+	
+	var dccScanned: String? {
+		didSet {
+			dccScannedLabel.text = dccScanned
 		}
 	}
 }

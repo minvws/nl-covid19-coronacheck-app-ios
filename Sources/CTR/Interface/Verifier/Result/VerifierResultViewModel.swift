@@ -54,6 +54,10 @@ class VerifierResultViewModel: Logging {
 	
 	@Bindable private(set) var secondaryTitle: String = ""
 	
+	@Bindable private(set) var dccFlag: String?
+	
+	@Bindable private(set) var dccScanned: String?
+	
 	@Bindable private(set) var checkIdentity: String = ""
 	
 	@Bindable private(set) var primaryButtonIcon: UIImage?
@@ -188,6 +192,8 @@ class VerifierResultViewModel: Logging {
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
+		dccFlag = "🇳🇱"
+		dccScanned = L.verifierResultAccessDcc()
 		// Only show when deeplink is available (US 1344)
 		primaryButtonIcon = I.deeplinkScan()
 	}
@@ -205,6 +211,8 @@ class VerifierResultViewModel: Logging {
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
+		dccFlag = "🇳🇱"
+		dccScanned = L.verifierResultAccessDcc()
 		// Only show when deeplink is available (US 1344)
 		primaryButtonIcon = I.deeplinkScan()
 	}
