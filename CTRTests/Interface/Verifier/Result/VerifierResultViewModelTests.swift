@@ -207,4 +207,15 @@ class VerifierResultViewModelTests: XCTestCase {
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToVerifiedInfo) == true
 	}
+	
+	func test_openDeeplinkOrScanAgain_shouldLaunchThirdPartyApp() {
+		
+		// Given
+		
+		// When
+		sut.launchThirdPartyAppOrScanAgain()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyScannerApp) == true
+	}
 }

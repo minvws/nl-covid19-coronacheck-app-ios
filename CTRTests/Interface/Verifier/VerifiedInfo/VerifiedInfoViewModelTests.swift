@@ -30,6 +30,6 @@ final class VerifiedInfoViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedDismiss) == true
-		expect(self.coordinatorDelegateSpy.invokedNavigateToScan) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyScannerApp) == true
 	}
 }

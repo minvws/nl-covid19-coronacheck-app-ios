@@ -192,8 +192,11 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	}
 	
 	func userWishesToLaunchThirdPartyScannerApp() {
-		guard let thirdPartyScannerApp = thirdPartyScannerApp else { return }
-		openUrl(thirdPartyScannerApp.returnURL, inApp: false)
+		if let thirdPartyScannerApp = thirdPartyScannerApp {
+			openUrl(thirdPartyScannerApp.returnURL, inApp: false)
+		} else {
+			navigateToScan()
+		}
 	}
 }
 

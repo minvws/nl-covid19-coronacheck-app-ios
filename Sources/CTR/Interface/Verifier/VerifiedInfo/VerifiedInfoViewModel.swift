@@ -48,8 +48,7 @@ final class VerifiedInfoViewModel: Logging {
 	/// The user tapped on the button
 	@objc func onTap() {
 
-		coordinator?.userWishesToLaunchThirdPartyScannerApp()
 		coordinator?.dismiss()
-		coordinator?.navigateToScan()
+		coordinator?.userWishesToLaunchThirdPartyScannerApp()
 	}
 }

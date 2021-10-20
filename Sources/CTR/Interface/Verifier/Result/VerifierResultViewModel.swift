@@ -221,9 +221,14 @@ class VerifierResultViewModel: Logging {
     func scanAgain() {
 
 		stopAutoCloseTimer()
-		coordinator?.userWishesToLaunchThirdPartyScannerApp()
         coordinator?.navigateToScan()
     }
+	
+	func launchThirdPartyAppOrScanAgain() {
+		
+		stopAutoCloseTimer()
+		coordinator?.userWishesToLaunchThirdPartyScannerApp()
+	}
 
 	func showMoreInformation() {
 
@@ -244,7 +249,7 @@ class VerifierResultViewModel: Logging {
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + displayDuration + verifiedDuration) {
 			
-			self.scanAgain()
+			self.launchThirdPartyAppOrScanAgain()
 		}
 	}
 
