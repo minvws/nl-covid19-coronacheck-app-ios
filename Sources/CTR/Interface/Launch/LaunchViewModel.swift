@@ -29,6 +29,8 @@ class LaunchViewModel: Logging {
 	var issuerPublicKeysStatus: LaunchState?
 	var didFinishLaunchState = false
 
+	private var remoteConfigManagerUpdateToken: RemoteConfigManager.ObserverToken?
+
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var version: String
@@ -53,7 +55,7 @@ class LaunchViewModel: Logging {
 		self.userSettings = userSettings
 
 		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
-		message = flavor == .holder  ? L.holderLaunchText() : L.verifierLaunchText()
+		message = flavor == .holder ? L.holderLaunchText() : L.verifierLaunchText()
 		appIcon = flavor == .holder ? I.holderAppIcon() : I.verifierAppIcon()
 
 		version = flavor == .holder
@@ -62,7 +64,17 @@ class LaunchViewModel: Logging {
 
 		walletManager = flavor == .holder ? Services.walletManager : nil
 
+		remoteConfigManagerUpdateToken = Services.remoteConfigManager.appendReloadObserver { [weak self] remoteConfig, rawData, urlResponse in
+			self?.checkWallet()
+		}
+
 		startChecks()
+	}
+
+	deinit {
+		remoteConfigManagerUpdateToken.map {
+			Services.remoteConfigManager.removeObserver(token: $0)
+		}
 	}
 
 	private func startChecks() {
@@ -141,77 +153,44 @@ class LaunchViewModel: Logging {
 	private func updateConfiguration(_ completion: @escaping (LaunchState) -> Void) {
 
 		// Execute once.
-		guard !isUpdatingConfiguration else {
-			return
-		}
-
+		guard !isUpdatingConfiguration else { return }
 		isUpdatingConfiguration = true
 
-		if let lastFetchedTimestamp = self.userSettings?.configFetchedTimestamp,
-		   lastFetchedTimestamp > Date().timeIntervalSince1970 - TimeInterval(remoteConfigManager?.storedConfiguration.configTTL ?? 0) {
-			self.logInfo("Remote Configuration still within TTL")
-			// Mark remote config loaded
-			cryptoLibUtility?.checkFile(.remoteConfiguration)
-			completion(.withinTTL)
-		}
+		remoteConfigManager?.update(
+			immediateCallbackIfWithinTTL: {
+				self.cryptoLibUtility?.checkFile(.remoteConfiguration)
+				completion(.withinTTL)
+			},
+			completion: { (result: Result<(Bool, RemoteConfiguration), ServerError>) in
+				switch result {
+					case let .success((_, remoteConfiguration)):
+						self.compare(remoteConfiguration, completion: completion)
 
-		remoteConfigManager?.update { resultWrapper in
+					case let .failure(networkError):
+						self.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
 
-			self.isUpdatingConfiguration = false
-			switch resultWrapper {
-				case let .success((remoteConfiguration, data, urlResponse)):
-
-					// Update the last fetch time
-					self.userSettings?.configFetchedTimestamp = Date().timeIntervalSince1970
-					self.userSettings?.configFetchedHash = {
-						guard let string = String(data: data, encoding: .utf8) else { return nil }
-						return string.sha256
-					}()
-
-					// Store as JSON file
-					self.cryptoLibUtility?.store(data, for: .remoteConfiguration)
-					// Check the wallet
-					self.checkWallet()
-
-					/// Fish for the server Date in the network response, and use that to maintain
-					/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
-					/// beyond a permitted time interval.
-					if let httpResponse = urlResponse as? HTTPURLResponse,
-					   let serverDateString = httpResponse.allHeaderFields["Date"] as? String {
-						Services.clockDeviationManager.update(
-							serverHeaderDate: serverDateString,
-							ageHeader: httpResponse.allHeaderFields["Age"] as? String
-						)
-					}
-
-					self.compare(remoteConfiguration, completion: completion)
-
-				case let .failure(networkError):
-
-					self.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
-
-					// Fallback to the last known remote configuration
-					guard let storedConfiguration = self.remoteConfigManager?.storedConfiguration else {
-						completion(.internetRequired)
-						return
-					}
-
-					self.logDebug("Using stored Configuration \(storedConfiguration)")
-
-					// Check the wallet
-					self.checkWallet()
-
-					self.compare(storedConfiguration) { state in
-						switch state {
-							case .actionRequired:
-								// Deactivated or update trumps no internet
-								completion(state)
-							default:
-								completion(.internetRequired)
+						// Fallback to the last known remote configuration
+						guard let storedConfiguration = self.remoteConfigManager?.storedConfiguration else {
+							completion(.internetRequired)
+							return
 						}
-					}
-			}
-		}
+
+						self.logDebug("Using stored Configuration \(storedConfiguration)")
+
+						// Check the wallet
+						self.checkWallet()
+
+						self.compare(storedConfiguration) { state in
+							switch state {
+								case .actionRequired:
+									// Deactivated or update trumps no internet
+									completion(state)
+								default:
+									completion(.internetRequired)
+							}
+						}
+				}
+			})
 	}
 
 	/// Compare the remote configuration against the app version

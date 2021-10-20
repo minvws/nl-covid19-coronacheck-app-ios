@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct HPKData: Codable {
+struct HPKData: Codable, Equatable {
 	
 	let code: String
 	
@@ -23,21 +23,21 @@ struct HPKData: Codable {
 	let ma: String
 }
 
-struct Mapping: Codable {
+struct Mapping: Codable, Equatable {
 
 	let code: String
 	
 	let name: String
 }
 
-struct UniversalLinkPermittedDomain: Codable {
+struct UniversalLinkPermittedDomain: Codable, Equatable {
 
 	let url: String
 
 	let name: String
 }
 
-struct RemoteConfiguration: Codable {
+struct RemoteConfiguration: Codable, Equatable {
 
 	/// The minimum required version
 	var minimumVersion: String

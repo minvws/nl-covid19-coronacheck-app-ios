@@ -191,6 +191,8 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 	}
 
 	deinit {
+		NotificationCenter.default.removeObserver(self)
+		
 		retryAfterNetworkFailureTimer?.invalidate()
 		retryAfterNetworkFailureTimer = nil
 	}
