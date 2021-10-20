@@ -47,7 +47,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 	private var localResponseSystemUptime: __darwin_time_t?
 
 	private var clockDeviationThresholdSeconds: Double? {
-		remoteConfigManager.getConfiguration().clockDeviationThresholdSeconds.map { Double($0) }
+		remoteConfigManager.storedConfiguration.clockDeviationThresholdSeconds.map { Double($0) }
 	}
 	private let remoteConfigManager: RemoteConfigManaging
 	private let currentSystemUptime: () -> __darwin_time_t?

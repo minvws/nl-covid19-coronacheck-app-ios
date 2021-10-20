@@ -224,7 +224,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	var isLunhCheckEnabled: Bool {
 		
-		return Services.remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false
+		return Services.remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
 	}
 }
 

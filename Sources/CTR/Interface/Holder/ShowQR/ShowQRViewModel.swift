@@ -62,7 +62,7 @@ class ShowQRViewModel: Logging {
 		self.coordinator = coordinator
 		self.dataSource = ShowQRDatasource(
 			greenCards: greenCards,
-			internationalQRRelevancyDays: TimeInterval(remoteConfigManager?.getConfiguration().internationalQRRelevancyDays ?? 28)
+			internationalQRRelevancyDays: TimeInterval(remoteConfigManager?.storedConfiguration.internationalQRRelevancyDays ?? 28)
 		)
 		self.items = dataSource.items
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
@@ -211,11 +211,11 @@ class ShowQRViewModel: Logging {
 			title = L.holderShowqrEuAboutVaccinationTitle("\(doseNumber)", "\(totalDose)")
 		}
 
-		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
+		let vaccineType = remoteConfigManager?.storedConfiguration.getTypeMapping(
 			vaccination.vaccineOrProphylaxis) ?? vaccination.vaccineOrProphylaxis
-		let vaccineBrand = remoteConfigManager?.getConfiguration().getBrandMapping(
+		let vaccineBrand = remoteConfigManager?.storedConfiguration.getBrandMapping(
 			vaccination.medicalProduct) ?? vaccination.medicalProduct
-		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getVaccinationManufacturerMapping(
+		let vaccineManufacturer = remoteConfigManager?.storedConfiguration.getVaccinationManufacturerMapping(
 			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
@@ -254,10 +254,10 @@ class ShowQRViewModel: Logging {
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
 			.map(printDateTimeFormatter.string) ?? test.sampleDate
 
-		let testType = remoteConfigManager?.getConfiguration().getTestTypeMapping(
+		let testType = remoteConfigManager?.storedConfiguration.getTestTypeMapping(
 			test.typeOfTest) ?? test.typeOfTest
 
-		let manufacturer = remoteConfigManager?.getConfiguration().getTestManufacturerMapping(
+		let manufacturer = remoteConfigManager?.storedConfiguration.getTestManufacturerMapping(
 			test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
 
 		var testResult = test.testResult

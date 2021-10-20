@@ -148,7 +148,7 @@ class LaunchViewModel: Logging {
 		isUpdatingConfiguration = true
 
 		if let lastFetchedTimestamp = self.userSettings?.configFetchedTimestamp,
-		   lastFetchedTimestamp > Date().timeIntervalSince1970 - TimeInterval(remoteConfigManager?.getConfiguration().configTTL ?? 0) {
+		   lastFetchedTimestamp > Date().timeIntervalSince1970 - TimeInterval(remoteConfigManager?.storedConfiguration.configTTL ?? 0) {
 			self.logInfo("Remote Configuration still within TTL")
 			// Mark remote config loaded
 			cryptoLibUtility?.checkFile(.remoteConfiguration)
@@ -191,7 +191,7 @@ class LaunchViewModel: Logging {
 					self.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
 
 					// Fallback to the last known remote configuration
-					guard let storedConfiguration = self.remoteConfigManager?.getConfiguration() else {
+					guard let storedConfiguration = self.remoteConfigManager?.storedConfiguration else {
 						completion(.internetRequired)
 						return
 					}
@@ -239,7 +239,7 @@ class LaunchViewModel: Logging {
 
 	private func checkWallet() {
 
-		guard let configuration = remoteConfigManager?.getConfiguration() else {
+		guard let configuration = remoteConfigManager?.storedConfiguration else {
 			return
 		}
 
@@ -260,7 +260,7 @@ class LaunchViewModel: Logging {
 		isUpdatingIssuerPublicKeys = true
 
 		if let lastFetchedTimestamp = self.userSettings?.issuerKeysFetchedTimestamp,
-		   lastFetchedTimestamp > Date().timeIntervalSince1970 - TimeInterval(remoteConfigManager?.getConfiguration().configTTL ?? 0) {
+		   lastFetchedTimestamp > Date().timeIntervalSince1970 - TimeInterval(remoteConfigManager?.storedConfiguration.configTTL ?? 0) {
 			self.logInfo("Issuer public keys still within TTL")
 			// Mark remote config loaded
 			cryptoLibUtility?.checkFile(.publicKeys)

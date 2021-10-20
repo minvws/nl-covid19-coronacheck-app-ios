@@ -77,7 +77,7 @@ class HolderCoordinator: SharedCoordinator {
 
 	/// Restricts access to GGD test provider login
 	private var isGGDEnabled: Bool {
-		return remoteConfigManager.getConfiguration().isGGDEnabled == true
+		return remoteConfigManager.storedConfiguration.isGGDEnabled == true
 	}
 	
 	// Designated starter method
@@ -136,7 +136,7 @@ class HolderCoordinator: SharedCoordinator {
 
 			case .thirdPartyTicketApp(let returnURL):
 				guard let returnURL = returnURL,
-					  let matchingMetadata = remoteConfigManager.getConfiguration().universalLinkPermittedDomains?.first(where: { permittedDomain in
+					  let matchingMetadata = remoteConfigManager.storedConfiguration.universalLinkPermittedDomains?.first(where: { permittedDomain in
 						  permittedDomain.url == returnURL.host
 					  })
 				else {
@@ -194,7 +194,7 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false)
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false)
 			)
 		)
 
@@ -219,7 +219,7 @@ class HolderCoordinator: SharedCoordinator {
 				coordinator: self,
 				datasource: HolderDashboardQRCardDatasource(now: { Date() }),
 				strippenRefresher: DashboardStrippenRefresher(
-					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
+					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
 					reachability: try? Reachability(),
 					now: { Date() }
 				),
