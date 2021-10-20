@@ -19,7 +19,8 @@ final class VerifiedInfoViewModelTests: XCTestCase {
 
 		coordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		sut = VerifiedInfoViewModel(
-			coordinator: coordinatorDelegateSpy
+			coordinator: coordinatorDelegateSpy,
+			isDeepLinkEnabled: true
 		)
 	}
 	
