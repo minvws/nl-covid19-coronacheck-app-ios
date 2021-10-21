@@ -121,7 +121,7 @@ class VerifierCheckIdentityView: BaseView {
 		addSubview(footerButtonView)
 		scrollView.addSubview(identityView)
 		scrollView.addSubview(labelStackView)
-		footerButtonView.addSubview(secondaryButton)
+		footerButtonView.buttonStackView.insertArrangedSubview(secondaryButton, at: 0)
 		labelStackView.addArrangedSubview(dccFlagLabel)
 		labelStackView.addArrangedSubview(dccScannedLabel)
 		labelStackView.addArrangedSubview(checkIdentityLabel)
@@ -131,8 +131,6 @@ class VerifierCheckIdentityView: BaseView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		
-		footerButtonView.topButtonConstraint?.isActive = false
 		
 		NSLayoutConstraint.activate([
 			
@@ -197,24 +195,7 @@ class VerifierCheckIdentityView: BaseView {
 			labelStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
 			
 			// Secondary button
-			secondaryButton.topAnchor.constraint(
-				equalTo: footerButtonView.topAnchor,
-				constant: ViewTraits.Margin.edge
-			),
 			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
-			secondaryButton.centerXAnchor.constraint(equalTo: footerButtonView.centerXAnchor),
-			secondaryButton.leftAnchor.constraint(
-				greaterThanOrEqualTo: footerButtonView.safeAreaLayoutGuide.leftAnchor,
-				constant: ViewTraits.Margin.edge
-			),
-			secondaryButton.rightAnchor.constraint(
-				lessThanOrEqualTo: footerButtonView.safeAreaLayoutGuide.rightAnchor,
-				constant: -ViewTraits.Margin.edge
-			),
-			secondaryButton.bottomAnchor.constraint(
-				equalTo: footerButtonView.primaryButton.topAnchor,
-				constant: -ViewTraits.Spacing.secondaryToPrimaryButton
-			),
 			
 			// Footer view
 			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),

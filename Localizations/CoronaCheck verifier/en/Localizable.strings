@@ -1,3 +1,4 @@
+"verifier.result.access.dcc" = "Scanned international certificate";
 "verifier.scan.button.moreInformation" = "What should I pay attention to?";
 "verifier.scaninstructions.navigation.title" = "About scanning";
 "verifier.scaninstructions.scanQR.title" = "Scan the QR code";
@@ -63,7 +64,7 @@
 "verifier.onboarding.message.safely" = "Visitors of certain locations must show a vaccination certificate, test certificate, or recovery certificate to enter.";
 "verifier.onboarding.title.scanqr" = "Scan QR code for access";
 "verifier.onboarding.message.scanqr" = "Visitors first make a QR code of their certificate. With this app, you can check the QR codes and see who is allowed to enter.";
-"verifier.onboarding.title.access" = "Proof of identity check";
+"verifier.onboarding.title.access" = "Mandatory ID check";
 "verifier.onboarding.message.access" = "Always ask visitors to show their proof of identity. Check whether the details on your screen match the details on their ID document. All good? Then the visitor is allowed to enter.";
 "verifier.onboarding.title.who" = "Who is the scanner for?";
 "verifier.onboarding.message.who" = "With this app, you can receive visitors again. But only if your location or activity falls under the designated locations.";
@@ -98,8 +99,8 @@
 "verifier.result.demo.title" = "Demo QR code scanned";
 "verifier.result.denied.title" = "Invalid QR code";
 "verifier.result.next" = "Scan next";
-"verifier.result.access.checkidentity" = "Note: ID check is mandatory";
-"verifier.result.access.identityverified" = "Correct details";
+"verifier.result.access.checkidentity" = "Please note: ID check is mandatory";
+"verifier.result.access.identityverified" = "Details are correct";
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "This QR code does not contain a coronavirus pass";
 "verifier.result.alert.unknown.message" = "Ask the visitor to show a QR code of a coronavirus pass.";

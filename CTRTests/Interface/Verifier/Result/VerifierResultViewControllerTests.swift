@@ -67,7 +67,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.checkIdentityView.dccFlag).to(beNil())
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.998))
+		sut.assertImage()
 	}
 
 	func testDeniedInvalidQR() throws {
@@ -87,7 +87,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultDeniedReadmore()
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.998))
+		sut.assertImage()
 	}
 
 	func testVerified() throws {
@@ -165,7 +165,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.checkIdentityView.dccFlag).to(beNil())
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.998))
+		sut.assertImage()
 	}
 
 	func test_dismiss_shouldNavigateToVerifierWelcome() {
