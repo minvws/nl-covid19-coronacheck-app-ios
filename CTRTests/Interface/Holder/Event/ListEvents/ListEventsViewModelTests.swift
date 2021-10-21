@@ -30,12 +30,13 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 		networkSpy = NetworkSpy(configuration: .development)
 		cryptoSpy = CryptoManagerSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: networkSpy)
+		remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigSpy.stubbedStoredConfiguration = .default
+		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
 
 		/// Not using a GreenCardLoader Spy here because all its dependencies are already spies here.
 		greenCardLoader = GreenCardLoader(networkManager: networkSpy, cryptoManager: cryptoSpy, walletManager: walletSpy)
-
-		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration.default
 
 		Services.use(greenCardLoader)
 		Services.use(walletSpy)
