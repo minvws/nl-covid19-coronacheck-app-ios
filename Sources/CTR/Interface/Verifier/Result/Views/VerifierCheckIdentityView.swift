@@ -69,7 +69,7 @@ class VerifierCheckIdentityView: BaseView {
 	
 	private let dccFlagLabel: Label = {
 		
-		let label = Label(title2: nil).multiline()
+		let label = Label(title1: nil).multiline()
 		label.textColor = Theme.colors.secondaryText
 		return label
 	}()
