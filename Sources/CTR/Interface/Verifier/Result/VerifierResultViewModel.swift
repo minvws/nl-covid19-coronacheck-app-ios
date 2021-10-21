@@ -272,10 +272,10 @@ class VerifierResultViewModel: Logging {
 	}
 	
 	private func showDccInfo() {
-		// If country code is nil, assume it is domestic QR
+		
 		guard let countryCode = verificationResult.details?.issuerCountryCode else { return }
 		
-		// Do not display for domestic DCC (to be sure)
+		// Do not display for domestic result
 		guard countryCode.caseInsensitiveCompare("NL") != .orderedSame else { return }
 		
 		dccFlag = flag(country: countryCode)
@@ -286,6 +286,7 @@ class VerifierResultViewModel: Logging {
 	/// - Parameter country: The country code
 	/// - Returns: Emoji country flag
 	private func flag(country: String) -> String? {
+		
 		let base: UInt32 = 127397
 		var scalars = ""
 		for scalar in country.unicodeScalars {
