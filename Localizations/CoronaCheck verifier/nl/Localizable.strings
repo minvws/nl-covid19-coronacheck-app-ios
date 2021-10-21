@@ -48,7 +48,7 @@
 "verifier.launch.version" = "App versie %@ (build %@)";
 
 /* MARK: - Verifier Menu */
-"verifier.menu.dashboard" = "Scan QR-code";
+"verifier.menu.dashboard" = "Scan QR-codes";
 
 "verifier.start.clockdeviationwarning.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
 "verifier.start.clockdeviationwarning.button" = "Lees meer";
