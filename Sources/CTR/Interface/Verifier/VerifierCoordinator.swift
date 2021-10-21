@@ -69,7 +69,7 @@ class VerifierCoordinator: SharedCoordinator {
 		switch universalLink {
 			case .thirdPartyScannerApp(let returnURL):
 				guard let returnURL = returnURL,
-					  let matchingMetadata = remoteConfigManager.getConfiguration().universalLinkPermittedDomains?.first(where: { permittedDomain in
+					  let matchingMetadata = remoteConfigManager.storedConfiguration.universalLinkPermittedDomains?.first(where: { permittedDomain in
 						  permittedDomain.url == returnURL.host
 					  })
 				else {
