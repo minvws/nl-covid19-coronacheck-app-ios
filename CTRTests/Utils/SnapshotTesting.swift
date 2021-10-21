@@ -14,7 +14,7 @@ internal extension UIViewController {
 		file: StaticString = #file,
 		testName: String = #function,
 		line: UInt = #line,
-		precision: Float = 1
+		precision: Float = 0.998
 	) {
 		UIScreen.main.assertSimulatorIsAllowedForSnapshotTesting()
 		UIViewController.assertSimulatorDoesNotHaveAlteredAccessibilitySizes()
@@ -42,7 +42,7 @@ internal extension UIView {
 		file: StaticString = #file,
 		testName: String = #function,
 		line: UInt = #line,
-		precision: Float = 1
+		precision: Float = 0.998
 	) {
 		UIScreen.main.assertSimulatorIsAllowedForSnapshotTesting()
 		UIViewController.assertSimulatorDoesNotHaveAlteredAccessibilitySizes()

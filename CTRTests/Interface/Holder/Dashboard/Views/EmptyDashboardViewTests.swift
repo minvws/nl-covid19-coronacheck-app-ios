@@ -31,7 +31,7 @@ final class EmptyDashboardViewTests: XCTestCase {
 
 		// Act
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+		sut.assertImage()
 	}
 	
 	func test_international() {
@@ -46,6 +46,6 @@ final class EmptyDashboardViewTests: XCTestCase {
 
 		// Act
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+		sut.assertImage()
 	}
 }
