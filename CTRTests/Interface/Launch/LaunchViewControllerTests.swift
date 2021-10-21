@@ -33,8 +33,11 @@ class LaunchViewControllerTests: XCTestCase {
 
 		appCoordinatorSpy = AppCoordinatorSpy()
 		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
-		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
-		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
+		remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigSpy.stubbedStoredConfiguration = remoteConfig
+		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
+		
 		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
 		deviceAuthenticationSpy = DeviceAuthenticationSpy()

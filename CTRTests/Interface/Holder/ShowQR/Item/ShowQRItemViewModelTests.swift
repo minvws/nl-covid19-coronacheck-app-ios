@@ -29,9 +29,11 @@ class ShowQRItemViewModelTests: XCTestCase {
 		cryptoManagerSpy = CryptoManagerSpy()
 		screenCaptureDetector = ScreenCaptureDetectorSpy()
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigManagingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
-		remoteConfigManagingSpy.stubbedGetConfigurationResult = .default
-
+		remoteConfigManagingSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigManagingSpy.stubbedStoredConfiguration = .default
+		remoteConfigManagingSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigManagingSpy.stubbedAppendUpdateObserverResult = UUID()
+		
 		Services.use(cryptoManagerSpy)
 		Services.use(remoteConfigManagingSpy)
 	}
@@ -143,7 +145,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 	}
 
 	func test_validity_withDomesticGreenCard_withValidCredential() throws {
-		remoteConfigManagingSpy.stubbedGetConfigurationResult = .default
+		remoteConfigManagingSpy.stubbedStoredConfiguration = .default
 
 		// Given
 		let greenCard = try XCTUnwrap(

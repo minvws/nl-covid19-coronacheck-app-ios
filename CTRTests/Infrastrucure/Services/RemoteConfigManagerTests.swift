@@ -14,12 +14,16 @@ class RemoteConfigManagerTests: XCTestCase {
 	// MARK: - Setup
 	private var sut: RemoteConfigManager!
 	private var networkSpy: NetworkSpy!
+	private var userSettingsSpy: UserSettingsSpy!
 
 	override func setUp() {
 
 		networkSpy = NetworkSpy(configuration: .development)
-		sut = RemoteConfigManager(networkManager: networkSpy)
+		userSettingsSpy = UserSettingsSpy()
+
+		sut = RemoteConfigManager(now: { now }, userSettings: userSettingsSpy, networkManager: networkSpy)
 		sut.reset()
+		
 		super.setUp()
 	}
 	
@@ -38,30 +42,34 @@ class RemoteConfigManagerTests: XCTestCase {
 			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
 
 			// When
-			self.sut.update { state in
+			self.sut.update(immediateCallbackIfWithinTTL: {
+				//
+			}, completion: { state in
 
 				// Then
 				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
 				expect(state.isFailure) == true
 				done()
-			}
+			})
 		}
 	}
 
 	/// Test the remote config manager update call with succss
-	func test_remoteConfigManagerUpdate_succes() {
+	func test_remoteConfigManagerUpdate_success() {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
 			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration.default, Data(), URLResponse())), ())
 			// When
-			self.sut.update { state in
+			self.sut.update(immediateCallbackIfWithinTTL: {
+				//
+			}, completion: { state in
 
 				// Then
 				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
 				expect(state.isSuccess) == true
 				done()
-			}
+			})
 		}
 	}
 }

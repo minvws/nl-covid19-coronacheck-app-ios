@@ -164,6 +164,7 @@ class LaunchViewModel: Logging {
 			completion: { (result: Result<(Bool, RemoteConfiguration), ServerError>) in
 				switch result {
 					case let .success((_, remoteConfiguration)):
+						self.checkWallet()
 						self.compare(remoteConfiguration, completion: completion)
 
 					case let .failure(networkError):

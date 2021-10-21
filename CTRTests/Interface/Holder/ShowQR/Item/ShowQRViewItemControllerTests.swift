@@ -20,7 +20,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 	var screenCaptureDetector: ScreenCaptureDetectorSpy!
 	var userSettingsSpy: UserSettingsSpy!
 	var viewModel: ShowQRItemViewModel!
-	var remoteConfigMangingSpy: RemoteConfigManagingSpy!
+	var remoteConfigManagingSpy: RemoteConfigManagingSpy!
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
@@ -34,11 +34,13 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 		screenCaptureDetector = ScreenCaptureDetectorSpy()
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigMangingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
-		remoteConfigMangingSpy.stubbedGetConfigurationResult = .default
-
+		remoteConfigManagingSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigManagingSpy.stubbedStoredConfiguration = .default
+		remoteConfigManagingSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigManagingSpy.stubbedAppendUpdateObserverResult = UUID()
+		
 		Services.use(cryptoManagerSpy)
-		Services.use(remoteConfigMangingSpy)
+		Services.use(remoteConfigManagingSpy)
 
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createTestGreenCard(

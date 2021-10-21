@@ -10,35 +10,71 @@ import XCTest
 
 class RemoteConfigManagingSpy: RemoteConfigManaging {
 
-	required init(networkManager: NetworkManaging?) {}
+	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, networkManager: NetworkManaging) {}
+
+	var invokedStoredConfigurationGetter = false
+	var invokedStoredConfigurationGetterCount = 0
+	var stubbedStoredConfiguration: RemoteConfiguration!
+
+	var storedConfiguration: RemoteConfiguration {
+		invokedStoredConfigurationGetter = true
+		invokedStoredConfigurationGetterCount += 1
+		return stubbedStoredConfiguration
+	}
+
+	var invokedAppendUpdateObserver = false
+	var invokedAppendUpdateObserverCount = 0
+	var stubbedAppendUpdateObserverObserverResult: (RemoteConfiguration, Data, URLResponse)?
+	var stubbedAppendUpdateObserverResult: ObserverToken!
+
+	func appendUpdateObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken {
+		invokedAppendUpdateObserver = true
+		invokedAppendUpdateObserverCount += 1
+		if let result = stubbedAppendUpdateObserverObserverResult {
+			observer(result.0, result.1, result.2)
+		}
+		return stubbedAppendUpdateObserverResult
+	}
+
+	var invokedAppendReloadObserver = false
+	var invokedAppendReloadObserverCount = 0
+	var stubbedAppendReloadObserverObserverResult: (RemoteConfiguration, Data, URLResponse)?
+	var stubbedAppendReloadObserverResult: ObserverToken!
+
+	func appendReloadObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken {
+		invokedAppendReloadObserver = true
+		invokedAppendReloadObserverCount += 1
+		if let result = stubbedAppendReloadObserverObserverResult {
+			observer(result.0, result.1, result.2)
+		}
+		return stubbedAppendReloadObserverResult
+	}
+
+	var invokedRemoveObserver = false
+	var invokedRemoveObserverCount = 0
+	var invokedRemoveObserverParameters: (token: ObserverToken, Void)?
+	var invokedRemoveObserverParametersList = [(token: ObserverToken, Void)]()
+
+	func removeObserver(token: ObserverToken) {
+		invokedRemoveObserver = true
+		invokedRemoveObserverCount += 1
+		invokedRemoveObserverParameters = (token, ())
+		invokedRemoveObserverParametersList.append((token, ()))
+	}
 
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
-	var stubbedUpdateCompletionResult: (Result<(RemoteConfiguration, Data, URLResponse), ServerError>, Void)?
+	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
+	var stubbedUpdateCompletionResult: (Result<(Bool, RemoteConfiguration), ServerError>, Void)?
 
-	func update(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
+	func update(immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
+		if shouldInvokeUpdateImmediateCallbackIfWithinTTL {
+			immediateCallbackIfWithinTTL()
+		}
 		if let result = stubbedUpdateCompletionResult {
 			completion(result.0)
 		}
-	}
-
-	var invokedGetConfiguration = false
-	var invokedGetConfigurationCount = 0
-	var stubbedGetConfigurationResult: RemoteConfiguration!
-
-	func getConfiguration() -> RemoteConfiguration {
-		invokedGetConfiguration = true
-		invokedGetConfigurationCount += 1
-		return stubbedGetConfigurationResult
-	}
-
-	var invokedReset = false
-	var invokedResetCount = 0
-
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
 	}
 }
