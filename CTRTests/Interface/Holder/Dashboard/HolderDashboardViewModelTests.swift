@@ -51,8 +51,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
-		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration.default
+		remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigSpy.stubbedStoredConfiguration = .default
+		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
+
 		migrationNotificationManagerSpy = DCCMigrationNotificationManagerSpy()
 
 		Services.use(cryptoManagerSpy)
@@ -1159,8 +1162,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 	}
 
 	func test_datasourceupdate_singleCurrentlyValidInternationalTest() {
-		remoteConfigSpy.stubbedGetConfigurationResult = .default
-		remoteConfigSpy.stubbedGetConfigurationResult.euTestTypes = [
+		remoteConfigSpy.stubbedStoredConfiguration = .default
+		remoteConfigSpy.stubbedStoredConfiguration.euTestTypes = [
 			.init(code: "LP6464-4", name: "PCR (NAAT)")
 		]
 

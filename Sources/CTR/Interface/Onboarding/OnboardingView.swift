@@ -22,7 +22,7 @@ class OnboardingView: BaseView {
 	}
 
 	/// The government ribbon
-	private let ribbonView: UIImageView = {
+	let ribbonView: UIImageView = {
 		
 		let view = UIImageView(image: I.onboarding.rijkslint())
 		view.translatesAutoresizingMaskIntoConstraints = false

@@ -181,7 +181,7 @@ extension ListEventsViewModel {
 		var dataSource = dataSource
 		if eventMode == .recovery {
 
-			let recoveryExpirationDays = remoteConfigManager.getConfiguration().recoveryExpirationDays ?? 180
+			let recoveryExpirationDays = remoteConfigManager.storedConfiguration.recoveryExpirationDays ?? 180
 			let result = filterTooOldRecoveryEvents(dataSource, recoveryEventExpirationDays: recoveryExpirationDays)
 			if result.hasTooOldEvents && result.filteredDataSource.isEmpty {
 				return recoveryEventsTooOld()
@@ -358,9 +358,9 @@ extension ListEventsViewModel {
 			.flatMap(Formatter.getDateFrom)
 			.map(printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 
-		let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(
+		let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(
 			dataRow.event.negativeTest?.type) ?? (dataRow.event.negativeTest?.type ?? "")
-		let manufacturer = remoteConfigManager.getConfiguration().getTestManufacturerMapping(
+		let manufacturer = remoteConfigManager.storedConfiguration.getTestManufacturerMapping(
 			dataRow.event.negativeTest?.manufacturer) ?? (dataRow.event.negativeTest?.manufacturer ?? "")
 		
 		let details: [EventDetails] = [
@@ -441,22 +441,22 @@ extension ListEventsViewModel {
 		var vaccineType: String?
 		var vaccineManufacturer: String?
 		if let hpkCode = dataRow.event.vaccination?.hpkCode, !hpkCode.isEmpty {
-			let hpkData = remoteConfigManager.getConfiguration().getHpkData(hpkCode)
-			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(hpkData?.mp)
-			vaccineType = remoteConfigManager.getConfiguration().getTypeMapping(hpkData?.vp)
-			vaccineManufacturer = remoteConfigManager.getConfiguration().getVaccinationManufacturerMapping(hpkData?.ma)
+			let hpkData = remoteConfigManager.storedConfiguration.getHpkData(hpkCode)
+			vaccinName = remoteConfigManager.storedConfiguration.getBrandMapping(hpkData?.mp)
+			vaccineType = remoteConfigManager.storedConfiguration.getTypeMapping(hpkData?.vp)
+			vaccineManufacturer = remoteConfigManager.storedConfiguration.getVaccinationManufacturerMapping(hpkData?.ma)
 		}
 
 		if vaccinName == nil, let brand = dataRow.event.vaccination?.brand {
-			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(brand)
+			vaccinName = remoteConfigManager.storedConfiguration.getBrandMapping(brand)
 		}
 		if vaccineType == nil {
-			vaccineType = remoteConfigManager.getConfiguration()
+			vaccineType = remoteConfigManager.storedConfiguration
 				.getTypeMapping(dataRow.event.vaccination?.type)
 				?? dataRow.event.vaccination?.type
 		}
 		if vaccineManufacturer == nil {
-			vaccineManufacturer = remoteConfigManager.getConfiguration()
+			vaccineManufacturer = remoteConfigManager.storedConfiguration
 				.getVaccinationManufacturerMapping(dataRow.event.vaccination?.manufacturer)
 				?? dataRow.event.vaccination?.manufacturer
 		}
@@ -543,9 +543,9 @@ extension ListEventsViewModel {
 			.flatMap(Formatter.getDateFrom)
 			.map(printTestDateFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
 
-		let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(
+		let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(
 			dataRow.event.positiveTest?.type) ?? (dataRow.event.positiveTest?.type ?? "")
-		let manufacturer = remoteConfigManager.getConfiguration().getTestManufacturerMapping(
+		let manufacturer = remoteConfigManager.storedConfiguration.getTestManufacturerMapping(
 			dataRow.event.positiveTest?.manufacturer) ?? (dataRow.event.positiveTest?.manufacturer ?? "")
 		
 		let details: [EventDetails] = [
@@ -590,11 +590,11 @@ extension ListEventsViewModel {
 			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 		}
 
-		let vaccineType = remoteConfigManager.getConfiguration().getTypeMapping(
+		let vaccineType = remoteConfigManager.storedConfiguration.getTypeMapping(
 			vaccination.vaccineOrProphylaxis) ?? vaccination.vaccineOrProphylaxis
-		let vaccineBrand = remoteConfigManager.getConfiguration().getBrandMapping(
+		let vaccineBrand = remoteConfigManager.storedConfiguration.getBrandMapping(
 			vaccination.medicalProduct) ?? vaccination.medicalProduct
-		let vaccineManufacturer = remoteConfigManager.getConfiguration().getVaccinationManufacturerMapping(
+		let vaccineManufacturer = remoteConfigManager.storedConfiguration.getVaccinationManufacturerMapping(
 			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
 			.map(printDateFormatter.string) ?? vaccination.dateOfVaccination
@@ -681,10 +681,10 @@ extension ListEventsViewModel {
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
 			.map(printTestDateFormatter.string) ?? test.sampleDate
 
-		let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(
+		let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(
 			test.typeOfTest) ?? test.typeOfTest
 
-		let manufacturer = remoteConfigManager.getConfiguration().getTestManufacturerMapping(
+		let manufacturer = remoteConfigManager.storedConfiguration.getTestManufacturerMapping(
 			test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
 
 		var testResult = test.testResult
@@ -800,7 +800,7 @@ private extension ListEventsViewModel {
 				
 				let details: [EventDetails] = [
 					EventDetails(field: EventDetailsTest.name, value: holderID),
-					EventDetails(field: EventDetailsTest.testType, value: self?.remoteConfigManager.getConfiguration().getNlTestType(result.testType) ?? result.testType),
+					EventDetails(field: EventDetailsTest.testType, value: self?.remoteConfigManager.storedConfiguration.getNlTestType(result.testType) ?? result.testType),
 					EventDetails(field: EventDetailsTest.date, value: printSampleLongDate),
 					EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
 					EventDetails(field: EventDetailsTest.uniqueIdentifer, value: result.unique)

@@ -71,7 +71,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.primaryTitle) == L.verifierStartButtonTitle()
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+		sut.assertImage()
 	}
 
 	func test_primaryButtonTapped_noScanInstructionsShown() {

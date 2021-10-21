@@ -1,3 +1,4 @@
+"verifier.result.access.dcc" = "Internationaal bewijs gescand";
 "verifier.scan.button.moreInformation" = "Waar moet ik op letten?";
 "verifier.scaninstructions.navigation.title" = "Over scannen";
 "verifier.scaninstructions.scanQR.title" = "Scan de QR-code";
@@ -47,7 +48,7 @@
 "verifier.launch.version" = "App versie %@ (build %@)";
 
 /* MARK: - Verifier Menu */
-"verifier.menu.dashboard" = "Scan QR-code";
+"verifier.menu.dashboard" = "Scan QR-codes";
 
 "verifier.start.clockdeviationwarning.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
 "verifier.start.clockdeviationwarning.button" = "Lees meer";
@@ -107,7 +108,7 @@
 "verifier.result.alert.dcc.message" = "Je hebt een internationale QR-code gescand. Gebruikers van CoronaCheck moeten in Nederland hun Nederlandse QR-code laten zien.";
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Kloppen de gegevens niet?";
-"verifier.result.check.button" = "Controle afgerond";
+"verifier.result.check.button" = "Scan volgende";
 
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Wat kan ik doen?";
