@@ -55,9 +55,17 @@ class TextView: UIStackView {
                 
                 // 2. Add current TextElement
                 let element = TextElement(attributedText: part)
+                
+                // Mark as header?
                 if part.isHeader {
                     element.accessibilityTraits = .header
                 }
+                
+                // Hide for assistive technologies?
+                if part.isBlank {
+                    element.isAccessibilityElement = false
+                }
+                
                 addArrangedSubview(element)
             }
         }
@@ -240,6 +248,11 @@ extension NSAttributedString {
         }
         
         return height
+    }
+    
+    /// Determines if the attributed string is blank
+    var isBlank: Bool {
+        return string.trimmingCharacters(in: .whitespaces).isEmpty
     }
 }
 
