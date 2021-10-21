@@ -51,6 +51,7 @@ class EventStartView: ScrolledStackWithButtonView {
 		stackView.distribution = .equalSpacing
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 		primaryButton.style = .roundedBlueImage
+		footerButtonView.buttonStackView.spacing = ViewTraits.margin
 	}
 
 	override func setupViewHierarchy() {
@@ -59,40 +60,18 @@ class EventStartView: ScrolledStackWithButtonView {
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(contentTextView)
-		footerButtonView.addSubview(secondaryButton)
+		footerButtonView.buttonStackView.addArrangedSubview(secondaryButton)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		
-		footerButtonView.bottomButtonConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
 
-			// Primary button
-			primaryButton.bottomAnchor.constraint(
-				equalTo: secondaryButton.topAnchor,
-				constant: -ViewTraits.margin
-			),
-
 			// Secondary button
-			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
-			secondaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-
-			secondaryButton.leadingAnchor.constraint(
-				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			secondaryButton.trailingAnchor.constraint(
-				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			secondaryButton.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			)
+			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight)
 		])
 	}
 
