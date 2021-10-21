@@ -82,7 +82,7 @@ class AppCoordinator: Coordinator, Logging {
 		// Attach behaviours that we want the RemoteConfigManager to perform
 		// each time it refreshes the config in future:
 
-		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendUpdateObserver { [weak self] remoteConfig, rawData, urlResponse in
+		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
 			// Mark remote config loaded
 			Services.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
 		}]
