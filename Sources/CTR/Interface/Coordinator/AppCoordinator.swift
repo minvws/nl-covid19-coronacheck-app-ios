@@ -37,6 +37,8 @@ class AppCoordinator: Coordinator, Logging {
 
 	var flavor = AppFlavor.flavor
 
+	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
+
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
 	init(scene: UIWindowScene, navigationController: UINavigationController) {
@@ -52,6 +54,12 @@ class AppCoordinator: Coordinator, Logging {
 		self.navigationController = navigationController
 	}
 
+	deinit {
+		remoteConfigManagerObserverTokens.forEach {
+			Services.remoteConfigManager.removeObserver(token: $0)
+		}
+	}
+
 	/// Designated starter method
 	func start() {
 
@@ -62,9 +70,36 @@ class AppCoordinator: Coordinator, Logging {
 		// Setup Logging
 		LogHandler.setup()
 
+		configureRemoteConfigManager()
+
 		// Start the launcher for update checks
 		startLauncher()
 		addObservers()
+	}
+
+	private func configureRemoteConfigManager() {
+
+		// Attach behaviours that we want the RemoteConfigManager to perform
+		// each time it refreshes the config in future:
+
+		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
+			// Mark remote config loaded
+			Services.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
+		}]
+
+		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendReloadObserver { remoteConfig, rawData, urlResponse in
+
+			/// Fish for the server Date in the network response, and use that to maintain
+			/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
+			/// beyond a permitted time interval.
+			guard let httpResponse = urlResponse as? HTTPURLResponse,
+				  let serverDateString = httpResponse.allHeaderFields["Date"] as? String else { return }
+
+			Services.clockDeviationManager.update(
+				serverHeaderDate: serverDateString,
+				ageHeader: httpResponse.allHeaderFields["Age"] as? String
+			)
+		}]
 	}
 
     // MARK: - Private functions
@@ -224,7 +259,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	var isLunhCheckEnabled: Bool {
 		
-		return Services.remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false
+		return Services.remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
 	}
 }
 
