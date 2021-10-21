@@ -53,6 +53,7 @@
 "verifier.start.clockdeviationwarning.button" = "Read more";
 "verifier.clockDeviationDetected.title" = "Check your phone's time settings";
 "verifier.clockDeviationDetected.message" = "<p>In order to properly use the CoronaCheck Scanner app, it is important that the time on your phone is set correctly. For example, if the clock on your phone is a few minutes ahead, an error might occur while verifying a coronavirus pass.</p><p><a href=\"%@\">Go to your phone's settings</a> and set Date & Time to 'set automatically'.</p>";
+"verifier.menu.scaninstructions" = "How it works";
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "About this app";
 "verifier.menu.privacy" = "Acceptable use policy";
@@ -106,6 +107,8 @@
 "verifier.result.alert.dcc.message" = "You have scanned an international QR code. In the Netherlands, CoronaCheck users should show their Dutch QR code.";
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Are the details incorrect?";
+"verifier.result.check.button" = "Scan next";
+
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "What should I do?";
 "verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";
