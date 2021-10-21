@@ -113,7 +113,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.checkIdentityView.dccFlag).to(beNil())
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.998))
+		sut.assertImage()
 	}
 	
 	func testVerifiedDCC() throws {
@@ -139,7 +139,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.checkIdentityView.dccFlag) == "🇮🇹"
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.998))
+		sut.assertImage()
 	}
 	
 	func testVerifiedDCCWithoutFlag() throws {
