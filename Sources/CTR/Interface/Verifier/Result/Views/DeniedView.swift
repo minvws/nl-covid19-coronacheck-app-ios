@@ -14,7 +14,6 @@ final class DeniedView: BaseView, AccessViewable {
 		enum Margin {
 			static let top: CGFloat = 4
 			static let secondaryButtonBottom: CGFloat = 8
-			static let button: CGFloat = 36
 		}
 		enum Spacing {
 			static let views: CGFloat = UIDevice.current.isSmallScreen ? 24 : 40
@@ -123,8 +122,8 @@ final class DeniedView: BaseView, AccessViewable {
 			}(),
 			
 			secondaryButton.topAnchor.constraint(greaterThanOrEqualTo: stackView.bottomAnchor, constant: ViewTraits.Spacing.views),
-			secondaryButton.leftAnchor.constraint(greaterThanOrEqualTo: scrollView.contentView.leftAnchor, constant: ViewTraits.Margin.button),
-			secondaryButton.rightAnchor.constraint(lessThanOrEqualTo: scrollView.contentView.rightAnchor, constant: -ViewTraits.Margin.button),
+			secondaryButton.leftAnchor.constraint(equalTo: footerButtonView.buttonStackView.leftAnchor),
+			secondaryButton.rightAnchor.constraint(equalTo: footerButtonView.buttonStackView.rightAnchor),
 			secondaryButton.centerXAnchor.constraint(equalTo: scrollView.contentView.centerXAnchor),
 			secondaryButton.bottomAnchor.constraint(equalTo: scrollView.contentView.bottomAnchor, constant: -ViewTraits.Margin.secondaryButtonBottom),
 			secondaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Size.buttonWidth),
