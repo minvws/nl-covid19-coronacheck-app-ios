@@ -166,8 +166,8 @@ class LaunchViewModel: Logging {
 				switch result {
 					case let .success((_, remoteConfiguration)):
 
-						// Note: There are also other steps done
-						// by way of the registered update/reload observers
+						// Note: There are also other steps done on completion
+						// by way of the remoteConfigManager's registered update/reload observers
 						// - see RemoteConfigManager `.appendUpdateObserver` and `.appendReloadObserver`.
 
 						self.checkWallet()

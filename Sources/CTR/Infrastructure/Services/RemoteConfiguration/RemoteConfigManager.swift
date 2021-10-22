@@ -127,7 +127,6 @@ class RemoteConfigManager: RemoteConfigManaging {
 			immediateCallbackIfWithinTTL()
 		}
 
-		// TODO: disregard on first launch of app? (for clock deviation)?
 		guard newValidity != .withinMinimalInterval else {
 			// Not allowed to call config endpoint again
 			immediateCallbackIfWithinTTL()
