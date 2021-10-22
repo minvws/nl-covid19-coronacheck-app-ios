@@ -36,7 +36,7 @@
 "verifier.result.identity.dayofbirth" = "Day of birth";
 "verifier.result.identity.monthofbirth" = "Birth month";
 
-"verifier.result.check.text" = "<p><b>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</b></p><p><b>Please note: sometimes not all details are shown</b><br />This happens to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing.</p>";
+"verifier.result.check.text" = "<p>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</p><p><b>Please note: sometimes not all details are shown</b><br />This happens to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing.</p>";
 
 
 "updateApp.content" = "To continue, install the latest version of the app";

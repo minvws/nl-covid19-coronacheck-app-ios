@@ -36,7 +36,7 @@
 "verifier.result.identity.dayofbirth" = "Geboortedag";
 "verifier.result.identity.monthofbirth" = "Geboortemaand";
 
-"verifier.result.check.text" = "<p><b>Je mag de bezoeker geen toegang geven als de gegevens op jouw scherm anders zijn dan op het identiteitsbewijs.</b></p><p><b>Let op: soms vallen gegevens weg</b><br />Om de privacy van de bezoeker te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controleer in dat geval alleen de gegevens die je wel ziet.</p>";
+"verifier.result.check.text" = "<p>Je mag de bezoeker geen toegang geven als de gegevens op jouw scherm anders zijn dan op het identiteitsbewijs.</p><p><b>Let op: soms vallen gegevens weg</b><br />Om de privacy van de bezoeker te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controleer in dat geval alleen de gegevens die je wel ziet.</p>";
 
 
 "updateApp.content" = "Je hebt de laatste versie van de app nodig om verder te gaan.";
