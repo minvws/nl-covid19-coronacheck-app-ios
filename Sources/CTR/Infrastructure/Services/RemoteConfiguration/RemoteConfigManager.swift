@@ -127,6 +127,10 @@ class RemoteConfigManager: RemoteConfigManaging {
 			immediateCallbackIfWithinTTL()
 		}
 
+		// Note: the `isAppFirstLaunch` parameter is respected in calculating the `newValidity`
+		// and thus the `guard` will not trigger during first launch
+		//
+		// This also means that during first launch, `reloadObservers` will always be called back.
 		guard newValidity != .withinMinimalInterval else {
 			// Not allowed to call config endpoint again
 			immediateCallbackIfWithinTTL()

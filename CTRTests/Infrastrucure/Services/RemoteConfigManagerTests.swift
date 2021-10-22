@@ -229,7 +229,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(self.sut.isLoading) == false
 	}
 
-	func test_update_withinTTL_withinMinimumRefreshInterval_onAppFirstLaunch_doesRefresh() {
+	func test_update_withinTTL_withinMinimumRefreshInterval_onAppFirstLaunch_doesRefresh_withNewConfig() {
 
 		// Load a new configuration into RemoteConfigurationManager to start with
 		// (currently not an easy way to change it from using .default)
@@ -256,6 +256,17 @@ class RemoteConfigManagerTests: XCTestCase {
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(5 * seconds * ago).timeIntervalSince1970
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfig, Data(), URLResponse())), ())
 
+		// Add observer callbacks:
+		var reloadObserverReceivedConfiguration: RemoteConfiguration?
+		var updateObserverReceivedConfiguration: RemoteConfiguration?
+
+		_ = sut.appendReloadObserver { remoteConfiguration, _, _ in
+			reloadObserverReceivedConfiguration = remoteConfiguration
+		}
+		_ = sut.appendUpdateObserver { remoteConfiguration, _, _ in
+			updateObserverReceivedConfiguration = remoteConfiguration
+		}
+
 		// Act
 		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
 		var didCallTTLCallback: Bool = false
@@ -277,6 +288,69 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		expect(self.sut.storedConfiguration) == newConfig
 		expect(self.sut.isLoading) == false
+
+		expect(reloadObserverReceivedConfiguration) == newConfig
+		expect(updateObserverReceivedConfiguration) == newConfig
+	}
+
+	func test_update_withinTTL_withinMinimumRefreshInterval_onAppFirstLaunch_doesRefresh_withUnchangedConfig() {
+
+		// Load a new configuration into RemoteConfigurationManager to start with
+		// (currently not an easy way to change it from using .default)
+		var firstConfig = RemoteConfiguration.default
+		firstConfig.configMinimumIntervalSeconds = 60
+		firstConfig.configTTL = 3600
+
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((firstConfig, Data(), URLResponse())), ())
+
+		var completedFirstLoad = false
+		sut.update(isAppFirstLaunch: true, immediateCallbackIfWithinTTL: {}, completion: { result in
+			if case .success((true, _)) = result {
+				completedFirstLoad = true
+			}
+		})
+		expect(completedFirstLoad).toEventually(beTrue())
+
+		// Setup the real test:
+		// within TTL but outside minimum interval
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(5 * seconds * ago).timeIntervalSince1970
+
+		// Add observer callbacks:
+		var reloadObserverReceivedConfiguration: RemoteConfiguration?
+		var updateObserverReceivedConfiguration: RemoteConfiguration?
+
+		_ = sut.appendReloadObserver { remoteConfiguration, _, _ in
+			reloadObserverReceivedConfiguration = remoteConfiguration
+		}
+		_ = sut.appendUpdateObserver { remoteConfiguration, _, _ in
+			updateObserverReceivedConfiguration = remoteConfiguration
+		}
+
+		// Act
+		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
+		var didCallTTLCallback: Bool = false
+		sut.update(
+			isAppFirstLaunch: true,
+			immediateCallbackIfWithinTTL: { didCallTTLCallback = true },
+			completion: { result in
+			receivedResult = result
+		})
+
+		// Assert
+		expect(didCallTTLCallback) == true
+
+		switch receivedResult {
+			case .success((false, firstConfig)): break
+			default:
+				assertionFailure("Didn't receive expected result")
+		}
+
+		expect(self.sut.storedConfiguration) == firstConfig
+		expect(self.sut.isLoading) == false
+
+		expect(reloadObserverReceivedConfiguration) == firstConfig
+		expect(updateObserverReceivedConfiguration).to(beNil()) // no update so no callback expected here.
 	}
 
 	func test_doesNotLoadWhenAlreadyLoading() {
