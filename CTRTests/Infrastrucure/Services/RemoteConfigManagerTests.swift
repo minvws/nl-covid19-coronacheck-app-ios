@@ -91,6 +91,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(hitCallback) == true
 		expect(self.networkSpy.invokedGetRemoteConfiguration) == true
 		expect(self.sut.storedConfiguration) == .default
+		expect(self.sut.isLoading) == false
 	}
 
 	func test_update_notWithinTTL_doesNotCallbackImmediately() {
@@ -108,6 +109,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(didNotHitCallback) == true
 		expect(self.networkSpy.invokedGetRemoteConfiguration) == true
 		expect(self.sut.storedConfiguration) == .default
+		expect(self.sut.isLoading) == false
 	}
 
 	func test_update_neverFetchedBefore_doesNotCallbackImmediately() {
@@ -125,6 +127,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(didNotHitCallback) == true
 		expect(self.networkSpy.invokedGetRemoteConfiguration) == true
 		expect(self.sut.storedConfiguration) == .default
+		expect(self.sut.isLoading) == false
 	}
 
 	func test_update_withinTTL_butOutsideMinimumRefreshInterval_doesRefresh() {
@@ -173,6 +176,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		}
 
 		expect(self.sut.storedConfiguration) == newConfig
+		expect(self.sut.isLoading) == false
 	}
 
 	func test_update_withinTTL_withinMinimumRefreshInterval_doesNotRefresh() {
@@ -222,6 +226,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		}
 
 		expect(self.sut.storedConfiguration) == firstConfig
+		expect(self.sut.isLoading) == false
 	}
 
 	func test_update_withinTTL_withinMinimumRefreshInterval_onAppFirstLaunch_doesRefresh() {
@@ -271,6 +276,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		}
 
 		expect(self.sut.storedConfiguration) == newConfig
+		expect(self.sut.isLoading) == false
 	}
 
 	func test_doesNotLoadWhenAlreadyLoading() {
@@ -306,6 +312,7 @@ class RemoteConfigManagerTests: XCTestCase {
 			default:
 				assertionFailure("results didn't match")
 		}
+		expect(self.sut.isLoading) == false
 	}
 
 	func test_update_updatesConfigFetchedTimestamp() {
@@ -318,6 +325,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Assert
 		expect(self.userSettingsSpy.invokedConfigFetchedTimestamp) == now.timeIntervalSince1970
+		expect(self.sut.isLoading) == false
 	}
 
 	func test_update_unchangedConfig_returnsFalse_updatesObservers() {
@@ -352,6 +360,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		expect(reloadObserverReceivedConfiguration).toEventually(equal(configuration))
 		expect(updateObserverReceivedConfiguration).toEventually(beNil())
+		expect(self.sut.isLoading) == false
 	}
 
 	func test_update_changedConfig_returnsTrue_updatesObservers() {
@@ -391,6 +400,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		expect(reloadObserverReceivedConfiguration).toEventually(equal(newConfiguration))
 		expect(updateObserverReceivedConfiguration).toEventually(equal(newConfiguration))
+		expect(self.sut.isLoading) == false
 	}
 
 }

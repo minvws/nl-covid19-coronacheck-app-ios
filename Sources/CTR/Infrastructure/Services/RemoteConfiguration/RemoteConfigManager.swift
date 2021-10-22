@@ -41,7 +41,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 	// MARK: - Vars
 
-	private var isLoading = false
+	private(set) var isLoading = false
 
 	@Keychain(name: "storedConfiguration", service: Constants.keychainService, clearOnReinstall: false)
 	private(set) var storedConfiguration: RemoteConfiguration = .default // swiftlint:disable:this let_var_whitespace
@@ -131,6 +131,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 			// Not allowed to call config endpoint again
 			immediateCallbackIfWithinTTL()
 			completion(.success((false, storedConfiguration)))
+			isLoading = false
 			return
 		}
 
