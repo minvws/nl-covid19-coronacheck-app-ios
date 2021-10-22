@@ -138,10 +138,18 @@ class RemoteConfigManager: RemoteConfigManaging {
 			userSettings: userSettings
 		)
 
-		// If already within TTL, immediately trigger special callback
-		// so that other app-startup work can begin:
-		if case .withinTTL = newValidity {
-			immediateCallbackIfWithinTTL()
+		// Special actions per-validity:
+		switch newValidity {
+			case .neverFetched:
+				// Ensure that we're not using a keychain-persisted value from a previous installation:
+				storedConfiguration = .default
+
+			case .withinTTL:
+				// If already within TTL, immediately trigger special callback
+				// so that other app-startup work can begin:
+				immediateCallbackIfWithinTTL()
+
+			default: break
 		}
 
 		// Note: the `isAppFirstLaunch` parameter is respected in calculating the `newValidity`
