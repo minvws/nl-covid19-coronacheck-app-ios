@@ -157,6 +157,7 @@ class LaunchViewModel: Logging {
 		isUpdatingConfiguration = true
 
 		remoteConfigManager?.update(
+			isAppFirstLaunch: true,
 			immediateCallbackIfWithinTTL: {
 				self.cryptoLibUtility?.checkFile(.remoteConfiguration)
 				completion(.withinTTL)
@@ -164,6 +165,11 @@ class LaunchViewModel: Logging {
 			completion: { (result: Result<(Bool, RemoteConfiguration), ServerError>) in
 				switch result {
 					case let .success((_, remoteConfiguration)):
+
+						// Note: There are also other steps done
+						// by way of the registered update/reload observers
+						// - see RemoteConfigManager `.appendUpdateObserver` and `.appendReloadObserver`.
+
 						self.checkWallet()
 						self.compare(remoteConfiguration, completion: completion)
 
