@@ -65,6 +65,7 @@ class LaunchViewModel: Logging {
 		walletManager = flavor == .holder ? Services.walletManager : nil
 
 		remoteConfigManagerUpdateToken = Services.remoteConfigManager.appendReloadObserver { [weak self] remoteConfig, rawData, urlResponse in
+			self?.cryptoLibUtility?.checkFile(.remoteConfiguration)
 			self?.checkWallet()
 		}
 
