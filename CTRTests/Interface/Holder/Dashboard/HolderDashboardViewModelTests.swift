@@ -2124,6 +2124,22 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 	}
+
+	// MARK: - RemoteConfig changes
+
+	func test_registersForRemoteConfigChanges_affectingStrippenRefresher() {
+		// Arrange
+		remoteConfigSpy.stubbedAppendUpdateObserverObserverResult = (RemoteConfiguration.default, Data(), URLResponse())
+
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+
+		// Assert
+		
+		// First: during `.init`
+		// Second: when it receives the `stubbedAppendUpdateObserverObserverResult` value above.
+		expect(self.strippenRefresherSpy.invokedLoadCount) == 2
+	}
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128

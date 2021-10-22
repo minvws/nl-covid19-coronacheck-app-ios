@@ -88,6 +88,7 @@ final class HolderDashboardViewModel: Logging {
 	private var dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private let now: () -> Date
+	private var remoteConfigUpdatesStrippenRefresherToken: RemoteConfigManager.ObserverToken?
 
 	// MARK: - Initializer
 	init(
@@ -131,6 +132,11 @@ final class HolderDashboardViewModel: Logging {
 		}
 		strippenRefresher.load()
 
+		// If the config ever changes, reload the strippen refresher:
+		remoteConfigUpdatesStrippenRefresherToken = remoteConfigManager.appendUpdateObserver { [weak strippenRefresher] _, _, _ in
+			strippenRefresher?.load()
+		}
+
 		self.setupNotificationListeners()
 
 		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
@@ -161,6 +167,7 @@ final class HolderDashboardViewModel: Logging {
 	deinit {
 		NotificationCenter.default.removeObserver(self)
 		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
+		remoteConfigUpdatesStrippenRefresherToken.map(remoteConfigManager.removeObserver)
 	}
 
 	func viewWillAppear() {
