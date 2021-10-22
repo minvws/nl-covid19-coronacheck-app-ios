@@ -32,6 +32,7 @@ class LaunchViewModelTests: XCTestCase {
 		remoteConfigSpy.stubbedStoredConfiguration = remoteConfig
 		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
+		remoteConfigSpy.stubbedAppendReloadObserverObserverResult = (.default, Data(), URLResponse())
 
 		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
