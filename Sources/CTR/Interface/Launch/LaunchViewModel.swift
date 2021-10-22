@@ -170,7 +170,6 @@ class LaunchViewModel: Logging {
 						// by way of the remoteConfigManager's registered update/reload observers
 						// - see RemoteConfigManager `.appendUpdateObserver` and `.appendReloadObserver`.
 
-						self.checkWallet()
 						self.compare(remoteConfiguration, completion: completion)
 
 					case let .failure(networkError):
