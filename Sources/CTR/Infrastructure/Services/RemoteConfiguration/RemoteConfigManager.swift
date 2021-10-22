@@ -54,6 +54,8 @@ class RemoteConfigManager: RemoteConfigManaging {
 	private let userSettings: UserSettingsProtocol
 	private let networkManager: NetworkManaging
 	
+	// MARK: - Setup
+
 	required init(
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
@@ -62,6 +64,21 @@ class RemoteConfigManager: RemoteConfigManaging {
 		self.now = now
 		self.userSettings = userSettings
 		self.networkManager = networkManager
+
+		registerTriggers()
+	}
+
+	func registerTriggers() {
+
+		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+		}
+	}
+
+	// MARK: - Teardown
+
+	deinit {
+		NotificationCenter.default.removeObserver(self)
 	}
 
 	// MARK: - External Observers
