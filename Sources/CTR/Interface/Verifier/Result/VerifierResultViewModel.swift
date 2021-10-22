@@ -54,6 +54,10 @@ class VerifierResultViewModel: Logging {
 	
 	@Bindable private(set) var secondaryTitle: String = ""
 	
+	@Bindable private(set) var dccFlag: String?
+	
+	@Bindable private(set) var dccScanned: String?
+	
 	@Bindable private(set) var checkIdentity: String = ""
 	
 	@Bindable private(set) var primaryButtonIcon: UIImage?
@@ -188,6 +192,7 @@ class VerifierResultViewModel: Logging {
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
+		showDccInfo()
 		// Only show when deeplink is available (US 1344)
 		primaryButtonIcon = I.deeplinkScan()
 	}
@@ -205,6 +210,7 @@ class VerifierResultViewModel: Logging {
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
+		showDccInfo()
 		// Only show when deeplink is available (US 1344)
 		primaryButtonIcon = I.deeplinkScan()
 	}
@@ -263,6 +269,31 @@ class VerifierResultViewModel: Logging {
 			title: L.verifierDeniedTitle(),
 			content: textViews
 		)
+	}
+	
+	private func showDccInfo() {
+		
+		guard let countryCode = verificationResult.details?.issuerCountryCode else { return }
+		
+		// Do not display for domestic result
+		guard countryCode.caseInsensitiveCompare("NL") != .orderedSame else { return }
+		
+		dccFlag = flag(country: countryCode)
+		dccScanned = L.verifierResultAccessDcc()
+	}
+	
+	/// Get emoji country flag for two character country code
+	/// - Parameter country: The country code
+	/// - Returns: Emoji country flag
+	private func flag(country: String) -> String? {
+		
+		let base: UInt32 = 127397
+		var scalars = ""
+		for scalar in country.unicodeScalars {
+			scalars.unicodeScalars.append(UnicodeScalar(base + scalar.value)!)
+		}
+		let flag = String(scalars)
+		return flag.isEmpty ? nil : flag
 	}
 
 	// MARK: - AutoCloseTimer

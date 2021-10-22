@@ -97,6 +97,10 @@ class Label: UILabel {
     convenience init(subheadBold: String?, textColor: UIColor = .darkText) {
         self.init(subheadBold, font: Theme.fonts.subheadBold, textColor: textColor)
     }
+	
+	convenience init(subheadHeavyBold: String?, textColor: UIColor = .darkText) {
+		self.init(subheadHeavyBold, font: Theme.fonts.subheadHeavyBold, textColor: textColor)
+	}
 
 	convenience init(subheadMedium: String?, textColor: UIColor = .darkText) {
 		self.init(subheadMedium, font: Theme.fonts.subheadMedium, textColor: textColor)

@@ -43,6 +43,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		// Given
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
+		details.issuerCountryCode = "NL"
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
 		result.details = details
@@ -55,6 +56,11 @@ class VerifierResultViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.allowAccess) == .demo
 		expect(self.sut.title) == L.verifierResultDemoTitle()
+		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
+		expect(self.sut.primaryTitle) == L.verifierResultAccessIdentityverified()
+		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
+		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned).to(beNil())
 	}
 	
 	func test_checkAttributes_whenNoAttributesAreSet_shouldDisplayDeniedInvalidQR() {
@@ -75,6 +81,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Given
 		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "NL"
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
 		result.details = details
@@ -87,6 +94,56 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.allowAccess) == .verified
 		expect(self.sut.title) == L.verifierResultAccessTitle()
 		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
+		expect(self.sut.primaryTitle) == L.verifierResultAccessIdentityverified()
+		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
+		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned).to(beNil())
+	}
+	
+	func test_checkAttributes_whenDCCIsScannedWithFlag_shouldDisplayVerified() {
+		
+		// Given
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "IT"
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		sut.verificationResult = result
+		
+		// When
+		sut.checkAttributes()
+		
+		// Then
+		expect(self.sut.allowAccess) == .verified
+		expect(self.sut.title) == L.verifierResultAccessTitle()
+		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
+		expect(self.sut.primaryTitle) == L.verifierResultAccessIdentityverified()
+		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
+		expect(self.sut.dccFlag) == "🇮🇹"
+		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
+	}
+	
+	func test_checkAttributes_whenDCCIsScannedWithoutFlag_shouldDisplayVerified() {
+		
+		// Given
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = ""
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		sut.verificationResult = result
+		
+		// When
+		sut.checkAttributes()
+		
+		// Then
+		expect(self.sut.allowAccess) == .verified
+		expect(self.sut.title) == L.verifierResultAccessTitle()
+		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
+		expect(self.sut.primaryTitle) == L.verifierResultAccessIdentityverified()
+		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
+		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
 	}
 
 	func test_holderIdentity_allNil() {
