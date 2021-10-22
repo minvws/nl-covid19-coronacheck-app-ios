@@ -86,7 +86,6 @@ class VerifierResultViewModel: Logging {
 
 		addObservers()
 		checkAttributes()
-		startAutoCloseTimer()
 	}
 
 	func addObservers() {
@@ -252,6 +251,7 @@ class VerifierResultViewModel: Logging {
 
 	private func showVerifiedInfo() {
 
+		stopAutoCloseTimer()
 		coordinator?.navigateToVerifiedInfo()
 	}
 
@@ -299,7 +299,7 @@ class VerifierResultViewModel: Logging {
 	// MARK: - AutoCloseTimer
 
 	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
-	private func startAutoCloseTimer() {
+	func startAutoCloseTimer() {
 
 		guard autoCloseTimer == nil else {
 			return

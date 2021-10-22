@@ -161,7 +161,9 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				coordinator: self
 			)
 		)
-		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
+		let navigationController = UINavigationController(rootViewController: viewController)
+		navigationController.modalPresentationStyle = .fullScreen
+		sidePanel?.selectedViewController?.present(navigationController, animated: true)
 	}
 }
 

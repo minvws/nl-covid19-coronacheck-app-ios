@@ -91,6 +91,13 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.$dccFlag.binding = { [weak self] in self?.sceneView.checkIdentityView.dccFlag = $0 }
 		viewModel.$dccScanned.binding = { [weak self] in self?.sceneView.checkIdentityView.dccScanned = $0 }
 	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		
+		super.viewDidAppear(animated)
+		
+		viewModel.startAutoCloseTimer()
+	}
 
 	/// User tapped on the button
 	@objc func closeButtonTapped() {

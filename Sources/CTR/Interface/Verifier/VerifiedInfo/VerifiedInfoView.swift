@@ -25,6 +25,14 @@ final class VerifiedInfoView: BaseView {
 		}
 	}
 	
+	private let scrollView: ScrolledContentHeightView = {
+		
+		let scrollView = ScrolledContentHeightView()
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		scrollView.showsHorizontalScrollIndicator = false
+		return scrollView
+	}()
+	
 	/// The stackview
 	private let stackView: UIStackView = {
 
@@ -68,8 +76,9 @@ final class VerifiedInfoView: BaseView {
 		stackView.setCustomSpacing(ViewTraits.Spacing.title, after: titleLabel)
 		stackView.addArrangedSubview(messageTextView)
 
-		addSubview(stackView)
-		addSubview(primaryButton)
+		addSubview(scrollView)
+		scrollView.contentView.addSubview(stackView)
+		scrollView.contentView.addSubview(primaryButton)
 	}
 	
 	/// Setup the constraints
@@ -79,15 +88,21 @@ final class VerifiedInfoView: BaseView {
 
 		NSLayoutConstraint.activate([
 
+			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			
 			stackView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor
+				equalTo: scrollView.contentView.topAnchor,
+				constant: ViewTraits.Margin.edge
 			),
 			stackView.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
+				equalTo: scrollView.contentView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
 			stackView.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor,
+				equalTo: scrollView.contentView.trailingAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
 			
@@ -95,19 +110,19 @@ final class VerifiedInfoView: BaseView {
 				equalTo: centerXAnchor
 			),
 			primaryButton.topAnchor.constraint(
-				equalTo: stackView.bottomAnchor,
+				greaterThanOrEqualTo: stackView.bottomAnchor,
 				constant: ViewTraits.Spacing.button
 			),
 			primaryButton.leadingAnchor.constraint(
-				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
+				greaterThanOrEqualTo: scrollView.contentView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
 			primaryButton.trailingAnchor.constraint(
-				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
+				lessThanOrEqualTo: scrollView.contentView.trailingAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
 			primaryButton.bottomAnchor.constraint(
-				lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
+				equalTo: scrollView.contentView.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
 			)
 		])
