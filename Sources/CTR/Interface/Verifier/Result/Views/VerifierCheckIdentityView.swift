@@ -18,7 +18,7 @@ class VerifierCheckIdentityView: BaseView {
 			static let identitySide: CGFloat = UIDevice.current.isSmallScreen ? 20.0 : 48.0
 			static let headerTop: CGFloat = 32.0
 			static let headerBottom: CGFloat = 24.0
-			static let headerSide: CGFloat = 80.0
+			static let headerSide: CGFloat = 48.0
 		}
 		enum Spacing {
 			static let identityToCheckIdentityLabel: CGFloat = 24
