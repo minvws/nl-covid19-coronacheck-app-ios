@@ -22,7 +22,7 @@ enum UniversalLink: Equatable {
 		else { return nil }
 		
 		// e.g. `/app/open?returnUri=customScheme%3A%2F%2Fmyreturnurl%2Fpath%2F%3Fsome%3Dquery%23anchor`
-		let createReturnURL = { (url: URL) -> URL? in
+		func createReturnURL(for url: URL) -> URL? {
 			guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
 			guard let returnURLString = components.queryItems?.first(where: { $0.name == "returnUri" })?.value else { return nil }
 			return URL(string: returnURLString)
@@ -39,7 +39,7 @@ enum UniversalLink: Equatable {
 				self = .redeemHolderToken(requestToken: requestToken)
 			} else if url.path == "/app/open" {
 
-				self = .thirdPartyTicketApp(returnURL: createReturnURL(url))
+				self = .thirdPartyTicketApp(returnURL: createReturnURL(for: url))
 			} else if url.path.hasPrefix("/app/auth") {
 				// Currently '/app/auth2' path is in use
 				self = .tvsAuth(returnURL: url)
@@ -50,7 +50,7 @@ enum UniversalLink: Equatable {
 			
 			if url.path == "/verifier/scan" {
 				
-				self = .thirdPartyScannerApp(returnURL: createReturnURL(url))
+				self = .thirdPartyScannerApp(returnURL: createReturnURL(for: url))
 			} else {
 				return nil
 			}
