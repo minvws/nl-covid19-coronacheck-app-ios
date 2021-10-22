@@ -176,13 +176,11 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 			case let .success((remoteConfiguration, data, urlResponse)):
 
-				defer {
-					// Some observers want to know whenever the config is reloaded (regardless if data changed since last time):
-					self.notifyReloadObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
-				}
-
 				// Update the last fetch-time
 				userSettings.configFetchedTimestamp = now().timeIntervalSince1970
+
+				// Some observers want to know whenever the config is reloaded (regardless if data changed since last time):
+				self.notifyReloadObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
 
 				// Is the newly fetched config the same as the existing one?
 				guard storedConfiguration != remoteConfiguration else {
