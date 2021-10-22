@@ -51,4 +51,9 @@ final class VerifiedInfoViewModel: Logging {
 		coordinator?.dismiss()
 		coordinator?.userWishesToLaunchThirdPartyScannerApp()
 	}
+	
+	func dismiss() {
+		
+		coordinator?.dismiss()
+	}
 }

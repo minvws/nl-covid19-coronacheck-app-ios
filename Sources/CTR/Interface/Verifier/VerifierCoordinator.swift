@@ -188,7 +188,9 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				isDeepLinkEnabled: thirdPartyScannerApp != nil
 			)
 		)
-		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
+		let navigationController = UINavigationController(rootViewController: viewController)
+		navigationController.modalPresentationStyle = .fullScreen
+		sidePanel?.selectedViewController?.present(navigationController, animated: true)
 	}
 	
 	func userWishesToLaunchThirdPartyScannerApp() {

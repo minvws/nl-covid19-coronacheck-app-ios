@@ -32,4 +32,12 @@ final class VerifiedInfoViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDismiss) == true
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyScannerApp) == true
 	}
+	
+	func test_dimiss_shouldInvokeCoordinatorDimiss() {
+		// When
+		sut.dismiss()
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedDismiss) == true
+	}
 }
