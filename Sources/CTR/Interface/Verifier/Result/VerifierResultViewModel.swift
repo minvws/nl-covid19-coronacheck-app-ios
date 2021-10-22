@@ -50,7 +50,13 @@ class VerifierResultViewModel: Logging {
 	/// The birth mont of the holder
 	@Bindable private(set) var monthOfBirth: String?
 	
+	@Bindable private(set) var primaryTitle: String = ""
+	
 	@Bindable private(set) var secondaryTitle: String = ""
+	
+	@Bindable private(set) var checkIdentity: String = ""
+	
+	@Bindable private(set) var primaryButtonIcon: UIImage?
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -179,19 +185,28 @@ class VerifierResultViewModel: Logging {
 	private func showAccessAllowed() {
 
 		title = L.verifierResultAccessTitle()
+		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
+		checkIdentity = L.verifierResultAccessCheckidentity()
+		// Only show when deeplink is available (US 1344)
+		primaryButtonIcon = I.deeplinkScan()
 	}
 
 	private func showAccessDeniedInvalidQR() {
 
 		title = L.verifierResultDeniedTitle()
+		primaryTitle = L.verifierResultNext()
 		secondaryTitle = L.verifierResultDeniedReadmore()
 	}
 
 	private func showAccessDemo() {
 
 		title = L.verifierResultDemoTitle()
+		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
+		checkIdentity = L.verifierResultAccessCheckidentity()
+		// Only show when deeplink is available (US 1344)
+		primaryButtonIcon = I.deeplinkScan()
 	}
 
 	func dismiss() {
@@ -215,15 +230,23 @@ class VerifierResultViewModel: Logging {
 				showDeniedInfo()
 		}
 	}
+	
+	func showVerified() {
+		
+		stopAutoCloseTimer()
+		
+		let displayDuration: CGFloat = 0.8
+		let verifiedDuration = VerifierResultViewTraits.Animation.verifiedDuration
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + displayDuration + verifiedDuration) {
+			
+			self.scanAgain()
+		}
+	}
 
 	private func showVerifiedInfo() {
 
-        let textView = TextView(htmlText: L.verifierResultCheckText())
-
-		coordinator?.displayContent(
-			title: L.verifierResultCheckTitle(),
-			content: [(textView, 16)]
-		)
+		coordinator?.navigateToVerifiedInfo()
 	}
 
 	private func showDeniedInfo() {
@@ -270,6 +293,6 @@ class VerifierResultViewModel: Logging {
 
 		logInfo("Auto closing the result view")
 		stopAutoCloseTimer()
-		dismiss()
+		scanAgain()
 	}
 }

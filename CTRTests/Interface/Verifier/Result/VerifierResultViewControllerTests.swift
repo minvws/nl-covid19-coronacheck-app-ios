@@ -59,7 +59,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.verifierResultDemoTitle()
-		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultAccessIdentityverified()
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 
 		// Snapshot
@@ -101,7 +101,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.verifierResultAccessTitle()
-		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultAccessIdentityverified()
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 
 		// Snapshot

@@ -23,6 +23,9 @@ final class FooterButtonView: BaseView {
 		enum Margin {
 			static let edge: CGFloat = 20.0
 		}
+		enum Spacing {
+			static let buttonStack: CGFloat = 16
+		}
 	}
 
 	/// The shadow gradient view
@@ -30,6 +33,14 @@ final class FooterButtonView: BaseView {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
+	}()
+	
+	let buttonStackView: UIStackView = {
+		let stackView = UIStackView()
+		stackView.translatesAutoresizingMaskIntoConstraints = false
+		stackView.axis = .vertical
+		stackView.spacing = ViewTraits.Spacing.buttonStack
+		return stackView
 	}()
 
 	/// The primary button
@@ -52,7 +63,8 @@ final class FooterButtonView: BaseView {
 		super.setupViewHierarchy()
 		
 		addSubview(gradientView)
-		addSubview(primaryButton)
+		addSubview(buttonStackView)
+		buttonStackView.addArrangedSubview(primaryButton)
 	}
 
 	/// Setup all the constraints
@@ -65,13 +77,13 @@ final class FooterButtonView: BaseView {
 			gradientView.rightAnchor.constraint(equalTo: rightAnchor),
 			gradientView.heightAnchor.constraint(equalToConstant: ViewTraits.Gradient.height),
 			
-			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
-			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.Margin.edge),
-			primaryButton.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -ViewTraits.Margin.edge),
-			primaryButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge),
+			buttonStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
+			buttonStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+			buttonStackView.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.Margin.edge),
+			buttonStackView.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -ViewTraits.Margin.edge),
+			buttonStackView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge),
 			{
-				let constraint = primaryButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -ViewTraits.Margin.edge)
+				let constraint = buttonStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -ViewTraits.Margin.edge)
 				bottomButtonConstraint = constraint
 				return constraint
 			}()

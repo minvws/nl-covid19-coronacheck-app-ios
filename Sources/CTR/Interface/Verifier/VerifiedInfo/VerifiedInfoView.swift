@@ -7,11 +7,11 @@
 
 import UIKit
 
-final class MakeTestAppointmentView: BaseView {
+final class VerifiedInfoView: BaseView {
 	
 	/// The display constants
-	private enum ViewTraits {
-		
+	private struct ViewTraits {
+
 		enum Margin {
 			static let edge: CGFloat = 20
 		}
@@ -36,41 +36,42 @@ final class MakeTestAppointmentView: BaseView {
 	
 	/// The title label
 	private let titleLabel: Label = {
-		
+
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
-
+	
 	/// The message text
 	private let messageTextView: TextView = {
 
 		return TextView()
 	}()
 	
-	let button: Button = {
+	/// The primary button
+	let primaryButton: Button = {
 
-		return Button(title: "Button", style: .roundedBlue)
+		return Button(title: "Button", style: .roundedBlueImage)
 	}()
-
-	/// setup the views
+	
+	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 	}
 
-	/// Setup the hierarchy
+	/// Setup the view hierarchy
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-
+		
 		stackView.addArrangedSubview(titleLabel)
 		stackView.setCustomSpacing(ViewTraits.Spacing.title, after: titleLabel)
 		stackView.addArrangedSubview(messageTextView)
 
 		addSubview(stackView)
-		addSubview(button)
+		addSubview(primaryButton)
 	}
-
+	
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
@@ -90,28 +91,28 @@ final class MakeTestAppointmentView: BaseView {
 				constant: -ViewTraits.Margin.edge
 			),
 			
-			button.centerXAnchor.constraint(
+			primaryButton.centerXAnchor.constraint(
 				equalTo: centerXAnchor
 			),
-			button.topAnchor.constraint(
+			primaryButton.topAnchor.constraint(
 				equalTo: stackView.bottomAnchor,
 				constant: ViewTraits.Spacing.button
 			),
-			button.leadingAnchor.constraint(
+			primaryButton.leadingAnchor.constraint(
 				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
-			button.trailingAnchor.constraint(
+			primaryButton.trailingAnchor.constraint(
 				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
-			button.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
+			primaryButton.bottomAnchor.constraint(
+				lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
 			)
 		])
 	}
-
+	
 	// MARK: Public Access
 
 	/// The title
@@ -123,7 +124,7 @@ final class MakeTestAppointmentView: BaseView {
 			)
 		}
 	}
-
+	
 	/// The message
 	var message: String? {
 		didSet {
@@ -132,9 +133,16 @@ final class MakeTestAppointmentView: BaseView {
 	}
 	
 	/// The button title
-	var buttonTitle: String? {
+	var primaryTitle: String? {
 		didSet {
-			button.setTitle(buttonTitle, for: .normal)
+			primaryButton.setTitle(primaryTitle, for: .normal)
+		}
+	}
+	
+	/// The primary button icon
+	var primaryButtonIcon: UIImage? {
+		didSet {
+			primaryButton.setImage(primaryButtonIcon, for: .normal)
 		}
 	}
 }

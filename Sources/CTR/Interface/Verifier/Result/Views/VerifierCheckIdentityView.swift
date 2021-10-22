@@ -21,7 +21,11 @@ class VerifierCheckIdentityView: BaseView {
 			static let headerSide: CGFloat = 80.0
 		}
 		enum Spacing {
-			static let identityToSecondaryButton: CGFloat = 32
+			static let identityToCheckIdentityLabel: CGFloat = 24
+			static let secondaryToPrimaryButton: CGFloat = 16
+		}
+		enum Button {
+			static let height: CGFloat = 52
 		}
 	}
 	
@@ -59,9 +63,15 @@ class VerifierCheckIdentityView: BaseView {
 	}()
 	
 	let secondaryButton: Button = {
-		let button = Button(style: .textLabelBlue)
-		button.contentHorizontalAlignment = .leading
-		return button
+		
+		return Button(style: .roundedBlueBorder)
+	}()
+	
+	private let checkIdentityLabel: Label = {
+		
+		let label = Label(subhead: nil).multiline()
+		label.textColor = Theme.colors.secondaryText
+		return label
 	}()
 	
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
@@ -69,6 +79,9 @@ class VerifierCheckIdentityView: BaseView {
 	/// Setup the views
 	override func setupViews() {
 		super.setupViews()
+		
+		backgroundColor = Theme.colors.grey5
+		footerButtonView.primaryButton.style = .roundedBlueImage
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
 			let translatedOffset = scrollView.translatedBottomScrollOffset
@@ -84,13 +97,15 @@ class VerifierCheckIdentityView: BaseView {
 		addSubview(scrollView)
 		addSubview(footerButtonView)
 		scrollView.addSubview(identityView)
-		scrollView.addSubview(secondaryButton)
+		scrollView.addSubview(checkIdentityLabel)
+		footerButtonView.buttonStackView.insertArrangedSubview(secondaryButton, at: 0)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
+		
 		NSLayoutConstraint.activate([
 			
 			// Title
@@ -134,23 +149,27 @@ class VerifierCheckIdentityView: BaseView {
 				constant: -ViewTraits.Margin.identitySide * 2
 			),
 			
-			// Secondary button
-			secondaryButton.topAnchor.constraint(
+			// Check identity label
+			checkIdentityLabel.topAnchor.constraint(
 				equalTo: identityView.bottomAnchor,
-				constant: ViewTraits.Spacing.identityToSecondaryButton
+				constant: ViewTraits.Spacing.identityToCheckIdentityLabel
 			),
-			secondaryButton.leadingAnchor.constraint(
-				equalTo: scrollView.leadingAnchor,
+			checkIdentityLabel.leadingAnchor.constraint(
+				greaterThanOrEqualTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.identitySide
 			),
-			secondaryButton.trailingAnchor.constraint(
-				equalTo: scrollView.trailingAnchor,
+			checkIdentityLabel.trailingAnchor.constraint(
+				lessThanOrEqualTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.identitySide
 			),
-			secondaryButton.bottomAnchor.constraint(
+			checkIdentityLabel.bottomAnchor.constraint(
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
+			checkIdentityLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			
+			// Secondary button
+			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
 			
 			// Footer view
 			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
@@ -224,6 +243,12 @@ class VerifierCheckIdentityView: BaseView {
 	var secondaryTitle: String? {
 		didSet {
 			secondaryButton.title = secondaryTitle
+		}
+	}
+	
+	var checkIdentity: String? {
+		didSet {
+			checkIdentityLabel.text = checkIdentity
 		}
 	}
 }

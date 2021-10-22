@@ -1,3 +1,4 @@
+"verifier.result.access.dcc" = "Scanned international certificate";
 "verifier.scan.button.moreInformation" = "What should I pay attention to?";
 "verifier.scaninstructions.navigation.title" = "About scanning";
 "verifier.scaninstructions.scanQR.title" = "Scan the QR code";
@@ -47,12 +48,13 @@
 "verifier.launch.version" = "App version %@ (build %@)";
 
 /* MARK: - Verifier Menu */
-"verifier.menu.dashboard" = "Scan QR code";
+"verifier.menu.dashboard" = "Scan QR codes";
 
 "verifier.start.clockdeviationwarning.message" = "Check your phone's time settings. They might be incorrect.";
 "verifier.start.clockdeviationwarning.button" = "Read more";
 "verifier.clockDeviationDetected.title" = "Check your phone's time settings";
 "verifier.clockDeviationDetected.message" = "<p>In order to properly use the CoronaCheck Scanner app, it is important that the time on your phone is set correctly. For example, if the clock on your phone is a few minutes ahead, an error might occur while verifying a coronavirus pass.</p><p><a href=\"%@\">Go to your phone's settings</a> and set Date & Time to 'set automatically'.</p>";
+"verifier.menu.scaninstructions" = "How it works";
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "About this app";
 "verifier.menu.privacy" = "Acceptable use policy";
@@ -62,7 +64,7 @@
 "verifier.onboarding.message.safely" = "Visitors of certain locations must show a vaccination certificate, test certificate, or recovery certificate to enter.";
 "verifier.onboarding.title.scanqr" = "Scan QR code for access";
 "verifier.onboarding.message.scanqr" = "Visitors first make a QR code of their certificate. With this app, you can check the QR codes and see who is allowed to enter.";
-"verifier.onboarding.title.access" = "Proof of identity check";
+"verifier.onboarding.title.access" = "Mandatory ID check";
 "verifier.onboarding.message.access" = "Always ask visitors to show their proof of identity. Check whether the details on your screen match the details on their ID document. All good? Then the visitor is allowed to enter.";
 "verifier.onboarding.title.who" = "Who is the scanner for?";
 "verifier.onboarding.message.who" = "With this app, you can receive visitors again. But only if your location or activity falls under the designated locations.";
@@ -97,8 +99,8 @@
 "verifier.result.demo.title" = "Demo QR code scanned";
 "verifier.result.denied.title" = "Invalid QR code";
 "verifier.result.next" = "Scan next";
-"verifier.result.access.checkidentity" = "Note: ID check is mandatory";
-"verifier.result.access.identityverified" = "Correct details";
+"verifier.result.access.checkidentity" = "Please note: ID check is mandatory";
+"verifier.result.access.identityverified" = "Details are correct";
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "This QR code does not contain a coronavirus pass";
 "verifier.result.alert.unknown.message" = "Ask the visitor to show a QR code of a coronavirus pass.";
@@ -106,6 +108,8 @@
 "verifier.result.alert.dcc.message" = "You have scanned an international QR code. In the Netherlands, CoronaCheck users should show their Dutch QR code.";
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Are the details incorrect?";
+"verifier.result.check.button" = "Scan next";
+
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "What should I do?";
 "verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";

@@ -204,6 +204,6 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut.showMoreInformation()
 		
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDisplayContent) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToVerifiedInfo) == true
 	}
 }
