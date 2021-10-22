@@ -33,12 +33,16 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutClockDeviation()
 	
 	func navigateToVerifiedInfo()
+	
+	func userWishesToLaunchThirdPartyScannerApp()
 }
 
 class VerifierCoordinator: SharedCoordinator {
 
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
+	
+	private var thirdPartyScannerApp: (name: String, returnURL: URL)?
 
 	// Designated starter method
 	override func start() {
@@ -59,6 +63,27 @@ class VerifierCoordinator: SharedCoordinator {
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
+	}
+	
+	override func consume(universalLink: UniversalLink) -> Bool {
+		switch universalLink {
+			case .thirdPartyScannerApp(let returnURL):
+				guard let returnURL = returnURL,
+					  let matchingMetadata = remoteConfigManager.storedConfiguration.universalLinkPermittedDomains?.first(where: { permittedDomain in
+						  permittedDomain.url == returnURL.host
+					  })
+				else {
+					return true
+				}
+				
+				thirdPartyScannerApp = (name: matchingMetadata.name, returnURL: returnURL)
+				
+				navigateToScan()
+				
+				return true
+			default:
+				return false
+		}
 	}
 }
 
@@ -105,7 +130,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
-				verificationResult: verificationResult
+				verificationResult: verificationResult,
+				isDeepLinkEnabled: thirdPartyScannerApp != nil
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
@@ -158,12 +184,21 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		
 		let viewController = VerifiedInfoViewController(
 			viewModel: VerifiedInfoViewModel(
-				coordinator: self
+				coordinator: self,
+				isDeepLinkEnabled: thirdPartyScannerApp != nil
 			)
 		)
 		let navigationController = UINavigationController(rootViewController: viewController)
 		navigationController.modalPresentationStyle = .fullScreen
 		sidePanel?.selectedViewController?.present(navigationController, animated: true)
+	}
+	
+	func userWishesToLaunchThirdPartyScannerApp() {
+		if let thirdPartyScannerApp = thirdPartyScannerApp {
+			openUrl(thirdPartyScannerApp.returnURL, inApp: false)
+		} else {
+			navigateToScan()
+		}
 	}
 }
 

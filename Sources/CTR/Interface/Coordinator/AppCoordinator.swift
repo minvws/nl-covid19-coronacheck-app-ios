@@ -249,8 +249,9 @@ class AppCoordinator: Coordinator, Logging {
 		switch universalLink {
 			case .redeemHolderToken,
 				 .thirdPartyTicketApp,
-				 .tvsAuth:
-				/// If we reach here it means that there was no holderCoordinator initialized at the time
+				 .tvsAuth,
+				 .thirdPartyScannerApp:
+				/// If we reach here it means that there was no holder/verifierCoordinator initialized at the time
 				/// the universal link was received. So hold onto it here, for when it is ready.
 				unhandledUniversalLink = universalLink
 				return true

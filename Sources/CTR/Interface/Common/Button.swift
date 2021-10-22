@@ -182,6 +182,13 @@ class Button: UIButton {
             height: maxHeight + verticalPadding
         )
 	}
+	
+	override func setImage(_ image: UIImage?, for state: UIControl.State) {
+		super.setImage(image, for: state)
+		
+		guard style == .roundedBlueImage else { return }
+		contentEdgeInsets = image != nil ? ButtonType.roundedBlueImage.contentEdgeInsets : ButtonType.roundedBlue.contentEdgeInsets
+	}
 
     // MARK: - Private
 

@@ -19,7 +19,8 @@ final class VerifiedInfoViewModelTests: XCTestCase {
 
 		coordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		sut = VerifiedInfoViewModel(
-			coordinator: coordinatorDelegateSpy
+			coordinator: coordinatorDelegateSpy,
+			isDeepLinkEnabled: true
 		)
 	}
 	
@@ -29,7 +30,7 @@ final class VerifiedInfoViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedDismiss) == true
-		expect(self.coordinatorDelegateSpy.invokedNavigateToScan) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyScannerApp) == true
 	}
 	
 	func test_dimiss_shouldInvokeCoordinatorDimiss() {

@@ -352,6 +352,7 @@
 "holder.menu.privacy" = "Privacyverklaring";
 "holder.menu.papercertificate" = "Papieren bewijs toevoegen";
 "holder.menu.colophon" = "Colofon";
+"holder.menu.verifierdeeplink" = "Open scanner";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang met een bewijs";

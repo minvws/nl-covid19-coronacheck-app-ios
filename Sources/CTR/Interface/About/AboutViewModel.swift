@@ -19,6 +19,8 @@ enum AboutMenuIdentifier: String {
 	case colophon
 
 	case clearData
+	
+	case deeplink
 }
 
 ///// Struct for information to display the different test providers
@@ -102,6 +104,7 @@ class AboutViewModel: Logging {
 		]
 		if Configuration().getEnvironment() != "production" {
 			menu.append(AboutMenuOption(identifier: .clearData, name: L.holderCleardataMenuTitle()))
+			menu.append(AboutMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
 	}
 
@@ -131,13 +134,19 @@ class AboutViewModel: Logging {
 				openUrlString(L.holderUrlColophon())
 			case .clearData:
 				showClearDataAlert()
+			case .deeplink:
+				if Configuration().getEnvironment() == "acc" {
+					openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
+				} else {
+					openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://iandundas.github.io/app/open?returnUri=scanner-test", inApp: false)
+				}
 		}
 	}
 
-	private func openUrlString(_ urlString: String) {
+	private func openUrlString(_ urlString: String, inApp: Bool = true) {
 
 		if let url = URL(string: urlString) {
-			coordinator?.openUrl(url, inApp: true)
+			coordinator?.openUrl(url, inApp: inApp)
 		}
 	}
 

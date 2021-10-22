@@ -30,7 +30,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		viewModel = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			verificationResult: MobilecoreVerificationResult()
+			verificationResult: MobilecoreVerificationResult(),
+			isDeepLinkEnabled: true
 		)
 		sut = VerifierResultViewController(viewModel: viewModel)
 	}

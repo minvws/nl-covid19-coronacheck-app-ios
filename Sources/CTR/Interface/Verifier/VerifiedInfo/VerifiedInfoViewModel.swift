@@ -31,13 +31,16 @@ final class VerifiedInfoViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: The coordinator delegate
-	init(coordinator: (VerifierCoordinatorDelegate & Dismissable)) {
+	///   - isDeepLinkEnabled: Deeplink boolean
+	init(
+		coordinator: (VerifierCoordinatorDelegate & Dismissable),
+		isDeepLinkEnabled: Bool) {
 
 		self.coordinator = coordinator
 		self.title = L.verifierResultCheckTitle()
 		self.message = L.verifierResultCheckText()
 		self.primaryTitle = L.verifierResultCheckButton()
-		self.primaryButtonIcon = I.deeplinkScan()
+		self.primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 	}
 
 	// MARK: - Methods
@@ -46,7 +49,7 @@ final class VerifiedInfoViewModel: Logging {
 	@objc func onTap() {
 
 		coordinator?.dismiss()
-		coordinator?.navigateToScan()
+		coordinator?.userWishesToLaunchThirdPartyScannerApp()
 	}
 	
 	func dismiss() {

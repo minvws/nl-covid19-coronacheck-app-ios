@@ -18,7 +18,7 @@ class AboutViewControllerTests: XCTestCase {
 	private var coordinatorSpy: OpenUrlProtocolSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	
-	var window = UIWindow()
+	var window: UIWindow!
 
 	// MARK: Test lifecycle
 	override func setUp() {
@@ -57,7 +57,7 @@ class AboutViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.message) == L.holderAboutText()
 		expect(self.sut.sceneView.listHeader) == L.holderAboutReadmore()
 		expect(self.sut.sceneView.itemStackView.arrangedSubviews)
-			.to(haveCount(4))
+			.to(haveCount(5))
 		expect(self.sut.sceneView.appVersion).toNot(beNil())
 
 		sut.assertImage()
@@ -70,7 +70,7 @@ class AboutViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(sut.sceneView.itemStackView.arrangedSubviews.last as? SimpleDisclosureButton)?.primaryButtonTapped()
+		(sut.sceneView.itemStackView.arrangedSubviews[3] as? SimpleDisclosureButton)?.primaryButtonTapped()
 
 		// Then
 		alertVerifier.verify(

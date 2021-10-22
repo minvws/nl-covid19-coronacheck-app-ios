@@ -32,7 +32,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		sut = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			verificationResult: MobilecoreVerificationResult()
+			verificationResult: MobilecoreVerificationResult(),
+			isDeepLinkEnabled: true
 		)
 	}
 	
@@ -262,5 +263,16 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToVerifiedInfo) == true
+	}
+	
+	func test_openDeeplinkOrScanAgain_shouldLaunchThirdPartyApp() {
+		
+		// Given
+		
+		// When
+		sut.launchThirdPartyAppOrScanAgain()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyScannerApp) == true
 	}
 }

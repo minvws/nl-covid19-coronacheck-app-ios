@@ -22,7 +22,8 @@ final class VerifiedInfoViewControllerTests: XCTestCase {
 		coordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		sut = VerifiedInfoViewController(
 			viewModel: VerifiedInfoViewModel(
-				coordinator: coordinatorDelegateSpy
+				coordinator: coordinatorDelegateSpy,
+				isDeepLinkEnabled: true
 			)
 		)
 	}

@@ -29,6 +29,8 @@ class VerifierResultViewModel: Logging {
 
 	/// The scanned result
 	internal var verificationResult: MobilecoreVerificationResult
+	
+	private var isDeepLinkEnabled: Bool
 
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
@@ -71,14 +73,17 @@ class VerifierResultViewModel: Logging {
 
 	/// Initialzier
 	/// - Parameters:
-	///   - coordinator: the dismissable delegate
-	///   - scanResults: the decrypted attributes
+	///   - coordinator: The dismissable delegate
+	///   - verificationResult: The verification result
+	///   - hasDeepLinkEnabled: Deeplink boolean
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		verificationResult: MobilecoreVerificationResult) {
+		verificationResult: MobilecoreVerificationResult,
+		isDeepLinkEnabled: Bool) {
 
 		self.coordinator = coordinator
 		self.verificationResult = verificationResult
+		self.isDeepLinkEnabled = isDeepLinkEnabled
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -191,9 +196,8 @@ class VerifierResultViewModel: Logging {
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
+		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
-		// Only show when deeplink is available (US 1344)
-		primaryButtonIcon = I.deeplinkScan()
 	}
 
 	private func showAccessDeniedInvalidQR() {
@@ -209,9 +213,8 @@ class VerifierResultViewModel: Logging {
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
+		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
-		// Only show when deeplink is available (US 1344)
-		primaryButtonIcon = I.deeplinkScan()
 	}
 
 	func dismiss() {
@@ -225,6 +228,12 @@ class VerifierResultViewModel: Logging {
 		stopAutoCloseTimer()
         coordinator?.navigateToScan()
     }
+	
+	func launchThirdPartyAppOrScanAgain() {
+		
+		stopAutoCloseTimer()
+		coordinator?.userWishesToLaunchThirdPartyScannerApp()
+	}
 
 	func showMoreInformation() {
 
@@ -245,7 +254,7 @@ class VerifierResultViewModel: Logging {
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + displayDuration + verifiedDuration) {
 			
-			self.scanAgain()
+			self.launchThirdPartyAppOrScanAgain()
 		}
 	}
 
