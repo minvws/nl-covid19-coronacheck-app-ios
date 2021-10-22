@@ -64,12 +64,16 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
+	var invokedUpdateParameters: (isAppFirstLaunch: Bool, Void)?
+	var invokedUpdateParametersList = [(isAppFirstLaunch: Bool, Void)]()
 	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
 	var stubbedUpdateCompletionResult: (Result<(Bool, RemoteConfiguration), ServerError>, Void)?
 
-	func update(immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
+	func update(isAppFirstLaunch: Bool, immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
+		invokedUpdateParameters = (isAppFirstLaunch, ())
+		invokedUpdateParametersList.append((isAppFirstLaunch, ()))
 		if shouldInvokeUpdateImmediateCallbackIfWithinTTL {
 			immediateCallbackIfWithinTTL()
 		}

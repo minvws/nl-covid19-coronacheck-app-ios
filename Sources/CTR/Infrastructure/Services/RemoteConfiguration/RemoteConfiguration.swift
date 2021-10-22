@@ -63,6 +63,10 @@ struct RemoteConfiguration: Codable, Equatable {
 	/// What is the TTL of the config
 	var configTTL: Int?
 
+	/// Loading config should always be done opportunisically,
+	/// but never more often than this value:
+	var configMinimumIntervalSeconds: Int?
+
 	/// What is the waiting period before a recovery is valid?
 	var recoveryWaitingPeriodDays: Int?
 
@@ -127,6 +131,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
 		case configTTL = "configTTL"
+		case configMinimumIntervalSeconds = "configMinimumIntervalSeconds"
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case requireUpdateBefore = "requireUpdateBefore"
 		case temporarilyDisabled = "temporarilyDisabled"
@@ -167,6 +172,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.appDeactivated = false
 		config.informationURL = nil
 		config.configTTL = 3600
+		config.configMinimumIntervalSeconds = 300
 		config.recoveryWaitingPeriodDays = 11
 		config.requireUpdateBefore = nil
 		config.temporarilyDisabled = false

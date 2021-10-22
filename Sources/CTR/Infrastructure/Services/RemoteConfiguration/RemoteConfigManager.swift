@@ -19,7 +19,7 @@ protocol RemoteConfigManaging: AnyObject {
 	func appendReloadObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
 
 	func removeObserver(token: ObserverToken)
-	func update(immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
+	func update(isAppFirstLaunch: Bool, immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
 }
 
 /// The remote configuration manager
@@ -31,6 +31,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 	enum ConfigValidity {
 		case neverFetched
 		case withinTTL
+		case withinMinimalInterval // should not refresh
 		case refreshNeeded
 	}
 
@@ -40,7 +41,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 	// MARK: - Vars
 
-	private var isLoading = false
+	private(set) var isLoading = false
 
 	@Keychain(name: "storedConfiguration", service: Constants.keychainService, clearOnReinstall: false)
 	private(set) var storedConfiguration: RemoteConfiguration = .default // swiftlint:disable:this let_var_whitespace
@@ -108,13 +109,14 @@ class RemoteConfigManager: RemoteConfigManaging {
 	/// 	 - completion: 	- Bool: whether the config did change during update.
 	///						- RemoteConfiguration: the latest configuration.
 	///
-	func update(immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
+	func update(isAppFirstLaunch: Bool, immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
 		guard !isLoading else { return }
 		isLoading = true
 
 		let newValidity = RemoteConfigManager.evaluateIfUpdateNeeded(
 			currentConfiguration: storedConfiguration,
 			lastFetchedTimestamp: userSettings.configFetchedTimestamp,
+			isAppFirstLaunch: isAppFirstLaunch,
 			now: now,
 			userSettings: userSettings
 		)
@@ -123,6 +125,18 @@ class RemoteConfigManager: RemoteConfigManaging {
 		// so that other app-startup work can begin:
 		if case .withinTTL = newValidity {
 			immediateCallbackIfWithinTTL()
+		}
+
+		// Note: the `isAppFirstLaunch` parameter is respected in calculating the `newValidity`
+		// and thus the `guard` will not trigger during first launch
+		//
+		// This also means that during first launch, `reloadObservers` will always be called back.
+		guard newValidity != .withinMinimalInterval else {
+			// Not allowed to call config endpoint again
+			immediateCallbackIfWithinTTL()
+			completion(.success((false, storedConfiguration)))
+			isLoading = false
+			return
 		}
 
 		// Regardless, let's see if there's a new configuration available:
@@ -180,6 +194,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 	static private func evaluateIfUpdateNeeded(
 		currentConfiguration: RemoteConfiguration,
 		lastFetchedTimestamp: TimeInterval?,
+		isAppFirstLaunch: Bool,
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol)
 	-> ConfigValidity {
@@ -189,8 +204,22 @@ class RemoteConfigManager: RemoteConfigManaging {
 		}
 
 		let ttlThreshold = (now().timeIntervalSince1970 - TimeInterval(currentConfiguration.configTTL ?? 0))
+		let configValidity: ConfigValidity = lastFetchedTimestamp > ttlThreshold ? .withinTTL : .refreshNeeded
 
-		return lastFetchedTimestamp > ttlThreshold ? .withinTTL : .refreshNeeded
+		guard let minimumRefreshIntervalValue = currentConfiguration.configMinimumIntervalSeconds
+		else {
+			return configValidity
+		}
+
+		let minimumTimeAgoInterval = TimeInterval(minimumRefreshIntervalValue)
+		let isWithinMinimumTimeInterval = lastFetchedTimestamp > (now().timeIntervalSince1970 - minimumTimeAgoInterval)
+
+		// If isAppFirstLaunch, skip minimumTimeInterval:
+		guard !isWithinMinimumTimeInterval || (isWithinMinimumTimeInterval && isAppFirstLaunch) else {
+			// 🛑 device is still within the configMinimumIntervalSeconds, so prevent another refresh:
+			return .withinMinimalInterval
+		}
+		return configValidity
 	}
 }
 
