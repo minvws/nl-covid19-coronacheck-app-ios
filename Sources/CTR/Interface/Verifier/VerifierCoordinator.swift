@@ -127,7 +127,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 		let coordinator = ScanInstructionsCoordinator(
 			navigationController: dashboardNavigationController!,
-			delegate: self
+			delegate: self,
+			isOpenedFromMenu: false
 		)
 		startChildCoordinator(coordinator)
 	}
@@ -189,6 +190,15 @@ extension VerifierCoordinator: MenuDelegate {
 			case .overview:
 				dashboardNavigationController?.popToRootViewController(animated: false)
 				sidePanel?.selectedViewController = dashboardNavigationController
+				
+			case .scanInstructions:
+				sidePanel?.selectedViewController = dashboardNavigationController
+				let coordinator = ScanInstructionsCoordinator(
+					navigationController: dashboardNavigationController!,
+					delegate: self,
+					isOpenedFromMenu: true
+				)
+				startChildCoordinator(coordinator)
 
 			case .support:
 				guard let faqUrl = URL(string: L.verifierUrlFaq()) else {
@@ -232,7 +242,8 @@ extension VerifierCoordinator: MenuDelegate {
 	func getTopMenuItems() -> [MenuItem] {
 		
 		return [
-			MenuItem(identifier: .overview, title: L.verifierMenuDashboard())
+			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
+			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions())
 		]
 	}
 	/// Get the items for the bottom menu

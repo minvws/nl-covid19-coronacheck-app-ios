@@ -564,7 +564,8 @@ extension HolderCoordinator: MenuDelegate {
 
 		return [
 			MenuItem(identifier: .overview, title: L.holderMenuDashboard()),
-			MenuItem(identifier: .addCertificate, title: L.holderMenuProof())
+			MenuItem(identifier: .addCertificate, title: L.holderMenuProof()),
+			MenuItem(identifier: .faq, title: L.holderMenuFaq())
 		]
 	}
 	/// Get the items for the bottom menu
@@ -573,7 +574,6 @@ extension HolderCoordinator: MenuDelegate {
 
 		return [
 			MenuItem(identifier: .addPaperCertificate, title: L.holderMenuPapercertificate()),
-			MenuItem(identifier: .faq, title: L.holderMenuFaq()),
 			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]
 	}

@@ -28,13 +28,10 @@ enum MenuIdentifier {
 	case overview
 	case addCertificate
 	case addPaperCertificate
-	case scan
+	case scanInstructions
 	case support
-	case settings
-	case privacy
 	case faq
 	case about
-	case feedback
 }
 
 struct MenuItem {
