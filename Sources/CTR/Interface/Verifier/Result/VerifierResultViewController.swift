@@ -89,6 +89,13 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.$dayOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.dayOfBirth = $0 }
 		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.monthOfBirth = $0 }
 	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		
+		super.viewDidAppear(animated)
+		
+		viewModel.startAutoCloseTimer()
+	}
 
 	/// User tapped on the button
 	@objc func closeButtonTapped() {

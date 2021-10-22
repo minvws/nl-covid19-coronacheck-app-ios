@@ -48,4 +48,9 @@ final class VerifiedInfoViewModel: Logging {
 		coordinator?.dismiss()
 		coordinator?.navigateToScan()
 	}
+	
+	func dismiss() {
+		
+		coordinator?.dismiss()
+	}
 }

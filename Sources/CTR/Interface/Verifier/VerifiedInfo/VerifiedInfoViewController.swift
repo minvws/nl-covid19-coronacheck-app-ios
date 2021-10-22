@@ -45,5 +45,13 @@ final class VerifiedInfoViewController: BaseViewController {
 		viewModel.$primaryButtonIcon.binding = { [weak self] in self?.sceneView.primaryButtonIcon = $0 }
 		
 		sceneView.primaryButton.touchUpInside(viewModel, action: #selector(VerifiedInfoViewModel.onTap))
+		
+		addCloseButton(action: #selector(closeButtonTapped))
+	}
+	
+	/// User tapped on the button
+	@objc func closeButtonTapped() {
+
+		viewModel.dismiss()
 	}
 }
