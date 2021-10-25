@@ -1,4 +1,10 @@
-"verifier.result.access.dcc" = "Scanned international certificate";
+"verifier.result.access.dcc" = "International certificate";
+"verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";
+"verifier.denied.message.two" = "<b>Here’s what you can do:</b>";
+"verifier.denied.message.three" = "<ul><li>Verify if the time is set correctly on the visitor's phone and yours. Make sure to set the date and time to ‘set automatically’.</li><li>Verify if the visitor is showing an original certificate. A screenshot of a certificate may cause problems.</li><li>Ask the visitor to completely shut down the app and restart it. Please scan the QR code again after.</li></ul>";
+"verifier.denied.message.four" = "<p><b>Still looking at a red screen?</b><br />Please ask the visitor to contact the CoronaCheck help desk.</p>";
+"verifier.denied.message.five" = "<p><b> Without a green screen with check mark, you can’t grant the visitor access.</b></p>";
+
 "verifier.scan.button.moreInformation" = "What should I pay attention to?";
 "verifier.scaninstructions.navigation.title" = "About scanning";
 "verifier.scaninstructions.scanQR.title" = "Scan the QR code";
@@ -6,7 +12,7 @@
 "verifier.scaninstructions.checkthedetails.title" = "Check the proof of identity";
 "verifier.scaninstructions.checkthedetails.message" = "For visitors aged 14 and over, always verify if the details on your screen are the same as those on the visitor's identity document. This way you can ensure the QR code belongs to the visitor.";
 "verifier.scaninstructions.checkonlythevisibledata.title" = "Sometimes not all details are shown";
-"verifier.scaninstructions.checkonlythevisibledata.message" = "This happens to protect the visitor’s privacy. You will see a hyphen (-). In this case, verify only the details you’re seeing.";
+"verifier.scaninstructions.checkonlythevisibledata.message" = "This is done to protect the visitor’s privacy. You will see a hyphen (-). In this case, verify only the details you’re seeing.";
 "verifier.scaninstructions.redscreennowwhat.title" = "Red screen - what happens now?";
 "verifier.scaninstructions.redscreennowwhat.message" = "In case of a red screen with a cross, you will get information to assist the visitor. If the screen stays red, you cannot grant the visitor access.";
 "verifier.scaninstructions.button.startscanning" = "Start scanning";
@@ -36,7 +42,7 @@
 "verifier.result.identity.dayofbirth" = "Day of birth";
 "verifier.result.identity.monthofbirth" = "Birth month";
 
-"verifier.result.check.text" = "<p>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</p><p><b>Please note: sometimes not all details are shown</b><br />This happens to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing.</p>";
+"verifier.result.check.text" = "<p>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</p><p><b>Please note: sometimes not all details are shown</b><br />This is done to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing.</p>";
 
 
 "updateApp.content" = "To continue, install the latest version of the app";
@@ -79,7 +85,7 @@
 "verifier.consent.button" = "I've read and agree to the acceptable use policy.";
 
 /* MARK: - Verifier Start */
-"verifier.start.title" = "Scan QR code";
+"verifier.start.title" = "Scan QR codes";
 "verifier.start.header" = "Get started";
 "verifier.start.message" = "Scan the QR codes of your visitors. Is the QR code valid and do the details match the proof of identity? You're allowed to give access to the visitor.";
 "verifier.start.button.title" = "Start scanning";
@@ -107,16 +113,11 @@
 "verifier.result.alert.dcc.title" = "Ask for a Dutch QR code";
 "verifier.result.alert.dcc.message" = "You have scanned an international QR code. In the Netherlands, CoronaCheck users should show their Dutch QR code.";
 /* MARK: - Verifier Check Result */
-"verifier.result.check.title" = "Are the details incorrect?";
+"verifier.result.check.title" = "Something is wrong";
 "verifier.result.check.button" = "Scan next";
 
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "What should I do?";
-"verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";
-"verifier.denied.message.two" = "<p><b>Here’s what you can do:</b></p><ul><li>Verify if the time on the visitor’s phone and yours is set correctly. Make sure to set the date and time to ‘set automatically’.</li><li>Verify if the visitor is showing an original certificate. A screenshot of a certificate may cause problems.</li><li>Ask the visitor to completely shut down the app and restart it. Please scan the QR code again after.</li></ul>";
-"verifier.denied.message.three" = "<p><b>Still looking at a red screen?</b><br />Please ask the visitor to contact the CoronaCheck help desk.</p>";
-"verifier.denied.message.four" = "<p><b> Without a green screen with check mark, you can’t grant the visitor access.</b></p>";
-
 /* MARK: - Verifier About */
 "verifier.about.title" = "About this app";
 "verifier.about.text" = "CoronaCheck Scanner is created so that certain locations and activities can open their doors again. Think for example of football matches and concerts. Visitors create a coronavirus pass of a vaccination, a negative test result or if they've had corona and are recovered. With this app, only visitors with a coronavirus pass gain access. This way, the Netherlands can head out more often.";
