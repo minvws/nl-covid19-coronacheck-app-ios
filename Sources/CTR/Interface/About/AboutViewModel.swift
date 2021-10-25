@@ -40,7 +40,11 @@ class AboutViewModel: Logging {
 
 	private var flavor: AppFlavor
 
-	weak var walletManager: WalletManaging? = Services.walletManager
+	private weak var walletManager: WalletManaging? = Services.walletManager
+
+	private weak var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
+
+	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
 
 	private let userSettings: UserSettingsProtocol
 
@@ -155,15 +159,18 @@ class AboutViewModel: Logging {
 			cancelTitle: L.generalCancel(),
 			okAction: { _ in
 				self.clearData()
-			}, okTitle: L.holderCleardataAlertRemove()
+			},
+			okTitle: L.holderCleardataAlertRemove()
 		)
 	}
 
 	func clearData() {
-		// Reset wallet manager
+		
+		// Reset all the data
 		walletManager?.removeExistingEventGroups()
 		walletManager?.removeExistingGreenCards()
-
+		remoteConfigManager?.reset()
+		cryptoLibUtility?.reset()
 		userSettings.reset()
 	}
 }

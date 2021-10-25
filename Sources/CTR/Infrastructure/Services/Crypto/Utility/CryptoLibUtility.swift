@@ -30,6 +30,9 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	/// Check if a file exists. If true, initialize
 	/// - Parameter file: file type
 	func checkFile(_ file: CryptoLibUtility.File)
+
+	/// Reset to default
+	func reset()
 }
 
 final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
@@ -122,6 +125,18 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 
 		if fileStorage.fileExists(file.name) {
 			shouldInitialize.insert(file)
+		}
+	}
+
+	/// Reset to default
+	func reset() {
+
+		/// Remove existing files
+		if fileStorage.fileExists(CryptoLibUtility.File.publicKeys.name) {
+			fileStorage.remove(CryptoLibUtility.File.publicKeys.name)
+		}
+		if fileStorage.fileExists(CryptoLibUtility.File.remoteConfiguration.name) {
+			fileStorage.remove(CryptoLibUtility.File.remoteConfiguration.name)
 		}
 	}
 }
