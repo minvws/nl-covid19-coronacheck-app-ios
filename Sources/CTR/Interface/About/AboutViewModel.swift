@@ -36,16 +36,16 @@ struct AboutMenuOption {
 class AboutViewModel: Logging {
 
 	/// Coordination Delegate
-	weak private var coordinator: OpenUrlProtocol?
+	weak private var coordinator: (OpenUrlProtocol & Restartable)?
 
 	private var flavor: AppFlavor
 
+	// MARK: - Managers
+
 	private weak var walletManager: WalletManaging? = Services.walletManager
-
 	private weak var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
-
 	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
-
+	private weak var onboardingsManager: OnboardingManaging? = Services.onboardingManager
 	private let userSettings: UserSettingsProtocol
 
 	// MARK: - Bindable
@@ -66,7 +66,7 @@ class AboutViewModel: Logging {
 	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor
 	init(
-		coordinator: OpenUrlProtocol,
+		coordinator: (OpenUrlProtocol & Restartable),
 		versionSupplier: AppVersionSupplierProtocol,
 		flavor: AppFlavor,
 		userSettings: UserSettingsProtocol) {
@@ -159,16 +159,18 @@ class AboutViewModel: Logging {
 			cancelTitle: L.generalCancel(),
 			okAction: { _ in
 				self.clearData()
+				self.coordinator?.restart()
 			},
 			okTitle: L.holderCleardataAlertRemove()
 		)
 	}
 
 	func clearData() {
-		
+
 		// Reset all the data
 		walletManager?.removeExistingEventGroups()
 		walletManager?.removeExistingGreenCards()
+		onboardingsManager?.reset()
 		remoteConfigManager?.reset()
 		cryptoLibUtility?.reset()
 		userSettings.reset()
