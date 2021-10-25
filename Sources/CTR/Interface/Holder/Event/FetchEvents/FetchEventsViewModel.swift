@@ -268,6 +268,9 @@ final class FetchEventsViewModel: Logging {
 					providers[index].accessToken = accessToken
 				}
 			}
+			if providers.isEmpty, let errorCode = mapNoProviderAvailable() {
+				errorCodes.append(errorCode)
+			}
 		}
 
 		completion(providers, errorCodes, serverErrors)
@@ -301,6 +304,20 @@ final class FetchEventsViewModel: Logging {
 				return .recovery
 			case .test:
 				return .ggdTest
+		}
+	}
+
+	private func mapNoProviderAvailable() -> ErrorCode? {
+
+		switch eventMode {
+			case .recovery:
+				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
+			case .paperflow:
+				return nil
+			case .test:
+				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)
+			case .vaccination:
+				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noVaccinationProviderAvailable)
 		}
 	}
 
@@ -732,4 +749,13 @@ private extension FetchEventsViewModel {
 			okTitle: L.generalRetry()
 		)
 	}
+}
+
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+
+	static let noTestProviderAvailable = ErrorCode.ClientCode(value: "080")
+	static let noRecoveryProviderAvailable = ErrorCode.ClientCode(value: "081")
+	static let noVaccinationProviderAvailable = ErrorCode.ClientCode(value: "082")
 }

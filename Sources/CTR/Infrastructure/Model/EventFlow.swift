@@ -67,7 +67,8 @@ struct EventFlow {
 		/// Result of the unomi call
 		var eventInformationAvailable: EventInformationAvailable?
 
-		let usages: [ProviderUsage]
+		/// Where can we use this provider for?
+		var usages: [ProviderUsage]
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
