@@ -81,4 +81,12 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 			completion(result.0)
 		}
 	}
+
+	var invokedReset = false
+	var invokedResetCount = 0
+
+	func reset() {
+		invokedReset = true
+		invokedResetCount += 1
+	}
 }

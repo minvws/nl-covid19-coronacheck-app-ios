@@ -68,7 +68,7 @@ final class FileStorage: Logging {
 	/// Check if a file exists
 	/// - Parameter fileName: the name of the file
 	/// - Returns: True if it does.
-	func remove(_ fileName: String)  {
+	func remove(_ fileName: String) {
 
 		guard let url = documentsURL else {
 			logError("Failed to load documents directory")

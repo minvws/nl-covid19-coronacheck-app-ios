@@ -244,7 +244,18 @@ class AboutViewModelTests: XCTestCase {
 
 		// Given
 		let walletSpy = WalletManagerSpy()
-		sut.walletManager = walletSpy
+		Services.use(walletSpy)
+		let remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigSpy.stubbedStoredConfiguration = .default
+		Services.use(remoteConfigSpy)
+		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(fileStorage: FileStorage(), flavor: AppFlavor.flavor)
+		Services.use(cryptoLibUtilitySpy)
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testClearData"),
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
+		)
 
 		// When
 		sut.clearData()
@@ -252,5 +263,8 @@ class AboutViewModelTests: XCTestCase {
 		// Then
 		expect(walletSpy.invokedRemoveExistingGreenCards) == true
 		expect(walletSpy.invokedRemoveExistingEventGroups) == true
+		expect(self.userSettingsSpy.invokedReset) == true
+		expect(remoteConfigSpy.invokedReset) == true
+		expect(cryptoLibUtilitySpy.invokedReset) == true
 	}
 }

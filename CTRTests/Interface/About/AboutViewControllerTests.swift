@@ -78,7 +78,7 @@ class AboutViewControllerTests: XCTestCase {
 			message: L.holderCleardataAlertSubtitle(),
 			animated: true,
 			actions: [
-				.default(L.holderCleardataAlertRemove()),
+				.destructive(L.holderCleardataAlertRemove()),
 				.cancel(L.generalCancel())
 			]
 		)
