@@ -159,9 +159,9 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
 			// ClockDeviationWarningView
-			clockDeviationWarningView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 20),
-			clockDeviationWarningView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-			clockDeviationWarningView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
+			clockDeviationWarningView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: ViewTraits.margin),
+			clockDeviationWarningView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: ViewTraits.margin),
+			clockDeviationWarningView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -ViewTraits.margin)
 		])
 	}
 
