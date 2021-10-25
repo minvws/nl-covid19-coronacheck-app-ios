@@ -78,7 +78,10 @@ class VerifierCoordinator: SharedCoordinator {
 				
 				thirdPartyScannerApp = (name: matchingMetadata.name, returnURL: returnURL)
 				
-				navigateToScan()
+				// On next runloop to show navigation animation and to open camera right after app launch
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+					self.navigateToScan()
+				}
 				
 				return true
 			default:

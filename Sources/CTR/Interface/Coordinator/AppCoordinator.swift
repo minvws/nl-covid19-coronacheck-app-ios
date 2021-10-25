@@ -156,6 +156,10 @@ class AppCoordinator: Coordinator, Logging {
 
         let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
         startChildCoordinator(coordinator)
+
+		if let universalLink = self.unhandledUniversalLink {
+		   coordinator.receive(universalLink: universalLink)
+		}
     }
 	
 	/// Show the Internet Required View
