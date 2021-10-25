@@ -71,6 +71,7 @@ class VerifierCheckIdentityView: BaseView {
 		
 		let label = Label(title1: nil).multiline()
 		label.textColor = Theme.colors.secondaryText
+		label.textAlignment = .center
 		return label
 	}()
 	
@@ -78,6 +79,7 @@ class VerifierCheckIdentityView: BaseView {
 		
 		let label = Label(subheadHeavyBold: nil).multiline()
 		label.textColor = Theme.colors.secondaryText
+		label.textAlignment = .center
 		return label
 	}()
 	
@@ -85,6 +87,7 @@ class VerifierCheckIdentityView: BaseView {
 		
 		let label = Label(subhead: nil).multiline()
 		label.textColor = Theme.colors.secondaryText
+		label.textAlignment = .center
 		return label
 	}()
 	
@@ -93,7 +96,6 @@ class VerifierCheckIdentityView: BaseView {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.axis = .vertical
-		stackView.alignment = .center
 		return stackView
 	}()
 	
