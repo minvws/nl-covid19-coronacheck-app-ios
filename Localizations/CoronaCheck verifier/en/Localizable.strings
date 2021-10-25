@@ -113,9 +113,10 @@
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "What should I do?";
 "verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";
-"verifier.denied.message.two" = "<p><b>Here’s what you can do:</b></p><ul><li>Verify if the time on the visitor’s phone and yours is set correctly. Make sure to set the date and time to ‘set automatically’.</li><li>Verify if the visitor is showing an original certificate. A screenshot of a certificate may cause problems.</li><li>Ask the visitor to completely shut down the app and restart it. Please scan the QR code again after.</li></ul>";
-"verifier.denied.message.three" = "<p><b>Still looking at a red screen?</b><br />Please ask the visitor to contact the CoronaCheck help desk.</p>";
-"verifier.denied.message.four" = "<p><b> Without a green screen with check mark, you can’t grant the visitor access.</b></p>";
+"verifier.denied.message.two" = "<b>Here’s what you can do:</b>";
+"verifier.denied.message.three" = "<ul><li>Verify if the time is set correctly on the visitor's phone and yours. Make sure to set the date and time to ‘set automatically’.</li><li>Verify if the visitor is showing an original certificate. A screenshot of a certificate may cause problems.</li><li>Ask the visitor to completely shut down the app and restart it. Please scan the QR code again after.</li></ul>";
+"verifier.denied.message.four" = "<p><b>Still looking at a red screen?</b><br />Please ask the visitor to contact the CoronaCheck help desk.</p>";
+"verifier.denied.message.five" = "<p><b> Without a green screen with check mark, you can’t grant the visitor access.</b></p>";
 
 /* MARK: - Verifier About */
 "verifier.about.title" = "About this app";

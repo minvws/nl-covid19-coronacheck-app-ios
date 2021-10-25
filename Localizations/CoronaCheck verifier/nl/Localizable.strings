@@ -113,9 +113,10 @@
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Wat kan ik doen?";
 "verifier.denied.message.one" = "<p>Een rood scherm betekent dat de QR-code niet aan Nederlandse eisen voldoet.</p>";
-"verifier.denied.message.two" = "<p><b>Dit kun je doen:</b></p><ul><li>Controleer of de tijd op de telefoon van de bezoeker en die van jou goed staan ingesteld. Zorg dat de datum en tijd op ‘automatisch instellen’ staan.</li><li>Controleer of de bezoeker een origineel bewijs laat zien. Een screenshot van een bewijs kan voor problemen zorgen.</li><li>Vraag de bezoeker om de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li></ul>";
-"verifier.denied.message.three" = "<p><b>Blijft het scherm rood?</b><br />Vraag de bezoeker contact op te nemen met de helpdesk van CoronaCheck.</p>";
-"verifier.denied.message.four" = "<p><b>Zonder groen scherm met vinkje mag de bezoeker niet toegelaten worden.</b></p>";
+"verifier.denied.message.two" = "<b>Dit kun je doen:</b>";
+"verifier.denied.message.three" = "<ul><li>Controleer of de tijd goed staat ingesteld op de telefoon van de bezoeker en die van jou. Zorg dat de datum en tijd op ‘automatisch instellen’ staan.</li><li>Controleer of de bezoeker een origineel bewijs laat zien. Een screenshot van een bewijs kan voor problemen zorgen.</li><li>Vraag de bezoeker om de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li></ul>";
+"verifier.denied.message.four" = "<p><b>Blijft het scherm rood?</b><br />Vraag de bezoeker contact op te nemen met de helpdesk van CoronaCheck.</p>";
+"verifier.denied.message.five" = "<p><b>Zonder groen scherm met vinkje mag de bezoeker niet toegelaten worden.</b></p>";
 
 /* MARK: - Verifier About */
 "verifier.about.title" = "Over deze app";
