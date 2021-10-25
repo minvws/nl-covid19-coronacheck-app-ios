@@ -104,10 +104,10 @@ class AboutViewModel: Logging {
 		menu = [
 			AboutMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
 			AboutMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
-			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon())
+			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
+			AboutMenuOption(identifier: .clearData, name: L.holderCleardataMenuTitle())
 		]
 		if Configuration().getEnvironment() != "production" {
-			menu.append(AboutMenuOption(identifier: .clearData, name: L.holderCleardataMenuTitle()))
 			menu.append(AboutMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
 	}
