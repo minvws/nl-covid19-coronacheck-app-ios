@@ -1,4 +1,4 @@
-"verifier.result.access.dcc" = "Scanned international certificate";
+"verifier.result.access.dcc" = "International certificate";
 "verifier.scan.button.moreInformation" = "What should I pay attention to?";
 "verifier.scaninstructions.navigation.title" = "About scanning";
 "verifier.scaninstructions.scanQR.title" = "Scan the QR code";
@@ -6,7 +6,7 @@
 "verifier.scaninstructions.checkthedetails.title" = "Check the proof of identity";
 "verifier.scaninstructions.checkthedetails.message" = "For visitors aged 14 and over, always verify if the details on your screen are the same as those on the visitor's identity document. This way you can ensure the QR code belongs to the visitor.";
 "verifier.scaninstructions.checkonlythevisibledata.title" = "Sometimes not all details are shown";
-"verifier.scaninstructions.checkonlythevisibledata.message" = "This happens to protect the visitor’s privacy. You will see a hyphen (-). In this case, verify only the details you’re seeing.";
+"verifier.scaninstructions.checkonlythevisibledata.message" = "This is done to protect the visitor’s privacy. You will see a hyphen (-). In this case, verify only the details you’re seeing.";
 "verifier.scaninstructions.redscreennowwhat.title" = "Red screen - what happens now?";
 "verifier.scaninstructions.redscreennowwhat.message" = "In case of a red screen with a cross, you will get information to assist the visitor. If the screen stays red, you cannot grant the visitor access.";
 "verifier.scaninstructions.button.startscanning" = "Start scanning";
@@ -36,7 +36,7 @@
 "verifier.result.identity.dayofbirth" = "Day of birth";
 "verifier.result.identity.monthofbirth" = "Birth month";
 
-"verifier.result.check.text" = "<p>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</p><p><b>Please note: sometimes not all details are shown</b><br />This happens to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing.</p>";
+"verifier.result.check.text" = "<p>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</p><p><b>Please note: sometimes not all details are shown</b><br />This is done to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing.</p>";
 
 
 "updateApp.content" = "To continue, install the latest version of the app";
@@ -79,7 +79,7 @@
 "verifier.consent.button" = "I've read and agree to the acceptable use policy.";
 
 /* MARK: - Verifier Start */
-"verifier.start.title" = "Scan QR code";
+"verifier.start.title" = "Scan QR codes";
 "verifier.start.header" = "Get started";
 "verifier.start.message" = "Scan the QR codes of your visitors. Is the QR code valid and do the details match the proof of identity? You're allowed to give access to the visitor.";
 "verifier.start.button.title" = "Start scanning";
@@ -107,7 +107,7 @@
 "verifier.result.alert.dcc.title" = "Ask for a Dutch QR code";
 "verifier.result.alert.dcc.message" = "You have scanned an international QR code. In the Netherlands, CoronaCheck users should show their Dutch QR code.";
 /* MARK: - Verifier Check Result */
-"verifier.result.check.title" = "Are the details incorrect?";
+"verifier.result.check.title" = "Something is wrong";
 "verifier.result.check.button" = "Scan next";
 
 /* MARK: - Verifier Denied Instructions */
