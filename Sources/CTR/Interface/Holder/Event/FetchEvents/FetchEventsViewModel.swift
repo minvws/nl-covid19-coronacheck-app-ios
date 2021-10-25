@@ -232,46 +232,61 @@ final class FetchEventsViewModel: Logging {
 
 		prefetchingGroup.notify(queue: DispatchQueue.main) {
 
-			var errorCodes = [ErrorCode]()
-			var serverErrors = [ServerError]()
-			var providers = [EventFlow.EventProvider]()
+			self.processEventProvidersWithAccessTokens(
+				accessTokenResult: accessTokenResult,
+				remoteEventProvidersResult: remoteEventProvidersResult,
+				completion: completion
+			)
+		}
+	}
 
-			switch (accessTokenResult, remoteEventProvidersResult) {
-				case (.success(let accessTokens), .success(let eventProviders)):
-					providers = eventProviders // mutable
-					for index in 0 ..< providers.count {
-						for accessToken in accessTokens where providers[index].identifier == accessToken.providerIdentifier {
-							providers[index].accessToken = accessToken
-						}
-					}
-					if self.eventMode == .test || self.eventMode == .recovery {
-						// only retrieve negative / positive test 3.0 from the GGD
-						providers = providers.filter { $0.identifier.lowercased() == "ggd" }
-					}
-				case (.failure(let accessError), .failure(let providerError)):
-					self.logError("Error getting access tokens: \(accessError)")
-					errorCodes.append(self.convert(accessError, for: self.flow, step: .accessTokens))
-					serverErrors.append(accessError)
+	private func processEventProvidersWithAccessTokens(
+		accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?,
+		remoteEventProvidersResult: Result<[EventFlow.EventProvider], ServerError>?,
+		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
 
-					self.logError("Error getting access tokens: \(providerError)")
-					errorCodes.append(self.convert(providerError, for: self.flow, step: .providers))
-					serverErrors.append(providerError)
+		var errorCodes = [ErrorCode]()
+		var serverErrors = [ServerError]()
+		var providers = [EventFlow.EventProvider]()
 
-				case (.failure(let accessError), _):
-					self.logError("Error getting access tokens: \(accessError)")
-					errorCodes.append(self.convert(accessError, for: self.flow, step: .accessTokens))
-					serverErrors.append(accessError)
+		if let providerError = remoteEventProvidersResult?.failureError {
+			self.logError("Error getting event providers: \(providerError)")
+			errorCodes.append(self.convert(providerError, for: self.flow, step: .providers))
+			serverErrors.append(providerError)
+		}
 
-				case (_, .failure(let providerError)):
-					self.logError("Error getting event providers: \(providerError)")
-					errorCodes.append(self.convert(providerError, for: self.flow, step: .providers))
-					serverErrors.append(providerError)
+		if let accessError = accessTokenResult?.failureError {
+			self.logError("Error getting access tokens: \(accessError)")
+			errorCodes.append(self.convert(accessError, for: self.flow, step: .accessTokens))
+			serverErrors.append(accessError)
+		}
 
-				default:
-					// this should not happen due to the prefetching group
-					self.logError("Unexpected: did not receive response from accessToken or eventProviders call")
+		if let accessTokens = accessTokenResult?.successValue, let eventProviders = remoteEventProvidersResult?.successValue {
+			providers = self.filterEventProvidersForEventMode(eventProviders)
+			for index in 0 ..< providers.count {
+				for accessToken in accessTokens where providers[index].identifier == accessToken.providerIdentifier {
+					providers[index].accessToken = accessToken
+				}
 			}
-			completion(providers, errorCodes, serverErrors)
+		}
+
+		completion(providers, errorCodes, serverErrors)
+	}
+
+	private func filterEventProvidersForEventMode(_ eventProviders: [EventFlow.EventProvider]) -> [EventFlow.EventProvider] {
+
+		switch eventMode {
+			case .recovery:
+				return eventProviders.filter {
+					$0.usages.contains(EventFlow.ProviderUsage.recovery) ||
+					$0.usages.contains(EventFlow.ProviderUsage.positiveTest)
+				}
+			case .paperflow:
+				return [] // Paperflow is not part of FetchEvents.
+			case .test:
+				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.negativeTest) }
+			case .vaccination:
+				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.vaccination) }
 		}
 	}
 
