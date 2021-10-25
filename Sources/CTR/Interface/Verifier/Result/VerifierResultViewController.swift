@@ -115,4 +115,6 @@ class VerifierResultViewController: BaseViewController, Logging {
 		sceneView.checkIdentityView.dayOfBirthHeader = L.verifierResultIdentityDayofbirth()
 		sceneView.checkIdentityView.monthOfBirthHeader = L.verifierResultIdentityMonthofbirth()
 	}
+	
+	override var enableSwipeBack: Bool { false }
 }
