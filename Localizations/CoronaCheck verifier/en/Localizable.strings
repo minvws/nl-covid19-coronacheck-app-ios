@@ -83,6 +83,7 @@
 "verifier.consent.item.2" = "You're only allowed to use the visitor's details to <b>check the certificate</b>";
 "verifier.consent.item.3" = "The visitor's data is <b>not centrally stored anywhere</b>";
 "verifier.consent.button" = "I've read and agree to the acceptable use policy.";
+"verifier.consent.action" = "Get started";
 
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR codes";
