@@ -181,8 +181,8 @@ extension ListEventsViewModel {
 		var dataSource = dataSource
 		if eventMode == .recovery {
 
-			let recoveryExpirationDays = remoteConfigManager.storedConfiguration.recoveryExpirationDays ?? 180
-			let result = filterTooOldRecoveryEvents(dataSource, recoveryEventExpirationDays: recoveryExpirationDays)
+			let recoveryEventValidityDays = remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
+			let result = filterTooOldRecoveryEvents(dataSource, recoveryEventValidityDays: recoveryEventValidityDays)
 			if result.hasTooOldEvents && result.filteredDataSource.isEmpty {
 				return recoveryEventsTooOld()
 			} else {
@@ -228,13 +228,13 @@ extension ListEventsViewModel {
 	/// - Returns: the filtered data source
 	private func filterTooOldRecoveryEvents(
 		_ dataSource: [EventDataTuple],
-		recoveryEventExpirationDays: Int) -> (filteredDataSource: [EventDataTuple], hasTooOldEvents: Bool) {
+		recoveryEventValidityDays: Int) -> (filteredDataSource: [EventDataTuple], hasTooOldEvents: Bool) {
 
 		let now = Date()
 
 		let filteredSource = dataSource.filter { dataRow in
 			if let sampleDate = dataRow.event.positiveTest?.getDate(with: dateFormatter),
-			   let validUntil = Calendar.current.date(byAdding: .day, value: recoveryEventExpirationDays, to: sampleDate) {
+			   let validUntil = Calendar.current.date(byAdding: .day, value: recoveryEventValidityDays, to: sampleDate) {
 				return validUntil > now
 
 			} else if let validUntilString = dataRow.event.recovery?.validUntil,

@@ -230,9 +230,9 @@ class LaunchViewModel: Logging {
 		}
 
 		walletManager?.expireEventGroups(
-			vaccinationValidity: configuration.vaccinationEventValidity,
-			recoveryValidity: configuration.recoveryEventValidity,
-			testValidity: configuration.testEventValidity
+			vaccinationValidity: (configuration.vaccinationEventValidityDays ?? 730) * 24,
+			recoveryValidity: (configuration.recoveryEventValidityDays ?? 365) * 24,
+			testValidity: configuration.testEventValidityHours
 		)
 	}
 
@@ -328,6 +328,7 @@ class LaunchViewModel: Logging {
 			return false
 		}
 
+		// Does the device have a pin/touch/face authentication? (show only once)
 		return !userSettings.deviceAuthenticationWarningShown && !deviceAuthenticationDetector.hasAuthenticationPolicy()
 	}
 

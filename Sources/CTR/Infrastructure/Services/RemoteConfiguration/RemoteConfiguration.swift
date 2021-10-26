@@ -79,16 +79,13 @@ struct RemoteConfiguration: Codable, Equatable {
 	/// What is the validity of a domestic  test / vaccination
 	var domesticValidityHours: Int?
 
-	/// Max validity of a vaccination
-	var vaccinationEventValidity: Int?
+	/// Event validity
 
-	/// max validity of a recovery
-	var recoveryEventValidity: Int?
+	var recoveryEventValidityDays: Int?
 
-	/// max validity of a test
-	var testEventValidity: Int?
+	var testEventValidityHours: Int?
 
-	var recoveryExpirationDays: Int?
+	var vaccinationEventValidityDays: Int?
 
 	var domesticQRRefreshSeconds: Int?
 	
@@ -136,10 +133,9 @@ struct RemoteConfiguration: Codable, Equatable {
 		case requireUpdateBefore = "requireUpdateBefore"
 		case temporarilyDisabled = "temporarilyDisabled"
 		case domesticValidityHours = "domesticValidity"
-		case vaccinationEventValidity = "vaccinationEventValidity"
-		case recoveryEventValidity = "recoveryEventValidity"
-		case testEventValidity = "testEventValidity"
-		case recoveryExpirationDays = "recoveryExpirationDays"
+		case recoveryEventValidityDays = "recoveryEventValidityDays"
+		case testEventValidityHours = "testEventValidityHours"
+		case vaccinationEventValidityDays = "vaccinationEventValidityDays"
 		case hpkCodes = "hpkCodes"
 		case euBrands = "euBrands"
 		case nlTestTypes = "nlTestTypes"
@@ -177,11 +173,10 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.requireUpdateBefore = nil
 		config.temporarilyDisabled = false
 		config.domesticValidityHours = 40
-		config.vaccinationEventValidity = 14600
-		config.recoveryEventValidity = 7300
-		config.testEventValidity = 40
+		config.recoveryEventValidityDays = 365
+		config.testEventValidityHours = 96
+		config.vaccinationEventValidityDays = 730
 		config.isGGDEnabled = true
-		config.recoveryExpirationDays = 180
 		config.credentialRenewalDays = 5
 		config.domesticQRRefreshSeconds = 60
 		config.universalLinkPermittedDomains = nil
