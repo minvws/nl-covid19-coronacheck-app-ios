@@ -32,6 +32,14 @@ struct EventFlow {
 		}
 	}
 
+	enum ProviderUsage: String, Codable {
+
+		case positiveTest = "pt"
+		case negativeTest = "nt"
+		case recovery = "r"
+		case vaccination = "v"
+	}
+
 	// A Vaccination Event Provider (VEP)
 	struct EventProvider: Codable, Equatable, CertificateProvider {
 
@@ -59,6 +67,9 @@ struct EventFlow {
 		/// Result of the unomi call
 		var eventInformationAvailable: EventInformationAvailable?
 
+		/// Where can we use this provider for?
+		var usages: [ProviderUsage]
+
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
 
@@ -68,6 +79,7 @@ struct EventFlow {
 			case eventURL = "event_url"
 			case cmsCertificate = "cms"
 			case tlsCertificate = "tls"
+			case usages = "usage"
 		}
 
 		func getHostNames() -> [String] {

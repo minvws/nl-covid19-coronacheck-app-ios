@@ -46,12 +46,6 @@ final class VerifiedInfoViewController: BaseViewController {
 		
 		sceneView.primaryButton.touchUpInside(viewModel, action: #selector(VerifiedInfoViewModel.onTap))
 		
-		addCloseButton(action: #selector(closeButtonTapped))
-	}
-	
-	/// User tapped on the button
-	@objc func closeButtonTapped() {
-
-		viewModel.dismiss()
+		addBackButton()
 	}
 }
