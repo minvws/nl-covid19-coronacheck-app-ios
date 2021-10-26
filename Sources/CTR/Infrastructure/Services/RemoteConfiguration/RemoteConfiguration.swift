@@ -76,9 +76,6 @@ struct RemoteConfiguration: Codable, Equatable {
 	/// Is the app temporarily disabled?
 	var temporarilyDisabled: Bool?
 
-	/// What is the validity of a domestic  test / vaccination
-	var domesticValidityHours: Int?
-
 	/// Event validity
 
 	var recoveryEventValidityDays: Int?
@@ -132,7 +129,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case requireUpdateBefore = "requireUpdateBefore"
 		case temporarilyDisabled = "temporarilyDisabled"
-		case domesticValidityHours = "domesticValidity"
 		case recoveryEventValidityDays = "recoveryEventValidityDays"
 		case testEventValidityHours = "testEventValidityHours"
 		case vaccinationEventValidityDays = "vaccinationEventValidityDays"
@@ -172,7 +168,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.recoveryWaitingPeriodDays = 11
 		config.requireUpdateBefore = nil
 		config.temporarilyDisabled = false
-		config.domesticValidityHours = 40
 		config.recoveryEventValidityDays = 365
 		config.testEventValidityHours = 96
 		config.vaccinationEventValidityDays = 730
