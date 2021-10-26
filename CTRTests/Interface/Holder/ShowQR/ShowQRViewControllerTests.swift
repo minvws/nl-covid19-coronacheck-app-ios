@@ -31,7 +31,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		cryptoManagerSpy = CryptoManagerSpy()
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 
-		remoteConfigManagerSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigManagerSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy())
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()

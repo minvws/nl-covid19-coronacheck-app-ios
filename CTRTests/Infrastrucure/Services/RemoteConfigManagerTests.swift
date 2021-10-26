@@ -19,9 +19,10 @@ class RemoteConfigManagerTests: XCTestCase {
 	override func setUp() {
 
 		networkSpy = NetworkSpy(configuration: .development)
+		Services.use(networkSpy)
 		userSettingsSpy = UserSettingsSpy()
 
-		sut = RemoteConfigManager(now: { now }, userSettings: userSettingsSpy, networkManager: networkSpy)
+		sut = RemoteConfigManager(now: { now }, userSettings: userSettingsSpy)
 		sut.reset()
 		
 		super.setUp()

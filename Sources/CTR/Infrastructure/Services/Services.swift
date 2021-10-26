@@ -149,8 +149,7 @@ final class Services {
 
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init(
 		now: { Date() },
-		userSettings: UserSettings(),
-		networkManager: networkManager
+		userSettings: UserSettings()
 	)
 
 	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init()

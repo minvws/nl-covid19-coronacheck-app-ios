@@ -10,7 +10,7 @@ import XCTest
 
 class RemoteConfigManagingSpy: RemoteConfigManaging {
 
-	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, networkManager: NetworkManaging) {}
+	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol) {}
 
 	var invokedStoredConfigurationGetter = false
 	var invokedStoredConfigurationGetterCount = 0
