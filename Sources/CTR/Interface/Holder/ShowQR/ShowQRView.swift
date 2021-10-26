@@ -275,7 +275,7 @@ class ShowQRView: BaseView {
 
 	@objc func didTapThirdPartyAppButton() {
 
-		didTapPreviousButtonCommand?()
+		didTapThirdPartyAppButtonCommand?()
 	}
 
 	@objc func didTapPreviousButton() {
