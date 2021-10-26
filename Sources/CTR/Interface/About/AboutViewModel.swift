@@ -18,7 +18,7 @@ enum AboutMenuIdentifier: String {
 	
 	case colophon
 
-	case clearData
+	case reset
 	
 	case deeplink
 }
@@ -40,12 +40,6 @@ class AboutViewModel: Logging {
 
 	private var flavor: AppFlavor
 
-	// MARK: - Managers
-
-	private weak var walletManager: WalletManaging? = Services.walletManager
-	private weak var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
-	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
-	private weak var onboardingsManager: OnboardingManaging? = Services.onboardingManager
 	private let userSettings: UserSettingsProtocol
 
 	// MARK: - Bindable
@@ -105,7 +99,7 @@ class AboutViewModel: Logging {
 			AboutMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
 			AboutMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
 			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
-			AboutMenuOption(identifier: .clearData, name: L.holderCleardataMenuTitle())
+			AboutMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle())
 		]
 		if Configuration().getEnvironment() != "production" {
 			menu.append(AboutMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
@@ -136,7 +130,7 @@ class AboutViewModel: Logging {
 				}
 			case .colophon:
 				openUrlString(L.holderUrlColophon())
-			case .clearData:
+			case .reset:
 				showClearDataAlert()
 			case .deeplink:
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
@@ -158,21 +152,16 @@ class AboutViewModel: Logging {
 			cancelAction: nil,
 			cancelTitle: L.generalCancel(),
 			okAction: { _ in
-				self.clearData()
-				self.coordinator?.restart()
+				self.resetDataAndRestart()
 			},
 			okTitle: L.holderCleardataAlertRemove()
 		)
 	}
 
-	func clearData() {
+	func resetDataAndRestart() {
 
-		// Reset all the data
-		walletManager?.removeExistingEventGroups()
-		walletManager?.removeExistingGreenCards()
-		onboardingsManager?.reset()
-		remoteConfigManager?.reset()
-		cryptoLibUtility?.reset()
-		userSettings.reset()
+		Services.reset()
+		self.userSettings.reset()
+		self.coordinator?.restart()
 	}
 }

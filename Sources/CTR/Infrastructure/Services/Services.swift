@@ -49,9 +49,9 @@ final class Services {
 		jailBreakDetector = jailBreakProtocol
 	}
 
-	static func use(_ forcedInformationManager: ForcedInformationManaging.Type) {
+	static func use(_ forcedInformationManaging: ForcedInformationManaging) {
 
-		forcedInformationManagingType = forcedInformationManager
+		forcedInformationManager = forcedInformationManaging
 	}
 
     static func use(_ networkManaging: NetworkManaging) {
@@ -64,9 +64,9 @@ final class Services {
 		remoteConfigManager = remoteConfigManaging
     }
 
-    static func use(_ onboardingManager: OnboardingManaging.Type) {
+    static func use(_ onboardingManaging: OnboardingManaging) {
 
-		onboardingManagingType = onboardingManager
+		onboardingManager = onboardingManaging
     }
 
 	static func use(_ openIdManaging: OpenIdManaging) {
@@ -173,4 +173,15 @@ final class Services {
 	)
 
 	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
+
+	/// Reset all the data
+	static func reset() {
+
+		walletManager.removeExistingEventGroups()
+		walletManager.removeExistingGreenCards()
+		onboardingManager.reset()
+		remoteConfigManager.reset()
+		cryptoLibUtility.reset()
+		forcedInformationManager.reset()
+	}
 }

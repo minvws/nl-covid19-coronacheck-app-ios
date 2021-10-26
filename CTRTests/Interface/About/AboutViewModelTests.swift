@@ -12,7 +12,7 @@ import Nimble
 class AboutViewModelTests: XCTestCase {
 
 	private var sut: AboutViewModel!
-	private var coordinatorSpy: OpenUrlProtocolSpy!
+	private var coordinatorSpy: AboutViewModelCoordinatorSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	private static var initialTimeZone: TimeZone?
 
@@ -33,7 +33,7 @@ class AboutViewModelTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 
-		coordinatorSpy = OpenUrlProtocolSpy()
+		coordinatorSpy = AboutViewModelCoordinatorSpy()
 		userSettingsSpy = UserSettingsSpy()
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
@@ -65,7 +65,8 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.menu[0].identifier) == .privacyStatement
 		expect(self.sut.menu[1].identifier) == AboutMenuIdentifier.accessibility
 		expect(self.sut.menu[2].identifier) == .colophon
-		expect(self.sut.menu[3].identifier) == .clearData
+		expect(self.sut.menu[3].identifier) == .reset
+		expect(self.sut.menu[4].identifier) == .deeplink
 		expect(self.sut.appVersion.contains("testInitHolder")) == true
 	}
 
@@ -231,7 +232,7 @@ class AboutViewModelTests: XCTestCase {
 			userSettings: userSettingsSpy
 		)
 		// When
-		sut.menuOptionSelected(.clearData)
+		sut.menuOptionSelected(.reset)
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == false
@@ -240,7 +241,24 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.alert?.subTitle) == L.holderCleardataAlertSubtitle()
 	}
 
-	func test_clearData() {
+	func test_menuOptionSelected_deeplink_forHolder() {
+
+		// Given
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
+		)
+		// When
+		sut.menuOptionSelected(.deeplink)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString.contains("scanner-test")) == true
+	}
+
+	func test_resetData() {
 
 		// Given
 		let walletSpy = WalletManagerSpy()
@@ -250,21 +268,45 @@ class AboutViewModelTests: XCTestCase {
 		Services.use(remoteConfigSpy)
 		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(fileStorage: FileStorage(), flavor: AppFlavor.flavor)
 		Services.use(cryptoLibUtilitySpy)
-		sut = AboutViewModel(
-			coordinator: coordinatorSpy,
-			versionSupplier: AppVersionSupplierSpy(version: "testClearData"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
-		)
+		let onboardingSpy = OnboardingManagerSpy()
+		Services.use(onboardingSpy)
+		let forcedInfoSpy = ForcedInformationManagerSpy()
+		Services.use(forcedInfoSpy)
 
 		// When
-		sut.clearData()
+		sut.resetDataAndRestart()
 
 		// Then
 		expect(walletSpy.invokedRemoveExistingGreenCards) == true
 		expect(walletSpy.invokedRemoveExistingEventGroups) == true
-		expect(self.userSettingsSpy.invokedReset) == true
 		expect(remoteConfigSpy.invokedReset) == true
 		expect(cryptoLibUtilitySpy.invokedReset) == true
+		expect(onboardingSpy.invokedReset) == true
+		expect(forcedInfoSpy.invokedReset) == true
+		expect(self.userSettingsSpy.invokedReset) == true
+		expect(self.coordinatorSpy.invokedRestart) == true
+	}
+}
+
+class AboutViewModelCoordinatorSpy: OpenUrlProtocol, Restartable {
+
+	var invokedOpenUrl = false
+	var invokedOpenUrlCount = 0
+	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
+	var invokedOpenUrlParametersList = [(url: URL, inApp: Bool)]()
+
+	func openUrl(_ url: URL, inApp: Bool) {
+		invokedOpenUrl = true
+		invokedOpenUrlCount += 1
+		invokedOpenUrlParameters = (url, inApp)
+		invokedOpenUrlParametersList.append((url, inApp))
+	}
+
+	var invokedRestart = false
+	var invokedRestartCount = 0
+
+	func restart() {
+		invokedRestart = true
+		invokedRestartCount += 1
 	}
 }
