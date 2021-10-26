@@ -18,7 +18,7 @@ enum AboutMenuIdentifier: String {
 	
 	case colophon
 
-	case clearData
+	case reset
 	
 	case deeplink
 }
@@ -36,11 +36,9 @@ struct AboutMenuOption {
 class AboutViewModel: Logging {
 
 	/// Coordination Delegate
-	weak private var coordinator: OpenUrlProtocol?
+	weak private var coordinator: (OpenUrlProtocol & Restartable)?
 
 	private var flavor: AppFlavor
-
-	weak var walletManager: WalletManaging? = Services.walletManager
 
 	private let userSettings: UserSettingsProtocol
 
@@ -62,7 +60,7 @@ class AboutViewModel: Logging {
 	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor
 	init(
-		coordinator: OpenUrlProtocol,
+		coordinator: (OpenUrlProtocol & Restartable),
 		versionSupplier: AppVersionSupplierProtocol,
 		flavor: AppFlavor,
 		userSettings: UserSettingsProtocol) {
@@ -100,10 +98,10 @@ class AboutViewModel: Logging {
 		menu = [
 			AboutMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
 			AboutMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
-			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon())
+			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
+			AboutMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle())
 		]
 		if Configuration().getEnvironment() != "production" {
-			menu.append(AboutMenuOption(identifier: .clearData, name: L.holderCleardataMenuTitle()))
 			menu.append(AboutMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
 	}
@@ -132,7 +130,7 @@ class AboutViewModel: Logging {
 				}
 			case .colophon:
 				openUrlString(L.holderUrlColophon())
-			case .clearData:
+			case .reset:
 				showClearDataAlert()
 			case .deeplink:
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
@@ -154,16 +152,16 @@ class AboutViewModel: Logging {
 			cancelAction: nil,
 			cancelTitle: L.generalCancel(),
 			okAction: { _ in
-				self.clearData()
-			}, okTitle: L.holderCleardataAlertRemove()
+				self.resetDataAndRestart()
+			},
+			okTitle: L.holderCleardataAlertRemove()
 		)
 	}
 
-	func clearData() {
-		// Reset wallet manager
-		walletManager?.removeExistingEventGroups()
-		walletManager?.removeExistingGreenCards()
+	func resetDataAndRestart() {
 
-		userSettings.reset()
+		Services.reset()
+		self.userSettings.reset()
+		self.coordinator?.restart()
 	}
 }

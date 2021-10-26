@@ -36,10 +36,10 @@
 "holder.tokenentry.universallinkflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "general.error.server.unreachable.errorCode" = "<p>Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?</p><p><b>Foutcode:</b><br />%@</p>";
-"holder.cleardata.menu.title" = "Verwijder data";
-"holder.cleardata.alert.title" = "Verwijder data";
-"holder.cleardata.alert.subtitle" = "Weet je zeker dat je alle greencards en events wilt verwijderen?";
-"holder.cleardata.alert.remove" = "Verwijder";
+"holder.cleardata.menu.title" = "Wis gegevens";
+"holder.cleardata.alert.title" = "Alle gegevens wissen?";
+"holder.cleardata.alert.subtitle" = "Bij het wissen worden alle gegevens en bewijzen uit de app verwijderd. Na het wissen wordt de app teruggezet naar het beginpunt.";
+"holder.cleardata.alert.remove" = "Wis gegevens";
 "holder.errorstate.login.title" = "Inloggen afgebroken";
 "holder.errorstate.login.message.vaccination" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
 "holder.errorstate.login.message.recovery" = "Wil je jouw herstelgegevens ophalen? Log dan opnieuw in met DigiD.";

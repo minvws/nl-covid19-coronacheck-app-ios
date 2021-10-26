@@ -136,6 +136,9 @@ class AppCoordinator: Coordinator, Logging {
     private func startAsHolder() {
 
 		guard childCoordinators.isEmpty else {
+			if childCoordinators.first is HolderCoordinator {
+				childCoordinators.first?.start()
+			}
 			return
 		}
 
@@ -151,6 +154,9 @@ class AppCoordinator: Coordinator, Logging {
     private func startAsVerifier() {
 
 		guard childCoordinators.isEmpty else {
+			if childCoordinators.first is VerifierCoordinator {
+				childCoordinators.first?.start()
+			}
 			return
 		}
 
