@@ -13,15 +13,33 @@ class AboutViewModelTests: XCTestCase {
 
 	private var sut: AboutViewModel!
 	private var coordinatorSpy: OpenUrlProtocolSpy!
+	private var userSettingsSpy: UserSettingsSpy!
+	private static var initialTimeZone: TimeZone?
+
+	override class func setUp() {
+		super.setUp()
+		initialTimeZone = NSTimeZone.default
+		NSTimeZone.default = TimeZone(abbreviation: "CEST")!
+	}
+
+	override class func tearDown() {
+		super.tearDown()
+
+		if let timeZone = initialTimeZone {
+			NSTimeZone.default = timeZone
+		}
+	}
 
 	override func setUp() {
 		super.setUp()
 
 		coordinatorSpy = OpenUrlProtocolSpy()
+		userSettingsSpy = UserSettingsSpy()
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 	}
 
@@ -35,19 +53,20 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 
 		// Then
 		expect(self.sut.title) == L.holderAboutTitle()
 		expect(self.sut.message) == L.holderAboutText()
 		expect(self.sut.listHeader) == L.holderAboutReadmore()
-		expect(self.sut.menu).to(haveCount(4))
+		expect(self.sut.menu).to(haveCount(5))
 		expect(self.sut.menu[0].identifier) == .privacyStatement
 		expect(self.sut.menu[1].identifier) == AboutMenuIdentifier.accessibility
 		expect(self.sut.menu[2].identifier) == .colophon
 		expect(self.sut.menu[3].identifier) == .clearData
-		expect(self.sut.version.contains("testInitHolder")) == true
+		expect(self.sut.appVersion.contains("testInitHolder")) == true
 	}
 
 	func test_initializationWithVerifier() {
@@ -58,7 +77,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -69,7 +89,7 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.menu.first?.identifier) == .terms
 		expect(self.sut.menu[1].identifier) == AboutMenuIdentifier.accessibility
 		expect(self.sut.menu.last?.identifier) == .colophon
-		expect(self.sut.version.contains("testInitVerifier")) == true
+		expect(self.sut.appVersion.contains("testInitVerifier")) == true
 	}
 
 	func test_menuOptionSelected_privacy() {
@@ -102,7 +122,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 		// When
 		sut.menuOptionSelected(.accessibility)
@@ -118,7 +139,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 		// When
 		sut.menuOptionSelected(.colophon)
@@ -134,7 +156,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
 		)
 
 		// When
@@ -151,7 +174,8 @@ class AboutViewModelTests: XCTestCase {
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
-			flavor: AppFlavor.verifier
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
 		)
 		// When
 		sut.menuOptionSelected(.colophon)
@@ -161,13 +185,50 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holderUrlColophon()
 	}
 
+	func test_configVersionFooter_forVerifier() {
+
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
+
+		// Given
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "verifier"),
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
+		)
+		// When
+
+		// Then
+		expect(self.sut.configVersion) == "Configuratie hereisa, 15-07-2021 17:02"
+	}
+
+	func test_configVersionFooter_forHolder() {
+
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
+
+		// Given
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "holder"),
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
+		)
+		// When
+
+		// Then
+		expect(self.sut.configVersion) == "Configuratie hereisa, 15-07-2021 17:02"
+	}
+
 	func test_menuOptionSelected_clearData_forHolder() {
 
 		// Given
 		sut = AboutViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
 		)
 		// When
 		sut.menuOptionSelected(.clearData)

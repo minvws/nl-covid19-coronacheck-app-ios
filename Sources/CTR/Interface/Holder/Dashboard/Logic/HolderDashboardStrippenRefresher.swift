@@ -20,7 +20,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 	enum Error: Swift.Error, LocalizedError, Equatable {
 		case unknownErrorA
-		case logicalErrorA
+		case serverResponseDidNotChangeExpiredOrExpiringState // i.e. you put your phone clock forward but server time is unchanged. Refresh is forced, but what you get back does not change State (.expiring, .expired)
 		case greencardLoaderError(error: GreenCardLoader.Error)
 		case networkError(error: NetworkError, timestamp: Date)
 
@@ -30,7 +30,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 					return error.errorDescription
 				case .networkError(let error, _):
 					return error.rawValue
-				case .logicalErrorA:
+				case .serverResponseDidNotChangeExpiredOrExpiringState:
 					return "Logical error A"
 				case .unknownErrorA:
 					return "Unknown error A"
@@ -191,6 +191,8 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 	}
 
 	deinit {
+		NotificationCenter.default.removeObserver(self)
+		
 		retryAfterNetworkFailureTimer?.invalidate()
 		retryAfterNetworkFailureTimer = nil
 	}
@@ -243,7 +245,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 							// The state should have changed - if not, throw error to avoid infinite loop.
 							guard newExpiryState != self.state.greencardsCredentialExpiryState else {
-								self.state.endLoadingWithError(error: Error.logicalErrorA)
+								self.state.endLoadingWithError(error: Error.serverResponseDidNotChangeExpiredOrExpiringState)
 								return
 							}
 

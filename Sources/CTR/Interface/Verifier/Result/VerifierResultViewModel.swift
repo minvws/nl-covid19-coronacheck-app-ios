@@ -29,6 +29,8 @@ class VerifierResultViewModel: Logging {
 
 	/// The scanned result
 	internal var verificationResult: MobilecoreVerificationResult
+	
+	private var isDeepLinkEnabled: Bool
 
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
@@ -50,7 +52,17 @@ class VerifierResultViewModel: Logging {
 	/// The birth mont of the holder
 	@Bindable private(set) var monthOfBirth: String?
 	
+	@Bindable private(set) var primaryTitle: String = ""
+	
 	@Bindable private(set) var secondaryTitle: String = ""
+	
+	@Bindable private(set) var dccFlag: String?
+	
+	@Bindable private(set) var dccScanned: String?
+	
+	@Bindable private(set) var checkIdentity: String = ""
+	
+	@Bindable private(set) var primaryButtonIcon: UIImage?
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -61,14 +73,17 @@ class VerifierResultViewModel: Logging {
 
 	/// Initialzier
 	/// - Parameters:
-	///   - coordinator: the dismissable delegate
-	///   - scanResults: the decrypted attributes
+	///   - coordinator: The dismissable delegate
+	///   - verificationResult: The verification result
+	///   - hasDeepLinkEnabled: Deeplink boolean
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		verificationResult: MobilecoreVerificationResult) {
+		verificationResult: MobilecoreVerificationResult,
+		isDeepLinkEnabled: Bool) {
 
 		self.coordinator = coordinator
 		self.verificationResult = verificationResult
+		self.isDeepLinkEnabled = isDeepLinkEnabled
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -76,7 +91,6 @@ class VerifierResultViewModel: Logging {
 
 		addObservers()
 		checkAttributes()
-		startAutoCloseTimer()
 	}
 
 	func addObservers() {
@@ -179,19 +193,28 @@ class VerifierResultViewModel: Logging {
 	private func showAccessAllowed() {
 
 		title = L.verifierResultAccessTitle()
+		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
+		checkIdentity = L.verifierResultAccessCheckidentity()
+		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
+		showDccInfo()
 	}
 
 	private func showAccessDeniedInvalidQR() {
 
 		title = L.verifierResultDeniedTitle()
+		primaryTitle = L.verifierResultNext()
 		secondaryTitle = L.verifierResultDeniedReadmore()
 	}
 
 	private func showAccessDemo() {
 
 		title = L.verifierResultDemoTitle()
+		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
+		checkIdentity = L.verifierResultAccessCheckidentity()
+		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
+		showDccInfo()
 	}
 
 	func dismiss() {
@@ -205,6 +228,12 @@ class VerifierResultViewModel: Logging {
 		stopAutoCloseTimer()
         coordinator?.navigateToScan()
     }
+	
+	func launchThirdPartyAppOrScanAgain() {
+		
+		stopAutoCloseTimer()
+		coordinator?.userWishesToLaunchThirdPartyScannerApp()
+	}
 
 	func showMoreInformation() {
 
@@ -215,37 +244,73 @@ class VerifierResultViewModel: Logging {
 				showDeniedInfo()
 		}
 	}
+	
+	func showVerified() {
+		
+		stopAutoCloseTimer()
+		
+		let displayDuration: CGFloat = 0.8
+		let verifiedDuration = VerifierResultViewTraits.Animation.verifiedDuration
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + displayDuration + verifiedDuration) {
+			
+			self.launchThirdPartyAppOrScanAgain()
+		}
+	}
 
 	private func showVerifiedInfo() {
 
-        let textView = TextView(htmlText: L.verifierResultCheckText())
-
-		coordinator?.displayContent(
-			title: L.verifierResultCheckTitle(),
-			content: [(textView, 16)]
-		)
+		stopAutoCloseTimer()
+		coordinator?.navigateToVerifiedInfo()
 	}
 
 	private func showDeniedInfo() {
+		
+		// By default, unordered lists have a space above them in HTML
+		let bulletSpacing: CGFloat = -28
+		let spacing: CGFloat = 16
 
-		let textViews = [L.verifierDeniedMessageOne(),
-			L.verifierDeniedMessageTwo(),
-			L.verifierDeniedMessageThree(),
-			L.verifierDeniedMessageFour()
-		] .map { text -> (TextView, CGFloat) in
-			(TextView(htmlText: text), 16)
-		}
+		let textViews = [(TextView(htmlText: L.verifierDeniedMessageOne()), spacing),
+						 (TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
+						 (TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
+						 (TextView(htmlText: L.verifierDeniedMessageFour()), spacing),
+						 (TextView(htmlText: L.verifierDeniedMessageFive()), spacing)]
 
 		coordinator?.displayContent(
 			title: L.verifierDeniedTitle(),
 			content: textViews
 		)
 	}
+	
+	private func showDccInfo() {
+		
+		guard let countryCode = verificationResult.details?.issuerCountryCode else { return }
+		
+		// Do not display for domestic result
+		guard countryCode.caseInsensitiveCompare("NL") != .orderedSame else { return }
+		
+		dccFlag = flag(country: countryCode)
+		dccScanned = L.verifierResultAccessDcc()
+	}
+	
+	/// Get emoji country flag for two character country code
+	/// - Parameter country: The country code
+	/// - Returns: Emoji country flag
+	private func flag(country: String) -> String? {
+		
+		let base: UInt32 = 127397
+		var scalars = ""
+		for scalar in country.unicodeScalars {
+			scalars.unicodeScalars.append(UnicodeScalar(base + scalar.value)!)
+		}
+		let flag = String(scalars)
+		return flag.isEmpty ? nil : flag
+	}
 
 	// MARK: - AutoCloseTimer
 
 	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
-	private func startAutoCloseTimer() {
+	func startAutoCloseTimer() {
 
 		guard autoCloseTimer == nil else {
 			return
@@ -270,6 +335,6 @@ class VerifierResultViewModel: Logging {
 
 		logInfo("Auto closing the result view")
 		stopAutoCloseTimer()
-		dismiss()
+		scanAgain()
 	}
 }

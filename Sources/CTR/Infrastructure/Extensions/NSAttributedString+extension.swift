@@ -259,3 +259,20 @@ extension NSMutableParagraphStyle {
 		minimumLineHeight = lineHeight * UIContentSizeCategory.currentSizeMultiplier
 	}
 }
+    
+public extension NSMutableAttributedString {
+
+    /// Trims white space and new line at the start and end
+    func trim() -> NSAttributedString {
+        let characterSet = CharacterSet.whitespacesAndNewlines.inverted
+        
+        let startRange = string.rangeOfCharacter(from: characterSet)
+        let endRange = string.rangeOfCharacter(from: characterSet, options: .backwards)
+        guard let startLocation = startRange?.lowerBound, let endLocation = endRange?.lowerBound else {
+            return NSAttributedString(string: string)
+        }
+
+        let trimRange = startLocation...endLocation
+        return attributedSubstring(from: NSRange(trimRange, in: string))
+    }
+}

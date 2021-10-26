@@ -82,9 +82,11 @@ class MenuView: ScrolledStackView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let topMargin: CGFloat = 32.0
-		static let topMenuSpacing: CGFloat = 32.0
-		static let bottomMenuSpacing: CGFloat = 24.0
+		// MenuItemView has additional margins, so less margins defined here
+		static let verticalMargin: CGFloat = 29.0
+		static let topMenuSpacing: CGFloat = 20.0
+		static let bottomMenuSpacing: CGFloat = 20.0
+		static let separatorHeight: CGFloat = 1.0
 	}
 
 	/// The stackview for the content
@@ -110,18 +112,12 @@ class MenuView: ScrolledStackView {
 		view.spacing = ViewTraits.bottomMenuSpacing
 		return view
 	}()
-
-	private let spacer: UIView = {
+	
+	private let separatorView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .clear
+		view.backgroundColor = Theme.colors.secondary.withAlphaComponent(0.5)
 		return view
-	}()
-
-	/// The bottom label
-	let bottomLabel: Label = {
-
-		return Label(footnote: nil, textColor: Theme.colors.secondary).multiline()
 	}()
 
 	override func setupViews() {
@@ -130,10 +126,10 @@ class MenuView: ScrolledStackView {
 		backgroundColor = Theme.colors.primary
 		
 		stackViewInset = UIEdgeInsets(
-			top: ViewTraits.topMargin,
+			top: ViewTraits.verticalMargin,
 			left: ViewTraits.margin,
 			bottom: ViewTraits.margin,
-			right: ViewTraits.margin
+			right: ViewTraits.verticalMargin
 		)
 	}
 
@@ -142,9 +138,8 @@ class MenuView: ScrolledStackView {
 		super.setupViewHierarchy()
 
 		stackView.addArrangedSubview(topStackView)
+		stackView.addArrangedSubview(separatorView)
 		stackView.addArrangedSubview(bottomStackView)
-		stackView.addArrangedSubview(spacer)
-		addSubview(bottomLabel)
 	}
 
 	/// Setup the constraints
@@ -153,28 +148,7 @@ class MenuView: ScrolledStackView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
-			// Spacer
-			spacer.heightAnchor.constraint(equalTo: bottomLabel.heightAnchor),
-
-			// Bottom label
-			bottomLabel.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			),
-			bottomLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-			bottomLabel.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.margin
-			)
+			separatorView.heightAnchor.constraint(equalToConstant: ViewTraits.separatorHeight)
 		])
-	}
-
-	// MARK: Public Access
-
-	/// The bottomText
-	var bottomText: String? {
-		didSet {
-			bottomLabel.text = bottomText
-		}
 	}
 }

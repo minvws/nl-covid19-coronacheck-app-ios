@@ -24,7 +24,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var userSettingsSpy: UserSettingsSpy!
 	private var sampleGreencardObjectID: NSManagedObjectID!
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
-	
+	private var migrationNotificationManagerSpy: DCCMigrationNotificationManagerSpy!
 	private static var initialTimeZone: TimeZone?
 
 	override class func setUp() {
@@ -51,8 +51,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
-		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration.default
+		remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigSpy.stubbedStoredConfiguration = .default
+		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
+
+		migrationNotificationManagerSpy = DCCMigrationNotificationManagerSpy()
 
 		Services.use(cryptoManagerSpy)
 		Services.use(remoteConfigSpy)
@@ -69,6 +73,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			datasource: datasourceSpy,
 			strippenRefresher: strippenRefresherSpy,
 			userSettings: userSettingsSpy,
+			dccMigrationNotificationManager: migrationNotificationManagerSpy,
 			now: { now }
 		)
 	}
@@ -1157,8 +1162,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 	}
 
 	func test_datasourceupdate_singleCurrentlyValidInternationalTest() {
-		remoteConfigSpy.stubbedGetConfigurationResult = .default
-		remoteConfigSpy.stubbedGetConfigurationResult.euTestTypes = [
+		remoteConfigSpy.stubbedStoredConfiguration = .default
+		remoteConfigSpy.stubbedStoredConfiguration.euTestTypes = [
 			.init(code: "LP6464-4", name: "PCR (NAAT)")
 		]
 
@@ -1192,13 +1197,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == "Testbewijs: PCR (NAAT)"
+			expect(nowValidityTexts[0].lines[0]) == "Type test: PCR (NAAT)"
 			expect(nowValidityTexts[0].lines[1]) == "Testdatum: donderdag 15 juli 16:02"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == "Testbewijs: PCR (NAAT)"
+			expect(futureValidityTexts[0].lines[0]) == "Type test: PCR (NAAT)"
 			expect(futureValidityTexts[0].lines[1]) == "Testdatum: donderdag 15 juli 16:02"
 
 			// check didTapViewQR
@@ -2118,6 +2123,22 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
+	}
+
+	// MARK: - RemoteConfig changes
+
+	func test_registersForRemoteConfigChanges_affectingStrippenRefresher() {
+		// Arrange
+		remoteConfigSpy.stubbedAppendUpdateObserverObserverResult = (RemoteConfiguration.default, Data(), URLResponse())
+
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+
+		// Assert
+		
+		// First: during `.init`
+		// Second: when it receives the `stubbedAppendUpdateObserverObserverResult` value above.
+		expect(self.strippenRefresherSpy.invokedLoadCount) == 2
 	}
 }
 

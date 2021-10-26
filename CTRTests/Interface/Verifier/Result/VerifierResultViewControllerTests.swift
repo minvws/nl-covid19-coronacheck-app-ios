@@ -30,7 +30,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		viewModel = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			verificationResult: MobilecoreVerificationResult()
+			verificationResult: MobilecoreVerificationResult(),
+			isDeepLinkEnabled: true
 		)
 		sut = VerifierResultViewController(viewModel: viewModel)
 	}
@@ -48,6 +49,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		// Given
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
+		details.issuerCountryCode = "NL"
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
 		result.details = details
@@ -59,11 +61,14 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.verifierResultDemoTitle()
-		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultAccessIdentityverified()
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
+		expect(self.sut.sceneView.checkIdentityView.checkIdentity) == L.verifierResultAccessCheckidentity()
+		expect(self.sut.sceneView.checkIdentityView.dccScanned).to(beNil())
+		expect(self.sut.sceneView.checkIdentityView.dccFlag).to(beNil())
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+		sut.assertImage()
 	}
 
 	func testDeniedInvalidQR() throws {
@@ -83,13 +88,14 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultDeniedReadmore()
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+		sut.assertImage()
 	}
 
 	func testVerified() throws {
 
 		// Given
 		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "NL"
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
 		result.details = details
@@ -101,11 +107,66 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.verifierResultAccessTitle()
-		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultAccessIdentityverified()
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
+		expect(self.sut.sceneView.checkIdentityView.checkIdentity) == L.verifierResultAccessCheckidentity()
+		expect(self.sut.sceneView.checkIdentityView.dccScanned).to(beNil())
+		expect(self.sut.sceneView.checkIdentityView.dccFlag).to(beNil())
 
 		// Snapshot
-		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+		sut.assertImage()
+	}
+	
+	func testVerifiedDCC() throws {
+
+		// Given
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "IT"
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		viewModel.verificationResult = result
+		loadView()
+
+		// When
+		viewModel.checkAttributes()
+
+		// Then
+		expect(self.sut.sceneView.title) == L.verifierResultAccessTitle()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultAccessIdentityverified()
+		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
+		expect(self.sut.sceneView.checkIdentityView.checkIdentity) == L.verifierResultAccessCheckidentity()
+		expect(self.sut.sceneView.checkIdentityView.dccScanned) == L.verifierResultAccessDcc()
+		expect(self.sut.sceneView.checkIdentityView.dccFlag) == "🇮🇹"
+
+		// Snapshot
+		sut.assertImage()
+	}
+	
+	func testVerifiedDCCWithoutFlag() throws {
+
+		// Given
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = ""
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		viewModel.verificationResult = result
+		loadView()
+
+		// When
+		viewModel.checkAttributes()
+
+		// Then
+		expect(self.sut.sceneView.title) == L.verifierResultAccessTitle()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultAccessIdentityverified()
+		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
+		expect(self.sut.sceneView.checkIdentityView.checkIdentity) == L.verifierResultAccessCheckidentity()
+		expect(self.sut.sceneView.checkIdentityView.dccScanned) == L.verifierResultAccessDcc()
+		expect(self.sut.sceneView.checkIdentityView.dccFlag).to(beNil())
+
+		// Snapshot
+		sut.assertImage()
 	}
 
 	func test_dismiss_shouldNavigateToVerifierWelcome() {

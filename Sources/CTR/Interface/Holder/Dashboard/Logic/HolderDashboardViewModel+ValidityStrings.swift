@@ -47,7 +47,7 @@ extension QRCard {
 
 				case (.validityHasBegun, .europeanUnion(let dccEvaluator), .test):
 					if let euTest = dccEvaluator(greencard, now)?.tests?.first {
-						let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
+						let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
 						return validityText_hasBegun_eu_test(testType: testType, validFrom: origin.validFromDate)
 					} else {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
@@ -107,7 +107,7 @@ private func validityText_hasBegun_eu_test(testType: String, validFrom: Date) ->
 	let formatter = HolderDashboardViewModel.dateWithDayAndTimeFormatter
 	return .init(
 		lines: [
-			"\(L.generalTestcertificate().capitalizingFirstLetter()): \(testType)",
+			"\(L.generalTesttype().capitalizingFirstLetter()): \(testType)",
 			"\(L.generalTestdate()): \(formatter.string(from: validFrom))"
 		],
 		kind: .current

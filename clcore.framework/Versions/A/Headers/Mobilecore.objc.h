@@ -86,11 +86,12 @@
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
 @property (nonatomic) NSString* _Nonnull credentialVersion;
+@property (nonatomic) NSString* _Nonnull isSpecimen;
+@property (nonatomic) NSString* _Nonnull issuerCountryCode;
 @property (nonatomic) NSString* _Nonnull firstNameInitial;
 @property (nonatomic) NSString* _Nonnull lastNameInitial;
 @property (nonatomic) NSString* _Nonnull birthDay;
 @property (nonatomic) NSString* _Nonnull birthMonth;
-@property (nonatomic) NSString* _Nonnull isSpecimen;
 @end
 
 @interface MobilecoreVerificationResult : NSObject <goSeqRefInterface> {
@@ -120,6 +121,8 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENA
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMMDD_FORMAT;
 
 @interface Mobilecore : NSObject
+// skipped variable CAS_SAN_TO_COUNTRY_CODE with unsupported type: map[string]string
+
 // skipped variable DATE_OF_BIRTH_REGEX with unsupported type: *regexp.Regexp
 
 /**
@@ -140,7 +143,7 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreErrorResult(NSError* _Nu
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreGenerateHolderSk(void);
 
-// skipped function GetDomesticVerifier with unsupported parameter or return types
+// skipped function GetVerifiersForCLI with unsupported parameter or return types
 
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreInitializeHolder(NSString* _Nullable configDirectoryPath);

@@ -31,11 +31,13 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 
 	private let pagesFactory: ScanInstructionsFactoryProtocol = ScanInstructionsFactory()
 	private let pages: [ScanInstructionsPage]
+	private let isOpenedFromMenu: Bool
 
-	init(navigationController: UINavigationController, delegate: ScanInstructionsDelegate) {
+	init(navigationController: UINavigationController, delegate: ScanInstructionsDelegate, isOpenedFromMenu: Bool) {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
+		self.isOpenedFromMenu = isOpenedFromMenu
 
 		pages = pagesFactory.create()
 	}
@@ -49,7 +51,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 			userSettings: UserSettings()
 		)
 		let viewController = ScanInstructionsViewController(viewModel: viewModel)
-		navigationController.pushOrReplaceTopViewController(with: viewController, animated: true)
+		navigationController.pushOrReplaceTopViewController(with: viewController, animated: !isOpenedFromMenu)
 	}
 
 	func userDidCompletePages() {

@@ -33,7 +33,7 @@ class ShowQRIrrelevantView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(title3: nil, montserrat: true).multiline()
+        return Label(title3: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The action label
@@ -134,6 +134,16 @@ class ShowQRIrrelevantView: BaseView {
 			actionButton.trailingAnchor.constraint(equalTo: innerView.trailingAnchor)
 		])
 	}
+	
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		accessibilityElements = [actionButton]
+		
+		guard let title = title, let action = action else { return }
+		actionButton.accessibilityLabel = title + action
+	}
 
 	// MARK: - Callbacks
 
@@ -148,6 +158,7 @@ class ShowQRIrrelevantView: BaseView {
 	var title: String? {
 		didSet {
 			titleLabel.text = title
+			setupAccessibility()
 		}
 	}
 
@@ -159,6 +170,7 @@ class ShowQRIrrelevantView: BaseView {
 				alignment: .center,
 				textColor: Theme.colors.iosBlue
 			)
+			setupAccessibility()
 		}
 	}
 

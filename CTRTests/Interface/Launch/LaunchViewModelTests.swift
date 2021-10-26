@@ -28,13 +28,17 @@ class LaunchViewModelTests: XCTestCase {
 
 		appCoordinatorSpy = AppCoordinatorSpy()
 		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
-		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
+		remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigSpy.stubbedStoredConfiguration = remoteConfig
+		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
+		remoteConfigSpy.stubbedAppendReloadObserverObserverResult = (.default, Data(), URLResponse())
+
 		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
 		deviceAuthenticationSpy = DeviceAuthenticationSpy()
 		userSettingsSpy = UserSettingsSpy()
 		cryptoLibUtilitySpy = CryptoLibUtilitySpy(fileStorage: FileStorage(), flavor: AppFlavor.flavor)
-		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 
 		Services.use(cryptoLibUtilitySpy)
@@ -86,7 +90,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_noActionRequired() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration.default, Data(), URLResponse())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((false, RemoteConfiguration.default)), ())
 
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
@@ -103,7 +107,6 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.userSettingsSpy.invokedConfigFetchedTimestampSetter) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.noActionNeeded
@@ -145,7 +148,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_internetRequired_forIssuerPublicKeys() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration.default, Data(), URLResponse())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((false, RemoteConfiguration.default)), ())
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
@@ -161,7 +164,6 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.userSettingsSpy.invokedConfigFetchedTimestampSetter) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
@@ -238,8 +240,8 @@ class LaunchViewModelTests: XCTestCase {
 		var remoteConfig = RemoteConfiguration.default
 		remoteConfig.minimumVersion = "2.0"
 
-		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((remoteConfig, Data(), URLResponse())), ())
+		remoteConfigSpy.stubbedStoredConfiguration = remoteConfig
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((false, remoteConfig)), ())
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
@@ -267,7 +269,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_cryptoLibNotInitialized() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration.default, Data(), URLResponse())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((false, RemoteConfiguration.default)), ())
 
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
@@ -299,7 +301,7 @@ class LaunchViewModelTests: XCTestCase {
 		var remoteConfig = RemoteConfiguration.default
 		remoteConfig.appDeactivated = true
 
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((remoteConfig, Data(), URLResponse())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((false, remoteConfig)), ())
 
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
@@ -331,7 +333,7 @@ class LaunchViewModelTests: XCTestCase {
 		remoteConfig.appDeactivated = true
 
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
+		remoteConfigSpy.stubbedStoredConfiguration = remoteConfig
 
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false

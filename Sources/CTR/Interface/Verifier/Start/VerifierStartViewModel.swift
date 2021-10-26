@@ -22,6 +22,8 @@ class VerifierStartViewModel: Logging {
 	weak private var cryptoManager: CryptoManaging?
 	weak private var proofManager: ProofManaging?
 	private var userSettings: UserSettingsProtocol
+	private let clockDeviationManager: ClockDeviationManaging
+	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 
 	// MARK: - Bindable properties
 
@@ -43,6 +45,8 @@ class VerifierStartViewModel: Logging {
 	/// The title of the button
 	@Bindable private(set) var showError: Bool = false
 
+	@Bindable private(set) var shouldShowClockDeviationWarning = false
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -53,11 +57,13 @@ class VerifierStartViewModel: Logging {
 		coordinator: VerifierCoordinatorDelegate,
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
+		clockDeviationManager: ClockDeviationManaging,
 		userSettings: UserSettingsProtocol = UserSettings()) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
 		self.proofManager = proofManager
+		self.clockDeviationManager = clockDeviationManager
 		self.userSettings = userSettings
 
 		primaryButtonTitle = L.verifierStartButtonTitle()
@@ -65,6 +71,14 @@ class VerifierStartViewModel: Logging {
 		header = L.verifierStartHeader()
 		message = L.verifierStartMessage()
 		showInstructionsTitle = L.verifierStartButtonShowinstructions()
+		shouldShowClockDeviationWarning = clockDeviationManager.hasSignificantDeviation ?? false
+
+		clockDeviationObserverToken = clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+			self?.shouldShowClockDeviationWarning = hasClockDeviation
+		}
+	}
+	deinit {
+		clockDeviationObserverToken.map(clockDeviationManager.removeDeviationChangeObserver)
 	}
 
 	func primaryButtonTapped() {
@@ -85,6 +99,10 @@ class VerifierStartViewModel: Logging {
 
 	func showInstructionsButtonTapped() {
 		coordinator?.didFinish(.userTappedProceedToScanInstructions)
+	}
+
+	func userDidTapClockDeviationWarningReadMore() {
+		coordinator?.userWishesMoreInfoAboutClockDeviation()
 	}
 
 	/// Update the public keys

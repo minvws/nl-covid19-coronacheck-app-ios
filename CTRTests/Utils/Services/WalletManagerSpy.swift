@@ -161,6 +161,30 @@ class WalletManagerSpy: WalletManaging {
 		invokedGreencardsWithUnexpiredOriginsParametersList.append((now, ()))
 		return stubbedGreencardsWithUnexpiredOriginsResult
 	}
+
+	var invokedCanSkipMultiDCCUpgrade = false
+	var invokedCanSkipMultiDCCUpgradeCount = 0
+	var stubbedCanSkipMultiDCCUpgradeResult: Bool! = false
+
+	func canSkipMultiDCCUpgrade() -> Bool {
+		invokedCanSkipMultiDCCUpgrade = true
+		invokedCanSkipMultiDCCUpgradeCount += 1
+		return stubbedCanSkipMultiDCCUpgradeResult
+	}
+
+	var invokedShouldShowMultiDCCUpgradeBanner = false
+	var invokedShouldShowMultiDCCUpgradeBannerCount = 0
+	var invokedShouldShowMultiDCCUpgradeBannerParameters: (userSettings: UserSettingsProtocol, Void)?
+	var invokedShouldShowMultiDCCUpgradeBannerParametersList = [(userSettings: UserSettingsProtocol, Void)]()
+	var stubbedShouldShowMultiDCCUpgradeBannerResult: Bool! = false
+
+	func shouldShowMultiDCCUpgradeBanner(userSettings: UserSettingsProtocol) -> Bool {
+		invokedShouldShowMultiDCCUpgradeBanner = true
+		invokedShouldShowMultiDCCUpgradeBannerCount += 1
+		invokedShouldShowMultiDCCUpgradeBannerParameters = (userSettings, ())
+		invokedShouldShowMultiDCCUpgradeBannerParametersList.append((userSettings, ()))
+		return stubbedShouldShowMultiDCCUpgradeBannerResult
+	}
 }
 
 extension WalletManagerSpy {

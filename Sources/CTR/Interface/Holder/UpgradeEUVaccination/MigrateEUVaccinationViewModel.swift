@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class UpgradeEUVaccinationViewModel: Logging {
+final class MigrateEUVaccinationViewModel: Logging {
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
@@ -46,7 +46,7 @@ final class UpgradeEUVaccinationViewModel: Logging {
 			guard let self = self else { return }
 			self.isLoading = false
 			self.handleGreenCardResult(result, onSuccess: {
-				self.userSettings.shouldNotifyThatEUVaccinationsWereUpgraded = true
+				self.userSettings.didCompleteEUVaccinationMigration = true
 				self.coordinator?.upgradeEUVaccinationDidComplete()
 			})
 		}
@@ -89,7 +89,7 @@ final class UpgradeEUVaccinationViewModel: Logging {
 // Future: there is a ticket to deduplicate this as it is taken from ListEventsViewModel.
 // Taiga task: 2072
 
-extension UpgradeEUVaccinationViewModel {
+extension MigrateEUVaccinationViewModel {
 
 	// MARK: Errors
 

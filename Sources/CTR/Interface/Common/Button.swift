@@ -11,22 +11,24 @@ import UIKit
 class Button: UIButton {
 	
     enum ButtonType {
-		// Rounded, blue background, white text
+		/// Rounded, blue background, white text
         case roundedBlue
-		// Rounded, white background, dark text
+		/// Rounded, white background, dark text
         case roundedWhite
-		// Rounded, clear background, dark border
+		/// Rounded, clear background, dark border
 		case roundedClear
-		// Text only, blue text
+		/// Rounded, white background, blue text, blue border
+		case roundedBlueBorder
+		/// Text only, blue text
         case textLabelBlue
-		// Rounded, blue background, white text, right image with label in center
+		/// Rounded, blue background, white text, right image with label in center
 		case roundedBlueImage
 		
 		func backgroundColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlue, .roundedBlueImage:
 					return isEnabled ? Theme.colors.primary : Theme.colors.tertiary
-				case .roundedWhite:
+				case .roundedWhite, .roundedBlueBorder:
 					return isEnabled ? Theme.colors.secondary : Theme.colors.grey2
 				case .roundedClear, .textLabelBlue:
 					return .clear
@@ -43,6 +45,8 @@ class Button: UIButton {
 					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
 				case .textLabelBlue:
 					return isEnabled ? Theme.colors.iosBlue : Theme.colors.grey2
+				case .roundedBlueBorder:
+					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
 			}
 		}
 		
@@ -69,12 +73,17 @@ class Button: UIButton {
 		}
 		
 		func borderColor(isEnabled: Bool = true) -> UIColor {
-			return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+			switch self {
+				case .roundedBlueBorder:
+					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
+				default:
+					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+			}
 		}
 		
 		var borderWidth: CGFloat {
 			switch self {
-				case .roundedClear: return 1
+				case .roundedClear, .roundedBlueBorder: return 1
 				default: return 0
 			}
 		}
@@ -172,6 +181,13 @@ class Button: UIButton {
             width: maxWidth + horizontalContentPadding + horizontalImagePadding,
             height: maxHeight + verticalPadding
         )
+	}
+	
+	override func setImage(_ image: UIImage?, for state: UIControl.State) {
+		super.setImage(image, for: state)
+		
+		guard style == .roundedBlueImage else { return }
+		contentEdgeInsets = image != nil ? ButtonType.roundedBlueImage.contentEdgeInsets : ButtonType.roundedBlue.contentEdgeInsets
 	}
 
     // MARK: - Private

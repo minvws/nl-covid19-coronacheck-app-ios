@@ -57,7 +57,14 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		footerView.translatesAutoresizingMaskIntoConstraints = false
 		return footerView
 	}()
-	
+
+	let clockDeviationWarningView: VerifierClockDeviationWarningView = {
+		let view = VerifierClockDeviationWarningView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		return view
+	}()
+
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 
 	/// Setup all the views
@@ -83,6 +90,8 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		contentView.addSubview(contentTextView)
 		contentView.addSubview(showInstructionsButton)
 		contentView.addSubview(spacer)
+
+		addSubview(clockDeviationWarningView)
 		addSubview(footerButtonView)
 	}
 
@@ -147,7 +156,12 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
 			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
 			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
-			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+			// ClockDeviationWarningView
+			clockDeviationWarningView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: ViewTraits.margin),
+			clockDeviationWarningView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: ViewTraits.margin),
+			clockDeviationWarningView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -ViewTraits.margin)
 		])
 	}
 

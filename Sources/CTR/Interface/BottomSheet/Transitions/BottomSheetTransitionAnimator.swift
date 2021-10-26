@@ -71,7 +71,12 @@ private extension BottomSheetTransitionAnimator {
 		let curve = animationCurve(using: transitionContext)
 		let duration = transitionDuration(using: transitionContext)
 		
+		// Create snapshot to fix UITextView animation rendering issues
+		let snapshotView = disappearingView.snapshotView(afterScreenUpdates: true)!
+		disappearingView.addSubview(snapshotView)
+		
 		var finalFrame = transitionContext.finalFrame(for: disappearingController)
+		snapshotView.bounds.size = finalFrame.size
 		disappearingView.frame = finalFrame
 		
 		finalFrame.origin.y = transitionContext.containerView.frame.height
@@ -81,6 +86,8 @@ private extension BottomSheetTransitionAnimator {
 		} completion: { _ in
 			if !transitionContext.transitionWasCancelled {
 				disappearingView.removeFromSuperview()
+			} else {
+				snapshotView.removeFromSuperview()
 			}
 			transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
 		}

@@ -318,7 +318,7 @@ targets:
       base:
         APP_FLAVOR: verifier
         # keep the comment on the next line, as it shows up in the CI logs & helps distinguish
-        MARKETING_VERSION: 2.4.0 # verifier
+        MARKETING_VERSION: 2.5.0 # verifier
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconVerifier
         INFOPLIST_FILE: Sources/CTR/Configuration/verifier-Info.plist
       configs:
@@ -326,21 +326,38 @@ targets:
           DISPLAY_NAME: "🤖 Dev Scanner"
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Dev
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Verifier-Dev.entitlements
         FirebaseAcceptance:
           DISPLAY_NAME: "💡 Acc Scanner"
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Acc
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.acc
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Verifier-Acc.entitlements
         FirebaseProduction:
           DISPLAY_NAME: "Prod Scanner"
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Prod
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Verifier-Prod.entitlements
         AppStore:
           DISPLAY_NAME: Scanner
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier AppStore
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Verifier-Prod.entitlements
     info:
       path: Sources/CTR/Configuration/verifier-Info.plist
       properties:
+        CFBundleURLTypes:
+            - CFBundleTypeRole: Editor
+              CFBundleURLName: nl.rijksoverheid.ctr.verifier
+              CFBundleURLSchemes:
+                - coronacheck-verifier
+            - CFBundleTypeRole: Editor
+              CFBundleURLName: nl.rijksoverheid.ctr.verifier.dev
+              CFBundleURLSchemes:
+                - coronacheck-verifier-dev
+            - CFBundleTypeRole: Editor
+              CFBundleURLName: nl.rijksoverheid.ctr.verifier.acc
+              CFBundleURLSchemes:
+                - coronacheck-verifier-acc
         UILaunchStoryboardName: LaunchScreenVerifier
 
   CTRTests:

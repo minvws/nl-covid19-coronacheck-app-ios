@@ -19,6 +19,8 @@ enum AboutMenuIdentifier: String {
 	case colophon
 
 	case clearData
+	
+	case deeplink
 }
 
 ///// Struct for information to display the different test providers
@@ -40,11 +42,14 @@ class AboutViewModel: Logging {
 
 	weak var walletManager: WalletManaging? = Services.walletManager
 
+	private let userSettings: UserSettingsProtocol
+
 	// MARK: - Bindable
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
-	@Bindable private(set) var version: String
+	@Bindable private(set) var appVersion: String
+	@Bindable private(set) var configVersion: String?
 	@Bindable private(set) var listHeader: String
 	@Bindable private(set) var alert: AlertContent?
 	@Bindable private(set) var menu: [AboutMenuOption] = []
@@ -59,18 +64,33 @@ class AboutViewModel: Logging {
 	init(
 		coordinator: OpenUrlProtocol,
 		versionSupplier: AppVersionSupplierProtocol,
-		flavor: AppFlavor) {
+		flavor: AppFlavor,
+		userSettings: UserSettingsProtocol) {
 
 		self.coordinator = coordinator
 		self.flavor = flavor
+		self.userSettings = userSettings
 
 		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
 		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
 		self.listHeader = flavor == .holder ? L.holderAboutReadmore() : L.verifierAboutReadmore()
 
-		version = flavor == .holder
+		appVersion = flavor == .holder
 			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
 			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
+
+		configVersion = {
+			guard let timestamp = userSettings.configFetchedTimestamp,
+				  let hash = userSettings.configFetchedHash
+			else { return nil }
+
+			// 13-10-2021 00:00
+			let dateformatter = DateFormatter()
+			dateformatter.dateFormat = "dd-MM-yyyy HH:mm"
+			let dateString = dateformatter.string(from: Date(timeIntervalSince1970: timestamp))
+
+			return L.generalMenuConfigVersion(String(hash.prefix(7)), dateString)
+		}()
 
 		flavor == .holder ? setupMenuHolder() : setupMenuVerifier()
 	}
@@ -84,6 +104,7 @@ class AboutViewModel: Logging {
 		]
 		if Configuration().getEnvironment() != "production" {
 			menu.append(AboutMenuOption(identifier: .clearData, name: L.holderCleardataMenuTitle()))
+			menu.append(AboutMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
 	}
 
@@ -113,13 +134,15 @@ class AboutViewModel: Logging {
 				openUrlString(L.holderUrlColophon())
 			case .clearData:
 				showClearDataAlert()
+			case .deeplink:
+				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
 		}
 	}
 
-	private func openUrlString(_ urlString: String) {
+	private func openUrlString(_ urlString: String, inApp: Bool = true) {
 
 		if let url = URL(string: urlString) {
-			coordinator?.openUrl(url, inApp: true)
+			coordinator?.openUrl(url, inApp: inApp)
 		}
 	}
 
@@ -137,8 +160,10 @@ class AboutViewModel: Logging {
 	}
 
 	func clearData() {
-
+		// Reset wallet manager
 		walletManager?.removeExistingEventGroups()
 		walletManager?.removeExistingGreenCards()
+
+		userSettings.reset()
 	}
 }

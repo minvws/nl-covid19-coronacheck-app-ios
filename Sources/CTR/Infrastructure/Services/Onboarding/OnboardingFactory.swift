@@ -214,6 +214,6 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 	}
 
 	func getActionButtonTitle() -> String {
-		return L.generalNext()
+		return L.verifierConsentAction()
 	}
 }

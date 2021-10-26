@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct HPKData: Codable {
+struct HPKData: Codable, Equatable {
 	
 	let code: String
 	
@@ -23,21 +23,21 @@ struct HPKData: Codable {
 	let ma: String
 }
 
-struct Mapping: Codable {
+struct Mapping: Codable, Equatable {
 
 	let code: String
 	
 	let name: String
 }
 
-struct UniversalLinkPermittedDomain: Codable {
+struct UniversalLinkPermittedDomain: Codable, Equatable {
 
 	let url: String
 
 	let name: String
 }
 
-struct RemoteConfiguration: Codable {
+struct RemoteConfiguration: Codable, Equatable {
 
 	/// The minimum required version
 	var minimumVersion: String
@@ -62,6 +62,10 @@ struct RemoteConfiguration: Codable {
 
 	/// What is the TTL of the config
 	var configTTL: Int?
+
+	/// Loading config should always be done opportunisically,
+	/// but never more often than this value:
+	var configMinimumIntervalSeconds: Int?
 
 	/// What is the waiting period before a recovery is valid?
 	var recoveryWaitingPeriodDays: Int?
@@ -127,6 +131,7 @@ struct RemoteConfiguration: Codable {
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
 		case configTTL = "configTTL"
+		case configMinimumIntervalSeconds = "configMinimumIntervalSeconds"
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case requireUpdateBefore = "requireUpdateBefore"
 		case temporarilyDisabled = "temporarilyDisabled"
@@ -167,6 +172,7 @@ struct RemoteConfiguration: Codable {
 		config.appDeactivated = false
 		config.informationURL = nil
 		config.configTTL = 3600
+		config.configMinimumIntervalSeconds = 300
 		config.recoveryWaitingPeriodDays = 11
 		config.requireUpdateBefore = nil
 		config.temporarilyDisabled = false

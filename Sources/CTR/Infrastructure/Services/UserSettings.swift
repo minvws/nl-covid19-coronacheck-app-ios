@@ -17,6 +17,8 @@ protocol UserSettingsProtocol: AnyObject {
 
 	var configFetchedTimestamp: TimeInterval? { get set }
 
+	var configFetchedHash: String? { get set }
+
 	var lastScreenshotTime: Date? { get set }
 
 	var issuerKeysFetchedTimestamp: TimeInterval? { get set }
@@ -25,7 +27,11 @@ protocol UserSettingsProtocol: AnyObject {
 
 	var deviceAuthenticationWarningShown: Bool { get set }
 
-	var shouldNotifyThatEUVaccinationsWereUpgraded: Bool { get set }
+	// Flags for upgrading to Multiple DCCs:
+	var didCompleteEUVaccinationMigration: Bool { get set }
+	var didDismissEUVaccinationMigrationSuccessBanner: Bool { get set }
+
+	func reset()
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -42,6 +48,9 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "configFetchedTimestamp", defaultValue: nil)
 	var configFetchedTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
 
+	@UserDefaults(key: "configFetchedHash", defaultValue: nil)
+	var configFetchedHash: String? // swiftlint:disable:this let_var_whitespace
+
 	@UserDefaults(key: "issuerKeysFetchedTimestamp", defaultValue: nil)
 	var issuerKeysFetchedTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
 
@@ -54,6 +63,19 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
 
-	@UserDefaults(key: "shouldNotifyThatEUVaccinationsWereUpgraded", defaultValue: false)
-	var shouldNotifyThatEUVaccinationsWereUpgraded: Bool // swiftlint:disable:this let_var_whitespace
+	@UserDefaults(key: "didCompleteEUVaccinationMigration", defaultValue: false)
+	var didCompleteEUVaccinationMigration: Bool // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "didDismissEUVaccinationMigrationSuccessBanner", defaultValue: false)
+	var didDismissEUVaccinationMigrationSuccessBanner: Bool // swiftlint:disable:this let_var_whitespace
+
+	func reset() {
+		// Clear user defaults:
+		let userDefaults = Foundation.UserDefaults.standard
+
+		userDefaults
+			.dictionaryRepresentation()
+			.keys
+			.forEach(userDefaults.removeObject(forKey:))
+	}
 }

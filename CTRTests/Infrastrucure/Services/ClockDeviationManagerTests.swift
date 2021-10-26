@@ -18,9 +18,11 @@ class ClockDeviationManagerTests: XCTestCase {
 
 	override func setUp() {
 		super.setUp()
-		remoteConfigManagerSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
-		remoteConfigManagerSpy.stubbedGetConfigurationResult = .default
-
+		remoteConfigManagerSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
+		
 		sut = ClockDeviationManager(
 			remoteConfigManager: remoteConfigManagerSpy,
 			currentSystemUptime: { 1 * 3600 },
