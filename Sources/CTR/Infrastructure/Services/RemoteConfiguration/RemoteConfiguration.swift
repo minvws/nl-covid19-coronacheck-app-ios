@@ -70,12 +70,6 @@ struct RemoteConfiguration: Codable, Equatable {
 	/// What is the waiting period before a recovery is valid?
 	var recoveryWaitingPeriodDays: Int?
 
-	/// When should we update
-	var requireUpdateBefore: TimeInterval?
-
-	/// Is the app temporarily disabled?
-	var temporarilyDisabled: Bool?
-
 	/// Event validity
 
 	var recoveryEventValidityDays: Int?
@@ -127,8 +121,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		case configTTL = "configTTL"
 		case configMinimumIntervalSeconds = "configMinimumIntervalSeconds"
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
-		case requireUpdateBefore = "requireUpdateBefore"
-		case temporarilyDisabled = "temporarilyDisabled"
 		case recoveryEventValidityDays = "recoveryEventValidityDays"
 		case testEventValidityHours = "testEventValidityHours"
 		case vaccinationEventValidityDays = "vaccinationEventValidityDays"
@@ -166,8 +158,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.configTTL = 3600
 		config.configMinimumIntervalSeconds = 300
 		config.recoveryWaitingPeriodDays = 11
-		config.requireUpdateBefore = nil
-		config.temporarilyDisabled = false
 		config.recoveryEventValidityDays = 365
 		config.testEventValidityHours = 96
 		config.vaccinationEventValidityDays = 730
