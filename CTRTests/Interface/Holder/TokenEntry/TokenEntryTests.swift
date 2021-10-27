@@ -31,6 +31,12 @@ class TokenEntryViewModelTests: XCTestCase {
 		Services.use(networkManagerSpy)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	func test_withoutInitialRequestToken_initialState() {
 
 		// Arrange

@@ -30,6 +30,12 @@ class VerifierScanViewModelTests: XCTestCase {
         sut = VerifierScanViewModel( coordinator: verifyCoordinatorDelegateSpy)
     }
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
     // MARK: - Tests
 
     func test_dismiss() {

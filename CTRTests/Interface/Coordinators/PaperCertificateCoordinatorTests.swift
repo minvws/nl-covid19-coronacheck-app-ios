@@ -29,6 +29,12 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		sut.navigationController = navigationSpy
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	// MARK: - Tests
 
 	func test_userWishesToEnterToken() {

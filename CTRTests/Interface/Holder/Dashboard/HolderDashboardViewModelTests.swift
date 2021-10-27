@@ -39,11 +39,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		if let timeZone = initialTimeZone {
 			NSTimeZone.default = timeZone
 		}
+		Services.revertToDefaults()
 	}
 
 	override func setUp() {
 		super.setUp()
 
+		Services.use(NetworkSpy())
 		configSpy = ConfigurationGeneralSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
 		dataStoreManager = DataStoreManager(.inMemory)

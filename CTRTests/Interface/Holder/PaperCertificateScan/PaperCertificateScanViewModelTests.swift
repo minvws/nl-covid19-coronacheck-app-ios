@@ -24,6 +24,12 @@ final class PaperCertificateScanViewModelTests: XCTestCase {
 		Services.use(cryptoManagerSpy)
 		sut = PaperCertificateScanViewModel(coordinator: coordinatorDelegateSpy)
 	}
+
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
 	
 	func test_initialState() {
 		expect(self.sut.title) == L.holderScannerTitle()

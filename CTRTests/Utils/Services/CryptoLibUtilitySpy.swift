@@ -64,6 +64,18 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		invokedCheckFileParametersList.append((file, ()))
 	}
 
+	var invokedFetchIssuerPublicKeys = false
+	var invokedFetchIssuerPublicKeysCount = 0
+	var stubbedFetchIssuerPublicKeysOnCompletionResult: (Result<Data, ServerError>, Void)?
+
+	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?) {
+		invokedFetchIssuerPublicKeys = true
+		invokedFetchIssuerPublicKeysCount += 1
+		if let result = stubbedFetchIssuerPublicKeysOnCompletionResult {
+			onCompletion?(result.0)
+		}
+	}
+
 	var invokedReset = false
 	var invokedResetCount = 0
 

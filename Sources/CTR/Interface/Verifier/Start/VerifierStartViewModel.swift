@@ -19,10 +19,10 @@ class VerifierStartViewModel: Logging {
 	var loggingCategory: String = "VerifierStartViewModel"
 
 	weak private var coordinator: VerifierCoordinatorDelegate?
-	weak private var cryptoManager: CryptoManaging?
-	weak private var proofManager: ProofManaging?
+	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
+	weak private var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
 	private var userSettings: UserSettingsProtocol
-	private let clockDeviationManager: ClockDeviationManaging
+	private let clockDeviationManager: ClockDeviationManaging = Services.clockDeviationManager
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 
 	// MARK: - Bindable properties
@@ -42,7 +42,6 @@ class VerifierStartViewModel: Logging {
 	/// The title of the showInstructions button
 	@Bindable private(set) var showInstructionsTitle: String
 
-	/// The title of the button
 	@Bindable private(set) var showError: Bool = false
 
 	@Bindable private(set) var shouldShowClockDeviationWarning = false
@@ -50,20 +49,12 @@ class VerifierStartViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - cryptoManager: the crypto manager
-	///   - proofManager: the proof manager
 	///   - userSettings: the user managed settings
 	init(
 		coordinator: VerifierCoordinatorDelegate,
-		cryptoManager: CryptoManaging,
-		proofManager: ProofManaging,
-		clockDeviationManager: ClockDeviationManaging,
 		userSettings: UserSettingsProtocol = UserSettings()) {
 
 		self.coordinator = coordinator
-		self.cryptoManager = cryptoManager
-		self.proofManager = proofManager
-		self.clockDeviationManager = clockDeviationManager
 		self.userSettings = userSettings
 
 		primaryButtonTitle = L.verifierStartButtonTitle()
@@ -109,6 +100,6 @@ class VerifierStartViewModel: Logging {
 	private func updatePublicKeys() {
 
 		// Fetch the public keys from the issuer
-		proofManager?.fetchIssuerPublicKeys(onCompletion: nil)
+		cryptoLibUtility?.fetchIssuerPublicKeys(onCompletion: nil)
 	}
 }

@@ -31,6 +31,11 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	/// - Parameter file: file type
 	func checkFile(_ file: CryptoLibUtility.File)
 
+	/// Fetch the issuer public keys
+	/// - Parameters:
+	///   - onCompletion: completion handler
+	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?)
+
 	/// Reset to default
 	func reset()
 }
@@ -74,6 +79,8 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	
 	private let fileStorage: FileStorage
 	private let flavor: AppFlavor
+
+	private var networkManager: NetworkManaging = Services.networkManager
 	
 	init(fileStorage: FileStorage = FileStorage(), flavor: AppFlavor = AppFlavor.flavor) {
 		self.fileStorage = fileStorage
@@ -125,6 +132,17 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 
 		if fileStorage.fileExists(file.name) {
 			shouldInitialize.insert(file)
+		}
+	}
+
+	/// Fetch the issuer public keys
+	/// - Parameters:
+	///   - onCompletion: completion handler
+	///   - onError: error handler
+	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?) {
+
+		networkManager.getPublicKeys { result in
+			onCompletion?(result)
 		}
 	}
 

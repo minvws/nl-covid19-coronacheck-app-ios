@@ -16,7 +16,7 @@ class VerifierStartViewModelTests: XCTestCase {
 	private var sut: VerifierStartViewModel!
 
 	private var cryptoManagerSpy: CryptoManagerSpy!
-	private var proofManagerSpy: ProofManagingSpy!
+	private var cryptoLibUtilitySpy: CryptoLibUtilitySpy!
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var clockDeviationManagerSpy: ClockDeviationManagerSpy!
 	private var userSettingsSpy: UserSettingsSpy!
@@ -26,13 +26,23 @@ class VerifierStartViewModelTests: XCTestCase {
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		proofManagerSpy = ProofManagingSpy()
+		cryptoLibUtilitySpy = CryptoLibUtilitySpy(fileStorage: FileStorage(), flavor: AppFlavor.verifier)
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		userSettingsSpy = UserSettingsSpy()
 
 		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
+
+		Services.use(cryptoLibUtilitySpy)
+		Services.use(cryptoManagerSpy)
+		Services.use(clockDeviationManagerSpy)
+	}
+
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
 	}
 
 	// MARK: - Tests
@@ -42,9 +52,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -67,9 +74,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		userSettingsSpy.stubbedScanInstructionShown = false
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -90,9 +94,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		cryptoManagerSpy.stubbedHasPublicKeysResult = true
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -112,9 +113,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		cryptoManagerSpy.stubbedHasPublicKeysResult = false
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -122,7 +120,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.sut.showError) == true
 	}
 
@@ -132,9 +130,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		userSettingsSpy.stubbedScanInstructionShown = false
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -157,9 +152,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -175,9 +167,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -193,9 +182,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -216,9 +202,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
