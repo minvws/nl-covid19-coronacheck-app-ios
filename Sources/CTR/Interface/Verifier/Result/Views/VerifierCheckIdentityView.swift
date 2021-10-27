@@ -80,16 +80,12 @@ class VerifierCheckIdentityView: BaseView {
 	
 	private let dccScannedLabel: Label = {
 		
-		let label = Label(subheadHeavyBold: nil).multiline()
-		label.textColor = Theme.colors.secondaryText
-		return label
+		return Label(subheadHeavyBold: nil).multiline()
 	}()
 	
 	private let checkIdentityLabel: Label = {
 		
-		let label = Label(subhead: nil).multiline()
-		label.textColor = Theme.colors.secondaryText
-		return label
+		return Label(subhead: nil).multiline()
 	}()
 	
 	private let labelStackView: UIStackView = {
@@ -279,7 +275,8 @@ class VerifierCheckIdentityView: BaseView {
 		didSet {
 			checkIdentityLabel.attributedText = checkIdentity?.setLineHeight(ViewTraits.Label.lineHeight,
 																			 alignment: .center,
-																			 kerning: ViewTraits.Label.kerning)
+																			 kerning: ViewTraits.Label.kerning,
+																			 textColor: Theme.colors.secondaryText)
 		}
 	}
 	
@@ -293,7 +290,8 @@ class VerifierCheckIdentityView: BaseView {
 		didSet {
 			dccScannedLabel.attributedText = dccScanned?.setLineHeight(ViewTraits.Label.lineHeight,
 																	   alignment: .center,
-																	   kerning: ViewTraits.Label.kerning)
+																	   kerning: ViewTraits.Label.kerning,
+																	   textColor: Theme.colors.secondaryText)
 		}
 	}
 }

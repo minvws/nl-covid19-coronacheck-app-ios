@@ -105,8 +105,6 @@ class LaunchView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		messageLabel.textColor = Theme.colors.grey1
-		versionLabel.textColor = Theme.colors.grey1
 		backgroundColor = Theme.colors.viewControllerBackground
 	}
 
@@ -202,7 +200,8 @@ class LaunchView: BaseView {
 	var message: String? {
 		didSet {
 			messageLabel.attributedText = message?.setLineHeight(ViewTraits.Message.lineHeight,
-																 kerning: ViewTraits.Message.kerning)
+																 kerning: ViewTraits.Message.kerning,
+																 textColor: Theme.colors.grey1)
 		}
 	}
 
@@ -211,7 +210,8 @@ class LaunchView: BaseView {
 		didSet {
 			versionLabel.attributedText = version?.setLineHeight(ViewTraits.Version.lineHeight,
 																 alignment: .center,
-																 kerning: ViewTraits.Version.kerning)
+																 kerning: ViewTraits.Version.kerning,
+																 textColor: Theme.colors.grey1)
 		}
 	}
 
