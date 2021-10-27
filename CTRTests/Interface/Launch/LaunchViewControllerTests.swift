@@ -18,7 +18,6 @@ class LaunchViewControllerTests: XCTestCase {
 	private var appCoordinatorSpy: AppCoordinatorSpy!
 	private var versionSupplierSpy: AppVersionSupplierSpy!
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
-	private var proofManagerSpy: ProofManagingSpy!
 	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
 	private var deviceAuthenticationSpy: DeviceAuthenticationSpy!
 	private var userSettingsSpy: UserSettingsSpy!
@@ -37,15 +36,13 @@ class LaunchViewControllerTests: XCTestCase {
 		remoteConfigSpy.stubbedStoredConfiguration = remoteConfig
 		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
-		
-		proofManagerSpy = ProofManagingSpy()
+
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
 		deviceAuthenticationSpy = DeviceAuthenticationSpy()
 		userSettingsSpy = UserSettingsSpy()
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 
 		Services.use(remoteConfigSpy)
-		Services.use(proofManagerSpy)
 		Services.use(deviceAuthenticationSpy)
 		Services.use(jailBreakProtocolSpy)
 		Services.use(walletSpy)
