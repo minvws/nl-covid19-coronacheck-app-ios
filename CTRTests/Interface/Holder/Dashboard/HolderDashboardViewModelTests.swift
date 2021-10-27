@@ -60,6 +60,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		Services.use(cryptoManagerSpy)
 		Services.use(remoteConfigSpy)
+		Services.use(NetworkSpy())
 		
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
