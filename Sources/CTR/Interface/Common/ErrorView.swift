@@ -21,6 +21,7 @@ class ErrorView: BaseView {
 		static let margin: CGFloat = 20.0
 		static let textLeadingMargin: CGFloat = 8.0
 		static let imageTopMargin: CGFloat = 5.0
+		static let labelTopMargin: CGFloat = 2.0
 	}
 	
 	/// The error image
@@ -69,7 +70,10 @@ class ErrorView: BaseView {
 			),
 			
 			// Title
-			errorLabel.topAnchor.constraint(equalTo: topAnchor),
+			errorLabel.topAnchor.constraint(
+				equalTo: topAnchor,
+				constant: ViewTraits.labelTopMargin
+			),
 			errorLabel.leadingAnchor.constraint(
 				equalTo: errorImageView.trailingAnchor,
 				constant: ViewTraits.textLeadingMargin

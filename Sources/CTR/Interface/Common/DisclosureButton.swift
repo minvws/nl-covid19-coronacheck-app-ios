@@ -14,8 +14,8 @@ class DisclosureButton: DisclosureSubtitleButton {
 	private struct ViewTraits {
 
 		// Margins
-		static let topMargin: CGFloat = 16.0
-		static let bottomMargin: CGFloat = 20
+		static let topMargin: CGFloat = 18.0
+		static let bottomMargin: CGFloat = 22
 		static let leadingMargin: CGFloat = 16.0
 	}
 
