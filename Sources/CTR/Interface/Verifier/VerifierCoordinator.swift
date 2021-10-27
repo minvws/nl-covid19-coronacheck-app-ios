@@ -103,10 +103,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 			let dashboardViewController = VerifierStartViewController(
 				viewModel: VerifierStartViewModel(
-					coordinator: self,
-					cryptoManager: cryptoManager,
-					proofManager: proofManager,
-					clockDeviationManager: Services.clockDeviationManager
+					coordinator: self
 				)
 			)
 
