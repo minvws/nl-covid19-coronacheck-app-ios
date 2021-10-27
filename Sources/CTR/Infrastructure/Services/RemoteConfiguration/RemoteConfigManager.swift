@@ -13,7 +13,7 @@ protocol RemoteConfigManaging: AnyObject {
 
 	var storedConfiguration: RemoteConfiguration { get }
 
-	init(now: @escaping () -> Date, userSettings: UserSettingsProtocol)
+	init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, networkManager: NetworkManaging)
 
 	func appendUpdateObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
 	func appendReloadObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
@@ -54,16 +54,18 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 	private let now: () -> Date
 	private let userSettings: UserSettingsProtocol
-	private let networkManager: NetworkManaging = Services.networkManager
+	private let networkManager: NetworkManaging
 	
 	// MARK: - Setup
 
 	required init(
 		now: @escaping () -> Date,
-		userSettings: UserSettingsProtocol) {
+		userSettings: UserSettingsProtocol,
+		networkManager: NetworkManaging = Services.networkManager) {
 
 		self.now = now
 		self.userSettings = userSettings
+		self.networkManager = networkManager
 
 		registerTriggers()
 	}
@@ -126,11 +128,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 	/// 	 - completion: 	- Bool: whether the config did change during update.
 	///						- RemoteConfiguration: the latest configuration.
 	///
-	func update(
-		isAppFirstLaunch: Bool,
-		immediateCallbackIfWithinTTL: @escaping () -> Void,
-		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
-
+	func update(isAppFirstLaunch: Bool, immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
 		guard !isLoading else { return }
 		isLoading = true
 
