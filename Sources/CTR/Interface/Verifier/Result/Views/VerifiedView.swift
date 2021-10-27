@@ -24,6 +24,10 @@ final class VerifiedView: BaseView, AccessViewable {
 		enum Position {
 			static let contentMultiplier: CGFloat = 0.75
 		}
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
+		}
 	}
 	
 	private let imageView: UIImageView = {
@@ -38,7 +42,6 @@ final class VerifiedView: BaseView, AccessViewable {
 	private let titleLabel: Label = {
 
 		let label = Label(title1: nil, montserrat: true).multiline().header()
-		label.textAlignment = .center
 		label.textColor = Theme.colors.dark
 		return label
 	}()
@@ -95,6 +98,8 @@ final class VerifiedView: BaseView, AccessViewable {
 
 	/// The title
 	func title(_ title: String?) {
-		titleLabel.text = title
+		titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+														 alignment: .center,
+														 kerning: ViewTraits.Title.kerning)
 	}
 }

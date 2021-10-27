@@ -19,6 +19,8 @@ class ExpiredQRView: BaseView {
 		static let buttonSize: CGFloat = 40
 		static let imageWidth: CGFloat = 30
 		static let imageHeight: CGFloat = 32
+		static let titleLineHeight: CGFloat = 22
+		static let titleKerning: CGFloat = -0.41
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -137,7 +139,8 @@ class ExpiredQRView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight,
+															 kerning: ViewTraits.titleKerning)
 		}
 	}
 

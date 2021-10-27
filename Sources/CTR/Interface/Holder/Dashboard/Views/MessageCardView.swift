@@ -22,6 +22,10 @@ class MessageCardView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 24.0
+		
+		// Label
+		static let lineHeight: CGFloat = 22
+		static let kerning: CGFloat = -0.41
 	}
 
 	/// The title label
@@ -114,7 +118,7 @@ class MessageCardView: BaseView {
 		NSLayoutConstraint.activate([
 			messageWithCloseButtonStackView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
 			messageWithCloseButtonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-			messageWithCloseButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+			messageWithCloseButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 
 			messageWithCloseButtonStackView.bottomAnchor.constraint(equalTo: callToActionButtonStackView.topAnchor, constant: -10),
 
@@ -143,7 +147,8 @@ class MessageCardView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.lineHeight,
+															 kerning: ViewTraits.kerning)
 		}
 	}
 

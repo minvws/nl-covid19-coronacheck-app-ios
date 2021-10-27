@@ -14,6 +14,8 @@ final class EventDetailsView: BaseView {
 		
 		static let margin: CGFloat = 20.0
 		static let spacing: CGFloat = 24
+		static let titleLineHeight: CGFloat = 32
+		static let titleKerning: CGFloat = -0.26
 	}
 	
 	/// The title label
@@ -66,7 +68,8 @@ final class EventDetailsView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight,
+															 kerning: ViewTraits.titleKerning)
 			stackView.setCustomSpacing(ViewTraits.spacing, after: titleLabel)
 		}
 	}

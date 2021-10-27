@@ -20,6 +20,7 @@ class QRCardView: BaseView {
 		static let shadowOpacity: Float = 0.15
 		static let shadowOpacityBottomSquashedView: Float = 0.1
 		static let imageDimension: CGFloat = 40
+		static let titleLineHeight: CGFloat = 28
 		
 		// Margins
 		static let imageMargin: CGFloat = 32
@@ -379,7 +380,7 @@ class QRCardView: BaseView {
 
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
 		}
 	}
 

@@ -21,10 +21,20 @@ class DisclosureSubtitleButton: BaseView {
 
 		// Margins
 		static let textMargin: CGFloat = 4.0
-		static let margin: CGFloat = 20.0
-		static let topMargin: CGFloat = 18.0
+		static let disclosureMargin: CGFloat = 18.0
+		static let topMargin: CGFloat = 13.0
+		static let bottomMargin: CGFloat = 16.0
 		static let leadingMargin: CGFloat = 16.0
 		static let iconSpacing: CGFloat = 12.0
+		
+		enum Title {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
+		enum Message {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+		}
 	}
 
 	/// The title label
@@ -127,7 +137,7 @@ class DisclosureSubtitleButton: BaseView {
 			),
 			subtitleLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
-				constant: -ViewTraits.topMargin
+				constant: -ViewTraits.bottomMargin
 			),
 			
 			iconImageView.leadingAnchor.constraint(
@@ -150,7 +160,7 @@ class DisclosureSubtitleButton: BaseView {
 
 			disclosureView.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
+				constant: -ViewTraits.disclosureMargin
 			),
 			disclosureView.heightAnchor.constraint(equalToConstant: ViewTraits.disclosureHeight),
 			disclosureView.centerYAnchor.constraint(equalTo: centerYAnchor)
@@ -184,7 +194,8 @@ class DisclosureSubtitleButton: BaseView {
 	/// The  title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 kerning: ViewTraits.Title.kerning)
 			setAccessibilityLabel()
 		}
 	}
@@ -192,7 +203,8 @@ class DisclosureSubtitleButton: BaseView {
 	/// The sub title
 	var subtitle: String? {
 		didSet {
-			subtitleLabel.text = subtitle
+			subtitleLabel.attributedText = subtitle?.setLineHeight(ViewTraits.Message.lineHeight,
+																   kerning: ViewTraits.Message.kerning)
 			setAccessibilityLabel()
 		}
 	}
