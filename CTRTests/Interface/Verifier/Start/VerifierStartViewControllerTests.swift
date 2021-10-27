@@ -19,7 +19,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: VerifierStartViewModel!
 	private var cryptoManagerSpy: CryptoManagerSpy!
-	private var proofManagerSpy: ProofManagingSpy!
+	private var cryptoLibUtilitySpy: CryptoLibUtilitySpy!
 	private var clockDeviationManagerSpy: ClockDeviationManagerSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	
@@ -31,18 +31,18 @@ class VerifierStartViewControllerTests: XCTestCase {
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		proofManagerSpy = ProofManagingSpy()
+		cryptoLibUtilitySpy = CryptoLibUtilitySpy(fileStorage: FileStorage(), flavor: AppFlavor.verifier)
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
 		userSettingsSpy = UserSettingsSpy()
+		Services.use(cryptoLibUtilitySpy)
+		Services.use(cryptoManagerSpy)
+		Services.use(clockDeviationManagerSpy)
 
 		viewModel = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			clockDeviationManager: clockDeviationManagerSpy,
 			userSettings: userSettingsSpy
 		)
 		sut = VerifierStartViewController(viewModel: viewModel)
@@ -127,7 +127,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 			],
 			presentingViewController: sut
 		)
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 	}
 
 	func test_howInstructionsButtonTapped() {

@@ -83,14 +83,14 @@ final class Services {
 		couplingManager = couplingManaging
 	}
 
-	static func use(_ mappingManager: MappingManaging.Type) {
+	static func use(_ mappingManaging: MappingManaging) {
 
-		mappingManagingType = mappingManager
+		mappingManager = mappingManaging
 	}
 
-	static func use(_ clockDeviationManager: ClockDeviationManaging.Type) {
+	static func use(_ clockDeviationManaging: ClockDeviationManaging) {
 
-		clockDeviationType = clockDeviationManager
+		clockDeviationManager = clockDeviationManaging
 	}
 
 	static func use(_ walletManaging: WalletManaging) {
