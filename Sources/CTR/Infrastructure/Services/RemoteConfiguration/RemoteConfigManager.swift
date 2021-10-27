@@ -30,13 +30,6 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 	// MARK: - Types
 
-	enum ConfigValidity {
-		case neverFetched
-		case withinTTL
-		case withinMinimalInterval // should not refresh
-		case refreshNeeded
-	}
-
 	private struct Constants {
 		static let keychainService = "RemoteConfigManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
@@ -132,12 +125,11 @@ class RemoteConfigManager: RemoteConfigManaging {
 		guard !isLoading else { return }
 		isLoading = true
 
-		let newValidity = RemoteConfigManager.evaluateIfUpdateNeeded(
-			currentConfiguration: storedConfiguration,
+		let newValidity = FileValidity.evaluateIfUpdateNeeded(
+			configuration: storedConfiguration,
 			lastFetchedTimestamp: userSettings.configFetchedTimestamp,
 			isAppFirstLaunch: isAppFirstLaunch,
-			now: now,
-			userSettings: userSettings
+			now: now
 		)
 
 		// Special actions per-validity:
@@ -212,39 +204,6 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 				completion(.success((true, remoteConfiguration)))
 		}
-	}
-	
-	// MARK: - Static functions
-
-	static private func evaluateIfUpdateNeeded(
-		currentConfiguration: RemoteConfiguration,
-		lastFetchedTimestamp: TimeInterval?,
-		isAppFirstLaunch: Bool,
-		now: @escaping () -> Date,
-		userSettings: UserSettingsProtocol)
-	-> ConfigValidity {
-
-		guard let lastFetchedTimestamp = lastFetchedTimestamp else {
-			return .neverFetched
-		}
-
-		let ttlThreshold = (now().timeIntervalSince1970 - TimeInterval(currentConfiguration.configTTL ?? 0))
-		let configValidity: ConfigValidity = lastFetchedTimestamp > ttlThreshold ? .withinTTL : .refreshNeeded
-
-		guard let minimumRefreshIntervalValue = currentConfiguration.configMinimumIntervalSeconds
-		else {
-			return configValidity
-		}
-
-		let minimumTimeAgoInterval = TimeInterval(minimumRefreshIntervalValue)
-		let isWithinMinimumTimeInterval = lastFetchedTimestamp > (now().timeIntervalSince1970 - minimumTimeAgoInterval)
-
-		// If isAppFirstLaunch, skip minimumTimeInterval:
-		guard !isWithinMinimumTimeInterval || (isWithinMinimumTimeInterval && isAppFirstLaunch) else {
-			// 🛑 device is still within the configMinimumIntervalSeconds, so prevent another refresh:
-			return .withinMinimalInterval
-		}
-		return configValidity
 	}
 }
 
