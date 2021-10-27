@@ -21,8 +21,9 @@ class DisclosureSubtitleButton: BaseView {
 
 		// Margins
 		static let textMargin: CGFloat = 4.0
-		static let margin: CGFloat = 20.0
-		static let topMargin: CGFloat = 18.0
+		static let disclosureMargin: CGFloat = 18.0
+		static let topMargin: CGFloat = 13.0
+		static let bottomMargin: CGFloat = 16.0
 		static let leadingMargin: CGFloat = 16.0
 		static let iconSpacing: CGFloat = 12.0
 		
@@ -136,7 +137,7 @@ class DisclosureSubtitleButton: BaseView {
 			),
 			subtitleLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
-				constant: -ViewTraits.topMargin
+				constant: -ViewTraits.bottomMargin
 			),
 			
 			iconImageView.leadingAnchor.constraint(
@@ -159,7 +160,7 @@ class DisclosureSubtitleButton: BaseView {
 
 			disclosureView.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
+				constant: -ViewTraits.disclosureMargin
 			),
 			disclosureView.heightAnchor.constraint(equalToConstant: ViewTraits.disclosureHeight),
 			disclosureView.centerYAnchor.constraint(equalTo: centerYAnchor)

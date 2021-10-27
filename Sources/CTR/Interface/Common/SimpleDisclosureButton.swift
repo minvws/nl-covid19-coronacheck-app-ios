@@ -20,7 +20,8 @@ class SimpleDisclosureButton: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let textMargin: CGFloat = 15.0
+		static let topMargin: CGFloat = 13.0
+		static let bottomMargin: CGFloat = 16.0
 	}
 
 	private let titleLabel: Label = {
@@ -80,13 +81,13 @@ class SimpleDisclosureButton: BaseView {
 			// Title
 			titleLabel.topAnchor.constraint(
 				equalTo: topAnchor,
-				constant: ViewTraits.textMargin
+				constant: ViewTraits.topMargin
 			),
 			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
 			titleLabel.trailingAnchor.constraint(equalTo: disclosureView.leadingAnchor),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
-				constant: -ViewTraits.textMargin
+				constant: -ViewTraits.bottomMargin
 			),
 			titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.lineHeight),
 
