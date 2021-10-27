@@ -54,13 +54,6 @@ protocol CryptoManaging: AnyObject {
 	/// - Parameter ism: the issuer commit message (signed testproof)
 	/// - Returns: Credential data if success, error if not
 	func createCredential(_ ism: Data) -> Result<Data, CryptoError>
-
-	/// Store the credential in the vault
-	/// - Parameter credential: the credential
-	func storeCredential(_ credential: Data)
-
-	/// Remove the credential
-	func removeCredential()
 	
 	// MARK: QR
 

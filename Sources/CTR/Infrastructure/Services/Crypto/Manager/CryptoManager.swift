@@ -199,17 +199,4 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		return .failure(CryptoError.unknown)
 	}
-
-	/// Store the credential in the vault
-	/// - Parameter credential: the credential
-	func storeCredential(_ credential: Data) {
-
-		cryptoData.credential = credential
-	}
-	
-	/// Remove the credential
-	func removeCredential() {
-		
-		cryptoData.credential = nil
-	}
 }
