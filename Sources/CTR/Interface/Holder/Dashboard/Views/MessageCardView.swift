@@ -118,7 +118,7 @@ class MessageCardView: BaseView {
 		NSLayoutConstraint.activate([
 			messageWithCloseButtonStackView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
 			messageWithCloseButtonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-			messageWithCloseButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+			messageWithCloseButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 
 			messageWithCloseButtonStackView.bottomAnchor.constraint(equalTo: callToActionButtonStackView.topAnchor, constant: -10),
 
