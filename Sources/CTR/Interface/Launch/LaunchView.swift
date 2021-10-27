@@ -23,6 +23,19 @@ class LaunchView: BaseView {
 		static let margin: CGFloat = 20.0
 		static let ribbonHeightOffset: CGFloat = 10.0
 		static let ribbonCenterOffset: CGFloat = 53.0
+		
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
+		}
+		enum Message {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
+		enum Version {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+		}
 	}
 
 	/// The government ribbon
@@ -92,11 +105,7 @@ class LaunchView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		titleLabel.textAlignment = .center
-		messageLabel.textColor = Theme.colors.grey1
-		versionLabel.textColor = Theme.colors.grey1
 		backgroundColor = Theme.colors.viewControllerBackground
-		versionLabel.textAlignment = .center
 	}
 
 	/// Setup the hierarchy
@@ -181,21 +190,28 @@ class LaunchView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 alignment: .center,
+															 kerning: ViewTraits.Title.kerning)
 		}
 	}
 
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.text = message
+			messageLabel.attributedText = message?.setLineHeight(ViewTraits.Message.lineHeight,
+																 kerning: ViewTraits.Message.kerning,
+																 textColor: Theme.colors.grey1)
 		}
 	}
 
 	/// The version
 	var version: String? {
 		didSet {
-			versionLabel.text = version
+			versionLabel.attributedText = version?.setLineHeight(ViewTraits.Version.lineHeight,
+																 alignment: .center,
+																 kerning: ViewTraits.Version.kerning,
+																 textColor: Theme.colors.grey1)
 		}
 	}
 

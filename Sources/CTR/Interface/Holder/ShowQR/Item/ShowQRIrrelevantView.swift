@@ -55,17 +55,18 @@ class ShowQRIrrelevantView: BaseView {
 		// Dimension
 		static let iconSize: CGFloat = 28.0
 		static let actionLineHeight: CGFloat = 22
+		static let titleLineHeight: CGFloat = 28
 
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let actionTitleMargin: CGFloat = 24.0
+		
 	}
 
 	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
-		titleLabel.textAlignment = .center
 		actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
 	}
 
@@ -157,7 +158,8 @@ class ShowQRIrrelevantView: BaseView {
 	/// The  title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight,
+															 alignment: .center)
 			setupAccessibility()
 		}
 	}

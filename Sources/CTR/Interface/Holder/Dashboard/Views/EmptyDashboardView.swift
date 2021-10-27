@@ -147,7 +147,6 @@ private final class EmptyStateCardView: BaseView {
 	private let titleLabel: Label = {
         let label = Label(headlineBold: nil, montserrat: true).multiline().header()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.textAlignment = .center
 		label.textColor = Theme.colors.dark
 		return label
 	}()
@@ -198,7 +197,7 @@ private final class EmptyStateCardView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(alignment: .center)
 		}
 	}
 }

@@ -23,14 +23,14 @@ extension String {
 extension NSAttributedString {
 
 	/// Set the line height
-	/// - Parameter lineHeight: the line height
+	/// - Parameter lineHeight: the line height (defaults to 22)
 	/// - Returns: attributed string
-	func setLineHeight(_ lineHeight: CGFloat = 20.0, alignment: NSTextAlignment = .left, kerning: CGFloat = 0.0) -> NSAttributedString {
+	func setLineHeight(_ lineHeight: CGFloat = 22.0, alignment: NSTextAlignment = .left, kerning: CGFloat = 0.0) -> NSAttributedString {
 
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byWordWrapping
 		paragraphStyle.alignment = alignment
-		paragraphStyle.minimumLineHeight = lineHeight
+		paragraphStyle.minimumLineHeightAdjustedForContentSize(lineHeight)
 
 		let attrString = NSMutableAttributedString(attributedString: self)
 		attrString.addAttributes(
@@ -134,7 +134,7 @@ public extension NSAttributedString {
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.alignment = .natural
 		paragraphStyle.paragraphSpacing = style.paragraphSpacing
-		paragraphStyle.minimumLineHeight = style.lineHeight
+		paragraphStyle.minimumLineHeightAdjustedForContentSize(style.lineHeight)
 
 		let attributes: [Key: Any] = [
 			.foregroundColor: style.textColor,
@@ -160,7 +160,7 @@ public extension NSAttributedString {
 		listParagraphStyle.tabStops = tabStops
 		listParagraphStyle.headIndent = tabInterval
 		listParagraphStyle.firstLineHeadIndent = 0
-		listParagraphStyle.minimumLineHeight = style.lineHeight
+		listParagraphStyle.minimumLineHeightAdjustedForContentSize(style.lineHeight)
 
 		return listParagraphStyle
 	}
@@ -253,6 +253,13 @@ public extension NSAttributedString {
 	}
 }
 
+extension NSMutableParagraphStyle {
+	
+	func minimumLineHeightAdjustedForContentSize(_ lineHeight: CGFloat) {
+		minimumLineHeight = lineHeight * UIContentSizeCategory.currentSizeMultiplier
+	}
+}
+    
 public extension NSMutableAttributedString {
 
     /// Trims white space and new line at the start and end

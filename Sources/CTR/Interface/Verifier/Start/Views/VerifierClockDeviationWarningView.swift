@@ -21,6 +21,8 @@ class VerifierClockDeviationWarningView: BaseView {
 		static let shadowOpacity: Float = 0.15
 		static let shadowOpacityBottomSquashedView: Float = 0.1
 		static let imageDimension: CGFloat = 40
+		static let messageLineHeight: CGFloat = 22
+		static let messageKerning: CGFloat = -0.41
 
 		// Margins
 		static let imageMargin: CGFloat = 32
@@ -124,7 +126,8 @@ class VerifierClockDeviationWarningView: BaseView {
 
 	var message: String? {
 		didSet {
-			messageLabel.text = message
+			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight,
+																 kerning: ViewTraits.messageKerning)
 		}
 	}
 	var buttonTitle: String? {

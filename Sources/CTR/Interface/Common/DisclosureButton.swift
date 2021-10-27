@@ -14,7 +14,8 @@ class DisclosureButton: DisclosureSubtitleButton {
 	private struct ViewTraits {
 
 		// Margins
-		static let singleLabelMargin: CGFloat = 26.0
+		static let topMargin: CGFloat = 18.0
+		static let bottomMargin: CGFloat = 22
 		static let leadingMargin: CGFloat = 16.0
 	}
 
@@ -33,7 +34,7 @@ class DisclosureButton: DisclosureSubtitleButton {
 			// Title
 			titleLabel.topAnchor.constraint(
 				equalTo: topAnchor,
-				constant: ViewTraits.singleLabelMargin
+				constant: ViewTraits.topMargin
 			),
 			titleLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
@@ -42,7 +43,7 @@ class DisclosureButton: DisclosureSubtitleButton {
 			titleLabel.trailingAnchor.constraint(equalTo: disclosureView.leadingAnchor),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
-				constant: -ViewTraits.singleLabelMargin
+				constant: -ViewTraits.bottomMargin
 			)
 		])
 

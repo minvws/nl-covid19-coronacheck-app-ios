@@ -14,6 +14,19 @@ final class DCCQRDetailsView: BaseView {
 		
 		static let margin: CGFloat = 20.0
 		static let spacing: CGFloat = 24
+		
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
+		}
+		enum Description {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
+		enum Footer {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
 	}
 	
 	/// The title label
@@ -67,14 +80,16 @@ final class DCCQRDetailsView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 kerning: ViewTraits.Title.kerning)
 		}
 	}
 	
 	/// The description
 	var detailsDescription: String? {
 		didSet {
-			descriptionLabel.text = detailsDescription
+			descriptionLabel.attributedText = detailsDescription?.setLineHeight(ViewTraits.Description.lineHeight,
+																				kerning: ViewTraits.Description.kerning)
 		}
 	}
 	
@@ -89,7 +104,8 @@ final class DCCQRDetailsView: BaseView {
 	/// The footer date information
 	var dateInformation: String? {
 		didSet {
-			dateInformationLabel.text = dateInformation
+			dateInformationLabel.attributedText = dateInformation?.setLineHeight(ViewTraits.Footer.lineHeight,
+																				 kerning: ViewTraits.Footer.kerning)
 		}
 	}
 	

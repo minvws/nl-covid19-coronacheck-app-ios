@@ -23,6 +23,10 @@ final class DeniedView: BaseView, AccessViewable {
 			static let buttonHeight: CGFloat = 52
 			static let buttonWidth: CGFloat = 234.0
 		}
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
+		}
 	}
 	
 	/// The scrollview
@@ -55,7 +59,6 @@ final class DeniedView: BaseView, AccessViewable {
 	private let titleLabel: Label = {
 
 		let label = Label(title1: nil, montserrat: true).multiline().header()
-		label.textAlignment = .center
 		label.textColor = Theme.colors.dark
 		return label
 	}()
@@ -139,7 +142,9 @@ final class DeniedView: BaseView, AccessViewable {
 	// MARK: - AccessViewable
 	
 	func title(_ title: String?) {
-		titleLabel.text = title
+		titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+														 alignment: .center,
+														 kerning: ViewTraits.Title.kerning)
 	}
 	
 	func primaryTitle(_ title: String?) {
