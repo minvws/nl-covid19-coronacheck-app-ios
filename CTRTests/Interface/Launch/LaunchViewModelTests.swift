@@ -16,7 +16,6 @@ class LaunchViewModelTests: XCTestCase {
 	private var appCoordinatorSpy: AppCoordinatorSpy!
 	private var versionSupplierSpy: AppVersionSupplierSpy!
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
-	private var proofManagerSpy: ProofManagingSpy!
 	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
 	private var deviceAuthenticationSpy: DeviceAuthenticationSpy!
 	private var userSettingsSpy: UserSettingsSpy!
@@ -34,7 +33,6 @@ class LaunchViewModelTests: XCTestCase {
 		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
 		remoteConfigSpy.stubbedAppendReloadObserverObserverResult = (.default, Data(), URLResponse())
 
-		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
 		deviceAuthenticationSpy = DeviceAuthenticationSpy()
 		userSettingsSpy = UserSettingsSpy()
@@ -44,7 +42,6 @@ class LaunchViewModelTests: XCTestCase {
 		Services.use(cryptoLibUtilitySpy)
 		Services.use(deviceAuthenticationSpy)
 		Services.use(jailBreakProtocolSpy)
-		Services.use(proofManagerSpy)
 		Services.use(remoteConfigSpy)
 		Services.use(walletSpy)
 	}
@@ -92,7 +89,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Given
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((false, RemoteConfiguration.default)), ())
 
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
+		cryptoLibUtilitySpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
@@ -107,7 +104,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.noActionNeeded
 		expect(self.sut.alert).to(beNil())
@@ -120,7 +117,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Given
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
+		cryptoLibUtilitySpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
@@ -136,7 +133,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.userSettingsSpy.invokedConfigFetchedTimestampSetter) == false
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.alert).to(beNil())
@@ -149,7 +146,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Given
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((false, RemoteConfiguration.default)), ())
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
+		cryptoLibUtilitySpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
@@ -164,7 +161,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.alert).to(beNil())
@@ -177,7 +174,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Given
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
+		cryptoLibUtilitySpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
@@ -193,7 +190,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.userSettingsSpy.invokedConfigFetchedTimestampSetter) == false
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.alert).to(beNil())
@@ -206,7 +203,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Given
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
+		cryptoLibUtilitySpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
@@ -224,7 +221,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.userSettingsSpy.invokedConfigFetchedTimestampSetter) == false
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateCount).toEventually(equal(1))
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
@@ -242,7 +239,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		remoteConfigSpy.stubbedStoredConfiguration = remoteConfig
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((false, remoteConfig)), ())
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
+		cryptoLibUtilitySpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
@@ -257,7 +254,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
 		expect(self.sut.alert).to(beNil())
@@ -271,7 +268,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Given
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((false, RemoteConfiguration.default)), ())
 
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
+		cryptoLibUtilitySpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 		cryptoLibUtilitySpy.stubbedIsInitialized = false
@@ -286,7 +283,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state)
 			.toEventually(equal(LaunchState.cryptoLibNotInitialized))
@@ -303,7 +300,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((false, remoteConfig)), ())
 
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
+		cryptoLibUtilitySpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 		cryptoLibUtilitySpy.stubbedIsInitialized = false
@@ -318,7 +315,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
 		expect(self.sut.alert).to(beNil())
@@ -335,7 +332,7 @@ class LaunchViewModelTests: XCTestCase {
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		remoteConfigSpy.stubbedStoredConfiguration = remoteConfig
 
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
+		cryptoLibUtilitySpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 		cryptoLibUtilitySpy.stubbedIsInitialized = false
@@ -350,7 +347,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
 		expect(self.sut.alert).to(beNil())
@@ -375,7 +372,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == false
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == false
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
 		expect(self.sut.alert).toNot(beNil())
@@ -401,7 +398,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
 		expect(self.sut.alert).to(beNil())
@@ -425,7 +422,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
 		expect(self.sut.alert).to(beNil())
@@ -472,7 +469,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == false
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == false
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
 		expect(self.sut.alert).toNot(beNil())
@@ -500,7 +497,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == false
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == false
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
 		expect(self.sut.alert).toNot(beNil())
@@ -528,7 +525,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
 		expect(self.sut.alert).to(beNil())
@@ -555,7 +552,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
 		expect(self.sut.alert).to(beNil())
