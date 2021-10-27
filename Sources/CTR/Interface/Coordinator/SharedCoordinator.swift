@@ -23,6 +23,11 @@ protocol OpenUrlProtocol: AnyObject {
 	func openUrl(_ url: URL, inApp: Bool)
 }
 
+protocol Restartable: AnyObject {
+
+	func restart()
+}
+
 /// The shared base class for the holder and verifier coordinator.
 class SharedCoordinator: Coordinator, Logging {
 
@@ -221,5 +226,26 @@ extension SharedCoordinator: ForcedInformationDelegate {
 
 		// Navigate to start
 		start()
+	}
+}
+
+// MARK: - Restartable
+
+extension SharedCoordinator: Restartable {
+
+	/// Restart the app
+	func restart() {
+
+		if #available(iOS 13.0, *) {
+			// Use Scene lifecycle
+			if let scene = UIApplication.shared.connectedScenes.first,
+				let sceneDelegate: SceneDelegate = (scene.delegate as? SceneDelegate) {
+				sceneDelegate.appCoordinator?.retry()
+			}
+		} else {
+			if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+				appDelegate.appCoordinator?.retry()
+			}
+		}
 	}
 }

@@ -63,4 +63,12 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		invokedCheckFileParameters = (file, ())
 		invokedCheckFileParametersList.append((file, ()))
 	}
+
+	var invokedReset = false
+	var invokedResetCount = 0
+
+	func reset() {
+		invokedReset = true
+		invokedResetCount += 1
+	}
 }

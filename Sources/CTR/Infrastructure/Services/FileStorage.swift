@@ -64,4 +64,23 @@ final class FileStorage: Logging {
 		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
 		return fileManager.fileExists(atPath: fileUrl.path)
 	}
+
+	/// Check if a file exists
+	/// - Parameter fileName: the name of the file
+	/// - Returns: True if it does.
+	func remove(_ fileName: String) {
+
+		guard let url = documentsURL else {
+			logError("Failed to load documents directory")
+			return
+		}
+
+		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
+		do {
+			try fileManager.removeItem(atPath: fileUrl.path)
+		} catch {
+			logError("Failed to read directory \(error)")
+		}
+	}
+
 }

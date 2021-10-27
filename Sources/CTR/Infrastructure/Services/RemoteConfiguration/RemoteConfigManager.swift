@@ -20,6 +20,8 @@ protocol RemoteConfigManaging: AnyObject {
 
 	func removeObserver(token: ObserverToken)
 	func update(isAppFirstLaunch: Bool, immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
+
+	func reset()
 }
 
 /// The remote configuration manager
@@ -248,7 +250,6 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 extension RemoteConfigManager {
 
-	// Used only for testing:
 	func reset() {
 		storedConfiguration = .default
 	}

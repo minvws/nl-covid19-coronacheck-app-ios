@@ -125,9 +125,9 @@ class WalletManager: WalletManaging, Logging {
 
 	/// Expire event groups that are no longer valid
 	/// - Parameters:
-	///   - vaccinationValidity: the max validity for vaccination
-	///   - recoveryValidity: the max validity for recovery
-	///   - testValidity: the max validity for test
+	///   - vaccinationValidity: the max validity for vaccination (in hours)
+	///   - recoveryValidity: the max validity for recovery (in hours)
+	///   - testValidity: the max validity for test (in hours)
 	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?) {
 
 		if let maxValidity = vaccinationValidity {

@@ -22,7 +22,7 @@ extension UIViewController {
 	/// - Parameters:
 	///   - alertContent: the content of the alert
 	///   - preferredAction: the title of the preferred action
-	func showAlert(_ alertContent: AlertContent?, preferredAction: String? = nil) {
+	func showAlert(_ alertContent: AlertContent?, preferredAction: String? = nil, okActionIsDestructive: Bool = false) {
 
 		guard let content = alertContent else {
 			return
@@ -35,7 +35,7 @@ extension UIViewController {
 		)
 		let okAction = UIAlertAction(
 				title: content.okTitle,
-				style: .default,
+				style: okActionIsDestructive ? .destructive : .default,
 				handler: content.okAction
 		)
 		alertController.addAction(okAction)
