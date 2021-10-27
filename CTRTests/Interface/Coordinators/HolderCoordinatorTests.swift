@@ -67,6 +67,10 @@ class HolderCoordinatorTests: XCTestCase {
 		forcedInformationSpy.stubbedNeedsUpdating = false
 		sut.forcedInformationManager = forcedInformationSpy
 
+		let remoteConfigManagerSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy())
+		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
+		Services.use(remoteConfigManagerSpy)
+
 		sut.childCoordinators = [
 			ForcedInformationCoordinator(
 				navigationController: navigationSpy,
