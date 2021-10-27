@@ -224,7 +224,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 			viewModel: EventStartViewModel(
 				coordinator: self,
 				eventMode: eventMode,
-				validAfterDays: Services.remoteConfigManager.getConfiguration().recoveryWaitingPeriodDays
+				validAfterDays: Services.remoteConfigManager.storedConfiguration.recoveryWaitingPeriodDays
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)

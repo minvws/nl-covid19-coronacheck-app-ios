@@ -30,12 +30,19 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	///   - content: the content
 	func displayContent(title: String, content: [DisplayContent])
 
+	func userWishesMoreInfoAboutClockDeviation()
+	
+	func navigateToVerifiedInfo()
+	
+	func userWishesToLaunchThirdPartyScannerApp()
 }
 
 class VerifierCoordinator: SharedCoordinator {
 
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
+	
+	private var thirdPartyScannerApp: (name: String, returnURL: URL)?
 
 	// Designated starter method
 	override func start() {
@@ -57,6 +64,30 @@ class VerifierCoordinator: SharedCoordinator {
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
 	}
+	
+	override func consume(universalLink: UniversalLink) -> Bool {
+		switch universalLink {
+			case .thirdPartyScannerApp(let returnURL):
+				guard let returnURL = returnURL,
+					  let matchingMetadata = remoteConfigManager.storedConfiguration.universalLinkPermittedDomains?.first(where: { permittedDomain in
+						  permittedDomain.url == returnURL.host
+					  })
+				else {
+					return true
+				}
+				
+				thirdPartyScannerApp = (name: matchingMetadata.name, returnURL: returnURL)
+				
+				// On next runloop to show navigation animation and to open camera right after app launch
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+					self.navigateToScan()
+				}
+				
+				return true
+			default:
+				return false
+		}
+	}
 }
 
 // MARK: - VerifierCoordinatorDelegate
@@ -74,7 +105,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				viewModel: VerifierStartViewModel(
 					coordinator: self,
 					cryptoManager: cryptoManager,
-					proofManager: proofManager
+					proofManager: proofManager,
+					clockDeviationManager: Services.clockDeviationManager
 				)
 			)
 
@@ -101,7 +133,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
-				verificationResult: verificationResult
+				verificationResult: verificationResult,
+				isDeepLinkEnabled: thirdPartyScannerApp != nil
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
@@ -141,6 +174,31 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		} else {
 			let destination = VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: self))
 			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
+		}
+	}
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		let title: String = L.verifierClockDeviationDetectedTitle()
+		let message: String = L.verifierClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+	
+	func navigateToVerifiedInfo() {
+		
+		let viewController = VerifiedInfoViewController(
+			viewModel: VerifiedInfoViewModel(
+				coordinator: self,
+				isDeepLinkEnabled: thirdPartyScannerApp != nil
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesToLaunchThirdPartyScannerApp() {
+		if let thirdPartyScannerApp = thirdPartyScannerApp {
+			openUrl(thirdPartyScannerApp.returnURL, inApp: false)
+		} else {
+			navigateToScan()
 		}
 	}
 }

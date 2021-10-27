@@ -23,6 +23,11 @@ protocol OpenUrlProtocol: AnyObject {
 	func openUrl(_ url: URL, inApp: Bool)
 }
 
+protocol Restartable: AnyObject {
+
+	func restart()
+}
+
 /// The shared base class for the holder and verifier coordinator.
 class SharedCoordinator: Coordinator, Logging {
 
@@ -58,6 +63,33 @@ class SharedCoordinator: Coordinator, Logging {
 	func start() {
 
 		// To be overwritten
+	}
+
+	/// Show an information page
+	/// - Parameters:
+	///   - title: the title of the page
+	///   - body: the body of the page
+	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
+
+		let viewController = InformationViewController(
+			viewModel: InformationViewModel(
+				coordinator: self,
+				title: title,
+				message: body,
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: openURLsInApp)
+				},
+				hideBodyForScreenCapture: hideBodyForScreenCapture
+			)
+		)
+		presentAsBottomSheet(viewController)
+	}
+
+	func presentAsBottomSheet(_ viewController: UIViewController) {
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.presentBottomSheet(viewController)
 	}
 
     // MARK: - Universal Link handling
@@ -194,5 +226,26 @@ extension SharedCoordinator: ForcedInformationDelegate {
 
 		// Navigate to start
 		start()
+	}
+}
+
+// MARK: - Restartable
+
+extension SharedCoordinator: Restartable {
+
+	/// Restart the app
+	func restart() {
+
+		if #available(iOS 13.0, *) {
+			// Use Scene lifecycle
+			if let scene = UIApplication.shared.connectedScenes.first,
+				let sceneDelegate: SceneDelegate = (scene.delegate as? SceneDelegate) {
+				sceneDelegate.appCoordinator?.retry()
+			}
+		} else {
+			if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+				appDelegate.appCoordinator?.retry()
+			}
+		}
 	}
 }

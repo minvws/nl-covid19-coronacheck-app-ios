@@ -43,7 +43,12 @@ class AboutView: ScrolledStackView {
 		return view
 	}()
 
-	private let versionLabel: Label = {
+	private let appVersionLabel: Label = {
+
+		return Label(subhead: nil).multiline()
+	}()
+
+	private let configVersionLabel: Label = {
 
 		return Label(subhead: nil).multiline()
 	}()
@@ -54,7 +59,8 @@ class AboutView: ScrolledStackView {
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 		stackView.distribution = .fill
-		versionLabel.textColor = Theme.colors.grey1
+		appVersionLabel.textColor = Theme.colors.grey1
+		configVersionLabel.textColor = Theme.colors.grey1
 	}
 
 	/// Setup the hierarchy
@@ -67,7 +73,9 @@ class AboutView: ScrolledStackView {
 		stackView.setCustomSpacing(0, after: listHeaderLabel)
 		stackView.addArrangedSubview(itemStackView)
 		stackView.setCustomSpacing(24, after: itemStackView)
-		stackView.addArrangedSubview(versionLabel)
+		stackView.addArrangedSubview(appVersionLabel)
+		stackView.setCustomSpacing(24, after: appVersionLabel)
+		stackView.addArrangedSubview(configVersionLabel)
 	}
 
 	override func setupViewConstraints() {
@@ -96,10 +104,21 @@ class AboutView: ScrolledStackView {
 		}
 	}
 
-	/// The version
-	var version: String? {
+	/// The app version
+	var appVersion: String? {
 		didSet {
-			versionLabel.attributedText = version?.setLineHeight(
+			appVersionLabel.attributedText = appVersion?.setLineHeight(
+				ViewTraits.versionLineHeight,
+				kerning: ViewTraits.versionLineKerning,
+				textColor: Theme.colors.grey1
+			)
+		}
+	}
+
+	/// The config version
+	var configVersion: String? {
+		didSet {
+			configVersionLabel.attributedText = configVersion?.setLineHeight(
 				ViewTraits.versionLineHeight,
 				kerning: ViewTraits.versionLineKerning,
 				textColor: Theme.colors.grey1

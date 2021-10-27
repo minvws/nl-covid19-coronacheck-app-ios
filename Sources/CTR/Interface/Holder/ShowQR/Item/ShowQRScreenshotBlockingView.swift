@@ -32,6 +32,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 		label.text = L.holderShowqrScreenshotwarningTitle()
 		label.setContentHuggingPriority(.required, for: .vertical)
 		label.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
+        label.header()
 
 		return label
 	}()

@@ -51,8 +51,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
-		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration.default
+		remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigSpy.stubbedStoredConfiguration = .default
+		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
+
 		migrationNotificationManagerSpy = DCCMigrationNotificationManagerSpy()
 
 		Services.use(cryptoManagerSpy)
@@ -1159,8 +1162,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 	}
 
 	func test_datasourceupdate_singleCurrentlyValidInternationalTest() {
-		remoteConfigSpy.stubbedGetConfigurationResult = .default
-		remoteConfigSpy.stubbedGetConfigurationResult.euTestTypes = [
+		remoteConfigSpy.stubbedStoredConfiguration = .default
+		remoteConfigSpy.stubbedStoredConfiguration.euTestTypes = [
 			.init(code: "LP6464-4", name: "PCR (NAAT)")
 		]
 
@@ -2120,6 +2123,22 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
+	}
+
+	// MARK: - RemoteConfig changes
+
+	func test_registersForRemoteConfigChanges_affectingStrippenRefresher() {
+		// Arrange
+		remoteConfigSpy.stubbedAppendUpdateObserverObserverResult = (RemoteConfiguration.default, Data(), URLResponse())
+
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+
+		// Assert
+		
+		// First: during `.init`
+		// Second: when it receives the `stubbedAppendUpdateObserverObserverResult` value above.
+		expect(self.strippenRefresherSpy.invokedLoadCount) == 2
 	}
 }
 

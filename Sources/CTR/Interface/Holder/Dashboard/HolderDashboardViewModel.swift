@@ -88,6 +88,7 @@ final class HolderDashboardViewModel: Logging {
 	private var dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private let now: () -> Date
+	private var remoteConfigUpdatesStrippenRefresherToken: RemoteConfigManager.ObserverToken?
 
 	// MARK: - Initializer
 	init(
@@ -131,6 +132,11 @@ final class HolderDashboardViewModel: Logging {
 		}
 		strippenRefresher.load()
 
+		// If the config ever changes, reload the strippen refresher:
+		remoteConfigUpdatesStrippenRefresherToken = remoteConfigManager.appendUpdateObserver { [weak strippenRefresher] _, _, _ in
+			strippenRefresher?.load()
+		}
+
 		self.setupNotificationListeners()
 
 		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
@@ -161,6 +167,7 @@ final class HolderDashboardViewModel: Logging {
 	deinit {
 		NotificationCenter.default.removeObserver(self)
 		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
+		remoteConfigUpdatesStrippenRefresherToken.map(remoteConfigManager.removeObserver)
 	}
 
 	func viewWillAppear() {
@@ -225,7 +232,14 @@ final class HolderDashboardViewModel: Logging {
 				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Presenting alert.")
 				currentlyPresentedAlert = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher, now: now())
 
-			// ❤️‍🩹 NETWORK ERROR: Refresher has entered a failed state (i.e. Server Error)
+			// ❤️‍🩹 NETWORK ERRORS: Refresher has entered a failed state (i.e. Server Error)
+
+			case (.failed(.serverResponseDidNotChangeExpiredOrExpiringState), _, _):
+				// This is a special case, and is caused by the user putting their system time
+				// so far into the future that it forces a strippen refresh, .. however the server time
+				// remains unchanged, so what it sends back does not resolve the `.expiring` or `.expired`
+				// state which the StrippenRefresher is currently in.
+				logDebug("StrippenRefresh: .serverResponseDidNotChangeExpiredOrExpiringState. Stopping.")
 
 			case (.failed, .expired, _):
 				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")

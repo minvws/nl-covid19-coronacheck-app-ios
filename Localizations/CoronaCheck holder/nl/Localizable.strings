@@ -1,3 +1,5 @@
+/* Configuratie ABC123, 13-10-2021 00:00 */
+"general.menu.configVersion" = "Configuratie %@, %@";
 "general.testtype" = "Type test";
 "general.readmore" = "Lees meer";
 "holder.dashboard.intro.international.button" = "Welk bewijs is nodig op mijn bestemming?";
@@ -34,10 +36,10 @@
 "holder.tokenentry.universallinkflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "general.error.server.unreachable.errorCode" = "<p>Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?</p><p><b>Foutcode:</b><br />%@</p>";
-"holder.cleardata.menu.title" = "Verwijder data";
-"holder.cleardata.alert.title" = "Verwijder data";
-"holder.cleardata.alert.subtitle" = "Weet je zeker dat je alle greencards en events wilt verwijderen?";
-"holder.cleardata.alert.remove" = "Verwijder";
+"holder.cleardata.menu.title" = "Wis gegevens";
+"holder.cleardata.alert.title" = "Alle gegevens wissen?";
+"holder.cleardata.alert.subtitle" = "Bij het wissen worden alle gegevens en bewijzen uit de app verwijderd. Na het wissen wordt de app teruggezet naar het beginpunt.";
+"holder.cleardata.alert.remove" = "Wis gegevens";
 "holder.errorstate.login.title" = "Inloggen afgebroken";
 "holder.errorstate.login.message.vaccination" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
 "holder.errorstate.login.message.recovery" = "Wil je jouw herstelgegevens ophalen? Log dan opnieuw in met DigiD.";
@@ -350,6 +352,7 @@
 "holder.menu.privacy" = "Privacyverklaring";
 "holder.menu.papercertificate" = "Papieren bewijs toevoegen";
 "holder.menu.colophon" = "Colofon";
+"holder.menu.verifierdeeplink" = "Open scanner";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang met een bewijs";
@@ -407,7 +410,7 @@
 "holder.clockDeviationDetected.title" = "Controleer de tijd van je telefoon";
 "holder.clockDeviationDetected.message" = "<p>Mogelijk klopt de tijd van jouw telefoon niet. Het kan bijvoorbeeld zijn dat je telefoon een paar minuten voor loopt. Om de CoronaCheck-app goed te kunnen gebruiken is het belangrijk dat de tijd juist staat ingesteld.</p><p><a href=\"%@\">Ga naar de instellingen</a> van jouw telefoon en zet de datum en tijd op 'automatisch instellen'.</p>";
 
-"holder.dashboard.clockDeviationDetected.message" = "Controleer de tijd van je telefoon. Mogelijk staat het niet goed ingesteld.";
+"holder.dashboard.clockDeviationDetected.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt wel een internationaal bewijs.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
@@ -432,7 +435,7 @@
 
 "holder.showqr.domestic.title" = "Nederlandse QR";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
-"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat dat je een geldig bewijs hebt. Niet of je een test of vaccinatie hebt gedaan.</p><p>Om zeker te zijn dat de QR-code bij jou hoort staan er enkele gegevens in de QR-code. Het gaat om de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand.</p><p>Jouw gegevens: <b>%@</b></p><p></p><p>*Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (-).</p>";
+"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. Er staat wel dat je een geldig bewijs hebt, maar niet of je een test hebt gedaan of gevaccineerd bent.</p><p>In de QR-code staat ook de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder.showqr.eu.title" = "Internationale QR";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
 "holder.showqr.eu.about.vaccination.description" = "Ben je in het buitenland of ga je de grens over? Dan zijn er meer gegevens nodig dan in Nederland. Daarom staan in jouw internationale QR-code de volgende gegevens:";

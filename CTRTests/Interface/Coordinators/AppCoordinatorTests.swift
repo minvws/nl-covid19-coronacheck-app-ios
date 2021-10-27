@@ -134,6 +134,7 @@ class AppCoordinatorTests: XCTestCase {
 		sut.handleLaunchState(state)
 
 		// Then
+		expect(config.isDeactivated) == true
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppUpdateViewController) == true

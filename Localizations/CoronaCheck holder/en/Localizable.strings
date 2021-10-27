@@ -1,3 +1,5 @@
+/* Configuratie ABC123, 13-10-2021 00:00 */
+"general.menu.configVersion" = "Configuration %@, %@";
 "general.testtype" = "Test type";
 "general.readmore" = "Read more";
 "holder.dashboard.intro.international.button" = "Which certificate is needed where I’m heading?";
@@ -350,6 +352,7 @@
 "holder.menu.privacy" = "Privacy statement";
 "holder.menu.papercertificate" = "Add paper certificate";
 "holder.menu.colophon" = "Colophon";
+"holder.menu.verifierdeeplink" = "Open scanner";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Only access with a certificate";
@@ -407,7 +410,7 @@
 "holder.clockDeviationDetected.title" = "Please check your phone’s time settings";
 "holder.clockDeviationDetected.message" = "<p>Your phone’s time settings may be incorrect. Your phone may be a few minutes ahead. To make the best use of the CoronaCheck app, it is important that the time is set correctly.</p><p><a href=\"%@\">Go to settings</a> on your phone and set date and time to ‘set automatically’.</p>";
 
-"holder.dashboard.clockDeviationDetected.message" = "Please check your phone’s time settings. These settings may be incorrect.";
+"holder.dashboard.clockDeviationDetected.message" = "Check your phone's time settings. They might be incorrect.";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Your %@ isn't valid internationally. You've only got a Dutch certificate.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Your %@ isn't valid in the Netherlands. You've only got an international certificate.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "About your vaccination certificate";
@@ -432,7 +435,7 @@
 
 "holder.showqr.domestic.title" = "Dutch QR";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
-"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code says whether or not the QR code is valid. It doesn't say whether or not you have a test certificate or vaccination.</p><p> The QR code also contains several of your details. This is to make sure the QR code belongs to you. The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth.</p><p>Your details: <b>%@</b></p><p></p><p>*. To protect your privacy, some details may disappear. In this case you will see a hyphen (-).</p>";
+"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal information. While it states that your certificate is valid, it doesn't specify if you've been tested or vaccinated.</p><p>The QR code also contains the first letter of your first and last name and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder.showqr.eu.title" = "International QR";
 "holder.showqr.eu.about.title" = "About my international QR code";
 "holder.showqr.eu.about.vaccination.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";

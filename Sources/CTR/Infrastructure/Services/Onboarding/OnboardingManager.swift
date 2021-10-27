@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol OnboardingManaging {
+protocol OnboardingManaging: AnyObject {
 
 	// Initialize
 	init()

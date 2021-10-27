@@ -61,6 +61,11 @@ class VerifierResultViewController: BaseViewController, Logging {
 			
 			self?.viewModel.showMoreInformation()
 		}
+		
+		sceneView.verifiedInfoTappedCommand = { [weak self] in
+			
+			self?.viewModel.showVerified()
+		}
 
 		viewModel.$hideForCapture.binding = { [weak self] in
 
@@ -71,10 +76,11 @@ class VerifierResultViewController: BaseViewController, Logging {
             #endif
 		}
 		
-		sceneView.primaryTitle = L.verifierResultNext()
-		
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$primaryTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 		viewModel.$secondaryTitle.binding = { [weak self] in self?.sceneView.secondaryTitle = $0 }
+		viewModel.$checkIdentity.binding = { [weak self] in self?.sceneView.checkIdentityView.checkIdentity = $0 }
+		viewModel.$primaryButtonIcon.binding = { [weak self] in self?.sceneView.primaryButtonIcon = $0 }
 		
 		// Identity
 		setupIdentityView()
@@ -82,6 +88,15 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.$firstName.binding = { [weak self] in self?.sceneView.checkIdentityView.firstName = $0 }
 		viewModel.$dayOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.dayOfBirth = $0 }
 		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.monthOfBirth = $0 }
+		viewModel.$dccFlag.binding = { [weak self] in self?.sceneView.checkIdentityView.dccFlag = $0 }
+		viewModel.$dccScanned.binding = { [weak self] in self?.sceneView.checkIdentityView.dccScanned = $0 }
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		
+		super.viewDidAppear(animated)
+		
+		viewModel.startAutoCloseTimer()
 	}
 
 	/// User tapped on the button
@@ -100,4 +115,6 @@ class VerifierResultViewController: BaseViewController, Logging {
 		sceneView.checkIdentityView.dayOfBirthHeader = L.verifierResultIdentityDayofbirth()
 		sceneView.checkIdentityView.monthOfBirthHeader = L.verifierResultIdentityMonthofbirth()
 	}
+	
+	override var enableSwipeBack: Bool { false }
 }

@@ -18,7 +18,7 @@ class ShowQRViewControllerTests: XCTestCase {
 	var cryptoManagerSpy: CryptoManagerSpy!
 	var dataStoreManager: DataStoreManaging!
 	var viewModel: ShowQRViewModel!
-	var remoteConfigMangingSpy: RemoteConfigManagingSpy!
+	var remoteConfigManagerSpy: RemoteConfigManagingSpy!
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
@@ -31,11 +31,13 @@ class ShowQRViewControllerTests: XCTestCase {
 		cryptoManagerSpy = CryptoManagerSpy()
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 
-		remoteConfigMangingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
-		remoteConfigMangingSpy.stubbedGetConfigurationResult = .default
-
+		remoteConfigManagerSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
+ 
 		Services.use(cryptoManagerSpy)
-		Services.use(remoteConfigMangingSpy)
+		Services.use(remoteConfigManagerSpy)
 
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createTestGreenCard(

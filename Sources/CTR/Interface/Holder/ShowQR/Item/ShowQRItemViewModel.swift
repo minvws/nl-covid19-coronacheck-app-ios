@@ -234,7 +234,7 @@ class ShowQRItemViewModel: Logging {
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(remoteConfigManager?.getConfiguration().domesticQRRefreshSeconds ?? 60),
+			timeInterval: TimeInterval(remoteConfigManager?.storedConfiguration.domesticQRRefreshSeconds ?? 60),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,

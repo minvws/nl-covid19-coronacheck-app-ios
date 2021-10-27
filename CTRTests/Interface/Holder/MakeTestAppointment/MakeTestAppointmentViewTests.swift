@@ -36,6 +36,6 @@ final class MakeTestAppointmentViewTests: XCTestCase {
 		sut.message = "Here is the message"
 
 		// Then
-		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+		sut.assertImage()
 	}
 }

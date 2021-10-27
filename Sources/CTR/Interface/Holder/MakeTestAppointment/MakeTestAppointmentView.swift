@@ -15,10 +15,13 @@ final class MakeTestAppointmentView: BaseView {
 		enum Margin {
 			static let edge: CGFloat = 20
 		}
-		
 		enum Spacing {
 			static let title: CGFloat = 24
 			static let button: CGFloat = 48
+		}
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
 		}
 	}
 	
@@ -45,10 +48,7 @@ final class MakeTestAppointmentView: BaseView {
 	
 	let button: Button = {
 
-		let button = Button(title: "Button", style: .roundedBlue)
-		button.translatesAutoresizingMaskIntoConstraints = false
-		button.contentEdgeInsets = UIEdgeInsets(top: 15, left: 56, bottom: 15, right: 56)
-		return button
+		return Button(title: "Button", style: .roundedBlue)
 	}()
 
 	/// setup the views
@@ -117,7 +117,10 @@ final class MakeTestAppointmentView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
+			)
 		}
 	}
 

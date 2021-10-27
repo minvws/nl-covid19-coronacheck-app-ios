@@ -21,11 +21,17 @@ class TextElement: UITextView, UITextViewDelegate {
         attributedText: NSAttributedString,
         font: UIFont = Theme.fonts.body,
         textColor: UIColor = Theme.colors.dark,
-        boldTextColor: UIColor = Theme.colors.dark) {
+        boldTextColor: UIColor = Theme.colors.dark
+    ) {
         super.init(frame: .zero, textContainer: nil)
         setup()
         
         self.attributedText = attributedText
+        
+        // Improve accessibility by trimming whitespace and newline characters
+        if let mutableAttributedText = attributedText.mutableCopy() as? NSMutableAttributedString {
+            accessibilityAttributedValue = mutableAttributedText.trim()
+        }
     }
     
     ///  Initializes the TextView with the given string

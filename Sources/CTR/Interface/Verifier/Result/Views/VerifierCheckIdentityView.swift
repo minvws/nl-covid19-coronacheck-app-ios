@@ -18,10 +18,14 @@ class VerifierCheckIdentityView: BaseView {
 			static let identitySide: CGFloat = UIDevice.current.isSmallScreen ? 20.0 : 48.0
 			static let headerTop: CGFloat = 32.0
 			static let headerBottom: CGFloat = 24.0
-			static let headerSide: CGFloat = 80.0
+			static let headerSide: CGFloat = 48.0
 		}
 		enum Spacing {
-			static let identityToSecondaryButton: CGFloat = 32
+			static let identityToCheckIdentityLabel: CGFloat = 24
+			static let secondaryToPrimaryButton: CGFloat = 16
+		}
+		enum Button {
+			static let height: CGFloat = 52
 		}
 	}
 	
@@ -59,9 +63,40 @@ class VerifierCheckIdentityView: BaseView {
 	}()
 	
 	let secondaryButton: Button = {
-		let button = Button(style: .textLabelBlue)
-		button.contentHorizontalAlignment = .leading
-		return button
+		
+		return Button(style: .roundedBlueBorder)
+	}()
+	
+	private let dccFlagLabel: Label = {
+		
+		let label = Label(title1: nil).multiline()
+		label.textColor = Theme.colors.secondaryText
+		label.textAlignment = .center
+		return label
+	}()
+	
+	private let dccScannedLabel: Label = {
+		
+		let label = Label(subheadHeavyBold: nil).multiline()
+		label.textColor = Theme.colors.secondaryText
+		label.textAlignment = .center
+		return label
+	}()
+	
+	private let checkIdentityLabel: Label = {
+		
+		let label = Label(subhead: nil).multiline()
+		label.textColor = Theme.colors.secondaryText
+		label.textAlignment = .center
+		return label
+	}()
+	
+	private let labelStackView: UIStackView = {
+		
+		let stackView = UIStackView()
+		stackView.translatesAutoresizingMaskIntoConstraints = false
+		stackView.axis = .vertical
+		return stackView
 	}()
 	
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
@@ -69,6 +104,9 @@ class VerifierCheckIdentityView: BaseView {
 	/// Setup the views
 	override func setupViews() {
 		super.setupViews()
+		
+		backgroundColor = Theme.colors.grey5
+		footerButtonView.primaryButton.style = .roundedBlueImage
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
 			let translatedOffset = scrollView.translatedBottomScrollOffset
@@ -84,13 +122,18 @@ class VerifierCheckIdentityView: BaseView {
 		addSubview(scrollView)
 		addSubview(footerButtonView)
 		scrollView.addSubview(identityView)
-		scrollView.addSubview(secondaryButton)
+		scrollView.addSubview(labelStackView)
+		footerButtonView.buttonStackView.insertArrangedSubview(secondaryButton, at: 0)
+		labelStackView.addArrangedSubview(dccFlagLabel)
+		labelStackView.addArrangedSubview(dccScannedLabel)
+		labelStackView.addArrangedSubview(checkIdentityLabel)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
+		
 		NSLayoutConstraint.activate([
 			
 			// Title
@@ -134,23 +177,27 @@ class VerifierCheckIdentityView: BaseView {
 				constant: -ViewTraits.Margin.identitySide * 2
 			),
 			
-			// Secondary button
-			secondaryButton.topAnchor.constraint(
+			// Check identity label
+			labelStackView.topAnchor.constraint(
 				equalTo: identityView.bottomAnchor,
-				constant: ViewTraits.Spacing.identityToSecondaryButton
+				constant: ViewTraits.Spacing.identityToCheckIdentityLabel
 			),
-			secondaryButton.leadingAnchor.constraint(
+			labelStackView.leadingAnchor.constraint(
 				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.identitySide
 			),
-			secondaryButton.trailingAnchor.constraint(
+			labelStackView.trailingAnchor.constraint(
 				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.identitySide
 			),
-			secondaryButton.bottomAnchor.constraint(
+			labelStackView.bottomAnchor.constraint(
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
+			labelStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			
+			// Secondary button
+			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
 			
 			// Footer view
 			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
@@ -224,6 +271,24 @@ class VerifierCheckIdentityView: BaseView {
 	var secondaryTitle: String? {
 		didSet {
 			secondaryButton.title = secondaryTitle
+		}
+	}
+	
+	var checkIdentity: String? {
+		didSet {
+			checkIdentityLabel.text = checkIdentity
+		}
+	}
+	
+	var dccFlag: String? {
+		didSet {
+			dccFlagLabel.text = dccFlag
+		}
+	}
+	
+	var dccScanned: String? {
+		didSet {
+			dccScannedLabel.text = dccScanned
 		}
 	}
 }
