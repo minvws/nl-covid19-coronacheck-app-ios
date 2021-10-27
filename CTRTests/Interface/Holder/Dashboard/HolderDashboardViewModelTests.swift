@@ -39,6 +39,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		if let timeZone = initialTimeZone {
 			NSTimeZone.default = timeZone
 		}
+		Services.revertToDefaults()
 	}
 
 	override func setUp() {

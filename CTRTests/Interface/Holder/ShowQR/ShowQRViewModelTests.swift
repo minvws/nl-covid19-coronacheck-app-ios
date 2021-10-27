@@ -28,6 +28,12 @@ class ShowQRViewModelTests: XCTestCase {
 		Services.use(cryptoManagerSpy)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	// MARK: - Tests
 
 	/// Test all the default content

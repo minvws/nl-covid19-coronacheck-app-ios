@@ -39,6 +39,12 @@ class VerifierStartViewModelTests: XCTestCase {
 		Services.use(clockDeviationManagerSpy)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	// MARK: - Tests
 
 	func test_defaultContent() {

@@ -28,6 +28,12 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	func test_backButtonTapped_loadingState() {
 
 		// Given

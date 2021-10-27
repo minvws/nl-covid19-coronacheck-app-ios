@@ -22,6 +22,12 @@ class CryptoLibUtilityTests: XCTestCase {
 		sut = CryptoLibUtility()
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	/// Test the fetch issuers public keys
 	func test_fetchIssuerPublicKeys() {
 

@@ -28,6 +28,12 @@ class LoginTVSViewModelTests: XCTestCase {
 		Services.use(openIDSpy)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	func test_loadingState_vaccinationMode() {
 
 		// Given

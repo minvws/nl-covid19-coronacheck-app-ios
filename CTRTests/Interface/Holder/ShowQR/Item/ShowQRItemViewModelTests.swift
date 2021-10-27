@@ -38,6 +38,12 @@ class ShowQRItemViewModelTests: XCTestCase {
 		Services.use(remoteConfigManagingSpy)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	// MARK: - Tests
 
 	/// Test all the default content

@@ -176,4 +176,37 @@ final class Services {
 		cryptoLibUtility.reset()
 		forcedInformationManager.reset()
 	}
+
+	static func revertToDefaults() {
+
+		cryptoManager = cryptoManagingType.init()
+		deviceAuthenticationDetector = deviceAuthenticationType.init()
+		dataStoreManager = dataStoreManagingType.init(StorageType.persistent)
+		walletManager = walletManagingType.init(
+			dataStoreManager: dataStoreManager
+		)
+		forcedInformationManager = forcedInformationManagingType.init()
+		jailBreakDetector = jailBreakType.init()
+		greenCardLoader = greenCardLoadingType.init(
+			networkManager: networkManager,
+			cryptoManager: cryptoManager,
+			walletManager: walletManager
+		)
+		remoteConfigManager = remoteConfigManagingType.init(
+			now: { Date() },
+			userSettings: UserSettings(),
+			networkManager: networkManager
+		)
+		onboardingManager = onboardingManagingType.init()
+		openIdManager = openIdManagerType.init()
+
+		couplingManager = couplingManagingType.init(
+			cryptoManager: cryptoManager,
+			networkManager: networkManager
+		)
+		mappingManager = mappingManagingType.init(
+			remoteConfigManager: remoteConfigManager
+		)
+		clockDeviationManager = clockDeviationType.init()
+	}
 }

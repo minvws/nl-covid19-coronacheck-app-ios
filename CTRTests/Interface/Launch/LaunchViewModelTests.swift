@@ -46,6 +46,12 @@ class LaunchViewModelTests: XCTestCase {
 		Services.use(walletSpy)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	let remoteConfig = RemoteConfiguration.default
 
 	// MARK: Tests
