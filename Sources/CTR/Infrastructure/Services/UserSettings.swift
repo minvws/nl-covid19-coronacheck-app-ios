@@ -31,6 +31,13 @@ protocol UserSettingsProtocol: AnyObject {
 	var didCompleteEUVaccinationMigration: Bool { get set }
 	var didDismissEUVaccinationMigrationSuccessBanner: Bool { get set }
 
+	// Flags for extension of Recovery validity:
+	var shouldCheckRecoveryGreenCardRevisedValidity: Bool { get set }
+	var shouldShowRecoveryValidityExtensionCard: Bool { get set }
+	var shouldShowRecoveryValidityReinstationCard: Bool { get set }
+	var hasDismissedRecoveryValidityExtensionCard: Bool { get set }
+	var hasDismissedRecoveryValidityReinstationCard: Bool { get set }
+	
 	func reset()
 }
 
@@ -63,11 +70,33 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
 
+	// MARK: - Multiple DCC migration:
+
 	@UserDefaults(key: "didCompleteEUVaccinationMigration", defaultValue: false)
 	var didCompleteEUVaccinationMigration: Bool // swiftlint:disable:this let_var_whitespace
 
 	@UserDefaults(key: "didDismissEUVaccinationMigrationSuccessBanner", defaultValue: false)
 	var didDismissEUVaccinationMigrationSuccessBanner: Bool // swiftlint:disable:this let_var_whitespace
+
+	// MARK: - Extension of Recovery validity:
+
+	@UserDefaults(key: "shouldCheckRecoveryGreenCardRevisedValidity", defaultValue: true)
+	var shouldCheckRecoveryGreenCardRevisedValidity: Bool // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "shouldShowRecoveryValidityExtensionCard", defaultValue: false)
+	var shouldShowRecoveryValidityExtensionCard: Bool // swiftlint:disable:this let_var_whitespace
+	@UserDefaults(key: "shouldShowRecoveryValidityReinstationCard", defaultValue: false)
+	var shouldShowRecoveryValidityReinstationCard: Bool // swiftlint:disable:this let_var_whitespace
+
+	/// blue
+	@UserDefaults(key: "hasDismissedRecoveryValidityExtensionCard", defaultValue: true)
+	var hasDismissedRecoveryValidityExtensionCard: Bool // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "hasDismissedRecoveryValidityReinstationCard", defaultValue: true)
+	var hasDismissedRecoveryValidityReinstationCard: Bool // swiftlint:disable:this let_var_whitespace
+}
+
+extension UserSettings {
 
 	func reset() {
 		// Clear user defaults:

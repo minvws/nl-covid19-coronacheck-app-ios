@@ -252,6 +252,116 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedShouldCheckRecoveryGreenCardRevisedValiditySetter = false
+	var invokedShouldCheckRecoveryGreenCardRevisedValiditySetterCount = 0
+	var invokedShouldCheckRecoveryGreenCardRevisedValidity: Bool?
+	var invokedShouldCheckRecoveryGreenCardRevisedValidityList = [Bool]()
+	var invokedShouldCheckRecoveryGreenCardRevisedValidityGetter = false
+	var invokedShouldCheckRecoveryGreenCardRevisedValidityGetterCount = 0
+	var stubbedShouldCheckRecoveryGreenCardRevisedValidity: Bool! = false
+
+	var shouldCheckRecoveryGreenCardRevisedValidity: Bool {
+		set {
+			invokedShouldCheckRecoveryGreenCardRevisedValiditySetter = true
+			invokedShouldCheckRecoveryGreenCardRevisedValiditySetterCount += 1
+			invokedShouldCheckRecoveryGreenCardRevisedValidity = newValue
+			invokedShouldCheckRecoveryGreenCardRevisedValidityList.append(newValue)
+		}
+		get {
+			invokedShouldCheckRecoveryGreenCardRevisedValidityGetter = true
+			invokedShouldCheckRecoveryGreenCardRevisedValidityGetterCount += 1
+			return stubbedShouldCheckRecoveryGreenCardRevisedValidity
+		}
+	}
+
+	var invokedShouldShowRecoveryValidityExtensionCardSetter = false
+	var invokedShouldShowRecoveryValidityExtensionCardSetterCount = 0
+	var invokedShouldShowRecoveryValidityExtensionCard: Bool?
+	var invokedShouldShowRecoveryValidityExtensionCardList = [Bool]()
+	var invokedShouldShowRecoveryValidityExtensionCardGetter = false
+	var invokedShouldShowRecoveryValidityExtensionCardGetterCount = 0
+	var stubbedShouldShowRecoveryValidityExtensionCard: Bool! = false
+
+	var shouldShowRecoveryValidityExtensionCard: Bool {
+		set {
+			invokedShouldShowRecoveryValidityExtensionCardSetter = true
+			invokedShouldShowRecoveryValidityExtensionCardSetterCount += 1
+			invokedShouldShowRecoveryValidityExtensionCard = newValue
+			invokedShouldShowRecoveryValidityExtensionCardList.append(newValue)
+		}
+		get {
+			invokedShouldShowRecoveryValidityExtensionCardGetter = true
+			invokedShouldShowRecoveryValidityExtensionCardGetterCount += 1
+			return stubbedShouldShowRecoveryValidityExtensionCard
+		}
+	}
+
+	var invokedShouldShowRecoveryValidityReinstationCardSetter = false
+	var invokedShouldShowRecoveryValidityReinstationCardSetterCount = 0
+	var invokedShouldShowRecoveryValidityReinstationCard: Bool?
+	var invokedShouldShowRecoveryValidityReinstationCardList = [Bool]()
+	var invokedShouldShowRecoveryValidityReinstationCardGetter = false
+	var invokedShouldShowRecoveryValidityReinstationCardGetterCount = 0
+	var stubbedShouldShowRecoveryValidityReinstationCard: Bool! = false
+
+	var shouldShowRecoveryValidityReinstationCard: Bool {
+		set {
+			invokedShouldShowRecoveryValidityReinstationCardSetter = true
+			invokedShouldShowRecoveryValidityReinstationCardSetterCount += 1
+			invokedShouldShowRecoveryValidityReinstationCard = newValue
+			invokedShouldShowRecoveryValidityReinstationCardList.append(newValue)
+		}
+		get {
+			invokedShouldShowRecoveryValidityReinstationCardGetter = true
+			invokedShouldShowRecoveryValidityReinstationCardGetterCount += 1
+			return stubbedShouldShowRecoveryValidityReinstationCard
+		}
+	}
+
+	var invokedHasDismissedRecoveryValidityExtensionCardSetter = false
+	var invokedHasDismissedRecoveryValidityExtensionCardSetterCount = 0
+	var invokedHasDismissedRecoveryValidityExtensionCard: Bool?
+	var invokedHasDismissedRecoveryValidityExtensionCardList = [Bool]()
+	var invokedHasDismissedRecoveryValidityExtensionCardGetter = false
+	var invokedHasDismissedRecoveryValidityExtensionCardGetterCount = 0
+	var stubbedHasDismissedRecoveryValidityExtensionCard: Bool! = false
+
+	var hasDismissedRecoveryValidityExtensionCard: Bool {
+		set {
+			invokedHasDismissedRecoveryValidityExtensionCardSetter = true
+			invokedHasDismissedRecoveryValidityExtensionCardSetterCount += 1
+			invokedHasDismissedRecoveryValidityExtensionCard = newValue
+			invokedHasDismissedRecoveryValidityExtensionCardList.append(newValue)
+		}
+		get {
+			invokedHasDismissedRecoveryValidityExtensionCardGetter = true
+			invokedHasDismissedRecoveryValidityExtensionCardGetterCount += 1
+			return stubbedHasDismissedRecoveryValidityExtensionCard
+		}
+	}
+
+	var invokedHasDismissedRecoveryValidityReinstationCardSetter = false
+	var invokedHasDismissedRecoveryValidityReinstationCardSetterCount = 0
+	var invokedHasDismissedRecoveryValidityReinstationCard: Bool?
+	var invokedHasDismissedRecoveryValidityReinstationCardList = [Bool]()
+	var invokedHasDismissedRecoveryValidityReinstationCardGetter = false
+	var invokedHasDismissedRecoveryValidityReinstationCardGetterCount = 0
+	var stubbedHasDismissedRecoveryValidityReinstationCard: Bool! = false
+
+	var hasDismissedRecoveryValidityReinstationCard: Bool {
+		set {
+			invokedHasDismissedRecoveryValidityReinstationCardSetter = true
+			invokedHasDismissedRecoveryValidityReinstationCardSetterCount += 1
+			invokedHasDismissedRecoveryValidityReinstationCard = newValue
+			invokedHasDismissedRecoveryValidityReinstationCardList.append(newValue)
+		}
+		get {
+			invokedHasDismissedRecoveryValidityReinstationCardGetter = true
+			invokedHasDismissedRecoveryValidityReinstationCardGetterCount += 1
+			return stubbedHasDismissedRecoveryValidityReinstationCard
+		}
+	}
+
 	var invokedReset = false
 	var invokedResetCount = 0
 
