@@ -44,6 +44,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 
+		Services.use(NetworkSpy())
 		configSpy = ConfigurationGeneralSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
 		dataStoreManager = DataStoreManager(.inMemory)
@@ -60,7 +61,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		Services.use(cryptoManagerSpy)
 		Services.use(remoteConfigSpy)
-		Services.use(NetworkSpy())
 		
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
