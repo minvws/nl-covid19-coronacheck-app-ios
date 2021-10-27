@@ -16,9 +16,6 @@ final class EmptyDashboardView: BaseView {
 			static let messageToButton: CGFloat = 16
 			static let cardToMessage: CGFloat = 32
 		}
-		enum Title {
-			static let lineHeight: CGFloat = 22
-		}
 	}
 	
 	let contentTextView = TextView()
@@ -150,7 +147,6 @@ private final class EmptyStateCardView: BaseView {
 	private let titleLabel: Label = {
         let label = Label(headlineBold: nil, montserrat: true).multiline().header()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.textAlignment = .center
 		label.textColor = Theme.colors.dark
 		return label
 	}()
@@ -201,7 +197,7 @@ private final class EmptyStateCardView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight()
+			titleLabel.attributedText = title?.setLineHeight(alignment: .center)
 		}
 	}
 }

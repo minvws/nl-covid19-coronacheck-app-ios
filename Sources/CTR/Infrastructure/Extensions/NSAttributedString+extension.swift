@@ -23,9 +23,9 @@ extension String {
 extension NSAttributedString {
 
 	/// Set the line height
-	/// - Parameter lineHeight: the line height
+	/// - Parameter lineHeight: the line height (defaults to 22)
 	/// - Returns: attributed string
-	func setLineHeight(_ lineHeight: CGFloat = 20.0, alignment: NSTextAlignment = .left, kerning: CGFloat = 0.0) -> NSAttributedString {
+	func setLineHeight(_ lineHeight: CGFloat = 22.0, alignment: NSTextAlignment = .left, kerning: CGFloat = 0.0) -> NSAttributedString {
 
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byWordWrapping

@@ -14,6 +14,7 @@ class ErrorView: BaseView {
 		
 		// Dimension
 		static let imageSize: CGFloat = 12.0
+		static let lineHeight: CGFloat = 18.0
 		static let errorKerning: CGFloat = 0.25
 		
 		// Margins
@@ -84,6 +85,7 @@ class ErrorView: BaseView {
 	var error: String? {
 		didSet {
 			errorLabel.attributedText = error?.setLineHeight(
+				ViewTraits.lineHeight,
 				kerning: ViewTraits.errorKerning,
 				textColor: Theme.colors.utilityError
 			)

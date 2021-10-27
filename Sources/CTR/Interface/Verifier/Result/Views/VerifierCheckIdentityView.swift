@@ -27,6 +27,10 @@ class VerifierCheckIdentityView: BaseView {
 		enum Button {
 			static let height: CGFloat = 52
 		}
+		enum Label {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+		}
 	}
 	
 	/// The scrollview
@@ -43,7 +47,6 @@ class VerifierCheckIdentityView: BaseView {
 
 		let label = Label(bodySemiBold: nil).multiline()
 		label.textColor = Theme.colors.dark
-		label.textAlignment = .center
 		return label
 	}()
 
@@ -69,7 +72,7 @@ class VerifierCheckIdentityView: BaseView {
 	
 	private let dccFlagLabel: Label = {
 		
-		let label = Label(title1: nil).multiline()
+		let label = Label(title1: nil)
 		label.textColor = Theme.colors.secondaryText
 		label.textAlignment = .center
 		return label
@@ -79,7 +82,6 @@ class VerifierCheckIdentityView: BaseView {
 		
 		let label = Label(subheadHeavyBold: nil).multiline()
 		label.textColor = Theme.colors.secondaryText
-		label.textAlignment = .center
 		return label
 	}()
 	
@@ -87,7 +89,6 @@ class VerifierCheckIdentityView: BaseView {
 		
 		let label = Label(subhead: nil).multiline()
 		label.textColor = Theme.colors.secondaryText
-		label.textAlignment = .center
 		return label
 	}()
 	
@@ -210,7 +211,7 @@ class VerifierCheckIdentityView: BaseView {
 
 	var header: String? {
 		didSet {
-			headerLabel.text = header
+			headerLabel.attributedText = header?.setLineHeight(alignment: .center)
 		}
 	}
 
@@ -276,7 +277,9 @@ class VerifierCheckIdentityView: BaseView {
 	
 	var checkIdentity: String? {
 		didSet {
-			checkIdentityLabel.text = checkIdentity
+			checkIdentityLabel.attributedText = checkIdentity?.setLineHeight(ViewTraits.Label.lineHeight,
+																			 alignment: .center,
+																			 kerning: ViewTraits.Label.kerning)
 		}
 	}
 	
@@ -288,7 +291,9 @@ class VerifierCheckIdentityView: BaseView {
 	
 	var dccScanned: String? {
 		didSet {
-			dccScannedLabel.text = dccScanned
+			dccScannedLabel.attributedText = dccScanned?.setLineHeight(ViewTraits.Label.lineHeight,
+																	   alignment: .center,
+																	   kerning: ViewTraits.Label.kerning)
 		}
 	}
 }

@@ -16,6 +16,7 @@ class SimpleDisclosureButton: BaseView {
 		// Dimensions
 		static let lineHeight: CGFloat = 22
 		static let disclosureHeight: CGFloat = 12
+		static let kerning: CGFloat = -0.41
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -122,7 +123,8 @@ class SimpleDisclosureButton: BaseView {
 	/// The  title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.lineHeight,
+															 kerning: ViewTraits.kerning)
 			button.accessibilityLabel = title
 		}
 	}
