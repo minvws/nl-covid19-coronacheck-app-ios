@@ -12,6 +12,8 @@ final class DCCQRLabelView: BaseView {
 	/// The display constants
 	private enum ViewTraits {
 		static let spacing: CGFloat = 1
+		static let lineHeight: CGFloat = 22
+		static let kerning: CGFloat = -0.41
 	}
 	
 	/// The field label
@@ -61,14 +63,16 @@ final class DCCQRLabelView: BaseView {
 	/// The dcc field
 	var field: String? {
 		didSet {
-			fieldLabel.text = field
+			fieldLabel.attributedText = field?.setLineHeight(ViewTraits.lineHeight,
+															 kerning: ViewTraits.kerning)
 		}
 	}
 	
 	/// The dcc value
 	var value: String? {
 		didSet {
-			valueLabel.text = value
+			valueLabel.attributedText = value?.setLineHeight(ViewTraits.lineHeight,
+															 kerning: ViewTraits.kerning)
 		}
 	}
 }

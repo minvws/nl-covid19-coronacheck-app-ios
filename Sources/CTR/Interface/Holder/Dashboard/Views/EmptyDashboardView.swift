@@ -16,6 +16,9 @@ final class EmptyDashboardView: BaseView {
 			static let messageToButton: CGFloat = 16
 			static let cardToMessage: CGFloat = 32
 		}
+		enum Title {
+			static let lineHeight: CGFloat = 22
+		}
 	}
 	
 	let contentTextView = TextView()
@@ -198,7 +201,7 @@ private final class EmptyStateCardView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight()
 		}
 	}
 }

@@ -15,6 +15,10 @@ class InformationView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
+		
+		// Title
+		static let lineHeight: CGFloat = 32.0
+		static let kerning: CGFloat = -0.26
 	}
 
 	private let stackView: UIStackView = {
@@ -84,7 +88,8 @@ class InformationView: BaseView {
 	/// The  title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.lineHeight,
+															 kerning: ViewTraits.kerning)
 		}
 	}
 
