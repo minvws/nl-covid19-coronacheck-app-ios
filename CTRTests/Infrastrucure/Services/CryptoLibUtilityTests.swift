@@ -19,7 +19,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		super.setUp()
 		networkSpy = NetworkSpy(configuration: .development)
 		Services.use(networkSpy)
-		sut = CryptoLibUtility()
+		sut = CryptoLibUtility(now: { now }, userSettings: UserSettingsSpy())
 	}
 
 	override func tearDown() {

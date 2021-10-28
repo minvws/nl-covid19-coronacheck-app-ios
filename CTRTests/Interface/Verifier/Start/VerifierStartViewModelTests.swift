@@ -26,7 +26,12 @@ class VerifierStartViewModelTests: XCTestCase {
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		cryptoLibUtilitySpy = CryptoLibUtilitySpy(fileStorage: FileStorage(), flavor: AppFlavor.verifier)
+		cryptoLibUtilitySpy = CryptoLibUtilitySpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			fileStorage: FileStorage(),
+			flavor: AppFlavor.verifier
+		)
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		userSettingsSpy = UserSettingsSpy()
 

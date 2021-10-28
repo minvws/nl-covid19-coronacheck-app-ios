@@ -10,7 +10,7 @@ import XCTest
 
 final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 
-	required init(fileStorage: FileStorage, flavor: AppFlavor) {}
+	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, fileStorage: FileStorage, flavor: AppFlavor) {}
 
 	var invokedHasPublicKeysGetter = false
 	var invokedHasPublicKeysGetterCount = 0
@@ -73,6 +73,29 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		invokedFetchIssuerPublicKeysCount += 1
 		if let result = stubbedFetchIssuerPublicKeysOnCompletionResult {
 			onCompletion?(result.0)
+		}
+	}
+
+	var invokedUpdate = false
+	var invokedUpdateCount = 0
+	var invokedUpdateParameters: (isAppFirstLaunch: Bool, Void)?
+	var invokedUpdateParametersList = [(isAppFirstLaunch: Bool, Void)]()
+	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
+	var stubbedUpdateCompletionResult: (Result<Bool, ServerError>, Void)?
+
+	func update(
+		isAppFirstLaunch: Bool,
+		immediateCallbackIfWithinTTL: @escaping () -> Void,
+		completion: @escaping (Result<Bool, ServerError>) -> Void) {
+		invokedUpdate = true
+		invokedUpdateCount += 1
+		invokedUpdateParameters = (isAppFirstLaunch, ())
+		invokedUpdateParametersList.append((isAppFirstLaunch, ()))
+		if shouldInvokeUpdateImmediateCallbackIfWithinTTL {
+			immediateCallbackIfWithinTTL()
+		}
+		if let result = stubbedUpdateCompletionResult {
+			completion(result.0)
 		}
 	}
 

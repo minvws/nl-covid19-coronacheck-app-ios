@@ -19,7 +19,10 @@ protocol RemoteConfigManaging: AnyObject {
 	func appendReloadObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
 
 	func removeObserver(token: ObserverToken)
-	func update(isAppFirstLaunch: Bool, immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
+	func update(
+		isAppFirstLaunch: Bool,
+		immediateCallbackIfWithinTTL: @escaping () -> Void,
+		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
 
 	func reset()
 }
@@ -121,7 +124,10 @@ class RemoteConfigManager: RemoteConfigManaging {
 	/// 	 - completion: 	- Bool: whether the config did change during update.
 	///						- RemoteConfiguration: the latest configuration.
 	///
-	func update(isAppFirstLaunch: Bool, immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
+	func update(
+		isAppFirstLaunch: Bool,
+		immediateCallbackIfWithinTTL: @escaping () -> Void,
+		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
 		guard !isLoading else { return }
 		isLoading = true
 
