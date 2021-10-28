@@ -207,8 +207,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 				// Use the hash, as not all of the config values are mapping in the remoteconfig object.
 				if hashesMatch {
 					completion(.success((false, remoteConfiguration)))
-				}
-				else {
+				} else {
 					// Inform the observers that only wish to know when config has changed:
 					notifyUpdateObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
 					completion(.success((true, remoteConfiguration)))
