@@ -138,7 +138,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 			],
 			presentingViewController: sut
 		)
-		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedUpdate) == true
 	}
 
 	func test_howInstructionsButtonTapped() {

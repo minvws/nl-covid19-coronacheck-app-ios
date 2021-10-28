@@ -125,7 +125,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.sut.showError) == true
 	}
 

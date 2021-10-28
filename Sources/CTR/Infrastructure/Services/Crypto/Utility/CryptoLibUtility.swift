@@ -36,15 +36,10 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	/// - Parameter file: file type
 	func checkFile(_ file: CryptoLibUtility.File)
 
-	/// Fetch the issuer public keys
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?)
-
 	func update(
 		isAppFirstLaunch: Bool,
-		immediateCallbackIfWithinTTL: @escaping () -> Void,
-		completion: @escaping (Result<Bool, ServerError>) -> Void)
+		immediateCallbackIfWithinTTL: (() -> Void)?,
+		completion: ((Result<Bool, ServerError>) -> Void)?)
 
 	/// Reset to default
 	func reset()
@@ -177,21 +172,10 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		}
 	}
 
-	/// Fetch the issuer public keys
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	///   - onError: error handler
-	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?) {
-
-		networkManager.getPublicKeys { result in
-			onCompletion?(result)
-		}
-	}
-
 	func update(
 		isAppFirstLaunch: Bool,
-		immediateCallbackIfWithinTTL: @escaping () -> Void,
-		completion: @escaping (Result<Bool, ServerError>) -> Void) {
+		immediateCallbackIfWithinTTL: (() -> Void)?,
+		completion: ((Result<Bool, ServerError>) -> Void)?) {
 
 		guard !isLoading else { return }
 		isLoading = true
@@ -209,15 +193,15 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 			case .withinTTL:
 				// If already within TTL, immediately trigger special callback
 				// so that other app-startup work can begin:
-				immediateCallbackIfWithinTTL()
+				immediateCallbackIfWithinTTL?()
 
 			default: break
 		}
 
 		guard newValidity != .withinMinimalInterval else {
 			// Not allowed to call config endpoint again
-			immediateCallbackIfWithinTTL()
-			completion(.success(false))
+			immediateCallbackIfWithinTTL?()
+			completion?(.success(false))
 			isLoading = false
 			return
 		}
@@ -233,18 +217,18 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 
 	private func handleNetworkResponse(
 		resultWrapper: Result<Data, ServerError>,
-		completion: @escaping (Result<Bool, ServerError>) -> Void
+		completion: ((Result<Bool, ServerError>) -> Void)?
 	) {
 		switch resultWrapper {
 			case let .failure(serverError):
-				completion(.failure(serverError))
+				completion?(.failure(serverError))
 
 			case let .success(data):
 
 				// Update the last fetch-time
 				userSettings.issuerKeysFetchedTimestamp = now().timeIntervalSince1970
 				store(data, for: .publicKeys)
-				completion(.success(true))
+				completion?(.success(true))
 		}
 	}
 

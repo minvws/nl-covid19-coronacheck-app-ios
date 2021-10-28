@@ -64,18 +64,6 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		invokedCheckFileParametersList.append((file, ()))
 	}
 
-	var invokedFetchIssuerPublicKeys = false
-	var invokedFetchIssuerPublicKeysCount = 0
-	var stubbedFetchIssuerPublicKeysOnCompletionResult: (Result<Data, ServerError>, Void)?
-
-	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?) {
-		invokedFetchIssuerPublicKeys = true
-		invokedFetchIssuerPublicKeysCount += 1
-		if let result = stubbedFetchIssuerPublicKeysOnCompletionResult {
-			onCompletion?(result.0)
-		}
-	}
-
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
 	var invokedUpdateParameters: (isAppFirstLaunch: Bool, Void)?
@@ -85,17 +73,17 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 
 	func update(
 		isAppFirstLaunch: Bool,
-		immediateCallbackIfWithinTTL: @escaping () -> Void,
-		completion: @escaping (Result<Bool, ServerError>) -> Void) {
+		immediateCallbackIfWithinTTL: (() -> Void)?,
+		completion: ((Result<Bool, ServerError>) -> Void)?) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
 		invokedUpdateParameters = (isAppFirstLaunch, ())
 		invokedUpdateParametersList.append((isAppFirstLaunch, ()))
 		if shouldInvokeUpdateImmediateCallbackIfWithinTTL {
-			immediateCallbackIfWithinTTL()
+			immediateCallbackIfWithinTTL?()
 		}
 		if let result = stubbedUpdateCompletionResult {
-			completion(result.0)
+			completion?(result.0)
 		}
 	}
 
