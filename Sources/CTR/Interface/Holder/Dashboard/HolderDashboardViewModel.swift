@@ -331,115 +331,64 @@ final class HolderDashboardViewModel: Logging {
 		// We'll add to this:
 		var viewControllerCards = [HolderDashboardViewController.Card]()
 
-		if !allQRCards.isEmpty || !regionFilteredExpiredCards.isEmpty {
-			viewControllerCards += [
-				{
-					switch validityRegion {
-						case .domestic:
-							return .headerMessage(message: L.holderDashboardIntroDomestic(),
-												  buttonTitle: nil)
-						case .europeanUnion:
-							return .headerMessage(message: L.holderDashboardIntroInternational(),
-												  buttonTitle: L.holderDashboardEmptyInternationalButton())
-					}
-				}()
-			]
-		}
+		viewControllerCards += HolderDashboardViewController.Card.headerCard(validityRegion: validityRegion, allQRCards: allQRCards, regionFilteredExpiredCards: regionFilteredExpiredCards)
 
-		if state.deviceHasClockDeviation && !allQRCards.isEmpty {
-			viewControllerCards += [
-				.deviceHasClockDeviation(
-					message: L.holderDashboardClockDeviationDetectedMessage(),
-					callToActionButtonText: L.generalReadmore(),
-					didTapCallToAction: {
-						coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
-					}
-				)
-			]
-		}
+		viewControllerCards += HolderDashboardViewController.Card.deviceHasClockDeviationCard(
+			deviceHasClockDeviation: state.deviceHasClockDeviation,
+			hasQRCards: !allQRCards.isEmpty,
+			didTapCallToAction: {
+				coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
+			}
+		)
 
 		// Multiple DCC migration banners:
 
 		if validityRegion == .europeanUnion {
 			if state.shouldShowEUVaccinationUpdateBanner {
-				viewControllerCards += [
-					.migrateYourInternationalVaccinationCertificate(
-						message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
-						callToActionButtonText: L.generalReadmore(),
-						didTapCallToAction: { [weak coordinatorDelegate] in
-							coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
-						}
-					)
-				]
-			} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
-				viewControllerCards += [
-					.migratingYourInternationalVaccinationCertificateDidComplete(
-						message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
-						callToActionButtonText: L.generalReadmore(),
-						didTapCallToAction: { [weak coordinatorDelegate] in
-							coordinatorDelegate?.presentInformationPage(
-								title: L.holderEuvaccinationswereupgradedTitle(),
-								body: L.holderEuvaccinationswereupgradedMessage(),
-								hideBodyForScreenCapture: false,
-								openURLsInApp: true)
-						},
-						didTapClose: {
-							userSettings.didDismissEUVaccinationMigrationSuccessBanner = true
-						}
-					)
-				]
-			}
-		}
-
-		viewControllerCards += regionFilteredExpiredCards
-			.compactMap { expiredQR -> HolderDashboardViewController.Card? in
-				let message = String.holderDashboardQRExpired(
-					localizedRegion: expiredQR.region.localizedAdjective,
-					localizedOriginType: expiredQR.type.localizedProof
+				viewControllerCards += HolderDashboardViewController.Card.multipleDCCMigrationUpdateCard(
+					didTapCallToAction: { [weak coordinatorDelegate] in
+						coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
+					}
 				)
-
-				return .expiredQR(message: message, didTapClose: {
-					didTapCloseExpiredQR(expiredQR)
-				})
-		}
-
-		if allQRCards.isEmpty && regionFilteredExpiredCards.isEmpty {
-			viewControllerCards += [
-				{
-					switch validityRegion {
-						case .domestic:
-							return HolderDashboardViewController.Card.emptyState(
-								image: I.dashboard.domestic(),
-								title: L.holderDashboardEmptyDomesticTitle(),
-								message: L.holderDashboardEmptyDomesticMessage(),
-								buttonTitle: nil
-							)
-						case .europeanUnion:
-							return HolderDashboardViewController.Card.emptyState(
-								image: I.dashboard.international(),
-								title: L.holderDashboardEmptyInternationalTitle(),
-								message: L.holderDashboardEmptyInternationalMessage(),
-								buttonTitle: L.holderDashboardEmptyInternationalButton()
-							)
+			} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
+				viewControllerCards += HolderDashboardViewController.Card.multipleDCCMigrationUpdateCompletedCard(
+					didTapCallToAction: { [weak coordinatorDelegate] in
+						coordinatorDelegate?.presentInformationPage(
+							title: L.holderEuvaccinationswereupgradedTitle(),
+							body: L.holderEuvaccinationswereupgradedMessage(),
+							hideBodyForScreenCapture: false,
+							openURLsInApp: true)
+					},
+					didTapClose: {
+						userSettings.didDismissEUVaccinationMigrationSuccessBanner = true
 					}
-				}()
-			]
-		}
-
-		// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
-		// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
-		viewControllerCards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state, thisRegion: validityRegion, now: now)
-			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
-			.map { originType, message in
-				return .originNotValidInThisRegion(
-					message: message,
-					callToActionButtonText: L.generalReadmore()) {
-						coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
-							originType: originType,
-							currentRegion: validityRegion,
-							availableRegion: validityRegion.opposite)
-					}
+				)
 			}
+		}
+
+		viewControllerCards += HolderDashboardViewController.Card.expiredQRCard(
+			regionFilteredExpiredCards: regionFilteredExpiredCards,
+			didTapClose: {
+				didTapCloseExpiredQR($0)
+		   })
+
+		viewControllerCards += HolderDashboardViewController.Card.emptyStateCard(
+			validityRegion: validityRegion,
+			allQRCards: allQRCards,
+			regionFilteredExpiredCards: regionFilteredExpiredCards
+		)
+
+		viewControllerCards += HolderDashboardViewController.Card.originNotValidInThisRegion(
+			qrCards: state.qrCards,
+			validityRegion: validityRegion,
+			now: now,
+			didTapCallToAction: { originType in
+				coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
+					originType: originType,
+					currentRegion: validityRegion,
+					availableRegion: validityRegion.opposite)
+			}
+		)
 
 		// Map a `QRCard` to a `VC.Card`:
 		viewControllerCards += regionFilteredMyQRCards
@@ -454,6 +403,128 @@ final class HolderDashboardViewModel: Logging {
 			}
 
 		return viewControllerCards
+	}
+}
+
+extension HolderDashboardViewController.Card {
+
+	fileprivate static func headerCard(
+		validityRegion: QRCodeValidityRegion,
+		allQRCards: [HolderDashboardViewModel.QRCard],
+		regionFilteredExpiredCards: [HolderDashboardViewModel.ExpiredQR]
+	) -> [HolderDashboardViewController.Card] {
+
+		guard !allQRCards.isEmpty || !regionFilteredExpiredCards.isEmpty else { return [] }
+
+		switch validityRegion {
+			case .domestic:
+				return [.headerMessage(
+					message: L.holderDashboardIntroDomestic(),
+					buttonTitle: nil
+				)]
+			case .europeanUnion:
+				return [.headerMessage(
+					message: L.holderDashboardIntroInternational(),
+					buttonTitle: L.holderDashboardEmptyInternationalButton()
+				)]
+		}
+	}
+
+	fileprivate static func deviceHasClockDeviationCard(deviceHasClockDeviation: Bool, hasQRCards: Bool, didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+		guard deviceHasClockDeviation && hasQRCards else { return [] }
+		return [
+			.deviceHasClockDeviation(
+				message: L.holderDashboardClockDeviationDetectedMessage(),
+				callToActionButtonText: L.generalReadmore(),
+				didTapCallToAction: didTapCallToAction
+			)
+		]
+	}
+
+	fileprivate static func multipleDCCMigrationUpdateCard(
+		didTapCallToAction: @escaping () -> Void
+	) -> [HolderDashboardViewController.Card] {
+		return [
+			.migrateYourInternationalVaccinationCertificate(
+				message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
+				callToActionButtonText: L.generalReadmore(),
+				didTapCallToAction: didTapCallToAction
+			)
+		]
+	}
+
+	fileprivate static func multipleDCCMigrationUpdateCompletedCard(
+		didTapCallToAction: @escaping () -> Void,
+		didTapClose: @escaping () -> Void
+	) -> [HolderDashboardViewController.Card] {
+
+		return [
+			.migratingYourInternationalVaccinationCertificateDidComplete(
+				message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
+				callToActionButtonText: L.generalReadmore(),
+				didTapCallToAction: didTapCallToAction,
+				didTapClose: didTapClose
+			)
+		]
+	}
+
+	fileprivate static func expiredQRCard(
+		regionFilteredExpiredCards: [HolderDashboardViewModel.ExpiredQR],
+		didTapClose: @escaping (HolderDashboardViewModel.ExpiredQR) -> Void
+	) -> [HolderDashboardViewController.Card] {
+		return regionFilteredExpiredCards
+			.compactMap { expiredQR -> HolderDashboardViewController.Card? in
+				let message = String.holderDashboardQRExpired(
+					localizedRegion: expiredQR.region.localizedAdjective,
+					localizedOriginType: expiredQR.type.localizedProof
+				)
+
+				return .expiredQR(message: message, didTapClose: { didTapClose(expiredQR) })
+			}
+	}
+
+	fileprivate static func emptyStateCard(
+		validityRegion: QRCodeValidityRegion,
+		allQRCards: [HolderDashboardViewModel.QRCard],
+		regionFilteredExpiredCards: [HolderDashboardViewModel.ExpiredQR]
+	) -> [HolderDashboardViewController.Card] {
+		guard allQRCards.isEmpty && regionFilteredExpiredCards.isEmpty else { return [] }
+		switch validityRegion {
+			case .domestic:
+				return [HolderDashboardViewController.Card.emptyState(
+					image: I.dashboard.domestic(),
+					title: L.holderDashboardEmptyDomesticTitle(),
+					message: L.holderDashboardEmptyDomesticMessage(),
+					buttonTitle: nil
+				)]
+			case .europeanUnion:
+				return [HolderDashboardViewController.Card.emptyState(
+					image: I.dashboard.international(),
+					title: L.holderDashboardEmptyInternationalTitle(),
+					message: L.holderDashboardEmptyInternationalMessage(),
+					buttonTitle: L.holderDashboardEmptyInternationalButton()
+				)]
+		}
+	}
+
+	/// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
+	/// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
+	fileprivate static func originNotValidInThisRegion(
+		qrCards: [QRCard],
+		validityRegion: QRCodeValidityRegion,
+		now: Date,
+		didTapCallToAction: @escaping (QRCodeOriginType) -> Void
+	) -> [HolderDashboardViewController.Card] {
+
+		return localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: qrCards, thisRegion: validityRegion, now: now)
+			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
+			.map { originType, message in
+				return .originNotValidInThisRegion(
+					message: message,
+					callToActionButtonText: L.generalReadmore(),
+					didTapCallToAction: { didTapCallToAction(originType) }
+				)
+			}
 	}
 }
 
@@ -601,25 +672,27 @@ extension HolderDashboardViewModel {
 
 // MARK: - Free Functions
 
-private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashboardViewModel.State, thisRegion: QRCodeValidityRegion, now: Date) -> [(originType: QRCodeOriginType, message: String)] {
+private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], thisRegion: QRCodeValidityRegion, now: Date) -> [(originType: QRCodeOriginType, message: String)] {
 
 	// Calculate origins which exist in the other region but are not in this region:
-	let originTypesForCurrentRegion = Set(state.qrCards
-											.filter { $0.isOfRegion(region: thisRegion) }
-											.flatMap { $0.origins }
-											.filter {
-												$0.isNotYetExpired(now: now)
-											}
-											.compactMap { $0.type }
+	let originTypesForCurrentRegion = Set(
+		qrCards
+			.filter { $0.isOfRegion(region: thisRegion) }
+			.flatMap { $0.origins }
+			.filter {
+				$0.isNotYetExpired(now: now)
+			}
+			.compactMap { $0.type }
 	)
 
-	let originTypesForOtherRegion = Set(state.qrCards
-											.filter { !$0.isOfRegion(region: thisRegion) }
-											.flatMap { $0.origins }
-											.filter {
-												$0.isNotYetExpired(now: now)
-											}
-											.compactMap { $0.type }
+	let originTypesForOtherRegion = Set(
+		qrCards
+			.filter { !$0.isOfRegion(region: thisRegion) }
+			.flatMap { $0.origins }
+			.filter {
+				$0.isNotYetExpired(now: now)
+			}
+			.compactMap { $0.type }
 	)
 
 	let originTypesOnlyInOtherRegion = originTypesForOtherRegion
