@@ -284,13 +284,26 @@ class VerifierResultViewModel: Logging {
 	
 	private func showDccInfo() {
 		
-		guard let countryCode = verificationResult.details?.issuerCountryCode else { return }
+		// Continue when a value is available
+		guard var countryCode = verificationResult.details?.issuerCountryCode else { return }
+		
+		// Uppercased for proper unicode scalar value
+		countryCode = countryCode.uppercased()
+		
+		// Check character count. Empty string and ISO 3166-1 alpha-2 codes are allowed.
+		guard countryCode == "" || countryCode.count == 2 else { return }
 		
 		// Do not display for domestic result
 		guard countryCode.caseInsensitiveCompare("NL") != .orderedSame else { return }
 		
-		dccFlag = flag(country: countryCode)
+		// Set DCC description
 		dccScanned = L.verifierResultAccessDcc()
+		
+		// Check for valid country code
+		guard Locale.isoRegionCodes.contains(where: { $0 == countryCode }) else { return }
+		
+		// Set flag
+		dccFlag = flag(country: countryCode)
 	}
 	
 	/// Get emoji country flag for two character country code
