@@ -162,6 +162,25 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
+	}
+	
+	func test_checkAttributes_whenDCCIsScannedWithGarbageValueCountryStartingWithNL_shouldNotDisplayFlag() {
+		
+		// Given
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "NLIT"
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		sut.verificationResult = result
+		
+		// When
+		sut.checkAttributes()
+		
+		// Then
+		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
 	}
 	
 	func test_checkAttributes_whenDCCIsScannedWithUnknownCountryCode_shouldNotDisplayFlag() {
@@ -179,6 +198,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
 	}
 	
 	func test_checkAttributes_whenDCCIsScannedWithLowercasedCountryCode_shouldDisplayFlag() {
@@ -196,6 +216,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.dccFlag) == "🇮🇹"
+		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
 	}
 
 	func test_holderIdentity_allNil() {

@@ -287,17 +287,17 @@ class VerifierResultViewModel: Logging {
 		// Continue when a value is available
 		guard var countryCode = verificationResult.details?.issuerCountryCode else { return }
 		
-		// Uppercased for proper unicode scalar value
-		countryCode = countryCode.uppercased()
-		
-		// Check character count. Empty string and ISO 3166-1 alpha-2 codes are allowed.
-		guard countryCode == "" || countryCode.count == 2 else { return }
-		
 		// Do not display for domestic result
 		guard countryCode.caseInsensitiveCompare("NL") != .orderedSame else { return }
 		
 		// Set DCC description
 		dccScanned = L.verifierResultAccessDcc()
+		
+		// Uppercased for proper unicode scalar value
+		countryCode = countryCode.uppercased()
+		
+		// Check character count. Empty string and ISO 3166-1 alpha-2 codes are allowed.
+		guard countryCode == "" || countryCode.count == 2 else { return }
 		
 		// Check for valid country code
 		guard Locale.isoRegionCodes.contains(where: { $0 == countryCode }) else { return }
