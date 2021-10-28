@@ -59,7 +59,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration.default, Data(), URLResponse())), ())
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 			// When
 			self.sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
 				//
@@ -76,7 +76,7 @@ class RemoteConfigManagerTests: XCTestCase {
 	func test_update_withinTTL_callsbackImmediately() {
 		// Arrange
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(10 * minutes * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 		var hitCallback = false
 
 		// Act
@@ -97,7 +97,7 @@ class RemoteConfigManagerTests: XCTestCase {
 	func test_update_notWithinTTL_doesNotCallbackImmediately() {
 		// Arrange
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 		var didNotHitCallback = true
 
 		// Act
@@ -115,7 +115,7 @@ class RemoteConfigManagerTests: XCTestCase {
 	func test_update_neverFetchedBefore_doesNotCallbackImmediately() {
 		// Arrange
 		userSettingsSpy.stubbedConfigFetchedTimestamp = nil
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 		var didNotHitCallback = true
 
 		// Act 
@@ -139,7 +139,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		config.configTTL = 3600
 
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((config, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((config, config.data, URLResponse())), ())
 
 		var completedFirstLoad = false
 		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { result in
@@ -155,7 +155,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		newConfig.minimumVersionMessage = "This was changed"
 
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(100 * seconds * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfig, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfig, newConfig.data, URLResponse())), ())
 
 		// Act
 		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
@@ -188,7 +188,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		firstConfig.configTTL = 3600
 
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((firstConfig, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((firstConfig, firstConfig.data, URLResponse())), ())
 
 		var completedFirstLoad = false
 		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { result in
@@ -204,7 +204,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		newConfig.minimumVersionMessage = "This was changed"
 
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(5 * seconds * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfig, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfig, newConfig.data, URLResponse())), ())
 
 		// Act
 		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
@@ -238,7 +238,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		firstConfig.configTTL = 3600
 
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((firstConfig, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((firstConfig, firstConfig.data, URLResponse())), ())
 
 		var completedFirstLoad = false
 		sut.update(isAppFirstLaunch: true, immediateCallbackIfWithinTTL: {}, completion: { result in
@@ -254,7 +254,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		newConfig.minimumVersionMessage = "This was changed"
 
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(5 * seconds * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfig, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfig, newConfig.data, URLResponse())), ())
 
 		// Add observer callbacks:
 		var reloadObserverReceivedConfiguration: RemoteConfiguration?
@@ -302,11 +302,13 @@ class RemoteConfigManagerTests: XCTestCase {
 		firstConfig.configTTL = 3600
 
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((firstConfig, Data(), URLResponse())), ())
+		userSettingsSpy.stubbedConfigFetchedHash = "6e4b55f8cf6c62e907b692b24c3e2d62b14218a38e0cbed92a166fa4788e7ee7"
+
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((firstConfig, firstConfig.data, URLResponse())), ())
 
 		var completedFirstLoad = false
 		sut.update(isAppFirstLaunch: true, immediateCallbackIfWithinTTL: {}, completion: { result in
-			if case .success((true, _)) = result {
+			if case .success((false, _)) = result {
 				completedFirstLoad = true
 			}
 		})
@@ -392,7 +394,7 @@ class RemoteConfigManagerTests: XCTestCase {
 	func test_update_updatesConfigFetchedTimestamp() {
 		// Arrange
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(20 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 
 		// Act
 		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
@@ -406,7 +408,8 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Arrange
 		let configuration = RemoteConfiguration.default
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(20 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((configuration, Data(), URLResponse())), ())
+		userSettingsSpy.stubbedConfigFetchedHash =	"8056f56f53d9ba81facba1bda8d3b06836ccca2d71af02492055f9bc677723cd"
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((configuration, configuration.data, URLResponse())), ())
 
 		var reloadObserverReceivedConfiguration: RemoteConfiguration?
 		var updateObserverReceivedConfiguration: RemoteConfiguration?
@@ -446,7 +449,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		}()
 
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(20 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfiguration, Data(), URLResponse())), ())
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfiguration, newConfiguration.data, URLResponse())), ())
 
 		var reloadObserverReceivedConfiguration: RemoteConfiguration?
 		var updateObserverReceivedConfiguration: RemoteConfiguration?
@@ -477,4 +480,11 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(self.sut.isLoading) == false
 	}
 
+}
+
+extension RemoteConfiguration {
+
+	var data: Data {
+		return try! JSONEncoder().encode(self) // swiftlint:disable:this force_try
+	}
 }
