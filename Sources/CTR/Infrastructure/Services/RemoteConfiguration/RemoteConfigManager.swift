@@ -190,17 +190,21 @@ class RemoteConfigManager: RemoteConfigManaging {
 				// Some observers want to know whenever the config is reloaded (regardless if data changed since last time):
 				self.notifyReloadObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
 
-				// Is the newly fetched config the same as the existing one?
-				guard storedConfiguration != remoteConfiguration else {
+				// Calculate the new hash
+				let newHash: String? = {
+					guard let string = String(data: data, encoding: .utf8) else { return nil }
+					return string.sha256
+				}()
+
+				// Is the newly fetched config hash the same as the existing one?
+				// Use the hash, as not all of the config values are mapping in the remoteconfig object. 
+				guard userSettings.configFetchedHash != newHash else {
 					completion(.success((false, storedConfiguration)))
 					return
 				}
 
 				// Store hash of new config data:
-				userSettings.configFetchedHash = {
-					guard let string = String(data: data, encoding: .utf8) else { return nil }
-					return string.sha256
-				}()
+				userSettings.configFetchedHash = newHash
 
 				// Save new config:
 				storedConfiguration = remoteConfiguration
