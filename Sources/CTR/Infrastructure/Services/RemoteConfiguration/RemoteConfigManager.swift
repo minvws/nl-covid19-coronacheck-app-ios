@@ -196,23 +196,23 @@ class RemoteConfigManager: RemoteConfigManaging {
 					return string.sha256
 				}()
 
-				// Is the newly fetched config hash the same as the existing one?
-				// Use the hash, as not all of the config values are mapping in the remoteconfig object. 
-				guard userSettings.configFetchedHash != newHash else {
-					completion(.success((false, storedConfiguration)))
-					return
-				}
+				let hashesMatch = userSettings.configFetchedHash == newHash
 
-				// Store hash of new config data:
+				// Save the config & new hash regardless of whether the hashes match,
+				// to guard against the keychain value being out of sync with the UserDefaults hash
 				userSettings.configFetchedHash = newHash
-
-				// Save new config:
 				storedConfiguration = remoteConfiguration
 
-				// Inform the observers that only wish to know when config has changed:
-				notifyUpdateObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
-
-				completion(.success((true, remoteConfiguration)))
+				// Is the newly fetched config hash the same as the existing one?
+				// Use the hash, as not all of the config values are mapping in the remoteconfig object.
+				if hashesMatch {
+					completion(.success((false, remoteConfiguration)))
+				}
+				else {
+					// Inform the observers that only wish to know when config has changed:
+					notifyUpdateObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
+					completion(.success((true, remoteConfiguration)))
+				}
 		}
 	}
 	
