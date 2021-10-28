@@ -146,6 +146,78 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.dccFlag).to(beNil())
 		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
 	}
+	
+	func test_checkAttributes_whenDCCIsScannedWithGarbageValueCountry_shouldNotDisplayFlag() {
+		
+		// Given
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "ITFR"
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		sut.verificationResult = result
+		
+		// When
+		sut.checkAttributes()
+		
+		// Then
+		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
+	}
+	
+	func test_checkAttributes_whenDCCIsScannedWithGarbageValueCountryStartingWithNL_shouldNotDisplayFlag() {
+		
+		// Given
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "NLIT"
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		sut.verificationResult = result
+		
+		// When
+		sut.checkAttributes()
+		
+		// Then
+		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
+	}
+	
+	func test_checkAttributes_whenDCCIsScannedWithUnknownCountryCode_shouldNotDisplayFlag() {
+		
+		// Given
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "ZZ"
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		sut.verificationResult = result
+		
+		// When
+		sut.checkAttributes()
+		
+		// Then
+		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
+	}
+	
+	func test_checkAttributes_whenDCCIsScannedWithLowercasedCountryCode_shouldDisplayFlag() {
+		
+		// Given
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "it"
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		sut.verificationResult = result
+		
+		// When
+		sut.checkAttributes()
+		
+		// Then
+		expect(self.sut.dccFlag) == "🇮🇹"
+		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
+	}
 
 	func test_holderIdentity_allNil() {
 
