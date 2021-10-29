@@ -174,7 +174,7 @@ class HolderDashboardViewController: BaseViewController {
 					case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
 						 let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 						 let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
-						 let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction) :
+						 let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction):
 
 						let messageCard = MessageCardView()
 						messageCard.title = message
