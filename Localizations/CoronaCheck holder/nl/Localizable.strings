@@ -677,5 +677,4 @@
 "holder.dashboard.config.card.message" = "Maak binnenkort verbinding met het internet";
 "holder.dashboard.config.card.button" = "Lees meer";
 "holder.dashboard.config.page.title" = "Maak verbinding met het internet";
-"holder.dashboard.config.page.message" = "<p>De CoronaCheck app heeft af en toe internet nodig om te blijven werken. Zonder internetverbinding werkt jouw app nog tot %@. Open de app zodra je internet hebt. Dan doet deze het gewoon weer.</p><p>
-Maak regelmatig verbinding om problemen te voorkomen.</p>";
+"holder.dashboard.config.page.message" = "<p>De CoronaCheck app heeft af en toe internet nodig om te blijven werken. Zonder internetverbinding werkt jouw app nog tot %@. Open de app zodra je internet hebt. Dan doet deze het gewoon weer.</p><p>Maak regelmatig verbinding om problemen te voorkomen.</p>";

@@ -49,6 +49,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInfoAboutUpgradingEUVaccinations()
 
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
+
 	func openUrl(_ url: URL, inApp: Bool)
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
@@ -388,6 +390,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
+		let title: String = L.holderDashboardConfigPageTitle()
+		let message: String = L.holderDashboardConfigPageMessage(validUntil)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 

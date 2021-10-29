@@ -336,8 +336,14 @@ final class HolderDashboardViewModel: Logging {
 		viewControllerCards += HolderDashboardViewController.Card.deviceHasClockDeviationCard(
 			deviceHasClockDeviation: state.deviceHasClockDeviation,
 			hasQRCards: !allQRCards.isEmpty,
-			didTapCallToAction: {
-				coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
+			didTapCallToAction: { [weak coordinatorDelegate] in
+				coordinatorDelegate?.userWishesMoreInfoAboutClockDeviation()
+			}
+		)
+
+		viewControllerCards += HolderDashboardViewController.Card.configMightBeOutdatedCard(
+			didTapCallToAction: { [weak coordinatorDelegate] in
+				coordinatorDelegate?.userWishesMoreInfoAboutOutdatedConfig(validUntil: "Todo")
 			}
 		)
 
@@ -436,6 +442,18 @@ extension HolderDashboardViewController.Card {
 			.deviceHasClockDeviation(
 				message: L.holderDashboardClockDeviationDetectedMessage(),
 				callToActionButtonText: L.generalReadmore(),
+				didTapCallToAction: didTapCallToAction
+			)
+		]
+	}
+
+	fileprivate static func configMightBeOutdatedCard(
+		didTapCallToAction: @escaping () -> Void
+	) -> [HolderDashboardViewController.Card] {
+		return [
+			.configMightBeOutdated(
+				message: L.holderDashboardConfigCardMessage(),
+				callToActionButtonText: L.holderDashboardConfigCardButton(),
 				didTapCallToAction: didTapCallToAction
 			)
 		]
