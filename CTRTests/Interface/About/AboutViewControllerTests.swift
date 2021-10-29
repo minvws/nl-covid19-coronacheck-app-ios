@@ -98,7 +98,12 @@ class AboutViewControllerTests: XCTestCase {
 		let remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		Services.use(remoteConfigSpy)
-		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(fileStorage: FileStorage(), flavor: AppFlavor.flavor)
+		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			fileStorage: FileStorage(),
+			flavor: AppFlavor.flavor
+		)
 		Services.use(cryptoLibUtilitySpy)
 		let onboardingSpy = OnboardingManagerSpy()
 		Services.use(onboardingSpy)

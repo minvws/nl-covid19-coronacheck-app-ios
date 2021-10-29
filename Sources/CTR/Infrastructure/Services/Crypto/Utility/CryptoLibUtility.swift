@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import UIKit
 import Clcore
 
 protocol CryptoLibUtilityProtocol: AnyObject {
@@ -19,7 +20,11 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	/// Initialize core library
 	func initialize()
 
-	init(fileStorage: FileStorage, flavor: AppFlavor)
+	init(
+		now: @escaping () -> Date,
+		userSettings: UserSettingsProtocol,
+		fileStorage: FileStorage,
+		flavor: AppFlavor)
 	
 	/// Store data in documents directory
 	/// - Parameters:
@@ -31,10 +36,10 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	/// - Parameter file: file type
 	func checkFile(_ file: CryptoLibUtility.File)
 
-	/// Fetch the issuer public keys
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?)
+	func update(
+		isAppFirstLaunch: Bool,
+		immediateCallbackIfWithinTTL: (() -> Void)?,
+		completion: ((Result<Bool, ServerError>) -> Void)?)
 
 	/// Reset to default
 	func reset()
@@ -58,14 +63,10 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 			}
 		}
 	}
-	
-	/// Returns true when public keys are saved
-	var hasPublicKeys: Bool {
-		return shouldInitialize.contains(.publicKeys)
-	}
-	
-	/// Returns true when core library is initialized
-	private(set) var isInitialized: Bool = false
+
+	// MARK: - Private vars
+
+	private(set) var isLoading = false
 	
 	private var shouldInitialize: File {
 		didSet {
@@ -76,17 +77,53 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 			initialize()
 		}
 	}
-	
+
+	// MARK: - Dependencies
+
 	private let fileStorage: FileStorage
 	private let flavor: AppFlavor
+	private let now: () -> Date
+	private let userSettings: UserSettingsProtocol
+	private let networkManager: NetworkManaging = Services.networkManager
 
-	private var networkManager: NetworkManaging = Services.networkManager
-	
-	init(fileStorage: FileStorage = FileStorage(), flavor: AppFlavor = AppFlavor.flavor) {
+	// MARK: - Setup
+
+	init(
+		now: @escaping () -> Date,
+		userSettings: UserSettingsProtocol,
+		fileStorage: FileStorage = FileStorage(),
+		flavor: AppFlavor = AppFlavor.flavor) {
+
+		self.now = now
 		self.fileStorage = fileStorage
 		self.flavor = flavor
+		self.userSettings = userSettings
 		self.shouldInitialize = .empty
+		registerTriggers()
 	}
+
+	func registerTriggers() {
+
+		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+		}
+	}
+
+	// MARK: - Teardown
+
+	deinit {
+		NotificationCenter.default.removeObserver(self)
+	}
+
+	// MARK: - CryptoLibUtilityProtocol
+
+	/// Returns true when public keys are saved
+	var hasPublicKeys: Bool {
+		return shouldInitialize.contains(.publicKeys)
+	}
+
+	/// Returns true when core library is initialized
+	private(set) var isInitialized: Bool = false
 	
 	/// Initialize core library
 	func initialize() {
@@ -135,14 +172,63 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		}
 	}
 
-	/// Fetch the issuer public keys
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	///   - onError: error handler
-	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?) {
+	func update(
+		isAppFirstLaunch: Bool,
+		immediateCallbackIfWithinTTL: (() -> Void)?,
+		completion: ((Result<Bool, ServerError>) -> Void)?) {
 
-		networkManager.getPublicKeys { result in
-			onCompletion?(result)
+		guard !isLoading else { return }
+		isLoading = true
+
+		let newValidity = FileValidity.evaluateIfUpdateNeeded(
+			configuration: Services.remoteConfigManager.storedConfiguration,
+			lastFetchedTimestamp: userSettings.issuerKeysFetchedTimestamp,
+			isAppFirstLaunch: isAppFirstLaunch,
+			now: now
+		)
+
+		// Special actions per-validity:
+		switch newValidity {
+
+			case .withinTTL:
+				// If already within TTL, immediately trigger special callback
+				// so that other app-startup work can begin:
+				immediateCallbackIfWithinTTL?()
+
+			default: break
+		}
+
+		guard newValidity != .withinMinimalInterval else {
+			// Not allowed to call config endpoint again
+			immediateCallbackIfWithinTTL?()
+			completion?(.success(false))
+			isLoading = false
+			return
+		}
+
+		// Regardless, let's see if there's a new public key file available:
+		networkManager.getPublicKeys { [weak self] (resultWrapper: Result<Data, ServerError>) in
+
+			guard let self = self else { return }
+			self.handleNetworkResponse(resultWrapper: resultWrapper, completion: completion)
+			self.isLoading = false
+		}
+	}
+
+	private func handleNetworkResponse(
+		resultWrapper: Result<Data, ServerError>,
+		completion: ((Result<Bool, ServerError>) -> Void)?
+	) {
+		switch resultWrapper {
+			case let .failure(serverError):
+				completion?(.failure(serverError))
+
+			case let .success(data):
+
+				// Update the last fetch-time
+				userSettings.issuerKeysFetchedTimestamp = now().timeIntervalSince1970
+				store(data, for: .publicKeys)
+				completion?(.success(true))
 		}
 	}
 
