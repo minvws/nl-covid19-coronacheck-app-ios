@@ -27,6 +27,12 @@ class HolderCoordinatorTests: XCTestCase {
 		)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	// MARK: - Tests
 
 	func testStartForcedInformation() {
@@ -66,6 +72,14 @@ class HolderCoordinatorTests: XCTestCase {
 		let forcedInformationSpy = ForcedInformationManagerSpy()
 		forcedInformationSpy.stubbedNeedsUpdating = false
 		sut.forcedInformationManager = forcedInformationSpy
+
+		let remoteConfigManagerSpy = RemoteConfigManagingSpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			networkManager: NetworkSpy()
+		)
+		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
+		Services.use(remoteConfigManagerSpy)
 
 		sut.childCoordinators = [
 			ForcedInformationCoordinator(

@@ -63,6 +63,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 	override func tearDown() {
 
 		super.tearDown()
+		Services.revertToDefaults()
 	}
 
 	func loadView() {

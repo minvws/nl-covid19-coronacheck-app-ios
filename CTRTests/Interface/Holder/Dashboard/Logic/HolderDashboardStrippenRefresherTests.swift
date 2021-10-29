@@ -34,6 +34,12 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		Services.use(walletManagerSpy)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	// MARK: - Test calculations
 
 	func test_expiring_calculates_state_expiring_and_loads() {

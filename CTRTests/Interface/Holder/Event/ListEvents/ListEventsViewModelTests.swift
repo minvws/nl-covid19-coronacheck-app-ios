@@ -49,6 +49,12 @@ class ListEventsViewModelTests: XCTestCase {
 		)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	func test_backButtonTapped_loadingState() {
 
 		// Given

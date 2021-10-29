@@ -15,7 +15,6 @@ class LaunchViewModel: Logging {
 	private var versionSupplier: AppVersionSupplierProtocol?
 	private weak var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
 	private weak var walletManager: WalletManaging?
-	private weak var proofManager: ProofManaging? = Services.proofManager
 	private weak var jailBreakDetector: JailBreakProtocol? = Services.jailBreakDetector
 	private weak var deviceAuthenticationDetector: DeviceAuthenticationProtocol? = Services.deviceAuthenticationDetector
 	private var userSettings: UserSettingsProtocol?
@@ -252,7 +251,7 @@ class LaunchViewModel: Logging {
 			cryptoLibUtility?.checkFile(.publicKeys)
 			completion(.withinTTL)
 		}
-		proofManager?.fetchIssuerPublicKeys {[weak self] resultWrapper in
+		cryptoLibUtility?.fetchIssuerPublicKeys {[weak self] resultWrapper in
 
 			self?.isUpdatingIssuerPublicKeys = false
 

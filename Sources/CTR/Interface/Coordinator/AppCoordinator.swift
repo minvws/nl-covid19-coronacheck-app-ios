@@ -87,7 +87,7 @@ class AppCoordinator: Coordinator, Logging {
 			Services.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
 		}]
 
-		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendReloadObserver { remoteConfig, rawData, urlResponse in
+		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendReloadObserver { _, _, urlResponse in
 
 			/// Fish for the server Date in the network response, and use that to maintain
 			/// a clockDeviationManager to check if the delta between the serverTime and the localTime is

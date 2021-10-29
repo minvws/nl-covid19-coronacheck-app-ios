@@ -26,6 +26,12 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		Services.use(couplingManagerSpy)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	func test_success_accepted_wrongDCC() {
 
 		// Given

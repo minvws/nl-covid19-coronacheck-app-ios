@@ -14,12 +14,14 @@ class ErrorView: BaseView {
 		
 		// Dimension
 		static let imageSize: CGFloat = 12.0
+		static let lineHeight: CGFloat = 18.0
 		static let errorKerning: CGFloat = 0.25
 		
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let textLeadingMargin: CGFloat = 8.0
 		static let imageTopMargin: CGFloat = 5.0
+		static let labelTopMargin: CGFloat = 2.0
 	}
 	
 	/// The error image
@@ -68,7 +70,10 @@ class ErrorView: BaseView {
 			),
 			
 			// Title
-			errorLabel.topAnchor.constraint(equalTo: topAnchor),
+			errorLabel.topAnchor.constraint(
+				equalTo: topAnchor,
+				constant: ViewTraits.labelTopMargin
+			),
 			errorLabel.leadingAnchor.constraint(
 				equalTo: errorImageView.trailingAnchor,
 				constant: ViewTraits.textLeadingMargin
@@ -84,6 +89,7 @@ class ErrorView: BaseView {
 	var error: String? {
 		didSet {
 			errorLabel.attributedText = error?.setLineHeight(
+				ViewTraits.lineHeight,
 				kerning: ViewTraits.errorKerning,
 				textColor: Theme.colors.utilityError
 			)

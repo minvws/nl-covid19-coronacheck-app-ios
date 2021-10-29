@@ -18,6 +18,15 @@ class AppUpdateView: ScrolledStackWithButtonView {
 		// Margins
 		static let labelSpacing: CGFloat = 24
 		static let imageToLabelSpacing: CGFloat = 43
+		
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
+		}
+		enum Message {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
 	}
 
 	/// The image view
@@ -71,8 +80,6 @@ class AppUpdateView: ScrolledStackWithButtonView {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
-		titleLabel.textAlignment = .center
-		messageLabel.textAlignment = .center
 	}
 
 	/// Setup the hierarchy
@@ -110,14 +117,18 @@ class AppUpdateView: ScrolledStackWithButtonView {
 	/// The onboarding title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 alignment: .center,
+															 kerning: ViewTraits.Title.kerning)
 		}
 	}
 
 	/// The onboarding message
 	var message: String? {
 		didSet {
-			messageLabel.text = message
+			messageLabel.attributedText = message?.setLineHeight(ViewTraits.Message.lineHeight,
+																 alignment: .center,
+																 kerning: ViewTraits.Message.kerning)
 		}
 	}
 

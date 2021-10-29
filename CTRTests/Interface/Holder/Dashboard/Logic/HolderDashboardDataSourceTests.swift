@@ -30,6 +30,12 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		Services.use(walletManagingSpy)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	func test_settingDidUpdateCallbackTriggersReloadWithCallback() {
 		// Arrange
 		sut = HolderDashboardQRCardDatasource(now: { now })

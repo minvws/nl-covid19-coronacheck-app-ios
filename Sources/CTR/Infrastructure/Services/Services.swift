@@ -19,7 +19,6 @@ final class Services {
 	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
 	private static var openIdManagerType: OpenIdManaging.Type = OpenIdManager.self
-	private static var proofManagerType: ProofManaging.Type = ProofManager.self
 	private static var remoteConfigManagingType: RemoteConfigManaging.Type = RemoteConfigManager.self
 	private static var walletManagingType: WalletManaging.Type = WalletManager.self
 	private static var greenCardLoadingType: GreenCardLoading.Type = GreenCardLoader.self
@@ -74,11 +73,6 @@ final class Services {
 		openIdManager = openIdManaging
 	}
 
-	static func use(_ proofManaging: ProofManaging) {
-
-		proofManager = proofManaging
-	}
-
 	static func use(_ greenCardLoading: GreenCardLoading) {
 
 		greenCardLoader = greenCardLoading
@@ -89,14 +83,14 @@ final class Services {
 		couplingManager = couplingManaging
 	}
 
-	static func use(_ mappingManager: MappingManaging.Type) {
+	static func use(_ mappingManaging: MappingManaging) {
 
-		mappingManagingType = mappingManager
+		mappingManager = mappingManaging
 	}
 
-	static func use(_ clockDeviationManager: ClockDeviationManaging.Type) {
+	static func use(_ clockDeviationManaging: ClockDeviationManaging) {
 
-		clockDeviationType = clockDeviationManager
+		clockDeviationManager = clockDeviationManaging
 	}
 
 	static func use(_ walletManaging: WalletManaging) {
@@ -157,8 +151,6 @@ final class Services {
 
 	static private(set) var openIdManager: OpenIdManaging = openIdManagerType.init()
 
-	static private(set) var proofManager: ProofManaging = proofManagerType.init()
-
 	static private(set) var walletManager: WalletManaging = walletManagingType.init(
 		dataStoreManager: dataStoreManager
 	)
@@ -183,5 +175,38 @@ final class Services {
 		remoteConfigManager.reset()
 		cryptoLibUtility.reset()
 		forcedInformationManager.reset()
+	}
+
+	static func revertToDefaults() {
+
+		cryptoManager = cryptoManagingType.init()
+		deviceAuthenticationDetector = deviceAuthenticationType.init()
+		dataStoreManager = dataStoreManagingType.init(StorageType.persistent)
+		walletManager = walletManagingType.init(
+			dataStoreManager: dataStoreManager
+		)
+		forcedInformationManager = forcedInformationManagingType.init()
+		jailBreakDetector = jailBreakType.init()
+		greenCardLoader = greenCardLoadingType.init(
+			networkManager: networkManager,
+			cryptoManager: cryptoManager,
+			walletManager: walletManager
+		)
+		remoteConfigManager = remoteConfigManagingType.init(
+			now: { Date() },
+			userSettings: UserSettings(),
+			networkManager: networkManager
+		)
+		onboardingManager = onboardingManagingType.init()
+		openIdManager = openIdManagerType.init()
+
+		couplingManager = couplingManagingType.init(
+			cryptoManager: cryptoManager,
+			networkManager: networkManager
+		)
+		mappingManager = mappingManagingType.init(
+			remoteConfigManager: remoteConfigManager
+		)
+		clockDeviationManager = clockDeviationType.init()
 	}
 }

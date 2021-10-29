@@ -9,17 +9,23 @@
 import XCTest
 import Nimble
 
-class ProofManagerTests: XCTestCase {
+class CryptoLibUtilityTests: XCTestCase {
 
-	private var sut: ProofManager!
+	private var sut: CryptoLibUtility!
 	private var networkSpy: NetworkSpy!
 
 	override func setUp() {
 
 		super.setUp()
-		sut = ProofManager()
 		networkSpy = NetworkSpy(configuration: .development)
-		sut.networkManager = networkSpy
+		Services.use(networkSpy)
+		sut = CryptoLibUtility()
+	}
+
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
 	}
 
 	/// Test the fetch issuers public keys

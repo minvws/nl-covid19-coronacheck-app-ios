@@ -81,26 +81,6 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedCreateCredentialResult
 	}
 
-	var invokedStoreCredential = false
-	var invokedStoreCredentialCount = 0
-	var invokedStoreCredentialParameters: (credential: Data, Void)?
-	var invokedStoreCredentialParametersList = [(credential: Data, Void)]()
-
-	func storeCredential(_ credential: Data) {
-		invokedStoreCredential = true
-		invokedStoreCredentialCount += 1
-		invokedStoreCredentialParameters = (credential, ())
-		invokedStoreCredentialParametersList.append((credential, ()))
-	}
-
-	var invokedRemoveCredential = false
-	var invokedRemoveCredentialCount = 0
-
-	func removeCredential() {
-		invokedRemoveCredential = true
-		invokedRemoveCredentialCount += 1
-	}
-
 	var invokedGenerateQRmessage = false
 	var invokedGenerateQRmessageCount = 0
 	var invokedGenerateQRmessageParameters: (credential: Data, Void)?
