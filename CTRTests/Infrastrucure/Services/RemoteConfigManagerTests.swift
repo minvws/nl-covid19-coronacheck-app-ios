@@ -342,10 +342,9 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Assert
 		expect(didCallTTLCallback) == true
 
-		switch receivedResult {
-			case .success((false, firstConfig)): break
-			default:
-				assertionFailure("Didn't receive expected result")
+		guard (receivedResult?.successValue)! == (false, firstConfig) else {
+			fail("Didn't receive expected result")
+			return
 		}
 
 		expect(self.sut.storedConfiguration) == firstConfig
@@ -428,11 +427,9 @@ class RemoteConfigManagerTests: XCTestCase {
 			receivedResult = result
 		})
 
-		switch receivedResult {
-			case .success((false, let receivedConfiguration)) where receivedConfiguration == configuration:
-				break
-			default:
-				assertionFailure("results didn't match")
+		guard (receivedResult?.successValue)! == (false, configuration) else {
+			fail("Didn't receive expected result")
+			return
 		}
 
 		expect(reloadObserverReceivedConfiguration).toEventually(equal(configuration))
