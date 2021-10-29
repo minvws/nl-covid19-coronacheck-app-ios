@@ -121,6 +121,8 @@ final class Services {
     }()
 
 	static private(set) var cryptoLibUtility: CryptoLibUtilityProtocol = cryptoLibUtilityType.init(
+		now: { Date() },
+		userSettings: UserSettings(),
 		fileStorage: FileStorage(),
 		flavor: AppFlavor.flavor
 	)

@@ -100,6 +100,6 @@ class VerifierStartViewModel: Logging {
 	private func updatePublicKeys() {
 
 		// Fetch the public keys from the issuer
-		cryptoLibUtility?.fetchIssuerPublicKeys(onCompletion: nil)
+		cryptoLibUtility?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: nil, completion: nil)
 	}
 }
