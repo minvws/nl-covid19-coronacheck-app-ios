@@ -342,7 +342,7 @@ final class HolderDashboardViewModel: Logging {
 		)
 
 		// Config might be out of date
-		viewControllerCards += HolderDashboardViewController.Card.configMightBeOutdatedCard(
+		viewControllerCards += HolderDashboardViewController.Card.configAlmostOutOfDateCard(
 			remoteConfiguration: remoteConfigManager.storedConfiguration,
 			now: now,
 			userSettings: userSettings,
@@ -459,7 +459,7 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 
-	fileprivate static func configMightBeOutdatedCard(
+	fileprivate static func configAlmostOutOfDateCard(
 		remoteConfiguration: RemoteConfiguration,
 		now: Date,
 		userSettings: UserSettingsProtocol,
@@ -476,7 +476,7 @@ extension HolderDashboardViewController.Card {
 		}
 
 		return [
-			.configMightBeOutdated(
+			.configAlmostOutOfDate(
 				message: L.holderDashboardConfigIsAlmostOutOfDateCardMessage(),
 				callToActionButtonText: L.holderDashboardConfigIsAlmostOutOfDateCardButton(),
 				didTapCallToAction: didTapCallToAction

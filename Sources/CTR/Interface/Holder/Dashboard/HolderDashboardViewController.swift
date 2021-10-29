@@ -30,7 +30,7 @@ class HolderDashboardViewController: BaseViewController {
 
 		case errorMessage(message: String, didTapTryAgain: () -> Void)
 
-		case configMightBeOutdated(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -174,7 +174,7 @@ class HolderDashboardViewController: BaseViewController {
 					case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
 						 let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 						 let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
-						 let .configMightBeOutdated(message, callToActionButtonText, didTapCallToAction) :
+						 let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction) :
 
 						let messageCard = MessageCardView()
 						messageCard.title = message
