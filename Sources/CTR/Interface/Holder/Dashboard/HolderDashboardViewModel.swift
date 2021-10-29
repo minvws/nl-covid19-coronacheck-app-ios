@@ -89,9 +89,9 @@ final class HolderDashboardViewModel: Logging {
 	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
 	private let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
-	private var userSettings: UserSettingsProtocol
+	private let userSettings: UserSettingsProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
-	private var dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
+	private let dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
 
 	// MARK: - Initializer
 	init(
