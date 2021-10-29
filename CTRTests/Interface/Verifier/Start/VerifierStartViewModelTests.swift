@@ -26,7 +26,12 @@ class VerifierStartViewModelTests: XCTestCase {
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		cryptoLibUtilitySpy = CryptoLibUtilitySpy(fileStorage: FileStorage(), flavor: AppFlavor.verifier)
+		cryptoLibUtilitySpy = CryptoLibUtilitySpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			fileStorage: FileStorage(),
+			flavor: AppFlavor.verifier
+		)
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		userSettingsSpy = UserSettingsSpy()
 
@@ -120,7 +125,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.sut.showError) == true
 	}
 

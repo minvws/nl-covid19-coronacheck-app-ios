@@ -126,6 +126,32 @@ class LaunchViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
+	func test_showJailBreakAlertAction() throws {
+
+		// Given
+		userSettingsSpy.stubbedJailbreakWarningShown = false
+		userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
+		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
+
+		let viewModel = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
+		)
+		sut = LaunchViewController(viewModel: viewModel)
+
+		let alertVerifier = AlertVerifier()
+		loadView()
+
+		// When
+		try alertVerifier.executeAction(forButton: L.generalOk())
+
+		// Then
+		expect(self.userSettingsSpy.invokedJailbreakWarningShownSetter) == true
+	}
+
 	func test_showDeviceAuthenticationAlert() {
 
 		// Given
@@ -159,5 +185,31 @@ class LaunchViewControllerTests: XCTestCase {
 		)
 
 		sut.assertImage()
+	}
+
+	func test_showDeviceAuthenticationAction() throws {
+
+		// Given
+		userSettingsSpy.stubbedJailbreakWarningShown = false
+		userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
+		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = false
+
+		let viewModel = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			userSettings: userSettingsSpy
+		)
+		sut = LaunchViewController(viewModel: viewModel)
+
+		let alertVerifier = AlertVerifier()
+		loadView()
+
+		// When
+		try alertVerifier.executeAction(forButton: L.generalOk())
+
+		// Then
+		expect(self.userSettingsSpy.invokedDeviceAuthenticationWarningShownSetter) == true
 	}
 }

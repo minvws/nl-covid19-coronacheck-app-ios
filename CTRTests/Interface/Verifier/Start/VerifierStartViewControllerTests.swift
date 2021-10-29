@@ -31,7 +31,12 @@ class VerifierStartViewControllerTests: XCTestCase {
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		cryptoLibUtilitySpy = CryptoLibUtilitySpy(fileStorage: FileStorage(), flavor: AppFlavor.verifier)
+		cryptoLibUtilitySpy = CryptoLibUtilitySpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			fileStorage: FileStorage(),
+			flavor: AppFlavor.verifier
+		)
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
@@ -133,7 +138,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 			],
 			presentingViewController: sut
 		)
-		expect(self.cryptoLibUtilitySpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.cryptoLibUtilitySpy.invokedUpdate) == true
 	}
 
 	func test_howInstructionsButtonTapped() {

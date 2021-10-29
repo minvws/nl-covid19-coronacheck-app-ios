@@ -163,6 +163,7 @@ class LaunchViewModel: Logging {
 				completion(.withinTTL)
 			},
 			completion: { (result: Result<(Bool, RemoteConfiguration), ServerError>) in
+				self.isUpdatingConfiguration = false
 				switch result {
 					case let .success((_, remoteConfiguration)):
 
@@ -238,40 +239,26 @@ class LaunchViewModel: Logging {
 	private func updateKeys(_ completion: @escaping (LaunchState) -> Void) {
 
 		// Execute once.
-		guard !isUpdatingIssuerPublicKeys else {
-			return
-		}
-
+		guard !isUpdatingIssuerPublicKeys else { return }
 		isUpdatingIssuerPublicKeys = true
 
-		if let lastFetchedTimestamp = self.userSettings?.issuerKeysFetchedTimestamp,
-		   lastFetchedTimestamp > Date().timeIntervalSince1970 - TimeInterval(remoteConfigManager?.storedConfiguration.configTTL ?? 0) {
-			self.logInfo("Issuer public keys still within TTL")
-			// Mark remote config loaded
-			cryptoLibUtility?.checkFile(.publicKeys)
-			completion(.withinTTL)
-		}
-		cryptoLibUtility?.fetchIssuerPublicKeys {[weak self] resultWrapper in
+		cryptoLibUtility?.update(
+			isAppFirstLaunch: true,
+			immediateCallbackIfWithinTTL: {
+				completion(.withinTTL)
+			},
+			completion: { (result: Result<Bool, ServerError>) in
+				self.isUpdatingIssuerPublicKeys = false
+				switch result {
+					case .success:
+						completion(.noActionNeeded)
 
-			self?.isUpdatingIssuerPublicKeys = false
-
-			// Response is of type (Result<Data, NetworkError>)
-			switch resultWrapper {
-				case .success(let data):
-
-					// Update the last fetch time
-					self?.userSettings?.issuerKeysFetchedTimestamp = Date().timeIntervalSince1970
-					// Store JSON file
-					self?.cryptoLibUtility?.store(data, for: .publicKeys)
-
-					completion(.noActionNeeded)
-
-				case let .failure(error):
-
-					self?.logError("Error getting the issuers public keys: \(error)")
-					completion(.internetRequired)
+					case let .failure(error):
+						self.logError("Error getting the issuers public keys: \(error)")
+						completion(.internetRequired)
+				}
 			}
-		}
+		)
 	}
 
 	// MARK: Jailbreak

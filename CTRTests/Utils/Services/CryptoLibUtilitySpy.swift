@@ -10,7 +10,7 @@ import XCTest
 
 final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 
-	required init(fileStorage: FileStorage, flavor: AppFlavor) {}
+	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, fileStorage: FileStorage, flavor: AppFlavor) {}
 
 	var invokedHasPublicKeysGetter = false
 	var invokedHasPublicKeysGetterCount = 0
@@ -64,15 +64,26 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		invokedCheckFileParametersList.append((file, ()))
 	}
 
-	var invokedFetchIssuerPublicKeys = false
-	var invokedFetchIssuerPublicKeysCount = 0
-	var stubbedFetchIssuerPublicKeysOnCompletionResult: (Result<Data, ServerError>, Void)?
+	var invokedUpdate = false
+	var invokedUpdateCount = 0
+	var invokedUpdateParameters: (isAppFirstLaunch: Bool, Void)?
+	var invokedUpdateParametersList = [(isAppFirstLaunch: Bool, Void)]()
+	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
+	var stubbedUpdateCompletionResult: (Result<Bool, ServerError>, Void)?
 
-	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, ServerError>) -> Void)?) {
-		invokedFetchIssuerPublicKeys = true
-		invokedFetchIssuerPublicKeysCount += 1
-		if let result = stubbedFetchIssuerPublicKeysOnCompletionResult {
-			onCompletion?(result.0)
+	func update(
+		isAppFirstLaunch: Bool,
+		immediateCallbackIfWithinTTL: (() -> Void)?,
+		completion: ((Result<Bool, ServerError>) -> Void)?) {
+		invokedUpdate = true
+		invokedUpdateCount += 1
+		invokedUpdateParameters = (isAppFirstLaunch, ())
+		invokedUpdateParametersList.append((isAppFirstLaunch, ()))
+		if shouldInvokeUpdateImmediateCallbackIfWithinTTL {
+			immediateCallbackIfWithinTTL?()
+		}
+		if let result = stubbedUpdateCompletionResult {
+			completion?(result.0)
 		}
 	}
 
