@@ -56,12 +56,6 @@ final class HolderDashboardViewModel: Logging {
 
 	// MARK: - Private properties
 
-	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
-	private let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
-	private var userSettings: UserSettingsProtocol
-
 	var dashboardRegionToggleValue: QRCodeValidityRegion {
 		didSet {
 			DispatchQueue.global().async {
@@ -84,11 +78,20 @@ final class HolderDashboardViewModel: Logging {
 	}
 
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
+
+	// Observation tokens:
+	private var remoteConfigUpdatesStrippenRefresherToken: RemoteConfigManager.ObserverToken?
+	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
+
+	// Dependencies:
+	private let now: () -> Date
+	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
+	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
+	private let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+	private var userSettings: UserSettingsProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private var dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
-	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
-	private let now: () -> Date
-	private var remoteConfigUpdatesStrippenRefresherToken: RemoteConfigManager.ObserverToken?
 
 	// MARK: - Initializer
 	init(
@@ -117,7 +120,32 @@ final class HolderDashboardViewModel: Logging {
 
 		didUpdate(oldState: nil, newState: state)
 
-		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
+		setupDatasource()
+		setupStrippenRefresher()
+		setupNotificationListeners()
+		setupDCCMigrationNotificationManager()
+
+		// If the config ever changes, reload the strippen refresher:
+		remoteConfigUpdatesStrippenRefresherToken = remoteConfigManager.appendUpdateObserver { [weak strippenRefresher] _, _, _ in
+			strippenRefresher?.load()
+		}
+
+		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+			self?.state.deviceHasClockDeviation = hasClockDeviation
+			self?.datasource.reload() // this could cause some QR code states to change, so reload.
+		}
+	}
+
+	deinit {
+		NotificationCenter.default.removeObserver(self)
+		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
+		remoteConfigUpdatesStrippenRefresherToken.map(remoteConfigManager.removeObserver)
+	}
+
+	// MARK: - Setup
+
+	private func setupDatasource() {
+		datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
 			DispatchQueue.main.async {
 				self?.state.qrCards = qrCardDataItems
 				self?.state.expiredGreenCards += expiredGreenCards
@@ -125,25 +153,17 @@ final class HolderDashboardViewModel: Logging {
 				self?.dccMigrationNotificationManager.reload()
 			}
 		}
+	}
 
+	private func setupStrippenRefresher() {
 		// Map RefresherState to State:
 		self.strippenRefresher.didUpdate = { [weak self] oldValue, newValue in
 			self?.strippenRefresherDidUpdate(oldRefresherState: oldValue, refresherState: newValue)
 		}
 		strippenRefresher.load()
+	}
 
-		// If the config ever changes, reload the strippen refresher:
-		remoteConfigUpdatesStrippenRefresherToken = remoteConfigManager.appendUpdateObserver { [weak strippenRefresher] _, _, _ in
-			strippenRefresher?.load()
-		}
-
-		self.setupNotificationListeners()
-
-		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
-			self?.state.deviceHasClockDeviation = hasClockDeviation
-			self?.datasource.reload() // this could cause some QR code states to change, so reload.
-		}
-
+	private func setupDCCMigrationNotificationManager() {
 		// Setup the dcc
 		self.dccMigrationNotificationManager.showMigrationAvailableBanner = { [weak self] in
 			self?.state.shouldShowEUVaccinationUpdateBanner = true
@@ -164,15 +184,13 @@ final class HolderDashboardViewModel: Logging {
 //		#endif
 	}
 
-	deinit {
-		NotificationCenter.default.removeObserver(self)
-		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
-		remoteConfigUpdatesStrippenRefresherToken.map(remoteConfigManager.removeObserver)
-	}
+	// MARK: - View Lifecycle callbacks:
 
 	func viewWillAppear() {
 		datasource.reload()
 	}
+
+	// MARK: - Receive Updates
 
 	/// Don't call directly, apart from within `init` and from within `var state: State { didSet { ... } }`
 	fileprivate func didUpdate(oldState: State?, newState: State) {
