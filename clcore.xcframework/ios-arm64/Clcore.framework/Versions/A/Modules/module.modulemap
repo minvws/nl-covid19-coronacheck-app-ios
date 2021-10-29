@@ -1,0 +1,8 @@
+framework module "Clcore" {
+	header "ref.h"
+    header "Mobilecore.objc.h"
+    header "Universe.objc.h"
+    header "Clcore.h"
+
+    export *
+}
