@@ -7,10 +7,10 @@
 
 import UIKit
 
-class UpgradeEUVaccinationViewController: BaseViewController {
+class MigrateEUVaccinationViewController: BaseViewController {
 
 	private let viewModel: MigrateEUVaccinationViewModel
-	private let sceneView = UpgradeEUVaccinationView()
+	private let sceneView = MigrateEUVaccinationView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
