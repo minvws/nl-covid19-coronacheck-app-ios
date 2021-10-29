@@ -151,6 +151,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount += 1
 	}
 
+	var invokedUserWishesMoreInfoAboutOutdatedConfig = false
+	var invokedUserWishesMoreInfoAboutOutdatedConfigCount = 0
+	var invokedUserWishesMoreInfoAboutOutdatedConfigParameters: (validUntil: String, Void)?
+	var invokedUserWishesMoreInfoAboutOutdatedConfigParametersList = [(validUntil: String, Void)]()
+
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
+		invokedUserWishesMoreInfoAboutOutdatedConfig = true
+		invokedUserWishesMoreInfoAboutOutdatedConfigCount += 1
+		invokedUserWishesMoreInfoAboutOutdatedConfigParameters = (validUntil, ())
+		invokedUserWishesMoreInfoAboutOutdatedConfigParametersList.append((validUntil, ()))
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
