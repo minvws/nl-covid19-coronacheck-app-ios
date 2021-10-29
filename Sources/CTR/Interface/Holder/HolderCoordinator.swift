@@ -394,8 +394,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
-		let title: String = L.holderDashboardConfigPageTitle()
-		let message: String = L.holderDashboardConfigPageMessage(validUntil)
+		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
+		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 

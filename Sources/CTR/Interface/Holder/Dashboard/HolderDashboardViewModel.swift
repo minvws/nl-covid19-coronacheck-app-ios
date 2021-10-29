@@ -341,9 +341,21 @@ final class HolderDashboardViewModel: Logging {
 			}
 		)
 
+		// Config might be out of date
 		viewControllerCards += HolderDashboardViewController.Card.configMightBeOutdatedCard(
+			remoteConfiguration: remoteConfigManager.storedConfiguration,
+			now: now,
+			userSettings: userSettings,
 			didTapCallToAction: { [weak coordinatorDelegate] in
-				coordinatorDelegate?.userWishesMoreInfoAboutOutdatedConfig(validUntil: "Todo")
+
+				guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
+					  let timeToLife = remoteConfigManager.storedConfiguration.configTTL else {
+					return
+				}
+
+				let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLife))
+				let configValidUntilDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: configValidUntilDate)
+				coordinatorDelegate?.userWishesMoreInfoAboutOutdatedConfig(validUntil: configValidUntilDateString)
 			}
 		)
 
@@ -448,12 +460,25 @@ extension HolderDashboardViewController.Card {
 	}
 
 	fileprivate static func configMightBeOutdatedCard(
+		remoteConfiguration: RemoteConfiguration,
+		now: Date,
+		userSettings: UserSettingsProtocol,
 		didTapCallToAction: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
+
+		guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
+			  let configMinimumIntervalSeconds = remoteConfiguration.configMinimumIntervalSeconds else {
+			return []
+		}
+		// The config should be older the minimum config interval
+		guard configFetchedTimestamp + TimeInterval(configMinimumIntervalSeconds) < now.timeIntervalSince1970 else {
+			return []
+		}
+
 		return [
 			.configMightBeOutdated(
-				message: L.holderDashboardConfigCardMessage(),
-				callToActionButtonText: L.holderDashboardConfigCardButton(),
+				message: L.holderDashboardConfigIsAlmostOutOfDateCardMessage(),
+				callToActionButtonText: L.holderDashboardConfigIsAlmostOutOfDateCardButton(),
 				didTapCallToAction: didTapCallToAction
 			)
 		]
