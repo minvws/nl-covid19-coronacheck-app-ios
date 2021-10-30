@@ -229,6 +229,7 @@ class HolderCoordinator: SharedCoordinator {
 				),
 				userSettings: UserSettings(),
 				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
 				now: { Date() }
 			)
 		)

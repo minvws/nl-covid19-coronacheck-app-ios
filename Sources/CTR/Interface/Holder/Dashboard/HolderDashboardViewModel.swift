@@ -52,6 +52,8 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowEUVaccinationUpdateBanner: Bool = false
 
 		var shouldShowEUVaccinationUpdateCompletedBanner: Bool = false
+
+		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
 	}
 
 	// MARK: - Private properties
@@ -87,8 +89,10 @@ final class HolderDashboardViewModel: Logging {
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private var dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
+	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
 	private let now: () -> Date
 	private var remoteConfigUpdatesStrippenRefresherToken: RemoteConfigManager.ObserverToken?
+	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
 
 	// MARK: - Initializer
 	init(
@@ -97,6 +101,7 @@ final class HolderDashboardViewModel: Logging {
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
 		dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol,
+		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
 		now: @escaping () -> Date
 	) {
 
@@ -107,6 +112,7 @@ final class HolderDashboardViewModel: Logging {
 		self.now = now
 		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
 		self.dccMigrationNotificationManager = dccMigrationNotificationManager
+		self.configurationNotificationManager = configurationNotificationManager
 
 		self.state = State(
 			qrCards: [],
@@ -136,6 +142,21 @@ final class HolderDashboardViewModel: Logging {
 		remoteConfigUpdatesStrippenRefresherToken = remoteConfigManager.appendUpdateObserver { [weak strippenRefresher] _, _, _ in
 			strippenRefresher?.load()
 		}
+
+		// Setup the configuration warning
+		remoteConfigUpdatesConfigurationWarningToken = remoteConfigManager.appendReloadObserver { [weak self] config, _, _ in
+
+			guard var state = self?.state else { return }
+			state.shouldShowConfigurationIsAlmostOutOfDateBanner = configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
+				now: now(),
+				remoteConfiguration: config
+			)
+			self?.state = state
+		}
+		state.shouldShowConfigurationIsAlmostOutOfDateBanner = configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
+			now: now(),
+			remoteConfiguration: remoteConfigManager.storedConfiguration
+		)
 
 		self.setupNotificationListeners()
 
@@ -168,6 +189,7 @@ final class HolderDashboardViewModel: Logging {
 		NotificationCenter.default.removeObserver(self)
 		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
 		remoteConfigUpdatesStrippenRefresherToken.map(remoteConfigManager.removeObserver)
+		remoteConfigUpdatesConfigurationWarningToken.map(remoteConfigManager.removeObserver)
 	}
 
 	func viewWillAppear() {
@@ -341,26 +363,21 @@ final class HolderDashboardViewModel: Logging {
 			}
 		)
 
-		// Config might be out of date
-		viewControllerCards += HolderDashboardViewController.Card.configAlmostOutOfDateCard(
-			remoteConfiguration: remoteConfigManager.storedConfiguration,
-			now: now,
-			userSettings: userSettings,
-			didTapCallToAction: { [weak coordinatorDelegate] in
+		if state.shouldShowConfigurationIsAlmostOutOfDateBanner {
+			viewControllerCards += HolderDashboardViewController.Card.configAlmostOutOfDateCard(
+				didTapCallToAction: { [weak coordinatorDelegate] in
 
-				guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
-					  let timeToLife = remoteConfigManager.storedConfiguration.configTTL else {
-					return
+					guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
+						  let timeToLife = remoteConfigManager.storedConfiguration.configTTL else { return }
+
+					let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLife))
+					let configValidUntilDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: configValidUntilDate)
+					coordinatorDelegate?.userWishesMoreInfoAboutOutdatedConfig(validUntil: configValidUntilDateString)
 				}
-
-				let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLife))
-				let configValidUntilDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: configValidUntilDate)
-				coordinatorDelegate?.userWishesMoreInfoAboutOutdatedConfig(validUntil: configValidUntilDateString)
-			}
-		)
+			)
+		}
 
 		// Multiple DCC migration banners:
-
 		if validityRegion == .europeanUnion {
 			if state.shouldShowEUVaccinationUpdateBanner {
 				viewControllerCards += HolderDashboardViewController.Card.multipleDCCMigrationUpdateCard(
@@ -460,21 +477,8 @@ extension HolderDashboardViewController.Card {
 	}
 
 	fileprivate static func configAlmostOutOfDateCard(
-		remoteConfiguration: RemoteConfiguration,
-		now: Date,
-		userSettings: UserSettingsProtocol,
 		didTapCallToAction: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
-
-		guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
-			  let configMinimumIntervalSeconds = remoteConfiguration.configMinimumIntervalSeconds else {
-			return []
-		}
-		// The config should be older the minimum config interval
-		guard configFetchedTimestamp + TimeInterval(configMinimumIntervalSeconds) < now.timeIntervalSince1970 else {
-			return []
-		}
-
 		return [
 			.configAlmostOutOfDate(
 				message: L.holderDashboardConfigIsAlmostOutOfDateCardMessage(),
@@ -500,7 +504,6 @@ extension HolderDashboardViewController.Card {
 		didTapCallToAction: @escaping () -> Void,
 		didTapClose: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
-
 		return [
 			.migratingYourInternationalVaccinationCertificateDidComplete(
 				message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
