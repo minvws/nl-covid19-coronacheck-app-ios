@@ -1,3 +1,17 @@
+"holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Bewijs terugzetten";
+"holder.recoveryvalidityextension.extensioncomplete.title" = "Verlengd herstelbewijs";
+"holder.recoveryvalidityextension.extensioncomplete.description" = "De geldigheid van Nederlandse herstelbewijzen is verlengd. Daardoor is je bewijs nu een jaar geldig vanaf het moment dat je positief bent getest.";
+"holder.recoveryvalidityextension.reinstationcomplete.title" = "Teruggezet herstelbewijs";
+"holder.recoveryvalidityextension.reinstationcomplete.description" = "We hebben je verlopen bewijs teruggezet, omdat de geldigheid van Nederlandse herstelbewijzen is verlengd. Een bewijs is nu een jaar geldig vanaf het moment dat je positief bent getest.";
+"holder.dashboard.recoveryvalidityextension.extensionavailable.banner.title" = "Je kunt je Nederlandse herstelbewijs verlengen";
+"holder.dashboard.recoveryvalidityextension.reinstationavailable.banner.title" = "Je kunt je verlopen Nederlandse herstelbewijs terugzetten";
+"holder.dashboard.recoveryvalidityextension.extensioncomplete.banner.title" = "Je Nederlandse herstelbewijs is verlengd";
+"holder.dashboard.recoveryvalidityextension.reinstationcomplete.banner.title" = "Je Nederlandse herstelbewijs is teruggezet";
+"holder.recoveryvalidityextension.extensionavailable.title" = "Herstelbewijs verlengen";
+"holder.recoveryvalidityextension.extensionavailable.description" = "<p>Binnenkort verlengen we voor iedereen het herstelbewijs. Hierdoor wordt je herstelbewijs een jaar geldig vanaf het moment dat je positief bent getest.</p><p>Je kunt je bewijs ook nu alvast verlengen als je dat wilt.</p>";
+"holder.recoveryvalidityextension.extensionavailable.button.submit" = "Verleng bewijs";
+"holder.recoveryvalidityextension.reinstationavailable.title" = "Herstelbewijs terugzetten";
+"holder.recoveryvalidityextension.reinstationavailable.description" = "<p>Binnenkort zetten we jouw verlopen herstelbewijs terug, omdat de geldigheid van Nederlandse herstelbewijzen wordt verlengd. Daardoor wordt je bewijs een jaar geldig vanaf het moment dat je positief bent getest.</p><p>Je kunt je bewijs ook nu alvast terugzetten als je dat wilt.</p>";
 /* Configuratie ABC123, 13-10-2021 00:00 */
 "general.menu.configVersion" = "Configuratie %@, %@";
 "general.testtype" = "Type test";
@@ -391,7 +405,7 @@
 "holder.dashboard.title" = "Mijn bewijzen";
 "holder.dashboard.intro.domestic" = "Bezoek je een locatie binnen Nederland? Laat je Nederlandse QR-code en je identiteitsbewijs zien bij de ingang van de locatie die je bezoekt.";
 "holder.dashboard.intro.international" = "<p>Ben je in het buitenland of ga je de grens over? Gebruik dan altijd de internationale QR-code hieronder. Controleer voor vertrek welk bewijs je nodig hebt.</p>";
-"holder.dashboard.qr.expired" = "Je QR-code is verlopen.";
+"holder.dashboard.qr.expired" = "Je bewijs is verlopen.";
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
 "holder.dashboard.qr.minute.long" = "minuut";
@@ -424,7 +438,7 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "Over je herstelbewijs";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "<p>Je herstelbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.</p><p>Dit komt doordat het type test niet voldoet in Nederland.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "Over je herstelbewijs";
-"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Je herstelbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit kan bijvoorbeeld komen doordat je type test niet voldoet. Alleen van een PCR-test kan een internationaal bewijs gemaakt worden. Lees meer over de mogelijke oorzaken op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a></p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Je herstelbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit kan bijvoorbeeld komen doordat je type test niet voldoet, of doordat deze niet meer geldig is in het buitenland. Alleen van een PCR-test die minder dan 180 dagen oud is kan een internationaal herstelbewijs gemaakt worden. Lees meer over de mogelijke oorzaken op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a></p>";
 "holder.dashboard.empty.domestic.title" = "Hier komt jouw Nederlandse bewijs";
 "holder.dashboard.empty.domestic.message" = "<p>Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>. De app maakt een Nederlands en een internationaal bewijs.</p>";
 "holder.dashboard.empty.international.title" = "Hier komt jouw internationale bewijs";
