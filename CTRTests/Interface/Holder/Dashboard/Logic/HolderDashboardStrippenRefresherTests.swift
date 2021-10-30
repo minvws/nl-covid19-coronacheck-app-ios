@@ -151,7 +151,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.sut.state.loadingState) == .idle
+		expect(self.sut.state.loadingState) == .completed
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 2
 	}
@@ -184,7 +184,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		// Callback is set on `invokedWhenReachable`:
 		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.sut.state.loadingState) == .idle
+		expect(self.sut.state.loadingState) == .completed
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 0
 	}
@@ -220,7 +220,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.sut.state.loadingState) == .idle
+		expect(self.sut.state.loadingState) == .completed
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 2
 	}
@@ -310,7 +310,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.sut.state.loadingState) == .idle
+		expect(self.sut.state.loadingState) == .completed
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 2
 	}
@@ -347,7 +347,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.sut.state.loadingState) == .idle
+		expect(self.sut.state.loadingState) == .completed
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 2
 	}
@@ -381,7 +381,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		// Callback is set on `invokedWhenReachable`:
 		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.sut.state.loadingState) == .idle
+		expect(self.sut.state.loadingState) == .completed
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 0
 	}
