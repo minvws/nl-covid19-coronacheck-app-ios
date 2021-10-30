@@ -10,7 +10,7 @@ import XCTest
 
 class RemoteConfigManagingSpy: RemoteConfigManaging {
 
-	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, networkManager: NetworkManaging) {}
+	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, reachability: ReachabilityProtocol?, networkManager: NetworkManaging) {}
 
 	var invokedStoredConfigurationGetter = false
 	var invokedStoredConfigurationGetterCount = 0
@@ -69,7 +69,10 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
 	var stubbedUpdateCompletionResult: (Result<(Bool, RemoteConfiguration), ServerError>, Void)?
 
-	func update(isAppFirstLaunch: Bool, immediateCallbackIfWithinTTL: @escaping () -> Void, completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
+	func update(
+		isAppFirstLaunch: Bool,
+		immediateCallbackIfWithinTTL: @escaping () -> Void,
+		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
 		invokedUpdateParameters = (isAppFirstLaunch, ())
