@@ -104,9 +104,7 @@ targetTemplates:
       - package: RSwiftLibrary
         product: Rswift
       # Frameworks:
-      - framework: clcore.framework
-        embed: false
-      - framework: openssl.framework
+      - framework: clcore.xcframework
         embed: false
     settings:
       base:
