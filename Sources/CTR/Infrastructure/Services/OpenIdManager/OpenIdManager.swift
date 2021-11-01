@@ -12,6 +12,9 @@ import AppAuthEnterpriseUserAgent
 protocol OpenIdManaging: AnyObject {
 
 	init()
+	
+	/// Is request authorization in progress
+	var isAuthorizationInProgress: Bool { get set }
 
 	/// Request an access token
 	/// - Parameters:
@@ -28,6 +31,8 @@ class OpenIdManager: OpenIdManaging, Logging {
 
 	/// The digid configuration
 	var configuration: ConfigurationDigidProtocol
+	
+	var isAuthorizationInProgress: Bool = false
 
 	required init() {
 		configuration = Configuration()
@@ -67,6 +72,8 @@ class OpenIdManager: OpenIdManaging, Logging {
 		_ serviceConfiguration: OIDServiceConfiguration,
 		onCompletion: @escaping (String?) -> Void,
 		onError: @escaping (Error?) -> Void) {
+			
+		isAuthorizationInProgress = true
 
 		let request = generateRequest(serviceConfiguration: serviceConfiguration)
 		self.logVerbose("OpenIdManager: authorization request: \(request)")
@@ -78,6 +85,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 			}
 
 			let callBack: OIDAuthStateAuthorizationCallback = { authState, error in
+				self.isAuthorizationInProgress = false
 
 				self.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
 				NotificationCenter.default.post(name: .enablePrivacySnapShot, object: nil)
