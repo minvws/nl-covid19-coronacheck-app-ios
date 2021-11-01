@@ -150,12 +150,10 @@ final class HolderDashboardViewModel: Logging {
 		// Setup the configuration warning
 		remoteConfigUpdatesConfigurationWarningToken = remoteConfigManager.appendReloadObserver { [weak self] config, _, _ in
 
-			guard var state = self?.state else { return }
-			state.shouldShowConfigurationIsAlmostOutOfDateBanner = configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
+			self?.state.shouldShowConfigurationIsAlmostOutOfDateBanner = configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
 				now: now(),
 				remoteConfiguration: config
 			)
-			self?.state = state
 		}
 
 		self.setupNotificationListeners()
