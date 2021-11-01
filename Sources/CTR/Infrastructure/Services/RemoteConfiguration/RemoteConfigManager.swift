@@ -145,7 +145,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 		guard !isLoading else { return }
 		isLoading = true
 
-		let newValidity = FileValidity.evaluateIfUpdateNeeded(
+		let newValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
 			configuration: storedConfiguration,
 			lastFetchedTimestamp: userSettings.configFetchedTimestamp,
 			isAppFirstLaunch: isAppFirstLaunch,

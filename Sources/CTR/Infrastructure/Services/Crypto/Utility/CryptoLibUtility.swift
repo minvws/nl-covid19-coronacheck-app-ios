@@ -190,7 +190,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		guard !isLoading else { return }
 		isLoading = true
 
-		let newValidity = FileValidity.evaluateIfUpdateNeeded(
+		let newValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
 			configuration: Services.remoteConfigManager.storedConfiguration,
 			lastFetchedTimestamp: userSettings.issuerKeysFetchedTimestamp,
 			isAppFirstLaunch: isAppFirstLaunch,
