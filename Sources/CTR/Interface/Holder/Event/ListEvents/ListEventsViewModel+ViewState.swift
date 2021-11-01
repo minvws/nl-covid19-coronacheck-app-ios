@@ -140,12 +140,12 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func recoveryEventsTooOld() -> ListEventsViewController.State {
+	private func recoveryEventsTooOld(_ days: String) -> ListEventsViewController.State {
 
 		return .feedback(
 			content: Content(
 				title: L.holderRecoveryTooOldTitle(),
-				subTitle: L.holderRecoveryTooOldMessage(),
+				subTitle: L.holderRecoveryTooOldMessage(days),
 				primaryActionTitle: L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -184,7 +184,7 @@ extension ListEventsViewModel {
 			let recoveryEventValidityDays = remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
 			let result = filterTooOldRecoveryEvents(dataSource, recoveryEventValidityDays: recoveryEventValidityDays)
 			if result.hasTooOldEvents && result.filteredDataSource.isEmpty {
-				return recoveryEventsTooOld()
+				return recoveryEventsTooOld("\(recoveryEventValidityDays)")
 			} else {
 				dataSource = result.filteredDataSource
 			}
