@@ -95,12 +95,18 @@ class AboutViewControllerTests: XCTestCase {
 		// Given
 		let walletSpy = WalletManagerSpy()
 		Services.use(walletSpy)
-		let remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		let remoteConfigSpy = RemoteConfigManagingSpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			reachability: ReachabilitySpy(),
+			networkManager: NetworkSpy()
+		)
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		Services.use(remoteConfigSpy)
 		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(
 			now: { now },
 			userSettings: UserSettingsSpy(),
+			reachability: ReachabilitySpy(),
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.flavor
 		)

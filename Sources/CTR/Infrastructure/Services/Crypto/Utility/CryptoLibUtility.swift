@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Reachability
 import Clcore
 
 protocol CryptoLibUtilityProtocol: AnyObject {
@@ -23,6 +24,7 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	init(
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
+		reachability: ReachabilityProtocol?,
 		fileStorage: FileStorage,
 		flavor: AppFlavor)
 	
@@ -85,12 +87,14 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	private let now: () -> Date
 	private let userSettings: UserSettingsProtocol
 	private let networkManager: NetworkManaging = Services.networkManager
+	private let reachability: ReachabilityProtocol?
 
 	// MARK: - Setup
 
 	init(
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
+		reachability: ReachabilityProtocol?,
 		fileStorage: FileStorage = FileStorage(),
 		flavor: AppFlavor = AppFlavor.flavor) {
 
@@ -99,6 +103,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		self.flavor = flavor
 		self.userSettings = userSettings
 		self.shouldInitialize = .empty
+		self.reachability = reachability
 		registerTriggers()
 	}
 
@@ -107,6 +112,11 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
+
+		reachability?.whenReachable = { [weak self] _ in
+			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+		}
+		try? reachability?.startNotifier()
 	}
 
 	// MARK: - Teardown

@@ -6,6 +6,7 @@
  */
 
 import Foundation
+import Reachability
 
 /// Global container for the different services used in the app
 final class Services {
@@ -123,6 +124,7 @@ final class Services {
 	static private(set) var cryptoLibUtility: CryptoLibUtilityProtocol = cryptoLibUtilityType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
+		reachability: try? Reachability(),
 		fileStorage: FileStorage(),
 		flavor: AppFlavor.flavor
 	)
@@ -146,6 +148,7 @@ final class Services {
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
+		reachability: try? Reachability(),
 		networkManager: networkManager
 	)
 
@@ -197,6 +200,7 @@ final class Services {
 		remoteConfigManager = remoteConfigManagingType.init(
 			now: { Date() },
 			userSettings: UserSettings(),
+			reachability: try? Reachability(),
 			networkManager: networkManager
 		)
 		onboardingManager = onboardingManagingType.init()
@@ -210,5 +214,12 @@ final class Services {
 			remoteConfigManager: remoteConfigManager
 		)
 		clockDeviationManager = clockDeviationType.init()
+		cryptoLibUtility = cryptoLibUtilityType.init(
+			now: { Date() },
+			userSettings: UserSettings(),
+			reachability: try? Reachability(),
+			fileStorage: FileStorage(),
+			flavor: AppFlavor.flavor
+		)
 	}
 }
