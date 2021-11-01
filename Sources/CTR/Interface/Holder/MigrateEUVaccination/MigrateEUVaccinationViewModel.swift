@@ -47,7 +47,7 @@ final class MigrateEUVaccinationViewModel: Logging {
 			self.isLoading = false
 			self.handleGreenCardResult(result, onSuccess: {
 				self.userSettings.didCompleteEUVaccinationMigration = true
-				self.coordinator?.upgradeEUVaccinationDidComplete()
+				self.coordinator?.migrateEUVaccinationDidComplete()
 			})
 		}
 	}
