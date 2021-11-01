@@ -59,7 +59,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func displayError(content: Content, backAction: @escaping () -> Void)
 
-	func upgradeEUVaccinationDidComplete()
+	func migrateEUVaccinationDidComplete()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -409,11 +409,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			userSettings: userSettings
 		)
 		viewModel.coordinator = self
-		let viewController = UpgradeEUVaccinationViewController(viewModel: viewModel)
+		let viewController = MigrateEUVaccinationViewController(viewModel: viewModel)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
-	func upgradeEUVaccinationDidComplete() {
+	func migrateEUVaccinationDidComplete() {
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {
 			// (will be added in upcoming PR)

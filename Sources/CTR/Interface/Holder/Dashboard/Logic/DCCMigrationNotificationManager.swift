@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol DCCMigrationNotificationManagerProtocol {
+protocol DCCMigrationNotificationManagerProtocol: AnyObject {
 	var showMigrationAvailableBanner: (() -> Void)? { get set }
 	var showMigrationCompletedBanner: (() -> Void)? { get set }
 

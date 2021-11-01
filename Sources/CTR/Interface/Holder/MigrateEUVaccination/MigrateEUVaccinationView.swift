@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UpgradeEUVaccinationView: ScrolledStackWithButtonView {
+class MigrateEUVaccinationView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {

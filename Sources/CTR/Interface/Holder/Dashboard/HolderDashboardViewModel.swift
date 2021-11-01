@@ -58,12 +58,6 @@ final class HolderDashboardViewModel: Logging {
 
 	// MARK: - Private properties
 
-	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
-	private let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
-	private var userSettings: UserSettingsProtocol
-
 	var dashboardRegionToggleValue: QRCodeValidityRegion {
 		didSet {
 			DispatchQueue.global().async {
@@ -86,13 +80,22 @@ final class HolderDashboardViewModel: Logging {
 	}
 
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
-	private let strippenRefresher: DashboardStrippenRefreshing
-	private var dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
-	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
-	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
-	private let now: () -> Date
+
+	// Observation tokens:
 	private var remoteConfigUpdatesStrippenRefresherToken: RemoteConfigManager.ObserverToken?
+	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
+
+	// Dependencies:
+	private let now: () -> Date
+	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
+	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
+	private let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+	private let userSettings: UserSettingsProtocol
+	private let strippenRefresher: DashboardStrippenRefreshing
+	private let dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
+	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
 
 	// MARK: - Initializer
 	init(
@@ -127,7 +130,34 @@ final class HolderDashboardViewModel: Logging {
 
 		didUpdate(oldState: nil, newState: state)
 
-		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
+		setupDatasource()
+		setupStrippenRefresher()
+		setupNotificationListeners()
+		setupDCCMigrationNotificationManager()
+		setupConfigNotificationManager()
+
+		// If the config ever changes, reload the strippen refresher:
+		remoteConfigUpdatesStrippenRefresherToken = remoteConfigManager.appendUpdateObserver { [weak strippenRefresher] _, _, _ in
+			strippenRefresher?.load()
+		}
+
+		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+			self?.state.deviceHasClockDeviation = hasClockDeviation
+			self?.datasource.reload() // this could cause some QR code states to change, so reload.
+		}
+	}
+
+	deinit {
+		NotificationCenter.default.removeObserver(self)
+		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
+		remoteConfigUpdatesStrippenRefresherToken.map(remoteConfigManager.removeObserver)
+		remoteConfigUpdatesConfigurationWarningToken.map(remoteConfigManager.removeObserver)
+	}
+
+	// MARK: - Setup
+
+	private func setupDatasource() {
+		datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
 			DispatchQueue.main.async {
 				self?.state.qrCards = qrCardDataItems
 				self?.state.expiredGreenCards += expiredGreenCards
@@ -135,33 +165,17 @@ final class HolderDashboardViewModel: Logging {
 				self?.dccMigrationNotificationManager.reload()
 			}
 		}
+	}
 
+	private func setupStrippenRefresher() {
 		// Map RefresherState to State:
 		self.strippenRefresher.didUpdate = { [weak self] oldValue, newValue in
 			self?.strippenRefresherDidUpdate(oldRefresherState: oldValue, refresherState: newValue)
 		}
 		strippenRefresher.load()
+	}
 
-		// If the config ever changes, reload the strippen refresher:
-		remoteConfigUpdatesStrippenRefresherToken = remoteConfigManager.appendUpdateObserver { [weak strippenRefresher] _, _, _ in
-			strippenRefresher?.load()
-		}
-
-		// Setup the configuration warning
-		remoteConfigUpdatesConfigurationWarningToken = remoteConfigManager.appendReloadObserver { [weak self] config, _, _ in
-
-			self?.state.shouldShowConfigurationIsAlmostOutOfDateBanner = configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
-				now: now(),
-				remoteConfiguration: config
-			)
-		}
-
-		self.setupNotificationListeners()
-
-		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
-			self?.state.deviceHasClockDeviation = hasClockDeviation
-			self?.datasource.reload() // this could cause some QR code states to change, so reload.
-		}
+	private func setupDCCMigrationNotificationManager() {
 
 		// Setup the dcc
 		self.dccMigrationNotificationManager.showMigrationAvailableBanner = { [weak self] in
@@ -174,25 +188,29 @@ final class HolderDashboardViewModel: Logging {
 			self?.state = state
 		}
 		dccMigrationNotificationManager.reload()
-
-//		#if DEBUG
-//		DispatchQueue.main.asyncAfter(deadline: .now()) {
-//			self.injectSampleData(dataStoreManager: Services.dataStoreManager)
-//			self.datasource.reload()
-//		}
-//		#endif
 	}
 
-	deinit {
-		NotificationCenter.default.removeObserver(self)
-		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
-		remoteConfigUpdatesStrippenRefresherToken.map(remoteConfigManager.removeObserver)
-		remoteConfigUpdatesConfigurationWarningToken.map(remoteConfigManager.removeObserver)
+	func setupConfigNotificationManager() {
+
+		// Setup the configuration warning
+		remoteConfigUpdatesConfigurationWarningToken = remoteConfigManager.appendReloadObserver { [weak self] config, _, _ in
+
+			guard let self = self else { return }
+
+			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
+				now: self.now(),
+				remoteConfiguration: config
+			)
+		}
 	}
+
+	// MARK: - View Lifecycle callbacks:
 
 	func viewWillAppear() {
 		datasource.reload()
 	}
+
+	// MARK: - Receive Updates
 
 	/// Don't call directly, apart from within `init` and from within `var state: State { didSet { ... } }`
 	fileprivate func didUpdate(oldState: State?, newState: State) {
@@ -631,7 +649,7 @@ extension HolderDashboardViewModel.QRCard {
 
 			case .europeanUnion:
 				var cards = [HolderDashboardViewController.Card.europeanUnionQR(
-					title: (self.origins.first?.type.localizedProof ?? L.holderDashboardQrTitle()).capitalized,
+					title: (self.origins.first?.type.localizedProof ?? L.holderDashboardQrTitle()).capitalizingFirstLetter(),
 					stackSize: {
 						let minStackSize = 1
 						let maxStackSize = 3
