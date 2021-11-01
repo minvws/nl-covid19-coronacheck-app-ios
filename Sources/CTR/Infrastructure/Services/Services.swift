@@ -124,6 +124,7 @@ final class Services {
 	static private(set) var cryptoLibUtility: CryptoLibUtilityProtocol = cryptoLibUtilityType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
+		reachability: try? Reachability(),
 		fileStorage: FileStorage(),
 		flavor: AppFlavor.flavor
 	)
@@ -213,5 +214,12 @@ final class Services {
 			remoteConfigManager: remoteConfigManager
 		)
 		clockDeviationManager = clockDeviationType.init()
+		cryptoLibUtility = cryptoLibUtilityType.init(
+			now: { Date() },
+			userSettings: UserSettings(),
+			reachability: try? Reachability(),
+			fileStorage: FileStorage(),
+			flavor: AppFlavor.flavor
+		)
 	}
 }

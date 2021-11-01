@@ -280,6 +280,7 @@ class AboutViewModelTests: XCTestCase {
 		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(
 			now: { now },
 			userSettings: UserSettingsSpy(),
+			reachability: ReachabilitySpy(),
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.flavor
 		)

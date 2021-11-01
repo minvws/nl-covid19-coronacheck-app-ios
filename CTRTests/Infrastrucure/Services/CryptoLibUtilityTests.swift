@@ -8,12 +8,14 @@
 @testable import CTR
 import XCTest
 import Nimble
+import Reachability
 
 class CryptoLibUtilityTests: XCTestCase {
 
 	private var sut: CryptoLibUtility!
 	private var networkSpy: NetworkSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var reachabilitySpy: ReachabilitySpy!
 
 	override func setUp() {
 
@@ -21,7 +23,9 @@ class CryptoLibUtilityTests: XCTestCase {
 		networkSpy = NetworkSpy(configuration: .development)
 		Services.use(networkSpy)
 		userSettingsSpy = UserSettingsSpy()
-		sut = CryptoLibUtility(now: { now }, userSettings: userSettingsSpy)
+		reachabilitySpy = ReachabilitySpy()
+
+		sut = CryptoLibUtility(now: { now }, userSettings: userSettingsSpy, reachability: reachabilitySpy)
 	}
 
 	override func tearDown() {
@@ -278,5 +282,17 @@ class CryptoLibUtilityTests: XCTestCase {
 		// Assert
 		expect(self.userSettingsSpy.invokedIssuerKeysFetchedTimestamp) == now.timeIntervalSince1970
 		expect(self.sut.isLoading) == false
+	}
+
+	func test_reachability() {
+
+		// Arrange
+		expect(self.networkSpy.invokedGetPublicKeysCount) == 0
+		
+		// Act
+		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
+
+		// Assert
+		expect(self.networkSpy.invokedGetPublicKeysCount) == 1
 	}
 }
