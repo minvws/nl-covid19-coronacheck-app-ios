@@ -20,10 +20,6 @@ protocol DataStoreManaging {
 	/// - Returns: the main context
 	func managedObjectContext() -> NSManagedObjectContext
 
-	/// Get a background context to perform a query on
-	/// - Returns: the background context
-	func backgroundContext() -> NSManagedObjectContext
-
 	/// Save the context, saves all pending changes.
 	/// - Parameter context: the context to be saved.
 	func save(_ context: NSManagedObjectContext)
@@ -90,13 +86,6 @@ class DataStoreManager: DataStoreManaging, Logging {
 	func managedObjectContext() -> NSManagedObjectContext {
 
 		return persistentContainer.viewContext
-	}
-
-	/// Get a background context to perform a query on
-	/// - Returns: the background context
-	func backgroundContext() -> NSManagedObjectContext {
-
-		return persistentContainer.newBackgroundContext()
 	}
 
 	/// Save the context, saves all pending changes.
