@@ -677,4 +677,4 @@
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
 "holder.dashboard.configIsAlmostOutOfDate.card.button" = "Read more";
 "holder.dashboard.configIsAlmostOutOfDate.page.title" = "Please connect to the internet";
-"holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until%@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";
+"holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until %@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";
