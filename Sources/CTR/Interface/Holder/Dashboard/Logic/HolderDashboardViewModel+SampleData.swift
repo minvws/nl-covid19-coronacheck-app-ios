@@ -12,7 +12,7 @@ import CoreData
 extension HolderDashboardViewModel {
 	func injectSampleData(dataStoreManager: DataStoreManaging) {
 
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 
 		context.performAndWait {
 			_ = Services.walletManager // ensure single entity Wallet is created.
