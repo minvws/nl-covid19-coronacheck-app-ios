@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum FileValidity {
+enum RemoteFileValidity {
 
 	case neverFetched
 	case withinTTL
@@ -19,14 +19,14 @@ enum FileValidity {
 		lastFetchedTimestamp: TimeInterval?,
 		isAppFirstLaunch: Bool,
 		now: @escaping () -> Date)
-	-> FileValidity {
+	-> RemoteFileValidity {
 
 		guard let lastFetchedTimestamp = lastFetchedTimestamp else {
 			return .neverFetched
 		}
 
 		let ttlThreshold = (now().timeIntervalSince1970 - TimeInterval(configuration.configTTL ?? 0))
-		let fileValidity: FileValidity = lastFetchedTimestamp > ttlThreshold ? .withinTTL : .refreshNeeded
+		let fileValidity: RemoteFileValidity = lastFetchedTimestamp > ttlThreshold ? .withinTTL : .refreshNeeded
 
 		guard let minimumRefreshIntervalValue = configuration.configMinimumIntervalSeconds
 		else {
