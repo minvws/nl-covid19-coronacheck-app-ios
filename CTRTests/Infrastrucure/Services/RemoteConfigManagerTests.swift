@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import Nimble
+import Reachability
 
 class RemoteConfigManagerTests: XCTestCase {
 	
@@ -15,13 +16,20 @@ class RemoteConfigManagerTests: XCTestCase {
 	private var sut: RemoteConfigManager!
 	private var networkSpy: NetworkSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var reachabilitySpy: ReachabilitySpy!
 
 	override func setUp() {
 
 		networkSpy = NetworkSpy(configuration: .development)
 		userSettingsSpy = UserSettingsSpy()
+		reachabilitySpy = ReachabilitySpy()
 
-		sut = RemoteConfigManager(now: { now }, userSettings: userSettingsSpy, networkManager: networkSpy)
+		sut = RemoteConfigManager(
+			now: { now },
+			userSettings: userSettingsSpy,
+			reachability: reachabilitySpy,
+			networkManager: networkSpy
+		)
 		sut.reset()
 		
 		super.setUp()
@@ -477,4 +485,15 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(self.sut.isLoading) == false
 	}
 
+	func test_reachability() {
+
+		// Arrange
+		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 0
+		
+		// Act
+		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
+
+		// Assert
+		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 1
+	}
 }

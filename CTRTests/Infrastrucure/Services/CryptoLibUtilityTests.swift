@@ -8,12 +8,14 @@
 @testable import CTR
 import XCTest
 import Nimble
+import Reachability
 
 class CryptoLibUtilityTests: XCTestCase {
 
 	private var sut: CryptoLibUtility!
 	private var networkSpy: NetworkSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var reachabilitySpy: ReachabilitySpy!
 
 	override func setUp() {
 
@@ -21,7 +23,9 @@ class CryptoLibUtilityTests: XCTestCase {
 		networkSpy = NetworkSpy(configuration: .development)
 		Services.use(networkSpy)
 		userSettingsSpy = UserSettingsSpy()
-		sut = CryptoLibUtility(now: { now }, userSettings: userSettingsSpy)
+		reachabilitySpy = ReachabilitySpy()
+
+		sut = CryptoLibUtility(now: { now }, userSettings: userSettingsSpy, reachability: reachabilitySpy)
 	}
 
 	override func tearDown() {
@@ -70,7 +74,19 @@ class CryptoLibUtilityTests: XCTestCase {
 	}
 
 	func test_update_withinTTL_callsbackImmediately() {
+
 		// Arrange
+		let remoteConfigSpy = RemoteConfigManagingSpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			reachability: ReachabilitySpy(),
+			networkManager: NetworkSpy()
+		)
+		remoteConfigSpy.stubbedStoredConfiguration = .default
+		remoteConfigSpy.stubbedStoredConfiguration.configTTL = 3600
+		remoteConfigSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
+		Services.use(remoteConfigSpy)
+
 		userSettingsSpy.stubbedIssuerKeysFetchedTimestamp = now.addingTimeInterval(10 * minutes * ago).timeIntervalSince1970
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
 		var hitCallback = false
@@ -80,11 +96,11 @@ class CryptoLibUtilityTests: XCTestCase {
 			hitCallback = true
 		}, completion: { _ in
 			// should be true by the time this completion is called:
-			expect(hitCallback) == true
+			expect(hitCallback).toEventually(beTrue())
 		})
 
 		// Assert
-		expect(hitCallback) == true
+		expect(hitCallback).toEventually(beTrue())
 		expect(self.networkSpy.invokedGetPublicKeys) == true
 		expect(self.sut.isLoading) == false
 	}
@@ -266,5 +282,17 @@ class CryptoLibUtilityTests: XCTestCase {
 		// Assert
 		expect(self.userSettingsSpy.invokedIssuerKeysFetchedTimestamp) == now.timeIntervalSince1970
 		expect(self.sut.isLoading) == false
+	}
+
+	func test_reachability() {
+
+		// Arrange
+		expect(self.networkSpy.invokedGetPublicKeysCount) == 0
+		
+		// Act
+		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
+
+		// Assert
+		expect(self.networkSpy.invokedGetPublicKeysCount) == 1
 	}
 }
