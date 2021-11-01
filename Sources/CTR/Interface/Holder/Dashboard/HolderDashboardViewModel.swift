@@ -587,7 +587,7 @@ extension HolderDashboardViewModel.QRCard {
 
 			case .europeanUnion:
 				var cards = [HolderDashboardViewController.Card.europeanUnionQR(
-					title: (self.origins.first?.type.localizedProof ?? L.holderDashboardQrTitle()).capitalized,
+					title: (self.origins.first?.type.localizedProof ?? L.holderDashboardQrTitle()).capitalizingFirstLetter(),
 					stackSize: {
 						let minStackSize = 1
 						let maxStackSize = 3
