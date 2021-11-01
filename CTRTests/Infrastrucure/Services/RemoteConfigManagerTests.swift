@@ -343,7 +343,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(didCallTTLCallback) == true
 
 		guard (receivedResult?.successValue)! == (false, firstConfig) else {
-			fail("Didn't receive expected result")
+			fail("Didn't receive expected result \(receivedResult)")
 			return
 		}
 
@@ -428,7 +428,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		})
 
 		guard (receivedResult?.successValue)! == (false, configuration) else {
-			fail("Didn't receive expected result")
+			fail("Didn't receive expected result \(receivedResult)")
 			return
 		}
 
