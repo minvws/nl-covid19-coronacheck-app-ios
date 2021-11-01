@@ -80,6 +80,8 @@ class HolderCoordinatorTests: XCTestCase {
 			networkManager: NetworkSpy()
 		)
 		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
+		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		Services.use(remoteConfigManagerSpy)
 
 		sut.childCoordinators = [

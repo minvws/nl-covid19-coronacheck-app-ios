@@ -673,3 +673,8 @@
 "general.networkwasbusy.errorcode" = "<p>Please try again later.</p><p><b>Error code:</b><br />%@</p>";
 "holder.device.authentication.warning.title" = "Security risks have been found";
 "holder.device.authentication.warning.message" = "Please note that your iPhone is not protected by PIN or Face ID/Touch ID. This means others can see your data and your details may not be secure.";
+
+"holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
+"holder.dashboard.configIsAlmostOutOfDate.card.button" = "Read more";
+"holder.dashboard.configIsAlmostOutOfDate.page.title" = "Please connect to the internet";
+"holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until %@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";

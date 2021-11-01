@@ -25,6 +25,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var sampleGreencardObjectID: NSManagedObjectID!
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
 	private var migrationNotificationManagerSpy: DCCMigrationNotificationManagerSpy!
+	private var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
 	private static var initialTimeZone: TimeZone?
 
 	override class func setUp() {
@@ -64,6 +65,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
 
 		migrationNotificationManagerSpy = DCCMigrationNotificationManagerSpy()
+		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
 
 		Services.use(cryptoManagerSpy)
 		Services.use(remoteConfigSpy)
@@ -81,6 +83,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			strippenRefresher: strippenRefresherSpy,
 			userSettings: userSettingsSpy,
 			dccMigrationNotificationManager: migrationNotificationManagerSpy,
+			configurationNotificationManager: configurationNotificationManagerSpy,
 			now: { now }
 		)
 	}
@@ -2147,6 +2150,53 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Second: when it receives the `stubbedAppendUpdateObserverObserverResult` value above.
 		expect(self.strippenRefresherSpy.invokedLoadCount) == 2
 	}
+
+	func test_configIsAlmostOutOfDate() {
+
+		// Arrange
+		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
+
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+
+		// Assert
+		expect(self.sut.domesticCards.first).to(beConfigurationAlmostOutOfDateCard())
+		expect(self.sut.internationalCards.first).to(beConfigurationAlmostOutOfDateCard())
+		// only during .init
+		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerCount) == 1
+	}
+
+	func test_configIsAlmostOutOfDate_userTappedOnCard_domesticTab() {
+
+		// Arrange
+		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+
+		// Act
+		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards.first {
+			action()
+		}
+
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutOutdatedConfig) == true
+	}
+
+	func test_configIsAlmostOutOfDate_userTappedOnCard_internationalTab() {
+
+		// Arrange
+		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+
+		// Act
+		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards.first {
+			action()
+		}
+
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutOutdatedConfig) == true
+	}
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
@@ -2221,6 +2271,17 @@ private func beOriginNotValidInThisRegionCard(test: @escaping (String, String, (
 	return Predicate.define("be .originNotValidInThisRegion with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .originNotValidInThisRegion(message2, callToActionButtonText, didTapCallToAction) = actual {
+			test(message2, callToActionButtonText, didTapCallToAction)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+private func beConfigurationAlmostOutOfDateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .configAlmostOutOfDate with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .configAlmostOutOfDate(message2, callToActionButtonText, didTapCallToAction) = actual {
 			test(message2, callToActionButtonText, didTapCallToAction)
 			return PredicateResult(status: .matches, message: message)
 		}

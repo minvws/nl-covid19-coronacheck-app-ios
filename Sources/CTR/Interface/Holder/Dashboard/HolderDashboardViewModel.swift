@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -52,6 +53,8 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowEUVaccinationUpdateBanner: Bool = false
 
 		var shouldShowEUVaccinationUpdateCompletedBanner: Bool = false
+
+		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
 	}
 
 	// MARK: - Private properties
@@ -82,6 +85,7 @@ final class HolderDashboardViewModel: Logging {
 	// Observation tokens:
 	private var remoteConfigUpdatesStrippenRefresherToken: RemoteConfigManager.ObserverToken?
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
+	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
 
 	// Dependencies:
 	private let now: () -> Date
@@ -92,6 +96,7 @@ final class HolderDashboardViewModel: Logging {
 	private let userSettings: UserSettingsProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private let dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
+	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
 
 	// MARK: - Initializer
 	init(
@@ -100,6 +105,7 @@ final class HolderDashboardViewModel: Logging {
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
 		dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol,
+		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
 		now: @escaping () -> Date
 	) {
 
@@ -110,12 +116,17 @@ final class HolderDashboardViewModel: Logging {
 		self.now = now
 		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
 		self.dccMigrationNotificationManager = dccMigrationNotificationManager
+		self.configurationNotificationManager = configurationNotificationManager
 
 		self.state = State(
 			qrCards: [],
 			expiredGreenCards: [],
 			isRefreshingStrippen: false,
-			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false
+			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false,
+			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
+				now: now(),
+				remoteConfiguration: remoteConfigManager.storedConfiguration
+			)
 		)
 
 		didUpdate(oldState: nil, newState: state)
@@ -124,6 +135,7 @@ final class HolderDashboardViewModel: Logging {
 		setupStrippenRefresher()
 		setupNotificationListeners()
 		setupDCCMigrationNotificationManager()
+		setupConfigNotificationManager()
 
 		// If the config ever changes, reload the strippen refresher:
 		remoteConfigUpdatesStrippenRefresherToken = remoteConfigManager.appendUpdateObserver { [weak strippenRefresher] _, _, _ in
@@ -140,6 +152,7 @@ final class HolderDashboardViewModel: Logging {
 		NotificationCenter.default.removeObserver(self)
 		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
 		remoteConfigUpdatesStrippenRefresherToken.map(remoteConfigManager.removeObserver)
+		remoteConfigUpdatesConfigurationWarningToken.map(remoteConfigManager.removeObserver)
 	}
 
 	// MARK: - Setup
@@ -164,6 +177,7 @@ final class HolderDashboardViewModel: Logging {
 	}
 
 	private func setupDCCMigrationNotificationManager() {
+
 		// Setup the dcc
 		self.dccMigrationNotificationManager.showMigrationAvailableBanner = { [weak self] in
 			self?.state.shouldShowEUVaccinationUpdateBanner = true
@@ -175,6 +189,20 @@ final class HolderDashboardViewModel: Logging {
 			self?.state = state
 		}
 		dccMigrationNotificationManager.reload()
+	}
+
+	func setupConfigNotificationManager() {
+
+		// Setup the configuration warning
+		remoteConfigUpdatesConfigurationWarningToken = remoteConfigManager.appendReloadObserver { [weak self] config, _, _ in
+
+			guard let self = self else { return }
+
+			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
+				now: self.now(),
+				remoteConfiguration: config
+			)
+		}
 	}
 
 	// MARK: - View Lifecycle callbacks:
@@ -347,13 +375,26 @@ final class HolderDashboardViewModel: Logging {
 		viewControllerCards += HolderDashboardViewController.Card.deviceHasClockDeviationCard(
 			deviceHasClockDeviation: state.deviceHasClockDeviation,
 			hasQRCards: !allQRCards.isEmpty,
-			didTapCallToAction: {
-				coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
+			didTapCallToAction: { [weak coordinatorDelegate] in
+				coordinatorDelegate?.userWishesMoreInfoAboutClockDeviation()
 			}
 		)
 
-		// Multiple DCC migration banners:
+		if state.shouldShowConfigurationIsAlmostOutOfDateBanner {
+			viewControllerCards += HolderDashboardViewController.Card.configAlmostOutOfDateCard(
+				didTapCallToAction: { [weak coordinatorDelegate] in
 
+					guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
+						  let timeToLive = remoteConfigManager.storedConfiguration.configTTL else { return }
+
+					let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLive))
+					let configValidUntilDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: configValidUntilDate)
+					coordinatorDelegate?.userWishesMoreInfoAboutOutdatedConfig(validUntil: configValidUntilDateString)
+				}
+			)
+		}
+
+		// Multiple DCC migration banners:
 		if validityRegion == .europeanUnion {
 			if state.shouldShowEUVaccinationUpdateBanner {
 				viewControllerCards += HolderDashboardViewController.Card.multipleDCCMigrationUpdateCard(
@@ -452,6 +493,18 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 
+	fileprivate static func configAlmostOutOfDateCard(
+		didTapCallToAction: @escaping () -> Void
+	) -> [HolderDashboardViewController.Card] {
+		return [
+			.configAlmostOutOfDate(
+				message: L.holderDashboardConfigIsAlmostOutOfDateCardMessage(),
+				callToActionButtonText: L.holderDashboardConfigIsAlmostOutOfDateCardButton(),
+				didTapCallToAction: didTapCallToAction
+			)
+		]
+	}
+
 	fileprivate static func multipleDCCMigrationUpdateCard(
 		didTapCallToAction: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
@@ -468,7 +521,6 @@ extension HolderDashboardViewController.Card {
 		didTapCallToAction: @escaping () -> Void,
 		didTapClose: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
-
 		return [
 			.migratingYourInternationalVaccinationCertificateDidComplete(
 				message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),

@@ -49,6 +49,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInfoAboutUpgradingEUVaccinations()
 
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
+
 	func openUrl(_ url: URL, inApp: Bool)
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
@@ -227,6 +229,7 @@ class HolderCoordinator: SharedCoordinator {
 				),
 				userSettings: UserSettings(),
 				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
 				now: { Date() }
 			)
 		)
@@ -388,6 +391,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
+		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
+		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 

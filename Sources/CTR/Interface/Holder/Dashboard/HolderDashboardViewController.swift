@@ -29,6 +29,8 @@ class HolderDashboardViewController: BaseViewController {
 		case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
 		case errorMessage(message: String, didTapTryAgain: () -> Void)
+
+		case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -171,7 +173,8 @@ class HolderDashboardViewController: BaseViewController {
 					// Message Cards with a message + CTA button
 					case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
 						 let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
-						 let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction):
+						 let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
+						 let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction):
 
 						let messageCard = MessageCardView()
 						messageCard.title = message
