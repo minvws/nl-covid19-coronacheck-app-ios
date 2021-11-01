@@ -12,6 +12,28 @@ class OpenIdManagerSpy: OpenIdManaging {
 
 	required init() {}
 
+	var invokedIsAuthorizationInProgressSetter = false
+	var invokedIsAuthorizationInProgressSetterCount = 0
+	var invokedIsAuthorizationInProgress: Bool?
+	var invokedIsAuthorizationInProgressList = [Bool]()
+	var invokedIsAuthorizationInProgressGetter = false
+	var invokedIsAuthorizationInProgressGetterCount = 0
+	var stubbedIsAuthorizationInProgress: Bool! = false
+
+	var isAuthorizationInProgress: Bool {
+		set {
+			invokedIsAuthorizationInProgressSetter = true
+			invokedIsAuthorizationInProgressSetterCount += 1
+			invokedIsAuthorizationInProgress = newValue
+			invokedIsAuthorizationInProgressList.append(newValue)
+		}
+		get {
+			invokedIsAuthorizationInProgressGetter = true
+			invokedIsAuthorizationInProgressGetterCount += 1
+			return stubbedIsAuthorizationInProgress
+		}
+	}
+
 	var invokedRequestAccessToken = false
 	var invokedRequestAccessTokenCount = 0
 	var stubbedRequestAccessTokenOnCompletionResult: (String?, Void)?

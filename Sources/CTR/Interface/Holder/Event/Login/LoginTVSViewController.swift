@@ -51,6 +51,13 @@ class LoginTVSViewController: BaseViewController {
 		viewModel.login()
 		
 		addBackButton()
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(displayCancelAuthorization), name: UIApplication.didBecomeActiveNotification, object: nil)
+	}
+	
+	@objc func displayCancelAuthorization() {
+		
+		viewModel.cancelAuthorization()
 	}
 
 	private func displayContent(_ content: Content) {
