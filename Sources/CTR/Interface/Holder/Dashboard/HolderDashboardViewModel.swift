@@ -118,7 +118,11 @@ final class HolderDashboardViewModel: Logging {
 			qrCards: [],
 			expiredGreenCards: [],
 			isRefreshingStrippen: false,
-			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false
+			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false,
+			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
+				now: now(),
+				remoteConfiguration: remoteConfigManager.storedConfiguration
+			)
 		)
 
 		didUpdate(oldState: nil, newState: state)
@@ -153,10 +157,6 @@ final class HolderDashboardViewModel: Logging {
 			)
 			self?.state = state
 		}
-		state.shouldShowConfigurationIsAlmostOutOfDateBanner = configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
-			now: now(),
-			remoteConfiguration: remoteConfigManager.storedConfiguration
-		)
 
 		self.setupNotificationListeners()
 
