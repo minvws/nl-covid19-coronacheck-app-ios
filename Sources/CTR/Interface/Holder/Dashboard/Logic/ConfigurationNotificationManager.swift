@@ -27,9 +27,9 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 			return false
 		}
 
-		logDebug("ConfigurationNotificationManager Now: \(now)")
-		logDebug("ConfigurationNotificationManager configFetchedTimestamp: \(Date(timeIntervalSince1970: configFetchedTimestamp))")
-		logDebug("ConfigurationNotificationManager configAlmostOutOfDateWarningSeconds: \(configAlmostOutOfDateWarningSeconds)")
+		logVerbose("ConfigurationNotificationManager Now: \(now)")
+		logVerbose("ConfigurationNotificationManager configFetchedTimestamp: \(Date(timeIntervalSince1970: configFetchedTimestamp))")
+		logVerbose("ConfigurationNotificationManager configAlmostOutOfDateWarningSeconds: \(configAlmostOutOfDateWarningSeconds)")
 
 		// The config should be older the minimum config interval
 		return configFetchedTimestamp + TimeInterval(configAlmostOutOfDateWarningSeconds) < now.timeIntervalSince1970
