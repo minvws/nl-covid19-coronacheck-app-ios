@@ -142,7 +142,7 @@
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Server error";
 "holder.recovery.tooOld.title" = "Positive test result is not valid";
-"holder.recovery.tooOld.message" = "Have you been tested more than 180 days ago? Then your test result is no longer valid. In this case, you cannot create a recovery certificate.";
+"holder.recovery.tooOld.message" = "<p>It has been more than %@ days since you tested positive for coronavirus. Therefore, your test result is no longer valid. Unfortunately, you cannot create a recovery certificate.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.list.message" = "You can create a recovery certificate from the retrieved details.";
 "holder.menu.proof" = "Add certificate";
 "holder.testresults.positive" = "Positive test result";
