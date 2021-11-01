@@ -368,9 +368,9 @@ final class HolderDashboardViewModel: Logging {
 				didTapCallToAction: { [weak coordinatorDelegate] in
 
 					guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
-						  let timeToLife = remoteConfigManager.storedConfiguration.configTTL else { return }
+						  let timeToLive = remoteConfigManager.storedConfiguration.configTTL else { return }
 
-					let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLife))
+					let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLive))
 					let configValidUntilDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: configValidUntilDate)
 					coordinatorDelegate?.userWishesMoreInfoAboutOutdatedConfig(validUntil: configValidUntilDateString)
 				}
