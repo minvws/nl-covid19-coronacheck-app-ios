@@ -125,6 +125,39 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .vaccination)
 	}
+	
+	func test_cancelAuthorization_whenRequestedAuthorizationIsFalse_shouldNotInvokeCoordinator() {
+
+		// Given
+		sut = LoginTVSViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination
+		)
+		openIDSpy.stubbedIsAuthorizationInProgress = false
+
+		// When
+		sut.cancelAuthorization()
+
+		// Then
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == false
+	}
+	
+	func test_abortAuthorization_whenRequestedAuthorization_shouldInvokeCoordinator() {
+
+		// Given
+		sut = LoginTVSViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination
+		)
+		openIDSpy.stubbedIsAuthorizationInProgress = true
+
+		// When
+		sut.cancelAuthorization()
+
+		// Then
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+	}
 
 	func test_openID_success_accessToken_ok() {
 

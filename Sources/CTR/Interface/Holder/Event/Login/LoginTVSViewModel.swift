@@ -124,6 +124,14 @@ extension LoginTVSViewModel {
 
 		self.coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
 	}
+	
+	func cancelAuthorization() {
+		
+		guard let openIdManager = openIdManager, openIdManager.isAuthorizationInProgress else { return }
+		
+		openIdManager.isAuthorizationInProgress = false
+		coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
+	}
 
 	func displayErrorCode(errorCode: ErrorCode) {
 
