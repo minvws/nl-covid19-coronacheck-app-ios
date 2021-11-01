@@ -407,7 +407,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Arrange
 		let configuration = RemoteConfiguration.default
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(20 * days * ago).timeIntervalSince1970
-		userSettingsSpy.stubbedConfigFetchedHash =	"8056f56f53d9ba81facba1bda8d3b06836ccca2d71af02492055f9bc677723cd"
+		userSettingsSpy.stubbedConfigFetchedHash = "8056f56f53d9ba81facba1bda8d3b06836ccca2d71af02492055f9bc677723cd"
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((configuration, configuration.data, URLResponse())), ())
 
 		var reloadObserverReceivedConfiguration: RemoteConfiguration?
