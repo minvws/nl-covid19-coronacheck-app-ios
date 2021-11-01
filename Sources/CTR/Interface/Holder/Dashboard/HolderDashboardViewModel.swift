@@ -175,13 +175,6 @@ final class HolderDashboardViewModel: Logging {
 			self?.state = state
 		}
 		dccMigrationNotificationManager.reload()
-
-//		#if DEBUG
-//		DispatchQueue.main.asyncAfter(deadline: .now()) {
-//			self.injectSampleData(dataStoreManager: Services.dataStoreManager)
-//			self.datasource.reload()
-//		}
-//		#endif
 	}
 
 	// MARK: - View Lifecycle callbacks:
