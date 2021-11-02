@@ -36,7 +36,7 @@ extension QRCard {
 				case (.isExpired, _, _):
 					return validityText_isExpired()
 
-				case (.validityHasBegun, .europeanUnion(let dccEvaluator), .vaccination):
+				case (_, .europeanUnion(let dccEvaluator), .vaccination):
 					if let euVaccination = dccEvaluator(greencard, now)?.vaccinations?.first,
 					   let doseNumber = euVaccination.doseNumber,
 					   let totalDose = euVaccination.totalDose {
@@ -45,7 +45,7 @@ extension QRCard {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
 					}
 
-				case (.validityHasBegun, .europeanUnion(let dccEvaluator), .test):
+				case (_, .europeanUnion(let dccEvaluator), .test):
 					if let euTest = dccEvaluator(greencard, now)?.tests?.first {
 						let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
 						return validityText_hasBegun_eu_test(testType: testType, validFrom: origin.eventDate)
@@ -53,7 +53,7 @@ extension QRCard {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
 					}
 
-				case (.validityHasBegun, .europeanUnion, .recovery):
+				case (_, .europeanUnion, .recovery):
 					return validityText_hasBegun_eu_recovery(isCurrentlyValid: origin.isCurrentlyValid(now: now), expirationTime: origin.expirationTime)
 
 				case (.validityHasBegun, .netherlands, .vaccination):
