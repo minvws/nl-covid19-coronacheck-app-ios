@@ -85,10 +85,10 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "shouldShowRecoveryValidityExtensionCard", defaultValue: false)
 	var shouldShowRecoveryValidityExtensionCard: Bool // swiftlint:disable:this let_var_whitespace
+
 	@UserDefaults(key: "shouldShowRecoveryValidityReinstationCard", defaultValue: false)
 	var shouldShowRecoveryValidityReinstationCard: Bool // swiftlint:disable:this let_var_whitespace
 
-	/// blue
 	@UserDefaults(key: "hasDismissedRecoveryValidityExtensionCard", defaultValue: true)
 	var hasDismissedRecoveryValidityExtensionCard: Bool // swiftlint:disable:this let_var_whitespace
 
