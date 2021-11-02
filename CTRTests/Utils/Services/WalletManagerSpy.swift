@@ -150,11 +150,11 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedGreencardsWithUnexpiredOrigins = false
 	var invokedGreencardsWithUnexpiredOriginsCount = 0
-	var invokedGreencardsWithUnexpiredOriginsParameters: (now: Date, ofOriginType: String?)?
-	var invokedGreencardsWithUnexpiredOriginsParametersList = [(now: Date, ofOriginType: String?)]()
+	var invokedGreencardsWithUnexpiredOriginsParameters: (now: Date, ofOriginType: OriginType?)?
+	var invokedGreencardsWithUnexpiredOriginsParametersList = [(now: Date, ofOriginType: OriginType?)]()
 	var stubbedGreencardsWithUnexpiredOriginsResult: [GreenCard]! = []
 
-	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: String?) -> [GreenCard] {
+	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard] {
 		invokedGreencardsWithUnexpiredOrigins = true
 		invokedGreencardsWithUnexpiredOriginsCount += 1
 		invokedGreencardsWithUnexpiredOriginsParameters = (now, ofOriginType)
