@@ -24,3 +24,5 @@ let days: TimeInterval = hours * 24
 let day: TimeInterval = days
 let years: TimeInterval = days * 365
 let year: TimeInterval = years
+let yesterday: TimeInterval = 24 * hours * ago
+let tomorrow: TimeInterval = 24 * hours * fromNow

@@ -25,6 +25,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var sampleGreencardObjectID: NSManagedObjectID!
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
 	private var migrationNotificationManagerSpy: DCCMigrationNotificationManagerSpy!
+	private var recoveryValidityExtensionManagerSpy: RecoveryValidityExtensionManagerProtocol!
 	private var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
 	private static var initialTimeZone: TimeZone?
 
@@ -63,7 +64,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
-
+		recoveryValidityExtensionManagerSpy = RecoveryValidityExtensionManagerSpy()
 		migrationNotificationManagerSpy = DCCMigrationNotificationManagerSpy()
 		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
 
@@ -83,6 +84,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			strippenRefresher: strippenRefresherSpy,
 			userSettings: userSettingsSpy,
 			dccMigrationNotificationManager: migrationNotificationManagerSpy,
+			recoveryValidityExtensionManager: recoveryValidityExtensionManagerSpy,
 			configurationNotificationManager: configurationNotificationManagerSpy,
 			now: { now }
 		)

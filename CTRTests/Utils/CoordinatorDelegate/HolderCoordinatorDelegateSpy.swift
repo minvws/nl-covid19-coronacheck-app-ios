@@ -151,6 +151,7 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount += 1
 	}
 
+
 	var invokedUserWishesMoreInfoAboutOutdatedConfig = false
 	var invokedUserWishesMoreInfoAboutOutdatedConfigCount = 0
 	var invokedUserWishesMoreInfoAboutOutdatedConfigParameters: (validUntil: String, Void)?
@@ -161,6 +162,23 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutOutdatedConfigCount += 1
 		invokedUserWishesMoreInfoAboutOutdatedConfigParameters = (validUntil, ())
 		invokedUserWishesMoreInfoAboutOutdatedConfigParametersList.append((validUntil, ()))
+	}
+
+
+	var invokedUserWishesMoreInfoAboutRecoveryValidityExtension = false
+	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount = 0
+
+	func userWishesMoreInfoAboutRecoveryValidityExtension() {
+		invokedUserWishesMoreInfoAboutRecoveryValidityExtension = true
+		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = false
+	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount = 0
+
+	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
+		invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = true
+		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount += 1
 	}
 
 	var invokedOpenUrl = false
@@ -211,12 +229,20 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		}
 	}
 
-	var invokedmigrateEUVaccinationDidComplete = false
-	var invokedmigrateEUVaccinationDidCompleteCount = 0
+	var invokedMigrateEUVaccinationDidComplete = false
+	var invokedMigrateEUVaccinationDidCompleteCount = 0
 
 	func migrateEUVaccinationDidComplete() {
-		invokedmigrateEUVaccinationDidComplete = true
-		invokedmigrateEUVaccinationDidCompleteCount += 1
+		invokedMigrateEUVaccinationDidComplete = true
+		invokedMigrateEUVaccinationDidCompleteCount += 1
+	}
+
+	var invokedExtendRecoveryValidityDidComplete = false
+	var invokedExtendRecoveryValidityDidCompleteCount = 0
+
+	func extendRecoveryValidityDidComplete() {
+		invokedExtendRecoveryValidityDidComplete = true
+		invokedExtendRecoveryValidityDidCompleteCount += 1
 	}
 
 	var invokedDismiss = false
