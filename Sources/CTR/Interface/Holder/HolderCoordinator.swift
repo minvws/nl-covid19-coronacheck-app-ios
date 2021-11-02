@@ -156,10 +156,10 @@ class HolderCoordinator: SharedCoordinator {
 			case .tvsAuth(let returnURL):
 				
 				if let url = returnURL,
-				   let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-				   let authorizationFlow = appDelegate.currentAuthorizationFlow,
+				   let appAuthState = UIApplication.shared.delegate as? AppAuthState,
+				   let authorizationFlow = appAuthState.currentAuthorizationFlow,
 				   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
-					appDelegate.currentAuthorizationFlow = nil
+					appAuthState.currentAuthorizationFlow = nil
 				}
 				return true
 			default:

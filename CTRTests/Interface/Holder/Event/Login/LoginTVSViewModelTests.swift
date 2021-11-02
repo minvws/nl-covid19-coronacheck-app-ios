@@ -17,6 +17,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var openIDSpy: OpenIdManagerSpy!
+	private var appAuthStateSpy: AppAuthStateSpy!
 
 	override func setUp() {
 
@@ -24,6 +25,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		openIDSpy = OpenIdManagerSpy()
+		appAuthStateSpy = AppAuthStateSpy()
 
 		Services.use(openIDSpy)
 	}
@@ -131,9 +133,10 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			appAuthState: appAuthStateSpy
 		)
-		openIDSpy.stubbedIsAuthorizationInProgress = false
+		appAuthStateSpy.stubbedCurrentAuthorizationFlow = nil
 
 		// When
 		sut.cancelAuthorization()
@@ -147,9 +150,10 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			appAuthState: appAuthStateSpy
 		)
-		openIDSpy.stubbedIsAuthorizationInProgress = true
+		appAuthStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
 
 		// When
 		sut.cancelAuthorization()
