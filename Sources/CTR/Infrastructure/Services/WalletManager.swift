@@ -56,7 +56,7 @@ protocol WalletManaging: AnyObject {
 	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?)
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
-	func greencardsWithUnexpiredOrigins(now: Date) -> [GreenCard]
+	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard]
 
 	func canSkipMultiDCCUpgrade() -> Bool
 	
@@ -488,7 +488,7 @@ class WalletManager: WalletManaging, Logging {
 	}
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
-	func greencardsWithUnexpiredOrigins(now: Date) -> [GreenCard] {
+	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType originType: OriginType? = nil) -> [GreenCard] {
 		var result = [GreenCard]()
 
 		let context = dataStoreManager.managedObjectContext()
@@ -502,8 +502,16 @@ class WalletManager: WalletManaging, Logging {
 				guard let origins = greenCard.castOrigins() else { break }
 
 				let hasValidRemainingOrigins = origins.contains(where: { origin in
-					guard let expirationTime = origin.expirationTime else { return false }
-					return expirationTime > now
+					guard let expirationTime = origin.expirationTime,
+						  expirationTime > now
+					else { return false }
+
+					// Optional extra check:
+					if let originType = originType {
+                        return origin.type == originType.rawValue
+					}
+
+					return true
 				})
 
 				if hasValidRemainingOrigins {

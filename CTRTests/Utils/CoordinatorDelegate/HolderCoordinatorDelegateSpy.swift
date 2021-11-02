@@ -163,6 +163,22 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutOutdatedConfigParametersList.append((validUntil, ()))
 	}
 
+	var invokedUserWishesMoreInfoAboutRecoveryValidityExtension = false
+	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount = 0
+
+	func userWishesMoreInfoAboutRecoveryValidityExtension() {
+		invokedUserWishesMoreInfoAboutRecoveryValidityExtension = true
+		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = false
+	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount = 0
+
+	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
+		invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = true
+		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount += 1
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
@@ -211,12 +227,20 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		}
 	}
 
-	var invokedmigrateEUVaccinationDidComplete = false
-	var invokedmigrateEUVaccinationDidCompleteCount = 0
+	var invokedMigrateEUVaccinationDidComplete = false
+	var invokedMigrateEUVaccinationDidCompleteCount = 0
 
 	func migrateEUVaccinationDidComplete() {
-		invokedmigrateEUVaccinationDidComplete = true
-		invokedmigrateEUVaccinationDidCompleteCount += 1
+		invokedMigrateEUVaccinationDidComplete = true
+		invokedMigrateEUVaccinationDidCompleteCount += 1
+	}
+
+	var invokedExtendRecoveryValidityDidComplete = false
+	var invokedExtendRecoveryValidityDidCompleteCount = 0
+
+	func extendRecoveryValidityDidComplete() {
+		invokedExtendRecoveryValidityDidComplete = true
+		invokedExtendRecoveryValidityDidCompleteCount += 1
 	}
 
 	var invokedDismiss = false

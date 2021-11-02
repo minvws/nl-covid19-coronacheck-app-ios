@@ -50,6 +50,10 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutUpgradingEUVaccinations()
 
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
+	
+    func userWishesMoreInfoAboutRecoveryValidityExtension()
+
+	func userWishesMoreInfoAboutRecoveryValidityReinstation()
 
 	func openUrl(_ url: URL, inApp: Bool)
 
@@ -60,6 +64,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func displayError(content: Content, backAction: @escaping () -> Void)
 
 	func migrateEUVaccinationDidComplete()
+
+	func extendRecoveryValidityDidComplete()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -68,6 +74,28 @@ class HolderCoordinator: SharedCoordinator {
 
 	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
+
+	let recoveryValidityExtensionManager: RecoveryValidityExtensionManager = {
+		RecoveryValidityExtensionManager(
+			userHasRecoveryEvents: {
+				let eventGroups = Services.walletManager.listEventGroups()
+				let hasRecoveryEvents = eventGroups.contains { $0.type == OriginType.recovery.rawValue }
+				return hasRecoveryEvents
+			},
+			userHasUnexpiredRecoveryGreencards: {
+				let unexpiredGreencards = Services.walletManager.greencardsWithUnexpiredOrigins(
+					now: Date(),
+					ofOriginType: OriginType.recovery
+				)
+
+				let hasUnexpiredRecoveryGreencards = !unexpiredGreencards.isEmpty
+				return hasUnexpiredRecoveryGreencards
+			},
+			userSettings: UserSettings(),
+			remoteConfigManager: Services.remoteConfigManager,
+			now: { Date() }
+		)
+	}()
 
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
@@ -229,6 +257,7 @@ class HolderCoordinator: SharedCoordinator {
 				),
 				userSettings: UserSettings(),
 				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
+				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
 				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
 				now: { Date() }
 			)
@@ -413,11 +442,44 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
+	func userWishesMoreInfoAboutRecoveryValidityExtension() {
+		let viewModel = ExtendRecoveryValidityViewModel(
+			mode: .extend,
+			backAction: { [weak self] in
+				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+			},
+			greencardLoader: GreenCardLoader(),
+			userSettings: userSettings
+		)
+		viewModel.coordinator = self
+		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+
+	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
+		let viewModel = ExtendRecoveryValidityViewModel(
+			mode: .reinstate,
+			backAction: { [weak self] in
+				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+			},
+			greencardLoader: GreenCardLoader(),
+			userSettings: userSettings
+		)
+		viewModel.coordinator = self
+		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+
 	func migrateEUVaccinationDidComplete() {
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {
-			// (will be added in upcoming PR)
-		})
+		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
+	}
+
+	func extendRecoveryValidityDidComplete() {
+
+		recoveryValidityExtensionManager.reload()
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
 	}
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {

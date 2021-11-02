@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 import Reachability
 
+// Will revisit this today 👀
+// swiftlint:disable type_body_length
 final class HolderDashboardViewModel: Logging {
 	typealias Datasource = HolderDashboardQRCardDatasource
 
@@ -51,9 +53,12 @@ final class HolderDashboardViewModel: Logging {
 		var deviceHasClockDeviation: Bool = false
 
 		var shouldShowEUVaccinationUpdateBanner: Bool = false
-
 		var shouldShowEUVaccinationUpdateCompletedBanner: Bool = false
 
+		var shouldShowRecoveryValidityExtensionAvailableBanner: Bool = false
+		var shouldShowRecoveryValidityReinstationAvailableBanner: Bool = false
+		var shouldShowRecoveryValidityExtensionCompleteBanner: Bool = false
+		var shouldShowRecoveryValidityReinstationCompleteBanner: Bool = false
 		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
 	}
 
@@ -96,6 +101,7 @@ final class HolderDashboardViewModel: Logging {
 	private let userSettings: UserSettingsProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private let dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
+	private var recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol
 	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
 
 	// MARK: - Initializer
@@ -105,6 +111,7 @@ final class HolderDashboardViewModel: Logging {
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
 		dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol,
+		recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
 		now: @escaping () -> Date
 	) {
@@ -116,6 +123,7 @@ final class HolderDashboardViewModel: Logging {
 		self.now = now
 		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
 		self.dccMigrationNotificationManager = dccMigrationNotificationManager
+		self.recoveryValidityExtensionManager = recoveryValidityExtensionManager
 		self.configurationNotificationManager = configurationNotificationManager
 
 		self.state = State(
@@ -135,6 +143,7 @@ final class HolderDashboardViewModel: Logging {
 		setupStrippenRefresher()
 		setupNotificationListeners()
 		setupDCCMigrationNotificationManager()
+		setupRecoveryValidityExtensionManager()
 		setupConfigNotificationManager()
 
 		// If the config ever changes, reload the strippen refresher:
@@ -170,25 +179,37 @@ final class HolderDashboardViewModel: Logging {
 
 	private func setupStrippenRefresher() {
 		// Map RefresherState to State:
-		self.strippenRefresher.didUpdate = { [weak self] oldValue, newValue in
+		strippenRefresher.didUpdate = { [weak self] oldValue, newValue in
 			self?.strippenRefresherDidUpdate(oldRefresherState: oldValue, refresherState: newValue)
 		}
 		strippenRefresher.load()
 	}
 
 	private func setupDCCMigrationNotificationManager() {
-
-		// Setup the dcc
-		self.dccMigrationNotificationManager.showMigrationAvailableBanner = { [weak self] in
+		dccMigrationNotificationManager.showMigrationAvailableBanner = { [weak self] in
 			self?.state.shouldShowEUVaccinationUpdateBanner = true
 		}
-		self.dccMigrationNotificationManager.showMigrationCompletedBanner = { [weak self] in
+		dccMigrationNotificationManager.showMigrationCompletedBanner = { [weak self] in
 			guard var state = self?.state else { return }
 			state.shouldShowEUVaccinationUpdateBanner = false
 			state.shouldShowEUVaccinationUpdateCompletedBanner = true
 			self?.state = state
 		}
 		dccMigrationNotificationManager.reload()
+	}
+
+	private func setupRecoveryValidityExtensionManager() {
+		recoveryValidityExtensionManager.bannerStateCallback = { [weak self] (bannerState: RecoveryValidityExtensionManagerProtocol.BannerType?) in
+			guard let self = self else { return }
+
+			var state = self.state // local copy to prevent 4x state updates
+			state.shouldShowRecoveryValidityExtensionAvailableBanner = bannerState == .extensionAvailable
+			state.shouldShowRecoveryValidityReinstationAvailableBanner = bannerState == .reinstationAvailable
+			state.shouldShowRecoveryValidityExtensionCompleteBanner = bannerState == .extensionDidComplete
+			state.shouldShowRecoveryValidityReinstationCompleteBanner = bannerState == .reinstationDidComplete
+			self.state = state
+		}
+		recoveryValidityExtensionManager.reload()
 	}
 
 	func setupConfigNotificationManager() {
@@ -292,7 +313,13 @@ final class HolderDashboardViewModel: Logging {
 				// We do handle "no internet" though - see above.
 				logDebug("StrippenRefresh: Swallowing server error because can refresh later.")
 
-			case (.loading, _, _), (.idle, _, _), (.completed, _, _):
+			case (.completed, _, _):
+				// The strippen were successfully renewed.
+
+				// the recoveryValidityExtensionManager should reevaluate it's state
+				recoveryValidityExtensionManager.reload()
+
+			case (.loading, _, _), (.idle, _, _):
 				break
 		}
 	}
@@ -416,6 +443,44 @@ final class HolderDashboardViewModel: Logging {
 					}
 				)
 			}
+		}
+
+		if validityRegion == .domestic {
+			viewControllerCards += {
+				if state.shouldShowRecoveryValidityExtensionAvailableBanner {
+					return HolderDashboardViewController.Card.recoveryValidityExtensionAvailableBanner {
+						coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityExtension()
+					}
+				} else if state.shouldShowRecoveryValidityReinstationAvailableBanner {
+					return HolderDashboardViewController.Card.recoveryValidityReinstationAvailableBanner {
+						coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityReinstation()
+					}
+				} else if state.shouldShowRecoveryValidityExtensionCompleteBanner {
+					return HolderDashboardViewController.Card.recoveryValidityExtensionCompleteBanner {
+						coordinatorDelegate.presentInformationPage(
+							title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
+							body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
+							hideBodyForScreenCapture: false,
+							openURLsInApp: true
+						)
+					} didTapClose: {
+						UserSettings().hasDismissedRecoveryValidityExtensionCard = true
+					}
+				} else if state.shouldShowRecoveryValidityReinstationCompleteBanner {
+					return HolderDashboardViewController.Card.recoveryValidityReinstationCompleteBanner {
+						coordinatorDelegate.presentInformationPage(
+							title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
+							body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
+							hideBodyForScreenCapture: false,
+							openURLsInApp: true
+						)
+					} didTapClose: {
+						UserSettings().hasDismissedRecoveryValidityReinstationCard = true
+					}
+				}
+				return []
+			}()
+
 		}
 
 		viewControllerCards += HolderDashboardViewController.Card.expiredQRCard(
@@ -589,6 +654,40 @@ extension HolderDashboardViewController.Card {
 				)
 			}
 	}
+
+	fileprivate static func recoveryValidityExtensionAvailableBanner(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+		return [.recoveryValidityExtensionAvailableBanner(
+			title: L.holderDashboardRecoveryvalidityextensionExtensionavailableBannerTitle(),
+			buttonText: L.generalReadmore(),
+			didTapCallToAction: didTapCallToAction
+		)]
+	}
+
+	fileprivate static func recoveryValidityReinstationAvailableBanner(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+		return [.recoveryValidityExtensionAvailableBanner(
+			title: L.holderDashboardRecoveryvalidityextensionReinstationavailableBannerTitle(),
+			buttonText: L.generalReadmore(),
+			didTapCallToAction: didTapCallToAction
+		)]
+	}
+
+	fileprivate static func recoveryValidityExtensionCompleteBanner(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+		return [.recoveryValidityExtensionDidCompleteBanner(
+			title: L.holderDashboardRecoveryvalidityextensionExtensioncompleteBannerTitle(),
+			buttonText: L.generalReadmore(),
+			didTapCallToAction: didTapCallToAction,
+			didTapClose: didTapClose
+		)]
+	}
+	
+	fileprivate static func recoveryValidityReinstationCompleteBanner(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+		return [.recoveryValidityExtensionDidCompleteBanner(
+			title: L.holderDashboardRecoveryvalidityextensionReinstationcompleteBannerTitle(),
+			buttonText: L.generalReadmore(),
+			didTapCallToAction: didTapCallToAction,
+			didTapClose: didTapClose
+		)]
+	}
 }
 
 // MARK: HolderDashboardViewModel.QRCard extension
@@ -726,9 +825,17 @@ extension HolderDashboardViewModel {
 	@objc func userDefaultsDidChange() {
 		DispatchQueue.main.async {
 
+			var state = self.state
+
+			// Multiple DCC:
 			// If it's already presented and dismiss is not true, then continue to show it:
-			self.state.shouldShowEUVaccinationUpdateCompletedBanner
-				= self.state.shouldShowEUVaccinationUpdateCompletedBanner && !self.userSettings.didDismissEUVaccinationMigrationSuccessBanner
+			state.shouldShowEUVaccinationUpdateCompletedBanner
+				= state.shouldShowEUVaccinationUpdateCompletedBanner && !self.userSettings.didDismissEUVaccinationMigrationSuccessBanner
+
+			state.shouldShowRecoveryValidityExtensionCompleteBanner = !self.userSettings.hasDismissedRecoveryValidityExtensionCard
+			state.shouldShowRecoveryValidityReinstationCompleteBanner = !self.userSettings.hasDismissedRecoveryValidityReinstationCard
+
+			self.state = state
 		}
 	}
 }

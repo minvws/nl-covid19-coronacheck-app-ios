@@ -12,6 +12,10 @@
 "holder.recoveryvalidityextension.extensionavailable.button.submit" = "Verleng bewijs";
 "holder.recoveryvalidityextension.reinstationavailable.title" = "Herstelbewijs terugzetten";
 "holder.recoveryvalidityextension.reinstationavailable.description" = "<p>Binnenkort zetten we jouw verlopen herstelbewijs terug, omdat de geldigheid van Nederlandse herstelbewijzen wordt verlengd. Daardoor wordt je bewijs een jaar geldig vanaf het moment dat je positief bent getest.</p><p>Je kunt je bewijs ook nu alvast terugzetten als je dat wilt.</p>";
+"holder.dashboard.configIsAlmostOutOfDate.card.message" = "Maak binnenkort verbinding met het internet";
+"holder.dashboard.configIsAlmostOutOfDate.card.button" = "Lees meer";
+"holder.dashboard.configIsAlmostOutOfDate.page.title" = "Maak verbinding met het internet";
+"holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>De CoronaCheck app heeft af en toe internet nodig om te blijven werken. Zonder internetverbinding werkt jouw app nog tot %@. Open de app zodra je internet hebt. Dan doet deze het gewoon weer.</p><p>Maak regelmatig verbinding om problemen te voorkomen.</p>";
 /* Configuratie ABC123, 13-10-2021 00:00 */
 "general.menu.configVersion" = "Configuratie %@, %@";
 "general.testtype" = "Type test";
@@ -25,10 +29,10 @@
 "holder.dashboard.card.euvaccinationswereupgraded.button" = "Lees meer";
 "holder.euvaccinationswereupgraded.title" = "Vernieuwd vaccinatiebewijs";
 "holder.euvaccinationswereupgraded.message" = "<p>We hebben voor iedereen het vaccinatiebewijs vernieuwd. Je hebt nu ook toegang tot QR-codes van eerdere prikken.</p><p>Dat is bijvoorbeeld handig voor mensen die ergens heen willen waar hun laatste prik nog niet geldig is.</p><p><a href=\"https://coronacheck.nl/nl/faq/3-5-waarom-heb-ik-voor-elke-prik-een-internationale-QR-code/\">Lees hier meer over je vernieuwde vaccinatiebewijs</a>.</p>";
-"holder.dashboard.card.upgradeeuvaccination.message" = "Je kan je internationale vaccinatiebewijs vernieuwen";
+"holder.dashboard.card.upgradeeuvaccination.message" = "Je kunt je internationale vaccinatiebewijs vernieuwen";
 "holder.dashboard.card.upgradeeuvaccination.button" = "Lees meer";
 "holder.upgradeeuvaccination.title" = "Vaccinatiebewijs vernieuwen";
-"holder.upgradeeuvaccination.message" = "<p>Binnenkort vernieuwen we voor iedereen het vaccinatiebewijs. Daardoor krijg je ook toegang tot QR-codes van eerdere prikken.</p><p>Dat is bijvoorbeeld handig voor mensen die ergens heen willen waar hun laatste prik nog niet geldig is.</p><p>Je kan je bewijs ook nu alvast vernieuwen als je dat wil.</p>";
+"holder.upgradeeuvaccination.message" = "<p>Binnenkort vernieuwen we voor iedereen het vaccinatiebewijs. Daardoor krijg je ook toegang tot QR-codes van eerdere prikken.</p><p>Dat is bijvoorbeeld handig voor mensen die ergens heen willen waar hun laatste prik nog niet geldig is.</p><p>Je kunt je bewijs ook nu alvast vernieuwen als je dat wilt.</p>";
 "holder.upgradeeuvaccination.button" = "Vernieuw bewijs";
 "holder.showqr.overvaccinated" = "Deze QR-code is nog niet overal geldig. Gebruik dan die van een eerdere dosis.";
 "holder.dashboard.qr.button.viewQRs" = "Bekijk QR-codes";
@@ -52,7 +56,7 @@
 "general.error.server.unreachable.errorCode" = "<p>Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?</p><p><b>Foutcode:</b><br />%@</p>";
 "holder.cleardata.menu.title" = "Wis gegevens";
 "holder.cleardata.alert.title" = "Alle gegevens wissen?";
-"holder.cleardata.alert.subtitle" = "Bij het wissen worden alle gegevens en bewijzen uit de app verwijderd. Na het wissen wordt de app teruggezet naar het beginpunt.";
+"holder.cleardata.alert.subtitle" = "Bij het wissen worden alle gegevens en bewijzen uit de app verwijderd en ga je terug naar het startscherm.";
 "holder.cleardata.alert.remove" = "Wis gegevens";
 "holder.errorstate.login.title" = "Inloggen afgebroken";
 "holder.errorstate.login.message.vaccination" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
@@ -162,7 +166,7 @@
 "holder.testresults.positive" = "Positieve testuitslag";
 "holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
-"holder.recovery.nolist.message" = "<p>Geen positieve testuitslag beschikbaar.</p><p>Ben je net getest? Het kan een paar uur duren voordat je jouw positieve testuitslag terugziet. Probeer het later nog eens.</p><p>Ben je langer dan 180 dagen geleden positief getest? Dan is de testuitslag niet meer geldig.</p>";
+"holder.recovery.nolist.message" = "<p>Ben je net getest? Het kan een paar uur  duren voordat jouw positieve testuitslag beschikbaar is. Probeer het later nog eens.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.recovery.nolist.action" = "Naar mijn bewijzen";
 "holder.recovery.list.title" = "Jouw opgehaalde positieve testuitslag";
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
@@ -280,7 +284,7 @@
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "Geen lettercombinatie?";
 "holder.dcctokenentry.title" = "Jouw lettercombinatie";
-"holder.dcctokenentry.header" = "Vul de lettercombinatie in. Deze heb je van je zorgverlener gekregen, samen met het papieren bewijs.";
+"holder.dcctokenentry.header" = "Vul de lettercombinatie in. Deze heb je samen met het papieren bewijs gekregen.";
 "holder.dcctokenentry.tokenField.title" = "Lettercombinatie";
 "holder.dcctokenentry.tokenField.placeholder" = "Bijv. FLBRXQ";
 "holder.dcctokenentry.tokenField.placeholder.screenreader" = "Vul hier je lettercombinatie in";
@@ -289,7 +293,7 @@
 "holder.dcctokenentry.retry.title" = "Ik heb geen code gekregen";
 "holder.dcctokenentry.next" = "Volgende";
 "holder.dcctokenentryinfo.title" = "Geen lettercombinatie?";
-"holder.dcctokenentryinfo.body" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt <a href=\"https://coronacheck.nl/nl/coronabewijs-aanvragen-bij-zorgverlener.html\">aangevraagd bij de zorgverlener</a> waar je bent gevaccineerd of getest.</p><p><b>Zelf jouw bewijs geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
+"holder.dcctokenentryinfo.body" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt aangevraagd bij je zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Zelf jouw bewijs geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
 
 /* MARK: - General */
 "general.cancel" = "Annuleer";
@@ -537,7 +541,7 @@
 
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
-"holder.about.text" = "<p>CoronaCheck is ontwikkeld om de samenleving beetje bij beetje te openen. Zo kunnen Nederlanders steeds meer plekken bezoeken en weer op reis.</p><p>CoronaCheck maakt een coronabewijs van jouw vaccinatie, van jouw negatieve testuitslag of als je corona hebt gehad en bent hersteld. Een coronabewijs bestaat uit twee verschillende QR-codes. De een is voor toegang tot plekken in Nederland, de ander is om internationaal mee te reizen (het EU Digitaal Corona Certificaat).</p>";
+"holder.about.text" = "<p>CoronaCheck is ontwikkeld om de samenleving beetje bij beetje te openen. Zo kunnen we steeds meer plekken bezoeken en weer op reis.</p><p>CoronaCheck maakt een coronabewijs van je vaccinatie, negatieve testuitslag of als je corona hebt gehad en bent hersteld. Je coronabewijs heeft een QR-code. Laat deze scannen voor toegang tot plekken of activiteiten in Nederland, of om internationaal mee te reizen (het EU Digitaal Corona Certificaat).</p>";
 "holder.about.link" = "Lees hier de privacyverklaring";
 
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
@@ -655,7 +659,7 @@
 
 /* MARK: - Start Paper Certificate */
 "holder.papercertificate.start.title" = "Papieren bewijs toevoegen";
-"holder.papercertificate.start.message" = "Heb je een papieren coronabewijs <b>aangevraagd bij de zorgverlener</b> waar je bent gevaccineerd of getest? Dan kun je deze hier ook in de app toevoegen.";
+"holder.papercertificate.start.message" = "Heb je een papieren coronabewijs <b>aangevraagd bij je zorgverlener,</b> of <b>opgestuurd gekregen per post?</b> Dan kun je deze hier ook in de app toevoegen.";
 "holder.papercertificate.start.highlightedmessage" = "<b>Zelf je bewijs uitgeprint?</b><p>Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
 
 /* MARK: - Start Paper Certificate */
@@ -687,8 +691,3 @@
 "general.networkwasbusy.errorcode" = "<p>Probeer het op een later moment nog eens.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder.device.authentication.warning.title" = "Er zijn beveiligingsrisico’s gevonden";
 "holder.device.authentication.warning.message" = "Let op: je iPhone is niet beveiligd met een pincode of met FaceID/Touch ID. Daardoor kunnen anderen je data inzien en zijn je gegevens mogelijk niet veilig.";
-
-"holder.dashboard.configIsAlmostOutOfDate.card.message" = "Maak binnenkort verbinding met het internet";
-"holder.dashboard.configIsAlmostOutOfDate.card.button" = "Lees meer";
-"holder.dashboard.configIsAlmostOutOfDate.page.title" = "Maak verbinding met het internet";
-"holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>De CoronaCheck app heeft af en toe internet nodig om te blijven werken. Zonder internetverbinding werkt jouw app nog tot %@. Open de app zodra je internet hebt. Dan doet deze het gewoon weer.</p><p>Maak regelmatig verbinding om problemen te voorkomen.</p>";

@@ -103,6 +103,13 @@ class GreenCardLoader: GreenCardLoading, Logging {
 										return
 									}
 
+									// ~~ 📆 TEMPORARY - will be removed in 1 month ~~
+									GreenCardLoader.temporary___updateRecoveryExtensionValidityFlags(
+										userSettings: UserSettings(),
+										remoteConfigManager: Services.remoteConfigManager,
+										now: { Date() }
+									)
+
 									completion(.success(()))
 								}
 						}
@@ -110,6 +117,43 @@ class GreenCardLoader: GreenCardLoading, Logging {
 			}
 		}
 	}
+
+	// ~~ 📆 TEMPORARY - will be removed in 1 month ~~
+	static func temporary___updateRecoveryExtensionValidityFlags(
+		userSettings: UserSettingsProtocol,
+		remoteConfigManager: RemoteConfigManaging,
+		now: @escaping () -> Date
+	) {
+		guard let launchDate = remoteConfigManager.storedConfiguration.recoveryGreencardRevisedValidityLaunchDate,
+			  launchDate < now()
+		else { return }
+
+		// Scenario:
+		// We add new recovery events _after_ `shouldCheckRecoveryGreenCardRevisedValidity` is checked by RecoveryValidityExtensionManager
+		// which means this would still be true. If that's the case, well we're adding a fresh Recovery greencard now
+		// so definitely need to set it to false here to disable that whole feature.
+		guard !userSettings.shouldCheckRecoveryGreenCardRevisedValidity else {
+			userSettings.shouldCheckRecoveryGreenCardRevisedValidity = false
+			return
+		}
+
+		if userSettings.shouldShowRecoveryValidityExtensionCard {
+
+			// Enable this card to be visible
+			userSettings.hasDismissedRecoveryValidityExtensionCard = false
+
+			userSettings.shouldShowRecoveryValidityExtensionCard = false
+			userSettings.shouldShowRecoveryValidityReinstationCard = false
+		} else if userSettings.shouldShowRecoveryValidityReinstationCard {
+
+			// Enable this card to be visible
+			userSettings.hasDismissedRecoveryValidityReinstationCard = false
+
+			userSettings.shouldShowRecoveryValidityExtensionCard = false
+			userSettings.shouldShowRecoveryValidityReinstationCard = false
+		}
+	}
+	// ~~ END Temporary - will be removed in 1 month ~~
 
 	private func fetchGreenCards(_ onCompletion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
 
