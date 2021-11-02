@@ -83,8 +83,8 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 			self.loadingState = .loading(silently: !hasLoadingEverFailed && greencardsCredentialExpiryState != .expired)
 		}
 
-		mutating func endLoading() {
-			self.loadingState = .idle
+		mutating func endLoadingWithSuccess() {
+			self.loadingState = .completed
 		}
 
 		// Apply an error state to the current loading state:
@@ -235,8 +235,6 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 					switch $0 {
 						case .success:
-							self.state.endLoading()
-
 							let newExpiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
 								minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: self.minimumThresholdOfValidCredentialsTriggeringRefresh,
 								walletManager: self.walletManager,
@@ -250,6 +248,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 							}
 
 							self.state.greencardsCredentialExpiryState = newExpiryState
+							self.state.endLoadingWithSuccess()
 
 						case .failure(let greenCardLoaderError):
 							self.state.endLoadingWithError(error: greenCardLoaderError)
