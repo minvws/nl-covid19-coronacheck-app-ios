@@ -33,14 +33,14 @@ final class ExtendRecoveryValidityViewModel: Logging {
 		self.userSettings = userSettings
         
         switch mode {
-        case .extend:
-            self.title = L.holderRecoveryvalidityextensionExtensionavailableTitle()
-            self.message = L.holderRecoveryvalidityextensionExtensionavailableDescription()
-            self.primaryButtonTitle = L.holderRecoveryvalidityextensionExtensionavailableButtonSubmit()
-        case .reinstate:
-            self.title = L.holderRecoveryvalidityextensionReinstationavailableTitle()
-            self.message = L.holderRecoveryvalidityextensionReinstationavailableDescription()
-            self.primaryButtonTitle = L.holderRecoveryvalidityextensionReinstationavailableButtonSubmit()
+            case .extend:
+                self.title = L.holderRecoveryvalidityextensionExtensionavailableTitle()
+                self.message = L.holderRecoveryvalidityextensionExtensionavailableDescription()
+                self.primaryButtonTitle = L.holderRecoveryvalidityextensionExtensionavailableButtonSubmit()
+            case .reinstate:
+                self.title = L.holderRecoveryvalidityextensionReinstationavailableTitle()
+                self.message = L.holderRecoveryvalidityextensionReinstationavailableDescription()
+                self.primaryButtonTitle = L.holderRecoveryvalidityextensionReinstationavailableButtonSubmit()
         }
 		self.backbuttonAction = backAction
 	}
