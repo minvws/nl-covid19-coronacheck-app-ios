@@ -23,4 +23,18 @@ class ConfigurationNotificationManagerSpy: ConfigurationNotificationManagerProto
 		invokedShouldShowAlmostOutOfDateBannerParametersList.append((now, remoteConfiguration))
 		return stubbedShouldShowAlmostOutOfDateBannerResult
 	}
+
+	var invokedGetAlmostOutOfDateTimeStamp = false
+	var invokedGetAlmostOutOfDateTimeStampCount = 0
+	var invokedGetAlmostOutOfDateTimeStampParameters: (remoteConfiguration: RemoteConfiguration, Void)?
+	var invokedGetAlmostOutOfDateTimeStampParametersList = [(remoteConfiguration: RemoteConfiguration, Void)]()
+	var stubbedGetAlmostOutOfDateTimeStampResult: TimeInterval!
+
+	func getAlmostOutOfDateTimeStamp(remoteConfiguration: RemoteConfiguration) -> TimeInterval? {
+		invokedGetAlmostOutOfDateTimeStamp = true
+		invokedGetAlmostOutOfDateTimeStampCount += 1
+		invokedGetAlmostOutOfDateTimeStampParameters = (remoteConfiguration, ())
+		invokedGetAlmostOutOfDateTimeStampParametersList.append((remoteConfiguration, ()))
+		return stubbedGetAlmostOutOfDateTimeStampResult
+	}
 }

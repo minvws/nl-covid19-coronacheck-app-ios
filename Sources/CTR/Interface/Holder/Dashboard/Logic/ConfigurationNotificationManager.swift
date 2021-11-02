@@ -10,6 +10,8 @@ import Foundation
 protocol ConfigurationNotificationManagerProtocol {
 
 	func shouldShowAlmostOutOfDateBanner(now: Date, remoteConfiguration: RemoteConfiguration) -> Bool
+
+	func getAlmostOutOfDateTimeStamp(remoteConfiguration: RemoteConfiguration) -> TimeInterval?
 }
 
 final class ConfigurationNotificationManager: ConfigurationNotificationManagerProtocol, Logging {
@@ -22,16 +24,25 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 
 	func shouldShowAlmostOutOfDateBanner(now: Date, remoteConfiguration: RemoteConfiguration) -> Bool {
 
-		guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
-			  let configAlmostOutOfDateWarningSeconds = remoteConfiguration.configAlmostOutOfDateWarningSeconds else {
+		logVerbose("ConfigurationNotificationManager Now: \(now)")
+		guard let almostOutOfDateTimestamp = getAlmostOutOfDateTimeStamp(remoteConfiguration: remoteConfiguration) else {
 			return false
 		}
+		// The config should be older the minimum config interval
+		return almostOutOfDateTimestamp < now.timeIntervalSince1970
+	}
 
-		logVerbose("ConfigurationNotificationManager Now: \(now)")
+	func getAlmostOutOfDateTimeStamp(remoteConfiguration: RemoteConfiguration) -> TimeInterval? {
+
+		guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
+			  let configAlmostOutOfDateWarningSeconds = remoteConfiguration.configAlmostOutOfDateWarningSeconds else {
+			return nil
+		}
+
 		logVerbose("ConfigurationNotificationManager configFetchedTimestamp: \(Date(timeIntervalSince1970: configFetchedTimestamp))")
 		logVerbose("ConfigurationNotificationManager configAlmostOutOfDateWarningSeconds: \(configAlmostOutOfDateWarningSeconds)")
 
-		// The config should be older the minimum config interval
-		return configFetchedTimestamp + TimeInterval(configAlmostOutOfDateWarningSeconds) < now.timeIntervalSince1970
+		return configFetchedTimestamp + TimeInterval(configAlmostOutOfDateWarningSeconds)
 	}
+
 }
