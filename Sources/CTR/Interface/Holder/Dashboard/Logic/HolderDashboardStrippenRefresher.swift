@@ -266,7 +266,10 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int,
 		walletManager: WalletManaging,
 		now: Date) -> State.GreencardsCredentialExpiryState {
-		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(now: now)
+		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(
+			now: now,
+			ofOriginType: nil
+		)
 
 		var expiredGreencards = [GreenCard]()
 		var expiringGreencards = [(GreenCard, Date)]()

@@ -75,6 +75,33 @@ class HolderCoordinator: SharedCoordinator {
 	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 
+	let recoveryValidityExtensionManager: RecoveryValidityExtensionManager = {
+		RecoveryValidityExtensionManager(
+			userHasRecoveryEvents: {
+				let eventGroups = Services.walletManager.listEventGroups()
+				let hasRecoveryEvents = eventGroups.contains { (eventGroup: EventGroup) in
+					// TODO: discuss with Rool if this is correct.
+					// is dcc correct for paper and non-paper?
+					// eventGroup.providerIdentifier == "dcc" &&
+					eventGroup.type == "recovery"
+				}
+				return hasRecoveryEvents
+			},
+			userHasUnexpiredRecoveryGreencards: {
+				let unexpiredGreencards = Services.walletManager.greencardsWithUnexpiredOrigins(
+					now: Date(),
+					ofOriginType: "recovery"
+				)
+
+				let hasUnexpiredRecoveryGreencards = !unexpiredGreencards.isEmpty
+				return hasUnexpiredRecoveryGreencards
+			},
+			userSettings: UserSettings(),
+			remoteConfigManager: Services.remoteConfigManager,
+			now: { Date() }
+		)
+	}()
+
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
 	/// Docs: https://shrtm.nu/oc45
@@ -235,6 +262,7 @@ class HolderCoordinator: SharedCoordinator {
 				),
 				userSettings: UserSettings(),
 				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
+				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
 				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
 				now: { Date() }
 			)
