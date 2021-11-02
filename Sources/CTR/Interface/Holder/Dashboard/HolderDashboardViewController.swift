@@ -28,6 +28,10 @@ class HolderDashboardViewController: BaseViewController {
 
 		case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
+		case recoveryValidityExtensionAvailableBanner(title: String, buttonText: String, didTapCallToAction: () -> Void)
+
+		 case recoveryValidityExtensionDidCompleteBanner(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+
 		case errorMessage(message: String, didTapTryAgain: () -> Void)
 
 		case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
@@ -174,6 +178,7 @@ class HolderDashboardViewController: BaseViewController {
 					case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
 						 let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 						 let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
+						 let .recoveryValidityExtensionAvailableBanner(message, callToActionButtonText, didTapCallToAction),
 						 let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction):
 
 						let messageCard = MessageCardView()
@@ -182,7 +187,9 @@ class HolderDashboardViewController: BaseViewController {
 						messageCard.callToActionButtonTappedCommand = didTapCallToAction
 						return messageCard
 
-					case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+					case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+						 let .recoveryValidityExtensionDidCompleteBanner(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+						
 						let messageCard = MessageCardView()
 						messageCard.title = message
 						messageCard.callToActionButtonText = callToActionButtonText
