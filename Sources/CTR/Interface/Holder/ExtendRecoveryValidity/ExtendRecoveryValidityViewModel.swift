@@ -68,10 +68,7 @@ final class ExtendRecoveryValidityViewModel: Logging {
 			guard let self = self else { return }
 			self.isLoading = false
 			self.handleGreenCardResult(result, onSuccess: {
-				// self.userSettings.didCompleteEUVaccinationMigration = true
 				self.coordinator?.extendRecoveryValidityDidComplete()
-
-				// NEXT: callback to the coordinator to update the thing
 			})
 		}
 	}
