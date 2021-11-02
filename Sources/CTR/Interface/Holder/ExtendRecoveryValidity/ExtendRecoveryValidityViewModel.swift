@@ -31,24 +31,17 @@ final class ExtendRecoveryValidityViewModel: Logging {
 		self.mode = mode
 		self.greencardLoader = greencardLoader
 		self.userSettings = userSettings
-		self.title = {
-			switch mode {
-				case .extend: return L.holderRecoveryvalidityextensionExtensionavailableTitle()
-				case .reinstate: return L.holderRecoveryvalidityextensionReinstationavailableTitle()
-			}
-		}()
-		self.message = {
-			switch mode {
-				case .extend: return L.holderRecoveryvalidityextensionExtensionavailableDescription()
-				case .reinstate: return L.holderRecoveryvalidityextensionReinstationavailableDescription()
-			}
-		}()
-		self.primaryButtonTitle = {
-			switch mode {
-				case .extend: return L.holderRecoveryvalidityextensionExtensionavailableButtonSubmit()
-				case .reinstate: return L.holderRecoveryvalidityextensionReinstationavailableButtonSubmit()
-			}
-		}()
+        
+        switch mode {
+        case .extend:
+            self.title = L.holderRecoveryvalidityextensionExtensionavailableTitle()
+            self.message = L.holderRecoveryvalidityextensionExtensionavailableDescription()
+            self.primaryButtonTitle = L.holderRecoveryvalidityextensionExtensionavailableButtonSubmit()
+        case .reinstate:
+            self.title = L.holderRecoveryvalidityextensionReinstationavailableTitle()
+            self.message = L.holderRecoveryvalidityextensionReinstationavailableDescription()
+            self.primaryButtonTitle = L.holderRecoveryvalidityextensionReinstationavailableButtonSubmit()
+        }
 		self.backbuttonAction = backAction
 	}
 
