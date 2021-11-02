@@ -466,7 +466,7 @@ final class HolderDashboardViewModel: Logging {
 							openURLsInApp: true
 						)
 					} didTapClose: {
-						UserSettings().hasDismissedRecoveryValidityExtensionCard = true
+						UserSettings().hasDismissedRecoveryValidityExtensionCompletionCard = true
 					}
 				} else if state.shouldShowRecoveryValidityReinstationCompleteBanner {
 					return HolderDashboardViewController.Card.recoveryValidityReinstationCompleteBanner {
@@ -477,7 +477,7 @@ final class HolderDashboardViewModel: Logging {
 							openURLsInApp: true
 						)
 					} didTapClose: {
-						UserSettings().hasDismissedRecoveryValidityReinstationCard = true
+						UserSettings().hasDismissedRecoveryValidityReinstationCompletionCard = true
 					}
 				}
 				return []
@@ -834,10 +834,10 @@ extension HolderDashboardViewModel {
 			state.shouldShowEUVaccinationUpdateCompletedBanner
 				= state.shouldShowEUVaccinationUpdateCompletedBanner && !self.userSettings.didDismissEUVaccinationMigrationSuccessBanner
 
-			state.shouldShowRecoveryValidityExtensionCompleteBanner = !self.userSettings.hasDismissedRecoveryValidityExtensionCard
-			state.shouldShowRecoveryValidityReinstationCompleteBanner = !self.userSettings.hasDismissedRecoveryValidityReinstationCard
+			state.shouldShowRecoveryValidityExtensionCompleteBanner = !self.userSettings.hasDismissedRecoveryValidityExtensionCompletionCard
+			state.shouldShowRecoveryValidityReinstationCompleteBanner = !self.userSettings.hasDismissedRecoveryValidityReinstationCompletionCard
             
-            if !self.userSettings.hasDismissedRecoveryValidityExtensionCard || !self.userSettings.hasDismissedRecoveryValidityReinstationCard {
+            if !self.userSettings.hasDismissedRecoveryValidityExtensionCompletionCard || !self.userSettings.hasDismissedRecoveryValidityReinstationCompletionCard {
                 state.shouldShowRecoveryValidityExtensionAvailableBanner = false
                 state.shouldShowRecoveryValidityReinstationAvailableBanner = false
             }
