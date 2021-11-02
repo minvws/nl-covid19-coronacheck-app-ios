@@ -125,7 +125,9 @@ class SecurityCheckerWorker: Logging {
 		}
 		logError("SecTrustEvaluate: returning false.")
 		return false
-	} // evaluateServerTrust()
+	}
+
+	private let openssl = OpenSSL()
 
 	func checkSSL(
 		serverTrust: SecTrust,
@@ -141,16 +143,13 @@ class SecurityCheckerWorker: Logging {
 			logError("Bail on ATS")
 			return false
 		}
-		
-		let openssl = OpenSSL()
+
 		let hostnameLC = hostname.lowercased()
-        let certificateCount = SecTrustGetCertificateCount(serverTrust)
-        
         var foundValidCertificate = false
         var foundValidCommonNameEndsWithTrustedName = trustedNames.isEmpty ? true : false
         var foundValidFullyQualifiedDomainName = false
         
-        for index in 0 ..< certificateCount {
+        for index in 0 ..< SecTrustGetCertificateCount(serverTrust) {
             
             if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
                 let serverCert = Certificate(certificate: serverCertificate)
@@ -183,14 +182,8 @@ class SecurityCheckerWorker: Logging {
                 }
             }
         }
-        if foundValidCertificate && foundValidCommonNameEndsWithTrustedName && foundValidFullyQualifiedDomainName {
-            // all good
-            logVerbose("Certificate signature is good for \(hostname)")
-            return true
-        }
-        
-        logError("Invalid server trust v=\(foundValidCertificate), cn=\(foundValidCommonNameEndsWithTrustedName) and fqdn=\(foundValidFullyQualifiedDomainName)")
-        return false
+		logDebug("Server trust for \(hostname): validCert \(foundValidCertificate), CN ending \(foundValidCommonNameEndsWithTrustedName), fqdn \(foundValidFullyQualifiedDomainName)")
+		return foundValidCertificate && foundValidCommonNameEndsWithTrustedName && foundValidFullyQualifiedDomainName
     } // checkSSL worker
   
 } // SecurityCheckerWorker
