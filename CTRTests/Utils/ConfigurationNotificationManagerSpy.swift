@@ -37,4 +37,20 @@ class ConfigurationNotificationManagerSpy: ConfigurationNotificationManagerProto
 		invokedGetAlmostOutOfDateTimeStampParametersList.append((remoteConfiguration, ()))
 		return stubbedGetAlmostOutOfDateTimeStampResult
 	}
+
+	var invokedRegisterForAlmostOutOfDateUpdate = false
+	var invokedRegisterForAlmostOutOfDateUpdateCount = 0
+	var invokedRegisterForAlmostOutOfDateUpdateParameters: (now: Date, remoteConfiguration: RemoteConfiguration)?
+	var invokedRegisterForAlmostOutOfDateUpdateParametersList = [(now: Date, remoteConfiguration: RemoteConfiguration)]()
+	var shouldInvokeRegisterForAlmostOutOfDateUpdateCallback = false
+
+	func registerForAlmostOutOfDateUpdate(now: Date, remoteConfiguration: RemoteConfiguration, callback: (() -> Void)?) {
+		invokedRegisterForAlmostOutOfDateUpdate = true
+		invokedRegisterForAlmostOutOfDateUpdateCount += 1
+		invokedRegisterForAlmostOutOfDateUpdateParameters = (now, remoteConfiguration)
+		invokedRegisterForAlmostOutOfDateUpdateParametersList.append((now, remoteConfiguration))
+		if shouldInvokeRegisterForAlmostOutOfDateUpdateCallback {
+			callback?()
+		}
+	}
 }
