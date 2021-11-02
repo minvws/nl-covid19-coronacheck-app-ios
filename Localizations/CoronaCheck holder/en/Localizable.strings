@@ -12,6 +12,10 @@
 "holder.recoveryvalidityextension.extensionavailable.button.submit" = "Extend certificate";
 "holder.recoveryvalidityextension.reinstationavailable.title" = "Restore recovery certificate";
 "holder.recoveryvalidityextension.reinstationavailable.description" = "<p>We will restore your expired recovery certificate soon, because the validity of Dutch recovery certificates will be extended. As a result, your certificate will be valid for one year after the moment of positive testing.</p><p>You can also restore your certificate right now if you want to.</p>";
+"holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
+"holder.dashboard.configIsAlmostOutOfDate.card.button" = "Read more";
+"holder.dashboard.configIsAlmostOutOfDate.page.title" = "Please connect to the internet";
+"holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until %@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";
 /* Configuratie ABC123, 13-10-2021 00:00 */
 "general.menu.configVersion" = "Configuration %@, %@";
 "general.testtype" = "Test type";
@@ -51,9 +55,9 @@
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
 "general.error.server.unreachable.errorCode" = "<p>We failed to reach the server. Can you check if you’re connected to the internet?</p><p><b>Error code:</b><br />%@</p>";
 "holder.cleardata.menu.title" = "Clear data";
-"holder.cleardata.alert.title" = "Clear data";
-"holder.cleardata.alert.subtitle" = "Are you sure you want to remove all the green cards and events?";
-"holder.cleardata.alert.remove" = "Remove";
+"holder.cleardata.alert.title" = "Clear all data?";
+"holder.cleardata.alert.subtitle" = "Clearing will delete all data and certificates from the app and return you to the start screen.";
+"holder.cleardata.alert.remove" = "Clear data";
 "holder.errorstate.login.title" = "Login was cancelled";
 "holder.errorstate.login.message.vaccination" = "Want to retrieve your vaccination details? Login again with DigiD.";
 "holder.errorstate.login.message.recovery" = "Want to retrieve your recovery details? Login again with DigiD.";
@@ -162,7 +166,7 @@
 "holder.testresults.positive" = "Positive test result";
 "holder.recovery.alert.message" = "You can retrieve your positive test result again later";
 "holder.recovery.nolist.title" = "No positive test result available";
-"holder.recovery.nolist.message" = "<p>There is no positive test result available.</p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p><p>Have you been tested more than 180 days ago? Then your test result is no longer valid.</p>";
+"holder.recovery.nolist.message" = "<p>Were you just tested? It can take a few hours before your positive test result is available. Please try again later.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.nolist.action" = "To my certificates";
 "holder.recovery.list.title" = "Your positive test result";
 "holder.recovery.start.title" = "Retrieve recovery details";
@@ -280,7 +284,7 @@
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
 "holder.dcctokenentry.title" = "Your letter combination";
-"holder.dcctokenentry.header" = "Please enter the letter combination. You’ve received this from your healthcare provider, together with the paper certificate.";
+"holder.dcctokenentry.header" = "Please enter the letter combination. You’ve received this together with the paper certificate.";
 "holder.dcctokenentry.tokenField.title" = "Letter combination";
 "holder.dcctokenentry.tokenField.placeholder" = "E.g. FLBRXQ";
 "holder.dcctokenentry.tokenField.placeholder.screenreader" = "Enter your letter combination here";
@@ -289,7 +293,7 @@
 "holder.dcctokenentry.retry.title" = "I haven't received a code";
 "holder.dcctokenentry.next" = "Next";
 "holder.dcctokenentryinfo.title" = "No letter combination?";
-"holder.dcctokenentryinfo.body" = "<p>Then you won’t be able to add your certificate to the app this way.</p><p>You’ve only received a letter combination if you <a href=\"https://coronacheck.nl/en/coronabewijs-aanvragen-bij-zorgverlener.html\"> requested your paper coronavirus pass at the healthcare provider</a> who vaccinated or tested you.</p><p><b>Did you print your certificate yourself?</b><br />Please add your certificate to the app via the menu. Go to “add certificate” and login using your DigiD.</p>";
+"holder.dcctokenentryinfo.body" = "<p>Then you won’t be able to add your certificate to the app this way.</p><p>You’ve only received a letter combination if you requested your paper coronavirus pass at your healthcare provider, or if you received it by post.</p><p><b>Did you print your certificate yourself?</b><br />Please add your certificate to the app via the menu. Go to “add certificate” and login using your DigiD.</p>";
 
 /* MARK: - General */
 "general.cancel" = "Cancel";
@@ -438,7 +442,7 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "About your recovery certificate";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "<p>Your recovery certificate is not valid in the Netherlands, because the type of test is not accepted.</p><p>You’ve only got an international QR code.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "About your recovery certificate";
-"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Your recovery certificate is not valid internationally. You’ve only got a Dutch certificate.</p><p>The reason could be that the type of test is not accepted. An international recovery certificate can only be made with a PCR test. Read more about the possible causes on the <a href=\"https://www.coronacheck.nl//en/guidepost\">Guidepost.</a></p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Your recovery certificate is not valid internationally. You’ve only got a Dutch certificate.</p><p>The reason could be that the type of test is not accepted, or that the test is no longer valid abroad. An international recovery certificate can only be made with a PCR-test that is less than 180 days old. Read more about the possible causes on the <a href=\"https://www.coronacheck.nl//en/guidepost\">Guidepost.</a></p>";
 "holder.dashboard.empty.domestic.title" = "Find your Dutch certificate here later";
 "holder.dashboard.empty.domestic.message" = "<p>You can add a certificate if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>. The app generates a certificate for the Netherlands and one for other countries.</p>";
 "holder.dashboard.empty.international.title" = "Find your international certificate here later";
@@ -537,7 +541,7 @@
 
 /* MARK: - Holder About */
 "holder.about.title" = "About this app";
-"holder.about.text" = "<p>CoronaCheck is created to reopen society step by step. This way, the Netherlands can head out more often and travel abroad.</p><p>CoronaCheck creates a coronavirus pass from your vaccination, your negative test result or if you've had corona and are recovered. A coronavirus pass consists of two QR codes: one for the Netherlands and one for other countries (the EU Digital COVID Certificate).</p>";
+"holder.about.text" = "<p>CoronaCheck is created to reopen society step by step. This way, we can head out more often and travel abroad.</p><p>CoronaCheck creates a coronavirus pass from your vaccination, negative test result or if you've had coronavirus and are recovered. Your coronavirus pass has a QR code. Have it scanned for access to places or activities in The Netherlands, or to travel internationally (the EU Digital COVID Certificate).</p>";
 "holder.about.link" = "Read the privacy statement here";
 
 "holder.vaccination.start.title" = "Retrieve vaccination details";
@@ -655,7 +659,7 @@
 
 /* MARK: - Start Paper Certificate */
 "holder.papercertificate.start.title" = "Add paper certificate";
-"holder.papercertificate.start.message" = "Have you requested your paper coronavirus pass <b>at the healthcare provider</b> who vaccinated or tested you? Then you can add it here in the app.";
+"holder.papercertificate.start.message" = "Have you <b>requested your paper coronavirus pass at your healthcare provider,</b> or <b>have you received it by post?</b> Then you can add it here in the app.";
 "holder.papercertificate.start.highlightedmessage" = "<b>Did you print your certificate yourself?</b><p>Please add your certificate to the app via the menu. Go to “Add certificate” and login using your DigiD.</p>";
 
 /* MARK: - Start Paper Certificate */
@@ -687,8 +691,3 @@
 "general.networkwasbusy.errorcode" = "<p>Please try again later.</p><p><b>Error code:</b><br />%@</p>";
 "holder.device.authentication.warning.title" = "Security risks have been found";
 "holder.device.authentication.warning.message" = "Please note that your iPhone is not protected by PIN or Face ID/Touch ID. This means others can see your data and your details may not be secure.";
-
-"holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
-"holder.dashboard.configIsAlmostOutOfDate.card.button" = "Read more";
-"holder.dashboard.configIsAlmostOutOfDate.page.title" = "Please connect to the internet";
-"holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until %@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";
