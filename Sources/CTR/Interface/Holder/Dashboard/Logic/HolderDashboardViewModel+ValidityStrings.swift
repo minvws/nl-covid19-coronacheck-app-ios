@@ -30,64 +30,73 @@ extension QRCard {
 			}
 		}
 
-		func text(qrCard: QRCard, greencard: QRCard.GreenCard, origin: QRCard.GreenCard.Origin, now: Date, remoteConfigManager: RemoteConfigManaging) -> HolderDashboardViewController.ValidityText {
-
-			switch (self, qrCard.region, origin.type) {
-				case (.isExpired, _, _):
-					return validityText_isExpired()
-
-				case (_, .europeanUnion(let dccEvaluator), .vaccination):
-					if let euVaccination = dccEvaluator(greencard, now)?.vaccinations?.first,
-					   let doseNumber = euVaccination.doseNumber,
-					   let totalDose = euVaccination.totalDose {
-						return validityText_hasBegun_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), validFrom: origin.eventDate)
-					} else {
-						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
-					}
-
-				case (_, .europeanUnion(let dccEvaluator), .test):
-					if let euTest = dccEvaluator(greencard, now)?.tests?.first {
-						let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
-						return validityText_hasBegun_eu_test(testType: testType, validFrom: origin.eventDate)
-					} else {
-						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
-					}
-
-				case (.validityHasBegun, .netherlands, .vaccination):
-					return validityText_hasBegun_domestic_vaccination(validFrom: origin.validFromDate)
-
-				case (.validityHasBegun, .netherlands, .test):
-					return validityText_hasBegun_domestic_test(
-						expirationTime: origin.expirationTime,
-						expiryIsBeyondThreeYearsFromNow: origin.expiryIsBeyondThreeYearsFromNow(now: now),
-						isCurrentlyValid: origin.isCurrentlyValid(now: now)
-					)
-
-				case (.validityHasBegun, .netherlands, .recovery):
-					let expiryIsBeyondThreeYearsFromNow = origin.expiryIsBeyondThreeYearsFromNow(now: now)
-
-					return validityText_hasBegun_domestic_recovery(
-						expirationTime: origin.expirationTime,
-						expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
-						isCurrentlyValid: origin.isCurrentlyValid(now: now)
-					)
-
+        func text(qrCard: QRCard, greencard: QRCard.GreenCard, origin: QRCard.GreenCard.Origin, now: Date, remoteConfigManager: RemoteConfigManaging) -> HolderDashboardViewController.ValidityText {
+            
+            switch (self, qrCard.region, origin.type) {
+                case (.isExpired, _, _):
+                    return validityText_isExpired()
+                    
+                case (_, .europeanUnion(let dccEvaluator), .vaccination):
+                    if let euVaccination = dccEvaluator(greencard, now)?.vaccinations?.first,
+                       let doseNumber = euVaccination.doseNumber,
+                       let totalDose = euVaccination.totalDose {
+                        return validityText_hasBegun_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), validFrom: origin.eventDate)
+                    } else {
+                        return validityText_hasBegun_eu_fallback(origin: origin, now: now)
+                    }
+                    
+                case (_, .europeanUnion(let dccEvaluator), .test):
+                    if let euTest = dccEvaluator(greencard, now)?.tests?.first {
+                        let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
+                        return validityText_hasBegun_eu_test(testType: testType, validFrom: origin.eventDate)
+                    } else {
+                        return validityText_hasBegun_eu_fallback(origin: origin, now: now)
+                    }
+                    
+                case (.validityHasBegun, .netherlands, .vaccination):
+                    return validityText_hasBegun_domestic_vaccination(validFrom: origin.validFromDate)
+                    
+                case (.validityHasBegun, .netherlands, .test):
+                    return validityText_hasBegun_domestic_test(
+                        expirationTime: origin.expirationTime,
+                        expiryIsBeyondThreeYearsFromNow: origin.expiryIsBeyondThreeYearsFromNow(now: now),
+                        isCurrentlyValid: origin.isCurrentlyValid(now: now)
+                    )
+                    
+                case (.validityHasBegun, .europeanUnion, .recovery):
+                    let expiryIsBeyondThreeYearsFromNow = origin.expiryIsBeyondThreeYearsFromNow(now: now)
+                    
+                    return validityText_hasBegun_eu_recovery(
+                        expirationTime: origin.expirationTime,
+                        expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
+                        isCurrentlyValid: origin.isCurrentlyValid(now: now)
+                    )
+                    
+                case (.validityHasBegun, .netherlands, .recovery):
+                    let expiryIsBeyondThreeYearsFromNow = origin.expiryIsBeyondThreeYearsFromNow(now: now)
+                    
+                    return validityText_hasBegun_domestic_recovery(
+                        expirationTime: origin.expirationTime,
+                        expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
+                        isCurrentlyValid: origin.isCurrentlyValid(now: now)
+                    )
+                    
                 case (.validityHasNotYetBegun, .netherlands, .recovery):
                     return validityText_hasNotYetBegun_domestic_recovery(
                         validFrom: origin.validFromDate,
                         expirationTime: origin.expirationTime
                     )
-
+                    
                 case (.validityHasNotYetBegun, .europeanUnion, .recovery):
                     return validityText_hasNotYetBegun_eu_recovery(
                         validFrom: origin.validFromDate,
                         expirationTime: origin.expirationTime
                     )
-
-				case (.validityHasNotYetBegun, _, _):
-					return validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: qrCard, origin: origin, now: now)
-			}
-		}
+                    
+                case (.validityHasNotYetBegun, _, _):
+                    return validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: qrCard, origin: origin, now: now)
+            }
+        }
 	}
 }
 
@@ -179,14 +188,27 @@ private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsB
 
 private func validityText_hasBegun_domestic_recovery(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool) -> HolderDashboardViewController.ValidityText {
 
-	let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+    let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+    let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
+    let dateString = formatter.string(from: expirationTime)
+
+    let titleString = QRCodeOriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
+    let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+    return .init(
+        lines: [titleString, valueString],
+        kind: .current
+    )
+}
+
+private func validityText_hasBegun_eu_recovery(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool) -> HolderDashboardViewController.ValidityText {
+
+    let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding().capitalizingFirstLetter()
 	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
 	let dateString = formatter.string(from: expirationTime)
 
-	let titleString = QRCodeOriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
-		lines: [titleString, valueString],
+		lines: [valueString],
 		kind: .current
 	)
 }
