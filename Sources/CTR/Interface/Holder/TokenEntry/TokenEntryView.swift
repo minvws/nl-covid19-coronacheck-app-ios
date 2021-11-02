@@ -107,6 +107,20 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		return view
 	}()
 	
+	/// The spinner
+	let spinner: UIActivityIndicatorView = {
+
+		let view = UIActivityIndicatorView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		if #available(iOS 13.0, *) {
+			view.style = .large
+		} else {
+			view.style = .whiteLarge
+		}
+		view.color = Theme.colors.primary
+		return view
+	}()
+	
 	/// Setup all the views
 	override func setupViews() {
 		
@@ -140,6 +154,8 @@ class TokenEntryView: ScrolledStackWithButtonView {
 
 		stackView.addArrangedSubview(resendVerificationCodeButton)
 		stackView.addArrangedSubview(spacer)
+		
+		addSubview(spinner)
 	}
 	
 	override func setupViewConstraints() {
@@ -147,7 +163,10 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
+			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0),
+			
+			spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
+			spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 	}
 

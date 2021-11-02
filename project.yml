@@ -21,9 +21,6 @@ packages:
   Lottie:
     github: airbnb/lottie-ios
     majorVersion: 3.2.3
-  MBProgressHUD:
-    github: jdg/MBProgressHUD
-    majorVersion: 1.2.0
   Nimble:
     github: Quick/Nimble
     majorVersion: 9.2.0
@@ -97,7 +94,6 @@ targetTemplates:
         product: CocoaLumberjackSwift
       - package: IOSSecuritySuite
       - package: Lottie
-      - package: MBProgressHUD
       - package: OpenSSL
       - package: Reachability
         product: Reachability
