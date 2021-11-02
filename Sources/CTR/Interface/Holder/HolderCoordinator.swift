@@ -448,9 +448,34 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesMoreInfoAboutRecoveryValidityExtension() {
+
+		// TODO: finish
+		let viewModel = ExtendRecoveryValidityViewModel(
+			mode: .extend,
+			backAction: { [weak self] in
+				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+			},
+			greencardLoader: GreenCardLoader(),
+			userSettings: userSettings
+		)
+		viewModel.coordinator = self
+		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
 	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
+		// TODO: finish
+		let viewModel = ExtendRecoveryValidityViewModel(
+			mode: .reinstate,
+			backAction: { [weak self] in
+				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+			},
+			greencardLoader: GreenCardLoader(),
+			userSettings: userSettings
+		)
+		viewModel.coordinator = self
+		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
 	func migrateEUVaccinationDidComplete() {
@@ -459,6 +484,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func extendRecoveryValidityDidComplete() {
+
+		recoveryValidityExtensionManager.reload()
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
 	}
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
