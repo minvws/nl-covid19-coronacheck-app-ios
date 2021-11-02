@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import MBProgressHUD
 
 class PaperCertificateTokenEntryViewController: BaseViewController {
 	
