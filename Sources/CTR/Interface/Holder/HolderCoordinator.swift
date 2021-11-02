@@ -50,6 +50,10 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutUpgradingEUVaccinations()
 
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
+	
+    func userWishesMoreInfoAboutRecoveryValidityExtension()
+
+	func userWishesMoreInfoAboutRecoveryValidityReinstation()
 
 	func openUrl(_ url: URL, inApp: Bool)
 
@@ -60,6 +64,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func displayError(content: Content, backAction: @escaping () -> Void)
 
 	func migrateEUVaccinationDidComplete()
+
+	func extendRecoveryValidityDidComplete()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -413,11 +419,18 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
+	func userWishesMoreInfoAboutRecoveryValidityExtension() {
+	}
+
+	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
+	}
+
 	func migrateEUVaccinationDidComplete() {
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {
-			// (will be added in upcoming PR)
-		})
+		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
+	}
+
+	func extendRecoveryValidityDidComplete() {
 	}
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
