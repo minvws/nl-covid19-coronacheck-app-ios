@@ -223,6 +223,8 @@ final class HolderDashboardViewModel: Logging {
 				now: self.now(),
 				remoteConfiguration: config
 			)
+            
+            self.recoveryValidityExtensionManager.reload()
 		}
 	}
 
@@ -834,6 +836,11 @@ extension HolderDashboardViewModel {
 
 			state.shouldShowRecoveryValidityExtensionCompleteBanner = !self.userSettings.hasDismissedRecoveryValidityExtensionCard
 			state.shouldShowRecoveryValidityReinstationCompleteBanner = !self.userSettings.hasDismissedRecoveryValidityReinstationCard
+            
+            if !self.userSettings.hasDismissedRecoveryValidityExtensionCard || !self.userSettings.hasDismissedRecoveryValidityReinstationCard {
+                state.shouldShowRecoveryValidityExtensionAvailableBanner = false
+                state.shouldShowRecoveryValidityReinstationAvailableBanner = false
+            }
 
 			self.state = state
 		}
