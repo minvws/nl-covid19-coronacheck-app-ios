@@ -140,14 +140,14 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		if userSettings.shouldShowRecoveryValidityExtensionCard {
 
 			// Enable this card to be visible
-			userSettings.hasDismissedRecoveryValidityExtensionCard = false
+			userSettings.hasDismissedRecoveryValidityExtensionCompletionCard = false
 
 			userSettings.shouldShowRecoveryValidityExtensionCard = false
 			userSettings.shouldShowRecoveryValidityReinstationCard = false
 		} else if userSettings.shouldShowRecoveryValidityReinstationCard {
 
 			// Enable this card to be visible
-			userSettings.hasDismissedRecoveryValidityReinstationCard = false
+			userSettings.hasDismissedRecoveryValidityReinstationCompletionCard = false
 
 			userSettings.shouldShowRecoveryValidityExtensionCard = false
 			userSettings.shouldShowRecoveryValidityReinstationCard = false

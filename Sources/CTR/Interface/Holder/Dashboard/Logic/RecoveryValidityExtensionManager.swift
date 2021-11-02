@@ -101,9 +101,9 @@ final class RecoveryValidityExtensionManager: RecoveryValidityExtensionManagerPr
 
 		guard userHasUnexpiredRecoveryGreencards() else { return nil }
 
-		if !userSettings.hasDismissedRecoveryValidityExtensionCard {
+		if !userSettings.hasDismissedRecoveryValidityExtensionCompletionCard {
 			return BannerType.extensionDidComplete
-		} else if !userSettings.hasDismissedRecoveryValidityReinstationCard {
+		} else if !userSettings.hasDismissedRecoveryValidityReinstationCompletionCard {
 			return BannerType.reinstationDidComplete
 		}
 		return nil

@@ -246,8 +246,8 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 		userSettingsSpy.stubbedShouldCheckRecoveryGreenCardRevisedValidity = false
 		userSettingsSpy.stubbedShouldShowRecoveryValidityExtensionCard = false
 		userSettingsSpy.stubbedShouldShowRecoveryValidityReinstationCard = false
-		userSettingsSpy.stubbedHasDismissedRecoveryValidityExtensionCard = false
-		userSettingsSpy.stubbedHasDismissedRecoveryValidityReinstationCard = true
+		userSettingsSpy.stubbedHasDismissedRecoveryValidityExtensionCompletionCard = false
+		userSettingsSpy.stubbedHasDismissedRecoveryValidityReinstationCompletionCard = true
 
 		// Act
 		sut.reload()
@@ -286,8 +286,8 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 		userSettingsSpy.stubbedShouldCheckRecoveryGreenCardRevisedValidity = false
 		userSettingsSpy.stubbedShouldShowRecoveryValidityExtensionCard = false
 		userSettingsSpy.stubbedShouldShowRecoveryValidityReinstationCard = false
-		userSettingsSpy.stubbedHasDismissedRecoveryValidityExtensionCard = true
-		userSettingsSpy.stubbedHasDismissedRecoveryValidityReinstationCard = false
+		userSettingsSpy.stubbedHasDismissedRecoveryValidityExtensionCompletionCard = true
+		userSettingsSpy.stubbedHasDismissedRecoveryValidityReinstationCompletionCard = false
 
 		// Act
 		sut.reload()
@@ -298,7 +298,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 
 		expect(self.userSettingsSpy.invokedShouldShowRecoveryValidityExtensionCardGetter) == true
 		expect(self.userSettingsSpy.invokedShouldShowRecoveryValidityReinstationCardGetter) == true
-		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityReinstationCardGetter) == true
+		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityReinstationCompletionCardGetter) == true
 
 		expect(callbackValue) == .reinstationDidComplete
 	}
