@@ -41,27 +41,16 @@ class SecurityCheckerWorker: Logging {
 		policies: [SecPolicy],
 		trustedCertificates: [Data]) -> Bool {
 
-		var trustList: [SecCertificate] = []
+		let trustList = createTrustList(trustedCertificates: trustedCertificates)
 
-		// XXX fixme -- use sensible conversion; etc..
-		for certificateAsPemData in trustedCertificates {
-			if let cert = certificateFromPEM(certificateAsPemData: certificateAsPemData) {
-				trustList.append(cert)
-				logVerbose("checkATS: adding cert \(cert.hashValue)")
-            } else {
-                logError("checkATS: Trust cert conversion failed")
-            }
-        }
         if trustList.isEmpty {
             // add main chain back in.
-            //
             if errSecSuccess != SecTrustSetAnchorCertificatesOnly(serverTrust, false) {
                 logError("checkATS: SecTrustSetAnchorCertificatesOnly failed)")
                 return false
             }
         } else {
             // rely on just the anchors specified.
-            //
             let erm = SecTrustSetAnchorCertificates(serverTrust, trustList as CFArray)
             if errSecSuccess != erm {
                 logError("checkATS: SecTrustSetAnchorCertificates failed: \(erm)")
@@ -70,48 +59,73 @@ class SecurityCheckerWorker: Logging {
         }
 
 		if #available(iOS 12.0, *) {
-			var error: CFError?
-			let result = SecTrustEvaluateWithError(serverTrust, &error)
-			if let error = error {
-				logError("checkATS: SecTrustEvaluateWithError: \(error)")
-			}
-			return result
+			return evaluateServerTrust(serverTrust)
 		} else {
 			// Fallback on earlier versions
+			return evaluateServerTrustPreiOS12(serverTrust)
+		}
+	}
 
-			var result = SecTrustResultType.invalid
-			if errSecSuccess != SecTrustEvaluate(serverTrust, &result) {
-				logError("checkATS: SecTrustEvaluate: \(result)")
-				return false
+	private func createTrustList(trustedCertificates: [Data]) -> [SecCertificate] {
+
+		var result: [SecCertificate] = []
+
+		for certificateAsPemData in trustedCertificates {
+			if let cert = certificateFromPEM(certificateAsPemData: certificateAsPemData) {
+				result.append(cert)
+				logVerbose("checkATS: adding cert \(cert.hashValue)")
+			} else {
+				logError("checkATS: Trust cert conversion failed")
 			}
-			switch result {
-				case .unspecified:
-					// We should be using SecTrustEvaluateWithError -- but cannot as that is > 12.0
-					// so we have a weakness here - we cannot readily distinguish between the users chain
-					// and our own lists. So that is a second stage comparison that we need to do.
-					//
-					logError("SecTrustEvaluate: unspecified - trusted by the OS or Us")
-					return true
-				case .proceed:
-					logError("SecTrustEvaluate: proceed - trusted by the user; but not from our list.")
-				case .deny:
-					logError("SecTrustEvaluate: deny")
-				case .invalid:
-					logError("SecTrustEvaluate: invalid")
-				case .recoverableTrustFailure:
-					logDebug(SecTrustCopyResult(serverTrust).debugDescription)
-					logError("SecTrustEvaluate: recoverableTrustFailure.")
-				case .fatalTrustFailure:
-					logError("SecTrustEvaluate: fatalTrustFailure")
-				case .otherError:
-					logError("SecTrustEvaluate: otherError")
-				default:
-					logError("SecTrustEvaluate: unknown")
-			}
-			logError("SecTrustEvaluate: returning false.")
+		}
+		return result
+	}
+
+	@available(iOS 12.0, *)
+	private func evaluateServerTrust(_ serverTrust: SecTrust) -> Bool {
+		var error: CFError?
+		let result = SecTrustEvaluateWithError(serverTrust, &error)
+		if let error = error {
+			logError("checkATS: SecTrustEvaluateWithError: \(error)")
+		}
+		return result
+	}
+
+	// Handle Server Trust pre iOS 12.
+	private func evaluateServerTrustPreiOS12(_ serverTrust: SecTrust) -> Bool {
+
+		var result = SecTrustResultType.invalid
+		if errSecSuccess != SecTrustEvaluate(serverTrust, &result) {
+			logError("checkATS: SecTrustEvaluate: \(result)")
 			return false
 		}
-	} // checkATS()
+		switch result {
+			case .unspecified:
+				// We should be using SecTrustEvaluateWithError -- but cannot as that is > 12.0
+				// so we have a weakness here - we cannot readily distinguish between the users chain
+				// and our own lists. So that is a second stage comparison that we need to do.
+				//
+				logError("SecTrustEvaluate: unspecified - trusted by the OS or Us")
+				return true
+			case .proceed:
+				logError("SecTrustEvaluate: proceed - trusted by the user; but not from our list.")
+			case .deny:
+				logError("SecTrustEvaluate: deny")
+			case .invalid:
+				logError("SecTrustEvaluate: invalid")
+			case .recoverableTrustFailure:
+				logDebug(SecTrustCopyResult(serverTrust).debugDescription)
+				logError("SecTrustEvaluate: recoverableTrustFailure.")
+			case .fatalTrustFailure:
+				logError("SecTrustEvaluate: fatalTrustFailure")
+			case .otherError:
+				logError("SecTrustEvaluate: otherError")
+			default:
+				logError("SecTrustEvaluate: unknown")
+		}
+		logError("SecTrustEvaluate: returning false.")
+		return false
+	} // evaluateServerTrust()
 
 	func checkSSL(
 		serverTrust: SecTrust,
