@@ -120,7 +120,7 @@ private func validityText_hasBegun_eu_test(testType: String, validFrom: Date) ->
 	return .init(
 		lines: [
 			"\(L.generalTesttype().capitalizingFirstLetter()): \(testType)",
-			"\(L.generalTestdate()): \(formatter.string(from: validFrom))"
+            "\(L.generalTestdate().capitalizingFirstLetter()): \(formatter.string(from: validFrom))"
 		],
 		kind: .current
 	)
