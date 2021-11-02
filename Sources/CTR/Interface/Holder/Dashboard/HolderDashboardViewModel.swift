@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 import Reachability
 
+// Will revisit this today 👀
+// swiftlint:disable type_body_length
 final class HolderDashboardViewModel: Logging {
 	typealias Datasource = HolderDashboardQRCardDatasource
 

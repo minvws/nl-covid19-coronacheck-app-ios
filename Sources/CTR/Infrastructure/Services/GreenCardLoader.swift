@@ -119,7 +119,6 @@ class GreenCardLoader: GreenCardLoading, Logging {
 	}
 
 	// ~~ 📆 TEMPORARY - will be removed in 1 month ~~
-	// TODO: Resolve this https://prototypecoro-oqr1532.slack.com/archives/D01T6EUEBFF/p1635586594022600
 	static func temporary___updateRecoveryExtensionValidityFlags(
 		userSettings: UserSettingsProtocol,
 		remoteConfigManager: RemoteConfigManaging,
@@ -134,7 +133,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		// which means this would still be true. If that's the case, well we're adding a fresh Recovery greencard now
 		// so definitely need to set it to false here to disable that whole feature.
 		guard !userSettings.shouldCheckRecoveryGreenCardRevisedValidity else {
-			userSettings.shouldCheckRecoveryGreenCardRevisedValidity = false // TODO: test this scenario - shouldn't it show a success banner?
+			userSettings.shouldCheckRecoveryGreenCardRevisedValidity = false
 			return
 		}
 

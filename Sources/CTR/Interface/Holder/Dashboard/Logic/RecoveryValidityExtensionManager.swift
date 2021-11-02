@@ -56,7 +56,6 @@ final class RecoveryValidityExtensionManager: RecoveryValidityExtensionManagerPr
 	}
 
 	func reload() {
-		// TODO: add lock?
 		guard !isLoading else { return }
 		isLoading = true
 		defer {

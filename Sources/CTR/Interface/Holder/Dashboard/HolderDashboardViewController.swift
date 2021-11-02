@@ -30,7 +30,7 @@ class HolderDashboardViewController: BaseViewController {
 
 		case recoveryValidityExtensionAvailableBanner(title: String, buttonText: String, didTapCallToAction: () -> Void)
 
-		 case recoveryValidityExtensionDidCompleteBanner(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		case recoveryValidityExtensionDidCompleteBanner(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 
 		case errorMessage(message: String, didTapTryAgain: () -> Void)
 

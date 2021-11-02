@@ -79,12 +79,7 @@ class HolderCoordinator: SharedCoordinator {
 		RecoveryValidityExtensionManager(
 			userHasRecoveryEvents: {
 				let eventGroups = Services.walletManager.listEventGroups()
-				let hasRecoveryEvents = eventGroups.contains { (eventGroup: EventGroup) in
-					// TODO: discuss with Rool if this is correct.
-					// is dcc correct for paper and non-paper?
-					// eventGroup.providerIdentifier == "dcc" &&
-					eventGroup.type == "recovery"
-				}
+				let hasRecoveryEvents = eventGroups.contains { $0.type == "recovery" }
 				return hasRecoveryEvents
 			},
 			userHasUnexpiredRecoveryGreencards: {
@@ -448,8 +443,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesMoreInfoAboutRecoveryValidityExtension() {
-
-		// TODO: finish
 		let viewModel = ExtendRecoveryValidityViewModel(
 			mode: .extend,
 			backAction: { [weak self] in
@@ -464,7 +457,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
-		// TODO: finish
 		let viewModel = ExtendRecoveryValidityViewModel(
 			mode: .reinstate,
 			backAction: { [weak self] in

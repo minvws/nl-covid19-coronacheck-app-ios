@@ -151,7 +151,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount += 1
 	}
 
-
 	var invokedUserWishesMoreInfoAboutOutdatedConfig = false
 	var invokedUserWishesMoreInfoAboutOutdatedConfigCount = 0
 	var invokedUserWishesMoreInfoAboutOutdatedConfigParameters: (validUntil: String, Void)?
@@ -163,7 +162,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutOutdatedConfigParameters = (validUntil, ())
 		invokedUserWishesMoreInfoAboutOutdatedConfigParametersList.append((validUntil, ()))
 	}
-
 
 	var invokedUserWishesMoreInfoAboutRecoveryValidityExtension = false
 	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount = 0
