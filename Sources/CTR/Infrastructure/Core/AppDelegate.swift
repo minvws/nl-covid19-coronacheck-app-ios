@@ -9,7 +9,7 @@ import UIKit
 import AppAuth
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate, Logging {
+class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?

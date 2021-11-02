@@ -35,8 +35,8 @@ protocol UserSettingsProtocol: AnyObject {
 	var shouldCheckRecoveryGreenCardRevisedValidity: Bool { get set }
 	var shouldShowRecoveryValidityExtensionCard: Bool { get set }
 	var shouldShowRecoveryValidityReinstationCard: Bool { get set }
-	var hasDismissedRecoveryValidityExtensionCard: Bool { get set }
-	var hasDismissedRecoveryValidityReinstationCard: Bool { get set }
+	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool { get set }
+	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool { get set }
 	
 	func reset()
 }
@@ -89,11 +89,11 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "shouldShowRecoveryValidityReinstationCard", defaultValue: false)
 	var shouldShowRecoveryValidityReinstationCard: Bool // swiftlint:disable:this let_var_whitespace
 
-	@UserDefaults(key: "hasDismissedRecoveryValidityExtensionCard", defaultValue: true)
-	var hasDismissedRecoveryValidityExtensionCard: Bool // swiftlint:disable:this let_var_whitespace
+	@UserDefaults(key: "hasDismissedRecoveryValidityExtensionCompletionCard", defaultValue: true)
+	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool // swiftlint:disable:this let_var_whitespace
 
-	@UserDefaults(key: "hasDismissedRecoveryValidityReinstationCard", defaultValue: true)
-	var hasDismissedRecoveryValidityReinstationCard: Bool // swiftlint:disable:this let_var_whitespace
+	@UserDefaults(key: "hasDismissedRecoveryValidityReinstationCompletionCard", defaultValue: true)
+	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool // swiftlint:disable:this let_var_whitespace
 }
 
 extension UserSettings {

@@ -318,47 +318,47 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedHasDismissedRecoveryValidityExtensionCardSetter = false
-	var invokedHasDismissedRecoveryValidityExtensionCardSetterCount = 0
-	var invokedHasDismissedRecoveryValidityExtensionCard: Bool?
-	var invokedHasDismissedRecoveryValidityExtensionCardList = [Bool]()
-	var invokedHasDismissedRecoveryValidityExtensionCardGetter = false
-	var invokedHasDismissedRecoveryValidityExtensionCardGetterCount = 0
-	var stubbedHasDismissedRecoveryValidityExtensionCard: Bool! = false
+	var invokedHasDismissedRecoveryValidityExtensionCompletionCardSetter = false
+	var invokedHasDismissedRecoveryValidityExtensionCompletionCardSetterCount = 0
+	var invokedHasDismissedRecoveryValidityExtensionCompletionCard: Bool?
+	var invokedHasDismissedRecoveryValidityExtensionCompletionCardList = [Bool]()
+	var invokedHasDismissedRecoveryValidityExtensionCompletionCardGetter = false
+	var invokedHasDismissedRecoveryValidityExtensionCompletionCardGetterCount = 0
+	var stubbedHasDismissedRecoveryValidityExtensionCompletionCard: Bool! = false
 
-	var hasDismissedRecoveryValidityExtensionCard: Bool {
+	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool {
 		set {
-			invokedHasDismissedRecoveryValidityExtensionCardSetter = true
-			invokedHasDismissedRecoveryValidityExtensionCardSetterCount += 1
-			invokedHasDismissedRecoveryValidityExtensionCard = newValue
-			invokedHasDismissedRecoveryValidityExtensionCardList.append(newValue)
+			invokedHasDismissedRecoveryValidityExtensionCompletionCardSetter = true
+			invokedHasDismissedRecoveryValidityExtensionCompletionCardSetterCount += 1
+			invokedHasDismissedRecoveryValidityExtensionCompletionCard = newValue
+			invokedHasDismissedRecoveryValidityExtensionCompletionCardList.append(newValue)
 		}
 		get {
-			invokedHasDismissedRecoveryValidityExtensionCardGetter = true
-			invokedHasDismissedRecoveryValidityExtensionCardGetterCount += 1
-			return stubbedHasDismissedRecoveryValidityExtensionCard
+			invokedHasDismissedRecoveryValidityExtensionCompletionCardGetter = true
+			invokedHasDismissedRecoveryValidityExtensionCompletionCardGetterCount += 1
+			return stubbedHasDismissedRecoveryValidityExtensionCompletionCard
 		}
 	}
 
-	var invokedHasDismissedRecoveryValidityReinstationCardSetter = false
-	var invokedHasDismissedRecoveryValidityReinstationCardSetterCount = 0
-	var invokedHasDismissedRecoveryValidityReinstationCard: Bool?
-	var invokedHasDismissedRecoveryValidityReinstationCardList = [Bool]()
-	var invokedHasDismissedRecoveryValidityReinstationCardGetter = false
-	var invokedHasDismissedRecoveryValidityReinstationCardGetterCount = 0
-	var stubbedHasDismissedRecoveryValidityReinstationCard: Bool! = false
+	var invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter = false
+	var invokedHasDismissedRecoveryValidityReinstationCompletionCardSetterCount = 0
+	var invokedHasDismissedRecoveryValidityReinstationCompletionCard: Bool?
+	var invokedHasDismissedRecoveryValidityReinstationCompletionCardList = [Bool]()
+	var invokedHasDismissedRecoveryValidityReinstationCompletionCardGetter = false
+	var invokedHasDismissedRecoveryValidityReinstationCompletionCardGetterCount = 0
+	var stubbedHasDismissedRecoveryValidityReinstationCompletionCard: Bool! = false
 
-	var hasDismissedRecoveryValidityReinstationCard: Bool {
+	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool {
 		set {
-			invokedHasDismissedRecoveryValidityReinstationCardSetter = true
-			invokedHasDismissedRecoveryValidityReinstationCardSetterCount += 1
-			invokedHasDismissedRecoveryValidityReinstationCard = newValue
-			invokedHasDismissedRecoveryValidityReinstationCardList.append(newValue)
+			invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter = true
+			invokedHasDismissedRecoveryValidityReinstationCompletionCardSetterCount += 1
+			invokedHasDismissedRecoveryValidityReinstationCompletionCard = newValue
+			invokedHasDismissedRecoveryValidityReinstationCompletionCardList.append(newValue)
 		}
 		get {
-			invokedHasDismissedRecoveryValidityReinstationCardGetter = true
-			invokedHasDismissedRecoveryValidityReinstationCardGetterCount += 1
-			return stubbedHasDismissedRecoveryValidityReinstationCard
+			invokedHasDismissedRecoveryValidityReinstationCompletionCardGetter = true
+			invokedHasDismissedRecoveryValidityReinstationCompletionCardGetterCount += 1
+			return stubbedHasDismissedRecoveryValidityReinstationCompletionCard
 		}
 	}
 

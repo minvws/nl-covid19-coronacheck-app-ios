@@ -12,9 +12,6 @@ import AppAuthEnterpriseUserAgent
 protocol OpenIdManaging: AnyObject {
 
 	init()
-	
-	/// Is request authorization in progress
-	var isAuthorizationInProgress: Bool { get set }
 
 	/// Request an access token
 	/// - Parameters:
@@ -78,14 +75,13 @@ class OpenIdManager: OpenIdManaging, Logging {
 		let request = generateRequest(serviceConfiguration: serviceConfiguration)
 		self.logVerbose("OpenIdManager: authorization request: \(request)")
 
-		if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+		if let appAuthState = UIApplication.shared.delegate as? AppAuthState {
 
 			if #available(iOS 13, *) { } else {
 				NotificationCenter.default.post(name: .disablePrivacySnapShot, object: nil)
 			}
 
 			let callBack: OIDAuthStateAuthorizationCallback = { authState, error in
-				self.isAuthorizationInProgress = false
 
 				self.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
 				NotificationCenter.default.post(name: .enablePrivacySnapShot, object: nil)
@@ -100,7 +96,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 				}
 			}
 
-			appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
+			appAuthState.currentAuthorizationFlow = OIDAuthState.authState(
 				byPresenting: request,
 				externalUserAgent: OIDExternalUserAgentIOSCustomBrowser.defaultBrowser() ?? OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari(),
 				callback: callBack
