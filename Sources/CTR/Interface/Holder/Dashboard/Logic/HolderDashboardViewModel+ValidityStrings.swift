@@ -53,9 +53,6 @@ extension QRCard {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
 					}
 
-				case (_, .europeanUnion, .recovery):
-					return validityText_hasBegun_eu_recovery(isCurrentlyValid: origin.isCurrentlyValid(now: now), expirationTime: origin.expirationTime)
-
 				case (.validityHasBegun, .netherlands, .vaccination):
 					return validityText_hasBegun_domestic_vaccination(validFrom: origin.validFromDate)
 
@@ -75,11 +72,17 @@ extension QRCard {
 						isCurrentlyValid: origin.isCurrentlyValid(now: now)
 					)
 
-				case (.validityHasNotYetBegun, _, .recovery):
-					return validityText_hasNotYetBegun_allRegions_recovery(
-						validFrom: origin.validFromDate,
-						expirationTime: origin.expirationTime
-					)
+                case (.validityHasNotYetBegun, .netherlands, .recovery):
+                    return validityText_hasNotYetBegun_domestic_recovery(
+                        validFrom: origin.validFromDate,
+                        expirationTime: origin.expirationTime
+                    )
+
+                case (.validityHasNotYetBegun, .europeanUnion, .recovery):
+                    return validityText_hasNotYetBegun_eu_recovery(
+                        validFrom: origin.validFromDate,
+                        expirationTime: origin.expirationTime
+                    )
 
 				case (.validityHasNotYetBegun, _, _):
 					return validityText_hasNotYetBegun_allRegions_vaccination_or_test(qrCard: qrCard, origin: origin, now: now)
@@ -148,23 +151,6 @@ private func validityText_hasBegun_eu_fallback(origin: QRCard.GreenCard.Origin, 
 	)
 }
 
-private func validityText_hasBegun_eu_recovery(isCurrentlyValid: Bool, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
-	var prefix: String {
-		if isCurrentlyValid {
-			return L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
-		}
-		return L.holderDashboardQrValidityDatePrefixValidFrom()
-	}
-	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
-	let dateString = formatter.string(from: expirationTime)
-
-	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
-	return .init(
-		lines: [valueString],
-		kind: .current
-	)
-}
-
 private func validityText_hasBegun_domestic_vaccination(validFrom: Date) -> HolderDashboardViewController.ValidityText {
 	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
 	let dateString = formatter.string(from: validFrom)
@@ -205,17 +191,31 @@ private func validityText_hasBegun_domestic_recovery(expirationTime: Date, expir
 	)
 }
 
-private func validityText_hasNotYetBegun_allRegions_recovery(validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasNotYetBegun_domestic_recovery(validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 
-	let prefix = L.holderDashboardQrValidityDatePrefixValidFrom()
+    let prefix = L.holderDashboardQrValidityDatePrefixValidFrom()
+    let validFromDateString = HolderDashboardViewModel.dayAndMonthWithTimeFormatter.string(from: validFrom)
+    let expiryDateString = HolderDashboardViewModel.dateWithoutTimeFormatter.string(from: expirationTime)
+
+    let titleString = QRCodeOriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
+    let valueString = "\(prefix) \(validFromDateString) \(L.generalUptoandincluding()) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
+    return .init(
+        // geldig vanaf 17 juli t/m 11 mei 2022
+        lines: [titleString, valueString],
+        kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+    )
+}
+
+private func validityText_hasNotYetBegun_eu_recovery(validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+
+    let prefix = L.holderDashboardQrValidityDatePrefixValidFrom().capitalizingFirstLetter()
 	let validFromDateString = HolderDashboardViewModel.dayAndMonthWithTimeFormatter.string(from: validFrom)
 	let expiryDateString = HolderDashboardViewModel.dateWithoutTimeFormatter.string(from: expirationTime)
 
-	let titleString = QRCodeOriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = "\(prefix) \(validFromDateString) \(L.generalUptoandincluding()) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
 		// geldig vanaf 17 juli t/m 11 mei 2022
-		lines: [titleString, valueString],
+		lines: [valueString],
 		kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
 	)
 }
