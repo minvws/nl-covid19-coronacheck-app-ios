@@ -16,6 +16,8 @@ class LoginTVSViewModel: Logging {
 	private var eventMode: EventMode
 
 	private var title: String
+	
+	private var appAuthState: AppAuthState?
 
 	@Bindable internal var content: Content
 
@@ -25,10 +27,12 @@ class LoginTVSViewModel: Logging {
 
 	init(
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
-		eventMode: EventMode) {
+		eventMode: EventMode,
+		appAuthState: AppAuthState? = UIApplication.shared.delegate as? AppAuthState) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
+		self.appAuthState = appAuthState
 
 		self.title = eventMode.title
 
@@ -127,9 +131,8 @@ extension LoginTVSViewModel {
 	
 	func cancelAuthorization() {
 		
-		guard let openIdManager = openIdManager, openIdManager.isAuthorizationInProgress else { return }
+		guard appAuthState?.currentAuthorizationFlow != nil else { return }
 		
-		openIdManager.isAuthorizationInProgress = false
 		coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
 	}
 
