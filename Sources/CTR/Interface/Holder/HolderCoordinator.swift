@@ -79,13 +79,13 @@ class HolderCoordinator: SharedCoordinator {
 		RecoveryValidityExtensionManager(
 			userHasRecoveryEvents: {
 				let eventGroups = Services.walletManager.listEventGroups()
-				let hasRecoveryEvents = eventGroups.contains { $0.type == "recovery" }
+				let hasRecoveryEvents = eventGroups.contains { $0.type == OriginType.recovery.rawValue }
 				return hasRecoveryEvents
 			},
 			userHasUnexpiredRecoveryGreencards: {
 				let unexpiredGreencards = Services.walletManager.greencardsWithUnexpiredOrigins(
 					now: Date(),
-					ofOriginType: "recovery"
+					ofOriginType: OriginType.recovery
 				)
 
 				let hasUnexpiredRecoveryGreencards = !unexpiredGreencards.isEmpty
