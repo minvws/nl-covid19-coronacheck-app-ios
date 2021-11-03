@@ -248,9 +248,11 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		/// Remove existing files
 		if fileStorage.fileExists(CryptoLibUtility.File.publicKeys.name) {
 			fileStorage.remove(CryptoLibUtility.File.publicKeys.name)
+			userSettings.issuerKeysFetchedTimestamp = nil
 		}
 		if fileStorage.fileExists(CryptoLibUtility.File.remoteConfiguration.name) {
 			fileStorage.remove(CryptoLibUtility.File.remoteConfiguration.name)
+			userSettings.configFetchedTimestamp = nil
 		}
 	}
 }
