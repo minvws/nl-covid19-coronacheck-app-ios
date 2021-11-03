@@ -214,7 +214,7 @@ final class HolderDashboardViewModel: Logging {
 
 	func setupConfigNotificationManager() {
 
-		// Setup the configuration warning
+		registerForConfigAlmostOutOfDateUpdate()
 		remoteConfigUpdatesConfigurationWarningToken = remoteConfigManager.appendReloadObserver { [weak self] config, _, _ in
 
 			guard let self = self else { return }
@@ -223,8 +223,23 @@ final class HolderDashboardViewModel: Logging {
 				now: self.now(),
 				remoteConfiguration: config
 			)
-            
-            self.recoveryValidityExtensionManager.reload()
+			self.recoveryValidityExtensionManager.reload()
+			self.registerForConfigAlmostOutOfDateUpdate()
+		}
+	}
+
+	private func registerForConfigAlmostOutOfDateUpdate() {
+
+		configurationNotificationManager.registerForAlmostOutOfDateUpdate(
+			now: self.now(),
+			remoteConfiguration: remoteConfigManager.storedConfiguration) { [weak self] in
+
+			guard let self = self else { return }
+
+			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
+				now: self.now(),
+				remoteConfiguration: self.remoteConfigManager.storedConfiguration
+			)
 		}
 	}
 
