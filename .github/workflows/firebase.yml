@@ -19,7 +19,7 @@ jobs:
     runs-on: macos-11
     steps:
     - name: Checkout
-      uses: actions/checkout@v2.3.5
+      uses: actions/checkout@v2.4.0
       with:
         fetch-depth: 0   
     
@@ -78,7 +78,7 @@ jobs:
     runs-on: macos-11
     steps:
     - name: Checkout
-      uses: actions/checkout@v2.3.5
+      uses: actions/checkout@v2.4.0
       with:
         fetch-depth: 0      
 
@@ -137,7 +137,7 @@ jobs:
     runs-on: macos-11
     steps:
     - name: Checkout
-      uses: actions/checkout@v2.3.5
+      uses: actions/checkout@v2.4.0
       with:
         fetch-depth: 0   
 
@@ -195,7 +195,7 @@ jobs:
     runs-on: macos-11
     steps:
     - name: Checkout
-      uses: actions/checkout@v2.3.5
+      uses: actions/checkout@v2.4.0
       with:
         fetch-depth: 0      
 

@@ -74,7 +74,7 @@ class GreenCardLoaderTests: XCTestCase {
 		}()
 
 		userSettingsSpy.stubbedShouldCheckRecoveryGreenCardRevisedValidity = false
-		userSettingsSpy.stubbedHasDismissedRecoveryValidityExtensionCard = true
+		userSettingsSpy.stubbedHasDismissedRecoveryValidityExtensionCompletionCard = true
 		userSettingsSpy.stubbedShouldShowRecoveryValidityExtensionCard = true
 		userSettingsSpy.stubbedShouldShowRecoveryValidityReinstationCard = false
 
@@ -86,7 +86,7 @@ class GreenCardLoaderTests: XCTestCase {
 		// Assert
 		expect(self.userSettingsSpy.invokedShouldCheckRecoveryGreenCardRevisedValidityGetter) == true
 
-		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityExtensionCard) == false
+		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityExtensionCompletionCard) == false
 		expect(self.userSettingsSpy.invokedShouldShowRecoveryValidityExtensionCard) == false
 		expect(self.userSettingsSpy.invokedShouldShowRecoveryValidityReinstationCard) == false
 	}
@@ -100,7 +100,7 @@ class GreenCardLoaderTests: XCTestCase {
 		}()
 
 		userSettingsSpy.stubbedShouldCheckRecoveryGreenCardRevisedValidity = false
-		userSettingsSpy.stubbedHasDismissedRecoveryValidityExtensionCard = true
+		userSettingsSpy.stubbedHasDismissedRecoveryValidityExtensionCompletionCard = true
 		userSettingsSpy.stubbedShouldShowRecoveryValidityExtensionCard = false
 		userSettingsSpy.stubbedShouldShowRecoveryValidityReinstationCard = true
 
@@ -112,7 +112,7 @@ class GreenCardLoaderTests: XCTestCase {
 		// Assert
 		expect(self.userSettingsSpy.invokedShouldShowRecoveryValidityReinstationCardGetter) == true
 
-		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityReinstationCard) == false
+		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityReinstationCompletionCard) == false
 		expect(self.userSettingsSpy.invokedShouldShowRecoveryValidityExtensionCard) == false
 		expect(self.userSettingsSpy.invokedShouldShowRecoveryValidityReinstationCard) == false
 	}

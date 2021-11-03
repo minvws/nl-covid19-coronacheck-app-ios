@@ -201,7 +201,14 @@ targetTemplates:
       - name: Run R.Swift
         basedOnDependencyAnalysis: true
         script: |
-          OUTPUT=`rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string,image,color`
+          # Determine path of Rswift. For M1 homebrew installs, it's at a location that isn't in Xcode's $PATH
+          if [ -f "/opt/homebrew/bin/rswift" ]; then
+            RSWIFT_PATH=/opt/homebrew/bin/rswift
+          elif which rswift >/dev/null; then
+            RSWIFT_PATH=rswift
+          fi
+
+          OUTPUT=`$RSWIFT_PATH generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string,image,color`
 
           # forbid TestFlight release if there are missing translations:
           if [[ "$OUTPUT" == *"warning"* ]] && [[ "$TESTFLIGHT_DEPLOY" == "true" ]]; then
@@ -218,10 +225,19 @@ targetTemplates:
       - name: Run SwiftLint
         basedOnDependencyAnalysis: true
         script: |
-          if which swiftlint >/dev/null; then
-            swiftlint --quiet --config=./.swiftlint.yml
-          else
+
+          # Determine path of Swiftlint. For M1 homebrew installs, it's at a location that isn't in Xcode's $PATH
+          if [ -f "/opt/homebrew/bin/swiftlint" ]; then
+            SWIFTLINT_PATH=/opt/homebrew/bin/swiftlint
+          elif which swiftlint >/dev/null; then
+            SWIFTLINT_PATH=swiftlint
+          fi
+
+          # Call Swiftlint:
+          if [ -z ${SWIFTLINT_PATH+x} ]; then 
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
+          else 
+            $SWIFTLINT_PATH --quiet --config=./.swiftlint.yml
           fi
 
   Standard_UnitTesting:
