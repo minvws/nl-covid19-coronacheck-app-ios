@@ -83,16 +83,7 @@ class ListEventsViewModel: Logging {
 		self.eventMode = eventMode
 		self.identityChecker = identityChecker
 
-		viewState = .loading(
-			content: Content(
-				title: eventMode.title,
-				subTitle: nil,
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
+		viewState = .loading(content: Content(title: eventMode.title))
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
