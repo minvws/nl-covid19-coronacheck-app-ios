@@ -35,7 +35,7 @@ class ChooseQRCodeTypeViewControllerTests: XCTestCase {
 	}
 
 	func test_snapshot() {
-		assertSnapshot(matching: sut, as: .image)
+        sut.assertImage(precision: 0.90)
 	}
 
 	func test_vaccination_tapped() {
