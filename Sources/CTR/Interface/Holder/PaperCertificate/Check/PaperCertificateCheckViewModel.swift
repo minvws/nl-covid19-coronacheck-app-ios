@@ -13,6 +13,17 @@ class PaperCertificateCheckViewModel: Logging {
 
 	private let couplingManager: CouplingManaging = Services.couplingManager
 
+	private let intialLoadingState: PaperCertificateCheckViewController.State = .loading(
+		content: Content(
+			title: L.holderDccListTitle(),
+			subTitle: nil,
+			primaryActionTitle: nil,
+			primaryAction: nil,
+			secondaryActionTitle: nil,
+			secondaryAction: nil
+		)
+	)
+
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
 			// Do not increment/decrement progress within this closure
@@ -28,10 +39,6 @@ class PaperCertificateCheckViewModel: Logging {
 
 	@Bindable private(set) var alert: AlertContent?
 
-	private let prefetchingGroup = DispatchGroup()
-	private let hasEventInformationFetchingGroup = DispatchGroup()
-	private let eventFetchingGroup = DispatchGroup()
-
 	init(
 		coordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol),
 		scannedDcc: String,
@@ -40,17 +47,7 @@ class PaperCertificateCheckViewModel: Logging {
 
 		self.coordinator = coordinator
 
-		viewState = .loading(
-			content: Content(
-				title: L.holderDccListTitle(),
-				subTitle: nil,
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
-
+		viewState = intialLoadingState
 		checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode)
 	}
 
