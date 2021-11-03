@@ -8,7 +8,7 @@
 "holder.dashboard.recoveryvalidityextension.extensioncomplete.banner.title" = "Your Dutch recovery certificate has been extended";
 "holder.dashboard.recoveryvalidityextension.reinstationcomplete.banner.title" = "Your Dutch recovery certificate has been restored";
 "holder.recoveryvalidityextension.extensionavailable.title" = "Extend recovery certificate";
-"holder.recoveryvalidityextension.extensionavailable.description" = "<p>We will extend everyone's expired recovery certificates soon. As a result, your certificate will be valid for one year after the moment of positive testing.</p><p>You can also extend your certificate right now if you want to.</p>";
+"holder.recoveryvalidityextension.extensionavailable.description" = "<p>We will extend everyone's recovery certificates soon. As a result, your certificate will be valid for one year after the moment of positive testing.</p><p>You can also extend your certificate right now if you want to.</p>";
 "holder.recoveryvalidityextension.extensionavailable.button.submit" = "Extend certificate";
 "holder.recoveryvalidityextension.reinstationavailable.title" = "Restore recovery certificate";
 "holder.recoveryvalidityextension.reinstationavailable.description" = "<p>We will restore your expired recovery certificate soon, because the validity of Dutch recovery certificates will be extended. As a result, your certificate will be valid for one year after the moment of positive testing.</p><p>You can also restore your certificate right now if you want to.</p>";
@@ -159,7 +159,7 @@
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Connect to the internet";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Server error";
-"holder.recovery.tooOld.title" = "Positive test result is not valid";
+"holder.recovery.tooOld.title" = "Positive test result no longer valid";
 "holder.recovery.tooOld.message" = "<p>It has been more than %@ days since you tested positive for coronavirus. Therefore, your test result is no longer valid. Unfortunately, you cannot create a recovery certificate.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.list.message" = "You can create a recovery certificate from the retrieved details.";
 "holder.menu.proof" = "Add certificate";
@@ -442,7 +442,7 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "About your recovery certificate";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "<p>Your recovery certificate is not valid in the Netherlands, because the type of test is not accepted.</p><p>You’ve only got an international QR code.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "About your recovery certificate";
-"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Your recovery certificate is not valid internationally. You’ve only got a Dutch certificate.</p><p>The reason could be that the type of test is not accepted, or that the test is no longer valid abroad. An international recovery certificate can only be made with a PCR-test that is less than 180 days old. Read more about the possible causes on the <a href=\"https://www.coronacheck.nl//en/guidepost\">Guidepost.</a></p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Your recovery certificate is not valid internationally. You’ve only got a Dutch certificate.</p><p>The reason could be that the type of test is not accepted, or that the test is no longer valid abroad. An international recovery certificate can only be made with a PCR-test that is less than 180 days old. Read more about the possible causes on the <a href=\"https://www.coronacheck.nl//en/guidepost\">Guidepost</a>.</p>";
 "holder.dashboard.empty.domestic.title" = "Find your Dutch certificate here later";
 "holder.dashboard.empty.domestic.message" = "<p>You can add a certificate if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>. The app generates a certificate for the Netherlands and one for other countries.</p>";
 "holder.dashboard.empty.international.title" = "Find your international certificate here later";

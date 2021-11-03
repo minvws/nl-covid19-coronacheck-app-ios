@@ -88,7 +88,7 @@ final class HolderDashboardViewModel: Logging {
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
 
 	// Observation tokens:
-	private var remoteConfigUpdatesStrippenRefresherToken: RemoteConfigManager.ObserverToken?
+	private var remoteConfigUpdateObserverToken: RemoteConfigManager.ObserverToken?
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
 
@@ -147,8 +147,9 @@ final class HolderDashboardViewModel: Logging {
 		setupConfigNotificationManager()
 
 		// If the config ever changes, reload the strippen refresher:
-		remoteConfigUpdatesStrippenRefresherToken = remoteConfigManager.appendUpdateObserver { [weak strippenRefresher] _, _, _ in
-			strippenRefresher?.load()
+		remoteConfigUpdateObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
+            self?.strippenRefresher.load()
+            self?.recoveryValidityExtensionManager.reload()
 		}
 
 		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
@@ -160,7 +161,7 @@ final class HolderDashboardViewModel: Logging {
 	deinit {
 		NotificationCenter.default.removeObserver(self)
 		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
-		remoteConfigUpdatesStrippenRefresherToken.map(remoteConfigManager.removeObserver)
+		remoteConfigUpdateObserverToken.map(remoteConfigManager.removeObserver)
 		remoteConfigUpdatesConfigurationWarningToken.map(remoteConfigManager.removeObserver)
 	}
 
@@ -214,7 +215,7 @@ final class HolderDashboardViewModel: Logging {
 
 	func setupConfigNotificationManager() {
 
-		// Setup the configuration warning
+		registerForConfigAlmostOutOfDateUpdate()
 		remoteConfigUpdatesConfigurationWarningToken = remoteConfigManager.appendReloadObserver { [weak self] config, _, _ in
 
 			guard let self = self else { return }
@@ -223,8 +224,23 @@ final class HolderDashboardViewModel: Logging {
 				now: self.now(),
 				remoteConfiguration: config
 			)
-            
-            self.recoveryValidityExtensionManager.reload()
+			self.recoveryValidityExtensionManager.reload()
+			self.registerForConfigAlmostOutOfDateUpdate()
+		}
+	}
+
+	private func registerForConfigAlmostOutOfDateUpdate() {
+
+		configurationNotificationManager.registerForAlmostOutOfDateUpdate(
+			now: self.now(),
+			remoteConfiguration: remoteConfigManager.storedConfiguration) { [weak self] in
+
+			guard let self = self else { return }
+
+			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
+				now: self.now(),
+				remoteConfiguration: self.remoteConfigManager.storedConfiguration
+			)
 		}
 	}
 

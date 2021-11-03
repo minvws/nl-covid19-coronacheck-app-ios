@@ -46,7 +46,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage()
+		sut.assertImage(precision: 0.98)
 	}
 
 	func testOneRowSampleContent() {
@@ -70,7 +70,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage()
+		sut.assertImage(precision: 0.98)
 	}
 
 	func testButtonEnabledWithLoadingStatesContent() {
@@ -140,7 +140,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage()
+		sut.assertImage(precision: 0.98)
 	}
 
 	func testHidesAutomaticallyValidRowFooterIfButtonIsEnabled() {
@@ -163,7 +163,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage()
+		sut.assertImage(precision: 0.98)
 	}
 
 	func testSubtextField() {
@@ -196,7 +196,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage()
+		sut.assertImage(precision: 0.98)
 	}
 
 	func testStackAppearance_level2() {
@@ -207,7 +207,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage()
+        sut.assertImage(precision: 0.95)
 	}
 
 	func testStackAppearance_level3() {
@@ -218,6 +218,6 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage()
+		sut.assertImage(precision: 0.95)
 	}
 }
