@@ -239,11 +239,11 @@ extension SharedCoordinator: Restartable {
 			// Use Scene lifecycle
 			if let scene = UIApplication.shared.connectedScenes.first,
 				let sceneDelegate: SceneDelegate = (scene.delegate as? SceneDelegate) {
-				sceneDelegate.appCoordinator?.retry()
+				sceneDelegate.appCoordinator?.reset()
 			}
 		} else {
 			if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-				appDelegate.appCoordinator?.retry()
+				appDelegate.appCoordinator?.reset()
 			}
 		}
 	}

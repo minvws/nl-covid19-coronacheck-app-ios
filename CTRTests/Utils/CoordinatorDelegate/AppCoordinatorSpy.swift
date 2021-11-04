@@ -45,4 +45,12 @@ class AppCoordinatorSpy: AppCoordinatorDelegate {
 		invokedRetry = true
 		invokedRetryCount += 1
 	}
+
+	var invokedReset = false
+	var invokedResetCount = 0
+
+	func reset() {
+		invokedReset = true
+		invokedResetCount += 1
+	}
 }
