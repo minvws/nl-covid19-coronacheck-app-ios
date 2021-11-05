@@ -39,7 +39,7 @@ class MessageCardView: BaseView {
 
 		let button = TappableButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.setImage(I.smallCross(), for: .normal)
+		button.setImage(I.bannerCross(), for: .normal)
 		button.contentHorizontalAlignment = .center
 		button.isHidden = true
 		return button
@@ -61,6 +61,7 @@ class MessageCardView: BaseView {
 		stackView.alignment = .top
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.spacing = 8
+        stackView.distribution = .equalSpacing
 		return stackView
 	}()
 
@@ -70,6 +71,11 @@ class MessageCardView: BaseView {
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		return stackView
 	}()
+    
+    /// Spacing between the two stackviews:
+    private lazy var stackViewPaddingConstraint: NSLayoutConstraint? = {
+        return callToActionButtonStackView.topAnchor.constraint(equalTo: messageWithCloseButtonStackView.bottomAnchor, constant: 0)
+    }()
 
 	/// Setup all the views
 	override func setupViews() {
@@ -118,16 +124,14 @@ class MessageCardView: BaseView {
 		NSLayoutConstraint.activate([
 			messageWithCloseButtonStackView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
 			messageWithCloseButtonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-			messageWithCloseButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
-
-			messageWithCloseButtonStackView.bottomAnchor.constraint(equalTo: callToActionButtonStackView.topAnchor, constant: -10),
+			messageWithCloseButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -26),
 
 			callToActionButtonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
 			callToActionButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
-			callToActionButtonStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
-
-			closeButton.widthAnchor.constraint(equalToConstant: 42)
+			callToActionButtonStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
 		])
+        
+        stackViewPaddingConstraint?.isActive = true
 	}
 
 	/// User tapped on the close button
@@ -162,7 +166,7 @@ class MessageCardView: BaseView {
 	/// The user tapped on the close button
 	var closeButtonTappedCommand: (() -> Void)? {
 		didSet {
-			closeButton.isHidden = closeButtonTappedCommand == nil
+             closeButton.isHidden = closeButtonTappedCommand == nil
 		}
 	}
 
@@ -170,6 +174,8 @@ class MessageCardView: BaseView {
 	var callToActionButtonTappedCommand: (() -> Void)? {
 		didSet {
 			callToActionButton.isHidden = callToActionButtonTappedCommand == nil
+            stackViewPaddingConstraint?.constant = callToActionButtonTappedCommand == nil ? 0 : 8 // If the button is shown, add some padding.
+            setNeedsLayout()
 		}
 	}
 }
