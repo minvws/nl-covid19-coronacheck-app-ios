@@ -110,11 +110,6 @@ final class PaperProofInputCouplingCodeViewModel {
 
 	func userHasNoTokenButtonTapped() {
 
-		coordinator?.presentInformationPage(
-			title: L.holderDcctokenentryinfoTitle(),
-			body: L.holderDcctokenentryinfoBody(),
-			hideBodyForScreenCapture: false
-		)
+		coordinator?.userWishesMoreInformationOnNoInputToken()
 	}
-
 }

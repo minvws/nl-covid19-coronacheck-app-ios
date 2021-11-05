@@ -146,4 +146,14 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateToken) == true
 		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateTokenParameters?.token) == "ABCDEF"
 	}
+
+	func test_tappingNoTokenButton() {
+		// Arrange
+
+		// Act
+		sut.userHasNoTokenButtonTapped()
+
+		// Assert
+		expect(self.coordinatorDelegateSpy.invokedUserWishesMoreInformationOnNoInputToken) == true
+	}
 }
