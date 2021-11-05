@@ -9,4 +9,31 @@ import UIKit
 
 final class RiskSettingViewController: BaseViewController {
 	
+	private let viewModel: RiskSettingViewModel
+
+	let sceneView = RiskSettingView()
+
+	init(viewModel: RiskSettingViewModel) {
+
+		self.viewModel = viewModel
+
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder: NSCoder) {
+
+		fatalError("init(coder:) has not been implemented")
+	}
+
+	// MARK: View lifecycle
+	override func loadView() {
+
+		view = sceneView
+	}
+
+	override func viewDidLoad() {
+
+		super.viewDidLoad()
+		
+	}
 }
