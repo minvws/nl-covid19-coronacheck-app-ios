@@ -14,6 +14,8 @@ protocol PaperCertificateFlowDelegate: AnyObject {
 
 protocol PaperCertificateCoordinatorDelegate: AnyObject {
 
+	func userWishesToViewSelfPrintedInformation()
+
 	func userDidSubmitPaperCertificateToken(token: String)
 
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
@@ -66,6 +68,11 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 }
 
 extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
+
+	func userWishesToViewSelfPrintedInformation() {
+
+		logDebug("Todo: userWishesToViewSelfPrintedInformation")
+	}
 
 	func userDidSubmitPaperCertificateToken(token: String) {
 

@@ -33,12 +33,7 @@ final class PaperProofStartViewController: BaseViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
-		setupBinding()
-	}
-	
-	func setupBinding() {
-		
+
 		setupText()
 		setupButtons()
 		setupItems()

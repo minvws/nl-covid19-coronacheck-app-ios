@@ -22,15 +22,19 @@ final class PaperProofItemView: BaseView {
 			static let kerning: CGFloat = -0.24
 		}
 
+		enum Icon {
+			static let size: CGFloat = 20
+		}
+
 		enum Spacing {
 			static let iconLeading: CGFloat = 12
 			static let iconTrailing: CGFloat = 24
 			static let message: CGFloat = 8
-
 		}
 	}
 
 	private let iconView: UIImageView = {
+
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
@@ -65,8 +69,8 @@ final class PaperProofItemView: BaseView {
 
 		NSLayoutConstraint.activate([
 
-			iconView.widthAnchor.constraint(equalToConstant: 20),
-			iconView.heightAnchor.constraint(equalToConstant: 20),
+			iconView.widthAnchor.constraint(equalToConstant: ViewTraits.Icon.size),
+			iconView.heightAnchor.constraint(equalToConstant: ViewTraits.Icon.size),
 			iconView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
 			iconView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
