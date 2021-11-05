@@ -64,6 +64,7 @@
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "Over deze app";
 "verifier.menu.privacy" = "Gebruikersvoorwaarden";
+"verifier.menu.risksetting" = "Risico instelling";
 
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Alleen toegang met bewijs";
