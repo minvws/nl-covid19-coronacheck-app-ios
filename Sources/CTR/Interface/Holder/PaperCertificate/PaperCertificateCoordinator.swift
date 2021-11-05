@@ -225,7 +225,7 @@ extension PaperCertificateCoordinator: EventFlowDelegate {
 
 		cleanup()
 		if let viewController = navigationController.viewControllers
-			.first(where: { $0 is PaperCertificateStartViewController }) {
+			.first(where: { $0 is PaperProofStartViewController }) {
 
 			navigationController.popToViewController(
 				viewController,

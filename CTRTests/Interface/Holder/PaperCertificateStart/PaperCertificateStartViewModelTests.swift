@@ -13,14 +13,14 @@ import SnapshotTesting
 
 final class PaperCertificateStartViewModelTests: XCTestCase {
 	
-	var sut: PaperCertificateStartViewModel!
+	var sut: PaperProofStartViewModel!
 	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
 	
 	override func setUp() {
 		super.setUp()
 		
 		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
-		sut = PaperCertificateStartViewModel(coordinator: coordinatorDelegateSpy)
+		sut = PaperProofStartViewModel(coordinator: coordinatorDelegateSpy)
 	}
 	
 	func test_initialState() {
@@ -29,7 +29,7 @@ final class PaperCertificateStartViewModelTests: XCTestCase {
 		expect(self.sut.highlightedMessage) == L.holderPapercertificateStartHighlightedmessage()
 		expect(self.sut.primaryButtonTitle) == L.generalNext()
 		
-		PaperCertificateStartViewController(viewModel: sut).assertImage()
+		PaperProofStartViewController(viewModel: sut).assertImage()
 	}
 	
 	func test_primaryButtonTapped_shouldInvokeCoordinator() {
