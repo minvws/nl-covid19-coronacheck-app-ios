@@ -71,7 +71,20 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userWishesToViewSelfPrintedInformation() {
 
-		logDebug("Todo: userWishesToViewSelfPrintedInformation")
+		let viewModel = PaperProofContentViewModel(
+			content: Content(
+				title: L.holderPaperproofSelfprintedTitle(),
+				subTitle: L.holderPaperproofSelfprintedMessage(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holderPaperproofSelfprintedAction(),
+				secondaryAction: {
+					self.logDebug("Todo: userWishesToViewSelfPrintedInformation")
+				}
+			)
+		)
+		let destination = PaperProofContentViewController(viewModel: viewModel)
+		navigationController.pushViewController(destination, animated: true)
 	}
 
 	func userDidSubmitPaperCertificateToken(token: String) {
