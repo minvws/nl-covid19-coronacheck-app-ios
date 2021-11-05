@@ -136,7 +136,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 		scannedQR = nil
 		if let tokenEntryViewController = navigationController.viewControllers
-			.first(where: { $0 is PaperCertificateTokenEntryViewController }) {
+			.first(where: { $0 is PaperProofInputCouplingCodeViewController }) {
 
 			navigationController.popToViewController(
 				tokenEntryViewController,
@@ -159,8 +159,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 //		userDidSubmitPaperCertificateToken(token: "NDREB5")
 
-		let destination = PaperCertificateTokenEntryViewController(
-			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
+		let destination = PaperProofInputCouplingCodeViewController(
+			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
 		)
 
 		navigationController.pushViewController(destination, animated: true)

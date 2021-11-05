@@ -7,14 +7,15 @@
 
 import UIKit
 
-class PaperCertificateTokenEntryViewController: BaseViewController {
+// swiftlint:disable:next type_name
+class PaperProofInputCouplingCodeViewController: BaseViewController {
 	
-	private let viewModel: PaperCertificateTokenEntryViewModel
+	private let viewModel: PaperProofInputCouplingCodeViewModel
 	private var tapGestureRecognizer: UITapGestureRecognizer?
 	
-	let sceneView = PaperCertificateTokenEntryView()
+	let sceneView = PaperProofInputCouplingCodeView()
 	
-	init(viewModel: PaperCertificateTokenEntryViewModel) {
+	init(viewModel: PaperProofInputCouplingCodeViewModel) {
 		
 		self.viewModel = viewModel
 
@@ -184,7 +185,7 @@ class PaperCertificateTokenEntryViewController: BaseViewController {
 
 // MARK: - UITextFieldDelegate
 
-extension PaperCertificateTokenEntryViewController: UITextFieldDelegate {
+extension PaperProofInputCouplingCodeViewController: UITextFieldDelegate {
 
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 

@@ -11,16 +11,17 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 
-class PaperCertificateTokenEntryViewModelTests: XCTestCase {
+// swiftlint:disable:next type_name
+class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 
-	var sut: PaperCertificateTokenEntryViewModel!
+	var sut: PaperProofInputCouplingCodeViewModel!
 	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
 
 	override func setUp() {
 		super.setUp()
 		
 		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
-		sut = PaperCertificateTokenEntryViewModel(coordinator: coordinatorDelegateSpy)
+		sut = PaperProofInputCouplingCodeViewModel(coordinator: coordinatorDelegateSpy)
 	}
 
 	func test_initialState() {
@@ -32,7 +33,7 @@ class PaperCertificateTokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.userNeedsATokenButtonTitle) == L.holderDcctokenentryButtonNotoken()
 
-		PaperCertificateTokenEntryViewController(viewModel: sut).assertImage()
+		PaperProofInputCouplingCodeViewController(viewModel: sut).assertImage()
 	}
 
 	func test_inputtingShortValue_doesntShowError() {

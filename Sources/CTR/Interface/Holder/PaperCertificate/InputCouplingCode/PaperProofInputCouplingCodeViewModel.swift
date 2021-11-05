@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PaperCertificateTokenEntryViewModel {
+final class PaperProofInputCouplingCodeViewModel {
 
 	enum Config {
 		static let requiredTokenLength = 6
