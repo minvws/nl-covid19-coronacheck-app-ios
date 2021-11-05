@@ -55,6 +55,6 @@ final class PaperProofStartViewModelTests: XCTestCase {
 		sut.userTappedSelfPrintedButton()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToViewSelfPrintedInformation) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesMoreInformationOnSelfPrintedProof) == true
 	}
 }

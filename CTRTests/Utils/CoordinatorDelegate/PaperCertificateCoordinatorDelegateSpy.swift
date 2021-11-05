@@ -10,12 +10,12 @@ import Foundation
 
 class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegate, OpenUrlProtocol {
 
-	var invokedUserWishesToViewSelfPrintedInformation = false
-	var invokedUserWishesToViewSelfPrintedInformationCount = 0
+	var invokedUserWishesMoreInformationOnSelfPrintedProof = false
+	var invokedUserWishesMoreInformationOnSelfPrintedProofCount = 0
 
 	func userWishesMoreInformationOnSelfPrintedProof() {
-		invokedUserWishesToViewSelfPrintedInformation = true
-		invokedUserWishesToViewSelfPrintedInformationCount += 1
+		invokedUserWishesMoreInformationOnSelfPrintedProof = true
+		invokedUserWishesMoreInformationOnSelfPrintedProofCount += 1
 	}
 
 	var invokedUserDidSubmitPaperCertificateToken = false
