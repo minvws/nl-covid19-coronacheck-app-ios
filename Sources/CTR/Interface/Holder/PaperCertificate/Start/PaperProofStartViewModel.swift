@@ -51,6 +51,6 @@ final class PaperProofStartViewModel: Logging {
 
 	func userTappedSelfPrintedButton() {
 
-		coordinator?.userWishesToViewSelfPrintedInformation()
+		coordinator?.userWishesMoreInformationOnSelfPrintedProof()
 	}
 }

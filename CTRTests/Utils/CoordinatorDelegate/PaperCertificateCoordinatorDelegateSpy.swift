@@ -13,7 +13,7 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 	var invokedUserWishesToViewSelfPrintedInformation = false
 	var invokedUserWishesToViewSelfPrintedInformationCount = 0
 
-	func userWishesToViewSelfPrintedInformation() {
+	func userWishesMoreInformationOnSelfPrintedProof() {
 		invokedUserWishesToViewSelfPrintedInformation = true
 		invokedUserWishesToViewSelfPrintedInformationCount += 1
 	}

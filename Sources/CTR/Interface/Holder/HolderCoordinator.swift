@@ -654,13 +654,18 @@ extension HolderCoordinator: EventFlowDelegate {
 	}
 }
 
-extension HolderCoordinator: PaperCertificateFlowDelegate {
+extension HolderCoordinator: PaperProofFlowDelegate {
 	
-	func addCertificateFlowDidFinish() {
+	func addPaperProofFlowDidFinish() {
 		
 		removeChildCoordinator()
-		
 		navigateToDashboard()
+	}
+
+	func switchToAddRegularProof() {
+
+		removeChildCoordinator()
+		openMenuItem(.addCertificate)
 	}
 }
 
