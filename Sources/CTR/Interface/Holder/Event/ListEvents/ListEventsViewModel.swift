@@ -328,10 +328,15 @@ class ListEventsViewModel: Logging {
 			}
 
 			// Remove any existing events for the provider
-			walletManager.removeExistingEventGroups(
-				type: eventModeForStorage,
-				providerIdentifier: response.wrapper.providerIdentifier
-			)
+			// 2463: Allow multiple vaccinations for paperflow. 
+			if eventMode != .paperflow || eventModeForStorage != .vaccination {
+				walletManager.removeExistingEventGroups(
+					type: eventModeForStorage,
+					providerIdentifier: response.wrapper.providerIdentifier
+				)
+			} else {
+				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(eventModeForStorage)]")
+			}
 
 			// Store the new events
 			if let maxIssuedAt = getMaxIssuedAt(wrapper: response.wrapper),
