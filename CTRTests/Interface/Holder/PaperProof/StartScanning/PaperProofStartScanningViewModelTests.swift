@@ -10,16 +10,16 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 
-final class PaperCertificateAboutScanViewModelTests: XCTestCase {
+final class PaperProofStartScanningViewModelTests: XCTestCase {
 	
-	var sut: PaperCertificateAboutScanViewModel!
+	var sut: PaperProofStartScanningViewModel!
 	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
 	
 	override func setUp() {
 		super.setUp()
 		
 		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
-		sut = PaperCertificateAboutScanViewModel(coordinator: coordinatorDelegateSpy)
+		sut = PaperProofStartScanningViewModel(coordinator: coordinatorDelegateSpy)
 	}
 
 	func test_initialState() {
@@ -27,7 +27,7 @@ final class PaperCertificateAboutScanViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.holderPapercertificateAboutscanMessage()
 		expect(self.sut.primaryButtonTitle) == L.holderScannerTitle()
 		
-		PaperCertificateAboutScanViewController(viewModel: sut).assertImage()
+		PaperProofStartScanningViewController(viewModel: sut).assertImage()
 	}
 	
 	func test_primaryButtonTapped_shouldInvokeCoordinator() {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class PaperCertificateAboutScanViewModel: Logging {
+final class PaperProofStartScanningViewModel: Logging {
 	
 	@Bindable private(set) var title: String = L.holderPapercertificateAboutscanTitle()
 	@Bindable private(set) var message: String = L.holderPapercertificateAboutscanMessage()

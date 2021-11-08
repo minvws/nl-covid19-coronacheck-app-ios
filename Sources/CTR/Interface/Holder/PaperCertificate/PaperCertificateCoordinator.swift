@@ -113,8 +113,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		self.token = token
 
 		// Navigate to About Scan
-		let destination = PaperCertificateAboutScanViewController(
-			viewModel: PaperCertificateAboutScanViewModel(
+		let destination = PaperProofStartScanningViewController(
+			viewModel: PaperProofStartScanningViewModel(
 				coordinator: self
 			)
 		)
