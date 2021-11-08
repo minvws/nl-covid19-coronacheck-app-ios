@@ -19,6 +19,7 @@ final class RiskSettingView: BaseView {
 		enum Spacing {
 			static let headerToControls: CGFloat = 32
 			static let controlsToMoreButton: CGFloat = 24
+			static let controls: CGFloat = 1
 		}
 		enum Header {
 			static let lineHeight: CGFloat = 22
@@ -40,19 +41,21 @@ final class RiskSettingView: BaseView {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.axis = .vertical
+		stackView.backgroundColor = Theme.colors.grey4
+		stackView.insets(.init(top: ViewTraits.Spacing.controls,
+							   leading: 0,
+							   bottom: ViewTraits.Spacing.controls,
+							   trailing: 0))
+		stackView.spacing = ViewTraits.Spacing.controls
 		return stackView
 	}()
 	
 	private let lowRiskControl: RiskSettingControl = {
-		let control = RiskSettingControl()
-		control.translatesAutoresizingMaskIntoConstraints = false
-		return control
+		return RiskSettingControl()
 	}()
 	
 	private let highRiskControl: RiskSettingControl = {
-		let control = RiskSettingControl()
-		control.translatesAutoresizingMaskIntoConstraints = false
-		return control
+		return RiskSettingControl()
 	}()
 	
 	private let moreButton: Button = {

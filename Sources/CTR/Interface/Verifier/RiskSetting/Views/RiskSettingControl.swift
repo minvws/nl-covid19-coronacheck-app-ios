@@ -17,6 +17,10 @@ final class RiskSettingControl: UIControl {
 		}
 		enum Spacing {
 			static let label: CGFloat = 8
+			static let iconToLabel: CGFloat = 24
+		}
+		enum Size {
+			static let icon: CGFloat = 22
 		}
 		enum Title {
 			static let lineHeight: CGFloat = 22
@@ -28,6 +32,13 @@ final class RiskSettingControl: UIControl {
 		}
 	}
 	
+	private let iconImageView: UIImageView = {
+		let imageView = ImageView(imageName: I.toggle.normal.name,
+								  highlightedImageName: I.toggle.selected.name)
+		imageView.translatesAutoresizingMaskIntoConstraints = false
+		return imageView
+	}()
+	
 	private let titleLabel: Label = {
 		return Label(body: nil).header().multiline()
 	}()
@@ -38,6 +49,7 @@ final class RiskSettingControl: UIControl {
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
+		setupViews()
 		setupViewHierarchy()
 		setupViewConstraints()
 	}
@@ -46,10 +58,18 @@ final class RiskSettingControl: UIControl {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	/// Setup all the views
+	func setupViews() {
+		
+		backgroundColor = Theme.colors.viewControllerBackground
+		
+		addTarget(self, action: #selector(toggle), for: .touchUpInside)
+	}
+	
 	/// Setup the view hierarchy
 	func setupViewHierarchy() {
 
-		// Add icon
+		addSubview(iconImageView)
 		addSubview(titleLabel)
 		addSubview(subtitleLabel)
 	}
@@ -58,22 +78,44 @@ final class RiskSettingControl: UIControl {
 	func setupViewConstraints() {
 
 		NSLayoutConstraint.activate([
+			
+			iconImageView.topAnchor.constraint(equalTo: topAnchor,
+											   constant: ViewTraits.Margin.vertical),
+			iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor,
+												   constant: ViewTraits.Margin.horizontal),
+			iconImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor,
+												  constant: -ViewTraits.Margin.vertical),
+			iconImageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.icon),
+			iconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.icon),
+			
 			titleLabel.topAnchor.constraint(equalTo: topAnchor,
 											constant: ViewTraits.Margin.vertical),
-			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor,
-												constant: ViewTraits.Margin.horizontal),
+			titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor,
+												constant: ViewTraits.Spacing.iconToLabel),
 			titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor,
 												 constant: -ViewTraits.Margin.horizontal),
 			
 			subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
 											   constant: ViewTraits.Spacing.label),
-			subtitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor,
-												   constant: ViewTraits.Margin.horizontal),
+			subtitleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor,
+												   constant: ViewTraits.Spacing.iconToLabel),
 			subtitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor,
 													constant: -ViewTraits.Margin.horizontal),
 			subtitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor,
 												  constant: -ViewTraits.Margin.vertical)
 		])
+	}
+	
+	override var isSelected: Bool {
+		didSet {
+			Haptic.light()
+			
+			iconImageView.isHighlighted = isSelected
+		}
+	}
+	
+	@objc private func toggle() {
+		isSelected.toggle()
 	}
 	
 	// MARK: Public Access

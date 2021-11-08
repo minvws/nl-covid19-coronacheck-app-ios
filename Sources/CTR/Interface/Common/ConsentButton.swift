@@ -27,7 +27,7 @@ class ConsentButton: UIButton {
 
 	required init(title: String = "", selected: Bool = false) {
 
-		icon = ImageView(imageName: "Toggle/Normal", highlightedImageName: "Toggle/Selected")
+		icon = ImageView(imageName: I.toggle.normal.name, highlightedImageName: I.toggle.selected.name)
 
 		super.init(frame: .zero)
 
