@@ -34,6 +34,5 @@ final class RiskSettingViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
-		
 	}
 }

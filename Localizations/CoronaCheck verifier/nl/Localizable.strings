@@ -123,3 +123,6 @@
 /* MARK: - Verifier About */
 "verifier.about.title" = "Over deze app";
 "verifier.about.text" = "CoronaCheck Scanner is ontwikkeld zodat bepaalde locaties en activiteiten hun deuren kunnen openen. Denk bijvoorbeeld aan voetbalwedstrijden en concerten. Bezoekers maken een coronabewijs van een vaccinatie, een negatieve testuitslag of als zij corona hebben gehad en hersteld zijn. Met behulp van deze app krijgen alleen bezoekers met zo’n coronabewijs toegang. Zo kunnen steeds meer plekken bezocht worden.";
+
+/* MARK: - Verifier Risk Setting */
+"verifier.risksetting.title" = "Risico instelling";
