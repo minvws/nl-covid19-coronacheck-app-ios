@@ -116,6 +116,7 @@ final class RiskSettingControl: UIControl {
 	
 	@objc private func toggle() {
 		isSelected.toggle()
+		onTapCommand?()
 	}
 	
 	// MARK: Public Access
@@ -135,4 +136,6 @@ final class RiskSettingControl: UIControl {
 																   textColor: Theme.colors.secondaryText)
 		}
 	}
+	
+	var onTapCommand: (() -> Void)?
 }

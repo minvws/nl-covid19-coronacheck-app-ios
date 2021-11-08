@@ -66,6 +66,16 @@ final class RiskSettingView: BaseView {
 		super.setupViews()
 		
 		backgroundColor = Theme.colors.viewControllerBackground
+		
+		lowRiskControl.onTapCommand = { [weak self] in
+			self?.selectRiskCommand?(.low)
+			self?.highRiskControl.isSelected = false
+		}
+		
+		highRiskControl.onTapCommand = { [weak self] in
+			self?.selectRiskCommand?(.high)
+			self?.lowRiskControl.isSelected = false
+		}
 	}
 	
 	override func setupViewHierarchy() {
@@ -154,4 +164,14 @@ final class RiskSettingView: BaseView {
 			moreButton.title = moreButtonTitle
 		}
 	}
+	
+	var riskSetting: RiskSetting? {
+		didSet {
+			guard let riskSetting = riskSetting else { return }
+			lowRiskControl.isSelected = riskSetting.isLow
+			highRiskControl.isSelected = riskSetting.isHigh
+		}
+	}
+	
+	var selectRiskCommand: ((RiskSetting) -> Void)?
 }

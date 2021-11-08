@@ -12,6 +12,8 @@ final class RiskSettingViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
 	
+	private let userSettings: UserSettingsProtocol
+	
 	/// The title of the scene
 	@Bindable private(set) var title: String
 	
@@ -27,9 +29,20 @@ final class RiskSettingViewModel: Logging {
 	
 	@Bindable private(set) var moreButtonTitle: String?
 	
-	init(coordinator: (VerifierCoordinatorDelegate & Dismissable)) {
+	@Bindable private(set) var riskSetting: RiskSetting
+	
+	var selectRisk: RiskSetting {
+		didSet {
+			userSettings.scanRiskSettingValue = selectRisk
+		}
+	}
+	
+	init(
+		coordinator: (VerifierCoordinatorDelegate & Dismissable),
+		userSettings: UserSettingsProtocol) {
 		
 		self.coordinator = coordinator
+		self.userSettings = userSettings
 		
 		title = L.verifierRisksettingTitle()
 		header = L.verifierRisksettingHeaderMenuentry()
@@ -38,5 +51,9 @@ final class RiskSettingViewModel: Logging {
 		highRiskTitle = L.verifierRisksettingHighriskTitle()
 		highRiskSubtitle = L.verifierRisksettingHighriskSubtitle()
 		moreButtonTitle = L.verifierRisksettingReadmore()
+		
+		let selectedRisk = userSettings.scanRiskSettingValue
+		riskSetting = selectedRisk
+		selectRisk = selectedRisk
 	}
 }
