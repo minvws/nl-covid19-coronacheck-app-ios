@@ -186,8 +186,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 //		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
 
-		let destination = PaperCertificateScanViewController(
-			viewModel: PaperCertificateScanViewModel(
+		let destination = PaperProofScanViewController(
+			viewModel: PaperProofScanViewModel(
 				coordinator: self
 			)
 		)
@@ -226,7 +226,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 	func userWishesToGoBackToScanCertificate() {
 
 		if let scanViewController = navigationController.viewControllers
-			.first(where: { $0 is PaperCertificateScanViewController }) {
+			.first(where: { $0 is PaperProofScanViewController }) {
 
 			navigationController.popToViewController(
 				scanViewController,
