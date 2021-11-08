@@ -54,7 +54,6 @@ class MessageCardTests: XCTestCase {
         sut.assertImage(precision: 0.98)
     }
     
-    
     func test_titleWithCTAWithCloseButton() {
         
         // Arrange
