@@ -10,8 +10,6 @@ import UIKit
 import CoreData
 import Reachability
 
-// Will revisit this today 👀
-// swiftlint:disable type_body_length
 final class HolderDashboardViewModel: Logging {
 	typealias Datasource = HolderDashboardQRCardDatasource
 
@@ -525,12 +523,12 @@ extension HolderDashboardViewController.Card {
 			)
 		]
 	}
-
+	
 	fileprivate static func configAlmostOutOfDateCard(
-        state: HolderDashboardViewModel.State,
+		state: HolderDashboardViewModel.State,
 		didTapCallToAction: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
-        guard state.shouldShowConfigurationIsAlmostOutOfDateBanner else { return [] }
+		guard state.shouldShowConfigurationIsAlmostOutOfDateBanner else { return [] }
 		return [
 			.configAlmostOutOfDate(
 				message: L.holderDashboardConfigIsAlmostOutOfDateCardMessage(),
@@ -661,20 +659,20 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 		guard allQRCards.isEmpty && regionFilteredExpiredCards.isEmpty else { return [] }
 		switch validityRegion {
-		case .domestic:
-			return [HolderDashboardViewController.Card.emptyState(
-				image: I.dashboard.domestic(),
-				title: L.holderDashboardEmptyDomesticTitle(),
-				message: L.holderDashboardEmptyDomesticMessage(),
-				buttonTitle: nil
-			)]
-		case .europeanUnion:
-			return [HolderDashboardViewController.Card.emptyState(
-				image: I.dashboard.international(),
-				title: L.holderDashboardEmptyInternationalTitle(),
-				message: L.holderDashboardEmptyInternationalMessage(),
-				buttonTitle: L.holderDashboardEmptyInternationalButton()
-			)]
+			case .domestic:
+				return [HolderDashboardViewController.Card.emptyState(
+					image: I.dashboard.domestic(),
+					title: L.holderDashboardEmptyDomesticTitle(),
+					message: L.holderDashboardEmptyDomesticMessage(),
+					buttonTitle: nil
+				)]
+			case .europeanUnion:
+				return [HolderDashboardViewController.Card.emptyState(
+					image: I.dashboard.international(),
+					title: L.holderDashboardEmptyInternationalTitle(),
+					message: L.holderDashboardEmptyInternationalMessage(),
+					buttonTitle: L.holderDashboardEmptyInternationalButton()
+				)]
 		}
 	}
 	
