@@ -13,12 +13,14 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 	private enum ViewTraits {
 		
 		enum Title {
-			static let lineHeight: CGFloat = 26
+			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
 		
 		enum Spacing {
 			static let title: CGFloat = 24
+			static let message: CGFloat = 16
+			static let icon: CGFloat = 40
 		}
 	}
 	
@@ -33,11 +35,28 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 
 		return TextView()
 	}()
+
+	private let iconView: UIImageView = {
+
+		let view = UIImageView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.contentMode = .center
+		return view
+	}()
+
+	let secondaryButton: Button = {
+
+		let button = Button(title: "", style: .textLabelBlue)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
 	
 	override func setupViews() {
 		super.setupViews()
 		
 		backgroundColor = Theme.colors.viewControllerBackground
+		secondaryButton.addTarget(self, action: #selector(secondaryButtonTapped), for: .touchUpInside)
 		
 		stackView.distribution = .fill
 	}
@@ -46,8 +65,19 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 		super.setupViewHierarchy()
 		
 		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(messageTextView)
 		stackView.setCustomSpacing(ViewTraits.Spacing.title, after: titleLabel)
+		stackView.addArrangedSubview(messageTextView)
+		stackView.setCustomSpacing(ViewTraits.Spacing.message, after: messageTextView)
+		stackView.addArrangedSubview(secondaryButton)
+		stackView.setCustomSpacing(ViewTraits.Spacing.icon, after: secondaryButton)
+		stackView.addArrangedSubview(iconView)
+	}
+
+	// MARK: - Callbacks
+
+	@objc func secondaryButtonTapped() {
+
+		secondaryButtonCommand?()
 	}
 	
 	// MARK: Public Access
@@ -75,4 +105,12 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 			)
 		}
 	}
+
+	var icon: UIImage? {
+		didSet {
+			iconView.image = icon
+		}
+	}
+
+	var secondaryButtonCommand: (() -> Void)?
 }

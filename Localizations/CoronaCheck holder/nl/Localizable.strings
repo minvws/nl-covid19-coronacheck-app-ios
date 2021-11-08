@@ -14,6 +14,14 @@
 "holder.paperproof.notoken.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt aangevraagd bij jouw zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je het papieren bewijs zelf geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
 "holder.paperproof.notoken.action" = "Naar bewijs toevoegen";
 
+"holder.paperproof.startscanning.title" = "Scan de internationale QR-code";
+"holder.paperproof.startscanning.message" = "Scan met de camera van je telefoon alleen de internationale QR-code van je papieren bewijs. Heb je meerdere internationale QR-codes? Doorloop het proces dan nog een keer";
+"holder.paperproof.startscanning.international" = "Waarom alleen internationaal?";
+"holder.paperproof.startscanning.action" = "Start scannen";
+
+"holder.paperproof.internationalQROnly.title" = "Waarom alleen internationaal?";
+"holder.paperproof.internationalQROnly.message" = "In de internationale QR-codes staan genoeg gegevens om ook een Nederlands bewijs te maken.";
+
 "holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Bewijs terugzetten";
 "holder.recoveryvalidityextension.extensioncomplete.title" = "Verlengd herstelbewijs";
 "holder.recoveryvalidityextension.extensioncomplete.description" = "De geldigheid van Nederlandse herstelbewijzen is verlengd. Daardoor is je bewijs nu een jaar geldig vanaf het moment dat je positief bent getest.";

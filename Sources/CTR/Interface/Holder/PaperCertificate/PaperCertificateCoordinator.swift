@@ -20,6 +20,8 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInformationOnNoInputToken()
 
+	func userWishesMoreInformationOnInternationalQROnly()
+
 	func userDidSubmitPaperCertificateToken(token: String)
 
 	func userWantsToGoBackToDashboard()
@@ -107,6 +109,23 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		navigationController.pushViewController(destination, animated: true)
 	}
 
+	func userWishesMoreInformationOnInternationalQROnly() {
+
+		let viewController = InformationViewController(
+			viewModel: InformationViewModel(
+				coordinator: self,
+				title: L.holderPaperproofInternationalQROnlyTitle(),
+				message: L.holderPaperproofInternationalQROnlyMessage(),
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: true)
+				},
+				hideBodyForScreenCapture: false
+			)
+		)
+		presentAsBottomSheet(viewController)
+	}
+
 	func userDidSubmitPaperCertificateToken(token: String) {
 
 		// Store Token
@@ -153,13 +172,13 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userWishesToEnterToken() {
 
-//		userDidSubmitPaperCertificateToken(token: "NDREB5")
+		userDidSubmitPaperCertificateToken(token: "NDREB5")
 
-		let destination = PaperProofInputCouplingCodeViewController(
-			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
-		)
-
-		navigationController.pushViewController(destination, animated: true)
+//		let destination = PaperProofInputCouplingCodeViewController(
+//			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
+//		)
+//
+//		navigationController.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to the scanner
@@ -214,6 +233,11 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 				animated: true
 			)
 		}
+	}
+
+	private func presentAsBottomSheet(_ viewController: UIViewController) {
+
+		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 }
 

@@ -34,19 +34,26 @@ final class PaperProofStartScanningViewController: BaseViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		setupBinding()
-		
+		setupText()
+		setupButtons()
+
+		viewModel.$internationalQROnly.binding = { [weak self] in self?.sceneView.icon = $0 }
+
 		addBackButton()
 	}
-	
-	func setupBinding() {
+
+	func setupText() {
 		
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		
-		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
-		
-		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.primaryButtonTapped() }
+	}
+
+	private func setupButtons() {
+
+		viewModel.$nextButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
+		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.userTappedNextButton() }
+
+		viewModel.$internationalTitle.binding = { [weak self] in self?.sceneView.secondaryButton.title = $0 }
+		sceneView.secondaryButtonCommand = { [weak self] in self?.viewModel.userTappedInternationalButton() }
 	}
 }
