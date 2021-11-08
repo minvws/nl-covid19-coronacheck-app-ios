@@ -157,26 +157,26 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userWishesToEnterToken() {
 
-//		userDidSubmitPaperCertificateToken(token: "NDREB5")
+		userDidSubmitPaperCertificateToken(token: "NDREB5")
 
-		let destination = PaperCertificateTokenEntryViewController(
-			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
-		)
-
-		navigationController.pushViewController(destination, animated: true)
+//		let destination = PaperCertificateTokenEntryViewController(
+//			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
+//		)
+//
+//		navigationController.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to the scanner
 	func userWishesToScanCertificate() {
 
-//		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
+		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
 
-		let destination = PaperCertificateScanViewController(
-			viewModel: PaperCertificateScanViewModel(
-				coordinator: self
-			)
-		)
-		navigationController.pushViewController(destination, animated: true)
+//		let destination = PaperCertificateScanViewController(
+//			viewModel: PaperCertificateScanViewModel(
+//				coordinator: self
+//			)
+//		)
+//		navigationController.pushViewController(destination, animated: true)
 	}
 
 	func userWishesToCreateACertificate(message: String) {

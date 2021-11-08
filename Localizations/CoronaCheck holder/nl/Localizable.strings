@@ -136,9 +136,11 @@
 "holder.dcc.vaccination.country" = "Gevaccineerd in:";
 "holder.dcc.vaccination.issuer" = "Afgever certificaat:";
 "holder.dcc.vaccination.identifier" = "Uniek vaccinatienummer:";
+"holder.dcc.vaccination.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 
 /* MARK: - Paper Certificate Recovery Event */
-"holder.dcc.recovery.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.dcc.recovery.details.title" = "Details";
+"holder.dcc.recovery.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.recovery.name" = "Naam:";
 "holder.dcc.recovery.dateofbirth" = "Geboortedatum:";
 "holder.dcc.recovery.pathogen" = "Ziekte waarvan hersteld:";
@@ -149,9 +151,11 @@
 "holder.dcc.recovery.validfrom" = "Geldig vanaf:";
 "holder.dcc.recovery.validuntil" = "Geldig tot:";
 "holder.dcc.recovery.identifier" = "Uniek testnummer:";
+"holder.dcc.recovery.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 
 /* MARK: - Paper Certificate Test Event */
-"holder.dcc.test.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.dcc.test.details.title" = "Details";
+"holder.dcc.test.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.test.name" = "Naam:";
 "holder.dcc.test.dateofbirth" = "Geboortedatum:";
 "holder.dcc.test.pathogen" = "Ziekteverwekker:";
@@ -165,6 +169,7 @@
 "holder.dcc.test.country" = "Getest in:";
 "holder.dcc.test.issuer" = "Afgever certificaat:";
 "holder.dcc.test.identifier" = "Uniek testnummer:";
+"holder.dcc.test.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 
 "holder.recovery.wrong.body" = "<p>Kloppen er gegevens niet? Neem contact op met je testlocatie. Zij kunnen de gegevens aanpassen.</p>";
 "general.retry" = "Probeer opnieuw";

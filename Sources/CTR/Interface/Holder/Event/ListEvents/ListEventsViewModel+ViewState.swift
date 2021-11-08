@@ -385,8 +385,11 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderEventAboutTitle(),
+						details: details,
+						footer: nil
+					)
 				)
 			}
 		)
@@ -420,8 +423,11 @@ extension ListEventsViewModel {
 			subTitle: subTitle,
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderEventAboutTitle(),
+						details: details,
+						footer: nil
+					)
 				)
 			}
 		)
@@ -524,8 +530,11 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderEventAboutTitle(),
+						details: details,
+						footer: nil
+					)
 				)
 			}
 		)
@@ -570,8 +579,11 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderEventAboutTitle(),
+						details: details,
+						footer: nil
+					)
 				)
 			}
 		)
@@ -626,7 +638,8 @@ extension ListEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderDccVaccinationDetailsTitle(),
-						details: details
+						details: details,
+						footer: L.holderDccVaccinationFooter()
 					)
 				)
 			}
@@ -668,8 +681,11 @@ extension ListEventsViewModel {
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderDccRecoveryDetailsTitle(),
+						details: details,
+						footer: L.holderDccRecoveryFooter()
+					)
 				)
 			}
 		)
@@ -724,8 +740,11 @@ extension ListEventsViewModel {
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderDccTestDetailsTitle(),
+						details: details,
+						footer: L.holderDccTestFooter()
+					)
 				)
 			}
 		)
@@ -811,8 +830,11 @@ private extension ListEventsViewModel {
 				]
 				
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderEventAboutTitle(),
+						details: details,
+						footer: nil
+					)
 				)
 			}
 		)
