@@ -13,14 +13,14 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 	var sut: PaperCertificateCoordinator!
 	var cryptoSpy: CryptoManagerSpy!
-	var flowSpy: PaperCertificateFlowDelegateSpy!
+	var flowSpy: PaperProofFlowDelegateSpy!
 	var navigationSpy: NavigationControllerSpy!
 
 	override func setUp() {
 
 		super.setUp()
 		cryptoSpy = CryptoManagerSpy()
-		flowSpy = PaperCertificateFlowDelegateSpy()
+		flowSpy = PaperProofFlowDelegateSpy()
 		navigationSpy = NavigationControllerSpy()
 
 		Services.use(cryptoSpy)
@@ -46,7 +46,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.flowSpy.invokedAddCertificateFlowDidFinish) == false
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token).to(beNil())
 		expect(self.sut.scannedQR).to(beNil())
 	}
@@ -60,7 +60,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.flowSpy.invokedAddCertificateFlowDidFinish) == false
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token) == "test"
 		expect(self.sut.scannedQR).to(beNil())
 	}
@@ -76,7 +76,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
-		expect(self.flowSpy.invokedAddCertificateFlowDidFinish) == true
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
 		expect(self.sut.token).to(beNil())
 		expect(self.sut.scannedQR).to(beNil())
 	}
@@ -90,7 +90,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.flowSpy.invokedAddCertificateFlowDidFinish) == false
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token).to(beNil())
 		expect(self.sut.scannedQR).to(beNil())
 	}
@@ -105,7 +105,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
-		expect(self.flowSpy.invokedAddCertificateFlowDidFinish) == false
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token).to(beNil())
 		expect(self.sut.scannedQR) == "test"
 	}
@@ -120,7 +120,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.flowSpy.invokedAddCertificateFlowDidFinish) == false
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token) == "test"
 		expect(self.sut.scannedQR) == "test"
 	}
@@ -129,7 +129,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 		// Given
 		navigationSpy.viewControllers = [
-			PaperCertificateStartViewController(viewModel: PaperCertificateStartViewModel(coordinator: sut)),
+			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
 			PaperCertificateTokenEntryViewController(viewModel: PaperCertificateTokenEntryViewModel(coordinator: sut)),
 			PaperCertificateScanViewController(viewModel: PaperCertificateScanViewModel(coordinator: sut))
 		]
@@ -150,7 +150,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 		// Given
 		navigationSpy.viewControllers = [
-			PaperCertificateStartViewController(viewModel: PaperCertificateStartViewModel(coordinator: sut))
+			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut))
 		]
 
 		// When
@@ -190,7 +190,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		sut.scannedQR = "test"
 		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 		navigationSpy.viewControllers = [
-			PaperCertificateStartViewController(viewModel: PaperCertificateStartViewModel(coordinator: sut)),
+			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
 			PaperCertificateTokenEntryViewController(viewModel: PaperCertificateTokenEntryViewModel(coordinator: sut)),
 			PaperCertificateScanViewController(viewModel: PaperCertificateScanViewModel(coordinator: sut))
 		]
@@ -199,7 +199,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		sut.eventFlowDidCancel()
 
 		// Then
-		expect(self.flowSpy.invokedAddCertificateFlowDidFinish) == false
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token).to(beNil())
 		expect(self.sut.scannedQR).to(beNil())
 		expect(self.sut.childCoordinators).to((haveCount(0)))
@@ -218,20 +218,28 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		sut.eventFlowDidComplete()
 
 		// Then
-		expect(self.flowSpy.invokedAddCertificateFlowDidFinish) == true
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
 		expect(self.sut.token).to(beNil())
 		expect(self.sut.scannedQR).to(beNil())
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 	}
 }
 
-class PaperCertificateFlowDelegateSpy: PaperCertificateFlowDelegate {
+class PaperProofFlowDelegateSpy: PaperProofFlowDelegate {
 
-	var invokedAddCertificateFlowDidFinish = false
-	var invokedAddCertificateFlowDidFinishCount = 0
+	var invokedAddPaperProofFlowDidFinish = false
+	var invokedAddPaperProofFlowDidFinishCount = 0
 
-	func addCertificateFlowDidFinish() {
-		invokedAddCertificateFlowDidFinish = true
-		invokedAddCertificateFlowDidFinishCount += 1
+	func addPaperProofFlowDidFinish() {
+		invokedAddPaperProofFlowDidFinish = true
+		invokedAddPaperProofFlowDidFinishCount += 1
+	}
+
+	var invokedSwitchToAddRegularProof = false
+	var invokedSwitchToAddRegularProofCount = 0
+
+	func switchToAddRegularProof() {
+		invokedSwitchToAddRegularProof = true
+		invokedSwitchToAddRegularProofCount += 1
 	}
 }
