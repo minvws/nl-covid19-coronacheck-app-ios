@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -42,17 +41,7 @@ final class FetchEventsViewModel: Logging {
 		self.tvsToken = tvsToken
 		self.eventMode = eventMode
 
-		viewState = .loading(
-			content: Content(
-				title: eventMode.title,
-				subTitle: nil,
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
-
+		viewState = .loading(content: Content(title: eventMode.title))
 		fetchEventProvidersWithAccessTokens(completion: handleFetchEventProvidersWithAccessTokensResponse)
 	}
 

@@ -7,19 +7,21 @@
 
 import UIKit
 
-final class PaperCertificateStartView: ScrolledStackWithButtonView {
+final class PaperProofStartView: ScrolledStackWithButtonView {
 	
 	/// The display constants
 	private enum ViewTraits {
 		
 		enum Title {
-			static let lineHeight: CGFloat = 26
+			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
 		
 		enum Spacing {
 			static let title: CGFloat = 24
-			static let messageLabel: CGFloat = 32
+			static let messageToItems: CGFloat = 40
+			static let items: CGFloat = 40
+			static let itemsToButton: CGFloat = 40
 		}
 	}
 	
@@ -34,25 +36,58 @@ final class PaperCertificateStartView: ScrolledStackWithButtonView {
 
 		return TextView()
 	}()
-	
-	private let highlightedMessageLabel = RoundedLabel()
-	
+
+	/// The stack view for the menu items
+	let itemStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .fill
+		view.distribution = .fill
+		view.spacing = ViewTraits.Spacing.items
+		return view
+	}()
+
+	let secondaryButton: Button = {
+
+		let button = Button(title: "", style: .textLabelBlue)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+
 	override func setupViews() {
+
 		super.setupViews()
 		
 		backgroundColor = Theme.colors.viewControllerBackground
+		secondaryButton.addTarget(self, action: #selector(secondaryButtonTapped), for: .touchUpInside)
 		
 		stackView.distribution = .fill
 	}
 	
 	override func setupViewHierarchy() {
+
 		super.setupViewHierarchy()
-		
+
+		// Elements
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageTextView)
-		stackView.addArrangedSubview(highlightedMessageLabel)
+		stackView.addArrangedSubview(itemStackView)
+		stackView.addArrangedSubview(secondaryButton)
+
+		// Spacing
 		stackView.setCustomSpacing(ViewTraits.Spacing.title, after: titleLabel)
-		stackView.setCustomSpacing(ViewTraits.Spacing.messageLabel, after: messageTextView)
+		stackView.setCustomSpacing(ViewTraits.Spacing.messageToItems, after: messageTextView)
+		stackView.setCustomSpacing(ViewTraits.Spacing.itemsToButton, after: itemStackView)
+	}
+
+	// MARK: - Callbacks
+
+	@objc func secondaryButtonTapped() {
+
+		secondaryButtonCommand?()
 	}
 	
 	// MARK: Public Access
@@ -73,11 +108,6 @@ final class PaperCertificateStartView: ScrolledStackWithButtonView {
 			messageTextView.attributedText = .makeFromHtml(text: message, style: .bodyDark)
 		}
 	}
-	
-	/// The highlighted message shown in rounded label
-	var highlightedMessage: String? {
-		didSet {
-			highlightedMessageLabel.message = highlightedMessage
-		}
-	}
+
+	var secondaryButtonCommand: (() -> Void)?
 }

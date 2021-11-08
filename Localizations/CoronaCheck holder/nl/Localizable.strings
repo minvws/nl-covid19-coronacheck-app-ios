@@ -1,3 +1,16 @@
+"holder.paperproof.start.title" = "Papieren bewijzen toevoegen";
+"holder.paperproof.start.message" = "Je kunt een papieren bewijs aan de app toevoegen als je hem op de volgende manier hebt gekregen:";
+"holder.paperproof.start.provider.title" = "Gekregen van een zorgverlener";
+"holder.paperproof.start.provider.message" = "Bijvoorbeeld je huisarts of je zorginstelling heeft dit voor je geprint";
+"holder.paperproof.start.mail.title" = "Opgestuurd per post";
+"holder.paperproof.start.mail.message" = "De overheid heeft je het bewijs opgestuurd per post";
+"holder.paperproof.start.selfprinted" = "Zelf je bewijs uitgeprint?";
+
+"holder.paperproof.selfprinted.title" = "Zelf je bewijs uitgeprint?";
+"holder.paperproof.selfprinted.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je kunt wel je bewijs toevoegen aan de app met behulp van DigiD. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
+"holder.paperproof.selfprinted.action" = "Naar bewijs toevoegen";
+
+
 "holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Bewijs terugzetten";
 "holder.recoveryvalidityextension.extensioncomplete.title" = "Verlengd herstelbewijs";
 "holder.recoveryvalidityextension.extensioncomplete.description" = "De geldigheid van Nederlandse herstelbewijzen is verlengd. Daardoor is je bewijs nu een jaar geldig vanaf het moment dat je positief bent getest.";

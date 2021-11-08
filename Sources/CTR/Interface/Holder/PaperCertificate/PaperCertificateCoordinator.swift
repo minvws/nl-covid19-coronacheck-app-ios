@@ -7,12 +7,16 @@
 
 import UIKit
 
-protocol PaperCertificateFlowDelegate: AnyObject {
+protocol PaperProofFlowDelegate: AnyObject {
 	
-	func addCertificateFlowDidFinish()
+	func addPaperProofFlowDidFinish()
+
+	func switchToAddRegularProof()
 }
 
 protocol PaperCertificateCoordinatorDelegate: AnyObject {
+
+	func userWishesMoreInformationOnSelfPrintedProof()
 
 	func userDidSubmitPaperCertificateToken(token: String)
 
@@ -41,7 +45,7 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	
 	var navigationController: UINavigationController = UINavigationController()
 
-	private weak var delegate: PaperCertificateFlowDelegate?
+	private weak var delegate: PaperProofFlowDelegate?
 
 	var token: String?
 
@@ -50,7 +54,7 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	/// Initializer
 	/// - Parameters:
 	///   - delegate: flow delegate
-	init(delegate: PaperCertificateFlowDelegate) {
+	init(delegate: PaperProofFlowDelegate) {
 		
 		self.delegate = delegate
 	}
@@ -66,6 +70,24 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 }
 
 extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
+
+	func userWishesMoreInformationOnSelfPrintedProof() {
+
+		let viewModel = PaperProofContentViewModel(
+			content: Content(
+				title: L.holderPaperproofSelfprintedTitle(),
+				subTitle: L.holderPaperproofSelfprintedMessage(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holderPaperproofSelfprintedAction(),
+				secondaryAction: { [weak self] in
+					self?.delegate?.switchToAddRegularProof()
+				}
+			)
+		)
+		let destination = PaperProofContentViewController(viewModel: viewModel)
+		navigationController.pushViewController(destination, animated: true)
+	}
 
 	func userDidSubmitPaperCertificateToken(token: String) {
 
@@ -107,7 +129,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 		scannedQR = nil
 		token = nil
-		delegate?.addCertificateFlowDidFinish()
+		delegate?.addPaperProofFlowDidFinish()
 	}
 
 	func userWantsToGoBackToTokenEntry() {
@@ -218,14 +240,14 @@ extension PaperCertificateCoordinator: EventFlowDelegate {
 	func eventFlowDidComplete() {
 
 		cleanup()
-		delegate?.addCertificateFlowDidFinish()
+		delegate?.addPaperProofFlowDidFinish()
 	}
 
 	func eventFlowDidCancel() {
 
 		cleanup()
 		if let viewController = navigationController.viewControllers
-			.first(where: { $0 is PaperCertificateStartViewController }) {
+			.first(where: { $0 is PaperProofStartViewController }) {
 
 			navigationController.popToViewController(
 				viewController,
