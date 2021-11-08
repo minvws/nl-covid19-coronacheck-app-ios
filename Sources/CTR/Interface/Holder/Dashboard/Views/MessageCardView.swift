@@ -16,13 +16,12 @@ class MessageCardView: BaseView {
 		static let cornerRadius: CGFloat = 15
 		static let shadowRadius: CGFloat = 10
 		static let shadowOpacity: Float = 0.15
-		static let buttonSize: CGFloat = 20
-		static let imageWidth: CGFloat = 30
-		static let imageHeight: CGFloat = 32
-
+		static let closeButtonSize: CGFloat = 16
+        
 		// Margins
-		static let margin: CGFloat = 24.0
-		
+		static let margin: CGFloat = 24
+        static let verticalPadding: CGFloat = 8
+        static let closeButtonTopMargin: CGFloat = 27
 		// Label
 		static let lineHeight: CGFloat = 22
 		static let kerning: CGFloat = -0.41
@@ -128,28 +127,28 @@ class MessageCardView: BaseView {
 
         var constraints = [NSLayoutConstraint]()
         
-        constraints += [titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 24)]
-        constraints += [titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24)]
+        constraints += [titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
+        constraints += [titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
         
         if nil != config.closeButtonCommand {
-            constraints += [closeButton.topAnchor.constraint(equalTo: topAnchor, constant: 27)]
-            constraints += [closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24)]
-            constraints += [closeButton.heightAnchor.constraint(equalToConstant: 16)]
-            constraints += [closeButton.widthAnchor.constraint(equalToConstant: 16)]
+            constraints += [closeButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.verticalPadding)]
+            constraints += [closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
+            constraints += [closeButton.heightAnchor.constraint(equalToConstant: ViewTraits.closeButtonSize)]
+            constraints += [closeButton.widthAnchor.constraint(equalToConstant: ViewTraits.closeButtonSize)]
             
-            constraints += [titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -8)]
+            constraints += [titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -ViewTraits.verticalPadding)]
         } else {
-            constraints += [titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24)]
+            constraints += [titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
         }
         
         if nil != config.ctaButton {
-            constraints += [callToActionButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24)]
-            constraints += [callToActionButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -24)]
-            constraints += [callToActionButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8)]
-            constraints += [callToActionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)]
+            constraints += [callToActionButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
+            constraints += [callToActionButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -ViewTraits.margin)]
+            constraints += [callToActionButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewTraits.verticalPadding)]
+            constraints += [callToActionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
             
         } else {
-            constraints += [titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)]
+            constraints += [titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
         }
         
         NSLayoutConstraint.activate(constraints)
