@@ -25,4 +25,20 @@ struct Content: Equatable {
 			lhs.primaryActionTitle == rhs.primaryActionTitle &&
 			lhs.secondaryActionTitle == rhs.secondaryActionTitle
 	}
+
+	init(
+		title: String,
+		subTitle: String? = nil,
+		primaryActionTitle: String? = nil,
+		primaryAction: (() -> Void)? = nil,
+		secondaryActionTitle: String? = nil,
+		secondaryAction: (() -> Void)? = nil) {
+			
+		self.title = title
+		self.subTitle = subTitle
+		self.primaryActionTitle = primaryActionTitle
+		self.primaryAction = primaryAction
+		self.secondaryActionTitle = secondaryActionTitle
+		self.secondaryAction = secondaryAction
+	}
 }

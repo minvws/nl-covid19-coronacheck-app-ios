@@ -16,61 +16,70 @@ class MessageCardView: BaseView {
 		static let cornerRadius: CGFloat = 15
 		static let shadowRadius: CGFloat = 10
 		static let shadowOpacity: Float = 0.15
-		static let buttonSize: CGFloat = 20
-		static let imageWidth: CGFloat = 30
-		static let imageHeight: CGFloat = 32
-
+		static let closeButtonSize: CGFloat = 16
+        
 		// Margins
-		static let margin: CGFloat = 24.0
-		
+		static let margin: CGFloat = 24
+        static let verticalPadding: CGFloat = 8
+        static let closeButtonTopMargin: CGFloat = 27
 		// Label
 		static let lineHeight: CGFloat = 22
 		static let kerning: CGFloat = -0.41
 	}
-
-	/// The title label
+    
+    struct Config {
+        
+        var title: String
+        var closeButtonCommand: (() -> Void)?
+        var ctaButton: ((title: String, command: () -> Void))?
+    }
+    
+    private let config: Config
+    private let closeButtonTappedCommand: (() -> Void)?
+    private let callToActionButtonTappedCommand: (() -> Void)?
+    
+    required init(config: Config) {
+        self.config = config
+        titleLabel.attributedText = config.title.setLineHeight(ViewTraits.lineHeight, kerning: ViewTraits.kerning)
+        
+        closeButtonTappedCommand = config.closeButtonCommand
+        
+        callToActionButton.title = config.ctaButton?.title
+        callToActionButtonTappedCommand = config.ctaButton?.command
+        
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// The title label (- within `messageWithCloseButtonStackView`)
 	private let titleLabel: Label = {
-
-        return Label(body: nil).multiline().header()
+        let titleLabel = Label(body: nil).multiline().header()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        return titleLabel
 	}()
 
-	/// The close button
+	/// The close button (- within `messageWithCloseButtonStackView`)
 	private let closeButton: TappableButton = {
 
 		let button = TappableButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.setImage(I.smallCross(), for: .normal)
+		button.setImage(I.bannerCross(), for: .normal)
 		button.contentHorizontalAlignment = .center
-		button.isHidden = true
 		return button
 	}()
 
-	/// The callToAction button
+	/// The callToAction button (-within `callToActionButtonStackView`)
 	private let callToActionButton: Button = {
 
-		let button = Button(title: "CTA!", style: Button.ButtonType.textLabelBlue)
+		let button = Button(title: "CTA", style: Button.ButtonType.textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentHorizontalAlignment = .leading
-		button.isHidden = true
 		return button
 	}()
-
-	private let messageWithCloseButtonStackView: UIStackView = {
-
-		let stackView = UIStackView()
-		stackView.alignment = .top
-		stackView.translatesAutoresizingMaskIntoConstraints = false
-		stackView.spacing = 8
-		return stackView
-	}()
-
-	private let callToActionButtonStackView: UIStackView = {
-
-		let stackView = UIStackView()
-		stackView.translatesAutoresizingMaskIntoConstraints = false
-		return stackView
-	}()
-
+    
 	/// Setup all the views
 	override func setupViews() {
 
@@ -100,14 +109,15 @@ class MessageCardView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-
-		addSubview(messageWithCloseButtonStackView)
-		addSubview(callToActionButtonStackView)
-
-		messageWithCloseButtonStackView.addArrangedSubview(titleLabel)
-		messageWithCloseButtonStackView.addArrangedSubview(closeButton)
-
-		callToActionButtonStackView.addArrangedSubview(callToActionButton)
+        
+        addSubview(titleLabel)
+        
+        if nil != config.closeButtonCommand {
+            addSubview(closeButton)
+        }
+        if nil != config.ctaButton {
+            addSubview(callToActionButton)
+        }
 	}
 
 	/// Setup the constraints
@@ -115,21 +125,37 @@ class MessageCardView: BaseView {
 
 		super.setupViewConstraints()
 
-		NSLayoutConstraint.activate([
-			messageWithCloseButtonStackView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
-			messageWithCloseButtonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-			messageWithCloseButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
-
-			messageWithCloseButtonStackView.bottomAnchor.constraint(equalTo: callToActionButtonStackView.topAnchor, constant: -10),
-
-			callToActionButtonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-			callToActionButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
-			callToActionButtonStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
-
-			closeButton.widthAnchor.constraint(equalToConstant: 42)
-		])
+        var constraints = [NSLayoutConstraint]()
+        
+        constraints += [titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
+        constraints += [titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
+        
+        if nil != config.closeButtonCommand {
+            constraints += [closeButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.verticalPadding)]
+            constraints += [closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
+            constraints += [closeButton.heightAnchor.constraint(equalToConstant: ViewTraits.closeButtonSize)]
+            constraints += [closeButton.widthAnchor.constraint(equalToConstant: ViewTraits.closeButtonSize)]
+            
+            constraints += [titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -ViewTraits.verticalPadding)]
+        } else {
+            constraints += [titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
+        }
+        
+        if nil != config.ctaButton {
+            constraints += [callToActionButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
+            constraints += [callToActionButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -ViewTraits.margin)]
+            constraints += [callToActionButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewTraits.verticalPadding)]
+            constraints += [callToActionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
+            
+        } else {
+            constraints += [titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
+        }
+        
+        NSLayoutConstraint.activate(constraints)
 	}
 
+    // MARK: - Objc Target-Action callbacks:
+    
 	/// User tapped on the close button
 	@objc func closeButtonTapped() {
 
@@ -140,36 +166,5 @@ class MessageCardView: BaseView {
 	@objc func callToActionButtonTapped() {
 
 		callToActionButtonTappedCommand?()
-	}
-
-	// MARK: Public Access
-
-	/// The title
-	var title: String? {
-		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.lineHeight,
-															 kerning: ViewTraits.kerning)
-		}
-	}
-
-	/// The title
-	var callToActionButtonText: String? {
-		didSet {
-			callToActionButton.title = callToActionButtonText
-		}
-	}
-
-	/// The user tapped on the close button
-	var closeButtonTappedCommand: (() -> Void)? {
-		didSet {
-			closeButton.isHidden = closeButtonTappedCommand == nil
-		}
-	}
-
-	/// The user tapped on the callToAction button
-	var callToActionButtonTappedCommand: (() -> Void)? {
-		didSet {
-			callToActionButton.isHidden = callToActionButtonTappedCommand == nil
-		}
 	}
 }

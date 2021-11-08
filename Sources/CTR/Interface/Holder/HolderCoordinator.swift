@@ -581,7 +581,7 @@ extension HolderCoordinator: MenuDelegate {
 				
 			case .addPaperCertificate:
 				let coordinator = PaperCertificateCoordinator(delegate: self)
-				let destination = PaperCertificateStartViewController(viewModel: .init(coordinator: coordinator))
+				let destination = PaperProofStartViewController(viewModel: .init(coordinator: coordinator))
 				navigationController = UINavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController
 				startChildCoordinator(coordinator)
@@ -654,13 +654,18 @@ extension HolderCoordinator: EventFlowDelegate {
 	}
 }
 
-extension HolderCoordinator: PaperCertificateFlowDelegate {
+extension HolderCoordinator: PaperProofFlowDelegate {
 	
-	func addCertificateFlowDidFinish() {
+	func addPaperProofFlowDidFinish() {
 		
 		removeChildCoordinator()
-		
 		navigateToDashboard()
+	}
+
+	func switchToAddRegularProof() {
+
+		removeChildCoordinator()
+		openMenuItem(.addCertificate)
 	}
 }
 
