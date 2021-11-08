@@ -126,3 +126,9 @@
 
 /* MARK: - Verifier Risk Setting */
 "verifier.risksetting.title" = "Risico instelling";
+"verifier.risksetting.header.menuentry" = "Geef aan of je op een hoog of laag risico plek gaat scannen.";
+"verifier.risksetting.lowrisk.title" = "Laag risico";
+"verifier.risksetting.lowrisk.subtitle" = "Bijvoorbeeld een museum, dierentuin of winkel, koffiehuis";
+"verifier.risksetting.highrisk.title" = "Hoog risico";
+"verifier.risksetting.highrisk.subtitle" = "Bijvoorbeeld een bar, nachtclub of plek waar veel mensen dichtbij elkaar komen";
+"verifier.risksetting.readmore" = "Ik weet het niet zeker";

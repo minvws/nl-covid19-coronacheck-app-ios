@@ -74,7 +74,7 @@ final class RiskSettingView: BaseView {
 		scrollView.addSubview(moreButton)
 		
 		riskControlStackView.addArrangedSubview(lowRiskControl)
-//		riskControlStackView.addArrangedSubview(highRiskControl)
+		riskControlStackView.addArrangedSubview(highRiskControl)
 	}
 	
 	override func setupViewConstraints() {
@@ -119,6 +119,36 @@ final class RiskSettingView: BaseView {
 			headerLabel.attributedText = header?.setLineHeight(ViewTraits.Header.lineHeight,
 															   kerning: ViewTraits.Header.kerning,
 															   textColor: Theme.colors.dark)
+		}
+	}
+	
+	var lowRiskTitle: String? {
+		didSet {
+			lowRiskControl.title = lowRiskTitle
+		}
+	}
+	
+	var lowRiskSubtitle: String? {
+		didSet {
+			lowRiskControl.subtitle = lowRiskSubtitle
+		}
+	}
+	
+	var highRiskTitle: String? {
+		didSet {
+			highRiskControl.title = highRiskTitle
+		}
+	}
+	
+	var highRiskSubtitle: String? {
+		didSet {
+			highRiskControl.subtitle = highRiskSubtitle
+		}
+	}
+	
+	var moreButtonTitle: String? {
+		didSet {
+			moreButton.title = moreButtonTitle
 		}
 	}
 }

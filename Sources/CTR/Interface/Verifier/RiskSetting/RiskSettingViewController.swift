@@ -34,5 +34,13 @@ final class RiskSettingViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+		
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$header.binding = { [weak self] in self?.sceneView.header = $0 }
+		viewModel.$lowRiskTitle.binding = { [weak self] in self?.sceneView.lowRiskTitle = $0 }
+		viewModel.$lowRiskSubtitle.binding = { [weak self] in self?.sceneView.lowRiskSubtitle = $0 }
+		viewModel.$highRiskTitle.binding = { [weak self] in self?.sceneView.highRiskTitle = $0 }
+		viewModel.$highRiskSubtitle.binding = { [weak self] in self?.sceneView.highRiskSubtitle = $0 }
+		viewModel.$moreButtonTitle.binding = { [weak self] in self?.sceneView.moreButtonTitle = $0 }
 	}
 }
