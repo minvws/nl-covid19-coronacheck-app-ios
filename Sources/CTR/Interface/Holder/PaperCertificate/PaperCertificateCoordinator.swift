@@ -172,13 +172,13 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userWishesToEnterToken() {
 
-		userDidSubmitPaperCertificateToken(token: "NDREB5")
+//		userDidSubmitPaperCertificateToken(token: "NDREB5")
 
-//		let destination = PaperProofInputCouplingCodeViewController(
-//			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
-//		)
-//
-//		navigationController.pushViewController(destination, animated: true)
+		let destination = PaperProofInputCouplingCodeViewController(
+			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
+		)
+
+		navigationController.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to the scanner
