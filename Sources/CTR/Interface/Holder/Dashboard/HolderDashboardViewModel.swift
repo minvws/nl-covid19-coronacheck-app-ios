@@ -58,6 +58,8 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowRecoveryValidityExtensionCompleteBanner: Bool = false
 		var shouldShowRecoveryValidityReinstationCompleteBanner: Bool = false
 		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
+		
+		var shouldShowIncompleteDutchVaccinationBanner: Bool = true
 	}
 
 	// MARK: - Private properties
@@ -466,10 +468,18 @@ final class HolderDashboardViewModel: Logging {
 			validityRegion: validityRegion,
 			now: now,
 			didTapCallToAction: { originType in
-				coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
-					originType: originType,
-					currentRegion: validityRegion,
-					availableRegion: validityRegion.opposite)
+				
+				switch (originType, validityRegion) {
+					// special case, has it's own screen:
+					case (.vaccination, .domestic):
+						coordinatorDelegate.userWishesMoreInfoAboutIncompleteDutchVaccination()
+					
+					default:
+						coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
+							originType: originType,
+							currentRegion: validityRegion,
+							availableRegion: validityRegion.opposite)
+				}
 			}
 		)
 
@@ -513,17 +523,17 @@ extension HolderDashboardViewController.Card {
 		}
 	}
 
-	fileprivate static func deviceHasClockDeviationCard(deviceHasClockDeviation: Bool, hasQRCards: Bool, didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		guard deviceHasClockDeviation && hasQRCards else { return [] }
-		return [
-			.deviceHasClockDeviation(
-				message: L.holderDashboardClockDeviationDetectedMessage(),
-				callToActionButtonText: L.generalReadmore(),
-				didTapCallToAction: didTapCallToAction
-			)
-		]
-	}
-	
+    fileprivate static func deviceHasClockDeviationCard(deviceHasClockDeviation: Bool, hasQRCards: Bool, didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+        guard deviceHasClockDeviation && hasQRCards else { return [] }
+        return [
+            .deviceHasClockDeviation(
+                message: L.holderDashboardClockDeviationDetectedMessage(),
+                callToActionButtonText: L.generalReadmore(),
+                didTapCallToAction: didTapCallToAction
+            )
+        ]
+    }
+
 	fileprivate static func configAlmostOutOfDateCard(
 		state: HolderDashboardViewModel.State,
 		didTapCallToAction: @escaping () -> Void
