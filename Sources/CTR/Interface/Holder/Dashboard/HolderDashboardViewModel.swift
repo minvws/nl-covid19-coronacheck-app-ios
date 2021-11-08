@@ -540,79 +540,79 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 
-    fileprivate static func multipleDCCMigrationCards(
-        validityRegion: QRCodeValidityRegion,
-        state: HolderDashboardViewModel.State,
-        coordinatorDelegate: HolderCoordinatorDelegate,
-        userSettings: UserSettingsProtocol
-    ) -> [HolderDashboardViewController.Card] {
-        
-        guard validityRegion == .europeanUnion else { return [] }
-        
-        if state.shouldShowEUVaccinationUpdateBanner {
-            return HolderDashboardViewController.Card.multipleDCCMigrationUpdateCard(
-                didTapCallToAction: { [weak coordinatorDelegate] in
-                    coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
-                }
-            )
-        } else if state.shouldShowEUVaccinationUpdateCompletedBanner {
-            return HolderDashboardViewController.Card.multipleDCCMigrationUpdateCompletedCard(
-                didTapCallToAction: { [weak coordinatorDelegate] in
-                    coordinatorDelegate?.presentInformationPage(
-                        title: L.holderEuvaccinationswereupgradedTitle(),
-                        body: L.holderEuvaccinationswereupgradedMessage(),
-                        hideBodyForScreenCapture: false,
-                        openURLsInApp: true)
-                },
-                didTapClose: {
-                    userSettings.didDismissEUVaccinationMigrationSuccessBanner = true
-                }
-            )
-        }
-        return []
-    }
-    
-    fileprivate static func recoveryValidityCards(
-        validityRegion: QRCodeValidityRegion,
-        state: HolderDashboardViewModel.State,
-        coordinatorDelegate: HolderCoordinatorDelegate
-    ) -> [HolderDashboardViewController.Card] {
-        guard validityRegion == .domestic else { return [] }
-        
-        if state.shouldShowRecoveryValidityExtensionAvailableBanner {
-            return HolderDashboardViewController.Card.recoveryValidityExtensionAvailableBanner {
-                coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityExtension()
-            }
-        } else if state.shouldShowRecoveryValidityReinstationAvailableBanner {
-            return HolderDashboardViewController.Card.recoveryValidityReinstationAvailableBanner {
-                coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityReinstation()
-            }
-        } else if state.shouldShowRecoveryValidityExtensionCompleteBanner {
-            return HolderDashboardViewController.Card.recoveryValidityExtensionCompleteBanner {
-                coordinatorDelegate.presentInformationPage(
-                    title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
-                    body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
-                    hideBodyForScreenCapture: false,
-                    openURLsInApp: true
-                )
-            } didTapClose: {
-                UserSettings().hasDismissedRecoveryValidityExtensionCompletionCard = true
-            }
-        } else if state.shouldShowRecoveryValidityReinstationCompleteBanner {
-            return HolderDashboardViewController.Card.recoveryValidityReinstationCompleteBanner {
-                coordinatorDelegate.presentInformationPage(
-                    title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
-                    body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
-                    hideBodyForScreenCapture: false,
-                    openURLsInApp: true
-                )
-            } didTapClose: {
-                UserSettings().hasDismissedRecoveryValidityReinstationCompletionCard = true
-            }
-        }
-        return []
-    }
-    
+	fileprivate static func multipleDCCMigrationCards(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		coordinatorDelegate: HolderCoordinatorDelegate,
+		userSettings: UserSettingsProtocol
+	) -> [HolderDashboardViewController.Card] {
+		
+		guard validityRegion == .europeanUnion else { return [] }
+		
+		if state.shouldShowEUVaccinationUpdateBanner {
+			return HolderDashboardViewController.Card.multipleDCCMigrationUpdateCard(
+				didTapCallToAction: { [weak coordinatorDelegate] in
+					coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
+				}
+			)
+		} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
+			return HolderDashboardViewController.Card.multipleDCCMigrationUpdateCompletedCard(
+				didTapCallToAction: { [weak coordinatorDelegate] in
+					coordinatorDelegate?.presentInformationPage(
+						title: L.holderEuvaccinationswereupgradedTitle(),
+						body: L.holderEuvaccinationswereupgradedMessage(),
+						hideBodyForScreenCapture: false,
+						openURLsInApp: true)
+				},
+				didTapClose: {
+					userSettings.didDismissEUVaccinationMigrationSuccessBanner = true
+				}
+			)
+		}
+		return []
+	}
+	
+	fileprivate static func recoveryValidityCards(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		coordinatorDelegate: HolderCoordinatorDelegate
+	) -> [HolderDashboardViewController.Card] {
+		guard validityRegion == .domestic else { return [] }
+		
+		if state.shouldShowRecoveryValidityExtensionAvailableBanner {
+			return HolderDashboardViewController.Card.recoveryValidityExtensionAvailableBanner {
+				coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityExtension()
+			}
+		} else if state.shouldShowRecoveryValidityReinstationAvailableBanner {
+			return HolderDashboardViewController.Card.recoveryValidityReinstationAvailableBanner {
+				coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityReinstation()
+			}
+		} else if state.shouldShowRecoveryValidityExtensionCompleteBanner {
+			return HolderDashboardViewController.Card.recoveryValidityExtensionCompleteBanner {
+				coordinatorDelegate.presentInformationPage(
+					title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
+					body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
+					hideBodyForScreenCapture: false,
+					openURLsInApp: true
+				)
+			} didTapClose: {
+				UserSettings().hasDismissedRecoveryValidityExtensionCompletionCard = true
+			}
+		} else if state.shouldShowRecoveryValidityReinstationCompleteBanner {
+			return HolderDashboardViewController.Card.recoveryValidityReinstationCompleteBanner {
+				coordinatorDelegate.presentInformationPage(
+					title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
+					body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
+					hideBodyForScreenCapture: false,
+					openURLsInApp: true
+				)
+			} didTapClose: {
+				UserSettings().hasDismissedRecoveryValidityReinstationCompletionCard = true
+			}
+		}
+		return []
+	}
+	
 	fileprivate static func multipleDCCMigrationUpdateCard(
 		didTapCallToAction: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
@@ -624,7 +624,7 @@ extension HolderDashboardViewController.Card {
 			)
 		]
 	}
-
+	
 	fileprivate static func multipleDCCMigrationUpdateCompletedCard(
 		didTapCallToAction: @escaping () -> Void,
 		didTapClose: @escaping () -> Void
@@ -638,7 +638,7 @@ extension HolderDashboardViewController.Card {
 			)
 		]
 	}
-
+	
 	fileprivate static func expiredQRCard(
 		regionFilteredExpiredCards: [HolderDashboardViewModel.ExpiredQR],
 		didTapClose: @escaping (HolderDashboardViewModel.ExpiredQR) -> Void
@@ -649,11 +649,11 @@ extension HolderDashboardViewController.Card {
 					localizedRegion: expiredQR.region.localizedAdjective,
 					localizedOriginType: expiredQR.type.localizedProof
 				)
-
+				
 				return .expiredQR(message: message, didTapClose: { didTapClose(expiredQR) })
 			}
 	}
-
+	
 	fileprivate static func emptyStateCard(
 		validityRegion: QRCodeValidityRegion,
 		allQRCards: [HolderDashboardViewModel.QRCard],
@@ -661,23 +661,23 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 		guard allQRCards.isEmpty && regionFilteredExpiredCards.isEmpty else { return [] }
 		switch validityRegion {
-			case .domestic:
-				return [HolderDashboardViewController.Card.emptyState(
-					image: I.dashboard.domestic(),
-					title: L.holderDashboardEmptyDomesticTitle(),
-					message: L.holderDashboardEmptyDomesticMessage(),
-					buttonTitle: nil
-				)]
-			case .europeanUnion:
-				return [HolderDashboardViewController.Card.emptyState(
-					image: I.dashboard.international(),
-					title: L.holderDashboardEmptyInternationalTitle(),
-					message: L.holderDashboardEmptyInternationalMessage(),
-					buttonTitle: L.holderDashboardEmptyInternationalButton()
-				)]
+		case .domestic:
+			return [HolderDashboardViewController.Card.emptyState(
+				image: I.dashboard.domestic(),
+				title: L.holderDashboardEmptyDomesticTitle(),
+				message: L.holderDashboardEmptyDomesticMessage(),
+				buttonTitle: nil
+			)]
+		case .europeanUnion:
+			return [HolderDashboardViewController.Card.emptyState(
+				image: I.dashboard.international(),
+				title: L.holderDashboardEmptyInternationalTitle(),
+				message: L.holderDashboardEmptyInternationalMessage(),
+				buttonTitle: L.holderDashboardEmptyInternationalButton()
+			)]
 		}
 	}
-
+	
 	/// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 	/// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
 	fileprivate static func originNotValidInThisRegion(
@@ -686,7 +686,7 @@ extension HolderDashboardViewController.Card {
 		now: Date,
 		didTapCallToAction: @escaping (QRCodeOriginType) -> Void
 	) -> [HolderDashboardViewController.Card] {
-
+		
 		return localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: qrCards, thisRegion: validityRegion, now: now)
 			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
 			.map { originType, message in
@@ -697,7 +697,7 @@ extension HolderDashboardViewController.Card {
 				)
 			}
 	}
-
+	
 	fileprivate static func recoveryValidityExtensionAvailableBanner(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
 		return [.recoveryValidityExtensionAvailableBanner(
 			title: L.holderDashboardRecoveryvalidityextensionExtensionavailableBannerTitle(),
@@ -705,7 +705,7 @@ extension HolderDashboardViewController.Card {
 			didTapCallToAction: didTapCallToAction
 		)]
 	}
-
+	
 	fileprivate static func recoveryValidityReinstationAvailableBanner(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
 		return [.recoveryValidityExtensionAvailableBanner(
 			title: L.holderDashboardRecoveryvalidityextensionReinstationavailableBannerTitle(),
@@ -713,7 +713,7 @@ extension HolderDashboardViewController.Card {
 			didTapCallToAction: didTapCallToAction
 		)]
 	}
-
+	
 	fileprivate static func recoveryValidityExtensionCompleteBanner(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
 		return [.recoveryValidityExtensionDidCompleteBanner(
 			title: L.holderDashboardRecoveryvalidityextensionExtensioncompleteBannerTitle(),
