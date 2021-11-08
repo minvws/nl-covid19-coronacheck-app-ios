@@ -101,13 +101,16 @@
 "holder.checkdcc.rejected.actionTitle" = "Probeer opnieuw";
 "holder.dcc.alert.message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder.event.originmismatch.dcc.body" = "Op dit moment kunnen we van jouw gescande QR-code geen bewijs maken. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a>";
-"holder.dcc.list.title" = "Opgehaalde gegevens";
-"holder.dcc.list.message" = "Met de gegevens die zijn opgehaald kun je een QR-code maken. Dat is jouw bewijs.";
+"holder.dcc.list.title" = "Gescande gegevens";
+"holder.dcc.list.message" = "Met deze gegevens kun je een bewijs maken. De app maakt een Nederlands en een internationaal bewijs.";
 "holder.dcc.element.subtitle" = "<p>Naam: %@</p><p>Geboortedatum: %@</p>";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
+"holder.dcc.list.action" = "Bewijs toevoegen";
 
 /* MARK: - Paper Certificate Vaccination Event */
-"holder.dcc.vaccination.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.dcc.vaccination.list.title" = "Vaccinatiebewijs dosis %@/%@";
+"holder.dcc.vaccination.details.title" = "Details";
+"holder.dcc.vaccination.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.vaccination.name" = "Naam:";
 "holder.dcc.vaccination.dateofbirth" = "Geboortedatum:";
 "holder.dcc.vaccination.pathogen" = "Ziekteverwekker:";
