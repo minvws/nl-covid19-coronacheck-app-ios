@@ -169,9 +169,11 @@ class HolderDashboardViewController: BaseViewController {
 						
 					// Message Cards with only a message + close button
 					case let .expiredQR(message, didTapCloseAction):
-						let messageCard = MessageCardView()
-						messageCard.title = message
-						messageCard.closeButtonTappedCommand = didTapCloseAction
+                        let messageCard = MessageCardView(config: .init(
+                            title: message,
+                            closeButtonCommand: didTapCloseAction,
+                            ctaButton: nil
+                        ))
 						return messageCard
 
 					// Message Cards with a message + CTA button
@@ -181,20 +183,21 @@ class HolderDashboardViewController: BaseViewController {
 						 let .recoveryValidityExtensionAvailableBanner(message, callToActionButtonText, didTapCallToAction),
 						 let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction):
 
-						let messageCard = MessageCardView()
-						messageCard.title = message
-						messageCard.callToActionButtonText = callToActionButtonText
-						messageCard.callToActionButtonTappedCommand = didTapCallToAction
+                        let messageCard = MessageCardView(config: .init(
+                            title: message,
+                            closeButtonCommand: nil,
+                            ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
+                        ))
 						return messageCard
 
 					case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
 						 let .recoveryValidityExtensionDidCompleteBanner(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 						
-						let messageCard = MessageCardView()
-						messageCard.title = message
-						messageCard.callToActionButtonText = callToActionButtonText
-						messageCard.callToActionButtonTappedCommand = didTapCallToAction
-						messageCard.closeButtonTappedCommand = didTapCloseAction
+                        let messageCard = MessageCardView(config: .init(
+                            title: message,
+                            closeButtonCommand: didTapCloseAction,
+                            ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
+                        ))
 						return messageCard
 
 					case let .emptyState(image, title, message, buttonTitle):
