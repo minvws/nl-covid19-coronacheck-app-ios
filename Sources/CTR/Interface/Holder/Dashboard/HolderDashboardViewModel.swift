@@ -415,91 +415,41 @@ final class HolderDashboardViewModel: Logging {
 		// We'll add to this:
 		var viewControllerCards = [HolderDashboardViewController.Card]()
 
-		viewControllerCards += HolderDashboardViewController.Card.headerCard(validityRegion: validityRegion, allQRCards: allQRCards, regionFilteredExpiredCards: regionFilteredExpiredCards)
+		viewControllerCards += HolderDashboardViewController.Card.headerCard(
+            validityRegion: validityRegion,
+            allQRCards: allQRCards,
+            regionFilteredExpiredCards: regionFilteredExpiredCards)
 
 		viewControllerCards += HolderDashboardViewController.Card.deviceHasClockDeviationCard(
 			deviceHasClockDeviation: state.deviceHasClockDeviation,
 			hasQRCards: !allQRCards.isEmpty,
 			didTapCallToAction: { [weak coordinatorDelegate] in
 				coordinatorDelegate?.userWishesMoreInfoAboutClockDeviation()
-			}
-		)
+            })
 
-		if state.shouldShowConfigurationIsAlmostOutOfDateBanner {
-			viewControllerCards += HolderDashboardViewController.Card.configAlmostOutOfDateCard(
-				didTapCallToAction: { [weak coordinatorDelegate] in
+        viewControllerCards += HolderDashboardViewController.Card.configAlmostOutOfDateCard(
+            state: state,
+            didTapCallToAction: { [weak coordinatorDelegate] in
+                guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
+                      let timeToLive = remoteConfigManager.storedConfiguration.configTTL else { return }
 
-					guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
-						  let timeToLive = remoteConfigManager.storedConfiguration.configTTL else { return }
-
-					let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLive))
-					let configValidUntilDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: configValidUntilDate)
-					coordinatorDelegate?.userWishesMoreInfoAboutOutdatedConfig(validUntil: configValidUntilDateString)
-				}
-			)
-		}
+                let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLive))
+                let configValidUntilDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: configValidUntilDate)
+                coordinatorDelegate?.userWishesMoreInfoAboutOutdatedConfig(validUntil: configValidUntilDateString)
+            })
 
 		// Multiple DCC migration banners:
-		if validityRegion == .europeanUnion {
-			if state.shouldShowEUVaccinationUpdateBanner {
-				viewControllerCards += HolderDashboardViewController.Card.multipleDCCMigrationUpdateCard(
-					didTapCallToAction: { [weak coordinatorDelegate] in
-						coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
-					}
-				)
-			} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
-				viewControllerCards += HolderDashboardViewController.Card.multipleDCCMigrationUpdateCompletedCard(
-					didTapCallToAction: { [weak coordinatorDelegate] in
-						coordinatorDelegate?.presentInformationPage(
-							title: L.holderEuvaccinationswereupgradedTitle(),
-							body: L.holderEuvaccinationswereupgradedMessage(),
-							hideBodyForScreenCapture: false,
-							openURLsInApp: true)
-					},
-					didTapClose: {
-						userSettings.didDismissEUVaccinationMigrationSuccessBanner = true
-					}
-				)
-			}
-		}
+        viewControllerCards += HolderDashboardViewController.Card.multipleDCCMigrationCards(
+            validityRegion: validityRegion,
+            state: state,
+            coordinatorDelegate: coordinatorDelegate,
+            userSettings: userSettings)
 
-		if validityRegion == .domestic {
-			viewControllerCards += {
-				if state.shouldShowRecoveryValidityExtensionAvailableBanner {
-					return HolderDashboardViewController.Card.recoveryValidityExtensionAvailableBanner {
-						coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityExtension()
-					}
-				} else if state.shouldShowRecoveryValidityReinstationAvailableBanner {
-					return HolderDashboardViewController.Card.recoveryValidityReinstationAvailableBanner {
-						coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityReinstation()
-					}
-				} else if state.shouldShowRecoveryValidityExtensionCompleteBanner {
-					return HolderDashboardViewController.Card.recoveryValidityExtensionCompleteBanner {
-						coordinatorDelegate.presentInformationPage(
-							title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
-							body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
-							hideBodyForScreenCapture: false,
-							openURLsInApp: true
-						)
-					} didTapClose: {
-						UserSettings().hasDismissedRecoveryValidityExtensionCompletionCard = true
-					}
-				} else if state.shouldShowRecoveryValidityReinstationCompleteBanner {
-					return HolderDashboardViewController.Card.recoveryValidityReinstationCompleteBanner {
-						coordinatorDelegate.presentInformationPage(
-							title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
-							body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
-							hideBodyForScreenCapture: false,
-							openURLsInApp: true
-						)
-					} didTapClose: {
-						UserSettings().hasDismissedRecoveryValidityReinstationCompletionCard = true
-					}
-				}
-				return []
-			}()
-
-		}
+        viewControllerCards += HolderDashboardViewController.Card.recoveryValidityCards(
+            validityRegion: validityRegion,
+            state: state,
+            coordinatorDelegate: coordinatorDelegate
+        )
 
 		viewControllerCards += HolderDashboardViewController.Card.expiredQRCard(
 			regionFilteredExpiredCards: regionFilteredExpiredCards,
@@ -577,8 +527,10 @@ extension HolderDashboardViewController.Card {
 	}
 
 	fileprivate static func configAlmostOutOfDateCard(
+        state: HolderDashboardViewModel.State,
 		didTapCallToAction: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
+        guard state.shouldShowConfigurationIsAlmostOutOfDateBanner else { return [] }
 		return [
 			.configAlmostOutOfDate(
 				message: L.holderDashboardConfigIsAlmostOutOfDateCardMessage(),
@@ -588,6 +540,79 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 
+    fileprivate static func multipleDCCMigrationCards(
+        validityRegion: QRCodeValidityRegion,
+        state: HolderDashboardViewModel.State,
+        coordinatorDelegate: HolderCoordinatorDelegate,
+        userSettings: UserSettingsProtocol
+    ) -> [HolderDashboardViewController.Card] {
+        
+        guard validityRegion == .europeanUnion else { return [] }
+        
+        if state.shouldShowEUVaccinationUpdateBanner {
+            return HolderDashboardViewController.Card.multipleDCCMigrationUpdateCard(
+                didTapCallToAction: { [weak coordinatorDelegate] in
+                    coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
+                }
+            )
+        } else if state.shouldShowEUVaccinationUpdateCompletedBanner {
+            return HolderDashboardViewController.Card.multipleDCCMigrationUpdateCompletedCard(
+                didTapCallToAction: { [weak coordinatorDelegate] in
+                    coordinatorDelegate?.presentInformationPage(
+                        title: L.holderEuvaccinationswereupgradedTitle(),
+                        body: L.holderEuvaccinationswereupgradedMessage(),
+                        hideBodyForScreenCapture: false,
+                        openURLsInApp: true)
+                },
+                didTapClose: {
+                    userSettings.didDismissEUVaccinationMigrationSuccessBanner = true
+                }
+            )
+        }
+        return []
+    }
+    
+    fileprivate static func recoveryValidityCards(
+        validityRegion: QRCodeValidityRegion,
+        state: HolderDashboardViewModel.State,
+        coordinatorDelegate: HolderCoordinatorDelegate
+    ) -> [HolderDashboardViewController.Card] {
+        guard validityRegion == .domestic else { return [] }
+        
+        if state.shouldShowRecoveryValidityExtensionAvailableBanner {
+            return HolderDashboardViewController.Card.recoveryValidityExtensionAvailableBanner {
+                coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityExtension()
+            }
+        } else if state.shouldShowRecoveryValidityReinstationAvailableBanner {
+            return HolderDashboardViewController.Card.recoveryValidityReinstationAvailableBanner {
+                coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityReinstation()
+            }
+        } else if state.shouldShowRecoveryValidityExtensionCompleteBanner {
+            return HolderDashboardViewController.Card.recoveryValidityExtensionCompleteBanner {
+                coordinatorDelegate.presentInformationPage(
+                    title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
+                    body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
+                    hideBodyForScreenCapture: false,
+                    openURLsInApp: true
+                )
+            } didTapClose: {
+                UserSettings().hasDismissedRecoveryValidityExtensionCompletionCard = true
+            }
+        } else if state.shouldShowRecoveryValidityReinstationCompleteBanner {
+            return HolderDashboardViewController.Card.recoveryValidityReinstationCompleteBanner {
+                coordinatorDelegate.presentInformationPage(
+                    title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
+                    body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
+                    hideBodyForScreenCapture: false,
+                    openURLsInApp: true
+                )
+            } didTapClose: {
+                UserSettings().hasDismissedRecoveryValidityReinstationCompletionCard = true
+            }
+        }
+        return []
+    }
+    
 	fileprivate static func multipleDCCMigrationUpdateCard(
 		didTapCallToAction: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
