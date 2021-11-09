@@ -30,6 +30,9 @@ final class RiskSettingControl: UIControl {
 			static let lineHeight: CGFloat = 18
 			static let kerning: CGFloat = -0.24
 		}
+		enum Colors {
+			static let highlighted = UIColor(white: 0.98, alpha: 1)
+		}
 	}
 	
 	private let iconImageView: UIImageView = {
@@ -114,8 +117,14 @@ final class RiskSettingControl: UIControl {
 		}
 	}
 	
+	override var isHighlighted: Bool {
+		didSet {
+			backgroundColor = isHighlighted ? ViewTraits.Colors.highlighted : Theme.colors.viewControllerBackground
+		}
+	}
+	
 	@objc private func toggle() {
-		isSelected.toggle()
+		isSelected = true
 		onTapCommand?()
 	}
 	
