@@ -180,12 +180,12 @@ class HolderDashboardViewController: BaseViewController {
 						let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
 						let .recoveryValidityExtensionAvailableBanner(message, callToActionButtonText, didTapCallToAction),
 						let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction):
-
-                        let messageCard = MessageCardView(config: .init(
-                            title: message,
-                            closeButtonCommand: nil,
-                            ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
-                        ))
+						
+						let messageCard = MessageCardView(config: .init(
+							title: message,
+							closeButtonCommand: nil,
+							ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
+						))
 						return messageCard
 
 					case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),

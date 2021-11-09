@@ -523,16 +523,16 @@ extension HolderDashboardViewController.Card {
 		}
 	}
 
-    fileprivate static func deviceHasClockDeviationCard(deviceHasClockDeviation: Bool, hasQRCards: Bool, didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-        guard deviceHasClockDeviation && hasQRCards else { return [] }
-        return [
-            .deviceHasClockDeviation(
-                message: L.holderDashboardClockDeviationDetectedMessage(),
-                callToActionButtonText: L.generalReadmore(),
-                didTapCallToAction: didTapCallToAction
-            )
-        ]
-    }
+	fileprivate static func deviceHasClockDeviationCard(deviceHasClockDeviation: Bool, hasQRCards: Bool, didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+		guard deviceHasClockDeviation && hasQRCards else { return [] }
+		return [
+			.deviceHasClockDeviation(
+				message: L.holderDashboardClockDeviationDetectedMessage(),
+				callToActionButtonText: L.generalReadmore(),
+				didTapCallToAction: didTapCallToAction
+			)
+		]
+	}
 
 	fileprivate static func configAlmostOutOfDateCard(
 		state: HolderDashboardViewModel.State,
