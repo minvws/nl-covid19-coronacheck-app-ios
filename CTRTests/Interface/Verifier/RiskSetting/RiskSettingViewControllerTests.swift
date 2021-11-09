@@ -16,7 +16,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 	// MARK: Subject under test
 	private var sut: RiskSettingViewController!
 	
-	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
+	private var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
 	private var viewModel: RiskSettingViewModel!
 	private var userSettingsSpy: UserSettingsSpy!
 	
@@ -25,7 +25,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 	override  func setUp() {
 		super.setUp()
 		
-		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
+		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
 	}
 	
@@ -41,7 +41,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanRiskSettingValue = .low
 		viewModel = RiskSettingViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
+			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
 		)
 		sut = RiskSettingViewController(viewModel: viewModel)
@@ -64,7 +64,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanRiskSettingValue = .low
 		viewModel = RiskSettingViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
+			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
 		)
 		sut = RiskSettingViewController(viewModel: viewModel)
@@ -83,7 +83,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanRiskSettingValue = .high
 		viewModel = RiskSettingViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
+			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
 		)
 		sut = RiskSettingViewController(viewModel: viewModel)

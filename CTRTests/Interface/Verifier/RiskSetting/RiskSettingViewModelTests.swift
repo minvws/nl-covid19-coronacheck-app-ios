@@ -16,17 +16,17 @@ final class RiskSettingViewModelTests: XCTestCase {
 	private var sut: RiskSettingViewModel!
 	
 	/// The coordinator spy
-	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
+	private var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	
 	override func setUp() {
 		super.setUp()
-		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
+		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
 		userSettingsSpy.stubbedScanRiskSettingValue = .low
 		
 		sut = RiskSettingViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
+			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
 		)
 	}
@@ -40,8 +40,8 @@ final class RiskSettingViewModelTests: XCTestCase {
 		sut.showReadMore()
 		
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedOpenUrl) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifierRisksettingReadmoreUrl()
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifierRisksettingReadmoreUrl()
 	}
 	
 	func test_bindings() {

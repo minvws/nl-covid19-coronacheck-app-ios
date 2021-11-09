@@ -14,6 +14,8 @@ protocol ScanInstructionsCoordinatorDelegate: AnyObject {
 
 	/// User pressed back on first page, thus cancelling this flow
 	func userDidCancelScanInstructions()
+	
+	func userWishesToSelectRiskSetting()
 }
 
 protocol ScanInstructionsDelegate: AnyObject {
@@ -21,7 +23,7 @@ protocol ScanInstructionsDelegate: AnyObject {
 	func scanInstructionsDidFinish()
 }
 
-class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordinatorDelegate {
+class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordinatorDelegate, OpenUrlProtocol {
 
 	weak var delegate: ScanInstructionsDelegate?
 
@@ -60,6 +62,13 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 
 	func userDidCancelScanInstructions() {
 		delegate?.scanInstructionsWasCancelled()
+	}
+	
+	func userWishesToSelectRiskSetting() {
+		let viewModel = RiskSettingViewModel(coordinator: self,
+											 userSettings: UserSettings())
+		let viewController = RiskSettingViewController(viewModel: viewModel)
+		navigationController.pushViewController(viewController, animated: true)
 	}
 
 	// MARK: - Universal Link handling

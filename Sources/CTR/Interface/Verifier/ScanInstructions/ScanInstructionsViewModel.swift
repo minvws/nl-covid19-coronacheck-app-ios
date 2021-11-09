@@ -55,6 +55,15 @@ class ScanInstructionsViewModel {
 	
 	func finishScanInstructions() {
 		
+		if userSettings.scanInstructionShown {
+			coordinator?.userDidCompletePages()
+		} else {
+			coordinator?.userWishesToSelectRiskSetting()
+		}
+	}
+	
+	func finishSelectRiskSetting() {
+		
 		coordinator?.userDidCompletePages()
 	}
 
@@ -72,11 +81,11 @@ class ScanInstructionsViewModel {
 			guard !userSettings.scanInstructionShown else { return false }
 			return currentPage < (pages.count - 1)
 		}()
-
-		nextButtonTitle = {
-			currentPage < (pages.count - 1)
-				? L.generalNext()
-				: L.verifierScaninstructionsButtonStartscanning()
-		}()
+		
+		if currentPage == (pages.count - 1), userSettings.scanInstructionShown {
+			nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
+		} else {
+			nextButtonTitle = L.generalNext()
+		}
 	}
 }
