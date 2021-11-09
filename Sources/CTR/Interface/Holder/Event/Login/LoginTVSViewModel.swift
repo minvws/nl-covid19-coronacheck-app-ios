@@ -35,15 +35,7 @@ class LoginTVSViewModel: Logging {
 		self.appAuthState = appAuthState
 
 		self.title = eventMode.title
-
-		content = Content(
-			title: title,
-			subTitle: nil,
-			primaryActionTitle: nil,
-			primaryAction: nil,
-			secondaryActionTitle: nil,
-			secondaryAction: nil
-		)
+		content = Content( title: eventMode.title)
 	}
 
 	func cancel() {
