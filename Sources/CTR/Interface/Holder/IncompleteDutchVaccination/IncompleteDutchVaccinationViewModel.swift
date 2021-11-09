@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class IncompleteDutchCertificateViewModel: Logging {
+final class IncompleteDutchVaccinationViewModel: Logging {
 	
 	@Bindable private(set) var title: String
 	@Bindable private(set) var secondVaccineText: String

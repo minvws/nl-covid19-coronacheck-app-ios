@@ -7,14 +7,14 @@
 
 import UIKit
 
-class IncompleteDutchCertificateViewController: BaseViewController {
+class IncompleteDutchVaccinationViewController: BaseViewController {
 	
-	private let viewModel: IncompleteDutchCertificateViewModel
-	private let sceneView = IncompleteDutchCertificateView()
+	private let viewModel: IncompleteDutchVaccinationViewModel
+	private let sceneView = IncompleteDutchVaccinationView()
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: IncompleteDutchCertificateViewModel) {
+	init(viewModel: IncompleteDutchVaccinationViewModel) {
 		
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

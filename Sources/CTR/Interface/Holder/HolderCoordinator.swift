@@ -473,8 +473,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
-		let viewModel = IncompleteDutchCertificateViewModel()
-		let viewController = IncompleteDutchCertificateViewController(viewModel: viewModel)
+		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
+		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 	

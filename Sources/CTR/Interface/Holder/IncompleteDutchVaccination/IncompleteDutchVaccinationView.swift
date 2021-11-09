@@ -7,7 +7,7 @@
 
 import UIKit
 
-class IncompleteDutchCertificateView: ScrolledStackWithButtonView {
+class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 	
 	/// The display constants
 	private struct ViewTraits {
