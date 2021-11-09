@@ -247,16 +247,17 @@ class ListEventsViewModel: Logging {
 		if eventModeForStorage == .vaccination,
 		   greencardResponse.domesticGreenCard == nil,
 		   let euCards = greencardResponse.euGreenCards, euCards.count == 1 {
-			logDebug("Only a single international Greencard.")
-		}
-
-		// All Good -> finish
-		self.coordinator?.listEventsScreenDidFinish(
-			.continue(
-				value: nil,
-				eventMode: self.eventMode
+			shouldPrimaryButtonBeEnabled = true
+			viewState = internationalQROnly()
+		} else {
+			// All Good -> finish
+			self.coordinator?.listEventsScreenDidFinish(
+				.continue(
+					value: nil,
+					eventMode: self.eventMode
+				)
 			)
-		)
+		}
 	}
 
 	func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
