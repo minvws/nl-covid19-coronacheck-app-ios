@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PaperCertificateTokenEntryViewModel {
+final class PaperProofInputCouplingCodeViewModel {
 
 	enum Config {
 		static let requiredTokenLength = 6
@@ -110,11 +110,6 @@ final class PaperCertificateTokenEntryViewModel {
 
 	func userHasNoTokenButtonTapped() {
 
-		coordinator?.presentInformationPage(
-			title: L.holderDcctokenentryinfoTitle(),
-			body: L.holderDcctokenentryinfoBody(),
-			hideBodyForScreenCapture: false
-		)
+		coordinator?.userWishesMoreInformationOnNoInputToken()
 	}
-
 }

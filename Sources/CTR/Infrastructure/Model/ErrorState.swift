@@ -53,6 +53,17 @@ struct ErrorCode: CustomStringConvertible {
 		}
 		return result
 	}
+
+	static func getFlowFromEventMode(_ eventMode: EventMode) -> Flow {
+
+		switch eventMode {
+			case .paperflow: return .hkvi
+			case .positiveTest: return .positiveTest
+			case .recovery: return .recovery
+			case .test: return .ggdTest
+			case .vaccination: return .vaccination
+		}
+	}
 }
 
 // The values are documented in the coordination repo:
@@ -70,6 +81,7 @@ extension ErrorCode.Flow {
 	static let hkvi = ErrorCode.Flow(value: "5")
 	static let qr = ErrorCode.Flow(value: "6")
 	static let upgradeEUVaccination = ErrorCode.Flow(value: "7")
+	static let positiveTest = ErrorCode.Flow(value: "8")
 }
 
 // MARK: ErrorCode.Step (Startup)

@@ -105,7 +105,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		// Arrange `expiring` starting state
 		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(()), ())
+		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -145,7 +145,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 2
 
 		// Fix network
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(()), ())
+		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
 
 		sut.load()
@@ -178,7 +178,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		// simulate reachability restoration
 
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(()), ())
+		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
 
 		// Callback is set on `invokedWhenReachable`:
@@ -214,7 +214,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 2
 
 		// Fix network
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(()), ())
+		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
 
 		sut.load()
@@ -228,7 +228,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_serverResponseDidNotChangeExpiredOrExpiringState() {
 		// Arrange
 		walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(()), ())
+		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -304,7 +304,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 2
 
 		// Fix network
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(()), ())
+		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
 
 		sut.load()
@@ -341,7 +341,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 2
 
 		// Fix network
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(()), ())
+		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
 
 		sut.load()
@@ -375,7 +375,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		// simulate reachability restoration
 
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(()), ())
+		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
 
 		// Callback is set on `invokedWhenReachable`:
@@ -433,4 +433,31 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 0
 		expect(self.greencardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentials) == true
 	}
+
+	let validGreenCardResponse = RemoteGreenCards.Response(
+		domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+			origins: [
+				RemoteGreenCards.Origin(
+					type: "vaccination",
+					eventTime: Date(),
+					expirationTime: Date().addingTimeInterval(60 * days * fromNow),
+					validFrom: Date()
+				)
+			],
+			createCredentialMessages: "validGreenCardResponse"
+		),
+		euGreenCards: [
+			RemoteGreenCards.EuGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "vaccination",
+						eventTime: Date(),
+						expirationTime: Date().addingTimeInterval(60 * days * fromNow),
+						validFrom: Date()
+					)
+				],
+				credential: "validGreenCardResponse"
+			)
+		]
+	)
 }

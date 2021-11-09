@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PaperCertificateTokenEntryView: ScrolledStackWithButtonView {
+class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 	
 	/// The display constants
 	private struct ViewTraits {

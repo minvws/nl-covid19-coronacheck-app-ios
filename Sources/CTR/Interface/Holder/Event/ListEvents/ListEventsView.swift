@@ -158,4 +158,8 @@ class ListEventsView: ScrolledStackWithButtonView {
 			eventStackView.isHidden = hideForCapture
 		}
 	}
+
+	func setEventStackVisibility(ishidden: Bool) {
+		eventStackView.isHidden = ishidden
+	}
 }

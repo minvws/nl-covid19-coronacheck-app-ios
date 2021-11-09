@@ -30,7 +30,7 @@ extension ListEventsViewModel {
 
 				case .recovery:
 					return L.holderRecoveryWrongBody()
-				case .test:
+				case .test, .positiveTest:
 					return L.holderTestresultsWrongBody()
 				case .vaccination:
 					return L.holderVaccinationWrongBody()
