@@ -130,7 +130,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
-			PaperCertificateTokenEntryViewController(viewModel: PaperCertificateTokenEntryViewModel(coordinator: sut)),
+			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
 			PaperCertificateScanViewController(viewModel: PaperCertificateScanViewModel(coordinator: sut))
 		]
 		sut.scannedQR = "test"
@@ -191,7 +191,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 		navigationSpy.viewControllers = [
 			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
-			PaperCertificateTokenEntryViewController(viewModel: PaperCertificateTokenEntryViewModel(coordinator: sut)),
+			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
 			PaperCertificateScanViewController(viewModel: PaperCertificateScanViewModel(coordinator: sut))
 		]
 

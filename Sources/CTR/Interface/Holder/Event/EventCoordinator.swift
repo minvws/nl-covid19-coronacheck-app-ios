@@ -92,7 +92,7 @@ enum EventScreenResult: Equatable {
 	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
 	
 	/// Show event details
-	case showEventDetails(title: String, details: [EventDetails])
+	case showEventDetails(title: String, details: [EventDetails], footer: String?)
 
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
@@ -114,8 +114,8 @@ enum EventScreenResult: Equatable {
 					}
 				}
 				return true
-			case (let showEventDetails(lhsTitle, lhsDetails), let showEventDetails(rhsTitle, rhsDetails)):
-				return (lhsTitle, lhsDetails) == (rhsTitle, rhsDetails)
+			case (let showEventDetails(lhsTitle, lhsDetails, lhsFooter), let showEventDetails(rhsTitle, rhsDetails, rhsFooter)):
+				return (lhsTitle, lhsDetails, lhsFooter) == (rhsTitle, rhsDetails, rhsFooter)
 
 			case (let errorRequiringRestart(lhsMode), let errorRequiringRestart(rhsMode)):
 				return lhsMode == rhsMode
@@ -281,13 +281,14 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		presentAsBottomSheet(viewController)
 	}
 	
-	private func navigateToEventDetails(_ title: String, details: [EventDetails]) {
+	private func navigateToEventDetails(_ title: String, details: [EventDetails], footer: String?) {
 		
 		let viewController = EventDetailsViewController(
 			viewModel: EventDetailsViewModel(
 				coordinator: self,
 				title: title,
 				details: details,
+				footer: footer,
 				hideBodyForScreenCapture: true
 			)
 		)
@@ -435,8 +436,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				displayError(content: content, backAction: backAction)
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
-			case let .showEventDetails(title, details):
-				navigateToEventDetails(title, details: details)
+			case let .showEventDetails(title, details, footer):
+				navigateToEventDetails(title, details: details, footer: footer)
 			default:
 				break
 		}
