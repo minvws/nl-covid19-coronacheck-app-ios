@@ -58,8 +58,6 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowRecoveryValidityExtensionCompleteBanner: Bool = false
 		var shouldShowRecoveryValidityReinstationCompleteBanner: Bool = false
 		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
-		
-		var shouldShowIncompleteDutchVaccinationBanner: Bool = true
 	}
 
 	// MARK: - Private properties
