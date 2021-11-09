@@ -17,7 +17,11 @@ final class IncompleteDutchCertificateViewModel: Logging {
 	@Bindable private(set) var addVaccinesButtonTitle: String
 	@Bindable private(set) var addTestResultsButtonTitle: String
 	
-	init() {
+	private weak var coordinatorDelegate: HolderCoordinatorDelegate?
+	
+	init(coordinatorDelegate: HolderCoordinatorDelegate?) {
+		self.coordinatorDelegate = coordinatorDelegate
+ 
 		title = L.holderIncompletedutchvaccinationTitle()
 		secondVaccineText = L.holderIncompletedutchvaccinationParagraphSecondvaccine()
 		coronaBeforeFirstVaccineText = L.holderIncompletedutchvaccinationParagraphCoronabeforefirstvaccine()
