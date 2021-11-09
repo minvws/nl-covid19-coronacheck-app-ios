@@ -53,7 +53,7 @@ final class MigrateEUVaccinationViewModel: Logging {
 	}
 
 	private func handleGreenCardResult(
-		_ result: Result<Void, Error>,
+		_ result: Result<RemoteGreenCards.Response, Error>,
 		onSuccess: @escaping () -> Void) {
 
 			switch result {

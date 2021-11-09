@@ -65,14 +65,11 @@ extension ListEventsViewModel {
 	private func emptyEventsState() -> ListEventsViewController.State {
 
 		switch eventMode {
-			case .recovery:
-				return emptyRecoveryState()
-			case .test:
-				return emptyTestState()
-			case .vaccination:
-				return emptyVaccinationState()
-			case .paperflow:
-				return emptyDccState()
+			case .paperflow: return emptyDccState()
+			case .positiveTest: return emptyTestState()
+			case .recovery: return emptyRecoveryState()
+			case .test: return emptyTestState()
+			case .vaccination: return emptyVaccinationState()
 		}
 	}
 
@@ -148,7 +145,7 @@ extension ListEventsViewModel {
 				subTitle: L.holderRecoveryTooOldMessage(days),
 				primaryActionTitle: L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
 				},
 				secondaryActionTitle: nil,
 				secondaryAction: nil
@@ -164,7 +161,7 @@ extension ListEventsViewModel {
 				subTitle: eventMode.originsMismatchBody,
 				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
 				},
 				secondaryActionTitle: nil,
 				secondaryAction: nil
@@ -749,6 +746,24 @@ extension ListEventsViewModel {
 			}
 		)
 	}
+
+	// MARK: international QR Only
+
+	internal func internationalQROnly() -> ListEventsViewController.State {
+
+		return .feedback(
+			content: Content(
+				title: L.holderVaccinationInternationlQROnlyTitle(),
+				subTitle: L.holderVaccinationInternationlQROnlyMessage(),
+				primaryActionTitle: L.holderVaccinationNolistAction(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: L.holderVaccinationInternationlQROnlyAction(),
+				secondaryAction: nil
+			)
+		)
+	}
 }
 
 // MARK: Test 2.0
@@ -763,10 +778,12 @@ private extension ListEventsViewModel {
 				subTitle: L.holderTestresultsPendingText(),
 				primaryActionTitle: L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
 				},
 				secondaryActionTitle: nil,
-				secondaryAction: nil
+				secondaryAction: { [weak self] in
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
+				}
 			)
 		)
 	}

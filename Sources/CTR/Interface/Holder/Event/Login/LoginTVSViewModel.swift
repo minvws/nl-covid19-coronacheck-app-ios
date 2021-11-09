@@ -93,7 +93,13 @@ extension LoginTVSViewModel {
 		if let error = error {
 			if  error.localizedDescription.contains("login_required") {
 				logDebug("Server busy")
-				displayServerBusy(errorCode: ErrorCode(flow: flow, step: .tvs, errorCode: "429"))
+				displayServerBusy(
+					errorCode: ErrorCode(
+						flow: ErrorCode.getFlowFromEventMode(eventMode),
+						step: .tvs,
+						errorCode: "429"
+					)
+				)
 				return
 			} else if error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
 				logDebug("User cancelled")
@@ -103,7 +109,11 @@ extension LoginTVSViewModel {
 				switch networkError {
 					case .serverUnreachableTimedOut, .serverUnreachableConnectionLost, .serverUnreachableInvalidHost:
 
-						let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: networkError.getClientErrorCode() ?? .unhandled)
+						let errorCode = ErrorCode(
+							flow: ErrorCode.getFlowFromEventMode(eventMode),
+							step: .tvs,
+							clientCode: networkError.getClientErrorCode() ?? .unhandled
+						)
 						self.displayUnreachable(errorCode: errorCode)
 						return
 					default:
@@ -112,7 +122,11 @@ extension LoginTVSViewModel {
 			}
 		}
 
-		let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: clientCode ?? ErrorCode.ClientCode(value: "000"))
+		let errorCode = ErrorCode(
+			flow: ErrorCode.getFlowFromEventMode(eventMode),
+			step: .tvs,
+			clientCode: clientCode ?? ErrorCode.ClientCode(value: "000")
+		)
 		self.displayErrorCode(errorCode: errorCode)
 	}
 
@@ -356,14 +370,11 @@ extension LoginTVSViewModel {
 	private var flow: ErrorCode.Flow {
 
 		switch eventMode {
-			case .vaccination:
-				return .vaccination
-			case .paperflow:
-				return .hkvi
-			case .recovery:
-				return .recovery
-			case .test:
-				return .ggdTest
+			case .paperflow: return .hkvi
+			case .positiveTest: return .positiveTest
+			case .recovery: return .recovery
+			case .test: return .ggdTest
+			case .vaccination: return .vaccination
 		}
 	}
 }

@@ -10,6 +10,14 @@
 "holder.paperproof.selfprinted.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je kunt wel je bewijs toevoegen aan de app met behulp van DigiD. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
 "holder.paperproof.selfprinted.action" = "Naar bewijs toevoegen";
 
+"holder.vaccination.internationlQROnly.title" = "Er is alleen een internationaal bewijs gemaakt";
+"holder.vaccination.internationlQROnly.message" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je meer dan één prik hebben gehad, of hersteld zijn van corona voor je eerste prik.</p><p><b>Krijg je nog een tweede prik?</b><br />Voeg opnieuw een vaccinatiebewijs toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan ook een Nederlands bewijs.</p>";
+"holder.vaccination.internationlQROnly.action" = "Haal mijn testuitslag op";
+
+"holder.positiveTest.start.title" = "Gegevens van je positieve test ophalen";
+"holder.positiveTest.start.message" = "Log in met DigiD. De gegevens van je positieve test worden dan automatisch opgehaald.";
+"holder.positiveTest.fetch.title" = "Testuitslag ophalen";
+
 "holder.paperproof.notoken.title" = "Geen lettercombinatie?";
 "holder.paperproof.notoken.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt aangevraagd bij jouw zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je het papieren bewijs zelf geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
 "holder.paperproof.notoken.action" = "Naar bewijs toevoegen";

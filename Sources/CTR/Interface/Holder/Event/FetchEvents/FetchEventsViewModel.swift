@@ -276,6 +276,8 @@ final class FetchEventsViewModel: Logging {
 				}
 			case .paperflow:
 				return [] // Paperflow is not part of FetchEvents.
+			case .positiveTest:
+				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
 			case .test:
 				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.negativeTest) }
 			case .vaccination:
@@ -286,14 +288,11 @@ final class FetchEventsViewModel: Logging {
 	private var flow: ErrorCode.Flow {
 
 		switch eventMode {
-			case .vaccination:
-				return .vaccination
-			case .paperflow:
-				return .hkvi
-			case .recovery:
-				return .recovery
-			case .test:
-				return .ggdTest
+			case .paperflow: return .hkvi
+			case .positiveTest: return .positiveTest
+			case .recovery: return .recovery
+			case .test: return .ggdTest
+			case .vaccination: return .vaccination
 		}
 	}
 
@@ -304,7 +303,7 @@ final class FetchEventsViewModel: Logging {
 				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
 			case .paperflow:
 				return nil
-			case .test:
+			case .test, .positiveTest:
 				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)
 			case .vaccination:
 				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noVaccinationProviderAvailable)
@@ -495,8 +494,9 @@ private extension EventMode {
 	/// Translate EventMode into a string that can be passed to the network as a query string
 	var queryFilterValue: String {
 		switch self {
+			case .paperflow: return "" // Not used
+			case .positiveTest: return "positivetest"
 			case .recovery: return "positivetest,recovery"
-			case .paperflow: return ""
 			case .test: return "negativetest"
 			case .vaccination: return "vaccination"
 		}

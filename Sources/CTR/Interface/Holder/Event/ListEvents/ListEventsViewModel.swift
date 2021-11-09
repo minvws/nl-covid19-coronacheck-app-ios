@@ -193,24 +193,25 @@ class ListEventsViewModel: Logging {
 
 			}, completion: { result in
 				self.progressIndicationCounter.decrement()
-				self.handleGreenCardResult(result, remoteEvents: remoteEvents, completion: completion)
+				self.handleGreenCardResult(
+					result,
+					eventModeForStorage: eventModeForStorage,
+					remoteEvents: remoteEvents,
+					completion: completion
+				)
 			})
 		}
 	}
 
 	private func handleGreenCardResult(
-		_ result: Result<Void, Error>,
+		_ result: Result<RemoteGreenCards.Response, Error>,
+		eventModeForStorage: EventMode,
 		remoteEvents: [RemoteEvent],
 		completion: @escaping (Bool) -> Void) {
 
 		switch result {
-			case .success:
-				self.coordinator?.listEventsScreenDidFinish(
-					.continue(
-						value: nil,
-						eventMode: self.eventMode
-					)
-				)
+			case let .success(greencardResponse):
+				self.handleSucces(greencardResponse, eventModeForStorage: eventModeForStorage)
 
 			case .failure(GreenCardLoader.Error.didNotEvaluate):
 				self.viewState = self.cannotCreateEventsState()
@@ -238,6 +239,24 @@ class ListEventsViewModel: Logging {
 			case .failure(let error):
 				self.logError("storeAndSign - unhandled: \(error)")
 				self.handleClientSideError(clientCode: .unhandled, for: .signer, with: remoteEvents)
+		}
+	}
+
+	func handleSucces(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+
+		if eventModeForStorage == .vaccination,
+		   greencardResponse.domesticGreenCard == nil,
+		   let euCards = greencardResponse.euGreenCards, euCards.count == 1 {
+			shouldPrimaryButtonBeEnabled = true
+			viewState = internationalQROnly()
+		} else {
+			// All Good -> finish
+			self.coordinator?.listEventsScreenDidFinish(
+				.continue(
+					value: nil,
+					eventMode: self.eventMode
+				)
+			)
 		}
 	}
 

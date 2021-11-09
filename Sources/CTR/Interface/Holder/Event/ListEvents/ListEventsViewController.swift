@@ -63,7 +63,7 @@ class ListEventsViewController: BaseViewController {
 
 			switch $0 {
 				case let .feedback(content):
-					self?.setForNoEvents(content)
+					self?.setForFeedback(content)
 				case let .loading(content):
 					self?.setForLoadingState(content)
 				case let .listEvents(content, rows):
@@ -116,6 +116,7 @@ class ListEventsViewController: BaseViewController {
 
 		sceneView.spinner.isHidden = true
 		displayContent(content)
+		sceneView.setEventStackVisibility(ishidden: false)
 
 		// Remove previously added rows:
 		removeExistingRows()
@@ -134,9 +135,10 @@ class ListEventsViewController: BaseViewController {
 			.forEach(self.sceneView.addVaccinationEventView)
 	}
 
-	private func setForNoEvents(_ content: Content) {
+	private func setForFeedback(_ content: Content) {
 
 		sceneView.spinner.isHidden = true
+		sceneView.setEventStackVisibility(ishidden: true)
 		displayContent(content)
 		removeExistingRows()
 	}

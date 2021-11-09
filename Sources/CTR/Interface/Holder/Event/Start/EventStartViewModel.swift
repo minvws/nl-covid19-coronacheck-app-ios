@@ -45,6 +45,10 @@ class EventStartViewModel: Logging {
 				self.title = ""
 				self.message = ""
 				self.primaryButtonIcon = nil
+			case .positiveTest:
+				self.title = L.holderPositiveTestStartTitle()
+				self.message = L.holderPositiveTestStartMessage()
+				self.primaryButtonIcon = I.digid()
 		}
 	}
 
