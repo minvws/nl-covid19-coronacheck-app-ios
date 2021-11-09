@@ -45,7 +45,12 @@ final class RiskSettingViewController: BaseViewController {
 		viewModel.$riskSetting.binding = { [weak self] in self?.sceneView.riskSetting = $0 }
 		
 		sceneView.selectRiskCommand = { [weak self] riskSetting in
+			
 			self?.viewModel.selectRisk = riskSetting
+		}
+		sceneView.readMoreCommand = { [weak self] in
+			
+			self?.viewModel.showReadMore()
 		}
 	}
 }

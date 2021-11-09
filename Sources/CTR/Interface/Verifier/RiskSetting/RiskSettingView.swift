@@ -76,6 +76,8 @@ final class RiskSettingView: BaseView {
 			self?.selectRiskCommand?(.high)
 			self?.lowRiskControl.isSelected = false
 		}
+		
+		moreButton.addTarget(self, action: #selector(readMore), for: .touchUpInside)
 	}
 	
 	override func setupViewHierarchy() {
@@ -123,6 +125,11 @@ final class RiskSettingView: BaseView {
 			moreButton.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
 											   constant: -ViewTraits.Margin.edge)
 		])
+	}
+	
+	@objc private func readMore() {
+		
+		readMoreCommand?()
 	}
 	
 	// MARK: Public Access
@@ -174,4 +181,6 @@ final class RiskSettingView: BaseView {
 	}
 	
 	var selectRiskCommand: ((RiskSetting) -> Void)?
+	
+	var readMoreCommand: (() -> Void)?
 }

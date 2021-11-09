@@ -10,7 +10,7 @@ import Foundation
 final class RiskSettingViewModel: Logging {
 	
 	/// Coordination Delegate
-	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
+	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
 	private let userSettings: UserSettingsProtocol
 	
@@ -38,7 +38,7 @@ final class RiskSettingViewModel: Logging {
 	}
 	
 	init(
-		coordinator: (VerifierCoordinatorDelegate & Dismissable),
+		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
 		userSettings: UserSettingsProtocol) {
 		
 		self.coordinator = coordinator
@@ -55,5 +55,11 @@ final class RiskSettingViewModel: Logging {
 		let selectedRisk = userSettings.scanRiskSettingValue
 		riskSetting = selectedRisk
 		selectRisk = selectedRisk
+	}
+	
+	func showReadMore() {
+		guard let url = URL(string: L.verifierRisksettingReadmoreUrl()) else { return }
+		
+		coordinator?.openUrl(url, inApp: true)
 	}
 }
