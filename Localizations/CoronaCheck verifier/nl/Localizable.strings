@@ -64,6 +64,7 @@
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "Over deze app";
 "verifier.menu.privacy" = "Gebruikersvoorwaarden";
+"verifier.menu.risksetting" = "Risico instelling";
 
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Alleen toegang met bewijs";
@@ -122,3 +123,13 @@
 /* MARK: - Verifier About */
 "verifier.about.title" = "Over deze app";
 "verifier.about.text" = "CoronaCheck Scanner is ontwikkeld zodat bepaalde locaties en activiteiten hun deuren kunnen openen. Denk bijvoorbeeld aan voetbalwedstrijden en concerten. Bezoekers maken een coronabewijs van een vaccinatie, een negatieve testuitslag of als zij corona hebben gehad en hersteld zijn. Met behulp van deze app krijgen alleen bezoekers met zo’n coronabewijs toegang. Zo kunnen steeds meer plekken bezocht worden.";
+
+/* MARK: - Verifier Risk Setting */
+"verifier.risksetting.title" = "Risico instelling";
+"verifier.risksetting.header.menuentry" = "Geef aan of je op een hoog of laag risico plek gaat scannen.";
+"verifier.risksetting.lowrisk.title" = "Laag risico";
+"verifier.risksetting.lowrisk.subtitle" = "Bijvoorbeeld een museum, dierentuin of winkel, koffiehuis";
+"verifier.risksetting.highrisk.title" = "Hoog risico";
+"verifier.risksetting.highrisk.subtitle" = "Bijvoorbeeld een bar, nachtclub of plek waar veel mensen dichtbij elkaar komen";
+"verifier.risksetting.readmore" = "Ik weet het niet zeker";
+"verifier.risksetting.readmore.url" = "https://coronacheck.nl/nl/faq-scanner-in-app";

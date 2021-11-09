@@ -254,6 +254,16 @@ extension VerifierCoordinator: MenuDelegate {
 					isOpenedFromMenu: true
 				)
 				startChildCoordinator(coordinator)
+				
+			case .riskSetting:
+				let destination = RiskSettingViewController(
+					viewModel: RiskSettingViewModel(
+						coordinator: self,
+						userSettings: UserSettings()
+					)
+				)
+				navigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = navigationController
 
 			case .support:
 				guard let faqUrl = URL(string: L.verifierUrlFaq()) else {
@@ -298,7 +308,8 @@ extension VerifierCoordinator: MenuDelegate {
 		
 		return [
 			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
-			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions())
+			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions()),
+			MenuItem(identifier: .riskSetting, title: L.verifierMenuRisksetting())
 		]
 	}
 	/// Get the items for the bottom menu

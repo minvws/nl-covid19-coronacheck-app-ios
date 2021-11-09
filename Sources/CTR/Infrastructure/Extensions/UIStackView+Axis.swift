@@ -31,6 +31,10 @@ extension UIStackView {
         return self
     }
  
+	func insets(_ insets: NSDirectionalEdgeInsets) {
+		directionalLayoutMargins = insets
+		isLayoutMarginsRelativeArrangement = true
+	}
 }
 
 func VStack(spacing: CGFloat = 0, _ views: UIView ...) -> UIStackView {
