@@ -9,15 +9,17 @@ import UIKit
 
 enum EventMode: String {
 
-	case recovery
 	case paperflow
+	case positiveTest
+	case recovery
 	case test
 	case vaccination
 
 	var localized: String {
 		switch self {
-			case .recovery: return L.generalRecoverystatement()
 			case .paperflow: return L.generalPaperflow()
+			case .positiveTest: return "Todo"
+			case .recovery: return L.generalRecoverystatement()
 			case .test: return L.generalTestresult()
 			case .vaccination: return L.generalVaccination()
 		}
@@ -25,54 +27,42 @@ enum EventMode: String {
 
 	var title: String {
 		switch self {
-			case .paperflow:
-				return L.holderDccListTitle()
-			case .recovery:
-				return L.holderRecoveryListTitle()
-			case .test:
-				return L.holderTestresultsResultsTitle()
-			case .vaccination:
-				return L.holderVaccinationListTitle()
+			case .paperflow: return L.holderDccListTitle()
+			case .positiveTest: return L.holderPositiveTestFetchTitle()
+			case .recovery: return L.holderRecoveryListTitle()
+			case .test: return L.holderTestresultsResultsTitle()
+			case .vaccination: return L.holderVaccinationListTitle()
 		}
 	}
 
 	var alertBody: String {
 
 		switch self {
-			case .paperflow:
-				return L.holderDccAlertMessage()
-			case .recovery:
-				return L.holderRecoveryAlertMessage()
-			case .test:
-				return L.holderTestAlertMessage()
-			case .vaccination:
-				return L.holderVaccinationAlertMessage()
+			case .paperflow: return L.holderDccAlertMessage()
+			case .positiveTest: return "Todo"
+			case .recovery: return L.holderRecoveryAlertMessage()
+			case .test: return L.holderTestAlertMessage()
+			case .vaccination: return L.holderVaccinationAlertMessage()
 		}
 	}
 
 	var listMessage: String {
 		switch self {
-			case .paperflow:
-				return L.holderDccListMessage()
-			case .recovery:
-				return L.holderRecoveryListMessage()
-			case .test:
-				return L.holderTestresultsResultsText()
-			case .vaccination:
-				return L.holderVaccinationListMessage()
+			case .paperflow: return L.holderDccListMessage()
+			case .positiveTest: return "Todo"
+			case .recovery: return L.holderRecoveryListMessage()
+			case .test: return L.holderTestresultsResultsText()
+			case .vaccination: return L.holderVaccinationListMessage()
 		}
 	}
 
 	var originsMismatchBody: String {
 		switch self {
-			case .paperflow:
-				return L.holderEventOriginmismatchDccBody()
-			case .recovery:
-				return L.holderEventOriginmismatchRecoveryBody()
-			case .test:
-				return L.holderEventOriginmismatchTestBody()
-			case .vaccination:
-				return L.holderEventOriginmismatchVaccinationBody()
+			case .paperflow: return L.holderEventOriginmismatchDccBody()
+			case .positiveTest: return "Todo"
+			case .recovery: return L.holderEventOriginmismatchRecoveryBody()
+			case .test: return L.holderEventOriginmismatchTestBody()
+			case .vaccination: return L.holderEventOriginmismatchVaccinationBody()
 		}
 	}
 }
@@ -102,7 +92,7 @@ enum EventScreenResult: Equatable {
 	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
 	
 	/// Show event details
-	case showEventDetails(title: String, details: [EventDetails])
+	case showEventDetails(title: String, details: [EventDetails], footer: String?)
 
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
@@ -124,8 +114,8 @@ enum EventScreenResult: Equatable {
 					}
 				}
 				return true
-			case (let showEventDetails(lhsTitle, lhsDetails), let showEventDetails(rhsTitle, rhsDetails)):
-				return (lhsTitle, lhsDetails) == (rhsTitle, rhsDetails)
+			case (let showEventDetails(lhsTitle, lhsDetails, lhsFooter), let showEventDetails(rhsTitle, rhsDetails, rhsFooter)):
+				return (lhsTitle, lhsDetails, lhsFooter) == (rhsTitle, rhsDetails, rhsFooter)
 
 			case (let errorRequiringRestart(lhsMode), let errorRequiringRestart(rhsMode)):
 				return lhsMode == rhsMode
@@ -193,6 +183,11 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	func startWithRecovery() {
 
 		startWith(.recovery)
+	}
+
+	func startWithPositiveTest() {
+
+		startWith(.positiveTest)
 	}
 
 	func startWithListTestEvents(_ events: [RemoteEvent]) {
@@ -286,13 +281,14 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		presentAsBottomSheet(viewController)
 	}
 	
-	private func navigateToEventDetails(_ title: String, details: [EventDetails]) {
+	private func navigateToEventDetails(_ title: String, details: [EventDetails], footer: String?) {
 		
 		let viewController = EventDetailsViewController(
 			viewModel: EventDetailsViewModel(
 				coordinator: self,
 				title: title,
 				details: details,
+				footer: footer,
 				hideBodyForScreenCapture: true
 			)
 		)
@@ -422,6 +418,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateBackToTestStart()
 			case .recovery, .vaccination:
 				navigateBackToEventStart()
+			case .positiveTest:
+				break
 			case .paperflow:
 				delegate?.eventFlowDidCancel()
 		}
@@ -438,8 +436,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				displayError(content: content, backAction: backAction)
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
-			case let .showEventDetails(title, details):
-				navigateToEventDetails(title, details: details)
+			case let .showEventDetails(title, details, footer):
+				navigateToEventDetails(title, details: details, footer: footer)
 			default:
 				break
 		}
@@ -467,6 +465,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 							return L.holderErrorstateLoginMessageRecovery()
 						case .paperflow:
 							return "" // HKVI is not a part of this flow
+						case .positiveTest:
+							return nil
 						case .test:
 							return L.holderErrorstateLoginMessageTest()
 						case .vaccination:

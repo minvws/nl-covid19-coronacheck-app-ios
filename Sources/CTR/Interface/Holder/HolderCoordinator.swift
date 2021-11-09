@@ -41,6 +41,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesToCreateARecoveryQR()
 
+	func userWishesToFetchPositiveTests()
+
 	func userDidScanRequestToken(requestToken: RequestToken)
 
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
@@ -216,6 +218,18 @@ class HolderCoordinator: SharedCoordinator {
 			)
 			addChildCoordinator(eventCoordinator)
 			eventCoordinator.startWithRecovery()
+		}
+	}
+
+	private func startEventFlowForPostiveTests() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithPositiveTest()
 		}
 	}
 
@@ -400,6 +414,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func userWishesToCreateARecoveryQR() {
 		startEventFlowForRecovery()
+	}
+
+	func userWishesToFetchPositiveTests() {
+		startEventFlowForPostiveTests()
 	}
 
 	func userWishesToCreateAQR() {

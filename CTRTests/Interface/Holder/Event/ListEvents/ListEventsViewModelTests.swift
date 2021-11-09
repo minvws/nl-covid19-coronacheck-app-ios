@@ -143,7 +143,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		
-		guard case let .showEventDetails(title, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, _, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1185,7 +1185,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1223,7 +1223,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1261,7 +1261,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1295,7 +1295,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1334,7 +1334,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1373,7 +1373,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1412,7 +1412,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1451,7 +1451,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1490,7 +1490,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}

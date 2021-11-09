@@ -18,9 +18,9 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInformationOnSelfPrintedProof()
 
-	func userDidSubmitPaperCertificateToken(token: String)
+	func userWishesMoreInformationOnNoInputToken()
 
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
+	func userDidSubmitPaperCertificateToken(token: String)
 
 	func userWantsToGoBackToDashboard()
 
@@ -89,6 +89,24 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		navigationController.pushViewController(destination, animated: true)
 	}
 
+	func userWishesMoreInformationOnNoInputToken() {
+
+		let viewModel = PaperProofContentViewModel(
+			content: Content(
+				title: L.holderPaperproofNotokenTitle(),
+				subTitle: L.holderPaperproofNotokenMessage(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holderPaperproofNotokenAction(),
+				secondaryAction: { [weak self] in
+					self?.delegate?.switchToAddRegularProof()
+				}
+			)
+		)
+		let destination = PaperProofContentViewController(viewModel: viewModel)
+		navigationController.pushViewController(destination, animated: true)
+	}
+
 	func userDidSubmitPaperCertificateToken(token: String) {
 
 		// Store Token
@@ -103,28 +121,6 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		navigationController.pushViewController(destination, animated: true)
 	}
 
-	/// Show an information page
-	/// - Parameters:
-	///   - title: the title of the page
-	///   - body: the body of the page
-	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
-
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
-				coordinator: self,
-				title: title,
-				message: body,
-				linkTapHander: { [weak self] url in
-
-					self?.openUrl(url, inApp: true)
-				},
-				hideBodyForScreenCapture: hideBodyForScreenCapture
-			)
-		)
-		navigationController.viewControllers.last?.presentBottomSheet(viewController)
-	}
-
 	func userWantsToGoBackToDashboard() {
 
 		scannedQR = nil
@@ -136,7 +132,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 		scannedQR = nil
 		if let tokenEntryViewController = navigationController.viewControllers
-			.first(where: { $0 is PaperCertificateTokenEntryViewController }) {
+			.first(where: { $0 is PaperProofInputCouplingCodeViewController }) {
 
 			navigationController.popToViewController(
 				tokenEntryViewController,
@@ -159,8 +155,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 //		userDidSubmitPaperCertificateToken(token: "NDREB5")
 
-		let destination = PaperCertificateTokenEntryViewController(
-			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
+		let destination = PaperProofInputCouplingCodeViewController(
+			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
 		)
 
 		navigationController.pushViewController(destination, animated: true)
