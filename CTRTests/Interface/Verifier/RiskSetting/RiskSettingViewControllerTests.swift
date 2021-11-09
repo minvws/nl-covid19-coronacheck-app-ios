@@ -35,6 +35,8 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		RunLoop.current.run(until: Date())
 	}
 	
+	// MARK: - Tests
+	
 	func test_bindings() {
 		// Given
 		userSettingsSpy.stubbedScanRiskSettingValue = .low
