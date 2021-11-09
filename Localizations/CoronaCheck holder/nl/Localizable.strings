@@ -11,6 +11,12 @@
 "holder.paperproof.selfprinted.action" = "Naar bewijs toevoegen";
 
 
+"holder.incompletedutchvaccination.title" = "Geen Nederlands vaccinatiebewijs";
+"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je meer dan één prik hebben gehad, of hersteld zijn van corona voor je eerste prik.</p><p><b>Tweede prik gehad?</b><br />Haal opnieuw je vaccinaties op. Je krijgt dan een Nederlands bewijs.</p>";
+"holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan een Nederlands bewijs.</p>";
+"holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Meer weten?</b><br />Bekijk de <a href=\"\">meestgestelde vragen</a> voor alle mogelijke oorzaken dat je geen Nederlands bewijs hebt.</p>";
+"holder.incompletedutchvaccination.button.addvaccines" = "Haal mijn vaccinaties op";
+"holder.incompletedutchvaccination.button.addtestresults" = "Haal mijn testuitslag op";
 "holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Bewijs terugzetten";
 "holder.recoveryvalidityextension.extensioncomplete.title" = "Verlengd herstelbewijs";
 "holder.recoveryvalidityextension.extensioncomplete.description" = "De geldigheid van Nederlandse herstelbewijzen is verlengd. Daardoor is je bewijs nu een jaar geldig vanaf het moment dat je positief bent getest.";
