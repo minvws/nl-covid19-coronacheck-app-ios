@@ -19,7 +19,9 @@ final class RiskSettingView: BaseView {
 		enum Spacing {
 			static let headerToControls: CGFloat = 32
 			static let controlsToMoreButton: CGFloat = 24
-			static let controls: CGFloat = 1
+		}
+		enum Height {
+			static let separator: CGFloat = 1
 		}
 		enum Header {
 			static let lineHeight: CGFloat = 22
@@ -41,12 +43,6 @@ final class RiskSettingView: BaseView {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.axis = .vertical
-		stackView.backgroundColor = Theme.colors.grey4
-		stackView.insets(.init(top: ViewTraits.Spacing.controls,
-							   leading: 0,
-							   bottom: ViewTraits.Spacing.controls,
-							   trailing: 0))
-		stackView.spacing = ViewTraits.Spacing.controls
 		return stackView
 	}()
 	
@@ -88,8 +84,11 @@ final class RiskSettingView: BaseView {
 		scrollView.addSubview(riskControlStackView)
 		scrollView.addSubview(moreButton)
 		
+		addSeparator()
 		riskControlStackView.addArrangedSubview(lowRiskControl)
+		addSeparator()
 		riskControlStackView.addArrangedSubview(highRiskControl)
+		addSeparator()
 	}
 	
 	override func setupViewConstraints() {
@@ -124,6 +123,16 @@ final class RiskSettingView: BaseView {
 											  constant: -ViewTraits.Margin.edge),
 			moreButton.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
 											   constant: -ViewTraits.Margin.edge)
+		])
+	}
+	
+	private func addSeparator() {
+		let separatorView = UIView()
+		separatorView.backgroundColor = Theme.colors.grey4
+		riskControlStackView.addArrangedSubview(separatorView)
+
+		NSLayoutConstraint.activate([
+			separatorView.heightAnchor.constraint(equalToConstant: ViewTraits.Height.separator)
 		])
 	}
 	
