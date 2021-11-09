@@ -16,6 +16,7 @@
 
 "holder.positiveTest.start.title" = "Gegevens van je positieve test ophalen";
 "holder.positiveTest.start.message" = "Log in met DigiD. De gegevens van je positieve test worden dan automatisch opgehaald.";
+"holder.positiveTest.fetch.title" = "Testuitslag ophalen";
 
 "holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Bewijs terugzetten";
 "holder.recoveryvalidityextension.extensioncomplete.title" = "Verlengd herstelbewijs";

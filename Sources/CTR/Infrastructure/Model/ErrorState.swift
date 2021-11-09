@@ -53,6 +53,17 @@ struct ErrorCode: CustomStringConvertible {
 		}
 		return result
 	}
+
+	static func getFlowFromEventMode(_ eventMode: EventMode) -> Flow {
+
+		switch eventMode {
+			case .paperflow: return .hkvi
+			case .positiveTest: return .positiveTest
+			case .recovery: return .recovery
+			case .test: return .ggdTest
+			case .vaccination: return .vaccination
+		}
+	}
 }
 
 // The values are documented in the coordination repo:

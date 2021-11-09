@@ -28,7 +28,7 @@ enum EventMode: String {
 	var title: String {
 		switch self {
 			case .paperflow: return L.holderDccListTitle()
-			case .positiveTest: return "Todo"
+			case .positiveTest: return L.holderPositiveTestFetchTitle()
 			case .recovery: return L.holderRecoveryListTitle()
 			case .test: return L.holderTestresultsResultsTitle()
 			case .vaccination: return L.holderVaccinationListTitle()
