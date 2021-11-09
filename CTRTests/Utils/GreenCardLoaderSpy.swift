@@ -15,12 +15,11 @@ class GreenCardLoaderSpy: GreenCardLoading {
 	var invokedSignTheEventsIntoGreenCardsAndCredentials = false
 	var invokedSignTheEventsIntoGreenCardsAndCredentialsCount = 0
 	var stubbedSignTheEventsIntoGreenCardsAndCredentialsResponseEvaluatorResult: (RemoteGreenCards.Response, Void)?
-	var stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult: (Result<Void, Swift.Error>, Void)?
+	var stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult: (Result<RemoteGreenCards.Response, Swift.Error>, Void)?
 
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<Void, Swift.Error>
-		) -> Void) {
+		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
 		invokedSignTheEventsIntoGreenCardsAndCredentials = true
 		invokedSignTheEventsIntoGreenCardsAndCredentialsCount += 1
 		if let result = stubbedSignTheEventsIntoGreenCardsAndCredentialsResponseEvaluatorResult {
