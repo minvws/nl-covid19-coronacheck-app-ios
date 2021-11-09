@@ -15,6 +15,10 @@ class IncompleteDutchCertificateView: ScrolledStackWithButtonView {
 		// Dimensions
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
+		
+		// Margins & padding
+		static let verticalPaddingContentToButton: CGFloat = 8
+		static let verticalPaddingButtonToNextParagaph: CGFloat = 34
 	}
 	
 	/// The title label
@@ -23,28 +27,28 @@ class IncompleteDutchCertificateView: ScrolledStackWithButtonView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
-	let contentTextViewA: TextView = {
+	private let secondVaccineTextView: TextView = {
 		
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 	
-	let contentTextViewB: TextView = {
+	private let coronaBeforeFirstVaccineTextView: TextView = {
 		
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 	
-	let contentTextViewC: TextView = {
+	private let learnMoreTextView: TextView = {
 		
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 	
-	let secondaryButtonA: Button = {
+	private let addVaccinesButton: Button = {
 		
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +57,7 @@ class IncompleteDutchCertificateView: ScrolledStackWithButtonView {
 		return button
 	}()
 	
-	let secondaryButtonB: Button = {
+	private let addTestResultsButton: Button = {
 		
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -66,8 +70,12 @@ class IncompleteDutchCertificateView: ScrolledStackWithButtonView {
 		
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
-		secondaryButtonA.touchUpInside(self, action: #selector(secondaryButtonTappedA))
-		secondaryButtonB.touchUpInside(self, action: #selector(secondaryButtonTappedB))
+		stackView.distribution = .fill
+		footerButtonView.isHidden = true
+		
+		// Add touch actions:
+		addVaccinesButton.touchUpInside(self, action: #selector(addVaccinesButtonTapped))
+		addTestResultsButton.touchUpInside(self, action: #selector(addTestResultsButtonTapped))
 	}
 	
 	override func setupViewHierarchy() {
@@ -75,21 +83,32 @@ class IncompleteDutchCertificateView: ScrolledStackWithButtonView {
 		super.setupViewHierarchy()
 		
 		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(contentTextViewA)
-		stackView.addArrangedSubview(secondaryButtonA)
-		stackView.addArrangedSubview(contentTextViewB)
-		stackView.addArrangedSubview(secondaryButtonB)
-		stackView.addArrangedSubview(contentTextViewC)
+		
+		// Paragraph A
+		stackView.addArrangedSubview(secondVaccineTextView)
+		stackView.addArrangedSubview(secondVaccineTextView)
+		stackView.setCustomSpacing(ViewTraits.verticalPaddingContentToButton, after: secondVaccineTextView)
+		stackView.addArrangedSubview(addVaccinesButton)
+		stackView.setCustomSpacing(ViewTraits.verticalPaddingButtonToNextParagaph, after: addVaccinesButton)
+		
+		// Paragraph B
+		stackView.addArrangedSubview(coronaBeforeFirstVaccineTextView)
+		stackView.setCustomSpacing(ViewTraits.verticalPaddingContentToButton, after: coronaBeforeFirstVaccineTextView)
+		stackView.addArrangedSubview(addTestResultsButton)
+		stackView.setCustomSpacing(ViewTraits.verticalPaddingButtonToNextParagaph, after: addTestResultsButton)
+		
+		// Paragraph C
+		stackView.addArrangedSubview(learnMoreTextView)
 	}
 	
-	@objc func secondaryButtonTappedA() {
+	@objc func addVaccinesButtonTapped() {
 		
-		secondaryButtonATappedCommand?()
+		addVaccinesButtonTapCommand?()
 	}
 	
-	@objc func secondaryButtonTappedB() {
+	@objc func addTestResultsButtonTapped() {
 		
-		secondaryButtonBTappedCommand?()
+		addTestResultsButtonTapCommand?()
 	}
 	
 	// MARK: Public Access
@@ -104,41 +123,41 @@ class IncompleteDutchCertificateView: ScrolledStackWithButtonView {
 		}
 	}
 	
-	var messageA: String? {
+	var secondVaccineText: String? {
 		didSet {
-			contentTextViewA.html(messageA)
+			secondVaccineTextView.html(secondVaccineText)
 		}
 	}
 	
-	var messageB: String? {
+	var coronaBeforeFirstVaccineText: String? {
 		didSet {
-			contentTextViewA.html(messageB)
+			coronaBeforeFirstVaccineTextView.html(coronaBeforeFirstVaccineText)
 		}
 	}
 	
-	var messageC: String? {
+	var learnMoreText: String? {
 		didSet {
-			contentTextViewA.html(messageC)
+			learnMoreTextView.html(learnMoreText)
 		}
 	}
 	
-	var secondaryButtonATappedCommand: (() -> Void)?
+	var addVaccinesButtonTapCommand: (() -> Void)?
 	
-	var secondaryButtonBTappedCommand: (() -> Void)?
+	var addTestResultsButtonTapCommand: (() -> Void)?
 	
 	/// The title for the secondary white/blue button
-	var secondaryButtonATitle: String? {
+	var addVaccinesButtonTitle: String? {
 		didSet {
-			secondaryButtonA.setTitle(secondaryButtonATitle, for: .normal)
-			secondaryButtonA.isHidden = secondaryButtonATitle?.isEmpty ?? true
+			addVaccinesButton.setTitle(addVaccinesButtonTitle, for: .normal)
+			addVaccinesButton.isHidden = addVaccinesButtonTitle?.isEmpty ?? true
 		}
 	}
 	
 	/// The title for the secondary white/blue button
-	var secondaryButtonBTitle: String? {
+	var addTestResultsButtonTitle: String? {
 		didSet {
-			secondaryButtonB.setTitle(secondaryButtonBTitle, for: .normal)
-			secondaryButtonB.isHidden = secondaryButtonBTitle?.isEmpty ?? true
+			addTestResultsButton.setTitle(addTestResultsButtonTitle, for: .normal)
+			addTestResultsButton.isHidden = addTestResultsButtonTitle?.isEmpty ?? true
 		}
 	}
 }

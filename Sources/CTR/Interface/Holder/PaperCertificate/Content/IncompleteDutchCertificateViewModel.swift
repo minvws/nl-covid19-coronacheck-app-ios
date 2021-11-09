@@ -10,28 +10,28 @@ import Foundation
 final class IncompleteDutchCertificateViewModel: Logging {
 	
 	@Bindable private(set) var title: String
-	@Bindable private(set) var paragraphA: String
-	@Bindable private(set) var paragraphB: String
-	@Bindable private(set) var paragraphC: String
+	@Bindable private(set) var secondVaccineText: String
+	@Bindable private(set) var coronaBeforeFirstVaccineText: String
+	@Bindable private(set) var learnMoreText: String
 	
-	@Bindable private(set) var secondaryButtonA: String
-	@Bindable private(set) var secondaryButtonB: String
+	@Bindable private(set) var addVaccinesButtonTitle: String
+	@Bindable private(set) var addTestResultsButtonTitle: String
 	
 	init() {
-		title = "Geen Nederlands.."
-		paragraphA = "Je vaccinatiebewijs.. "
-		paragraphB = "Corona gehad.. ?"
-		paragraphC = "Meer weten?"
+		title = L.holderIncompletedutchvaccinationTitle()
+		secondVaccineText = L.holderIncompletedutchvaccinationParagraphSecondvaccine()
+		coronaBeforeFirstVaccineText = L.holderIncompletedutchvaccinationParagraphCoronabeforefirstvaccine()
+		learnMoreText = L.holderIncompletedutchvaccinationParagraphLearnmore()
 		
-		secondaryButtonA = "Voeg tweede.."
-		secondaryButtonB = "Voeg een positieve.. "
+		addVaccinesButtonTitle = L.holderIncompletedutchvaccinationButtonAddvaccines()
+		addTestResultsButtonTitle = L.holderIncompletedutchvaccinationButtonAddtestresults()
 	}
 	
-	func didTapSecondaryButtonA() {
-		print("Button A..")
+	func didTapAddVaccines() {
+		debugPrint("didTapAddVaccines()")
 	}
 	
-	func didTapSecondaryButtonB() {
-		print("Button B..")
+	func didTapAddTestResults() {
+		debugPrint("didTapAddTestResults()")
 	}
 }

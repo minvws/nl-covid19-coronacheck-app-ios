@@ -42,34 +42,31 @@ class IncompleteDutchCertificateViewController: BaseViewController {
 			self?.sceneView.title = $0
 		}
 		
-		viewModel.$paragraphA.binding = { [weak self] in
-			self?.sceneView.messageA = $0
+		viewModel.$secondVaccineText.binding = { [weak self] in
+			self?.sceneView.secondVaccineText = $0
 		}
 		
-		viewModel.$paragraphB.binding = { [weak self] in
-			self?.sceneView.messageB = $0
+		viewModel.$coronaBeforeFirstVaccineText.binding = { [weak self] in
+			self?.sceneView.coronaBeforeFirstVaccineText = $0
 		}
 		
-		viewModel.$paragraphC.binding = { [weak self] in
-			self?.sceneView.messageC = $0
+		viewModel.$learnMoreText.binding = { [weak self] in
+			self?.sceneView.learnMoreText = $0
 		}
 		
-		viewModel.$secondaryButtonA.binding = { [weak self] in
-			self?.sceneView.secondaryButtonATitle = $0
+		viewModel.$addVaccinesButtonTitle.binding = { [weak self] in
+			self?.sceneView.addVaccinesButtonTitle = $0
 		}
 		
-		viewModel.$secondaryButtonB.binding = { [weak self] in
-			self?.sceneView.secondaryButtonBTitle = $0
+		viewModel.$addTestResultsButtonTitle.binding = { [weak self] in
+			self?.sceneView.addTestResultsButtonTitle = $0
 		}
 		
-		sceneView.secondaryButtonATappedCommand = { [weak self] in
-			self?.viewModel.didTapSecondaryButtonA()
+		sceneView.addVaccinesButtonTapCommand = { [weak self] in
+			self?.viewModel.didTapAddVaccines()
 		}
-		sceneView.secondaryButtonATitle = viewModel.secondaryButtonA
-		
-		sceneView.secondaryButtonBTappedCommand = { [weak self] in
-			self?.viewModel.didTapSecondaryButtonB()
+		sceneView.addTestResultsButtonTapCommand = { [weak self] in
+			self?.viewModel.didTapAddTestResults()
 		}
-		sceneView.secondaryButtonBTitle = viewModel.secondaryButtonB
 	}
 }
