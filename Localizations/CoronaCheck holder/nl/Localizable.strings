@@ -14,6 +14,9 @@
 "holder.vaccination.internationlQROnly.message" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je meer dan één prik hebben gehad, of hersteld zijn van corona voor je eerste prik.</p><p><b>Krijg je nog een tweede prik?</b><br />Voeg opnieuw een vaccinatiebewijs toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan ook een Nederlands bewijs.</p>";
 "holder.vaccination.internationlQROnly.action" = "Haal mijn testuitslag op";
 
+"holder.positiveTest.start.title" = "Gegevens van je positieve test ophalen";
+"holder.positiveTest.start.message" = "Log in met DigiD. De gegevens van je positieve test worden dan automatisch opgehaald.";
+
 "holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Bewijs terugzetten";
 "holder.recoveryvalidityextension.extensioncomplete.title" = "Verlengd herstelbewijs";
 "holder.recoveryvalidityextension.extensioncomplete.description" = "De geldigheid van Nederlandse herstelbewijzen is verlengd. Daardoor is je bewijs nu een jaar geldig vanaf het moment dat je positief bent getest.";

@@ -34,6 +34,8 @@ extension ListEventsViewModel {
 					return L.holderTestresultsWrongBody()
 				case .vaccination:
 					return L.holderVaccinationWrongBody()
+				case .positiveTest:
+					return ""
 			}
 		}
 	}

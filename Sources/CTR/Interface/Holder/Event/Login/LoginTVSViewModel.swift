@@ -356,14 +356,11 @@ extension LoginTVSViewModel {
 	private var flow: ErrorCode.Flow {
 
 		switch eventMode {
-			case .vaccination:
-				return .vaccination
-			case .paperflow:
-				return .hkvi
-			case .recovery:
-				return .recovery
-			case .test:
-				return .ggdTest
+			case .paperflow: return .hkvi
+			case .positiveTest: return .positiveTest
+			case .recovery: return .recovery
+			case .test: return .ggdTest
+			case .vaccination: return .vaccination
 		}
 	}
 }

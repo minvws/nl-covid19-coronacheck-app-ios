@@ -65,14 +65,11 @@ extension ListEventsViewModel {
 	private func emptyEventsState() -> ListEventsViewController.State {
 
 		switch eventMode {
-			case .recovery:
-				return emptyRecoveryState()
-			case .test:
-				return emptyTestState()
-			case .vaccination:
-				return emptyVaccinationState()
-			case .paperflow:
-				return emptyDccState()
+			case .paperflow: return emptyDccState()
+			case .positiveTest: return emptyTestState()
+			case .recovery: return emptyRecoveryState()
+			case .test: return emptyTestState()
+			case .vaccination: return emptyVaccinationState()
 		}
 	}
 
