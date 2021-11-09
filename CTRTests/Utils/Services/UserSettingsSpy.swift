@@ -208,6 +208,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedScanRiskSettingValueSetter = false
+	var invokedScanRiskSettingValueSetterCount = 0
+	var invokedScanRiskSettingValue: RiskSetting?
+	var invokedScanRiskSettingValueList = [RiskSetting]()
+	var invokedScanRiskSettingValueGetter = false
+	var invokedScanRiskSettingValueGetterCount = 0
+	var stubbedScanRiskSettingValue: RiskSetting!
+
+	var scanRiskSettingValue: RiskSetting {
+		set {
+			invokedScanRiskSettingValueSetter = true
+			invokedScanRiskSettingValueSetterCount += 1
+			invokedScanRiskSettingValue = newValue
+			invokedScanRiskSettingValueList.append(newValue)
+		}
+		get {
+			invokedScanRiskSettingValueGetter = true
+			invokedScanRiskSettingValueGetterCount += 1
+			return stubbedScanRiskSettingValue
+		}
+	}
+
 	var invokedDidCompleteEUVaccinationMigrationSetter = false
 	var invokedDidCompleteEUVaccinationMigrationSetterCount = 0
 	var invokedDidCompleteEUVaccinationMigration: Bool?
