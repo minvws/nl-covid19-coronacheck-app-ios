@@ -58,7 +58,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: []
+			remoteEvents: [],
+			tvsToken: .test
 		)
 	}
 
@@ -130,7 +131,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -156,7 +158,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -183,7 +186,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteVaccinationEvent(vaccinationDate: "2021-08-01")]
+			remoteEvents: [remoteVaccinationEvent(vaccinationDate: "2021-08-01")],
+			tvsToken: .test
 		)
 
 		// When
@@ -205,7 +209,8 @@ class ListEventsViewModelTests: XCTestCase {
 			remoteEvents: [
 				remoteVaccinationEvent(vaccinationDate: "2021-08-01"),
 				remoteVaccinationEvent(vaccinationDate: "2021-08-03")
-			]
+			],
+			tvsToken: .test
 		)
 
 		// When
@@ -227,7 +232,8 @@ class ListEventsViewModelTests: XCTestCase {
 			remoteEvents: [
 				remoteVaccinationEvent(vaccinationDate: "2021-08-01"),
 				remoteVaccinationEvent(vaccinationDate: "2021-08-01")
-			]
+			],
+			tvsToken: .test
 		)
 
 		// When
@@ -249,7 +255,8 @@ class ListEventsViewModelTests: XCTestCase {
 			remoteEvents: [
 				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528")
-			]
+			],
+			tvsToken: .test
 		)
 
 		// When
@@ -273,7 +280,8 @@ class ListEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528")
-			]
+			],
+			tvsToken: .test
 		)
 
 		// When
@@ -295,7 +303,8 @@ class ListEventsViewModelTests: XCTestCase {
 			remoteEvents: [
 				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-01"),
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-01")
-			]
+			],
+			tvsToken: .test
 		)
 
 		// When
@@ -317,7 +326,8 @@ class ListEventsViewModelTests: XCTestCase {
 			remoteEvents: [
 				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
-			]
+			],
+			tvsToken: .test
 		)
 
 		// When
@@ -343,7 +353,8 @@ class ListEventsViewModelTests: XCTestCase {
 				// Shot 2 in august
 				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
-			]
+			],
+			tvsToken: .test
 		)
 
 		// When
@@ -371,7 +382,8 @@ class ListEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
-			]
+			],
+			tvsToken: .test
 		)
 
 		// When
@@ -390,7 +402,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = false
@@ -427,7 +440,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [defaultRemoteRecoveryEvent()]
+			remoteEvents: [defaultRemoteRecoveryEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = false
@@ -464,7 +478,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = false
@@ -500,7 +515,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -541,7 +557,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -582,7 +599,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -623,7 +641,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -664,7 +683,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -705,7 +725,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -749,7 +770,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -792,7 +814,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -836,7 +859,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -880,7 +904,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -962,7 +987,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1008,7 +1034,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1046,7 +1073,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1076,7 +1104,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -1086,7 +1114,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1116,7 +1145,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -1126,7 +1155,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
-			remoteEvents: [remotePaperFlowEvent()]
+			remoteEvents: [remotePaperFlowEvent()],
+			tvsToken: .test
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1156,7 +1186,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -1172,7 +1202,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			tvsToken: .test
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -1210,7 +1241,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			tvsToken: .test
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -1248,7 +1280,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			tvsToken: .test
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -1282,7 +1315,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			tvsToken: .test
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -1321,7 +1355,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			tvsToken: .test
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -1360,7 +1395,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			tvsToken: .test
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -1399,7 +1435,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			tvsToken: .test
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -1438,7 +1475,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			tvsToken: .test
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -1477,7 +1515,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			tvsToken: .test
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -1512,7 +1551,8 @@ class ListEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [],
-			eventsMightBeMissing: true
+			eventsMightBeMissing: true,
+			tvsToken: .test
 		)
 
 		expect(self.sut.alert).toEventuallyNot(beNil())

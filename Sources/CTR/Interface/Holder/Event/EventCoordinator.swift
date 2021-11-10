@@ -85,8 +85,11 @@ enum EventScreenResult: Equatable {
 	/// Continue with the next step in the flow
 	case `continue`(eventMode: EventMode)
 
+	// LoginTVS happy path:
+	case didLogin(token: TVSAuthorizationToken, eventMode: EventMode)
+	
 	/// Show the vaccination events
-	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
+	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool, tvsToken: TVSAuthorizationToken?)
 
 	/// Show some more information
 	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
@@ -98,11 +101,13 @@ enum EventScreenResult: Equatable {
 		switch (lhs, rhs) {
 			case (.back, .back), (.stop, .stop), (.continue, .continue):
 				return true
+			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
+				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
-			case (let showEvents(lhsEvents, lhsMode, lhsComplete), let showEvents(rhsEvents, rhsMode, rhsComplete)):
+			case (let showEvents(lhsEvents, lhsMode, lhsComplete, lhsToken), let showEvents(rhsEvents, rhsMode, rhsComplete, rhsToken)):
 
-				if lhsEvents.count != rhsEvents.count || lhsMode != rhsMode || lhsComplete != rhsComplete {
+				if lhsEvents.count != rhsEvents.count || lhsMode != rhsMode || lhsComplete != rhsComplete || lhsToken != rhsToken {
 					return false
 				}
 
@@ -192,12 +197,12 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	func startWithListTestEvents(_ events: [RemoteEvent]) {
 
-		navigateToListEvents(events, eventMode: .test, eventsMightBeMissing: false)
+		navigateToListEvents(events, eventMode: .test, eventsMightBeMissing: false, tvsToken: nil)
 	}
 
 	func startWithScannedEvent(_ event: RemoteEvent) {
 
-		navigateToListEvents([event], eventMode: .paperflow, eventsMightBeMissing: false)
+		navigateToListEvents([event], eventMode: .paperflow, eventsMightBeMissing: false, tvsToken: nil)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -236,7 +241,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToFetchEvents(token: String, eventMode: EventMode) {
+	private func navigateToFetchEvents(token: TVSAuthorizationToken, eventMode: EventMode) {
 		let viewController = FetchEventsViewController(
 			viewModel: FetchEventsViewModel(
 				coordinator: self,
@@ -251,14 +256,16 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	private func navigateToListEvents(
 		_ remoteEvents: [RemoteEvent],
 		eventMode: EventMode,
-		eventsMightBeMissing: Bool) {
+		eventsMightBeMissing: Bool,
+		tvsToken: TVSAuthorizationToken?) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				eventMode: eventMode,
 				remoteEvents: remoteEvents,
-				eventsMightBeMissing: eventsMightBeMissing
+				eventsMightBeMissing: eventsMightBeMissing,
+				tvsToken: tvsToken
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -367,12 +374,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		switch result {
 
-			case let .continue(value: token, eventMode: eventMode):
-				if let token = token {
-					navigateToFetchEvents(token: token, eventMode: eventMode)
-				} else {
-					start()
-				}
+			case let .didLogin(token, eventMode):
+				navigateToFetchEvents(token: token, eventMode: eventMode)
 
 			case .errorRequiringRestart(let eventMode):
 				handleErrorRequiringRestart(eventMode: eventMode)
@@ -403,8 +406,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case let .error(content: content, backAction: backAction):
 				displayError(content: content, backAction: backAction)
 
-			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
-				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
+			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing, tvsToken):
+				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing, tvsToken: tvsToken)
 
 			default:
 				break
