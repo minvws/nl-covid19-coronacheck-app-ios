@@ -7,66 +7,6 @@
 
 import UIKit
 
-enum EventMode: String {
-
-	case paperflow
-	case positiveTest
-	case recovery
-	case test
-	case vaccination
-
-	var localized: String {
-		switch self {
-			case .paperflow: return L.generalPaperflow()
-			case .positiveTest: return "Todo"
-			case .recovery: return L.generalRecoverystatement()
-			case .test: return L.generalTestresult()
-			case .vaccination: return L.generalVaccination()
-		}
-	}
-
-	var title: String {
-		switch self {
-			case .paperflow: return L.holderDccListTitle()
-			case .positiveTest: return L.holderPositiveTestFetchTitle()
-			case .recovery: return L.holderRecoveryListTitle()
-			case .test: return L.holderTestresultsResultsTitle()
-			case .vaccination: return L.holderVaccinationListTitle()
-		}
-	}
-
-	var alertBody: String {
-
-		switch self {
-			case .paperflow: return L.holderDccAlertMessage()
-			case .positiveTest: return "Todo"
-			case .recovery: return L.holderRecoveryAlertMessage()
-			case .test: return L.holderTestAlertMessage()
-			case .vaccination: return L.holderVaccinationAlertMessage()
-		}
-	}
-
-	var listMessage: String {
-		switch self {
-			case .paperflow: return L.holderDccListMessage()
-			case .positiveTest: return "Todo"
-			case .recovery: return L.holderRecoveryListMessage()
-			case .test: return L.holderTestresultsResultsText()
-			case .vaccination: return L.holderVaccinationListMessage()
-		}
-	}
-
-	var originsMismatchBody: String {
-		switch self {
-			case .paperflow: return L.holderEventOriginmismatchDccBody()
-			case .positiveTest: return "Todo"
-			case .recovery: return L.holderEventOriginmismatchRecoveryBody()
-			case .test: return L.holderEventOriginmismatchTestBody()
-			case .vaccination: return L.holderEventOriginmismatchVaccinationBody()
-		}
-	}
-}
-
 enum EventScreenResult: Equatable {
 
 	/// The user wants to go back a scene
@@ -416,10 +356,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch eventMode {
 			case .test:
 				navigateBackToTestStart()
-			case .recovery, .vaccination:
+			case .recovery, .vaccination, .positiveTest:
 				navigateBackToEventStart()
-			case .positiveTest:
-				break
 			case .paperflow:
 				delegate?.eventFlowDidCancel()
 		}
@@ -465,9 +403,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 							return L.holderErrorstateLoginMessageRecovery()
 						case .paperflow:
 							return "" // HKVI is not a part of this flow
-						case .positiveTest:
-							return nil
-						case .test:
+						case .test, .positiveTest:
 							return L.holderErrorstateLoginMessageTest()
 						case .vaccination:
 							return L.holderErrorstateLoginMessageVaccination()
