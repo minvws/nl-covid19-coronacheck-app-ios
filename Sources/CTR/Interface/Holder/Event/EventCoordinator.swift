@@ -143,6 +143,8 @@ protocol EventCoordinatorDelegate: AnyObject {
 	func fetchEventsScreenDidFinish(_ result: EventScreenResult)
 
 	func listEventsScreenDidFinish(_ result: EventScreenResult)
+	
+	func startWithPositiveTest(tvsToken: TVSAuthorizationToken?)
 }
 
 protocol EventFlowDelegate: AnyObject {
@@ -190,9 +192,12 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		startWith(.recovery)
 	}
 
-	func startWithPositiveTest() {
-
-		startWith(.positiveTest)
+	func startWithPositiveTest(tvsToken: TVSAuthorizationToken?) {
+		if let tvsSessionToken = tvsToken, tvsSessionToken.expiration > Date(timeIntervalSinceNow: 10) {
+			navigateToFetchEvents(token: tvsSessionToken, eventMode: .positiveTest)
+		} else {
+			startWith(.positiveTest)
+		}
 	}
 
 	func startWithListTestEvents(_ events: [RemoteEvent]) {
