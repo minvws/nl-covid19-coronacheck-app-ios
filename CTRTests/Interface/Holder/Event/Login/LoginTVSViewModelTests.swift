@@ -176,7 +176,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		expect(self.sut.content.title) == L.holderVaccinationListTitle()
+		expect(self.sut.content.title) == L.holderFetcheventsVaccinationTitle()
 		expect(self.sut.content.subTitle).to(beNil())
 		expect(self.sut.content.primaryAction).toNot(beNil())
 		expect(self.sut.content.primaryActionTitle) == L.generalClose()
