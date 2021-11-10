@@ -37,14 +37,14 @@ final class RiskSettingViewController: BaseViewController {
 		
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$header.binding = { [weak self] in self?.sceneView.header = $0 }
-		viewModel.$lowRiskTitle.binding = { [weak self] in self?.sceneView.lowRiskTitle = $0 }
-		viewModel.$lowRiskSubtitle.binding = { [weak self] in self?.sceneView.lowRiskSubtitle = $0 }
-		viewModel.$highRiskTitle.binding = { [weak self] in self?.sceneView.highRiskTitle = $0 }
-		viewModel.$highRiskSubtitle.binding = { [weak self] in self?.sceneView.highRiskSubtitle = $0 }
+		viewModel.$lowRiskTitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.lowRiskTitle = $0 }
+		viewModel.$lowRiskSubtitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.lowRiskSubtitle = $0 }
+		viewModel.$highRiskTitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskTitle = $0 }
+		viewModel.$highRiskSubtitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskSubtitle = $0 }
 		viewModel.$moreButtonTitle.binding = { [weak self] in self?.sceneView.moreButtonTitle = $0 }
-		viewModel.$riskSetting.binding = { [weak self] in self?.sceneView.riskSetting = $0 }
+		viewModel.$riskSetting.binding = { [weak self] in self?.sceneView.riskSettingControlsView.riskSetting = $0 }
 		
-		sceneView.selectRiskCommand = { [weak self] riskSetting in
+		sceneView.riskSettingControlsView.selectRiskCommand = { [weak self] riskSetting in
 			
 			self?.viewModel.selectRisk = riskSetting
 		}

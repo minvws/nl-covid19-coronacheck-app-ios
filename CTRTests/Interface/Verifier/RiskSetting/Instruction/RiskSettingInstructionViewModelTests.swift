@@ -10,23 +10,23 @@ import XCTest
 import Nimble
 import Rswift
 
-final class RiskSettingViewModelTests: XCTestCase {
+final class RiskSettingInstructionViewModelTests: XCTestCase {
 	
 	/// Subject under test
-	private var sut: RiskSettingViewModel!
+	private var sut: RiskSettingInstructionViewModel!
 	
 	/// The coordinator spy
-	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
+	private var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	
 	override func setUp() {
 		super.setUp()
-		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
+		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
 		userSettingsSpy.stubbedScanRiskSettingValue = .low
 		
-		sut = RiskSettingViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
+		sut = RiskSettingInstructionViewModel(
+			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
 		)
 	}
@@ -40,8 +40,8 @@ final class RiskSettingViewModelTests: XCTestCase {
 		sut.showReadMore()
 		
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedOpenUrl) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifierRisksettingReadmoreUrl()
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifierRisksettingReadmoreUrl()
 	}
 	
 	func test_bindings() {
@@ -50,13 +50,24 @@ final class RiskSettingViewModelTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.title) == L.verifierRisksettingTitle()
-		expect(self.sut.header) == L.verifierRisksettingHeaderMenuentry()
+		expect(self.sut.title) == L.verifierRisksettingTitleInstruction()
+		expect(self.sut.header) == L.verifierRisksettingHeaderInstruction()
 		expect(self.sut.lowRiskTitle) == L.verifierRisksettingLowriskTitle()
 		expect(self.sut.lowRiskSubtitle) == L.verifierRisksettingLowriskSubtitle()
 		expect(self.sut.highRiskTitle) == L.verifierRisksettingHighriskTitle()
 		expect(self.sut.highRiskSubtitle) == L.verifierRisksettingHighriskSubtitle()
 		expect(self.sut.moreButtonTitle) == L.verifierRisksettingReadmore()
+		expect(self.sut.primaryButtonTitle) == L.verifierScaninstructionsButtonStartscanning()
 		expect(self.sut.riskSetting) == .low
+	}
+	
+	func test_startScanner_shouldInvokeUserDidCompletePages() {
+		// Given
+		
+		// When
+		sut.startScanner()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
 	}
 }

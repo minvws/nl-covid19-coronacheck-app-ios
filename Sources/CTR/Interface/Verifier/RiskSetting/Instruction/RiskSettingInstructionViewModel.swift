@@ -7,27 +7,29 @@
 
 import Foundation
 
-final class RiskSettingViewModel: Logging {
+final class RiskSettingInstructionViewModel: Logging {
 	
 	/// Coordination Delegate
-	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
+	weak private var coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol)?
 	
 	private let userSettings: UserSettingsProtocol
 	
 	/// The title of the scene
 	@Bindable private(set) var title: String
 	
-	@Bindable private(set) var header: String?
+	@Bindable private(set) var header: String
 	
-	@Bindable private(set) var lowRiskTitle: String?
+	@Bindable private(set) var lowRiskTitle: String
 	
-	@Bindable private(set) var lowRiskSubtitle: String?
+	@Bindable private(set) var lowRiskSubtitle: String
 	
-	@Bindable private(set) var highRiskTitle: String?
+	@Bindable private(set) var highRiskTitle: String
 	
-	@Bindable private(set) var highRiskSubtitle: String?
+	@Bindable private(set) var highRiskSubtitle: String
 	
-	@Bindable private(set) var moreButtonTitle: String?
+	@Bindable private(set) var moreButtonTitle: String
+	
+	@Bindable private(set) var primaryButtonTitle: String
 	
 	@Bindable private(set) var riskSetting: RiskSetting
 	
@@ -38,19 +40,20 @@ final class RiskSettingViewModel: Logging {
 	}
 	
 	init(
-		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
+		coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol),
 		userSettings: UserSettingsProtocol) {
 		
 		self.coordinator = coordinator
 		self.userSettings = userSettings
 		
-		title = L.verifierRisksettingTitle()
-		header = L.verifierRisksettingHeaderMenuentry()
+		title = L.verifierRisksettingTitleInstruction()
+		header = L.verifierRisksettingHeaderInstruction()
 		lowRiskTitle = L.verifierRisksettingLowriskTitle()
 		lowRiskSubtitle = L.verifierRisksettingLowriskSubtitle()
 		highRiskTitle = L.verifierRisksettingHighriskTitle()
 		highRiskSubtitle = L.verifierRisksettingHighriskSubtitle()
 		moreButtonTitle = L.verifierRisksettingReadmore()
+		primaryButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 		
 		let selectedRisk = userSettings.scanRiskSettingValue
 		riskSetting = selectedRisk
@@ -61,5 +64,10 @@ final class RiskSettingViewModel: Logging {
 		guard let url = URL(string: L.verifierRisksettingReadmoreUrl()) else { return }
 		
 		coordinator?.openUrl(url, inApp: true)
+	}
+	
+	func startScanner() {
+		
+		coordinator?.userDidCompletePages()
 	}
 }

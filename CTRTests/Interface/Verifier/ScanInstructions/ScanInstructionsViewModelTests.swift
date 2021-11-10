@@ -28,6 +28,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		sut = ScanInstructionsViewModel(
 			coordinator: coordinatorSpy, pages: [], userSettings: userSettingsSpy
 		)
+		userSettingsSpy.stubbedScanInstructionShown = true
 
 		// Act
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
@@ -118,6 +119,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	}
 
 	func test_nextButtonTitleChangesOnLastPage() {
+		userSettingsSpy.stubbedScanInstructionShown = true
 		let pages = [
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
