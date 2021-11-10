@@ -52,12 +52,12 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.verifierRisksettingTitle()
 		expect(self.sut.sceneView.header) == L.verifierRisksettingHeaderMenuentry()
-		expect(self.sut.sceneView.lowRiskTitle) == L.verifierRisksettingLowriskTitle()
-		expect(self.sut.sceneView.lowRiskSubtitle) == L.verifierRisksettingLowriskSubtitle()
-		expect(self.sut.sceneView.highRiskTitle) == L.verifierRisksettingHighriskTitle()
-		expect(self.sut.sceneView.highRiskSubtitle) == L.verifierRisksettingHighriskSubtitle()
+		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifierRisksettingLowriskTitle()
+		expect(self.sut.sceneView.riskSettingControlsView.lowRiskSubtitle) == L.verifierRisksettingLowriskSubtitle()
+		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifierRisksettingHighriskTitle()
+		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifierRisksettingHighriskSubtitle()
 		expect(self.sut.sceneView.moreButtonTitle) == L.verifierRisksettingReadmore()
-		expect(self.sut.sceneView.riskSetting) == .low
+		expect(self.sut.sceneView.riskSettingControlsView.riskSetting) == .low
 	}
 	
 	func test_riskSetting_low() {
@@ -73,7 +73,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.sceneView.riskSetting) == .low
+		expect(self.sut.sceneView.riskSettingControlsView.riskSetting) == .low
 		
 		// Snapshot
 		sut.assertImage()
@@ -92,7 +92,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.sceneView.riskSetting) == .high
+		expect(self.sut.sceneView.riskSettingControlsView.riskSetting) == .high
 		
 		// Snapshot
 		sut.assertImage()
