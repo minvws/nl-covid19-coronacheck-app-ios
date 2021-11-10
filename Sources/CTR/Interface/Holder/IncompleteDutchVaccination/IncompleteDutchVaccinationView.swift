@@ -145,6 +145,16 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 	
 	var addTestResultsButtonTapCommand: (() -> Void)?
 	
+	var linkTouchedHandler: ((URL) -> Void)? {
+		didSet {
+			[learnMoreTextView, secondVaccineTextView, coronaBeforeFirstVaccineTextView].forEach { textView in
+				textView.linkTouched { [weak self] url in
+					self?.linkTouchedHandler?(url)
+				}
+			}
+		}
+	}
+	
 	/// The title for the secondary white/blue button
 	var addVaccinesButtonTitle: String? {
 		didSet {

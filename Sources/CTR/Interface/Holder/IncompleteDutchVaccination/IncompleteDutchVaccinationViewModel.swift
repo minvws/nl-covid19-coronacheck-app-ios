@@ -38,4 +38,8 @@ final class IncompleteDutchVaccinationViewModel: Logging {
 	func didTapAddTestResults() {
 		coordinatorDelegate?.userWishesToFetchPositiveTests()
 	}
+	
+	func userTappedLink(url: URL) {
+		coordinatorDelegate?.openUrl(url, inApp: true)
+	}
 }
