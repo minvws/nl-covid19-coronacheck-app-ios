@@ -16,6 +16,8 @@
 
 "holder.positiveTest.start.title" = "Gegevens van je positieve test ophalen";
 "holder.positiveTest.start.message" = "Log in met DigiD. De gegevens van je positieve test worden dan automatisch opgehaald.";
+"holder.positiveTest.list.title" = "Kloppen de gegevens?";
+"holder.positiveTest.list.message" = "Als de gegevens van je test kloppen kun je een bewijs maken.";
 
 "holder.paperproof.notoken.title" = "Geen lettercombinatie?";
 "holder.paperproof.notoken.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt aangevraagd bij jouw zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je het papieren bewijs zelf geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
@@ -221,7 +223,7 @@
 "general.error.cryptolib.title" = "Sorry, er gaat iets mis";
 "general.error.cryptolib.message" = "Neem contact op met onze helpdesk en geef de foutcode (%@) door.";
 "general.error.cryptolib.retry" = "Probeer opnieuw";
-
+"general.positiveTest" = "positieve test";
 "general.recoverystatement" = "herstelbewijs";
 "general.recoverydate" = "hersteldatum";
 "general.testcertificate" = "testbewijs";

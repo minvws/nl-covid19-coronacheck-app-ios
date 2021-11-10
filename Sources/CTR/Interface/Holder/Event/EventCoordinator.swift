@@ -18,7 +18,7 @@ enum EventMode: String {
 	var localized: String {
 		switch self {
 			case .paperflow: return L.generalPaperflow()
-			case .positiveTest: return "Todo"
+			case .positiveTest: return L.generalPositiveTest()
 			case .recovery: return L.generalRecoverystatement()
 			case .test: return L.generalTestresult()
 			case .vaccination: return L.generalVaccination()
@@ -38,7 +38,7 @@ enum EventMode: String {
 	var title: String {
 		switch self {
 			case .paperflow: return L.holderDccListTitle()
-			case .positiveTest: return ""
+			case .positiveTest: return L.holderPositiveTestListTitle()
 			case .recovery: return L.holderRecoveryListTitle()
 			case .test: return L.holderTestresultsResultsTitle()
 			case .vaccination: return L.holderVaccinationListTitle()
@@ -59,7 +59,7 @@ enum EventMode: String {
 	var listMessage: String {
 		switch self {
 			case .paperflow: return L.holderDccListMessage()
-			case .positiveTest: return "Als de gegevens van je test kloppen kun je een bewijs maken."
+			case .positiveTest: return L.holderPositiveTestListMessage()
 			case .recovery: return L.holderRecoveryListMessage()
 			case .test: return L.holderTestresultsResultsText()
 			case .vaccination: return L.holderVaccinationListMessage()
