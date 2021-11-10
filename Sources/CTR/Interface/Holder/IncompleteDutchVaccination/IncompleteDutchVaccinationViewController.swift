@@ -68,5 +68,8 @@ class IncompleteDutchVaccinationViewController: BaseViewController {
 		sceneView.addTestResultsButtonTapCommand = { [weak self] in
 			self?.viewModel.didTapAddTestResults()
 		}
+		sceneView.linkTouchedHandler = { [weak viewModel] url in
+			viewModel?.userTappedLink(url: url)
+		}
 	}
 }
