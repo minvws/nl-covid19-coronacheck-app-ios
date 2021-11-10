@@ -172,3 +172,8 @@ extension UIImage {
 		return image
 	}
 }
+
+extension TVSAuthorizationToken {
+	
+	static var test: TVSAuthorizationToken = .init(idTokenString: "test", expiration: now.addingTimeInterval(5 * minutes * fromNow))
+}

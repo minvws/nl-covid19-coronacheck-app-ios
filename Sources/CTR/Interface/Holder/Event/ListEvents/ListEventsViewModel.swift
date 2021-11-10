@@ -70,7 +70,7 @@ class ListEventsViewModel: Logging {
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
-
+	
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
@@ -82,7 +82,7 @@ class ListEventsViewModel: Logging {
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 		self.identityChecker = identityChecker
-
+		
 		viewState = .loading(content: Content(title: eventMode.title))
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
@@ -211,7 +211,7 @@ class ListEventsViewModel: Logging {
 
 		switch result {
 			case let .success(greencardResponse):
-				self.handleSucces(greencardResponse, eventModeForStorage: eventModeForStorage)
+				self.handleSuccess(greencardResponse, eventModeForStorage: eventModeForStorage)
 
 			case .failure(GreenCardLoader.Error.didNotEvaluate):
 				self.viewState = self.cannotCreateEventsState()
@@ -242,7 +242,7 @@ class ListEventsViewModel: Logging {
 		}
 	}
 
-	func handleSucces(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+	func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
 
 		if eventModeForStorage == .vaccination,
 		   greencardResponse.domesticGreenCard == nil,
@@ -253,7 +253,6 @@ class ListEventsViewModel: Logging {
 			// All Good -> finish
 			self.coordinator?.listEventsScreenDidFinish(
 				.continue(
-					value: nil,
 					eventMode: self.eventMode
 				)
 			)
