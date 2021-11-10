@@ -20,9 +20,6 @@ final class RiskSettingView: BaseView {
 			static let headerToControls: CGFloat = 32
 			static let controlsToMoreButton: CGFloat = 24
 		}
-		enum Height {
-			static let separator: CGFloat = 1
-		}
 		enum Header {
 			static let lineHeight: CGFloat = 22
 			static let kerning: CGFloat = -0.41
@@ -39,19 +36,10 @@ final class RiskSettingView: BaseView {
 		return Label(body: nil).header().multiline()
 	}()
 	
-	private let riskControlStackView: UIStackView = {
-		let stackView = UIStackView()
-		stackView.translatesAutoresizingMaskIntoConstraints = false
-		stackView.axis = .vertical
-		return stackView
-	}()
-	
-	private let lowRiskControl: RiskSettingControl = {
-		return RiskSettingControl()
-	}()
-	
-	private let highRiskControl: RiskSettingControl = {
-		return RiskSettingControl()
+	let riskSettingControlsView: RiskSettingControlsView = {
+		let view = RiskSettingControlsView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
 	}()
 	
 	private let moreButton: Button = {
@@ -63,16 +51,6 @@ final class RiskSettingView: BaseView {
 		
 		backgroundColor = Theme.colors.viewControllerBackground
 		
-		lowRiskControl.onTapCommand = { [weak self] in
-			self?.selectRiskCommand?(.low)
-			self?.highRiskControl.isSelected = false
-		}
-		
-		highRiskControl.onTapCommand = { [weak self] in
-			self?.selectRiskCommand?(.high)
-			self?.lowRiskControl.isSelected = false
-		}
-		
 		moreButton.addTarget(self, action: #selector(readMore), for: .touchUpInside)
 	}
 	
@@ -81,14 +59,8 @@ final class RiskSettingView: BaseView {
 		
 		addSubview(scrollView)
 		scrollView.addSubview(headerLabel)
-		scrollView.addSubview(riskControlStackView)
+		scrollView.addSubview(riskSettingControlsView)
 		scrollView.addSubview(moreButton)
-		
-		addSeparator()
-		riskControlStackView.addArrangedSubview(lowRiskControl)
-		addSeparator()
-		riskControlStackView.addArrangedSubview(highRiskControl)
-		addSeparator()
 	}
 	
 	override func setupViewConstraints() {
@@ -109,13 +81,13 @@ final class RiskSettingView: BaseView {
 			headerLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
 														constant: -2 * ViewTraits.Margin.edge),
 			
-			riskControlStackView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor,
+			riskSettingControlsView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor,
 													  constant: ViewTraits.Spacing.headerToControls),
-			riskControlStackView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-			riskControlStackView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
-			riskControlStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+			riskSettingControlsView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+			riskSettingControlsView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			riskSettingControlsView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 			
-			moreButton.topAnchor.constraint(equalTo: riskControlStackView.bottomAnchor,
+			moreButton.topAnchor.constraint(equalTo: riskSettingControlsView.bottomAnchor,
 											constant: ViewTraits.Spacing.controlsToMoreButton),
 			moreButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
 											 constant: ViewTraits.Margin.edge),
@@ -123,16 +95,6 @@ final class RiskSettingView: BaseView {
 											  constant: -ViewTraits.Margin.edge),
 			moreButton.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
 											   constant: -ViewTraits.Margin.edge)
-		])
-	}
-	
-	private func addSeparator() {
-		let separatorView = UIView()
-		separatorView.backgroundColor = Theme.colors.grey4
-		riskControlStackView.addArrangedSubview(separatorView)
-
-		NSLayoutConstraint.activate([
-			separatorView.heightAnchor.constraint(equalToConstant: ViewTraits.Height.separator)
 		])
 	}
 	
@@ -151,45 +113,11 @@ final class RiskSettingView: BaseView {
 		}
 	}
 	
-	var lowRiskTitle: String? {
-		didSet {
-			lowRiskControl.title = lowRiskTitle
-		}
-	}
-	
-	var lowRiskSubtitle: String? {
-		didSet {
-			lowRiskControl.subtitle = lowRiskSubtitle
-		}
-	}
-	
-	var highRiskTitle: String? {
-		didSet {
-			highRiskControl.title = highRiskTitle
-		}
-	}
-	
-	var highRiskSubtitle: String? {
-		didSet {
-			highRiskControl.subtitle = highRiskSubtitle
-		}
-	}
-	
 	var moreButtonTitle: String? {
 		didSet {
 			moreButton.title = moreButtonTitle
 		}
 	}
-	
-	var riskSetting: RiskSetting? {
-		didSet {
-			guard let riskSetting = riskSetting else { return }
-			lowRiskControl.isSelected = riskSetting.isLow
-			highRiskControl.isSelected = riskSetting.isHigh
-		}
-	}
-	
-	var selectRiskCommand: ((RiskSetting) -> Void)?
 	
 	var readMoreCommand: (() -> Void)?
 }
