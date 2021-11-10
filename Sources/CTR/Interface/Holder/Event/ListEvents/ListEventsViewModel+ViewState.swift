@@ -747,6 +747,17 @@ extension ListEventsViewModel {
 			)
 		)
 	}
+
+	// MARK: Positive test inapplicable
+
+	internal func positiveTestInapplicable() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderPositiveTestInapplicableTitle(),
+			subTitle: L.holderPositiveTestInapplicableMessage(),
+			primaryActionTitle: L.holderPositiveTestInapplicableAction()
+		)
+	}
 }
 
 // MARK: Test 2.0

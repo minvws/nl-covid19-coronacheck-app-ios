@@ -179,6 +179,10 @@ class ListEventsViewModel: Logging {
 				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
 				// > 0 -> Success
 
+				guard eventModeForStorage != .positiveTest else {
+					return true
+				}
+
 				let domesticOrigins: Int = remoteResponse.domesticGreenCard?.origins
 					.filter { $0.type == eventModeForStorage.rawValue }
 					.count ?? 0
@@ -242,25 +246,55 @@ class ListEventsViewModel: Logging {
 		}
 	}
 
-	func handleSucces(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+	private func handleSucces(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
 
-		if eventModeForStorage == .vaccination,
-		   greencardResponse.domesticGreenCard == nil,
+		switch eventModeForStorage {
+			case .positiveTest:
+				handleSuccessForPositiveTest(greencardResponse, eventModeForStorage: eventModeForStorage)
+			case .paperflow, .recovery, .test:
+				completeFlow()
+			case .vaccination:
+				handleSuccessForVaccination(greencardResponse, eventModeForStorage: eventModeForStorage)
+		}
+	}
+
+	private func completeFlow() {
+
+		self.coordinator?.listEventsScreenDidFinish(
+			.continue(
+				value: nil,
+				eventMode: self.eventMode
+			)
+		)
+	}
+
+	private func handleSuccessForVaccination(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+
+		guard eventModeForStorage == .vaccination else { return }
+
+		if greencardResponse.domesticGreenCard == nil,
 		   let euCards = greencardResponse.euGreenCards, euCards.count == 1 {
 			shouldPrimaryButtonBeEnabled = true
 			viewState = internationalQROnly()
 		} else {
-			// All Good -> finish
-			self.coordinator?.listEventsScreenDidFinish(
-				.continue(
-					value: nil,
-					eventMode: self.eventMode
-				)
-			)
+			completeFlow()
 		}
 	}
 
-	func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
+	private func handleSuccessForPositiveTest(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+
+		guard eventModeForStorage == .positiveTest else { return }
+
+//		if greencardResponse.domesticGreenCard == nil,
+//		   let euCards = greencardResponse.euGreenCards, euCards.count == 1 {
+			shouldPrimaryButtonBeEnabled = true
+			viewState = positiveTestInapplicable()
+//		} else {
+//			completeFlow()
+//		}
+	}
+
+	private func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
 
 		let errorCode = ErrorCode(
 			flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
@@ -273,7 +307,7 @@ class ListEventsViewModel: Logging {
 		shouldPrimaryButtonBeEnabled = true
 	}
 
-	func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
+	private func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
 
 		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
 			self.logDebug("handleServerError \(serverError)")

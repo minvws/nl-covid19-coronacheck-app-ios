@@ -22,6 +22,10 @@
 "holder.positiveTest.nolist.message" = "<p>Er is geen positieve testuitslag van jou beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a>.</p><p>Ben je net getest? Het kan een paar uur  duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p>";
 "holder.positiveTest.nolist.action" = "Naar mijn bewijzen";
 
+"holder.positiveTest.inapplicable.title" = "Positieve testuitslag is niet geschikt";
+"holder.positiveTest.inapplicable.message" = "<p>Je bent positief getest ná je eerste vaccinatie. Daardoor is je testuitslag niet geschikt om een Nederlands bewijs van te maken.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a>.</p>";
+"holder.positiveTest.inapplicable.action" = "Naar mijn bewijzen";
+
 "holder.paperproof.notoken.title" = "Geen lettercombinatie?";
 "holder.paperproof.notoken.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt aangevraagd bij jouw zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je het papieren bewijs zelf geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
 "holder.paperproof.notoken.action" = "Naar bewijs toevoegen";
