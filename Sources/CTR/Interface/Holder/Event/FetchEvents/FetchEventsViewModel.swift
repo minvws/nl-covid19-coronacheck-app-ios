@@ -152,7 +152,7 @@ final class FetchEventsViewModel: Logging {
 			nextAction: { someEventsMightBeMissing in
 				if hasNoResults && !unomiServerErrors.isEmpty {
 					self.logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
-					let errorCodes = self.mapServerErrors(unomiServerErrors, for: self.flow, step: .unomi)
+					let errorCodes = self.mapServerErrors(unomiServerErrors, for: eventMode.flow, step: .unomi)
 					self.displayErrorCodeForUnomiAndEvent(errorCodes)
 				} else {
 					self.coordinator?.fetchEventsScreenDidFinish(
@@ -241,13 +241,13 @@ final class FetchEventsViewModel: Logging {
 
 		if let providerError = remoteEventProvidersResult?.failureError {
 			self.logError("Error getting event providers: \(providerError)")
-			errorCodes.append(self.convert(providerError, for: self.flow, step: .providers))
+			errorCodes.append(self.convert(providerError, for: eventMode.flow, step: .providers))
 			serverErrors.append(providerError)
 		}
 
 		if let accessError = accessTokenResult?.failureError {
 			self.logError("Error getting access tokens: \(accessError)")
-			errorCodes.append(self.convert(accessError, for: self.flow, step: .accessTokens))
+			errorCodes.append(self.convert(accessError, for: eventMode.flow, step: .accessTokens))
 			serverErrors.append(accessError)
 		}
 
@@ -285,28 +285,17 @@ final class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private var flow: ErrorCode.Flow {
-
-		switch eventMode {
-			case .paperflow: return .hkvi
-			case .positiveTest: return .positiveTest
-			case .recovery: return .recovery
-			case .test: return .ggdTest
-			case .vaccination: return .vaccination
-		}
-	}
-
 	private func mapNoProviderAvailable() -> ErrorCode? {
 
 		switch eventMode {
 			case .recovery:
-				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
+				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
 			case .paperflow:
 				return nil
 			case .test, .positiveTest:
-				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)
+				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)
 			case .vaccination:
-				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noVaccinationProviderAvailable)
+				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noVaccinationProviderAvailable)
 		}
 	}
 

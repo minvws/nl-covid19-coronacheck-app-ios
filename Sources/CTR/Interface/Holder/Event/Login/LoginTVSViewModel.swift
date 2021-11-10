@@ -95,7 +95,7 @@ extension LoginTVSViewModel {
 				logDebug("Server busy")
 				displayServerBusy(
 					errorCode: ErrorCode(
-						flow: ErrorCode.getFlowFromEventMode(eventMode),
+						flow: eventMode.flow,
 						step: .tvs,
 						errorCode: "429"
 					)
@@ -110,7 +110,7 @@ extension LoginTVSViewModel {
 					case .serverUnreachableTimedOut, .serverUnreachableConnectionLost, .serverUnreachableInvalidHost:
 
 						let errorCode = ErrorCode(
-							flow: ErrorCode.getFlowFromEventMode(eventMode),
+							flow: eventMode.flow,
 							step: .tvs,
 							clientCode: networkError.getClientErrorCode() ?? .unhandled
 						)
@@ -123,7 +123,7 @@ extension LoginTVSViewModel {
 		}
 
 		let errorCode = ErrorCode(
-			flow: ErrorCode.getFlowFromEventMode(eventMode),
+			flow: eventMode.flow,
 			step: .tvs,
 			clientCode: clientCode ?? ErrorCode.ClientCode(value: "000")
 		)
