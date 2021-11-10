@@ -56,6 +56,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
     func userWishesMoreInfoAboutRecoveryValidityExtension()
 
 	func userWishesMoreInfoAboutRecoveryValidityReinstation()
+	
+	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
 	func openUrl(_ url: URL, inApp: Bool)
 
@@ -488,6 +490,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
+	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
+		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
+		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
 	func migrateEUVaccinationDidComplete() {
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
