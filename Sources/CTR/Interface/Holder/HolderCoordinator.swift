@@ -231,7 +231,7 @@ class HolderCoordinator: SharedCoordinator {
 				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithPositiveTest(tvsToken: nil)
+			eventCoordinator.startWithPositiveTest()
 		}
 	}
 

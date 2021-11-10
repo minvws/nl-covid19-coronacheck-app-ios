@@ -762,7 +762,7 @@ extension ListEventsViewModel {
 				secondaryActionTitle: L.holderVaccinationInternationlQROnlyAction(),
 				secondaryAction: { [weak self] in
 					guard let self = self else { return }
-					self.coordinator?.startWithPositiveTest(tvsToken: self.tvsToken)
+					self.coordinator?.startWithPositiveTest()
 				}
 			)
 		)

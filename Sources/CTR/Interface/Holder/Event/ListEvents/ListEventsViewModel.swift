@@ -71,22 +71,17 @@ class ListEventsViewModel: Logging {
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
 	
-	// keep a reference so that it can be passed to next screen, if available.
-	let tvsToken: TVSAuthorizationToken?
-	
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
 		remoteEvents: [RemoteEvent],
 		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
-		eventsMightBeMissing: Bool = false,
-		tvsToken: TVSAuthorizationToken?
+		eventsMightBeMissing: Bool = false
 	) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 		self.identityChecker = identityChecker
-		self.tvsToken = tvsToken
 		
 		viewState = .loading(content: Content(title: eventMode.title))
 

@@ -512,12 +512,6 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
-		
-		guard case let EventScreenResult.showEvents(_, _, _, tvsToken)? = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.result,
-			  tvsToken == .test else {
-			fail("tvsToken did not match")
-			return
-		}
 	}
 
 	func test_happyFlow_noEvents() {

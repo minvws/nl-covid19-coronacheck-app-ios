@@ -60,14 +60,10 @@ class EventCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtocol {
 
 	var invokedStartWithPositiveTest = false
 	var invokedStartWithPositiveTestCount = 0
-	var invokedStartWithPositiveTestParameters: (tvsToken: TVSAuthorizationToken?, Void)?
-	var invokedStartWithPositiveTestParametersList = [(tvsToken: TVSAuthorizationToken?, Void)]()
 
-	func startWithPositiveTest(tvsToken: TVSAuthorizationToken?) {
+	func startWithPositiveTest() {
 		invokedStartWithPositiveTest = true
 		invokedStartWithPositiveTestCount += 1
-		invokedStartWithPositiveTestParameters = (tvsToken, ())
-		invokedStartWithPositiveTestParametersList.append((tvsToken, ()))
 	}
 
 	var invokedOpenUrl = false

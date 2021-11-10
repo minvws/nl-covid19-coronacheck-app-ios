@@ -89,7 +89,7 @@ enum EventScreenResult: Equatable {
 	case didLogin(token: TVSAuthorizationToken, eventMode: EventMode)
 	
 	/// Show the vaccination events
-	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool, tvsToken: TVSAuthorizationToken?)
+	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
 
 	/// Show some more information
 	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
@@ -105,9 +105,9 @@ enum EventScreenResult: Equatable {
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
-			case (let showEvents(lhsEvents, lhsMode, lhsComplete, lhsToken), let showEvents(rhsEvents, rhsMode, rhsComplete, rhsToken)):
+			case (let showEvents(lhsEvents, lhsMode, lhsComplete), let showEvents(rhsEvents, rhsMode, rhsComplete)):
 
-				if lhsEvents.count != rhsEvents.count || lhsMode != rhsMode || lhsComplete != rhsComplete || lhsToken != rhsToken {
+				if lhsEvents.count != rhsEvents.count || lhsMode != rhsMode || lhsComplete != rhsComplete {
 					return false
 				}
 
@@ -144,7 +144,7 @@ protocol EventCoordinatorDelegate: AnyObject {
 
 	func listEventsScreenDidFinish(_ result: EventScreenResult)
 	
-	func startWithPositiveTest(tvsToken: TVSAuthorizationToken?)
+	func startWithPositiveTest()
 }
 
 protocol EventFlowDelegate: AnyObject {
@@ -165,6 +165,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	weak var delegate: EventFlowDelegate?
 
+	private var tvsToken: TVSAuthorizationToken?
+	
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
@@ -192,9 +194,9 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		startWith(.recovery)
 	}
 
-	func startWithPositiveTest(tvsToken: TVSAuthorizationToken?) {
-		if let tvsSessionToken = tvsToken, tvsSessionToken.expiration > Date(timeIntervalSinceNow: 10) {
-			navigateToFetchEvents(token: tvsSessionToken, eventMode: .positiveTest)
+	func startWithPositiveTest() {
+		if let tvsToken = tvsToken, tvsToken.expiration > Date(timeIntervalSinceNow: 10) {
+			navigateToFetchEvents(token: tvsToken, eventMode: .positiveTest)
 		} else {
 			startWith(.positiveTest)
 		}
@@ -202,12 +204,12 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	func startWithListTestEvents(_ events: [RemoteEvent]) {
 
-		navigateToListEvents(events, eventMode: .test, eventsMightBeMissing: false, tvsToken: nil)
+		navigateToListEvents(events, eventMode: .test, eventsMightBeMissing: false)
 	}
 
 	func startWithScannedEvent(_ event: RemoteEvent) {
 
-		navigateToListEvents([event], eventMode: .paperflow, eventsMightBeMissing: false, tvsToken: nil)
+		navigateToListEvents([event], eventMode: .paperflow, eventsMightBeMissing: false)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -261,16 +263,14 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	private func navigateToListEvents(
 		_ remoteEvents: [RemoteEvent],
 		eventMode: EventMode,
-		eventsMightBeMissing: Bool,
-		tvsToken: TVSAuthorizationToken?) {
+		eventsMightBeMissing: Bool) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				eventMode: eventMode,
 				remoteEvents: remoteEvents,
-				eventsMightBeMissing: eventsMightBeMissing,
-				tvsToken: tvsToken
+				eventsMightBeMissing: eventsMightBeMissing
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -380,6 +380,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 
 			case let .didLogin(token, eventMode):
+				self.tvsToken = token
 				navigateToFetchEvents(token: token, eventMode: eventMode)
 
 			case .errorRequiringRestart(let eventMode):
@@ -411,8 +412,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case let .error(content: content, backAction: backAction):
 				displayError(content: content, backAction: backAction)
 
-			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing, tvsToken):
-				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing, tvsToken: tvsToken)
+			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
+				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
 
 			default:
 				break

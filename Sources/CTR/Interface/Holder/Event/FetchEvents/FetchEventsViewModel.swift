@@ -159,8 +159,7 @@ final class FetchEventsViewModel: Logging {
 						.showEvents(
 							events: remoteEvents,
 							eventMode: self.eventMode,
-							eventsMightBeMissing: someEventsMightBeMissing || someInformationMightBeMissing,
-							tvsToken: self.tvsToken
+							eventsMightBeMissing: someEventsMightBeMissing || someInformationMightBeMissing
 						)
 					)
 				}
