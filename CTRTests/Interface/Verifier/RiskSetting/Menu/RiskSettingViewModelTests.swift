@@ -16,12 +16,12 @@ final class RiskSettingViewModelTests: XCTestCase {
 	private var sut: RiskSettingViewModel!
 	
 	/// The coordinator spy
-	private var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
+	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	
 	override func setUp() {
 		super.setUp()
-		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
+		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
 		userSettingsSpy.stubbedScanRiskSettingValue = .low
 		

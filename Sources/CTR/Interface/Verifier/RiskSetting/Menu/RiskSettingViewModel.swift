@@ -10,7 +10,7 @@ import Foundation
 final class RiskSettingViewModel: Logging {
 	
 	/// Coordination Delegate
-	weak private var coordinator: (Coordinator & OpenUrlProtocol)?
+	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
 	private let userSettings: UserSettingsProtocol
 	
@@ -38,7 +38,7 @@ final class RiskSettingViewModel: Logging {
 	}
 	
 	init(
-		coordinator: (Coordinator & OpenUrlProtocol),
+		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
 		userSettings: UserSettingsProtocol) {
 		
 		self.coordinator = coordinator

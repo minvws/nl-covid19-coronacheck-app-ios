@@ -16,7 +16,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 	// MARK: Subject under test
 	private var sut: RiskSettingViewController!
 	
-	private var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
+	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: RiskSettingViewModel!
 	private var userSettingsSpy: UserSettingsSpy!
 	
@@ -25,7 +25,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 	override  func setUp() {
 		super.setUp()
 		
-		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
+		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
 	}
 	
