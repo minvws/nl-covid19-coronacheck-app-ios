@@ -17,8 +17,13 @@ final class RiskSettingInstructionView: BaseView {
 			static let edge: CGFloat = 20
 		}
 		enum Spacing {
+			static let titleToHeader: CGFloat = 24
 			static let headerToControls: CGFloat = 32
 			static let controlsToMoreButton: CGFloat = 24
+		}
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
 		}
 		enum Header {
 			static let lineHeight: CGFloat = 22
@@ -30,6 +35,10 @@ final class RiskSettingInstructionView: BaseView {
 		let scrollView = UIScrollView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		return scrollView
+	}()
+	
+	private let titleLabel: Label = {
+		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
 	private let headerLabel: Label = {
@@ -72,6 +81,7 @@ final class RiskSettingInstructionView: BaseView {
 		
 		addSubview(scrollView)
 		addSubview(footerButtonView)
+		scrollView.addSubview(titleLabel)
 		scrollView.addSubview(headerLabel)
 		scrollView.addSubview(riskSettingControlsView)
 		scrollView.addSubview(moreButton)
@@ -90,8 +100,17 @@ final class RiskSettingInstructionView: BaseView {
 			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
-			headerLabel.topAnchor.constraint(equalTo: scrollView.topAnchor,
+			titleLabel.topAnchor.constraint(equalTo: scrollView.topAnchor,
 											constant: ViewTraits.Margin.top),
+			titleLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
+											 constant: ViewTraits.Margin.edge),
+			titleLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
+											  constant: -ViewTraits.Margin.edge),
+			titleLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
+														constant: -2 * ViewTraits.Margin.edge),
+			
+			headerLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+											 constant: ViewTraits.Spacing.titleToHeader),
 			headerLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
 											 constant: ViewTraits.Margin.edge),
 			headerLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
@@ -122,6 +141,14 @@ final class RiskSettingInstructionView: BaseView {
 	}
 	
 	// MARK: Public Access
+	
+	var title: String? {
+		didSet {
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 kerning: ViewTraits.Title.kerning,
+															 textColor: Theme.colors.dark)
+		}
+	}
 	
 	var header: String? {
 		didSet {

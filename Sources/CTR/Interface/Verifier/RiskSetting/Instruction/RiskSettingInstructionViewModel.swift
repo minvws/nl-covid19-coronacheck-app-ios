@@ -46,8 +46,8 @@ final class RiskSettingInstructionViewModel: Logging {
 		self.coordinator = coordinator
 		self.userSettings = userSettings
 		
-		title = L.verifierRisksettingTitle()
-		header = L.verifierRisksettingHeaderMenuentry()
+		title = L.verifierRisksettingTitleInstruction()
+		header = L.verifierRisksettingHeaderInstruction()
 		lowRiskTitle = L.verifierRisksettingLowriskTitle()
 		lowRiskSubtitle = L.verifierRisksettingLowriskSubtitle()
 		highRiskTitle = L.verifierRisksettingHighriskTitle()

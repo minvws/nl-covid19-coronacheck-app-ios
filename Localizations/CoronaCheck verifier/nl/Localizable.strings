@@ -133,3 +133,6 @@
 "verifier.risksetting.highrisk.subtitle" = "Bijvoorbeeld een bar, nachtclub of plek waar veel mensen dichtbij elkaar komen";
 "verifier.risksetting.readmore" = "Ik weet het niet zeker";
 "verifier.risksetting.readmore.url" = "https://coronacheck.nl/nl/faq-scanner-in-app";
+
+"verifier.risksetting.title.instruction" = "Wat is het risico niveau van jouw locatie?";
+"verifier.risksetting.header.instruction" = "Geef aan of je op een hoog of laag risico plek gaat scannen. Je kunt later eventueel in het menu je instelling aanpassen.";

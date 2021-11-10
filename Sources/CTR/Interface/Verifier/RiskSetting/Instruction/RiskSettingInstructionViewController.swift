@@ -35,7 +35,7 @@ final class RiskSettingInstructionViewController: BaseViewController {
 
 		super.viewDidLoad()
 		
-		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$header.binding = { [weak self] in self?.sceneView.header = $0 }
 		viewModel.$lowRiskTitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.lowRiskTitle = $0 }
 		viewModel.$lowRiskSubtitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.lowRiskSubtitle = $0 }
