@@ -137,7 +137,5 @@ final class RiskSettingInstructionView: BaseView {
 		}
 	}
 	
-	var selectRiskCommand: ((RiskSetting) -> Void)?
-	
 	var readMoreCommand: (() -> Void)?
 }
