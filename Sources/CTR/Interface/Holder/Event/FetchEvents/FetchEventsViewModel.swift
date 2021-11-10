@@ -41,7 +41,7 @@ final class FetchEventsViewModel: Logging {
 		self.tvsToken = tvsToken
 		self.eventMode = eventMode
 
-		viewState = .loading(content: Content(title: eventMode.title))
+		viewState = .loading(content: Content(title: eventMode.fetching))
 		fetchEventProvidersWithAccessTokens(completion: handleFetchEventProvidersWithAccessTokensResponse)
 	}
 

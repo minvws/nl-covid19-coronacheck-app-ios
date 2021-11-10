@@ -221,7 +221,7 @@ class HolderCoordinator: SharedCoordinator {
 		}
 	}
 
-	private func startEventFlowForPostiveTests() {
+	private func startEventFlowForPositiveTests() {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
@@ -417,7 +417,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToFetchPositiveTests() {
-		startEventFlowForPostiveTests()
+		startEventFlowForPositiveTests()
 	}
 
 	func userWishesToCreateAQR() {

@@ -25,10 +25,20 @@ enum EventMode: String {
 		}
 	}
 
+	var fetching: String {
+		switch self {
+			case .paperflow: return L.holderDccListTitle()
+			case .positiveTest: return L.holderFetcheventsPositiveTestTitle()
+			case .recovery: return L.holderFetcheventsRecoveryTitle()
+			case .test: return L.holderFetcheventsNegativeTestTitle()
+			case .vaccination: return L.holderFetcheventsVaccinationTitle()
+		}
+	}
+
 	var title: String {
 		switch self {
 			case .paperflow: return L.holderDccListTitle()
-			case .positiveTest: return L.holderPositiveTestFetchTitle()
+			case .positiveTest: return ""
 			case .recovery: return L.holderRecoveryListTitle()
 			case .test: return L.holderTestresultsResultsTitle()
 			case .vaccination: return L.holderVaccinationListTitle()
@@ -49,7 +59,7 @@ enum EventMode: String {
 	var listMessage: String {
 		switch self {
 			case .paperflow: return L.holderDccListMessage()
-			case .positiveTest: return "Todo"
+			case .positiveTest: return "Als de gegevens van je test kloppen kun je een bewijs maken."
 			case .recovery: return L.holderRecoveryListMessage()
 			case .test: return L.holderTestresultsResultsText()
 			case .vaccination: return L.holderVaccinationListMessage()

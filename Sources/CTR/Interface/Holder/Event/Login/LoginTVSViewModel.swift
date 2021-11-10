@@ -34,7 +34,7 @@ class LoginTVSViewModel: Logging {
 		self.eventMode = eventMode
 		self.appAuthState = appAuthState
 
-		self.title = eventMode.title
+		self.title = eventMode.fetching
 		content = Content( title: eventMode.title)
 	}
 
