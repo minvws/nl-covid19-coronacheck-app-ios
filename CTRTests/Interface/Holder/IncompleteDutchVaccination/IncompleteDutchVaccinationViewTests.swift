@@ -21,7 +21,7 @@ class IncompleteDutchVaccinationViewTests: XCTestCase {
 		sut.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
 	}
 
-	func test() {
+	func testLabels() {
 		sut.title = "title"
 		sut.addTestResultsButtonTitle = "addTestResultsButtonTitle"
 		sut.addVaccinesButtonTitle = "addVaccinesButtonTitle"

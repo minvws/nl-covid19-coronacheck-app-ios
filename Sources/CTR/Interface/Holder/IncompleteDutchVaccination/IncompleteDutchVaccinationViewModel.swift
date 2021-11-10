@@ -32,10 +32,10 @@ final class IncompleteDutchVaccinationViewModel: Logging {
 	}
 	
 	func didTapAddVaccines() {
-		debugPrint("didTapAddVaccines()")
+		coordinatorDelegate?.userWishesToCreateAVaccinationQR()
 	}
 	
 	func didTapAddTestResults() {
-		debugPrint("didTapAddTestResults()")
+		coordinatorDelegate?.userWishesToFetchPositiveTests()
 	}
 }
