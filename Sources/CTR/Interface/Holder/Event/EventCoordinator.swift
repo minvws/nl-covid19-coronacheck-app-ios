@@ -49,8 +49,7 @@ enum EventMode: String {
 
 		switch self {
 			case .paperflow: return L.holderDccAlertMessage()
-			case .positiveTest: return "Todo"
-			case .recovery: return L.holderRecoveryAlertMessage()
+			case .recovery, .positiveTest: return L.holderRecoveryAlertMessage()
 			case .test: return L.holderTestAlertMessage()
 			case .vaccination: return L.holderVaccinationAlertMessage()
 		}
@@ -426,10 +425,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch eventMode {
 			case .test:
 				navigateBackToTestStart()
-			case .recovery, .vaccination:
+			case .recovery, .vaccination, .positiveTest:
 				navigateBackToEventStart()
-			case .positiveTest:
-				break
 			case .paperflow:
 				delegate?.eventFlowDidCancel()
 		}
@@ -475,9 +472,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 							return L.holderErrorstateLoginMessageRecovery()
 						case .paperflow:
 							return "" // HKVI is not a part of this flow
-						case .positiveTest:
-							return nil
-						case .test:
+						case .test, .positiveTest:
 							return L.holderErrorstateLoginMessageTest()
 						case .vaccination:
 							return L.holderErrorstateLoginMessageVaccination()
