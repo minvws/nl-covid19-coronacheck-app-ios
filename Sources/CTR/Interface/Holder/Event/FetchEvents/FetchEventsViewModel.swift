@@ -123,7 +123,7 @@ final class FetchEventsViewModel: Logging {
 				displayServerUnreachable()
 
 			case (true, _, true): // No results and >=1 network had an error
-				let errorCodes = mapServerErrors(serverErrors, for: flow, step: step)
+				let errorCodes = mapServerErrors(serverErrors, for: eventMode.flow, step: step)
 				displayErrorCodeForUnomiAndEvent(errorCodes)
 
 			case (false, true, _), // Some results and >=1 network was busy (5.5.3)
@@ -152,7 +152,7 @@ final class FetchEventsViewModel: Logging {
 			nextAction: { someEventsMightBeMissing in
 				if hasNoResults && !unomiServerErrors.isEmpty {
 					self.logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
-					let errorCodes = self.mapServerErrors(unomiServerErrors, for: eventMode.flow, step: .unomi)
+					let errorCodes = self.mapServerErrors(unomiServerErrors, for: self.eventMode.flow, step: .unomi)
 					self.displayErrorCodeForUnomiAndEvent(errorCodes)
 				} else {
 					self.coordinator?.fetchEventsScreenDidFinish(

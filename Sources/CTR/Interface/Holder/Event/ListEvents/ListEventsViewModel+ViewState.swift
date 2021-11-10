@@ -66,7 +66,7 @@ extension ListEventsViewModel {
 
 		switch eventMode {
 			case .paperflow: return emptyDccState()
-			case .positiveTest: return emptyTestState()
+			case .positiveTest: return emptyPositiveTestState()
 			case .recovery: return emptyRecoveryState()
 			case .test: return emptyTestState()
 			case .vaccination: return emptyVaccinationState()
@@ -75,91 +75,74 @@ extension ListEventsViewModel {
 
 	private func emptyVaccinationState() -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderVaccinationNolistTitle(),
-				subTitle: L.holderVaccinationNolistMessage(),
-				primaryActionTitle: L.holderVaccinationNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderVaccinationNolistTitle(),
+			subTitle: L.holderVaccinationNolistMessage(),
+			primaryActionTitle: L.holderVaccinationNolistAction()
 		)
 	}
 
 	private func emptyTestState() -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderTestNolistTitle(),
-				subTitle: L.holderTestNolistMessage(),
-				primaryActionTitle: L.holderTestNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderTestNolistTitle(),
+			subTitle: L.holderTestNolistMessage(),
+			primaryActionTitle: L.holderTestNolistAction()
+		)
+	}
+
+	private func emptyPositiveTestState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderPositiveTestNolistTitle(),
+			subTitle: L.holderPositiveTestNolistMessage(),
+			primaryActionTitle: L.holderPositiveTestNolistAction()
 		)
 	}
 
 	private func emptyDccState() -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderCheckdccExpiredTitle(),
-				subTitle: L.holderCheckdccExpiredMessage(),
-				primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderCheckdccExpiredTitle(),
+			subTitle: L.holderCheckdccExpiredMessage(),
+			primaryActionTitle: L.holderCheckdccExpiredActionTitle()
 		)
 	}
 
 	private func emptyRecoveryState() -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderRecoveryNolistTitle(),
-				subTitle: L.holderRecoveryNolistMessage(),
-				primaryActionTitle: L.holderRecoveryNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryNolistTitle(),
+			subTitle: L.holderRecoveryNolistMessage(),
+			primaryActionTitle: L.holderRecoveryNolistAction()
 		)
 	}
 
 	private func recoveryEventsTooOld(_ days: String) -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderRecoveryTooOldTitle(),
-				subTitle: L.holderRecoveryTooOldMessage(days),
-				primaryActionTitle: L.holderTestNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryTooOldTitle(),
+			subTitle: L.holderRecoveryTooOldMessage(days),
+			primaryActionTitle: L.holderTestNolistAction()
 		)
 	}
 
 	internal func cannotCreateEventsState() -> ListEventsViewController.State {
 
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderEventOriginmismatchTitle(),
+			subTitle: eventMode.originsMismatchBody,
+			primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction()
+		)
+	}
+
+	private func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListEventsViewController.State {
+
 		return .feedback(
 			content: Content(
-				title: L.holderEventOriginmismatchTitle(),
-				subTitle: eventMode.originsMismatchBody,
-				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
+				title: title,
+				subTitle: subTitle,
+				primaryActionTitle: primaryActionTitle,
 				primaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(.stop)
 				},
