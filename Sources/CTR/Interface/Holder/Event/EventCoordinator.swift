@@ -83,7 +83,7 @@ enum EventScreenResult: Equatable {
 	case error(content: Content, backAction: () -> Void)
 
 	/// Continue with the next step in the flow
-	case `continue`(value: String?, eventMode: EventMode)
+	case `continue`(eventMode: EventMode)
 
 	/// Show the vaccination events
 	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
@@ -356,7 +356,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				delegate?.eventFlowDidCancel()
 			case .backSwipe:
 				delegate?.eventFlowDidCancelFromBackSwipe()
-			case let .continue(_, eventMode):
+			case let .continue(eventMode):
 				navigateToLogin(eventMode: eventMode)
 			default:
 				break

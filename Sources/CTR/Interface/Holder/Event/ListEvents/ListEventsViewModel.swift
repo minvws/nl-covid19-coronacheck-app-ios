@@ -253,7 +253,6 @@ class ListEventsViewModel: Logging {
 			// All Good -> finish
 			self.coordinator?.listEventsScreenDidFinish(
 				.continue(
-					value: nil,
 					eventMode: self.eventMode
 				)
 			)
