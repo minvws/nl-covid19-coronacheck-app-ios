@@ -77,12 +77,14 @@ class ScanInstructionsViewModel {
 	}
 
 	private func updateState() {
+		let lastPage = pages.count - 1
+		
 		shouldShowSkipButton = {
 			guard !userSettings.scanInstructionShown else { return false }
-			return currentPage < (pages.count - 1)
+			return currentPage < lastPage
 		}()
 		
-		if currentPage == (pages.count - 1), userSettings.scanInstructionShown {
+		if currentPage == lastPage, userSettings.scanInstructionShown {
 			nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 		} else {
 			nextButtonTitle = L.generalNext()
