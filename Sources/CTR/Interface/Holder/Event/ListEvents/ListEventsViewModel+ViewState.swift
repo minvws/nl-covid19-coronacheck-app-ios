@@ -136,7 +136,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListEventsViewController.State {
+	internal func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListEventsViewController.State {
 
 		return .feedback(
 			content: Content(
@@ -755,19 +755,10 @@ private extension ListEventsViewModel {
 
 	func pendingEventsState() -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderTestresultsPendingTitle(),
-				subTitle: L.holderTestresultsPendingText(),
-				primaryActionTitle: L.holderTestNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				}
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderTestresultsPendingTitle(),
+			subTitle: L.holderTestresultsPendingText(),
+			primaryActionTitle: L.holderTestNolistAction()
 		)
 	}
 
