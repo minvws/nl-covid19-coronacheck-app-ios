@@ -97,9 +97,11 @@ enum EventScreenResult: Equatable {
 	/// Show event details
 	case showEventDetails(title: String, details: [EventDetails], footer: String?)
 
+	case startWithPositiveTest
+	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.continue, .continue):
+			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest):
 				return true
 			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
@@ -143,8 +145,6 @@ protocol EventCoordinatorDelegate: AnyObject {
 	func fetchEventsScreenDidFinish(_ result: EventScreenResult)
 
 	func listEventsScreenDidFinish(_ result: EventScreenResult)
-	
-	func startWithPositiveTest()
 }
 
 protocol EventFlowDelegate: AnyObject {
@@ -447,6 +447,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
 			case let .showEventDetails(title, details, footer):
 				navigateToEventDetails(title, details: details, footer: footer)
+			case .startWithPositiveTest:
+				startWithPositiveTest()
 			default:
 				break
 		}
