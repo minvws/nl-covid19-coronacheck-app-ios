@@ -20,6 +20,8 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInformationOnNoInputToken()
 
+	func userWishesMoreInformationOnInternationalQROnly()
+
 	func userDidSubmitPaperCertificateToken(token: String)
 
 	func userWantsToGoBackToDashboard()
@@ -107,14 +109,31 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		navigationController.pushViewController(destination, animated: true)
 	}
 
+	func userWishesMoreInformationOnInternationalQROnly() {
+
+		let viewController = InformationViewController(
+			viewModel: InformationViewModel(
+				coordinator: self,
+				title: L.holderPaperproofInternationalQROnlyTitle(),
+				message: L.holderPaperproofInternationalQROnlyMessage(),
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: true)
+				},
+				hideBodyForScreenCapture: false
+			)
+		)
+		presentAsBottomSheet(viewController)
+	}
+
 	func userDidSubmitPaperCertificateToken(token: String) {
 
 		// Store Token
 		self.token = token
 
 		// Navigate to About Scan
-		let destination = PaperCertificateAboutScanViewController(
-			viewModel: PaperCertificateAboutScanViewModel(
+		let destination = PaperProofStartScanningViewController(
+			viewModel: PaperProofStartScanningViewModel(
 				coordinator: self
 			)
 		)
@@ -167,8 +186,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 //		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
 
-		let destination = PaperCertificateScanViewController(
-			viewModel: PaperCertificateScanViewModel(
+		let destination = PaperProofScanViewController(
+			viewModel: PaperProofScanViewModel(
 				coordinator: self
 			)
 		)
@@ -207,13 +226,18 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 	func userWishesToGoBackToScanCertificate() {
 
 		if let scanViewController = navigationController.viewControllers
-			.first(where: { $0 is PaperCertificateScanViewController }) {
+			.first(where: { $0 is PaperProofScanViewController }) {
 
 			navigationController.popToViewController(
 				scanViewController,
 				animated: true
 			)
 		}
+	}
+
+	private func presentAsBottomSheet(_ viewController: UIViewController) {
+
+		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 }
 

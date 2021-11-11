@@ -10,9 +10,9 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 
-final class PaperCertificateScanViewModelTests: XCTestCase {
+final class PaperProofScanViewModelTests: XCTestCase {
 	
-	var sut: PaperCertificateScanViewModel!
+	var sut: PaperProofScanViewModel!
 	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
 	var cryptoManagerSpy: CryptoManagerSpy!
 	
@@ -22,7 +22,7 @@ final class PaperCertificateScanViewModelTests: XCTestCase {
 		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
 		Services.use(cryptoManagerSpy)
-		sut = PaperCertificateScanViewModel(coordinator: coordinatorDelegateSpy)
+		sut = PaperProofScanViewModel(coordinator: coordinatorDelegateSpy)
 	}
 
 	override func tearDown() {
@@ -36,7 +36,7 @@ final class PaperCertificateScanViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.holderScannerMessage()
 		expect(self.sut.torchLabels) == [L.holderTokenscanTorchEnable(), L.holderTokenscanTorchDisable()]
 		
-		PaperCertificateScanViewController(viewModel: sut).assertImage()
+		PaperProofScanViewController(viewModel: sut).assertImage()
 	}
 	
 	func test_parseQRMessage_whenDomesticQRIsUppercased_shouldInvokeAlert() {
