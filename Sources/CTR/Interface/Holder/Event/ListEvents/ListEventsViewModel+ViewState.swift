@@ -716,7 +716,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	// MARK: Positive test inapplicable
+	// MARK: Positive test end states
 
 	internal func positiveTestInapplicable() -> ListEventsViewController.State {
 
@@ -724,6 +724,24 @@ extension ListEventsViewModel {
 			title: L.holderPositiveTestInapplicableTitle(),
 			subTitle: L.holderPositiveTestInapplicableMessage(),
 			primaryActionTitle: L.holderPositiveTestInapplicableAction()
+		)
+	}
+
+	internal func recoveryAndVaccinationCreated(_ days: String) -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderPositiveTestRecoveryAndVaccinationTitle(),
+			subTitle: L.holderPositiveTestRecoveryAndVaccinationMessage(days),
+			primaryActionTitle: L.holderPositiveTestRecoveryAndVaccinationAction()
+		)
+	}
+
+	internal func recoveryOnlyCreated() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderPositiveTestRecoveryOnlyTitle(),
+			subTitle: L.holderPositiveTestRecoveryOnlyMessage(),
+			primaryActionTitle: L.holderPositiveTestRecoveryOnlyAction()
 		)
 	}
 }

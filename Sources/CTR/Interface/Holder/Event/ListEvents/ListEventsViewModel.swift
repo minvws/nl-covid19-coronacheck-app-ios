@@ -155,8 +155,8 @@ class ListEventsViewModel: Logging {
 					return true
 				}
 
-				let domesticOrigins: Int = remoteResponse.filterDomesticGreenCard(ofType: eventModeForStorage.rawValue).count
-				let internationalOrigins: Int = remoteResponse.filterInternationalGreenCard(ofType: eventModeForStorage.rawValue).count
+				let domesticOrigins: Int = remoteResponse.getDomesticOrigins(ofType: eventModeForStorage.rawValue).count
+				let internationalOrigins: Int = remoteResponse.getInternationalOrigins(ofType: eventModeForStorage.rawValue).count
 
 				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(eventModeForStorage.rawValue)")
 				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(eventModeForStorage.rawValue)")
@@ -236,8 +236,8 @@ class ListEventsViewModel: Logging {
 
 		guard eventModeForStorage == .vaccination else { return }
 
-		if !greencardResponse.hasDomesticGreenCard(ofType: OriginType.vaccination.rawValue) &&
-			greencardResponse.hasInternationalGreenCard(ofType: OriginType.vaccination.rawValue) {
+		if !greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue) &&
+			greencardResponse.hasInternationalOrigins(ofType: OriginType.vaccination.rawValue) {
 			shouldPrimaryButtonBeEnabled = true
 			viewState = internationalQROnly()
 		} else {
@@ -248,14 +248,31 @@ class ListEventsViewModel: Logging {
 	private func handleSuccessForPositiveTest(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
 
 		guard eventModeForStorage == .positiveTest else { return }
-		logDebug("\(greencardResponse)")
 
-		if !greencardResponse.hasDomesticGreenCard(ofType: OriginType.vaccination.rawValue) &&
-			greencardResponse.hasInternationalGreenCard(ofType: OriginType.vaccination.rawValue) {
-			shouldPrimaryButtonBeEnabled = true
-			viewState = positiveTestInapplicable()
-		} else {
-			completeFlow()
+		shouldPrimaryButtonBeEnabled = true
+
+		let recoveryEventValidityDays = remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
+		let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
+		let domesticRecoveryOrigins = greencardResponse.getDomesticOrigins(ofType: OriginType.recovery.rawValue)
+		var hasValidDomesticRecoveryOrigin = false
+		for origin in domesticRecoveryOrigins where origin.expirationTime > Date() {
+			hasValidDomesticRecoveryOrigin = true
+		}
+
+		switch (hasDomesticVaccinationOrigins, hasValidDomesticRecoveryOrigin ) {
+
+			case (true, true):
+				// V + R
+				viewState = recoveryAndVaccinationCreated("\(recoveryEventValidityDays)")
+			case (true, false):
+				// V only
+				completeFlow()
+			case (false, true):
+				// R only
+				viewState = positiveTestInapplicable() //recoveryOnlyCreated()
+			case (false, false):
+				// Nothing. (R older than recoveryEventValidityDays)
+				viewState = positiveTestInapplicable()
 		}
 	}
 
@@ -265,7 +282,7 @@ class ListEventsViewModel: Logging {
 		logDebug("\(greencardResponse)")
 
 		var success = false
-		let domesticRecoveryOrigins = greencardResponse.filterDomesticGreenCard(ofType: OriginType.recovery.rawValue)
+		let domesticRecoveryOrigins = greencardResponse.getDomesticOrigins(ofType: OriginType.recovery.rawValue)
 		for origin in domesticRecoveryOrigins where origin.expirationTime > Date() {
 			success = true
 		}
@@ -278,7 +295,7 @@ class ListEventsViewModel: Logging {
 			viewState = recoveryEventsTooOld("\(recoveryEventValidityDays)")
 			// While the recovery is expired, it is still in Core Data
 			// Let's remove it, to avoid any banner issues on the dashboard (Je bewijs is verlopen)
-			walletManager.removeExpiredGreenCards()
+			_ = walletManager.removeExpiredGreenCards()
 		}
 	}
 

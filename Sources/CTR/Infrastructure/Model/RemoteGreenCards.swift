@@ -20,27 +20,27 @@ struct RemoteGreenCards: Codable {
 			case euGreenCards = "euGreencards"
 		}
 
-		func filterDomesticGreenCard(ofType: String) -> [RemoteGreenCards.Origin] {
+		func getDomesticOrigins(ofType: String) -> [RemoteGreenCards.Origin] {
 
 			return domesticGreenCard?.origins
 				.filter { $0.type == ofType } ?? []
 		}
 
-		func hasDomesticGreenCard(ofType: String) -> Bool {
+		func hasDomesticOrigins(ofType: String) -> Bool {
 
-			return !filterDomesticGreenCard(ofType: ofType).isEmpty
+			return !getDomesticOrigins(ofType: ofType).isEmpty
 		}
 
-		func filterInternationalGreenCard(ofType: String) -> [RemoteGreenCards.Origin] {
+		func getInternationalOrigins(ofType: String) -> [RemoteGreenCards.Origin] {
 
 			return euGreenCards?
 				.flatMap { $0.origins }
 				.filter { $0.type == ofType } ?? []
 		}
 
-		func hasInternationalGreenCard(ofType: String) -> Bool {
+		func hasInternationalOrigins(ofType: String) -> Bool {
 
-			return !filterInternationalGreenCard(ofType: ofType).isEmpty
+			return !getInternationalOrigins(ofType: ofType).isEmpty
 		}
 	}
 
