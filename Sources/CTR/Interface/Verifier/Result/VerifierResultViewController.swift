@@ -43,10 +43,10 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.$allowAccess.binding = { [weak self] in
 
 			switch $0 {
-				case .verified:
-					self?.sceneView.setup(for: .verified)
-				case .demo:
-					self?.sceneView.setup(for: .demo)
+				case .verified(let risk):
+					self?.sceneView.setup(for: .verified(risk))
+				case .demo(let risk):
+					self?.sceneView.setup(for: .demo(risk))
 				case .denied:
 					self?.sceneView.setup(for: .denied)
 			}
@@ -81,6 +81,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.$secondaryTitle.binding = { [weak self] in self?.sceneView.secondaryTitle = $0 }
 		viewModel.$checkIdentity.binding = { [weak self] in self?.sceneView.checkIdentityView.checkIdentity = $0 }
 		viewModel.$primaryButtonIcon.binding = { [weak self] in self?.sceneView.primaryButtonIcon = $0 }
+		viewModel.$riskDescription.binding = { [weak self] in self?.sceneView.riskDescription = $0 }
 		
 		// Identity
 		setupIdentityView()
