@@ -255,7 +255,7 @@ class WalletManager: WalletManaging, Logging {
 
 	/// Remove expired GreenCards that contain no more valid origins
 	/// returns: an array of `Greencard.type` Strings. One for each GreenCard that was deleted.
-	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
+	@discardableResult func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
 		var deletedGreenCardTypes: [(greencardType: String, originType: String)] = []
 
 		let context = dataStoreManager.managedObjectContext()

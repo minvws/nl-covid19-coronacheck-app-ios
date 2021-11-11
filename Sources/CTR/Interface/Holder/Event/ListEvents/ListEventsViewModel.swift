@@ -27,34 +27,6 @@ class ListEventsViewModel: Logging {
 		}
 	}()
 
-	lazy var dateFormatter: ISO8601DateFormatter = {
-		let dateFormatter = ISO8601DateFormatter()
-		dateFormatter.formatOptions = [.withFullDate]
-		return dateFormatter
-	}()
-	
-	lazy var printDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "d MMMM yyyy"
-		return dateFormatter
-	}()
-	lazy var printTestDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
-		return dateFormatter
-	}()
-	lazy var printMonthFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "MMMM"
-		return dateFormatter
-	}()
-
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
 	@Bindable internal var viewState: ListEventsViewController.State
@@ -244,10 +216,12 @@ class ListEventsViewModel: Logging {
 	private func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
 
 		switch eventModeForStorage {
+			case .paperflow, .test:
+				completeFlow()
 			case .positiveTest:
 				handleSuccessForPositiveTest(greencardResponse, eventModeForStorage: eventModeForStorage)
-			case .paperflow, .recovery, .test:
-				completeFlow()
+			case .recovery:
+				handleSuccessForRecovery(greencardResponse, eventModeForStorage: eventModeForStorage)
 			case .vaccination:
 				handleSuccessForVaccination(greencardResponse, eventModeForStorage: eventModeForStorage)
 		}
@@ -282,6 +256,29 @@ class ListEventsViewModel: Logging {
 			viewState = positiveTestInapplicable()
 		} else {
 			completeFlow()
+		}
+	}
+
+	private func handleSuccessForRecovery(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+
+		guard eventModeForStorage == .recovery else { return }
+		logDebug("\(greencardResponse)")
+
+		var success = false
+		let domesticRecoveryOrigins = greencardResponse.filterDomesticGreenCard(ofType: OriginType.recovery.rawValue)
+		for origin in domesticRecoveryOrigins where origin.expirationTime > Date() {
+			success = true
+		}
+
+		if success {
+			completeFlow()
+		} else {
+			let recoveryEventValidityDays = remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
+			shouldPrimaryButtonBeEnabled = true
+			viewState = recoveryEventsTooOld("\(recoveryEventValidityDays)")
+			// While the recovery is expired, it is still in Core Data
+			// Let's remove it, to avoid any banner issues on the dashboard (Je bewijs is verlopen)
+			walletManager.removeExpiredGreenCards()
 		}
 	}
 
