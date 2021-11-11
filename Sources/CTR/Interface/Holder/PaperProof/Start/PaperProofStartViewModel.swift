@@ -22,11 +22,11 @@ final class PaperProofStartViewModel: Logging {
 	@Bindable private (set) var selfPrintedButtonTitle = L.holderPaperproofStartSelfprinted()
 	@Bindable private (set) var nextButtonTitle = L.generalNext()
 	
-	private weak var coordinator: PaperCertificateCoordinatorDelegate?
+	private weak var coordinator: PaperProofCoordinatorDelegate?
 	
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: PaperCertificateCoordinatorDelegate) {
+	init(coordinator: PaperProofCoordinatorDelegate) {
 		
 		self.coordinator = coordinator
 		self.items = [

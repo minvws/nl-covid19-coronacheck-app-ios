@@ -11,17 +11,17 @@ import SnapshotTesting
 import ViewControllerPresentationSpy
 @testable import CTR
 
-class PaperCertificateCheckViewControllerTests: XCTestCase {
+class PaperProofCheckViewControllerTests: XCTestCase {
 
-	var sut: PaperCertificateCheckViewController!
-	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
+	var sut: PaperProofCheckViewController!
+	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
 	var couplingManagerSpy: CouplingManagerSpy!
 
 	var window = UIWindow()
 
 	override func setUp() {
 		super.setUp()
-		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
+		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
 		couplingManagerSpy = CouplingManagerSpy(
 			cryptoManager: CryptoManagerSpy(),
 			networkManager: NetworkSpy(configuration: .development)
@@ -50,8 +50,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
 
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewController(
+			viewModel: PaperProofCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
 				couplingCode: "test"
@@ -75,8 +75,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
 
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewController(
+			viewModel: PaperProofCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
 				couplingCode: "test"
@@ -97,8 +97,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
 
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewController(
+			viewModel: PaperProofCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
 				couplingCode: "test"
@@ -122,8 +122,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
 
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewController(
+			viewModel: PaperProofCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
 				couplingCode: "test"
@@ -144,8 +144,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
 
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewController(
+			viewModel: PaperProofCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
 				couplingCode: "test"
@@ -169,8 +169,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
 
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewController(
+			viewModel: PaperProofCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
 				couplingCode: "test"
@@ -192,8 +192,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewController(
+			viewModel: PaperProofCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
 				couplingCode: "test"
@@ -224,8 +224,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewController(
+			viewModel: PaperProofCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
 				couplingCode: "test"
@@ -247,8 +247,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
-		sut = PaperCertificateCheckViewController(
-			viewModel: PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewController(
+			viewModel: PaperProofCheckViewModel(
 				coordinator: coordinatorDelegateSpy,
 				scannedDcc: "test",
 				couplingCode: "test"

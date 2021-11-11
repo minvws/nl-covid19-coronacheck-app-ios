@@ -15,12 +15,12 @@ import SnapshotTesting
 class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 
 	var sut: PaperProofInputCouplingCodeViewModel!
-	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
+	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
 
 	override func setUp() {
 		super.setUp()
 		
-		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
+		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
 		sut = PaperProofInputCouplingCodeViewModel(coordinator: coordinatorDelegateSpy)
 	}
 
@@ -131,8 +131,8 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.nextButtonTapped()
 
 		// Assert
-		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateToken) == true
-		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateTokenParameters?.token) == "ABCDEF"
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperProofToken) == true
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperProofTokenParameters?.token) == "ABCDEF"
 	}
 
 	func test_tappingSubmit_withValidLowercaseValue_submitsUppercasedValue() {
@@ -143,8 +143,8 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.nextButtonTapped()
 
 		// Assert
-		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateToken) == true
-		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateTokenParameters?.token) == "ABCDEF"
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperProofToken) == true
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperProofTokenParameters?.token) == "ABCDEF"
 	}
 
 	func test_tappingNoTokenButton() {

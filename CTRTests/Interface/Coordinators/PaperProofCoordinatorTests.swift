@@ -9,9 +9,9 @@ import XCTest
 import Nimble
 @testable import CTR
 
-class PaperCertificateCoordinatorTests: XCTestCase {
+class PaperProofCoordinatorTests: XCTestCase {
 
-	var sut: PaperCertificateCoordinator!
+	var sut: PaperProofCoordinator!
 	var cryptoSpy: CryptoManagerSpy!
 	var flowSpy: PaperProofFlowDelegateSpy!
 	var navigationSpy: NavigationControllerSpy!
@@ -25,7 +25,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 		Services.use(cryptoSpy)
 
-		sut = PaperCertificateCoordinator(delegate: flowSpy)
+		sut = PaperProofCoordinator(delegate: flowSpy)
 		sut.navigationController = navigationSpy
 	}
 
@@ -51,12 +51,12 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		expect(self.sut.scannedQR).to(beNil())
 	}
 
-	func test_userDidSubmitPaperCertificateToken() {
+	func test_userDidSubmitPaperProofToken() {
 
 		// Given
 
 		// When
-		sut.userDidSubmitPaperCertificateToken(token: "test")
+		sut.userDidSubmitPaperProofToken(token: "test")
 
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1

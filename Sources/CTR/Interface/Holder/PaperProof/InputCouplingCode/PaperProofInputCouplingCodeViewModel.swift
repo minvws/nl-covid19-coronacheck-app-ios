@@ -32,7 +32,7 @@ final class PaperProofInputCouplingCodeViewModel {
 
 	// MARK: - Private Dependencies:
 
-	private weak var coordinator: PaperCertificateCoordinatorDelegate?
+	private weak var coordinator: PaperProofCoordinatorDelegate?
 
 	// MARK: - Private vars
 
@@ -44,7 +44,7 @@ final class PaperProofInputCouplingCodeViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - proofManager: the proof manager
 	///   - requestToken: an optional existing request token
-	init(coordinator: PaperCertificateCoordinatorDelegate) {
+	init(coordinator: PaperProofCoordinatorDelegate) {
 
 		self.coordinator = coordinator
 	}
@@ -105,7 +105,7 @@ final class PaperProofInputCouplingCodeViewModel {
 			return
 		}
 
-		coordinator?.userDidSubmitPaperCertificateToken(token: sanitizedInput)
+		coordinator?.userDidSubmitPaperProofToken(token: sanitizedInput)
 	}
 
 	func userHasNoTokenButtonTapped() {
