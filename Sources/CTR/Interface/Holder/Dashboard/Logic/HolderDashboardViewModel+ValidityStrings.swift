@@ -79,9 +79,11 @@ extension QRCard {
 				case (.validityHasBegun, .netherlands, .vaccination):
 					return validityText_hasBegun_domestic_vaccination(validFrom: origin.validFromDate)
 				
-				case (.validityHasNotYetBegun, .netherlands, .vaccination),
-					(.validityHasNotYetBegun, .netherlands, .test):
-					return validityText_hasNotYetBegun_netherlands_vaccination_or_test(qrCard: qrCard, origin: origin, now: now)
+				case (.validityHasNotYetBegun, .netherlands, .vaccination):
+					return validityText_hasNotYetBegun_netherlands_vaccination(qrCard: qrCard, origin: origin, now: now)
+				
+				case (.validityHasNotYetBegun, .netherlands, .test):
+					return validityText_hasNotYetBegun_netherlands_test(qrCard: qrCard, origin: origin, now: now)
 					
 				// -- Domestic Tests --
 					
@@ -257,7 +259,19 @@ private func validityText_hasNotYetBegun_eu_recovery(validFrom: Date, expiration
 
 // Caveats!
 // - "future validity" for a test probably won't happen..
-private func validityText_hasNotYetBegun_netherlands_vaccination_or_test(qrCard: QRCard, origin: QRCard.GreenCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasNotYetBegun_netherlands_test(qrCard: QRCard, origin: QRCard.GreenCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
+	let prefix: String = L.holderDashboardQrValidityDatePrefixValidFrom()
+	let validFromDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: origin.validFromDate)
+
+	let titleString = origin.type.localizedProof.capitalizingFirstLetter() + ":"
+	let valueString = (prefix + " " + validFromDateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	return .init(
+		lines: [titleString, valueString],
+		kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+	)
+}
+
+private func validityText_hasNotYetBegun_netherlands_vaccination(qrCard: QRCard, origin: QRCard.GreenCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
 	let prefix: String = L.holderDashboardQrValidityDatePrefixValidFrom()
 	let validFromDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: origin.validFromDate)
 
