@@ -357,7 +357,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.vaccination,
 			eventDate: now.addingTimeInterval(1 * day * ago),
 			expirationTime: now.addingTimeInterval(3 * days * fromNow),
-			validFromDate: now.addingTimeInterval(1 * day * ago)
+			validFromDate: now.addingTimeInterval(1 * day * ago),
+			doseNumber: 1
 		)
 	}
 
@@ -366,7 +367,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.vaccination,
 			eventDate: now.addingTimeInterval(5 * days * ago),
 			expirationTime: now.addingTimeInterval(25 * days * fromNow),
-			validFromDate: now.addingTimeInterval(5 * days * ago)
+			validFromDate: now.addingTimeInterval(5 * days * ago),
+			doseNumber: 1
 		)
 	}
 
@@ -375,7 +377,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.vaccination,
 			eventDate: now.addingTimeInterval(30 * day * ago),
 			expirationTime: now.addingTimeInterval(60 * seconds * fromNow),
-			validFromDate: now.addingTimeInterval(30 * day * ago)
+			validFromDate: now.addingTimeInterval(30 * day * ago),
+			doseNumber: 1
 		)
 	}
 
@@ -384,7 +387,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.vaccination,
 			eventDate: now.addingTimeInterval(15 * days * ago),
 			expirationTime: now.addingTimeInterval(14 * days * fromNow),
-			validFromDate: now.addingTimeInterval(15 * day * ago)
+			validFromDate: now.addingTimeInterval(15 * day * ago),
+			doseNumber: 1
 		)
 	}
 
@@ -393,7 +397,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.vaccination,
 			eventDate: now.addingTimeInterval(24 * hours * ago),
 			expirationTime: now.addingTimeInterval(30 * days * fromNow),
-			validFromDate: now.addingTimeInterval(24 * hours * ago)
+			validFromDate: now.addingTimeInterval(24 * hours * ago),
+			doseNumber: 1
 		)
 	}
 
@@ -402,7 +407,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.test,
 			eventDate: now.addingTimeInterval(1 * hour * ago),
 			expirationTime: now.addingTimeInterval(23 * hours * fromNow),
-			validFromDate: now.addingTimeInterval(1 * hour * ago)
+			validFromDate: now.addingTimeInterval(1 * hour * ago),
+			doseNumber: nil
 		)
 	}
 
@@ -411,7 +417,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.test,
 			eventDate: now.addingTimeInterval(1 * day * ago),
 			expirationTime: now.addingTimeInterval(5 * minutes * fromNow),
-			validFromDate: now.addingTimeInterval(1 * day * ago)
+			validFromDate: now.addingTimeInterval(1 * day * ago),
+			doseNumber: nil
 		)
 	}
 
@@ -420,7 +427,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.recovery,
 			eventDate: now.addingTimeInterval(1 * hour * ago),
 			expirationTime: now.addingTimeInterval(300 * days * fromNow),
-			validFromDate: now.addingTimeInterval(1 * hour * ago)
+			validFromDate: now.addingTimeInterval(1 * hour * ago),
+			doseNumber: nil
 		)
 	}
 
@@ -429,7 +437,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.recovery,
 			eventDate: now.addingTimeInterval(30 * days * ago),
 			expirationTime: now.addingTimeInterval(120 * minutes * fromNow),
-			validFromDate: now.addingTimeInterval(30 * days * ago)
+			validFromDate: now.addingTimeInterval(30 * days * ago),
+			doseNumber: nil
 		)
 	}
 
@@ -438,7 +447,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.vaccination,
 			eventDate: now.addingTimeInterval(9 * days * ago),
 			expirationTime: now.addingTimeInterval(4 * years * fromNow),
-			validFromDate: now.addingTimeInterval(5 * days * fromNow)
+			validFromDate: now.addingTimeInterval(5 * days * fromNow),
+			doseNumber: nil
 		)
 	}
 
@@ -449,7 +459,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.vaccination,
 			eventDate: now.addingTimeInterval(5 * days * ago),
 			expirationTime: now.addingTimeInterval(30 * days * fromNow),
-			validFromDate: now.addingTimeInterval(48 * hours * fromNow)
+			validFromDate: now.addingTimeInterval(48 * hours * fromNow),
+			doseNumber: 1
 		)
 	}
 
@@ -458,7 +469,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.recovery,
 			eventDate: now.addingTimeInterval(5 * days * ago),
 			expirationTime: now.addingTimeInterval(300 * days * fromNow),
-			validFromDate: now.addingTimeInterval(48 * hour * fromNow)
+			validFromDate: now.addingTimeInterval(48 * hour * fromNow),
+			doseNumber: nil
 		)
 	}
 
@@ -469,7 +481,8 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			type: QRCodeOriginType.vaccination,
 			eventDate: now.addingTimeInterval(30 * days * ago),
 			expirationTime: now.addingTimeInterval(2 * days * ago),
-			validFromDate: now.addingTimeInterval(14 * days * ago)
+			validFromDate: now.addingTimeInterval(14 * days * ago),
+			doseNumber: 1
 		)
 	}
 }
