@@ -410,7 +410,6 @@ final class HolderDashboardViewModel: Logging {
 		let regionFilteredExpiredCards = state.expiredGreenCards.filter { $0.region == validityRegion }
 		let dashboardIsEmpty = allQRCards.isEmpty && regionFilteredExpiredCards.isEmpty
 
-
 		// Build up the cards into this array:
 		var viewControllerCards = [HolderDashboardViewController.Card]()
 
