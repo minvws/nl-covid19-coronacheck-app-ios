@@ -187,6 +187,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount += 1
 	}
 
+	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = false
+	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount = 0
+
+	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
+		invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = true
+		invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount += 1
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?

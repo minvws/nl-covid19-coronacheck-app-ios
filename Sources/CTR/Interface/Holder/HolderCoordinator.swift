@@ -56,6 +56,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
     func userWishesMoreInfoAboutRecoveryValidityExtension()
 
 	func userWishesMoreInfoAboutRecoveryValidityReinstation()
+	
+	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
 	func openUrl(_ url: URL, inApp: Bool)
 
@@ -221,7 +223,7 @@ class HolderCoordinator: SharedCoordinator {
 		}
 	}
 
-	private func startEventFlowForPostiveTests() {
+	private func startEventFlowForPositiveTests() {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
@@ -417,7 +419,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToFetchPositiveTests() {
-		startEventFlowForPostiveTests()
+		startEventFlowForPositiveTests()
 	}
 
 	func userWishesToCreateAQR() {
@@ -488,6 +490,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
+	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
+		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
+		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
 	func migrateEUVaccinationDidComplete() {
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})

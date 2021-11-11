@@ -18,7 +18,7 @@ protocol OpenIdManaging: AnyObject {
 	///   - onCompletion: completion handler with optional access token
 	///   - onError: error handler
 	func requestAccessToken(
-		onCompletion: @escaping (String?) -> Void,
+		onCompletion: @escaping (TVSAuthorizationToken) -> Void,
 		onError: @escaping (Error?) -> Void)
 }
 
@@ -47,7 +47,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 	///   - onCompletion: completion handler with optional access token
 	///   - onError: error handler
 	func requestAccessToken(
-		onCompletion: @escaping (String?) -> Void,
+		onCompletion: @escaping (TVSAuthorizationToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
 
 		discoverServiceConfiguration { [weak self] result in
@@ -67,7 +67,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 
 	private func requestAuthorization(
 		_ serviceConfiguration: OIDServiceConfiguration,
-		onCompletion: @escaping (String?) -> Void,
+		onCompletion: @escaping (TVSAuthorizationToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
 			
 		isAuthorizationInProgress = true
@@ -86,9 +86,17 @@ class OpenIdManager: OpenIdManaging, Logging {
 				self.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
 				NotificationCenter.default.post(name: .enablePrivacySnapShot, object: nil)
 				DispatchQueue.main.async {
-					if let authState = authState {
+					
+					if let lastTokenResponse = authState?.lastTokenResponse,
+					   let idTokenString = lastTokenResponse.idToken,
+					   let idToken = OIDIDToken(idTokenString: idTokenString) {
+
 						self.logDebug("OpenIdManager: We got the idToken")
-						onCompletion(authState.lastTokenResponse?.idToken)
+						
+						onCompletion(TVSAuthorizationToken(
+							idTokenString: idTokenString,
+							expiration: idToken.expiresAt
+						))
 					} else {
 						self.logError("OpenIdManager: \(String(describing: error))")
 						onError(error)

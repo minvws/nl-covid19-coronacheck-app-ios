@@ -58,6 +58,14 @@ class EventCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtocol {
 		invokedListEventsScreenDidFinishParametersList.append((result, ()))
 	}
 
+	var invokedStartWithPositiveTest = false
+	var invokedStartWithPositiveTestCount = 0
+
+	func startWithPositiveTest() {
+		invokedStartWithPositiveTest = true
+		invokedStartWithPositiveTestCount += 1
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
