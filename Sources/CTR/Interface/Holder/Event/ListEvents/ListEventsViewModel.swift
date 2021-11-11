@@ -183,13 +183,8 @@ class ListEventsViewModel: Logging {
 					return true
 				}
 
-				let domesticOrigins: Int = remoteResponse.domesticGreenCard?.origins
-					.filter { $0.type == eventModeForStorage.rawValue }
-					.count ?? 0
-				let internationalOrigins: Int = remoteResponse.euGreenCards?
-					.flatMap { $0.origins }
-					.filter { $0.type == eventModeForStorage.rawValue }
-					.count ?? 0
+				let domesticOrigins: Int = remoteResponse.filterDomesticGreenCard(ofType: eventModeForStorage.rawValue).count
+				let internationalOrigins: Int = remoteResponse.filterInternationalGreenCard(ofType: eventModeForStorage.rawValue).count
 
 				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(eventModeForStorage.rawValue)")
 				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(eventModeForStorage.rawValue)")
@@ -272,8 +267,8 @@ class ListEventsViewModel: Logging {
 
 		guard eventModeForStorage == .vaccination else { return }
 
-		if greencardResponse.domesticGreenCard == nil,
-		   let euCards = greencardResponse.euGreenCards, euCards.count == 1 {
+		if !greencardResponse.hasDomesticGreenCard(ofType: OriginType.vaccination.rawValue) &&
+			greencardResponse.hasInternationalGreenCard(ofType: OriginType.vaccination.rawValue) {
 			shouldPrimaryButtonBeEnabled = true
 			viewState = internationalQROnly()
 		} else {
@@ -284,14 +279,15 @@ class ListEventsViewModel: Logging {
 	private func handleSuccessForPositiveTest(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
 
 		guard eventModeForStorage == .positiveTest else { return }
+		logDebug("\(greencardResponse)")
 
-//		if greencardResponse.domesticGreenCard == nil,
-//		   let euCards = greencardResponse.euGreenCards, euCards.count == 1 {
+		if !greencardResponse.hasDomesticGreenCard(ofType: OriginType.vaccination.rawValue) &&
+			greencardResponse.hasInternationalGreenCard(ofType: OriginType.vaccination.rawValue) {
 			shouldPrimaryButtonBeEnabled = true
 			viewState = positiveTestInapplicable()
-//		} else {
-//			completeFlow()
-//		}
+		} else {
+			completeFlow()
+		}
 	}
 
 	private func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
