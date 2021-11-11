@@ -1076,7 +1076,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -1116,7 +1116,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -1156,7 +1156,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 

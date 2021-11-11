@@ -58,22 +58,11 @@ class LoginTVSViewModel: Logging {
 			secondaryAction: nil
 		)
 
-		openIdManager?.requestAccessToken() { accessToken in
+		openIdManager?.requestAccessToken() { tvsToken in
 
 			self.shouldShowProgress = false
 
-			if let token = accessToken {
-				self.coordinator?.loginTVSScreenDidFinish(.continue(value: token, eventMode: self.eventMode))
-			} else {
-				self.alert = AlertContent(
-					title: L.generalErrorTitle(),
-					subTitle: L.generalErrorTechnicalText(),
-					cancelAction: nil,
-					cancelTitle: nil,
-					okAction: nil,
-					okTitle: L.generalOk()
-				)
-			}
+			self.coordinator?.loginTVSScreenDidFinish(.didLogin(token: tvsToken, eventMode: self.eventMode))
 		} onError: { error in
 			self.shouldShowProgress = false
 			self.handleError(error)
