@@ -11,7 +11,8 @@ class HolderDashboardViewController: BaseViewController {
 
     enum Card {
         case headerMessage(message: String, buttonTitle: String?)
-        case emptyState(image: UIImage?, title: String, message: String, buttonTitle: String?)
+        case emptyStateDescription(message: String, buttonTitle: String?)
+        case emptyStatePlaceholderImage(image: UIImage, title: String)
 
         // Warnings:
         case expiredQR(message: String, didTapClose: () -> Void)
@@ -198,20 +199,24 @@ class HolderDashboardViewController: BaseViewController {
                         ))
 						return messageCard
 
-					case let .emptyState(image, title, message, buttonTitle):
-						let emptyDashboardView = EmptyDashboardDescriptionView()
-						emptyDashboardView.image = image
-						emptyDashboardView.title = title
-						emptyDashboardView.message = message
-						emptyDashboardView.buttonTitle = buttonTitle
-						emptyDashboardView.contentTextView.linkTouched { url in
+					case let .emptyStateDescription(message, buttonTitle):
+						let view = EmptyDashboardDescriptionView()
+						view.message = message
+						view.buttonTitle = buttonTitle
+						view.contentTextView.linkTouched { url in
 							self?.viewModel.openUrl(url)
 						}
-						emptyDashboardView.buttonTappedCommand = {
+						view.buttonTappedCommand = {
 							guard let url = URL(string: L.holderDashboardEmptyInternationalUrl()) else { return }
 							self?.viewModel.openUrl(url)
 						}
-						return emptyDashboardView
+						return view
+
+					case let .emptyStatePlaceholderImage(image, title):
+						let view = EmptyDashboardImagePlaceholderView()
+						view.title = title
+						view.image = image
+						return view
 						
 					case let .domesticQR(title, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
 						 let .europeanUnionQR(title, _, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):

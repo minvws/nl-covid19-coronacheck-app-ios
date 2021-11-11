@@ -407,12 +407,18 @@ final class HolderDashboardViewModel: Logging {
 				default: return false
 			}
 		}
-
 		let regionFilteredExpiredCards = state.expiredGreenCards.filter { $0.region == validityRegion }
+		let dashboardIsEmpty = allQRCards.isEmpty && regionFilteredExpiredCards.isEmpty
 
-		// We'll add to this:
+
+		// Build up the cards into this array:
 		var viewControllerCards = [HolderDashboardViewController.Card]()
 
+		viewControllerCards += HolderDashboardViewController.Card.emptyStateDescriptionCard(
+			hasEmptyState: dashboardIsEmpty,
+			validityRegion: validityRegion
+		)
+		
 		viewControllerCards += HolderDashboardViewController.Card.headerCard(
             validityRegion: validityRegion,
             allQRCards: allQRCards,
@@ -455,13 +461,7 @@ final class HolderDashboardViewModel: Logging {
 				didTapCloseExpiredQR($0)
 		   })
 
-		viewControllerCards += HolderDashboardViewController.Card.emptyStateCard(
-			validityRegion: validityRegion,
-			allQRCards: allQRCards,
-			regionFilteredExpiredCards: regionFilteredExpiredCards
-		)
-
-		viewControllerCards += HolderDashboardViewController.Card.originNotValidInThisRegion(
+		viewControllerCards += HolderDashboardViewController.Card.originNotValidInThisRegionBanner(
 			qrCards: state.qrCards,
 			validityRegion: validityRegion,
 			now: now,
@@ -480,7 +480,12 @@ final class HolderDashboardViewModel: Logging {
 				}
 			}
 		)
-
+		
+		viewControllerCards += HolderDashboardViewController.Card.emptyStatePlaceholderImageCard(
+			hasEmptyState: dashboardIsEmpty,
+			validityRegion: validityRegion
+		)
+		
 		// Map a `QRCard` to a `VC.Card`:
 		viewControllerCards += regionFilteredMyQRCards
 			.flatMap { (qrcardDataItem: HolderDashboardViewModel.QRCard) -> [HolderDashboardViewController.Card] in
@@ -660,33 +665,49 @@ extension HolderDashboardViewController.Card {
 			}
 	}
 	
-	fileprivate static func emptyStateCard(
-		validityRegion: QRCodeValidityRegion,
-		allQRCards: [HolderDashboardViewModel.QRCard],
-		regionFilteredExpiredCards: [HolderDashboardViewModel.ExpiredQR]
+	fileprivate static func emptyStateDescriptionCard(
+		hasEmptyState: Bool,
+		validityRegion: QRCodeValidityRegion
 	) -> [HolderDashboardViewController.Card] {
-		guard allQRCards.isEmpty && regionFilteredExpiredCards.isEmpty else { return [] }
+		guard hasEmptyState else { return [] }
 		switch validityRegion {
 			case .domestic:
-				return [HolderDashboardViewController.Card.emptyState(
-					image: I.dashboard.domestic(),
-					title: L.holderDashboardEmptyDomesticTitle(),
+				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: L.holderDashboardEmptyDomesticMessage(),
 					buttonTitle: nil
 				)]
 			case .europeanUnion:
-				return [HolderDashboardViewController.Card.emptyState(
-					image: I.dashboard.international(),
-					title: L.holderDashboardEmptyInternationalTitle(),
+				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: L.holderDashboardEmptyInternationalMessage(),
 					buttonTitle: L.holderDashboardEmptyInternationalButton()
 				)]
 		}
 	}
 	
+	fileprivate static func emptyStatePlaceholderImageCard(
+		hasEmptyState: Bool,
+		validityRegion: QRCodeValidityRegion
+	) -> [HolderDashboardViewController.Card] {
+		guard hasEmptyState else { return [] }
+		switch validityRegion {
+			case .domestic:
+				guard let domesticImage = I.dashboard.domestic() else { return [] }
+				return [HolderDashboardViewController.Card.emptyStatePlaceholderImage(
+					image: domesticImage,
+					title: L.holderDashboardEmptyDomesticTitle()
+				)]
+			case .europeanUnion:
+				guard let internationalImage = I.dashboard.international() else { return [] }
+				return [HolderDashboardViewController.Card.emptyStatePlaceholderImage(
+					image: internationalImage,
+					title: L.holderDashboardEmptyInternationalTitle()
+				)]
+		}
+	}
+	
 	/// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 	/// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
-	fileprivate static func originNotValidInThisRegion(
+	fileprivate static func originNotValidInThisRegionBanner(
 		qrCards: [QRCard],
 		validityRegion: QRCodeValidityRegion,
 		now: Date,
