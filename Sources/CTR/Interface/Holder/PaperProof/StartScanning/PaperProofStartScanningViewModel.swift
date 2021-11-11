@@ -15,11 +15,11 @@ final class PaperProofStartScanningViewModel: Logging {
 	@Bindable private(set) var internationalTitle = L.holderPaperproofStartscanningInternational()
 	@Bindable private(set) var internationalQROnly = I.internationalQROnly()
 
-	private weak var coordinator: PaperCertificateCoordinatorDelegate?
+	private weak var coordinator: PaperProofCoordinatorDelegate?
 	
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: PaperCertificateCoordinatorDelegate) {
+	init(coordinator: PaperProofCoordinatorDelegate) {
 		
 		self.coordinator = coordinator
 	}

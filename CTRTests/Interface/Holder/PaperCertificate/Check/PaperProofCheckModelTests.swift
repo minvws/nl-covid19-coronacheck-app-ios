@@ -9,16 +9,16 @@ import XCTest
 import Nimble
 @testable import CTR
 
-class PaperCertificateCheckModelTests: XCTestCase {
+class PaperProofCheckModelTests: XCTestCase {
 
-	var sut: PaperCertificateCheckViewModel!
-	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
+	var sut: PaperProofCheckViewModel!
+	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
 	var couplingManagerSpy: CouplingManagerSpy!
 
 	override func setUp() {
 		super.setUp()
 
-		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
+		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
 		couplingManagerSpy = CouplingManagerSpy(
 			cryptoManager: CryptoManagerSpy(),
 			networkManager: NetworkSpy(configuration: .development)
@@ -40,7 +40,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -74,7 +74,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		)
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -93,7 +93,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -119,7 +119,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -145,7 +145,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -171,7 +171,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -197,7 +197,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -218,7 +218,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -245,7 +245,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -271,7 +271,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -297,7 +297,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -323,7 +323,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -349,7 +349,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -375,7 +375,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -401,7 +401,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
@@ -427,7 +427,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
-		sut = PaperCertificateCheckViewModel(
+		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"

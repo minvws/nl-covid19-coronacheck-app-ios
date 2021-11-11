@@ -605,8 +605,8 @@ extension HolderCoordinator: MenuDelegate {
 				navigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
 				
-			case .addPaperCertificate:
-				let coordinator = PaperCertificateCoordinator(delegate: self)
+			case .addPaperProof:
+				let coordinator = PaperProofCoordinator(delegate: self)
 				let destination = PaperProofStartViewController(viewModel: .init(coordinator: coordinator))
 				navigationController = UINavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController
@@ -646,7 +646,7 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .addPaperCertificate, title: L.holderMenuPapercertificate()),
+			MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
 			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]
 	}

@@ -7,19 +7,19 @@
 
 import UIKit
 
-class PaperCertificateCheckViewController: BaseViewController {
+class PaperProofCheckViewController: BaseViewController {
 
 	enum State {
 		case loading(content: Content)
 		case feedback(content: Content)
 	}
 
-	private let viewModel: PaperCertificateCheckViewModel
+	private let viewModel: PaperProofCheckViewModel
 	let sceneView = FetchEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PaperCertificateCheckViewModel) {
+	init(viewModel: PaperProofCheckViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

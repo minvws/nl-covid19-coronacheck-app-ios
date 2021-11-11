@@ -7,9 +7,9 @@
 
 import Foundation
 
-class PaperCertificateCheckViewModel: Logging {
+class PaperProofCheckViewModel: Logging {
 
-	weak var coordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol)?
+	weak var coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)?
 
 	private let couplingManager: CouplingManaging = Services.couplingManager
 
@@ -22,14 +22,14 @@ class PaperCertificateCheckViewModel: Logging {
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	@Bindable internal var viewState: PaperCertificateCheckViewController.State
+	@Bindable internal var viewState: PaperProofCheckViewController.State
 
 	@Bindable internal var shouldPrimaryButtonBeEnabled: Bool = true
 
 	@Bindable private(set) var alert: AlertContent?
 
 	init(
-		coordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol),
+		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol),
 		scannedDcc: String,
 		couplingCode: String
 	) {

@@ -27,7 +27,7 @@ enum MenuIdentifier {
 
 	case overview
 	case addCertificate
-	case addPaperCertificate
+	case addPaperProof
 	case scanInstructions
 	case support
 	case faq

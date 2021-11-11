@@ -14,7 +14,7 @@ protocol PaperProofFlowDelegate: AnyObject {
 	func switchToAddRegularProof()
 }
 
-protocol PaperCertificateCoordinatorDelegate: AnyObject {
+protocol PaperProofCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInformationOnSelfPrintedProof()
 
@@ -22,7 +22,7 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInformationOnInternationalQROnly()
 
-	func userDidSubmitPaperCertificateToken(token: String)
+	func userDidSubmitPaperProofToken(token: String)
 
 	func userWantsToGoBackToDashboard()
 
@@ -41,7 +41,7 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 	func userWishesToGoBackToScanCertificate()
 }
 
-final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
+final class PaperProofCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 	
@@ -71,7 +71,7 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	}
 }
 
-extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
+extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func userWishesMoreInformationOnSelfPrintedProof() {
 
@@ -126,7 +126,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		presentAsBottomSheet(viewController)
 	}
 
-	func userDidSubmitPaperCertificateToken(token: String) {
+	func userDidSubmitPaperProofToken(token: String) {
 
 		// Store Token
 		self.token = token
@@ -201,8 +201,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 		// Navigate to Check Certificate
 		if let scannedDcc = scannedQR, let couplingCode = token {
-			let viewController = PaperCertificateCheckViewController(
-				viewModel: PaperCertificateCheckViewModel(
+			let viewController = PaperProofCheckViewController(
+				viewModel: PaperProofCheckViewModel(
 					coordinator: self,
 					scannedDcc: scannedDcc,
 					couplingCode: couplingCode
@@ -243,7 +243,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 // MARK: - Dismissable
 
-extension PaperCertificateCoordinator: Dismissable {
+extension PaperProofCoordinator: Dismissable {
 
 	func dismiss() {
 
@@ -255,7 +255,7 @@ extension PaperCertificateCoordinator: Dismissable {
 	}
 }
 
-extension PaperCertificateCoordinator: EventFlowDelegate {
+extension PaperProofCoordinator: EventFlowDelegate {
 
 	func eventFlowDidComplete() {
 

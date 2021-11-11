@@ -8,7 +8,7 @@
 import Foundation
 @testable import CTR
 
-class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegate, OpenUrlProtocol {
+class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlProtocol {
 
 	var invokedUserWishesMoreInformationOnSelfPrintedProof = false
 	var invokedUserWishesMoreInformationOnSelfPrintedProofCount = 0
@@ -34,16 +34,16 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 		invokedUserWishesMoreInformationOnInternationalQROnlyCount += 1
 	}
 
-	var invokedUserDidSubmitPaperCertificateToken = false
-	var invokedUserDidSubmitPaperCertificateTokenCount = 0
-	var invokedUserDidSubmitPaperCertificateTokenParameters: (token: String, Void)?
-	var invokedUserDidSubmitPaperCertificateTokenParametersList = [(token: String, Void)]()
+	var invokedUserDidSubmitPaperProofToken = false
+	var invokedUserDidSubmitPaperProofTokenCount = 0
+	var invokedUserDidSubmitPaperProofTokenParameters: (token: String, Void)?
+	var invokedUserDidSubmitPaperProofTokenParametersList = [(token: String, Void)]()
 
-	func userDidSubmitPaperCertificateToken(token: String) {
-		invokedUserDidSubmitPaperCertificateToken = true
-		invokedUserDidSubmitPaperCertificateTokenCount += 1
-		invokedUserDidSubmitPaperCertificateTokenParameters = (token, ())
-		invokedUserDidSubmitPaperCertificateTokenParametersList.append((token, ()))
+	func userDidSubmitPaperProofToken(token: String) {
+		invokedUserDidSubmitPaperProofToken = true
+		invokedUserDidSubmitPaperProofTokenCount += 1
+		invokedUserDidSubmitPaperProofTokenParameters = (token, ())
+		invokedUserDidSubmitPaperProofTokenParametersList.append((token, ()))
 	}
 
 	var invokedUserWantsToGoBackToDashboard = false
