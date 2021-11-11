@@ -64,12 +64,7 @@ class EventStartViewModel: Logging {
 
 	func primaryButtonTapped() {
 
-		coordinator?.eventStartScreenDidFinish(
-			.continue(
-				value: nil,
-				eventMode: eventMode
-			)
-		)
+		coordinator?.eventStartScreenDidFinish(.continue(eventMode: eventMode))
 	}
 
 	func openUrl(_ url: URL) {

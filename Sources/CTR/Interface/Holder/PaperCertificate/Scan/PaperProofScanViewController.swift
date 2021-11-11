@@ -7,13 +7,13 @@
 
 import UIKit
 
-class PaperCertificateScanViewController: ScanViewController {
+class PaperProofScanViewController: ScanViewController {
 
-	private let viewModel: PaperCertificateScanViewModel
+	private let viewModel: PaperProofScanViewModel
 
 	// MARK: Initializers
 
-	init(viewModel: PaperCertificateScanViewModel) {
+	init(viewModel: PaperProofScanViewModel) {
 
 		self.viewModel = viewModel
 

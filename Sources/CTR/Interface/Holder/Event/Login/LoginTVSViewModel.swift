@@ -34,7 +34,7 @@ class LoginTVSViewModel: Logging {
 		self.eventMode = eventMode
 		self.appAuthState = appAuthState
 
-		self.title = eventMode.title
+		self.title = eventMode.fetching
 		content = Content( title: eventMode.title)
 	}
 
@@ -58,22 +58,11 @@ class LoginTVSViewModel: Logging {
 			secondaryAction: nil
 		)
 
-		openIdManager?.requestAccessToken() { accessToken in
+		openIdManager?.requestAccessToken() { tvsToken in
 
 			self.shouldShowProgress = false
 
-			if let token = accessToken {
-				self.coordinator?.loginTVSScreenDidFinish(.continue(value: token, eventMode: self.eventMode))
-			} else {
-				self.alert = AlertContent(
-					title: L.generalErrorTitle(),
-					subTitle: L.generalErrorTechnicalText(),
-					cancelAction: nil,
-					cancelTitle: nil,
-					okAction: nil,
-					okTitle: L.generalOk()
-				)
-			}
+			self.coordinator?.loginTVSScreenDidFinish(.didLogin(token: tvsToken, eventMode: self.eventMode))
 		} onError: { error in
 			self.shouldShowProgress = false
 			self.handleError(error)
@@ -95,7 +84,7 @@ extension LoginTVSViewModel {
 				logDebug("Server busy")
 				displayServerBusy(
 					errorCode: ErrorCode(
-						flow: ErrorCode.getFlowFromEventMode(eventMode),
+						flow: eventMode.flow,
 						step: .tvs,
 						errorCode: "429"
 					)
@@ -110,7 +99,7 @@ extension LoginTVSViewModel {
 					case .serverUnreachableTimedOut, .serverUnreachableConnectionLost, .serverUnreachableInvalidHost:
 
 						let errorCode = ErrorCode(
-							flow: ErrorCode.getFlowFromEventMode(eventMode),
+							flow: eventMode.flow,
 							step: .tvs,
 							clientCode: networkError.getClientErrorCode() ?? .unhandled
 						)
@@ -123,7 +112,7 @@ extension LoginTVSViewModel {
 		}
 
 		let errorCode = ErrorCode(
-			flow: ErrorCode.getFlowFromEventMode(eventMode),
+			flow: eventMode.flow,
 			step: .tvs,
 			clientCode: clientCode ?? ErrorCode.ClientCode(value: "000")
 		)
