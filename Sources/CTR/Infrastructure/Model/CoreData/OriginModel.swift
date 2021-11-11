@@ -24,6 +24,7 @@ class OriginModel {
 		eventDate: Date,
 		expirationTime: Date,
 		validFromDate: Date,
+		doseNumber: Int?,
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Origin? {
 
@@ -35,6 +36,9 @@ class OriginModel {
 			object.eventDate = eventDate
 			object.expirationTime = expirationTime
 			object.validFromDate = validFromDate
+			if let doseNumber = doseNumber {
+				object.doseNumber = doseNumber as NSNumber
+			}
 			object.greenCard = greenCard
 
 			return object
