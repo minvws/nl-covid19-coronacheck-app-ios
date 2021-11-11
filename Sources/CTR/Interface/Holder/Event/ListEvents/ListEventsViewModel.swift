@@ -281,13 +281,13 @@ class ListEventsViewModel: Logging {
 		guard eventModeForStorage == .recovery else { return }
 		logDebug("\(greencardResponse)")
 
-		var success = false
+		var hasValidDomesticRecoveryOrigin = false
 		let domesticRecoveryOrigins = greencardResponse.getDomesticOrigins(ofType: OriginType.recovery.rawValue)
 		for origin in domesticRecoveryOrigins where origin.expirationTime > Date() {
-			success = true
+			hasValidDomesticRecoveryOrigin = true
 		}
 
-		if success {
+		if hasValidDomesticRecoveryOrigin {
 			completeFlow()
 		} else {
 			let recoveryEventValidityDays = remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
