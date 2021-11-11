@@ -26,6 +26,14 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 		invokedUserWishesMoreInformationOnNoInputTokenCount += 1
 	}
 
+	var invokedUserWishesMoreInformationOnInternationalQROnly = false
+	var invokedUserWishesMoreInformationOnInternationalQROnlyCount = 0
+
+	func userWishesMoreInformationOnInternationalQROnly() {
+		invokedUserWishesMoreInformationOnInternationalQROnly = true
+		invokedUserWishesMoreInformationOnInternationalQROnlyCount += 1
+	}
+
 	var invokedUserDidSubmitPaperCertificateToken = false
 	var invokedUserDidSubmitPaperCertificateTokenCount = 0
 	var invokedUserDidSubmitPaperCertificateTokenParameters: (token: String, Void)?

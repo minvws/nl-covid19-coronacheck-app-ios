@@ -30,12 +30,21 @@
 "holder.paperproof.notoken.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt aangevraagd bij jouw zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je het papieren bewijs zelf geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
 "holder.paperproof.notoken.action" = "Naar bewijs toevoegen";
 
+"holder.paperproof.startscanning.title" = "Scan de internationale QR-code";
+"holder.paperproof.startscanning.message" = "Scan met de camera van je telefoon alleen de internationale QR-code van je papieren bewijs. Heb je meerdere internationale QR-codes? Doorloop het proces dan nog een keer";
+"holder.paperproof.startscanning.international" = "Waarom alleen internationaal?";
+"holder.paperproof.startscanning.action" = "Start scannen";
+
+"holder.paperproof.internationalQROnly.title" = "Waarom alleen internationaal?";
+"holder.paperproof.internationalQROnly.message" = "In de internationale QR-codes staan genoeg gegevens om ook een Nederlands bewijs te maken.";
+
 "holder.incompletedutchvaccination.title" = "Geen Nederlands vaccinatiebewijs";
 "holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je meer dan één prik hebben gehad, of hersteld zijn van corona voor je eerste prik.</p><p><b>Tweede prik gehad?</b><br />Haal opnieuw je vaccinaties op. Je krijgt dan een Nederlands bewijs.</p>";
 "holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan een Nederlands bewijs.</p>";
 "holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Meer weten?</b><br />Bekijk de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a> voor alle mogelijke oorzaken dat je geen Nederlands bewijs hebt.</p>";
 "holder.incompletedutchvaccination.button.addvaccines" = "Haal mijn vaccinaties op";
 "holder.incompletedutchvaccination.button.addtestresults" = "Haal mijn testuitslag op";
+
 "holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Bewijs terugzetten";
 "holder.recoveryvalidityextension.extensioncomplete.title" = "Verlengd herstelbewijs";
 "holder.recoveryvalidityextension.extensioncomplete.description" = "De geldigheid van Nederlandse herstelbewijzen is verlengd. Daardoor is je bewijs nu een jaar geldig vanaf het moment dat je positief bent getest.";

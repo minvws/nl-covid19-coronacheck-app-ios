@@ -131,7 +131,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		navigationSpy.viewControllers = [
 			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
 			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
-			PaperCertificateScanViewController(viewModel: PaperCertificateScanViewModel(coordinator: sut))
+			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
 		]
 		sut.scannedQR = "test"
 		sut.token = "test"
@@ -192,7 +192,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		navigationSpy.viewControllers = [
 			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
 			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
-			PaperCertificateScanViewController(viewModel: PaperCertificateScanViewModel(coordinator: sut))
+			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
 		]
 
 		// When

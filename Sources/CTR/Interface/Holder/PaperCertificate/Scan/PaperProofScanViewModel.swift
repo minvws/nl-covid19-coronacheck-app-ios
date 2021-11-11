@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PaperCertificateScanViewModel: ScanPermissionViewModel {
+class PaperProofScanViewModel: ScanPermissionViewModel {
 	
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging? = Services.cryptoManager

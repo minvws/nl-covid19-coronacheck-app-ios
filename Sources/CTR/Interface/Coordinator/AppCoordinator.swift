@@ -15,6 +15,8 @@ protocol AppCoordinatorDelegate: AnyObject {
 
 	/// Retry loading the requirements
 	func retry()
+
+	func reset()
 }
 
 class AppCoordinator: Coordinator, Logging {
@@ -349,6 +351,12 @@ extension AppCoordinator: AppCoordinatorDelegate {
 			startLauncher()
 		}
     }
+
+	func reset() {
+		
+		childCoordinators = []
+		retry()
+	}
 }
 
 // MARK: - Notification observations
