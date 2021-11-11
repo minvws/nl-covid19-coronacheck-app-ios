@@ -269,7 +269,7 @@ class ListEventsViewModel: Logging {
 				completeFlow()
 			case (false, true):
 				// R only
-				viewState = positiveTestInapplicable() //recoveryOnlyCreated()
+				viewState = recoveryOnlyCreated()
 			case (false, false):
 				// Nothing. (R older than recoveryEventValidityDays)
 				viewState = positiveTestInapplicable()
