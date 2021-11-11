@@ -184,7 +184,7 @@ private func validityText_hasBegun_domestic_vaccination(doseNumber: Int?, validF
 		var string = ""
 		string += QRCodeOriginType.vaccination.localizedProof.capitalizingFirstLetter()
 		if let doseNumber = doseNumber, doseNumber > 0 {
-			let dosePluralised = doseNumber == 1 ? "dose" : "doses"
+			let dosePluralised = doseNumber == 1 ? L.generalDose() : L.generalDoses()
 			string += " (\(doseNumber) \(dosePluralised))"
 		}
 		string += ":"
@@ -289,7 +289,7 @@ private func validityText_hasNotYetBegun_netherlands_vaccination(doseNumber: Int
 		var string = ""
 		string += QRCodeOriginType.vaccination.localizedProof.capitalizingFirstLetter()
 		if let doseNumber = doseNumber, doseNumber > 0 {
-			let dosePluralised = doseNumber == 1 ? "dose" : "doses"
+			let dosePluralised = doseNumber == 1 ? L.generalDose() : L.generalDoses()
 			string += " (\(doseNumber) \(dosePluralised))"
 		}
 		string += ":"
