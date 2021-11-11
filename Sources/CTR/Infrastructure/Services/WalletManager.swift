@@ -423,6 +423,7 @@ class WalletManager: WalletManaging, Logging {
 				eventDate: remoteOrigin.eventTime,
 				expirationTime: remoteOrigin.expirationTime,
 				validFromDate: remoteOrigin.validFrom,
+				doseNumber: remoteOrigin.doseNumber,
 				greenCard: greenCard,
 				managedContext: context
 			) != nil

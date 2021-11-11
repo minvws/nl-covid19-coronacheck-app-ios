@@ -39,5 +39,6 @@ struct RemoteGreenCards: Codable {
 		let eventTime: Date
 		let expirationTime: Date
 		let validFrom: Date
+		let doseNumber: Int?
 	}
 }
