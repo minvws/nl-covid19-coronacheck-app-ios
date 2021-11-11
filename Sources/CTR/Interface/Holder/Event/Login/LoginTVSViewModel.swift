@@ -34,7 +34,7 @@ class LoginTVSViewModel: Logging {
 		self.eventMode = eventMode
 		self.appAuthState = appAuthState
 
-		self.title = eventMode.title
+		self.title = eventMode.fetching
 		content = Content( title: eventMode.title)
 	}
 
@@ -58,22 +58,11 @@ class LoginTVSViewModel: Logging {
 			secondaryAction: nil
 		)
 
-		openIdManager?.requestAccessToken() { accessToken in
+		openIdManager?.requestAccessToken() { tvsToken in
 
 			self.shouldShowProgress = false
 
-			if let token = accessToken {
-				self.coordinator?.loginTVSScreenDidFinish(.continue(value: token, eventMode: self.eventMode))
-			} else {
-				self.alert = AlertContent(
-					title: L.generalErrorTitle(),
-					subTitle: L.generalErrorTechnicalText(),
-					cancelAction: nil,
-					cancelTitle: nil,
-					okAction: nil,
-					okTitle: L.generalOk()
-				)
-			}
+			self.coordinator?.loginTVSScreenDidFinish(.didLogin(token: tvsToken, eventMode: self.eventMode))
 		} onError: { error in
 			self.shouldShowProgress = false
 			self.handleError(error)
@@ -93,7 +82,13 @@ extension LoginTVSViewModel {
 		if let error = error {
 			if  error.localizedDescription.contains("login_required") {
 				logDebug("Server busy")
-				displayServerBusy(errorCode: ErrorCode(flow: flow, step: .tvs, errorCode: "429"))
+				displayServerBusy(
+					errorCode: ErrorCode(
+						flow: eventMode.flow,
+						step: .tvs,
+						errorCode: "429"
+					)
+				)
 				return
 			} else if error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
 				logDebug("User cancelled")
@@ -103,7 +98,11 @@ extension LoginTVSViewModel {
 				switch networkError {
 					case .serverUnreachableTimedOut, .serverUnreachableConnectionLost, .serverUnreachableInvalidHost:
 
-						let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: networkError.getClientErrorCode() ?? .unhandled)
+						let errorCode = ErrorCode(
+							flow: eventMode.flow,
+							step: .tvs,
+							clientCode: networkError.getClientErrorCode() ?? .unhandled
+						)
 						self.displayUnreachable(errorCode: errorCode)
 						return
 					default:
@@ -112,7 +111,11 @@ extension LoginTVSViewModel {
 			}
 		}
 
-		let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: clientCode ?? ErrorCode.ClientCode(value: "000"))
+		let errorCode = ErrorCode(
+			flow: eventMode.flow,
+			step: .tvs,
+			clientCode: clientCode ?? ErrorCode.ClientCode(value: "000")
+		)
 		self.displayErrorCode(errorCode: errorCode)
 	}
 
@@ -356,14 +359,11 @@ extension LoginTVSViewModel {
 	private var flow: ErrorCode.Flow {
 
 		switch eventMode {
-			case .vaccination:
-				return .vaccination
-			case .paperflow:
-				return .hkvi
-			case .recovery:
-				return .recovery
-			case .test:
-				return .ggdTest
+			case .paperflow: return .hkvi
+			case .positiveTest: return .positiveTest
+			case .recovery: return .recovery
+			case .test: return .ggdTest
+			case .vaccination: return .vaccination
 		}
 	}
 }

@@ -12,7 +12,7 @@ protocol GreenCardLoading {
 
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<Void, Swift.Error>) -> Void)
+		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void)
 }
 
 class GreenCardLoader: GreenCardLoading, Logging {
@@ -67,7 +67,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<Void, Swift.Error>) -> Void) {
+		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
 		
 		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, ServerError>) in
 			switch prepareIssueResult {
@@ -110,7 +110,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 										now: { Date() }
 									)
 
-									completion(.success(()))
+									completion(.success(greenCardResponse))
 								}
 						}
 					}

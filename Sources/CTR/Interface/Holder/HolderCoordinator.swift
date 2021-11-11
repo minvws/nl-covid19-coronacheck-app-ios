@@ -41,6 +41,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesToCreateARecoveryQR()
 
+	func userWishesToFetchPositiveTests()
+
 	func userDidScanRequestToken(requestToken: RequestToken)
 
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
@@ -54,6 +56,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
     func userWishesMoreInfoAboutRecoveryValidityExtension()
 
 	func userWishesMoreInfoAboutRecoveryValidityReinstation()
+	
+	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
 	func openUrl(_ url: URL, inApp: Bool)
 
@@ -216,6 +220,18 @@ class HolderCoordinator: SharedCoordinator {
 			)
 			addChildCoordinator(eventCoordinator)
 			eventCoordinator.startWithRecovery()
+		}
+	}
+
+	private func startEventFlowForPositiveTests() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithPositiveTest()
 		}
 	}
 
@@ -402,6 +418,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		startEventFlowForRecovery()
 	}
 
+	func userWishesToFetchPositiveTests() {
+		startEventFlowForPositiveTests()
+	}
+
 	func userWishesToCreateAQR() {
 		navigateToChooseQRCodeType()
 	}
@@ -470,6 +490,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
+	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
+		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
+		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
 	func migrateEUVaccinationDidComplete() {
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})

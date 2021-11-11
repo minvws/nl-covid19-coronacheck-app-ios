@@ -45,6 +45,10 @@ class EventStartViewModel: Logging {
 				self.title = ""
 				self.message = ""
 				self.primaryButtonIcon = nil
+			case .positiveTest:
+				self.title = L.holderPositiveTestStartTitle()
+				self.message = L.holderPositiveTestStartMessage()
+				self.primaryButtonIcon = I.digid()
 		}
 	}
 
@@ -60,12 +64,7 @@ class EventStartViewModel: Logging {
 
 	func primaryButtonTapped() {
 
-		coordinator?.eventStartScreenDidFinish(
-			.continue(
-				value: nil,
-				eventMode: eventMode
-			)
-		)
+		coordinator?.eventStartScreenDidFinish(.continue(eventMode: eventMode))
 	}
 
 	func openUrl(_ url: URL) {

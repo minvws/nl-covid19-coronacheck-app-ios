@@ -65,106 +65,86 @@ extension ListEventsViewModel {
 	private func emptyEventsState() -> ListEventsViewController.State {
 
 		switch eventMode {
-			case .recovery:
-				return emptyRecoveryState()
-			case .test:
-				return emptyTestState()
-			case .vaccination:
-				return emptyVaccinationState()
-			case .paperflow:
-				return emptyDccState()
+			case .paperflow: return emptyDccState()
+			case .positiveTest: return emptyPositiveTestState()
+			case .recovery: return emptyRecoveryState()
+			case .test: return emptyTestState()
+			case .vaccination: return emptyVaccinationState()
 		}
 	}
 
 	private func emptyVaccinationState() -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderVaccinationNolistTitle(),
-				subTitle: L.holderVaccinationNolistMessage(),
-				primaryActionTitle: L.holderVaccinationNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderVaccinationNolistTitle(),
+			subTitle: L.holderVaccinationNolistMessage(),
+			primaryActionTitle: L.holderVaccinationNolistAction()
 		)
 	}
 
 	private func emptyTestState() -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderTestNolistTitle(),
-				subTitle: L.holderTestNolistMessage(),
-				primaryActionTitle: L.holderTestNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderTestNolistTitle(),
+			subTitle: L.holderTestNolistMessage(),
+			primaryActionTitle: L.holderTestNolistAction()
+		)
+	}
+
+	private func emptyPositiveTestState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderPositiveTestNolistTitle(),
+			subTitle: L.holderPositiveTestNolistMessage(),
+			primaryActionTitle: L.holderPositiveTestNolistAction()
 		)
 	}
 
 	private func emptyDccState() -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderCheckdccExpiredTitle(),
-				subTitle: L.holderCheckdccExpiredMessage(),
-				primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderCheckdccExpiredTitle(),
+			subTitle: L.holderCheckdccExpiredMessage(),
+			primaryActionTitle: L.holderCheckdccExpiredActionTitle()
 		)
 	}
 
 	private func emptyRecoveryState() -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderRecoveryNolistTitle(),
-				subTitle: L.holderRecoveryNolistMessage(),
-				primaryActionTitle: L.holderRecoveryNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryNolistTitle(),
+			subTitle: L.holderRecoveryNolistMessage(),
+			primaryActionTitle: L.holderRecoveryNolistAction()
 		)
 	}
 
 	private func recoveryEventsTooOld(_ days: String) -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderRecoveryTooOldTitle(),
-				subTitle: L.holderRecoveryTooOldMessage(days),
-				primaryActionTitle: L.holderTestNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryTooOldTitle(),
+			subTitle: L.holderRecoveryTooOldMessage(days),
+			primaryActionTitle: L.holderTestNolistAction()
 		)
 	}
 
 	internal func cannotCreateEventsState() -> ListEventsViewController.State {
 
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderEventOriginmismatchTitle(),
+			subTitle: eventMode.originsMismatchBody,
+			primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction()
+		)
+	}
+
+	internal func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListEventsViewController.State {
+
 		return .feedback(
 			content: Content(
-				title: L.holderEventOriginmismatchTitle(),
-				subTitle: eventMode.originsMismatchBody,
-				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
+				title: title,
+				subTitle: subTitle,
+				primaryActionTitle: primaryActionTitle,
 				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
 				},
 				secondaryActionTitle: nil,
 				secondaryAction: nil
@@ -199,7 +179,7 @@ extension ListEventsViewModel {
 			content: Content(
 				title: eventMode.title,
 				subTitle: eventMode.listMessage,
-				primaryActionTitle: L.holderVaccinationListAction(),
+				primaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListAction() : L.holderDccListAction(),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
 						if !success {
@@ -207,8 +187,8 @@ extension ListEventsViewModel {
 						}
 					}
 				},
-				secondaryActionTitle: L.holderVaccinationListWrong(),
-				secondaryAction: { [weak self] in
+				secondaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListWrong() : nil,
+				secondaryAction: eventMode != .paperflow ? { [weak self] in
 					guard let self = self else { return }
 					self.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
@@ -217,7 +197,7 @@ extension ListEventsViewModel {
 							hideBodyForScreenCapture: false
 						)
 					)
-				}
+				} : nil
 			),
 			rows: rows
 		)
@@ -385,8 +365,11 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderEventAboutTitle(),
+						details: details,
+						footer: nil
+					)
 				)
 			}
 		)
@@ -420,8 +403,11 @@ extension ListEventsViewModel {
 			subTitle: subTitle,
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderEventAboutTitle(),
+						details: details,
+						footer: nil
+					)
 				)
 			}
 		)
@@ -524,8 +510,11 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderEventAboutTitle(),
+						details: details,
+						footer: nil
+					)
 				)
 			}
 		)
@@ -570,8 +559,11 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderEventAboutTitle(),
+						details: details,
+						footer: nil
+					)
 				)
 			}
 		)
@@ -586,8 +578,10 @@ extension ListEventsViewModel {
 			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		var dosage: String?
+		var title: String = L.generalVaccinationcertificate().capitalizingFirstLetter()
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
 			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
+			title = L.holderDccVaccinationListTitle("\(doseNumber)", "\(totalDose)")
 		}
 
 		let vaccineType = remoteConfigManager.storedConfiguration.getTypeMapping(
@@ -618,12 +612,15 @@ extension ListEventsViewModel {
 		]
 
 		return ListEventsViewController.Row(
-			title: L.generalVaccinationcertificate().capitalizingFirstLetter(),
+			title: title,
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderDccVaccinationDetailsTitle(),
+						details: details,
+						footer: L.holderDccVaccinationFooter()
+					)
 				)
 			}
 		)
@@ -664,8 +661,11 @@ extension ListEventsViewModel {
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderDccRecoveryDetailsTitle(),
+						details: details,
+						footer: L.holderDccRecoveryFooter()
+					)
 				)
 			}
 		)
@@ -720,10 +720,34 @@ extension ListEventsViewModel {
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderDccTestDetailsTitle(),
+						details: details,
+						footer: L.holderDccTestFooter()
+					)
 				)
 			}
+		)
+	}
+
+	// MARK: international QR Only
+
+	internal func internationalQROnly() -> ListEventsViewController.State {
+
+		return .feedback(
+			content: Content(
+				title: L.holderVaccinationInternationlQROnlyTitle(),
+				subTitle: L.holderVaccinationInternationlQROnlyMessage(),
+				primaryActionTitle: L.holderVaccinationNolistAction(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: L.holderVaccinationInternationlQROnlyAction(),
+				secondaryAction: { [weak self] in
+					guard let self = self else { return }
+					self.coordinator?.listEventsScreenDidFinish(.startWithPositiveTest)
+				}
+			)
 		)
 	}
 }
@@ -734,17 +758,10 @@ private extension ListEventsViewModel {
 
 	func pendingEventsState() -> ListEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderTestresultsPendingTitle(),
-				subTitle: L.holderTestresultsPendingText(),
-				primaryActionTitle: L.holderTestNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderTestresultsPendingTitle(),
+			subTitle: L.holderTestresultsPendingText(),
+			primaryActionTitle: L.holderTestNolistAction()
 		)
 	}
 
@@ -807,8 +824,11 @@ private extension ListEventsViewModel {
 				]
 				
 				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
+					.showEventDetails(
+						title: L.holderEventAboutTitle(),
+						details: details,
+						footer: nil
+					)
 				)
 			}
 		)

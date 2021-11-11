@@ -170,13 +170,13 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnCompletionResult = ("test", ())
+		openIDSpy.stubbedRequestAccessTokenOnCompletionResult = (.test, ())
 
 		// When
 		sut.login()
 
 		// Then
-		expect(self.sut.content.title) == L.holderVaccinationListTitle()
+		expect(self.sut.content.title) == L.holderFetcheventsVaccinationTitle()
 		expect(self.sut.content.subTitle).to(beNil())
 		expect(self.sut.content.primaryAction).toNot(beNil())
 		expect(self.sut.content.primaryActionTitle) == L.generalClose()
@@ -184,37 +184,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.sut.content.secondaryActionTitle).to(beNil())
 
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.continue(value: "test", eventMode: .vaccination)
-	}
-
-	func test_openID_success_accessToken_nil() {
-
-		// Given
-		sut = LoginTVSViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .vaccination
-		)
-		openIDSpy.stubbedRequestAccessTokenOnCompletionResult = (nil, ())
-
-		// When
-		sut.login()
-
-		// Then
-		expect(self.sut.content.title) == L.holderVaccinationListTitle()
-		expect(self.sut.content.subTitle).to(beNil())
-		expect(self.sut.content.primaryAction).toNot(beNil())
-		expect(self.sut.content.primaryActionTitle) == L.generalClose()
-		expect(self.sut.content.secondaryAction).to(beNil())
-		expect(self.sut.content.secondaryActionTitle).to(beNil())
-
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == false
-		expect(self.sut.alert).toNot(beNil())
-		expect(self.sut.alert?.title) == L.generalErrorTitle()
-		expect(self.sut.alert?.subTitle) == L.generalErrorTechnicalText()
-		expect(self.sut.alert?.cancelAction).to(beNil())
-		expect(self.sut.alert?.cancelTitle).to(beNil())
-		expect(self.sut.alert?.okAction).to(beNil())
-		expect(self.sut.alert?.okTitle) == L.generalOk()
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: .test, eventMode: .vaccination)
 	}
 
 	func test_openID_error_serverUnreachable() throws {

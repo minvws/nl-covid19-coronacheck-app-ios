@@ -10,6 +10,18 @@
 "holder.paperproof.selfprinted.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je kunt wel je bewijs toevoegen aan de app met behulp van DigiD. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
 "holder.paperproof.selfprinted.action" = "Naar bewijs toevoegen";
 
+"holder.vaccination.internationlQROnly.title" = "Er is alleen een internationaal bewijs gemaakt";
+"holder.vaccination.internationlQROnly.message" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je meer dan één prik hebben gehad, of hersteld zijn van corona voor je eerste prik.</p><p><b>Krijg je nog een tweede prik?</b><br />Voeg opnieuw een vaccinatiebewijs toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan ook een Nederlands bewijs.</p>";
+"holder.vaccination.internationlQROnly.action" = "Haal mijn testuitslag op";
+
+"holder.positiveTest.start.title" = "Gegevens van je positieve test ophalen";
+"holder.positiveTest.start.message" = "Log in met DigiD. De gegevens van je positieve test worden dan automatisch opgehaald.";
+"holder.positiveTest.list.title" = "Kloppen de gegevens?";
+"holder.positiveTest.list.message" = "Als de gegevens van je test kloppen kun je een bewijs maken.";
+"holder.positiveTest.nolist.title" = "Geen positieve testuitslag beschikbaar";
+"holder.positiveTest.nolist.message" = "<p>Er is geen positieve testuitslag van jou beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a>.</p><p>Ben je net getest? Het kan een paar uur  duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p>";
+"holder.positiveTest.nolist.action" = "Naar mijn bewijzen";
+
 "holder.paperproof.notoken.title" = "Geen lettercombinatie?";
 "holder.paperproof.notoken.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt aangevraagd bij jouw zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je het papieren bewijs zelf geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
 "holder.paperproof.notoken.action" = "Naar bewijs toevoegen";
@@ -21,6 +33,13 @@
 
 "holder.paperproof.internationalQROnly.title" = "Waarom alleen internationaal?";
 "holder.paperproof.internationalQROnly.message" = "In de internationale QR-codes staan genoeg gegevens om ook een Nederlands bewijs te maken.";
+
+"holder.incompletedutchvaccination.title" = "Geen Nederlands vaccinatiebewijs";
+"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je meer dan één prik hebben gehad, of hersteld zijn van corona voor je eerste prik.</p><p><b>Tweede prik gehad?</b><br />Haal opnieuw je vaccinaties op. Je krijgt dan een Nederlands bewijs.</p>";
+"holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan een Nederlands bewijs.</p>";
+"holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Meer weten?</b><br />Bekijk de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a> voor alle mogelijke oorzaken dat je geen Nederlands bewijs hebt.</p>";
+"holder.incompletedutchvaccination.button.addvaccines" = "Haal mijn vaccinaties op";
+"holder.incompletedutchvaccination.button.addtestresults" = "Haal mijn testuitslag op";
 
 "holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Bewijs terugzetten";
 "holder.recoveryvalidityextension.extensioncomplete.title" = "Verlengd herstelbewijs";
@@ -125,13 +144,16 @@
 "holder.checkdcc.rejected.actionTitle" = "Probeer opnieuw";
 "holder.dcc.alert.message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder.event.originmismatch.dcc.body" = "Op dit moment kunnen we van jouw gescande QR-code geen bewijs maken. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a>";
-"holder.dcc.list.title" = "Opgehaalde gegevens";
-"holder.dcc.list.message" = "Met de gegevens die zijn opgehaald kun je een QR-code maken. Dat is jouw bewijs.";
+"holder.dcc.list.title" = "Gescande gegevens";
+"holder.dcc.list.message" = "Met deze gegevens kun je een bewijs maken. De app maakt een Nederlands en een internationaal bewijs.";
 "holder.dcc.element.subtitle" = "<p>Naam: %@</p><p>Geboortedatum: %@</p>";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
+"holder.dcc.list.action" = "Bewijs toevoegen";
 
 /* MARK: - Paper Certificate Vaccination Event */
-"holder.dcc.vaccination.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.dcc.vaccination.list.title" = "Vaccinatiebewijs dosis %@/%@";
+"holder.dcc.vaccination.details.title" = "Details";
+"holder.dcc.vaccination.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.vaccination.name" = "Naam:";
 "holder.dcc.vaccination.dateofbirth" = "Geboortedatum:";
 "holder.dcc.vaccination.pathogen" = "Ziekteverwekker:";
@@ -144,9 +166,11 @@
 "holder.dcc.vaccination.country" = "Gevaccineerd in:";
 "holder.dcc.vaccination.issuer" = "Afgever certificaat:";
 "holder.dcc.vaccination.identifier" = "Uniek vaccinatienummer:";
+"holder.dcc.vaccination.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 
 /* MARK: - Paper Certificate Recovery Event */
-"holder.dcc.recovery.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.dcc.recovery.details.title" = "Details";
+"holder.dcc.recovery.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.recovery.name" = "Naam:";
 "holder.dcc.recovery.dateofbirth" = "Geboortedatum:";
 "holder.dcc.recovery.pathogen" = "Ziekte waarvan hersteld:";
@@ -157,9 +181,11 @@
 "holder.dcc.recovery.validfrom" = "Geldig vanaf:";
 "holder.dcc.recovery.validuntil" = "Geldig tot:";
 "holder.dcc.recovery.identifier" = "Uniek testnummer:";
+"holder.dcc.recovery.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 
 /* MARK: - Paper Certificate Test Event */
-"holder.dcc.test.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.dcc.test.details.title" = "Details";
+"holder.dcc.test.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.test.name" = "Naam:";
 "holder.dcc.test.dateofbirth" = "Geboortedatum:";
 "holder.dcc.test.pathogen" = "Ziekteverwekker:";
@@ -173,6 +199,7 @@
 "holder.dcc.test.country" = "Getest in:";
 "holder.dcc.test.issuer" = "Afgever certificaat:";
 "holder.dcc.test.identifier" = "Uniek testnummer:";
+"holder.dcc.test.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 
 "holder.recovery.wrong.body" = "<p>Kloppen er gegevens niet? Neem contact op met je testlocatie. Zij kunnen de gegevens aanpassen.</p>";
 "general.retry" = "Probeer opnieuw";
@@ -214,7 +241,7 @@
 "general.error.cryptolib.title" = "Sorry, er gaat iets mis";
 "general.error.cryptolib.message" = "Neem contact op met onze helpdesk en geef de foutcode (%@) door.";
 "general.error.cryptolib.retry" = "Probeer opnieuw";
-
+"general.positiveTest" = "positieve test";
 "general.recoverystatement" = "herstelbewijs";
 "general.recoverydate" = "hersteldatum";
 "general.testcertificate" = "testbewijs";
@@ -680,6 +707,11 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het later nog een keer.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het eventueel later nog een keer.";
+
+"holder.fetchevents.vaccination.title" = "Vaccinatiegegevens ophalen";
+"holder.fetchevents.positiveTest.title" = "Testuitslag ophalen";
+"holder.fetchevents.negativeTest.title" = "Testuitslag ophalen";
+"holder.fetchevents.recovery.title" = "Herstelgegevens ophalen";
 
 /* MARK: - Start Paper Certificate */
 "holder.papercertificate.start.title" = "Papieren bewijs toevoegen";

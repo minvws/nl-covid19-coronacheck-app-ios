@@ -14,11 +14,11 @@ class OpenIdManagerSpy: OpenIdManaging {
 
 	var invokedRequestAccessToken = false
 	var invokedRequestAccessTokenCount = 0
-	var stubbedRequestAccessTokenOnCompletionResult: (String?, Void)?
+	var stubbedRequestAccessTokenOnCompletionResult: (TVSAuthorizationToken, Void)?
 	var stubbedRequestAccessTokenOnErrorResult: (Error?, Void)?
 
 	func requestAccessToken(
-		onCompletion: @escaping (String?) -> Void,
+		onCompletion: @escaping (TVSAuthorizationToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
 		invokedRequestAccessToken = true
 		invokedRequestAccessTokenCount += 1
