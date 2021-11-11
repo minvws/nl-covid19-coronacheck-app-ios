@@ -7,76 +7,6 @@
 
 import UIKit
 
-enum EventMode: String {
-
-	case recovery
-	case paperflow
-	case test
-	case vaccination
-
-	var localized: String {
-		switch self {
-			case .recovery: return L.generalRecoverystatement()
-			case .paperflow: return L.generalPaperflow()
-			case .test: return L.generalTestresult()
-			case .vaccination: return L.generalVaccination()
-		}
-	}
-
-	var title: String {
-		switch self {
-			case .paperflow:
-				return L.holderDccListTitle()
-			case .recovery:
-				return L.holderRecoveryListTitle()
-			case .test:
-				return L.holderTestresultsResultsTitle()
-			case .vaccination:
-				return L.holderVaccinationListTitle()
-		}
-	}
-
-	var alertBody: String {
-
-		switch self {
-			case .paperflow:
-				return L.holderDccAlertMessage()
-			case .recovery:
-				return L.holderRecoveryAlertMessage()
-			case .test:
-				return L.holderTestAlertMessage()
-			case .vaccination:
-				return L.holderVaccinationAlertMessage()
-		}
-	}
-
-	var listMessage: String {
-		switch self {
-			case .paperflow:
-				return L.holderDccListMessage()
-			case .recovery:
-				return L.holderRecoveryListMessage()
-			case .test:
-				return L.holderTestresultsResultsText()
-			case .vaccination:
-				return L.holderVaccinationListMessage()
-		}
-	}
-
-	var originsMismatchBody: String {
-		switch self {
-			case .paperflow:
-				return L.holderEventOriginmismatchDccBody()
-			case .recovery:
-				return L.holderEventOriginmismatchRecoveryBody()
-			case .test:
-				return L.holderEventOriginmismatchTestBody()
-			case .vaccination:
-				return L.holderEventOriginmismatchVaccinationBody()
-		}
-	}
-}
-
 enum EventScreenResult: Equatable {
 
 	/// The user wants to go back a scene
@@ -93,8 +23,11 @@ enum EventScreenResult: Equatable {
 	case error(content: Content, backAction: () -> Void)
 
 	/// Continue with the next step in the flow
-	case `continue`(value: String?, eventMode: EventMode)
+	case `continue`(eventMode: EventMode)
 
+	// LoginTVS happy path:
+	case didLogin(token: TVSAuthorizationToken, eventMode: EventMode)
+	
 	/// Show the vaccination events
 	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
 
@@ -102,12 +35,16 @@ enum EventScreenResult: Equatable {
 	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
 	
 	/// Show event details
-	case showEventDetails(title: String, details: [EventDetails])
+	case showEventDetails(title: String, details: [EventDetails], footer: String?)
 
+	case startWithPositiveTest
+	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.continue, .continue):
+			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest):
 				return true
+			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
+				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
 			case (let showEvents(lhsEvents, lhsMode, lhsComplete), let showEvents(rhsEvents, rhsMode, rhsComplete)):
@@ -124,8 +61,8 @@ enum EventScreenResult: Equatable {
 					}
 				}
 				return true
-			case (let showEventDetails(lhsTitle, lhsDetails), let showEventDetails(rhsTitle, rhsDetails)):
-				return (lhsTitle, lhsDetails) == (rhsTitle, rhsDetails)
+			case (let showEventDetails(lhsTitle, lhsDetails, lhsFooter), let showEventDetails(rhsTitle, rhsDetails, rhsFooter)):
+				return (lhsTitle, lhsDetails, lhsFooter) == (rhsTitle, rhsDetails, rhsFooter)
 
 			case (let errorRequiringRestart(lhsMode), let errorRequiringRestart(rhsMode)):
 				return lhsMode == rhsMode
@@ -168,6 +105,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	weak var delegate: EventFlowDelegate?
 
+	private var tvsToken: TVSAuthorizationToken?
+	
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
@@ -193,6 +132,14 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	func startWithRecovery() {
 
 		startWith(.recovery)
+	}
+
+	func startWithPositiveTest() {
+		if let tvsToken = tvsToken, tvsToken.expiration > Date(timeIntervalSinceNow: 10) {
+			navigateToFetchEvents(token: tvsToken, eventMode: .positiveTest)
+		} else {
+			startWith(.positiveTest)
+		}
 	}
 
 	func startWithListTestEvents(_ events: [RemoteEvent]) {
@@ -241,7 +188,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToFetchEvents(token: String, eventMode: EventMode) {
+	private func navigateToFetchEvents(token: TVSAuthorizationToken, eventMode: EventMode) {
 		let viewController = FetchEventsViewController(
 			viewModel: FetchEventsViewModel(
 				coordinator: self,
@@ -286,13 +233,14 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		presentAsBottomSheet(viewController)
 	}
 	
-	private func navigateToEventDetails(_ title: String, details: [EventDetails]) {
+	private func navigateToEventDetails(_ title: String, details: [EventDetails], footer: String?) {
 		
 		let viewController = EventDetailsViewController(
 			viewModel: EventDetailsViewModel(
 				coordinator: self,
 				title: title,
 				details: details,
+				footer: footer,
 				hideBodyForScreenCapture: true
 			)
 		)
@@ -360,7 +308,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				delegate?.eventFlowDidCancel()
 			case .backSwipe:
 				delegate?.eventFlowDidCancelFromBackSwipe()
-			case let .continue(_, eventMode):
+			case let .continue(eventMode):
 				navigateToLogin(eventMode: eventMode)
 			default:
 				break
@@ -371,12 +319,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		switch result {
 
-			case let .continue(value: token, eventMode: eventMode):
-				if let token = token {
-					navigateToFetchEvents(token: token, eventMode: eventMode)
-				} else {
-					start()
-				}
+			case let .didLogin(token, eventMode):
+				self.tvsToken = token
+				navigateToFetchEvents(token: token, eventMode: eventMode)
 
 			case .errorRequiringRestart(let eventMode):
 				handleErrorRequiringRestart(eventMode: eventMode)
@@ -420,7 +365,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch eventMode {
 			case .test:
 				navigateBackToTestStart()
-			case .recovery, .vaccination:
+			case .recovery, .vaccination, .positiveTest:
 				navigateBackToEventStart()
 			case .paperflow:
 				delegate?.eventFlowDidCancel()
@@ -438,8 +383,10 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				displayError(content: content, backAction: backAction)
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
-			case let .showEventDetails(title, details):
-				navigateToEventDetails(title, details: details)
+			case let .showEventDetails(title, details, footer):
+				navigateToEventDetails(title, details: details, footer: footer)
+			case .startWithPositiveTest:
+				startWithPositiveTest()
 			default:
 				break
 		}
@@ -467,7 +414,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 							return L.holderErrorstateLoginMessageRecovery()
 						case .paperflow:
 							return "" // HKVI is not a part of this flow
-						case .test:
+						case .test, .positiveTest:
 							return L.holderErrorstateLoginMessageTest()
 						case .vaccination:
 							return L.holderErrorstateLoginMessageVaccination()

@@ -10,6 +10,30 @@ import Foundation
 
 class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegate, OpenUrlProtocol {
 
+	var invokedUserWishesMoreInformationOnSelfPrintedProof = false
+	var invokedUserWishesMoreInformationOnSelfPrintedProofCount = 0
+
+	func userWishesMoreInformationOnSelfPrintedProof() {
+		invokedUserWishesMoreInformationOnSelfPrintedProof = true
+		invokedUserWishesMoreInformationOnSelfPrintedProofCount += 1
+	}
+
+	var invokedUserWishesMoreInformationOnNoInputToken = false
+	var invokedUserWishesMoreInformationOnNoInputTokenCount = 0
+
+	func userWishesMoreInformationOnNoInputToken() {
+		invokedUserWishesMoreInformationOnNoInputToken = true
+		invokedUserWishesMoreInformationOnNoInputTokenCount += 1
+	}
+
+	var invokedUserWishesMoreInformationOnInternationalQROnly = false
+	var invokedUserWishesMoreInformationOnInternationalQROnlyCount = 0
+
+	func userWishesMoreInformationOnInternationalQROnly() {
+		invokedUserWishesMoreInformationOnInternationalQROnly = true
+		invokedUserWishesMoreInformationOnInternationalQROnlyCount += 1
+	}
+
 	var invokedUserDidSubmitPaperCertificateToken = false
 	var invokedUserDidSubmitPaperCertificateTokenCount = 0
 	var invokedUserDidSubmitPaperCertificateTokenParameters: (token: String, Void)?
@@ -20,18 +44,6 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 		invokedUserDidSubmitPaperCertificateTokenCount += 1
 		invokedUserDidSubmitPaperCertificateTokenParameters = (token, ())
 		invokedUserDidSubmitPaperCertificateTokenParametersList.append((token, ()))
-	}
-
-	var invokedPresentInformationPage = false
-	var invokedPresentInformationPageCount = 0
-	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool)?
-	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool)]()
-
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
-		invokedPresentInformationPage = true
-		invokedPresentInformationPageCount += 1
-		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture)
-		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
 	}
 
 	var invokedUserWantsToGoBackToDashboard = false

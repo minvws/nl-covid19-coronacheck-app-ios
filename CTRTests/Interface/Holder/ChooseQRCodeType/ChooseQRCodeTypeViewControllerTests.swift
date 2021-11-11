@@ -35,7 +35,7 @@ class ChooseQRCodeTypeViewControllerTests: XCTestCase {
 	}
 
 	func test_snapshot() {
-		assertSnapshot(matching: sut, as: .image)
+        sut.assertImage(precision: 0.90)
 	}
 
 	func test_vaccination_tapped() {
@@ -68,7 +68,7 @@ class ChooseQRCodeTypeViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(self.sut.sceneView.buttonsStackView.arrangedSubviews.last as? DisclosureSubtitleButton)?.primaryButtonTapped()
+		(self.sut.sceneView.buttonsStackView.arrangedSubviews[2] as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToChooseLocation) == true

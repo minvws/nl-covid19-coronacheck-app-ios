@@ -30,7 +30,12 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 		networkSpy = NetworkSpy(configuration: .development)
 		cryptoSpy = CryptoManagerSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigSpy = RemoteConfigManagingSpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			reachability: ReachabilitySpy(),
+			networkManager: NetworkSpy()
+		)
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
@@ -41,12 +46,6 @@ class ListEventsViewModelTests: XCTestCase {
 		Services.use(greenCardLoader)
 		Services.use(walletSpy)
 		Services.use(remoteConfigSpy)
-
-		sut = ListEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .vaccination,
-			remoteEvents: []
-		)
 	}
 
 	override func tearDown() {
@@ -55,9 +54,18 @@ class ListEventsViewModelTests: XCTestCase {
 		Services.revertToDefaults()
 	}
 
+	func setupSut() {
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: []
+		)
+	}
+
 	func test_backButtonTapped_loadingState() {
 
 		// Given
+		setupSut()
 		sut.viewState = .loading(
 			content: defaultContent
 		)
@@ -73,6 +81,7 @@ class ListEventsViewModelTests: XCTestCase {
 	func test_backButtonTapped_emptyState() {
 
 		// Given
+		setupSut()
 		sut.viewState = .feedback(
 			content: defaultContent
 		)
@@ -88,6 +97,7 @@ class ListEventsViewModelTests: XCTestCase {
 	func test_backButtonTapped_listState() {
 
 		// Given
+		setupSut()
 		sut.viewState = .listEvents(
 			content: defaultContent,
 			rows: []
@@ -104,7 +114,8 @@ class ListEventsViewModelTests: XCTestCase {
 	func test_warnBeforeGoBack() {
 
 		// Given
-
+		setupSut()
+		
 		// When
 		sut.warnBeforeGoBack()
 
@@ -132,7 +143,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		
-		guard case let .showEventDetails(title, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, _, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1065,7 +1076,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -1105,7 +1116,47 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+		expect(self.sut.alert).toEventually(beNil())
+	}
+
+	func test_makeQR_paperflow() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .paperflow,
+			remoteEvents: [remotePaperFlowEvent()]
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedStoreEuGreenCardResult = true
+		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
+		networkSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == false
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -1134,7 +1185,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1172,7 +1223,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1210,7 +1261,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1244,7 +1295,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1283,7 +1334,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1322,7 +1373,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1361,7 +1412,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1400,7 +1451,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1439,7 +1490,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
 		}
@@ -1721,6 +1772,35 @@ class ListEventsViewModelTests: XCTestCase {
 				]
 			),
 			signedResponse: signedResponse
+		)
+	}
+
+	private func remotePaperFlowEvent() -> RemoteEvent {
+
+		return RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper(
+				providerIdentifier: "DCC",
+				protocolVersion: "3.0",
+				identity: identity,
+				status: .complete,
+				result: nil,
+				events: [
+					EventFlow.Event(
+						type: "paperFlow",
+						unique: "1234",
+						isSpecimen: false,
+						vaccination: nil,
+						negativeTest: nil,
+						positiveTest: nil,
+						recovery: nil,
+						dccEvent: EventFlow.DccEvent(
+							credential: CouplingManager.vaccinationDCC,
+							couplingCode: "NDREB5"
+						)
+					)
+				]
+			),
+			signedResponse: nil
 		)
 	}
 }

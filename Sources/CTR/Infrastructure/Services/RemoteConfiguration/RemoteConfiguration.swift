@@ -67,8 +67,12 @@ struct RemoteConfiguration: Codable, Equatable {
 	/// but never more often than this value:
 	var configMinimumIntervalSeconds: Int?
 
+	var configAlmostOutOfDateWarningSeconds: Int?
+
 	/// What is the waiting period before a recovery is valid?
 	var recoveryWaitingPeriodDays: Int?
+
+	var recoveryGreencardRevisedValidityLaunchDate: Date?
 
 	/// Event validity
 
@@ -120,6 +124,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case informationURL = "informationURL"
 		case configTTL = "configTTL"
 		case configMinimumIntervalSeconds = "configMinimumIntervalSeconds"
+		case configAlmostOutOfDateWarningSeconds = "configAlmostOutOfDateWarningSeconds"
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case recoveryEventValidityDays = "recoveryEventValidityDays"
 		case testEventValidityHours = "testEventValidityHours"
@@ -138,6 +143,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case clockDeviationThresholdSeconds = "clockDeviationThresholdSeconds"
 		case isLuhnCheckEnabled = "luhnCheckEnabled"
 		case internationalQRRelevancyDays = "internationalQRRelevancyDays"
+		case recoveryGreencardRevisedValidityLaunchDate = "recoveryGreencardRevisedValidityLaunchDate"
 	}
 
 	init(minVersion: String) {
@@ -157,6 +163,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.informationURL = nil
 		config.configTTL = 3600
 		config.configMinimumIntervalSeconds = 300
+		config.configAlmostOutOfDateWarningSeconds = 300
 		config.recoveryWaitingPeriodDays = 11
 		config.recoveryEventValidityDays = 365
 		config.testEventValidityHours = 96
@@ -168,7 +175,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.clockDeviationThresholdSeconds = 30
 		config.isLuhnCheckEnabled = true
 		config.internationalQRRelevancyDays = 28
-
+		config.recoveryGreencardRevisedValidityLaunchDate = .distantFuture
 		return config
 	}
 

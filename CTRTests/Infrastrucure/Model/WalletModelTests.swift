@@ -25,7 +25,7 @@ class WalletModelTests: XCTestCase {
 		
 		// Given
 		var wallet: Wallet?
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
 			// When
@@ -46,7 +46,7 @@ class WalletModelTests: XCTestCase {
 		
 		// Given
 		var listIsEmpty = false
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
 			// When
@@ -60,7 +60,7 @@ class WalletModelTests: XCTestCase {
 		
 		// Given
 		var list = [Wallet]()
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
 			WalletModel.create(
@@ -81,7 +81,7 @@ class WalletModelTests: XCTestCase {
 		
 		// Given
 		var list = [Wallet]()
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
 			WalletModel.create(
@@ -106,7 +106,7 @@ class WalletModelTests: XCTestCase {
 		// Given
 		var wallet: Wallet?
 		var eventGroup: EventGroup?
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedWallet = wallet, let json = "test_addEvent".data(using: .utf8) {
@@ -136,7 +136,7 @@ class WalletModelTests: XCTestCase {
 		
 		// Given
 		var listIsEmpty = false
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let json = "test_removeEvent".data(using: .utf8),
@@ -163,7 +163,7 @@ class WalletModelTests: XCTestCase {
 		// Given
 		var wallet: Wallet?
 		var greenCard: GreenCard?
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
 			wallet = WalletModel.createTestWallet(managedContext: context)
@@ -190,7 +190,7 @@ class WalletModelTests: XCTestCase {
 		
 		// Given
 		var listIsEmpty = false
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
@@ -212,7 +212,7 @@ class WalletModelTests: XCTestCase {
 		
 		// Given
 		var resultIsNil = false
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
 			// When
@@ -227,7 +227,7 @@ class WalletModelTests: XCTestCase {
 		// Given
 		var wallet: Wallet?
 		var result: Wallet?
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
 			wallet = WalletModel.createTestWallet(managedContext: context)
@@ -244,7 +244,7 @@ class WalletModelTests: XCTestCase {
 		
 		// Given
 		var resultIsNil = false
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
 			WalletModel.createTestWallet(managedContext: context)

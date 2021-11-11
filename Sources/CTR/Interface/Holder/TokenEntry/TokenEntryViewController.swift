@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import MBProgressHUD
 
 class TokenEntryViewController: BaseViewController {
 	
@@ -89,12 +88,14 @@ class TokenEntryViewController: BaseViewController {
 			self?.sceneView.verificationEntryFieldPlaceholder = $0
 		}
 		
-		viewModel.$shouldShowProgress.binding = { [sceneView] in
+		viewModel.$shouldShowProgress.binding = { [weak self] in
 			if $0 {
-				MBProgressHUD.showAdded(to: sceneView, animated: true)
+				self?.sceneView.spinner.isHidden = false
+				self?.sceneView.spinner.startAnimating()
 				UIAccessibility.post(notification: .announcement, argument: L.generalLoading())
 			} else {
-				MBProgressHUD.hide(for: sceneView, animated: true)
+				self?.sceneView.spinner.stopAnimating()
+				self?.sceneView.spinner.isHidden = true
 			}
 		}
 		

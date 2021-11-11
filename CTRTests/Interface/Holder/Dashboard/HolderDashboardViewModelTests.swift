@@ -25,6 +25,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var sampleGreencardObjectID: NSManagedObjectID!
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
 	private var migrationNotificationManagerSpy: DCCMigrationNotificationManagerSpy!
+	private var recoveryValidityExtensionManagerSpy: RecoveryValidityExtensionManagerProtocol!
+	private var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
 	private static var initialTimeZone: TimeZone?
 
 	override class func setUp() {
@@ -53,12 +55,18 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy(now: { now }, userSettings: UserSettingsSpy(), networkManager: NetworkSpy())
+		remoteConfigSpy = RemoteConfigManagingSpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			reachability: ReachabilitySpy(),
+			networkManager: NetworkSpy()
+		)
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
-
+		recoveryValidityExtensionManagerSpy = RecoveryValidityExtensionManagerSpy()
 		migrationNotificationManagerSpy = DCCMigrationNotificationManagerSpy()
+		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
 
 		Services.use(cryptoManagerSpy)
 		Services.use(remoteConfigSpy)
@@ -76,6 +84,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 			strippenRefresher: strippenRefresherSpy,
 			userSettings: userSettingsSpy,
 			dccMigrationNotificationManager: migrationNotificationManagerSpy,
+			recoveryValidityExtensionManager: recoveryValidityExtensionManagerSpy,
+			configurationNotificationManager: configurationNotificationManagerSpy,
 			now: { now }
 		)
 	}
@@ -1246,12 +1256,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(1))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == "geldig tot 11 mei 2022"
+			expect(nowValidityTexts[0].lines[0]) == "Geldig tot 11 mei 2022"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == "geldig tot 11 mei 2022"
+			expect(futureValidityTexts[0].lines[0]) == "Geldig tot 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
@@ -1515,7 +1525,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
 			expect(nowValidityTexts[0].lines.count) == 1
-			expect(nowValidityTexts[0].lines[0]) == "geldig tot 11 mei 2022"
+			expect(nowValidityTexts[0].lines[0]) == "Geldig tot 11 mei 2022"
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
@@ -1658,9 +1668,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { _, _, didTapMoreInfo in
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQR) == false
 			didTapMoreInfo()
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQR) == true
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.availableRegion) == .europeanUnion
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.currentRegion) == .domestic
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutIncompleteDutchVaccination) == true
 		}))
 	}
 
@@ -1799,9 +1807,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
-			expect(nowValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(nowValidityTexts[0].kind) == .current
 			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
-			expect(nowValidityTexts[0].lines[1]) == "wordt automatisch geldig over 17 juli 17:02"
+			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 2021"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
@@ -1840,16 +1848,14 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
-			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].lines).to(haveCount(1))
 			expect(nowValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(nowValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 t/m 11 mei 2022"
+			expect(nowValidityTexts[0].lines[0]) == "Geldig vanaf 17 juli 17:02 t/m 11 mei 2022"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(futureValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 t/m 11 mei 2022"
+			expect(futureValidityTexts[0].lines[0]) == "Geldig vanaf 17 juli 17:02 t/m 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
@@ -2142,6 +2148,53 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Second: when it receives the `stubbedAppendUpdateObserverObserverResult` value above.
 		expect(self.strippenRefresherSpy.invokedLoadCount) == 2
 	}
+
+	func test_configIsAlmostOutOfDate() {
+
+		// Arrange
+		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
+
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+
+		// Assert
+		expect(self.sut.domesticCards.first).to(beConfigurationAlmostOutOfDateCard())
+		expect(self.sut.internationalCards.first).to(beConfigurationAlmostOutOfDateCard())
+		// only during .init
+		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerCount) == 1
+	}
+
+	func test_configIsAlmostOutOfDate_userTappedOnCard_domesticTab() {
+
+		// Arrange
+		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+
+		// Act
+		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards.first {
+			action()
+		}
+
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutOutdatedConfig) == true
+	}
+
+	func test_configIsAlmostOutOfDate_userTappedOnCard_internationalTab() {
+
+		// Arrange
+		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+
+		// Act
+		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards.first {
+			action()
+		}
+
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutOutdatedConfig) == true
+	}
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
@@ -2216,6 +2269,17 @@ private func beOriginNotValidInThisRegionCard(test: @escaping (String, String, (
 	return Predicate.define("be .originNotValidInThisRegion with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .originNotValidInThisRegion(message2, callToActionButtonText, didTapCallToAction) = actual {
+			test(message2, callToActionButtonText, didTapCallToAction)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+private func beConfigurationAlmostOutOfDateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .configAlmostOutOfDate with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .configAlmostOutOfDate(message2, callToActionButtonText, didTapCallToAction) = actual {
 			test(message2, callToActionButtonText, didTapCallToAction)
 			return PredicateResult(status: .matches, message: message)
 		}

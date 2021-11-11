@@ -29,6 +29,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		cryptoLibUtilitySpy = CryptoLibUtilitySpy(
 			now: { now },
 			userSettings: UserSettingsSpy(),
+			reachability: ReachabilitySpy(),
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.verifier
 		)

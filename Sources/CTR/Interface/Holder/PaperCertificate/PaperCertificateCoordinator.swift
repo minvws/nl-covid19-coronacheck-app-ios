@@ -7,16 +7,22 @@
 
 import UIKit
 
-protocol PaperCertificateFlowDelegate: AnyObject {
+protocol PaperProofFlowDelegate: AnyObject {
 	
-	func addCertificateFlowDidFinish()
+	func addPaperProofFlowDidFinish()
+
+	func switchToAddRegularProof()
 }
 
 protocol PaperCertificateCoordinatorDelegate: AnyObject {
 
-	func userDidSubmitPaperCertificateToken(token: String)
+	func userWishesMoreInformationOnSelfPrintedProof()
 
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
+	func userWishesMoreInformationOnNoInputToken()
+
+	func userWishesMoreInformationOnInternationalQROnly()
+
+	func userDidSubmitPaperCertificateToken(token: String)
 
 	func userWantsToGoBackToDashboard()
 
@@ -41,7 +47,7 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	
 	var navigationController: UINavigationController = UINavigationController()
 
-	private weak var delegate: PaperCertificateFlowDelegate?
+	private weak var delegate: PaperProofFlowDelegate?
 
 	var token: String?
 
@@ -50,7 +56,7 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	/// Initializer
 	/// - Parameters:
 	///   - delegate: flow delegate
-	init(delegate: PaperCertificateFlowDelegate) {
+	init(delegate: PaperProofFlowDelegate) {
 		
 		self.delegate = delegate
 	}
@@ -67,54 +73,85 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
+	func userWishesMoreInformationOnSelfPrintedProof() {
+
+		let viewModel = PaperProofContentViewModel(
+			content: Content(
+				title: L.holderPaperproofSelfprintedTitle(),
+				subTitle: L.holderPaperproofSelfprintedMessage(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holderPaperproofSelfprintedAction(),
+				secondaryAction: { [weak self] in
+					self?.delegate?.switchToAddRegularProof()
+				}
+			)
+		)
+		let destination = PaperProofContentViewController(viewModel: viewModel)
+		navigationController.pushViewController(destination, animated: true)
+	}
+
+	func userWishesMoreInformationOnNoInputToken() {
+
+		let viewModel = PaperProofContentViewModel(
+			content: Content(
+				title: L.holderPaperproofNotokenTitle(),
+				subTitle: L.holderPaperproofNotokenMessage(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holderPaperproofNotokenAction(),
+				secondaryAction: { [weak self] in
+					self?.delegate?.switchToAddRegularProof()
+				}
+			)
+		)
+		let destination = PaperProofContentViewController(viewModel: viewModel)
+		navigationController.pushViewController(destination, animated: true)
+	}
+
+	func userWishesMoreInformationOnInternationalQROnly() {
+
+		let viewController = InformationViewController(
+			viewModel: InformationViewModel(
+				coordinator: self,
+				title: L.holderPaperproofInternationalQROnlyTitle(),
+				message: L.holderPaperproofInternationalQROnlyMessage(),
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: true)
+				},
+				hideBodyForScreenCapture: false
+			)
+		)
+		presentAsBottomSheet(viewController)
+	}
+
 	func userDidSubmitPaperCertificateToken(token: String) {
 
 		// Store Token
 		self.token = token
 
 		// Navigate to About Scan
-		let destination = PaperCertificateAboutScanViewController(
-			viewModel: PaperCertificateAboutScanViewModel(
+		let destination = PaperProofStartScanningViewController(
+			viewModel: PaperProofStartScanningViewModel(
 				coordinator: self
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)
 	}
 
-	/// Show an information page
-	/// - Parameters:
-	///   - title: the title of the page
-	///   - body: the body of the page
-	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
-
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
-				coordinator: self,
-				title: title,
-				message: body,
-				linkTapHander: { [weak self] url in
-
-					self?.openUrl(url, inApp: true)
-				},
-				hideBodyForScreenCapture: hideBodyForScreenCapture
-			)
-		)
-		navigationController.viewControllers.last?.presentBottomSheet(viewController)
-	}
-
 	func userWantsToGoBackToDashboard() {
 
 		scannedQR = nil
 		token = nil
-		delegate?.addCertificateFlowDidFinish()
+		delegate?.addPaperProofFlowDidFinish()
 	}
 
 	func userWantsToGoBackToTokenEntry() {
 
 		scannedQR = nil
 		if let tokenEntryViewController = navigationController.viewControllers
-			.first(where: { $0 is PaperCertificateTokenEntryViewController }) {
+			.first(where: { $0 is PaperProofInputCouplingCodeViewController }) {
 
 			navigationController.popToViewController(
 				tokenEntryViewController,
@@ -137,8 +174,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 //		userDidSubmitPaperCertificateToken(token: "NDREB5")
 
-		let destination = PaperCertificateTokenEntryViewController(
-			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
+		let destination = PaperProofInputCouplingCodeViewController(
+			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
 		)
 
 		navigationController.pushViewController(destination, animated: true)
@@ -149,8 +186,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 //		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
 
-		let destination = PaperCertificateScanViewController(
-			viewModel: PaperCertificateScanViewModel(
+		let destination = PaperProofScanViewController(
+			viewModel: PaperProofScanViewModel(
 				coordinator: self
 			)
 		)
@@ -189,13 +226,18 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 	func userWishesToGoBackToScanCertificate() {
 
 		if let scanViewController = navigationController.viewControllers
-			.first(where: { $0 is PaperCertificateScanViewController }) {
+			.first(where: { $0 is PaperProofScanViewController }) {
 
 			navigationController.popToViewController(
 				scanViewController,
 				animated: true
 			)
 		}
+	}
+
+	private func presentAsBottomSheet(_ viewController: UIViewController) {
+
+		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 }
 
@@ -218,14 +260,14 @@ extension PaperCertificateCoordinator: EventFlowDelegate {
 	func eventFlowDidComplete() {
 
 		cleanup()
-		delegate?.addCertificateFlowDidFinish()
+		delegate?.addPaperProofFlowDidFinish()
 	}
 
 	func eventFlowDidCancel() {
 
 		cleanup()
 		if let viewController = navigationController.viewControllers
-			.first(where: { $0 is PaperCertificateStartViewController }) {
+			.first(where: { $0 is PaperProofStartViewController }) {
 
 			navigationController.popToViewController(
 				viewController,

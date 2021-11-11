@@ -27,7 +27,7 @@ class EventGroupModelTests: XCTestCase {
 		var eventGroup: EventGroup?
 		let date = Date()
 		let json = "test_createEvent".data(using: .utf8)
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedJson = json, let unwrappedWallet = wallet {
@@ -57,7 +57,7 @@ class EventGroupModelTests: XCTestCase {
 
 		// Given
 		var wallet: Wallet?
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedWallet = wallet,

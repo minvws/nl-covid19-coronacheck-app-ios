@@ -56,7 +56,7 @@ protocol WalletManaging: AnyObject {
 	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?)
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
-	func greencardsWithUnexpiredOrigins(now: Date) -> [GreenCard]
+	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard]
 
 	func canSkipMultiDCCUpgrade() -> Bool
 	
@@ -78,7 +78,7 @@ class WalletManager: WalletManaging, Logging {
 
 	private func createMainWalletIfNotExists() {
 
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			if WalletModel.findBy(label: WalletManager.walletName, managedContext: context) == nil {
@@ -103,7 +103,7 @@ class WalletManager: WalletManaging, Logging {
 
 		var success = true
 
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -149,7 +149,7 @@ class WalletManager: WalletManaging, Logging {
 	///   - maxValidity: the max validity (in HOURS) of the event group beyond the max issued at date. (from remote config)
 	private func findAndExpireEventGroups(for type: EventMode, maxValidity: Int) {
 
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
 			   let eventGroups = wallet.eventGroups {
@@ -173,7 +173,7 @@ class WalletManager: WalletManaging, Logging {
 
 		var result = [String]()
 
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -197,7 +197,7 @@ class WalletManager: WalletManaging, Logging {
 	///   - providerIdentifier: the identifier of the the provider
 	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) {
 
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -218,7 +218,7 @@ class WalletManager: WalletManaging, Logging {
 	/// Remove any existing event groups
 	func removeExistingEventGroups() {
 
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 
 		context.performAndWait {
 
@@ -237,7 +237,7 @@ class WalletManager: WalletManaging, Logging {
 
 	func removeExistingGreenCards() {
 
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -258,7 +258,7 @@ class WalletManager: WalletManaging, Logging {
 	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
 		var deletedGreenCardTypes: [(greencardType: String, originType: String)] = []
 
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -301,7 +301,7 @@ class WalletManager: WalletManaging, Logging {
 		}
 
 		var result = true
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -381,7 +381,7 @@ class WalletManager: WalletManaging, Logging {
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool {
 
 		var result = true
-		let context = dataStoreManager.backgroundContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -488,7 +488,7 @@ class WalletManager: WalletManaging, Logging {
 	}
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
-	func greencardsWithUnexpiredOrigins(now: Date) -> [GreenCard] {
+	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType originType: OriginType? = nil) -> [GreenCard] {
 		var result = [GreenCard]()
 
 		let context = dataStoreManager.managedObjectContext()
@@ -502,8 +502,16 @@ class WalletManager: WalletManaging, Logging {
 				guard let origins = greenCard.castOrigins() else { break }
 
 				let hasValidRemainingOrigins = origins.contains(where: { origin in
-					guard let expirationTime = origin.expirationTime else { return false }
-					return expirationTime > now
+					guard let expirationTime = origin.expirationTime,
+						  expirationTime > now
+					else { return false }
+
+					// Optional extra check:
+					if let originType = originType {
+                        return origin.type == originType.rawValue
+					}
+
+					return true
 				})
 
 				if hasValidRemainingOrigins {

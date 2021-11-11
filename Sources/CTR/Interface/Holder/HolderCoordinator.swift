@@ -41,6 +41,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesToCreateARecoveryQR()
 
+	func userWishesToFetchPositiveTests()
+
 	func userDidScanRequestToken(requestToken: RequestToken)
 
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
@@ -48,6 +50,14 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutClockDeviation()
 
 	func userWishesMoreInfoAboutUpgradingEUVaccinations()
+
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
+	
+    func userWishesMoreInfoAboutRecoveryValidityExtension()
+
+	func userWishesMoreInfoAboutRecoveryValidityReinstation()
+	
+	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
 	func openUrl(_ url: URL, inApp: Bool)
 
@@ -57,7 +67,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func displayError(content: Content, backAction: @escaping () -> Void)
 
-	func upgradeEUVaccinationDidComplete()
+	func migrateEUVaccinationDidComplete()
+
+	func extendRecoveryValidityDidComplete()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -66,6 +78,28 @@ class HolderCoordinator: SharedCoordinator {
 
 	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
+
+	let recoveryValidityExtensionManager: RecoveryValidityExtensionManager = {
+		RecoveryValidityExtensionManager(
+			userHasRecoveryEvents: {
+				let eventGroups = Services.walletManager.listEventGroups()
+				let hasRecoveryEvents = eventGroups.contains { $0.type == OriginType.recovery.rawValue }
+				return hasRecoveryEvents
+			},
+			userHasUnexpiredRecoveryGreencards: {
+				let unexpiredGreencards = Services.walletManager.greencardsWithUnexpiredOrigins(
+					now: Date(),
+					ofOriginType: OriginType.recovery
+				)
+
+				let hasUnexpiredRecoveryGreencards = !unexpiredGreencards.isEmpty
+				return hasUnexpiredRecoveryGreencards
+			},
+			userSettings: UserSettings(),
+			remoteConfigManager: Services.remoteConfigManager,
+			now: { Date() }
+		)
+	}()
 
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
@@ -154,10 +188,10 @@ class HolderCoordinator: SharedCoordinator {
 			case .tvsAuth(let returnURL):
 				
 				if let url = returnURL,
-				   let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-				   let authorizationFlow = appDelegate.currentAuthorizationFlow,
+				   let appAuthState = UIApplication.shared.delegate as? AppAuthState,
+				   let authorizationFlow = appAuthState.currentAuthorizationFlow,
 				   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
-					appDelegate.currentAuthorizationFlow = nil
+					appAuthState.currentAuthorizationFlow = nil
 				}
 				return true
 			default:
@@ -186,6 +220,18 @@ class HolderCoordinator: SharedCoordinator {
 			)
 			addChildCoordinator(eventCoordinator)
 			eventCoordinator.startWithRecovery()
+		}
+	}
+
+	private func startEventFlowForPositiveTests() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithPositiveTest()
 		}
 	}
 
@@ -227,6 +273,8 @@ class HolderCoordinator: SharedCoordinator {
 				),
 				userSettings: UserSettings(),
 				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
+				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
 				now: { Date() }
 			)
 		)
@@ -370,6 +418,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		startEventFlowForRecovery()
 	}
 
+	func userWishesToFetchPositiveTests() {
+		startEventFlowForPositiveTests()
+	}
+
 	func userWishesToCreateAQR() {
 		navigateToChooseQRCodeType()
 	}
@@ -391,6 +443,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
+		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
+		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+
 	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
 		let viewModel = MigrateEUVaccinationViewModel(
 			backAction: { [weak self] in
@@ -400,15 +458,54 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			userSettings: userSettings
 		)
 		viewModel.coordinator = self
-		let viewController = UpgradeEUVaccinationViewController(viewModel: viewModel)
+		let viewController = MigrateEUVaccinationViewController(viewModel: viewModel)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
-	func upgradeEUVaccinationDidComplete() {
+	func userWishesMoreInfoAboutRecoveryValidityExtension() {
+		let viewModel = ExtendRecoveryValidityViewModel(
+			mode: .extend,
+			backAction: { [weak self] in
+				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+			},
+			greencardLoader: GreenCardLoader(),
+			userSettings: userSettings
+		)
+		viewModel.coordinator = self
+		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {
-			// (will be added in upcoming PR)
-		})
+	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
+		let viewModel = ExtendRecoveryValidityViewModel(
+			mode: .reinstate,
+			backAction: { [weak self] in
+				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+			},
+			greencardLoader: GreenCardLoader(),
+			userSettings: userSettings
+		)
+		viewModel.coordinator = self
+		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+
+	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
+		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
+		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
+	func migrateEUVaccinationDidComplete() {
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
+	}
+
+	func extendRecoveryValidityDidComplete() {
+
+		recoveryValidityExtensionManager.reload()
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
 	}
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
@@ -510,7 +607,7 @@ extension HolderCoordinator: MenuDelegate {
 				
 			case .addPaperCertificate:
 				let coordinator = PaperCertificateCoordinator(delegate: self)
-				let destination = PaperCertificateStartViewController(viewModel: .init(coordinator: coordinator))
+				let destination = PaperProofStartViewController(viewModel: .init(coordinator: coordinator))
 				navigationController = UINavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController
 				startChildCoordinator(coordinator)
@@ -583,13 +680,18 @@ extension HolderCoordinator: EventFlowDelegate {
 	}
 }
 
-extension HolderCoordinator: PaperCertificateFlowDelegate {
+extension HolderCoordinator: PaperProofFlowDelegate {
 	
-	func addCertificateFlowDidFinish() {
+	func addPaperProofFlowDidFinish() {
 		
 		removeChildCoordinator()
-		
 		navigateToDashboard()
+	}
+
+	func switchToAddRegularProof() {
+
+		removeChildCoordinator()
+		openMenuItem(.addCertificate)
 	}
 }
 

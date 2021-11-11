@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Reachability
 import UIKit
 
 protocol RemoteConfigManaging: AnyObject {
@@ -13,7 +14,12 @@ protocol RemoteConfigManaging: AnyObject {
 
 	var storedConfiguration: RemoteConfiguration { get }
 
-	init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, networkManager: NetworkManaging)
+	init(
+		now: @escaping () -> Date,
+		userSettings: UserSettingsProtocol,
+		reachability: ReachabilityProtocol?,
+		networkManager: NetworkManaging
+	)
 
 	func appendUpdateObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
 	func appendReloadObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
@@ -51,16 +57,19 @@ class RemoteConfigManager: RemoteConfigManaging {
 	private let now: () -> Date
 	private let userSettings: UserSettingsProtocol
 	private let networkManager: NetworkManaging
+	private let reachability: ReachabilityProtocol?
 	
 	// MARK: - Setup
 
 	required init(
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
+		reachability: ReachabilityProtocol?,
 		networkManager: NetworkManaging = Services.networkManager) {
 
 		self.now = now
 		self.userSettings = userSettings
+		self.reachability = reachability
 		self.networkManager = networkManager
 
 		registerTriggers()
@@ -71,6 +80,11 @@ class RemoteConfigManager: RemoteConfigManaging {
 		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
+
+		reachability?.whenReachable = { [weak self] _ in
+			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+		}
+		try? reachability?.startNotifier()
 	}
 
 	// MARK: - Teardown
@@ -131,7 +145,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 		guard !isLoading else { return }
 		isLoading = true
 
-		let newValidity = FileValidity.evaluateIfUpdateNeeded(
+		let newValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
 			configuration: storedConfiguration,
 			lastFetchedTimestamp: userSettings.configFetchedTimestamp,
 			isAppFirstLaunch: isAppFirstLaunch,
@@ -190,25 +204,28 @@ class RemoteConfigManager: RemoteConfigManaging {
 				// Some observers want to know whenever the config is reloaded (regardless if data changed since last time):
 				self.notifyReloadObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
 
-				// Is the newly fetched config the same as the existing one?
-				guard storedConfiguration != remoteConfiguration else {
-					completion(.success((false, storedConfiguration)))
-					return
-				}
-
-				// Store hash of new config data:
-				userSettings.configFetchedHash = {
+				// Calculate the new hash
+				let newHash: String? = {
 					guard let string = String(data: data, encoding: .utf8) else { return nil }
 					return string.sha256
 				}()
 
-				// Save new config:
+				let hashesMatch = userSettings.configFetchedHash == newHash
+
+				// Save the config & new hash regardless of whether the hashes match,
+				// to guard against the keychain value being out of sync with the UserDefaults hash
+				userSettings.configFetchedHash = newHash
 				storedConfiguration = remoteConfiguration
 
-				// Inform the observers that only wish to know when config has changed:
-				notifyUpdateObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
-
-				completion(.success((true, remoteConfiguration)))
+				// Is the newly fetched config hash the same as the existing one?
+				// Use the hash, as not all of the config values are mapping in the remoteconfig object.
+				if hashesMatch {
+					completion(.success((false, remoteConfiguration)))
+				} else {
+					// Inform the observers that only wish to know when config has changed:
+					notifyUpdateObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
+					completion(.success((true, remoteConfiguration)))
+				}
 		}
 	}
 }

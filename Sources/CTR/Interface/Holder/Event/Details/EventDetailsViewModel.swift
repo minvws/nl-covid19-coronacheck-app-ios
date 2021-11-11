@@ -18,7 +18,9 @@ final class EventDetailsViewModel {
 	@Bindable private(set) var title: String
 	
 	@Bindable private(set) var details: [(detail: NSAttributedString, hasExtraLineBreak: Bool, isSeparator: Bool)]
-	
+
+	@Bindable private(set) var footer: String?
+
 	@Bindable private(set) var hideForCapture: Bool = false
 	
 	// MARK: - Private
@@ -29,10 +31,12 @@ final class EventDetailsViewModel {
 		coordinator: Dismissable,
 		title: String,
 		details: [EventDetails],
+		footer: String? = nil,
 		hideBodyForScreenCapture: Bool = false) {
 		
 		self.coordinator = coordinator
 		self.title = title
+		self.footer = footer
 		self.hideBodyForScreenCapture = hideBodyForScreenCapture
 		self.details = details.compactMap {
 

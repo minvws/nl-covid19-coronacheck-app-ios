@@ -111,6 +111,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToCreateARecoveryQRCount += 1
 	}
 
+	var invokedUserWishesToFetchPositiveTests = false
+	var invokedUserWishesToFetchPositiveTestsCount = 0
+
+	func userWishesToFetchPositiveTests() {
+		invokedUserWishesToFetchPositiveTests = true
+		invokedUserWishesToFetchPositiveTestsCount += 1
+	}
+
 	var invokedUserDidScanRequestToken = false
 	var invokedUserDidScanRequestTokenCount = 0
 	var invokedUserDidScanRequestTokenParameters: (requestToken: RequestToken, Void)?
@@ -149,6 +157,42 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
 		invokedUserWishesMoreInfoAboutUpgradingEUVaccinations = true
 		invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutOutdatedConfig = false
+	var invokedUserWishesMoreInfoAboutOutdatedConfigCount = 0
+	var invokedUserWishesMoreInfoAboutOutdatedConfigParameters: (validUntil: String, Void)?
+	var invokedUserWishesMoreInfoAboutOutdatedConfigParametersList = [(validUntil: String, Void)]()
+
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
+		invokedUserWishesMoreInfoAboutOutdatedConfig = true
+		invokedUserWishesMoreInfoAboutOutdatedConfigCount += 1
+		invokedUserWishesMoreInfoAboutOutdatedConfigParameters = (validUntil, ())
+		invokedUserWishesMoreInfoAboutOutdatedConfigParametersList.append((validUntil, ()))
+	}
+
+	var invokedUserWishesMoreInfoAboutRecoveryValidityExtension = false
+	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount = 0
+
+	func userWishesMoreInfoAboutRecoveryValidityExtension() {
+		invokedUserWishesMoreInfoAboutRecoveryValidityExtension = true
+		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = false
+	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount = 0
+
+	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
+		invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = true
+		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = false
+	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount = 0
+
+	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
+		invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = true
+		invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount += 1
 	}
 
 	var invokedOpenUrl = false
@@ -199,12 +243,20 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		}
 	}
 
-	var invokedUpgradeEUVaccinationDidComplete = false
-	var invokedUpgradeEUVaccinationDidCompleteCount = 0
+	var invokedMigrateEUVaccinationDidComplete = false
+	var invokedMigrateEUVaccinationDidCompleteCount = 0
 
-	func upgradeEUVaccinationDidComplete() {
-		invokedUpgradeEUVaccinationDidComplete = true
-		invokedUpgradeEUVaccinationDidCompleteCount += 1
+	func migrateEUVaccinationDidComplete() {
+		invokedMigrateEUVaccinationDidComplete = true
+		invokedMigrateEUVaccinationDidCompleteCount += 1
+	}
+
+	var invokedExtendRecoveryValidityDidComplete = false
+	var invokedExtendRecoveryValidityDidCompleteCount = 0
+
+	func extendRecoveryValidityDidComplete() {
+		invokedExtendRecoveryValidityDidComplete = true
+		invokedExtendRecoveryValidityDidCompleteCount += 1
 	}
 
 	var invokedDismiss = false

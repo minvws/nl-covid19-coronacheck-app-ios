@@ -73,7 +73,7 @@ class EventStartViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .vaccination)
 	}
 
 	func test_primaryButtonTapped_recoveryMode() {
@@ -86,7 +86,7 @@ class EventStartViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .recovery)
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .recovery)
 	}
 
 	func test_openUrl() throws {

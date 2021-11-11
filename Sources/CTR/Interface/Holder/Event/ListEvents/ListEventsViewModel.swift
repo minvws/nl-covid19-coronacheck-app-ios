@@ -70,7 +70,7 @@ class ListEventsViewModel: Logging {
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
-
+	
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
@@ -82,17 +82,8 @@ class ListEventsViewModel: Logging {
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 		self.identityChecker = identityChecker
-
-		viewState = .loading(
-			content: Content(
-				title: eventMode.title,
-				subTitle: nil,
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
+		
+		viewState = .loading(content: Content(title: eventMode.title))
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -202,24 +193,25 @@ class ListEventsViewModel: Logging {
 
 			}, completion: { result in
 				self.progressIndicationCounter.decrement()
-				self.handleGreenCardResult(result, remoteEvents: remoteEvents, completion: completion)
+				self.handleGreenCardResult(
+					result,
+					eventModeForStorage: eventModeForStorage,
+					remoteEvents: remoteEvents,
+					completion: completion
+				)
 			})
 		}
 	}
 
 	private func handleGreenCardResult(
-		_ result: Result<Void, Error>,
+		_ result: Result<RemoteGreenCards.Response, Error>,
+		eventModeForStorage: EventMode,
 		remoteEvents: [RemoteEvent],
 		completion: @escaping (Bool) -> Void) {
 
 		switch result {
-			case .success:
-				self.coordinator?.listEventsScreenDidFinish(
-					.continue(
-						value: nil,
-						eventMode: self.eventMode
-					)
-				)
+			case let .success(greencardResponse):
+				self.handleSuccess(greencardResponse, eventModeForStorage: eventModeForStorage)
 
 			case .failure(GreenCardLoader.Error.didNotEvaluate):
 				self.viewState = self.cannotCreateEventsState()
@@ -247,6 +239,23 @@ class ListEventsViewModel: Logging {
 			case .failure(let error):
 				self.logError("storeAndSign - unhandled: \(error)")
 				self.handleClientSideError(clientCode: .unhandled, for: .signer, with: remoteEvents)
+		}
+	}
+
+	func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+
+		if eventModeForStorage == .vaccination,
+		   greencardResponse.domesticGreenCard == nil,
+		   let euCards = greencardResponse.euGreenCards, euCards.count == 1 {
+			shouldPrimaryButtonBeEnabled = true
+			viewState = internationalQROnly()
+		} else {
+			// All Good -> finish
+			self.coordinator?.listEventsScreenDidFinish(
+				.continue(
+					eventMode: self.eventMode
+				)
+			)
 		}
 	}
 
@@ -337,10 +346,15 @@ class ListEventsViewModel: Logging {
 			}
 
 			// Remove any existing events for the provider
-			walletManager.removeExistingEventGroups(
-				type: eventModeForStorage,
-				providerIdentifier: response.wrapper.providerIdentifier
-			)
+			// 2463: Allow multiple vaccinations for paperflow. 
+			if eventMode != .paperflow || eventModeForStorage != .vaccination {
+				walletManager.removeExistingEventGroups(
+					type: eventModeForStorage,
+					providerIdentifier: response.wrapper.providerIdentifier
+				)
+			} else {
+				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(eventModeForStorage)]")
+			}
 
 			// Store the new events
 			if let maxIssuedAt = getMaxIssuedAt(wrapper: response.wrapper),

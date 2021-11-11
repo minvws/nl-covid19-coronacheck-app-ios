@@ -76,9 +76,12 @@ class HolderCoordinatorTests: XCTestCase {
 		let remoteConfigManagerSpy = RemoteConfigManagingSpy(
 			now: { now },
 			userSettings: UserSettingsSpy(),
+			reachability: ReachabilitySpy(),
 			networkManager: NetworkSpy()
 		)
 		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
+		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
+		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		Services.use(remoteConfigManagerSpy)
 
 		sut.childCoordinators = [

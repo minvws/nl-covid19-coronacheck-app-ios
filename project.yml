@@ -21,12 +21,12 @@ packages:
   Lottie:
     github: airbnb/lottie-ios
     majorVersion: 3.2.3
-  MBProgressHUD:
-    github: jdg/MBProgressHUD
-    majorVersion: 1.2.0
   Nimble:
     github: Quick/Nimble
     majorVersion: 9.2.0
+  OpenSSL:
+    github: krzyzanowskim/OpenSSL
+    minorVersion: 1.1.1200
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
@@ -94,15 +94,13 @@ targetTemplates:
         product: CocoaLumberjackSwift
       - package: IOSSecuritySuite
       - package: Lottie
-      - package: MBProgressHUD
+      - package: OpenSSL
       - package: Reachability
         product: Reachability
       - package: RSwiftLibrary
         product: Rswift
       # Frameworks:
-      - framework: clcore.framework
-        embed: false
-      - framework: openssl.framework
+      - framework: clcore.xcframework
         embed: false
     settings:
       base:
@@ -203,7 +201,14 @@ targetTemplates:
       - name: Run R.Swift
         basedOnDependencyAnalysis: true
         script: |
-          OUTPUT=`rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string,image,color`
+          # Determine path of Rswift. For M1 homebrew installs, it's at a location that isn't in Xcode's $PATH
+          if [ -f "/opt/homebrew/bin/rswift" ]; then
+            RSWIFT_PATH=/opt/homebrew/bin/rswift
+          elif which rswift >/dev/null; then
+            RSWIFT_PATH=rswift
+          fi
+
+          OUTPUT=`$RSWIFT_PATH generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string,image,color`
 
           # forbid TestFlight release if there are missing translations:
           if [[ "$OUTPUT" == *"warning"* ]] && [[ "$TESTFLIGHT_DEPLOY" == "true" ]]; then
@@ -220,10 +225,19 @@ targetTemplates:
       - name: Run SwiftLint
         basedOnDependencyAnalysis: true
         script: |
-          if which swiftlint >/dev/null; then
-            swiftlint --quiet --config=./.swiftlint.yml
-          else
+
+          # Determine path of Swiftlint. For M1 homebrew installs, it's at a location that isn't in Xcode's $PATH
+          if [ -f "/opt/homebrew/bin/swiftlint" ]; then
+            SWIFTLINT_PATH=/opt/homebrew/bin/swiftlint
+          elif which swiftlint >/dev/null; then
+            SWIFTLINT_PATH=swiftlint
+          fi
+
+          # Call Swiftlint:
+          if [ -z ${SWIFTLINT_PATH+x} ]; then 
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
+          else 
+            $SWIFTLINT_PATH --quiet --config=./.swiftlint.yml
           fi
 
   Standard_UnitTesting:
@@ -256,7 +270,7 @@ targets:
       base:
         APP_FLAVOR: holder
         # keep the comment on the next line, as it shows up in the CI logs & helps distinguish
-        MARKETING_VERSION: 2.4.1 # holder
+        MARKETING_VERSION: 2.5.0 # holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
 
@@ -318,7 +332,7 @@ targets:
       base:
         APP_FLAVOR: verifier
         # keep the comment on the next line, as it shows up in the CI logs & helps distinguish
-        MARKETING_VERSION: 2.5.0 # verifier
+        MARKETING_VERSION: 2.5.1 # verifier
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconVerifier
         INFOPLIST_FILE: Sources/CTR/Configuration/verifier-Info.plist
       configs:
