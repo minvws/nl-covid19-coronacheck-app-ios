@@ -241,8 +241,7 @@ class ListEventsViewModel: Logging {
 		}
 	}
 
-<<<<<<< HEAD
-	private func handleSucces(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+	private func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
 
 		switch eventModeForStorage {
 			case .positiveTest:
@@ -256,12 +255,7 @@ class ListEventsViewModel: Logging {
 
 	private func completeFlow() {
 
-		self.coordinator?.listEventsScreenDidFinish(
-			.continue(
-				value: nil,
-				eventMode: self.eventMode
-			)
-		)
+		self.coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
 	}
 
 	private func handleSuccessForVaccination(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
