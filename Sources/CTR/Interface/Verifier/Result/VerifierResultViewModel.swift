@@ -9,11 +9,16 @@ import UIKit
 import Clcore
 
 /// The access options
-enum AccessAction {
+enum AccessAction: Equatable {
 
-	case verified
+	case verified(Risk)
 	case denied
-	case demo
+	case demo(Risk)
+	
+	enum Risk {
+		case low
+		case high
+	}
 }
 
 class VerifierResultViewModel: Logging {
@@ -63,6 +68,8 @@ class VerifierResultViewModel: Logging {
 	@Bindable private(set) var checkIdentity: String = ""
 	
 	@Bindable private(set) var primaryButtonIcon: UIImage?
+	
+	@Bindable private(set) var riskDescription: String?
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -124,11 +131,13 @@ class VerifierResultViewModel: Logging {
 		}
 
 		if details.isSpecimen == "1" {
-			allowAccess = .demo
+			// Change #2497 library update
+			allowAccess = .demo(.low)
 			setHolderIdentity(details)
 			showAccessDemo()
 		} else {
-			allowAccess = .verified
+			// Change #2497 library update
+			allowAccess = .verified(.low)
 			setHolderIdentity(details)
 			showAccessAllowed()
 		}
@@ -198,6 +207,10 @@ class VerifierResultViewModel: Logging {
 		checkIdentity = L.verifierResultAccessCheckidentity()
 		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
+		
+		if case .verified(let risk) = allowAccess, risk == .high {
+			riskDescription = L.verifierResultAccessHighrisk()
+		}
 	}
 
 	private func showAccessDeniedInvalidQR() {
@@ -215,6 +228,10 @@ class VerifierResultViewModel: Logging {
 		checkIdentity = L.verifierResultAccessCheckidentity()
 		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
+		
+		if case .demo(let risk) = allowAccess, risk == .high {
+			riskDescription = L.verifierResultAccessHighrisk()
+		}
 	}
 
 	func dismiss() {

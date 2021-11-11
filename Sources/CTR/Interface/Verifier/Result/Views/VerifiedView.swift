@@ -17,6 +17,7 @@ final class VerifiedView: BaseView, AccessViewable {
 		}
 		enum Spacing {
 			static let imageToLabel: CGFloat = 32
+			static let label: CGFloat = 16
 		}
 		enum Size {
 			static let imageWidth: CGFloat = 200
@@ -27,6 +28,10 @@ final class VerifiedView: BaseView, AccessViewable {
 		enum Title {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
+		}
+		enum RiskDescription {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
 		}
 	}
 	
@@ -41,9 +46,12 @@ final class VerifiedView: BaseView, AccessViewable {
 	
 	private let titleLabel: Label = {
 
-		let label = Label(title1: nil, montserrat: true).multiline().header()
-		label.textColor = Theme.colors.dark
-		return label
+		return Label(title1: nil, montserrat: true).multiline().header()
+	}()
+	
+	private let riskDescriptionLabel: Label = {
+		
+		return Label(body: nil).multiline()
 	}()
 	
 	private let stackView: UIStackView = {
@@ -101,5 +109,16 @@ final class VerifiedView: BaseView, AccessViewable {
 		titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
 														 alignment: .center,
 														 kerning: ViewTraits.Title.kerning)
+	}
+	
+	var riskDescription: String? {
+		didSet {
+			guard oldValue == nil else { return }
+			riskDescriptionLabel.attributedText = riskDescription?.setLineHeight(ViewTraits.RiskDescription.lineHeight,
+																				 alignment: .center,
+																				 kerning: ViewTraits.RiskDescription.kerning)
+			stackView.addArrangedSubview(riskDescriptionLabel)
+			stackView.setCustomSpacing(ViewTraits.Spacing.label, after: titleLabel)
+		}
 	}
 }

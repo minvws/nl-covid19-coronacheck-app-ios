@@ -28,4 +28,14 @@ final class VerifiedViewTests: XCTestCase {
 		// Then
 		sut.assertImage()
 	}
+	
+	func test_snapshot_highrisk() {
+		// When
+		sut.title(L.verifierResultAccessTitle())
+		sut.riskDescription = L.verifierResultAccessHighrisk()
+		sut.backgroundColor = C.secondaryBlue()
+		
+		// Then
+		sut.assertImage()
+	}
 }

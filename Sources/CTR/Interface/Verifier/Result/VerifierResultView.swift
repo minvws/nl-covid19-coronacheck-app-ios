@@ -8,21 +8,6 @@
 import UIKit
 
 class VerifierResultView: BaseView {
-	
-	enum Result {
-		
-		case verified
-		case denied
-		case demo
-		
-		var colors: UIColor {
-			switch self {
-				case .verified: return Theme.colors.access
-				case .demo: return Theme.colors.grey4
-				case .denied: return Theme.colors.denied
-			}
-		}
-	}
 
 	let checkIdentityView: VerifierCheckIdentityView = {
 
@@ -42,7 +27,7 @@ class VerifierResultView: BaseView {
 		backgroundColor = Theme.colors.viewControllerBackground
 	}
 	
-	func setup(for result: Result) {
+	func setup(for result: AccessAction) {
 		switch result {
 			case .verified, .demo:
 				setupViews(for: result)
@@ -83,6 +68,12 @@ class VerifierResultView: BaseView {
 		}
 	}
 	
+	var riskDescription: String? {
+		didSet {
+			verifiedView.riskDescription = riskDescription
+		}
+	}
+	
 	/// The user tapped on the primary button
 	var scanNextTappedCommand: (() -> Void)?
 	
@@ -95,7 +86,7 @@ class VerifierResultView: BaseView {
 
 private extension VerifierResultView {
 	
-	func setupViews(for result: Result) {
+	func setupViews(for result: AccessAction) {
 		
 		verifiedView.backgroundColor = result.colors
 		accessView = verifiedView
@@ -121,5 +112,20 @@ private extension VerifierResultView {
 	@objc func readMoreTapped() {
 		
 		readMoreTappedCommand?()
+	}
+}
+
+extension AccessAction {
+	
+	var colors: UIColor? {
+		switch self {
+			case .verified(let risk):
+				switch risk {
+					case .low: return C.accessColor()
+					case .high: return C.secondaryBlue()
+				}
+			case .demo: return C.grey4()
+			case .denied: return C.deniedColor()
+		}
 	}
 }

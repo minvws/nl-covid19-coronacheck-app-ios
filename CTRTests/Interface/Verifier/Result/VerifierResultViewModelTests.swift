@@ -55,7 +55,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut.checkAttributes()
 		
 		// Then
-		expect(self.sut.allowAccess) == .demo
+		expect(self.sut.allowAccess) == .demo(.low)
 		expect(self.sut.title) == L.verifierResultDemoTitle()
 		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
 		expect(self.sut.primaryTitle) == L.verifierResultAccessIdentityverified()
@@ -92,7 +92,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut.checkAttributes()
 		
 		// Then
-		expect(self.sut.allowAccess) == .verified
+		expect(self.sut.allowAccess) == .verified(.low)
 		expect(self.sut.title) == L.verifierResultAccessTitle()
 		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
 		expect(self.sut.primaryTitle) == L.verifierResultAccessIdentityverified()
@@ -115,7 +115,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut.checkAttributes()
 		
 		// Then
-		expect(self.sut.allowAccess) == .verified
+		expect(self.sut.allowAccess) == .verified(.low)
 		expect(self.sut.title) == L.verifierResultAccessTitle()
 		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
 		expect(self.sut.primaryTitle) == L.verifierResultAccessIdentityverified()
@@ -138,7 +138,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut.checkAttributes()
 		
 		// Then
-		expect(self.sut.allowAccess) == .verified
+		expect(self.sut.allowAccess) == .verified(.low)
 		expect(self.sut.title) == L.verifierResultAccessTitle()
 		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
 		expect(self.sut.primaryTitle) == L.verifierResultAccessIdentityverified()
@@ -328,7 +328,7 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_showMoreInformation_whenAllowed_shouldDisplayContent() {
 		
 		// Given
-		sut.allowAccess = .verified
+		sut.allowAccess = .verified(.low)
 		
 		// When
 		sut.showMoreInformation()
