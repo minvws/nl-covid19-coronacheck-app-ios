@@ -11,12 +11,12 @@ import SnapshotTesting
 
 final class EmptyDashboardViewTests: XCTestCase {
 	
-	var sut: EmptyDashboardView!
+	var sut: EmptyDashboardDescriptionView!
 
 	override func setUp() {
 		super.setUp()
 
-		sut = EmptyDashboardView()
+		sut = EmptyDashboardDescriptionView()
 		sut.translatesAutoresizingMaskIntoConstraints = false
 		NSLayoutConstraint.activate([
 			sut.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width)

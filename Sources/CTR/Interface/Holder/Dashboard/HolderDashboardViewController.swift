@@ -199,7 +199,7 @@ class HolderDashboardViewController: BaseViewController {
 						return messageCard
 
 					case let .emptyState(image, title, message, buttonTitle):
-						let emptyDashboardView = EmptyDashboardView()
+						let emptyDashboardView = EmptyDashboardDescriptionView()
 						emptyDashboardView.image = image
 						emptyDashboardView.title = title
 						emptyDashboardView.message = message

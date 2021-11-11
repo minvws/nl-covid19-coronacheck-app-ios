@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class EmptyDashboardView: BaseView {
+final class EmptyDashboardDescriptionView: BaseView {
 	
 	/// The display constants
 	private enum ViewTraits {
