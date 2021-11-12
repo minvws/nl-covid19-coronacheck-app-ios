@@ -60,12 +60,6 @@ class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 		view.isHidden = true
 		return view
 	}()
-	
-	/// The header label
-	let textLabel: Label = {
-
-		return Label(subhead: nil).multiline()
-	}()
 
 	let userNeedsATokenButton: Button = {
 		
@@ -105,9 +99,6 @@ class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 
 		stackView.addArrangedSubview(userNeedsATokenButton)
 		stackView.setCustomSpacing(0, after: userNeedsATokenButton)
-
-		stackView.addArrangedSubview(textLabel)
-		stackView.setCustomSpacing(8, after: textLabel)
 
 		stackView.addArrangedSubview(spacer)
 	}
@@ -150,13 +141,6 @@ class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 		}
 	}
 	
-	var text: String? {
-		didSet {
-			textLabel.attributedText = text?.setLineHeight(ViewTraits.textLineHeight,
-														   kerning: ViewTraits.textKerning)
-		}
-	}
-	
 	var userNeedsATokenButtonTitle: String? {
 		didSet {
 			userNeedsATokenButton.setTitle(userNeedsATokenButtonTitle, for: .normal)
@@ -181,8 +165,9 @@ class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 			if let header = fieldErrorMessage {
 				errorView.error = header
 				errorView.isHidden = false
-				textLabel.isHidden = true
+				stackView.setCustomSpacing(8, after: tokenEntryView)
 			} else {
+				stackView.setCustomSpacing(16, after: tokenEntryView)
 				errorView.isHidden = true
 			}
 		}
