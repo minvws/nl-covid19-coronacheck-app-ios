@@ -98,8 +98,14 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.primaryButtonTitle) == L.holderMenuProof()
 		expect(self.sut.hasAddCertificateMode) == true
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
-		expect(self.sut.domesticCards.first).to(beEmptyStateCard())
-		expect(self.sut.internationalCards.first).to(beEmptyStateCard())
+		
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
 	}
 
 	func test_initialStateAfterFirstEmptyLoad() {
@@ -115,20 +121,25 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 
 		expect(self.sut.hasAddCertificateMode).toEventually(beTrue())
-		expect(self.sut.domesticCards).toEventually(haveCount(1))
-		expect(self.sut.internationalCards).toEventually(haveCount(1))
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
 
-		expect(self.sut.domesticCards.first).to(beEmptyStateCard(test: { image, title, message, buttonTitle in
-			expect(image) == I.dashboard.domestic()
-			expect(title) == L.holderDashboardEmptyDomesticTitle()
+		expect(self.sut.domesticCards[0]).to(beEmptyStateDescription(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardEmptyDomesticMessage()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.internationalCards.first).to(beEmptyStateCard(test: { image, title, message, buttonTitle in
-			expect(image) == I.dashboard.international()
-			expect(title) == L.holderDashboardEmptyInternationalTitle()
+		expect(self.sut.domesticCards[1]).to(beEmptyStatePlaceholderImage(test: { image, title in
+			expect(image) == I.dashboard.domestic()
+			expect(title) == L.holderDashboardEmptyDomesticTitle()
+		}))
+		
+		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardEmptyInternationalMessage()
 			expect(buttonTitle) == L.holderDashboardEmptyInternationalButton()
+		}))
+		expect(self.sut.internationalCards[1]).to(beEmptyStatePlaceholderImage(test: { image, title in
+			expect(image) == I.dashboard.international()
+			expect(title) == L.holderDashboardEmptyInternationalTitle()
 		}))
 	}
 
@@ -464,8 +475,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(1))
-		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateCard())
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
 
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 	}
@@ -486,10 +498,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(1))
-		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateCard())
-		expect(self.sut.internationalCards).toEventually(haveCount(1))
-		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateCard())
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
 
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 	}
@@ -723,10 +738,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(1))
-		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateCard())
-		expect(self.sut.internationalCards).toEventually(haveCount(1))
-		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateCard())
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
 
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 	}
@@ -2023,8 +2041,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 			didTapClose()
 
 			// Check the non-cached value now to check that the Expired QR row was removed:
-			expect(self.sut.domesticCards).to(haveCount(1))
-			expect(self.sut.domesticCards[0]).to(beEmptyStateCard())
+			expect(self.sut.domesticCards).to(haveCount(2))
+			expect(self.sut.domesticCards[0]).to(beEmptyStateDescription())
+			expect(self.sut.domesticCards[1]).to(beEmptyStatePlaceholderImage())
+
 		}))
 	}
 
@@ -2074,8 +2094,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 
 		// Assert
-		expect(self.sut.internationalCards).toEventually(haveCount(1))
-		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateCard())
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
 	}
 
 	func test_datasourceupdate_multipleDCC_1of2_2of2() {
@@ -2255,8 +2276,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		// Assert
-		expect(self.sut.domesticCards.first).to(beConfigurationAlmostOutOfDateCard())
-		expect(self.sut.internationalCards.first).to(beConfigurationAlmostOutOfDateCard())
+		expect(self.sut.domesticCards[1]).to(beConfigurationAlmostOutOfDateCard())
+		expect(self.sut.internationalCards[1]).to(beConfigurationAlmostOutOfDateCard())
+		
 		// only during .init
 		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerCount) == 1
 	}
@@ -2269,7 +2291,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		// Act
-		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards.first {
+		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards[1] {
 			action()
 		}
 
@@ -2285,7 +2307,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		// Act
-		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards.first {
+		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards[1] {
 			action()
 		}
 
@@ -2295,11 +2317,22 @@ class HolderDashboardViewModelTests: XCTestCase {
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
-private func beEmptyStateCard(test: @escaping (UIImage?, String, String, String?) -> Void = { _, _, _, _  in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .emptyState with matching values") { expression, message in
+private func beEmptyStateDescription(test: @escaping (String, String?) -> Void = { _, _  in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .emptyStateDescription with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
-		   case let .emptyState(image, title1, message1, buttonTitle1) = actual {
-			test(image, title1, message1, buttonTitle1)
+		   case let .emptyStateDescription(message1, buttonTitle1) = actual {
+			test(message1, buttonTitle1)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+private func beEmptyStatePlaceholderImage(test: @escaping (UIImage?, String) -> Void = { _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .emptyStatePlaceholderImage with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .emptyStatePlaceholderImage(image, title1) = actual {
+			test(image, title1)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)
