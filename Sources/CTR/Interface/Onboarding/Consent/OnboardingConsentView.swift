@@ -86,7 +86,6 @@ final class OnboardingConsentView: BaseView {
 		return button
 	}()
 	
-	private var bottomStackViewConstraint: NSLayoutConstraint?
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 
 	/// setup the views
@@ -146,11 +145,7 @@ final class OnboardingConsentView: BaseView {
 				constant: -2.0 * ViewTraits.margin
 			),
 			stackView.centerXAnchor.constraint(equalTo: scrollView.contentView.centerXAnchor),
-			{
-				let constraint = stackView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.contentView.bottomAnchor, constant: -ViewTraits.margin)
-				bottomStackViewConstraint = constraint
-				return constraint
-			}(),
+			stackView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.contentView.bottomAnchor, constant: -ViewTraits.margin),
 
 			// Footer view
 			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
@@ -225,27 +220,8 @@ final class OnboardingConsentView: BaseView {
 	/// Setup the consent button. By default hidden.
 	func setupConsentButton() {
 		
-		scrollView.contentView.addSubview(consentButton)
-		bottomStackViewConstraint?.isActive = false
+		footerButtonView.buttonStackView.alignment = .center
 		
-		NSLayoutConstraint.activate([
-			// Consent button
-			consentButton.topAnchor.constraint(
-				greaterThanOrEqualTo: stackView.bottomAnchor,
-				constant: ViewTraits.itemSpacing
-			),
-			consentButton.leftAnchor.constraint(
-				equalTo: scrollView.contentView.leftAnchor,
-				constant: ViewTraits.margin
-			),
-			consentButton.rightAnchor.constraint(
-				equalTo: scrollView.contentView.rightAnchor,
-				constant: -ViewTraits.margin
-			),
-			consentButton.bottomAnchor.constraint(
-				equalTo: scrollView.contentView.bottomAnchor,
-				constant: -ViewTraits.bottomConsentMargin
-			)
-		])
+		footerButtonView.buttonStackView.insertArrangedSubview(consentButton, at: 0)
 	}
 }
