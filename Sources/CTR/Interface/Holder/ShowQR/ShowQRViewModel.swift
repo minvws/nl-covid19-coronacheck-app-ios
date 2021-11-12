@@ -17,7 +17,7 @@ class ShowQRViewModel: Logging {
 	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
 	weak private var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
 	private var mappingManager: MappingManaging? = Services.mappingManager
-	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+	private let notificationCenter: NotificationCenterProtocol
 
 	private var previousBrightness: CGFloat?
 
@@ -56,7 +56,8 @@ class ShowQRViewModel: Logging {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCards: [GreenCard],
-		thirdPartyTicketAppName: String?
+		thirdPartyTicketAppName: String?,
+		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	) {
 
 		self.coordinator = coordinator
@@ -64,6 +65,7 @@ class ShowQRViewModel: Logging {
 			greenCards: greenCards,
 			internationalQRRelevancyDays: TimeInterval(remoteConfigManager?.storedConfiguration.internationalQRRelevancyDays ?? 28)
 		)
+		self.notificationCenter = notificationCenter
 		self.items = dataSource.items
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
 		self.startingPage = mostRelevantPage
