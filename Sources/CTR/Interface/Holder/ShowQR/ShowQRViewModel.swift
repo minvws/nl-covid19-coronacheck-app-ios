@@ -98,17 +98,15 @@ class ShowQRViewModel: Logging {
 
 	private func setupListeners() {
 
-		notificationCenter.addObserver(
-			self,
-			selector: #selector(onDidBecomeActiveNotification),
-			name: UIApplication.didBecomeActiveNotification,
-			object: nil
-		)
-	}
+		notificationCenter.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.setBrightness()
+		}
 
-	/// Handle the event the application did become active
-	@objc func onDidBecomeActiveNotification() {
-		setBrightness()
+		// When the app is backgrounded, the holdercoordinator clears the reference to the third-party ticket app
+		// so we should hide that from the UI on this screen too.
+		notificationCenter.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.thirdPartyTicketAppButtonTitle = nil
+		}
 	}
 
 	/// Adjust the brightness
