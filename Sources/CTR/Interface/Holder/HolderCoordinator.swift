@@ -114,6 +114,13 @@ class HolderCoordinator: SharedCoordinator {
 		return remoteConfigManager.storedConfiguration.isGGDEnabled == true
 	}
 	
+	// MARK: - Setup
+	
+	override init(navigationController: UINavigationController, window: UIWindow) {
+		super.init(navigationController: navigationController, window: window)
+		setupNotificationListeners()
+	}
+	
 	// Designated starter method
 	override func start() {
 
@@ -140,6 +147,22 @@ class HolderCoordinator: SharedCoordinator {
 				// Start with the holder app
 				navigateToHolderStart()
 			}
+		}
+	}
+	
+	// MARK: - Teardown
+
+	deinit {
+		NotificationCenter.default.removeObserver(self)
+	}
+
+	// MARK: - Listeners
+	
+	private func setupNotificationListeners() {
+		
+		// Prevent the thirdparty ticket feature persisting forever, let's clear it when the user minimises the app
+		NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.thirdpartyTicketApp = nil
 		}
 	}
 

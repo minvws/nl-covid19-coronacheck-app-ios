@@ -17,6 +17,7 @@ protocol NotificationCenterProtocol {
 		object anObject: Any?
 	)
 
+	@discardableResult
 	func addObserver(
 		forName name: NSNotification.Name?,
 		object obj: Any?,
