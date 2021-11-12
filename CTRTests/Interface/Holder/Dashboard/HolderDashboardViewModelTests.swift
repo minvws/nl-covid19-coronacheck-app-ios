@@ -778,7 +778,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands,
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()])],
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			)
@@ -802,13 +802,60 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dose)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dose)" + ":"
+			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
+
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
+
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+	}
+	
+	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_secondDose() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .netherlands,
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 2)])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
+
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (2 doses)" + ":"
+			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
+
+			// Exercise the validityText with different sample dates:
+			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow))
+			expect(futureValidityTexts[0].kind) == .current
+			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (2 doses)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 
 			// check didTapViewQR
@@ -852,7 +899,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dose)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 15 juni 2021"
 
 			// Exercise the validityText with different sample dates:
@@ -981,7 +1028,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
 					return .sampleWithVaccine(doseNumber: 1, totalDose: 2)
 				}),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()])],
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			)
@@ -1086,7 +1133,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
 					return .sampleWithVaccine(doseNumber: 0, totalDose: 2)
 				}),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()])],
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			)
@@ -1133,7 +1180,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
 					return .sampleWithVaccine(doseNumber: nil, totalDose: 2)
 				}),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()])],
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			)
@@ -1283,7 +1330,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands,
 				greencards: [.init(id: sampleGreencardObjectID, origins: [
-					.validOneDayAgo_vaccination_expires3DaysFromNow(),
+					.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1),
 					.validIn48Hours_recovery_expires300DaysFromNow()
 				])],
 				shouldShowErrorBeneathCard: false,
@@ -1309,7 +1356,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(2))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dose)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 			expect(nowValidityTexts[1].lines).to(haveCount(2))
 			expect(nowValidityTexts[1].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
@@ -1319,7 +1366,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dose)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 			expect(futureValidityTexts[1].kind) == .current
 			expect(futureValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
@@ -1345,7 +1392,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands,
 				greencards: [.init(id: sampleGreencardObjectID, origins: [
-					.validOneDayAgo_vaccination_expires3DaysFromNow(),
+					.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1),
 					.validOneHourAgo_test_expires23HoursFromNow(),
 					.validOneHourAgo_recovery_expires300DaysFromNow()
 				])],
@@ -1372,7 +1419,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 				let nowValidityTexts = validityTextEvaluator(now)
 				expect(nowValidityTexts).to(haveCount(3))
-				expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+				expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dose)" + ":"
 				expect(nowValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
 				expect(nowValidityTexts[2].lines[0]) == L.generalTestcertificate().capitalized + ":"
 
@@ -1414,7 +1461,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(3))
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dose)" + ":"
 			expect(nowValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
 			expect(nowValidityTexts[2].lines[0]) == L.generalTestcertificate().capitalized + ":"
 
@@ -1455,7 +1502,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(3))
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dose)" + ":"
 			expect(nowValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
 			expect(nowValidityTexts[2].lines[0]) == L.generalTestcertificate().capitalized + ":"
 
@@ -1477,7 +1524,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
-				greencards: [.init(id: vaccineGreenCardID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()])],
+				greencards: [.init(id: vaccineGreenCardID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			),
@@ -1553,7 +1600,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands,
 				greencards: [.init(id: sampleGreencardObjectID, origins: [
-					.validOneDayAgo_vaccination_expires3DaysFromNow(),
+					.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1),
 					.validOneHourAgo_test_expires23HoursFromNow(),
 					.validOneHourAgo_recovery_expires300DaysFromNow()
 				])],
@@ -1600,7 +1647,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
-				greencards: [.init(id: vaccineGreenCardID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()])],
+				greencards: [.init(id: vaccineGreenCardID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			),
@@ -1652,7 +1699,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
-				greencards: [.init(id: vaccineGreenCardID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()])],
+				greencards: [.init(id: vaccineGreenCardID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			)
@@ -1681,7 +1728,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands,
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expires30DaysFromNow()])],
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expires30DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			)
@@ -1705,13 +1752,63 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dose)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dose)" + ":"
+			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02"
+
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
+
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+	}
+	
+	func test_datasourceupdate_singleNotYetValidDomesticVaccination_dose2() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .netherlands,
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expires30DaysFromNow(doseNumber: 2)])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
+			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
+		}))
+
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (2 doses)" + ":"
+			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02"
+
+			// Exercise the validityText with different sample dates:
+			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow))
+			expect(futureValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (2 doses)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02"
 
 			// check didTapViewQR
@@ -1784,7 +1881,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expires30DaysFromNow()])],
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expires30DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			)

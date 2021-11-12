@@ -223,6 +223,7 @@ class GreenCardModelTests: XCTestCase {
 						eventDate: date,
 						expirationTime: date,
 						validFromDate: date,
+						doseNumber: 1,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -258,6 +259,7 @@ class GreenCardModelTests: XCTestCase {
 				eventDate: date,
 				expirationTime: date,
 				validFromDate: date,
+				doseNumber: 1,
 				greenCard: greenCard,
 				managedContext: context
 			   ) {

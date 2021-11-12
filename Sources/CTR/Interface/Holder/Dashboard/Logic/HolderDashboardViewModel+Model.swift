@@ -40,6 +40,7 @@ extension HolderDashboardViewModel {
 				let eventDate: Date
 				let expirationTime: Date
 				let validFromDate: Date
+				let doseNumber: Int?
 
 				/// There is a particular order to sort these onscreen
 				var customSortIndex: Int {

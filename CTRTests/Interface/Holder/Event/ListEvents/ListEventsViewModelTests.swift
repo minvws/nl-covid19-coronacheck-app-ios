@@ -1622,7 +1622,8 @@ class ListEventsViewModelTests: XCTestCase {
 					type: "vaccination",
 					eventTime: Date(),
 					expirationTime: Date(),
-					validFrom: Date()
+					validFrom: Date(),
+					doseNumber: 1
 				)
 			],
 			createCredentialMessages: "test"
@@ -1634,7 +1635,8 @@ class ListEventsViewModelTests: XCTestCase {
 						type: "vaccination",
 						eventTime: Date(),
 						expirationTime: Date(),
-						validFrom: Date()
+						validFrom: Date(),
+						doseNumber: nil
 					)
 				],
 				credential: "test credential"
@@ -1649,7 +1651,8 @@ class ListEventsViewModelTests: XCTestCase {
 					type: "vaccination",
 					eventTime: Date(),
 					expirationTime: Date(),
-					validFrom: Date()
+					validFrom: Date(),
+					doseNumber: 2
 				)
 			],
 			createCredentialMessages: "test"
@@ -1661,7 +1664,8 @@ class ListEventsViewModelTests: XCTestCase {
 						type: "vaccination",
 						eventTime: Date(),
 						expirationTime: Date(),
-						validFrom: Date()
+						validFrom: Date(),
+						doseNumber: nil
 					)
 				],
 				credential: "test credential1"
@@ -1672,7 +1676,8 @@ class ListEventsViewModelTests: XCTestCase {
 						type: "vaccination",
 						eventTime: Date(),
 						expirationTime: Date(),
-						validFrom: Date()
+						validFrom: Date(),
+						doseNumber: nil
 					)
 				],
 				credential: "test credential2"
