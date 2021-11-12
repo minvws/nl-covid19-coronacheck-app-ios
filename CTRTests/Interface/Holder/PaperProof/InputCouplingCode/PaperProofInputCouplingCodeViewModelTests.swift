@@ -8,7 +8,6 @@
 import Foundation
 import XCTest
 import Nimble
-import SnapshotTesting
 @testable import CTR
 
 // swiftlint:disable:next type_name
@@ -32,8 +31,6 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		expect(self.sut.nextButtonTitle) == L.holderDcctokenentryNext()
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.userNeedsATokenButtonTitle) == L.holderDcctokenentryButtonNotoken()
-
-		PaperProofInputCouplingCodeViewController(viewModel: sut).assertImage()
 	}
 
 	func test_inputtingShortValue_doesntShowError() {

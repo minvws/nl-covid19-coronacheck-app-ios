@@ -10,6 +10,8 @@
 "holder.paperproof.selfprinted.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je kunt wel je bewijs toevoegen aan de app met behulp van DigiD. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
 "holder.paperproof.selfprinted.action" = "Naar bewijs toevoegen";
 
+"general.doses" = "doses";
+"general.dose" = "dose";
 "holder.vaccination.internationlQROnly.title" = "Er is alleen een internationaal bewijs gemaakt";
 "holder.vaccination.internationlQROnly.message" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je meer dan één prik hebben gehad, of hersteld zijn van corona voor je eerste prik.</p><p><b>Krijg je nog een tweede prik?</b><br />Voeg opnieuw een vaccinatiebewijs toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan ook een Nederlands bewijs.</p>";
 "holder.vaccination.internationlQROnly.action" = "Haal mijn testuitslag op";
@@ -21,6 +23,18 @@
 "holder.positiveTest.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.positiveTest.nolist.message" = "<p>Er is geen positieve testuitslag van jou beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a>.</p><p>Ben je net getest? Het kan een paar uur  duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p>";
 "holder.positiveTest.nolist.action" = "Naar mijn bewijzen";
+
+"holder.positiveTest.inapplicable.title" = "Positieve testuitslag is niet geschikt";
+"holder.positiveTest.inapplicable.message" = "<p>Je bent positief getest ná je eerste vaccinatie. Daardoor is je testuitslag niet geschikt om een Nederlands vaccinatiebewijs van te maken.</p><p>Kijk voor meer informatie bij de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a>.</p>";
+"holder.positiveTest.inapplicable.action" = "Naar mijn bewijzen";
+
+"holder.positiveTest.recoveryAndVaccination.title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
+"holder.positiveTest.recoveryAndVaccination.message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Je positieve test is minder dan %@ dagen geleden afgenomen. Daarom is er ook een herstelbewijs gemaakt.</p>";
+"holder.positiveTest.recoveryAndVaccination.action" = "Naar mijn bewijzen";
+
+"holder.positiveTest.recoveryOnly.title" = "Alleen een herstelbewijs gemaakt";
+"holder.positiveTest.recoveryOnly.message" = "<p>Je bent positief getest ná je eerste vaccinatie. Daardoor is je testuitslag niet geschikt om een Nederlands vaccinatiebewijs van te maken. Er is wel een herstelbewijs gemaakt.</p><p>Kijk voor meer informatie bij de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a>.</p>";
+"holder.positiveTest.recoveryOnly.action" = "Naar mijn bewijzen";
 
 "holder.paperproof.notoken.title" = "Geen lettercombinatie?";
 "holder.paperproof.notoken.message" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt aangevraagd bij jouw zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je het papieren bewijs zelf geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ in het menu. Kies je bewijs en haal je gegevens op door in te loggen met DigiD.</p>";
@@ -712,15 +726,6 @@
 "holder.fetchevents.positiveTest.title" = "Testuitslag ophalen";
 "holder.fetchevents.negativeTest.title" = "Testuitslag ophalen";
 "holder.fetchevents.recovery.title" = "Herstelgegevens ophalen";
-
-/* MARK: - Start Paper Certificate */
-"holder.papercertificate.start.title" = "Papieren bewijs toevoegen";
-"holder.papercertificate.start.message" = "Heb je een papieren coronabewijs <b>aangevraagd bij je zorgverlener,</b> of <b>opgestuurd gekregen per post?</b> Dan kun je deze hier ook in de app toevoegen.";
-"holder.papercertificate.start.highlightedmessage" = "<b>Zelf je bewijs uitgeprint?</b><p>Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
-
-/* MARK: - Start Paper Certificate */
-"holder.papercertificate.aboutscan.title" = "Scan nu de internationale QR-code";
-"holder.papercertificate.aboutscan.message" = "<p>In de internationale QR-code staan genoeg gegevens om zowel een Nederlands als een internationaal bewijs te maken.</p><p>Scan daarom met de camera van je telefoon <b>alleen je internationale QR-code.</b></p><b>Dit krijg je:</b><ul><li>Een Nederlands bewijs</li><li>Een internationaal bewijs</li></ul>";
 
 /* MARK: - Holder Scanner */
 "holder.scanner.title" = "Scan QR-code";
