@@ -657,15 +657,6 @@
 "holder.fetchevents.warning.someresults.networkerror.title" = "Details possibly incomplete";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
 
-/* MARK: - Start Paper Certificate */
-"holder.papercertificate.start.title" = "Add paper certificate";
-"holder.papercertificate.start.message" = "Have you <b>requested your paper coronavirus pass at your healthcare provider,</b> or <b>have you received it by post?</b> Then you can add it here in the app.";
-"holder.papercertificate.start.highlightedmessage" = "<b>Did you print your certificate yourself?</b><p>Please add your certificate to the app via the menu. Go to “Add certificate” and login using your DigiD.</p>";
-
-/* MARK: - Start Paper Certificate */
-"holder.papercertificate.aboutscan.title" = "Now scan the international QR code";
-"holder.papercertificate.aboutscan.message" = "<p>The international QR code contains enough information to create both a Dutch certificate and an international certificate.</p><p>Therefore please <b>only scan the international QR code</b> using your smartphone camera.</p><b>You will receive the following:</b><ul><li>A Dutch certificate</li><li>An international certificate</li></ul>";
-
 /* MARK: - Holder Scanner */
 "holder.scanner.title" = "Scan QR code";
 "holder.scanner.message" = "Point your phone at the QR code on the international certificate";
