@@ -727,15 +727,6 @@
 "holder.fetchevents.negativeTest.title" = "Testuitslag ophalen";
 "holder.fetchevents.recovery.title" = "Herstelgegevens ophalen";
 
-/* MARK: - Start Paper Certificate */
-"holder.papercertificate.start.title" = "Papieren bewijs toevoegen";
-"holder.papercertificate.start.message" = "Heb je een papieren coronabewijs <b>aangevraagd bij je zorgverlener,</b> of <b>opgestuurd gekregen per post?</b> Dan kun je deze hier ook in de app toevoegen.";
-"holder.papercertificate.start.highlightedmessage" = "<b>Zelf je bewijs uitgeprint?</b><p>Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
-
-/* MARK: - Start Paper Certificate */
-"holder.papercertificate.aboutscan.title" = "Scan nu de internationale QR-code";
-"holder.papercertificate.aboutscan.message" = "<p>In de internationale QR-code staan genoeg gegevens om zowel een Nederlands als een internationaal bewijs te maken.</p><p>Scan daarom met de camera van je telefoon <b>alleen je internationale QR-code.</b></p><b>Dit krijg je:</b><ul><li>Een Nederlands bewijs</li><li>Een internationaal bewijs</li></ul>";
-
 /* MARK: - Holder Scanner */
 "holder.scanner.title" = "Scan QR-code";
 "holder.scanner.message" = "Richt je telefoon op de QR-code op je internationale bewijs";
