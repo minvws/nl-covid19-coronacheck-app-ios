@@ -55,7 +55,7 @@ class ConsentButton: UIButton {
 
 	fileprivate func setup() {
 		clipsToBounds = true
-		contentEdgeInsets = .topBottom(17) + .left(56) + .right(16)
+		contentEdgeInsets = .topBottom(14) + .left(56) + .right(16)
 
 		layer.cornerRadius = 8
 
@@ -78,9 +78,9 @@ class ConsentButton: UIButton {
 	}
 
 	override var intrinsicContentSize: CGSize {
-		var base = titleLabel?.intrinsicContentSize ?? .zero
+		var base = super.intrinsicContentSize
 		base.height += contentEdgeInsets.top + contentEdgeInsets.bottom
-		base.width += contentEdgeInsets.left + contentEdgeInsets.right
+		base.width += contentEdgeInsets.right
 		return base
 	}
 
