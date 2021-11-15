@@ -84,6 +84,7 @@
 "verifier.consent.item.3" = "Gegevens van de bezoeker worden <b>nergens centraal opgeslagen</b> ";
 "verifier.consent.button" = "Ik heb de gebruikersvoorwaarden gelezen en ga hiermee akkoord.";
 "verifier.consent.action" = "Aan de slag";
+"verifier.consent.button.error" = "Zonder akkoord kan je niet verder";
 
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-codes";

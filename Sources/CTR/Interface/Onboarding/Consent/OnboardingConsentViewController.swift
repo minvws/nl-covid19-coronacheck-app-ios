@@ -48,11 +48,11 @@ final class OnboardingConsentViewController: BaseViewController {
 			self?.setupLink()
 		}
 
-		viewModel.$isContinueButtonEnabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 		viewModel.$actionTitle.binding = { [weak self] in self?.sceneView.primaryButton.setTitle($0, for: .normal) }
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 
 		viewModel.$consentText.binding = { [weak self] in self?.sceneView.consent = $0 }
+		viewModel.$consentNotGivenError.binding = { [weak self] in self?.sceneView.consentError = $0 }
 		self.sceneView.consentButton.valueChanged(self, action: #selector(consentValueChanged))
 
 		viewModel.$summary.binding = { [weak self] in
@@ -64,6 +64,7 @@ final class OnboardingConsentViewController: BaseViewController {
 		}
 		viewModel.$shouldHideBackButton.binding = { [weak self] in if !$0 { self?.addBackButton() } }
 		viewModel.$shouldHideConsentButton.binding = { [weak self] in if !$0 { self?.sceneView.setupConsentButton() } }
+		viewModel.$shouldDisplayConsentError.binding = { [weak self] in self?.sceneView.hasErrorState = $0 }
 	}
 
 	/// Setup a gesture recognizer for underlined text
@@ -77,7 +78,9 @@ final class OnboardingConsentViewController: BaseViewController {
 	/// User tapped on the consent button
 	@objc func consentValueChanged(_ sender: ConsentButton) {
 
-		viewModel.consentGiven(sender.isSelected)
+		// Hide error
+		guard sender.isSelected else { return }
+		viewModel.consentGiven(true)
 	}
 
 	/// User tapped on the link
@@ -89,8 +92,11 @@ final class OnboardingConsentViewController: BaseViewController {
 	/// The user tapped on the primary button
 	@objc func primaryButtonTapped() {
 
-		if sceneView.primaryButton.isEnabled {
+		if sceneView.consentButton.isSelected {
 			viewModel.primaryButtonTapped()
+		} else {
+			// Display error
+			viewModel.consentGiven(false)
 		}
 	}
 }

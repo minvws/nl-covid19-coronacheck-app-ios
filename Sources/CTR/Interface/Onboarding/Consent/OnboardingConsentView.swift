@@ -89,7 +89,7 @@ final class OnboardingConsentView: BaseView {
     let errorView: ErrorView = {
         
         let view = ErrorView()
-        view.error = "Zonder akkoord kan je niet verder"
+		view.isHidden = true
         return view
     }()
 	
@@ -196,6 +196,12 @@ final class OnboardingConsentView: BaseView {
 			consentButton.setTitle(consent, for: .normal)
 		}
 	}
+	
+	var consentError: String? {
+		didSet {
+			errorView.error = consentError
+		}
+	}
 
 	/// Add a privacy item
 	/// - Parameter text: the privacy text
@@ -230,6 +236,14 @@ final class OnboardingConsentView: BaseView {
 		footerButtonView.buttonStackView.alignment = .center
 		
 		footerButtonView.buttonStackView.insertArrangedSubview(consentButton, at: 0)
-        footerButtonView.buttonStackView.insertArrangedSubview(errorView, at: 1)
+		footerButtonView.buttonStackView.insertArrangedSubview(errorView, at: 1)
+	}
+	
+	var hasErrorState: Bool? {
+		didSet {
+			guard let hasError = hasErrorState else { return }
+			consentButton.backgroundColor = hasError ? C.consentButtonError() : C.consentButtonBackground()
+			errorView.isHidden = !hasError
+		}
 	}
 }
