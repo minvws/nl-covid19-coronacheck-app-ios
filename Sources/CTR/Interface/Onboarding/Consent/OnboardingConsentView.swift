@@ -85,6 +85,13 @@ final class OnboardingConsentView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		return button
 	}()
+    
+    let errorView: ErrorView = {
+        
+        let view = ErrorView()
+        view.error = "Zonder akkoord kan je niet verder"
+        return view
+    }()
 	
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 
@@ -223,5 +230,6 @@ final class OnboardingConsentView: BaseView {
 		footerButtonView.buttonStackView.alignment = .center
 		
 		footerButtonView.buttonStackView.insertArrangedSubview(consentButton, at: 0)
+        footerButtonView.buttonStackView.insertArrangedSubview(errorView, at: 1)
 	}
 }
