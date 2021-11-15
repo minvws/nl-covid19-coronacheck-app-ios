@@ -709,6 +709,7 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 		
 		removeChildCoordinator()
 		navigateToDashboard()
+		navigationController.viewControllers = []
 	}
 
 	func switchToAddRegularProof() {
