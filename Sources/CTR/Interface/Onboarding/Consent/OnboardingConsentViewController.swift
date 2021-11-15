@@ -64,7 +64,16 @@ final class OnboardingConsentViewController: BaseViewController {
 		}
 		viewModel.$shouldHideBackButton.binding = { [weak self] in if !$0 { self?.addBackButton() } }
 		viewModel.$shouldHideConsentButton.binding = { [weak self] in if !$0 { self?.sceneView.setupConsentButton() } }
-		viewModel.$shouldDisplayConsentError.binding = { [weak self] in self?.sceneView.hasErrorState = $0 }
+		viewModel.$shouldDisplayConsentError.binding = { [weak self] shouldDisplayError in
+			
+			self?.sceneView.hasErrorState = shouldDisplayError
+			
+			if shouldDisplayError {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+					UIAccessibility.post(notification: .announcement, argument: self?.viewModel.consentNotGivenError)
+				}
+			}
+		}
 	}
 
 	/// Setup a gesture recognizer for underlined text
