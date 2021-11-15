@@ -23,7 +23,7 @@ class MessageCardViewTests: XCTestCase {
 
         // Assert
         sut.frame = CGRect(x: 0, y: 0, width: 335, height: 70)
-        sut.assertImage(precision: 0.98)
+        sut.assertImage()
     }
     
     func test_titleWithClose() {
@@ -37,7 +37,7 @@ class MessageCardViewTests: XCTestCase {
 
         // Assert
         sut.frame = CGRect(x: 0, y: 0, width: 335, height: 70)
-        sut.assertImage(precision: 0.98)
+        sut.assertImage()
     }
     
     func test_titleWithCTA() {
@@ -51,7 +51,7 @@ class MessageCardViewTests: XCTestCase {
 
         // Assert
         sut.frame = CGRect(x: 0, y: 0, width: 335, height: 335)
-        sut.assertImage(precision: 0.98)
+        sut.assertImage()
     }
     
     func test_titleWithCTAWithCloseButton() {
@@ -65,7 +65,7 @@ class MessageCardViewTests: XCTestCase {
 
         // Assert
         sut.frame = CGRect(x: 0, y: 0, width: 335, height: 250)
-        sut.assertImage(precision: 0.98)
+        sut.assertImage()
     }
     
     func test_longTitleWithLongCTA() {
@@ -79,7 +79,7 @@ class MessageCardViewTests: XCTestCase {
 
         // Assert
         sut.frame = CGRect(x: 0, y: 0, width: 335, height: 300)
-        sut.assertImage(precision: 0.98)
+        sut.assertImage()
     }
     
     func test_longTitleWithLongCTAWithCloseButton() {
@@ -93,6 +93,6 @@ class MessageCardViewTests: XCTestCase {
 
         // Assert
         sut.frame = CGRect(x: 0, y: 0, width: 335, height: 300)
-        sut.assertImage(precision: 0.98)
+        sut.assertImage()
     }
 }
