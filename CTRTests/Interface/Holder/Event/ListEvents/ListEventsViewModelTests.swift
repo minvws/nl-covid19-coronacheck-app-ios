@@ -933,7 +933,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		networkSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
-		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
 		cryptoSpy.stubbedGetStokenResult = "test"
 
@@ -1015,7 +1016,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
-			networkSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+			networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1095,7 +1097,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
-		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1319,7 +1322,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
-		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1365,7 +1369,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
-		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.domesticAndInternationalRecovery), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalRecovery), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1411,7 +1416,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
-		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.domesticAndInternationalRecoveryExpired), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalRecoveryExpired), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1457,7 +1463,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
-		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1497,7 +1504,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
-		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.domesticAndInternationalRecoveryExpired), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalRecoveryExpired), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1543,7 +1551,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
-		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1569,7 +1578,6 @@ class ListEventsViewModelTests: XCTestCase {
 			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
-
 
 	// MARK: Default values
 
