@@ -85,13 +85,13 @@ final class OnboardingConsentView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		return button
 	}()
-    
-    let errorView: ErrorView = {
-        
-        let view = ErrorView()
+	
+	let errorView: ErrorView = {
+		
+		let view = ErrorView()
 		view.isHidden = true
-        return view
-    }()
+		return view
+	}()
 	
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 

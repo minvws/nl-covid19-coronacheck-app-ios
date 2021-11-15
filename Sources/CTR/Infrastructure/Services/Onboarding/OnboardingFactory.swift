@@ -50,9 +50,9 @@ protocol OnboardingFactoryProtocol {
 
 	/// Get the Consent Button Title
 	func getConsentButtonTitle() -> String
-    
-    /// Get the Consent not given error
-    func getConsentNotGivenError() -> String?
+	
+	/// Get the Consent not given error
+	func getConsentNotGivenError() -> String?
 
 	/// Get the consent Items
 	func getConsentItems() -> [String]
@@ -140,10 +140,10 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 	func getActionButtonTitle() -> String {
 		return L.holderConsentAction()
 	}
-    
-    func getConsentNotGivenError() -> String? {
-        return nil
-    }
+	
+	func getConsentNotGivenError() -> String? {
+		return nil
+	}
 }
 
 struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
@@ -223,8 +223,8 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 	func getActionButtonTitle() -> String {
 		return L.verifierConsentAction()
 	}
-    
-    func getConsentNotGivenError() -> String? {
+	
+	func getConsentNotGivenError() -> String? {
 		return L.verifierConsentButtonError()
-    }
+	}
 }
