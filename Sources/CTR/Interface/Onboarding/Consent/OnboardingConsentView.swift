@@ -21,7 +21,8 @@ final class OnboardingConsentView: BaseView {
 		static let bottomConsentMargin: CGFloat = 8.0
 		static let itemSpacing: CGFloat = 24.0
 		static let iconToLabelSpacing: CGFloat = 16.0
-		static let consentButtonToErrorSpacing: CGFloat = 8.0
+		static let consentButtonToErrorSpacing: CGFloat = 5.0
+		static let errorViewMargin: CGFloat = 8.0
 	}
 
 	/// The scrollview
@@ -241,7 +242,10 @@ final class OnboardingConsentView: BaseView {
 		footerButtonView.buttonStackView.insertArrangedSubview(errorView, at: 1)
 		
 		NSLayoutConstraint.activate([
-			errorView.widthAnchor.constraint(equalTo: consentButton.widthAnchor)
+			errorView.widthAnchor.constraint(
+				equalTo: consentButton.widthAnchor,
+				constant: -2 * ViewTraits.errorViewMargin
+			)
 		])
 	}
 	
