@@ -39,6 +39,65 @@ extension TestProvider {
     }
 }
 
+extension EventFlow.EventProvider {
+
+	static var vaccinationProvider: EventFlow.EventProvider {
+		EventFlow.EventProvider(
+			identifier: "CC",
+			name: "CoronaCheck",
+			unomiURL: URL(string: "https://coronacheck.nl"),
+			eventURL: URL(string: "https://coronacheck.nl"),
+			cmsCertificate: "test",
+			tlsCertificate: "test",
+			accessToken: nil,
+			eventInformationAvailable: nil,
+			usages: [.vaccination]
+		)
+	}
+
+	static var positiveTestProvider: EventFlow.EventProvider {
+		EventFlow.EventProvider(
+			identifier: "CC",
+			name: "CoronaCheck",
+			unomiURL: URL(string: "https://coronacheck.nl"),
+			eventURL: URL(string: "https://coronacheck.nl"),
+			cmsCertificate: "test",
+			tlsCertificate: "test",
+			accessToken: nil,
+			eventInformationAvailable: nil,
+			usages: [.positiveTest]
+		)
+	}
+
+	static var recoveryProvider: EventFlow.EventProvider {
+		EventFlow.EventProvider(
+			identifier: "CC",
+			name: "CoronaCheck",
+			unomiURL: URL(string: "https://coronacheck.nl"),
+			eventURL: URL(string: "https://coronacheck.nl"),
+			cmsCertificate: "test",
+			tlsCertificate: "test",
+			accessToken: nil,
+			eventInformationAvailable: nil,
+			usages: [.recovery]
+		)
+	}
+
+	static var negativeTestProvider: EventFlow.EventProvider {
+		EventFlow.EventProvider(
+			identifier: "CC",
+			name: "CoronaCheck",
+			unomiURL: URL(string: "https://coronacheck.nl"),
+			eventURL: URL(string: "https://coronacheck.nl"),
+			cmsCertificate: "test",
+			tlsCertificate: "test",
+			accessToken: nil,
+			eventInformationAvailable: nil,
+			usages: [.negativeTest]
+		)
+	}
+}
+
 extension EventFlow.EventResultWrapper {
 	
 	static var fakeComplete: EventFlow.EventResultWrapper {
