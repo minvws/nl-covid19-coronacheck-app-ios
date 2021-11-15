@@ -59,7 +59,7 @@ class ConsentButton: UIButton {
 
 		layer.cornerRadius = 8
 
-		titleLabel?.font = Theme.fonts.body
+		titleLabel?.font = Theme.fonts.subhead
 		titleLabel?.lineBreakMode = .byWordWrapping
 		titleLabel?.numberOfLines = 0
 

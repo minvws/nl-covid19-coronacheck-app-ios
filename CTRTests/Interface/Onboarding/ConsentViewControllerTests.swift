@@ -87,6 +87,54 @@ class ConsentViewControllerTests: XCTestCase {
 
 		sut.assertImage()
 	}
+	
+	/// Test verifier error consent state
+	func testContent_verifier_errorState() {
+
+		// Given
+		sut = OnboardingConsentViewController(
+			viewModel: OnboardingConsentViewModel(
+				coordinator: coordinatorSpy,
+				factory: VerifierOnboardingFactory(),
+				shouldHideBackButton: true
+			)
+		)
+
+		// When
+		loadView()
+		sut.sceneView.hasErrorState = true
+
+		// Then
+		expect(self.sut.sceneView.title) == L.verifierConsentTitle()
+		expect(self.sut.sceneView.message) == L.verifierConsentMessage()
+		expect(self.sut.sceneView.itemStackView.arrangedSubviews).to(haveCount(3))
+
+		sut.assertImage()
+	}
+	
+	/// Test verifier selected state
+	func testContent_verifier_selectedState() {
+
+		// Given
+		sut = OnboardingConsentViewController(
+			viewModel: OnboardingConsentViewModel(
+				coordinator: coordinatorSpy,
+				factory: VerifierOnboardingFactory(),
+				shouldHideBackButton: true
+			)
+		)
+
+		// When
+		loadView()
+		sut.sceneView.consentButton.isSelected = true
+
+		// Then
+		expect(self.sut.sceneView.title) == L.verifierConsentTitle()
+		expect(self.sut.sceneView.message) == L.verifierConsentMessage()
+		expect(self.sut.sceneView.itemStackView.arrangedSubviews).to(haveCount(3))
+
+		sut.assertImage()
+	}
 
 	/// Test the user tapped on the link
 	func testLink() {
