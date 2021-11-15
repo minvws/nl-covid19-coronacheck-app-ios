@@ -70,7 +70,9 @@ class PaperProofInputCouplingCodeViewController: BaseViewController {
 
 		viewModel.$fieldErrorMessage.binding = { [weak self] header in
 			if let header = header {
-				UIAccessibility.post(notification: .announcement, argument: header)
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+					UIAccessibility.post(notification: .announcement, argument: header)
+				}
 			}
 			self?.sceneView.fieldErrorMessage = header
 		}
