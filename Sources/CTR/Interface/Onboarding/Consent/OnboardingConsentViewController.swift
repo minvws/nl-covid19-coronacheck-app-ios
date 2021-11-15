@@ -92,7 +92,7 @@ final class OnboardingConsentViewController: BaseViewController {
 	/// The user tapped on the primary button
 	@objc func primaryButtonTapped() {
 
-		if sceneView.consentButton.isSelected {
+		if sceneView.consentButton.isSelected || viewModel.shouldHideConsentButton {
 			viewModel.primaryButtonTapped()
 		} else {
 			// Display error

@@ -179,7 +179,7 @@ class ConsentViewControllerTests: XCTestCase {
 		expect(self.sut.viewModel.shouldDisplayConsentError) == false
 	}
 
-	/// Test the user tapped on the enabled primary button
+	/// Test the user tapped on the primary button
 	func test_primaryButtonTapped_whenConsentButtonSelectedIsFalse_shouldNotGiveConsent() {
 
 		// Given
@@ -194,12 +194,27 @@ class ConsentViewControllerTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedConsentGiven) == false
 	}
 	
+	/// Test the user tapped on the primary button
 	func test_primaryButtonTapped_whenConsentButtonSelectedIsTrue_shouldGiveConsent() {
 
 		// Given
 		loadView()
 		sut.sceneView.primaryButton.isEnabled = true
 		sut.sceneView.consentButton.isSelected = true
+
+		// When
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
+
+		// Then
+		expect(self.coordinatorSpy.invokedConsentGiven) == true
+	}
+	
+	/// Test the user tapped on the primary button for holder
+	func test_primaryButtonTapped_whenConsentButtonIsHidden_shouldGiveConsent() {
+
+		// Given
+		loadView()
+		sut.sceneView.primaryButton.isEnabled = true
 
 		// When
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
