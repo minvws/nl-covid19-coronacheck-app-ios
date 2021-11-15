@@ -347,6 +347,127 @@ class FetchEventsViewModelTests: XCTestCase {
 		}
 	}
 
+	func test_accessTokenServerUnreachableTimeOut_providersOk() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .vaccination
+		)
+
+		// Then
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 004")
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
+	}
+
+	func test_accessTokenServerUnreachableConnectionLost_providersOk() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .vaccination
+		)
+
+		// Then
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 005")
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
+	}
+
+	func test_accessTokenServerUnreachableInvalidHost_providersOk() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .vaccination
+		)
+
+		// Then
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 002")
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
+	}
+
+	func test_accessTokenNoInternetConnection_providersOk() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .vaccination
+		)
+
+		// Then
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
+		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
+		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
+	}
+
 	func test_accessTokenNoBSN() {
 
 		// Given

@@ -452,7 +452,6 @@ class LoginTVSViewModelTests: XCTestCase {
 			OIDErrorCodeOAuthRegistration.invalidClientMetadata.rawValue: ErrorCode.ClientCode.openIOAuthRegistrationInvalidClientMetaData,
 			OIDErrorCodeOAuthRegistration.clientError.rawValue: ErrorCode.ClientCode.openIOAuthRegistrationClientError,
 			OIDErrorCodeOAuthRegistration.other.rawValue: ErrorCode.ClientCode.openIOAuthRegistrationUnknownError
-
 		]
 
 		for (code, clientcode) in cases {

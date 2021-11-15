@@ -49,6 +49,17 @@ class EventStartViewModelTests: XCTestCase {
 		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
 
+	func test_content_recoveryMode_noValidity() {
+
+		// When
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery, validAfterDays: nil)
+
+		// Then
+		expect(self.sut.title) == L.holderRecoveryStartTitle()
+		expect(self.sut.message) == L.holderRecoveryStartMessage("11")
+		expect(self.sut.primaryButtonIcon) == I.digid()
+	}
+
 	func test_content_positiveTestMode() {
 
 		// When
@@ -58,6 +69,28 @@ class EventStartViewModelTests: XCTestCase {
 		expect(self.sut.title) == L.holderPositiveTestStartTitle()
 		expect(self.sut.message) == L.holderPositiveTestStartMessage()
 		expect(self.sut.primaryButtonIcon) == I.digid()
+	}
+
+	func test_content_paperflowMode() {
+
+		// When
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow, validAfterDays: nil)
+
+		// Then
+		expect(self.sut.title) == ""
+		expect(self.sut.message) == ""
+		expect(self.sut.primaryButtonIcon).to(beNil())
+	}
+
+	func test_content_negativeTestMode() {
+
+		// When
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .test, validAfterDays: nil)
+
+		// Then
+		expect(self.sut.title) == ""
+		expect(self.sut.message) == ""
+		expect(self.sut.primaryButtonIcon).to(beNil())
 	}
 
 	func test_backButtonTapped() {
