@@ -10,7 +10,7 @@ import SnapshotTesting
 @testable import CTR
 import XCTest
 
-class MessageCardTests: XCTestCase {
+class MessageCardViewTests: XCTestCase {
 
     func test_onlyTitle() {
         
