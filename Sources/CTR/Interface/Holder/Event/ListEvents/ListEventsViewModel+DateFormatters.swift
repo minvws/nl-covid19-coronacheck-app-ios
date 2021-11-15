@@ -9,7 +9,7 @@ import Foundation
 
 extension ListEventsViewModel {
 
-	static let dateFormatter: ISO8601DateFormatter = {
+	static let iso8601DateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
 		dateFormatter.formatOptions = [.withFullDate]
 		return dateFormatter

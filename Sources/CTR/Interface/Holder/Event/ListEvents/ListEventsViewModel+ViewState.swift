@@ -227,8 +227,8 @@ extension ListEventsViewModel {
 	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListEventsViewController.Row] {
 
 		var sortedDataSource = dataSource.sorted { lhs, rhs in
-			if let lhsDate = lhs.event.getSortDate(with: ListEventsViewModel.dateFormatter),
-			   let rhsDate = rhs.event.getSortDate(with: ListEventsViewModel.dateFormatter) {
+			if let lhsDate = lhs.event.getSortDate(with: ListEventsViewModel.iso8601DateFormatter),
+			   let rhsDate = rhs.event.getSortDate(with: ListEventsViewModel.iso8601DateFormatter) {
 
 				if lhsDate == rhsDate {
 					return lhs.providerIdentifier < rhs.providerIdentifier
