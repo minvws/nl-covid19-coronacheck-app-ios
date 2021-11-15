@@ -21,6 +21,7 @@ final class OnboardingConsentView: BaseView {
 		static let bottomConsentMargin: CGFloat = 8.0
 		static let itemSpacing: CGFloat = 24.0
 		static let iconToLabelSpacing: CGFloat = 16.0
+		static let consentButtonToErrorSpacing: CGFloat = 8.0
 	}
 
 	/// The scrollview
@@ -89,6 +90,7 @@ final class OnboardingConsentView: BaseView {
 	let errorView: ErrorView = {
 		
 		let view = ErrorView()
+		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isHidden = true
 		return view
 	}()
@@ -237,6 +239,10 @@ final class OnboardingConsentView: BaseView {
 		
 		footerButtonView.buttonStackView.insertArrangedSubview(consentButton, at: 0)
 		footerButtonView.buttonStackView.insertArrangedSubview(errorView, at: 1)
+		
+		NSLayoutConstraint.activate([
+			errorView.widthAnchor.constraint(equalTo: consentButton.widthAnchor)
+		])
 	}
 	
 	var hasErrorState: Bool? {
@@ -244,6 +250,9 @@ final class OnboardingConsentView: BaseView {
 			guard let hasError = hasErrorState else { return }
 			consentButton.backgroundColor = hasError ? C.consentButtonError() : C.consentButtonBackground()
 			errorView.isHidden = !hasError
+			
+			let spacing = hasError ? ViewTraits.consentButtonToErrorSpacing : footerButtonView.buttonStackView.spacing
+			footerButtonView.buttonStackView.setCustomSpacing(spacing, after: consentButton)
 		}
 	}
 }
