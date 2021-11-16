@@ -153,7 +153,7 @@ class HolderDashboardViewController: BaseViewController {
 				switch card {
 					case let .headerMessage(message, buttonTitle):
 						
-						let headerMessageView = HeaderMessageView()
+						let headerMessageView = HeaderMessageCardView()
 						headerMessageView.message = message
 						headerMessageView.buttonTitle = buttonTitle
 						headerMessageView.contentTextView.linkTouched { url in
@@ -200,7 +200,7 @@ class HolderDashboardViewController: BaseViewController {
 						return messageCard
 
 					case let .emptyStateDescription(message, buttonTitle):
-						let view = EmptyDashboardDescriptionView()
+						let view = EmptyDashboardDescriptionCardView()
 						view.message = message
 						view.buttonTitle = buttonTitle
 						view.contentTextView.linkTouched { url in
@@ -213,7 +213,7 @@ class HolderDashboardViewController: BaseViewController {
 						return view
 
 					case let .emptyStatePlaceholderImage(image, title):
-						let view = EmptyDashboardImagePlaceholderView()
+						let view = EmptyDashboardImagePlaceholderCardView()
 						view.title = title
 						view.image = image
 						return view
@@ -247,7 +247,7 @@ class HolderDashboardViewController: BaseViewController {
 						
 					case let .errorMessage(message, didTapTryAgain):
 						
-						let errorView = ErrorDashboardView()
+						let errorView = ErrorDashboardCardView()
 						errorView.message = message
 						errorView.messageTextView.linkTouched { url in
 							if url.absoluteString == AppAction.tryAgain {
@@ -271,7 +271,7 @@ class HolderDashboardViewController: BaseViewController {
 		
 		// Custom spacing for error message
 		for (index, view) in cardViews.enumerated() {
-			guard view is ErrorDashboardView else { continue }
+			guard view is ErrorDashboardCardView else { continue }
 			
 			// Try to get previous view, which would be an QR card:
 			let previousIndex = index - 1
