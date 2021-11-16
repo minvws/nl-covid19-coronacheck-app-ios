@@ -194,7 +194,6 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButton.isEnabled = true
 		sut.sceneView.consentButton.isSelected = false
 		
-
 		// When
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
