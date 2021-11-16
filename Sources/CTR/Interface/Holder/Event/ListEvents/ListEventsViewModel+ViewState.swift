@@ -60,82 +60,6 @@ extension ListEventsViewModel {
 		return emptyEventsState()
 	}
 
-	// MARK: Empty State
-
-	private func emptyEventsState() -> ListEventsViewController.State {
-
-		switch eventMode {
-			case .paperflow: return emptyDccState()
-			case .positiveTest: return emptyPositiveTestState()
-			case .recovery: return emptyRecoveryState()
-			case .test: return emptyTestState()
-			case .vaccination: return emptyVaccinationState()
-		}
-	}
-
-	private func emptyVaccinationState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderVaccinationNolistTitle(),
-			subTitle: L.holderVaccinationNolistMessage(),
-			primaryActionTitle: L.holderVaccinationNolistAction()
-		)
-	}
-
-	private func emptyTestState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderTestNolistTitle(),
-			subTitle: L.holderTestNolistMessage(),
-			primaryActionTitle: L.holderTestNolistAction()
-		)
-	}
-
-	private func emptyPositiveTestState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderPositiveTestNolistTitle(),
-			subTitle: L.holderPositiveTestNolistMessage(),
-			primaryActionTitle: L.holderPositiveTestNolistAction()
-		)
-	}
-
-	private func emptyDccState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderCheckdccExpiredTitle(),
-			subTitle: L.holderCheckdccExpiredMessage(),
-			primaryActionTitle: L.holderCheckdccExpiredActionTitle()
-		)
-	}
-
-	private func emptyRecoveryState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderRecoveryNolistTitle(),
-			subTitle: L.holderRecoveryNolistMessage(),
-			primaryActionTitle: L.holderRecoveryNolistAction()
-		)
-	}
-
-	internal func recoveryEventsTooOld(_ days: String) -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderRecoveryTooOldTitle(),
-			subTitle: L.holderRecoveryTooOldMessage(days),
-			primaryActionTitle: L.holderTestNolistAction()
-		)
-	}
-
-	internal func cannotCreateEventsState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderEventOriginmismatchTitle(),
-			subTitle: eventMode.originsMismatchBody,
-			primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction()
-		)
-	}
-
 	internal func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListEventsViewController.State {
 
 		return .feedback(
@@ -695,6 +619,61 @@ extension ListEventsViewModel {
 		)
 	}
 
+	// MARK: Empty States
+
+	internal func emptyEventsState() -> ListEventsViewController.State {
+
+		switch eventMode {
+			case .paperflow: return emptyDccState()
+			case .positiveTest: return emptyPositiveTestState()
+			case .recovery: return emptyRecoveryState()
+			case .test: return emptyTestState()
+			case .vaccination: return emptyVaccinationState()
+		}
+	}
+
+	internal func cannotCreateEventsState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderEventOriginmismatchTitle(),
+			subTitle: eventMode.originsMismatchBody,
+			primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction()
+		)
+	}
+
+	// MARK: Vaccination End State
+
+	internal func emptyVaccinationState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderVaccinationNolistTitle(),
+			subTitle: L.holderVaccinationNolistMessage(),
+			primaryActionTitle: L.holderVaccinationNolistAction()
+		)
+	}
+
+	// MARK: Negative Test End State
+
+	internal func emptyTestState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderTestNolistTitle(),
+			subTitle: L.holderTestNolistMessage(),
+			primaryActionTitle: L.holderTestNolistAction()
+		)
+	}
+
+	// MARK: Paper Flow End State
+
+	internal func emptyDccState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderCheckdccExpiredTitle(),
+			subTitle: L.holderCheckdccExpiredMessage(),
+			primaryActionTitle: L.holderCheckdccExpiredActionTitle()
+		)
+	}
+
 	// MARK: international QR Only
 
 	internal func internationalQROnly() -> ListEventsViewController.State {
@@ -717,6 +696,15 @@ extension ListEventsViewModel {
 	}
 
 	// MARK: Positive test end states
+
+	internal func emptyPositiveTestState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderPositiveTestNolistTitle(),
+			subTitle: L.holderPositiveTestNolistMessage(),
+			primaryActionTitle: L.holderPositiveTestNolistAction()
+		)
+	}
 
 	internal func positiveTestFlowInapplicable() -> ListEventsViewController.State {
 
@@ -747,6 +735,15 @@ extension ListEventsViewModel {
 
 	// MARK: Recovery end states
 
+	internal func emptyRecoveryState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryNolistTitle(),
+			subTitle: L.holderRecoveryNolistMessage(),
+			primaryActionTitle: L.holderRecoveryNolistAction()
+		)
+	}
+
 	internal func recoveryFlowRecoveryAndVaccinationCreated() -> ListEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
@@ -762,6 +759,15 @@ extension ListEventsViewModel {
 			title: L.holderRecoveryVaccinationOnlyTitle(),
 			subTitle: L.holderRecoveryVaccinationOnlyMessage(days),
 			primaryActionTitle: L.holderRecoveryVaccinationOnlyAction()
+		)
+	}
+
+	internal func recoveryEventsTooOld(_ days: String) -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryTooOldTitle(),
+			subTitle: L.holderRecoveryTooOldMessage(days),
+			primaryActionTitle: L.holderRecoveryTooOldAction()
 		)
 	}
 }

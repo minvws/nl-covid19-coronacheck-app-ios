@@ -234,6 +234,7 @@
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Fout op de server";
 "holder.recovery.tooOld.title" = "Positieve testuitslag niet meer geldig";
 "holder.recovery.tooOld.message" = "<p>Het is langer dan %@ dagen geleden dat je positief getest bent op corona. Daarom is je testuitslag niet meer geldig. Je kunt helaas geen herstelbewijs maken.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder.recovery.tooOld.action" = "Naar mijn bewijzen";
 "holder.recovery.list.message" = "Met de opgehaalde gegevens kun je een herstelbewijs maken.";
 "holder.menu.proof" = "Bewijs toevoegen";
 "holder.testresults.positive" = "Positieve testuitslag";
