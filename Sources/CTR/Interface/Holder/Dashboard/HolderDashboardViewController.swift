@@ -28,8 +28,8 @@ class HolderDashboardViewController: BaseViewController {
         case migratingYourInternationalVaccinationCertificateDidComplete(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 
         // Recovery Validity Extension
-        case recoveryValidityExtensionAvailableBanner(title: String, buttonText: String, didTapCallToAction: () -> Void)
-        case recoveryValidityExtensionDidCompleteBanner(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+        case recoveryValidityExtensionAvailable(title: String, buttonText: String, didTapCallToAction: () -> Void)
+        case recoveryValidityExtensionDidComplete(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 
         // QR Cards:
         case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
@@ -179,7 +179,7 @@ class HolderDashboardViewController: BaseViewController {
 					case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
 						let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 						let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
-						let .recoveryValidityExtensionAvailableBanner(message, callToActionButtonText, didTapCallToAction),
+						let .recoveryValidityExtensionAvailable(message, callToActionButtonText, didTapCallToAction),
 						let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction):
 						
 						let messageCard = MessageCardView(config: .init(
@@ -190,7 +190,7 @@ class HolderDashboardViewController: BaseViewController {
 						return messageCard
 
 					case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-						 let .recoveryValidityExtensionDidCompleteBanner(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+						 let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 						
                         let messageCard = MessageCardView(config: .init(
                             title: message,
