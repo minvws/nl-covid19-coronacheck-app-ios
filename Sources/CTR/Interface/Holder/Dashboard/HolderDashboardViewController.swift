@@ -34,6 +34,9 @@ class HolderDashboardViewController: BaseViewController {
         // QR Cards:
         case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
         case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		
+		// Recommendations
+		case recommendCoronaMelder
 	}
 
 	struct ValidityText: Equatable {
@@ -257,6 +260,14 @@ class HolderDashboardViewController: BaseViewController {
 							}
 						}
 						return errorView
+					
+					case .recommendCoronaMelder:
+						let view = RecommendCoronaMelderCardView()
+						view.message = L.holderDashboardRecommendcoronamelderTitle()
+						view.urlTapHandler = { [weak viewModel] url in
+							viewModel?.userTappedCoronaMelderLink(url: url)
+						}
+						return view
 				}
 			}
 		
