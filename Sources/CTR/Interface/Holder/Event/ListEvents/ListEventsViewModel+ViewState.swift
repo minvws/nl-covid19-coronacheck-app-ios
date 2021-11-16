@@ -718,7 +718,7 @@ extension ListEventsViewModel {
 
 	// MARK: Positive test end states
 
-	internal func positiveTestInapplicable() -> ListEventsViewController.State {
+	internal func positiveTestFlowInapplicable() -> ListEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestInapplicableTitle(),
@@ -727,7 +727,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func recoveryAndVaccinationCreated(_ days: String) -> ListEventsViewController.State {
+	internal func positiveTestFlowRecoveryAndVaccinationCreated(_ days: String) -> ListEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestRecoveryAndVaccinationTitle(),
@@ -736,12 +736,32 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func recoveryOnlyCreated() -> ListEventsViewController.State {
+	internal func positiveTestFlowRecoveryOnlyCreated() -> ListEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestRecoveryOnlyTitle(),
 			subTitle: L.holderPositiveTestRecoveryOnlyMessage(),
 			primaryActionTitle: L.holderPositiveTestRecoveryOnlyAction()
+		)
+	}
+
+	// MARK: Recovery end states
+
+	internal func recoveryFlowRecoveryAndVaccinationCreated() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryRecoveryAndVaccinationTitle(),
+			subTitle: L.holderRecoveryRecoveryAndVaccinationMessage(),
+			primaryActionTitle: L.holderRecoveryRecoveryAndVaccinationAction()
+		)
+	}
+
+	internal func recoveryFlowVaccinationOnly(_ days: String) -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryVaccinationOnlyTitle(),
+			subTitle: L.holderRecoveryVaccinationOnlyMessage(days),
+			primaryActionTitle: L.holderRecoveryVaccinationOnlyAction()
 		)
 	}
 }
