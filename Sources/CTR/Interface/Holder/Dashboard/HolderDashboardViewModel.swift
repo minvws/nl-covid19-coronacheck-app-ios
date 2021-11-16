@@ -502,7 +502,9 @@ final class HolderDashboardViewModel: Logging {
 				)
 			}
 		
-		viewControllerCards += HolderDashboardViewController.Card.makeRecommendCoronaMelderCard()
+		viewControllerCards += HolderDashboardViewController.Card.makeRecommendCoronaMelderCard(
+			regionFilteredMyQRCards: regionFilteredMyQRCards
+		)
 
 		return viewControllerCards
 	}
@@ -712,7 +714,12 @@ extension HolderDashboardViewController.Card {
 	}
 	
 	fileprivate static func makeRecommendCoronaMelderCard(
+		regionFilteredMyQRCards: [HolderDashboardViewModel.QRCard]
 	) -> [HolderDashboardViewController.Card] {
+		guard !regionFilteredMyQRCards.isEmpty,
+			  !regionFilteredMyQRCards.contains(where: { $0.shouldShowErrorBeneathCard })
+		else { return [] }
+		
 		return [HolderDashboardViewController.Card.recommendCoronaMelder]
 	}
 	
