@@ -42,11 +42,12 @@ class VaccinationEventView: BaseView {
 		return Label(bodyMedium: nil).multiline()
 	}()
 
-	private let detailsButton: UIButton = {
+	private let backgroundButton: UIButton = {
 
 		let button = UIButton()
 		button.backgroundColor = .clear
 		button.translatesAutoresizingMaskIntoConstraints = false
+		
 		return button
 	}()
 
@@ -56,7 +57,7 @@ class VaccinationEventView: BaseView {
 		view?.backgroundColor = Theme.colors.viewControllerBackground
 		messageLabel.textColor = Theme.colors.grey1
 		linkLabel.textColor = Theme.colors.iosBlue
-		detailsButton.addTarget(
+		backgroundButton.addTarget(
 			self,
 			action: #selector(disclaimerButtonTapped),
 			for: .touchUpInside
@@ -68,7 +69,7 @@ class VaccinationEventView: BaseView {
 
 		super.setupViewHierarchy()
 
-		detailsButton.embed(in: self)
+		backgroundButton.embed(in: self)
 
 		addSubview(titleLabel)
 		addSubview(messageLabel)
@@ -129,7 +130,7 @@ class VaccinationEventView: BaseView {
 
 		super.setupAccessibility()
 
-		accessibilityElements = [detailsButton]
+		accessibilityElements = [backgroundButton]
 	}
 
 	/// User tapped on the primary button
