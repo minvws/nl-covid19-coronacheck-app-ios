@@ -87,6 +87,54 @@ class ConsentViewControllerTests: XCTestCase {
 
 		sut.assertImage()
 	}
+	
+	/// Test verifier error consent state
+	func testContent_verifier_errorState() {
+
+		// Given
+		sut = OnboardingConsentViewController(
+			viewModel: OnboardingConsentViewModel(
+				coordinator: coordinatorSpy,
+				factory: VerifierOnboardingFactory(),
+				shouldHideBackButton: true
+			)
+		)
+
+		// When
+		loadView()
+		sut.sceneView.hasErrorState = true
+
+		// Then
+		expect(self.sut.sceneView.title) == L.verifierConsentTitle()
+		expect(self.sut.sceneView.message) == L.verifierConsentMessage()
+		expect(self.sut.sceneView.itemStackView.arrangedSubviews).to(haveCount(3))
+
+		sut.assertImage()
+	}
+	
+	/// Test verifier selected state
+	func testContent_verifier_selectedState() {
+
+		// Given
+		sut = OnboardingConsentViewController(
+			viewModel: OnboardingConsentViewModel(
+				coordinator: coordinatorSpy,
+				factory: VerifierOnboardingFactory(),
+				shouldHideBackButton: true
+			)
+		)
+
+		// When
+		loadView()
+		sut.sceneView.consentButton.isSelected = true
+
+		// Then
+		expect(self.sut.sceneView.title) == L.verifierConsentTitle()
+		expect(self.sut.sceneView.message) == L.verifierConsentMessage()
+		expect(self.sut.sceneView.itemStackView.arrangedSubviews).to(haveCount(3))
+
+		sut.assertImage()
+	}
 
 	/// Test the user tapped on the link
 	func testLink() {
@@ -102,7 +150,7 @@ class ConsentViewControllerTests: XCTestCase {
 	}
 
 	/// Test the user tapped on the consent button
-	func testConsentGivenTrue() {
+	func test_consentValueChanged_whenButtonSelectedIsTrue_shouldHideConsentError() {
 
 		// Given
 		loadView()
@@ -113,11 +161,11 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.consentValueChanged(button)
 
 		// Then
-		expect(self.sut.viewModel.isContinueButtonEnabled) == true
+		expect(self.sut.viewModel.shouldDisplayConsentError) == false
 	}
 
 	/// Test the user tapped on the consent button
-	func testConsentGivenFalse() {
+	func test_consentValueChanged_whenButtonSelectedIsFalse_shouldNotDisplayConsentError() {
 
 		// Given
 		loadView()
@@ -128,11 +176,48 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.consentValueChanged(button)
 
 		// Then
-		expect(self.sut.viewModel.isContinueButtonEnabled) == false
+		expect(self.sut.viewModel.shouldDisplayConsentError) == false
 	}
 
-	/// Test the user tapped on the enabled primary button
-	func testPrimaryButtonTappedEnabled() {
+	/// Test the user tapped on the primary button
+	func test_primaryButtonTapped_whenConsentButtonSelectedIsFalse_shouldNotGiveConsent() {
+
+		// Given
+		sut = OnboardingConsentViewController(
+			viewModel: OnboardingConsentViewModel(
+				coordinator: coordinatorSpy,
+				factory: VerifierOnboardingFactory(),
+				shouldHideBackButton: true
+			)
+		)
+		loadView()
+		sut.sceneView.primaryButton.isEnabled = true
+		sut.sceneView.consentButton.isSelected = false
+		
+		// When
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
+
+		// Then
+		expect(self.coordinatorSpy.invokedConsentGiven) == false
+	}
+	
+	/// Test the user tapped on the primary button
+	func test_primaryButtonTapped_whenConsentButtonSelectedIsTrue_shouldGiveConsent() {
+
+		// Given
+		loadView()
+		sut.sceneView.primaryButton.isEnabled = true
+		sut.sceneView.consentButton.isSelected = true
+
+		// When
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
+
+		// Then
+		expect(self.coordinatorSpy.invokedConsentGiven) == true
+	}
+	
+	/// Test the user tapped on the primary button for holder
+	func test_primaryButtonTapped_whenConsentButtonIsHidden_shouldGiveConsent() {
 
 		// Given
 		loadView()
@@ -143,19 +228,5 @@ class ConsentViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedConsentGiven) == true
-	}
-
-	/// Test the user tapped on the enabled primary button
-	func testPrimaryButtonTappedDisabled() {
-
-		// Given
-		loadView()
-		sut.sceneView.primaryButton.isEnabled = false
-
-		// When
-		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
-
-		// Then
-		expect(self.coordinatorSpy.invokedConsentGiven) == false
 	}
 }
