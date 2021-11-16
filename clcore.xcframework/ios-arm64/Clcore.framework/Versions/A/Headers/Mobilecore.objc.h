@@ -115,6 +115,8 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVACCINE_MEDICINAL_PRODUCT_J
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_ERROR;
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_IS_NL_DCC;
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFICATION_POLICY_2G;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFICATION_POLICY_3G;
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_SUCCESS;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENAME;
@@ -162,7 +164,7 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(N
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(NSData* _Nullable proofPrefixed);
 
-FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded);
+FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded, NSString* _Nullable verificationPolicy);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreWrappedErrorResult(NSError* _Nullable err, NSString* _Nullable prefix);
 
