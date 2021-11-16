@@ -60,6 +60,16 @@ class OnboardingFactorySpy: OnboardingFactoryProtocol {
 		return stubbedGetConsentButtonTitleResult
 	}
 
+	var invokedGetConsentNotGivenError = false
+	var invokedGetConsentNotGivenErrorCount = 0
+	var stubbedGetConsentNotGivenErrorResult: String!
+
+	func getConsentNotGivenError() -> String? {
+		invokedGetConsentNotGivenError = true
+		invokedGetConsentNotGivenErrorCount += 1
+		return stubbedGetConsentNotGivenErrorResult
+	}
+
 	var invokedGetConsentItems = false
 	var invokedGetConsentItemsCount = 0
 	var stubbedGetConsentItemsResult: [String]! = []
