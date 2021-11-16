@@ -157,7 +157,7 @@ final class HolderDashboardViewModel: Logging {
 	}
 
 	deinit {
-		NotificationCenter.default.removeObserver(self)
+		notificationCenter.removeObserver(self)
 		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
 		remoteConfigUpdateObserverToken.map(remoteConfigManager.removeObserver)
 		remoteConfigUpdatesConfigurationWarningToken.map(remoteConfigManager.removeObserver)
@@ -872,14 +872,14 @@ extension HolderDashboardViewModel {
 
 	fileprivate func setupNotificationListeners() {
 
-		NotificationCenter.default.addObserver(
+		notificationCenter.addObserver(
 			self,
 			selector: #selector(receiveDidBecomeActiveNotification),
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
 
-		NotificationCenter.default.addObserver(
+		notificationCenter.addObserver(
 			self,
 			selector: #selector(userDefaultsDidChange),
 			name: Foundation.UserDefaults.didChangeNotification,

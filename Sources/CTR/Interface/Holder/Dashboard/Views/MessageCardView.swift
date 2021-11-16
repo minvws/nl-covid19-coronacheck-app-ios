@@ -21,7 +21,8 @@ class MessageCardView: BaseView {
 		// Margins
 		static let margin: CGFloat = 24
         static let verticalPadding: CGFloat = 8
-        static let closeButtonTopMargin: CGFloat = 27
+        static let closeButtonTopMargin: CGFloat = 28
+
 		// Label
 		static let lineHeight: CGFloat = 22
 		static let kerning: CGFloat = -0.41
@@ -131,7 +132,7 @@ class MessageCardView: BaseView {
         constraints += [titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
         
         if nil != config.closeButtonCommand {
-            constraints += [closeButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.verticalPadding)]
+            constraints += [closeButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.closeButtonTopMargin)]
             constraints += [closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
             constraints += [closeButton.heightAnchor.constraint(equalToConstant: ViewTraits.closeButtonSize)]
             constraints += [closeButton.widthAnchor.constraint(equalToConstant: ViewTraits.closeButtonSize)]
