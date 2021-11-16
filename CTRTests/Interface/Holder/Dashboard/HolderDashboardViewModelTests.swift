@@ -1718,7 +1718,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		}))
 
 		expect(self.sut.domesticCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
-			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.generalVaccinationcertificate())
+			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEUVaccination()
 		}))
 
 		expect(self.sut.domesticCards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
@@ -2451,7 +2451,7 @@ private func beConfigurationAlmostOutOfDateCard(test: @escaping (String, String,
 private func beRecommendCoronaMelderCard() -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .beRecommendCoronaMelderCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
-		   case let .recommendCoronaMelder = actual {
+		   case .recommendCoronaMelder = actual {
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)
