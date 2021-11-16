@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class EmptyDashboardImagePlaceholderView: BaseView {
+final class EmptyDashboardImagePlaceholderCardView: BaseView {
 	
 	/// The display constants
 	private enum ViewTraits {

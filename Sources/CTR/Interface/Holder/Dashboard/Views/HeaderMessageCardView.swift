@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class HeaderMessageView: BaseView {
+final class HeaderMessageCardView: BaseView {
 	
 	/// The display constants
 	private enum ViewTraits {

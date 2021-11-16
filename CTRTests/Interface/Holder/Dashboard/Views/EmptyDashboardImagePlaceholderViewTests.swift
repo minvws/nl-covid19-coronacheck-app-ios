@@ -11,12 +11,12 @@ import SnapshotTesting
 
 final class EmptyDashboardImagePlaceholderViewTests: XCTestCase {
 	
-	var sut: EmptyDashboardImagePlaceholderView!
+	var sut: EmptyDashboardImagePlaceholderCardView!
 
 	override func setUp() {
 		super.setUp()
 
-		sut = EmptyDashboardImagePlaceholderView()
+		sut = EmptyDashboardImagePlaceholderCardView()
 		sut.translatesAutoresizingMaskIntoConstraints = false
 		NSLayoutConstraint.activate([
 			sut.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width)
