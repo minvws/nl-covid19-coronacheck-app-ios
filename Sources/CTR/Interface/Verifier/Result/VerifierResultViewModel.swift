@@ -36,6 +36,8 @@ class VerifierResultViewModel: Logging {
 	internal var verificationResult: MobilecoreVerificationResult
 	
 	private var isDeepLinkEnabled: Bool
+	
+	private let userSettings: UserSettingsProtocol
 
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
@@ -86,11 +88,13 @@ class VerifierResultViewModel: Logging {
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
 		verificationResult: MobilecoreVerificationResult,
-		isDeepLinkEnabled: Bool) {
+		isDeepLinkEnabled: Bool,
+		userSettings: UserSettingsProtocol) {
 
 		self.coordinator = coordinator
 		self.verificationResult = verificationResult
 		self.isDeepLinkEnabled = isDeepLinkEnabled
+		self.userSettings = userSettings
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -129,15 +133,15 @@ class VerifierResultViewModel: Logging {
 			showAccessDeniedInvalidQR()
 			return
 		}
+		
+		let riskSetting: AccessAction.Risk = userSettings.scanRiskSettingValue.isHigh ? .high : .low
 
 		if details.isSpecimen == "1" {
-			// Change #2497 library update
-			allowAccess = .demo(.low)
+			allowAccess = .demo(riskSetting)
 			setHolderIdentity(details)
 			showAccessDemo()
 		} else {
-			// Change #2497 library update
-			allowAccess = .verified(.low)
+			allowAccess = .verified(riskSetting)
 			setHolderIdentity(details)
 			showAccessAllowed()
 		}
