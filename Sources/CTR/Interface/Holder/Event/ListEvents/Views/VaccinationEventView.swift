@@ -140,8 +140,8 @@ class VaccinationEventView: BaseView {
 	}
 
 	func setAccessibilityLabel() {
-
-        backgroundButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageLabel.text ?? "").\n\(linkLabel.text ?? "")"
+		
+		backgroundButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageLabel.text ?? "").\n\(linkLabel.text ?? "")"
 	}
 
 	// MARK: Public Access
