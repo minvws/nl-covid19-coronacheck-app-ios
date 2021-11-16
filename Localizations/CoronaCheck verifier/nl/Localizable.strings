@@ -13,6 +13,8 @@
 "verifier.scaninstructions.checkthedetails.message" = "Controleer bij bezoekers vanaf 14 jaar altijd of de gegevens op jouw scherm hetzelfde zijn als die op het identiteitsbewijs van de bezoeker. Zo weet je zeker dat de QR-code van de bezoeker is.";
 "verifier.scaninstructions.checkonlythevisibledata.title" = "Soms vallen gegevens weg";
 "verifier.scaninstructions.checkonlythevisibledata.message" = "Dat doen we om de privacy van de bezoeker te beschermen. Je ziet dan een streepje (-) staan. Controleer in dat geval alleen de gegevens die je wel ziet.";
+"verifier.scaninstructions.greenScreenIsAccess.title" = "Groen scherm = toegang";
+"verifier.scaninstructions.greenScreenIsAccess.message" = "Kleurt je scherm groen met een vinkje? Dan is de QR-code geldig en kloppen de gegevens met het identiteitsbewijs. Je mag de bezoeker toegang geven.";
 "verifier.scaninstructions.redscreennowwhat.title" = "Rood scherm, wat nu?";
 "verifier.scaninstructions.redscreennowwhat.message" = "Bij een rood scherm met kruis krijg je uitleg om de bezoeker te helpen. Blijft het scherm rood? Dan mag je de bezoeker geen toegang geven.";
 "verifier.scaninstructions.button.startscanning" = "Start scannen";

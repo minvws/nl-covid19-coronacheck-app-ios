@@ -61,8 +61,8 @@ struct ScanInstructionsFactory: ScanInstructionsFactoryProtocol {
 				step: .checkOnlyTheVisibleData
 			),
 			ScanInstructionsPage(
-				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
-				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				title: L.verifierScaninstructionsGreenScreenIsAccessTitle(),
+				message: L.verifierScaninstructionsGreenScreenIsAccessMessage(),
 				animationName: ScanInstructionsStep.greenScreenIsAccess.animationName,
 				step: .greenScreenIsAccess
 			),

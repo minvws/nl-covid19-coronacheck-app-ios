@@ -159,24 +159,6 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 				image: I.onboarding.safely(),
 				step: .safelyOnTheRoad
 			)
-//			OnboardingPage(
-//				title: L.verifierOnboardingTitleScanqr(),
-//				message: L.verifierOnboardingMessageScanqr(),
-//				image: I.onboarding.scan(),
-//				step: .yourQR
-//			),
-//			OnboardingPage(
-//				title: L.verifierOnboardingTitleAccess(),
-//				message: L.verifierOnboardingMessageAccess(),
-//				image: I.onboarding.identity(),
-//				step: .access
-//			),
-//			OnboardingPage(
-//				title: L.verifierOnboardingTitleWho(),
-//				message: L.verifierOnboardingMessageWho(),
-//				image: I.onboarding.who(),
-//				step: .privacy
-//			)
 		]
 
 		return pages.sorted { $0.step.rawValue < $1.step.rawValue }
