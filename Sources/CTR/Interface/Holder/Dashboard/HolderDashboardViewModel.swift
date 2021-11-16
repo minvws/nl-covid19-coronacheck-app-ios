@@ -350,6 +350,11 @@ final class HolderDashboardViewModel: Logging {
 
 		coordinator?.openUrl(url, inApp: true)
 	}
+	
+	func userTappedCoronaMelderLink(url: URL) {
+		
+		coordinator?.openUrl(url, inApp: false)
+	}
 
 	// MARK: - Static Methods
 
@@ -497,7 +502,9 @@ final class HolderDashboardViewModel: Logging {
 				)
 			}
 		
-//		viewControllerCards += HolderDashboardViewController.Card.
+		viewControllerCards += HolderDashboardViewController.Card.makeRecommendCoronaMelderCard(
+			regionFilteredMyQRCards: regionFilteredMyQRCards
+		)
 
 		return viewControllerCards
 	}
@@ -706,10 +713,15 @@ extension HolderDashboardViewController.Card {
 		}
 	}
 	
-//	fileprivate static func recommendCoronaMelderCard(
-//	) -> [HolderDashboardViewController.Card] {
-//		return [HolderDashboardViewController.Card.recommendCoronaMelderCard]
-//	}
+	fileprivate static func makeRecommendCoronaMelderCard(
+		regionFilteredMyQRCards: [HolderDashboardViewModel.QRCard]
+	) -> [HolderDashboardViewController.Card] {
+		guard !regionFilteredMyQRCards.isEmpty,
+			  !regionFilteredMyQRCards.contains(where: { $0.shouldShowErrorBeneathCard })
+		else { return [] }
+		
+		return [HolderDashboardViewController.Card.recommendCoronaMelder]
+	}
 	
 	/// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 	/// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
