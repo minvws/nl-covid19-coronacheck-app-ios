@@ -183,9 +183,17 @@ class ConsentViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped_whenConsentButtonSelectedIsFalse_shouldNotGiveConsent() {
 
 		// Given
+		sut = OnboardingConsentViewController(
+			viewModel: OnboardingConsentViewModel(
+				coordinator: coordinatorSpy,
+				factory: VerifierOnboardingFactory(),
+				shouldHideBackButton: true
+			)
+		)
 		loadView()
 		sut.sceneView.primaryButton.isEnabled = true
 		sut.sceneView.consentButton.isSelected = false
+		
 
 		// When
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
