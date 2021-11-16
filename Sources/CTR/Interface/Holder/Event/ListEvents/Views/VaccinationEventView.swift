@@ -141,7 +141,7 @@ class VaccinationEventView: BaseView {
 
 	func setAccessibilityLabel() {
 
-        detailsButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageLabel.text ?? "")"
+        backgroundButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageLabel.text ?? "").\n\(linkLabel.text ?? "")"
 	}
 
 	// MARK: Public Access
@@ -182,6 +182,7 @@ class VaccinationEventView: BaseView {
 				kerning: ViewTraits.titleKerning,
 				textColor: Theme.colors.iosBlue
 			)
+			setAccessibilityLabel()
 		}
 	}
 
