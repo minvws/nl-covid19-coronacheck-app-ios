@@ -963,10 +963,12 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], 
 
 	// Map it to user messages:
 	let userMessages = originTypesOnlyInOtherRegion.map { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String) in
-		switch thisRegion {
-			case .domestic:
+		switch (originType, thisRegion) {
+			case (.vaccination, .domestic):
+				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEUVaccination())
+			case (_, .domestic):
 				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEU(originType.localizedProof))
-			case .europeanUnion:
+			case (_, .europeanUnion):
 				return (originType, L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(originType.localizedProof))
 		}
 	}

@@ -1,3 +1,30 @@
+"holder.positiveTest.recoveryAndVaccination.title" = "Created vaccination and recovery certificates";
+"holder.positiveTest.recoveryAndVaccination.message" = "<p>A Dutch vaccination certificate has been created.</p><p>You tested positive less than %@ days ago. Therefore a recovery certificate has also been created.</p>";
+"holder.positiveTest.recoveryAndVaccination.action" = "To my certificates";
+"holder.positiveTest.recoveryOnly.title" = "Created only a recovery certificate";
+"holder.positiveTest.recoveryOnly.message" = "<p>You tested positive after your first vaccination. Your test result is therefore not suitable for creating a Dutch vaccination certificate. However, a recovery certificate has been created.</p><p>Check the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for more information.</p>";
+"holder.positiveTest.recoveryOnly.action" = "To my certificates";
+"holder.positiveTest.inapplicable.title" = "Positive test result is not suitable";
+"holder.positiveTest.inapplicable.message" = "<p>You were tested positive after your first vaccination. Your test result is therefore not suitable for creating a Dutch certificate.</p><p>Check the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for more information.</p>";
+"holder.positiveTest.inapplicable.action" = "To my certificates";
+"holder.positiveTest.nolist.title" = "No positive test result available";
+"holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Please contact your test location to verify if your details were entered into the system correctly.</p>";
+"holder.positiveTest.nolist.action" = "To my certificates";
+"holder.positiveTest.list.title" = "Are the details correct?";
+"holder.positiveTest.list.message" = "If the details about your test are correct, you can create a certificate.";
+"holder.fetchevents.vaccination.title" = "Retrieve vaccination details";
+"holder.fetchevents.positiveTest.title" = "Retrieve test result";
+"holder.positiveTest.start.title" = "Retrieve details about your positive test";
+"holder.positiveTest.start.message" = "Log in with DigiD. Details about your positive test will be retrieved automatically.";
+"holder.vaccination.internationlQROnly.title" = "Only an international certificate was created";
+"holder.vaccination.internationlQROnly.message" = "<p>You don't have a Dutch vaccination certificate. To obtain this, you have to either be fully vaccinated, or have recovered from coronavirus before you received your first vaccination.</p><p><b>Still have to get a second vaccination?</b><br />Please add a vaccination certificate again after getting your vaccination. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Retrieve your positive test result. You will also receive a Dutch certificate then.</p>";
+"holder.vaccination.internationlQROnly.action" = "Retrieve my test result";
+"holder.incompletedutchvaccination.title" = "No Dutch vaccination certificate";
+"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>You don't have a Dutch vaccination certificate. To obtain this, you have to either be fully vaccinated, or have recovered from coronavirus before you received your first vaccination.</p><p><b>Had your second vaccination?</b><br />Please retrieve your vaccination details again. You will receive a Dutch certificate.</p>";
+"holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Had coronavirus before your first vaccination?</b><br />Retrieve your positive test result. You will also receive a Dutch certificate then.</p>";
+"holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Want to know more?</b><br />Read the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for other possible reasons.</p>";
+"holder.incompletedutchvaccination.button.addvaccines" = "Retrieve my vaccinations";
+"holder.incompletedutchvaccination.button.addtestresults" = "Retrieve my test result";
 "holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Restore certificate";
 "holder.recoveryvalidityextension.extensioncomplete.title" = "Extended recovery certificate";
 "holder.recoveryvalidityextension.extensioncomplete.description" = "The validity of Dutch recovery certificates has been extended. As a result, your certificate is now valid for one year after the moment of positive testing.";
@@ -430,7 +457,7 @@
 
 "holder.dashboard.clockDeviationDetected.message" = "Check your phone's time settings. They might be incorrect.";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Your %@ isn't valid internationally. You've only got a Dutch certificate.";
-"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Your %@ isn't valid in the Netherlands. You've only got an international certificate.";
+"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "You don't have a Dutch vaccination certificate";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "About your vaccination certificate";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Your vaccination certificate isn't valid in the Netherlands. That's why only an international certificate was made.</p><p>It's possible you've only had one injection. Add your second vaccination to get a valid Dutch certificate. <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">Read all about the possible causes.</a></p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "About your vaccination certificate";
@@ -545,12 +572,12 @@
 "holder.about.link" = "Read the privacy statement here";
 
 "holder.vaccination.start.title" = "Retrieve vaccination details";
-"holder.vaccination.start.message" = "<p>Were you vaccinated? Login with DigiD. Details regarding your vaccination will be retrieved automatically.</p>";
-"holder.vaccination.start.action" = "Login with your DigiD";
+"holder.vaccination.start.message" = "<p>Were you vaccinated? Please log in with DigiD. Details regarding your vaccination will be retrieved automatically.</p>";
+"holder.vaccination.start.action" = "Log in with DigiD";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
-"holder.vaccination.list.title" = "Your retrieved vaccinations";
+"holder.vaccination.list.title" = "Are the details correct?";
 "holder.test.list.title" = "Retrieve test result";
-"holder.vaccination.list.message" = "You can make a QR code of your vaccinations. This is your certificate.";
+"holder.vaccination.list.message" = "If the details about your vaccination are correct, you can create a certificate.";
 "holder.vaccination.list.action" = "Make certificate";
 "holder.vaccination.element.title" = "Vaccination %@";
 "holder.vaccination.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
@@ -567,8 +594,8 @@
 "holder.vaccination.about.text" = "About your vaccination";
 "holder.vaccination.about.off" = "%@ of %@";
 "holder.vaccination.list.wrong" = "Is something wrong?";
-"holder.vaccination.wrong.title" = "Something is wrong";
-"holder.vaccination.wrong.body" = "<p>Are these details incorrect? Please contact the healthcare provider who vaccinated you. They can edit your details.</p>";
+"holder.vaccination.wrong.title" = "Is something wrong?";
+"holder.vaccination.wrong.body" = "<p>Please contact the care provider who vaccinated you. This can be the GGD, your general practitioner, or a doctor belonging to a healthcare facility. They can help you change these details.</p>";
 
 "holder.vaccination.start.nodigid" = "I don't have DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/en/apply-or-activate-digid";
@@ -583,7 +610,7 @@
 "holder.vaccination.status.complete.recovery" = "yes (I’ve had coronavirus earlier)";
 "holder.vaccination.status.complete.priorevent" = "yes (I have been vaccinated elsewhere)";
 
-"holder.event.about.title" = "What was retrieved?";
+"holder.event.about.title" = "Details";
 
 /* MARK: - Test Event */
 "holder.event.about.test.subtitle" = "The following details were retrieved at the test location:";
@@ -598,7 +625,7 @@
 "holder.event.about.test.identifier" = "Unique certificate identifier:";
 
 /* MARK: - Vaccination Event */
-"holder.event.about.vaccination.subtitle" = "The following details of your vaccination were retrieved at %@:";
+"holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.name" = "Name:";
 "holder.event.about.vaccination.dateofbirth" = "Date of birth:";
 "holder.event.about.vaccination.pathogen" = "Pathogen:";
@@ -621,7 +648,7 @@
 "holder.event.about.recovery.validuntil" = "Valid until:";
 "holder.event.about.recovery.identifier" = "Unique certificate number:";
 
-"holder.testresults.wrong.body" = "<p>Are these details incorrect? Contact your test location. They can edit your details.</p>";
+"holder.testresults.wrong.body" = "<p>Please contact the test location. They can help you change your details.</p>";
 
 "holder.event.element.subtitle.test2" = "<p>Test date: %@</p><p>Your details: %@</p>";
 "holder.event.element.subtitle.test3" = "<p>Test date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
