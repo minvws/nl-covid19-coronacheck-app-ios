@@ -19,6 +19,8 @@ class VerifierResultViewModelTests: XCTestCase {
 	/// The coordinator spy
 	var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	
+	private var userSettingsSpy: UserSettingsSpy!
+	
 	/// Date parser
 	private lazy var parseDateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
@@ -29,11 +31,14 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
+		userSettingsSpy = UserSettingsSpy()
+		userSettingsSpy.stubbedScanRiskSettingValue = .low
 		
 		sut = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			verificationResult: MobilecoreVerificationResult(),
-			isDeepLinkEnabled: true
+			isDeepLinkEnabled: true,
+			userSettings: userSettingsSpy
 		)
 	}
 	

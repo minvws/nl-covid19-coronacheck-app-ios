@@ -19,6 +19,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: VerifierResultViewModel!
+	private var userSettingsSpy: UserSettingsSpy!
 	
 	var window = UIWindow()
 
@@ -27,11 +28,14 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
+		userSettingsSpy = UserSettingsSpy()
+		userSettingsSpy.stubbedScanRiskSettingValue = .low
 
 		viewModel = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			verificationResult: MobilecoreVerificationResult(),
-			isDeepLinkEnabled: true
+			isDeepLinkEnabled: true,
+			userSettings: userSettingsSpy
 		)
 		sut = VerifierResultViewController(viewModel: viewModel)
 	}
