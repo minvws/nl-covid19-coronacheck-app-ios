@@ -8,7 +8,7 @@
 import UIKit
 
 enum ScanInstructionsStep: CaseIterable {
-	case scanQR, checkTheDetails, checkOnlyTheVisibleData, redScreenNowWhat
+	case scanQR, checkTheDetails, checkOnlyTheVisibleData, greenScreenIsAccess, redScreenNowWhat
 	
 	var animationName: String {
 		switch self {
@@ -18,8 +18,10 @@ enum ScanInstructionsStep: CaseIterable {
 				return "Scanner_2"
 			case .checkOnlyTheVisibleData:
 				return "Scanner_3"
-			case .redScreenNowWhat:
+			case .greenScreenIsAccess:
 				return "Scanner_4"
+			case .redScreenNowWhat:
+				return "Scanner_5"
 		}
 	}
 }
@@ -57,6 +59,12 @@ struct ScanInstructionsFactory: ScanInstructionsFactoryProtocol {
 				message: L.verifierScaninstructionsCheckonlythevisibledataMessage(),
 				animationName: ScanInstructionsStep.checkOnlyTheVisibleData.animationName,
 				step: .checkOnlyTheVisibleData
+			),
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				animationName: ScanInstructionsStep.greenScreenIsAccess.animationName,
+				step: .greenScreenIsAccess
 			),
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
