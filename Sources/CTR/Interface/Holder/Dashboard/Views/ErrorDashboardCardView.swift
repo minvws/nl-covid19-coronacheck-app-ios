@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ErrorDashboardView: BaseView {
+final class ErrorDashboardCardView: BaseView {
 	
 	/// The display constants
 	private enum ViewTraits {

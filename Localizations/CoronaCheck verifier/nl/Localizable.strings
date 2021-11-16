@@ -13,6 +13,8 @@
 "verifier.scaninstructions.checkthedetails.message" = "Controleer bij bezoekers vanaf 14 jaar altijd of de gegevens op jouw scherm hetzelfde zijn als die op het identiteitsbewijs van de bezoeker. Zo weet je zeker dat de QR-code van de bezoeker is.";
 "verifier.scaninstructions.checkonlythevisibledata.title" = "Soms vallen gegevens weg";
 "verifier.scaninstructions.checkonlythevisibledata.message" = "Dat doen we om de privacy van de bezoeker te beschermen. Je ziet dan een streepje (-) staan. Controleer in dat geval alleen de gegevens die je wel ziet.";
+"verifier.scaninstructions.greenScreenIsAccess.title" = "Groen scherm = toegang";
+"verifier.scaninstructions.greenScreenIsAccess.message" = "Kleurt je scherm groen met een vinkje? Dan is de QR-code geldig en kloppen de gegevens met het identiteitsbewijs. Je mag de bezoeker toegang geven.";
 "verifier.scaninstructions.redscreennowwhat.title" = "Rood scherm, wat nu?";
 "verifier.scaninstructions.redscreennowwhat.message" = "Bij een rood scherm met kruis krijg je uitleg om de bezoeker te helpen. Blijft het scherm rood? Dan mag je de bezoeker geen toegang geven.";
 "verifier.scaninstructions.button.startscanning" = "Start scannen";
@@ -59,7 +61,7 @@
 "verifier.start.clockdeviationwarning.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
 "verifier.start.clockdeviationwarning.button" = "Lees meer";
 "verifier.clockDeviationDetected.title" = "Controleer de tijd van je telefoon";
-"verifier.clockDeviationDetected.message" = "<p>Om de CoronaCheck Scanner-app goed te kunnen gebruiken, is het belangrijk dat de tijd op je telefoon goed staat ingesteld. Loopt je telefoon bijvoorbeeld een paar minuten voor? Dan kan er een fout ontstaan tijdens de controle van een coronabewijs.</p><p><a href=\"%@\">Ga naar de instellingen</a> van jouw telefoon en zet de datum en tijd op 'automatisch instellen'.</p>";
+"verifier.clockDeviationDetected.message" = "<p>Om de CoronaCheck Scanner-app goed te kunnen gebruiken, is het belangrijk dat de tijd op je telefoon goed staat ingesteld. Loopt je telefoon bijvoorbeeld een paar minuten voor? Dan kan er een fout ontstaan tijdens de controle van een coronabewijs.</p><p><a href=\"%@\">Ga naar de instellingen</a> van je telefoon en zet de datum en tijd op 'automatisch instellen'.</p>";
 "verifier.menu.scaninstructions" = "Hoe het werkt";
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "Over deze app";
@@ -68,13 +70,6 @@
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Alleen toegang met bewijs";
 "verifier.onboarding.message.safely" = "Voor toegang tot sommige activiteiten of plekken moeten bezoekers een vaccinatiebewijs, testbewijs of herstelbewijs laten zien.";
-"verifier.onboarding.title.scanqr" = "Scan QR-code voor toegang";
-"verifier.onboarding.message.scanqr" = "Bezoekers maken eerst hun bewijs in de vorm van een QR-code. Met deze app check jij de QR-codes en zie je wie toegang mag krijgen. ";
-"verifier.onboarding.title.access" = "Verplichte controle identiteitsbewijs";
-"verifier.onboarding.message.access" = "Vraag bezoekers altijd om een identiteitsbewijs te laten zien. Controleer of de gegevens op jouw scherm hetzelfde zijn als op het identiteitsbewijs. Check? Dan mag de bezoeker naar binnen.";
-"verifier.onboarding.title.who" = "Voor wie is de scanner?";
-"verifier.onboarding.message.who" = "Met behulp van deze app kun je weer bezoekers ontvangen. Maar alleen als jouw locatie of activiteit onder de aangewezen locaties valt.";
-
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "Voorwaarden voor gebruik";
 "verifier.consent.message" = "In de gebruikersvoorwaarden staat hoe CoronaCheck Scanner werkt en wat je rechten zijn.";
@@ -84,7 +79,7 @@
 "verifier.consent.item.3" = "Gegevens van de bezoeker worden <b>nergens centraal opgeslagen</b> ";
 "verifier.consent.button" = "Ik heb de gebruikersvoorwaarden gelezen en ga hiermee akkoord.";
 "verifier.consent.action" = "Aan de slag";
-"verifier.consent.button.error" = "Zonder akkoord kan je niet verder";
+"verifier.consent.button.error" = "Ga akkoord om verder te kunnen";
 
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-codes";
