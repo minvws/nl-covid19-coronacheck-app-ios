@@ -8,19 +8,18 @@
 import Foundation
 import XCTest
 import Nimble
-import SnapshotTesting
 @testable import CTR
 
 // swiftlint:disable:next type_name
 class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 
 	var sut: PaperProofInputCouplingCodeViewModel!
-	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
+	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
 
 	override func setUp() {
 		super.setUp()
 		
-		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
+		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
 		sut = PaperProofInputCouplingCodeViewModel(coordinator: coordinatorDelegateSpy)
 	}
 
@@ -32,8 +31,6 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		expect(self.sut.nextButtonTitle) == L.holderDcctokenentryNext()
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.userNeedsATokenButtonTitle) == L.holderDcctokenentryButtonNotoken()
-
-		PaperProofInputCouplingCodeViewController(viewModel: sut).assertImage()
 	}
 
 	func test_inputtingShortValue_doesntShowError() {
@@ -131,8 +128,8 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.nextButtonTapped()
 
 		// Assert
-		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateToken) == true
-		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateTokenParameters?.token) == "ABCDEF"
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperProofToken) == true
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperProofTokenParameters?.token) == "ABCDEF"
 	}
 
 	func test_tappingSubmit_withValidLowercaseValue_submitsUppercasedValue() {
@@ -143,8 +140,8 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.nextButtonTapped()
 
 		// Assert
-		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateToken) == true
-		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateTokenParameters?.token) == "ABCDEF"
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperProofToken) == true
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperProofTokenParameters?.token) == "ABCDEF"
 	}
 
 	func test_tappingNoTokenButton() {

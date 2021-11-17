@@ -62,8 +62,12 @@ class OnboardingViewController: BaseViewController {
 				onboardingPageViewController.delegate = self
 				return onboardingPageViewController
 			}
-			self.sceneView.pageControl.numberOfPages = $0.count
-			self.sceneView.pageControl.currentPage = 0
+			
+			// Only display page control for multiple pages
+			if $0.count > 1 {
+				self.sceneView.pageControl.numberOfPages = $0.count
+				self.sceneView.pageControl.currentPage = 0
+			}
 		}
 		
 		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)

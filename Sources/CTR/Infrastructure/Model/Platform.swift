@@ -12,10 +12,10 @@ struct Platform {
 
 	static let isSimulator: Bool = {
 
-		var isSim = false
-		#if arch(i386) || arch(x86_64)
-		isSim = true
+		#if targetEnvironment(simulator)
+		return true
+		#else
+		return false
 		#endif
-		return isSim
 	}()
 }

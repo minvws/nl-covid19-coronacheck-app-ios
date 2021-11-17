@@ -158,5 +158,6 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	func consentGiven() {
 
 		onboardingDelegate?.consentGiven()
+		navigationController.popToRootViewController(animated: false)
 	}
 }

@@ -70,6 +70,9 @@ enum EventScreenResult: Equatable {
 			case (let error(lhsContent, _), let error(rhsContent, _)):
 				return lhsContent == rhsContent
 
+			case (.backSwipe, .backSwipe):
+				return true
+
 			default:
 				return false
 		}

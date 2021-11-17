@@ -68,13 +68,6 @@
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Access only with certificate";
 "verifier.onboarding.message.safely" = "Visitors of certain locations must show a vaccination certificate, test certificate, or recovery certificate to enter.";
-"verifier.onboarding.title.scanqr" = "Scan QR code for access";
-"verifier.onboarding.message.scanqr" = "Visitors first make a QR code of their certificate. With this app, you can check the QR codes and see who is allowed to enter.";
-"verifier.onboarding.title.access" = "Mandatory ID check";
-"verifier.onboarding.message.access" = "Always ask visitors to show their proof of identity. Check whether the details on your screen match the details on their ID document. All good? Then the visitor is allowed to enter.";
-"verifier.onboarding.title.who" = "Who is the scanner for?";
-"verifier.onboarding.message.who" = "With this app, you can receive visitors again. But only if your location or activity falls under the designated locations.";
-
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "Acceptable use policy";
 "verifier.consent.message" = "The acceptable use policy details how CoronaCheck Scanner uses your data and what your rights are.";
@@ -84,6 +77,7 @@
 "verifier.consent.item.3" = "The visitor's data is <b>not centrally stored anywhere</b>";
 "verifier.consent.button" = "I've read and agree to the acceptable use policy.";
 "verifier.consent.action" = "Get started";
+"verifier.consent.button.error" = "To continue, please agree";
 
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR codes";

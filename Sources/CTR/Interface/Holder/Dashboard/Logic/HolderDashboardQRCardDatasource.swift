@@ -266,7 +266,8 @@ extension QRCard.GreenCard.Origin {
 					type: type,
 					eventDate: eventDate,
 					expirationTime: expirationTime,
-					validFromDate: validFromDate
+					validFromDate: validFromDate,
+					doseNumber: origin.doseNumber.map { $0.intValue }
 				)
 			}
 			.filter {

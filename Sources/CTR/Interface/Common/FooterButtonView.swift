@@ -79,8 +79,8 @@ final class FooterButtonView: BaseView {
 			
 			buttonStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
 			buttonStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			buttonStackView.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.Margin.edge),
-			buttonStackView.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -ViewTraits.Margin.edge),
+			buttonStackView.leftAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.leftAnchor, constant: ViewTraits.Margin.edge),
+			buttonStackView.rightAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.rightAnchor, constant: -ViewTraits.Margin.edge),
 			buttonStackView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge),
 			{
 				let constraint = buttonStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -ViewTraits.Margin.edge)
