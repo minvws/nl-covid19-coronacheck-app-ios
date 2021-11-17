@@ -26,7 +26,7 @@ extension ListEventsViewModel {
 		for eventResponse in remoteEvents {
 			if let identity = eventResponse.wrapper.identity,
 			   let events30 = eventResponse.wrapper.events {
-				for event in events30 {
+				for event in events30 where isEventAllowed(event) {
 					event30DataSource.append(
 						(
 							identity: identity,
@@ -58,6 +58,20 @@ extension ListEventsViewModel {
 		}
 
 		return emptyEventsState()
+	}
+
+	/// Only allow certain events for the event mode
+	/// - Parameter event: the event
+	/// - Returns: True if allowed for this event flow
+	private func isEventAllowed(_ event: EventFlow.Event) -> Bool {
+
+		switch eventMode {
+			case .paperflow: return event.dccEvent != nil
+			case .positiveTest: return event.positiveTest != nil
+			case .recovery: return event.positiveTest != nil || event.recovery != nil
+			case .test: return event.negativeTest != nil
+			case .vaccination: return event.vaccination != nil
+		}
 	}
 
 	internal func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListEventsViewController.State {
