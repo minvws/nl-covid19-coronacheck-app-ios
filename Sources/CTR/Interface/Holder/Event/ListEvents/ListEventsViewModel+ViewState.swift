@@ -618,48 +618,21 @@ private extension ListEventsViewModel {
 		}
 
 		let printSampleDate: String = ListEventsViewModel.printTestDateFormatter.string(from: sampleDate)
-		let printSampleLongDate: String = ListEventsViewModel.printTestDateFormatter.string(from: sampleDate)
-		let holderID = getDisplayIdentity(result.holder)
+		let holderID = NegativeTestV2DetailsGenerator.getDisplayIdentity(result.holder)
 		
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
 			subTitle: L.holderEventElementSubtitleTest2(printSampleDate, holderID),
 			action: { [weak self] in
 				
-				let details: [EventDetails] = [
-					EventDetails(field: EventDetailsTest.name, value: holderID),
-					EventDetails(field: EventDetailsTest.testType, value: self?.remoteConfigManager.storedConfiguration.getNlTestType(result.testType) ?? result.testType),
-					EventDetails(field: EventDetailsTest.date, value: printSampleLongDate),
-					EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
-					EventDetails(field: EventDetailsTest.uniqueIdentifer, value: result.unique)
-				]
-				
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderEventAboutTitle(),
-						details: details,
+						details: NegativeTestV2DetailsGenerator.getDetails(testResult: result),
 						footer: nil
 					)
 				)
 			}
 		)
-	}
-
-	/// Get a display version of the holder identity
-	/// - Parameter holder: the holder identity
-	/// - Returns: the display version
-	func getDisplayIdentity(_ holder: TestHolderIdentity?) -> String {
-
-		guard let holder = holder else {
-			return ""
-		}
-
-		let parts = holder.mapIdentity(months: String.shortMonths)
-		var output = ""
-		for part in parts {
-			output.append(part)
-			output.append(" ")
-		}
-		return output.trimmingCharacters(in: .whitespaces)
 	}
 }
