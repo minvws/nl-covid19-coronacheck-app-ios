@@ -682,8 +682,8 @@ extension HolderCoordinator: EventFlowDelegate {
 		/// The user completed the event flow. Go back to the dashboard.
 
 		removeChildCoordinator()
-
 		navigateToDashboard()
+		navigationController.viewControllers = []
 	}
 
 	func eventFlowDidCancel() {
@@ -709,6 +709,7 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 		
 		removeChildCoordinator()
 		navigateToDashboard()
+		navigationController.viewControllers = []
 	}
 
 	func switchToAddRegularProof() {
