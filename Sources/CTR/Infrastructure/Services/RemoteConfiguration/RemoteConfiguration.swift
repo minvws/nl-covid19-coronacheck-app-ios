@@ -96,6 +96,8 @@ struct RemoteConfiguration: Codable, Equatable {
 
 	var euTestTypes: [Mapping]? = []
 
+	var euTestNames: [Mapping]? = []
+
 	var euTestManufacturers: [Mapping]? = []
 
 	/// Restricts access to GGD test provider login
@@ -135,6 +137,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case euManufacturers = "euManufacturers"
 		case euVaccinationTypes = "euVaccinations"
 		case euTestTypes = "euTestTypes"
+		case euTestNames = "euTestNames"
 		case euTestManufacturers = "euTestManufacturers"
 		case isGGDEnabled = "ggdEnabled"
 		case credentialRenewalDays = "credentialRenewalDays"

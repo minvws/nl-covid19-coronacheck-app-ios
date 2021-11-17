@@ -299,27 +299,6 @@ extension ListEventsViewModel {
 		let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(ListEventsViewModel.printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
-		let formattedTestLongDate: String = dataRow.event.negativeTest?.sampleDateString
-			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
-
-		let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(
-			dataRow.event.negativeTest?.type) ?? (dataRow.event.negativeTest?.type ?? "")
-		let manufacturer = remoteConfigManager.storedConfiguration.getTestManufacturerMapping(
-			dataRow.event.negativeTest?.manufacturer) ?? (dataRow.event.negativeTest?.manufacturer ?? "")
-		
-		let details: [EventDetails] = [
-			EventDetails(field: EventDetailsTest.subtitle, value: nil),
-			EventDetails(field: EventDetailsTest.name, value: dataRow.identity.fullName),
-			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsTest.testType, value: testType),
-			EventDetails(field: EventDetailsTest.testName, value: dataRow.event.negativeTest?.name),
-			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
-			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
-			EventDetails(field: EventDetailsTest.facility, value: dataRow.event.negativeTest?.facility),
-			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: dataRow.event.unique)
-		]
 
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
@@ -332,7 +311,7 @@ extension ListEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderEventAboutTitle(),
-						details: details,
+						details: NegativeTestDetailsGenerator.getDetails(identity: dataRow.identity, event: dataRow.event),
 						footer: nil
 					)
 				)
@@ -493,27 +472,6 @@ extension ListEventsViewModel {
 		let formattedTestDate: String = dataRow.event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(ListEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
-		let formattedTestLongDate: String = dataRow.event.positiveTest?.sampleDateString
-			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
-
-		let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(
-			dataRow.event.positiveTest?.type) ?? (dataRow.event.positiveTest?.type ?? "")
-		let manufacturer = remoteConfigManager.storedConfiguration.getTestManufacturerMapping(
-			dataRow.event.positiveTest?.manufacturer) ?? (dataRow.event.positiveTest?.manufacturer ?? "")
-		
-		let details: [EventDetails] = [
-			EventDetails(field: EventDetailsTest.subtitle, value: nil),
-			EventDetails(field: EventDetailsTest.name, value: dataRow.identity.fullName),
-			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsTest.testType, value: testType),
-			EventDetails(field: EventDetailsTest.testName, value: dataRow.event.positiveTest?.name),
-			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
-			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestPostive()),
-			EventDetails(field: EventDetailsTest.facility, value: dataRow.event.positiveTest?.facility),
-			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: dataRow.event.unique)
-		]
 
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
@@ -526,7 +484,7 @@ extension ListEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderEventAboutTitle(),
-						details: details,
+						details: PositiveTestDetailsGenerator.getDetails(identity: dataRow.identity, event: dataRow.event),
 						footer: nil
 					)
 				)
@@ -643,42 +601,6 @@ extension ListEventsViewModel {
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
-		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-				.map(ListEventsViewModel.printTestDateFormatter.string) ?? test.sampleDate
-
-		let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(
-			test.typeOfTest) ?? test.typeOfTest
-
-		let manufacturer = remoteConfigManager.storedConfiguration.getTestManufacturerMapping(
-			test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
-
-		var testResult = test.testResult
-		if test.testResult == "260415000" {
-			testResult = L.holderShowqrEuAboutTestNegative()
-		}
-		if test.testResult == "260373001" {
-			testResult = L.holderShowqrEuAboutTestPostive()
-		}
-		
-		let issuer = getDisplayIssuer(test.issuer)
-		let country = getDisplayCountry(test.country)
-		let facility = getDisplayFacility(test.testCenter)
-		
-		let details: [EventDetails] = [
-			EventDetails(field: EventDetailsDCCTest.subtitle, value: nil),
-			EventDetails(field: EventDetailsDCCTest.name, value: dataRow.identity.fullName),
-			EventDetails(field: EventDetailsDCCTest.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsDCCTest.pathogen, value: L.holderDccTestPathogenvalue()),
-			EventDetails(field: EventDetailsDCCTest.testType, value: testType),
-			EventDetails(field: EventDetailsDCCTest.testName, value: test.name),
-			EventDetails(field: EventDetailsDCCTest.date, value: formattedTestDate),
-			EventDetails(field: EventDetailsDCCTest.result, value: testResult),
-			EventDetails(field: EventDetailsDCCTest.facility, value: facility),
-			EventDetails(field: EventDetailsDCCTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsDCCTest.country, value: country),
-			EventDetails(field: EventDetailsDCCTest.issuer, value: issuer),
-			EventDetails(field: EventDetailsDCCTest.certificateIdentifier, value: test.certificateIdentifier)
-		]
 
 		return ListEventsViewController.Row(
 			title: L.generalTestcertificate().capitalizingFirstLetter(),
@@ -687,7 +609,7 @@ extension ListEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderDccTestDetailsTitle(),
-						details: details,
+						details: DCCTestDetailsGenerator.getDetails(identity: dataRow.identity, test: test),
 						footer: L.holderDccTestFooter()
 					)
 				)

@@ -20,9 +20,19 @@ protocol MappingManaging {
 	func getDisplayCountry(_ country: String) -> String
 	
 	func getDisplayFacility(_ facility: String) -> String
+
+	func getTestType(_ code: String? ) -> String?
+
+	func getTestName(_ code: String? ) -> String?
+
+	func getTestManufacturer(_ code: String? ) -> String?
+
+	func isRatTest(_ code: String?) -> Bool
 }
 
 class MappingManager: MappingManaging, Logging {
+
+	static let RATTest = "LP217198-3"
 
 	let remoteConfigManager: RemoteConfigManaging
 
@@ -66,4 +76,25 @@ class MappingManager: MappingManaging, Logging {
 		return L.holderDccListFacility()
 	}
 
+	// MARK: Test
+
+	func getTestType(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euTestTypes?.first(where: { $0.code == code })?.name
+	}
+
+	func getTestName(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euTestNames?.first(where: { $0.code == code })?.name
+	}
+
+	func getTestManufacturer(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euTestManufacturers?.first(where: { $0.code == code })?.name
+	}
+
+	func isRatTest(_ code: String?) -> Bool {
+
+		return code == MappingManager.RATTest
+	}
 }
