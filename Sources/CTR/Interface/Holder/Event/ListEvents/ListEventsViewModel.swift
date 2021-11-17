@@ -43,7 +43,7 @@ class ListEventsViewModel: Logging {
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
 
-	private var hasPreviousDomesticVaccination = false
+	private let hasExistingDomesticVaccination: Bool
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
@@ -58,6 +58,7 @@ class ListEventsViewModel: Logging {
 		self.identityChecker = identityChecker
 		
 		viewState = .loading(content: Content(title: eventMode.title))
+		hasExistingDomesticVaccination = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -68,7 +69,6 @@ class ListEventsViewModel: Logging {
 				self?.displaySomeResultsMightBeMissing()
 			}
 		}
-		hasPreviousDomesticVaccination = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
 		viewState = getViewState(from: remoteEvents)
 	}
 
@@ -280,14 +280,14 @@ class ListEventsViewModel: Logging {
 		inspectGreencardResponseForPositiveTestAndRecovery(
 			greencardResponse,
 			onVaccinationAndRecovery: {
-				if self.hasPreviousDomesticVaccination {
+				if self.hasExistingDomesticVaccination {
 					self.completeFlow()
 				} else {
 					self.viewState = self.recoveryFlowRecoveryAndVaccinationCreated()
 				}
 			},
 			onVaccinationOnly: {
-				if self.hasPreviousDomesticVaccination {
+				if self.hasExistingDomesticVaccination {
 					self.viewState = self.recoveryEventsTooOld("\(recoveryEventValidityDays)")
 				} else {
 					self.viewState = self.recoveryFlowVaccinationOnly("\(recoveryEventValidityDays)")
