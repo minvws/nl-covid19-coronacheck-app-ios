@@ -387,25 +387,6 @@ extension ListEventsViewModel {
 		let formattedTestDate: String = dataRow.event.recovery?.sampleDate
 			.flatMap(Formatter.getDateFrom)
 			.map(ListEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
-		let formattedShortTestDate: String = dataRow.event.recovery?.sampleDate
-			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
-		let formattedShortValidFromDate: String = dataRow.event.recovery?.validFrom
-			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.event.recovery?.validFrom ?? "")
-		let formattedShortValidUntilDate: String = dataRow.event.recovery?.validUntil
-			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.event.recovery?.validUntil ?? "")
-		
-		let details: [EventDetails] = [
-			EventDetails(field: EventDetailsRecovery.subtitle, value: nil),
-			EventDetails(field: EventDetailsRecovery.name, value: dataRow.identity.fullName),
-			EventDetails(field: EventDetailsRecovery.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsRecovery.date, value: formattedShortTestDate),
-			EventDetails(field: EventDetailsRecovery.validFrom, value: formattedShortValidFromDate),
-			EventDetails(field: EventDetailsRecovery.validUntil, value: formattedShortValidUntilDate),
-			EventDetails(field: EventDetailsRecovery.uniqueIdentifer, value: dataRow.event.unique)
-		]
 
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
@@ -418,7 +399,7 @@ extension ListEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderEventAboutTitle(),
-						details: details,
+						details: RecoveryDetailsGenerator.getDetails(identity: dataRow.identity, event: dataRow.event),
 						footer: nil
 					)
 				)
@@ -493,28 +474,6 @@ extension ListEventsViewModel {
 			.flatMap(Formatter.getDateFrom)
 			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
-		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-				.map(ListEventsViewModel.printDateFormatter.string) ?? recovery.firstPositiveTestDate
-		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
-				.map(ListEventsViewModel.printDateFormatter.string) ?? recovery.validFrom
-		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
-				.map(ListEventsViewModel.printDateFormatter.string) ?? recovery.expiresAt
-		
-		let issuer = getDisplayIssuer(recovery.issuer)
-		let country = getDisplayCountry(recovery.country)
-		
-		let details: [EventDetails] = [
-			EventDetails(field: EventDetailsDCCRecovery.subtitle, value: nil),
-			EventDetails(field: EventDetailsDCCRecovery.name, value: dataRow.identity.fullName),
-			EventDetails(field: EventDetailsDCCRecovery.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsDCCRecovery.date, value: formattedFirstPostiveDate),
-			EventDetails(field: EventDetailsDCCRecovery.country, value: country),
-			EventDetails(field: EventDetailsDCCRecovery.issuer, value: issuer),
-			EventDetails(field: EventDetailsDCCRecovery.validFrom, value: formattedValidFromDate),
-			EventDetails(field: EventDetailsDCCRecovery.validUntil, value: formattedValidUntilDate),
-			EventDetails(field: EventDetailsDCCRecovery.certificateIdentifier, value: recovery.certificateIdentifier)
-		]
-
 		return ListEventsViewController.Row(
 			title: L.generalRecoverystatement().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
@@ -522,7 +481,7 @@ extension ListEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderDccRecoveryDetailsTitle(),
-						details: details,
+						details: DCCRecoveryDetailsGenerator.getDetails(identity: dataRow.identity, recovery: recovery),
 						footer: L.holderDccRecoveryFooter()
 					)
 				)
@@ -702,19 +661,5 @@ private extension ListEventsViewModel {
 			output.append(" ")
 		}
 		return output.trimmingCharacters(in: .whitespaces)
-	}
-	
-	func getDisplayIssuer(_ issuer: String) -> String {
-		guard issuer == "Ministry of Health Welfare and Sport" else {
-			return issuer
-		}
-		return L.holderDccListIssuer()
-	}
-	
-	func getDisplayCountry(_ country: String) -> String {
-		guard ["NL", "NLD"].contains(country) else {
-			return country
-		}
-		return L.generalNetherlands()
 	}
 }

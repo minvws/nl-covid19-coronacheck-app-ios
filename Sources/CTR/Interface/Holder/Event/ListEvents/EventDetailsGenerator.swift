@@ -248,6 +248,65 @@ class DCCVaccinationDetailsGenerator {
 	}
 }
 
+class RecoveryDetailsGenerator {
+
+	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event) -> [EventDetails] {
+
+		let formattedBirthDate: String = identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+		let formattedShortTestDate: String = event.recovery?.sampleDate
+			.flatMap(Formatter.getDateFrom)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? (event.recovery?.sampleDate ?? "")
+		let formattedShortValidFromDate: String = event.recovery?.validFrom
+			.flatMap(Formatter.getDateFrom)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? (event.recovery?.validFrom ?? "")
+		let formattedShortValidUntilDate: String = event.recovery?.validUntil
+			.flatMap(Formatter.getDateFrom)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? (event.recovery?.validUntil ?? "")
+
+		return [
+			EventDetails(field: EventDetailsRecovery.subtitle, value: nil),
+			EventDetails(field: EventDetailsRecovery.name, value: identity.fullName),
+			EventDetails(field: EventDetailsRecovery.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsRecovery.date, value: formattedShortTestDate),
+			EventDetails(field: EventDetailsRecovery.validFrom, value: formattedShortValidFromDate),
+			EventDetails(field: EventDetailsRecovery.validUntil, value: formattedShortValidUntilDate),
+			EventDetails(field: EventDetailsRecovery.uniqueIdentifer, value: event.unique)
+		]
+	}
+}
+
+class DCCRecoveryDetailsGenerator {
+
+	static func getDetails(identity: EventFlow.Identity, recovery: EuCredentialAttributes.RecoveryEntry) -> [EventDetails] {
+
+		let mappingManager: MappingManaging = Services.mappingManager
+
+		let formattedBirthDate: String = identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? recovery.firstPositiveTestDate
+		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? recovery.validFrom
+		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? recovery.expiresAt
+
+		return [
+			EventDetails(field: EventDetailsDCCRecovery.subtitle, value: nil),
+			EventDetails(field: EventDetailsDCCRecovery.name, value: identity.fullName),
+			EventDetails(field: EventDetailsDCCRecovery.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsDCCRecovery.date, value: formattedFirstPostiveDate),
+			EventDetails(field: EventDetailsDCCRecovery.country, value: mappingManager.getDisplayCountry(recovery.country)),
+			EventDetails(field: EventDetailsDCCRecovery.issuer, value: mappingManager.getDisplayIssuer(recovery.issuer)),
+			EventDetails(field: EventDetailsDCCRecovery.validFrom, value: formattedValidFromDate),
+			EventDetails(field: EventDetailsDCCRecovery.validUntil, value: formattedValidUntilDate),
+			EventDetails(field: EventDetailsDCCRecovery.certificateIdentifier, value: recovery.certificateIdentifier)
+		]
+	}
+}
+
 private extension EventFlow.VaccinationEvent {
 
 	/// Get a display version of the vaccination completion status
