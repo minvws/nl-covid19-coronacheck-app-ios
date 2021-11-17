@@ -28,6 +28,14 @@ protocol MappingManaging {
 	func getTestManufacturer(_ code: String? ) -> String?
 
 	func isRatTest(_ code: String?) -> Bool
+
+	func getHpkData(_ code: String? ) -> HPKData?
+
+	func getVaccinationBrand(_ code: String? ) -> String?
+
+	func getVaccinationType(_ code: String? ) -> String?
+
+	func getVaccinationManufacturerMapping(_ code: String? ) -> String?
 }
 
 class MappingManager: MappingManaging, Logging {
@@ -96,5 +104,27 @@ class MappingManager: MappingManaging, Logging {
 	func isRatTest(_ code: String?) -> Bool {
 
 		return code == MappingManager.RATTest
+	}
+
+	// Vaccination
+
+	func getHpkData(_ code: String? ) -> HPKData? {
+
+		return remoteConfigManager.storedConfiguration.hpkCodes?.first(where: { $0.code == code })
+	}
+
+	func getVaccinationBrand(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euBrands?.first(where: { $0.code == code })?.name
+	}
+
+	func getVaccinationType(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euVaccinationTypes?.first(where: { $0.code == code })?.name
+	}
+
+	func getVaccinationManufacturerMapping(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euManufacturers?.first(where: { $0.code == code })?.name
 	}
 }

@@ -343,7 +343,11 @@ extension ListEventsViewModel {
 			.map(ListEventsViewModel.printMonthFormatter.string) ?? ""
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
-		var details = getEventDetail(dataRow: dataRow)
+		var details = VaccinationDetailsGenerator.getDetails(
+			identity: dataRow.identity,
+			event: dataRow.event,
+			providerIdentifier: dataRow.providerIdentifier
+		)
 
 		let title = L.holderVaccinationElementTitle("\(formattedShotMonth)")
 		var subTitle = L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate)
@@ -351,7 +355,11 @@ extension ListEventsViewModel {
 			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(nextRow.providerIdentifier) ?? nextRow.providerIdentifier
 			subTitle += L.holderVaccinationElementCombined(provider, otherProviderString)
 			details += [EventDetails(field: EventDetailsVaccination.separator, value: nil)]
-			details += getEventDetail(dataRow: nextRow)
+			details += VaccinationDetailsGenerator.getDetails(
+				identity: nextRow.identity,
+				event: nextRow.event,
+				providerIdentifier: nextRow.providerIdentifier
+			)
 		} else {
 			subTitle += L.holderVaccinationElementSingle(provider)
 		}
@@ -369,66 +377,6 @@ extension ListEventsViewModel {
 				)
 			}
 		)
-	}
-
-	private func getEventDetail(dataRow: EventDataTuple) -> [EventDetails] {
-
-		let formattedBirthDate: String = dataRow.identity.birthDateString
-			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
-		let formattedShotDate: String = dataRow.event.vaccination?.dateString
-			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
-		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
-
-		var vaccinName: String?
-		var vaccineType: String?
-		var vaccineManufacturer: String?
-		if let hpkCode = dataRow.event.vaccination?.hpkCode, !hpkCode.isEmpty {
-			let hpkData = remoteConfigManager.storedConfiguration.getHpkData(hpkCode)
-			vaccinName = remoteConfigManager.storedConfiguration.getBrandMapping(hpkData?.mp)
-			vaccineType = remoteConfigManager.storedConfiguration.getTypeMapping(hpkData?.vp)
-			vaccineManufacturer = remoteConfigManager.storedConfiguration.getVaccinationManufacturerMapping(hpkData?.ma)
-		}
-
-		if vaccinName == nil, let brand = dataRow.event.vaccination?.brand {
-			vaccinName = remoteConfigManager.storedConfiguration.getBrandMapping(brand)
-		}
-		if vaccineType == nil {
-			vaccineType = remoteConfigManager.storedConfiguration
-				.getTypeMapping(dataRow.event.vaccination?.type)
-				?? dataRow.event.vaccination?.type
-		}
-		if vaccineManufacturer == nil {
-			vaccineManufacturer = remoteConfigManager.storedConfiguration
-				.getVaccinationManufacturerMapping(dataRow.event.vaccination?.manufacturer)
-				?? dataRow.event.vaccination?.manufacturer
-		}
-
-		var dosage: String?
-		if let doseNumber = dataRow.event.vaccination?.doseNumber,
-		   let totalDose = dataRow.event.vaccination?.totalDoses {
-			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
-		}
-
-		let country = getDisplayCountry(dataRow.event.vaccination?.country ?? "")
-
-		let details: [EventDetails] = [
-			EventDetails(field: EventDetailsVaccination.subtitle(provider: provider), value: nil),
-			EventDetails(field: EventDetailsVaccination.name, value: dataRow.identity.fullName),
-			EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue()),
-			EventDetails(field: EventDetailsVaccination.vaccineBrand, value: vaccinName),
-			EventDetails(field: EventDetailsVaccination.vaccineType, value: vaccineType),
-			EventDetails(field: EventDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
-			EventDetails(field: EventDetailsVaccination.dosage, value: dosage),
-			EventDetails(field: EventDetailsVaccination.completionReason, value: dataRow.event.vaccination?.completionStatus),
-			EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate),
-			EventDetails(field: EventDetailsVaccination.country, value: country),
-			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: dataRow.event.unique)
-		]
-
-		return details
 	}
 
 	private func getRowFromRecoveryEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
@@ -801,27 +749,5 @@ private extension ListEventsViewModel {
 			return facility
 		}
 		return L.holderDccListFacility()
-	}
-}
-
-private extension EventFlow.VaccinationEvent {
-	
-	/// Get a display version of the vaccination completion status
-	var completionStatus: String? {
-		
-		// Neither statements are completed: Vaccination incomplete
-		guard completedByMedicalStatement == true || completedByPersonalStatement == true else {
-			return nil
-		}
-		
-		// Vaccination completed: Optional clarification for completion
-		switch completionReason {
-			case .recovery:
-				return L.holderVaccinationStatusCompleteRecovery()
-			case .priorEvent:
-				return L.holderVaccinationStatusCompletePriorevent()
-			default:
-				return L.holderVaccinationStatusComplete()
-		}
 	}
 }

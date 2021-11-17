@@ -122,12 +122,11 @@ class DCCTestDetailsGenerator {
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? (test.typeOfTest)
 		let manufacturer = mappingManager.getTestManufacturer(test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
 
-		var testResult = test.testResult
-		if test.testResult == "260415000" {
-			testResult = L.holderShowqrEuAboutTestNegative()
-		}
-		if test.testResult == "260373001" {
-			testResult = L.holderShowqrEuAboutTestPostive()
+		let testResult: String
+		switch test.testResult {
+			case "260415000": testResult = L.holderShowqrEuAboutTestNegative()
+			case "260373001": testResult = L.holderShowqrEuAboutTestPostive()
+			default: testResult = ""
 		}
 
 		return [
@@ -145,5 +144,88 @@ class DCCTestDetailsGenerator {
 			EventDetails(field: EventDetailsDCCTest.issuer, value: mappingManager.getDisplayIssuer(test.issuer)),
 			EventDetails(field: EventDetailsDCCTest.certificateIdentifier, value: test.certificateIdentifier)
 		]
+	}
+}
+
+class VaccinationDetailsGenerator {
+
+	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String) -> [EventDetails] {
+
+		let mappingManager: MappingManaging = Services.mappingManager
+
+		let formattedBirthDate: String = identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+		let formattedShotDate: String = event.vaccination?.dateString
+			.flatMap(Formatter.getDateFrom)
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (event.vaccination?.dateString ?? "")
+		let provider: String = mappingManager.getProviderIdentifierMapping(providerIdentifier) ?? providerIdentifier
+
+		var vaccinName: String?
+		var vaccineType: String?
+		var vaccineManufacturer: String?
+		if let hpkCode = event.vaccination?.hpkCode, !hpkCode.isEmpty {
+			let hpkData = mappingManager.getHpkData(hpkCode)
+			vaccinName = mappingManager.getVaccinationBrand(hpkData?.mp)
+			vaccineType = mappingManager.getVaccinationType(hpkData?.vp)
+			vaccineManufacturer = mappingManager.getVaccinationManufacturerMapping(hpkData?.ma)
+		}
+
+		if vaccinName == nil, let brand = event.vaccination?.brand {
+			vaccinName = mappingManager.getVaccinationBrand(brand)
+		}
+		if vaccineType == nil {
+			vaccineType = mappingManager.getVaccinationType(event.vaccination?.type) ?? event.vaccination?.type
+		}
+		if vaccineManufacturer == nil {
+			vaccineManufacturer = mappingManager.getVaccinationManufacturerMapping(event.vaccination?.manufacturer)
+			?? event.vaccination?.manufacturer
+		}
+
+		var dosage: String?
+		if let doseNumber = event.vaccination?.doseNumber,
+		   let totalDose = event.vaccination?.totalDoses {
+			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
+		}
+
+		let country = mappingManager.getDisplayCountry(event.vaccination?.country ?? "")
+
+		return [
+			EventDetails(field: EventDetailsVaccination.subtitle(provider: provider), value: nil),
+			EventDetails(field: EventDetailsVaccination.name, value: identity.fullName),
+			EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue()),
+			EventDetails(field: EventDetailsVaccination.vaccineBrand, value: vaccinName),
+			EventDetails(field: EventDetailsVaccination.vaccineType, value: vaccineType),
+			EventDetails(field: EventDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
+			EventDetails(field: EventDetailsVaccination.dosage, value: dosage),
+			EventDetails(field: EventDetailsVaccination.completionReason, value: event.vaccination?.completionStatus),
+			EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate),
+			EventDetails(field: EventDetailsVaccination.country, value: country),
+			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: event.unique)
+		]
+	}
+
+}
+
+private extension EventFlow.VaccinationEvent {
+
+	/// Get a display version of the vaccination completion status
+	var completionStatus: String? {
+
+		// Neither statements are completed: Vaccination incomplete
+		guard completedByMedicalStatement == true || completedByPersonalStatement == true else {
+			return nil
+		}
+
+		// Vaccination completed: Optional clarification for completion
+		switch completionReason {
+			case .recovery:
+				return L.holderVaccinationStatusCompleteRecovery()
+			case .priorEvent:
+				return L.holderVaccinationStatusCompletePriorevent()
+			default:
+				return L.holderVaccinationStatusComplete()
+		}
 	}
 }
