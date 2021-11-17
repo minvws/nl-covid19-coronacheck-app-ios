@@ -384,6 +384,26 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(rows).to(haveCount(2))
 	}
 
+	func test_makeQR_invalidMode() throws {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [defaultRemoteNegativeTestEvent()]
+		)
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		expect(feedback.title) == L.holderVaccinationNolistTitle()
+		expect(feedback.subTitle) == L.holderVaccinationNolistMessage()
+		expect(feedback.primaryActionTitle) == L.holderVaccinationNolistAction()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+
 	func test_makeQR_saveEventGroupError_eventModeVaccination() throws {
 
 		// Given
@@ -464,7 +484,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [defaultRemoteNegativeTestEvent()]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = false
@@ -1655,6 +1675,39 @@ class ListEventsViewModelTests: XCTestCase {
 							name: nil,
 							manufacturer: nil
 						),
+						recovery: nil,
+						dccEvent: nil
+					)
+				]
+			),
+			signedResponse: signedResponse
+		)
+	}
+
+	private func defaultRemoteNegativeTestEvent() -> RemoteEvent {
+		return RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper(
+				providerIdentifier: "CC",
+				protocolVersion: "3.0",
+				identity: identity,
+				status: .complete,
+				result: nil,
+				events: [
+					EventFlow.Event(
+						type: "test",
+						unique: "1234",
+						isSpecimen: false,
+						vaccination: nil,
+						negativeTest: EventFlow.TestEvent(
+							sampleDateString: "2021-07-01",
+							negativeResult: true,
+							positiveResult: nil,
+							facility: nil,
+							type: nil,
+							name: nil,
+							manufacturer: nil
+						),
+						positiveTest: nil,
 						recovery: nil,
 						dccEvent: nil
 					)

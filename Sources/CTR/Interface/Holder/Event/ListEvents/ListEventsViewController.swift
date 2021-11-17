@@ -160,6 +160,11 @@ class ListEventsViewController: BaseViewController {
 		sceneView.primaryButtonTappedCommand = content.primaryAction
 		sceneView.somethingIsWrongTappedCommand = content.secondaryAction
 		sceneView.somethingIsWrongButtonTitle = content.secondaryActionTitle
+		
+		UIAccessibility.post(
+			notification: .screenChanged,
+			argument: [sceneView.title, sceneView.message].compactMap { $0 }.joined(separator: ". ")
+		)
 	}
 }
 
