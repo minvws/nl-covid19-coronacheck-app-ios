@@ -79,11 +79,6 @@ class ListEventsViewController: BaseViewController {
 			self?.sceneView.primaryButton.isEnabled = $0
 		}
 
-		sceneView.contentTextView.linkTouched { [weak self] url in
-
-			self?.viewModel.openUrl(url)
-		}
-
 		viewModel.$hideForCapture.binding = { [weak self] in
 
 			self?.sceneView.hideForCapture = $0
@@ -148,6 +143,11 @@ class ListEventsViewController: BaseViewController {
 		// Texts
 		sceneView.title = content.title
 		sceneView.message = content.subTitle
+
+		sceneView.contentTextView.linkTouched { [weak self] url in
+
+			self?.viewModel.openUrl(url)
+		}
 
 		// Button
 		if let actionTitle = content.primaryActionTitle {

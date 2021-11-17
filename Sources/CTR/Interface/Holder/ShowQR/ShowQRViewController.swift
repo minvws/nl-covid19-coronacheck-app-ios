@@ -43,7 +43,6 @@ class ShowQRViewController: BaseViewController {
 		setupPages()
 		setupBinding()
 		addBackButton()
-		viewModel.setBrightness()
 	}
 
 	private func setupBinding() {
@@ -70,6 +69,7 @@ class ShowQRViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
+		viewModel.setBrightness()
 		sceneView.play()
 		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)

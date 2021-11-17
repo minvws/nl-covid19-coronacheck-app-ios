@@ -114,6 +114,13 @@ class HolderCoordinator: SharedCoordinator {
 		return remoteConfigManager.storedConfiguration.isGGDEnabled == true
 	}
 	
+	// MARK: - Setup
+	
+	override init(navigationController: UINavigationController, window: UIWindow) {
+		super.init(navigationController: navigationController, window: window)
+		setupNotificationListeners()
+	}
+	
 	// Designated starter method
 	override func start() {
 
@@ -140,6 +147,22 @@ class HolderCoordinator: SharedCoordinator {
 				// Start with the holder app
 				navigateToHolderStart()
 			}
+		}
+	}
+	
+	// MARK: - Teardown
+
+	deinit {
+		NotificationCenter.default.removeObserver(self)
+	}
+
+	// MARK: - Listeners
+	
+	private func setupNotificationListeners() {
+		
+		// Prevent the thirdparty ticket feature persisting forever, let's clear it when the user minimises the app
+		NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.thirdpartyTicketApp = nil
 		}
 	}
 
@@ -605,8 +628,8 @@ extension HolderCoordinator: MenuDelegate {
 				navigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
 				
-			case .addPaperCertificate:
-				let coordinator = PaperCertificateCoordinator(delegate: self)
+			case .addPaperProof:
+				let coordinator = PaperProofCoordinator(delegate: self)
 				let destination = PaperProofStartViewController(viewModel: .init(coordinator: coordinator))
 				navigationController = UINavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController
@@ -646,7 +669,7 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .addPaperCertificate, title: L.holderMenuPapercertificate()),
+			MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
 			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]
 	}
@@ -659,8 +682,8 @@ extension HolderCoordinator: EventFlowDelegate {
 		/// The user completed the event flow. Go back to the dashboard.
 
 		removeChildCoordinator()
-
 		navigateToDashboard()
+		navigationController.viewControllers = []
 	}
 
 	func eventFlowDidCancel() {
@@ -686,6 +709,7 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 		
 		removeChildCoordinator()
 		navigateToDashboard()
+		navigationController.viewControllers = []
 	}
 
 	func switchToAddRegularProof() {
