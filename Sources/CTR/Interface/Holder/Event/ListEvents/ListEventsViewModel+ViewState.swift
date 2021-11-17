@@ -462,39 +462,10 @@ extension ListEventsViewModel {
 			.flatMap(Formatter.getDateFrom)
 			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
-		var dosage: String?
 		var title: String = L.generalVaccinationcertificate().capitalizingFirstLetter()
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
-			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 			title = L.holderDccVaccinationListTitle("\(doseNumber)", "\(totalDose)")
 		}
-
-		let vaccineType = remoteConfigManager.storedConfiguration.getTypeMapping(
-			vaccination.vaccineOrProphylaxis) ?? vaccination.vaccineOrProphylaxis
-		let vaccineBrand = remoteConfigManager.storedConfiguration.getBrandMapping(
-			vaccination.medicalProduct) ?? vaccination.medicalProduct
-		let vaccineManufacturer = remoteConfigManager.storedConfiguration.getVaccinationManufacturerMapping(
-			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
-		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-				.map(ListEventsViewModel.printDateFormatter.string) ?? vaccination.dateOfVaccination
-		
-		let issuer = getDisplayIssuer(vaccination.issuer)
-		let country = getDisplayCountry(vaccination.country)
-		
-		let details: [EventDetails] = [
-			EventDetails(field: EventDetailsDCCVaccination.subtitle, value: nil),
-			EventDetails(field: EventDetailsDCCVaccination.name, value: dataRow.identity.fullName),
-			EventDetails(field: EventDetailsDCCVaccination.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsDCCVaccination.pathogen, value: L.holderDccVaccinationPathogenvalue()),
-			EventDetails(field: EventDetailsDCCVaccination.vaccineBrand, value: vaccineBrand),
-			EventDetails(field: EventDetailsDCCVaccination.vaccineType, value: vaccineType),
-			EventDetails(field: EventDetailsDCCVaccination.vaccineManufacturer, value: vaccineManufacturer),
-			EventDetails(field: EventDetailsDCCVaccination.dosage, value: dosage),
-			EventDetails(field: EventDetailsDCCVaccination.date, value: formattedVaccinationDate),
-			EventDetails(field: EventDetailsDCCVaccination.country, value: country),
-			EventDetails(field: EventDetailsDCCVaccination.issuer, value: issuer),
-			EventDetails(field: EventDetailsDCCVaccination.certificateIdentifier, value: vaccination.certificateIdentifier)
-		]
 
 		return ListEventsViewController.Row(
 			title: title,
@@ -503,7 +474,10 @@ extension ListEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderDccVaccinationDetailsTitle(),
-						details: details,
+						details: DCCVaccinationDetailsGenerator.getDetails(
+							identity: dataRow.identity,
+							vaccination: vaccination
+						),
 						footer: L.holderDccVaccinationFooter()
 					)
 				)
@@ -742,12 +716,5 @@ private extension ListEventsViewModel {
 			return country
 		}
 		return L.generalNetherlands()
-	}
-	
-	func getDisplayFacility(_ facility: String) -> String {
-		guard facility == "Facility approved by the State of The Netherlands" else {
-			return facility
-		}
-		return L.holderDccListFacility()
 	}
 }

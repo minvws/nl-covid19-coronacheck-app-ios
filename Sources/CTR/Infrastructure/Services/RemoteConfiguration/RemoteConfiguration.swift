@@ -193,11 +193,6 @@ struct RemoteConfiguration: Codable, Equatable {
 
 extension RemoteConfiguration {
 
-	func getHpkData(_ code: String? ) -> HPKData? {
-
-		return hpkCodes?.first(where: { $0.code == code })
-	}
-
 	func getNlTestType(_ code: String? ) -> String? {
 
 		return nlTestTypes?.first(where: { $0.code == code })?.name

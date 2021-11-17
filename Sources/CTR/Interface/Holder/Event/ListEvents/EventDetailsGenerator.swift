@@ -155,10 +155,10 @@ class VaccinationDetailsGenerator {
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 		let formattedShotDate: String = event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (event.vaccination?.dateString ?? "")
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? (event.vaccination?.dateString ?? "")
 		let provider: String = mappingManager.getProviderIdentifierMapping(providerIdentifier) ?? providerIdentifier
 
 		var vaccinName: String?
@@ -205,7 +205,47 @@ class VaccinationDetailsGenerator {
 			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: event.unique)
 		]
 	}
+}
 
+class DCCVaccinationDetailsGenerator {
+
+	static func getDetails(identity: EventFlow.Identity, vaccination: EuCredentialAttributes.Vaccination) -> [EventDetails] {
+
+		let mappingManager: MappingManaging = Services.mappingManager
+
+		let formattedBirthDate: String = identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+
+		var dosage: String?
+		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
+			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
+		}
+
+		let vaccineType = mappingManager.getVaccinationType(vaccination.vaccineOrProphylaxis)
+		?? vaccination.vaccineOrProphylaxis
+		let vaccineBrand = mappingManager.getVaccinationBrand(vaccination.medicalProduct)
+		?? vaccination.medicalProduct
+		let vaccineManufacturer = mappingManager.getVaccinationManufacturerMapping( vaccination.marketingAuthorizationHolder)
+		?? vaccination.marketingAuthorizationHolder
+		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? vaccination.dateOfVaccination
+
+		return [
+			EventDetails(field: EventDetailsDCCVaccination.subtitle, value: nil),
+			EventDetails(field: EventDetailsDCCVaccination.name, value: identity.fullName),
+			EventDetails(field: EventDetailsDCCVaccination.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsDCCVaccination.pathogen, value: L.holderDccVaccinationPathogenvalue()),
+			EventDetails(field: EventDetailsDCCVaccination.vaccineBrand, value: vaccineBrand),
+			EventDetails(field: EventDetailsDCCVaccination.vaccineType, value: vaccineType),
+			EventDetails(field: EventDetailsDCCVaccination.vaccineManufacturer, value: vaccineManufacturer),
+			EventDetails(field: EventDetailsDCCVaccination.dosage, value: dosage),
+			EventDetails(field: EventDetailsDCCVaccination.date, value: formattedVaccinationDate),
+			EventDetails(field: EventDetailsDCCVaccination.country, value: mappingManager.getDisplayCountry(vaccination.country)),
+			EventDetails(field: EventDetailsDCCVaccination.issuer, value: mappingManager.getDisplayIssuer(vaccination.issuer)),
+			EventDetails(field: EventDetailsDCCVaccination.certificateIdentifier, value: vaccination.certificateIdentifier)
+		]
+	}
 }
 
 private extension EventFlow.VaccinationEvent {
