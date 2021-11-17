@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Clcore
 
 enum RiskSetting: Codable {
 	case low
@@ -17,5 +18,14 @@ enum RiskSetting: Codable {
 	
 	var isHigh: Bool {
 		return self == .high
+	}
+	
+	var policy: String {
+		switch self {
+			case .low:
+				return MobilecoreVERIFICATION_POLICY_3G
+			case .high:
+				return MobilecoreVERIFICATION_POLICY_2G
+		}
 	}
 }

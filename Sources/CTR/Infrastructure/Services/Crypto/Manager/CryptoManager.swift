@@ -136,7 +136,7 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		
 		let proofQREncoded = message.data(using: .utf8)
-		let verificationPolicy = userSettings.scanRiskSettingValue.isHigh ? MobilecoreVERIFICATION_POLICY_2G : MobilecoreVERIFICATION_POLICY_3G
+		let verificationPolicy = userSettings.scanRiskSettingValue.policy
 		
 		guard let result = MobilecoreVerify(proofQREncoded, verificationPolicy) else {
 			logError("Could not verify QR")
