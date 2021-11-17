@@ -139,6 +139,14 @@ final class DeniedView: BaseView, AccessViewable {
 		])
 	}
 	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+			UIAccessibility.post(notification: .screenChanged, argument: self.titleLabel.text)
+		}
+	}
+	
 	// MARK: - AccessViewable
 	
 	func title(_ title: String?) {
