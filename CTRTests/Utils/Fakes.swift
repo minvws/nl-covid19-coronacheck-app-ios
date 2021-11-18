@@ -457,7 +457,7 @@ extension EventFlow.Identity {
 
 extension EventFlow.Event {
 
-	static var  negativeTestEvent: EventFlow.Event {
+	static var negativeTestEvent: EventFlow.Event {
 		EventFlow.Event(
 			type: "test",
 			unique: "1234",
@@ -472,6 +472,52 @@ extension EventFlow.Event {
 				name: "Antigen Test",
 				manufacturer: "1213"
 			),
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil
+		)
+	}
+
+	static var positiveTestEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "test",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: EventFlow.TestEvent(
+				sampleDateString: "2021-07-01",
+				negativeResult: nil,
+				positiveResult: true,
+				facility: "GGD XL Factory",
+				type: "LP217198-3",
+				name: "Antigen Test",
+				manufacturer: "1213"
+			),
+			recovery: nil,
+			dccEvent: nil
+		)
+	}
+
+	static var vaccinationEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccination",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: EventFlow.VaccinationEvent(
+				dateString: "2021-05-16",
+				hpkCode: nil,
+				type: nil,
+				manufacturer: "ORG-100030215",
+				brand: "EU/1/20/1528",
+				doseNumber: 1,
+				totalDoses: 2,
+				country: "NLD",
+				completedByMedicalStatement: nil,
+				completedByPersonalStatement: nil,
+				completionReason: nil
+			),
+			negativeTest: nil,
 			positiveTest: nil,
 			recovery: nil,
 			dccEvent: nil
@@ -493,6 +539,42 @@ extension TestResult {
 				birthDay: "12",
 				birthMonth: "12"
 			)
+		)
+	}
+}
+
+extension EuCredentialAttributes.TestEntry {
+
+	static var negativeTest: EuCredentialAttributes.TestEntry {
+		EuCredentialAttributes.TestEntry(
+			certificateIdentifier: "1234",
+			country: "NL",
+			diseaseAgentTargeted: "840539006",
+			issuer: "Ministry of Health Welfare and Sport",
+			marketingAuthorizationHolder: "1213",
+			name: "fake negativeTest",
+			sampleDate: "2021-11-17T16:00:00+01:00",
+			testResult: "260415000",
+			testCenter: "Facility approved by the State of The Netherlands",
+			typeOfTest: "LP217198-3"
+		)
+	}
+}
+
+extension EuCredentialAttributes.Vaccination {
+
+	static var vaccination: EuCredentialAttributes.Vaccination {
+		EuCredentialAttributes.Vaccination(
+			certificateIdentifier: "1234",
+			country: "NLD",
+			diseaseAgentTargeted: "test",
+			doseNumber: 2,
+			dateOfVaccination: "2021-06-01",
+			issuer: "Test",
+			marketingAuthorizationHolder: "Test",
+			medicalProduct: "Test",
+			totalDose: 2,
+			vaccineOrProphylaxis: "test"
 		)
 	}
 }
