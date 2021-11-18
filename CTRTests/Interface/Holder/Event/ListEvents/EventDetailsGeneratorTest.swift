@@ -188,4 +188,48 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[10].value) == "Facility approved by the State of The Netherlands"
 		expect(details[11].value) == "1234"
 	}
+
+	func testRecoveryDetailsGenerator() {
+
+		// Given
+		let identity = EventFlow.Identity.fakeIdentity
+		let event = EventFlow.Event.recoveryEvent
+
+		// When
+		let details = RecoveryDetailsGenerator.getDetails(identity: identity, event: event)
+
+		// Then
+		expect(details).to(haveCount(7))
+		expect(details[0].value).to(beNil())
+		expect(details[1].value) == "Check, Corona"
+		expect(details[2].value) == "16 mei 2021"
+		expect(details[3].value) == "1 juli 2021"
+		expect(details[4].value) == "12 juli 2021"
+		expect(details[5].value) == "31 december 2022"
+		expect(details[6].value) == "1234"
+	}
+
+	func testDCCRecoveryDetailsGenerator() {
+
+		// Given
+		let identity = EventFlow.Identity.fakeIdentity
+		let dccRecovery = EuCredentialAttributes.RecoveryEntry.recovery
+		mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
+		mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
+
+		// When
+		let details = DCCRecoveryDetailsGenerator.getDetails(identity: identity, recovery: dccRecovery)
+
+		// Then
+		expect(details).to(haveCount(9))
+		expect(details[0].value).to(beNil())
+		expect(details[1].value) == "Check, Corona"
+		expect(details[2].value) == "16 mei 2021"
+		expect(details[3].value) == "1 juli 2021"
+		expect(details[4].value) == "NL"
+		expect(details[5].value) == "Facility approved by the State of The Netherlands"
+		expect(details[6].value) == "12 juli 2021"
+		expect(details[7].value) == "31 december 2022"
+		expect(details[8].value) == "1234"
+	}
 }

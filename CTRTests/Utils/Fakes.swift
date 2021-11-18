@@ -523,6 +523,23 @@ extension EventFlow.Event {
 			dccEvent: nil
 		)
 	}
+
+	static var recoveryEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccination",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: EventFlow.RecoveryEvent(
+				sampleDate: "2021-07-01",
+				validFrom: "2021-07-12",
+				validUntil: "2022-12-31"
+			),
+			dccEvent: nil
+		)
+	}
 }
 
 extension TestResult {
@@ -567,7 +584,7 @@ extension EuCredentialAttributes.Vaccination {
 		EuCredentialAttributes.Vaccination(
 			certificateIdentifier: "1234",
 			country: "NLD",
-			diseaseAgentTargeted: "test",
+			diseaseAgentTargeted: "840539006",
 			doseNumber: 2,
 			dateOfVaccination: "2021-06-01",
 			issuer: "Test",
@@ -575,6 +592,20 @@ extension EuCredentialAttributes.Vaccination {
 			medicalProduct: "Test",
 			totalDose: 2,
 			vaccineOrProphylaxis: "test"
+		)
+	}
+}
+
+extension EuCredentialAttributes.RecoveryEntry {
+	static var recovery: EuCredentialAttributes.RecoveryEntry {
+		EuCredentialAttributes.RecoveryEntry(
+			certificateIdentifier: "1234",
+			country: "NL",
+			diseaseAgentTargeted: "840539006",
+			expiresAt: "2022-12-31",
+			firstPositiveTestDate: "2021-07-01",
+			issuer: "Facility approved by the State of The Netherlands",
+			validFrom: "2021-07-12"
 		)
 	}
 }
