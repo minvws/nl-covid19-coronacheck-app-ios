@@ -781,7 +781,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryTooOldTitle(),
 			subTitle: L.holderRecoveryTooOldMessage(days),
-			primaryActionTitle: L.holderRecoveryTooOldAction()
+			primaryActionTitle: L.holderRecoveryNolistAction()
 		)
 	}
 }

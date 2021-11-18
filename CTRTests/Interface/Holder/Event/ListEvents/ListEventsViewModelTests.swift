@@ -1740,7 +1740,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderRecoveryTooOldTitle()
 		expect(feedback.subTitle) == L.holderRecoveryTooOldMessage("365")
-		expect(feedback.primaryActionTitle) == L.holderRecoveryTooOldAction()
+		expect(feedback.primaryActionTitle) == L.holderRecoveryNolistAction()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 

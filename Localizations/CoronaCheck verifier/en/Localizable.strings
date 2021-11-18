@@ -8,13 +8,15 @@
 "verifier.scan.button.moreInformation" = "What should I pay attention to?";
 "verifier.scaninstructions.navigation.title" = "About scanning";
 "verifier.scaninstructions.scanQR.title" = "Scan the QR code";
-"verifier.scaninstructions.scanQR.content" = "Ask the visitor to show a QR code in the CoronaCheck app or on paper. A tourist may show a QR code in a foreign app, or on paper. Scan the visitor's QR code with your phone camera.";
+"verifier.scaninstructions.scanQR.content" = "Use your phone's camera to scan visitors' QR codes, in the CoronaCheck app or on paper. Tourists can show their QR code in a foreign app or on paper.";
 "verifier.scaninstructions.checkthedetails.title" = "Check the proof of identity";
-"verifier.scaninstructions.checkthedetails.message" = "For visitors aged 14 and over, always verify if the details on your screen are the same as those on the visitor's identity document. This way you can ensure the QR code belongs to the visitor.";
+"verifier.scaninstructions.checkthedetails.message" = "For visitors aged 14 and over, always check if the details on your screen are the same as on the visitor's proof of identity. This way, you can ensure the QR code belongs to the visitor.";
 "verifier.scaninstructions.checkonlythevisibledata.title" = "Sometimes not all details are shown";
-"verifier.scaninstructions.checkonlythevisibledata.message" = "This is done to protect the visitor’s privacy. You will see a hyphen (-). In this case, verify only the details you’re seeing.";
-"verifier.scaninstructions.redscreennowwhat.title" = "Red screen - what happens now?";
-"verifier.scaninstructions.redscreennowwhat.message" = "In case of a red screen with a cross, you will get information to assist the visitor. If the screen stays red, you cannot grant the visitor access.";
+"verifier.scaninstructions.checkonlythevisibledata.message" = "Details can be left out to protect the visitor's privacy. You will see a hyphen (-) instead. In this case, only check the details that are visible.";
+"verifier.scaninstructions.greenScreenIsAccess.title" = "Green screen = access";
+"verifier.scaninstructions.greenScreenIsAccess.message" = "Does your screen turn green and show a checkmark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";
+"verifier.scaninstructions.redscreennowwhat.title" = "Red screen - what happens next?";
+"verifier.scaninstructions.redscreennowwhat.message" = "Does your screen turn red and show a cross? In that case, you'll receive information to assist the visitor. If the screen stays red, you cannot grant the visitor access.";
 "verifier.scaninstructions.button.startscanning" = "Start scanning";
 "verifier.scaninstructions.step.title" = "Step %@";
 "verifier.start.button.showinstructions" = "What should I pay attention to?";
@@ -66,8 +68,8 @@
 "verifier.menu.privacy" = "Acceptable use policy";
 
 /* MARK: - Verifier Onboarding */
-"verifier.onboarding.title.safely" = "Access only with certificate";
-"verifier.onboarding.message.safely" = "Visitors of certain locations must show a vaccination certificate, test certificate, or recovery certificate to enter.";
+"verifier.onboarding.title.safely" = "Safely opening your location";
+"verifier.onboarding.message.safely" = "You can use this app to check your visitors' coronavirus passes. This way your location can stay open safely.";
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "Acceptable use policy";
 "verifier.consent.message" = "The acceptable use policy details how CoronaCheck Scanner uses your data and what your rights are.";
@@ -80,9 +82,9 @@
 "verifier.consent.button.error" = "To continue, please agree";
 
 /* MARK: - Verifier Start */
-"verifier.start.title" = "Scan QR codes";
+"verifier.start.title" = "Scan your visitors' QR codes";
 "verifier.start.header" = "Get started";
-"verifier.start.message" = "Scan the QR codes of your visitors. Is the QR code valid and do the details match the proof of identity? You're allowed to give access to the visitor.";
+"verifier.start.message" = "Is de QR-code geldig en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
 "verifier.start.button.title" = "Start scanning";
 "verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
 
