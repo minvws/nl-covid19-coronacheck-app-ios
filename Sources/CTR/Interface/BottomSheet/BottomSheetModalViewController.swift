@@ -36,6 +36,11 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		button.accessibilityIdentifier = "CloseButton"
 		button.accessibilityLabel = L.generalClose()
 		button.tintColor = Theme.colors.dark
+		if #available(iOS 13.0, *) {
+			button.addInteraction(UILargeContentViewerInteraction())
+			button.showsLargeContentViewer = true
+			button.largeContentTitle = L.generalClose()
+		}
 		return button
 	}()
 	
