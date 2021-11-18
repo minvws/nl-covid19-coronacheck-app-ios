@@ -443,6 +443,60 @@ extension RemoteGreenCards.Response {
 	}
 }
 
+extension EventFlow.Identity {
+
+	static var fakeIdentity: EventFlow.Identity {
+		EventFlow.Identity(
+			infix: "",
+			firstName: "Corona",
+			lastName: "Check",
+			birthDateString: "2021-05-16"
+		)
+	}
+}
+
+extension EventFlow.Event {
+
+	static var  negativeTestEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "test",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: EventFlow.TestEvent(
+				sampleDateString: "2021-07-01",
+				negativeResult: true,
+				positiveResult: nil,
+				facility: "GGD XL Factory",
+				type: "LP217198-3",
+				name: "Antigen Test",
+				manufacturer: "1213"
+			),
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil
+		)
+	}
+}
+
+extension TestResult {
+
+	static var negativeResult: TestResult {
+		TestResult(
+			unique: "test",
+			sampleDate: "2021-01-01T12:00:00",
+			testType: "PCR",
+			negativeResult: true,
+			holder: TestHolderIdentity(
+				firstNameInitial: "T",
+				lastNameInitial: "D",
+				birthDay: "12",
+				birthMonth: "12"
+			)
+		)
+	}
+}
+
 extension UIImage {
 
 	static func withColor(_ color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
