@@ -185,6 +185,20 @@ class WalletManagerSpy: WalletManaging {
 		invokedShouldShowMultiDCCUpgradeBannerParametersList.append((userSettings, ()))
 		return stubbedShouldShowMultiDCCUpgradeBannerResult
 	}
+
+	var invokedHasDomesticGreenCard = false
+	var invokedHasDomesticGreenCardCount = 0
+	var invokedHasDomesticGreenCardParameters: (originType: String, Void)?
+	var invokedHasDomesticGreenCardParametersList = [(originType: String, Void)]()
+	var stubbedHasDomesticGreenCardResult: Bool! = false
+
+	func hasDomesticGreenCard(originType: String) -> Bool {
+		invokedHasDomesticGreenCard = true
+		invokedHasDomesticGreenCardCount += 1
+		invokedHasDomesticGreenCardParameters = (originType, ())
+		invokedHasDomesticGreenCardParametersList.append((originType, ()))
+		return stubbedHasDomesticGreenCardResult
+	}
 }
 
 extension WalletManagerSpy {

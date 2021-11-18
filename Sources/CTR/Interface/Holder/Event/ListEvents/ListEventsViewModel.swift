@@ -42,7 +42,9 @@ class ListEventsViewModel: Logging {
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
-	
+
+	private let hasExistingDomesticVaccination: Bool
+
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
@@ -56,6 +58,7 @@ class ListEventsViewModel: Logging {
 		self.identityChecker = identityChecker
 		
 		viewState = .loading(content: Content(title: eventMode.title))
+		hasExistingDomesticVaccination = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -66,7 +69,6 @@ class ListEventsViewModel: Logging {
 				self?.displaySomeResultsMightBeMissing()
 			}
 		}
-
 		viewState = getViewState(from: remoteEvents)
 	}
 
@@ -251,7 +253,66 @@ class ListEventsViewModel: Logging {
 
 		shouldPrimaryButtonBeEnabled = true
 
+		inspectGreencardResponseForPositiveTestAndRecovery(
+			greencardResponse,
+			onVaccinationAndRecovery: {
+				let recoveryEventValidityDays = self.remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
+				self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated("\(recoveryEventValidityDays)")
+			},
+			onVaccinationOnly: {
+				self.completeFlow()
+			},
+			onRecoveryOnly: {
+				self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
+			},
+			onNothing: {
+				self.viewState = self.positiveTestFlowInapplicable()
+			}
+		)
+	}
+
+	private func handleSuccessForRecovery(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+
+		guard eventModeForStorage == .recovery else { return }
+
 		let recoveryEventValidityDays = remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
+		shouldPrimaryButtonBeEnabled = true
+		inspectGreencardResponseForPositiveTestAndRecovery(
+			greencardResponse,
+			onVaccinationAndRecovery: {
+				if self.hasExistingDomesticVaccination {
+					self.completeFlow()
+				} else {
+					self.viewState = self.recoveryFlowRecoveryAndVaccinationCreated()
+				}
+			},
+			onVaccinationOnly: {
+				if self.hasExistingDomesticVaccination {
+					self.viewState = self.recoveryEventsTooOld("\(recoveryEventValidityDays)")
+				} else {
+					self.viewState = self.recoveryFlowVaccinationOnly("\(recoveryEventValidityDays)")
+				}
+			},
+			onRecoveryOnly: {
+				self.completeFlow()
+			},
+			onNothing: {
+				self.viewState = self.recoveryEventsTooOld("\(recoveryEventValidityDays)")
+			}
+		)
+
+		// While the recovery is expired, it is still in Core Data
+		// Let's remove it, to avoid any banner issues on the dashboard (Je bewijs is verlopen)
+		_ = walletManager.removeExpiredGreenCards()
+	}
+
+	private func inspectGreencardResponseForPositiveTestAndRecovery(
+		_ greencardResponse: RemoteGreenCards.Response,
+		onVaccinationAndRecovery: (() -> Void)?,
+		onVaccinationOnly: (() -> Void)?,
+		onRecoveryOnly: (() -> Void)?,
+		onNothing: (() -> Void)?) {
+
 		let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
 		let domesticRecoveryOrigins = greencardResponse.getDomesticOrigins(ofType: OriginType.recovery.rawValue)
 		var hasValidDomesticRecoveryOrigin = false
@@ -261,41 +322,10 @@ class ListEventsViewModel: Logging {
 
 		switch (hasDomesticVaccinationOrigins, hasValidDomesticRecoveryOrigin ) {
 
-			case (true, true):
-				// V + R
-				viewState = recoveryAndVaccinationCreated("\(recoveryEventValidityDays)")
-			case (true, false):
-				// V only
-				completeFlow()
-			case (false, true):
-				// R only
-				viewState = recoveryOnlyCreated()
-			case (false, false):
-				// Nothing. (R older than recoveryEventValidityDays)
-				viewState = positiveTestInapplicable()
-		}
-	}
-
-	private func handleSuccessForRecovery(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
-
-		guard eventModeForStorage == .recovery else { return }
-		logDebug("\(greencardResponse)")
-
-		var hasValidDomesticRecoveryOrigin = false
-		let domesticRecoveryOrigins = greencardResponse.getDomesticOrigins(ofType: OriginType.recovery.rawValue)
-		for origin in domesticRecoveryOrigins where origin.expirationTime > Date() {
-			hasValidDomesticRecoveryOrigin = true
-		}
-
-		if hasValidDomesticRecoveryOrigin {
-			completeFlow()
-		} else {
-			let recoveryEventValidityDays = remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
-			shouldPrimaryButtonBeEnabled = true
-			viewState = recoveryEventsTooOld("\(recoveryEventValidityDays)")
-			// While the recovery is expired, it is still in Core Data
-			// Let's remove it, to avoid any banner issues on the dashboard (Je bewijs is verlopen)
-			_ = walletManager.removeExpiredGreenCards()
+			case (true, true): onVaccinationAndRecovery?()
+			case (true, false): onVaccinationOnly?()
+			case (false, true): onRecoveryOnly?()
+			case (false, false): onNothing?()
 		}
 	}
 
