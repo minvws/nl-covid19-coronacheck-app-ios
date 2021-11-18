@@ -99,9 +99,13 @@ class ErrorView: BaseView {
 				textColor: Theme.colors.utilityError
 			)
 			
-			accessibilityValue = error
-			accessibilityLabel = L.generalNotification()
-			isAccessibilityElement = true
+			if let error = error {
+				accessibilityValue = error
+				accessibilityLabel = L.generalNotification()
+ 				isAccessibilityElement = true
+			} else {
+				isAccessibilityElement = false
+			}
 		}
 	}
 }
