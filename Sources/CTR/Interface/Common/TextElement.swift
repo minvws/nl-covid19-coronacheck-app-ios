@@ -80,9 +80,14 @@ class TextElement: UITextView, UITextViewDelegate {
     ///
     /// - parameter handler: The closure to be called when the user selects a link
     @discardableResult
-    func linkTouched(handler: @escaping (URL) -> Void) -> Self {
+	func linkTouched(handler: @escaping (URL) -> Void) -> Self {
         isSelectable = true
         linkHandlers.append(handler)
+		
+		accessibilityLabel = L.generalUrlLink()
+		accessibilityValue = text
+		accessibilityTraits = .link
+		isAccessibilityElement = true
         return self
     }
     
