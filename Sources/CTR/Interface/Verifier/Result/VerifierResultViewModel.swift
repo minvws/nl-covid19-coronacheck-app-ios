@@ -249,7 +249,7 @@ class VerifierResultViewModel: Logging {
 		
 		stopAutoCloseTimer()
 		
-		let displayDuration: CGFloat = 0.8
+		let displayDuration: CGFloat = UIAccessibility.isVoiceOverRunning ? 5.0 : 0.8
 		let verifiedDuration = VerifierResultViewTraits.Animation.verifiedDuration
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + displayDuration + verifiedDuration) {

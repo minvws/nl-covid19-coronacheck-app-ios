@@ -51,6 +51,7 @@ class VerifierResultView: BaseView {
 				view.footerButtonView.primaryButtonTappedCommand = { [weak self] in self?.scanNextTappedCommand?() }
 				view.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 				view.embed(in: self)
+				view.focusAccessibility()
 				accessView = view
 		}
 	}
@@ -115,6 +116,8 @@ private extension VerifierResultView {
 		
 		UIView.animate(withDuration: VerifierResultViewTraits.Animation.verifiedDuration) {
 			self.verifiedView.alpha = 1
+		} completion: { [weak self] _ in
+			self?.verifiedView.focusAccessibility()
 		}
 	}
 	

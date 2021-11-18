@@ -94,14 +94,6 @@ final class VerifiedView: BaseView, AccessViewable {
 		])
 	}
 	
-	override func setupAccessibility() {
-		super.setupAccessibility()
-		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-			UIAccessibility.post(notification: .screenChanged, argument: self.titleLabel)
-		}
-	}
-	
 	// MARK: - AccessViewable
 
 	/// The title
@@ -109,5 +101,9 @@ final class VerifiedView: BaseView, AccessViewable {
 		titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
 														 alignment: .center,
 														 kerning: ViewTraits.Title.kerning)
+	}
+	
+	func focusAccessibility() {
+		UIAccessibility.post(notification: .screenChanged, argument: self.titleLabel)
 	}
 }

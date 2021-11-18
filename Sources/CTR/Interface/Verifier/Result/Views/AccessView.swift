@@ -16,6 +16,8 @@ protocol AccessViewable: AnyObject {
 	func primaryTitle(_ title: String?)
 	
 	func secondaryTitle(_ title: String?)
+	
+	func focusAccessibility()
 }
 
 extension AccessViewable {
