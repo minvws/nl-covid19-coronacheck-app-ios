@@ -131,7 +131,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
 				verificationResult: verificationResult,
-				isDeepLinkEnabled: thirdPartyScannerApp != nil
+				isDeepLinkEnabled: thirdPartyScannerApp != nil,
+				userSettings: UserSettings()
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)

@@ -11,14 +11,9 @@ import Clcore
 /// The access options
 enum AccessAction: Equatable {
 
-	case verified(Risk)
+	case verified(RiskLevel)
 	case denied
-	case demo(Risk)
-	
-	enum Risk {
-		case low
-		case high
-	}
+	case demo(RiskLevel)
 }
 
 class VerifierResultViewModel: Logging {
@@ -36,6 +31,8 @@ class VerifierResultViewModel: Logging {
 	internal var verificationResult: MobilecoreVerificationResult
 	
 	private var isDeepLinkEnabled: Bool
+	
+	private let userSettings: UserSettingsProtocol
 
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
@@ -86,11 +83,13 @@ class VerifierResultViewModel: Logging {
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
 		verificationResult: MobilecoreVerificationResult,
-		isDeepLinkEnabled: Bool) {
+		isDeepLinkEnabled: Bool,
+		userSettings: UserSettingsProtocol) {
 
 		self.coordinator = coordinator
 		self.verificationResult = verificationResult
 		self.isDeepLinkEnabled = isDeepLinkEnabled
+		self.userSettings = userSettings
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -129,15 +128,15 @@ class VerifierResultViewModel: Logging {
 			showAccessDeniedInvalidQR()
 			return
 		}
+		
+		let riskSetting = userSettings.scanRiskLevelValue
 
 		if details.isSpecimen == "1" {
-			// Change #2497 library update
-			allowAccess = .demo(.low)
+			allowAccess = .demo(riskSetting)
 			setHolderIdentity(details)
 			showAccessDemo()
 		} else {
-			// Change #2497 library update
-			allowAccess = .verified(.low)
+			allowAccess = .verified(riskSetting)
 			setHolderIdentity(details)
 			showAccessAllowed()
 		}

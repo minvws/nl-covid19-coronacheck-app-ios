@@ -208,25 +208,25 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedScanRiskSettingValueSetter = false
-	var invokedScanRiskSettingValueSetterCount = 0
-	var invokedScanRiskSettingValue: RiskSetting?
-	var invokedScanRiskSettingValueList = [RiskSetting]()
-	var invokedScanRiskSettingValueGetter = false
-	var invokedScanRiskSettingValueGetterCount = 0
-	var stubbedScanRiskSettingValue: RiskSetting!
+	var invokedScanRiskLevelValueSetter = false
+	var invokedScanRiskLevelValueSetterCount = 0
+	var invokedScanRiskLevelValue: RiskLevel?
+	var invokedScanRiskLevelValueList = [RiskLevel]()
+	var invokedScanRiskLevelValueGetter = false
+	var invokedScanRiskLevelValueGetterCount = 0
+	var stubbedScanRiskLevelValue: RiskLevel!
 
-	var scanRiskSettingValue: RiskSetting {
+	var scanRiskLevelValue: RiskLevel {
 		set {
-			invokedScanRiskSettingValueSetter = true
-			invokedScanRiskSettingValueSetterCount += 1
-			invokedScanRiskSettingValue = newValue
-			invokedScanRiskSettingValueList.append(newValue)
+			invokedScanRiskLevelValueSetter = true
+			invokedScanRiskLevelValueSetterCount += 1
+			invokedScanRiskLevelValue = newValue
+			invokedScanRiskLevelValueList.append(newValue)
 		}
 		get {
-			invokedScanRiskSettingValueGetter = true
-			invokedScanRiskSettingValueGetterCount += 1
-			return stubbedScanRiskSettingValue
+			invokedScanRiskLevelValueGetter = true
+			invokedScanRiskLevelValueGetterCount += 1
+			return stubbedScanRiskLevelValue
 		}
 	}
 

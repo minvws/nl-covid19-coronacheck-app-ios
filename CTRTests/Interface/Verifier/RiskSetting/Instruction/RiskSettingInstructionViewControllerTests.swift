@@ -39,7 +39,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_bindings() {
 		// Given
-		userSettingsSpy.stubbedScanRiskSettingValue = .low
+		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		viewModel = RiskSettingInstructionViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
@@ -58,13 +58,13 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifierRisksettingHighriskTitle()
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifierRisksettingHighriskSubtitle()
 		expect(self.sut.sceneView.moreButtonTitle) == L.verifierRisksettingReadmore()
-		expect(self.sut.sceneView.riskSettingControlsView.riskSetting) == .low
+		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
 		expect(self.sut.sceneView.footerButtonView.primaryTitle) == L.verifierScaninstructionsButtonStartscanning()
 	}
 	
 	func test_riskSetting_low() {
 		// Given
-		userSettingsSpy.stubbedScanRiskSettingValue = .low
+		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		viewModel = RiskSettingInstructionViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
@@ -75,7 +75,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 		// When
 		
 		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.riskSetting) == .low
+		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
 		
 		// Snapshot
 		sut.assertImage()
@@ -83,7 +83,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_riskSetting_high() {
 		// Given
-		userSettingsSpy.stubbedScanRiskSettingValue = .high
+		userSettingsSpy.stubbedScanRiskLevelValue = .high
 		viewModel = RiskSettingInstructionViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
@@ -94,7 +94,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 		// When
 		
 		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.riskSetting) == .high
+		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .high
 		
 		// Snapshot
 		sut.assertImage()

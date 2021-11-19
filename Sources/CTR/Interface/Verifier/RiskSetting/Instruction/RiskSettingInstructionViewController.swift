@@ -42,7 +42,7 @@ final class RiskSettingInstructionViewController: BaseViewController {
 		viewModel.$highRiskTitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskTitle = $0 }
 		viewModel.$highRiskSubtitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskSubtitle = $0 }
 		viewModel.$moreButtonTitle.binding = { [weak self] in self?.sceneView.moreButtonTitle = $0 }
-		viewModel.$riskSetting.binding = { [weak self] in self?.sceneView.riskSettingControlsView.riskSetting = $0 }
+		viewModel.$riskLevel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.riskLevel = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		
 		sceneView.riskSettingControlsView.selectRiskCommand = { [weak self] riskSetting in

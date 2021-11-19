@@ -39,7 +39,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 	
 	func test_bindings() {
 		// Given
-		userSettingsSpy.stubbedScanRiskSettingValue = .low
+		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		viewModel = RiskSettingViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
@@ -57,12 +57,12 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifierRisksettingHighriskTitle()
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifierRisksettingHighriskSubtitle()
 		expect(self.sut.sceneView.moreButtonTitle) == L.verifierRisksettingReadmore()
-		expect(self.sut.sceneView.riskSettingControlsView.riskSetting) == .low
+		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
 	}
 	
 	func test_riskSetting_low() {
 		// Given
-		userSettingsSpy.stubbedScanRiskSettingValue = .low
+		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		viewModel = RiskSettingViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
@@ -73,7 +73,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.riskSetting) == .low
+		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
 		
 		// Snapshot
 		sut.assertImage()
@@ -81,7 +81,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_high() {
 		// Given
-		userSettingsSpy.stubbedScanRiskSettingValue = .high
+		userSettingsSpy.stubbedScanRiskLevelValue = .high
 		viewModel = RiskSettingViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
@@ -92,7 +92,7 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.riskSetting) == .high
+		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .high
 		
 		// Snapshot
 		sut.assertImage()

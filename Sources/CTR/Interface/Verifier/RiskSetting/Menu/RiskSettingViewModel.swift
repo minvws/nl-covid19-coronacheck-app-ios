@@ -29,11 +29,11 @@ final class RiskSettingViewModel: Logging {
 	
 	@Bindable private(set) var moreButtonTitle: String
 	
-	@Bindable private(set) var riskSetting: RiskSetting
+	@Bindable private(set) var riskLevel: RiskLevel
 	
-	var selectRisk: RiskSetting {
+	var selectRisk: RiskLevel {
 		didSet {
-			userSettings.scanRiskSettingValue = selectRisk
+			userSettings.scanRiskLevelValue = selectRisk
 		}
 	}
 	
@@ -52,8 +52,8 @@ final class RiskSettingViewModel: Logging {
 		highRiskSubtitle = L.verifierRisksettingHighriskSubtitle()
 		moreButtonTitle = L.verifierRisksettingReadmore()
 		
-		let selectedRisk = userSettings.scanRiskSettingValue
-		riskSetting = selectedRisk
+		let selectedRisk = userSettings.scanRiskLevelValue
+		riskLevel = selectedRisk
 		selectRisk = selectedRisk
 	}
 	

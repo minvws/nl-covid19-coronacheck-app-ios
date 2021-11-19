@@ -38,6 +38,8 @@ class CryptoManager: CryptoManaging, Logging {
 	
 	private let cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility
 	
+	private let userSettings: UserSettingsProtocol = UserSettings()
+	
 	/// Initializer
 	required init() {
 		
@@ -134,12 +136,13 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		
 		let proofQREncoded = message.data(using: .utf8)
+		let verificationPolicy = userSettings.scanRiskLevelValue.policy
 		
-		guard let result = MobilecoreVerify(proofQREncoded) else {
+		guard let result = MobilecoreVerify(proofQREncoded, verificationPolicy) else {
 			logError("Could not verify QR")
 			return nil
 		}
-		
+
 		return result
 	}
 	
