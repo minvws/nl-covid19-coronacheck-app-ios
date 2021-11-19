@@ -16,6 +16,10 @@ class ListEventsView: ScrolledStackWithButtonView {
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
+
+		enum Button {
+			static let spacing: CGFloat = 8
+		}
 	}
 
 	/// The title label
@@ -71,6 +75,7 @@ class ListEventsView: ScrolledStackWithButtonView {
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 		somethingIsWrongButton.touchUpInside(self, action: #selector(somethingIsWrongButtonTapped))
+		stackView.distribution = .fill
 	}
 
 	override func setupViewHierarchy() {
@@ -161,5 +166,8 @@ class ListEventsView: ScrolledStackWithButtonView {
 
 	func setEventStackVisibility(ishidden: Bool) {
 		eventStackView.isHidden = ishidden
+		if ishidden {
+			stackView.setCustomSpacing(ViewTraits.Button.spacing, after: contentTextView)
+		}
 	}
 }
