@@ -13,6 +13,8 @@ class VerifierStartViewController: BaseViewController {
 
 	let sceneView = VerifierStartView()
 	
+	override var enableSwipeBack: Bool { false }
+	
 	init(viewModel: VerifierStartViewModel) {
 
 		self.viewModel = viewModel
