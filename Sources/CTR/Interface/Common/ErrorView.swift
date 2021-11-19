@@ -98,6 +98,14 @@ class ErrorView: BaseView {
 				kerning: ViewTraits.Font.kerning,
 				textColor: Theme.colors.utilityError
 			)
+			
+			if let error = error {
+				accessibilityValue = error
+				accessibilityLabel = L.generalNotification()
+ 				isAccessibilityElement = true
+			} else {
+				isAccessibilityElement = false
+			}
 		}
 	}
 }

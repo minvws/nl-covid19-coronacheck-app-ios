@@ -284,14 +284,15 @@ class VerifierResultViewModel: Logging {
 	private func showDeniedInfo() {
 		
 		// By default, unordered lists have a space above them in HTML
-		let bulletSpacing: CGFloat = -28
+		let bulletSpacing: CGFloat = -26
 		let spacing: CGFloat = 16
 
 		let textViews = [(TextView(htmlText: L.verifierDeniedMessageOne()), spacing),
 						 (TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
 						 (TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
-						 (TextView(htmlText: L.verifierDeniedMessageFour()), spacing),
-						 (TextView(htmlText: L.verifierDeniedMessageFive()), spacing)]
+						 (TextView(htmlText: L.verifierDeniedMessageFour()), 0),
+						 (TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
+						 (TextView(htmlText: L.verifierDeniedMessageSix()), spacing)]
 
 		coordinator?.displayContent(
 			title: L.verifierDeniedTitle(),
