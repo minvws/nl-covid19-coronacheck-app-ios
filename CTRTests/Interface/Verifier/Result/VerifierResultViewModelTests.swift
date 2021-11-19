@@ -32,7 +32,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
-		userSettingsSpy.stubbedScanRiskSettingValue = .low
+		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		
 		sut = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,

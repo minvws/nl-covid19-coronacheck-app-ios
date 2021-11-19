@@ -11,9 +11,9 @@ import Clcore
 /// The access options
 enum AccessAction: Equatable {
 
-	case verified(RiskSetting)
+	case verified(RiskLevel)
 	case denied
-	case demo(RiskSetting)
+	case demo(RiskLevel)
 }
 
 class VerifierResultViewModel: Logging {
@@ -129,7 +129,7 @@ class VerifierResultViewModel: Logging {
 			return
 		}
 		
-		let riskSetting = userSettings.scanRiskSettingValue
+		let riskSetting = userSettings.scanRiskLevelValue
 
 		if details.isSpecimen == "1" {
 			allowAccess = .demo(riskSetting)

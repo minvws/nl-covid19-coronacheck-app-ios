@@ -23,7 +23,7 @@ final class RiskSettingInstructionViewModelTests: XCTestCase {
 		super.setUp()
 		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
-		userSettingsSpy.stubbedScanRiskSettingValue = .low
+		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		
 		sut = RiskSettingInstructionViewModel(
 			coordinator: coordinatorSpy,
@@ -58,7 +58,7 @@ final class RiskSettingInstructionViewModelTests: XCTestCase {
 		expect(self.sut.highRiskSubtitle) == L.verifierRisksettingHighriskSubtitle()
 		expect(self.sut.moreButtonTitle) == L.verifierRisksettingReadmore()
 		expect(self.sut.primaryButtonTitle) == L.verifierScaninstructionsButtonStartscanning()
-		expect(self.sut.riskSetting) == .low
+		expect(self.sut.riskLevel) == .low
 	}
 	
 	func test_startScanner_shouldInvokeUserDidCompletePages() {

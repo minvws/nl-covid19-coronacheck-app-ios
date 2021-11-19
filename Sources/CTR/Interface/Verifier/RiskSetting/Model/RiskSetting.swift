@@ -8,7 +8,7 @@
 import Foundation
 import Clcore
 
-enum RiskSetting: Codable {
+enum RiskLevel: Codable {
 	case low
 	case high
 	

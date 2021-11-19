@@ -97,13 +97,13 @@ final class RiskSettingControlsView: BaseView {
 		}
 	}
 	
-	var riskSetting: RiskSetting? {
+	var riskLevel: RiskLevel? {
 		didSet {
-			guard let riskSetting = riskSetting else { return }
-			lowRiskControl.isSelected = riskSetting.isLow
-			highRiskControl.isSelected = riskSetting.isHigh
+			guard let riskLevel = riskLevel else { return }
+			lowRiskControl.isSelected = riskLevel.isLow
+			highRiskControl.isSelected = riskLevel.isHigh
 		}
 	}
 	
-	var selectRiskCommand: ((RiskSetting) -> Void)?
+	var selectRiskCommand: ((RiskLevel) -> Void)?
 }

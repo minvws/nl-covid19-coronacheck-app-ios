@@ -23,7 +23,7 @@ final class RiskSettingViewModelTests: XCTestCase {
 		super.setUp()
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
-		userSettingsSpy.stubbedScanRiskSettingValue = .low
+		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		
 		sut = RiskSettingViewModel(
 			coordinator: coordinatorSpy,
@@ -57,6 +57,6 @@ final class RiskSettingViewModelTests: XCTestCase {
 		expect(self.sut.highRiskTitle) == L.verifierRisksettingHighriskTitle()
 		expect(self.sut.highRiskSubtitle) == L.verifierRisksettingHighriskSubtitle()
 		expect(self.sut.moreButtonTitle) == L.verifierRisksettingReadmore()
-		expect(self.sut.riskSetting) == .low
+		expect(self.sut.riskLevel) == .low
 	}
 }
