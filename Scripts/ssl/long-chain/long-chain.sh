@@ -7,11 +7,11 @@
 TMPDIR=${TMPDIR:-/tmp}
 set -e
 
-OPENSSL=${OPENSSL:-openssl}
+OPENSSL=${OPENSSL:-/usr/local/Cellar/openssl\@1.1/1.1.1l_1/bin/openssl}
 JSON=${1:-example.json}
 
 S=0
-$OPENSSL req -x509 -new \
+$OPENSSL req -x509 -days 365 -new \
 	-out 0.pem -keyout 0.key -nodes \
 	-subj '/CN=CA'
 
@@ -30,7 +30,7 @@ $OPENSSL req -new -keyout $ss.key -nodes \
 	-subj "/CN=$ss deep" |
 $OPENSSL x509 \
 	-extfile  ext.cnf.$$ -extensions subca \
-	-req -CAkey $S.key -CA $S.pem -set_serial 1000$s -out $ss.pem
+	-days 365 -req -CAkey $S.key -CA $S.pem -set_serial 1000$s -out $ss.pem
 	S=$ss
 done
 
@@ -53,7 +53,7 @@ SUBJ="/CN=leaf"
 $OPENSSL req -new -keyout client.key -nodes -subj "${SUBJ}" |\
 $OPENSSL x509 \
 	-extfile  ext.cnf.$$ -extensions leaf \
-	-req -CAkey $S.key -CA $S.pem -set_serial 0xdeadbeefdeadbeefc0de -out client.pub
+	-days 365 -req -CAkey $S.key -CA $S.pem -set_serial 0xdeadbeefdeadbeefc0de -out client.pub
 rm ext.cnf.$$
 
 cat client.key client.pub > client.crt

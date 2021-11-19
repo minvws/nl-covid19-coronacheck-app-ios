@@ -61,6 +61,8 @@ protocol WalletManaging: AnyObject {
 	func canSkipMultiDCCUpgrade() -> Bool
 	
 	func shouldShowMultiDCCUpgradeBanner(userSettings: UserSettingsProtocol) -> Bool
+
+	func hasDomesticGreenCard(originType: String) -> Bool
 }
 
 class WalletManager: WalletManaging, Logging {
@@ -597,5 +599,17 @@ class WalletManager: WalletManaging, Logging {
 		// if there are more than 1 vaccination events but 1 or less greencards,
 		// show the banner to offer people an upgrade
 		return allEUVaccinationGreencards.count == 1 // show the banner
+	}
+
+	func hasDomesticGreenCard(originType: String) -> Bool {
+
+		let allDomesticGreencards = listGreenCards()
+			.filter { $0.getType() == .domestic }
+			.filter { greencard in
+				guard let origins = greencard.castOrigins() else { return false }
+				return !origins.filter({ $0.type == originType }).isEmpty
+			}
+
+		return !allDomesticGreencards.isEmpty
 	}
 }
