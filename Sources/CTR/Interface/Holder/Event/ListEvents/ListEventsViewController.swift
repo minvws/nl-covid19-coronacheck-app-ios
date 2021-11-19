@@ -48,6 +48,8 @@ class ListEventsViewController: BaseViewController {
 
 		super.viewDidLoad()
 
+		navigationController?.delegate = self
+
 		addBackButton(customAction: #selector(backButtonTapped))
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
@@ -85,7 +87,7 @@ class ListEventsViewController: BaseViewController {
 		}
 	}
 	
-	override var enableSwipeBack: Bool { false }
+	override var enableSwipeBack: Bool { true }
 
 	@objc func backButtonTapped() {
 
@@ -188,5 +190,19 @@ extension VaccinationEventView {
 		view.link = L.holderEventDetails()
 		view.disclaimerButtonTappedCommand = command
 		return view
+	}
+}
+
+extension ListEventsViewController: UINavigationControllerDelegate {
+
+	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+
+		if let coordinator = navigationController.topViewController?.transitionCoordinator {
+			coordinator.notifyWhenInteractionChanges { [weak self] context in
+				guard !context.isCancelled else { return }
+				print("yo yo yo")
+				self?.viewModel.goBack()
+			}
+		}
 	}
 }
