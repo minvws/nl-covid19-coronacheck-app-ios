@@ -59,4 +59,14 @@ final class RiskSettingViewModelTests: XCTestCase {
 		expect(self.sut.moreButtonTitle) == L.verifierRisksettingReadmore()
 		expect(self.sut.riskLevel) == .low
 	}
+	
+	func test_selectRisk_shouldSetHighRisk() {
+		// Given
+		
+		// When
+		sut.selectRisk = .high
+		
+		// When
+		expect(self.userSettingsSpy.invokedScanRiskLevelValue) == .high
+	}
 }

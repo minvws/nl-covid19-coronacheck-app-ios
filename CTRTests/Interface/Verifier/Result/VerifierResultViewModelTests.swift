@@ -223,6 +223,56 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.dccFlag) == "🇮🇹"
 		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
 	}
+	
+	func test_checkAttributes_withLowRiskUserSetting_shouldDisplayVerified() {
+		
+		// Given
+		userSettingsSpy.stubbedScanRiskLevelValue = .low
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "NL"
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		sut.verificationResult = result
+		
+		// When
+		sut.checkAttributes()
+		
+		// Then
+		expect(self.sut.allowAccess) == .verified(.low)
+		expect(self.sut.title) == L.verifierResultAccessTitle()
+		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
+		expect(self.sut.primaryTitle) == L.verifierResultAccessIdentityverified()
+		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
+		expect(self.sut.riskDescription).to(beNil())
+		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned).to(beNil())
+	}
+	
+	func test_checkAttributes_withHighRiskUserSetting_shouldDisplayVerified() {
+		
+		// Given
+		userSettingsSpy.stubbedScanRiskLevelValue = .high
+		let details = MobilecoreVerificationDetails()
+		details.issuerCountryCode = "NL"
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
+		result.details = details
+		sut.verificationResult = result
+		
+		// When
+		sut.checkAttributes()
+		
+		// Then
+		expect(self.sut.allowAccess) == .verified(.high)
+		expect(self.sut.title) == L.verifierResultAccessTitle()
+		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
+		expect(self.sut.primaryTitle) == L.verifierResultAccessIdentityverified()
+		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
+		expect(self.sut.riskDescription) == L.verifierResultAccessHighrisk()
+		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccScanned).to(beNil())
+	}
 
 	func test_holderIdentity_allNil() {
 
