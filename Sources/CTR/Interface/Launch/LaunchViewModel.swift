@@ -245,6 +245,7 @@ class LaunchViewModel: Logging {
 		cryptoLibUtility?.update(
 			isAppFirstLaunch: true,
 			immediateCallbackIfWithinTTL: {
+				self.cryptoLibUtility?.checkFile(.publicKeys)
 				completion(.withinTTL)
 			},
 			completion: { (result: Result<Bool, ServerError>) in
