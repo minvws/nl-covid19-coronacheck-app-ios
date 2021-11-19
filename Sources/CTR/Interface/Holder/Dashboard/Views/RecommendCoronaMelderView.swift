@@ -9,6 +9,14 @@ import UIKit
 
 final class RecommendCoronaMelderCardView: BaseView {
 	
+	/// The display constants
+	private enum ViewTraits {
+		
+		enum Message {
+			static let kerning: CGFloat = -0.24
+		}
+	}
+	
 	private let contentTextView = TextView()
 	
 	// MARK: - Lifecycle
@@ -44,7 +52,7 @@ final class RecommendCoronaMelderCardView: BaseView {
 				style: NSAttributedString.HTMLStyle(
 					font: Theme.fonts.subhead,
 					textColor: Theme.colors.grey1,
-					kern: -0.24,
+					kern: ViewTraits.Message.kerning,
 					paragraphSpacing: 0
 				)
 			)
