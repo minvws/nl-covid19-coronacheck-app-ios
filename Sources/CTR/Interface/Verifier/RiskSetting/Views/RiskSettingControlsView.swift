@@ -85,6 +85,12 @@ final class RiskSettingControlsView: BaseView {
 		}
 	}
 	
+	var lowRiskAccessibilityLabel: String? {
+		didSet {
+			lowRiskControl.accessibilityLabel = lowRiskAccessibilityLabel
+		}
+	}
+	
 	var highRiskTitle: String? {
 		didSet {
 			highRiskControl.title = highRiskTitle
@@ -94,6 +100,12 @@ final class RiskSettingControlsView: BaseView {
 	var highRiskSubtitle: String? {
 		didSet {
 			highRiskControl.subtitle = highRiskSubtitle
+		}
+	}
+	
+	var highRiskAccessibilityLabel: String? {
+		didSet {
+			highRiskControl.accessibilityLabel = highRiskAccessibilityLabel
 		}
 	}
 	

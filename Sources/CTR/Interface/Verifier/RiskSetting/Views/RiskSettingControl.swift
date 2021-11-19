@@ -55,6 +55,7 @@ final class RiskSettingControl: UIControl {
 		setupViews()
 		setupViewHierarchy()
 		setupViewConstraints()
+		setupAccessibility()
 	}
 	
 	required init?(coder: NSCoder) {
@@ -62,7 +63,7 @@ final class RiskSettingControl: UIControl {
 	}
 	
 	/// Setup all the views
-	func setupViews() {
+	private func setupViews() {
 		
 		backgroundColor = Theme.colors.viewControllerBackground
 		
@@ -70,7 +71,7 @@ final class RiskSettingControl: UIControl {
 	}
 	
 	/// Setup the view hierarchy
-	func setupViewHierarchy() {
+	private func setupViewHierarchy() {
 
 		addSubview(iconImageView)
 		addSubview(titleLabel)
@@ -78,7 +79,7 @@ final class RiskSettingControl: UIControl {
 	}
 
 	/// Setup all the constraints
-	func setupViewConstraints() {
+	private func setupViewConstraints() {
 
 		NSLayoutConstraint.activate([
 			
@@ -109,11 +110,22 @@ final class RiskSettingControl: UIControl {
 		])
 	}
 	
+	private func setupAccessibility() {
+		isAccessibilityElement = true
+		accessibilityTraits = .button
+	}
+	
 	override var isSelected: Bool {
 		didSet {
 			Haptic.light()
 			
 			iconImageView.isHighlighted = isSelected
+			
+			if isSelected {
+				accessibilityTraits.insert(.selected)
+			} else {
+				accessibilityTraits.remove(.selected)
+			}
 		}
 	}
 	

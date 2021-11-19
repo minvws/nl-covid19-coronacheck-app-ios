@@ -54,8 +54,10 @@ final class RiskSettingViewModelTests: XCTestCase {
 		expect(self.sut.header) == L.verifierRisksettingHeaderMenuentry()
 		expect(self.sut.lowRiskTitle) == L.verifierRisksettingLowriskTitle()
 		expect(self.sut.lowRiskSubtitle) == L.verifierRisksettingLowriskSubtitle()
+		expect(self.sut.lowRiskAccessibilityLabel) == "\(L.verifierRisksettingLowriskTitle()), \(L.verifierRisksettingLowriskSubtitle())"
 		expect(self.sut.highRiskTitle) == L.verifierRisksettingHighriskTitle()
 		expect(self.sut.highRiskSubtitle) == L.verifierRisksettingHighriskSubtitle()
+		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifierRisksettingHighriskTitle()), \(L.verifierRisksettingHighriskSubtitle())"
 		expect(self.sut.moreButtonTitle) == L.verifierRisksettingReadmore()
 		expect(self.sut.riskLevel) == .low
 	}
