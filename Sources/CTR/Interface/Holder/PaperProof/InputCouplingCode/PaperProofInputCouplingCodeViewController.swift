@@ -68,13 +68,11 @@ class PaperProofInputCouplingCodeViewController: BaseViewController {
 			self?.sceneView.primaryTitle = $0
 		}
 
-		viewModel.$fieldErrorMessage.binding = { [weak self] header in
-			if let header = header {
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-					UIAccessibility.post(notification: .announcement, argument: header)
-				}
+		viewModel.$fieldErrorMessage.binding = { [weak self] message in
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				UIAccessibility.post(notification: .layoutChanged, argument: self?.sceneView.errorView)
 			}
-			self?.sceneView.fieldErrorMessage = header
+			self?.sceneView.fieldErrorMessage = message
 		}
 		
 		sceneView.primaryButtonTappedCommand = { [weak self] in

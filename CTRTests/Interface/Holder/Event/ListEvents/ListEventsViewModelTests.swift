@@ -1437,7 +1437,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		networkSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalRecoveryExpired), ())
+		(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecovery), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1525,7 +1525,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		networkSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalRecoveryExpired), ())
+		(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecovery), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1558,25 +1558,212 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
-	func test_successRecovery_domesticRecovery() throws {
+	func test_successRecovery_domesticRecoveryAndVaccination() throws {
 
 		// Given
-		sut = ListEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .recovery,
-			remoteEvents: [defaultRemoteRecoveryEvent()]
-		)
-
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
 		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		walletSpy.stubbedHasDomesticGreenCardResult = false
 		networkSpy.stubbedFetchGreencardsCompletionResult =
 		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
 		networkSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
 		cryptoSpy.stubbedGetStokenResult = "test"
+
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: [defaultRemoteRecoveryEvent()]
+		)
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		expect(feedback.title) == L.holderRecoveryRecoveryAndVaccinationTitle()
+		expect(feedback.subTitle) == L.holderRecoveryRecoveryAndVaccinationMessage()
+		expect(feedback.primaryActionTitle) == L.holderRecoveryRecoveryAndVaccinationAction()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+
+	func test_successRecovery_domesticRecoveryAndExistingVaccination() throws {
+
+		// Given
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedStoreEuGreenCardResult = true
+		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		walletSpy.stubbedHasDomesticGreenCardResult = true
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
+		networkSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: [defaultRemoteRecoveryEvent()]
+		)
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+		expect(self.sut.alert).toEventually(beNil())
+	}
+
+	func test_successRecovery_domesticVaccinationOnly() throws {
+
+		// Given
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedStoreEuGreenCardResult = true
+		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		walletSpy.stubbedHasDomesticGreenCardResult = false
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecoveryValidVaccination), ())
+		networkSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: [defaultRemoteRecoveryEvent()]
+		)
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		expect(feedback.title) == L.holderRecoveryVaccinationOnlyTitle()
+		expect(feedback.subTitle) == L.holderRecoveryVaccinationOnlyMessage("365")
+		expect(feedback.primaryActionTitle) == L.holderRecoveryVaccinationOnlyAction()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+
+	func test_successRecovery_existingDomesticVaccinationOnly() throws {
+
+		// Given
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedStoreEuGreenCardResult = true
+		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		walletSpy.stubbedHasDomesticGreenCardResult = true
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecoveryValidVaccination), ())
+		networkSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: [defaultRemoteRecoveryEvent()]
+		)
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		expect(feedback.title) == L.holderRecoveryTooOldTitle()
+		expect(feedback.subTitle) == L.holderRecoveryTooOldMessage("365")
+		expect(feedback.primaryActionTitle) == L.holderRecoveryNolistAction()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+
+	func test_successRecovery_recoveryOnly() throws {
+
+		// Given
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedStoreEuGreenCardResult = true
+		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		walletSpy.stubbedHasDomesticGreenCardResult = false
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalRecovery), ())
+		networkSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: [defaultRemoteRecoveryEvent()]
+		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")

@@ -411,7 +411,7 @@ extension RemoteGreenCards.Response {
 		)
 	}
 
-	static var domesticAndInternationalRecoveryExpired: RemoteGreenCards.Response {
+	static var domesticAndInternationalExpiredRecovery: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
 			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
 				origins: [
@@ -426,6 +426,56 @@ extension RemoteGreenCards.Response {
 				createCredentialMessages: "test"
 			),
 			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "recovery",
+							eventTime: Date(),
+							expirationTime: Date().addingTimeInterval(30 * days),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+
+	static var domesticAndInternationalExpiredRecoveryValidVaccination: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "vaccination",
+						eventTime: Date(),
+						expirationTime: Date().addingTimeInterval(30 * days),
+						validFrom: Date(),
+						doseNumber: 1
+					),
+					RemoteGreenCards.Origin(
+						type: "recovery",
+						eventTime: Date().addingTimeInterval(400 * days * ago),
+						expirationTime: Date().addingTimeInterval(30 * days * ago),
+						validFrom: Date().addingTimeInterval(400 * days * ago),
+						doseNumber: nil
+					)
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "vaccination",
+							eventTime: Date(),
+							expirationTime: Date().addingTimeInterval(30 * days),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential"
+				),
 				RemoteGreenCards.EuGreenCard(
 					origins: [
 						RemoteGreenCards.Origin(

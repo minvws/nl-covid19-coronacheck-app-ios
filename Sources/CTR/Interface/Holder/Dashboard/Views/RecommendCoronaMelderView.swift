@@ -12,12 +12,12 @@ final class RecommendCoronaMelderCardView: BaseView {
 	/// The display constants
 	private enum ViewTraits {
 		
-		enum Spacing {
-			static let messageToButton: CGFloat = 16
+		enum Message {
+			static let kerning: CGFloat = -0.24
 		}
 	}
 	
-	let contentTextView = TextView()
+	private let contentTextView = TextView()
 	
 	// MARK: - Lifecycle
 
@@ -50,8 +50,9 @@ final class RecommendCoronaMelderCardView: BaseView {
 			contentTextView.attributedText = .makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
-					font: Theme.fonts.body,
-					textColor: Theme.colors.dark,
+					font: Theme.fonts.subhead,
+					textColor: Theme.colors.grey1,
+					kern: ViewTraits.Message.kerning,
 					paragraphSpacing: 0
 				)
 			)
