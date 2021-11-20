@@ -1,13 +1,13 @@
 
 ## localizations: 
-array=( "nl" "en" )
+shortname=( "nl" "en" )
+longname=( "nl-NL" "en-EN" )
 
-for i in "${array[@]}"
-do
-    COMBINED_PATH="Sources/CTR/Infrastructure/Resources/Localization/${i}.lproj/Localizable.strings"
+for i in "${!shortname[@]}"; do
+    COMBINED_PATH="Sources/CTR/Infrastructure/Resources/Localization/${shortname[i]}.lproj/Localizable.strings"
 
-    cat Localizations/CoronaCheck\ holder/$i/Localizable.strings > $COMBINED_PATH
-    cat Localizations/CoronaCheck\ verifier/$i/Localizable.strings >> $COMBINED_PATH
+    cat "Localizations/Holder/${longname[i]}.lproj/Localizable.strings" > $COMBINED_PATH
+    cat "Localizations/Verifier/${longname[i]}.lproj/Localizable.strings" >> $COMBINED_PATH
 
     # Count duplicate lines
     DUPLICATE_LINE_COUNT=$(sort $COMBINED_PATH | sed '/\/\*/d' | sed '/^$/d' | uniq -d | wc -l | xargs)
