@@ -9,7 +9,20 @@ import UIKit
 
 class ConsentButton: UIButton {
 
+	enum Images {
+		enum Icon {
+			
+			static var normal: UIImage? = I.toggle.normal()
+			static var highlighted: UIImage? = I.toggle.selected()
+			static var error: UIImage? = I.toggle.error()
+		}
+	}
+
 	override var isSelected: Bool {
+		didSet { applyState() }
+	}
+	
+	var hasError: Bool = false {
 		didSet { applyState() }
 	}
 
@@ -27,8 +40,8 @@ class ConsentButton: UIButton {
 
 	required init(title: String = "", selected: Bool = false) {
 
-		icon = ImageView(imageName: I.toggle.normal.name, highlightedImageName: I.toggle.selected.name)
-
+		icon = UIImageView(image: Images.Icon.normal, highlightedImage: Images.Icon.highlighted)
+		
 		super.init(frame: .zero)
 
 		setTitle(title, for: .normal)
@@ -64,7 +77,6 @@ class ConsentButton: UIButton {
 		titleLabel?.numberOfLines = 0
 
 		tintColor = Theme.colors.viewControllerBackground
-		backgroundColor = Theme.colors.tertiary
 		setTitleColor(Theme.colors.dark, for: .normal)
 		contentHorizontalAlignment = .left
 
@@ -92,6 +104,8 @@ class ConsentButton: UIButton {
 
 	private func applyState() {
 		icon.isHighlighted = isSelected
+		icon.image = hasError ? Images.Icon.error : Images.Icon.normal
+		backgroundColor = hasError ? C.consentButtonError() : C.consentButtonBackground()
 	}
 
 	@objc private func toggle() {
