@@ -17,7 +17,7 @@ class ShowQRViewModel: Logging {
 	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
 	weak private var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
 	private var mappingManager: MappingManaging? = Services.mappingManager
-	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+	private let notificationCenter: NotificationCenterProtocol
 
 	private var previousBrightness: CGFloat?
 
@@ -56,7 +56,8 @@ class ShowQRViewModel: Logging {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCards: [GreenCard],
-		thirdPartyTicketAppName: String?
+		thirdPartyTicketAppName: String?,
+		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	) {
 
 		self.coordinator = coordinator
@@ -64,6 +65,7 @@ class ShowQRViewModel: Logging {
 			greenCards: greenCards,
 			internationalQRRelevancyDays: TimeInterval(remoteConfigManager?.storedConfiguration.internationalQRRelevancyDays ?? 28)
 		)
+		self.notificationCenter = notificationCenter
 		self.items = dataSource.items
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
 		self.startingPage = mostRelevantPage
@@ -98,17 +100,15 @@ class ShowQRViewModel: Logging {
 
 	private func setupListeners() {
 
-		notificationCenter.addObserver(
-			self,
-			selector: #selector(onDidBecomeActiveNotification),
-			name: UIApplication.didBecomeActiveNotification,
-			object: nil
-		)
-	}
+		notificationCenter.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.setBrightness()
+		}
 
-	/// Handle the event the application did become active
-	@objc func onDidBecomeActiveNotification() {
-		setBrightness()
+		// When the app is backgrounded, the holdercoordinator clears the reference to the third-party ticket app
+		// so we should hide that from the UI on this screen too.
+		notificationCenter.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.thirdPartyTicketAppButtonTitle = nil
+		}
 	}
 
 	/// Adjust the brightness

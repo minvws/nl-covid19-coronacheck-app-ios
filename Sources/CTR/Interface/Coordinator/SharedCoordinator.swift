@@ -165,18 +165,19 @@ extension SharedCoordinator: OpenUrlProtocol {
 			shouldOpenInApp = false
 		}
 
-		if shouldOpenInApp {
-			let safariController = SFSafariViewController(url: url)
-
-			if let presentedViewController = sidePanel?.selectedViewController?.presentedViewController {
-				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
-					self.sidePanel?.selectedViewController?.present(safariController, animated: true)
-				})
-			} else {
-				sidePanel?.selectedViewController?.present(safariController, animated: true)
-			}
-		} else {
+		guard #available(iOS 13.0, *), shouldOpenInApp else {
 			UIApplication.shared.open(url)
+			return
+		}
+		
+		let safariController = SFSafariViewController(url: url)
+
+		if let presentedViewController = sidePanel?.selectedViewController?.presentedViewController {
+			presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
+				self.sidePanel?.selectedViewController?.present(safariController, animated: true)
+			})
+		} else {
+			sidePanel?.selectedViewController?.present(safariController, animated: true)
 		}
 	}
 }

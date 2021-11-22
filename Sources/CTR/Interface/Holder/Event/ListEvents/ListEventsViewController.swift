@@ -79,11 +79,6 @@ class ListEventsViewController: BaseViewController {
 			self?.sceneView.primaryButton.isEnabled = $0
 		}
 
-		sceneView.contentTextView.linkTouched { [weak self] url in
-
-			self?.viewModel.openUrl(url)
-		}
-
 		viewModel.$hideForCapture.binding = { [weak self] in
 
 			self?.sceneView.hideForCapture = $0
@@ -141,6 +136,7 @@ class ListEventsViewController: BaseViewController {
 		sceneView.setEventStackVisibility(ishidden: true)
 		displayContent(content)
 		removeExistingRows()
+		navigationItem.leftBarButtonItem = nil
 	}
 
 	private func displayContent(_ content: Content) {
@@ -148,6 +144,11 @@ class ListEventsViewController: BaseViewController {
 		// Texts
 		sceneView.title = content.title
 		sceneView.message = content.subTitle
+
+		sceneView.contentTextView.linkTouched { [weak self] url in
+
+			self?.viewModel.openUrl(url)
+		}
 
 		// Button
 		if let actionTitle = content.primaryActionTitle {
@@ -160,6 +161,11 @@ class ListEventsViewController: BaseViewController {
 		sceneView.primaryButtonTappedCommand = content.primaryAction
 		sceneView.somethingIsWrongTappedCommand = content.secondaryAction
 		sceneView.somethingIsWrongButtonTitle = content.secondaryActionTitle
+		
+		UIAccessibility.post(
+			notification: .screenChanged,
+			argument: [sceneView.title, sceneView.message].compactMap { $0 }.joined(separator: ". ")
+		)
 	}
 }
 

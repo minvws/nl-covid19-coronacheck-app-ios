@@ -27,34 +27,6 @@ class ListEventsViewModel: Logging {
 		}
 	}()
 
-	lazy var dateFormatter: ISO8601DateFormatter = {
-		let dateFormatter = ISO8601DateFormatter()
-		dateFormatter.formatOptions = [.withFullDate]
-		return dateFormatter
-	}()
-	
-	lazy var printDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "d MMMM yyyy"
-		return dateFormatter
-	}()
-	lazy var printTestDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
-		return dateFormatter
-	}()
-	lazy var printMonthFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "MMMM"
-		return dateFormatter
-	}()
-
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
 	@Bindable internal var viewState: ListEventsViewController.State
@@ -70,7 +42,9 @@ class ListEventsViewModel: Logging {
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
-	
+
+	private let hasExistingDomesticVaccination: Bool
+
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
@@ -84,6 +58,7 @@ class ListEventsViewModel: Logging {
 		self.identityChecker = identityChecker
 		
 		viewState = .loading(content: Content(title: eventMode.title))
+		hasExistingDomesticVaccination = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -94,7 +69,6 @@ class ListEventsViewModel: Logging {
 				self?.displaySomeResultsMightBeMissing()
 			}
 		}
-
 		viewState = getViewState(from: remoteEvents)
 	}
 
@@ -179,13 +153,12 @@ class ListEventsViewModel: Logging {
 				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
 				// > 0 -> Success
 
-				let domesticOrigins: Int = remoteResponse.domesticGreenCard?.origins
-					.filter { $0.type == eventModeForStorage.rawValue }
-					.count ?? 0
-				let internationalOrigins: Int = remoteResponse.euGreenCards?
-					.flatMap { $0.origins }
-					.filter { $0.type == eventModeForStorage.rawValue }
-					.count ?? 0
+				guard eventModeForStorage != .positiveTest else {
+					return true
+				}
+
+				let domesticOrigins: Int = remoteResponse.getDomesticOrigins(ofType: eventModeForStorage.rawValue).count
+				let internationalOrigins: Int = remoteResponse.getInternationalOrigins(ofType: eventModeForStorage.rawValue).count
 
 				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(eventModeForStorage.rawValue)")
 				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(eventModeForStorage.rawValue)")
@@ -242,24 +215,121 @@ class ListEventsViewModel: Logging {
 		}
 	}
 
-	func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+	private func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
 
-		if eventModeForStorage == .vaccination,
-		   greencardResponse.domesticGreenCard == nil,
-		   let euCards = greencardResponse.euGreenCards, euCards.count == 1 {
-			shouldPrimaryButtonBeEnabled = true
-			viewState = internationalQROnly()
-		} else {
-			// All Good -> finish
-			self.coordinator?.listEventsScreenDidFinish(
-				.continue(
-					eventMode: self.eventMode
-				)
-			)
+		switch eventModeForStorage {
+			case .paperflow, .test:
+				completeFlow()
+			case .positiveTest:
+				handleSuccessForPositiveTest(greencardResponse, eventModeForStorage: eventModeForStorage)
+			case .recovery:
+				handleSuccessForRecovery(greencardResponse, eventModeForStorage: eventModeForStorage)
+			case .vaccination:
+				handleSuccessForVaccination(greencardResponse, eventModeForStorage: eventModeForStorage)
 		}
 	}
 
-	func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
+	private func completeFlow() {
+
+		self.coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
+	}
+
+	private func handleSuccessForVaccination(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+
+		guard eventModeForStorage == .vaccination else { return }
+
+		if !greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue) &&
+			greencardResponse.hasInternationalOrigins(ofType: OriginType.vaccination.rawValue) {
+			shouldPrimaryButtonBeEnabled = true
+			viewState = internationalQROnly()
+		} else {
+			completeFlow()
+		}
+	}
+
+	private func handleSuccessForPositiveTest(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+
+		guard eventModeForStorage == .positiveTest else { return }
+
+		shouldPrimaryButtonBeEnabled = true
+
+		inspectGreencardResponseForPositiveTestAndRecovery(
+			greencardResponse,
+			onVaccinationAndRecovery: {
+				let recoveryEventValidityDays = self.remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
+				self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated("\(recoveryEventValidityDays)")
+			},
+			onVaccinationOnly: {
+				self.completeFlow()
+			},
+			onRecoveryOnly: {
+				self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
+			},
+			onNothing: {
+				self.viewState = self.positiveTestFlowInapplicable()
+			}
+		)
+	}
+
+	private func handleSuccessForRecovery(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+
+		guard eventModeForStorage == .recovery else { return }
+
+		let recoveryEventValidityDays = remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
+		shouldPrimaryButtonBeEnabled = true
+		inspectGreencardResponseForPositiveTestAndRecovery(
+			greencardResponse,
+			onVaccinationAndRecovery: {
+				if self.hasExistingDomesticVaccination {
+					self.completeFlow()
+				} else {
+					self.viewState = self.recoveryFlowRecoveryAndVaccinationCreated()
+				}
+			},
+			onVaccinationOnly: {
+				if self.hasExistingDomesticVaccination {
+					self.viewState = self.recoveryEventsTooOld("\(recoveryEventValidityDays)")
+				} else {
+					self.viewState = self.recoveryFlowVaccinationOnly("\(recoveryEventValidityDays)")
+				}
+			},
+			onRecoveryOnly: {
+				self.completeFlow()
+			},
+			onNothing: {
+				self.viewState = self.recoveryEventsTooOld("\(recoveryEventValidityDays)")
+			}
+		)
+
+		// While the recovery is expired, it is still in Core Data
+		// Let's remove it, to avoid any banner issues on the dashboard (Je bewijs is verlopen)
+		_ = walletManager.removeExpiredGreenCards()
+	}
+
+	private func inspectGreencardResponseForPositiveTestAndRecovery(
+		_ greencardResponse: RemoteGreenCards.Response,
+		onVaccinationAndRecovery: (() -> Void)?,
+		onVaccinationOnly: (() -> Void)?,
+		onRecoveryOnly: (() -> Void)?,
+		onNothing: (() -> Void)?) {
+
+		let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
+		let domesticRecoveryOrigins = greencardResponse.getDomesticOrigins(ofType: OriginType.recovery.rawValue)
+		var hasValidDomesticRecoveryOrigin = false
+		for origin in domesticRecoveryOrigins where origin.expirationTime > Date() {
+			hasValidDomesticRecoveryOrigin = true
+		}
+
+		switch (hasDomesticVaccinationOrigins, hasValidDomesticRecoveryOrigin ) {
+
+			case (true, true): onVaccinationAndRecovery?()
+			case (true, false): onVaccinationOnly?()
+			case (false, true): onRecoveryOnly?()
+			case (false, false): onNothing?()
+		}
+	}
+
+	private func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
 
 		let errorCode = ErrorCode(
 			flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
@@ -272,7 +342,7 @@ class ListEventsViewModel: Logging {
 		shouldPrimaryButtonBeEnabled = true
 	}
 
-	func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
+	private func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
 
 		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
 			self.logDebug("handleServerError \(serverError)")

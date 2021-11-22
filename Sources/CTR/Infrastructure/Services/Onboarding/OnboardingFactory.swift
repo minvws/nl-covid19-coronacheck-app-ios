@@ -50,6 +50,9 @@ protocol OnboardingFactoryProtocol {
 
 	/// Get the Consent Button Title
 	func getConsentButtonTitle() -> String
+	
+	/// Get the Consent not given error
+	func getConsentNotGivenError() -> String?
 
 	/// Get the consent Items
 	func getConsentItems() -> [String]
@@ -137,6 +140,10 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 	func getActionButtonTitle() -> String {
 		return L.holderConsentAction()
 	}
+	
+	func getConsentNotGivenError() -> String? {
+		return nil
+	}
 }
 
 struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
@@ -151,24 +158,6 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 				message: L.verifierOnboardingMessageSafely(),
 				image: I.onboarding.safely(),
 				step: .safelyOnTheRoad
-			),
-			OnboardingPage(
-				title: L.verifierOnboardingTitleScanqr(),
-				message: L.verifierOnboardingMessageScanqr(),
-				image: I.onboarding.scan(),
-				step: .yourQR
-			),
-			OnboardingPage(
-				title: L.verifierOnboardingTitleAccess(),
-				message: L.verifierOnboardingMessageAccess(),
-				image: I.onboarding.identity(),
-				step: .access
-			),
-			OnboardingPage(
-				title: L.verifierOnboardingTitleWho(),
-				message: L.verifierOnboardingMessageWho(),
-				image: I.onboarding.who(),
-				step: .privacy
 			)
 		]
 
@@ -215,5 +204,9 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 
 	func getActionButtonTitle() -> String {
 		return L.verifierConsentAction()
+	}
+	
+	func getConsentNotGivenError() -> String? {
+		return L.verifierConsentButtonError()
 	}
 }

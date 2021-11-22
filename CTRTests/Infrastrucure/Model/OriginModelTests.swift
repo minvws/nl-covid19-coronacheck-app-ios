@@ -44,6 +44,7 @@ class OriginModelTests: XCTestCase {
 						eventDate: date,
 						expirationTime: date,
 						validFromDate: validFromDate,
+						doseNumber: 1,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -82,6 +83,7 @@ class OriginModelTests: XCTestCase {
 						eventDate: date,
 						expirationTime: date,
 						validFromDate: date,
+						doseNumber: nil,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -90,6 +92,7 @@ class OriginModelTests: XCTestCase {
 						eventDate: date,
 						expirationTime: date,
 						validFromDate: date,
+						doseNumber: 1,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)

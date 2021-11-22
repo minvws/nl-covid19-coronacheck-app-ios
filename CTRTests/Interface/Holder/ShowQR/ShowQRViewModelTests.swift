@@ -18,13 +18,15 @@ class ShowQRViewModelTests: XCTestCase {
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	var dataStoreManager: DataStoreManaging!
 	var cryptoManagerSpy: CryptoManagerSpy!
+	var notificationCenterSpy: NotificationCenterSpy!
 
 	override func setUp() {
 		super.setUp()
 		dataStoreManager = DataStoreManager(.inMemory)
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-
+		notificationCenterSpy = NotificationCenterSpy()
+		
 		Services.use(cryptoManagerSpy)
 	}
 
@@ -300,5 +302,30 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyTicketApp) == true
+	}
+	
+	func test_minimisingApp_clears_thirdpartyappbutton() throws {
+		// Arrange
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+		notificationCenterSpy.stubbedAddObserverForNameResult = NSObject()
+		notificationCenterSpy.stubbedAddObserverForNameBlockResult = (Notification(name: UIApplication.didEnterBackgroundNotification, object: nil, userInfo: nil), ())
+		// Act
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: "RollerDiscoParties",
+			notificationCenter: notificationCenterSpy
+		)
+
+		let (name, _, _) = notificationCenterSpy.invokedAddObserverForNameParameters!
+		expect(name) == UIApplication.didEnterBackgroundNotification
+
+		expect(self.sut.thirdPartyTicketAppButtonTitle).to(beNil())
 	}
 }

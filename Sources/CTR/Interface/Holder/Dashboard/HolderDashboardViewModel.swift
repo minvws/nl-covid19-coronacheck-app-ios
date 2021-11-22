@@ -157,7 +157,7 @@ final class HolderDashboardViewModel: Logging {
 	}
 
 	deinit {
-		NotificationCenter.default.removeObserver(self)
+		notificationCenter.removeObserver(self)
 		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
 		remoteConfigUpdateObserverToken.map(remoteConfigManager.removeObserver)
 		remoteConfigUpdatesConfigurationWarningToken.map(remoteConfigManager.removeObserver)
@@ -350,6 +350,11 @@ final class HolderDashboardViewModel: Logging {
 
 		coordinator?.openUrl(url, inApp: true)
 	}
+	
+	func userTappedCoronaMelderLink(url: URL) {
+		
+		coordinator?.openUrl(url, inApp: false)
+	}
 
 	// MARK: - Static Methods
 
@@ -407,25 +412,30 @@ final class HolderDashboardViewModel: Logging {
 				default: return false
 			}
 		}
-
 		let regionFilteredExpiredCards = state.expiredGreenCards.filter { $0.region == validityRegion }
+		let dashboardIsEmpty = allQRCards.isEmpty && regionFilteredExpiredCards.isEmpty
 
-		// We'll add to this:
+		// Build up the cards into this array:
 		var viewControllerCards = [HolderDashboardViewController.Card]()
 
-		viewControllerCards += HolderDashboardViewController.Card.headerCard(
+		viewControllerCards += HolderDashboardViewController.Card.makeEmptyStateDescriptionCard(
+			hasEmptyState: dashboardIsEmpty,
+			validityRegion: validityRegion
+		)
+		
+		viewControllerCards += HolderDashboardViewController.Card.makeHeaderMessageCard(
             validityRegion: validityRegion,
             allQRCards: allQRCards,
             regionFilteredExpiredCards: regionFilteredExpiredCards)
 
-		viewControllerCards += HolderDashboardViewController.Card.deviceHasClockDeviationCard(
+		viewControllerCards += HolderDashboardViewController.Card.makeDeviceHasClockDeviationCard(
 			deviceHasClockDeviation: state.deviceHasClockDeviation,
 			hasQRCards: !allQRCards.isEmpty,
 			didTapCallToAction: { [weak coordinatorDelegate] in
 				coordinatorDelegate?.userWishesMoreInfoAboutClockDeviation()
             })
 
-        viewControllerCards += HolderDashboardViewController.Card.configAlmostOutOfDateCard(
+        viewControllerCards += HolderDashboardViewController.Card.makeConfigAlmostOutOfDateCard(
             state: state,
             didTapCallToAction: { [weak coordinatorDelegate] in
                 guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
@@ -437,31 +447,25 @@ final class HolderDashboardViewModel: Logging {
             })
 
 		// Multiple DCC migration banners:
-        viewControllerCards += HolderDashboardViewController.Card.multipleDCCMigrationCards(
+        viewControllerCards += HolderDashboardViewController.Card.makeMultipleDCCMigrationCards(
             validityRegion: validityRegion,
             state: state,
             coordinatorDelegate: coordinatorDelegate,
             userSettings: userSettings)
 
-        viewControllerCards += HolderDashboardViewController.Card.recoveryValidityCards(
+        viewControllerCards += HolderDashboardViewController.Card.makeRecoveryValidityCards(
             validityRegion: validityRegion,
             state: state,
             coordinatorDelegate: coordinatorDelegate
         )
 
-		viewControllerCards += HolderDashboardViewController.Card.expiredQRCard(
+		viewControllerCards += HolderDashboardViewController.Card.makeExpiredQRCard(
 			regionFilteredExpiredCards: regionFilteredExpiredCards,
 			didTapClose: {
 				didTapCloseExpiredQR($0)
 		   })
 
-		viewControllerCards += HolderDashboardViewController.Card.emptyStateCard(
-			validityRegion: validityRegion,
-			allQRCards: allQRCards,
-			regionFilteredExpiredCards: regionFilteredExpiredCards
-		)
-
-		viewControllerCards += HolderDashboardViewController.Card.originNotValidInThisRegion(
+		viewControllerCards += HolderDashboardViewController.Card.makeOriginNotValidInThisRegionCard(
 			qrCards: state.qrCards,
 			validityRegion: validityRegion,
 			now: now,
@@ -480,7 +484,12 @@ final class HolderDashboardViewModel: Logging {
 				}
 			}
 		)
-
+		
+		viewControllerCards += HolderDashboardViewController.Card.makeEmptyStatePlaceholderImageCard(
+			hasEmptyState: dashboardIsEmpty,
+			validityRegion: validityRegion
+		)
+		
 		// Map a `QRCard` to a `VC.Card`:
 		viewControllerCards += regionFilteredMyQRCards
 			.flatMap { (qrcardDataItem: HolderDashboardViewModel.QRCard) -> [HolderDashboardViewController.Card] in
@@ -492,6 +501,10 @@ final class HolderDashboardViewModel: Logging {
 					now: now
 				)
 			}
+		
+		viewControllerCards += HolderDashboardViewController.Card.makeRecommendCoronaMelderCard(
+			regionFilteredMyQRCards: regionFilteredMyQRCards
+		)
 
 		return viewControllerCards
 	}
@@ -499,7 +512,7 @@ final class HolderDashboardViewModel: Logging {
 
 extension HolderDashboardViewController.Card {
 
-	fileprivate static func headerCard(
+	fileprivate static func makeHeaderMessageCard(
 		validityRegion: QRCodeValidityRegion,
 		allQRCards: [HolderDashboardViewModel.QRCard],
 		regionFilteredExpiredCards: [HolderDashboardViewModel.ExpiredQR]
@@ -521,7 +534,7 @@ extension HolderDashboardViewController.Card {
 		}
 	}
 
-	fileprivate static func deviceHasClockDeviationCard(deviceHasClockDeviation: Bool, hasQRCards: Bool, didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+	fileprivate static func makeDeviceHasClockDeviationCard(deviceHasClockDeviation: Bool, hasQRCards: Bool, didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
 		guard deviceHasClockDeviation && hasQRCards else { return [] }
 		return [
 			.deviceHasClockDeviation(
@@ -532,7 +545,7 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 
-	fileprivate static func configAlmostOutOfDateCard(
+	fileprivate static func makeConfigAlmostOutOfDateCard(
 		state: HolderDashboardViewModel.State,
 		didTapCallToAction: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
@@ -546,7 +559,7 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 
-	fileprivate static func multipleDCCMigrationCards(
+	fileprivate static func makeMultipleDCCMigrationCards(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		coordinatorDelegate: HolderCoordinatorDelegate,
@@ -556,13 +569,13 @@ extension HolderDashboardViewController.Card {
 		guard validityRegion == .europeanUnion else { return [] }
 		
 		if state.shouldShowEUVaccinationUpdateBanner {
-			return HolderDashboardViewController.Card.multipleDCCMigrationUpdateCard(
+			return HolderDashboardViewController.Card.makeMultipleDCCMigrationUpdateCard(
 				didTapCallToAction: { [weak coordinatorDelegate] in
 					coordinatorDelegate?.userWishesMoreInfoAboutUpgradingEUVaccinations()
 				}
 			)
 		} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
-			return HolderDashboardViewController.Card.multipleDCCMigrationUpdateCompletedCard(
+			return HolderDashboardViewController.Card.makeMultipleDCCMigrationUpdateCompletedCard(
 				didTapCallToAction: { [weak coordinatorDelegate] in
 					coordinatorDelegate?.presentInformationPage(
 						title: L.holderEuvaccinationswereupgradedTitle(),
@@ -578,7 +591,7 @@ extension HolderDashboardViewController.Card {
 		return []
 	}
 	
-	fileprivate static func recoveryValidityCards(
+	fileprivate static func makeRecoveryValidityCards(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		coordinatorDelegate: HolderCoordinatorDelegate
@@ -586,15 +599,15 @@ extension HolderDashboardViewController.Card {
 		guard validityRegion == .domestic else { return [] }
 		
 		if state.shouldShowRecoveryValidityExtensionAvailableBanner {
-			return HolderDashboardViewController.Card.recoveryValidityExtensionAvailableBanner {
+			return HolderDashboardViewController.Card.makeRecoveryValidityExtensionAvailableCard {
 				coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityExtension()
 			}
 		} else if state.shouldShowRecoveryValidityReinstationAvailableBanner {
-			return HolderDashboardViewController.Card.recoveryValidityReinstationAvailableBanner {
+			return HolderDashboardViewController.Card.makeRecoveryValidityReinstationAvailableCard {
 				coordinatorDelegate.userWishesMoreInfoAboutRecoveryValidityReinstation()
 			}
 		} else if state.shouldShowRecoveryValidityExtensionCompleteBanner {
-			return HolderDashboardViewController.Card.recoveryValidityExtensionCompleteBanner {
+			return HolderDashboardViewController.Card.makeRecoveryValidityExtensionCompleteCard {
 				coordinatorDelegate.presentInformationPage(
 					title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
 					body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
@@ -605,7 +618,7 @@ extension HolderDashboardViewController.Card {
 				UserSettings().hasDismissedRecoveryValidityExtensionCompletionCard = true
 			}
 		} else if state.shouldShowRecoveryValidityReinstationCompleteBanner {
-			return HolderDashboardViewController.Card.recoveryValidityReinstationCompleteBanner {
+			return HolderDashboardViewController.Card.makeRecoveryValidityReinstationCompleteCard {
 				coordinatorDelegate.presentInformationPage(
 					title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
 					body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
@@ -619,7 +632,7 @@ extension HolderDashboardViewController.Card {
 		return []
 	}
 	
-	fileprivate static func multipleDCCMigrationUpdateCard(
+	fileprivate static func makeMultipleDCCMigrationUpdateCard(
 		didTapCallToAction: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
 		return [
@@ -631,7 +644,7 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
-	fileprivate static func multipleDCCMigrationUpdateCompletedCard(
+	fileprivate static func makeMultipleDCCMigrationUpdateCompletedCard(
 		didTapCallToAction: @escaping () -> Void,
 		didTapClose: @escaping () -> Void
 	) -> [HolderDashboardViewController.Card] {
@@ -645,7 +658,7 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
-	fileprivate static func expiredQRCard(
+	fileprivate static func makeExpiredQRCard(
 		regionFilteredExpiredCards: [HolderDashboardViewModel.ExpiredQR],
 		didTapClose: @escaping (HolderDashboardViewModel.ExpiredQR) -> Void
 	) -> [HolderDashboardViewController.Card] {
@@ -660,33 +673,59 @@ extension HolderDashboardViewController.Card {
 			}
 	}
 	
-	fileprivate static func emptyStateCard(
-		validityRegion: QRCodeValidityRegion,
-		allQRCards: [HolderDashboardViewModel.QRCard],
-		regionFilteredExpiredCards: [HolderDashboardViewModel.ExpiredQR]
+	fileprivate static func makeEmptyStateDescriptionCard(
+		hasEmptyState: Bool,
+		validityRegion: QRCodeValidityRegion
 	) -> [HolderDashboardViewController.Card] {
-		guard allQRCards.isEmpty && regionFilteredExpiredCards.isEmpty else { return [] }
+		guard hasEmptyState else { return [] }
 		switch validityRegion {
 			case .domestic:
-				return [HolderDashboardViewController.Card.emptyState(
-					image: I.dashboard.domestic(),
-					title: L.holderDashboardEmptyDomesticTitle(),
+				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: L.holderDashboardEmptyDomesticMessage(),
 					buttonTitle: nil
 				)]
 			case .europeanUnion:
-				return [HolderDashboardViewController.Card.emptyState(
-					image: I.dashboard.international(),
-					title: L.holderDashboardEmptyInternationalTitle(),
+				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: L.holderDashboardEmptyInternationalMessage(),
 					buttonTitle: L.holderDashboardEmptyInternationalButton()
 				)]
 		}
 	}
 	
+	fileprivate static func makeEmptyStatePlaceholderImageCard(
+		hasEmptyState: Bool,
+		validityRegion: QRCodeValidityRegion
+	) -> [HolderDashboardViewController.Card] {
+		guard hasEmptyState else { return [] }
+		switch validityRegion {
+			case .domestic:
+				guard let domesticImage = I.dashboard.domestic() else { return [] }
+				return [HolderDashboardViewController.Card.emptyStatePlaceholderImage(
+					image: domesticImage,
+					title: L.holderDashboardEmptyDomesticTitle()
+				)]
+			case .europeanUnion:
+				guard let internationalImage = I.dashboard.international() else { return [] }
+				return [HolderDashboardViewController.Card.emptyStatePlaceholderImage(
+					image: internationalImage,
+					title: L.holderDashboardEmptyInternationalTitle()
+				)]
+		}
+	}
+	
+	fileprivate static func makeRecommendCoronaMelderCard(
+		regionFilteredMyQRCards: [HolderDashboardViewModel.QRCard]
+	) -> [HolderDashboardViewController.Card] {
+		guard !regionFilteredMyQRCards.isEmpty,
+			  !regionFilteredMyQRCards.contains(where: { $0.shouldShowErrorBeneathCard })
+		else { return [] }
+		
+		return [HolderDashboardViewController.Card.recommendCoronaMelder]
+	}
+	
 	/// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 	/// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
-	fileprivate static func originNotValidInThisRegion(
+	fileprivate static func makeOriginNotValidInThisRegionCard(
 		qrCards: [QRCard],
 		validityRegion: QRCodeValidityRegion,
 		now: Date,
@@ -704,24 +743,24 @@ extension HolderDashboardViewController.Card {
 			}
 	}
 	
-	fileprivate static func recoveryValidityExtensionAvailableBanner(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionAvailableBanner(
+	fileprivate static func makeRecoveryValidityExtensionAvailableCard(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+		return [.recoveryValidityExtensionAvailable(
 			title: L.holderDashboardRecoveryvalidityextensionExtensionavailableBannerTitle(),
 			buttonText: L.generalReadmore(),
 			didTapCallToAction: didTapCallToAction
 		)]
 	}
 	
-	fileprivate static func recoveryValidityReinstationAvailableBanner(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionAvailableBanner(
+	fileprivate static func makeRecoveryValidityReinstationAvailableCard(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+		return [.recoveryValidityExtensionAvailable(
 			title: L.holderDashboardRecoveryvalidityextensionReinstationavailableBannerTitle(),
 			buttonText: L.generalReadmore(),
 			didTapCallToAction: didTapCallToAction
 		)]
 	}
 	
-	fileprivate static func recoveryValidityExtensionCompleteBanner(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionDidCompleteBanner(
+	fileprivate static func makeRecoveryValidityExtensionCompleteCard(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+		return [.recoveryValidityExtensionDidComplete(
 			title: L.holderDashboardRecoveryvalidityextensionExtensioncompleteBannerTitle(),
 			buttonText: L.generalReadmore(),
 			didTapCallToAction: didTapCallToAction,
@@ -729,8 +768,8 @@ extension HolderDashboardViewController.Card {
 		)]
 	}
 	
-	fileprivate static func recoveryValidityReinstationCompleteBanner(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionDidCompleteBanner(
+	fileprivate static func makeRecoveryValidityReinstationCompleteCard(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
+		return [.recoveryValidityExtensionDidComplete(
 			title: L.holderDashboardRecoveryvalidityextensionReinstationcompleteBannerTitle(),
 			buttonText: L.generalReadmore(),
 			didTapCallToAction: didTapCallToAction,
@@ -852,14 +891,14 @@ extension HolderDashboardViewModel {
 
 	fileprivate func setupNotificationListeners() {
 
-		NotificationCenter.default.addObserver(
+		notificationCenter.addObserver(
 			self,
 			selector: #selector(receiveDidBecomeActiveNotification),
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
 
-		NotificationCenter.default.addObserver(
+		notificationCenter.addObserver(
 			self,
 			selector: #selector(userDefaultsDidChange),
 			name: Foundation.UserDefaults.didChangeNotification,
@@ -924,10 +963,12 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], 
 
 	// Map it to user messages:
 	let userMessages = originTypesOnlyInOtherRegion.map { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String) in
-		switch thisRegion {
-			case .domestic:
+		switch (originType, thisRegion) {
+			case (.vaccination, .domestic):
+				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEUVaccination())
+			case (_, .domestic):
 				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEU(originType.localizedProof))
-			case .europeanUnion:
+			case (_, .europeanUnion):
 				return (originType, L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(originType.localizedProof))
 		}
 	}

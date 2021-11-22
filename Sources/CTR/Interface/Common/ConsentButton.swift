@@ -9,7 +9,20 @@ import UIKit
 
 class ConsentButton: UIButton {
 
+	enum Images {
+		enum Icon {
+			
+			static var normal: UIImage? = I.toggle.normal()
+			static var highlighted: UIImage? = I.toggle.selected()
+			static var error: UIImage? = I.toggle.error()
+		}
+	}
+
 	override var isSelected: Bool {
+		didSet { applyState() }
+	}
+	
+	var hasError: Bool = false {
 		didSet { applyState() }
 	}
 
@@ -27,8 +40,8 @@ class ConsentButton: UIButton {
 
 	required init(title: String = "", selected: Bool = false) {
 
-		icon = ImageView(imageName: "Toggle/Normal", highlightedImageName: "Toggle/Selected")
-
+		icon = UIImageView(image: Images.Icon.normal, highlightedImage: Images.Icon.highlighted)
+		
 		super.init(frame: .zero)
 
 		setTitle(title, for: .normal)
@@ -55,16 +68,15 @@ class ConsentButton: UIButton {
 
 	fileprivate func setup() {
 		clipsToBounds = true
-		contentEdgeInsets = .topBottom(17) + .left(68) + .right(16)
+		contentEdgeInsets = .topBottom(14) + .left(56) + .right(16)
 
 		layer.cornerRadius = 8
 
-		titleLabel?.font = Theme.fonts.body
+		titleLabel?.font = Theme.fonts.subhead
 		titleLabel?.lineBreakMode = .byWordWrapping
 		titleLabel?.numberOfLines = 0
 
 		tintColor = Theme.colors.viewControllerBackground
-		backgroundColor = Theme.colors.tertiary
 		setTitleColor(Theme.colors.dark, for: .normal)
 		contentHorizontalAlignment = .left
 
@@ -78,9 +90,9 @@ class ConsentButton: UIButton {
 	}
 
 	override var intrinsicContentSize: CGSize {
-		var base = titleLabel?.intrinsicContentSize ?? .zero
+		var base = super.intrinsicContentSize
 		base.height += contentEdgeInsets.top + contentEdgeInsets.bottom
-		base.width += contentEdgeInsets.left + contentEdgeInsets.right
+		base.width += contentEdgeInsets.right
 		return base
 	}
 
@@ -92,6 +104,8 @@ class ConsentButton: UIButton {
 
 	private func applyState() {
 		icon.isHighlighted = isSelected
+		icon.image = hasError ? Images.Icon.error : Images.Icon.normal
+		backgroundColor = hasError ? C.consentButtonError() : C.consentButtonBackground()
 	}
 
 	@objc private func toggle() {

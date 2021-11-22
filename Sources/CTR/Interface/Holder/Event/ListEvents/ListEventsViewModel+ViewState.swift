@@ -26,7 +26,7 @@ extension ListEventsViewModel {
 		for eventResponse in remoteEvents {
 			if let identity = eventResponse.wrapper.identity,
 			   let events30 = eventResponse.wrapper.events {
-				for event in events30 {
+				for event in events30 where isEventAllowed(event) {
 					event30DataSource.append(
 						(
 							identity: identity,
@@ -60,80 +60,18 @@ extension ListEventsViewModel {
 		return emptyEventsState()
 	}
 
-	// MARK: Empty State
-
-	private func emptyEventsState() -> ListEventsViewController.State {
+	/// Only allow certain events for the event mode
+	/// - Parameter event: the event
+	/// - Returns: True if allowed for this event flow
+	private func isEventAllowed(_ event: EventFlow.Event) -> Bool {
 
 		switch eventMode {
-			case .paperflow: return emptyDccState()
-			case .positiveTest: return emptyPositiveTestState()
-			case .recovery: return emptyRecoveryState()
-			case .test: return emptyTestState()
-			case .vaccination: return emptyVaccinationState()
+			case .paperflow: return event.dccEvent != nil
+			case .positiveTest: return event.positiveTest != nil
+			case .recovery: return event.positiveTest != nil || event.recovery != nil
+			case .test: return event.negativeTest != nil
+			case .vaccination: return event.vaccination != nil
 		}
-	}
-
-	private func emptyVaccinationState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderVaccinationNolistTitle(),
-			subTitle: L.holderVaccinationNolistMessage(),
-			primaryActionTitle: L.holderVaccinationNolistAction()
-		)
-	}
-
-	private func emptyTestState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderTestNolistTitle(),
-			subTitle: L.holderTestNolistMessage(),
-			primaryActionTitle: L.holderTestNolistAction()
-		)
-	}
-
-	private func emptyPositiveTestState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderPositiveTestNolistTitle(),
-			subTitle: L.holderPositiveTestNolistMessage(),
-			primaryActionTitle: L.holderPositiveTestNolistAction()
-		)
-	}
-
-	private func emptyDccState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderCheckdccExpiredTitle(),
-			subTitle: L.holderCheckdccExpiredMessage(),
-			primaryActionTitle: L.holderCheckdccExpiredActionTitle()
-		)
-	}
-
-	private func emptyRecoveryState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderRecoveryNolistTitle(),
-			subTitle: L.holderRecoveryNolistMessage(),
-			primaryActionTitle: L.holderRecoveryNolistAction()
-		)
-	}
-
-	private func recoveryEventsTooOld(_ days: String) -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderRecoveryTooOldTitle(),
-			subTitle: L.holderRecoveryTooOldMessage(days),
-			primaryActionTitle: L.holderTestNolistAction()
-		)
-	}
-
-	internal func cannotCreateEventsState() -> ListEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderEventOriginmismatchTitle(),
-			subTitle: eventMode.originsMismatchBody,
-			primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction()
-		)
 	}
 
 	internal func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListEventsViewController.State {
@@ -157,18 +95,6 @@ extension ListEventsViewModel {
 	private func listEventsState(
 		_ dataSource: [EventDataTuple],
 		remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
-
-		var dataSource = dataSource
-		if eventMode == .recovery {
-
-			let recoveryEventValidityDays = remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
-			let result = filterTooOldRecoveryEvents(dataSource, recoveryEventValidityDays: recoveryEventValidityDays)
-			if result.hasTooOldEvents && result.filteredDataSource.isEmpty {
-				return recoveryEventsTooOld("\(recoveryEventValidityDays)")
-			} else {
-				dataSource = result.filteredDataSource
-			}
-		}
 
 		let rows = getSortedRowsFromEvents(dataSource)
 		guard !rows.isEmpty else {
@@ -201,29 +127,6 @@ extension ListEventsViewModel {
 			),
 			rows: rows
 		)
-	}
-
-	/// Filter out all recovery / positive tests that are older than 180 days (config recoveryEventValidity)
-	/// - Parameter dataSource: the complete data source
-	/// - Returns: the filtered data source
-	private func filterTooOldRecoveryEvents(
-		_ dataSource: [EventDataTuple],
-		recoveryEventValidityDays: Int) -> (filteredDataSource: [EventDataTuple], hasTooOldEvents: Bool) {
-
-		let now = Date()
-
-		let filteredSource = dataSource.filter { dataRow in
-			if let sampleDate = dataRow.event.positiveTest?.getDate(with: dateFormatter),
-			   let validUntil = Calendar.current.date(byAdding: .day, value: recoveryEventValidityDays, to: sampleDate) {
-				return validUntil > now
-
-			} else if let validUntilString = dataRow.event.recovery?.validUntil,
-					  let validUntilDate = dateFormatter.date(from: validUntilString) {
-				return validUntilDate > now
-			}
-			return false
-		}
-		return (filteredDataSource: filteredSource, hasTooOldEvents: filteredSource.count != dataSource.count)
 	}
 
 	/// Filter all duplicate vaccination events (same provider, same hpkCode, same manufacturer, same date)
@@ -262,8 +165,8 @@ extension ListEventsViewModel {
 	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListEventsViewController.Row] {
 
 		var sortedDataSource = dataSource.sorted { lhs, rhs in
-			if let lhsDate = lhs.event.getSortDate(with: dateFormatter),
-			   let rhsDate = rhs.event.getSortDate(with: dateFormatter) {
+			if let lhsDate = lhs.event.getSortDate(with: ListEventsViewModel.iso8601DateFormatter),
+			   let rhsDate = rhs.event.getSortDate(with: ListEventsViewModel.iso8601DateFormatter) {
 
 				if lhsDate == rhsDate {
 					return lhs.providerIdentifier < rhs.providerIdentifier
@@ -330,13 +233,13 @@ extension ListEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
+			.map(ListEventsViewModel.printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 		let formattedTestLongDate: String = dataRow.event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
+			.map(ListEventsViewModel.printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 
 		let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(
 			dataRow.event.negativeTest?.type) ?? (dataRow.event.negativeTest?.type ?? "")
@@ -379,10 +282,10 @@ extension ListEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedShotMonth: String = dataRow.event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printMonthFormatter.string) ?? ""
+			.map(ListEventsViewModel.printMonthFormatter.string) ?? ""
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
 		var details = getEventDetail(dataRow: dataRow)
@@ -417,10 +320,10 @@ extension ListEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedShotDate: String = dataRow.event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
 		var vaccinName: String?
@@ -477,19 +380,19 @@ extension ListEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.recovery?.sampleDate
 			.flatMap(Formatter.getDateFrom)
-			.map(printTestDateFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
+			.map(ListEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
 		let formattedShortTestDate: String = dataRow.event.recovery?.sampleDate
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
 		let formattedShortValidFromDate: String = dataRow.event.recovery?.validFrom
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.event.recovery?.validFrom ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.event.recovery?.validFrom ?? "")
 		let formattedShortValidUntilDate: String = dataRow.event.recovery?.validUntil
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.event.recovery?.validUntil ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.event.recovery?.validUntil ?? "")
 		
 		let details: [EventDetails] = [
 			EventDetails(field: EventDetailsRecovery.subtitle, value: nil),
@@ -524,13 +427,13 @@ extension ListEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printTestDateFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
+			.map(ListEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
 		let formattedTestLongDate: String = dataRow.event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printTestDateFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
+			.map(ListEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
 
 		let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(
 			dataRow.event.positiveTest?.type) ?? (dataRow.event.positiveTest?.type ?? "")
@@ -575,7 +478,7 @@ extension ListEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		var dosage: String?
 		var title: String = L.generalVaccinationcertificate().capitalizingFirstLetter()
@@ -591,7 +494,7 @@ extension ListEventsViewModel {
 		let vaccineManufacturer = remoteConfigManager.storedConfiguration.getVaccinationManufacturerMapping(
 			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(printDateFormatter.string) ?? vaccination.dateOfVaccination
+				.map(ListEventsViewModel.printDateFormatter.string) ?? vaccination.dateOfVaccination
 		
 		let issuer = getDisplayIssuer(vaccination.issuer)
 		let country = getDisplayCountry(vaccination.country)
@@ -632,14 +535,14 @@ extension ListEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-			.map(printDateFormatter.string) ?? recovery.firstPositiveTestDate
+				.map(ListEventsViewModel.printDateFormatter.string) ?? recovery.firstPositiveTestDate
 		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
-			.map(printDateFormatter.string) ?? recovery.validFrom
+				.map(ListEventsViewModel.printDateFormatter.string) ?? recovery.validFrom
 		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
-			.map(printDateFormatter.string) ?? recovery.expiresAt
+				.map(ListEventsViewModel.printDateFormatter.string) ?? recovery.expiresAt
 		
 		let issuer = getDisplayIssuer(recovery.issuer)
 		let country = getDisplayCountry(recovery.country)
@@ -677,9 +580,9 @@ extension ListEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(printTestDateFormatter.string) ?? test.sampleDate
+				.map(ListEventsViewModel.printTestDateFormatter.string) ?? test.sampleDate
 
 		let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(
 			test.typeOfTest) ?? test.typeOfTest
@@ -730,6 +633,61 @@ extension ListEventsViewModel {
 		)
 	}
 
+	// MARK: Empty States
+
+	internal func emptyEventsState() -> ListEventsViewController.State {
+
+		switch eventMode {
+			case .paperflow: return emptyDccState()
+			case .positiveTest: return emptyPositiveTestState()
+			case .recovery: return emptyRecoveryState()
+			case .test: return emptyTestState()
+			case .vaccination: return emptyVaccinationState()
+		}
+	}
+
+	internal func cannotCreateEventsState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderEventOriginmismatchTitle(),
+			subTitle: eventMode.originsMismatchBody,
+			primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction()
+		)
+	}
+
+	// MARK: Vaccination End State
+
+	internal func emptyVaccinationState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderVaccinationNolistTitle(),
+			subTitle: L.holderVaccinationNolistMessage(),
+			primaryActionTitle: L.holderVaccinationNolistAction()
+		)
+	}
+
+	// MARK: Negative Test End State
+
+	internal func emptyTestState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderTestNolistTitle(),
+			subTitle: L.holderTestNolistMessage(),
+			primaryActionTitle: L.holderTestNolistAction()
+		)
+	}
+
+	// MARK: Paper Flow End State
+
+	internal func emptyDccState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderCheckdccExpiredTitle(),
+			subTitle: L.holderCheckdccExpiredMessage(),
+			primaryActionTitle: L.holderCheckdccExpiredActionTitle()
+		)
+	}
+
 	// MARK: international QR Only
 
 	internal func internationalQROnly() -> ListEventsViewController.State {
@@ -748,6 +706,82 @@ extension ListEventsViewModel {
 					self.coordinator?.listEventsScreenDidFinish(.startWithPositiveTest)
 				}
 			)
+		)
+	}
+
+	// MARK: Positive test end states
+
+	internal func emptyPositiveTestState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderPositiveTestNolistTitle(),
+			subTitle: L.holderPositiveTestNolistMessage(),
+			primaryActionTitle: L.holderPositiveTestNolistAction()
+		)
+	}
+
+	internal func positiveTestFlowInapplicable() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderPositiveTestInapplicableTitle(),
+			subTitle: L.holderPositiveTestInapplicableMessage(),
+			primaryActionTitle: L.holderPositiveTestInapplicableAction()
+		)
+	}
+
+	internal func positiveTestFlowRecoveryAndVaccinationCreated(_ days: String) -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderPositiveTestRecoveryAndVaccinationTitle(),
+			subTitle: L.holderPositiveTestRecoveryAndVaccinationMessage(days),
+			primaryActionTitle: L.holderPositiveTestRecoveryAndVaccinationAction()
+		)
+	}
+
+	internal func positiveTestFlowRecoveryOnlyCreated() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderPositiveTestRecoveryOnlyTitle(),
+			subTitle: L.holderPositiveTestRecoveryOnlyMessage(),
+			primaryActionTitle: L.holderPositiveTestRecoveryOnlyAction()
+		)
+	}
+
+	// MARK: Recovery end states
+
+	internal func emptyRecoveryState() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryNolistTitle(),
+			subTitle: L.holderRecoveryNolistMessage(),
+			primaryActionTitle: L.holderRecoveryNolistAction()
+		)
+	}
+
+	internal func recoveryFlowRecoveryAndVaccinationCreated() -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryRecoveryAndVaccinationTitle(),
+			subTitle: L.holderRecoveryRecoveryAndVaccinationMessage(),
+			primaryActionTitle: L.holderRecoveryRecoveryAndVaccinationAction()
+		)
+	}
+
+	internal func recoveryFlowVaccinationOnly(_ days: String) -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryVaccinationOnlyTitle(),
+			subTitle: L.holderRecoveryVaccinationOnlyMessage(days),
+			primaryActionTitle: L.holderRecoveryVaccinationOnlyAction()
+		)
+	}
+
+	internal func recoveryEventsTooOld(_ days: String) -> ListEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderRecoveryTooOldTitle(),
+			subTitle: L.holderRecoveryTooOldMessage(days),
+			primaryActionTitle: L.holderRecoveryNolistAction()
 		)
 	}
 }
@@ -806,8 +840,8 @@ private extension ListEventsViewModel {
 			return nil
 		}
 
-		let printSampleDate: String = printTestDateFormatter.string(from: sampleDate)
-		let printSampleLongDate: String = printTestDateFormatter.string(from: sampleDate)
+		let printSampleDate: String = ListEventsViewModel.printTestDateFormatter.string(from: sampleDate)
+		let printSampleLongDate: String = ListEventsViewModel.printTestDateFormatter.string(from: sampleDate)
 		let holderID = getDisplayIdentity(result.holder)
 		
 		return ListEventsViewController.Row(

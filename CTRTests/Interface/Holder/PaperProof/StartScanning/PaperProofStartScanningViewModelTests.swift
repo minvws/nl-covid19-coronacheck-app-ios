@@ -13,12 +13,12 @@ import SnapshotTesting
 final class PaperProofStartScanningViewModelTests: XCTestCase {
 	
 	var sut: PaperProofStartScanningViewModel!
-	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
+	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
 	
 	override func setUp() {
 		super.setUp()
 		
-		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
+		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
 		sut = PaperProofStartScanningViewModel(coordinator: coordinatorDelegateSpy)
 	}
 

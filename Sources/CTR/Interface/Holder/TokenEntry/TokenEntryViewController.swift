@@ -100,8 +100,8 @@ class TokenEntryViewController: BaseViewController {
 		}
 		
 		viewModel.$fieldErrorMessage.binding = { [weak self] message in
-			if let message = message {
-				UIAccessibility.post(notification: .announcement, argument: message)
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				UIAccessibility.post(notification: .layoutChanged, argument: self?.sceneView.errorView)
 			}
 			self?.sceneView.fieldErrorMessage = message
 		}
