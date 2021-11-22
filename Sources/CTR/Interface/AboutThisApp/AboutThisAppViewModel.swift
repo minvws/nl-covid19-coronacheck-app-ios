@@ -13,8 +13,6 @@ enum AboutThisAppMenuIdentifier: String {
 	case accessibility
 
 	case privacyStatement
-
-	case terms
 	
 	case colophon
 
@@ -109,7 +107,7 @@ class AboutThisAppViewModel: Logging {
 	private func setupMenuVerifier() {
 
 		menu = [
-			AboutThisAppMenuOption(identifier: .terms, name: L.verifierMenuPrivacy()) ,
+			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.verifierMenuPrivacy()) ,
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]
@@ -119,21 +117,35 @@ class AboutThisAppViewModel: Logging {
 
 		switch identifier {
 			case .privacyStatement:
-				openUrlString(L.holderUrlPrivacy())
-			case .terms:
-				openUrlString(L.verifierUrlPrivacy())
+				openPrivacyPage()
 			case .accessibility:
-				if flavor == .holder {
-					openUrlString(L.holderUrlAccessibility())
-				} else {
-					openUrlString(L.verifierUrlAccessibility())
-				}
+				openAccessibilityPage()
 			case .colophon:
 				openUrlString(L.holderUrlColophon())
 			case .reset:
 				showClearDataAlert()
 			case .deeplink:
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
+		}
+	}
+
+	private func openPrivacyPage() {
+
+		switch flavor {
+			case .holder:
+				openUrlString(L.holderUrlPrivacy())
+			case .verifier:
+				openUrlString(L.verifierUrlPrivacy())
+		}
+	}
+
+	private func openAccessibilityPage() {
+		
+		switch flavor {
+			case .holder:
+				openUrlString(L.holderUrlAccessibility())
+			case .verifier:
+				openUrlString(L.verifierUrlAccessibility())
 		}
 	}
 

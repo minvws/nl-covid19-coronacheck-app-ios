@@ -93,7 +93,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.verifierAboutText()
 		expect(self.sut.listHeader) == L.verifierAboutReadmore()
 		expect(self.sut.menu).to(haveCount(3))
-		expect(self.sut.menu.first?.identifier) == .terms
+		expect(self.sut.menu.first?.identifier) == .privacyStatement
 		expect(self.sut.menu[1].identifier) == AboutThisAppMenuIdentifier.accessibility
 		expect(self.sut.menu.last?.identifier) == .colophon
 		expect(self.sut.appVersion.contains("testInitVerifier")) == true
@@ -114,9 +114,15 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_menuOptionSelected_terms() {
 
 		// Given
+		sut = AboutThisAppViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
+		)
 
 		// When
-		sut.menuOptionSelected(.terms)
+		sut.menuOptionSelected(.privacyStatement)
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
