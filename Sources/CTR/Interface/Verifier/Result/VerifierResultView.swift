@@ -116,8 +116,6 @@ private extension VerifierResultView {
 		
 		UIView.animate(withDuration: VerifierResultViewTraits.Animation.verifiedDuration) {
 			self.verifiedView.alpha = 1
-		} completion: { [weak self] _ in
-			self?.verifiedView.focusAccessibility()
 		}
 	}
 	

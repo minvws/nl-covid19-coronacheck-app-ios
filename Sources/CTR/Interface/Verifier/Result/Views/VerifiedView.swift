@@ -102,8 +102,4 @@ final class VerifiedView: BaseView, AccessViewable {
 														 alignment: .center,
 														 kerning: ViewTraits.Title.kerning)
 	}
-	
-	func focusAccessibility() {
-		UIAccessibility.post(notification: .screenChanged, argument: self.titleLabel)
-	}
 }
