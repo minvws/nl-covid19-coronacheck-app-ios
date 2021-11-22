@@ -48,7 +48,7 @@ class NegativeTestDetailsGenerator {
 		// Test name
 		var testName: String? = event.negativeTest?.name
 		if mappingManager.isRatTest(event.negativeTest?.type) {
-			testName = mappingManager.getTestName(event.negativeTest?.name) ?? event.negativeTest?.name
+			testName = mappingManager.getTestName(event.negativeTest?.manufacturer) ?? event.negativeTest?.name
 		}
 
 		return [
@@ -129,7 +129,7 @@ class PositiveTestDetailsGenerator {
 		// Test name
 		var testName: String? = event.positiveTest?.name
 		if mappingManager.isRatTest(event.positiveTest?.type) {
-			testName = mappingManager.getTestName(event.negativeTest?.name) ?? event.positiveTest?.name
+			testName = mappingManager.getTestName(event.negativeTest?.manufacturer) ?? event.positiveTest?.name
 		}
 
 		return [

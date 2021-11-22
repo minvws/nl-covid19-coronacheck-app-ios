@@ -53,7 +53,7 @@ class NegativeTestQRDetailsGenerator {
 		// Test name
 		var testName: String? = test.name
 		if mappingManager.isRatTest(test.typeOfTest) {
-			testName = mappingManager.getTestName(test.name) ?? test.name
+			testName = mappingManager.getTestName(test.marketingAuthorizationHolder) ?? test.name
 		}
 
 		return [
