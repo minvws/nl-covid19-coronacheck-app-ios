@@ -252,7 +252,7 @@ final class OnboardingConsentView: BaseView {
 	var hasErrorState: Bool? {
 		didSet {
 			guard let hasError = hasErrorState else { return }
-			consentButton.backgroundColor = hasError ? C.consentButtonError() : C.consentButtonBackground()
+			consentButton.hasError = hasError
 			errorView.isHidden = !hasError
 			
 			let spacing = hasError ? ViewTraits.consentButtonToErrorSpacing : footerButtonView.buttonStackView.spacing
