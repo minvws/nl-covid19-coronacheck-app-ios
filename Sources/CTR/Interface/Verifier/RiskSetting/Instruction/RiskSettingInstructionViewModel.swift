@@ -23,9 +23,13 @@ final class RiskSettingInstructionViewModel: Logging {
 	
 	@Bindable private(set) var lowRiskSubtitle: String
 	
+	@Bindable private(set) var lowRiskAccessibilityLabel: String
+	
 	@Bindable private(set) var highRiskTitle: String
 	
 	@Bindable private(set) var highRiskSubtitle: String
+	
+	@Bindable private(set) var highRiskAccessibilityLabel: String
 	
 	@Bindable private(set) var moreButtonTitle: String
 	
@@ -50,8 +54,10 @@ final class RiskSettingInstructionViewModel: Logging {
 		header = L.verifierRisksettingHeaderInstruction()
 		lowRiskTitle = L.verifierRisksettingLowriskTitle()
 		lowRiskSubtitle = L.verifierRisksettingLowriskSubtitle()
+		lowRiskAccessibilityLabel = "\(L.verifierRisksettingLowriskTitle()), \(L.verifierRisksettingLowriskSubtitle())"
 		highRiskTitle = L.verifierRisksettingHighriskTitle()
 		highRiskSubtitle = L.verifierRisksettingHighriskSubtitle()
+		highRiskAccessibilityLabel = "\(L.verifierRisksettingHighriskTitle()), \(L.verifierRisksettingHighriskSubtitle())"
 		moreButtonTitle = L.verifierRisksettingReadmore()
 		primaryButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 		
