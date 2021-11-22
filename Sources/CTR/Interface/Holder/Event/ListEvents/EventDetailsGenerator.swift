@@ -129,7 +129,7 @@ class PositiveTestDetailsGenerator {
 		// Test name
 		var testName: String? = event.positiveTest?.name
 		if mappingManager.isRatTest(event.positiveTest?.type) {
-			testName = mappingManager.getTestName(event.negativeTest?.manufacturer) ?? event.positiveTest?.name
+			testName = mappingManager.getTestName(event.positiveTest?.manufacturer) ?? event.positiveTest?.name
 		}
 
 		return [
