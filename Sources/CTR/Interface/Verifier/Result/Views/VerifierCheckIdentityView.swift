@@ -294,4 +294,11 @@ class VerifierCheckIdentityView: BaseView {
 																	   textColor: Theme.colors.secondaryText)
 		}
 	}
+	
+	/// Confirm that a valid QR code is scanned on this view. The verified view is shown for a limited duration
+	var verifiedAccessibility: String? {
+		didSet {
+			headerLabel.accessibilityLabel = verifiedAccessibility
+		}
+	}
 }

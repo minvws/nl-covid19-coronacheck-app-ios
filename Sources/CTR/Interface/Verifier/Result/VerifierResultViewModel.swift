@@ -63,6 +63,8 @@ class VerifierResultViewModel: Logging {
 	@Bindable private(set) var checkIdentity: String = ""
 	
 	@Bindable private(set) var primaryButtonIcon: UIImage?
+	
+	@Bindable private(set) var verifiedAccessibility: String?
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -198,6 +200,7 @@ class VerifierResultViewModel: Logging {
 		checkIdentity = L.verifierResultAccessCheckidentity()
 		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
+		verifiedAccessibility = "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
 	}
 
 	private func showAccessDeniedInvalidQR() {
@@ -215,6 +218,7 @@ class VerifierResultViewModel: Logging {
 		checkIdentity = L.verifierResultAccessCheckidentity()
 		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
+		verifiedAccessibility = "\(L.verifierResultAccessAccessibilityDemo()), \(L.verifierResultIdentityTitle())"
 	}
 
 	func dismiss() {
