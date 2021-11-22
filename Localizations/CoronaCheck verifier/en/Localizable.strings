@@ -105,6 +105,8 @@
 "verifier.result.next" = "Scan next";
 "verifier.result.access.checkidentity" = "Please note: ID check is mandatory";
 "verifier.result.access.identityverified" = "Details are correct";
+"verifier.result.access.accessibility.verified" = "Valid QR code scanned";
+"verifier.result.access.accessibility.demo" = "Demo QR code scanned";
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "This QR code does not contain a coronavirus pass";
 "verifier.result.alert.unknown.message" = "Ask the visitor to show a QR code of a coronavirus pass.";

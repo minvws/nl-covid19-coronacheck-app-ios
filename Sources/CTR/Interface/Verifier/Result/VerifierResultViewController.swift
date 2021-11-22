@@ -90,6 +90,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.monthOfBirth = $0 }
 		viewModel.$dccFlag.binding = { [weak self] in self?.sceneView.checkIdentityView.dccFlag = $0 }
 		viewModel.$dccScanned.binding = { [weak self] in self?.sceneView.checkIdentityView.dccScanned = $0 }
+		viewModel.$verifiedAccessibility.binding = { [weak self] in self?.sceneView.checkIdentityView.verifiedAccessibility = $0 }
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {

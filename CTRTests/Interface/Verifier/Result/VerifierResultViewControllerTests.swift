@@ -66,6 +66,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.checkIdentityView.checkIdentity) == L.verifierResultAccessCheckidentity()
 		expect(self.sut.sceneView.checkIdentityView.dccScanned).to(beNil())
 		expect(self.sut.sceneView.checkIdentityView.dccFlag).to(beNil())
+		expect(self.sut.sceneView.checkIdentityView.verifiedAccessibility) == "\(L.verifierResultAccessAccessibilityDemo()), \(L.verifierResultIdentityTitle())"
 
 		// Snapshot
 		sut.assertImage()
@@ -86,6 +87,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.title) == L.verifierResultDeniedTitle()
 		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultDeniedReadmore()
+		expect(self.sut.sceneView.checkIdentityView.verifiedAccessibility).to(beNil())
 
 		// Snapshot
 		sut.assertImage()
@@ -112,6 +114,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.checkIdentityView.checkIdentity) == L.verifierResultAccessCheckidentity()
 		expect(self.sut.sceneView.checkIdentityView.dccScanned).to(beNil())
 		expect(self.sut.sceneView.checkIdentityView.dccFlag).to(beNil())
+		expect(self.sut.sceneView.checkIdentityView.verifiedAccessibility) == "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
 
 		// Snapshot
 		sut.assertImage()
@@ -138,6 +141,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.checkIdentityView.checkIdentity) == L.verifierResultAccessCheckidentity()
 		expect(self.sut.sceneView.checkIdentityView.dccScanned) == L.verifierResultAccessDcc()
 		expect(self.sut.sceneView.checkIdentityView.dccFlag) == "🇮🇹"
+		expect(self.sut.sceneView.checkIdentityView.verifiedAccessibility) == "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
 
 		// Snapshot
 		sut.assertImage()
@@ -164,6 +168,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.checkIdentityView.checkIdentity) == L.verifierResultAccessCheckidentity()
 		expect(self.sut.sceneView.checkIdentityView.dccScanned) == L.verifierResultAccessDcc()
 		expect(self.sut.sceneView.checkIdentityView.dccFlag).to(beNil())
+		expect(self.sut.sceneView.checkIdentityView.verifiedAccessibility) == "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
 
 		// Snapshot
 		sut.assertImage()
