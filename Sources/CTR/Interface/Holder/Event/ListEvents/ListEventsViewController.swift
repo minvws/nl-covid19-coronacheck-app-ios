@@ -136,6 +136,7 @@ class ListEventsViewController: BaseViewController {
 		sceneView.setEventStackVisibility(ishidden: true)
 		displayContent(content)
 		removeExistingRows()
+		navigationItem.leftBarButtonItem = nil
 	}
 
 	private func displayContent(_ content: Content) {
