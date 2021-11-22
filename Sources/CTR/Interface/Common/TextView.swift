@@ -212,6 +212,13 @@ extension NSAttributedString {
         }
     }
     
+    /// Determines whether the attributed string contains a link
+    var containsLink: Bool {
+        return attributes { key, value, range in
+			return key == NSAttributedString.Key.link
+        }
+    }
+    
     // swiftlint:disable empty_count
     /// Determines whether the attributed string is a list item
     var isListItem: Bool {
