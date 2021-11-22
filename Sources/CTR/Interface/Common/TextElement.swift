@@ -32,6 +32,12 @@ class TextElement: UITextView, UITextViewDelegate {
         if let mutableAttributedText = attributedText.mutableCopy() as? NSMutableAttributedString {
             accessibilityAttributedValue = mutableAttributedText.trim()
         }
+		
+		let containsLink = attributedText.containsLink
+		self.accessibilityLabel = containsLink ? L.generalUrlLink() : nil
+		self.accessibilityValue = containsLink ? attributedText.string : nil
+		self.accessibilityTraits = containsLink ? .link : .staticText
+		self.isAccessibilityElement = containsLink
     }
     
     ///  Initializes the TextView with the given string
@@ -83,11 +89,6 @@ class TextElement: UITextView, UITextViewDelegate {
 	func linkTouched(handler: @escaping (URL) -> Void) -> Self {
         isSelectable = true
         linkHandlers.append(handler)
-		
-		accessibilityLabel = L.generalUrlLink()
-		accessibilityValue = text
-		accessibilityTraits = .link
-		isAccessibilityElement = true
         return self
     }
     

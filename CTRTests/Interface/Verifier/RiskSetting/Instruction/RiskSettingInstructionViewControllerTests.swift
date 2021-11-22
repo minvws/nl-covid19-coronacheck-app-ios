@@ -55,8 +55,10 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 		expect(self.sut.sceneView.header) == L.verifierRisksettingHeaderInstruction()
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifierRisksettingLowriskTitle()
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskSubtitle) == L.verifierRisksettingLowriskSubtitle()
+		expect(self.sut.sceneView.riskSettingControlsView.lowRiskAccessibilityLabel) == "\(L.verifierRisksettingLowriskTitle()), \(L.verifierRisksettingLowriskSubtitle())"
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifierRisksettingHighriskTitle()
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifierRisksettingHighriskSubtitle()
+		expect(self.sut.sceneView.riskSettingControlsView.highRiskAccessibilityLabel) == "\(L.verifierRisksettingHighriskTitle()), \(L.verifierRisksettingHighriskSubtitle())"
 		expect(self.sut.sceneView.moreButtonTitle) == L.verifierRisksettingReadmore()
 		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
 		expect(self.sut.sceneView.footerButtonView.primaryTitle) == L.verifierScaninstructionsButtonStartscanning()
