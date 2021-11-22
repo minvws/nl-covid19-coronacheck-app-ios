@@ -8,7 +8,7 @@
 import Foundation
 
 /// the various about menu options
-enum AboutMenuIdentifier: String {
+enum AboutThisAppMenuIdentifier: String {
 
 	case accessibility
 
@@ -24,16 +24,16 @@ enum AboutMenuIdentifier: String {
 }
 
 ///// Struct for information to display the different test providers
-struct AboutMenuOption {
+struct AboutThisAppMenuOption {
 
 	/// The identifier
-	let identifier: AboutMenuIdentifier
+	let identifier: AboutThisAppMenuIdentifier
 
 	/// The name
 	let name: String
 }
 
-class AboutViewModel: Logging {
+class AboutThisAppViewModel: Logging {
 
 	/// Coordination Delegate
 	weak private var coordinator: (OpenUrlProtocol & Restartable)?
@@ -50,7 +50,7 @@ class AboutViewModel: Logging {
 	@Bindable private(set) var configVersion: String?
 	@Bindable private(set) var listHeader: String
 	@Bindable private(set) var alert: AlertContent?
-	@Bindable private(set) var menu: [AboutMenuOption] = []
+	@Bindable private(set) var menu: [AboutThisAppMenuOption] = []
 
 	// MARK: - Initializer
 
@@ -96,26 +96,26 @@ class AboutViewModel: Logging {
 	private func setupMenuHolder() {
 
 		menu = [
-			AboutMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
-			AboutMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
-			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
-			AboutMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle())
+			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
+			AboutThisAppMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
+			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
+			AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle())
 		]
 		if Configuration().getEnvironment() != "production" {
-			menu.append(AboutMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
+			menu.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
 	}
 
 	private func setupMenuVerifier() {
 
 		menu = [
-			AboutMenuOption(identifier: .terms, name: L.verifierMenuPrivacy()) ,
-			AboutMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
-			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon())
+			AboutThisAppMenuOption(identifier: .terms, name: L.verifierMenuPrivacy()) ,
+			AboutThisAppMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
+			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]
 	}
 
-	func menuOptionSelected(_ identifier: AboutMenuIdentifier) {
+	func menuOptionSelected(_ identifier: AboutThisAppMenuIdentifier) {
 
 		switch identifier {
 			case .privacyStatement:
