@@ -8,13 +8,11 @@
 import Foundation
 
 /// the various about menu options
-enum AboutMenuIdentifier: String {
+enum AboutThisAppMenuIdentifier: String {
 
 	case accessibility
 
 	case privacyStatement
-
-	case terms
 	
 	case colophon
 
@@ -24,16 +22,16 @@ enum AboutMenuIdentifier: String {
 }
 
 ///// Struct for information to display the different test providers
-struct AboutMenuOption {
+struct AboutThisAppMenuOption {
 
 	/// The identifier
-	let identifier: AboutMenuIdentifier
+	let identifier: AboutThisAppMenuIdentifier
 
 	/// The name
 	let name: String
 }
 
-class AboutViewModel: Logging {
+class AboutThisAppViewModel: Logging {
 
 	/// Coordination Delegate
 	weak private var coordinator: (OpenUrlProtocol & Restartable)?
@@ -50,7 +48,7 @@ class AboutViewModel: Logging {
 	@Bindable private(set) var configVersion: String?
 	@Bindable private(set) var listHeader: String
 	@Bindable private(set) var alert: AlertContent?
-	@Bindable private(set) var menu: [AboutMenuOption] = []
+	@Bindable private(set) var menu: [AboutThisAppMenuOption] = []
 
 	// MARK: - Initializer
 
@@ -96,44 +94,58 @@ class AboutViewModel: Logging {
 	private func setupMenuHolder() {
 
 		menu = [
-			AboutMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
-			AboutMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
-			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
-			AboutMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle())
+			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
+			AboutThisAppMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
+			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
+			AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle())
 		]
 		if Configuration().getEnvironment() != "production" {
-			menu.append(AboutMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
+			menu.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
 	}
 
 	private func setupMenuVerifier() {
 
 		menu = [
-			AboutMenuOption(identifier: .terms, name: L.verifierMenuPrivacy()) ,
-			AboutMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
-			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon())
+			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.verifierMenuPrivacy()) ,
+			AboutThisAppMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
+			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]
 	}
 
-	func menuOptionSelected(_ identifier: AboutMenuIdentifier) {
+	func menuOptionSelected(_ identifier: AboutThisAppMenuIdentifier) {
 
 		switch identifier {
 			case .privacyStatement:
-				openUrlString(L.holderUrlPrivacy())
-			case .terms:
-				openUrlString(L.verifierUrlPrivacy())
+				openPrivacyPage()
 			case .accessibility:
-				if flavor == .holder {
-					openUrlString(L.holderUrlAccessibility())
-				} else {
-					openUrlString(L.verifierUrlAccessibility())
-				}
+				openAccessibilityPage()
 			case .colophon:
 				openUrlString(L.holderUrlColophon())
 			case .reset:
 				showClearDataAlert()
 			case .deeplink:
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
+		}
+	}
+
+	private func openPrivacyPage() {
+
+		switch flavor {
+			case .holder:
+				openUrlString(L.holderUrlPrivacy())
+			case .verifier:
+				openUrlString(L.verifierUrlPrivacy())
+		}
+	}
+
+	private func openAccessibilityPage() {
+		
+		switch flavor {
+			case .holder:
+				openUrlString(L.holderUrlAccessibility())
+			case .verifier:
+				openUrlString(L.verifierUrlAccessibility())
 		}
 	}
 

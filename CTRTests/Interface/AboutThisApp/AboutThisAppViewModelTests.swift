@@ -9,10 +9,10 @@ import XCTest
 @testable import CTR
 import Nimble
 
-class AboutViewModelTests: XCTestCase {
+class AboutThisAppViewModelTests: XCTestCase {
 
-	private var sut: AboutViewModel!
-	private var coordinatorSpy: AboutViewModelCoordinatorSpy!
+	private var sut: AboutThisAppViewModel!
+	private var coordinatorSpy: AboutThisAppViewModelCoordinatorSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	private static var initialTimeZone: TimeZone?
 
@@ -33,9 +33,9 @@ class AboutViewModelTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 
-		coordinatorSpy = AboutViewModelCoordinatorSpy()
+		coordinatorSpy = AboutThisAppViewModelCoordinatorSpy()
 		userSettingsSpy = UserSettingsSpy()
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
 			flavor: AppFlavor.holder,
@@ -56,7 +56,7 @@ class AboutViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
 			flavor: AppFlavor.holder,
@@ -69,7 +69,7 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.listHeader) == L.holderAboutReadmore()
 		expect(self.sut.menu).to(haveCount(5))
 		expect(self.sut.menu[0].identifier) == .privacyStatement
-		expect(self.sut.menu[1].identifier) == AboutMenuIdentifier.accessibility
+		expect(self.sut.menu[1].identifier) == AboutThisAppMenuIdentifier.accessibility
 		expect(self.sut.menu[2].identifier) == .colophon
 		expect(self.sut.menu[3].identifier) == .reset
 		expect(self.sut.menu[4].identifier) == .deeplink
@@ -81,7 +81,7 @@ class AboutViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
 			flavor: AppFlavor.verifier,
@@ -93,8 +93,8 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.verifierAboutText()
 		expect(self.sut.listHeader) == L.verifierAboutReadmore()
 		expect(self.sut.menu).to(haveCount(3))
-		expect(self.sut.menu.first?.identifier) == .terms
-		expect(self.sut.menu[1].identifier) == AboutMenuIdentifier.accessibility
+		expect(self.sut.menu.first?.identifier) == .privacyStatement
+		expect(self.sut.menu[1].identifier) == AboutThisAppMenuIdentifier.accessibility
 		expect(self.sut.menu.last?.identifier) == .colophon
 		expect(self.sut.appVersion.contains("testInitVerifier")) == true
 	}
@@ -114,9 +114,15 @@ class AboutViewModelTests: XCTestCase {
 	func test_menuOptionSelected_terms() {
 
 		// Given
+		sut = AboutThisAppViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
+		)
 
 		// When
-		sut.menuOptionSelected(.terms)
+		sut.menuOptionSelected(.privacyStatement)
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
@@ -126,7 +132,7 @@ class AboutViewModelTests: XCTestCase {
 	func test_menuOptionSelected_accessibility_forHolder() {
 
 		// Given
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
 			flavor: AppFlavor.holder,
@@ -143,7 +149,7 @@ class AboutViewModelTests: XCTestCase {
 	func test_menuOptionSelected_colophon_forHolder() {
 
 		// Given
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
 			flavor: AppFlavor.holder,
@@ -160,7 +166,7 @@ class AboutViewModelTests: XCTestCase {
 	func test_menuOptionSelected_accessibility_forVerifier() {
 
 		// Given
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
 			flavor: AppFlavor.verifier,
@@ -178,7 +184,7 @@ class AboutViewModelTests: XCTestCase {
 	func test_menuOptionSelected_colophon_forVerifier() {
 
 		// Given
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
 			flavor: AppFlavor.verifier,
@@ -198,7 +204,7 @@ class AboutViewModelTests: XCTestCase {
 		userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
 
 		// Given
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "verifier"),
 			flavor: AppFlavor.verifier,
@@ -216,7 +222,7 @@ class AboutViewModelTests: XCTestCase {
 		userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
 
 		// Given
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "holder"),
 			flavor: AppFlavor.verifier,
@@ -231,7 +237,7 @@ class AboutViewModelTests: XCTestCase {
 	func test_menuOptionSelected_clearData_forHolder() {
 
 		// Given
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
 			flavor: AppFlavor.holder,
@@ -250,7 +256,7 @@ class AboutViewModelTests: XCTestCase {
 	func test_menuOptionSelected_deeplink_forHolder() {
 
 		// Given
-		sut = AboutViewModel(
+		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
 			flavor: AppFlavor.holder,
@@ -305,7 +311,7 @@ class AboutViewModelTests: XCTestCase {
 	}
 }
 
-class AboutViewModelCoordinatorSpy: OpenUrlProtocol, Restartable {
+class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable {
 
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0

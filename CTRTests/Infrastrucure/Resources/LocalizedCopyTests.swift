@@ -54,7 +54,7 @@ final class LocalizedCopyTests: XCTestCase {
 
 		// Should be "recovery certificate"
 		expect(self.copyValue(key: "holder.recovery.list.message", forLocaleIdentifier: .en))
-			== "You can create a recovery certificate from the retrieved details."
+			== "If the details about your test are correct, you can create a recovery certificate."
 	}
 }
 

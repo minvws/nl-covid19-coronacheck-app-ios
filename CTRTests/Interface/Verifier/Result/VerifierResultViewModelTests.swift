@@ -67,6 +67,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
 		expect(self.sut.dccFlag).to(beNil())
 		expect(self.sut.dccScanned).to(beNil())
+		expect(self.sut.verifiedAccessibility) == "\(L.verifierResultAccessAccessibilityDemo()), \(L.verifierResultIdentityTitle())"
+		expect(self.sut.checkIdentityTitle) == L.verifierResultIdentityTitle()
 	}
 	
 	func test_checkAttributes_whenNoAttributesAreSet_shouldDisplayDeniedInvalidQR() {
@@ -81,6 +83,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.allowAccess) == .denied
 		expect(self.sut.title) == L.verifierResultDeniedTitle()
 		expect(self.sut.secondaryTitle) == L.verifierResultDeniedReadmore()
+		expect(self.sut.verifiedAccessibility).to(beNil())
+		expect(self.sut.checkIdentityTitle).to(beNil())
 	}
 	
 	func test_checkAttributes_shouldDisplayVerified() {
@@ -104,6 +108,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
 		expect(self.sut.dccFlag).to(beNil())
 		expect(self.sut.dccScanned).to(beNil())
+		expect(self.sut.verifiedAccessibility) == "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
+		expect(self.sut.checkIdentityTitle) == L.verifierResultIdentityTitle()
 	}
 	
 	func test_checkAttributes_whenDCCIsScannedWithFlag_shouldDisplayVerified() {
@@ -127,6 +133,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
 		expect(self.sut.dccFlag) == "🇮🇹"
 		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
+		expect(self.sut.verifiedAccessibility) == "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
+		expect(self.sut.checkIdentityTitle) == L.verifierResultIdentityTitle()
 	}
 	
 	func test_checkAttributes_whenDCCIsScannedWithoutFlag_shouldDisplayVerified() {
@@ -150,6 +158,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
 		expect(self.sut.dccFlag).to(beNil())
 		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
+		expect(self.sut.verifiedAccessibility) == "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
+		expect(self.sut.checkIdentityTitle) == L.verifierResultIdentityTitle()
 	}
 	
 	func test_checkAttributes_whenDCCIsScannedWithGarbageValueCountry_shouldNotDisplayFlag() {

@@ -7,19 +7,19 @@
 
 import UIKit
 
-class AboutViewController: BaseViewController {
+class AboutThisAppViewController: BaseViewController {
 
 	/// The model
-	private let viewModel: AboutViewModel
+	private let viewModel: AboutThisAppViewModel
 
 	/// The view
-	let sceneView = AboutView()
+	let sceneView = AboutThisAppView()
 
 	// MARK: Initializers
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: AboutViewModel) {
+	init(viewModel: AboutThisAppViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
