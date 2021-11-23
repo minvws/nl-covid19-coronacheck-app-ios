@@ -194,10 +194,10 @@ targetTemplates:
           TEMP_DIR=`mktemp -d`
 
           #Compile script:
-          xcrun --sdk macosx swiftc Scripts/check_localization_html_tags.swift -o $TEMP_DIR/check_localization_html_tags
+          xcrun --sdk macosx swiftc Scripts/strings_checker.swift -o $TEMP_DIR/strings_checker
 
           #Run script:
-          $TEMP_DIR/check_localization_html_tags Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings && $TEMP_DIR/check_localization_html_tags Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
+          $TEMP_DIR/strings_checker Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings && $TEMP_DIR/strings_checker Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
       - name: Run R.Swift
         basedOnDependencyAnalysis: true
         script: |
