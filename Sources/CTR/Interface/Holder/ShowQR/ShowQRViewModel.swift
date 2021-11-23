@@ -204,121 +204,34 @@ class ShowQRViewModel: Logging {
 
 	private func showVaccinationDetails(euCredentialAttributes: EuCredentialAttributes, vaccination: EuCredentialAttributes.Vaccination) {
 
-		var dosage: String?
 		var title: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
-			dosage = "\(doseNumber) / \(totalDose)"
 			title = L.holderShowqrEuAboutVaccinationTitle("\(doseNumber)", "\(totalDose)")
 		}
-
-		let vaccineType = remoteConfigManager?.storedConfiguration.getTypeMapping(
-			vaccination.vaccineOrProphylaxis) ?? vaccination.vaccineOrProphylaxis
-		let vaccineBrand = remoteConfigManager?.storedConfiguration.getBrandMapping(
-			vaccination.medicalProduct) ?? vaccination.medicalProduct
-		let vaccineManufacturer = remoteConfigManager?.storedConfiguration.getVaccinationManufacturerMapping(
-			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
-
-		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
-
-		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(printDateFormatter.string) ?? vaccination.dateOfVaccination
-
-		let details: [DCCQRDetails] = [
-			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: name),
-			DCCQRDetails(field: DCCQRDetailsVaccination.dateOfBirth, value: formattedBirthDate),
-			DCCQRDetails(field: DCCQRDetailsVaccination.pathogen, value: L.holderShowqrEuAboutVaccinationPathogenvalue()),
-			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineBrand, value: vaccineBrand),
-			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineType, value: vaccineType),
-			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
-			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: dosage),
-			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: formattedVaccinationDate),
-			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: mappingManager?.getDisplayCountry(vaccination.country)),
-			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: mappingManager?.getDisplayIssuer(vaccination.issuer)),
-			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: vaccination.certificateIdentifier)
-		]
-
 		coordinator?.presentDCCQRDetails(
 			title: title ?? L.holderShowqrEuAboutTitle(),
 			description: L.holderShowqrEuAboutVaccinationDescription(),
-			details: details,
+			details: VaccinationQRDetailsGenerator.getDetails(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination),
 			dateInformation: L.holderShowqrEuAboutVaccinationDateinformation()
 		)
 	}
 
 	private func showTestDetails(euCredentialAttributes: EuCredentialAttributes, test: EuCredentialAttributes.TestEntry) {
 
-		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
-
-		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(printDateTimeFormatter.string) ?? test.sampleDate
-
-		let testType = remoteConfigManager?.storedConfiguration.getTestTypeMapping(
-			test.typeOfTest) ?? test.typeOfTest
-
-		let manufacturer = remoteConfigManager?.storedConfiguration.getTestManufacturerMapping(
-			test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
-
-		var testResult = test.testResult
-		if test.testResult == "260415000" {
-			testResult = L.holderShowqrEuAboutTestNegative()
-		}
-		if test.testResult == "260373001" {
-			testResult = L.holderShowqrEuAboutTestPostive()
-		}
-
-		let details: [DCCQRDetails] = [
-			DCCQRDetails(field: DCCQRDetailsTest.name, value: name),
-			DCCQRDetails(field: DCCQRDetailsTest.dateOfBirth, value: formattedBirthDate),
-			DCCQRDetails(field: DCCQRDetailsTest.pathogen, value: L.holderShowqrEuAboutTestPathogenvalue()),
-			DCCQRDetails(field: DCCQRDetailsTest.testType, value: testType),
-			DCCQRDetails(field: DCCQRDetailsTest.testName, value: test.name),
-			DCCQRDetails(field: DCCQRDetailsTest.date, value: formattedTestDate),
-			DCCQRDetails(field: DCCQRDetailsTest.result, value: testResult),
-			DCCQRDetails(field: DCCQRDetailsTest.facility, value: mappingManager?.getDisplayFacility(test.testCenter)),
-			DCCQRDetails(field: DCCQRDetailsTest.manufacturer, value: manufacturer),
-			DCCQRDetails(field: DCCQRDetailsTest.country, value: mappingManager?.getDisplayCountry(test.country)),
-			DCCQRDetails(field: DCCQRDetailsTest.issuer, value: mappingManager?.getDisplayIssuer(test.issuer)),
-			DCCQRDetails(field: DCCQRDetailsTest.uniqueIdentifer, value: test.certificateIdentifier)
-		]
-
 		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
 			description: L.holderShowqrEuAboutTestDescription(),
-			details: details,
+			details: NegativeTestQRDetailsGenerator.getDetails(euCredentialAttributes: euCredentialAttributes, test: test),
 			dateInformation: L.holderShowqrEuAboutTestDateinformation()
 		)
 	}
 
 	private func showRecoveryDetails(euCredentialAttributes: EuCredentialAttributes, recovery: EuCredentialAttributes.RecoveryEntry) {
 
-		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
-
-		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-			.map(printDateFormatter.string) ?? recovery.firstPositiveTestDate
-		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
-			.map(printDateFormatter.string) ?? recovery.validFrom
-		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
-			.map(printDateFormatter.string) ?? recovery.expiresAt
-
-		let details: [DCCQRDetails] = [
-			DCCQRDetails(field: DCCQRDetailsRecovery.name, value: name),
-			DCCQRDetails(field: DCCQRDetailsRecovery.dateOfBirth, value: formattedBirthDate),
-			DCCQRDetails(field: DCCQRDetailsRecovery.pathogen, value: L.holderShowqrEuAboutRecoveryPathogenvalue()),
-			DCCQRDetails(field: DCCQRDetailsRecovery.date, value: formattedFirstPostiveDate),
-			DCCQRDetails(field: DCCQRDetailsRecovery.country, value: mappingManager?.getDisplayCountry(recovery.country)),
-			DCCQRDetails(field: DCCQRDetailsRecovery.issuer, value: mappingManager?.getDisplayIssuer(recovery.issuer)),
-			DCCQRDetails(field: DCCQRDetailsRecovery.validFrom, value: formattedValidFromDate),
-			DCCQRDetails(field: DCCQRDetailsRecovery.validUntil, value: formattedValidUntilDate),
-			DCCQRDetails(field: DCCQRDetailsRecovery.uniqueIdentifer, value: recovery.certificateIdentifier)
-		]
-
 		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
 			description: L.holderShowqrEuAboutRecoveryDescription(),
-			details: details,
+			details: RecoveryQRDetailsGenerator.getDetails(euCredentialAttributes: euCredentialAttributes, recovery: recovery),
 			dateInformation: L.holderShowqrEuAboutRecoveryDateinformation()
 		)
 	}
@@ -335,29 +248,6 @@ class ShowQRViewModel: Logging {
 		viewController.isAccessibilityElement = true
 		return viewController
 	}
-
-	private lazy var dateFormatter: ISO8601DateFormatter = {
-		let dateFormatter = ISO8601DateFormatter()
-		dateFormatter.formatOptions = [.withFullDate]
-		return dateFormatter
-	}()
-
-	/// Formatter to print
-	private lazy var printDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "dd-MM-yyyy"
-		return dateFormatter
-	}()
-
-	private lazy var printDateTimeFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
-		return dateFormatter
-	}()
 }
 
 // MARK: - ShowQRItemViewModelDelegate
@@ -366,16 +256,6 @@ extension ShowQRViewModel: ShowQRItemViewModelDelegate {
 
 	func itemIsNotValid() {
 		coordinator?.navigateBackToStart()
-	}
-}
-
-private extension EuCredentialAttributes {
-
-	func dateOfBirth(_ dateFormatter: DateFormatter) -> String {
-		return Formatter
-			.getDateFrom(dateString8601: digitalCovidCertificate.dateOfBirth)
-			.map(dateFormatter.string)
-		?? digitalCovidCertificate.dateOfBirth
 	}
 }
 
