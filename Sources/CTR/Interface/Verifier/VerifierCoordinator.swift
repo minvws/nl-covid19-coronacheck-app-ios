@@ -263,8 +263,8 @@ extension VerifierCoordinator: MenuDelegate {
 				openUrl(faqUrl, inApp: true)
 				
 			case .about :
-				let destination = AboutViewController(
-					viewModel: AboutViewModel(
+				let destination = AboutThisAppViewController(
+					viewModel: AboutThisAppViewModel(
 						coordinator: self,
 						versionSupplier: versionSupplier,
 						flavor: AppFlavor.flavor,
