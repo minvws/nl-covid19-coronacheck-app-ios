@@ -65,6 +65,13 @@ class VerifierResultViewController: BaseViewController, Logging {
 		sceneView.verifiedInfoTappedCommand = { [weak self] in
 			
 			self?.viewModel.showVerified()
+			
+			// Fade out navigation title for verfied view
+			let fadeAnimation = CATransition()
+			fadeAnimation.duration = VerifierResultViewTraits.Animation.verifiedDuration
+			fadeAnimation.type = .fade
+			self?.navigationController?.navigationBar.layer.add(fadeAnimation, forKey: "fadeTitle")
+			self?.navigationItem.title = ""
 		}
 
 		viewModel.$hideForCapture.binding = { [weak self] in
@@ -84,13 +91,15 @@ class VerifierResultViewController: BaseViewController, Logging {
 		
 		// Identity
 		setupIdentityView()
+		viewModel.$checkIdentityTitle.binding = { [weak self] in self?.title = $0 }
 		viewModel.$lastName.binding = { [weak self] in self?.sceneView.checkIdentityView.lastName = $0 }
 		viewModel.$firstName.binding = { [weak self] in self?.sceneView.checkIdentityView.firstName = $0 }
 		viewModel.$dayOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.dayOfBirth = $0 }
 		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.monthOfBirth = $0 }
 		viewModel.$dccFlag.binding = { [weak self] in self?.sceneView.checkIdentityView.dccFlag = $0 }
 		viewModel.$dccScanned.binding = { [weak self] in self?.sceneView.checkIdentityView.dccScanned = $0 }
-		viewModel.$verifiedAccessibility.binding = { [weak self] in self?.sceneView.checkIdentityView.verifiedAccessibility = $0 }
+		/// Confirm that a valid QR code is scanned on this view. The verified view is shown for a limited duration
+		viewModel.$verifiedAccessibility.binding = { [weak self] in self?.navigationItem.accessibilityLabel = $0 }
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -110,7 +119,6 @@ class VerifierResultViewController: BaseViewController, Logging {
 
 	private func setupIdentityView() {
 
-		sceneView.checkIdentityView.header = L.verifierResultIdentityTitle()
 		sceneView.checkIdentityView.firstNameHeader = L.verifierResultIdentityFirstname()
 		sceneView.checkIdentityView.lastNameHeader = L.verifierResultIdentityLastname()
 		sceneView.checkIdentityView.dayOfBirthHeader = L.verifierResultIdentityDayofbirth()
