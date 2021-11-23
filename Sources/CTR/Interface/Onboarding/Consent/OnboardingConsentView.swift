@@ -196,7 +196,7 @@ final class OnboardingConsentView: BaseView {
 
 	var consent: String? {
 		didSet {
-			consentButton.setTitle(consent, for: .normal)
+			consentButton.title = consent
 		}
 	}
 	
