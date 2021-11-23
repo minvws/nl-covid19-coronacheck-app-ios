@@ -303,14 +303,21 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	func eventStartScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
-			case .back, .stop:
-				delegate?.eventFlowDidCancel()
-			case .backSwipe:
-				delegate?.eventFlowDidCancelFromBackSwipe()
-			case let .continue(eventMode):
-				navigateToLogin(eventMode: eventMode)
-			default:
-				break
+			case let .back(eventMode): handleBackAction(eventMode: eventMode)
+			case .stop: delegate?.eventFlowDidCancel()
+			case .backSwipe: delegate?.eventFlowDidCancelFromBackSwipe()
+			case let .continue(eventMode): navigateToLogin(eventMode: eventMode)
+			default: break
+		}
+	}
+
+	private func handleBackAction(eventMode: EventMode) {
+
+		if eventMode == .positiveTest, navigationController.viewControllers.filter({ $0 is EventStartViewController }).count > 1 {
+			// Positive Test flow after vaccination flow with only an international QR
+			navigationController.popViewController(animated: true)
+		} else {
+			delegate?.eventFlowDidCancel()
 		}
 	}
 
