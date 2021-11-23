@@ -16,9 +16,7 @@ class VerifierCheckIdentityView: BaseView {
 			static let edge: CGFloat = 20.0
 			static let identityTop: CGFloat = UIDevice.current.isSmallScreen ? 16.0 : 48.0
 			static let identitySide: CGFloat = UIDevice.current.isSmallScreen ? 20.0 : 48.0
-			static let headerTop: CGFloat = 32.0
-			static let headerBottom: CGFloat = 24.0
-			static let headerSide: CGFloat = 48.0
+			static let scrollViewTop: CGFloat = 12
 		}
 		enum Spacing {
 			static let identityToCheckIdentityLabel: CGFloat = 24
@@ -40,14 +38,6 @@ class VerifierCheckIdentityView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = Theme.colors.viewControllerBackground
 		return view
-	}()
-
-	/// The title label
-	private let headerLabel: Label = {
-
-		let label = Label(bodySemiBold: nil).multiline()
-		label.textColor = Theme.colors.dark
-		return label
 	}()
 
 	private let identityView: VerifierIdentityView = {
@@ -115,7 +105,6 @@ class VerifierCheckIdentityView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
-		addSubview(headerLabel)
 		addSubview(scrollView)
 		addSubview(footerButtonView)
 		scrollView.addSubview(identityView)
@@ -133,24 +122,10 @@ class VerifierCheckIdentityView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			
-			// Title
-			headerLabel.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: -ViewTraits.Margin.headerTop
-			),
-			headerLabel.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.Margin.headerSide
-			),
-			headerLabel.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.Margin.headerSide
-			),
-			
 			// Scroll view
 			scrollView.topAnchor.constraint(
-				equalTo: headerLabel.bottomAnchor,
-				constant: ViewTraits.Margin.headerBottom
+				equalTo: safeAreaLayoutGuide.topAnchor,
+				constant: ViewTraits.Margin.scrollViewTop
 			),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
@@ -204,12 +179,6 @@ class VerifierCheckIdentityView: BaseView {
 	}
 
 	// MARK: - Public Access
-
-	var header: String? {
-		didSet {
-			headerLabel.attributedText = header?.setLineHeight(alignment: .center)
-		}
-	}
 
 	var firstNameHeader: String? {
 		didSet {
@@ -292,13 +261,6 @@ class VerifierCheckIdentityView: BaseView {
 																	   alignment: .center,
 																	   kerning: ViewTraits.Label.kerning,
 																	   textColor: Theme.colors.secondaryText)
-		}
-	}
-	
-	/// Confirm that a valid QR code is scanned on this view. The verified view is shown for a limited duration
-	var verifiedAccessibility: String? {
-		didSet {
-			headerLabel.accessibilityLabel = verifiedAccessibility
 		}
 	}
 }
