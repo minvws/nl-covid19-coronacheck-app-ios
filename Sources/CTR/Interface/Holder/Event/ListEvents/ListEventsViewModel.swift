@@ -275,7 +275,6 @@ class ListEventsViewModel: Logging {
 
 		guard eventModeForStorage == .recovery else { return }
 
-		let recoveryEventValidityDays = remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
 		shouldPrimaryButtonBeEnabled = true
 		inspectGreencardResponseForPositiveTestAndRecovery(
 			greencardResponse,
@@ -288,8 +287,9 @@ class ListEventsViewModel: Logging {
 			},
 			onVaccinationOnly: {
 				if self.hasExistingDomesticVaccination {
-					self.viewState = self.recoveryEventsTooOld("\(recoveryEventValidityDays)")
+					self.viewState = self.recoveryEventsTooOld()
 				} else {
+					let recoveryEventValidityDays = self.remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
 					self.viewState = self.recoveryFlowVaccinationOnly("\(recoveryEventValidityDays)")
 				}
 			},
@@ -297,7 +297,7 @@ class ListEventsViewModel: Logging {
 				self.completeFlow()
 			},
 			onNothing: {
-				self.viewState = self.recoveryEventsTooOld("\(recoveryEventValidityDays)")
+				self.viewState = self.recoveryEventsTooOld()
 			}
 		)
 
