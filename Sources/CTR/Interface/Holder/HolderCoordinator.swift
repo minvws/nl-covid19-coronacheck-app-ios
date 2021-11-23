@@ -301,7 +301,7 @@ class HolderCoordinator: SharedCoordinator {
 				now: { Date() }
 			)
 		)
-		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
+		dashboardNavigationController = NavigationController(rootViewController: dashboardViewController)
 		sidePanel?.selectedViewController = dashboardNavigationController
 	}
 	
@@ -326,7 +326,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 		)
-		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
+		sidePanel = SidePanelController(sideController: NavigationController(rootViewController: menu))
 		navigateToDashboard()
 
 		// Replace the root with the side panel controller
@@ -615,7 +615,7 @@ extension HolderCoordinator: MenuDelegate {
 						userSettings: UserSettings()
 					)
 				)
-				aboutNavigationController = UINavigationController(rootViewController: destination)
+				aboutNavigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
 
 			case .addCertificate:
@@ -625,13 +625,13 @@ extension HolderCoordinator: MenuDelegate {
 					),
 					isRootViewController: true
 				)
-				navigationController = UINavigationController(rootViewController: destination)
+				navigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
 				
 			case .addPaperProof:
 				let coordinator = PaperProofCoordinator(delegate: self)
 				let destination = PaperProofStartViewController(viewModel: .init(coordinator: coordinator))
-				navigationController = UINavigationController(rootViewController: destination)
+				navigationController = NavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController
 				startChildCoordinator(coordinator)
 				sidePanel?.selectedViewController = navigationController
@@ -641,7 +641,7 @@ extension HolderCoordinator: MenuDelegate {
 
 				let destinationViewController = PlaceholderViewController()
 				destinationViewController.placeholder = "\(identifier)"
-				let navigationController = UINavigationController(rootViewController: destinationViewController)
+				let navigationController = NavigationController(rootViewController: destinationViewController)
 				sidePanel?.selectedViewController = navigationController
 		}
 		fixRotation()

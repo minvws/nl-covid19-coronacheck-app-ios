@@ -7,14 +7,15 @@
 
 import UIKit
 
-extension UINavigationController {
-	
-	override open var preferredStatusBarStyle: UIStatusBarStyle {
-		
+class NavigationController: UINavigationController {
+
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+
 		if #available(iOS 13.0, *) {
 			return topViewController?.preferredStatusBarStyle ?? .darkContent
 		} else {
 			return topViewController?.preferredStatusBarStyle ?? .default
 		}
 	}
+
 }
