@@ -84,6 +84,18 @@ class VerifierScanViewController: ScanViewController {
 			tintColor: .white
 		)
 	}
+    
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+
+		overrideNavigationBarTitleColor(with: .white)
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+	 
+		restoreNavigationBarTitleColor()
+	}
 
 	override func found(code: String) {
 
