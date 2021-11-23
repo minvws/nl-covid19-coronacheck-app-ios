@@ -1,3 +1,5 @@
+"verifier.result.access.accessibility.verified" = "Geldige QR-code gescand";
+"verifier.result.access.accessibility.demo" = "Demo QR-code gescand";
 "verifier.result.access.dcc" = "Internationaal bewijs";
 "verifier.denied.message.one" = "<p>Een rood scherm betekent dat de QR-code niet aan Nederlandse eisen voldoet.</p>";
 "verifier.denied.message.two" = "<b>Dit kun je doen:</b>";
@@ -105,8 +107,6 @@
 "verifier.result.next" = "Scan volgende";
 "verifier.result.access.checkidentity" = "Let op: identiteitscontrole is verplicht";
 "verifier.result.access.identityverified" = "Gegevens kloppen";
-"verifier.result.access.accessibility.verified" = "Geldige QR-code gescand";
-"verifier.result.access.accessibility.demo" = "Demo QR-code gescand";
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "Deze QR-code bevat geen coronabewijs";
 "verifier.result.alert.unknown.message" = "Vraag de bezoeker een QR-code van een coronabewijs te laten zien.";
