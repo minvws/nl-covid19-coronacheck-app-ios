@@ -56,11 +56,17 @@ func checkLine(line: String) throws {
 	var iterator = line.enumerated().makeIterator()
 
 	var stack = [Tag]()
+	var hasProcessedAHyperlink = false
 
 	// Iterate over each character in the line:
 	while let (position, char) = iterator.next() {
-
-		if char == "<" {
+		if char == "\\" {
+			var findNewlineIterator = iterator
+			if let (_, newlineN) = findNewlineIterator.next(), newlineN == "n" {
+				// Newline detected, reset `hasProcessedAHyperlink`
+				hasProcessedAHyperlink = false
+			}
+		} else if char == "<" {
 
 			// Check if we're currently closing a tag by looking ahead by 1 for a "/":
 			var findSlashIterator = iterator
@@ -95,6 +101,14 @@ func checkLine(line: String) throws {
 					continue
 				}
 
+				if tagContents == "a" {
+					guard !hasProcessedAHyperlink else {
+						throw "Due to limitations in the accessibility implementation (see TextView.swift), there can only be one hyperlink <a> tag per line. Use \\n to start a newline."
+					}
+					// we found a hyperlink
+					hasProcessedAHyperlink = true
+				}
+
 				// Append this tag to the Stack
 				stack += [Tag(name: tagContents)]
 			}
@@ -123,10 +137,10 @@ paths.forEach { path in
 		do {
 			try checkLine(line: line)
 		} catch let error as String {
-			print("error: ", error)
+			print("error: StringsChecker: ", error)
 			didError = true
 		} catch let error as ParseError {
-			print("error: \(error.message) at position '\(error.position)' on line \(error.line)")
+			print("error: StringsChecker: \(error.message) at position '\(error.position)' on line \(error.line)")
 			didError = true
 		} catch {
 			fatalError("unhandled error")

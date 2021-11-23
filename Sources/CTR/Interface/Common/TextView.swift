@@ -219,6 +219,19 @@ extension NSAttributedString {
         }
     }
     
+	/// Determines whether the attributed string contains a link
+    var rangeOfFirstLink: NSRange? {
+		var foundRange: NSRange?
+		
+		_ = attributes { key, value, range in
+			guard key == NSAttributedString.Key.link else { return false }
+			foundRange = range
+			return true
+        }
+		
+		return foundRange
+    }
+    
     // swiftlint:disable empty_count
     /// Determines whether the attributed string is a list item
     var isListItem: Bool {
