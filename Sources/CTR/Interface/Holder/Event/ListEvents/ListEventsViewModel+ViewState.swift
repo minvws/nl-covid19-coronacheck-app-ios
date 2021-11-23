@@ -776,11 +776,11 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func recoveryEventsTooOld(_ days: String) -> ListEventsViewController.State {
+	internal func recoveryEventsTooOld() -> ListEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryTooOldTitle(),
-			subTitle: L.holderRecoveryTooOldMessage(days),
+			subTitle: L.holderRecoveryTooOldMessage(),
 			primaryActionTitle: L.holderRecoveryNolistAction()
 		)
 	}
