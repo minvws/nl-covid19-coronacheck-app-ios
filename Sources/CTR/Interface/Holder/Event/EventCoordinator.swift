@@ -41,7 +41,7 @@ enum EventScreenResult: Equatable {
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest):
+			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest), (.backSwipe, .backSwipe):
 				return true
 			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
@@ -69,9 +69,6 @@ enum EventScreenResult: Equatable {
 
 			case (let error(lhsContent, _), let error(rhsContent, _)):
 				return lhsContent == rhsContent
-
-			case (.backSwipe, .backSwipe):
-				return true
 
 			default:
 				return false
