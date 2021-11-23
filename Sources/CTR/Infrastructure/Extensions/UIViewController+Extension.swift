@@ -23,13 +23,16 @@ extension UIViewController {
 		}
 	}
 	
+	/// Set the navigation bar's title color. For use with iOS 15.
+	/// - Parameters:
+	///   - color: The color to apply
 	func overrideNavigationBarTitleColor(with color: UIColor) {
 		if #available(iOS 15.0, *) {
 			navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: color]
 			navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: color]
 		}
 	}
-	
+	/// Restores the navigation bar's title color to its default. For use with iOS 15.
 	func restoreNavigationBarTitleColor() {
 		if #available(iOS 15.0, *) {
 			navigationController?.navigationBar.standardAppearance.titleTextAttributes = [:]
