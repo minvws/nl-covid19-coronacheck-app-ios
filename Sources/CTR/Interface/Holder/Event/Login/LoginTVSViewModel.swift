@@ -133,23 +133,11 @@ extension LoginTVSViewModel {
 
 	func displayErrorCode(errorCode: ErrorCode) {
 
-		let content = Content(
+		displayError(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
-			primaryActionTitle: L.holderErrorstateOverviewAction(),
-			primaryAction: { [weak self] in
-				self?.coordinator?.loginTVSScreenDidFinish(.stop)
-			},
-			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-			secondaryAction: { [weak self] in
-				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-					return
-				}
-
-				self?.coordinator?.openUrl(url, inApp: true)
-			}
+			primaryActionTitle: L.holderErrorstateOverviewAction()
 		)
-		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
 	}
 
 	func displayServerBusy(errorCode: ErrorCode) {
@@ -169,10 +157,19 @@ extension LoginTVSViewModel {
 
 	func displayUnreachable(errorCode: ErrorCode) {
 
-		let content = Content(
+		displayError(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryActionTitle: L.generalNetworkwasbusyButton()
+		)
+	}
+
+	private func displayError(title: String, subTitle: String, primaryActionTitle: String) {
+
+		let content = Content(
+			title: title,
+			subTitle: subTitle,
+			primaryActionTitle: primaryActionTitle,
 			primaryAction: { [weak self] in
 				self?.coordinator?.loginTVSScreenDidFinish(.stop)
 			},
@@ -187,6 +184,11 @@ extension LoginTVSViewModel {
 		)
 		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
 	}
+}
+
+// MARK: Mapping Errors
+
+extension LoginTVSViewModel {
 
 	func mapError(_ error: Error?) -> ErrorCode.ClientCode? {
 
