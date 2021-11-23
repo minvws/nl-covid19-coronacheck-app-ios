@@ -62,12 +62,11 @@ func checkLine(line: String) throws {
 	while let (position, char) = iterator.next() {
 		if char == "\\" {
 			var findNewlineIterator = iterator
-			if let (_, n) = findNewlineIterator.next(), n == "n" {
+			if let (_, newlineN) = findNewlineIterator.next(), newlineN == "n" {
 				// Newline detected, reset `hasProcessedAHyperlink`
 				hasProcessedAHyperlink = false
 			}
-		}
-		else if char == "<" {
+		} else if char == "<" {
 
 			// Check if we're currently closing a tag by looking ahead by 1 for a "/":
 			var findSlashIterator = iterator
