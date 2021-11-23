@@ -45,7 +45,7 @@ final class PaperProofCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 	
-	var navigationController: UINavigationController = UINavigationController()
+	var navigationController: UINavigationController = NavigationController()
 
 	private weak var delegate: PaperProofFlowDelegate?
 

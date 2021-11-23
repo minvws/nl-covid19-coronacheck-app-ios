@@ -1,3 +1,5 @@
+"verifier.result.access.accessibility.verified" = "Geldige QR-code gescand";
+"verifier.result.access.accessibility.demo" = "Demo QR-code gescand";
 "verifier.result.access.dcc" = "Internationaal bewijs";
 "verifier.denied.message.one" = "<p>Een rood scherm betekent dat de QR-code niet aan Nederlandse eisen voldoet.</p>";
 "verifier.denied.message.two" = "<b>Dit kun je doen:</b>";
@@ -86,7 +88,7 @@
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-codes";
 "verifier.start.header" = "Scan de QR-codes van je bezoekers";
-"verifier.start.message" = "Scan de QR-codes van jouw bezoekers. Is de QR-code geldig en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan kun je de bezoeker toegang geven.";
+"verifier.start.message" = "Is de QR-code geldig en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
 "verifier.start.button.title" = "Start scannen";
 "verifier.start.ontimeinternet" = "De app heeft eenmalig internet nodig om de laatste gegevens op te halen.";
 

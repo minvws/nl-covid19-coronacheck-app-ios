@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AboutView: ScrolledStackView {
+class AboutThisAppView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {

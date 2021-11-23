@@ -11,11 +11,11 @@ import ViewControllerPresentationSpy
 import Nimble
 import SnapshotTesting
 
-class AboutViewControllerTests: XCTestCase {
+class AboutThisAppViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	private var sut: AboutViewController!
-	private var coordinatorSpy: AboutViewModelCoordinatorSpy!
+	private var sut: AboutThisAppViewController!
+	private var coordinatorSpy: AboutThisAppViewModelCoordinatorSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	
 	var window: UIWindow!
@@ -24,16 +24,16 @@ class AboutViewControllerTests: XCTestCase {
 	override func setUp() {
 
 		super.setUp()
-		coordinatorSpy = AboutViewModelCoordinatorSpy()
+		coordinatorSpy = AboutThisAppViewModelCoordinatorSpy()
 		userSettingsSpy = UserSettingsSpy()
-		let viewModel = AboutViewModel(
+		let viewModel = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
 			flavor: AppFlavor.holder,
 			userSettings: userSettingsSpy
 		)
 
-		sut = AboutViewController(viewModel: viewModel)
+		sut = AboutThisAppViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
 

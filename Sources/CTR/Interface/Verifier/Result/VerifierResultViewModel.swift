@@ -67,6 +67,10 @@ class VerifierResultViewModel: Logging {
 	@Bindable private(set) var primaryButtonIcon: UIImage?
 	
 	@Bindable private(set) var riskDescription: String?
+	
+	@Bindable private(set) var verifiedAccessibility: String?
+	
+	@Bindable private(set) var checkIdentityTitle: String?
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -206,6 +210,8 @@ class VerifierResultViewModel: Logging {
 		checkIdentity = L.verifierResultAccessCheckidentity()
 		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
+		verifiedAccessibility = "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
+		checkIdentityTitle = L.verifierResultIdentityTitle()
 		
 		if case .verified(let risk) = allowAccess, risk == .high {
 			riskDescription = L.verifierResultAccessHighrisk()
@@ -227,6 +233,8 @@ class VerifierResultViewModel: Logging {
 		checkIdentity = L.verifierResultAccessCheckidentity()
 		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
+		verifiedAccessibility = "\(L.verifierResultAccessAccessibilityDemo()), \(L.verifierResultIdentityTitle())"
+		checkIdentityTitle = L.verifierResultIdentityTitle()
 		
 		if case .demo(let risk) = allowAccess, risk == .high {
 			riskDescription = L.verifierResultAccessHighrisk()

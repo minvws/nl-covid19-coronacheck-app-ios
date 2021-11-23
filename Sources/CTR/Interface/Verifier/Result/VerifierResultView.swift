@@ -36,6 +36,7 @@ class VerifierResultView: BaseView {
 				view.footerButtonView.primaryButtonTappedCommand = { [weak self] in self?.scanNextTappedCommand?() }
 				view.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 				view.embed(in: self)
+				view.focusAccessibility()
 				accessView = view
 		}
 	}
