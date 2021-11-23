@@ -301,8 +301,8 @@
 "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton" = "Close";
 
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
-"holder.tokenentry.universallinkflow.confirmresendverificationalert.message" = "The test location sends you a verification code via text or e-mail. Didn't get one? Then you can request a new code.";
-"holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton" = "Send code";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.message" = "You receive the verification code via text or e-mail. Didn't get one? Click ‘send again’ below for a new code.";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton" = "Send again";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.cancelbutton" = "Close";
 
 
