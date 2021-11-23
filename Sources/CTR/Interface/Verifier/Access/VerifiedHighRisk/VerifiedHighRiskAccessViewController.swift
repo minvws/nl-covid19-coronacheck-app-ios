@@ -5,4 +5,35 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import UIKit
+
+final class VerifiedHighRiskAccessViewController: BaseViewController, Logging {
+	
+	private let viewModel: VerifiedHighRiskAccessViewModel
+
+	let sceneView = VerifiedHighRiskAccessView()
+
+	init(viewModel: VerifiedHighRiskAccessViewModel) {
+
+		self.viewModel = viewModel
+
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder: NSCoder) {
+
+		fatalError("init(coder:) has not been implemented")
+	}
+
+	// MARK: View lifecycle
+	
+	override func loadView() {
+
+		view = sceneView
+	}
+
+	override func viewDidLoad() {
+
+		super.viewDidLoad()
+	}
+}
