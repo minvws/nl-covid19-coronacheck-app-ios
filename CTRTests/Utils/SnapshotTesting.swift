@@ -22,7 +22,7 @@ internal extension UIViewController {
 		let subject: UIViewController
 
 		if containedInNavigationController {
-			subject = NavigationController(rootViewController: self)
+			subject = UINavigationController(rootViewController: self)
 		} else {
 			subject = self
 		}
