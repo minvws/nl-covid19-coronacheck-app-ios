@@ -59,6 +59,30 @@ enum NetworkError: String, Error, Equatable {
 				return nil
 		}
 	}
+
+	/// Checks for valid HTTPResponse and status codes
+	static func inspect(response: URLResponse) -> NetworkError? {
+		guard let response = response as? HTTPURLResponse else {
+			return .invalidResponse
+		}
+
+		switch response.statusCode {
+			case 200 ... 299:
+				return nil
+			case 304:
+				return .responseCached
+			case 300 ... 399:
+				return .redirection
+			case 429:
+				return .serverBusy
+			case 400 ... 499:
+				return .resourceNotFound
+			case 500 ... 599:
+				return .serverError
+			default:
+				return .invalidResponse
+		}
+	}
 }
 
 enum HTTPHeaderKey: String {
@@ -128,7 +152,7 @@ protocol NetworkManaging: AnyObject {
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void)
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse, URLResponse), ServerError>) -> Void)
 
 	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
