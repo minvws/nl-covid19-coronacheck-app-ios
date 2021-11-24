@@ -559,10 +559,11 @@ class TokenEntryViewModelTests: XCTestCase {
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_success_unknown_showsError() {
 
 		// Arrange
+		let urlResponse = HTTPURLResponse(url: URL(string: "https://coronacheck.nl")!, statusCode: 200, httpVersion: "1.1", headerFields: nil)!
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
 		networkManagerSpy.stubbedFetchTestResultCompletionResult =
-			(.success((.fakeUnknown, SignedResponse(payload: "test", signature: "test"), URLResponse())), ())
+			(.success((.fakeUnknown, SignedResponse(payload: "test", signature: "test"), urlResponse)), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -578,6 +579,29 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
+	}
+
+	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_success_403_showsError() {
+
+		// Arrange
+		let urlResponse = HTTPURLResponse(url: URL(string: "https://coronacheck.nl")!, statusCode: 403, httpVersion: "1.1", headerFields: nil)!
+		tokenValidatorSpy.stubbedValidateResult = true
+		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+		(.success((.fakeUnknown, SignedResponse(payload: "test", signature: "test"), urlResponse)), ())
+
+		// Act
+		sut = mockedViewModel(withRequestToken: .fake)
+
+		// Assert
+		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
+			expect(content.subTitle).toEventually(equal(L.holderErrorstateTestMessage("i 150 xxx 403")))
+			expect(content.primaryActionTitle).toEventually(equal(L.generalNetworkwasbusyButton()))
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_failure_withInvalidURL_showsCustomError() {
@@ -946,10 +970,11 @@ class TokenEntryViewModelTests: XCTestCase {
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_success_unknown_showsError() {
 
 		// Arrange
+		let urlResponse = HTTPURLResponse(url: URL(string: "https://coronacheck.nl")!, statusCode: 200, httpVersion: "1.1", headerFields: nil)!
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
 		networkManagerSpy.stubbedFetchTestResultCompletionResult =
-			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"), URLResponse())), ())
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"), urlResponse)), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -957,7 +982,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
 		networkManagerSpy.stubbedFetchTestResultCompletionResult =
-			(.success((.fakeUnknown, SignedResponse(payload: "test", signature: "test"), URLResponse())), ())
+			(.success((.fakeUnknown, SignedResponse(payload: "test", signature: "test"), urlResponse)), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
@@ -1363,10 +1388,12 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Arrange
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
+		let urlResponse = HTTPURLResponse(url: URL(string: "https://coronacheck.nl")!, statusCode: 200, httpVersion: "1.1", headerFields: nil)!
+
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
 		networkManagerSpy.stubbedFetchTestResultCompletionResult =
-			(.success((.fakeUnknown, SignedResponse(payload: "test", signature: "test"), URLResponse())), ())
+			(.success((.fakeUnknown, SignedResponse(payload: "test", signature: "test"), urlResponse)), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
