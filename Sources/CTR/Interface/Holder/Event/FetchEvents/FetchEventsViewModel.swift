@@ -558,7 +558,11 @@ private extension FetchEventsViewModel {
 		if hasNoBSN {
 			displayNoBSN()
 		} else if sessionExpired {
-			displaySessionExpired()
+			if eventMode == .positiveTest {
+				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)
+			} else {
+				displaySessionExpired()
+			}
 		} else if serverUnreachable {
 			displayServerUnreachable(errorCodes)
 		} else if serverBusy {
