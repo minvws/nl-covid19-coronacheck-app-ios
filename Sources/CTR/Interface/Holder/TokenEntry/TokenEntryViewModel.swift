@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length
+// swiftlint:disable type_body_length file_length
 
 import UIKit
 
@@ -402,11 +402,11 @@ class TokenEntryViewModel {
 			default:
 				if let networkError = NetworkError.inspect(response: remoteEvent.2) {
 					self.displayError(ServerError.provider(
-						provider: provider.identifier,
-						statusCode: remoteEvent.2.httpStatusCode,
-						response: nil,
-						error: networkError
-					))
+							provider: provider.identifier,
+							statusCode: remoteEvent.2.httpStatusCode,
+							response: nil,
+							error: networkError
+						))
 				} else {
 
 					self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
