@@ -139,20 +139,26 @@ final class DeniedAccessView: BaseView {
 		])
 	}
 	
-	// MARK: - AccessViewable
+	// MARK: - Public Access
 	
-	func title(_ title: String?) {
-		titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
-														 alignment: .center,
-														 kerning: ViewTraits.Title.kerning)
+	var title: String? {
+		didSet {
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 alignment: .center,
+															 kerning: ViewTraits.Title.kerning)
+		}
 	}
 	
-	func primaryTitle(_ title: String?) {
-		footerButtonView.primaryTitle = title
+	var primaryTitle: String? {
+		didSet {
+			footerButtonView.primaryTitle = title
+		}
 	}
 	
-	func secondaryTitle(_ title: String?) {
-		secondaryButton.title = title
+	var secondaryTitle: String? {
+		didSet {
+			secondaryButton.title = title
+		}
 	}
 	
 	func focusAccessibility() {

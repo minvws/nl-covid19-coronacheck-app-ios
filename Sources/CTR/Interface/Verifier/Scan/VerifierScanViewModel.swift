@@ -64,10 +64,15 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 				case MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX:
 
 					displayAlert(title: L.verifierResultAlertUnknownTitle(), message: L.verifierResultAlertUnknownMessage())
+					
+				case MobilecoreVERIFICATION_SUCCESS where verificationResult.details != nil:
+
+					theCoordinator?.navigateToCheckIdentity(verificationResult)
 
 				default:
 					
-					theCoordinator?.navigateToScanResult(verificationResult)
+					theCoordinator?.navigateToDeniedAccess()
+					
 			}
 		}
 	}

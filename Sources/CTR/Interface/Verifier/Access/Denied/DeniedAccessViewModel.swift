@@ -9,4 +9,27 @@ import Foundation
 
 final class DeniedAccessViewModel: Logging {
 	
+	/// Coordination Delegate
+	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
+	
+	/// The title of the scene
+	@Bindable private(set) var accessTitle: String
+	
+	@Bindable private(set) var primaryTitle: String
+	
+	@Bindable private(set) var secondaryTitle: String
+	
+	init(coordinator: (VerifierCoordinatorDelegate & Dismissable)) {
+		
+		self.coordinator = coordinator
+		
+		accessTitle = L.verifierResultDeniedTitle()
+		primaryTitle = L.verifierResultNext()
+		secondaryTitle = L.verifierResultDeniedReadmore()
+	}
+	
+	func dismiss() {
+
+		coordinator?.navigateToVerifierWelcome()
+	}
 }

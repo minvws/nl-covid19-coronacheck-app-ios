@@ -35,6 +35,10 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func navigateToVerifiedInfo()
 	
 	func userWishesToLaunchThirdPartyScannerApp()
+	
+	func navigateToCheckIdentity(_ verificationResult: MobilecoreVerificationResult)
+	
+	func navigateToDeniedAccess()
 }
 
 class VerifierCoordinator: SharedCoordinator {
