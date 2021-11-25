@@ -7,6 +7,13 @@
 
 import UIKit
 
+/// The access options
+enum VerifiedType: Equatable {
+
+	case verified(RiskLevel)
+	case demo(RiskLevel)
+}
+
 final class VerifiedAccessViewModel: Logging {
 	
 	/// Coordination Delegate
@@ -18,11 +25,21 @@ final class VerifiedAccessViewModel: Logging {
 	/// The title of the scene
 	@Bindable private(set) var accessTitle: String
 	
-	init(coordinator: (VerifierCoordinatorDelegate & Dismissable)) {
+	@Bindable private(set) var verifiedType: VerifiedType
+	
+	init(
+		coordinator: (VerifierCoordinatorDelegate & Dismissable),
+		verifiedType: VerifiedType
+	) {
 		
 		self.coordinator = coordinator
+		self.verifiedType = verifiedType
 		
-		accessTitle = L.verifierResultDeniedTitle()
+		if case .verified(let risk) = verifiedType, risk.isHigh {
+			accessTitle = L.verifierResultAccessTitleHighrisk()
+		} else {
+			accessTitle = L.verifierResultAccessTitle()
+		}
 		
 		addObservers()
 	}

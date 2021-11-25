@@ -23,6 +23,8 @@ final class CheckIdentityViewModel: Logging {
 	
 	private let screenCaptureDetector = ScreenCaptureDetector()
 	
+	private let userSettings: UserSettingsProtocol
+	
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
 	
@@ -59,12 +61,14 @@ final class CheckIdentityViewModel: Logging {
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
 		verificationDetails: MobilecoreVerificationDetails,
-		isDeepLinkEnabled: Bool
+		isDeepLinkEnabled: Bool,
+		userSettings: UserSettingsProtocol
 	) {
 		
 		self.coordinator = coordinator
 		self.verificationDetails = verificationDetails
 		self.isDeepLinkEnabled = isDeepLinkEnabled
+		self.userSettings = userSettings
 		
 		title = L.verifierResultIdentityTitle()
 		primaryTitle = L.verifierResultAccessIdentityverified()
@@ -77,9 +81,9 @@ final class CheckIdentityViewModel: Logging {
 		}
 		
 		addObservers()
-		setHolderIdentity(verificationDetails)
 		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
-		showDccInfo()
+		setHolderIdentity(verificationDetails)
+		showDccInfo(verificationDetails)
 	}
 	
 	deinit {
@@ -117,8 +121,17 @@ final class CheckIdentityViewModel: Logging {
 	
 	func showVerifiedAccess() {
 		
+		let verifiedType: VerifiedType
+		let riskSetting = userSettings.scanRiskLevelValue
+		
+		if verificationDetails.isSpecimen == "1" {
+			verifiedType = .demo(riskSetting)
+		} else {
+			verifiedType = .verified(riskSetting)
+		}
+		
 		stopAutoCloseTimer()
-		coordinator?.navigateToVerifiedAccess()
+		coordinator?.navigateToVerifiedAccess(verifiedType)
 	}
 	
 	func showMoreInformation() {
@@ -129,6 +142,8 @@ final class CheckIdentityViewModel: Logging {
 }
 
 private extension CheckIdentityViewModel {
+	
+	// MARK: - Identity
 	
 	func setHolderIdentity(_ details: MobilecoreVerificationDetails) {
 
@@ -193,10 +208,10 @@ private extension CheckIdentityViewModel {
 		return flag.isEmpty ? nil : flag
 	}
 	
-	func showDccInfo() {
+	func showDccInfo(_ details: MobilecoreVerificationDetails) {
 		
 		// Get issuer country code
-		var countryCode = verificationDetails.issuerCountryCode
+		var countryCode = details.issuerCountryCode
 		
 		// Do not display for domestic result
 		guard countryCode.caseInsensitiveCompare("NL") != .orderedSame else { return }

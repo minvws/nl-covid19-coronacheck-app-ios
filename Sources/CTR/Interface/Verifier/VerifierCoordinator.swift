@@ -38,7 +38,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails)
 	
-	func navigateToVerifiedAccess()
+	func navigateToVerifiedAccess(_ verifiedType: VerifiedType)
 	
 	func navigateToDeniedAccess()
 }
@@ -150,17 +150,19 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			viewModel: CheckIdentityViewModel(
 				coordinator: self,
 				verificationDetails: verificationDetails,
-				isDeepLinkEnabled: thirdPartyScannerApp != nil
+				isDeepLinkEnabled: thirdPartyScannerApp != nil,
+				userSettings: UserSettings()
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
 	
-	func navigateToVerifiedAccess() {
+	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
 		
 		let viewController = VerifiedAccessViewController(
 			viewModel: VerifiedAccessViewModel(
-				coordinator: self
+				coordinator: self,
+				verifiedType: verifiedType
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushWithFadeAnimation(with: viewController,

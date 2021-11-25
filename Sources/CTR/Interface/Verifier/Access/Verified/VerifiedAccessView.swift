@@ -35,7 +35,7 @@ final class VerifiedAccessView: BaseView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
-		view.image = I.access()
+		view.image = I.access()?.withRenderingMode(.alwaysTemplate)
 		return view
 	}()
 	
@@ -52,12 +52,6 @@ final class VerifiedAccessView: BaseView {
 		view.spacing = ViewTraits.Spacing.imageToLabel
 		return view
 	}()
-	
-	override func setupViews() {
-		super.setupViews()
-		
-		backgroundColor = Theme.colors.access
-	}
 	
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
@@ -100,6 +94,39 @@ final class VerifiedAccessView: BaseView {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
 															 alignment: .center,
 															 kerning: ViewTraits.Title.kerning)
+		}
+	}
+	
+	var verifiedType: VerifiedType? {
+		didSet {
+			backgroundColor = verifiedType?.backgroundColor
+			imageView.tintColor = verifiedType?.tintColor
+			titleLabel.textColor = verifiedType?.tintColor
+		}
+	}
+}
+
+extension VerifiedType {
+	
+	var backgroundColor: UIColor? {
+		switch self {
+			case .verified(let riskLevel):
+				switch riskLevel {
+					case .low:
+						return C.accessColor()
+					case .high:
+						return C.primaryColor()
+				}
+			case .demo:
+				return C.grey4()
+		}
+	}
+	
+	var tintColor: UIColor? {
+		if case .verified(let risk) = self, risk.isHigh {
+			return .white
+		} else {
+			return C.darkColor()
 		}
 	}
 }

@@ -103,6 +103,7 @@
 
 /* MARK: - Verifier Result */
 "verifier.result.access.title" = "Controle klaar";
+"verifier.result.access.title.highrisk" = "2G controle klaar";
 "verifier.result.demo.title" = "Demo QR-code gescand";
 "verifier.result.denied.title" = "Geen geldige QR-code";
 "verifier.result.next" = "Scan volgende";

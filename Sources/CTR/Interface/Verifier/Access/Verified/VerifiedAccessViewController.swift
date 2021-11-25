@@ -39,6 +39,11 @@ final class VerifiedAccessViewController: BaseViewController, Logging {
 		addCloseButton(action: #selector(closeButtonTapped))
 		
 		viewModel.$accessTitle.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$verifiedType.binding = { [weak self] in
+			
+			self?.sceneView.verifiedType = $0
+			self?.navigationItem.leftBarButtonItem?.tintColor = $0.tintColor
+		}
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -47,6 +52,11 @@ final class VerifiedAccessViewController: BaseViewController, Logging {
 		
 		viewModel.startScanAgainTimer()
 	}
+	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+		
+		return viewModel.verifiedType.statusBarStyle
+	}
 }
 
 private extension VerifiedAccessViewController {
@@ -54,5 +64,17 @@ private extension VerifiedAccessViewController {
 	@objc func closeButtonTapped() {
 
 		viewModel.dismiss()
+	}
+}
+
+extension VerifiedType {
+	
+	var statusBarStyle: UIStatusBarStyle {
+		
+		if case .verified(let risk) = self, risk.isHigh {
+			return .lightContent
+		} else {
+			return .default
+		}
 	}
 }
