@@ -149,6 +149,15 @@ extension EventFlow.EventResultWrapper {
 			result: nil
 		)
 	}
+
+	static var fakeVaccinationResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.vaccinationEvent]
+	)
 }
 
 extension RequestToken {
@@ -676,4 +685,24 @@ extension UIImage {
 extension TVSAuthorizationToken {
 	
 	static var test: TVSAuthorizationToken = .init(idTokenString: "test", expiration: now.addingTimeInterval(5 * minutes * fromNow))
+}
+
+extension EventFlow.EventInformationAvailable {
+	static var fakeInformationIsAvailable: EventFlow.EventInformationAvailable {
+		EventFlow.EventInformationAvailable(
+			providerIdentifier: "CC",
+			protocolVersion: "3.0",
+			informationAvailable: true
+		)
+	}
+}
+
+extension EventFlow.AccessToken {
+	static var fakeTestToken: EventFlow.AccessToken {
+		EventFlow.AccessToken(
+			providerIdentifier: "CC",
+			unomiAccessToken: "unomi test",
+			eventAccessToken: "event test"
+		)
+	}
 }

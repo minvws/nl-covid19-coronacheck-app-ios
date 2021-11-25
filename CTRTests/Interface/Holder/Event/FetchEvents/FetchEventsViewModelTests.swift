@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length file_length
+// swiftlint:disable type_body_length
 
 @testable import CTR
 import XCTest
@@ -83,7 +83,7 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenOK_providersRequestTimeOut() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 
@@ -156,7 +156,7 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenOK_providersNoInternet() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
@@ -223,7 +223,7 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenOK_providersServerBusy() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 
@@ -531,10 +531,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_noProviderForEventMode_vaccination() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.positiveTestProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -556,10 +556,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_noProviderForEventMode_positiveTest() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -581,10 +581,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_noProviderForEventMode_recovery() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -606,10 +606,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_noProviderForEventMode_negativeTest() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -632,10 +632,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_happyFlow_willInvokeCoordinator() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -654,15 +654,15 @@ class FetchEventsViewModelTests: XCTestCase {
 		let eventWrapper = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
-			identity: FetchEventsViewModelTests.identity,
+			identity: EventFlow.Identity.fakeIdentity,
 			status: .complete,
 			result: nil,
 			events: []
 		)
 
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
 		networkSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
 
 		// When
@@ -679,11 +679,11 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_unomiServerBusy_eventOk() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 		networkSpy.stubbedFetchEventInformationCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -703,9 +703,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_unomiOK_eventServerBusy() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
 		networkSpy.stubbedFetchEventsCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 
@@ -738,59 +738,6 @@ class FetchEventsViewModelTests: XCTestCase {
 	}
 
 	// MARK: Default values
-
-	let accessToken = EventFlow.AccessToken(
-		providerIdentifier: "CC",
-		unomiAccessToken: "unomi test",
-		eventAccessToken: "event test"
-	)
-
-	let eventInformationAvailable = EventFlow.EventInformationAvailable(
-		providerIdentifier: "CC",
-		protocolVersion: "3.0",
-		informationAvailable: true
-	)
-
-	static let identity = EventFlow.Identity(
-		infix: "",
-		firstName: "Corona",
-		lastName: "Check",
-		birthDateString: "2021-05-16"
-	)
-
-	let succesEventWrapper = EventFlow.EventResultWrapper(
-		providerIdentifier: "CC",
-		protocolVersion: "3.0",
-		identity: identity,
-		status: .complete,
-		result: nil,
-		events: [
-			EventFlow.Event(
-				type: "vaccination",
-				unique: "1234",
-				isSpecimen: false,
-				vaccination: vaccinationEvent,
-				negativeTest: nil,
-				positiveTest: nil,
-				recovery: nil,
-				dccEvent: nil
-			)
-		]
-	)
-
-	static let vaccinationEvent = EventFlow.VaccinationEvent(
-		dateString: "2021-05-16",
-		hpkCode: nil,
-		type: nil,
-		manufacturer: nil,
-		brand: nil,
-		doseNumber: 1,
-		totalDoses: 2,
-		country: "NLD",
-		completedByMedicalStatement: nil,
-		completedByPersonalStatement: nil,
-		completionReason: nil
-	)
 
 	let signedResponse = SignedResponse(
 		payload: "payload",
