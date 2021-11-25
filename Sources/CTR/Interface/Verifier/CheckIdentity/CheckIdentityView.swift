@@ -263,4 +263,10 @@ final class CheckIdentityView: BaseView {
 																	   textColor: Theme.colors.secondaryText)
 		}
 	}
+	
+	/// The user tapped on the primary button
+	var scanNextTappedCommand: (() -> Void)?
+	
+	/// The user tapped on the secondary button in the verified view
+	var verifiedInfoTappedCommand: (() -> Void)?
 }

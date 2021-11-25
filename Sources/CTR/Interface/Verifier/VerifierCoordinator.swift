@@ -141,6 +141,29 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
+	
+	func navigateToCheckIdentity(_ verificationResult: MobilecoreVerificationResult) {
+		
+		let viewController = VerifierResultViewController(
+			viewModel: VerifierResultViewModel(
+				coordinator: self,
+				verificationResult: verificationResult,
+				isDeepLinkEnabled: thirdPartyScannerApp != nil,
+				userSettings: UserSettings()
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
+	
+	func navigateToDeniedAccess() {
+		
+		let viewController = DeniedAccessViewController(
+			viewModel: DeniedAccessViewModel(
+				coordinator: self
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
 
 	/// Display content
 	/// - Parameters:

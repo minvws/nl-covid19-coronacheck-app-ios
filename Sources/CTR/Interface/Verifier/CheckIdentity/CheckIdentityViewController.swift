@@ -5,4 +5,50 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import UIKit
+
+final class CheckIdentityViewController: BaseViewController, Logging {
+	
+	private let viewModel: CheckIdentityViewModel
+
+	let sceneView = CheckIdentityView()
+
+	init(viewModel: CheckIdentityViewModel) {
+
+		self.viewModel = viewModel
+
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder: NSCoder) {
+
+		fatalError("init(coder:) has not been implemented")
+	}
+
+	// MARK: View lifecycle
+	override func loadView() {
+
+		view = sceneView
+	}
+
+	override func viewDidLoad() {
+
+		super.viewDidLoad()
+		
+		addCloseButton(action: #selector(closeButtonTapped))
+		
+		// Make the navbar the same color as the background
+		setupTranslucentNavigationBar()
+		
+		sceneView.scanNextTappedCommand = { [weak self] in
+
+			self?.viewModel.scanAgain()
+		}
+	}
+	
+	/// User tapped on the button
+	@objc func closeButtonTapped() {
+
+		viewModel.dismiss()
+	}
+}
