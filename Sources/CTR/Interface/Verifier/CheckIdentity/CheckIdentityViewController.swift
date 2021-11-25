@@ -62,6 +62,10 @@ final class CheckIdentityViewController: BaseViewController, Logging {
 		sceneView.lastNameHeader = L.verifierResultIdentityLastname()
 		sceneView.dayOfBirthHeader = L.verifierResultIdentityDayofbirth()
 		sceneView.monthOfBirthHeader = L.verifierResultIdentityMonthofbirth()
+		
+		viewModel.$primaryTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
+		viewModel.$secondaryTitle.binding = { [weak self] in self?.sceneView.secondaryTitle = $0 }
+		viewModel.$primaryButtonIcon.binding = { [weak self] in self?.sceneView.primaryButtonIcon = $0 }
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {

@@ -148,8 +148,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			viewModel: CheckIdentityViewModel(
 				coordinator: self,
 				verificationDetails: verificationDetails,
-				isDeepLinkEnabled: thirdPartyScannerApp != nil,
-				userSettings: UserSettings()
+				isDeepLinkEnabled: thirdPartyScannerApp != nil
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)

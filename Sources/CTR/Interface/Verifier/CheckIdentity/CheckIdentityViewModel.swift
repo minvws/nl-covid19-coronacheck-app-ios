@@ -21,8 +21,6 @@ final class CheckIdentityViewModel: Logging {
 	
 	private var isDeepLinkEnabled: Bool
 	
-	private let userSettings: UserSettingsProtocol
-	
 	private let screenCaptureDetector = ScreenCaptureDetector()
 	
 	/// A timer auto close the scene
@@ -30,7 +28,7 @@ final class CheckIdentityViewModel: Logging {
 	
 	@Bindable private(set) var hideForCapture: Bool = false
 	
-	@Bindable private(set) var title: String?
+	@Bindable private(set) var title: String
 	
 	/// The first name of the holder
 	@Bindable private(set) var firstName: String?
@@ -44,40 +42,44 @@ final class CheckIdentityViewModel: Logging {
 	/// The birth mont of the holder
 	@Bindable private(set) var monthOfBirth: String?
 	
-	@Bindable private(set) var primaryTitle: String = ""
+	@Bindable private(set) var primaryTitle: String
 	
-	@Bindable private(set) var secondaryTitle: String = ""
+	@Bindable private(set) var secondaryTitle: String
 	
 	@Bindable private(set) var dccFlag: String?
 	
 	@Bindable private(set) var dccScanned: String?
 	
-	@Bindable private(set) var checkIdentity: String = ""
+	@Bindable private(set) var checkIdentity: String
 	
 	@Bindable private(set) var primaryButtonIcon: UIImage?
 	
-	@Bindable private(set) var riskDescription: String?
-	
-	@Bindable private(set) var verifiedAccessibility: String?
+	@Bindable private(set) var verifiedAccessibility: String
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
 		verificationDetails: MobilecoreVerificationDetails,
-		isDeepLinkEnabled: Bool,
-		userSettings: UserSettingsProtocol) {
-
+		isDeepLinkEnabled: Bool
+	) {
+		
 		self.coordinator = coordinator
 		self.verificationDetails = verificationDetails
 		self.isDeepLinkEnabled = isDeepLinkEnabled
-		self.userSettings = userSettings
-
+		
+		title = L.verifierResultIdentityTitle()
+		primaryTitle = L.verifierResultAccessIdentityverified()
+		secondaryTitle = L.verifierResultAccessReadmore()
+		checkIdentity = L.verifierResultAccessCheckidentity()
+		verifiedAccessibility = "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
+		
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
 		}
-
+		
 		addObservers()
-		setupBindings()
 		setHolderIdentity(verificationDetails)
+		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
+		showDccInfo()
 	}
 	
 	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
@@ -116,21 +118,6 @@ final class CheckIdentityViewModel: Logging {
 }
 
 private extension CheckIdentityViewModel {
-	
-	func setupBindings() {
-		
-		title = L.verifierResultIdentityTitle()
-		primaryTitle = L.verifierResultAccessIdentityverified()
-		secondaryTitle = L.verifierResultAccessReadmore()
-		checkIdentity = L.verifierResultAccessCheckidentity()
-		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
-		showDccInfo()
-		verifiedAccessibility = "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
-		
-//		if case .verified(let risk) = allowAccess, risk == .high {
-//			riskDescription = L.verifierResultAccessHighrisk()
-//		}
-	}
 	
 	func setHolderIdentity(_ details: MobilecoreVerificationDetails) {
 

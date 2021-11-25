@@ -240,6 +240,12 @@ final class CheckIdentityView: BaseView {
 		}
 	}
 	
+	var primaryButtonIcon: UIImage? {
+		didSet {
+			footerButtonView.primaryButton.setImage(primaryButtonIcon, for: .normal)
+		}
+	}
+	
 	var checkIdentity: String? {
 		didSet {
 			checkIdentityLabel.attributedText = checkIdentity?.setLineHeight(ViewTraits.Label.lineHeight,
