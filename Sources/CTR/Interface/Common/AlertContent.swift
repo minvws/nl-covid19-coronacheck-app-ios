@@ -33,14 +33,18 @@ extension UIViewController {
 			message: content.subTitle,
 			preferredStyle: .alert
 		)
-		let okAction = UIAlertAction(
-				title: content.okTitle,
+
+		// Optional ok button:
+		if let okTitle = content.okTitle {
+			let okAction = UIAlertAction(
+				title: okTitle,
 				style: okActionIsDestructive ? .destructive : .default,
 				handler: content.okAction
-		)
-		alertController.addAction(okAction)
-		if preferredAction == content.okTitle {
-			alertController.preferredAction = okAction
+			)
+			alertController.addAction(okAction)
+			if preferredAction == content.okTitle {
+				alertController.preferredAction = okAction
+			}
 		}
 
 		// Optional cancel button:
