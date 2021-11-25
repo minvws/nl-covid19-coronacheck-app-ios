@@ -82,6 +82,11 @@ final class CheckIdentityViewModel: Logging {
 		showDccInfo()
 	}
 	
+	deinit {
+		
+		stopAutoCloseTimer()
+	}
+	
 	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
 	func startAutoCloseTimer() {
 
@@ -94,7 +99,7 @@ final class CheckIdentityViewModel: Logging {
 			target: self,
 			selector: (#selector(autoCloseScene)),
 			userInfo: nil,
-			repeats: true
+			repeats: false
 		)
 	}
 	
@@ -110,10 +115,10 @@ final class CheckIdentityViewModel: Logging {
 		coordinator?.navigateToScan()
 	}
 	
-	func launchThirdPartyAppOrScanAgain() {
+	func showVerifiedAccess() {
 		
 		stopAutoCloseTimer()
-		coordinator?.userWishesToLaunchThirdPartyScannerApp()
+		coordinator?.navigateToVerifiedAccess()
 	}
 	
 	func showMoreInformation() {
@@ -232,7 +237,7 @@ private extension CheckIdentityViewModel {
 
 	@objc func autoCloseScene() {
 
-		logInfo("Auto closing the result view")
+		logInfo("Auto closing the check identity view")
 		stopAutoCloseTimer()
 		scanAgain()
 	}

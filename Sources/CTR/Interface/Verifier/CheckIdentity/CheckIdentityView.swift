@@ -277,9 +277,9 @@ final class CheckIdentityView: BaseView {
 	}
 	
 	/// The user tapped on the primary button
-	var scanNextTappedCommand: (() -> Void)? {
+	var identityVerifiedTappedCommand: (() -> Void)? {
 		didSet {
-			footerButtonView.primaryButtonTappedCommand = scanNextTappedCommand
+			footerButtonView.primaryButtonTappedCommand = identityVerifiedTappedCommand
 		}
 	}
 

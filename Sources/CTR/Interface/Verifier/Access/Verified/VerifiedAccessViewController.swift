@@ -40,6 +40,13 @@ final class VerifiedAccessViewController: BaseViewController, Logging {
 		
 		viewModel.$accessTitle.binding = { [weak self] in self?.sceneView.title = $0 }
 	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		
+		super.viewDidAppear(animated)
+		
+		viewModel.startScanAgainTimer()
+	}
 }
 
 private extension VerifiedAccessViewController {

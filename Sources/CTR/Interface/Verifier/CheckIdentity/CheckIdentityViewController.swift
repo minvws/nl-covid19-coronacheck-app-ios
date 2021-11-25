@@ -42,9 +42,9 @@ final class CheckIdentityViewController: BaseViewController, Logging {
 		// Make the navbar the same color as the background
 		setupTranslucentNavigationBar()
 		
-		sceneView.scanNextTappedCommand = { [weak self] in
+		sceneView.identityVerifiedTappedCommand = { [weak self] in
 
-			self?.viewModel.scanAgain()
+			self?.viewModel.showVerifiedAccess()
 		}
 		
 		sceneView.readMoreTappedCommand = { [weak self] in

@@ -5,12 +5,15 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import UIKit
 
 final class VerifiedAccessViewModel: Logging {
 	
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
+	
+	/// A timer to go to scanner
+	private var scanAgainTimer: Timer?
 	
 	/// The title of the scene
 	@Bindable private(set) var accessTitle: String
@@ -20,10 +23,56 @@ final class VerifiedAccessViewModel: Logging {
 		self.coordinator = coordinator
 		
 		accessTitle = L.verifierResultDeniedTitle()
+		
+		addObservers()
+	}
+	
+	deinit {
+		
+		stopTimer()
+	}
+	
+	func startScanAgainTimer() {
+
+		guard scanAgainTimer == nil else { return }
+
+		scanAgainTimer = Timer.scheduledTimer(
+			timeInterval: 0.8,
+			target: self,
+			selector: (#selector(scanAgainOrLaunchThirdPartyScannerApp)),
+			userInfo: nil,
+			repeats: false
+		)
 	}
 	
 	func dismiss() {
 
+		stopTimer()
 		coordinator?.navigateToVerifierWelcome()
+	}
+}
+
+private extension VerifiedAccessViewModel {
+	
+	func addObservers() {
+
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(scanAgainOrLaunchThirdPartyScannerApp),
+			name: UIApplication.didEnterBackgroundNotification,
+			object: nil
+		)
+	}
+	
+	func stopTimer() {
+
+		scanAgainTimer?.invalidate()
+		scanAgainTimer = nil
+	}
+	
+	@objc func scanAgainOrLaunchThirdPartyScannerApp() {
+		
+		stopTimer()
+		coordinator?.userWishesToLaunchThirdPartyScannerApp()
 	}
 }

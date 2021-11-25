@@ -38,6 +38,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails)
 	
+	func navigateToVerifiedAccess()
+	
 	func navigateToDeniedAccess()
 }
 
@@ -149,6 +151,16 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				coordinator: self,
 				verificationDetails: verificationDetails,
 				isDeepLinkEnabled: thirdPartyScannerApp != nil
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
+	
+	func navigateToVerifiedAccess() {
+		
+		let viewController = VerifiedAccessViewController(
+			viewModel: VerifiedAccessViewModel(
+				coordinator: self
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
