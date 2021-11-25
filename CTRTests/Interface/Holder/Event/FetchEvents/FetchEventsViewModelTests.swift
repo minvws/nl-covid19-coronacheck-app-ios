@@ -483,22 +483,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateNobsnTitle()
 			expect(feedback.subTitle) == L.holderErrorstateNobsnMessage()
 			expect(feedback.primaryActionTitle) == L.holderErrorstateNobsnAction()
 			expect(feedback.secondaryActionTitle).to(beNil())
-			done()
-		}
+		}))
 	}
 
 	func test_accessToken_TVSSessionExpired_vaccination() {
@@ -541,14 +532,8 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == .startWithPositiveTest
-
-			done()
-		}
-
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(equal(.startWithPositiveTest))
 	}
 
 	func test_accessToken_nonceExpired() {
@@ -955,4 +940,15 @@ class FetchEventsViewModelTests: XCTestCase {
 		payload: "payload",
 		signature: "signature"
 	)
+}
+
+private func beEventScreenResultError(test: @escaping (Content) -> Void = { _ in }) -> Predicate<EventScreenResult> {
+	return Predicate.define("be .error with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .error(content, _) = actual {
+			test(content)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
 }
