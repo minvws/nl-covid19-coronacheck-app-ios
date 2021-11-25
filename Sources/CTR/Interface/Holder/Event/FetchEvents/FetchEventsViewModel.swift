@@ -535,47 +535,63 @@ private extension FetchEventsViewModel {
 
 	func handleErrorCodesForAccesTokenAndProviders(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
-		let hasNoBSN = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }.isEmpty
-		let nonceExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeNonceExpired }.isEmpty
-		let tvsSessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeTvsSessionExpired }.isEmpty
-		let serverUnreachable = !serverErrors.filter { serverError in
-			if case let ServerError.error(_, _, error) = serverError {
-				return error == .serverUnreachableTimedOut || error == .serverUnreachableInvalidHost || error == .serverUnreachableConnectionLost
-			}
-			return false
-		}.isEmpty
-		let serverBusy = !serverErrors.filter { serverError in
-			if case let ServerError.error(_, _, error) = serverError {
-				return error == .serverBusy
-			}
-			return false
-		}.isEmpty
-		let noInternet = !serverErrors.filter { serverError in
-			if case let ServerError.error(_, _, error) = serverError {
-				return error == .noInternetConnection
-			}
-			return false
-		}.isEmpty
-
-		if hasNoBSN {
+		// No BSN
+		guard errorCodes.filter({ $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }).isEmpty else {
 			displayNoBSN()
-		} else if nonceExpired {
+			return
+		}
+
+		//Expired Nonce
+		guard errorCodes.filter({ $0.detailedCode == FetchEventsViewModel.detailedCodeNonceExpired }).isEmpty else {
 			displayNonceOrTVSExpired()
-		} else if tvsSessionExpired {
+			return
+		}
+
+		// Expired TVS token
+		guard errorCodes.filter({ $0.detailedCode == FetchEventsViewModel.detailedCodeTvsSessionExpired }).isEmpty else {
 			if eventMode == .positiveTest {
+				// This is recoverable, so redirect to login
 				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)
 			} else {
 				displayNonceOrTVSExpired()
 			}
-		} else if serverUnreachable {
-			displayServerUnreachable(errorCodes)
-		} else if serverBusy {
-			displayServerBusy(errorCodes)
-		} else if noInternet {
-			displayNoInternet()
-		} else {
-			displayErrorCodeForAccessTokenAndProviders(errorCodes)
+			return
 		}
+
+		// Unreachable
+		guard serverErrors.filter({ serverError in
+			if case let ServerError.error(_, _, error) = serverError {
+				return error == .serverUnreachableTimedOut || error == .serverUnreachableInvalidHost || error == .serverUnreachableConnectionLost
+			}
+			return false
+		}).isEmpty else {
+			displayServerUnreachable(errorCodes)
+			return
+		}
+
+		// Server Busy
+		guard serverErrors.filter({ serverError in
+			if case let ServerError.error(_, _, error) = serverError {
+				return error == .serverBusy
+			}
+			return false
+		}).isEmpty else {
+			displayServerBusy(errorCodes)
+			return
+		}
+
+		// No Internet
+		guard serverErrors.filter({ serverError in
+			if case let ServerError.error(_, _, error) = serverError {
+				return error == .noInternetConnection
+			}
+			return false
+		}).isEmpty else {
+			displayNoInternet()
+			return
+		}
+
+		displayErrorCodeForAccessTokenAndProviders(errorCodes)
 	}
 
 	func displayNoBSN() {
