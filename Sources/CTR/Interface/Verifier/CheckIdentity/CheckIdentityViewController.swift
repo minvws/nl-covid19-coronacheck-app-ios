@@ -9,6 +9,8 @@ import UIKit
 
 final class CheckIdentityViewController: BaseViewController, Logging {
 	
+	override var enableSwipeBack: Bool { false }
+	
 	private let viewModel: CheckIdentityViewModel
 
 	let sceneView = CheckIdentityView()
@@ -44,6 +46,29 @@ final class CheckIdentityViewController: BaseViewController, Logging {
 
 			self?.viewModel.scanAgain()
 		}
+		
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$checkIdentity.binding = { [weak self] in self?.sceneView.checkIdentity = $0 }
+		viewModel.$lastName.binding = { [weak self] in self?.sceneView.lastName = $0 }
+		viewModel.$firstName.binding = { [weak self] in self?.sceneView.firstName = $0 }
+		viewModel.$dayOfBirth.binding = { [weak self] in self?.sceneView.dayOfBirth = $0 }
+		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.monthOfBirth = $0 }
+		viewModel.$dccFlag.binding = { [weak self] in self?.sceneView.dccFlag = $0 }
+		viewModel.$dccScanned.binding = { [weak self] in self?.sceneView.dccScanned = $0 }
+		/// Confirm that a valid QR code is scanned on this view. The verified view is shown for a limited duration
+		viewModel.$verifiedAccessibility.binding = { [weak self] in self?.navigationItem.accessibilityLabel = $0 }
+		
+		sceneView.firstNameHeader = L.verifierResultIdentityFirstname()
+		sceneView.lastNameHeader = L.verifierResultIdentityLastname()
+		sceneView.dayOfBirthHeader = L.verifierResultIdentityDayofbirth()
+		sceneView.monthOfBirthHeader = L.verifierResultIdentityMonthofbirth()
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		
+		super.viewDidAppear(animated)
+		
+		viewModel.startAutoCloseTimer()
 	}
 	
 	/// User tapped on the button

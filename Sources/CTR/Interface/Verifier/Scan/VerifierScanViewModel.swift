@@ -67,7 +67,10 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 					
 				case MobilecoreVERIFICATION_SUCCESS where verificationResult.details != nil:
 
-					theCoordinator?.navigateToCheckIdentity(verificationResult)
+					guard let details = verificationResult.details else {
+						fallthrough
+					}
+					theCoordinator?.navigateToCheckIdentity(details)
 
 				default:
 					

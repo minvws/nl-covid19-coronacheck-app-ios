@@ -16,8 +16,8 @@ final class CheckIdentityViewModel: Logging {
 	/// The configuration
 	private var configuration: ConfigurationGeneralProtocol = Configuration()
 	
-	/// The scanned result
-	internal var verificationResult: MobilecoreVerificationResult
+	/// The scanned details
+	internal var verificationDetails: MobilecoreVerificationDetails
 	
 	private var isDeepLinkEnabled: Bool
 	
@@ -29,6 +29,8 @@ final class CheckIdentityViewModel: Logging {
 	private var autoCloseTimer: Timer?
 	
 	@Bindable private(set) var hideForCapture: Bool = false
+	
+	@Bindable private(set) var title: String?
 	
 	/// The first name of the holder
 	@Bindable private(set) var firstName: String?
@@ -58,16 +60,14 @@ final class CheckIdentityViewModel: Logging {
 	
 	@Bindable private(set) var verifiedAccessibility: String?
 	
-	@Bindable private(set) var checkIdentityTitle: String?
-	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		verificationResult: MobilecoreVerificationResult,
+		verificationDetails: MobilecoreVerificationDetails,
 		isDeepLinkEnabled: Bool,
 		userSettings: UserSettingsProtocol) {
 
 		self.coordinator = coordinator
-		self.verificationResult = verificationResult
+		self.verificationDetails = verificationDetails
 		self.isDeepLinkEnabled = isDeepLinkEnabled
 		self.userSettings = userSettings
 
@@ -76,7 +76,24 @@ final class CheckIdentityViewModel: Logging {
 		}
 
 		addObservers()
-//		checkAttributes()
+		setupBindings()
+		setHolderIdentity(verificationDetails)
+	}
+	
+	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
+	func startAutoCloseTimer() {
+
+		guard autoCloseTimer == nil else {
+			return
+		}
+
+		autoCloseTimer = Timer.scheduledTimer(
+			timeInterval: TimeInterval(configuration.getAutoCloseTime()),
+			target: self,
+			selector: (#selector(autoCloseScene)),
+			userInfo: nil,
+			repeats: true
+		)
 	}
 	
 	func dismiss() {
@@ -102,13 +119,13 @@ private extension CheckIdentityViewModel {
 	
 	func setupBindings() {
 		
+		title = L.verifierResultIdentityTitle()
 		primaryTitle = L.verifierResultAccessIdentityverified()
 		secondaryTitle = L.verifierResultAccessReadmore()
 		checkIdentity = L.verifierResultAccessCheckidentity()
 		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
 		verifiedAccessibility = "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
-		checkIdentityTitle = L.verifierResultIdentityTitle()
 		
 //		if case .verified(let risk) = allowAccess, risk == .high {
 //			riskDescription = L.verifierResultAccessHighrisk()
@@ -180,8 +197,8 @@ private extension CheckIdentityViewModel {
 	
 	func showDccInfo() {
 		
-		// Continue when a value is available
-		guard var countryCode = verificationResult.details?.issuerCountryCode else { return }
+		// Get issuer country code
+		var countryCode = verificationDetails.issuerCountryCode
 		
 		// Do not display for domestic result
 		guard countryCode.caseInsensitiveCompare("NL") != .orderedSame else { return }
@@ -211,22 +228,6 @@ private extension CheckIdentityViewModel {
 			selector: #selector(autoCloseScene),
 			name: UIApplication.didEnterBackgroundNotification,
 			object: nil
-		)
-	}
-
-	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
-	func startAutoCloseTimer() {
-
-		guard autoCloseTimer == nil else {
-			return
-		}
-
-		autoCloseTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getAutoCloseTime()),
-			target: self,
-			selector: (#selector(autoCloseScene)),
-			userInfo: nil,
-			repeats: true
 		)
 	}
 

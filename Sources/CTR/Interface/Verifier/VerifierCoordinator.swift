@@ -36,7 +36,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	func userWishesToLaunchThirdPartyScannerApp()
 	
-	func navigateToCheckIdentity(_ verificationResult: MobilecoreVerificationResult)
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails)
 	
 	func navigateToDeniedAccess()
 }
@@ -142,12 +142,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
 	
-	func navigateToCheckIdentity(_ verificationResult: MobilecoreVerificationResult) {
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails) {
 		
-		let viewController = VerifierResultViewController(
-			viewModel: VerifierResultViewModel(
+		let viewController = CheckIdentityViewController(
+			viewModel: CheckIdentityViewModel(
 				coordinator: self,
-				verificationResult: verificationResult,
+				verificationDetails: verificationDetails,
 				isDeepLinkEnabled: thirdPartyScannerApp != nil,
 				userSettings: UserSettings()
 			)
