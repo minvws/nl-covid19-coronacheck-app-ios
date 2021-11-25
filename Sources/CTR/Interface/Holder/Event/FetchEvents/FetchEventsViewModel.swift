@@ -536,19 +536,19 @@ private extension FetchEventsViewModel {
 	func handleErrorCodesForAccesTokenAndProviders(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
 		// No BSN
-		guard errorCodes.filter({ $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }).isEmpty else {
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }) else {
 			displayNoBSN()
 			return
 		}
 
 		// Expired Nonce
-		guard errorCodes.filter({ $0.detailedCode == FetchEventsViewModel.detailedCodeNonceExpired }).isEmpty else {
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeNonceExpired }) else {
 			displayNonceOrTVSExpired()
 			return
 		}
 
 		// Expired TVS token
-		guard errorCodes.filter({ $0.detailedCode == FetchEventsViewModel.detailedCodeTvsSessionExpired }).isEmpty else {
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeTvsSessionExpired }) else {
 			if eventMode == .positiveTest {
 				// This is recoverable, so redirect to login
 				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)
