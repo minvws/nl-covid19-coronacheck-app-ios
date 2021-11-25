@@ -115,6 +115,12 @@ final class CheckIdentityViewModel: Logging {
 		stopAutoCloseTimer()
 		coordinator?.userWishesToLaunchThirdPartyScannerApp()
 	}
+	
+	func showMoreInformation() {
+
+		stopAutoCloseTimer()
+		coordinator?.navigateToVerifiedInfo()
+	}
 }
 
 private extension CheckIdentityViewModel {

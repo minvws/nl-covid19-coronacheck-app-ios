@@ -94,6 +94,7 @@ final class CheckIdentityView: BaseView {
 		
 		backgroundColor = Theme.colors.grey5
 		footerButtonView.primaryButton.style = .roundedBlueImage
+		secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
 			let translatedOffset = scrollView.translatedBottomScrollOffset
@@ -176,6 +177,11 @@ final class CheckIdentityView: BaseView {
 			footerButtonView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
+	}
+	
+	@objc private func readMoreTapped() {
+		
+		readMoreTappedCommand?()
 	}
 
 	// MARK: - Public Access
@@ -271,8 +277,12 @@ final class CheckIdentityView: BaseView {
 	}
 	
 	/// The user tapped on the primary button
-	var scanNextTappedCommand: (() -> Void)?
-	
-	/// The user tapped on the secondary button in the verified view
-	var verifiedInfoTappedCommand: (() -> Void)?
+	var scanNextTappedCommand: (() -> Void)? {
+		didSet {
+			footerButtonView.primaryButtonTappedCommand = scanNextTappedCommand
+		}
+	}
+
+	/// The user tapped on the secondary button
+	var readMoreTappedCommand: (() -> Void)?
 }

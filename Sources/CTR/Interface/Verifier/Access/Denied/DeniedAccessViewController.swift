@@ -41,6 +41,16 @@ final class DeniedAccessViewController: BaseViewController, Logging {
 		viewModel.$accessTitle.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$primaryTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 		viewModel.$secondaryTitle.binding = { [weak self] in self?.sceneView.secondaryTitle = $0 }
+		
+		sceneView.scanNextTappedCommand = { [weak self] in
+
+			self?.viewModel.scanAgain()
+		}
+		
+		sceneView.readMoreTappedCommand = { [weak self] in
+			
+			self?.viewModel.showMoreInformation()
+		}
 	}
 }
 

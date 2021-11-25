@@ -47,6 +47,11 @@ final class CheckIdentityViewController: BaseViewController, Logging {
 			self?.viewModel.scanAgain()
 		}
 		
+		sceneView.readMoreTappedCommand = { [weak self] in
+			
+			self?.viewModel.showMoreInformation()
+		}
+		
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$checkIdentity.binding = { [weak self] in self?.sceneView.checkIdentity = $0 }
 		viewModel.$lastName.binding = { [weak self] in self?.sceneView.lastName = $0 }

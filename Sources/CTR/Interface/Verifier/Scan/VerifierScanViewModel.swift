@@ -59,11 +59,13 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 			switch Int64(verificationResult.status) {
 				case MobilecoreVERIFICATION_FAILED_IS_NL_DCC:
 
-					displayAlert(title: L.verifierResultAlertDccTitle(), message: L.verifierResultAlertDccMessage())
+					displayAlert(title: L.verifierResultAlertDccTitle(),
+								 message: L.verifierResultAlertDccMessage())
 
 				case MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX:
 
-					displayAlert(title: L.verifierResultAlertUnknownTitle(), message: L.verifierResultAlertUnknownMessage())
+					displayAlert(title: L.verifierResultAlertUnknownTitle(),
+								 message: L.verifierResultAlertUnknownMessage())
 					
 				case MobilecoreVERIFICATION_SUCCESS where verificationResult.details != nil:
 
@@ -85,8 +87,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		alert = AlertContent(
 			title: title,
 			subTitle: message,
-			cancelAction: nil,
-			cancelTitle: nil,
 			okAction: { [weak self] _ in
 				self?.shouldResumeScanning = true
 			},

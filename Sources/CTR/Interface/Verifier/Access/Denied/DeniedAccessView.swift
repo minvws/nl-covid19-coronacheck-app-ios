@@ -86,6 +86,7 @@ final class DeniedAccessView: BaseView {
 		scrollView.backgroundColor = Theme.colors.denied
 		footerButtonView.primaryButton.style = .roundedWhite
 		footerButtonView.backgroundColor = Theme.colors.denied
+		secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
 			let translatedOffset = scrollView.translatedBottomScrollOffset
@@ -139,6 +140,11 @@ final class DeniedAccessView: BaseView {
 		])
 	}
 	
+	@objc private func readMoreTapped() {
+		
+		readMoreTappedCommand?()
+	}
+	
 	// MARK: - Public Access
 	
 	var title: String? {
@@ -160,6 +166,16 @@ final class DeniedAccessView: BaseView {
 			secondaryButton.title = title
 		}
 	}
+	
+	/// The user tapped on the primary button
+	var scanNextTappedCommand: (() -> Void)? {
+		didSet {
+			footerButtonView.primaryButtonTappedCommand = scanNextTappedCommand
+		}
+	}
+
+	/// The user tapped on the secondary button
+	var readMoreTappedCommand: (() -> Void)?
 	
 	func focusAccessibility() {
 		UIAccessibility.post(notification: .screenChanged, argument: self.titleLabel)
