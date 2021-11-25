@@ -95,22 +95,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 220 000 004")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenRequestTimeOut_providersOK() {
@@ -128,22 +119,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 004")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenRequestTimeOut_providersRequestTimeOut() {
@@ -162,22 +144,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 220 000 004<br />i 230 000 004")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenOK_providersNoInternet() {
@@ -262,22 +235,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
 			expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 220 000 429")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle).to(beNil())
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenServerBusy_providersServerBusy() {
@@ -296,22 +260,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
 			expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 220 000 429<br />i 230 000 429")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle).to(beNil())
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenServerBusy_providersOk() {
@@ -329,22 +284,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
 			expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 230 000 429")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle).to(beNil())
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenServerUnreachableTimeOut_providersOk() {
@@ -362,22 +308,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 004")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenServerUnreachableConnectionLost_providersOk() {
@@ -395,22 +332,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 005")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenServerUnreachableInvalidHost_providersOk() {
@@ -428,22 +356,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 002")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenNoInternetConnection_providersOk() {
@@ -508,7 +427,6 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
-		
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateNosessionTitle()
 			expect(feedback.subTitle) == L.holderErrorstateNosessionMessage()
@@ -551,22 +469,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateNosessionTitle()
 			expect(feedback.subTitle) == L.holderErrorstateNosessionMessage()
 			expect(feedback.primaryActionTitle) == L.holderErrorstateNosessionAction()
 			expect(feedback.secondaryActionTitle).to(beNil())
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenOtherServerError() {
@@ -584,22 +493,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.holderErrorstateServerMessage("i 230 000 500 99000")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_accessTokenOtherServerError_providerOtherServerError() {
@@ -618,23 +518,14 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 230 000 500 99000"))
 			expect(feedback.subTitle).to(contain("i 220 000 500 99001"))
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_noProviderForEventMode_vaccination() {
@@ -653,22 +544,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 220 000 082"))
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_noProviderForEventMode_positiveTest() {
@@ -687,22 +569,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 820 000 080"))
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_noProviderForEventMode_recovery() {
@@ -721,22 +594,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 320 000 081"))
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_noProviderForEventMode_negativeTest() {
@@ -755,22 +619,14 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 420 000 080"))
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-			done()
-		}
+		}))
 	}
 
 	func test_happyFlow_willInvokeCoordinator() {
