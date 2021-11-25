@@ -580,7 +580,7 @@
 "holder.provider.commercial.title" = "Other test location";
 
 /* MARK: - Holder Test Results */
-"holder.testresults.results.title" = "Is something wrong?";
+"holder.testresults.results.title" = "Are the details correct?";
 "holder.testresults.results.text" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
 "holder.testresults.results.button" = "Make certificate";
 "holder.testresults.pending.title" = "Test result not yet known";
