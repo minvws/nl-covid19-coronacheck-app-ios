@@ -157,13 +157,13 @@ final class DeniedAccessView: BaseView {
 	
 	var primaryTitle: String? {
 		didSet {
-			footerButtonView.primaryTitle = title
+			footerButtonView.primaryTitle = primaryTitle
 		}
 	}
 	
 	var secondaryTitle: String? {
 		didSet {
-			secondaryButton.title = title
+			secondaryButton.title = secondaryTitle
 		}
 	}
 	

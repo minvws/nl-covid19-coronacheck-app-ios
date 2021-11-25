@@ -71,6 +71,15 @@ final class CheckIdentityViewController: BaseViewController, Logging {
 		viewModel.$primaryTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 		viewModel.$secondaryTitle.binding = { [weak self] in self?.sceneView.secondaryTitle = $0 }
 		viewModel.$primaryButtonIcon.binding = { [weak self] in self?.sceneView.primaryButtonIcon = $0 }
+		
+		viewModel.$hideForCapture.binding = { [weak self] in
+
+			#if DEBUG
+			self?.logDebug("Skipping hiding of result because in DEBUG mode")
+			#else
+			self?.sceneView.isHidden = $0
+			#endif
+		}
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
