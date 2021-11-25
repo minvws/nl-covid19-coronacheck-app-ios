@@ -541,7 +541,7 @@ private extension FetchEventsViewModel {
 			return
 		}
 
-		//Expired Nonce
+		// Expired Nonce
 		guard errorCodes.filter({ $0.detailedCode == FetchEventsViewModel.detailedCodeNonceExpired }).isEmpty else {
 			displayNonceOrTVSExpired()
 			return
