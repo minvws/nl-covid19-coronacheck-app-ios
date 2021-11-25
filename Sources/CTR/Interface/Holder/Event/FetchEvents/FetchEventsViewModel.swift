@@ -494,8 +494,9 @@ private extension EventMode {
 
 extension FetchEventsViewModel {
 
+	static let detailedCodeNonceExpired: Int = 99708
+	static let detailedCodeTvsSessionExpired: Int = 99710
 	static let detailedCodeNoBSN: Int = 99782
-	static let detailedCodeSessionExpired: Int = 99708
 }
 
 // MARK: - Error states
@@ -535,7 +536,8 @@ private extension FetchEventsViewModel {
 	func handleErrorCodesForAccesTokenAndProviders(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
 		let hasNoBSN = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }.isEmpty
-		let sessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeSessionExpired }.isEmpty
+		let nonceExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeNonceExpired }.isEmpty
+		let tvsSessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeTvsSessionExpired }.isEmpty
 		let serverUnreachable = !serverErrors.filter { serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .serverUnreachableTimedOut || error == .serverUnreachableInvalidHost || error == .serverUnreachableConnectionLost
@@ -557,11 +559,13 @@ private extension FetchEventsViewModel {
 
 		if hasNoBSN {
 			displayNoBSN()
-		} else if sessionExpired {
+		} else if nonceExpired {
+			displayNonceOrTVSExpired()
+		} else if tvsSessionExpired {
 			if eventMode == .positiveTest {
 				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)
 			} else {
-				displaySessionExpired()
+				displayNonceOrTVSExpired()
 			}
 		} else if serverUnreachable {
 			displayServerUnreachable(errorCodes)
@@ -589,7 +593,7 @@ private extension FetchEventsViewModel {
 		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
-	func displaySessionExpired() {
+	func displayNonceOrTVSExpired() {
 
 		let content = Content(
 			title: L.holderErrorstateNosessionTitle(),
