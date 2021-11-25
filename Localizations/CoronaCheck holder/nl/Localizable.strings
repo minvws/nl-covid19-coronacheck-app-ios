@@ -681,7 +681,7 @@
 "holder.event.about.vaccination.identifier" = "Uniek vaccinatienummer:";
 
 /* MARK: - Recovery Event */
-"holder.event.about.recovery.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.event.about.recovery.subtitle" = "De volgende gegevens zijn opgehaald bij de testlocatie:";
 "holder.event.about.recovery.name" = "Naam:";
 "holder.event.about.recovery.dateofbirth" = "Geboortedatum:";
 "holder.event.about.recovery.date" = "Testdatum:";
