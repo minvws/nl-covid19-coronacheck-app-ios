@@ -8,12 +8,12 @@
 import UIKit
 
 struct AlertContent {
-	var title: String
-	var subTitle: String
+	var title: String?
+	var subTitle: String?
 	var cancelAction: ((UIAlertAction) -> Void)?
 	var cancelTitle: String?
 	var okAction: ((UIAlertAction) -> Void)?
-	var okTitle: String
+	var okTitle: String?
 }
 
 extension UIViewController {
