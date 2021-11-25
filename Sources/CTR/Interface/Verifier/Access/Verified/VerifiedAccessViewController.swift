@@ -7,13 +7,13 @@
 
 import UIKit
 
-final class VerifiedHighRiskAccessViewController: BaseViewController, Logging {
+final class VerifiedAccessViewController: BaseViewController, Logging {
 	
-	private let viewModel: VerifiedHighRiskAccessViewModel
+	private let viewModel: VerifiedAccessViewModel
 
-	let sceneView = VerifiedHighRiskAccessView()
+	let sceneView = VerifiedAccessView()
 
-	init(viewModel: VerifiedHighRiskAccessViewModel) {
+	init(viewModel: VerifiedAccessViewModel) {
 
 		self.viewModel = viewModel
 
@@ -35,5 +35,17 @@ final class VerifiedHighRiskAccessViewController: BaseViewController, Logging {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+		
+		addCloseButton(action: #selector(closeButtonTapped))
+		
+		viewModel.$accessTitle.binding = { [weak self] in self?.sceneView.title = $0 }
+	}
+}
+
+private extension VerifiedAccessViewController {
+	
+	@objc func closeButtonTapped() {
+
+		viewModel.dismiss()
 	}
 }

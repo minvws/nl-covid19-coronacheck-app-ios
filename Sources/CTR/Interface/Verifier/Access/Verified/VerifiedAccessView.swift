@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class VerifiedLowRiskAccessView: BaseView {
+final class VerifiedAccessView: BaseView {
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -17,7 +17,6 @@ final class VerifiedLowRiskAccessView: BaseView {
 		}
 		enum Spacing {
 			static let imageToLabel: CGFloat = 32
-			static let label: CGFloat = 16
 		}
 		enum Size {
 			static let imageWidth: CGFloat = 200
@@ -28,10 +27,6 @@ final class VerifiedLowRiskAccessView: BaseView {
 		enum Title {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
-		}
-		enum RiskDescription {
-			static let lineHeight: CGFloat = 22
-			static let kerning: CGFloat = -0.41
 		}
 	}
 	
@@ -47,11 +42,6 @@ final class VerifiedLowRiskAccessView: BaseView {
 	private let titleLabel: Label = {
 
 		return Label(title1: nil, montserrat: true).multiline().header()
-	}()
-	
-	private let riskDescriptionLabel: Label = {
-		
-		return Label(body: nil).multiline()
 	}()
 	
 	private let stackView: UIStackView = {
@@ -102,23 +92,14 @@ final class VerifiedLowRiskAccessView: BaseView {
 		])
 	}
 	
-	// MARK: - AccessViewable
+	// MARK: - Public Access
 
 	/// The title
-	func title(_ title: String?) {
-		titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
-														 alignment: .center,
-														 kerning: ViewTraits.Title.kerning)
-	}
-	
-	var riskDescription: String? {
+	var title: String? {
 		didSet {
-			guard oldValue == nil else { return }
-			riskDescriptionLabel.attributedText = riskDescription?.setLineHeight(ViewTraits.RiskDescription.lineHeight,
-																				 alignment: .center,
-																				 kerning: ViewTraits.RiskDescription.kerning)
-			stackView.addArrangedSubview(riskDescriptionLabel)
-			stackView.setCustomSpacing(ViewTraits.Spacing.label, after: titleLabel)
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 alignment: .center,
+															 kerning: ViewTraits.Title.kerning)
 		}
 	}
 }
