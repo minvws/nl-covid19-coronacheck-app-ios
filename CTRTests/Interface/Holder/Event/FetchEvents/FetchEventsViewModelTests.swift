@@ -516,22 +516,14 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateNosessionTitle()
 			expect(feedback.subTitle) == L.holderErrorstateNosessionMessage()
 			expect(feedback.primaryActionTitle) == L.holderErrorstateNosessionAction()
 			expect(feedback.secondaryActionTitle).to(beNil())
-			done()
-		}
+		}))
 	}
 
 	func test_accessToken_TVSSessionExpired_positiveTest() {
