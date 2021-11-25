@@ -35,9 +35,12 @@ final class VerifiedAccessViewModel: Logging {
 	func startScanAgainTimer() {
 
 		guard scanAgainTimer == nil else { return }
+		
+		let displayTime: TimeInterval = 0.8
+		let animationDuration = VerifierResultViewTraits.Animation.verifiedDuration
 
 		scanAgainTimer = Timer.scheduledTimer(
-			timeInterval: 0.8,
+			timeInterval: displayTime + animationDuration,
 			target: self,
 			selector: (#selector(scanAgainOrLaunchThirdPartyScannerApp)),
 			userInfo: nil,

@@ -163,7 +163,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				coordinator: self
 			)
 		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushWithFadeAnimation(with: viewController,
+																							  animationDuration: VerifierResultViewTraits.Animation.verifiedDuration)
 	}
 	
 	func navigateToDeniedAccess() {
