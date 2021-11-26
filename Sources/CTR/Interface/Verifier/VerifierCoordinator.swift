@@ -35,6 +35,12 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func navigateToVerifiedInfo()
 	
 	func userWishesToLaunchThirdPartyScannerApp()
+	
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails)
+	
+	func navigateToVerifiedAccess(_ verifiedType: VerifiedType)
+	
+	func navigateToDeniedAccess()
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -133,6 +139,41 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				verificationResult: verificationResult,
 				isDeepLinkEnabled: thirdPartyScannerApp != nil,
 				userSettings: UserSettings()
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
+	
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails) {
+		
+		let viewController = CheckIdentityViewController(
+			viewModel: CheckIdentityViewModel(
+				coordinator: self,
+				verificationDetails: verificationDetails,
+				isDeepLinkEnabled: thirdPartyScannerApp != nil,
+				userSettings: UserSettings()
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
+	
+	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
+		
+		let viewController = VerifiedAccessViewController(
+			viewModel: VerifiedAccessViewModel(
+				coordinator: self,
+				verifiedType: verifiedType
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushWithFadeAnimation(with: viewController,
+																							  animationDuration: VerifierResultViewTraits.Animation.verifiedDuration)
+	}
+	
+	func navigateToDeniedAccess() {
+		
+		let viewController = DeniedAccessViewController(
+			viewModel: DeniedAccessViewModel(
+				coordinator: self
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)

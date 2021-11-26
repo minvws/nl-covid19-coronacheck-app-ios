@@ -95,6 +95,38 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedUserWishesToLaunchThirdPartyScannerAppCount += 1
 	}
 
+	var invokedNavigateToCheckIdentity = false
+	var invokedNavigateToCheckIdentityCount = 0
+	var invokedNavigateToCheckIdentityParameters: (verificationDetails: MobilecoreVerificationDetails, Void)?
+	var invokedNavigateToCheckIdentityParametersList = [(verificationDetails: MobilecoreVerificationDetails, Void)]()
+
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails) {
+		invokedNavigateToCheckIdentity = true
+		invokedNavigateToCheckIdentityCount += 1
+		invokedNavigateToCheckIdentityParameters = (verificationDetails, ())
+		invokedNavigateToCheckIdentityParametersList.append((verificationDetails, ()))
+	}
+
+	var invokedNavigateToVerifiedAccess = false
+	var invokedNavigateToVerifiedAccessCount = 0
+	var invokedNavigateToVerifiedAccessParameters: (verifiedType: VerifiedType, Void)?
+	var invokedNavigateToVerifiedAccessParametersList = [(verifiedType: VerifiedType, Void)]()
+
+	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
+		invokedNavigateToVerifiedAccess = true
+		invokedNavigateToVerifiedAccessCount += 1
+		invokedNavigateToVerifiedAccessParameters = (verifiedType, ())
+		invokedNavigateToVerifiedAccessParametersList.append((verifiedType, ()))
+	}
+
+	var invokedNavigateToDeniedAccess = false
+	var invokedNavigateToDeniedAccessCount = 0
+
+	func navigateToDeniedAccess() {
+		invokedNavigateToDeniedAccess = true
+		invokedNavigateToDeniedAccessCount += 1
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?

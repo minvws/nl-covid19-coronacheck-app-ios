@@ -70,4 +70,16 @@ extension UINavigationController {
 			setViewControllers(updatedViewControllers, animated: animated)
 		}
 	}
+	
+	/// Pushes view controller with fade animation instead of push animation.
+	/// - Parameters:
+	///   - viewController: The view controller to push onto the stack.
+	///   - animationDuration: The animation duration.
+	func pushWithFadeAnimation(with viewController: UIViewController, animationDuration: CFTimeInterval) {
+		let transition = CATransition()
+		transition.duration = animationDuration
+		transition.type = .fade
+		view.layer.add(transition, forKey: nil)
+		pushViewController(viewController, animated: false)
+	}
 }
