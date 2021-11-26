@@ -12,6 +12,12 @@ final class DeniedAccessViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
 	
+	/// The configuration
+	private var configuration: ConfigurationGeneralProtocol = Configuration()
+	
+	/// A timer auto close the scene
+	private var autoCloseTimer: Timer?
+	
 	/// The title of the scene
 	@Bindable private(set) var accessTitle: String
 	
@@ -26,6 +32,29 @@ final class DeniedAccessViewModel: Logging {
 		accessTitle = L.verifierResultDeniedTitle()
 		primaryTitle = L.verifierResultNext()
 		secondaryTitle = L.verifierResultDeniedReadmore()
+		
+		addObservers()
+	}
+	
+	deinit {
+		
+		stopAutoCloseTimer()
+	}
+	
+	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
+	func startAutoCloseTimer() {
+
+		guard autoCloseTimer == nil else {
+			return
+		}
+
+		autoCloseTimer = Timer.scheduledTimer(
+			timeInterval: TimeInterval(configuration.getAutoCloseTime()),
+			target: self,
+			selector: (#selector(autoCloseScene)),
+			userInfo: nil,
+			repeats: false
+		)
 	}
 	
 	func dismiss() {
@@ -35,7 +64,7 @@ final class DeniedAccessViewModel: Logging {
 	
 	func scanAgain() {
 
-//		stopAutoCloseTimer()
+		stopAutoCloseTimer()
 		coordinator?.navigateToScan()
 	}
 	
@@ -56,5 +85,33 @@ final class DeniedAccessViewModel: Logging {
 			title: L.verifierDeniedTitle(),
 			content: textViews
 		)
+	}
+}
+
+private extension DeniedAccessViewModel {
+	
+	// MARK: - AutoCloseTimer
+	
+	func addObservers() {
+
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(autoCloseScene),
+			name: UIApplication.didEnterBackgroundNotification,
+			object: nil
+		)
+	}
+
+	func stopAutoCloseTimer() {
+
+		autoCloseTimer?.invalidate()
+		autoCloseTimer = nil
+	}
+
+	@objc func autoCloseScene() {
+
+		logInfo("Auto closing the denied access view")
+		stopAutoCloseTimer()
+		scanAgain()
 	}
 }

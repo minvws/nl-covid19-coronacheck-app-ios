@@ -52,6 +52,13 @@ final class DeniedAccessViewController: BaseViewController, Logging {
 			self?.viewModel.showMoreInformation()
 		}
 	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		
+		super.viewDidAppear(animated)
+		
+		viewModel.startAutoCloseTimer()
+	}
 }
 
 private extension DeniedAccessViewController {

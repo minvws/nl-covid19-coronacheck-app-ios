@@ -60,7 +60,7 @@ final class CheckIdentityViewController: BaseViewController, Logging {
 		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.monthOfBirth = $0 }
 		viewModel.$dccFlag.binding = { [weak self] in self?.sceneView.dccFlag = $0 }
 		viewModel.$dccScanned.binding = { [weak self] in self?.sceneView.dccScanned = $0 }
-		/// Confirm that a valid QR code is scanned on this view. The verified view is shown for a limited duration
+		// Confirm that a valid QR code is scanned on this view. The verified view is shown for a limited duration
 		viewModel.$verifiedAccessibility.binding = { [weak self] in self?.navigationItem.accessibilityLabel = $0 }
 		
 		sceneView.firstNameHeader = L.verifierResultIdentityFirstname()
@@ -88,8 +88,10 @@ final class CheckIdentityViewController: BaseViewController, Logging {
 		
 		viewModel.startAutoCloseTimer()
 	}
+}
+
+private extension CheckIdentityViewController {
 	
-	/// User tapped on the button
 	@objc func closeButtonTapped() {
 
 		viewModel.dismiss()
