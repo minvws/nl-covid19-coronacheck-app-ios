@@ -111,6 +111,8 @@ private extension BottomSheetModalViewController {
 		view.clipsToBounds = true
 		
 		closeButton.addTarget(self, action: #selector(dismissModal), for: .touchUpInside)
+		
+		childViewController.view.isAccessibilityElement = true
 	}
 	
 	func setupViewHierarchy() {

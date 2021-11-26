@@ -1,5 +1,5 @@
 "holder.recovery.recoveryAndVaccination.title" = "Herstelbewijs en vaccinatiebewijs gemaakt";
-"holder.recovery.recoveryAndVaccination.message" = "<p>Er is een herstelbewijs gemaakt.</p><p>Omdat je positieve getest bent vóór je eerste prik, ben je met één prik volledig gevaccineerd. Daarom is er ook een volledig vaccinatiebewijs gemaakt.</p>";
+"holder.recovery.recoveryAndVaccination.message" = "<p>Er is een herstelbewijs gemaakt.</p><p>Omdat je positief getest bent vóór je eerste prik, ben je met één prik volledig gevaccineerd. Daarom is er ook een volledig vaccinatiebewijs gemaakt.</p>";
 "holder.recovery.recoveryAndVaccination.action" = "Naar mijn bewijzen";
 "general.url.link" = "Link";
 "holder.recovery.vaccinationOnly.title" = "Geen herstelbewijs, wel een vaccinatiebewijs";
@@ -52,7 +52,7 @@
 "holder.dcc.recovery.details.title" = "Details";
 "holder.dcc.test.details.title" = "Details";
 "holder.incompletedutchvaccination.title" = "Geen Nederlands vaccinatiebewijs";
-"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je meer dan één prik hebben gehad, of hersteld zijn van corona voor je eerste prik.</p><p><b>Tweede prik gehad?</b><br />Haal opnieuw je vaccinaties op. Je krijgt dan een Nederlands bewijs.</p>";
+"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je volledig gevaccineerd zijn, of hersteld van corona vóór je eerste prik.</p><p><b>Tweede prik gehad?</b><br />Haal opnieuw je vaccinaties op. Je krijgt dan een Nederlands bewijs.</p>";
 "holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan een Nederlands bewijs.</p>";
 "holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Meer weten?</b><br />Bekijk de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a> voor andere mogelijke oorzaken.</p>";
 "holder.incompletedutchvaccination.button.addvaccines" = "Haal mijn vaccinaties op";
@@ -169,8 +169,7 @@
 "holder.checkdcc.rejected.actionTitle" = "Probeer opnieuw";
 "holder.dcc.alert.message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder.event.originmismatch.dcc.body" = "Op dit moment kunnen we van jouw gescande QR-code geen bewijs maken. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a>";
-"holder.dcc.list.title" = "Gescande gegevens
-";
+"holder.dcc.list.title" = "Gescande gegevens";
 "holder.dcc.list.message" = "Met deze gegevens kun je een bewijs maken.";
 "holder.dcc.element.subtitle" = "<p>Naam: %@</p><p>Geboortedatum: %@</p>";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
@@ -682,7 +681,7 @@
 "holder.event.about.vaccination.identifier" = "Uniek vaccinatienummer:";
 
 /* MARK: - Recovery Event */
-"holder.event.about.recovery.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.event.about.recovery.subtitle" = "De volgende gegevens zijn opgehaald bij de testlocatie:";
 "holder.event.about.recovery.name" = "Naam:";
 "holder.event.about.recovery.dateofbirth" = "Geboortedatum:";
 "holder.event.about.recovery.date" = "Testdatum:";
