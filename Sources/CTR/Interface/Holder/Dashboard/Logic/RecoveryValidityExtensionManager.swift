@@ -73,10 +73,11 @@ final class RecoveryValidityExtensionManager: RecoveryValidityExtensionManagerPr
 		// If feature not launched yet, exit.
 		guard featureLaunchDate < now() else { return }
 
-		// If no recovery events, exit.
-		guard userHasRecoveryEvents() else {
+		// If no valid recovery events, exit.
+		guard userHasRecoveryEvents(), !userHasPaperflowRecoveryGreencards() else {
 			// we're already past the launch date and the user doesn't have any recovery
 			// events, so this feature can now be permanently disabled:
+			// Or this is a HKVI recovery that can not be extended.
 			userSettings.shouldCheckRecoveryGreenCardRevisedValidity = false
 			return
 		}
