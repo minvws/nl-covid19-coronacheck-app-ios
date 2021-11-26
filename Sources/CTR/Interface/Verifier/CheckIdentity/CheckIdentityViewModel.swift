@@ -41,7 +41,7 @@ final class CheckIdentityViewModel: Logging {
 	/// The birth day of the holder
 	@Bindable private(set) var dayOfBirth: String?
 
-	/// The birth mont of the holder
+	/// The birth month of the holder
 	@Bindable private(set) var monthOfBirth: String?
 	
 	@Bindable private(set) var primaryTitle = L.verifierResultAccessIdentityverified()
