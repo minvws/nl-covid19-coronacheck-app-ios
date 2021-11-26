@@ -91,6 +91,10 @@ class HolderCoordinator: SharedCoordinator {
 				let hasUnexpiredRecoveryGreencards = !unexpiredGreencards.isEmpty
 				return hasUnexpiredRecoveryGreencards
 			},
+			userHasPaperflowRecoveryGreencards: {
+
+				return Services.walletManager.hasEventGroup(type: EventMode.recovery.rawValue, providerIdentifier: "DCC")
+			},
 			userSettings: UserSettings(),
 			remoteConfigManager: Services.remoteConfigManager,
 			now: { Date() }
