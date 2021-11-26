@@ -681,7 +681,7 @@
 "holder.event.about.vaccination.identifier" = "Unique vaccination identifier:";
 
 /* MARK: - Recovery Event */
-"holder.event.about.recovery.subtitle" = "The following details were retrieved:";
+"holder.event.about.recovery.subtitle" = "The following details were retrieved at the test location:";
 "holder.event.about.recovery.name" = "Name:";
 "holder.event.about.recovery.dateofbirth" = "Date of birth:";
 "holder.event.about.recovery.date" = "Test date:";

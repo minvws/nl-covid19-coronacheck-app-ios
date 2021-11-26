@@ -483,29 +483,64 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		waitUntil { done in
-			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
-				fail("invalid params")
-				return
-			}
-			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-				fail("wrong state")
-				return
-			}
-			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateNobsnTitle()
 			expect(feedback.subTitle) == L.holderErrorstateNobsnMessage()
 			expect(feedback.primaryActionTitle) == L.holderErrorstateNobsnAction()
 			expect(feedback.secondaryActionTitle).to(beNil())
-			done()
-		}
+		}))
 	}
 
-	func test_accessTokenSessionExpired() {
+	func test_accessToken_TVSSessionExpired_vaccination() {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
-			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeSessionExpired), error: .serverError)), ())
+			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeTvsSessionExpired), error: .serverError)), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .vaccination
+		)
+
+		// Then
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
+			expect(feedback.title) == L.holderErrorstateNosessionTitle()
+			expect(feedback.subTitle) == L.holderErrorstateNosessionMessage()
+			expect(feedback.primaryActionTitle) == L.holderErrorstateNosessionAction()
+			expect(feedback.secondaryActionTitle).to(beNil())
+		}))
+	}
+
+	func test_accessToken_TVSSessionExpired_positiveTest() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeTvsSessionExpired), error: .serverError)), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.positiveTestProvider]), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .positiveTest
+		)
+
+		// Then
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(equal(.startWithPositiveTest))
+	}
+
+	func test_accessToken_nonceExpired() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeNonceExpired), error: .serverError)), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
@@ -905,4 +940,15 @@ class FetchEventsViewModelTests: XCTestCase {
 		payload: "payload",
 		signature: "signature"
 	)
+}
+
+private func beEventScreenResultError(test: @escaping (Content) -> Void = { _ in }) -> Predicate<EventScreenResult> {
+	return Predicate.define("be .error with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .error(content, _) = actual {
+			test(content)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
 }
