@@ -37,6 +37,7 @@ final class RecoveryValidityExtensionManager: RecoveryValidityExtensionManagerPr
 	// Dependencies:
 	private let userHasRecoveryEvents: () -> Bool
 	private let userHasUnexpiredRecoveryGreencards: () -> Bool
+	private let userHasPaperflowRecoveryGreencards: () -> Bool
 	private let userSettings: UserSettingsProtocol
 	private let remoteConfigManager: RemoteConfigManaging
 	private let now: () -> Date
@@ -44,12 +45,14 @@ final class RecoveryValidityExtensionManager: RecoveryValidityExtensionManagerPr
 	init(
 		userHasRecoveryEvents: @escaping () -> Bool,
 		userHasUnexpiredRecoveryGreencards: @escaping () -> Bool,
+		userHasPaperflowRecoveryGreencards: @escaping () -> Bool,
 		userSettings: UserSettingsProtocol,
 		remoteConfigManager: RemoteConfigManaging,
 		now: @escaping () -> Date
 	) {
 		self.userHasRecoveryEvents = userHasRecoveryEvents
 		self.userHasUnexpiredRecoveryGreencards = userHasUnexpiredRecoveryGreencards
+		self.userHasPaperflowRecoveryGreencards = userHasPaperflowRecoveryGreencards
 		self.userSettings = userSettings
 		self.remoteConfigManager = remoteConfigManager
 		self.now = now

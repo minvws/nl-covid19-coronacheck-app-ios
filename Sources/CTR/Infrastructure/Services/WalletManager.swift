@@ -61,6 +61,8 @@ protocol WalletManaging: AnyObject {
 	func canSkipMultiDCCUpgrade() -> Bool
 	
 	func shouldShowMultiDCCUpgradeBanner(userSettings: UserSettingsProtocol) -> Bool
+
+	func hasEventGroup(type: String, providerIdentifier: String) -> Bool
 }
 
 class WalletManager: WalletManaging, Logging {
@@ -457,6 +459,22 @@ class WalletManager: WalletManaging, Logging {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
 			   let eventGroups = wallet.eventGroups?.allObjects as? [EventGroup] {
 				result = eventGroups
+			}
+		}
+		return result
+	}
+
+	func hasEventGroup(type: String, providerIdentifier: String) -> Bool {
+
+		var result = false
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+			   let eventGroups = wallet.eventGroups?.allObjects as? [EventGroup] {
+				for eventGroup in eventGroups where eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type {
+					result = true
+				}
 			}
 		}
 		return result

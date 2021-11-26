@@ -46,6 +46,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 				return true
 			},
 			userHasUnexpiredRecoveryGreencards: { false },
+			userHasPaperflowRecoveryGreencards: { false },
 			userSettings: userSettingsSpy,
 			remoteConfigManager: remoteConfigManagerSpy,
 			now: { now }
@@ -67,6 +68,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 				return true
 			},
 			userHasUnexpiredRecoveryGreencards: { false },
+			userHasPaperflowRecoveryGreencards: { false },
 			userSettings: userSettingsSpy,
 			remoteConfigManager: remoteConfigManagerSpy,
 			now: { now }
@@ -95,6 +97,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 				return false
 			},
 			userHasUnexpiredRecoveryGreencards: { false },
+			userHasPaperflowRecoveryGreencards: { false },
 			userSettings: userSettingsSpy,
 			remoteConfigManager: remoteConfigManagerSpy,
 			now: { now }
@@ -120,6 +123,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 				invokedUserHasUnexpiredRecoveryGreencards = true
 				return false
 			},
+			userHasPaperflowRecoveryGreencards: { false },
 			userSettings: userSettingsSpy,
 			remoteConfigManager: remoteConfigManagerSpy,
 			now: { now }
@@ -156,6 +160,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 				invokedUserHasUnexpiredRecoveryGreencards = true
 				return true
 			},
+			userHasPaperflowRecoveryGreencards: { false },
 			userSettings: userSettingsSpy,
 			remoteConfigManager: remoteConfigManagerSpy,
 			now: { now }
@@ -195,6 +200,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 				invokedUserHasUnexpiredRecoveryGreencards = true
 				return false
 			},
+			userHasPaperflowRecoveryGreencards: { false },
 			userSettings: userSettingsSpy,
 			remoteConfigManager: remoteConfigManagerSpy,
 			now: { now }
@@ -234,6 +240,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 				invokedUserHasUnexpiredRecoveryGreencards = true
 				return true
 			},
+			userHasPaperflowRecoveryGreencards: { false },
 			userSettings: userSettingsSpy,
 			remoteConfigManager: remoteConfigManagerSpy,
 			now: { now }
@@ -274,6 +281,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 				invokedUserHasUnexpiredRecoveryGreencards = true
 				return true
 			},
+			userHasPaperflowRecoveryGreencards: { false },
 			userSettings: userSettingsSpy,
 			remoteConfigManager: remoteConfigManagerSpy,
 			now: { now }
