@@ -742,3 +742,25 @@ extension EventFlow.AccessToken {
 		)
 	}
 }
+
+extension EuCredentialAttributes {
+	static var fakeVaccination: EuCredentialAttributes {
+		EuCredentialAttributes(
+			credentialVersion: 1,
+			digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate(
+				dateOfBirth: "2021-06-01",
+				name: EuCredentialAttributes.Name(
+					familyName: "Corona",
+					standardisedFamilyName: "CORONA",
+					givenName: "Check",
+					standardisedGivenName: "CHECK"
+				),
+				schemaVersion: "1.0.0",
+				vaccinations: [ EuCredentialAttributes.Vaccination.vaccination]
+			),
+			expirationTime: Date().timeIntervalSince1970 + 3600,
+			issuedAt: Date().timeIntervalSince1970,
+			issuer: "NL"
+		)
+	}
+}

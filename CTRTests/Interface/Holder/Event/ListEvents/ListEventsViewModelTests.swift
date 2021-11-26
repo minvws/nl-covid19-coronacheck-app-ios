@@ -150,7 +150,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(title) == L.holderEventAboutTitle()
 	}
 
-	func test_somethingIsWrong_tapped() {
+	func test_somethingIsWrong_vaccination_tapped() {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -175,6 +175,107 @@ class ListEventsViewModelTests: XCTestCase {
 				body: L.holderVaccinationWrongBody(),
 				hideBodyForScreenCapture: false
 			)
+	}
+
+	func test_somethingIsWrong_recovery_tapped() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: [fakeRemoteEventRecovery]
+		)
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.secondaryAction?()
+
+		// Then
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
+			.moreInformation(
+				title: L.holderVaccinationWrongTitle(),
+				body: L.holderRecoveryWrongBody(),
+				hideBodyForScreenCapture: false
+			)
+	}
+
+	func test_somethingIsWrong_positiveTest_tapped() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .positiveTest,
+			remoteEvents: [fakeRemoteEventPositiveTest]
+		)
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.secondaryAction?()
+
+		// Then
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
+			.moreInformation(
+				title: L.holderVaccinationWrongTitle(),
+				body: L.holderTestresultsWrongBody(),
+				hideBodyForScreenCapture: false
+			)
+	}
+
+	func test_somethingIsWrong_negativeTest_tapped() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .test,
+			remoteEvents: [fakeRemoteEventNegativeTest]
+		)
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.secondaryAction?()
+
+		// Then
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
+			.moreInformation(
+				title: L.holderVaccinationWrongTitle(),
+				body: L.holderTestresultsWrongBody(),
+				hideBodyForScreenCapture: false
+			)
+	}
+
+	func test_somethingIsWrong_dccVaccination_notAvailable() {
+
+		// Given
+		cryptoSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .paperflow,
+			remoteEvents: [remotePaperFlowEvent]
+		)
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(content.secondaryAction).to(beNil())
+		expect(content.secondaryActionTitle).to(beNil())
 	}
 
 	func test_oneEvent_oneRow() {
