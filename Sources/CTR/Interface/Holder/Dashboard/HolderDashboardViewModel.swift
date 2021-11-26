@@ -560,4 +560,3 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		return cards
 	}
 }
-
