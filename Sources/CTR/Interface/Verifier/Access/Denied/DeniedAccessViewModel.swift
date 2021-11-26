@@ -19,19 +19,15 @@ final class DeniedAccessViewModel: Logging {
 	private var autoCloseTimer: Timer?
 	
 	/// The title of the scene
-	@Bindable private(set) var accessTitle: String
+	@Bindable private(set) var accessTitle = L.verifierResultDeniedTitle()
 	
-	@Bindable private(set) var primaryTitle: String
+	@Bindable private(set) var primaryTitle = L.verifierResultNext()
 	
-	@Bindable private(set) var secondaryTitle: String
+	@Bindable private(set) var secondaryTitle = L.verifierResultDeniedReadmore()
 	
 	init(coordinator: (VerifierCoordinatorDelegate & Dismissable)) {
 		
 		self.coordinator = coordinator
-		
-		accessTitle = L.verifierResultDeniedTitle()
-		primaryTitle = L.verifierResultNext()
-		secondaryTitle = L.verifierResultDeniedReadmore()
 		
 		addObservers()
 	}

@@ -30,7 +30,7 @@ final class CheckIdentityViewModel: Logging {
 	
 	@Bindable private(set) var hideForCapture: Bool = false
 	
-	@Bindable private(set) var title: String
+	@Bindable private(set) var title = L.verifierResultIdentityTitle()
 	
 	/// The first name of the holder
 	@Bindable private(set) var firstName: String?
@@ -44,19 +44,19 @@ final class CheckIdentityViewModel: Logging {
 	/// The birth mont of the holder
 	@Bindable private(set) var monthOfBirth: String?
 	
-	@Bindable private(set) var primaryTitle: String
+	@Bindable private(set) var primaryTitle = L.verifierResultAccessIdentityverified()
 	
-	@Bindable private(set) var secondaryTitle: String
+	@Bindable private(set) var secondaryTitle = L.verifierResultAccessReadmore()
 	
 	@Bindable private(set) var dccFlag: String?
 	
 	@Bindable private(set) var dccScanned: String?
 	
-	@Bindable private(set) var checkIdentity: String
+	@Bindable private(set) var checkIdentity = L.verifierResultAccessCheckidentity()
 	
 	@Bindable private(set) var primaryButtonIcon: UIImage?
 	
-	@Bindable private(set) var verifiedAccessibility: String
+	@Bindable private(set) var verifiedAccessibility = "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
@@ -69,12 +69,6 @@ final class CheckIdentityViewModel: Logging {
 		self.verificationDetails = verificationDetails
 		self.isDeepLinkEnabled = isDeepLinkEnabled
 		self.userSettings = userSettings
-		
-		title = L.verifierResultIdentityTitle()
-		primaryTitle = L.verifierResultAccessIdentityverified()
-		secondaryTitle = L.verifierResultAccessReadmore()
-		checkIdentity = L.verifierResultAccessCheckidentity()
-		verifiedAccessibility = "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
 		
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
