@@ -188,6 +188,45 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 		expect(callbackValue) == .extensionAvailable
 	}
 
+	func test_hasRecoveryEvents_shouldCheckIsTrue_withUnexpiredRecoveryGreencards_withDCCRecovery() {
+
+		// Arrange
+		var invokedUserHasUnexpiredRecoveryGreencards = false
+		var invokedUserHasPaperflowRecoveryGreencards = false
+		sut = RecoveryValidityExtensionManager(
+			userHasRecoveryEvents: {
+				return true
+			},
+			userHasUnexpiredRecoveryGreencards: {
+				invokedUserHasUnexpiredRecoveryGreencards = true
+				return true
+			},
+			userHasPaperflowRecoveryGreencards: {
+				invokedUserHasPaperflowRecoveryGreencards = true
+				return true
+			},
+			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			now: { now }
+		)
+
+		// set non-nil value to see if it gets nilled
+		var callbackValue: RecoveryValidityExtensionManager.BannerType? = .extensionDidComplete
+		sut.bannerStateCallback = { val in callbackValue = val }
+
+		userSettingsSpy.stubbedShouldCheckRecoveryGreenCardRevisedValidity = true
+
+		userSettingsSpy.stubbedShouldShowRecoveryValidityExtensionCard = true
+		userSettingsSpy.stubbedShouldShowRecoveryValidityReinstationCard = false
+		// Act
+		sut.reload()
+
+		// Assert
+		expect(invokedUserHasPaperflowRecoveryGreencards) == true
+		expect(invokedUserHasUnexpiredRecoveryGreencards) == false
+		expect(callbackValue).to(beNil())
+	}
+
 	func test_hasRecoveryEvents_shouldCheckIsTrue_withoutUnexpiredRecoveryGreencards() {
 
 		// Arrange
