@@ -9,6 +9,8 @@ import UIKit
 
 final class DeniedAccessViewController: BaseViewController, Logging {
 	
+	override var enableSwipeBack: Bool { false }
+	
 	private let viewModel: DeniedAccessViewModel
 
 	let sceneView = DeniedAccessView()

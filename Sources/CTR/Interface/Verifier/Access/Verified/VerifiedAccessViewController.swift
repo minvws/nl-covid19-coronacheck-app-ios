@@ -9,6 +9,8 @@ import UIKit
 
 final class VerifiedAccessViewController: BaseViewController, Logging {
 	
+	override var enableSwipeBack: Bool { false }
+	
 	private let viewModel: VerifiedAccessViewModel
 
 	let sceneView = VerifiedAccessView()
