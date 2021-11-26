@@ -158,6 +158,33 @@ extension EventFlow.EventResultWrapper {
 		result: nil,
 		events: [EventFlow.Event.vaccinationEvent]
 	)
+
+	static var fakeRecoveryResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.recoveryEvent]
+	)
+
+	static var fakePositiveTestResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.positiveTestEvent]
+	)
+
+	static var fakeNegativeTestResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.negativeTestEvent]
+	)
 }
 
 extension RequestToken {
@@ -597,6 +624,15 @@ extension EventFlow.Event {
 				validUntil: "2022-12-31"
 			),
 			dccEvent: nil
+		)
+	}
+}
+
+extension SignedResponse {
+	static var fakeResponse: SignedResponse {
+		SignedResponse(
+			payload: "payload",
+			signature: "signature"
 		)
 	}
 }

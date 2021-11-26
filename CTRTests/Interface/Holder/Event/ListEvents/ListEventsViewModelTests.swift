@@ -130,7 +130,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -156,7 +156,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -390,7 +390,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteNegativeTestEvent()]
+			remoteEvents: [fakeRemoteEventNegativeTest]
 		)
 
 		guard case let .feedback(content: feedback) = sut.viewState else {
@@ -410,7 +410,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = false
@@ -447,7 +447,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [defaultRemoteRecoveryEvent()]
+			remoteEvents: [fakeRemoteEventRecovery]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = false
@@ -484,7 +484,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: [defaultRemoteNegativeTestEvent()]
+			remoteEvents: [fakeRemoteEventNegativeTest]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = false
@@ -520,7 +520,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -561,7 +561,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -602,7 +602,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -643,7 +643,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -684,7 +684,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -725,7 +725,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -769,7 +769,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -812,7 +812,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -856,7 +856,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -900,7 +900,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -944,7 +944,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -991,7 +991,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1029,7 +1029,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1070,7 +1070,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1110,7 +1110,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
-			remoteEvents: [remotePaperFlowEvent()]
+			remoteEvents: [remotePaperFlowEvent]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1176,7 +1176,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1211,7 +1211,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1246,7 +1246,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1289,7 +1289,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [defaultRemoteVaccinationEvent()]
+			remoteEvents: [fakeRemoteEventVaccination]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1335,7 +1335,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .positiveTest,
-			remoteEvents: [defaultRemotePositiveTestEvent()]
+			remoteEvents: [fakeRemoteEventPositiveTest]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1382,7 +1382,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .positiveTest,
-			remoteEvents: [defaultRemotePositiveTestEvent()]
+			remoteEvents: [fakeRemoteEventPositiveTest]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1429,7 +1429,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .positiveTest,
-			remoteEvents: [defaultRemotePositiveTestEvent()]
+			remoteEvents: [fakeRemoteEventPositiveTest]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1476,7 +1476,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .positiveTest,
-			remoteEvents: [defaultRemotePositiveTestEvent()]
+			remoteEvents: [fakeRemoteEventPositiveTest]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1517,7 +1517,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [defaultRemoteRecoveryEvent()]
+			remoteEvents: [fakeRemoteEventRecovery]
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -1576,7 +1576,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [defaultRemoteRecoveryEvent()]
+			remoteEvents: [fakeRemoteEventRecovery]
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1624,7 +1624,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [defaultRemoteRecoveryEvent()]
+			remoteEvents: [fakeRemoteEventRecovery]
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1666,7 +1666,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [defaultRemoteRecoveryEvent()]
+			remoteEvents: [fakeRemoteEventRecovery]
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1714,7 +1714,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [defaultRemoteRecoveryEvent()]
+			remoteEvents: [fakeRemoteEventRecovery]
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1762,7 +1762,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [defaultRemoteRecoveryEvent()]
+			remoteEvents: [fakeRemoteEventRecovery]
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1788,157 +1788,37 @@ class ListEventsViewModelTests: XCTestCase {
 
 	// MARK: Default values
 
-	private func defaultRemoteVaccinationEvent() -> RemoteEvent {
-		return RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper(
-				providerIdentifier: "CC",
-				protocolVersion: "3.0",
-				identity: identity,
-				status: .complete,
-				result: nil,
-				events: [
-					EventFlow.Event(
-						type: "vaccination",
-						unique: "1234",
-						isSpecimen: false,
-						vaccination: vaccinationEvent,
-						negativeTest: nil,
-						positiveTest: nil,
-						recovery: nil,
-						dccEvent: nil
-					)
-				]
-			),
-			signedResponse: signedResponse
+	private var fakeRemoteEventVaccination: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
 		)
 	}
 
-	private func defaultRemoteRecoveryEvent() -> RemoteEvent {
-		return RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper(
-				providerIdentifier: "CC",
-				protocolVersion: "3.0",
-				identity: identity,
-				status: .complete,
-				result: nil,
-				events: [
-					EventFlow.Event(
-						type: "recovery",
-						unique: "1234",
-						isSpecimen: false,
-						vaccination: nil,
-						negativeTest: nil,
-						positiveTest: nil,
-						recovery: recoveryEvent,
-						dccEvent: nil
-					)
-				]
-			),
-			signedResponse: signedResponse
+	private var fakeRemoteEventRecovery: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeRecoveryResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
 		)
 	}
 
-	private func defaultRemotePositiveTestEvent() -> RemoteEvent {
-		return RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper(
-				providerIdentifier: "CC",
-				protocolVersion: "3.0",
-				identity: identity,
-				status: .complete,
-				result: nil,
-				events: [
-					EventFlow.Event(
-						type: "positivetest",
-						unique: "1234",
-						isSpecimen: false,
-						vaccination: nil,
-						negativeTest: nil,
-						positiveTest: EventFlow.TestEvent(
-							sampleDateString: "2021-07-01",
-							negativeResult: nil,
-							positiveResult: true,
-							facility: nil,
-							type: nil,
-							name: nil,
-							manufacturer: nil
-						),
-						recovery: nil,
-						dccEvent: nil
-					)
-				]
-			),
-			signedResponse: signedResponse
+	private var fakeRemoteEventPositiveTest: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakePositiveTestResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
 		)
 	}
 
-	private func defaultRemoteNegativeTestEvent() -> RemoteEvent {
-		return RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper(
-				providerIdentifier: "CC",
-				protocolVersion: "3.0",
-				identity: identity,
-				status: .complete,
-				result: nil,
-				events: [
-					EventFlow.Event(
-						type: "test",
-						unique: "1234",
-						isSpecimen: false,
-						vaccination: nil,
-						negativeTest: EventFlow.TestEvent(
-							sampleDateString: "2021-07-01",
-							negativeResult: true,
-							positiveResult: nil,
-							facility: nil,
-							type: nil,
-							name: nil,
-							manufacturer: nil
-						),
-						positiveTest: nil,
-						recovery: nil,
-						dccEvent: nil
-					)
-				]
-			),
-			signedResponse: signedResponse
+	private var fakeRemoteEventNegativeTest: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
 		)
 	}
-
-	private let recoveryEvent = EventFlow.RecoveryEvent(
-		sampleDate: "2021-07-01",
-		validFrom: "2021-07-12",
-		validUntil: "2022-12-31" // This will fail the test after 2022-12-31
-	)
-
-	private let identity = EventFlow.Identity(
-		infix: "",
-		firstName: "Corona",
-		lastName: "Check",
-		birthDateString: "2021-05-16"
-	)
-
-	private let vaccinationEvent = EventFlow.VaccinationEvent(
-		dateString: "2021-05-16",
-		hpkCode: nil,
-		type: nil,
-		manufacturer: nil,
-		brand: nil,
-		doseNumber: 1,
-		totalDoses: 2,
-		country: "NLD",
-		completedByMedicalStatement: nil,
-		completedByPersonalStatement: nil,
-		completionReason: nil
-	)
-
-	private let signedResponse = SignedResponse(
-		payload: "payload",
-		signature: "signature"
-	)
 	
 	// MARK: Helper
 
-	func remoteVaccinationEvent(providerIdentifier: String = "CC", vaccinationDate: String, hpkCode: String? = nil) -> RemoteEvent {
+	private func remoteVaccinationEvent(providerIdentifier: String = "CC", vaccinationDate: String, hpkCode: String? = nil) -> RemoteEvent {
 
 		let vaccinationEvent = EventFlow.VaccinationEvent(
 			dateString: vaccinationDate,
@@ -1957,7 +1837,7 @@ class ListEventsViewModelTests: XCTestCase {
 			wrapper: EventFlow.EventResultWrapper(
 				providerIdentifier: providerIdentifier,
 				protocolVersion: "3.0",
-				identity: identity,
+				identity: EventFlow.Identity.fakeIdentity,
 				status: .complete,
 				result: nil,
 				events: [
@@ -1973,17 +1853,16 @@ class ListEventsViewModelTests: XCTestCase {
 					)
 				]
 			),
-			signedResponse: signedResponse
+			signedResponse: SignedResponse.fakeResponse
 		)
 	}
 
-	private func remotePaperFlowEvent() -> RemoteEvent {
-
-		return RemoteEvent(
+	private var remotePaperFlowEvent: RemoteEvent {
+		RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper(
 				providerIdentifier: "DCC",
 				protocolVersion: "3.0",
-				identity: identity,
+				identity: EventFlow.Identity.fakeIdentity,
 				status: .complete,
 				result: nil,
 				events: [
