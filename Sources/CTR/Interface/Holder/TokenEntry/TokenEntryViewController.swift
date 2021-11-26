@@ -280,9 +280,15 @@ class TokenEntryViewController: BaseViewController {
 	
 	func displayResendVerificationConfirmationAlert() {
 
+		guard let title = viewModel.confirmResendVerificationAlertTitle,
+			  let subTitle = viewModel.confirmResendVerificationAlertMessage,
+			  let okTitle = viewModel.confirmResendVerificationAlertOkayButton else {
+			return
+		}
+
 		let alert = AlertContent(
-			title: viewModel.confirmResendVerificationAlertTitle,
-			subTitle: viewModel.confirmResendVerificationAlertMessage,
+			title: title,
+			subTitle: subTitle,
 			cancelAction: nil,
 			cancelTitle: viewModel.confirmResendVerificationAlertCancelButton,
 			okAction: { [weak self] _ in
@@ -290,7 +296,7 @@ class TokenEntryViewController: BaseViewController {
 				self.sceneView.verificationEntryView.inputField.text = nil
 				self.viewModel.resendVerificationCodeButtonTapped()
 			},
-			okTitle: viewModel.confirmResendVerificationAlertOkayButton
+			okTitle: okTitle
 		)
 
 		showAlert(alert, preferredAction: viewModel.confirmResendVerificationAlertOkayButton)

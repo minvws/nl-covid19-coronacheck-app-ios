@@ -8,12 +8,12 @@
 import UIKit
 
 struct AlertContent {
-	var title: String?
-	var subTitle: String?
+	var title: String
+	var subTitle: String
 	var cancelAction: ((UIAlertAction) -> Void)?
 	var cancelTitle: String?
 	var okAction: ((UIAlertAction) -> Void)?
-	var okTitle: String?
+	var okTitle: String
 }
 
 extension UIViewController {
@@ -34,17 +34,14 @@ extension UIViewController {
 			preferredStyle: .alert
 		)
 
-		// Optional ok button:
-		if let okTitle = content.okTitle {
-			let okAction = UIAlertAction(
-				title: okTitle,
-				style: okActionIsDestructive ? .destructive : .default,
-				handler: content.okAction
-			)
-			alertController.addAction(okAction)
-			if preferredAction == content.okTitle {
-				alertController.preferredAction = okAction
-			}
+		let okAction = UIAlertAction(
+			title: content.okTitle,
+			style: okActionIsDestructive ? .destructive : .default,
+			handler: content.okAction
+		)
+		alertController.addAction(okAction)
+		if preferredAction == content.okTitle {
+			alertController.preferredAction = okAction
 		}
 
 		// Optional cancel button:
