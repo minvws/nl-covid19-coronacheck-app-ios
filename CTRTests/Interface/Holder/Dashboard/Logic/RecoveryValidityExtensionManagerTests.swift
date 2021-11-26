@@ -210,7 +210,6 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 			now: { now }
 		)
 
-		// set non-nil value to see if it gets nilled
 		var callbackValue: RecoveryValidityExtensionManager.BannerType? = .extensionDidComplete
 		sut.bannerStateCallback = { val in callbackValue = val }
 
@@ -222,9 +221,9 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 		sut.reload()
 
 		// Assert
+		expect(self.userSettingsSpy.invokedShouldCheckRecoveryGreenCardRevisedValiditySetter) == true
 		expect(invokedUserHasPaperflowRecoveryGreencards) == true
 		expect(invokedUserHasUnexpiredRecoveryGreencards) == false
-		expect(callbackValue).to(beNil())
 	}
 
 	func test_hasRecoveryEvents_shouldCheckIsTrue_withoutUnexpiredRecoveryGreencards() {
