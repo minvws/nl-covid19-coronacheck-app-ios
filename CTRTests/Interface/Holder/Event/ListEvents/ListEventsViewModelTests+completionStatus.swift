@@ -426,7 +426,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			wrapper: EventFlow.EventResultWrapper(
 				providerIdentifier: "CC",
 				protocolVersion: "3.0",
-				identity: identity,
+				identity: EventFlow.Identity.fakeIdentity,
 				status: .complete,
 				result: nil,
 				events: [
@@ -442,19 +442,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 					)
 				]
 			),
-			signedResponse: signedResponse
+			signedResponse: SignedResponse.fakeResponse
 		)
 	}
-
-	private let identity = EventFlow.Identity(
-		infix: "",
-		firstName: "Corona",
-		lastName: "Check",
-		birthDateString: "2021-05-16"
-	)
-
-	private let signedResponse = SignedResponse(
-		payload: "payload",
-		signature: "signature"
-	)
 }
