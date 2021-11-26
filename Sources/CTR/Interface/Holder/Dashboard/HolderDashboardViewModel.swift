@@ -372,8 +372,8 @@ final class HolderDashboardViewModel: Logging {
 			forValidityRegion: .domestic,
 			state: state,
 			didTapCloseExpiredQR: didTapCloseExpiredQR,
+			triggerStrippenRefresh: strippenRefresher.load,
 			coordinatorDelegate: coordinatorDelegate,
-			strippenRefresher: strippenRefresher,
 			remoteConfigManager: remoteConfigManager,
 			now: now,
 			userSettings: userSettings)
@@ -382,8 +382,8 @@ final class HolderDashboardViewModel: Logging {
 			forValidityRegion: .europeanUnion,
 			state: state,
 			didTapCloseExpiredQR: didTapCloseExpiredQR,
+			triggerStrippenRefresh: strippenRefresher.load,
 			coordinatorDelegate: coordinatorDelegate,
-			strippenRefresher: strippenRefresher,
 			remoteConfigManager: remoteConfigManager,
 			now: now,
 			userSettings: userSettings)
@@ -397,8 +397,8 @@ final class HolderDashboardViewModel: Logging {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		didTapCloseExpiredQR: @escaping (ExpiredQR) -> Void,
+		triggerStrippenRefresh: @escaping () -> Void,
 		coordinatorDelegate: HolderCoordinatorDelegate,
-		strippenRefresher: DashboardStrippenRefreshing,
 		remoteConfigManager: RemoteConfigManaging,
 		now: Date,
 		userSettings: UserSettingsProtocol
@@ -496,7 +496,7 @@ final class HolderDashboardViewModel: Logging {
 				qrcardDataItem.toViewControllerCards(
 					state: state,
 					coordinatorDelegate: coordinatorDelegate,
-					strippenRefresher: strippenRefresher,
+					triggerStrippenRefresh: triggerStrippenRefresh,
 					remoteConfigManager: remoteConfigManager,
 					now: now
 				)
@@ -785,7 +785,7 @@ extension HolderDashboardViewModel.QRCard {
 	fileprivate func toViewControllerCards(
 		state: HolderDashboardViewModel.State,
 		coordinatorDelegate: HolderCoordinatorDelegate,
-		strippenRefresher: DashboardStrippenRefreshing,
+		triggerStrippenRefresh: @escaping () -> Void,
 		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
@@ -830,7 +830,7 @@ extension HolderDashboardViewModel.QRCard {
 				)]
 
 				if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
-					cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: strippenRefresher.load)]
+					cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: triggerStrippenRefresh)]
 				}
 
 				return cards
@@ -853,7 +853,7 @@ extension HolderDashboardViewModel.QRCard {
 				)]
 
 				if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
-					cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: strippenRefresher.load)]
+					cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: triggerStrippenRefresh)]
 				}
 
 				return cards
