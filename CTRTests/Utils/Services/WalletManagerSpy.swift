@@ -214,3 +214,9 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedHasDomesticGreenCardResult
 	}
 }
+
+extension WalletManagerSpy {
+	convenience init() {
+		self.init(dataStoreManager: DataStoreManager(.inMemory))
+	}
+}

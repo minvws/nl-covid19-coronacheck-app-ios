@@ -210,8 +210,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 			now: { now }
 		)
 
-		var callbackValue: RecoveryValidityExtensionManager.BannerType? = .extensionDidComplete
-		sut.bannerStateCallback = { val in callbackValue = val }
+		sut.bannerStateCallback = { _ in }
 
 		userSettingsSpy.stubbedShouldCheckRecoveryGreenCardRevisedValidity = true
 
