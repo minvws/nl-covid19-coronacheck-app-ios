@@ -260,10 +260,10 @@ private extension HolderDashboardViewController.Card {
 				return view
 				
 			case let .domesticQR(title, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
-				return QRCardView.makeDomestic(title: title, validityTexts: validityTexts, isLoading: isLoading, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
+				return QRCardView.make(stackSize: 1, forEu: false, title: title, isLoading: isLoading, validityTexts: validityTexts, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
 			
 			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
-				return QRCardView.makeInternational(stackSize: stackSize, title: title, validityTexts: validityTexts, isLoading: isLoading, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
+				return QRCardView.make(stackSize: stackSize, forEu: true, title: title, isLoading: isLoading, validityTexts: validityTexts, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
 				
 			case let .errorMessage(message, didTapTryAgain):
 				return ErrorDashboardCardView(message: message, didTapTryAgain: didTapTryAgain, openURLHandler: openURLHandler)
@@ -326,43 +326,20 @@ private extension EmptyDashboardDescriptionCardView {
 }
 
 private extension QRCardView {
-	
-	static func makeDomestic(
-		title: String,
-		validityTexts: @escaping (Date) -> [HolderDashboardViewController.ValidityText],
-		isLoading: Bool,
-		didTapViewQR: @escaping () -> Void,
-		buttonEnabledEvaluator: @escaping (Date) -> Bool,
-		expiryCountdownEvaluator: ((Date) -> String?)?
-	) -> QRCardView {
-		let qrCard: QRCardView
 
-		qrCard = QRCardView(stackSize: 1)
-		qrCard.shouldStyleForEU = false
-		qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
-		qrCard.viewQRButtonCommand = didTapViewQR
-		qrCard.title = title
-		qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
-		qrCard.validityTexts = validityTexts
-		qrCard.expiryEvaluator = expiryCountdownEvaluator
-		qrCard.isLoading = isLoading
-		
-		return qrCard
-	}
-	
-	static func makeInternational(
+	// swiftlint:disable:next function_parameter_count
+	static func make(
 		stackSize: Int,
+		forEu: Bool,
 		title: String,
-		validityTexts: @escaping (Date) -> [HolderDashboardViewController.ValidityText],
 		isLoading: Bool,
+		validityTexts: @escaping (Date) -> [HolderDashboardViewController.ValidityText],
 		didTapViewQR: @escaping () -> Void,
 		buttonEnabledEvaluator: @escaping (Date) -> Bool,
 		expiryCountdownEvaluator: ((Date) -> String?)?
 	) -> QRCardView {
-		let qrCard: QRCardView
-
-		qrCard = QRCardView(stackSize: stackSize)
-		qrCard.shouldStyleForEU = true
+		let qrCard = QRCardView(stackSize: stackSize)
+		qrCard.shouldStyleForEU = forEu
 		qrCard.viewQRButtonTitle = stackSize == 1
 			? L.holderDashboardQrButtonViewQR()
 			: L.holderDashboardQrButtonViewQRs()
