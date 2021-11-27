@@ -63,6 +63,10 @@ class VerifierResultViewModel: Logging {
 	@Bindable private(set) var checkIdentity: String = ""
 	
 	@Bindable private(set) var primaryButtonIcon: UIImage?
+	
+	@Bindable private(set) var verifiedAccessibility: String?
+	
+	@Bindable private(set) var checkIdentityTitle: String?
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -198,6 +202,8 @@ class VerifierResultViewModel: Logging {
 		checkIdentity = L.verifierResultAccessCheckidentity()
 		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
+		verifiedAccessibility = "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
+		checkIdentityTitle = L.verifierResultIdentityTitle()
 	}
 
 	private func showAccessDeniedInvalidQR() {
@@ -215,6 +221,8 @@ class VerifierResultViewModel: Logging {
 		checkIdentity = L.verifierResultAccessCheckidentity()
 		primaryButtonIcon = isDeepLinkEnabled ? I.deeplinkScan() : nil
 		showDccInfo()
+		verifiedAccessibility = "\(L.verifierResultAccessAccessibilityDemo()), \(L.verifierResultIdentityTitle())"
+		checkIdentityTitle = L.verifierResultIdentityTitle()
 	}
 
 	func dismiss() {
@@ -267,14 +275,15 @@ class VerifierResultViewModel: Logging {
 	private func showDeniedInfo() {
 		
 		// By default, unordered lists have a space above them in HTML
-		let bulletSpacing: CGFloat = -28
+		let bulletSpacing: CGFloat = -26
 		let spacing: CGFloat = 16
 
 		let textViews = [(TextView(htmlText: L.verifierDeniedMessageOne()), spacing),
 						 (TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
 						 (TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
-						 (TextView(htmlText: L.verifierDeniedMessageFour()), spacing),
-						 (TextView(htmlText: L.verifierDeniedMessageFive()), spacing)]
+						 (TextView(htmlText: L.verifierDeniedMessageFour()), 0),
+						 (TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
+						 (TextView(htmlText: L.verifierDeniedMessageSix()), spacing)]
 
 		coordinator?.displayContent(
 			title: L.verifierDeniedTitle(),

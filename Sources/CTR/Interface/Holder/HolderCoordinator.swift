@@ -41,6 +41,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesToCreateARecoveryQR()
 
+	func userWishesToFetchPositiveTests()
+
 	func userDidScanRequestToken(requestToken: RequestToken)
 
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
@@ -54,6 +56,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
     func userWishesMoreInfoAboutRecoveryValidityExtension()
 
 	func userWishesMoreInfoAboutRecoveryValidityReinstation()
+	
+	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
 	func openUrl(_ url: URL, inApp: Bool)
 
@@ -114,6 +118,13 @@ class HolderCoordinator: SharedCoordinator {
 		return remoteConfigManager.storedConfiguration.isGGDEnabled == true
 	}
 	
+	// MARK: - Setup
+	
+	override init(navigationController: UINavigationController, window: UIWindow) {
+		super.init(navigationController: navigationController, window: window)
+		setupNotificationListeners()
+	}
+	
 	// Designated starter method
 	override func start() {
 
@@ -140,6 +151,22 @@ class HolderCoordinator: SharedCoordinator {
 				// Start with the holder app
 				navigateToHolderStart()
 			}
+		}
+	}
+	
+	// MARK: - Teardown
+
+	deinit {
+		NotificationCenter.default.removeObserver(self)
+	}
+
+	// MARK: - Listeners
+	
+	private func setupNotificationListeners() {
+		
+		// Prevent the thirdparty ticket feature persisting forever, let's clear it when the user minimises the app
+		NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.thirdpartyTicketApp = nil
 		}
 	}
 
@@ -223,6 +250,18 @@ class HolderCoordinator: SharedCoordinator {
 		}
 	}
 
+	private func startEventFlowForPositiveTests() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithPositiveTest()
+		}
+	}
+
 	/// Navigate to the token entry scene
 	func navigateToTokenEntry(_ token: RequestToken? = nil) {
 
@@ -266,7 +305,7 @@ class HolderCoordinator: SharedCoordinator {
 				now: { Date() }
 			)
 		)
-		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
+		dashboardNavigationController = NavigationController(rootViewController: dashboardViewController)
 		sidePanel?.selectedViewController = dashboardNavigationController
 	}
 	
@@ -291,7 +330,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 		)
-		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
+		sidePanel = SidePanelController(sideController: NavigationController(rootViewController: menu))
 		navigateToDashboard()
 
 		// Replace the root with the side panel controller
@@ -406,6 +445,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		startEventFlowForRecovery()
 	}
 
+	func userWishesToFetchPositiveTests() {
+		startEventFlowForPositiveTests()
+	}
+
 	func userWishesToCreateAQR() {
 		navigateToChooseQRCodeType()
 	}
@@ -474,6 +517,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 
+	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
+		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
+		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
 	func migrateEUVaccinationDidComplete() {
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
@@ -562,15 +611,15 @@ extension HolderCoordinator: MenuDelegate {
 				openUrl(faqUrl, inApp: true)
 
 			case .about:
-				let destination = AboutViewController(
-					viewModel: AboutViewModel(
+				let destination = AboutThisAppViewController(
+					viewModel: AboutThisAppViewModel(
 						coordinator: self,
 						versionSupplier: versionSupplier,
 						flavor: AppFlavor.flavor,
 						userSettings: UserSettings()
 					)
 				)
-				aboutNavigationController = UINavigationController(rootViewController: destination)
+				aboutNavigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
 
 			case .addCertificate:
@@ -580,13 +629,13 @@ extension HolderCoordinator: MenuDelegate {
 					),
 					isRootViewController: true
 				)
-				navigationController = UINavigationController(rootViewController: destination)
+				navigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
 				
-			case .addPaperCertificate:
-				let coordinator = PaperCertificateCoordinator(delegate: self)
-				let destination = PaperCertificateStartViewController(viewModel: .init(coordinator: coordinator))
-				navigationController = UINavigationController(rootViewController: destination)
+			case .addPaperProof:
+				let coordinator = PaperProofCoordinator(delegate: self)
+				let destination = PaperProofStartViewController(viewModel: .init(coordinator: coordinator))
+				navigationController = NavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController
 				startChildCoordinator(coordinator)
 				sidePanel?.selectedViewController = navigationController
@@ -596,7 +645,7 @@ extension HolderCoordinator: MenuDelegate {
 
 				let destinationViewController = PlaceholderViewController()
 				destinationViewController.placeholder = "\(identifier)"
-				let navigationController = UINavigationController(rootViewController: destinationViewController)
+				let navigationController = NavigationController(rootViewController: destinationViewController)
 				sidePanel?.selectedViewController = navigationController
 		}
 		fixRotation()
@@ -624,7 +673,7 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .addPaperCertificate, title: L.holderMenuPapercertificate()),
+			MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
 			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]
 	}
@@ -637,8 +686,8 @@ extension HolderCoordinator: EventFlowDelegate {
 		/// The user completed the event flow. Go back to the dashboard.
 
 		removeChildCoordinator()
-
 		navigateToDashboard()
+		navigationController.viewControllers = []
 	}
 
 	func eventFlowDidCancel() {
@@ -658,13 +707,19 @@ extension HolderCoordinator: EventFlowDelegate {
 	}
 }
 
-extension HolderCoordinator: PaperCertificateFlowDelegate {
+extension HolderCoordinator: PaperProofFlowDelegate {
 	
-	func addCertificateFlowDidFinish() {
+	func addPaperProofFlowDidFinish() {
 		
 		removeChildCoordinator()
-		
 		navigateToDashboard()
+		navigationController.viewControllers = []
+	}
+
+	func switchToAddRegularProof() {
+
+		removeChildCoordinator()
+		openMenuItem(.addCertificate)
 	}
 }
 

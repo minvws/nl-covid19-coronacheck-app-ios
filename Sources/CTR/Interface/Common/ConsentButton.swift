@@ -7,9 +7,42 @@
 
 import UIKit
 
-class ConsentButton: UIButton {
+final class ConsentButton: UIControl {
+
+	private enum Images {
+		enum Icon {
+			
+			static var normal: UIImage? = I.toggle.normal()
+			static var highlighted: UIImage? = I.toggle.selected()
+			static var error: UIImage? = I.toggle.error()
+		}
+	}
+	
+	/// The display constants
+	private enum ViewTraits {
+		
+		enum Margin {
+			static let vertical: CGFloat = 14
+			static let horizontal: CGFloat = 16
+		}
+		enum Animation {
+			static let duration: CGFloat = 0.2
+		}
+		enum Spacing {
+			static let iconToLabel: CGFloat = 16
+		}
+		enum Dimension {
+			static let icon: CGFloat = 24
+			static let cornerRadius: CGFloat = 8
+			static let lineHeight: CGFloat = 20
+		}
+	}
 
 	override var isSelected: Bool {
+		didSet { applyState() }
+	}
+	
+	var hasError: Bool = false {
 		didSet { applyState() }
 	}
 
@@ -22,29 +55,13 @@ class ConsentButton: UIButton {
         get { return isSelected ? "1" : "0" }
         set { super.accessibilityValue = newValue }
     }
-    
-	var useHapticFeedback = true
-
-	required init(title: String = "", selected: Bool = false) {
-
-		icon = ImageView(imageName: "Toggle/Normal", highlightedImageName: "Toggle/Selected")
-
-		super.init(frame: .zero)
-
-		setTitle(title, for: .normal)
-
-		addTarget(self, action: #selector(touchUpAnimation), for: .touchDragExit)
-		addTarget(self, action: #selector(touchUpAnimation), for: .touchCancel)
-		addTarget(self, action: #selector(touchUpAnimation), for: .touchUpInside)
-		addTarget(self, action: #selector(toggle), for: .touchUpInside)
-		addTarget(self, action: #selector(touchDownAnimation), for: .touchDown)
-
-		icon.contentMode = .scaleAspectFit
-		icon.snap(to: .left, of: self, insets: .left(16))
-
-		isSelected = selected
-
-		setup()
+	
+	override init(frame: CGRect) {
+		super.init(frame: frame)
+		
+		setupViews()
+		setupViewHierarchy()
+		setupViewConstraints()
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -52,36 +69,59 @@ class ConsentButton: UIButton {
 	}
 
 	// MARK: - Private
-
-	fileprivate func setup() {
+	
+	private let titleLabel: Label = {
+		return Label(subhead: nil).multiline()
+	}()
+	
+	private let iconImageView: UIImageView = {
+		let view = UIImageView(image: Images.Icon.normal, highlightedImage: Images.Icon.highlighted)
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.contentMode = .scaleAspectFit
+		return view
+	}()
+	
+	/// Setup all the views
+	private func setupViews() {
+		
 		clipsToBounds = true
-		contentEdgeInsets = .topBottom(17) + .left(68) + .right(16)
-
-		layer.cornerRadius = 8
-
-		titleLabel?.font = Theme.fonts.body
-		titleLabel?.lineBreakMode = .byWordWrapping
-		titleLabel?.numberOfLines = 0
-
+		layer.cornerRadius = ViewTraits.Dimension.cornerRadius
 		tintColor = Theme.colors.viewControllerBackground
-		backgroundColor = Theme.colors.tertiary
-		setTitleColor(Theme.colors.dark, for: .normal)
-		contentHorizontalAlignment = .left
 
 		applyState()
+
+		addTarget(self, action: #selector(touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])
+		addTarget(self, action: #selector(toggle), for: .touchUpInside)
+		addTarget(self, action: #selector(touchDownAnimation), for: .touchDown)
 	}
 
-	override func layoutSubviews() {
-		super.layoutSubviews()
+	/// Setup the view hierarchy
+	private func setupViewHierarchy() {
 
-		titleLabel?.preferredMaxLayoutWidth = bounds.width - contentEdgeInsets.left - contentEdgeInsets.right
+		addSubview(iconImageView)
+		addSubview(titleLabel)
 	}
 
-	override var intrinsicContentSize: CGSize {
-		var base = titleLabel?.intrinsicContentSize ?? .zero
-		base.height += contentEdgeInsets.top + contentEdgeInsets.bottom
-		base.width += contentEdgeInsets.left + contentEdgeInsets.right
-		return base
+	/// Setup all the constraints
+	private func setupViewConstraints() {
+
+		iconImageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+		titleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+		
+		NSLayoutConstraint.activate([
+			
+			iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.Margin.horizontal),
+			iconImageView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: ViewTraits.Margin.vertical),
+			iconImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -ViewTraits.Margin.vertical),
+			iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+			iconImageView.widthAnchor.constraint(equalToConstant: ViewTraits.Dimension.icon),
+			iconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.Dimension.icon),
+			
+			titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: ViewTraits.Spacing.iconToLabel),
+			titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.Margin.horizontal),
+			titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.vertical),
+			titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Margin.vertical)
+		])
 	}
 
 	@discardableResult
@@ -91,7 +131,9 @@ class ConsentButton: UIButton {
 	}
 
 	private func applyState() {
-		icon.isHighlighted = isSelected
+		iconImageView.isHighlighted = isSelected
+		iconImageView.image = hasError ? Images.Icon.error : Images.Icon.normal
+		backgroundColor = hasError ? C.consentButtonError() : C.consentButtonBackground()
 	}
 
 	@objc private func toggle() {
@@ -100,18 +142,25 @@ class ConsentButton: UIButton {
 	}
 
 	@objc private func touchDownAnimation() {
-		if useHapticFeedback { Haptic.light() }
+		Haptic.light()
 
-		UIButton.animate(withDuration: 0.2, animations: {
+		UIButton.animate(withDuration: ViewTraits.Animation.duration, animations: {
 			self.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
 		})
 	}
 
 	@objc private func touchUpAnimation() {
-		UIButton.animate(withDuration: 0.2, animations: {
+		UIButton.animate(withDuration: ViewTraits.Animation.duration, animations: {
 			self.transform = CGAffineTransform.identity
 		})
 	}
-
-	fileprivate let icon: UIImageView
+	
+	// MARK: Public Access
+	
+	var title: String? {
+		didSet {
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Dimension.lineHeight,
+															 textColor: Theme.colors.dark)
+		}
+	}
 }

@@ -121,8 +121,6 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENA
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMMDD_FORMAT;
 
 @interface Mobilecore : NSObject
-// skipped variable CAS_SAN_TO_COUNTRY_CODE with unsupported type: map[string]string
-
 // skipped variable DATE_OF_BIRTH_REGEX with unsupported type: *regexp.Regexp
 
 /**
@@ -138,6 +136,8 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCommitmentMessage(
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCredentials(NSData* _Nullable ccmsJson);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDisclose(NSData* _Nullable holderSkJson, NSData* _Nullable credJson);
+
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDiscloseWithTime(NSData* _Nullable holderSkJson, NSData* _Nullable credJson, int64_t unixTimeSeconds);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreErrorResult(NSError* _Nullable err);
 
@@ -163,6 +163,8 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(N
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(NSData* _Nullable proofPrefixed);
 
 FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded);
+
+FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerifyWithTime(NSData* _Nullable proofQREncoded, int64_t unixTimeSeconds);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreWrappedErrorResult(NSError* _Nullable err, NSString* _Nullable prefix);
 

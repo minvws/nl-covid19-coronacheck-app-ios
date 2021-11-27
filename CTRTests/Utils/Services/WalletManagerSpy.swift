@@ -199,10 +199,18 @@ class WalletManagerSpy: WalletManaging {
 		invokedHasEventGroupParametersList.append((type, providerIdentifier))
 		return stubbedHasEventGroupResult
 	}
-}
 
-extension WalletManagerSpy {
-	convenience init() {
-		self.init(dataStoreManager: DataStoreManager(.inMemory))
+	var invokedHasDomesticGreenCard = false
+	var invokedHasDomesticGreenCardCount = 0
+	var invokedHasDomesticGreenCardParameters: (originType: String, Void)?
+	var invokedHasDomesticGreenCardParametersList = [(originType: String, Void)]()
+	var stubbedHasDomesticGreenCardResult: Bool! = false
+
+	func hasDomesticGreenCard(originType: String) -> Bool {
+		invokedHasDomesticGreenCard = true
+		invokedHasDomesticGreenCardCount += 1
+		invokedHasDomesticGreenCardParameters = (originType, ())
+		invokedHasDomesticGreenCardParametersList.append((originType, ()))
+		return stubbedHasDomesticGreenCardResult
 	}
 }

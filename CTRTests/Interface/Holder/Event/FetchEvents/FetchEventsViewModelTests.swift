@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 
 @testable import CTR
 import XCTest
@@ -25,7 +25,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		networkSpy = NetworkSpy(configuration: .development)
 		Services.use(networkSpy)
 
-		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination)
+		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: .test, eventMode: .vaccination)
 	}
 
 	override func tearDown() {
@@ -37,7 +37,7 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_backButtonTapped_loadingState() {
 
 		// Given
-		sut.viewState = .loading(content: Content(title: "test", subTitle: nil, primaryActionTitle: nil, primaryAction: nil, secondaryActionTitle: nil, secondaryAction: nil))
+		sut.viewState = .loading(content: Content(title: "Test"))
 
 		// When
 		sut.backButtonTapped()
@@ -47,9 +47,20 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toNot(beNil())
 	}
 
-	func test_warnBeforeGoBack() {
+	func test_backButtonTapped_feedbackState() {
 
 		// Given
+		sut.viewState = .feedback(content: Content(title: "Test"))
+
+		// When
+		sut.backButtonTapped()
+
+		// Then
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == .back(eventMode: .vaccination)
+	}
+
+	func test_warnBeforeGoBack() {
 
 		// When
 		sut.warnBeforeGoBack()
@@ -57,6 +68,16 @@ class FetchEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
 		expect(self.sut.alert).toNot(beNil())
+	}
+
+	func test_goBack() {
+
+		// When
+		sut.goBack()
+
+		// Then
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == .back(eventMode: .vaccination)
 	}
 
 	func test_accessTokenOK_providersRequestTimeOut() {
@@ -69,7 +90,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -97,12 +118,12 @@ class FetchEventsViewModelTests: XCTestCase {
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -136,7 +157,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -169,7 +190,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -186,12 +207,12 @@ class FetchEventsViewModelTests: XCTestCase {
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -214,7 +235,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -236,7 +257,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -270,7 +291,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -298,12 +319,12 @@ class FetchEventsViewModelTests: XCTestCase {
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -326,17 +347,138 @@ class FetchEventsViewModelTests: XCTestCase {
 		}
 	}
 
+	func test_accessTokenServerUnreachableTimeOut_providersOk() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .vaccination
+		)
+
+		// Then
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 004")
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
+	}
+
+	func test_accessTokenServerUnreachableConnectionLost_providersOk() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .vaccination
+		)
+
+		// Then
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 005")
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
+	}
+
+	func test_accessTokenServerUnreachableInvalidHost_providersOk() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .vaccination
+		)
+
+		// Then
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 002")
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
+	}
+
+	func test_accessTokenNoInternetConnection_providersOk() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .vaccination
+		)
+
+		// Then
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
+		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
+		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
+	}
+
 	func test_accessTokenNoBSN() {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeNoBSN), error: .serverError)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -364,12 +506,12 @@ class FetchEventsViewModelTests: XCTestCase {
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeSessionExpired), error: .serverError)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -397,12 +539,12 @@ class FetchEventsViewModelTests: XCTestCase {
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99000), error: .serverError)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -436,7 +578,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -460,19 +602,18 @@ class FetchEventsViewModelTests: XCTestCase {
 		}
 	}
 
-	func test_noProviderForEventMode() {
+	func test_noProviderForEventMode_vaccination() {
 
 		// Given
-		provider.usages = [.positiveTest]
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.positiveTestProvider]), ())
 		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
 		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -495,18 +636,120 @@ class FetchEventsViewModelTests: XCTestCase {
 		}
 	}
 
-	func test_happyFlow_willInvokeCoordinator() {
+	func test_noProviderForEventMode_positiveTest() {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
 		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
+			eventMode: .positiveTest
+		)
+
+		// Then
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle).to(contain("i 820 000 080"))
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
+	}
+
+	func test_noProviderForEventMode_recovery() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .recovery
+		)
+
+		// Then
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle).to(contain("i 320 000 081"))
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
+	}
+
+	func test_noProviderForEventMode_negativeTest() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .test
+		)
+
+		// Then
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle).to(contain("i 420 000 080"))
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
+	}
+
+	func test_happyFlow_willInvokeCoordinator() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -527,14 +770,14 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
 		networkSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -546,7 +789,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 		networkSpy.stubbedFetchEventInformationCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
@@ -554,7 +797,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -570,7 +813,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
 		networkSpy.stubbedFetchEventsCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
@@ -578,7 +821,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: "test",
+			tvsToken: .test,
 			eventMode: .vaccination
 		)
 
@@ -590,24 +833,25 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.cancelTitle).toEventually(beNil())
 	}
 
+	func test_openUrl() throws {
+
+		// Given
+		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
+
+		// When
+		sut.openUrl(url)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
+	}
+
 	// MARK: Default values
 
 	let accessToken = EventFlow.AccessToken(
 		providerIdentifier: "CC",
 		unomiAccessToken: "unomi test",
 		eventAccessToken: "event test"
-	)
-
-	var provider = EventFlow.EventProvider(
-		identifier: "CC",
-		name: "CoronaCheck",
-		unomiURL: URL(string: "https://coronacheck.nl"),
-		eventURL: URL(string: "https://coronacheck.nl"),
-		cmsCertificate: "test",
-		tlsCertificate: "test",
-		accessToken: nil,
-		eventInformationAvailable: nil,
-		usages: [.vaccination]
 	)
 
 	let eventInformationAvailable = EventFlow.EventInformationAvailable(

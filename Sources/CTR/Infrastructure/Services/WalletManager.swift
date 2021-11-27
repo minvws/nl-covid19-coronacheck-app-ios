@@ -63,6 +63,8 @@ protocol WalletManaging: AnyObject {
 	func shouldShowMultiDCCUpgradeBanner(userSettings: UserSettingsProtocol) -> Bool
 
 	func hasEventGroup(type: String, providerIdentifier: String) -> Bool
+
+	func hasDomesticGreenCard(originType: String) -> Bool
 }
 
 class WalletManager: WalletManaging, Logging {
@@ -257,7 +259,7 @@ class WalletManager: WalletManaging, Logging {
 
 	/// Remove expired GreenCards that contain no more valid origins
 	/// returns: an array of `Greencard.type` Strings. One for each GreenCard that was deleted.
-	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
+	@discardableResult func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
 		var deletedGreenCardTypes: [(greencardType: String, originType: String)] = []
 
 		let context = dataStoreManager.managedObjectContext()
@@ -425,6 +427,7 @@ class WalletManager: WalletManaging, Logging {
 				eventDate: remoteOrigin.eventTime,
 				expirationTime: remoteOrigin.expirationTime,
 				validFromDate: remoteOrigin.validFrom,
+				doseNumber: remoteOrigin.doseNumber,
 				greenCard: greenCard,
 				managedContext: context
 			) != nil
@@ -614,5 +617,17 @@ class WalletManager: WalletManaging, Logging {
 		// if there are more than 1 vaccination events but 1 or less greencards,
 		// show the banner to offer people an upgrade
 		return allEUVaccinationGreencards.count == 1 // show the banner
+	}
+
+	func hasDomesticGreenCard(originType: String) -> Bool {
+
+		let allDomesticGreencards = listGreenCards()
+			.filter { $0.getType() == .domestic }
+			.filter { greencard in
+				guard let origins = greencard.castOrigins() else { return false }
+				return !origins.filter({ $0.type == originType }).isEmpty
+			}
+
+		return !allDomesticGreencards.isEmpty
 	}
 }

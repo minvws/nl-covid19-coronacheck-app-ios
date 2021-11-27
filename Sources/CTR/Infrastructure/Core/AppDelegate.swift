@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 		if #available(iOS 13.0, *) {
 			// Use Scene lifecycle
 		} else {
-			appCoordinator = AppCoordinator(navigationController: UINavigationController())
+			appCoordinator = AppCoordinator(navigationController: NavigationController())
 			appCoordinator?.start()
 		}
 		return true

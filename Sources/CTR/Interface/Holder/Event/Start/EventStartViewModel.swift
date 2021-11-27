@@ -23,8 +23,7 @@ class EventStartViewModel: Logging {
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
-		eventMode: EventMode,
-		validAfterDays: Int?
+		eventMode: EventMode
 	) {
 
 		self.coordinator = coordinator
@@ -37,14 +36,17 @@ class EventStartViewModel: Logging {
 				self.primaryButtonIcon = I.digid()
 			case .recovery:
 				self.title = L.holderRecoveryStartTitle()
-				let validAfterDays = validAfterDays ?? 11
-				self.message = L.holderRecoveryStartMessage("\(validAfterDays)")
+				self.message = L.holderRecoveryStartMessage()
 				self.primaryButtonIcon = I.digid()
 			case .test, .paperflow:
 				// Should be changed when we want test 3.0 to use this page. Skipped in the current flow.
 				self.title = ""
 				self.message = ""
 				self.primaryButtonIcon = nil
+			case .positiveTest:
+				self.title = L.holderPositiveTestStartTitle()
+				self.message = L.holderPositiveTestStartMessage()
+				self.primaryButtonIcon = I.digid()
 		}
 	}
 
@@ -60,12 +62,7 @@ class EventStartViewModel: Logging {
 
 	func primaryButtonTapped() {
 
-		coordinator?.eventStartScreenDidFinish(
-			.continue(
-				value: nil,
-				eventMode: eventMode
-			)
-		)
+		coordinator?.eventStartScreenDidFinish(.continue(eventMode: eventMode))
 	}
 
 	func openUrl(_ url: URL) {
