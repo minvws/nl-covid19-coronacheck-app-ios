@@ -191,4 +191,39 @@ class WalletManagerTests: XCTestCase {
 		expect(list).to(haveCount(3))
 
 	}
+
+	func test_hasEventGroup_vaccination() {
+
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GGD",
+			jsonData: Data(),
+			issuedAt: Date()
+		)
+
+		// When
+		let hasEventGroup = sut.hasEventGroup(type: "vaccination", providerIdentifier: "GGD")
+
+		// Then
+		expect(hasEventGroup) == true
+	}
+
+	func test_hasEventGroup_recovery() {
+
+		// Given
+		sut.storeEventGroup(
+			.recovery,
+			providerIdentifier: "DCC",
+			jsonData: Data(),
+			issuedAt: Date()
+		)
+
+		// When
+		let hasEventGroup = sut.hasEventGroup(type: "recovery", providerIdentifier: "DCC")
+
+		// Then
+		expect(hasEventGroup) == true
+	}
+
 }

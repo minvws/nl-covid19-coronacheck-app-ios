@@ -186,6 +186,20 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedShouldShowMultiDCCUpgradeBannerResult
 	}
 
+	var invokedHasEventGroup = false
+	var invokedHasEventGroupCount = 0
+	var invokedHasEventGroupParameters: (type: String, providerIdentifier: String)?
+	var invokedHasEventGroupParametersList = [(type: String, providerIdentifier: String)]()
+	var stubbedHasEventGroupResult: Bool! = false
+
+	func hasEventGroup(type: String, providerIdentifier: String) -> Bool {
+		invokedHasEventGroup = true
+		invokedHasEventGroupCount += 1
+		invokedHasEventGroupParameters = (type, providerIdentifier)
+		invokedHasEventGroupParametersList.append((type, providerIdentifier))
+		return stubbedHasEventGroupResult
+	}
+
 	var invokedHasDomesticGreenCard = false
 	var invokedHasDomesticGreenCardCount = 0
 	var invokedHasDomesticGreenCardParameters: (originType: String, Void)?
