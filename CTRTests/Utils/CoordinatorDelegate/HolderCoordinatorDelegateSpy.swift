@@ -195,6 +195,30 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount += 1
 	}
 
+	var invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompleted = false
+	var invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompletedCount = 0
+
+	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted() {
+		invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompleted = true
+		invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompletedCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompleted = false
+	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompletedCount = 0
+
+	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {
+		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompleted = true
+		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompletedCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompleted = false
+	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompletedCount = 0
+
+	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted() {
+		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompleted = true
+		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompletedCount += 1
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
