@@ -1,1 +1,0 @@
-The Github macOS runner has an environment of preinstalled tools [described here](https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md)
