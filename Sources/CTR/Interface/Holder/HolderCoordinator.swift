@@ -59,6 +59,12 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
+	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted()
+
+	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted()
+	
+	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted()
+	
 	func openUrl(_ url: URL, inApp: Bool)
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
@@ -521,6 +527,33 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
 		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted() {
+		presentInformationPage(
+			title: L.holderEuvaccinationswereupgradedTitle(),
+			body: L.holderEuvaccinationswereupgradedMessage(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
+	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {
+		presentInformationPage(
+			title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
+			body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
+	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted() {
+		presentInformationPage(
+			title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
+			body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
 	}
 	
 	func migrateEUVaccinationDidComplete() {
