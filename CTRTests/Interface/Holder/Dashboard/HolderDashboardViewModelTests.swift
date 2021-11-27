@@ -2285,6 +2285,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	// MARK: - RemoteConfig changes
 
 	func test_registersForRemoteConfigChanges_affectingStrippenRefresher() {
+
 		// Arrange
 		remoteConfigSpy.stubbedAppendUpdateObserverObserverResult = (RemoteConfiguration.default, Data(), URLResponse())
 
@@ -2344,6 +2345,229 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutOutdatedConfig) == true
+	}
+	
+	// MARK: - HolderDashboardCardUserActionHandling callbacks
+	
+	func test_actionhandling_didTapConfigAlmostOutOfDateCTA() {
+
+		// Arrange
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapConfigAlmostOutOfDateCTA()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutOutdatedConfigCount) == 1
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutOutdatedConfigParameters?.validUntil) == "15 juli 18:02"
+	}
+	
+	func test_actionhandling_didTapCloseExpiredQR() {
+
+		// Arrange
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+
+		let expiredRecovery = HolderDashboardViewModel.ExpiredQR(region: .domestic, type: .recovery)
+		let expiredTest = HolderDashboardViewModel.ExpiredQR(region: .domestic, type: .test)
+
+		// Act & Assert
+		datasourceSpy.invokedDidUpdate?([], [expiredRecovery, expiredTest])
+
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard())
+		expect(self.sut.domesticCards[2]).toEventually(beExpiredQRCard())
+		
+		// Close first expired QR:
+		sut.didTapCloseExpiredQR(expiredQR: expiredRecovery)
+		
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard(test: { title, _ in
+			expect(title) == "Je bewijs is verlopen." // Upcoming: future feature, the expiry message will soon identify the QR removed.
+		}))
+		
+		// Close second expired QR:
+		sut.didTapCloseExpiredQR(expiredQR: expiredTest)
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_actionhandling_didTapOriginNotValidInThisRegionMoreInfo_vaccination_domestic() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapOriginNotValidInThisRegionMoreInfo(originType: .vaccination, validityRegion: .domestic)
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount) == 1
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQR) == false
+	}
+	
+	func test_actionhandling_didTapOriginNotValidInThisRegionMoreInfo() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		
+		// Act
+		sut.didTapOriginNotValidInThisRegionMoreInfo(originType: .vaccination, validityRegion: .europeanUnion)
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRCount) == 1
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.originType) == .vaccination
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.currentRegion) == .europeanUnion
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.availableRegion) == .domestic
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutIncompleteDutchVaccination) == false
+	}
+	
+	func test_actionhandling_didTapDeviceHasClockDeviationMoreInfo() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapDeviceHasClockDeviationMoreInfo()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutClockDeviationCount) == 1
+	}
+	
+	func test_actionhandling_didTapMultipleDCCUpgradeMoreInfo() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapMultipleDCCUpgradeMoreInfo()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount) == 1
+	}
+	
+	func test_actionhandling_didTapMultipleDCCUpgradeCompletedMoreInfo() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapMultipleDCCUpgradeCompletedMoreInfo()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompletedCount) == 1
+	}
+	
+	func test_actionhandling_didTapMultipleDCCUpgradeCompletedClose() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapMultipleDCCUpgradeCompletedClose()
+		
+		// Assert
+		expect(self.userSettingsSpy.invokedDidDismissEUVaccinationMigrationSuccessBanner) == true
+	}
+	
+	func test_actionhandling_didTapShowQR() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		let values = [NSManagedObjectID()]
+		sut.didTapShowQR(greenCardObjectIDs: values)
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs) === values
+	}
+	
+	func test_actionhandling_didTapRetryLoadQRCards() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapRetryLoadQRCards()
+		
+		// Assert
+		expect(self.strippenRefresherSpy.invokedLoadCount) == 2
+	}
+	
+	func test_actionhandling_didTapRecoveryValidityExtensionAvailableMoreInfo() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapRecoveryValidityExtensionAvailableMoreInfo()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount) == 1
+	}
+	
+	func test_actionhandling_didTapRecoveryValidityExtensionCompleteMoreInfo() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapRecoveryValidityExtensionCompleteMoreInfo()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompletedCount) == 1
+	}
+	
+	func test_actionhandling_didTapRecoveryValidityExtensionCompleteClose() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapRecoveryValidityExtensionCompleteClose()
+		
+		// Assert
+		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityExtensionCompletionCardSetter) == true
+	}
+	
+	func test_actionhandling_didTapRecoveryValidityReinstationAvailableMoreInfo() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapRecoveryValidityReinstationAvailableMoreInfo()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount) == 1
+	}
+	
+	func test_actionhandling_didTapRecoveryValidityReinstationCompleteMoreInfo() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapRecoveryValidityReinstationCompleteMoreInfo()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompletedCount) == 1
+	}
+	
+	func test_actionhandling_didTapRecoveryValidityReinstationCompleteClose() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapRecoveryValidityReinstationCompleteClose()
+		
+		// Assert
+		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter) == true
 	}
 }
 
