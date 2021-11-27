@@ -437,11 +437,6 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		coordinator?.openUrl(url, inApp: true)
 	}
 	
-	func userTappedCoronaMelderLink(url: URL) {
-		
-		coordinator?.openUrl(url, inApp: false)
-	}
-	
 	// MARK: - HolderDashboardCardUserActionHandling
 	
 	func didTapConfigAlmostOutOfDateCTA() {
