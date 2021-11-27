@@ -28,7 +28,6 @@ protocol HolderDashboardCardUserActionHandling {
 	func didTapRecoveryValidityReinstationCompleteClose()
 }
 
-// swiftlint:disable type_body_length
 final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHandling {
 	typealias Datasource = HolderDashboardQRCardDatasource
 
@@ -481,11 +480,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	}
 	
 	func didTapMultipleDCCUpgradeCompletedMoreInfo() {
-		coordinator?.presentInformationPage(
-			title: L.holderEuvaccinationswereupgradedTitle(),
-			body: L.holderEuvaccinationswereupgradedMessage(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true)
+		coordinator?.userWishesMoreInfoAboutMultipleDCCUpgradeCompleted()
 	}
 	
 	func didTapMultipleDCCUpgradeCompletedClose() {
@@ -505,12 +500,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	}
 	
 	func didTapRecoveryValidityExtensionCompleteMoreInfo() {
-		coordinator?.presentInformationPage(
-			title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
-			body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
+		coordinator?.userWishesMoreInfoAboutRecoveryValidityExtensionCompleted()
 	}
 	
 	func didTapRecoveryValidityExtensionCompleteClose() {
@@ -522,12 +512,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	}
 	
 	func didTapRecoveryValidityReinstationCompleteMoreInfo() {
-		coordinator?.presentInformationPage(
-			title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
-			body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
+		coordinator?.userWishesMoreInfoAboutRecoveryValidityReinstationCompleted()
 	}
 	
 	func didTapRecoveryValidityReinstationCompleteClose() {
