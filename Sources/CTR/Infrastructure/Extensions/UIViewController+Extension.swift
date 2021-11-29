@@ -27,6 +27,14 @@ extension UIViewController {
 	/// - Parameters:
 	///   - color: The color to apply
 	func overrideNavigationBarTitleColor(with color: UIColor) {
+		
+		let textAttributes = [
+			NSAttributedString.Key.foregroundColor: color,
+			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
+		]
+		navigationController?.navigationBar.titleTextAttributes = textAttributes
+		navigationController?.navigationBar.tintColor = color
+		
 		if #available(iOS 15.0, *) {
 			navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: color]
 			navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: color]
