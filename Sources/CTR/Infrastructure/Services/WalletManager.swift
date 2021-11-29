@@ -556,10 +556,10 @@ class WalletManager: WalletManaging, Logging {
 
 		// Check if we should show the banner.
 		let vaccinationEventGroups = listEventGroups().filter { $0.type == "vaccination" }
-		let hkviVaccinationEvents = vaccinationEventGroups.filter { $0.providerIdentifier?.uppercased() == "DCC" }
+		let hkviVaccinationEvents = vaccinationEventGroups.filter { $0.providerIdentifier?.uppercased() == EventFlow.paperproofIdentier }
 
 		let regularVaccinationEvents: [EventFlow.Event] = vaccinationEventGroups
-			.filter({ $0.providerIdentifier?.uppercased() != "DCC" })
+			.filter({ $0.providerIdentifier?.uppercased() != EventFlow.paperproofIdentier })
 			.flatMap({ vaccineEventGroup -> [EventFlow.Event] in
 
 				// convert back to a network response and get the payload:

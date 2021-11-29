@@ -273,7 +273,7 @@ class WalletManagerTests: XCTestCase {
 		)
 
 		// When
-		let hasEventGroup = sut.hasEventGroup(type: "recovery", providerIdentifier: "DCC")
+		let hasEventGroup = sut.hasEventGroup(type: "recovery", providerIdentifier: EventFlow.paperproofIdentier)
 
 		// Then
 		expect(hasEventGroup) == true
