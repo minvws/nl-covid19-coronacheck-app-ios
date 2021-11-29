@@ -1961,7 +1961,7 @@ class ListEventsViewModelTests: XCTestCase {
 	private var remotePaperFlowEvent: RemoteEvent {
 		RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper(
-				providerIdentifier: "DCC",
+				providerIdentifier: EventFlow.paperproofIdentier,
 				protocolVersion: "3.0",
 				identity: EventFlow.Identity.fakeIdentity,
 				status: .complete,

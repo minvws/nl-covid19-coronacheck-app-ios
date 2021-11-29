@@ -97,7 +97,10 @@ class HolderCoordinator: SharedCoordinator {
 			},
 			userHasPaperflowRecoveryGreencards: {
 
-				return Services.walletManager.hasEventGroup(type: EventMode.recovery.rawValue, providerIdentifier: "DCC")
+				return Services.walletManager.hasEventGroup(
+					type: EventMode.recovery.rawValue,
+					providerIdentifier: EventFlow.paperproofIdentier
+				)
 			},
 			userSettings: UserSettings(),
 			remoteConfigManager: Services.remoteConfigManager,

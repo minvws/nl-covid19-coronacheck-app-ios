@@ -348,6 +348,9 @@ struct EventFlow {
 			return nil
 		}
 	}
+
+	/// This identifier is used for persiting paper proofs.
+	static let paperproofIdentier = "DCC"
 }
 
 extension EventFlow.VaccinationEvent {
