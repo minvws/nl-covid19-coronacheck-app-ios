@@ -24,6 +24,14 @@ struct EventDetailsGenerator {
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
+
+	static let printTestDateLongFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "EEEE d MMMM yyyy HH:mm"
+		return dateFormatter
+	}()
 }
 
 class NegativeTestDetailsGenerator {
@@ -118,7 +126,7 @@ class PositiveTestDetailsGenerator {
 			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 		let formattedTestLongDate: String = event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printTestDateFormatter.string) ?? (event.positiveTest?.sampleDateString ?? "")
+			.map(EventDetailsGenerator.printTestDateLongFormatter.string) ?? (event.positiveTest?.sampleDateString ?? "")
 
 		// Type
 		let testType = mappingManager.getTestType(event.positiveTest?.type) ?? (event.positiveTest?.type ?? "")
