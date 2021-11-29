@@ -437,11 +437,6 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		coordinator?.openUrl(url, inApp: true)
 	}
 	
-	func userTappedCoronaMelderLink(url: URL) {
-		
-		coordinator?.openUrl(url, inApp: false)
-	}
-	
 	// MARK: - HolderDashboardCardUserActionHandling
 	
 	func didTapConfigAlmostOutOfDateCTA() {
@@ -504,7 +499,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	}
 	
 	func didTapRecoveryValidityExtensionCompleteClose() {
-		UserSettings().hasDismissedRecoveryValidityExtensionCompletionCard = true
+		userSettings.hasDismissedRecoveryValidityExtensionCompletionCard = true
 	}
 	
 	func didTapRecoveryValidityReinstationAvailableMoreInfo() {
@@ -516,7 +511,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	}
 	
 	func didTapRecoveryValidityReinstationCompleteClose() {
-		UserSettings().hasDismissedRecoveryValidityReinstationCompletionCard = true
+		userSettings.hasDismissedRecoveryValidityReinstationCompletionCard = true
 	}
 	
 	// MARK: - Static Methods
