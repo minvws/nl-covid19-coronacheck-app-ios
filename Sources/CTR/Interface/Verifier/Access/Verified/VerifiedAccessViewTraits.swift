@@ -8,7 +8,7 @@
 import Foundation
 
 /// Shared display constants
-enum VerifierResultViewTraits {
+enum VerifiedAccessViewTraits {
 
 	enum Animation {
 		static let verifiedDuration: TimeInterval = 0.2

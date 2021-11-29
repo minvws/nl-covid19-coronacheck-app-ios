@@ -109,7 +109,6 @@
 "verifier.result.next" = "Scan volgende";
 "verifier.result.access.checkidentity" = "Let op: identiteitscontrole is verplicht";
 "verifier.result.access.identityverified" = "Gegevens kloppen";
-"verifier.result.access.highrisk" = "Hoog risico locatie";
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "Deze QR-code bevat geen coronabewijs";
 "verifier.result.alert.unknown.message" = "Vraag de bezoeker een QR-code van een coronabewijs te laten zien.";

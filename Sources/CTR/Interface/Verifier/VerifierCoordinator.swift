@@ -20,10 +20,6 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	func navigateToScanInstruction()
 
-	/// Navigate to the scan result
-	/// - Parameter attributes: the scanned result
-	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult)
-
 	/// Display content
 	/// - Parameters:
 	///   - title: the title
@@ -128,21 +124,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				navigateToScanInstruction()
 		}
 	}
-
-	/// Navigate to the scan result
-	/// - Parameter attributes: the scanned result
-	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult) {
-		
-		let viewController = VerifierResultViewController(
-			viewModel: VerifierResultViewModel(
-				coordinator: self,
-				verificationResult: verificationResult,
-				isDeepLinkEnabled: thirdPartyScannerApp != nil,
-				userSettings: UserSettings()
-			)
-		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
-	}
 	
 	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails) {
 		
@@ -166,7 +147,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushWithFadeAnimation(with: viewController,
-																							  animationDuration: VerifierResultViewTraits.Animation.verifiedDuration)
+																							  animationDuration: VerifiedAccessViewTraits.Animation.verifiedDuration)
 	}
 	
 	func navigateToDeniedAccess() {
