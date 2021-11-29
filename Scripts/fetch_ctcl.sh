@@ -7,8 +7,8 @@ git submodule init
 git submodule update
 go mod download golang.org/x/mobile
 gomobile init
-gomobile bind -target ios -o clcore.framework github.com/minvws/nl-covid19-coronacheck-mobile-core
+gomobile bind -target ios,iossimulator -o clcore.xcframework -iosversion 11.0 github.com/minvws/nl-covid19-coronacheck-mobile-core
 cd ../
 rm -rf clcore.framework
-cp -R tmp-clcore/clcore.framework .
+cp -R tmp-clcore/clcore.xcframework .
 rm -rf tmp-clcore

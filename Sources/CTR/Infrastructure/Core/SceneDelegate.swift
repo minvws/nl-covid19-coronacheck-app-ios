@@ -29,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		previousBrightness = UIScreen.main.brightness
 
-		appCoordinator = AppCoordinator(scene: windowScene, navigationController: UINavigationController())
+		appCoordinator = AppCoordinator(scene: windowScene, navigationController: NavigationController())
 		appCoordinator?.start()
 
         // Possibly we launched via a Universal Link. If so, pass it to the AppCoordinator:

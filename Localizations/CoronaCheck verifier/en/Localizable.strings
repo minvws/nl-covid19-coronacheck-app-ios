@@ -1,3 +1,5 @@
+"verifier.result.access.accessibility.verified" = "Valid QR code scanned";
+"verifier.result.access.accessibility.demo" = "Demo QR code scanned";
 "verifier.result.access.dcc" = "International certificate";
 "verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";
 "verifier.denied.message.two" = "<b>Here’s what you can do:</b>";
@@ -85,7 +87,7 @@
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR codes";
 "verifier.start.header" = "Scan your visitors' QR codes";
-"verifier.start.message" = "Is de QR-code geldig en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
+"verifier.start.message" = "Is the QR code valid, and are the details the same as on the proof of identity? Then you can grant the visitor access.";
 "verifier.start.button.title" = "Start scanning";
 "verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
 
@@ -105,8 +107,6 @@
 "verifier.result.next" = "Scan next";
 "verifier.result.access.checkidentity" = "Please note: ID check is mandatory";
 "verifier.result.access.identityverified" = "Details are correct";
-"verifier.result.access.accessibility.verified" = "Valid QR code scanned";
-"verifier.result.access.accessibility.demo" = "Demo QR code scanned";
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "This QR code does not contain a coronavirus pass";
 "verifier.result.alert.unknown.message" = "Ask the visitor to show a QR code of a coronavirus pass.";

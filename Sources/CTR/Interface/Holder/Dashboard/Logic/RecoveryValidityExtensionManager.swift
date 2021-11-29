@@ -37,6 +37,7 @@ final class RecoveryValidityExtensionManager: RecoveryValidityExtensionManagerPr
 	// Dependencies:
 	private let userHasRecoveryEvents: () -> Bool
 	private let userHasUnexpiredRecoveryGreencards: () -> Bool
+	private let userHasPaperflowRecoveryGreencards: () -> Bool
 	private let userSettings: UserSettingsProtocol
 	private let remoteConfigManager: RemoteConfigManaging
 	private let now: () -> Date
@@ -44,12 +45,14 @@ final class RecoveryValidityExtensionManager: RecoveryValidityExtensionManagerPr
 	init(
 		userHasRecoveryEvents: @escaping () -> Bool,
 		userHasUnexpiredRecoveryGreencards: @escaping () -> Bool,
+		userHasPaperflowRecoveryGreencards: @escaping () -> Bool,
 		userSettings: UserSettingsProtocol,
 		remoteConfigManager: RemoteConfigManaging,
 		now: @escaping () -> Date
 	) {
 		self.userHasRecoveryEvents = userHasRecoveryEvents
 		self.userHasUnexpiredRecoveryGreencards = userHasUnexpiredRecoveryGreencards
+		self.userHasPaperflowRecoveryGreencards = userHasPaperflowRecoveryGreencards
 		self.userSettings = userSettings
 		self.remoteConfigManager = remoteConfigManager
 		self.now = now
@@ -70,10 +73,11 @@ final class RecoveryValidityExtensionManager: RecoveryValidityExtensionManagerPr
 		// If feature not launched yet, exit.
 		guard featureLaunchDate < now() else { return }
 
-		// If no recovery events, exit.
-		guard userHasRecoveryEvents() else {
+		// If no valid recovery events, exit.
+		guard userHasRecoveryEvents(), !userHasPaperflowRecoveryGreencards() else {
 			// we're already past the launch date and the user doesn't have any recovery
 			// events, so this feature can now be permanently disabled:
+			// Or this is a HKVI recovery that can not be extended.
 			userSettings.shouldCheckRecoveryGreenCardRevisedValidity = false
 			return
 		}

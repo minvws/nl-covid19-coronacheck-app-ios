@@ -59,6 +59,12 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
+	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted()
+
+	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted()
+	
+	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted()
+	
 	func openUrl(_ url: URL, inApp: Bool)
 
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
@@ -94,6 +100,10 @@ class HolderCoordinator: SharedCoordinator {
 
 				let hasUnexpiredRecoveryGreencards = !unexpiredGreencards.isEmpty
 				return hasUnexpiredRecoveryGreencards
+			},
+			userHasPaperflowRecoveryGreencards: {
+
+				return Services.walletManager.hasEventGroup(type: EventMode.recovery.rawValue, providerIdentifier: "DCC")
 			},
 			userSettings: UserSettings(),
 			remoteConfigManager: Services.remoteConfigManager,
@@ -301,7 +311,7 @@ class HolderCoordinator: SharedCoordinator {
 				now: { Date() }
 			)
 		)
-		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
+		dashboardNavigationController = NavigationController(rootViewController: dashboardViewController)
 		sidePanel?.selectedViewController = dashboardNavigationController
 	}
 	
@@ -326,7 +336,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 		)
-		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
+		sidePanel = SidePanelController(sideController: NavigationController(rootViewController: menu))
 		navigateToDashboard()
 
 		// Replace the root with the side panel controller
@@ -519,6 +529,33 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 	
+	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted() {
+		presentInformationPage(
+			title: L.holderEuvaccinationswereupgradedTitle(),
+			body: L.holderEuvaccinationswereupgradedMessage(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
+	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {
+		presentInformationPage(
+			title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
+			body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
+	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted() {
+		presentInformationPage(
+			title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
+			body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
 	func migrateEUVaccinationDidComplete() {
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
@@ -615,7 +652,7 @@ extension HolderCoordinator: MenuDelegate {
 						userSettings: UserSettings()
 					)
 				)
-				aboutNavigationController = UINavigationController(rootViewController: destination)
+				aboutNavigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
 
 			case .addCertificate:
@@ -625,13 +662,13 @@ extension HolderCoordinator: MenuDelegate {
 					),
 					isRootViewController: true
 				)
-				navigationController = UINavigationController(rootViewController: destination)
+				navigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
 				
 			case .addPaperProof:
 				let coordinator = PaperProofCoordinator(delegate: self)
 				let destination = PaperProofStartViewController(viewModel: .init(coordinator: coordinator))
-				navigationController = UINavigationController(rootViewController: destination)
+				navigationController = NavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController
 				startChildCoordinator(coordinator)
 				sidePanel?.selectedViewController = navigationController
@@ -641,7 +678,7 @@ extension HolderCoordinator: MenuDelegate {
 
 				let destinationViewController = PlaceholderViewController()
 				destinationViewController.placeholder = "\(identifier)"
-				let navigationController = UINavigationController(rootViewController: destinationViewController)
+				let navigationController = NavigationController(rootViewController: destinationViewController)
 				sidePanel?.selectedViewController = navigationController
 		}
 		fixRotation()

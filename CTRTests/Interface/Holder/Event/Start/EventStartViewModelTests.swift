@@ -25,8 +25,7 @@ class EventStartViewModelTests: XCTestCase {
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		sut = EventStartViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination,
-			validAfterDays: 11
+			eventMode: .vaccination
 		)
 	}
 
@@ -41,29 +40,18 @@ class EventStartViewModelTests: XCTestCase {
 	func test_content_recoveryMode() {
 
 		// When
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery, validAfterDays: 11)
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
 
 		// Then
 		expect(self.sut.title) == L.holderRecoveryStartTitle()
-		expect(self.sut.message) == L.holderRecoveryStartMessage("11")
-		expect(self.sut.primaryButtonIcon) == I.digid()
-	}
-
-	func test_content_recoveryMode_noValidity() {
-
-		// When
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery, validAfterDays: nil)
-
-		// Then
-		expect(self.sut.title) == L.holderRecoveryStartTitle()
-		expect(self.sut.message) == L.holderRecoveryStartMessage("11")
+		expect(self.sut.message) == L.holderRecoveryStartMessage()
 		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
 
 	func test_content_positiveTestMode() {
 
 		// When
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .positiveTest, validAfterDays: nil)
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .positiveTest)
 
 		// Then
 		expect(self.sut.title) == L.holderPositiveTestStartTitle()
@@ -74,7 +62,7 @@ class EventStartViewModelTests: XCTestCase {
 	func test_content_paperflowMode() {
 
 		// When
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow, validAfterDays: nil)
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow)
 
 		// Then
 		expect(self.sut.title) == ""
@@ -85,7 +73,7 @@ class EventStartViewModelTests: XCTestCase {
 	func test_content_negativeTestMode() {
 
 		// When
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .test, validAfterDays: nil)
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
 
 		// Then
 		expect(self.sut.title) == ""
@@ -126,7 +114,7 @@ class EventStartViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_recoveryMode() {
 
 		// Given
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery, validAfterDays: 11)
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
 
 		// When
 		sut.primaryButtonTapped()

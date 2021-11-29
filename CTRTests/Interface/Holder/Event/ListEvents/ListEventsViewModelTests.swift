@@ -1553,7 +1553,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderRecoveryTooOldTitle()
-		expect(feedback.subTitle) == L.holderRecoveryTooOldMessage("365")
+		expect(feedback.subTitle) == L.holderRecoveryTooOldMessage()
 		expect(feedback.primaryActionTitle) == L.holderTestNolistAction()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -1739,7 +1739,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderRecoveryTooOldTitle()
-		expect(feedback.subTitle) == L.holderRecoveryTooOldMessage("365")
+		expect(feedback.subTitle) == L.holderRecoveryTooOldMessage()
 		expect(feedback.primaryActionTitle) == L.holderRecoveryNolistAction()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}

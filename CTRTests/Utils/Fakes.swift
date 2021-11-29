@@ -493,6 +493,173 @@ extension RemoteGreenCards.Response {
 	}
 }
 
+extension EventFlow.Identity {
+
+	static var fakeIdentity: EventFlow.Identity {
+		EventFlow.Identity(
+			infix: "",
+			firstName: "Corona",
+			lastName: "Check",
+			birthDateString: "2021-05-16"
+		)
+	}
+}
+
+extension EventFlow.Event {
+
+	static var negativeTestEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "test",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: EventFlow.TestEvent(
+				sampleDateString: "2021-07-01",
+				negativeResult: true,
+				positiveResult: nil,
+				facility: "GGD XL Factory",
+				type: "LP217198-3",
+				name: "Antigen Test",
+				manufacturer: "1213"
+			),
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil
+		)
+	}
+
+	static var positiveTestEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "test",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: EventFlow.TestEvent(
+				sampleDateString: "2021-07-01",
+				negativeResult: nil,
+				positiveResult: true,
+				facility: "GGD XL Factory",
+				type: "LP217198-3",
+				name: "Antigen Test",
+				manufacturer: "1213"
+			),
+			recovery: nil,
+			dccEvent: nil
+		)
+	}
+
+	static var vaccinationEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccination",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: EventFlow.VaccinationEvent(
+				dateString: "2021-05-16",
+				hpkCode: nil,
+				type: nil,
+				manufacturer: "ORG-100030215",
+				brand: "EU/1/20/1528",
+				doseNumber: 1,
+				totalDoses: 2,
+				country: "NLD",
+				completedByMedicalStatement: nil,
+				completedByPersonalStatement: nil,
+				completionReason: nil
+			),
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil
+		)
+	}
+
+	static var recoveryEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccination",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: EventFlow.RecoveryEvent(
+				sampleDate: "2021-07-01",
+				validFrom: "2021-07-12",
+				validUntil: "2022-12-31"
+			),
+			dccEvent: nil
+		)
+	}
+}
+
+extension TestResult {
+
+	static var negativeResult: TestResult {
+		TestResult(
+			unique: "test",
+			sampleDate: "2021-01-01T12:00:00",
+			testType: "PCR",
+			negativeResult: true,
+			holder: TestHolderIdentity(
+				firstNameInitial: "T",
+				lastNameInitial: "D",
+				birthDay: "12",
+				birthMonth: "12"
+			)
+		)
+	}
+}
+
+extension EuCredentialAttributes.TestEntry {
+
+	static var negativeTest: EuCredentialAttributes.TestEntry {
+		EuCredentialAttributes.TestEntry(
+			certificateIdentifier: "1234",
+			country: "NL",
+			diseaseAgentTargeted: "840539006",
+			issuer: "Ministry of Health Welfare and Sport",
+			marketingAuthorizationHolder: "1213",
+			name: "fake negativeTest",
+			sampleDate: "2021-11-17T16:00:00+01:00",
+			testResult: "260415000",
+			testCenter: "Facility approved by the State of The Netherlands",
+			typeOfTest: "LP217198-3"
+		)
+	}
+}
+
+extension EuCredentialAttributes.Vaccination {
+
+	static var vaccination: EuCredentialAttributes.Vaccination {
+		EuCredentialAttributes.Vaccination(
+			certificateIdentifier: "1234",
+			country: "NLD",
+			diseaseAgentTargeted: "840539006",
+			doseNumber: 2,
+			dateOfVaccination: "2021-06-01",
+			issuer: "Test",
+			marketingAuthorizationHolder: "Test",
+			medicalProduct: "Test",
+			totalDose: 2,
+			vaccineOrProphylaxis: "test"
+		)
+	}
+}
+
+extension EuCredentialAttributes.RecoveryEntry {
+	static var recovery: EuCredentialAttributes.RecoveryEntry {
+		EuCredentialAttributes.RecoveryEntry(
+			certificateIdentifier: "1234",
+			country: "NL",
+			diseaseAgentTargeted: "840539006",
+			expiresAt: "2022-12-31",
+			firstPositiveTestDate: "2021-07-01",
+			issuer: "Facility approved by the State of The Netherlands",
+			validFrom: "2021-07-12"
+		)
+	}
+}
+
 extension UIImage {
 
 	static func withColor(_ color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {

@@ -34,6 +34,11 @@ class VerifierScanViewController: ScanViewController {
 
 		view = sceneView
 	}
+	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+
+		.lightContent
+	}
 
 	override func viewDidLoad() {
 
@@ -79,19 +84,17 @@ class VerifierScanViewController: ScanViewController {
 			tintColor: .white
 		)
 	}
-
+    
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		
-		// To achieve a white status bar color:
-		self.navigationController?.navigationBar.barStyle = .black
-	}
 
+		overrideNavigationBarTitleColor(with: .white)
+	}
+	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-		
-		// Restore default status bar color:
-		self.navigationController?.navigationBar.barStyle = .default
+	 
+		restoreNavigationBarTitleColor()
 	}
 
 	override func found(code: String) {

@@ -41,7 +41,7 @@ enum EventScreenResult: Equatable {
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest):
+			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest), (.backSwipe, .backSwipe):
 				return true
 			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
@@ -69,9 +69,6 @@ enum EventScreenResult: Equatable {
 
 			case (let error(lhsContent, _), let error(rhsContent, _)):
 				return lhsContent == rhsContent
-
-			case (.backSwipe, .backSwipe):
-				return true
 
 			default:
 				return false
@@ -173,8 +170,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		let viewController = EventStartViewController(
 			viewModel: EventStartViewModel(
 				coordinator: self,
-				eventMode: eventMode,
-				validAfterDays: Services.remoteConfigManager.storedConfiguration.recoveryWaitingPeriodDays
+				eventMode: eventMode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
@@ -307,14 +303,21 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	func eventStartScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
-			case .back, .stop:
-				delegate?.eventFlowDidCancel()
-			case .backSwipe:
-				delegate?.eventFlowDidCancelFromBackSwipe()
-			case let .continue(eventMode):
-				navigateToLogin(eventMode: eventMode)
-			default:
-				break
+			case let .back(eventMode): handleBackAction(eventMode: eventMode)
+			case .stop: delegate?.eventFlowDidCancel()
+			case .backSwipe: delegate?.eventFlowDidCancelFromBackSwipe()
+			case let .continue(eventMode): navigateToLogin(eventMode: eventMode)
+			default: break
+		}
+	}
+
+	private func handleBackAction(eventMode: EventMode) {
+
+		if eventMode == .positiveTest, navigationController.viewControllers.filter({ $0 is EventStartViewController }).count > 1 {
+			// Positive Test flow after vaccination flow with only an international QR
+			navigationController.popViewController(animated: true)
+		} else {
+			delegate?.eventFlowDidCancel()
 		}
 	}
 
