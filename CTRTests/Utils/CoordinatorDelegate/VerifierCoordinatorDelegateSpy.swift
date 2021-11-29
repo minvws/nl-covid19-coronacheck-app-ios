@@ -47,18 +47,6 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedNavigateToScanInstructionCount += 1
 	}
 
-	var invokedNavigateToScanResult = false
-	var invokedNavigateToScanResultCount = 0
-	var invokedNavigateToScanResultParameters: (verificationResult: MobilecoreVerificationResult, Void)?
-	var invokedNavigateToScanResultParametersList = [(verificationResult: MobilecoreVerificationResult, Void)]()
-
-	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult) {
-		invokedNavigateToScanResult = true
-		invokedNavigateToScanResultCount += 1
-		invokedNavigateToScanResultParameters = (verificationResult, ())
-		invokedNavigateToScanResultParametersList.append((verificationResult, ()))
-	}
-
 	var invokedDisplayContent = false
 	var invokedDisplayContentCount = 0
 	var invokedDisplayContentParameters: (title: String, content: [DisplayContent])?
