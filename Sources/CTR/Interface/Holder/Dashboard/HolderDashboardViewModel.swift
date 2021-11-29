@@ -499,7 +499,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	}
 	
 	func didTapRecoveryValidityExtensionCompleteClose() {
-		UserSettings().hasDismissedRecoveryValidityExtensionCompletionCard = true
+		userSettings.hasDismissedRecoveryValidityExtensionCompletionCard = true
 	}
 	
 	func didTapRecoveryValidityReinstationAvailableMoreInfo() {
@@ -511,7 +511,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	}
 	
 	func didTapRecoveryValidityReinstationCompleteClose() {
-		UserSettings().hasDismissedRecoveryValidityReinstationCompletionCard = true
+		userSettings.hasDismissedRecoveryValidityReinstationCompletionCard = true
 	}
 	
 	// MARK: - Static Methods
