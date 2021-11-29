@@ -40,13 +40,6 @@ extension UIViewController {
 			navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: color]
 		}
 	}
-	/// Restores the navigation bar's title color to its default. For use with iOS 15.
-	func restoreNavigationBarTitleColor() {
-		if #available(iOS 15.0, *) {
-			navigationController?.navigationBar.standardAppearance.titleTextAttributes = [:]
-			navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [:]
-		}
-	}
 	
 	/// Presents a view controller as bottom sheet modal
 	/// - Parameters:
