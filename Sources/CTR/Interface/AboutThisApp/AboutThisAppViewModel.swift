@@ -90,7 +90,6 @@ class AboutThisAppViewModel: Logging {
 
 		flavor == .holder ? setupMenuHolder() : setupMenuVerifier()
 	}
-
 	private func setupMenuHolder() {
 
 		menu = [
@@ -163,8 +162,8 @@ class AboutThisAppViewModel: Logging {
 			subTitle: L.holderCleardataAlertSubtitle(),
 			cancelAction: nil,
 			cancelTitle: L.generalCancel(),
-			okAction: { _ in
-				self.resetDataAndRestart()
+			okAction: { [weak self] _ in
+				self?.resetDataAndRestart()
 			},
 			okTitle: L.holderCleardataAlertRemove()
 		)
