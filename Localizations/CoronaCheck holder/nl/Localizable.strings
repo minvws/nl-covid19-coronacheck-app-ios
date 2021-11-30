@@ -9,7 +9,7 @@
 "holder.paperproof.notoken.message" = "<p>Het is dan niet mogelijk om je bewijzen op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie als je jouw papieren bewijzen hebt aangevraagd bij je zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je zelf je bewijs geprint?</b><br />Je kunt dan je bewijzen toevoegen aan de app met behulp van DigiD.</p>";
 "holder.paperproof.notoken.action" = "Voeg bewijs toe via DigiD";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU.vaccination" = "Je hebt geen Nederlands vaccinatiebewijs";
-"holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Voorkom verspreiding van het coronavirus, <a href=\"https://apps.apple.com/nl/app/coronamelder/id1517652429\">gebruik ook CoronaMelder</a>.</p>";
+"holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Voorkom verspreiding van het coronavirus, gebruik ook <a href=\"https://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a>.</p>";
 "holder.paperproof.selfprinted.title" = "Zelf je bewijs uitgeprint?";
 "holder.paperproof.selfprinted.message" = "<p>Het is dan niet mogelijk om je bewijzen op deze manier aan de app toe te voegen.</p><p>Je kunt wel bewijzen toevoegen aan de app met behulp van DigiD.</p>";
 "holder.paperproof.selfprinted.action" = "Voeg bewijs toe via DigiD";
