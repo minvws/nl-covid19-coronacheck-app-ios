@@ -86,7 +86,7 @@ class VaccinationQRDetailsGenerator {
 
 		let vaccineType = mappingManager.getVaccinationType(vaccination.vaccineOrProphylaxis) ?? vaccination.vaccineOrProphylaxis
 		let vaccineBrand = mappingManager.getVaccinationBrand(vaccination.medicalProduct) ?? vaccination.medicalProduct
-		let vaccineManufacturer = mappingManager.getVaccinationBrand(vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
+		let vaccineManufacturer = mappingManager.getVaccinationManufacturer(vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)

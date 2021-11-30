@@ -494,8 +494,9 @@ private extension EventMode {
 
 extension FetchEventsViewModel {
 
+	static let detailedCodeNonceExpired: Int = 99708
+	static let detailedCodeTvsSessionExpired: Int = 99710
 	static let detailedCodeNoBSN: Int = 99782
-	static let detailedCodeSessionExpired: Int = 99708
 }
 
 // MARK: - Error states
@@ -534,40 +535,63 @@ private extension FetchEventsViewModel {
 
 	func handleErrorCodesForAccesTokenAndProviders(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
-		let hasNoBSN = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }.isEmpty
-		let sessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeSessionExpired }.isEmpty
-		let serverUnreachable = !serverErrors.filter { serverError in
+		// No BSN
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }) else {
+			displayNoBSN()
+			return
+		}
+
+		// Expired Nonce
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeNonceExpired }) else {
+			displayNonceOrTVSExpired()
+			return
+		}
+
+		// Expired TVS token
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeTvsSessionExpired }) else {
+			if eventMode == .positiveTest {
+				// This is recoverable, so redirect to login
+				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)
+			} else {
+				displayNonceOrTVSExpired()
+			}
+			return
+		}
+
+		// Unreachable
+		guard serverErrors.filter({ serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .serverUnreachableTimedOut || error == .serverUnreachableInvalidHost || error == .serverUnreachableConnectionLost
 			}
 			return false
-		}.isEmpty
-		let serverBusy = !serverErrors.filter { serverError in
+		}).isEmpty else {
+			displayServerUnreachable(errorCodes)
+			return
+		}
+
+		// Server Busy
+		guard serverErrors.filter({ serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .serverBusy
 			}
 			return false
-		}.isEmpty
-		let noInternet = !serverErrors.filter { serverError in
+		}).isEmpty else {
+			displayServerBusy(errorCodes)
+			return
+		}
+
+		// No Internet
+		guard serverErrors.filter({ serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .noInternetConnection
 			}
 			return false
-		}.isEmpty
-
-		if hasNoBSN {
-			displayNoBSN()
-		} else if sessionExpired {
-			displaySessionExpired()
-		} else if serverUnreachable {
-			displayServerUnreachable(errorCodes)
-		} else if serverBusy {
-			displayServerBusy(errorCodes)
-		} else if noInternet {
+		}).isEmpty else {
 			displayNoInternet()
-		} else {
-			displayErrorCodeForAccessTokenAndProviders(errorCodes)
+			return
 		}
+
+		displayErrorCodeForAccessTokenAndProviders(errorCodes)
 	}
 
 	func displayNoBSN() {
@@ -585,7 +609,7 @@ private extension FetchEventsViewModel {
 		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
-	func displaySessionExpired() {
+	func displayNonceOrTVSExpired() {
 
 		let content = Content(
 			title: L.holderErrorstateNosessionTitle(),
