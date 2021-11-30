@@ -9,7 +9,7 @@
 "holder.paperproof.notoken.message" = "<p>Then you won't be able to add your certificates to the app this way.</p><p>You only have a letter combination if you requested your paper certificates from your healthcare provider, or had them delivered by mail.</p><p><b>Did you print your certificate yourself?</b><br />Then you can add your certificates to the app using DigiD.</p>";
 "holder.paperproof.notoken.action" = "Add certificate via DigiD";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU.vaccination" = "You don't have a Dutch vaccination certificate";
-"holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Prevent the spread of coronavirus, <a href=\"https://apps.apple.com/nl/app/coronamelder/id1517652429\">use CoronaMelder too</a>.</p>";
+"holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Prevent the spread of coronavirus, use <a href=\"https://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a> too.</p>";
 "holder.paperproof.selfprinted.title" = "Printed your certificate yourself?";
 "holder.paperproof.selfprinted.message" = "<p>Then you won't be able to add your certificates to the app this way.</p><p>However, you can add certificates to the app using DigiD.</p>";
 "holder.paperproof.selfprinted.action" = "Add certificate via DigiD";
@@ -296,12 +296,12 @@
 /* Voice over voor einde van een lijst */
 "general.list.accessibility.end" = "End of list";
 "holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
-"holder.tokenentry.regularflow.confirmresendverificationalert.message" = "You receive the verification code via text or e-mail. Didn't get one? Click ‘send again’ below for a new code.";
+"holder.tokenentry.regularflow.confirmresendverificationalert.message" = "You receive the verification code via text or email. Didn't get one? Click ‘send again’ below for a new code.";
 "holder.tokenentry.regularflow.confirmresendverificationalert.okaybutton" = "Send again";
 "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton" = "Close";
 
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
-"holder.tokenentry.universallinkflow.confirmresendverificationalert.message" = "You receive the verification code via text or e-mail. Didn't get one? Click ‘send again’ below for a new code.";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.message" = "You receive the verification code via text or email. Didn't get one? Click ‘send again’ below for a new code.";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton" = "Send again";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.cancelbutton" = "Close";
 
