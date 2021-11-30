@@ -8,6 +8,8 @@
 import UIKit
 
 class PaperProofScanViewController: ScanViewController {
+	
+	let sceneView = PaperProofScanView()
 
 	private let viewModel: PaperProofScanViewModel
 
@@ -26,10 +28,10 @@ class PaperProofScanViewController: ScanViewController {
 	}
 
 	// MARK: View lifecycle
-//	override func loadView() {
-//
-//		view = sceneView
-//	}
+	override func loadView() {
+
+		view = sceneView
+	}
 
 	override func viewDidLoad() {
 
@@ -39,7 +41,7 @@ class PaperProofScanViewController: ScanViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		
-//		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 	
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
@@ -65,6 +67,12 @@ class PaperProofScanViewController: ScanViewController {
 
 		// Only show an arrow as back button
 		addBackButton()
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		attachCameraViewAndStartRunning(sceneView.scanView.cameraView)
 	}
 
 	override func found(code: String) {

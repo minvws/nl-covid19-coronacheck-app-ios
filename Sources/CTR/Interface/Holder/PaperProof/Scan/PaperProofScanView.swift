@@ -7,26 +7,34 @@
 
 import UIKit
 
-final class VerifierScanView: BaseView {
+final class PaperProofScanView: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
 
+		// Dimensions
+		static let messageLineHeight: CGFloat = 22
+
+		// Margins
 		static let margin: CGFloat = 20.0
 	}
 	
+	/// The message label
+	private let messageLabel: Label = {
+
+		return Label(bodySemiBold: nil).multiline()
+	}()
+	
 	let scanView = ScanView()
 	
-	private let moreInformationButton = Button(style: Button.ButtonType.textLabelBlue)
-	
 	// A dummy view to move the scrollview below the mask on the overlay
-	private let dummyView: UIView = {
+	let dummyView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
-	private let scrollView: UIScrollView = {
+	let scrollView: UIScrollView = {
 		let scrollView = UIScrollView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		return scrollView
@@ -36,8 +44,6 @@ final class VerifierScanView: BaseView {
 		super.setupViews()
 		
 		backgroundColor = Theme.colors.viewControllerBackground
-		
-		moreInformationButton.touchUpInside(self, action: #selector(moreInformationButtonTapped))
 	}
 	
 	override func setupViewHierarchy() {
@@ -46,7 +52,7 @@ final class VerifierScanView: BaseView {
 		scanView.embed(in: self)
 		addSubview(dummyView)
 		addSubview(scrollView)
-		scrollView.addSubview(moreInformationButton)
+		scrollView.addSubview(messageLabel)
 	}
 	
 	override func setupViewConstraints() {
@@ -62,57 +68,46 @@ final class VerifierScanView: BaseView {
 			dummyView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			dummyView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			dummyView.heightAnchor.constraint(equalTo: widthAnchor),
-
+			
 			// ScrollView
 			scrollView.topAnchor.constraint(equalTo: dummyView.bottomAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
-			// More information button
-			moreInformationButton.topAnchor.constraint(equalTo: scrollView.topAnchor),
-			moreInformationButton.leadingAnchor.constraint(
+			// Message
+			messageLabel.topAnchor.constraint(equalTo: scrollView.topAnchor),
+			messageLabel.leadingAnchor.constraint(
 				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			moreInformationButton.trailingAnchor.constraint(
+			messageLabel.trailingAnchor.constraint(
 				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			moreInformationButton.bottomAnchor.constraint(
+			// Extra constraints to make the message scrollable
+			messageLabel.widthAnchor.constraint(
+				equalTo: scrollView.widthAnchor,
+				constant: -2 * ViewTraits.margin
+			),
+			messageLabel.bottomAnchor.constraint(
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.margin
 			),
-			moreInformationButton.widthAnchor.constraint(
-				lessThanOrEqualTo: scrollView.widthAnchor,
-				constant: -2 * ViewTraits.margin
-			),
-			moreInformationButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
+			messageLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
 		])
 	}
-	
-	@objc func moreInformationButtonTapped() {
 
-		moreInformationButtonCommand?()
-	}
-	
 	// MARK: - Public Access
 	
 	/// The message
-	var moreInformationButtonText: String? {
+	var message: String? {
 		didSet {
-			guard let moreInformationButtonText = moreInformationButtonText else {
-				moreInformationButton.title = nil
-				return
-			}
-
-			let attributedTitle = moreInformationButtonText.underline(
-				underlined: moreInformationButtonText,
-				with: .white
+			messageLabel.attributedText = message?.setLineHeight(
+				ViewTraits.messageLineHeight,
+				alignment: .center,
+				textColor: .white
 			)
-			moreInformationButton.setAttributedTitle(attributedTitle, for: .normal)
 		}
 	}
-	
-	var moreInformationButtonCommand: (() -> Void)?
 }
