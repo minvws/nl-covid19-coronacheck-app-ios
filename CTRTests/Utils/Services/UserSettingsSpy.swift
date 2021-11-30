@@ -186,6 +186,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedLastSeenRecommendUpdateSetter = false
+	var invokedLastSeenRecommendUpdateSetterCount = 0
+	var invokedLastSeenRecommendUpdate: String?
+	var invokedLastSeenRecommendUpdateList = [String?]()
+	var invokedLastSeenRecommendUpdateGetter = false
+	var invokedLastSeenRecommendUpdateGetterCount = 0
+	var stubbedLastSeenRecommendUpdate: String!
+
+	var lastSeenRecommendUpdate: String? {
+		set {
+			invokedLastSeenRecommendUpdateSetter = true
+			invokedLastSeenRecommendUpdateSetterCount += 1
+			invokedLastSeenRecommendUpdate = newValue
+			invokedLastSeenRecommendUpdateList.append(newValue)
+		}
+		get {
+			invokedLastSeenRecommendUpdateGetter = true
+			invokedLastSeenRecommendUpdateGetterCount += 1
+			return stubbedLastSeenRecommendUpdate
+		}
+	}
+
 	var invokedDeviceAuthenticationWarningShownSetter = false
 	var invokedDeviceAuthenticationWarningShownSetterCount = 0
 	var invokedDeviceAuthenticationWarningShown: Bool?
