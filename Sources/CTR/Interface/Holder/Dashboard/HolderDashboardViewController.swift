@@ -222,7 +222,7 @@ private extension HolderDashboardViewController.Card {
 		
 		switch self {
 			case let .headerMessage(message, buttonTitle):
-				return HeaderMessageCardView(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
+				return HeaderMessageCardView.make(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
 				
 			// Message Cards with only a message + close button
 			case let .expiredQR(message, didTapCloseAction):
@@ -251,7 +251,7 @@ private extension HolderDashboardViewController.Card {
 				))
 
 			case let .emptyStateDescription(message, buttonTitle):
-				return EmptyDashboardDescriptionCardView(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
+				return EmptyDashboardDescriptionCardView.make(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
 
 			case let .emptyStatePlaceholderImage(image, title):
 				let view = EmptyDashboardImagePlaceholderCardView()
@@ -266,7 +266,7 @@ private extension HolderDashboardViewController.Card {
 				return QRCardView.make(stackSize: stackSize, forEu: true, title: title, isLoading: isLoading, validityTexts: validityTexts, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
 				
 			case let .errorMessage(message, didTapTryAgain):
-				return ErrorDashboardCardView(message: message, didTapTryAgain: didTapTryAgain, openURLHandler: openURLHandler)
+				return ErrorDashboardCardView.make(message: message, didTapTryAgain: didTapTryAgain, openURLHandler: openURLHandler)
 			
 			case .recommendCoronaMelder:
 				let view = RecommendCoronaMelderCardView()
@@ -280,48 +280,51 @@ private extension HolderDashboardViewController.Card {
 
 private extension ErrorDashboardCardView {
 	
-	convenience init(message: String, didTapTryAgain: @escaping () -> Void, openURLHandler: @escaping (URL) -> Void) {
-		self.init()
-		self.message = message
-		self.messageTextView.linkTouched { url in
+	static func make(message: String, didTapTryAgain: @escaping () -> Void, openURLHandler: @escaping (URL) -> Void) -> ErrorDashboardCardView {
+		let view = ErrorDashboardCardView()
+		view.message = message
+		view.messageTextView.linkTouched { url in
 			if url.absoluteString == AppAction.tryAgain {
 				didTapTryAgain()
 			} else {
 				openURLHandler(url)
 			}
 		}
+		return view
 	}
 }
 
 private extension HeaderMessageCardView {
 	
-	convenience init(message: String, buttonTitle: String?, openURLHandler: @escaping (URL) -> Void) {
-		self.init()
-		self.message = message
-		self.buttonTitle = buttonTitle
-		self.contentTextView.linkTouched { url in
+	static func make(message: String, buttonTitle: String?, openURLHandler: @escaping (URL) -> Void) -> HeaderMessageCardView {
+		let view = HeaderMessageCardView()
+		view.message = message
+		view.buttonTitle = buttonTitle
+		view.contentTextView.linkTouched { url in
 			openURLHandler(url)
 		}
-		self.buttonTappedCommand = {
+		view.buttonTappedCommand = {
 			guard let url = URL(string: L.holderDashboardIntroInternationalUrl()) else { return }
 			openURLHandler(url)
 		}
+		return view
 	}
 }
 
 private extension EmptyDashboardDescriptionCardView {
 	
-	convenience init(message: String, buttonTitle: String?, openURLHandler: @escaping (URL) -> Void) {
-		self.init()
-		self.message = message
-		self.buttonTitle = buttonTitle
-		self.contentTextView.linkTouched { url in
+	static func make(message: String, buttonTitle: String?, openURLHandler: @escaping (URL) -> Void) -> EmptyDashboardDescriptionCardView {
+		let view = EmptyDashboardDescriptionCardView()
+		view.message = message
+		view.buttonTitle = buttonTitle
+		view.contentTextView.linkTouched { url in
 			openURLHandler(url)
 		}
-		self.buttonTappedCommand = {
+		view.buttonTappedCommand = {
 			guard let url = URL(string: L.holderDashboardEmptyInternationalUrl()) else { return }
 			openURLHandler(url)
 		}
+		return view
 	}
 }
 
