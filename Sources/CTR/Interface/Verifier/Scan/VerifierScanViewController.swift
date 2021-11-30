@@ -14,6 +14,8 @@ class VerifierScanViewController: ScanViewController {
 		let subTitle: String
 		let okTitle: String
 	}
+	
+	let sceneView = VerifierScanView()
 
 	private let viewModel: VerifierScanViewModel
 
@@ -48,7 +50,7 @@ class VerifierScanViewController: ScanViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+//		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 
 		viewModel.$moreInformationButtonText.binding = { [weak self] in self?.sceneView.moreInformationButtonText = $0 }
 		
@@ -89,6 +91,12 @@ class VerifierScanViewController: ScanViewController {
 		super.viewWillAppear(animated)
 
 		overrideNavigationBarTitleColor(with: .white)
+	}
+
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		attachCameraViewAndStartRunning(sceneView.cameraView.cameraView)
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {

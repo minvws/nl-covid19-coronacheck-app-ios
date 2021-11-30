@@ -12,16 +12,14 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 	var loggingCategory: String = "ScanViewController"
 
-	var captureSession: AVCaptureSession!
-	var previewLayer: AVCaptureVideoPreviewLayer!
+	private var captureSession: AVCaptureSession!
+	private var previewLayer: AVCaptureVideoPreviewLayer!
 
-	let sceneView = ScanView()
-
-	var previousOrientation: UIInterfaceOrientation?
+	private var previousOrientation: UIInterfaceOrientation?
     
-    var torchButton: UIBarButtonItem?
-    var torchEnableLabel: String?
-    var torchDisableLabel: String?
+    private var torchButton: UIBarButtonItem?
+    private var torchEnableLabel: String?
+    private var torchDisableLabel: String?
 
 	// Actions to perform on the navigationController at the moment that we are removing this screen.
 	// 	Background:
@@ -32,11 +30,6 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	private var navigationControllerTeardown: (() -> Void)?
 
 	// MARK: View lifecycle
-	override func loadView() {
-
-		view = sceneView
-	}
-
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -49,6 +42,8 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			navigationController?.navigationBar.titleTextAttributes = textAttributes
 			navigationController?.navigationBar.tintColor = Theme.colors.dark
 		}
+		
+		setupScan()
 	}
 
 	func setupScan() {
@@ -57,7 +52,6 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			return
 		}
 
-		sceneView.cameraView.backgroundColor = UIColor.black
 		captureSession = AVCaptureSession()
 
 		guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
@@ -91,13 +85,24 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			failed()
 			return
 		}
-
-		previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-		previewLayer.frame = sceneView.cameraView.layer.bounds
-		previewLayer.videoGravity = .resizeAspectFill
-		sceneView.cameraView.layer.addSublayer(previewLayer)
-
-		captureSession.startRunning()
+	}
+	
+	func attachCameraViewAndStartRunning(_ cameraView: UIView) {
+		
+		guard !Platform.isSimulator else {
+			return
+		}
+		
+		if previewLayer?.superlayer == nil {
+			previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+			previewLayer?.videoGravity = .resizeAspectFill
+			previewLayer.frame = cameraView.layer.bounds
+			cameraView.layer.addSublayer(previewLayer)
+		}
+		
+		if captureSession?.isRunning == false {
+			captureSession.startRunning()
+		}
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -114,16 +119,6 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
-	}
-
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-
-		setupScan()
-
-		if !Platform.isSimulator, captureSession?.isRunning == false {
-			captureSession.startRunning()
-		}
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {

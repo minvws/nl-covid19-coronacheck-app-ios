@@ -26,10 +26,10 @@ class PaperProofScanViewController: ScanViewController {
 	}
 
 	// MARK: View lifecycle
-	override func loadView() {
-
-		view = sceneView
-	}
+//	override func loadView() {
+//
+//		view = sceneView
+//	}
 
 	override func viewDidLoad() {
 
@@ -39,7 +39,7 @@ class PaperProofScanViewController: ScanViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+//		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 	
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
