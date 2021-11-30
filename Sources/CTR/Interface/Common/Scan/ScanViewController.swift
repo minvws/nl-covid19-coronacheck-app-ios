@@ -36,18 +36,18 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 		view = sceneView
 	}
+	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+
+		.lightContent
+	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		navigationControllerTeardown = { [weak navigationController] in
-			// Reset navigation title color
-			let textAttributes = [
-				NSAttributedString.Key.foregroundColor: Theme.colors.dark,
-				NSAttributedString.Key.font: Theme.fonts.bodyMontserrat
-			]
-			navigationController?.navigationBar.titleTextAttributes = textAttributes
-			navigationController?.navigationBar.tintColor = Theme.colors.dark
+		navigationControllerTeardown = { [weak self] in
+			// Reset navigation title color			
+			self?.overrideNavigationBarTitleColor(with: Theme.colors.dark)
 		}
 	}
 
@@ -105,12 +105,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		super.viewWillAppear(animated)
 
 		// Force navigation title color to white
-		let textAttributes = [
-			NSAttributedString.Key.foregroundColor: UIColor.white,
-			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
-		]
-		navigationController?.navigationBar.titleTextAttributes = textAttributes
-		navigationController?.navigationBar.tintColor = .white
+		overrideNavigationBarTitleColor(with: .white)
 
 		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)

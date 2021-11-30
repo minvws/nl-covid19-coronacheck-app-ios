@@ -54,7 +54,7 @@ class TokenEntryViewControllerTests: XCTestCase {
 				.default(L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()),
 				.cancel(L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton())
 			],
-			preferredStyle: .actionSheet,
+			preferredStyle: .alert,
 			presentingViewController: sut
 		)
 	}
@@ -79,7 +79,7 @@ class TokenEntryViewControllerTests: XCTestCase {
 				.default(L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()),
 				.cancel(L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton())
 			],
-			preferredStyle: .actionSheet,
+			preferredStyle: .alert,
 			presentingViewController: sut
 		)
 	}

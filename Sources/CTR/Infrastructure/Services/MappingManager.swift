@@ -35,7 +35,7 @@ protocol MappingManaging {
 
 	func getVaccinationType(_ code: String? ) -> String?
 
-	func getVaccinationManufacturerMapping(_ code: String? ) -> String?
+	func getVaccinationManufacturer(_ code: String? ) -> String?
 
 	func getNlTestType(_ code: String? ) -> String?
 }
@@ -125,7 +125,7 @@ class MappingManager: MappingManaging, Logging {
 		return remoteConfigManager.storedConfiguration.euVaccinationTypes?.first(where: { $0.code == code })?.name
 	}
 
-	func getVaccinationManufacturerMapping(_ code: String? ) -> String? {
+	func getVaccinationManufacturer(_ code: String? ) -> String? {
 
 		return remoteConfigManager.storedConfiguration.euManufacturers?.first(where: { $0.code == code })?.name
 	}

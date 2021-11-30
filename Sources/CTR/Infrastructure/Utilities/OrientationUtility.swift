@@ -14,9 +14,11 @@ struct OrientationUtility {
 	/// - Parameter orientation: the orientation mask to lock to
 	static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
 
-		if let delegate = UIApplication.shared.delegate as? AppDelegate {
-			delegate.orientationLock = orientation
-		}
+		(UIApplication.shared.delegate as? AppDelegate)?.orientationLock = orientation
+	}
+	
+	static func unlockOrientation() {
+		(UIApplication.shared.delegate as? AppDelegate)?.orientationLock = .all
 	}
 
 	/// Lock the orientation and rotate

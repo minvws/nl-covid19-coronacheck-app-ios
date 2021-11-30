@@ -312,10 +312,15 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	}
 
 	private func handleBackAction(eventMode: EventMode) {
-
-		if eventMode == .positiveTest, navigationController.viewControllers.filter({ $0 is EventStartViewController }).count > 1 {
-			// Positive Test flow after vaccination flow with only an international QR
-			navigationController.popViewController(animated: true)
+		
+		if eventMode == .positiveTest,
+		   navigationController.viewControllers.filter({ $0 is EventStartViewController }).count > 1,
+		   let listEventViewController = navigationController.viewControllers.first(where: { $0 is ListEventsViewController }) {
+			
+			navigationController.popToViewController(
+				listEventViewController,
+				animated: true
+			)
 		} else {
 			delegate?.eventFlowDidCancel()
 		}
@@ -361,6 +366,10 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
 				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
 
+			case .startWithPositiveTest:
+				// route after international QR only, and backend says token expired, while our check says valid.
+				tvsToken = nil
+				startWithPositiveTest()
 			default:
 				break
 		}
