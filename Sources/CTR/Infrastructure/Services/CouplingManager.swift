@@ -53,7 +53,7 @@ class CouplingManager: CouplingManaging, Logging {
 			
 			let wrapper =
 				EventFlow.EventResultWrapper(
-					providerIdentifier: "DCC",
+					providerIdentifier: EventFlow.paperproofIdentier,
 					protocolVersion: "3.0",
 					identity: euCredentialAttributes.identity,
 					status: .complete,

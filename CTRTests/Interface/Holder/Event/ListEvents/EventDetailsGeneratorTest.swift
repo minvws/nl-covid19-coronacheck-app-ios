@@ -93,7 +93,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[2].value) == "16 mei 2021"
 		expect(details[3].value) == "Sneltest (RAT)"
 		expect(details[4].value) == "Antigen Test"
-		expect(details[5].value) == "donderdag 1 juli 02:00"
+		expect(details[5].value) == "donderdag 1 juli 2021 02:00"
 		expect(details[6].value) == L.holderShowqrEuAboutTestPostive()
 		expect(details[7].value) == "GGD XL Factory"
 		expect(details[8].value) == "testPositiveTestGenerator"

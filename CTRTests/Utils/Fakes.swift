@@ -149,6 +149,42 @@ extension EventFlow.EventResultWrapper {
 			result: nil
 		)
 	}
+
+	static var fakeVaccinationResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.vaccinationEvent]
+	)
+
+	static var fakeRecoveryResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.recoveryEvent]
+	)
+
+	static var fakePositiveTestResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.positiveTestEvent]
+	)
+
+	static var fakeNegativeTestResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.negativeTestEvent]
+	)
 }
 
 extension RequestToken {
@@ -592,6 +628,15 @@ extension EventFlow.Event {
 	}
 }
 
+extension SignedResponse {
+	static var fakeResponse: SignedResponse {
+		SignedResponse(
+			payload: "payload",
+			signature: "signature"
+		)
+	}
+}
+
 extension TestResult {
 
 	static var negativeResult: TestResult {
@@ -676,4 +721,46 @@ extension UIImage {
 extension TVSAuthorizationToken {
 	
 	static var test: TVSAuthorizationToken = .init(idTokenString: "test", expiration: now.addingTimeInterval(5 * minutes * fromNow))
+}
+
+extension EventFlow.EventInformationAvailable {
+	static var fakeInformationIsAvailable: EventFlow.EventInformationAvailable {
+		EventFlow.EventInformationAvailable(
+			providerIdentifier: "CC",
+			protocolVersion: "3.0",
+			informationAvailable: true
+		)
+	}
+}
+
+extension EventFlow.AccessToken {
+	static var fakeTestToken: EventFlow.AccessToken {
+		EventFlow.AccessToken(
+			providerIdentifier: "CC",
+			unomiAccessToken: "unomi test",
+			eventAccessToken: "event test"
+		)
+	}
+}
+
+extension EuCredentialAttributes {
+	static var fakeVaccination: EuCredentialAttributes {
+		EuCredentialAttributes(
+			credentialVersion: 1,
+			digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate(
+				dateOfBirth: "2021-06-01",
+				name: EuCredentialAttributes.Name(
+					familyName: "Corona",
+					standardisedFamilyName: "CORONA",
+					givenName: "Check",
+					standardisedGivenName: "CHECK"
+				),
+				schemaVersion: "1.0.0",
+				vaccinations: [ EuCredentialAttributes.Vaccination.vaccination]
+			),
+			expirationTime: Date().timeIntervalSince1970 + 3600,
+			issuedAt: Date().timeIntervalSince1970,
+			issuer: "NL"
+		)
+	}
 }

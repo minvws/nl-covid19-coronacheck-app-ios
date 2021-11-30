@@ -81,36 +81,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_whenQRIsDCC_shouldInvokeCoordinator() {
 		// Given
 		let message = "HC1:MOCK:MESSAGE"
-		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes(
-			credentialVersion: 1,
-			digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate(
-				dateOfBirth: "2021-06-01",
-				name: EuCredentialAttributes.Name(
-					familyName: "Corona",
-					standardisedFamilyName: "CORONA",
-					givenName: "Check",
-					standardisedGivenName: "CHECK"
-				),
-				schemaVersion: "1.0.0",
-				vaccinations: [
-					EuCredentialAttributes.Vaccination(
-						certificateIdentifier: "test",
-						country: "NLS",
-						diseaseAgentTargeted: "test",
-						doseNumber: 2,
-						dateOfVaccination: "2021-06-01",
-						issuer: "Test",
-						marketingAuthorizationHolder: "Test",
-						medicalProduct: "Test",
-						totalDose: 2,
-						vaccineOrProphylaxis: "test"
-					)
-				]
-			),
-			expirationTime: Date().timeIntervalSince1970,
-			issuedAt: Date().timeIntervalSince1970 + 3600,
-			issuer: "NL"
-		)
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination
 		
 		// When
 		sut.parseQRMessage(message)
