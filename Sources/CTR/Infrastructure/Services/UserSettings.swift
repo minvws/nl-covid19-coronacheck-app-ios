@@ -24,7 +24,7 @@ protocol UserSettingsProtocol: AnyObject {
 	var issuerKeysFetchedTimestamp: TimeInterval? { get set }
 
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? { get set }
-	var lastSeenRecommendUpdate: String? { get set }
+	var lastSeenRecommendedUpdate: String? { get set }
 
 	var deviceAuthenticationWarningShown: Bool { get set }
 
@@ -68,8 +68,8 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "lastRecommendUpdateDismissalTimestamp", defaultValue: nil)
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
 
-	@UserDefaults(key: "lastSeenRecommendUpdate", defaultValue: nil)
-	var lastSeenRecommendUpdate: String? // swiftlint:disable:this let_var_whitespace
+	@UserDefaults(key: "lastSeenRecommendedUpdate", defaultValue: nil)
+	var lastSeenRecommendedUpdate: String? // swiftlint:disable:this let_var_whitespace
 
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
@@ -107,7 +107,7 @@ extension UserSettings {
 		// We can not simply loop over all the keys, as some are needed for clear on reinstall for the keychain items.
 		let userDefaults = Foundation.UserDefaults.standard
 		["scanInstructionShown", "jailbreakWarningShown", "dashboardRegionToggleValue", "configFetchedTimestamp", "configFetchedHash",
-		"issuerKeysFetchedTimestamp", "lastScreenshotTime", "lastRecommendUpdateDismissalTimestamp", "lastSeenRecommendUpdate",
+		"issuerKeysFetchedTimestamp", "lastScreenshotTime", "lastRecommendUpdateDismissalTimestamp", "lastSeenRecommendedUpdate",
 		"deviceAuthenticationWarningShown", "didCompleteEUVaccinationMigration", "didDismissEUVaccinationMigrationSuccessBanner",
 		 "shouldCheckRecoveryGreenCardRevisedValidity", "shouldShowRecoveryValidityExtensionCard",
 		 "shouldShowRecoveryValidityReinstationCard", "hasDismissedRecoveryValidityExtensionCompletionCard",

@@ -186,25 +186,25 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedLastSeenRecommendUpdateSetter = false
-	var invokedLastSeenRecommendUpdateSetterCount = 0
-	var invokedLastSeenRecommendUpdate: String?
-	var invokedLastSeenRecommendUpdateList = [String?]()
-	var invokedLastSeenRecommendUpdateGetter = false
-	var invokedLastSeenRecommendUpdateGetterCount = 0
-	var stubbedLastSeenRecommendUpdate: String!
+	var invokedLastSeenRecommendedUpdateSetter = false
+	var invokedLastSeenRecommendedUpdateSetterCount = 0
+	var invokedLastSeenRecommendedUpdate: String?
+	var invokedLastSeenRecommendedUpdateList = [String?]()
+	var invokedLastSeenRecommendedUpdateGetter = false
+	var invokedLastSeenRecommendedUpdateGetterCount = 0
+	var stubbedLastSeenRecommendedUpdate: String!
 
-	var lastSeenRecommendUpdate: String? {
+	var lastSeenRecommendedUpdate: String? {
 		set {
-			invokedLastSeenRecommendUpdateSetter = true
-			invokedLastSeenRecommendUpdateSetterCount += 1
-			invokedLastSeenRecommendUpdate = newValue
-			invokedLastSeenRecommendUpdateList.append(newValue)
+			invokedLastSeenRecommendedUpdateSetter = true
+			invokedLastSeenRecommendedUpdateSetterCount += 1
+			invokedLastSeenRecommendedUpdate = newValue
+			invokedLastSeenRecommendedUpdateList.append(newValue)
 		}
 		get {
-			invokedLastSeenRecommendUpdateGetter = true
-			invokedLastSeenRecommendUpdateGetterCount += 1
-			return stubbedLastSeenRecommendUpdate
+			invokedLastSeenRecommendedUpdateGetter = true
+			invokedLastSeenRecommendedUpdateGetterCount += 1
+			return stubbedLastSeenRecommendedUpdate
 		}
 	}
 

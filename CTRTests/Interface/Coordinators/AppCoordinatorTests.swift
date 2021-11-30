@@ -174,7 +174,7 @@ class AppCoordinatorTests: XCTestCase {
 		sut.window.rootViewController = viewControllerSpy
 		let userSettingSpy = UserSettingsSpy()
 		sut.userSettings = userSettingSpy
-		userSettingSpy.stubbedLastSeenRecommendUpdate = nil
+		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
 		let alertVerifier = AlertVerifier()
 		sut.flavor = .holder
 
@@ -191,7 +191,7 @@ class AppCoordinatorTests: XCTestCase {
 				.default(L.recommendedUpdateAppActionOk())
 			]
 		)
-		expect(userSettingSpy.invokedLastSeenRecommendUpdateSetter) == true
+		expect(userSettingSpy.invokedLastSeenRecommendedUpdateSetter) == true
 	}
 
 	func test_handleLaunchState_verifier_updateRecommended() {
@@ -242,7 +242,7 @@ class AppCoordinatorTests: XCTestCase {
 		sut.window.rootViewController = viewControllerSpy
 		let userSettingSpy = UserSettingsSpy()
 		sut.userSettings = userSettingSpy
-		userSettingSpy.stubbedLastSeenRecommendUpdate = "1.1.0"
+		userSettingSpy.stubbedLastSeenRecommendedUpdate = "1.1.0"
 		sut.flavor = .holder
 
 		// When
@@ -267,7 +267,7 @@ class AppCoordinatorTests: XCTestCase {
 		sut.window.rootViewController = viewControllerSpy
 		let userSettingSpy = UserSettingsSpy()
 		sut.userSettings = userSettingSpy
-		userSettingSpy.stubbedLastSeenRecommendUpdate = nil
+		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
 		let alertVerifier = AlertVerifier()
 		sut.flavor = .holder
 
@@ -333,7 +333,7 @@ class AppCoordinatorTests: XCTestCase {
 		sut.window.rootViewController = viewControllerSpy
 		let userSettingSpy = UserSettingsSpy()
 		sut.userSettings = userSettingSpy
-		userSettingSpy.stubbedLastSeenRecommendUpdate = nil
+		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
 		let alertVerifier = AlertVerifier()
 		sut.flavor = .holder
 
@@ -399,7 +399,7 @@ class AppCoordinatorTests: XCTestCase {
 		sut.window.rootViewController = viewControllerSpy
 		let userSettingSpy = UserSettingsSpy()
 		sut.userSettings = userSettingSpy
-		userSettingSpy.stubbedLastSeenRecommendUpdate = nil
+		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
 		sut.flavor = .holder
 
 		// When

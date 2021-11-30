@@ -369,14 +369,14 @@ extension AppCoordinator: AppCoordinatorDelegate {
 
 	private func handleRecommendedUpdateForHolder(recommendedVersion: String, appStoreUrl: URL) {
 
-		if let lastSeenRecommendUpdate = userSettings.lastSeenRecommendUpdate,
-		   lastSeenRecommendUpdate == recommendedVersion {
+		if let lastSeenRecommendedUpdate = userSettings.lastSeenRecommendedUpdate,
+		   lastSeenRecommendedUpdate == recommendedVersion {
 			logDebug("The recommended version \(recommendedVersion) is the last seen version")
 			startApplication()
 		} else {
 			// User has not seen a dialog for this recommended Version
 			logDebug("The recommended version \(recommendedVersion) is not the last seen version")
-			userSettings.lastSeenRecommendUpdate = recommendedVersion
+			userSettings.lastSeenRecommendedUpdate = recommendedVersion
 			showRecommendedUpdate(updateURL: appStoreUrl)
 		}
 	}
