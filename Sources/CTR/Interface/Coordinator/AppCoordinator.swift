@@ -33,8 +33,12 @@ class AppCoordinator: Coordinator, Logging {
 
 	private var shouldUsePrivacySnapShot = true
 
+	// Flag to prevent showing the recommended update dialog twice
+	// which can happen with the config being fetched within the TTL.
 	private var isPresentingRecommendedUpdate = false
 
+	// Flag to prevent starting the application more than once
+	// which can happen with the config being fetched within the TTL.
 	private var isApplicationStarted = false
 
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
