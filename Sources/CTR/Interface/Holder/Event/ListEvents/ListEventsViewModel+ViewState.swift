@@ -112,13 +112,15 @@ extension ListEventsViewModel {
 						}
 					}
 				},
+				// No secondary action for scanned paperflow, that is moved to the body of the details.
 				secondaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListWrong() : nil,
 				secondaryAction: eventMode != .paperflow ? { [weak self] in
 					guard let self = self else { return }
+					guard let body = Strings.somethingIsWrongBody(forEventMode: self.eventMode) else { return }
 					self.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
 							title: L.holderVaccinationWrongTitle(),
-							body: Strings.somethingIsWrongBody(forEventMode: self.eventMode, dataSource: dataSource),
+							body: body,
 							hideBodyForScreenCapture: false
 						)
 					)

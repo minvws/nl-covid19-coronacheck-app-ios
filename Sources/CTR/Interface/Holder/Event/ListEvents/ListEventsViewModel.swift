@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -125,16 +126,7 @@ class ListEventsViewModel: Logging {
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		var eventModeForStorage = eventMode
-
-		if let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
-			let credentialData = dccEvent.credential.data(using: .utf8),
-			let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
-			let dccEventType = euCredentialAttributes.eventMode {
-
-			eventModeForStorage = dccEventType
-			logVerbose("Setting eventModeForStorage to \(eventModeForStorage.rawValue)")
-		}
+		let eventModeForStorage = getEventModeForStorage(remoteEvents: remoteEvents)
 
 		storeEvent(
 			remoteEvents: remoteEvents,
@@ -174,6 +166,18 @@ class ListEventsViewModel: Logging {
 				)
 			})
 		}
+	}
+
+	private func getEventModeForStorage(remoteEvents: [RemoteEvent]) -> EventMode {
+
+		if let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
+		   let credentialData = dccEvent.credential.data(using: .utf8),
+		   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
+		   let dccEventType = euCredentialAttributes.eventMode {
+			logVerbose("Setting eventModeForStorage to \(dccEventType.rawValue)")
+			return dccEventType
+		}
+		return eventMode
 	}
 
 	private func handleGreenCardResult(
@@ -216,6 +220,12 @@ class ListEventsViewModel: Logging {
 	}
 
 	private func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+
+		guard eventMode != .paperflow else {
+			// 2701: No special end states for the paperflow
+			completeFlow()
+			return
+		}
 
 		switch eventModeForStorage {
 			case .paperflow, .test:

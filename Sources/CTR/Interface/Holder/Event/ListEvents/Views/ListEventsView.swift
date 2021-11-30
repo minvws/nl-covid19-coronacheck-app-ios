@@ -12,10 +12,15 @@ class ListEventsView: ScrolledStackWithButtonView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
-		static let titleLineHeight: CGFloat = 26
-		static let titleKerning: CGFloat = -0.26
-		static let messageLineHeight: CGFloat = 22
+		enum Title {
+			static let spacing: CGFloat = 24
+			static let lineHeight: CGFloat = 26
+			static let kerning: CGFloat = -0.26
+		}
+
+		enum Message {
+			static let spacing: CGFloat = 32
+		}
 
 		enum Button {
 			static let spacing: CGFloat = 8
@@ -85,7 +90,9 @@ class ListEventsView: ScrolledStackWithButtonView {
 		addSubview(spinner)
 
 		stackView.addArrangedSubview(titleLabel)
+		stackView.setCustomSpacing(ViewTraits.Title.spacing, after: titleLabel)
 		stackView.addArrangedSubview(contentTextView)
+		stackView.setCustomSpacing(ViewTraits.Message.spacing, after: contentTextView)
 		stackView.addArrangedSubview(eventStackView)
 		stackView.addArrangedSubview(somethingIsWrongButton)
 	}
@@ -120,8 +127,8 @@ class ListEventsView: ScrolledStackWithButtonView {
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
-				ViewTraits.titleLineHeight,
-				kerning: ViewTraits.titleKerning
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
 			)
 		}
 	}

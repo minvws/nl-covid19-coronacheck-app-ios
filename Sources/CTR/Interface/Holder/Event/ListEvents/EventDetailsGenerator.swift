@@ -24,6 +24,14 @@ struct EventDetailsGenerator {
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
+
+	static let printTestDateLongFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "EEEE d MMMM yyyy HH:mm"
+		return dateFormatter
+	}()
 }
 
 class NegativeTestDetailsGenerator {
@@ -118,7 +126,7 @@ class PositiveTestDetailsGenerator {
 			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 		let formattedTestLongDate: String = event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printTestDateFormatter.string) ?? (event.positiveTest?.sampleDateString ?? "")
+			.map(EventDetailsGenerator.printTestDateLongFormatter.string) ?? (event.positiveTest?.sampleDateString ?? "")
 
 		// Type
 		let testType = mappingManager.getTestType(event.positiveTest?.type) ?? (event.positiveTest?.type ?? "")
@@ -209,7 +217,7 @@ class VaccinationDetailsGenerator {
 			let hpkData = mappingManager.getHpkData(hpkCode)
 			vaccinName = mappingManager.getVaccinationBrand(hpkData?.mp)
 			vaccineType = mappingManager.getVaccinationType(hpkData?.vp)
-			vaccineManufacturer = mappingManager.getVaccinationManufacturerMapping(hpkData?.ma)
+			vaccineManufacturer = mappingManager.getVaccinationManufacturer(hpkData?.ma)
 		}
 
 		if vaccinName == nil, let brand = event.vaccination?.brand {
@@ -219,7 +227,7 @@ class VaccinationDetailsGenerator {
 			vaccineType = mappingManager.getVaccinationType(event.vaccination?.type) ?? event.vaccination?.type
 		}
 		if vaccineManufacturer == nil {
-			vaccineManufacturer = mappingManager.getVaccinationManufacturerMapping(event.vaccination?.manufacturer)
+			vaccineManufacturer = mappingManager.getVaccinationManufacturer(event.vaccination?.manufacturer)
 			?? event.vaccination?.manufacturer
 		}
 
@@ -267,7 +275,7 @@ class DCCVaccinationDetailsGenerator {
 		?? vaccination.vaccineOrProphylaxis
 		let vaccineBrand = mappingManager.getVaccinationBrand(vaccination.medicalProduct)
 		?? vaccination.medicalProduct
-		let vaccineManufacturer = mappingManager.getVaccinationManufacturerMapping( vaccination.marketingAuthorizationHolder)
+		let vaccineManufacturer = mappingManager.getVaccinationManufacturer( vaccination.marketingAuthorizationHolder)
 		?? vaccination.marketingAuthorizationHolder
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
 			.map(EventDetailsGenerator.printDateFormatter.string) ?? vaccination.dateOfVaccination
