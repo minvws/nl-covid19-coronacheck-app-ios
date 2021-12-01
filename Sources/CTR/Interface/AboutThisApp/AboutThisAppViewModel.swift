@@ -19,6 +19,8 @@ enum AboutThisAppMenuIdentifier: String {
 	case reset
 	
 	case deeplink
+
+	case scanlog
 }
 
 ///// Struct for information to display the different test providers
@@ -46,9 +48,8 @@ class AboutThisAppViewModel: Logging {
 	@Bindable private(set) var message: String
 	@Bindable private(set) var appVersion: String
 	@Bindable private(set) var configVersion: String?
-	@Bindable private(set) var listHeader: String
 	@Bindable private(set) var alert: AlertContent?
-	@Bindable private(set) var menu: [AboutThisAppMenuOption] = []
+	@Bindable private(set) var menu: KeyValuePairs<String, [AboutThisAppMenuOption]> = [:]
 
 	// MARK: - Initializer
 
@@ -69,7 +70,6 @@ class AboutThisAppViewModel: Logging {
 
 		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
 		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
-		self.listHeader = flavor == .holder ? L.holderAboutReadmore() : L.verifierAboutReadmore()
 
 		appVersion = flavor == .holder
 			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
@@ -92,23 +92,30 @@ class AboutThisAppViewModel: Logging {
 	}
 	private func setupMenuHolder() {
 
-		menu = [
+		var list: [AboutThisAppMenuOption] = [
 			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
 			AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle())
 		]
 		if Configuration().getEnvironment() != "production" {
-			menu.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
+			list.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
+
+		menu = [L.holderAboutReadmore(): list]
 	}
 
 	private func setupMenuVerifier() {
 
 		menu = [
-			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.verifierMenuPrivacy()) ,
-			AboutThisAppMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
-			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
+			L.verifierAboutReadmore(): [
+				AboutThisAppMenuOption(identifier: .privacyStatement, name: L.verifierMenuPrivacy()) ,
+				AboutThisAppMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
+				AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
+			],
+			L.verifier_about_this_app_law_enforcement(): [
+				AboutThisAppMenuOption(identifier: .scanlog, name: L.verifier_about_this_app_scan_log())
+			]
 		]
 	}
 
@@ -125,6 +132,8 @@ class AboutThisAppViewModel: Logging {
 				showClearDataAlert()
 			case .deeplink:
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
+			case .scanlog:
+				openScanLog()
 		}
 	}
 
@@ -174,5 +183,12 @@ class AboutThisAppViewModel: Logging {
 		Services.reset()
 		self.userSettings.reset()
 		self.coordinator?.restart()
+	}
+
+	func openScanLog() {
+
+		if let coordinator = coordinator as? VerifierCoordinatorDelegate {
+			coordinator.userWishesToOpenScanLog()
+		}
 	}
 }

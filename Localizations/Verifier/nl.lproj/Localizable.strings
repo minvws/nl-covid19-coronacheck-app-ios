@@ -122,3 +122,5 @@
 
 "verifier.risksetting.title.instruction" = "Wat is het risico niveau van jouw locatie?";
 "verifier.risksetting.header.instruction" = "Geef aan of je op een hoog of laag risico plek gaat scannen. Je kunt later eventueel in het menu je instelling aanpassen.";
+"verifier_about_this_app_scan_log" = "Scan log";
+"verifier_about_this_app_law_enforcement" = "Voor handhaving";
