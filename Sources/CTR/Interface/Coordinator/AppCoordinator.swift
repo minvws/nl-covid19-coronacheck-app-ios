@@ -33,6 +33,14 @@ class AppCoordinator: Coordinator, Logging {
 
 	private var shouldUsePrivacySnapShot = true
 
+	// Flag to prevent showing the recommended update dialog twice
+	// which can happen with the config being fetched within the TTL.
+	private var isPresentingRecommendedUpdate = false
+
+	// Flag to prevent starting the application more than once
+	// which can happen with the config being fetched within the TTL.
+	private var isApplicationStarted = false
+
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 
 	var userSettings: UserSettingsProtocol = UserSettings()
@@ -126,6 +134,9 @@ class AppCoordinator: Coordinator, Logging {
     /// Start the real application
     private func startApplication() {
 
+		guard !isApplicationStarted else { return }
+		isApplicationStarted = true
+
         switch flavor {
             case .holder:
                 startAsHolder()
@@ -202,7 +213,8 @@ class AppCoordinator: Coordinator, Logging {
 
 	/// Show an alert for the recommended update
 	private func showRecommendedUpdate(updateURL: URL) {
-		userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
+
+		isPresentingRecommendedUpdate = true
 
 		let alertController = UIAlertController(
 			title: L.recommendedUpdateAppTitle(),
@@ -214,6 +226,7 @@ class AppCoordinator: Coordinator, Logging {
 				title: L.recommendedUpdateAppActionCancel(),
 				style: .cancel,
 				handler: { [weak self] _ in
+					self?.isPresentingRecommendedUpdate = false
 					self?.startApplication()
 				}
 			)
@@ -224,6 +237,7 @@ class AppCoordinator: Coordinator, Logging {
 				style: .default,
 				handler: { [weak self] _ in
 					self?.openUrl(updateURL) {
+						self?.isPresentingRecommendedUpdate = false
 						self?.startApplication()
 					}
 				}
@@ -319,24 +333,69 @@ extension AppCoordinator: AppCoordinatorDelegate {
 						)
 					)
 				} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
-						  let updateURL = remoteConfiguration.appStoreURL {
+						  let appStoreURL = remoteConfiguration.appStoreURL {
+
 					// Recommended update
-
-					let now = Date().timeIntervalSince1970
-					let interval: Int = remoteConfiguration.recommendedNagIntervalHours ?? 24
-					let lastSeen: TimeInterval = userSettings.lastRecommendUpdateDismissalTimestamp ?? now
-
-					if lastSeen == now || lastSeen + (Double(interval) * 3600) < now {
-						showRecommendedUpdate(updateURL: updateURL)
-					} else {
-						startApplication()
-					}
+					handleRecommendedUpdate(
+						recommendedVersion: recommendedVersion,
+						remoteConfiguration: remoteConfiguration,
+						appStoreUrl: appStoreURL
+					)
 				} else {
 					startApplication()
 				}
 			case .cryptoLibNotInitialized:
 				// Crypto library not loaded
 				showCryptoLibNotInitializedError()
+		}
+	}
+
+	// MARK: - Recommended Update
+
+	private func handleRecommendedUpdate(recommendedVersion: String, remoteConfiguration: RemoteConfiguration, appStoreUrl: URL) {
+
+		guard !isPresentingRecommendedUpdate else {
+			// Do not proceed if we are presenting the recommended update dialog.
+			return
+		}
+
+		switch flavor {
+			case .holder: handleRecommendedUpdateForHolder(
+				recommendedVersion: recommendedVersion,
+				appStoreUrl: appStoreUrl
+			)
+			case .verifier: handleRecommendedUpdateForVerifier(
+				remoteConfiguration: remoteConfiguration,
+				appStoreUrl: appStoreUrl
+			)
+		}
+	}
+
+	private func handleRecommendedUpdateForHolder(recommendedVersion: String, appStoreUrl: URL) {
+
+		if let lastSeenRecommendedUpdate = userSettings.lastSeenRecommendedUpdate,
+		   lastSeenRecommendedUpdate == recommendedVersion {
+			logDebug("The recommended version \(recommendedVersion) is the last seen version")
+			startApplication()
+		} else {
+			// User has not seen a dialog for this recommended Version
+			logDebug("The recommended version \(recommendedVersion) is not the last seen version")
+			userSettings.lastSeenRecommendedUpdate = recommendedVersion
+			showRecommendedUpdate(updateURL: appStoreUrl)
+		}
+	}
+
+	private func handleRecommendedUpdateForVerifier(remoteConfiguration: RemoteConfiguration, appStoreUrl: URL) {
+
+		let now = Date().timeIntervalSince1970
+		let interval: Double = Double(remoteConfiguration.recommendedNagIntervalHours ?? 24) * 3600
+		let lastSeen: TimeInterval = userSettings.lastRecommendUpdateDismissalTimestamp ?? now
+
+		if lastSeen == now || lastSeen + interval < now {
+			showRecommendedUpdate(updateURL: appStoreUrl)
+			userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
+		} else {
+			startApplication()
 		}
 	}
 
@@ -353,7 +412,8 @@ extension AppCoordinator: AppCoordinatorDelegate {
     }
 
 	func reset() {
-		
+
+		isApplicationStarted = false
 		childCoordinators = []
 		retry()
 	}
