@@ -22,9 +22,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// The title of the scene
 	@Bindable private(set) var title: String
 
-	/// The message of the scene
-	@Bindable private(set) var message: String?
-
 	/// "Waar moet ik op letten?"
 	@Bindable private(set) var moreInformationButtonText: String?
 
@@ -44,7 +41,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.theCoordinator = coordinator
 
 		self.title = L.verifierScanTitle()
-		self.message = nil
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
 
