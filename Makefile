@@ -48,3 +48,16 @@ install_githooks_xcodegen:
 
 install_githooks_gitlfs:
 	@git lfs install --force
+
+# -- lokalize: -- 
+# Create an API key here: https://app.lokalise.com/profile
+# add export LOKALISE_API_KEY="--your value here--" to your ~/.zshrc file
+# run source ~/.zshrc to load in that exported value
+# then you can run `make download_translations` each time you want to download the latest copy.
+download_translations:
+# Holder: 
+	@lokalise2 file download --token ${LOKALISE_API_KEY} --project-id "5229025261717f4fcb81c1.73606773" --format strings --unzip-to Localizations/Holder --export-empty-as skip
+# Verifier: 
+	@lokalise2 file download --token ${LOKALISE_API_KEY} --project-id "243601816196631318a279.00348152" --format strings --unzip-to Localizations/Verifier --export-empty-as skip
+	mv Localizations/Verifier/nl.lproj/Localizable{\ \(1\),}.strings
+	mv Localizations/Verifier/en.lproj/Localizable{\ \(1\),}.strings
