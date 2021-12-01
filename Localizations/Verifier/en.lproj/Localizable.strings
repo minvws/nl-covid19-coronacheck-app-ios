@@ -1,0 +1,107 @@
+"general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
+"new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
+"new.terms.highlights" = "<b>Here's what changed</b><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";
+"updateApp.content" = "To continue, install the latest version of the app";
+/* Koptekst in de over de app pagina */
+"verifier.about.readmore" = "Read more:";
+"verifier.about.text" = "CoronaCheck Scanner is created so that certain locations and activities can open their doors again. Think for example of football matches and concerts. Visitors create a coronavirus pass of a vaccination, a negative test result or if they've had corona and are recovered. With this app, only visitors with a coronavirus pass gain access. This way, the Netherlands can head out more often.";
+/* MARK: - Verifier About */
+"verifier.about.title" = "About this app";
+"verifier.clockDeviationDetected.message" = "<p>In order to properly use the CoronaCheck Scanner app, it is important that the time on your phone is set correctly. For example, if the clock on your phone is a few minutes ahead, an error might occur while verifying a coronavirus pass.</p><p><a href=\"%@\">Go to your phone's settings</a> and set Date & Time to 'set automatically'.</p>";
+"verifier.clockDeviationDetected.title" = "Check your phone's time settings";
+"verifier.consent.action" = "Get started";
+"verifier.consent.button" = "I've read and agree to the acceptable use policy.";
+"verifier.consent.button.error" = "To continue, please agree";
+"verifier.consent.item.1" = "Location data is <b>not saved or used</b>";
+"verifier.consent.item.2" = "You're only allowed to use the visitor's details to <b>check the certificate</b>";
+"verifier.consent.item.3" = "The visitor's data is <b>not centrally stored anywhere</b>";
+"verifier.consent.message" = "The acceptable use policy details how CoronaCheck Scanner uses your data and what your rights are.";
+"verifier.consent.message.underlined" = "acceptable use policy";
+/* MARK: - Verifier Consent */
+"verifier.consent.title" = "Acceptable use policy";
+"verifier.denied.message.five" = "<p>Please ask the visitor to contact the CoronaCheck help desk.</p>";
+"verifier.denied.message.four" = "<p><b>Still looking at a red screen?</b></p>";
+"verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";
+"verifier.denied.message.six" = "<p><b>Please note:</b> Without a green screen with check mark, you can’t grant the visitor access.</p>";
+"verifier.denied.message.three" = "<ul><li>Verify if the time is set correctly on the visitor's phone and yours. Make sure to set the date and time to ‘set automatically’.</li><li>Verify if the visitor is showing an original certificate. A screenshot of a certificate may cause problems.</li><li>Ask the visitor to completely shut down the app and restart it. Please scan the QR code again after.</li></ul>";
+"verifier.denied.message.two" = "<b>Here’s what you can do:</b>";
+/* MARK: - Verifier Denied Instructions */
+"verifier.denied.title" = "What should I do?";
+"verifier.launch.text" = "We're starting the app...";
+/* MARK: - Verifier Launch */
+"verifier.launch.title" = "CoronaCheck Scanner";
+"verifier.launch.version" = "App version %@ (build %@)";
+"verifier.menu.about" = "About this app";
+/* Menu item voor Toegankelijkheid */
+"verifier.menu.accessibility" = "Accessibility";
+/* MARK: - Verifier Menu */
+"verifier.menu.dashboard" = "Scan QR codes";
+"verifier.menu.privacy" = "Acceptable use policy";
+"verifier.menu.scaninstructions" = "How it works";
+"verifier.menu.support" = "Support";
+"verifier.onboarding.message.safely" = "You can use this app to check your visitors' coronavirus passes. This way your location can stay open safely.";
+/* MARK: - Verifier Onboarding */
+"verifier.onboarding.title.safely" = "Safely opening your location";
+"verifier.result.access.accessibility.demo" = "Demo QR code scanned";
+"verifier.result.access.accessibility.verified" = "Valid QR code scanned";
+"verifier.result.access.checkidentity" = "Please note: ID check is mandatory";
+"verifier.result.access.dcc" = "International certificate";
+"verifier.result.access.identityverified" = "Details are correct";
+"verifier.result.access.readmore" = "Something is wrong";
+/* MARK: - Verifier Result */
+"verifier.result.access.title" = "Check done";
+"verifier.result.alert.dcc.message" = "You have scanned an international QR code. In the Netherlands, CoronaCheck users should show their Dutch QR code.";
+"verifier.result.alert.dcc.title" = "Ask for a Dutch QR code";
+"verifier.result.alert.unknown.message" = "Ask the visitor to show a QR code of a coronavirus pass.";
+/* MARK: - Verifier Result Alert */
+"verifier.result.alert.unknown.title" = "This QR code does not contain a coronavirus pass";
+"verifier.result.check.button" = "Scan next";
+"verifier.result.check.text" = "<p>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</p><p><b>Please note: sometimes not all details are shown</b><br />This is done to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing.</p>";
+/* MARK: - Verifier Check Result */
+"verifier.result.check.title" = "Something is wrong";
+"verifier.result.demo.title" = "Demo QR code scanned";
+"verifier.result.denied.readmore" = "What should I do?";
+"verifier.result.denied.title" = "Invalid QR code";
+"verifier.result.identity.dayofbirth" = "Day of birth";
+"verifier.result.identity.firstname" = "First name";
+"verifier.result.identity.label" = "Characteristic %@ is %@";
+"verifier.result.identity.lastname" = "Last name";
+"verifier.result.identity.monthofbirth" = "Birth month";
+"verifier.result.identity.title" = "Check proof of identity";
+"verifier.result.next" = "Scan next";
+"verifier.scan.button.moreInformation" = "What should I pay attention to?";
+"verifier.scan.permission.message" = "The app wants to access your camera to scan the QR code.";
+"verifier.scan.permission.settings" = "To settings";
+"verifier.scan.permission.title" = "Scanner wants to access the camera";
+/* MARK: - Verifier QR Scan */
+"verifier.scan.title" = "Scan QR code";
+"verifier.scan.torch.disable" = "Turn the flashlight off.";
+"verifier.scan.torch.enable" = "Turn the flashlight on.";
+"verifier.scaninstructions.button.startscanning" = "Start scanning";
+"verifier.scaninstructions.checkonlythevisibledata.message" = "Details can be left out to protect the visitor's privacy. You will see a hyphen (-) instead. In this case, only check the details that are visible.";
+"verifier.scaninstructions.checkonlythevisibledata.title" = "Sometimes not all details are shown";
+"verifier.scaninstructions.checkthedetails.message" = "For visitors aged 14 and over, always check if the details on your screen are the same as on the visitor's proof of identity. This way, you can ensure the QR code belongs to the visitor.";
+"verifier.scaninstructions.checkthedetails.title" = "Check the proof of identity";
+"verifier.scaninstructions.greenScreenIsAccess.message" = "Does your screen turn green and show a checkmark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";
+"verifier.scaninstructions.greenScreenIsAccess.title" = "Green screen = access";
+"verifier.scaninstructions.navigation.skipbutton.title" = "Skip";
+"verifier.scaninstructions.navigation.title" = "About scanning";
+"verifier.scaninstructions.redscreennowwhat.message" = "Does your screen turn red and show a cross? In that case, you'll receive information to assist the visitor. If the screen stays red, you cannot grant the visitor access.";
+"verifier.scaninstructions.redscreennowwhat.title" = "Red screen - what happens next?";
+"verifier.scaninstructions.scanQR.content" = "Use your phone's camera to scan visitors' QR codes, in the CoronaCheck app or on paper. Tourists can show their QR code in a foreign app or on paper.";
+"verifier.scaninstructions.scanQR.title" = "Scan the QR code";
+"verifier.scaninstructions.step.title" = "Step %@";
+"verifier.start.button.showinstructions" = "What should I pay attention to?";
+"verifier.start.button.title" = "Start scanning";
+"verifier.start.clockdeviationwarning.button" = "Read more";
+"verifier.start.clockdeviationwarning.message" = "Check your phone's time settings. They might be incorrect.";
+"verifier.start.header" = "Scan your visitors' QR codes";
+"verifier.start.message" = "Is the QR code valid, and are the details the same as on the proof of identity? Then you can grant the visitor access.";
+"verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
+/* MARK: - Verifier Start */
+"verifier.start.title" = "Scan QR codes";
+/* Link naar web accessibility pagina */
+"verifier.url.accessibility" = "https://coronacheck.nl/en/accessibility-in-app";
+/* MARK: - URL */
+"verifier.url.faq" = "https://coronacheck.nl/en/faq-scanner-in-app";
+"verifier.url.privacy" = "https://coronacheck.nl/en/gebruikersvoorwaarden-in-app";
