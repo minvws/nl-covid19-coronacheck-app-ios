@@ -16,14 +16,17 @@ class AboutThisAppView: ScrolledStackView {
 		enum ListHeader {
 			static let lineHeight: CGFloat = 16
 			static let height: CGFloat = 38
+			static let spacing: CGFloat = 8
 		}
 
 		enum Footer {
 			static let lineHeight: CGFloat = 18
 			static let kerning: CGFloat = -0.24
+			static let spacing: CGFloat = 24
 		}
 
 		enum StackView {
+			static let topMargin: CGFloat = 40
 			static let bottomMargin: CGFloat = 32
 		}
 	}
@@ -71,10 +74,11 @@ class AboutThisAppView: ScrolledStackView {
 		super.setupViewHierarchy()
 
 		stackView.addArrangedSubview(messageTextView)
+		stackView.setCustomSpacing(ViewTraits.StackView.topMargin, after: messageTextView)
 		stackView.addArrangedSubview(menuStackView)
 		stackView.setCustomSpacing(ViewTraits.StackView.bottomMargin, after: menuStackView)
 		stackView.addArrangedSubview(appVersionLabel)
-		stackView.setCustomSpacing(24, after: appVersionLabel)
+		stackView.setCustomSpacing(ViewTraits.Footer.spacing, after: appVersionLabel)
 		stackView.addArrangedSubview(configVersionLabel)
 	}
 
@@ -127,6 +131,7 @@ class AboutThisAppView: ScrolledStackView {
 		let label = Label(caption1SemiBold: nil).multiline().header()
 		label.attributedText = title.setLineHeight(ViewTraits.ListHeader.lineHeight)
 		menuOptionStackView.addArrangedSubview(label)
+		menuOptionStackView.setCustomSpacing(ViewTraits.ListHeader.spacing, after: label)
 
 		return menuOptionStackView
 	}
