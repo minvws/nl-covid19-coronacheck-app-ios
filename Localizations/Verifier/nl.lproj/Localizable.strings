@@ -119,7 +119,7 @@
 "verifier_about_this_app_law_enforcement" = "Voor handhaving";
 
 "scan_log_title" = "Scan log";
-"scan_log_message" = "<p>De scan log houdt bij welke regels er zijn gebruikt tijdens het scannen. Een BOA kan vragen om dit scherm te laten zien.</p><p>Om privacy redenen worden alleen de scan regels van laatste 60 minuten opgeslagen op deze telefoon. Er worden geen persoonsgevens opgeslagen. Lees meer in de <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">meestgestelde vragen</a>.</p>";
+"scan_log_message" = "<p>De scan log houdt bij welke regels er zijn gebruikt tijdens het scannen. Een BOA kan vragen om dit scherm te laten zien.</p><p>Om privacy redenen worden alleen de scan regels van laatste %@ minuten opgeslagen op deze telefoon. Er worden geen persoonsgevens opgeslagen. Lees meer in de <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">meestgestelde vragen</a>.</p>";
 "scan_log_footer_in_use" = "App in gebruik sinds %@";
 "scan_log_footer_long_time" = "App langer dan een maand in gebruik";
 
