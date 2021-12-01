@@ -105,3 +105,20 @@
 /* MARK: - URL */
 "verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
+
+/* ----- Temporary manual addition of 2G/3G strings ------ */
+"verifier.menu.risksetting" = "Risico instelling";
+"verifier.result.access.title.highrisk" = "2G controle klaar";
+
+/* MARK: - Verifier Risk Setting */
+"verifier.risksetting.title" = "Risico instelling";
+"verifier.risksetting.header.menuentry" = "Geef aan of je op een hoog of laag risico plek gaat scannen.";
+"verifier.risksetting.lowrisk.title" = "Laag risico";
+"verifier.risksetting.lowrisk.subtitle" = "Bijvoorbeeld een museum, dierentuin of winkel, koffiehuis";
+"verifier.risksetting.highrisk.title" = "Hoog risico";
+"verifier.risksetting.highrisk.subtitle" = "Bijvoorbeeld een bar, nachtclub of plek waar veel mensen dichtbij elkaar komen";
+"verifier.risksetting.readmore" = "Ik weet het niet zeker";
+"verifier.risksetting.readmore.url" = "https://coronacheck.nl/nl/faq-scanner-in-app";
+
+"verifier.risksetting.title.instruction" = "Wat is het risico niveau van jouw locatie?";
+"verifier.risksetting.header.instruction" = "Geef aan of je op een hoog of laag risico plek gaat scannen. Je kunt later eventueel in het menu je instelling aanpassen.";
