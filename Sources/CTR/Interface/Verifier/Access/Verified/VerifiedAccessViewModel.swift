@@ -38,7 +38,7 @@ final class VerifiedAccessViewModel: Logging {
 		switch verifiedType {
 			case .verified(let riskLevel) where riskLevel.isHigh,
 					.demo(let riskLevel) where riskLevel.isHigh:
-				accessTitle = L.verifierResultAccessTitleHighrisk()
+				accessTitle = L.verifier_result_access_title_highrisk()
 			default:
 				accessTitle = L.verifierResultAccessTitle()
 		}

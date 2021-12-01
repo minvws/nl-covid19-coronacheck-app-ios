@@ -50,15 +50,15 @@ final class RiskSettingInstructionViewModel: Logging {
 		self.coordinator = coordinator
 		self.userSettings = userSettings
 		
-		title = L.verifierRisksettingTitleInstruction()
-		header = L.verifierRisksettingHeaderInstruction()
-		lowRiskTitle = L.verifierRisksettingLowriskTitle()
-		lowRiskSubtitle = L.verifierRisksettingLowriskSubtitle()
-		lowRiskAccessibilityLabel = "\(L.verifierRisksettingLowriskTitle()), \(L.verifierRisksettingLowriskSubtitle())"
-		highRiskTitle = L.verifierRisksettingHighriskTitle()
-		highRiskSubtitle = L.verifierRisksettingHighriskSubtitle()
-		highRiskAccessibilityLabel = "\(L.verifierRisksettingHighriskTitle()), \(L.verifierRisksettingHighriskSubtitle())"
-		moreButtonTitle = L.verifierRisksettingReadmore()
+		title = L.verifier_risksetting_firsttimeuse_title()
+		header = L.verifier_risksetting_firsttimeuse_header()
+		lowRiskTitle = L.verifier_risksetting_lowrisk_title()
+		lowRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
+		lowRiskAccessibilityLabel = "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
+		highRiskTitle = L.verifier_risksetting_highrisk_title()
+		highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
+		highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
+		moreButtonTitle = L.verifier_risksetting_readmore()
 		primaryButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 		
 		let selectedRisk = userSettings.scanRiskLevelValue
@@ -67,7 +67,7 @@ final class RiskSettingInstructionViewModel: Logging {
 	}
 	
 	func showReadMore() {
-		guard let url = URL(string: L.verifierRisksettingReadmoreUrl()) else { return }
+		guard let url = URL(string: L.verifier_risksetting_readmore_url()) else { return }
 		
 		coordinator?.openUrl(url, inApp: true)
 	}
