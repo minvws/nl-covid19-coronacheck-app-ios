@@ -36,11 +36,20 @@ class ScanLogViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
-
-		viewModel.$title.binding = { [weak self] in self?.title = $0 }
-
 		addBackButton()
-
+		setupBindings()
 	}
 
+	private func setupBindings() {
+
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$appInUseSince.binding = { [weak self] in self?.sceneView.footer = $0 }
+
+		sceneView.messageTextView.linkTouched { [weak self] url in
+
+			self?.viewModel.openUrl(url)
+		}
+
+	}
 }
