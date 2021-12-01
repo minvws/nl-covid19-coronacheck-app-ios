@@ -339,7 +339,7 @@ extension VerifierCoordinator: MenuDelegate {
 		return [
 			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
 			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions()),
-			MenuItem(identifier: .riskSetting, title: L.verifierMenuRisksetting())
+			MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting())
 		]
 	}
 	/// Get the items for the bottom menu

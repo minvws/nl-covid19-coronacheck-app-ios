@@ -1,6 +1,17 @@
 "general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";
+"scan_log_footer_in_use" = "App in gebruik sinds %@";
+"scan_log_footer_long_time" = "App langer dan een maand in gebruik";
+"scan_log_list_clock_skew_detected" = "Verkeerde tijd ingesteld";
+"scan_log_list_entry" = "%@ tot %@ bewijzen gescand";
+"scan_log_list_header" = "Laatste %@ minuten";
+"scan_log_list_highrisk" = "2G";
+"scan_log_list_lowrisk" = "3G";
+"scan_log_list_no_items" = "Geen bewijzen gescand";
+"scan_log_list_now" = "nu";
+"scan_log_message" = "<p>De scan log houdt bij welke regels er zijn gebruikt tijdens het scannen. Een BOA kan vragen om dit scherm te laten zien.</p><p>Om privacy redenen worden alleen de scan regels van laatste 60 minuten opgeslagen op deze telefoon. Er worden geen persoonsgevens opgeslagen. Lees meer in de <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">meestgestelde vragen</a>.</p>";
+"scan_log_title" = "Scan log";
 "updateApp.content" = "Je hebt de laatste versie van de app nodig om verder te gaan.";
 /* Koptekst in de over de app pagina */
 "verifier.about.readmore" = "Lees meer:";
@@ -105,22 +116,16 @@
 /* MARK: - URL */
 "verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
-
-/* ----- Temporary manual addition of 2G/3G strings ------ */
-"verifier.menu.risksetting" = "Risico instelling";
-"verifier.result.access.title.highrisk" = "2G controle klaar";
-
-/* MARK: - Verifier Risk Setting */
-"verifier.risksetting.title" = "Risico instelling";
-"verifier.risksetting.header.menuentry" = "Geef aan of je op een hoog of laag risico plek gaat scannen.";
-"verifier.risksetting.lowrisk.title" = "Laag risico";
-"verifier.risksetting.lowrisk.subtitle" = "Bijvoorbeeld een museum, dierentuin of winkel, koffiehuis";
-"verifier.risksetting.highrisk.title" = "Hoog risico";
-"verifier.risksetting.highrisk.subtitle" = "Bijvoorbeeld een bar, nachtclub of plek waar veel mensen dichtbij elkaar komen";
-"verifier.risksetting.readmore" = "Ik weet het niet zeker";
-"verifier.risksetting.readmore.url" = "https://coronacheck.nl/nl/faq-scanner-in-app";
-
-"verifier.risksetting.title.instruction" = "Wat is het risico niveau van jouw locatie?";
-"verifier.risksetting.header.instruction" = "Geef aan of je op een hoog of laag risico plek gaat scannen. Je kunt later eventueel in het menu je instelling aanpassen.";
-"verifier_about_this_app_scan_log" = "Scan log";
 "verifier_about_this_app_law_enforcement" = "Voor handhaving";
+"verifier_about_this_app_scan_log" = "Scan log";
+"verifier_menu_risksetting" = "Scan-instelling";
+"verifier_result_access_title_highrisk" = "2G controle klaar";
+"verifier_risksetting_active_title" = "Scan-instelling aanpassen";
+"verifier_risksetting_firsttimeuse_header" = "Stel in of je 2G- of 3G-toegang gaat geven. Controleer voordat je gaat scannen altijd welk soort toegang jouw locatie mag geven.";
+"verifier_risksetting_firsttimeuse_title" = "Kies je scan-instelling";
+"verifier_risksetting_highrisk_subtitle" = "Je kunt alleen QR-codes scannen van bezoekers met een vaccinatie- of herstelbewijs.";
+"verifier_risksetting_highrisk_title" = "2G-toegang";
+"verifier_risksetting_lowrisk_subtitle" = "Je kunt QR-codes scannen van bezoekers met een vaccinatie-, herstel-, of testbewijs.";
+"verifier_risksetting_lowrisk_title" = "3G-toegang";
+"verifier_risksetting_readmore" = "Welk soort toegang mag ik geven?";
+"verifier_risksetting_readmore_url" = "https://coronacheck.nl/nl/faq-scanner-in-app";
