@@ -51,6 +51,6 @@ class ScanLogViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.footer) == L.scan_log_footer_long_time()
 
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 }
