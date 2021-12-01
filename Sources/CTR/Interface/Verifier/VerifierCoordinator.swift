@@ -29,6 +29,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutClockDeviation()
 	
 	func navigateToVerifiedInfo()
+
+	func userWishesToOpenScanLog()
 	
 	func userWishesToLaunchThirdPartyScannerApp()
 	
@@ -201,6 +203,11 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let title: String = L.verifierClockDeviationDetectedTitle()
 		let message: String = L.verifierClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+
+	func userWishesToOpenScanLog() {
+
+		// Todo
 	}
 	
 	func navigateToVerifiedInfo() {
