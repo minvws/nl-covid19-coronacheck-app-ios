@@ -78,15 +78,6 @@ class AboutThisAppView: ScrolledStackView {
 		stackView.addArrangedSubview(configVersionLabel)
 	}
 
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-//		NSLayoutConstraint.activate([
-//			topHeaderLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.ListHeader.height),
-//			bottomHeaderLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.ListHeader.height)
-//		])
-	}
-
 	// MARK: Public Access
 
 	/// The message
@@ -95,15 +86,6 @@ class AboutThisAppView: ScrolledStackView {
 			messageTextView.attributedText = .makeFromHtml(text: message, style: .bodyDark)
 		}
 	}
-
-//	/// The list header
-//	var topListHeader: String? {
-//		didSet {
-//			topHeaderLabel.attributedText = topListHeader?.setLineHeight(
-//				ViewTraits.ListHeader.lineHeight
-//			)
-//		}
-//	}
 
 	/// The app version
 	var appVersion: String? {

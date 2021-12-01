@@ -66,13 +66,14 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holderAboutTitle()
 		expect(self.sut.message) == L.holderAboutText()
-		expect(self.sut.listHeader) == L.holderAboutReadmore()
-		expect(self.sut.menu).to(haveCount(5))
-		expect(self.sut.menu[0].identifier) == .privacyStatement
-		expect(self.sut.menu[1].identifier) == AboutThisAppMenuIdentifier.accessibility
-		expect(self.sut.menu[2].identifier) == .colophon
-		expect(self.sut.menu[3].identifier) == .reset
-		expect(self.sut.menu[4].identifier) == .deeplink
+		expect(self.sut.menu).to(haveCount(1))
+		expect(self.sut.menu[0].key) == L.holderAboutReadmore()
+		expect(self.sut.menu[0].value).to(haveCount(5))
+		expect(self.sut.menu[0].value[0].identifier) == .privacyStatement
+		expect(self.sut.menu[0].value[1].identifier) == AboutThisAppMenuIdentifier.accessibility
+		expect(self.sut.menu[0].value[2].identifier) == .colophon
+		expect(self.sut.menu[0].value[3].identifier) == .reset
+		expect(self.sut.menu[0].value[4].identifier) == .deeplink
 		expect(self.sut.appVersion.contains("testInitHolder")) == true
 	}
 
@@ -91,11 +92,16 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.verifierAboutTitle()
 		expect(self.sut.message) == L.verifierAboutText()
-		expect(self.sut.listHeader) == L.verifierAboutReadmore()
-		expect(self.sut.menu).to(haveCount(3))
-		expect(self.sut.menu.first?.identifier) == .privacyStatement
-		expect(self.sut.menu[1].identifier) == AboutThisAppMenuIdentifier.accessibility
-		expect(self.sut.menu.last?.identifier) == .colophon
+		expect(self.sut.menu).to(haveCount(2))
+		expect(self.sut.menu[0].key) == L.verifierAboutReadmore()
+		expect(self.sut.menu[0].value).to(haveCount(3))
+		expect(self.sut.menu[0].value[0].identifier) == .privacyStatement
+		expect(self.sut.menu[0].value[1].identifier) == AboutThisAppMenuIdentifier.accessibility
+		expect(self.sut.menu[0].value[2].identifier) == .colophon
+
+		expect(self.sut.menu[1].key) == L.verifier_about_this_app_law_enforcement()
+		expect(self.sut.menu[1].value).to(haveCount(1))
+		expect(self.sut.menu[1].value[0].identifier) == .scanlog
 		expect(self.sut.appVersion.contains("testInitVerifier")) == true
 	}
 
@@ -308,6 +314,23 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(forcedInfoSpy.invokedReset) == true
 		expect(self.userSettingsSpy.invokedReset) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
+	}
+
+	func test_menuOptionSelected_scanlog_forVerifier() {
+
+		let delegateSpy = VerifierCoordinatorDelegateSpy()
+
+		sut = AboutThisAppViewModel(
+			coordinator: delegateSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
+		)
+		// When
+		sut.menuOptionSelected(.scanlog)
+
+		// Then
+		expect(self.delegateSpy.invokedUserWishesToOpenScanLog) == true
 	}
 }
 
