@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import Nimble
+import Clcore
 
 class AboutThisAppViewModelTests: XCTestCase {
 
@@ -318,10 +319,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 
 	func test_menuOptionSelected_scanlog_forVerifier() {
 
-		let delegateSpy = VerifierCoordinatorDelegateSpy()
-
 		sut = AboutThisAppViewModel(
-			coordinator: delegateSpy,
+			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
 			flavor: AppFlavor.verifier,
 			userSettings: userSettingsSpy
@@ -330,11 +329,11 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut.menuOptionSelected(.scanlog)
 
 		// Then
-		expect(self.delegateSpy.invokedUserWishesToOpenScanLog) == true
+		expect(self.coordinatorSpy.invokedUserWishesToOpenScanLog) == true
 	}
 }
 
-class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable {
+class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, VerifierCoordinatorDelegate {
 
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
@@ -354,5 +353,117 @@ class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable {
 	func restart() {
 		invokedRestart = true
 		invokedRestartCount += 1
+	}
+
+	var invokedDidFinish = false
+	var invokedDidFinishCount = 0
+	var invokedDidFinishParameters: (result: VerifierStartResult, Void)?
+	var invokedDidFinishParametersList = [(result: VerifierStartResult, Void)]()
+
+	func didFinish(_ result: VerifierStartResult) {
+		invokedDidFinish = true
+		invokedDidFinishCount += 1
+		invokedDidFinishParameters = (result, ())
+		invokedDidFinishParametersList.append((result, ()))
+	}
+
+	var invokedNavigateToVerifierWelcome = false
+	var invokedNavigateToVerifierWelcomeCount = 0
+
+	func navigateToVerifierWelcome() {
+		invokedNavigateToVerifierWelcome = true
+		invokedNavigateToVerifierWelcomeCount += 1
+	}
+
+	var invokedNavigateToScan = false
+	var invokedNavigateToScanCount = 0
+
+	func navigateToScan() {
+		invokedNavigateToScan = true
+		invokedNavigateToScanCount += 1
+	}
+
+	var invokedNavigateToScanInstruction = false
+	var invokedNavigateToScanInstructionCount = 0
+
+	func navigateToScanInstruction() {
+		invokedNavigateToScanInstruction = true
+		invokedNavigateToScanInstructionCount += 1
+	}
+
+	var invokedDisplayContent = false
+	var invokedDisplayContentCount = 0
+	var invokedDisplayContentParameters: (title: String, content: [DisplayContent])?
+	var invokedDisplayContentParametersList = [(title: String, content: [DisplayContent])]()
+
+	func displayContent(title: String, content: [DisplayContent]) {
+		invokedDisplayContent = true
+		invokedDisplayContentCount += 1
+		invokedDisplayContentParameters = (title, content)
+		invokedDisplayContentParametersList.append((title, content))
+	}
+
+	var invokedUserWishesMoreInfoAboutClockDeviation = false
+	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		invokedUserWishesMoreInfoAboutClockDeviation = true
+		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
+	}
+
+	var invokedNavigateToVerifiedInfo = false
+	var invokedNavigateToVerifiedInfoCount = 0
+
+	func navigateToVerifiedInfo() {
+		invokedNavigateToVerifiedInfo = true
+		invokedNavigateToVerifiedInfoCount += 1
+	}
+
+	var invokedUserWishesToOpenScanLog = false
+	var invokedUserWishesToOpenScanLogCount = 0
+
+	func userWishesToOpenScanLog() {
+		invokedUserWishesToOpenScanLog = true
+		invokedUserWishesToOpenScanLogCount += 1
+	}
+
+	var invokedUserWishesToLaunchThirdPartyScannerApp = false
+	var invokedUserWishesToLaunchThirdPartyScannerAppCount = 0
+
+	func userWishesToLaunchThirdPartyScannerApp() {
+		invokedUserWishesToLaunchThirdPartyScannerApp = true
+		invokedUserWishesToLaunchThirdPartyScannerAppCount += 1
+	}
+
+	var invokedNavigateToCheckIdentity = false
+	var invokedNavigateToCheckIdentityCount = 0
+	var invokedNavigateToCheckIdentityParameters: (verificationDetails: MobilecoreVerificationDetails, Void)?
+	var invokedNavigateToCheckIdentityParametersList = [(verificationDetails: MobilecoreVerificationDetails, Void)]()
+
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails) {
+		invokedNavigateToCheckIdentity = true
+		invokedNavigateToCheckIdentityCount += 1
+		invokedNavigateToCheckIdentityParameters = (verificationDetails, ())
+		invokedNavigateToCheckIdentityParametersList.append((verificationDetails, ()))
+	}
+
+	var invokedNavigateToVerifiedAccess = false
+	var invokedNavigateToVerifiedAccessCount = 0
+	var invokedNavigateToVerifiedAccessParameters: (verifiedType: VerifiedType, Void)?
+	var invokedNavigateToVerifiedAccessParametersList = [(verifiedType: VerifiedType, Void)]()
+
+	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
+		invokedNavigateToVerifiedAccess = true
+		invokedNavigateToVerifiedAccessCount += 1
+		invokedNavigateToVerifiedAccessParameters = (verifiedType, ())
+		invokedNavigateToVerifiedAccessParametersList.append((verifiedType, ()))
+	}
+
+	var invokedNavigateToDeniedAccess = false
+	var invokedNavigateToDeniedAccessCount = 0
+
+	func navigateToDeniedAccess() {
+		invokedNavigateToDeniedAccess = true
+		invokedNavigateToDeniedAccessCount += 1
 	}
 }
