@@ -13,12 +13,19 @@ class AboutThisAppView: ScrolledStackView {
 	private struct ViewTraits {
 
 		// Dimensions
-		static let messageLineHeight: CGFloat = 22
-		static let messageLineKerning: CGFloat = -0.41
-		static let listHeaderLineHeight: CGFloat = 16
-		static let listHeaderHeight: CGFloat = 38
-		static let versionLineHeight: CGFloat = 18
-		static let versionLineKerning: CGFloat = -0.24
+		enum ListHeader {
+			static let lineHeight: CGFloat = 16
+			static let height: CGFloat = 38
+		}
+
+		enum Footer {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+		}
+
+		enum StackView {
+			static let bottomMargin: CGFloat = 32
+		}
 	}
 
 	private let messageTextView: TextView = {
@@ -26,13 +33,8 @@ class AboutThisAppView: ScrolledStackView {
 		return TextView()
 	}()
 
-	private let listHeaderLabel: Label = {
-
-        return Label(caption1SemiBold: nil).multiline().header()
-	}()
-
 	/// The stack view for the menu items
-	let itemStackView: UIStackView = {
+	let menuStackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -69,10 +71,8 @@ class AboutThisAppView: ScrolledStackView {
 		super.setupViewHierarchy()
 
 		stackView.addArrangedSubview(messageTextView)
-		stackView.addArrangedSubview(listHeaderLabel)
-		stackView.setCustomSpacing(0, after: listHeaderLabel)
-		stackView.addArrangedSubview(itemStackView)
-		stackView.setCustomSpacing(24, after: itemStackView)
+		stackView.addArrangedSubview(menuStackView)
+		stackView.setCustomSpacing(ViewTraits.StackView.bottomMargin, after: menuStackView)
 		stackView.addArrangedSubview(appVersionLabel)
 		stackView.setCustomSpacing(24, after: appVersionLabel)
 		stackView.addArrangedSubview(configVersionLabel)
@@ -81,9 +81,10 @@ class AboutThisAppView: ScrolledStackView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		NSLayoutConstraint.activate([
-			listHeaderLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.listHeaderHeight)
-		])
+//		NSLayoutConstraint.activate([
+//			topHeaderLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.ListHeader.height),
+//			bottomHeaderLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.ListHeader.height)
+//		])
 	}
 
 	// MARK: Public Access
@@ -95,21 +96,21 @@ class AboutThisAppView: ScrolledStackView {
 		}
 	}
 
-	/// The list header
-	var listHeader: String? {
-		didSet {
-			listHeaderLabel.attributedText = listHeader?.setLineHeight(
-				ViewTraits.listHeaderLineHeight
-			)
-		}
-	}
+//	/// The list header
+//	var topListHeader: String? {
+//		didSet {
+//			topHeaderLabel.attributedText = topListHeader?.setLineHeight(
+//				ViewTraits.ListHeader.lineHeight
+//			)
+//		}
+//	}
 
 	/// The app version
 	var appVersion: String? {
 		didSet {
 			appVersionLabel.attributedText = appVersion?.setLineHeight(
-				ViewTraits.versionLineHeight,
-				kerning: ViewTraits.versionLineKerning,
+				ViewTraits.Footer.lineHeight,
+				kerning: ViewTraits.Footer.kerning,
 				textColor: Theme.colors.grey1
 			)
 		}
@@ -119,10 +120,32 @@ class AboutThisAppView: ScrolledStackView {
 	var configVersion: String? {
 		didSet {
 			configVersionLabel.attributedText = configVersion?.setLineHeight(
-				ViewTraits.versionLineHeight,
-				kerning: ViewTraits.versionLineKerning,
+				ViewTraits.Footer.lineHeight,
+				kerning: ViewTraits.Footer.kerning,
 				textColor: Theme.colors.grey1
 			)
 		}
+	}
+
+	func createMenuStackView(title: String) -> UIStackView {
+
+		/// The stack view for the menu items
+		let menuOptionStackView: UIStackView = {
+
+			let view = UIStackView()
+			view.translatesAutoresizingMaskIntoConstraints = false
+			view.axis = .vertical
+			view.alignment = .fill
+			view.distribution = .fill
+			view.spacing = 0
+			return view
+		}()
+
+		// Title Label
+		let label = Label(caption1SemiBold: nil).multiline().header()
+		label.attributedText = title.setLineHeight(ViewTraits.ListHeader.lineHeight)
+		menuOptionStackView.addArrangedSubview(label)
+
+		return menuOptionStackView
 	}
 }
