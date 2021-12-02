@@ -286,10 +286,9 @@ extension VerifierCoordinator: MenuDelegate {
 				startChildCoordinator(coordinator)
 				
 			case .riskSetting:
-				let destination = RiskSettingViewController(
-					viewModel: RiskSettingViewModel(
-						coordinator: self,
-						userSettings: UserSettings()
+				let destination = RiskSettingStartViewController(
+					viewModel: RiskSettingStartViewModel(
+						coordinator: self
 					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)
