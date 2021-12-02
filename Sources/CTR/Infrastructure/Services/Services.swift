@@ -26,6 +26,7 @@ final class Services {
 	private static var couplingManagingType: CouplingManaging.Type = CouplingManager.self
 	private static var mappingManagingType: MappingManaging.Type = MappingManager.self
 	private static var clockDeviationType: ClockDeviationManaging.Type = ClockDeviationManager.self
+	private static var scanManagingType: ScanManaging.Type = ScanManager.self
 
 	// MARK: use override for testing
 
@@ -97,6 +98,11 @@ final class Services {
 	static func use(_ walletManaging: WalletManaging) {
 
 		walletManager = walletManaging
+	}
+
+	static func use(_ scanManaging: ScanManaging) {
+
+		scanManager = scanManaging
 	}
 
 	// MARK: Static access
@@ -171,6 +177,10 @@ final class Services {
 
 	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
 
+	static private(set) var scanManager: ScanManaging = scanManagingType.init(
+		dataStoreManager: dataStoreManager
+	)
+
 	/// Reset all the data
 	static func reset() {
 
@@ -220,6 +230,9 @@ final class Services {
 			reachability: try? Reachability(),
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.flavor
+		)
+		scanManager = scanManagingType.init(
+			dataStoreManager: dataStoreManager
 		)
 	}
 }

@@ -12,11 +12,10 @@ class ScanLogView: ScrolledStackView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
 		enum ListHeader {
-			static let lineHeight: CGFloat = 16
-			static let height: CGFloat = 38
-			static let spacing: CGFloat = 8
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.24
+			static let topMargin: CGFloat = 40
 		}
 
 		enum Footer {
@@ -26,14 +25,29 @@ class ScanLogView: ScrolledStackView {
 		}
 
 		enum StackView {
-			static let topMargin: CGFloat = 40
-			static let bottomMargin: CGFloat = 32
+			static let topMargin: CGFloat = 16
+			static let bottomMargin: CGFloat = 24
+			static let spacing: CGFloat = 24
+		}
+
+		enum Line {
+			static let height: CGFloat = 1
+		}
+
+		enum Entry {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.24
 		}
 	}
 
 	let messageTextView: TextView = {
 
 		return TextView()
+	}()
+
+	private let listHeaderLabel: Label = {
+
+		return Label(bodySemiBold: nil)
 	}()
 
 	/// The stack view for the menu items
@@ -44,7 +58,7 @@ class ScanLogView: ScrolledStackView {
 		view.axis = .vertical
 		view.alignment = .fill
 		view.distribution = .fill
-		view.spacing = 0
+		view.spacing = ViewTraits.StackView.spacing
 		return view
 	}()
 
@@ -68,7 +82,9 @@ class ScanLogView: ScrolledStackView {
 		super.setupViewHierarchy()
 
 		stackView.addArrangedSubview(messageTextView)
-		stackView.setCustomSpacing(ViewTraits.StackView.topMargin, after: messageTextView)
+		stackView.setCustomSpacing(ViewTraits.ListHeader.topMargin, after: messageTextView)
+		stackView.addArrangedSubview(listHeaderLabel)
+		stackView.setCustomSpacing(ViewTraits.StackView.topMargin, after: listHeaderLabel)
 		stackView.addArrangedSubview(logStackView)
 		stackView.setCustomSpacing(ViewTraits.StackView.bottomMargin, after: logStackView)
 		stackView.addArrangedSubview(footerLabel)
@@ -83,6 +99,15 @@ class ScanLogView: ScrolledStackView {
 		}
 	}
 
+	var listHeader: String? {
+		didSet {
+			listHeaderLabel.attributedText = listHeader?.setLineHeight(
+				ViewTraits.ListHeader.lineHeight,
+				kerning: ViewTraits.ListHeader.kerning
+			)
+		}
+	}
+
 	/// The app version
 	var footer: String? {
 		didSet {
@@ -92,5 +117,35 @@ class ScanLogView: ScrolledStackView {
 				textColor: Theme.colors.grey1
 			)
 		}
+	}
+
+	// Helpers for log stack view
+
+	private func createLineView() -> UIView {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.line
+		return view
+	}
+
+	func addLineToLogStackView() {
+
+		let lineView = createLineView()
+		NSLayoutConstraint.activate([
+			lineView.heightAnchor.constraint(equalToConstant: ViewTraits.Line.height)
+		])
+		logStackView.addArrangedSubview(lineView)
+	}
+
+	func createLabel(_ text: String?) -> Label {
+
+		let label = Label(body: nil)
+		label.attributedText = text?.setLineHeight(
+			ViewTraits.Entry.lineHeight,
+			kerning: ViewTraits.Entry.kerning,
+			textColor: Theme.colors.dark
+		)
+		return label
 	}
 }
