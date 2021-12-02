@@ -7,16 +7,6 @@
 
 import Foundation
 
-// Temp, to be replaced by CoreData Class
-struct ScanLogEntry {
-
-	let timeStamp: TimeInterval
-
-	let highRisk: Bool
-
-	let sequenceNumber: Int64
-}
-
 protocol ScanManaging: AnyObject {
 
 	init( dataStoreManager: DataStoreManaging)
@@ -30,8 +20,11 @@ protocol ScanManaging: AnyObject {
 
 class ScanManager: ScanManaging {
 
-	required init( dataStoreManager: DataStoreManaging) {
-		// Required by protocol
+	private var dataStoreManager: DataStoreManaging
+
+	required init( dataStoreManager: DataStoreManaging = Services.dataStoreManager) {
+
+		self.dataStoreManager = dataStoreManager
 	}
 
 	func didWeScanQRs(seconds: Int) -> Bool {

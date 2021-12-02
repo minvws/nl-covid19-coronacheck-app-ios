@@ -139,7 +139,10 @@ final class Services {
 
 	static private(set) var deviceAuthenticationDetector: DeviceAuthenticationProtocol = deviceAuthenticationType.init()
 	
-	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
+	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(
+		StorageType.persistent,
+		flavor: AppFlavor.flavor
+	)
 
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
 
@@ -196,7 +199,7 @@ final class Services {
 
 		cryptoManager = cryptoManagingType.init()
 		deviceAuthenticationDetector = deviceAuthenticationType.init()
-		dataStoreManager = dataStoreManagingType.init(StorageType.persistent)
+		dataStoreManager = dataStoreManagingType.init(StorageType.persistent, flavor: AppFlavor.flavor)
 		walletManager = walletManagingType.init(
 			dataStoreManager: dataStoreManager
 		)
