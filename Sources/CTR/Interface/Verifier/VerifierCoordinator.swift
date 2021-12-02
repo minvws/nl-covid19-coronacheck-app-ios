@@ -207,7 +207,13 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 	func userWishesToOpenScanLog() {
 
-		// Todo
+		let viewController = ScanLogViewController(
+			viewModel: ScanLogViewModel(
+				coordinator: self,
+				configuration: remoteConfigManager.storedConfiguration
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 	
 	func navigateToVerifiedInfo() {
