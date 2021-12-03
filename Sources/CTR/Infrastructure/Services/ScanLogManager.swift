@@ -43,7 +43,7 @@ class ScanLogManager: ScanLogManaging {
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			result = ScanLogEntryModel.listFrom(date: fromDate, managedContext: context)
+			result = ScanLogEntryModel.listEntriesStartingFrom(date: fromDate, managedContext: context)
 		}
 		return result
 	}

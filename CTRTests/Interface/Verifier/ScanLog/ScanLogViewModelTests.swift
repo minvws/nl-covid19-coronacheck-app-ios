@@ -15,6 +15,7 @@ class ScanLogViewModelTests: XCTestCase {
 	/// Subject under test
 	private var sut: ScanLogViewModel!
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
+	private var scanLogManagingSpy: ScanLogManagingSpy!
 
 	override func setUp() {
 
@@ -23,8 +24,8 @@ class ScanLogViewModelTests: XCTestCase {
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		let config: RemoteConfiguration = .default
 
-		let scanLogManager = ScanLogManager(dataStoreManager: DataStoreManager(.inMemory, flavor: .verifier))
-		Services.use(scanLogManager)
+		scanLogManagingSpy = ScanLogManagingSpy()
+		Services.use(scanLogManagingSpy)
 
 		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
 	}

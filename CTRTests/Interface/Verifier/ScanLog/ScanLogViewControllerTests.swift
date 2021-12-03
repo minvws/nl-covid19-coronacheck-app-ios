@@ -17,6 +17,7 @@ class ScanLogViewControllerTests: XCTestCase {
 
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: ScanLogViewModel!
+	private var scanLogManagingSpy: ScanLogManagingSpy!
 	
 	var window = UIWindow()
 
@@ -27,8 +28,8 @@ class ScanLogViewControllerTests: XCTestCase {
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		let config: RemoteConfiguration = .default
 
-		let scanLogManager = ScanLogManager(dataStoreManager: DataStoreManager(.inMemory, flavor: .verifier))
-		Services.use(scanLogManager)
+		scanLogManagingSpy = ScanLogManagingSpy()
+		Services.use(scanLogManagingSpy)
 
 		viewModel = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
 		sut = ScanLogViewController(viewModel: viewModel)
