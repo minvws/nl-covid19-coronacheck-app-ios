@@ -23,7 +23,16 @@ class ScanLogViewModelTests: XCTestCase {
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		let config: RemoteConfiguration = .default
 
+		let scanLogManager = ScanLogManager(dataStoreManager: DataStoreManager(.inMemory, flavor: .verifier))
+		Services.use(scanLogManager)
+
 		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
+	}
+
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
 	}
 
 	// MARK: - Tests

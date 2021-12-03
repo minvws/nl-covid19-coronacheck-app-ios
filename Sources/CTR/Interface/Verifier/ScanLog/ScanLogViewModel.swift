@@ -18,7 +18,7 @@ class ScanLogViewModel {
 
 	weak private var coordinator: OpenUrlProtocol?
 
-	weak private var scanManager: ScanManaging? = Services.scanManager
+	weak private var scanManager: ScanLogManaging? = Services.scanManager
 
 	private var scanLogStorageMinutes: Int
 

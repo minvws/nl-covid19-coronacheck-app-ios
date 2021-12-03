@@ -26,12 +26,22 @@ class ScanLogViewControllerTests: XCTestCase {
 		super.setUp()
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		let config: RemoteConfiguration = .default
+
+		let scanLogManager = ScanLogManager(dataStoreManager: DataStoreManager(.inMemory, flavor: .verifier))
+		Services.use(scanLogManager)
+
 		viewModel = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
 		sut = ScanLogViewController(viewModel: viewModel)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	func loadView() {
-		
+
 		window.addSubview(sut.view)
 		RunLoop.current.run(until: Date())
 	}
