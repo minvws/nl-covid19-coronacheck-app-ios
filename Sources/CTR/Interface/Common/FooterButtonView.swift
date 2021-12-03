@@ -39,6 +39,7 @@ final class FooterButtonView: BaseView {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.axis = .vertical
+		stackView.alignment = .center
 		stackView.spacing = ViewTraits.Spacing.buttonStack
 		return stackView
 	}()
@@ -77,7 +78,8 @@ final class FooterButtonView: BaseView {
 			gradientView.rightAnchor.constraint(equalTo: rightAnchor),
 			gradientView.heightAnchor.constraint(equalToConstant: ViewTraits.Gradient.height),
 			
-			buttonStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
+			
 			buttonStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
 			buttonStackView.leftAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.leftAnchor, constant: ViewTraits.Margin.edge),
 			buttonStackView.rightAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.rightAnchor, constant: -ViewTraits.Margin.edge),
