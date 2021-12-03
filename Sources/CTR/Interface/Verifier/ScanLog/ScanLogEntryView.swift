@@ -59,10 +59,7 @@ class ScanLogEntryView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		view?.backgroundColor = .orange // Theme.colors.viewControllerBackground
-		riskLabel.backgroundColor = .lightGray
-		timeLabel.backgroundColor = .yellow
-		messageLabel.backgroundColor = .cyan
+		view?.backgroundColor = Theme.colors.viewControllerBackground
 	}
 
 	/// Setup the hierarchy
@@ -80,9 +77,6 @@ class ScanLogEntryView: BaseView {
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
-//		riskLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-//		containerView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-
 		super.setupViewConstraints()
 		NSLayoutConstraint.activate([
 
@@ -92,6 +86,7 @@ class ScanLogEntryView: BaseView {
 				constant: ViewTraits.Risk.leadingMargin
 			),
 			riskLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+			riskLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 80), // Ugly fix, to be improved.
 
 			// Container
 			containerView.leadingAnchor.constraint(
@@ -147,7 +142,8 @@ class ScanLogEntryView: BaseView {
 		didSet {
 			timeLabel.attributedText = time?.setLineHeight(
 				ViewTraits.Time.lineHeight,
-				kerning: ViewTraits.Time.kerning
+				kerning: ViewTraits.Time.kerning,
+				textColor: Theme.colors.secondaryText
 			)
 			setAccessibilityLabel()
 		}

@@ -17,6 +17,7 @@ class ScanLogViewControllerTests: XCTestCase {
 
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: ScanLogViewModel!
+	private var scanLogManagingSpy: ScanLogManagingSpy!
 	
 	var window = UIWindow()
 
@@ -26,12 +27,22 @@ class ScanLogViewControllerTests: XCTestCase {
 		super.setUp()
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		let config: RemoteConfiguration = .default
+
+		scanLogManagingSpy = ScanLogManagingSpy()
+		Services.use(scanLogManagingSpy)
+
 		viewModel = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
 		sut = ScanLogViewController(viewModel: viewModel)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	func loadView() {
-		
+
 		window.addSubview(sut.view)
 		RunLoop.current.run(until: Date())
 	}

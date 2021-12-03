@@ -73,7 +73,6 @@ class ScanLogView: ScrolledStackView {
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 		stackView.distribution = .fill
-		footerLabel.textColor = Theme.colors.grey1
 	}
 
 	/// Setup the hierarchy
@@ -114,7 +113,7 @@ class ScanLogView: ScrolledStackView {
 			footerLabel.attributedText = footer?.setLineHeight(
 				ViewTraits.Footer.lineHeight,
 				kerning: ViewTraits.Footer.kerning,
-				textColor: Theme.colors.grey1
+				textColor: Theme.colors.secondaryText
 			)
 		}
 	}
@@ -125,7 +124,7 @@ class ScanLogView: ScrolledStackView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.line
+		view.backgroundColor = Theme.colors.grey4
 		return view
 	}
 
