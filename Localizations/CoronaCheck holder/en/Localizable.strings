@@ -3,7 +3,7 @@
 "holder.recovery.recoveryAndVaccination.action" = "To my certificates";
 "general.url.link" = "Link";
 "holder.recovery.vaccinationOnly.title" = "Vaccination certificate instead of recovery certificate";
-"holder.recovery.vaccinationOnly.message" = "<p>You were tested positive for coronavirus longer than %@ days ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>Because you were tested positive before your first vaccination, one shot means you’re fully vaccinated. Therefore, a full vaccination certificate has been created instead.</p><p>For more information, please check the <a href=\"https://coronacheck.nl/en/guidepost\"> Guidepost</a>.</p>";
+"holder.recovery.vaccinationOnly.message" = "<p>You were tested positive for coronavirus too long ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>Because you were tested positive before your first vaccination, one shot means you’re fully vaccinated. Therefore, a full vaccination certificate has been created instead.</p><p>For more information, please check the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.vaccinationOnly.action" = "To my certificates";
 "holder.paperproof.notoken.title" = "No letter combination?";
 "holder.paperproof.notoken.message" = "<p>Then you won't be able to add your certificates to the app this way.</p><p>You only have a letter combination if you requested your paper certificates from your healthcare provider, or had them delivered by mail.</p><p><b>Did you print your certificate yourself?</b><br />Then you can add your certificates to the app using DigiD.</p>";
@@ -21,7 +21,7 @@
 "holder.paperproof.start.mail.message" = "The government has printed your certificates for you and sent them by mail";
 "holder.paperproof.start.selfprinted" = "Printed your certificate yourself?";
 "holder.positiveTest.recoveryAndVaccination.title" = "Created vaccination and recovery certificates";
-"holder.positiveTest.recoveryAndVaccination.message" = "<p>A Dutch vaccination certificate has been created.</p><p>You tested positive less than %@ days ago. Therefore a recovery certificate has also been created.</p>";
+"holder.positiveTest.recoveryAndVaccination.message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
 "holder.positiveTest.recoveryAndVaccination.action" = "To my certificates";
 "holder.positiveTest.recoveryOnly.title" = "Created only a recovery certificate";
 "holder.positiveTest.recoveryOnly.message" = "<p>You tested positive after your first vaccination. Your test result is therefore not suitable for creating a Dutch vaccination certificate. However, a recovery certificate has been created.</p><p>Check the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for more information.</p>";
