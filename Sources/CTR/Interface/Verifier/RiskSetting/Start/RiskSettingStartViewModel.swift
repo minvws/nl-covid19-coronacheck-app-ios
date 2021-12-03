@@ -19,7 +19,21 @@ final class RiskSettingStartViewModel: Logging {
 	
 	@Bindable private(set) var primaryTitle: String = L.verifier_risksetting_setting_button()
 	
+	@Bindable private(set) var readMoreButtonTitle: String = L.verifier_risksetting_start_readmore()
+	
 	init(coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)) {
 		
+		self.coordinator = coordinator
+	}
+	
+	func showReadMore() {
+		guard let url = URL(string: L.verifier_risksetting_readmore_url()) else { return }
+		
+		coordinator?.openUrl(url, inApp: true)
+	}
+	
+	func showRiskSetting() {
+		
+		coordinator?.userWishesToSetRiskLevel()
 	}
 }

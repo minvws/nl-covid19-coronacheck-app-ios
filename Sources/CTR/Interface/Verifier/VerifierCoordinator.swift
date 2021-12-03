@@ -39,6 +39,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func navigateToVerifiedAccess(_ verifiedType: VerifiedType)
 	
 	func navigateToDeniedAccess()
+	
+	func userWishesToSetRiskLevel()
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -233,6 +235,17 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		} else {
 			navigateToScan()
 		}
+	}
+	
+	func userWishesToSetRiskLevel() {
+		
+		let viewController = RiskSettingViewController(
+			viewModel: RiskSettingViewModel(
+				coordinator: self,
+				userSettings: UserSettings()
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 }
 

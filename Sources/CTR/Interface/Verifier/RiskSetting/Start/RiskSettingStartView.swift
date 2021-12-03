@@ -16,6 +16,9 @@ final class RiskSettingStartView: ScrolledStackWithButtonView {
 			static let top: CGFloat = 24
 			static let edge: CGFloat = 20
 		}
+		enum Spacing {
+			static let headerToReadMoreButton: CGFloat = 16
+		}
 		enum Header {
 			static let lineHeight: CGFloat = 22
 			static let kerning: CGFloat = -0.41
@@ -26,10 +29,29 @@ final class RiskSettingStartView: ScrolledStackWithButtonView {
 		return Label(body: nil).header().multiline()
 	}()
 	
+	private let readMoreButton: Button = {
+		return Button(style: .textLabelBlue)
+	}()
+	
+	override func setupViews() {
+		super.setupViews()
+		
+		stackView.alignment = .leading
+		
+		readMoreButton.touchUpInside(self, action: #selector(readMore))
+	}
+	
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
 		stackView.addArrangedSubview(headerLabel)
+		stackView.setCustomSpacing(ViewTraits.Spacing.headerToReadMoreButton, after: headerLabel)
+		stackView.addArrangedSubview(readMoreButton)
+	}
+	
+	@objc private func readMore() {
+		
+		readMoreCommand?()
 	}
 	
 	// MARK: Public Access
@@ -40,4 +62,12 @@ final class RiskSettingStartView: ScrolledStackWithButtonView {
 															   kerning: ViewTraits.Header.kerning)
 		}
 	}
+	
+	var readMoreButtonTitle: String? {
+		didSet {
+			readMoreButton.title = readMoreButtonTitle
+		}
+	}
+	
+	var readMoreCommand: (() -> Void)?
 }
