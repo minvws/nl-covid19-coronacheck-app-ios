@@ -15,23 +15,23 @@ final class RiskSettingViewModel: Logging {
 	private let userSettings: UserSettingsProtocol
 	
 	/// The title of the scene
-	@Bindable private(set) var title: String
+	@Bindable private(set) var title = L.verifier_risksetting_active_title()
 	
-	@Bindable private(set) var header: String
+	@Bindable private(set) var header = L.verifier_risksetting_firsttimeuse_header()
 	
-	@Bindable private(set) var lowRiskTitle: String
+	@Bindable private(set) var lowRiskTitle = L.verifier_risksetting_lowrisk_title()
 	
-	@Bindable private(set) var lowRiskSubtitle: String
+	@Bindable private(set) var lowRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
 	
-	@Bindable private(set) var lowRiskAccessibilityLabel: String
+	@Bindable private(set) var lowRiskAccessibilityLabel = "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
 	
-	@Bindable private(set) var highRiskTitle: String
+	@Bindable private(set) var highRiskTitle = L.verifier_risksetting_highrisk_title()
 	
-	@Bindable private(set) var highRiskSubtitle: String
+	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
 	
-	@Bindable private(set) var highRiskAccessibilityLabel: String
+	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
 	
-	@Bindable private(set) var moreButtonTitle: String
+	@Bindable private(set) var moreButtonTitle = L.verifier_risksetting_readmore()
 	
 	@Bindable private(set) var riskLevel: RiskLevel
 	
@@ -47,16 +47,6 @@ final class RiskSettingViewModel: Logging {
 		
 		self.coordinator = coordinator
 		self.userSettings = userSettings
-		
-		title = L.verifier_risksetting_active_title()
-		header = L.verifier_risksetting_firsttimeuse_header()
-		lowRiskTitle = L.verifier_risksetting_lowrisk_title()
-		lowRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
-		lowRiskAccessibilityLabel = "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
-		highRiskTitle = L.verifier_risksetting_highrisk_title()
-		highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
-		highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-		moreButtonTitle = L.verifier_risksetting_readmore()
 		
 		let selectedRisk = userSettings.scanRiskLevelValue
 		riskLevel = selectedRisk

@@ -123,6 +123,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedNavigateToDeniedAccessCount += 1
 	}
 
+	var invokedUserWishesToSetRiskLevel = false
+	var invokedUserWishesToSetRiskLevelCount = 0
+
+	func userWishesToSetRiskLevel() {
+		invokedUserWishesToSetRiskLevel = true
+		invokedUserWishesToSetRiskLevelCount += 1
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
