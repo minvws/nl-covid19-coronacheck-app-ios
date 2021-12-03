@@ -12,11 +12,12 @@ class ScanLogEntryModel {
 
 	static let entityName = "ScanLogEntry"
 
-	/// Create a wallet
+	/// Create a scan log entry
 	/// - Parameters:
-	///   - label: the label of the wallet
+	///   - mode: the scanned mode
+	///   - date: the date
 	///   - managedContext: the managed object context
-	/// - Returns: optional newly created wallet
+	/// - Returns: optional newly created scan log entry
 	@discardableResult class func create(
 		mode: String,
 		date: Date,
@@ -34,10 +35,10 @@ class ScanLogEntryModel {
 		return nil
 	}
 
-	class func list(dateFrom: Date, managedContext: NSManagedObjectContext) -> [ScanLogEntry] {
+	class func listFrom(date: Date, managedContext: NSManagedObjectContext) -> [ScanLogEntry] {
 
 		let fetchRequest = NSFetchRequest<ScanLogEntry>(entityName: entityName)
-		let fromPredicate = NSPredicate(format: "%@ >= %K", dateFrom as NSDate, #keyPath(ScanLogEntry.date))
+		let fromPredicate = NSPredicate(format: "date >= %@", date as CVarArg)
 		fetchRequest.predicate = fromPredicate
 
 		do {
@@ -47,5 +48,16 @@ class ScanLogEntryModel {
 		return []
 	}
 
+	class func listTo(date: Date, managedContext: NSManagedObjectContext) -> [ScanLogEntry] {
 
+		let fetchRequest = NSFetchRequest<ScanLogEntry>(entityName: entityName)
+		let fromPredicate = NSPredicate(format: "date < %@", date as CVarArg)
+		fetchRequest.predicate = fromPredicate
+
+		do {
+			let fetchedResults = try managedContext.fetch(fetchRequest)
+			return fetchedResults
+		} catch {}
+		return []
+	}
 }
