@@ -43,7 +43,7 @@ class ScanLogEntryModel {
 	class func listEntriesStartingFrom(date: Date, managedContext: NSManagedObjectContext) -> [ScanLogEntry] {
 
 		let fetchRequest = NSFetchRequest<ScanLogEntry>(entityName: entityName)
-		let fromPredicate = NSPredicate(format: "date >= %@", date as CVarArg)
+		let fromPredicate = NSPredicate(format: "date >= %@", date as NSDate)
 		fetchRequest.predicate = fromPredicate
 
 		do {
@@ -61,7 +61,7 @@ class ScanLogEntryModel {
 	class func listEntriesUpTo(date: Date, managedContext: NSManagedObjectContext) -> [ScanLogEntry] {
 
 		let fetchRequest = NSFetchRequest<ScanLogEntry>(entityName: entityName)
-		let fromPredicate = NSPredicate(format: "date < %@", date as CVarArg)
+		let fromPredicate = NSPredicate(format: "date < %@", date as NSDate)
 		fetchRequest.predicate = fromPredicate
 
 		do {
