@@ -145,7 +145,7 @@ class ListEventsViewModel: Logging {
 				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
 				// > 0 -> Success
 
-				guard eventModeForStorage != .positiveTest else {
+				guard eventModeForStorage != .positiveTest, eventModeForStorage != .recovery  else {
 					return true
 				}
 
