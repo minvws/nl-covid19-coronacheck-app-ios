@@ -1472,7 +1472,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderPositiveTestRecoveryAndVaccinationTitle()
-		expect(feedback.subTitle) == L.holderPositiveTestRecoveryAndVaccinationMessage("365")
+		expect(feedback.subTitle) == L.holderPositiveTestRecoveryAndVaccinationMessage()
 		expect(feedback.primaryActionTitle) == L.holderPositiveTestRecoveryAndVaccinationAction()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -1792,7 +1792,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderRecoveryVaccinationOnlyTitle()
-		expect(feedback.subTitle) == L.holderRecoveryVaccinationOnlyMessage("365")
+		expect(feedback.subTitle) == L.holderRecoveryVaccinationOnlyMessage()
 		expect(feedback.primaryActionTitle) == L.holderRecoveryVaccinationOnlyAction()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
