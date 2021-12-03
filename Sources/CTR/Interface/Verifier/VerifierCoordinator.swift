@@ -48,6 +48,8 @@ class VerifierCoordinator: SharedCoordinator {
 	
 	private var thirdPartyScannerApp: (name: String, returnURL: URL)?
 
+	private var userSettings: UserSettingsProtocol = UserSettings()
+
 	// Designated starter method
 	override func start() {
 
@@ -134,7 +136,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				coordinator: self,
 				verificationDetails: verificationDetails,
 				isDeepLinkEnabled: thirdPartyScannerApp != nil,
-				userSettings: UserSettings()
+				userSettings: userSettings
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
@@ -194,7 +196,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		if let existingScanViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierScanViewController }) {
 			dashboardNavigationController?.popToViewController(existingScanViewController, animated: true)
 		} else {
-			let destination = VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: self))
+			let destination = VerifierScanViewController(
+				viewModel: VerifierScanViewModel(
+					coordinator: self,
+					userSettings: userSettings
+				)
+			)
 			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
 		}
 	}
@@ -242,7 +249,7 @@ extension VerifierCoordinator: ScanInstructionsDelegate {
 
 	/// User completed (or skipped) the Scan Instructions flow
 	func scanInstructionsDidFinish() {
-		UserSettings().scanInstructionShown = true
+		userSettings.scanInstructionShown = true
 
 		removeScanInstructionsCoordinator()
 		navigateToScan()
@@ -295,7 +302,7 @@ extension VerifierCoordinator: MenuDelegate {
 				let destination = RiskSettingViewController(
 					viewModel: RiskSettingViewModel(
 						coordinator: self,
-						userSettings: UserSettings()
+						userSettings: userSettings
 					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)

@@ -36,7 +36,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(highRisk: true, date: date)
+		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
 		let result = sut.didWeScanQRs(seconds: 3600)
@@ -49,7 +49,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 4000 * seconds)
-		sut.addScanEntry(highRisk: true, date: date)
+		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
 		let result = sut.didWeScanQRs(seconds: 3600)
@@ -73,7 +73,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(highRisk: true, date: date)
+		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
 		let result = sut.getScanEntries(seconds: 3600)
@@ -88,7 +88,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(highRisk: false, date: date)
+		sut.addScanEntry(riskLevel: RiskLevel.low, date: date)
 
 		// When
 		let result = sut.getScanEntries(seconds: 3600)
@@ -103,7 +103,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 4000 * seconds)
-		sut.addScanEntry(highRisk: true, date: date)
+		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
 		let result = sut.getScanEntries(seconds: 3600)
