@@ -68,7 +68,7 @@ enum EventMode: String {
 	var originsMismatchBody: String {
 		switch self {
 			case .paperflow: return L.holderEventOriginmismatchDccBody()
-			case .positiveTest: return "Todo"
+			case .positiveTest: return ""
 			case .recovery: return L.holderEventOriginmismatchRecoveryBody()
 			case .test: return L.holderEventOriginmismatchTestBody()
 			case .vaccination: return L.holderEventOriginmismatchVaccinationBody()

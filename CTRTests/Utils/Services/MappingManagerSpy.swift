@@ -183,7 +183,7 @@ class MappingManagerSpy: MappingManaging {
 	var invokedGetVaccinationManufacturerMappingParametersList = [(code: String?, Void)]()
 	var stubbedGetVaccinationManufacturerMappingResult: String!
 
-	func getVaccinationManufacturerMapping(_ code: String? ) -> String? {
+	func getVaccinationManufacturer(_ code: String? ) -> String? {
 		invokedGetVaccinationManufacturerMapping = true
 		invokedGetVaccinationManufacturerMappingCount += 1
 		invokedGetVaccinationManufacturerMappingParameters = (code, ())
