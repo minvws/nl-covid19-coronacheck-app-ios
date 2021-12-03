@@ -67,7 +67,7 @@ class VerifierStartViewController: BaseViewController {
 			}
 		}
 
-		sceneView.headerImage = I.scanStart()
+		sceneView.headerImage = I.scanStartLowRisk()
     }
 
 	override func viewWillAppear(_ animated: Bool) {
