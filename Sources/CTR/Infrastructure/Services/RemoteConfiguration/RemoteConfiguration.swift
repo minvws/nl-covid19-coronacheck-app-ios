@@ -114,11 +114,11 @@ struct RemoteConfiguration: Codable, Equatable {
 
 	var internationalQRRelevancyDays: Int?
 
-	var scanLockMinutes: Int?
+	var scanLockSeconds: Int?
 
-	var scanLockWarningMinutes: Int?
+	var scanLockWarningSeconds: Int?
 
-	var scanLogStorageMinutes: Int?
+	var scanLogStorageSeconds: Int?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -153,9 +153,9 @@ struct RemoteConfiguration: Codable, Equatable {
 		case isLuhnCheckEnabled = "luhnCheckEnabled"
 		case internationalQRRelevancyDays = "internationalQRRelevancyDays"
 		case recoveryGreencardRevisedValidityLaunchDate = "recoveryGreencardRevisedValidityLaunchDate"
-		case scanLockMinutes = "scanLockMinutes"
-		case scanLockWarningMinutes = "scanLockWarningMinutes"
-		case scanLogStorageMinutes = "scanLogStorageMinutes"
+		case scanLockSeconds = "scanLockSeconds"
+		case scanLockWarningSeconds = "scanLockWarningSeconds"
+		case scanLogStorageSeconds = "scanLogStorageSeconds"
 	}
 
 	init(minVersion: String) {
@@ -188,9 +188,9 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.isLuhnCheckEnabled = true
 		config.internationalQRRelevancyDays = 28
 		config.recoveryGreencardRevisedValidityLaunchDate = .distantFuture
-		config.scanLockMinutes = 5
-		config.scanLockWarningMinutes = 60
-		config.scanLogStorageMinutes = 60
+		config.scanLockSeconds = 300
+		config.scanLockWarningSeconds = 3600
+		config.scanLogStorageSeconds = 3600
 		return config
 	}
 

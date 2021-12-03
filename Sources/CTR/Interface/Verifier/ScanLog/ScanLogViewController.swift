@@ -38,6 +38,7 @@ class ScanLogViewController: BaseViewController {
 		super.viewDidLoad()
 		addBackButton()
 		setupBindings()
+		setupEntries()
 	}
 
 	private func setupBindings() {
@@ -45,11 +46,53 @@ class ScanLogViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$appInUseSince.binding = { [weak self] in self?.sceneView.footer = $0 }
+		viewModel.$listHeader.binding = { [weak self] in self?.sceneView.listHeader = $0 }
 
 		sceneView.messageTextView.linkTouched { [weak self] url in
 
 			self?.viewModel.openUrl(url)
 		}
+	}
 
+	private func setupEntries() {
+
+		viewModel.$displayEntries.binding = { [weak self] entries in
+
+			guard let strongSelf = self else { return }
+
+			// Clear all items
+			strongSelf.sceneView.logStackView.arrangedSubviews.forEach {
+				strongSelf.sceneView.logStackView.removeArrangedSubview($0)
+				$0.removeFromSuperview()
+			}
+
+			// Starting Line
+			strongSelf.sceneView.addLineToLogStackView()
+
+			// Entries
+			entries.forEach { entry in
+				if case let .message(message) = entry {
+					strongSelf.sceneView.logStackView.addArrangedSubview(strongSelf.sceneView.createLabel(message))
+				}
+				if case let .entry(type: riskType, timeInterval: timeInterval, message: message) = entry {
+					strongSelf.sceneView.logStackView.addArrangedSubview( ScanLogEntryView.makeView(risk: riskType, time: timeInterval, message: message))
+				}
+				// Always add a line underneath the entry
+				strongSelf.sceneView.addLineToLogStackView()
+			}
+		}
+	}
+}
+
+extension ScanLogEntryView {
+
+	static func makeView(risk: String, time: String, message: String) -> ScanLogEntryView {
+
+		let view = ScanLogEntryView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.risk = risk
+		view.time = time
+		view.message = message
+		return view
 	}
 }

@@ -121,6 +121,7 @@
 "verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
 "verifier_about_this_app_law_enforcement" = "Voor handhaving";
+
 "verifier_about_this_app_scan_log" = "Scan log";
 "verifier_menu_risksetting" = "Scan-instelling";
 "verifier_result_access_title_highrisk" = "2G controle klaar";
