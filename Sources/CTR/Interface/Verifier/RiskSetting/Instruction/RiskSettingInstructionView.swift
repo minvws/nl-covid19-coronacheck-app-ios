@@ -18,8 +18,9 @@ final class RiskSettingInstructionView: BaseView {
 		}
 		enum Spacing {
 			static let titleToHeader: CGFloat = 24
-			static let headerToControls: CGFloat = 32
-			static let controlsToMoreButton: CGFloat = 24
+			static let headerToMoreButton: CGFloat = 16
+			static let moreButtonToControls: CGFloat = 32
+			static let controlsToErrorView: CGFloat = 16
 		}
 		enum Title {
 			static let lineHeight: CGFloat = 32
@@ -61,6 +62,13 @@ final class RiskSettingInstructionView: BaseView {
 		return view
 	}()
 	
+	private let errorView: ErrorView = {
+		let view = ErrorView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		return view
+	}()
+	
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
 	override func setupViews() {
@@ -83,8 +91,9 @@ final class RiskSettingInstructionView: BaseView {
 		addSubview(footerButtonView)
 		scrollView.addSubview(titleLabel)
 		scrollView.addSubview(headerLabel)
-		scrollView.addSubview(riskSettingControlsView)
 		scrollView.addSubview(moreButton)
+		scrollView.addSubview(riskSettingControlsView)
+		scrollView.addSubview(errorView)
 	}
 	
 	override func setupViewConstraints() {
@@ -118,19 +127,26 @@ final class RiskSettingInstructionView: BaseView {
 			headerLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
 														constant: -2 * ViewTraits.Margin.edge),
 			
-			riskSettingControlsView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor,
-													  constant: ViewTraits.Spacing.headerToControls),
-			riskSettingControlsView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-			riskSettingControlsView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
-			riskSettingControlsView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-			
-			moreButton.topAnchor.constraint(equalTo: riskSettingControlsView.bottomAnchor,
-											constant: ViewTraits.Spacing.controlsToMoreButton),
+			moreButton.topAnchor.constraint(equalTo: headerLabel.bottomAnchor,
+											constant: ViewTraits.Spacing.headerToMoreButton),
 			moreButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
 											 constant: ViewTraits.Margin.edge),
 			moreButton.rightAnchor.constraint(lessThanOrEqualTo: scrollView.rightAnchor,
 											  constant: -ViewTraits.Margin.edge),
-			moreButton.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
+			
+			riskSettingControlsView.topAnchor.constraint(equalTo: moreButton.bottomAnchor,
+													  constant: ViewTraits.Spacing.moreButtonToControls),
+			riskSettingControlsView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+			riskSettingControlsView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			riskSettingControlsView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+			
+			errorView.topAnchor.constraint(equalTo: riskSettingControlsView.bottomAnchor,
+											constant: ViewTraits.Spacing.controlsToErrorView),
+			errorView.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
+											 constant: ViewTraits.Margin.edge),
+			errorView.rightAnchor.constraint(lessThanOrEqualTo: scrollView.rightAnchor,
+											  constant: -ViewTraits.Margin.edge),
+			errorView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
 											   constant: -ViewTraits.Margin.edge)
 		])
 	}
@@ -158,6 +174,12 @@ final class RiskSettingInstructionView: BaseView {
 		}
 	}
 	
+	var errorMessage: String? {
+		didSet {
+			errorView.error = errorMessage
+		}
+	}
+	
 	var moreButtonTitle: String? {
 		didSet {
 			moreButton.title = moreButtonTitle
@@ -165,4 +187,11 @@ final class RiskSettingInstructionView: BaseView {
 	}
 	
 	var readMoreCommand: (() -> Void)?
+	
+	var hasErrorState: Bool? {
+		didSet {
+			guard let hasError = hasErrorState else { return }
+			errorView.isHidden = !hasError
+		}
+	}
 }

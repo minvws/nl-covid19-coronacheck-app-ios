@@ -116,7 +116,9 @@ final class CheckIdentityViewModel: Logging {
 	func showVerifiedAccess() {
 		
 		let verifiedType: VerifiedType
-		let riskSetting = userSettings.scanRiskLevelValue
+		guard let riskSetting = userSettings.scanRiskLevelValue else {
+			fatalError("Risk level should be set")
+		}
 		
 		if verificationDetails.isSpecimen == "1" {
 			verifiedType = .demo(riskSetting)

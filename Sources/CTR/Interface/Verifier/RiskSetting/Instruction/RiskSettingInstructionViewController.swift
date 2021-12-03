@@ -46,6 +46,8 @@ final class RiskSettingInstructionViewController: BaseViewController {
 		viewModel.$moreButtonTitle.binding = { [weak self] in self?.sceneView.moreButtonTitle = $0 }
 		viewModel.$riskLevel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.riskLevel = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
+		viewModel.$errorMessage.binding = { [weak self] in self?.sceneView.errorMessage = $0 }
+		viewModel.$shouldDisplayNotSetError.binding = { [weak self] in self?.sceneView.hasErrorState = $0 }
 		
 		sceneView.riskSettingControlsView.selectRiskCommand = { [weak self] riskSetting in
 			

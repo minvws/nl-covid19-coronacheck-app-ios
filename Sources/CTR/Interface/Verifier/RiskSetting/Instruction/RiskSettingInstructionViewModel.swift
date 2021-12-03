@@ -16,29 +16,22 @@ final class RiskSettingInstructionViewModel: Logging {
 	
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_firsttimeuse_title()
-	
 	@Bindable private(set) var header = L.verifier_risksetting_firsttimeuse_header()
-	
 	@Bindable private(set) var lowRiskTitle = L.verifier_risksetting_lowrisk_title()
-	
 	@Bindable private(set) var lowRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
-	
 	@Bindable private(set) var lowRiskAccessibilityLabel = "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
-	
 	@Bindable private(set) var highRiskTitle = L.verifier_risksetting_highrisk_title()
-	
 	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
-	
 	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-	
 	@Bindable private(set) var moreButtonTitle = L.verifier_risksetting_readmore()
-	
 	@Bindable private(set) var primaryButtonTitle = L.verifierScaninstructionsButtonStartscanning()
+	@Bindable private(set) var errorMessage = L.verification_policy_selection_error_message()
+	@Bindable private(set) var shouldDisplayNotSetError = false
+	@Bindable private(set) var riskLevel: RiskLevel?
 	
-	@Bindable private(set) var riskLevel: RiskLevel
-	
-	var selectRisk: RiskLevel {
+	var selectRisk: RiskLevel? {
 		didSet {
+			shouldDisplayNotSetError = false
 			userSettings.scanRiskLevelValue = selectRisk
 		}
 	}
@@ -63,6 +56,10 @@ final class RiskSettingInstructionViewModel: Logging {
 	
 	func startScanner() {
 		
-		coordinator?.userDidCompletePages()
+		if selectRisk == nil {
+			shouldDisplayNotSetError = true
+		} else {
+			coordinator?.userDidCompletePages()
+		}
 	}
 }
