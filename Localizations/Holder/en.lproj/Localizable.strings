@@ -412,7 +412,7 @@
 "holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Please contact your test location to verify if your details were entered into the system correctly.</p>";
 "holder.positiveTest.nolist.title" = "No positive test result available";
 "holder.positiveTest.recoveryAndVaccination.action" = "To my certificates";
-"holder.positiveTest.recoveryAndVaccination.message" = "<p>A Dutch vaccination certificate has been created.</p><p>You tested positive less than %@ days ago. Therefore a recovery certificate has also been created.</p>";
+"holder.positiveTest.recoveryAndVaccination.message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
 "holder.positiveTest.recoveryAndVaccination.title" = "Created vaccination and recovery certificates";
 "holder.positiveTest.recoveryOnly.action" = "To my certificates";
 "holder.positiveTest.recoveryOnly.message" = "<p>You tested positive after your first vaccination. Your test result is therefore not suitable for creating a Dutch vaccination certificate. However, a recovery certificate has been created.</p><p>Check the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for more information.</p>";
@@ -440,7 +440,7 @@
 "holder.recovery.tooOld.message" = "<p>It has been too long ago since you tested positive for coronavirus. Therefore, your test result is no longer valid. Unfortunately, you cannot create a recovery certificate.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.tooOld.title" = "Positive test result no longer valid";
 "holder.recovery.vaccinationOnly.action" = "To my certificates";
-"holder.recovery.vaccinationOnly.message" = "<p>You were tested positive for coronavirus longer than %@ days ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>Because you were tested positive before your first vaccination, one shot means you’re fully vaccinated. Therefore, a full vaccination certificate has been created instead.</p><p>For more information, please check the <a href=\"https://coronacheck.nl/en/guidepost\"> Guidepost</a>.</p>";
+"holder.recovery.vaccinationOnly.message" = "<p>You were tested positive for coronavirus longer too long ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>Because you were tested positive before your first vaccination, one shot means you’re fully vaccinated. Therefore, a full vaccination certificate has been created instead.</p><p>For more information, please check the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.vaccinationOnly.title" = "Vaccination certificate instead of recovery certificate";
 "holder.recovery.wrong.body" = "<p>Please contact your test location. They can help you change these details.</p>";
 "holder.recoveryvalidityextension.extensionavailable.button.submit" = "Extend certificate";

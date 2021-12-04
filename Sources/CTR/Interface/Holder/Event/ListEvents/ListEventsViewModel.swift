@@ -145,7 +145,7 @@ class ListEventsViewModel: Logging {
 				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
 				// > 0 -> Success
 
-				guard eventModeForStorage != .positiveTest else {
+				guard eventModeForStorage != .positiveTest, eventModeForStorage != .recovery  else {
 					return true
 				}
 
@@ -266,8 +266,7 @@ class ListEventsViewModel: Logging {
 		inspectGreencardResponseForPositiveTestAndRecovery(
 			greencardResponse,
 			onVaccinationAndRecovery: {
-				let recoveryEventValidityDays = self.remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
-				self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated("\(recoveryEventValidityDays)")
+				self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
 			},
 			onVaccinationOnly: {
 				self.completeFlow()
@@ -299,8 +298,7 @@ class ListEventsViewModel: Logging {
 				if self.hasExistingDomesticVaccination {
 					self.viewState = self.recoveryEventsTooOld()
 				} else {
-					let recoveryEventValidityDays = self.remoteConfigManager.storedConfiguration.recoveryEventValidityDays ?? 365
-					self.viewState = self.recoveryFlowVaccinationOnly("\(recoveryEventValidityDays)")
+					self.viewState = self.recoveryFlowVaccinationOnly()
 				}
 			},
 			onRecoveryOnly: {

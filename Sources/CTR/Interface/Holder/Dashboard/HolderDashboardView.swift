@@ -201,6 +201,7 @@ extension HolderDashboardView: DashboardTabBarDelegate {
 	func dashboardTabBar(_ tabBar: DashboardTabBar, didSelect tab: DashboardTab) {
 		let scrollOffset = CGPoint(x: scrollView.bounds.width * CGFloat(tab.rawValue), y: 0)
 		scrollView.setContentOffset(scrollOffset, animated: true)
+		UIAccessibility.post(notification: .pageScrolled, argument: nil)
 				
 		updateScrollViewContentOffsetObserver(for: tab)
 		delegate?.holderDashboardView(self, didDisplay: tab)
