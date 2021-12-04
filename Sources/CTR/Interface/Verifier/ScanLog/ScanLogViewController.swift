@@ -74,8 +74,10 @@ class ScanLogViewController: BaseViewController {
 				if case let .message(message) = entry {
 					strongSelf.sceneView.logStackView.addArrangedSubview(strongSelf.sceneView.createLabel(message))
 				}
-				if case let .entry(type: riskType, timeInterval: timeInterval, message: message) = entry {
-					strongSelf.sceneView.logStackView.addArrangedSubview( ScanLogEntryView.makeView(risk: riskType, time: timeInterval, message: message))
+				if case let .entry(type: riskType, timeInterval: timeInterval, message: message, warning: warning) = entry {
+					strongSelf.sceneView.logStackView.addArrangedSubview(
+						ScanLogEntryView.makeView(risk: riskType, time: timeInterval, message: message, error: warning)
+					)
 				}
 				// Always add a line underneath the entry
 				strongSelf.sceneView.addLineToLogStackView()
@@ -86,13 +88,14 @@ class ScanLogViewController: BaseViewController {
 
 extension ScanLogEntryView {
 
-	static func makeView(risk: String, time: String, message: String) -> ScanLogEntryView {
+	static func makeView(risk: String, time: String, message: String, error: String?) -> ScanLogEntryView {
 
 		let view = ScanLogEntryView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.risk = risk
 		view.time = time
 		view.message = message
+		view.error = error
 		return view
 	}
 }

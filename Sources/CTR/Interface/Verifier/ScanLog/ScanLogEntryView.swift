@@ -15,19 +15,22 @@ class ScanLogEntryView: BaseView {
 		enum Risk {
 			static let lineHeight: CGFloat = 22
 			static let kerning: CGFloat = -0.41
-			static let leadingMargin: CGFloat = 12
-			static let trailingMargin: CGFloat = 32
 		}
 
 		enum Time {
 			static let lineHeight: CGFloat = 18
 			static let kerning: CGFloat = -0.24
-			static let bottomMargin: CGFloat = 8
 		}
 
 		enum Message {
 			static let lineHeight: CGFloat = 17
 			static let kerning: CGFloat = -0.41
+		}
+
+		enum StackView {
+			static let spacing: CGFloat = 8
+			static let horizontalSpacing: CGFloat = 32
+			static let leadingMargin: CGFloat = 12
 		}
 	}
 
@@ -49,10 +52,33 @@ class ScanLogEntryView: BaseView {
 		return Label(body: nil).multiline()
 	}()
 
-	private let containerView: UIView = {
+	private let errorView: ErrorView = {
 
-		let view = UIView()
+		let view = ErrorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		return view
+	}()
+
+	let horizontalStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .horizontal
+		view.alignment = .center
+		view.distribution = .fill
+		view.spacing = ViewTraits.StackView.horizontalSpacing
+		return view
+	}()
+
+	let verticalStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .fill
+		view.distribution = .fill
+		view.spacing = ViewTraits.StackView.spacing
 		return view
 	}()
 
@@ -60,6 +86,7 @@ class ScanLogEntryView: BaseView {
 
 		super.setupViews()
 		view?.backgroundColor = Theme.colors.viewControllerBackground
+		riskLabel.setContentHuggingPriority(.required, for: .horizontal)
 	}
 
 	/// Setup the hierarchy
@@ -67,61 +94,23 @@ class ScanLogEntryView: BaseView {
 
 		super.setupViewHierarchy()
 
-		addSubview(riskLabel)
-		addSubview(containerView)
+		horizontalStackView.embed(
+			in: self,
+			insets: UIEdgeInsets(top: 0, left: ViewTraits.StackView.leadingMargin, bottom: 0, right: 0)
+		)
 
-		containerView.addSubview(timeLabel)
-		containerView.addSubview(messageLabel)
-	}
+		horizontalStackView.addArrangedSubview(riskLabel)
+		horizontalStackView.setCustomSpacing(ViewTraits.StackView.horizontalSpacing, after: riskLabel)
+		horizontalStackView.addArrangedSubview(verticalStackView)
 
-	/// Setup the constraints
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-		NSLayoutConstraint.activate([
-
-			// Risk
-			riskLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.Risk.leadingMargin
-			),
-			riskLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-			riskLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 80), // Ugly fix, to be improved.
-
-			// Container
-			containerView.leadingAnchor.constraint(
-				equalTo: riskLabel.trailingAnchor,
-				constant: ViewTraits.Risk.trailingMargin
-			),
-			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			containerView.topAnchor.constraint(equalTo: topAnchor),
-			containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-			// Time
-			timeLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
-			timeLabel.leadingAnchor.constraint( equalTo: containerView.leadingAnchor),
-			timeLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.Time.bottomMargin
-			),
-
-			// Message
-			messageLabel.leadingAnchor.constraint(
-				equalTo: riskLabel.trailingAnchor,
-				constant: ViewTraits.Risk.trailingMargin
-			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: containerView.trailingAnchor
-			),
-			messageLabel.bottomAnchor.constraint(
-				equalTo: containerView.bottomAnchor
-			)
-		])
+		verticalStackView.addArrangedSubview(timeLabel)
+		verticalStackView.addArrangedSubview(errorView)
+		verticalStackView.addArrangedSubview(messageLabel)
 	}
 
 	func setAccessibilityLabel() {
 		
-		accessibilityLabel = "\(riskLabel.text ?? "") \(timeLabel.text ?? "").\n\(messageLabel.text ?? "")"
+		accessibilityLabel = "\(riskLabel.text ?? "").\n \(timeLabel.text ?? "").\n \(error ?? "") \n\(messageLabel.text ?? "")"
 	}
 
 	// MARK: Public Access
@@ -156,6 +145,13 @@ class ScanLogEntryView: BaseView {
 				kerning: ViewTraits.Message.kerning
 			)
 			setAccessibilityLabel()
+		}
+	}
+
+	var error: String? {
+		didSet {
+			errorView.error = error
+			errorView.isHidden = error == nil
 		}
 	}
 }
