@@ -25,7 +25,7 @@ final class RiskLevelManager: RiskLevelManaging {
 	private var observers = [ObserverToken: (RiskLevel?) -> Void]()
 	
 	required init() {
-		// Todo: persist the risk level across launches.
+		// Todo: persist the risk level across launches (keychain).
 		state = nil
 	}
 	
@@ -51,8 +51,11 @@ final class RiskLevelManager: RiskLevelManaging {
 #if DEBUG
 extension RiskLevelManaging {
 	
+	/// LLDB:
+	/// `e import CTR`
+	/// `Services.riskLevelManager.set(riskLevel: .high)`
 	func set(riskLevel: RiskLevel) {
-		let casted = self as! RiskLevelManager
+		let casted = self as! RiskLevelManager // swiftlint:disable:this force_cast
 		casted.state = riskLevel
 	}
 }

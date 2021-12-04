@@ -103,13 +103,6 @@ class VerifierStartViewModel: Logging {
 		}()
 	}
 	
-	// MARK: - Static
-	
-	/// Query the Remote Config Manager for the scan lock duration.
-	private static var configScanLockDuration: TimeInterval {
-		TimeInterval(Services.remoteConfigManager.storedConfiguration.scanLockSeconds ?? 300)
-	}
-	
 	// MARK: - Internal vars
 	
 	var loggingCategory: String = "VerifierStartViewModel"
@@ -129,31 +122,23 @@ class VerifierStartViewModel: Logging {
 
 	// MARK: - State
 	
-	@Atomic<Mode> // swiftlint:disable:next let_var_whitespace
-	private var mode = .locked(mode: .highRisk, timeRemaining: 30)
+	@Atomic<Mode>
+	private var mode = .noLevelSet // swiftlint:disable:this let_var_whitespace
 	
 	private lazy var lockLabelCountdownTimer: Timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-		guard let self = self else { return }
-
-		// Simplistic implementation for now. Once we have the locking mechanism integrated,
-		// this can be revisited.
-		guard case let .locked(mode, timeRemaining) = self.mode else { return }
-
-		self.mode = {
-			if timeRemaining <= 1 {
-				return mode
-			} else {
-				return .locked(mode: mode, timeRemaining: timeRemaining - 1)
-			}
-		}()
+		guard let self = self,
+			  case let .locked(mode, timeRemaining) = self.mode,
+			  timeRemaining > 0
+		else { return }
+		self.mode = .locked(mode: mode, timeRemaining: timeRemaining - 1)
 	}
 
 	// MARK: - Observer tokens
-		
+	
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
-//	private var scanLockObserverToken: FictionalScanLockProvider.ObserverToken?
-//	private var riskLevelObserverToken: FictionalRiskLevelProvider.ObserverToken?
-		
+	private var scanLockObserverToken: ScanLockManager.ObserverToken?
+	private var riskLevelObserverToken: RiskLevelManager.ObserverToken?
+
 	// MARK: - Dependencies
 	
 	private weak var coordinator: VerifierCoordinatorDelegate?
@@ -161,6 +146,8 @@ class VerifierStartViewModel: Logging {
 	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
 	private var userSettings: UserSettingsProtocol
 	private let clockDeviationManager: ClockDeviationManaging = Services.clockDeviationManager
+	private let scanLockProvider: ScanLockManaging
+	private let riskLevelProvider: RiskLevelManaging
 	
 	/// Initializer
 	/// - Parameters:
@@ -168,15 +155,21 @@ class VerifierStartViewModel: Logging {
 	///   - userSettings: the user managed settings
 	init(
 		coordinator: VerifierCoordinatorDelegate,
+		scanLockProvider: ScanLockManaging,
+		riskLevelProvider: RiskLevelManaging,
 		userSettings: UserSettingsProtocol = UserSettings()
 	) {
 
 		self.coordinator = coordinator
+		self.scanLockProvider = scanLockProvider
+		self.riskLevelProvider = riskLevelProvider
 		self.userSettings = userSettings
 
 		// Add a `didSet` callback to the Atomic<Mode>:
-		$mode.projectedValue.didSet = { [weak self] newMode in
+		$mode.projectedValue.didSet = { [weak self] atomic in
 			guard let self = self else { return }
+			
+			let newMode: Mode = atomic.wrappedValue
 			self.reloadUI(forMode: newMode, hasClockDeviation: self.clockDeviationManager.hasSignificantDeviation ?? false)
 		}
 		
@@ -186,7 +179,16 @@ class VerifierStartViewModel: Logging {
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
 		
+		scanLockObserverToken = scanLockProvider.appendObserver { [weak self] lockState in
+			self?.lockStateDidChange(lockState: lockState)
+		}
+		
+		riskLevelObserverToken = riskLevelProvider.appendObserver { [weak self] riskLevel in
+			self?.riskLevelDidChange(riskLevel: riskLevel)
+		}
+
 		reloadUI(forMode: mode, hasClockDeviation: clockDeviationManager.hasSignificantDeviation ?? false)
+		
 		lockLabelCountdownTimer.fire()
 	}
 	
@@ -206,7 +208,68 @@ class VerifierStartViewModel: Logging {
 		largeImage = mode.largeImage
 		riskIndicator = mode.riskIndicator
 	}
+	
+	private func lockStateDidChange(lockState: ScanLockManager.State) {
+		
+		// Update mode with the new lockState:
+		self.$mode.projectedValue.mutate { (mode: inout Mode) in
+			switch (mode, lockState) {
 
+				// We're already locked, but maybe the `until` time has changed?
+				case let (.locked(prelockMode, _), .locked(until)):
+					mode = .locked(mode: prelockMode, timeRemaining: until.timeIntervalSinceNow)
+
+				// We're not already locked, but must now lock:
+				case (_, .locked(let until)):
+					mode = .locked(mode: mode, timeRemaining: until.timeIntervalSinceNow)
+
+				// We're locked, but must unlock:
+				case let (.locked(prelockMode, _), .unlocked):
+					mode = prelockMode
+
+				// We're not locked and so unlocking does nothing:
+				case (_, .unlocked):
+					break
+			}
+		}
+	}
+	
+	private func riskLevelDidChange(riskLevel: RiskLevel?) {
+		// Update mode with the new riskLevel:
+		self.$mode.projectedValue.mutate { (mode: inout Mode) in
+			switch (mode, riskLevel) {
+				
+				// RiskLevel changed, but we're locked. Just update the lock:
+				case let (.locked(_, timeRemaining), .high):
+					mode = .locked(mode: .highRisk, timeRemaining: timeRemaining)
+				case let (.locked(_, timeRemaining), .low):
+					mode = .locked(mode: .lowRisk, timeRemaining: timeRemaining)
+				case let (.locked(_, timeRemaining), .none):
+					mode = .locked(mode: .noLevelSet, timeRemaining: timeRemaining)
+				
+				// Risk Level changed: update mode
+				case (_, .high):
+					mode = .highRisk
+				case (_, .low):
+					mode = .lowRisk
+				case (_, .none):
+					mode = .noLevelSet
+			}
+		}
+	}
+
+	/// Update the public keys
+	private func updatePublicKeys() {
+
+		// Fetch the public keys from the issuer
+		cryptoLibUtility?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: nil, completion: nil)
+	}
+}
+
+// MARK: - Handle User Input:
+
+extension VerifierStartViewModel {
+	
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }
 
@@ -229,12 +292,5 @@ class VerifierStartViewModel: Logging {
 
 	func userDidTapClockDeviationWarningReadMore() {
 		coordinator?.userWishesMoreInfoAboutClockDeviation()
-	}
-
-	/// Update the public keys
-	private func updatePublicKeys() {
-
-		// Fetch the public keys from the issuer
-		cryptoLibUtility?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: nil, completion: nil)
 	}
 }

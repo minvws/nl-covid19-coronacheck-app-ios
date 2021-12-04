@@ -41,11 +41,11 @@ final class ScanLockManager: ScanLockManaging {
 	
 	// MARK: - Vars
 	
-	@Atomic<State> private(set) var state: State = .unlocked
+	@Atomic<State> fileprivate(set) var state: State = .unlocked
 	private var observers = [ObserverToken: (State) -> Void]()
 	
 	@Keychain(name: "scanLockUntil", service: Constants.keychainService, clearOnReinstall: false)
-	private var keychainScanLockUntil: Date = .distantPast // swiftlint:disable:this let_var_whitespace
+	fileprivate var keychainScanLockUntil: Date = .distantPast // swiftlint:disable:this let_var_whitespace
 	
 	private var recheckTimer: Timer?
 	
@@ -77,10 +77,10 @@ final class ScanLockManager: ScanLockManaging {
 		}
 		
 		// Add a change handler to `state`:
-		$state.projectedValue.didSet = { [weak self] oldState, newState in
-			guard let self = self, oldState != newState else { return }
+		$state.projectedValue.didSet = { [weak self] atomic in
+			guard let self = self else { return }
 
-			if case .locked(let until) = newState {
+			if case .locked(let until) = atomic.wrappedValue {
 				// update the keychain:
 				self.keychainScanLockUntil = until
 			}
@@ -102,12 +102,6 @@ final class ScanLockManager: ScanLockManaging {
 		let lockUntil = now().addingTimeInterval(lockDuration)
 		self.keychainScanLockUntil = lockUntil
 		recheck()
-	}
-	
-	// TODO: delete
-	fileprivate func debugUnlock() {
-		self.keychainScanLockUntil = .distantPast
-		self.state = .unlocked
 	}
 	
 	func setupNotificationObservers() {
@@ -168,9 +162,16 @@ final class ScanLockManager: ScanLockManaging {
 
 #if DEBUG
 extension ScanLockManaging {
+	
+	/// LLDB:
+	/// `e import CTR`
+	/// `Services.scanLockManager.unlock()`
+	/// `Services.scanLockManager.lock()`
+	/// etc
 	func unlock() {
-		let casted = self as! ScanLockManager
-		casted.debugUnlock()
+		let casted = self as! ScanLockManager // swiftlint:disable:this force_cast
+		casted.keychainScanLockUntil = .distantPast
+		casted.state = .unlocked
 	}
 }
 #endif
