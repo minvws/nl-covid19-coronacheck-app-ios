@@ -1,6 +1,7 @@
 "general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
 "new.terms.highlights" = "<b>Here's what changed</b><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";
+"new_in_app_subtitle" = "New in the app";
 "updateApp.content" = "To continue, install the latest version of the app";
 /* Koptekst in de over de app pagina */
 "verifier.about.readmore" = "Read more:";

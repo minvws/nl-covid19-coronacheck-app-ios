@@ -412,7 +412,7 @@
 "holder.positiveTest.nolist.message" = "<p>Ben je net getest? Het kan een paar uur  duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Neem dan contact op met je testlocatie om te controleren of je gegevens goed in het systeem staan.</p>";
 "holder.positiveTest.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.positiveTest.recoveryAndVaccination.action" = "Naar mijn bewijzen";
-"holder.positiveTest.recoveryAndVaccination.message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Je positieve test is minder dan %@ dagen geleden afgenomen. Daarom is er ook een herstelbewijs gemaakt.</p>";
+"holder.positiveTest.recoveryAndVaccination.message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
 "holder.positiveTest.recoveryAndVaccination.title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder.positiveTest.recoveryOnly.action" = "Naar mijn bewijzen";
 "holder.positiveTest.recoveryOnly.message" = "<p>Je bent positief getest ná je eerste vaccinatie. Daardoor is je testuitslag niet geschikt om een Nederlands vaccinatiebewijs van te maken. Er is wel een herstelbewijs gemaakt.</p><p>Kijk voor meer informatie bij de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a>.</p>";
@@ -440,7 +440,7 @@
 "holder.recovery.tooOld.message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daarom is je testuitslag niet meer geldig. Je kunt helaas geen herstelbewijs maken.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.recovery.tooOld.title" = "Positieve testuitslag niet meer geldig";
 "holder.recovery.vaccinationOnly.action" = "Naar mijn bewijzen";
-"holder.recovery.vaccinationOnly.message" = "<p>Het is langer dan %@ dagen geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Omdat je positief getest bent vóór je eerste prik, ben je met één prik volledig gevaccineerd. Daarom is er wel een volledig vaccinatiebewijs gemaakt.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer</a>.</p>";
+"holder.recovery.vaccinationOnly.message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Omdat je positief getest bent vóór je eerste prik, ben je met één prik volledig gevaccineerd. Daarom is er wel een volledig vaccinatiebewijs gemaakt.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.recovery.vaccinationOnly.title" = "Geen herstelbewijs, wel een vaccinatiebewijs";
 "holder.recovery.wrong.body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.recoveryvalidityextension.extensionavailable.button.submit" = "Verleng bewijs";
@@ -664,6 +664,8 @@
 "holder.vaccination.status.complete.recovery" = "ja (eerder corona gehad)";
 "holder.vaccination.wrong.body" = "<p>Neem contact op met de zorgverlener waar je bent gevaccineerd. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.vaccination.wrong.title" = "Klopt er iets niet?";
+"holder_my_overview_3g_test_validity_bottom_sheet_title" = "Testbewijs alleen geldig voor 3G-toegang";
+"holder_my_overview_3g_test_validity_card" = "Je testbewijs is alleen geldig voor 3G-toegang in Nederland";
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";
 "internet.required.text" = "Om de app op te starten heb je internet nodig.";

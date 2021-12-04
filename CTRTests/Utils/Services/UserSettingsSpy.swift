@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -183,6 +184,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedLastRecommendUpdateDismissalTimestampGetter = true
 			invokedLastRecommendUpdateDismissalTimestampGetterCount += 1
 			return stubbedLastRecommendUpdateDismissalTimestamp
+		}
+	}
+
+	var invokedLastSeenRecommendedUpdateSetter = false
+	var invokedLastSeenRecommendedUpdateSetterCount = 0
+	var invokedLastSeenRecommendedUpdate: String?
+	var invokedLastSeenRecommendedUpdateList = [String?]()
+	var invokedLastSeenRecommendedUpdateGetter = false
+	var invokedLastSeenRecommendedUpdateGetterCount = 0
+	var stubbedLastSeenRecommendedUpdate: String!
+
+	var lastSeenRecommendedUpdate: String? {
+		set {
+			invokedLastSeenRecommendedUpdateSetter = true
+			invokedLastSeenRecommendedUpdateSetterCount += 1
+			invokedLastSeenRecommendedUpdate = newValue
+			invokedLastSeenRecommendedUpdateList.append(newValue)
+		}
+		get {
+			invokedLastSeenRecommendedUpdateGetter = true
+			invokedLastSeenRecommendedUpdateGetterCount += 1
+			return stubbedLastSeenRecommendedUpdate
 		}
 	}
 
