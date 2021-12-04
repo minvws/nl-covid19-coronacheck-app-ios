@@ -173,6 +173,8 @@ class VerifierStartViewModel: Logging {
 			self.reloadUI(forMode: newMode, hasClockDeviation: self.clockDeviationManager.hasSignificantDeviation ?? false)
 		}
 		
+		reloadUI(forMode: mode, hasClockDeviation: clockDeviationManager.hasSignificantDeviation ?? false)
+		
 		// Add an observer for when Clock Deviation is detected/undetected:
 		clockDeviationObserverToken = clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
 			guard let self = self else { return }
@@ -187,8 +189,6 @@ class VerifierStartViewModel: Logging {
 			self?.riskLevelDidChange(riskLevel: riskLevel)
 		}
 
-		reloadUI(forMode: mode, hasClockDeviation: clockDeviationManager.hasSignificantDeviation ?? false)
-		
 		lockLabelCountdownTimer.fire()
 	}
 	
