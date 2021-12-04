@@ -43,33 +43,27 @@ class ScanLogViewModel {
 		listHeader = L.scan_log_list_header(scanLogStorageMinutes)
 
 		let entries = scanManager?.getScanEntries(seconds: configuration.scanLogStorageSeconds ?? 3600) ?? []
-		handleScanLogEntries(entries)
+		displayEntries.append(contentsOf: ScanLogDataSource(entries: entries).getDisplayEntries())
+
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-12 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-10 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-9 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-8 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-7 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-6 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-5 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-4 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-3 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-2 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1.5 * 60))
+		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1 * 60))
 	}
 
 	func openUrl(_ url: URL) {
 
 		coordinator?.openUrl(url, inApp: true)
-	}
-
-	private func handleScanLogEntries(_ entries: [ScanLogEntry]) {
-
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-12 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-10 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-9 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-8 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-7 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-6 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-5 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-4 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-3 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-2 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1.5 * 60))
-//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1 * 60))
-
-		let dataSource = ScanLogDataSource(entries: entries)
-		displayEntries.append(contentsOf: dataSource.getDisplayEntries())
 	}
 }
 
@@ -159,11 +153,11 @@ struct ScanLogDataSource: Logging {
 
 		var result = [ScanLogDisplayEntry]()
 
-		var first = true
+		var firstItem = true
 		log.forEach { item in
 
-			if let scanLogDisplayEntry = convert(item, replaceToDate: first) {
-				first = false
+			if let scanLogDisplayEntry = convert(item, replaceToDate: firstItem) {
+				firstItem = false
 				result.append(scanLogDisplayEntry)
 			}
 		}

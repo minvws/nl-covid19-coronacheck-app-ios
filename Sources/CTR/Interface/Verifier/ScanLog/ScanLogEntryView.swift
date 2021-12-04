@@ -86,6 +86,8 @@ class ScanLogEntryView: BaseView {
 
 		super.setupViews()
 		view?.backgroundColor = Theme.colors.viewControllerBackground
+
+		// Make the riskLabel hug the "2G" text
 		riskLabel.setContentHuggingPriority(.required, for: .horizontal)
 	}
 
@@ -111,6 +113,17 @@ class ScanLogEntryView: BaseView {
 	func setAccessibilityLabel() {
 		
 		accessibilityLabel = "\(riskLabel.text ?? "").\n \(timeLabel.text ?? "").\n \(error ?? "") \n\(messageLabel.text ?? "")"
+	}
+
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+
+		riskLabel.isAccessibilityElement = false
+		timeLabel.isAccessibilityElement = false
+		errorView.isAccessibilityElement = false
+		messageLabel.isAccessibilityElement = false
+		isAccessibilityElement = true
 	}
 
 	// MARK: Public Access
@@ -152,6 +165,7 @@ class ScanLogEntryView: BaseView {
 		didSet {
 			errorView.error = error
 			errorView.isHidden = error == nil
+			setAccessibilityLabel()
 		}
 	}
 }
