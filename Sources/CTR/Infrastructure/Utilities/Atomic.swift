@@ -17,7 +17,8 @@ class Atomic<Value> {
 	/// Serial Queue
 	private let queue = DispatchQueue(label: "nl.coronacheck.atomicserialqueue.\(UUID().uuidString)")
 	private var value: Value
-	var didSet: ((Value) -> Void)?
+	
+	var didSet: ((Atomic<Value>) -> Void)?
 	
 	var projectedValue: Atomic<Value> {
 		return self
@@ -39,9 +40,13 @@ class Atomic<Value> {
 	}
 	
 	func mutate(_ mutation: (inout Value) -> Void) {
+		
 		queue.sync {
 			mutation(&value)
 		}
-		didSet?(value)
+		
+		DispatchQueue.main.async {
+			self.didSet?(self)
+		}
 	}
 }
