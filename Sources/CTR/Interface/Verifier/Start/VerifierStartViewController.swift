@@ -63,7 +63,6 @@ class VerifierStartViewController: BaseViewController {
 		sceneView.clockDeviationWarningView.buttonTitle = L.verifierStartClockdeviationwarningButton()
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
-
 			self?.viewModel.primaryButtonTapped()
 		}
 
