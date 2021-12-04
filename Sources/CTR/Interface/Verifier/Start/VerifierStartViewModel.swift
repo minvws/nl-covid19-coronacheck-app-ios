@@ -127,31 +127,18 @@ class VerifierStartViewModel: Logging {
 	@Bindable private(set) var shouldShowClockDeviationWarning = false
 	@Bindable private(set) var riskIndicator: (UIColor, String)?
 
-	// MARK: - Dependencies
-	
-	private weak var coordinator: VerifierCoordinatorDelegate?
-	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
-	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
-	private var userSettings: UserSettingsProtocol
-	private let clockDeviationManager: ClockDeviationManaging = Services.clockDeviationManager
-
 	// MARK: - State
 	
-	private var mode: Mode = .noLevelSet {
-		didSet {
-			reloadUI(forMode: mode, hasClockDeviation: clockDeviationManager.hasSignificantDeviation ?? false)
-		}
-	}
-	
-	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
+	@Atomic<Mode> // swiftlint:disable:next let_var_whitespace
+	private var mode = .locked(mode: .highRisk, timeRemaining: 30)
 	
 	private lazy var lockLabelCountdownTimer: Timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
 		guard let self = self else { return }
-		
+
 		// Simplistic implementation for now. Once we have the locking mechanism integrated,
 		// this can be revisited.
 		guard case let .locked(mode, timeRemaining) = self.mode else { return }
-		
+
 		self.mode = {
 			if timeRemaining <= 1 {
 				return mode
@@ -160,6 +147,20 @@ class VerifierStartViewModel: Logging {
 			}
 		}()
 	}
+
+	// MARK: - Observer tokens
+		
+	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
+//	private var scanLockObserverToken: FictionalScanLockProvider.ObserverToken?
+//	private var riskLevelObserverToken: FictionalRiskLevelProvider.ObserverToken?
+		
+	// MARK: - Dependencies
+	
+	private weak var coordinator: VerifierCoordinatorDelegate?
+	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
+	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
+	private var userSettings: UserSettingsProtocol
+	private let clockDeviationManager: ClockDeviationManaging = Services.clockDeviationManager
 	
 	/// Initializer
 	/// - Parameters:
@@ -173,19 +174,24 @@ class VerifierStartViewModel: Logging {
 		self.coordinator = coordinator
 		self.userSettings = userSettings
 
-		reloadUI(forMode: mode, hasClockDeviation: clockDeviationManager.hasSignificantDeviation ?? false)
+		// Add a `didSet` callback to the Atomic<Mode>:
+		$mode.projectedValue.didSet = { [weak self] newMode in
+			guard let self = self else { return }
+			self.reloadUI(forMode: newMode, hasClockDeviation: self.clockDeviationManager.hasSignificantDeviation ?? false)
+		}
 		
+		// Add an observer for when Clock Deviation is detected/undetected:
 		clockDeviationObserverToken = clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
 			guard let self = self else { return }
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
 		
+		reloadUI(forMode: mode, hasClockDeviation: clockDeviationManager.hasSignificantDeviation ?? false)
 		lockLabelCountdownTimer.fire()
 	}
 	
 	deinit {
 		clockDeviationObserverToken.map(clockDeviationManager.removeDeviationChangeObserver)
-		
 		lockLabelCountdownTimer.invalidate()
 	}
 	
