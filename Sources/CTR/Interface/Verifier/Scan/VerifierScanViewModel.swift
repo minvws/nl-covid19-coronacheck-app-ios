@@ -22,9 +22,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// The title of the scene
 	@Bindable private(set) var title: String
 
-	/// The message of the scene
-	@Bindable private(set) var message: String?
-
 	/// "Waar moet ik op letten?"
 	@Bindable private(set) var moreInformationButtonText: String?
 
@@ -44,7 +41,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.theCoordinator = coordinator
 
 		self.title = L.verifierScanTitle()
-		self.message = nil
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
 
@@ -59,15 +55,25 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 			switch Int64(verificationResult.status) {
 				case MobilecoreVERIFICATION_FAILED_IS_NL_DCC:
 
-					displayAlert(title: L.verifierResultAlertDccTitle(), message: L.verifierResultAlertDccMessage())
+					displayAlert(title: L.verifierResultAlertDccTitle(),
+								 message: L.verifierResultAlertDccMessage())
 
 				case MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX:
 
-					displayAlert(title: L.verifierResultAlertUnknownTitle(), message: L.verifierResultAlertUnknownMessage())
+					displayAlert(title: L.verifierResultAlertUnknownTitle(),
+								 message: L.verifierResultAlertUnknownMessage())
+					
+				case MobilecoreVERIFICATION_SUCCESS where verificationResult.details != nil:
+
+					guard let details = verificationResult.details else {
+						fallthrough
+					}
+					theCoordinator?.navigateToCheckIdentity(details)
 
 				default:
 					
-					theCoordinator?.navigateToScanResult(verificationResult)
+					theCoordinator?.navigateToDeniedAccess()
+					
 			}
 		}
 	}
@@ -77,8 +83,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		alert = AlertContent(
 			title: title,
 			subTitle: message,
-			cancelAction: nil,
-			cancelTitle: nil,
 			okAction: { [weak self] _ in
 				self?.shouldResumeScanning = true
 			},

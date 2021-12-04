@@ -27,6 +27,8 @@ protocol UserSettingsProtocol: AnyObject {
 	var lastSeenRecommendedUpdate: String? { get set }
 
 	var deviceAuthenticationWarningShown: Bool { get set }
+	
+	var scanRiskLevelValue: RiskLevel { get set }
 
 	// Flags for upgrading to Multiple DCCs:
 	var didCompleteEUVaccinationMigration: Bool { get set }
@@ -73,6 +75,9 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
+	
+	@UserDefaults(key: "scanRiskLevelValue")
+	var scanRiskLevelValue: RiskLevel = .low // swiftlint:disable:this let_var_whitespace
 
 	// MARK: - Multiple DCC migration:
 
@@ -106,12 +111,25 @@ extension UserSettings {
 		// Clear user defaults:
 		// We can not simply loop over all the keys, as some are needed for clear on reinstall for the keychain items.
 		let userDefaults = Foundation.UserDefaults.standard
-		["scanInstructionShown", "jailbreakWarningShown", "dashboardRegionToggleValue", "configFetchedTimestamp", "configFetchedHash",
-		"issuerKeysFetchedTimestamp", "lastScreenshotTime", "lastRecommendUpdateDismissalTimestamp", "lastSeenRecommendedUpdate",
-		"deviceAuthenticationWarningShown", "didCompleteEUVaccinationMigration", "didDismissEUVaccinationMigrationSuccessBanner",
-		 "shouldCheckRecoveryGreenCardRevisedValidity", "shouldShowRecoveryValidityExtensionCard",
-		 "shouldShowRecoveryValidityReinstationCard", "hasDismissedRecoveryValidityExtensionCompletionCard",
-		 "hasDismissedRecoveryValidityReinstationCompletionCard"]
-			.forEach(userDefaults.removeObject(forKey:))
+		[	"scanInstructionShown",
+			"jailbreakWarningShown",
+			"dashboardRegionToggleValue",
+			"configFetchedTimestamp",
+			"configFetchedHash",
+			"issuerKeysFetchedTimestamp",
+			"lastScreenshotTime",
+			"lastRecommendUpdateDismissalTimestamp",
+			"lastSeenRecommendedUpdate",
+			"deviceAuthenticationWarningShown",
+			"didCompleteEUVaccinationMigration",
+			"didDismissEUVaccinationMigrationSuccessBanner",
+			"deviceAuthenticationWarningShown",
+			"scanRiskSettingValue",
+			"shouldCheckRecoveryGreenCardRevisedValidity",
+			"shouldShowRecoveryValidityExtensionCard",
+			"shouldShowRecoveryValidityReinstationCard",
+			"hasDismissedRecoveryValidityExtensionCompletionCard",
+			"hasDismissedRecoveryValidityReinstationCompletionCard"
+		].forEach(userDefaults.removeObject(forKey:))
 	}
 }

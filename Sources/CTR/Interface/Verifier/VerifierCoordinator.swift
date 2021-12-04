@@ -20,10 +20,6 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	func navigateToScanInstruction()
 
-	/// Navigate to the scan result
-	/// - Parameter attributes: the scanned result
-	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult)
-
 	/// Display content
 	/// - Parameters:
 	///   - title: the title
@@ -33,8 +29,16 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutClockDeviation()
 	
 	func navigateToVerifiedInfo()
+
+	func userWishesToOpenScanLog()
 	
 	func userWishesToLaunchThirdPartyScannerApp()
+	
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails)
+	
+	func navigateToVerifiedAccess(_ verifiedType: VerifiedType)
+	
+	func navigateToDeniedAccess()
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -122,16 +126,37 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				navigateToScanInstruction()
 		}
 	}
-
-	/// Navigate to the scan result
-	/// - Parameter attributes: the scanned result
-	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult) {
+	
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails) {
 		
-		let viewController = VerifierResultViewController(
-			viewModel: VerifierResultViewModel(
+		let viewController = CheckIdentityViewController(
+			viewModel: CheckIdentityViewModel(
 				coordinator: self,
-				verificationResult: verificationResult,
-				isDeepLinkEnabled: thirdPartyScannerApp != nil
+				verificationDetails: verificationDetails,
+				isDeepLinkEnabled: thirdPartyScannerApp != nil,
+				userSettings: UserSettings()
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
+	
+	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
+		
+		let viewController = VerifiedAccessViewController(
+			viewModel: VerifiedAccessViewModel(
+				coordinator: self,
+				verifiedType: verifiedType
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushWithFadeAnimation(with: viewController,
+																							  animationDuration: VerifiedAccessViewTraits.Animation.verifiedDuration)
+	}
+	
+	func navigateToDeniedAccess() {
+		
+		let viewController = DeniedAccessViewController(
+			viewModel: DeniedAccessViewModel(
+				coordinator: self
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
@@ -178,6 +203,17 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let title: String = L.verifierClockDeviationDetectedTitle()
 		let message: String = L.verifierClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+
+	func userWishesToOpenScanLog() {
+
+		let viewController = ScanLogViewController(
+			viewModel: ScanLogViewModel(
+				coordinator: self,
+				configuration: remoteConfigManager.storedConfiguration
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 	
 	func navigateToVerifiedInfo() {
@@ -254,6 +290,16 @@ extension VerifierCoordinator: MenuDelegate {
 					isOpenedFromMenu: true
 				)
 				startChildCoordinator(coordinator)
+				
+			case .riskSetting:
+				let destination = RiskSettingViewController(
+					viewModel: RiskSettingViewModel(
+						coordinator: self,
+						userSettings: UserSettings()
+					)
+				)
+				navigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = navigationController
 
 			case .support:
 				guard let faqUrl = URL(string: L.verifierUrlFaq()) else {
@@ -298,7 +344,8 @@ extension VerifierCoordinator: MenuDelegate {
 		
 		return [
 			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
-			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions())
+			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions()),
+			MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting())
 		]
 	}
 	/// Get the items for the bottom menu

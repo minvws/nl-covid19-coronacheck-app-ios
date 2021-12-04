@@ -26,6 +26,7 @@ final class Services {
 	private static var couplingManagingType: CouplingManaging.Type = CouplingManager.self
 	private static var mappingManagingType: MappingManaging.Type = MappingManager.self
 	private static var clockDeviationType: ClockDeviationManaging.Type = ClockDeviationManager.self
+	private static var scanLogManagingType: ScanLogManaging.Type = ScanLogManager.self
 
 	// MARK: use override for testing
 
@@ -99,6 +100,11 @@ final class Services {
 		walletManager = walletManaging
 	}
 
+	static func use(_ scanLogManaging: ScanLogManaging) {
+
+		scanManager = scanLogManaging
+	}
+
 	// MARK: Static access
     
     static private(set) var networkManager: NetworkManaging = {
@@ -133,7 +139,10 @@ final class Services {
 
 	static private(set) var deviceAuthenticationDetector: DeviceAuthenticationProtocol = deviceAuthenticationType.init()
 	
-	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
+	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(
+		StorageType.persistent,
+		flavor: AppFlavor.flavor
+	)
 
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
 
@@ -171,6 +180,10 @@ final class Services {
 
 	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
 
+	static private(set) var scanManager: ScanLogManaging = scanLogManagingType.init(
+		dataStoreManager: dataStoreManager
+	)
+
 	/// Reset all the data
 	static func reset() {
 
@@ -186,7 +199,7 @@ final class Services {
 
 		cryptoManager = cryptoManagingType.init()
 		deviceAuthenticationDetector = deviceAuthenticationType.init()
-		dataStoreManager = dataStoreManagingType.init(StorageType.persistent)
+		dataStoreManager = dataStoreManagingType.init(StorageType.persistent, flavor: AppFlavor.flavor)
 		walletManager = walletManagingType.init(
 			dataStoreManager: dataStoreManager
 		)
@@ -220,6 +233,9 @@ final class Services {
 			reachability: try? Reachability(),
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.flavor
+		)
+		scanManager = scanLogManagingType.init(
+			dataStoreManager: dataStoreManager
 		)
 	}
 }

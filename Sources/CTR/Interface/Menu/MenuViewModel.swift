@@ -32,6 +32,7 @@ enum MenuIdentifier {
 	case support
 	case faq
 	case about
+	case riskSetting
 }
 
 struct MenuItem {

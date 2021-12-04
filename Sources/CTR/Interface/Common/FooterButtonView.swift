@@ -124,7 +124,7 @@ final class FooterButtonView: BaseView {
 	/// The title for the primary button
 	var primaryTitle: String? {
 		didSet {
-			primaryButton.setTitle(primaryTitle, for: .normal)
+			primaryButton.title = primaryTitle
 		}
 	}
 	
