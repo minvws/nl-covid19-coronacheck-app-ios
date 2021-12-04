@@ -23,16 +23,14 @@ class ScanLogEntryModel {
 		date: Date,
 		managedContext: NSManagedObjectContext) -> ScanLogEntry? {
 
-		if let object = NSEntityDescription.insertNewObject(
-			forEntityName: entityName,
-			into: managedContext) as? ScanLogEntry {
-
-			object.date = date
-			object.mode = mode
-			object.identifier = 0
-			return object
+		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? ScanLogEntry else {
+			return nil
 		}
-		return nil
+
+		object.date = date
+		object.mode = mode
+		object.identifier = 0
+		return object
 	}
 
 	/// List all the entries starting from a date
@@ -69,5 +67,12 @@ class ScanLogEntryModel {
 			return fetchedResults
 		} catch {}
 		return []
+	}
+}
+
+extension Array {
+
+	func sortedByIdentifier() -> [ScanLogEntry] where Element == ScanLogEntry {
+		sorted(by: { ($0.identifier) < ($1.identifier) })
 	}
 }
