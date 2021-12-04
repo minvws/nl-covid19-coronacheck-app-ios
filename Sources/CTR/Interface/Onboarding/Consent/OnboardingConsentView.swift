@@ -15,6 +15,7 @@ final class OnboardingConsentView: BaseView {
 		// Dimensions
 		static let titleLineHeight: CGFloat = 26
 		static let messageLineHeight: CGFloat = 22
+		static let maxButtonHeightMultiplier: CGFloat = 0.3
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -245,6 +246,15 @@ final class OnboardingConsentView: BaseView {
 			errorView.widthAnchor.constraint(
 				equalTo: consentButton.widthAnchor,
 				constant: -2 * ViewTraits.errorViewMargin
+			),
+			// Buttons have a maximum height for large font size
+			consentButton.heightAnchor.constraint(
+				lessThanOrEqualTo: safeAreaLayoutGuide.heightAnchor,
+				multiplier: ViewTraits.maxButtonHeightMultiplier
+			),
+			primaryButton.heightAnchor.constraint(
+				lessThanOrEqualTo: safeAreaLayoutGuide.heightAnchor,
+				multiplier: ViewTraits.maxButtonHeightMultiplier
 			)
 		])
 	}
