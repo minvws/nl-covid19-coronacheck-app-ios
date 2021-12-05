@@ -46,18 +46,32 @@ final class RiskSettingView: BaseView {
 		return Button(style: .textLabelBlue)
 	}()
 	
+	let footerButtonView: FooterButtonView = {
+		let view = FooterButtonView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
+	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
+	
 	override func setupViews() {
 		super.setupViews()
 		
 		backgroundColor = Theme.colors.viewControllerBackground
 		
-		moreButton.addTarget(self, action: #selector(readMore), for: .touchUpInside)
+		moreButton.touchUpInside(self, action: #selector(readMore))
+		
+		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
+			let translatedOffset = scrollView.translatedBottomScrollOffset
+			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
+		}
 	}
 	
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
 		addSubview(scrollView)
+		addSubview(footerButtonView)
 		scrollView.addSubview(headerLabel)
 		scrollView.addSubview(riskSettingControlsView)
 		scrollView.addSubview(moreButton)
@@ -70,7 +84,11 @@ final class RiskSettingView: BaseView {
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			
+			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
 			headerLabel.topAnchor.constraint(equalTo: scrollView.topAnchor,
 											constant: ViewTraits.Margin.top),

@@ -24,13 +24,10 @@ final class RiskSettingViewModel: Logging {
 	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
 	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
 	@Bindable private(set) var moreButtonTitle = L.verifier_risksetting_readmore()
+	@Bindable private(set) var primaryButtonTitle = ""
 	@Bindable private(set) var riskLevel: RiskLevel?
 	
-	var selectRisk: RiskLevel? {
-		didSet {
-			userSettings.scanRiskLevelValue = selectRisk
-		}
-	}
+	var selectRisk: RiskLevel?
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
@@ -48,5 +45,10 @@ final class RiskSettingViewModel: Logging {
 		guard let url = URL(string: L.verifier_risksetting_readmore_url()) else { return }
 		
 		coordinator?.openUrl(url, inApp: true)
+	}
+	
+	func confirmSetting() {
+		
+		userSettings.scanRiskLevelValue = selectRisk
 	}
 }

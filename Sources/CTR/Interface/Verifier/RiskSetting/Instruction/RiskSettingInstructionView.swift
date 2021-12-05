@@ -76,7 +76,7 @@ final class RiskSettingInstructionView: BaseView {
 		
 		backgroundColor = Theme.colors.viewControllerBackground
 		
-		moreButton.addTarget(self, action: #selector(readMore), for: .touchUpInside)
+		moreButton.touchUpInside(self, action: #selector(readMore))
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
 			let translatedOffset = scrollView.translatedBottomScrollOffset

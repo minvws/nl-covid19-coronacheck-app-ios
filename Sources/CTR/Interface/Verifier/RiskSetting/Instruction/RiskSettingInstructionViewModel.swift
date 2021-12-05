@@ -32,7 +32,6 @@ final class RiskSettingInstructionViewModel: Logging {
 	var selectRisk: RiskLevel? {
 		didSet {
 			shouldDisplayNotSetError = false
-			userSettings.scanRiskLevelValue = selectRisk
 		}
 	}
 	
@@ -59,6 +58,7 @@ final class RiskSettingInstructionViewModel: Logging {
 		if selectRisk == nil {
 			shouldDisplayNotSetError = true
 		} else {
+			userSettings.scanRiskLevelValue = selectRisk
 			coordinator?.userDidCompletePages()
 		}
 	}
