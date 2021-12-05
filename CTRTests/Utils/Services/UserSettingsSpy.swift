@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -186,6 +187,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedLastSeenRecommendedUpdateSetter = false
+	var invokedLastSeenRecommendedUpdateSetterCount = 0
+	var invokedLastSeenRecommendedUpdate: String?
+	var invokedLastSeenRecommendedUpdateList = [String?]()
+	var invokedLastSeenRecommendedUpdateGetter = false
+	var invokedLastSeenRecommendedUpdateGetterCount = 0
+	var stubbedLastSeenRecommendedUpdate: String!
+
+	var lastSeenRecommendedUpdate: String? {
+		set {
+			invokedLastSeenRecommendedUpdateSetter = true
+			invokedLastSeenRecommendedUpdateSetterCount += 1
+			invokedLastSeenRecommendedUpdate = newValue
+			invokedLastSeenRecommendedUpdateList.append(newValue)
+		}
+		get {
+			invokedLastSeenRecommendedUpdateGetter = true
+			invokedLastSeenRecommendedUpdateGetterCount += 1
+			return stubbedLastSeenRecommendedUpdate
+		}
+	}
+
 	var invokedDeviceAuthenticationWarningShownSetter = false
 	var invokedDeviceAuthenticationWarningShownSetterCount = 0
 	var invokedDeviceAuthenticationWarningShown: Bool?
@@ -211,12 +234,12 @@ class UserSettingsSpy: UserSettingsProtocol {
 	var invokedScanRiskLevelValueSetter = false
 	var invokedScanRiskLevelValueSetterCount = 0
 	var invokedScanRiskLevelValue: RiskLevel?
-	var invokedScanRiskLevelValueList = [RiskLevel]()
+	var invokedScanRiskLevelValueList = [RiskLevel?]()
 	var invokedScanRiskLevelValueGetter = false
 	var invokedScanRiskLevelValueGetterCount = 0
 	var stubbedScanRiskLevelValue: RiskLevel!
 
-	var scanRiskLevelValue: RiskLevel {
+	var scanRiskLevelValue: RiskLevel? {
 		set {
 			invokedScanRiskLevelValueSetter = true
 			invokedScanRiskLevelValueSetterCount += 1

@@ -18,7 +18,7 @@ class ScanLogViewModel {
 
 	weak private var coordinator: OpenUrlProtocol?
 
-	weak private var scanManager: ScanManaging? = Services.scanManager
+	weak private var scanManager: ScanLogManaging? = Services.scanManager
 
 	private var scanLogStorageMinutes: Int
 
@@ -40,7 +40,7 @@ class ScanLogViewModel {
 		appInUseSince = L.scan_log_footer_long_time()
 
 		message = L.scan_log_message("\(scanLogStorageMinutes)")
-		listHeader = L.scan_log_list_header("\(scanLogStorageMinutes)")
+		listHeader = L.scan_log_list_header(scanLogStorageMinutes)
 
 		let entries = scanManager?.getScanEntries(seconds: configuration.scanLogStorageSeconds ?? 3600) ?? []
 		handleScanLogEntries(entries)
