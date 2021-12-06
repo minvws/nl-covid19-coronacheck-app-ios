@@ -98,24 +98,24 @@ final class RiskSettingSelectedView: BaseView {
 			titleLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
 											  constant: -ViewTraits.Margin.edge),
 			titleLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
-														constant: -2 * ViewTraits.Margin.edge),
+											  constant: -2 * ViewTraits.Margin.edge),
 			
 			headerLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-											constant: ViewTraits.Margin.top),
+											 constant: ViewTraits.Margin.top),
 			headerLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
-											 constant: ViewTraits.Margin.edge),
+											  constant: ViewTraits.Margin.edge),
 			headerLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
-											  constant: -ViewTraits.Margin.edge),
+											   constant: -ViewTraits.Margin.edge),
 			headerLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
-														constant: -2 * ViewTraits.Margin.edge),
+											   constant: -2 * ViewTraits.Margin.edge),
 			
 			riskSettingControlsView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor,
-													  constant: ViewTraits.Spacing.headerToControls),
+														 constant: ViewTraits.Spacing.headerToControls),
 			riskSettingControlsView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
 			riskSettingControlsView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
 			riskSettingControlsView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 			riskSettingControlsView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
-											   constant: -ViewTraits.Margin.edge)
+															constant: -ViewTraits.Margin.edge)
 		])
 	}
 	

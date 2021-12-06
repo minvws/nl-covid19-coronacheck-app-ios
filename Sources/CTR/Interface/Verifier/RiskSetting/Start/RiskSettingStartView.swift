@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class RiskSettingStartView: ScrolledStackWithButtonView {
+final class RiskSettingStartView: BaseView {
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -25,6 +25,12 @@ final class RiskSettingStartView: ScrolledStackWithButtonView {
 		}
 	}
 	
+	private let scrollView: UIScrollView = {
+		let scrollView = UIScrollView()
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		return scrollView
+	}()
+	
 	private let headerLabel: Label = {
 		return Label(body: nil).header().multiline()
 	}()
@@ -33,10 +39,14 @@ final class RiskSettingStartView: ScrolledStackWithButtonView {
 		return Button(style: .textLabelBlue)
 	}()
 	
+	let footerButtonView: FooterButtonView = {
+		let view = FooterButtonView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
 	override func setupViews() {
 		super.setupViews()
-		
-		stackView.alignment = .leading
 		
 		readMoreButton.touchUpInside(self, action: #selector(readMore))
 	}
@@ -44,9 +54,44 @@ final class RiskSettingStartView: ScrolledStackWithButtonView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		stackView.addArrangedSubview(headerLabel)
-		stackView.setCustomSpacing(ViewTraits.Spacing.headerToReadMoreButton, after: headerLabel)
-		stackView.addArrangedSubview(readMoreButton)
+		addSubview(scrollView)
+		addSubview(footerButtonView)
+		scrollView.addSubview(headerLabel)
+		scrollView.addSubview(readMoreButton)
+	}
+	
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
+		
+		NSLayoutConstraint.activate([
+			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			
+			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			
+			headerLabel.topAnchor.constraint(equalTo: scrollView.topAnchor,
+											 constant: ViewTraits.Margin.top),
+			headerLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
+											  constant: ViewTraits.Margin.edge),
+			headerLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
+											   constant: -ViewTraits.Margin.edge),
+			headerLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
+											   constant: -2 * ViewTraits.Margin.edge),
+			
+			readMoreButton.topAnchor.constraint(equalTo: headerLabel.bottomAnchor,
+												constant: ViewTraits.Spacing.headerToReadMoreButton),
+			readMoreButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
+												 constant: ViewTraits.Margin.edge),
+			readMoreButton.rightAnchor.constraint(lessThanOrEqualTo: scrollView.rightAnchor,
+												  constant: -ViewTraits.Margin.edge),
+			
+			headerLabel.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
+												constant: -ViewTraits.Margin.edge)
+		])
 	}
 	
 	@objc private func readMore() {
@@ -70,4 +115,11 @@ final class RiskSettingStartView: ScrolledStackWithButtonView {
 	}
 	
 	var readMoreCommand: (() -> Void)?
+	
+	var hideFooterButtonView: Bool? {
+		didSet {
+			guard let hideFooterButtonView = hideFooterButtonView else { return }
+			footerButtonView.isHidden = hideFooterButtonView
+		}
+	}
 }
