@@ -30,6 +30,7 @@ class ScanLogViewControllerTests: XCTestCase {
 
 		scanLogManagingSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagingSpy)
+		scanLogManagingSpy.stubbedGetScanEntriesResult = .success([])
 
 		viewModel = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
 		sut = ScanLogViewController(viewModel: viewModel)
@@ -60,7 +61,7 @@ class ScanLogViewControllerTests: XCTestCase {
 		expect(self.sut.title) == L.scan_log_title()
 		expect(self.sut.sceneView.message) == L.scan_log_message("60")
 		expect(self.sut.sceneView.footer) == L.scan_log_footer_long_time()
-		expect(self.sut.sceneView.listHeader) == L.scan_log_list_header("60")
+		expect(self.sut.sceneView.listHeader) == L.scan_log_list_header(60)
 
 		// Snapshot
 		sut.assertImage(containedInNavigationController: true)

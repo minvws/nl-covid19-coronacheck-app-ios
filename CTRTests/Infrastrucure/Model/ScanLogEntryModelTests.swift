@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import XCTest
 import Nimble
@@ -48,7 +48,9 @@ class ScanLogEntryModelTests: XCTestCase {
 		context.performAndWait {
 
 			// When
-			listIsEmpty = ScanLogEntryModel.listEntriesStartingFrom(date: date, managedContext: context).isEmpty
+			if let list = ScanLogEntryModel.listEntriesStartingFrom(date: date, managedContext: context).successValue {
+				listIsEmpty = list.isEmpty
+			}
 		}
 		// Then
 		expect(listIsEmpty).toEventually(beTrue())
@@ -63,7 +65,9 @@ class ScanLogEntryModelTests: XCTestCase {
 		context.performAndWait {
 
 			// When
-			listIsEmpty = ScanLogEntryModel.listEntriesUpTo(date: date, managedContext: context).isEmpty
+			if let list = ScanLogEntryModel.listEntriesUpTo(date: date, managedContext: context).successValue {
+				listIsEmpty = list.isEmpty
+			}
 		}
 		// Then
 		expect(listIsEmpty).toEventually(beTrue())
@@ -80,7 +84,9 @@ class ScanLogEntryModelTests: XCTestCase {
 			ScanLogEntryModel.create(mode: "2G", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
 
 			// When
-			listIsEmpty = ScanLogEntryModel.listEntriesStartingFrom(date: date, managedContext: context).isEmpty
+			if let list = ScanLogEntryModel.listEntriesStartingFrom(date: date, managedContext: context).successValue {
+				listIsEmpty = list.isEmpty
+			}
 		}
 		// Then
 		expect(listIsEmpty).toEventually(beTrue())
@@ -97,7 +103,9 @@ class ScanLogEntryModelTests: XCTestCase {
 			ScanLogEntryModel.create(mode: "2G", date: date, managedContext: context)
 
 			// When
-			listIsEmpty = ScanLogEntryModel.listEntriesUpTo(date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context).isEmpty
+			if let list = ScanLogEntryModel.listEntriesUpTo(date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context).successValue {
+				listIsEmpty = list.isEmpty
+			}
 		}
 		// Then
 		expect(listIsEmpty).toEventually(beTrue())
@@ -114,7 +122,7 @@ class ScanLogEntryModelTests: XCTestCase {
 			ScanLogEntryModel.create(mode: "test_list_oneEntry", date: date, managedContext: context)
 
 			// When
-			list = ScanLogEntryModel.listEntriesStartingFrom(date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
+			list = ScanLogEntryModel.listEntriesStartingFrom(date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context).successValue ?? []
 		}
 		// Then
 		expect(list).toEventuallyNot(beEmpty())
@@ -133,7 +141,7 @@ class ScanLogEntryModelTests: XCTestCase {
 			ScanLogEntryModel.create(mode: "test_list_oneEntry", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
 
 			// When
-			list = ScanLogEntryModel.listEntriesUpTo(date: date, managedContext: context)
+			list = ScanLogEntryModel.listEntriesUpTo(date: date, managedContext: context).successValue ?? []
 		}
 		// Then
 		expect(list).toEventuallyNot(beEmpty())
@@ -153,7 +161,7 @@ class ScanLogEntryModelTests: XCTestCase {
 			ScanLogEntryModel.create(mode: "test_listFrom_twoEntries_second", date: date, managedContext: context)
 
 			// When
-			list = ScanLogEntryModel.listEntriesStartingFrom(date: date.addingTimeInterval(ago * 5 * minute), managedContext: context)
+			list = ScanLogEntryModel.listEntriesStartingFrom(date: date.addingTimeInterval(ago * 5 * minute), managedContext: context).successValue ?? []
 		}
 		// Then
 		expect(list).toEventuallyNot(beEmpty())
@@ -172,7 +180,7 @@ class ScanLogEntryModelTests: XCTestCase {
 			ScanLogEntryModel.create(mode: "test_listTo_twoEntries_second", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
 
 			// When
-			list = ScanLogEntryModel.listEntriesUpTo(date: date, managedContext: context)
+			list = ScanLogEntryModel.listEntriesUpTo(date: date, managedContext: context).successValue ?? []
 		}
 		// Then
 		expect(list).toEventuallyNot(beEmpty())
@@ -191,7 +199,7 @@ class ScanLogEntryModelTests: XCTestCase {
 			ScanLogEntryModel.create(mode: "test_listFrom_threeEntries_second", date: date.addingTimeInterval(ago * 20 * seconds), managedContext: context)
 			ScanLogEntryModel.create(mode: "test_listFrom_threeEntries_third", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
 			// When
-			list = ScanLogEntryModel.listEntriesStartingFrom(date: date.addingTimeInterval(ago * 25 * seconds), managedContext: context)
+			list = ScanLogEntryModel.listEntriesStartingFrom(date: date.addingTimeInterval(ago * 25 * seconds), managedContext: context).successValue ?? []
 		}
 		// Then
 		expect(list).toEventuallyNot(beEmpty())
@@ -210,7 +218,7 @@ class ScanLogEntryModelTests: XCTestCase {
 			ScanLogEntryModel.create(mode: "test_listTo_threeEntries_second", date: date.addingTimeInterval(ago * 20 * seconds), managedContext: context)
 			ScanLogEntryModel.create(mode: "test_listTo_threeEntries_third", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
 			// When
-			list = ScanLogEntryModel.listEntriesUpTo(date: date.addingTimeInterval(ago * 15 * seconds), managedContext: context)
+			list = ScanLogEntryModel.listEntriesUpTo(date: date.addingTimeInterval(ago * 15 * seconds), managedContext: context).successValue ?? []
 		}
 		// Then
 		expect(list).toEventuallyNot(beEmpty())

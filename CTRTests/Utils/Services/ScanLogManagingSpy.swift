@@ -30,9 +30,9 @@ class ScanLogManagingSpy: ScanLogManaging {
 	var invokedGetScanEntriesCount = 0
 	var invokedGetScanEntriesParameters: (seconds: Int, Void)?
 	var invokedGetScanEntriesParametersList = [(seconds: Int, Void)]()
-	var stubbedGetScanEntriesResult: [ScanLogEntry]! = []
+	var stubbedGetScanEntriesResult: Result<[ScanLogEntry], Error>!
 
-	func getScanEntries(seconds: Int) -> [ScanLogEntry] {
+	func getScanEntries(seconds: Int) -> Result<[ScanLogEntry], Error> {
 		invokedGetScanEntries = true
 		invokedGetScanEntriesCount += 1
 		invokedGetScanEntriesParameters = (seconds, ())

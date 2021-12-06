@@ -58,25 +58,25 @@ class ScanLogManagerTests: XCTestCase {
 		expect(result) == false
 	}
 
-	func test_getScanEntries_nothingScanned() {
+	func test_getScanEntries_nothingScanned() throws {
 
 		// Given
 
 		// When
-		let result = sut.getScanEntries(seconds: 3600)
+		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
 
 		// Then
 		expect(result).to(beEmpty())
 	}
 
-	func test_getScanEntries_oneScan_inTimeWindow_highrisk() {
+	func test_getScanEntries_oneScan_inTimeWindow_highrisk() throws {
 
 		// Given
 		let date = Date()
 		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
-		let result = sut.getScanEntries(seconds: 3600)
+		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
 
 		// Then
 		expect(result).toNot(beEmpty())
@@ -84,14 +84,14 @@ class ScanLogManagerTests: XCTestCase {
 		expect(result.first?.mode) == ScanLogManager.highRisk
 	}
 
-	func test_getScanEntries_oneScan_inTimeWindow_lowisk() {
+	func test_getScanEntries_oneScan_inTimeWindow_lowisk() throws {
 
 		// Given
 		let date = Date()
 		sut.addScanEntry(riskLevel: RiskLevel.low, date: date)
 
 		// When
-		let result = sut.getScanEntries(seconds: 3600)
+		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
 
 		// Then
 		expect(result).toNot(beEmpty())
@@ -99,14 +99,14 @@ class ScanLogManagerTests: XCTestCase {
 		expect(result.first?.mode) == ScanLogManager.lowRisk
 	}
 
-	func test_getScanEntries_oneScan_outsideTimeWindow() {
+	func test_getScanEntries_oneScan_outsideTimeWindow() throws {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 4000 * seconds)
 		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
-		let result = sut.getScanEntries(seconds: 3600)
+		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
 
 		// Then
 		expect(result).to(beEmpty())
