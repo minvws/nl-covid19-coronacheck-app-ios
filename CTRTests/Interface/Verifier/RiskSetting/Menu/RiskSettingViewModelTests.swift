@@ -41,7 +41,7 @@ final class RiskSettingViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifierRisksettingReadmoreUrl()
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifier_risksetting_readmore_url()
 	}
 	
 	func test_bindings() {
@@ -50,15 +50,15 @@ final class RiskSettingViewModelTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.title) == L.verifierRisksettingTitle()
-		expect(self.sut.header) == L.verifierRisksettingHeaderMenuentry()
-		expect(self.sut.lowRiskTitle) == L.verifierRisksettingLowriskTitle()
-		expect(self.sut.lowRiskSubtitle) == L.verifierRisksettingLowriskSubtitle()
-		expect(self.sut.lowRiskAccessibilityLabel) == "\(L.verifierRisksettingLowriskTitle()), \(L.verifierRisksettingLowriskSubtitle())"
-		expect(self.sut.highRiskTitle) == L.verifierRisksettingHighriskTitle()
-		expect(self.sut.highRiskSubtitle) == L.verifierRisksettingHighriskSubtitle()
-		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifierRisksettingHighriskTitle()), \(L.verifierRisksettingHighriskSubtitle())"
-		expect(self.sut.moreButtonTitle) == L.verifierRisksettingReadmore()
+		expect(self.sut.title) == L.verifier_risksetting_active_title()
+		expect(self.sut.header) == L.verifier_risksetting_firsttimeuse_header()
+		expect(self.sut.lowRiskTitle) == L.verifier_risksetting_lowrisk_title()
+		expect(self.sut.lowRiskSubtitle) == L.verifier_risksetting_lowrisk_subtitle()
+		expect(self.sut.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
+		expect(self.sut.highRiskTitle) == L.verifier_risksetting_highrisk_title()
+		expect(self.sut.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
+		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
+		expect(self.sut.moreButtonTitle) == L.verifier_risksetting_readmore()
 		expect(self.sut.riskLevel) == .low
 	}
 	

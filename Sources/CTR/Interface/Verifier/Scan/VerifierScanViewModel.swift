@@ -14,16 +14,17 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
 
+	weak var scanLogManager: ScanLogManaging? = Services.scanManager
+
 	/// Coordination Delegate
 	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
+
+	var userSettings: UserSettingsProtocol
 
 	// MARK: - Bindable properties
 
 	/// The title of the scene
 	@Bindable private(set) var title: String
-
-	/// The message of the scene
-	@Bindable private(set) var message: String?
 
 	/// "Waar moet ik op letten?"
 	@Bindable private(set) var moreInformationButtonText: String?
@@ -39,12 +40,14 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	init(
-		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)) {
+		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol),
+		userSettings: UserSettingsProtocol
+	) {
 
 		self.theCoordinator = coordinator
+		self.userSettings = userSettings
 
 		self.title = L.verifierScanTitle()
-		self.message = nil
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
 
@@ -54,6 +57,9 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// Parse the scanned QR-code
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
+
+		let currentRiskLevel = userSettings.scanRiskLevelValue
+		scanLogManager?.addScanEntry(riskLevel: currentRiskLevel, date: Date())
 
 		if let verificationResult = cryptoManager?.verifyQRMessage(message) {
 			switch Int64(verificationResult.status) {

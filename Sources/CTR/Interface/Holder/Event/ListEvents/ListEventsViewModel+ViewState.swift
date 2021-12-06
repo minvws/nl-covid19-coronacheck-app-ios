@@ -533,11 +533,11 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func positiveTestFlowRecoveryAndVaccinationCreated(_ days: String) -> ListEventsViewController.State {
+	internal func positiveTestFlowRecoveryAndVaccinationCreated() -> ListEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestRecoveryAndVaccinationTitle(),
-			subTitle: L.holderPositiveTestRecoveryAndVaccinationMessage(days),
+			subTitle: L.holderPositiveTestRecoveryAndVaccinationMessage(),
 			primaryActionTitle: L.holderPositiveTestRecoveryAndVaccinationAction()
 		)
 	}
@@ -571,11 +571,11 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func recoveryFlowVaccinationOnly(_ days: String) -> ListEventsViewController.State {
+	internal func recoveryFlowVaccinationOnly() -> ListEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryVaccinationOnlyTitle(),
-			subTitle: L.holderRecoveryVaccinationOnlyMessage(days),
+			subTitle: L.holderRecoveryVaccinationOnlyMessage(),
 			primaryActionTitle: L.holderRecoveryVaccinationOnlyAction()
 		)
 	}

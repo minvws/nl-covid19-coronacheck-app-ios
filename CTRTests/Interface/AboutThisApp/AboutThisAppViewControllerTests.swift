@@ -61,9 +61,8 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holderAboutTitle()
 		expect(self.sut.sceneView.message) == L.holderAboutText()
-		expect(self.sut.sceneView.listHeader) == L.holderAboutReadmore()
-		expect(self.sut.sceneView.itemStackView.arrangedSubviews)
-			.to(haveCount(5))
+		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
+			.to(haveCount(6))
 		expect(self.sut.sceneView.appVersion).toNot(beNil())
 
 		sut.assertImage()
@@ -76,7 +75,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(sut.sceneView.itemStackView.arrangedSubviews[3] as? SimpleDisclosureButton)?.primaryButtonTapped()
+		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[4] as? SimpleDisclosureButton)?.primaryButtonTapped()
 
 		// Then
 		alertVerifier.verify(
@@ -117,7 +116,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		Services.use(forcedInfoSpy)
 		let alertVerifier = AlertVerifier()
 		loadView()
-		(sut.sceneView.itemStackView.arrangedSubviews[3] as? SimpleDisclosureButton)?.primaryButtonTapped()
+		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[4] as? SimpleDisclosureButton)?.primaryButtonTapped()
 
 		// When
 		try alertVerifier.executeAction(forButton: L.holderCleardataAlertRemove())

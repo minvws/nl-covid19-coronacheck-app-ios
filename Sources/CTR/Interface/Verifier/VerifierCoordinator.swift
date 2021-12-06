@@ -29,6 +29,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutClockDeviation()
 	
 	func navigateToVerifiedInfo()
+
+	func userWishesToOpenScanLog()
 	
 	func userWishesToLaunchThirdPartyScannerApp()
 	
@@ -45,6 +47,8 @@ class VerifierCoordinator: SharedCoordinator {
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
 	
 	private var thirdPartyScannerApp: (name: String, returnURL: URL)?
+
+	private var userSettings: UserSettingsProtocol = UserSettings()
 
 	// Designated starter method
 	override func start() {
@@ -105,7 +109,9 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 			let dashboardViewController = VerifierStartViewController(
 				viewModel: VerifierStartViewModel(
-					coordinator: self
+					coordinator: self,
+					scanLockProvider: Services.scanLockManager,
+					riskLevelProvider: Services.riskLevelManager
 				)
 			)
 
@@ -132,7 +138,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				coordinator: self,
 				verificationDetails: verificationDetails,
 				isDeepLinkEnabled: thirdPartyScannerApp != nil,
-				userSettings: UserSettings()
+				userSettings: userSettings
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
@@ -192,7 +198,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		if let existingScanViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierScanViewController }) {
 			dashboardNavigationController?.popToViewController(existingScanViewController, animated: true)
 		} else {
-			let destination = VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: self))
+			let destination = VerifierScanViewController(
+				viewModel: VerifierScanViewModel(
+					coordinator: self,
+					userSettings: userSettings
+				)
+			)
 			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
 		}
 	}
@@ -201,6 +212,17 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let title: String = L.verifierClockDeviationDetectedTitle()
 		let message: String = L.verifierClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+
+	func userWishesToOpenScanLog() {
+
+		let viewController = ScanLogViewController(
+			viewModel: ScanLogViewModel(
+				coordinator: self,
+				configuration: remoteConfigManager.storedConfiguration
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 	
 	func navigateToVerifiedInfo() {
@@ -229,7 +251,7 @@ extension VerifierCoordinator: ScanInstructionsDelegate {
 
 	/// User completed (or skipped) the Scan Instructions flow
 	func scanInstructionsDidFinish() {
-		UserSettings().scanInstructionShown = true
+		userSettings.scanInstructionShown = true
 
 		removeScanInstructionsCoordinator()
 		navigateToScan()
@@ -282,7 +304,7 @@ extension VerifierCoordinator: MenuDelegate {
 				let destination = RiskSettingViewController(
 					viewModel: RiskSettingViewModel(
 						coordinator: self,
-						userSettings: UserSettings()
+						userSettings: userSettings
 					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)
@@ -332,7 +354,7 @@ extension VerifierCoordinator: MenuDelegate {
 		return [
 			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
 			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions()),
-			MenuItem(identifier: .riskSetting, title: L.verifierMenuRisksetting())
+			MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting())
 		]
 	}
 	/// Get the items for the bottom menu

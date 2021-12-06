@@ -13,12 +13,13 @@ import Nimble
 class VerifierScanViewModelTests: XCTestCase {
 
     /// Subject under test
-    var sut: VerifierScanViewModel!
+	private var sut: VerifierScanViewModel!
 
     /// The coordinator spy
-	var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
-
-	var cryptoSpy: CryptoManagerSpy!
+	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
+	private var userSettingsSpy: UserSettingsSpy!
+	private var cryptoSpy: CryptoManagerSpy!
+	private var scanLogManagingSpy: ScanLogManagingSpy!
 
     override func setUp() {
 
@@ -26,8 +27,13 @@ class VerifierScanViewModelTests: XCTestCase {
         verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoSpy = CryptoManagerSpy()
 		Services.use(cryptoSpy)
+		userSettingsSpy = UserSettingsSpy()
+		userSettingsSpy.stubbedScanRiskLevelValue = .high
 
-        sut = VerifierScanViewModel( coordinator: verifyCoordinatorDelegateSpy)
+		scanLogManagingSpy = ScanLogManagingSpy()
+		Services.use(scanLogManagingSpy)
+
+		sut = VerifierScanViewModel( coordinator: verifyCoordinatorDelegateSpy, userSettings: userSettingsSpy)
     }
 
 	override func tearDown() {
@@ -58,6 +64,32 @@ class VerifierScanViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToScanInstruction) == true
+	}
+
+	func test_parseQRMessage_shouldAddScanLogEntry_lowRisk() {
+
+		// Given
+		userSettingsSpy.stubbedScanRiskLevelValue = .low
+
+		// When
+		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
+
+		// Then
+		expect(self.scanLogManagingSpy.invokedAddScanEntry) == true
+		expect(self.scanLogManagingSpy.invokedAddScanEntryParameters?.riskLevel) == .low
+	}
+
+	func test_parseQRMessage_shouldAddScanLogEntry_highRisk() {
+
+		// Given
+		userSettingsSpy.stubbedScanRiskLevelValue = .high
+
+		// When
+		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
+
+		// Then
+		expect(self.scanLogManagingSpy.invokedAddScanEntry) == true
+		expect(self.scanLogManagingSpy.invokedAddScanEntryParameters?.riskLevel) == .high
 	}
 
 	func test_parseQRMessage_whenDCCIsNL_shouldDisplayAlert() {
