@@ -38,7 +38,7 @@ class ScanLogEntryModel {
 	///   - date: the date
 	///   - managedContext: the managed object context
 	/// - Returns: list of scan log entries
-	class func listEntriesStartingFrom(date: Date, managedContext: NSManagedObjectContext) -> [ScanLogEntry] {
+	class func listEntriesStartingFrom(date: Date, managedContext: NSManagedObjectContext) -> Result<[ScanLogEntry], Error> {
 
 		let fetchRequest = NSFetchRequest<ScanLogEntry>(entityName: entityName)
 		let fromPredicate = NSPredicate(format: "date >= %@", date as NSDate)
@@ -46,9 +46,10 @@ class ScanLogEntryModel {
 
 		do {
 			let fetchedResults = try managedContext.fetch(fetchRequest)
-			return fetchedResults
-		} catch {}
-		return []
+			return .success(fetchedResults)
+		} catch let error {
+			return .failure(error)
+		}
 	}
 
 	/// List all the entries up until a date
@@ -56,7 +57,7 @@ class ScanLogEntryModel {
 	///   - date: the date
 	///   - managedContext: the managed object context
 	/// - Returns: list of scan log entries
-	class func listEntriesUpTo(date: Date, managedContext: NSManagedObjectContext) -> [ScanLogEntry] {
+	class func listEntriesUpTo(date: Date, managedContext: NSManagedObjectContext) -> Result<[ScanLogEntry], Error> {
 
 		let fetchRequest = NSFetchRequest<ScanLogEntry>(entityName: entityName)
 		let fromPredicate = NSPredicate(format: "date < %@", date as NSDate)
@@ -64,9 +65,10 @@ class ScanLogEntryModel {
 
 		do {
 			let fetchedResults = try managedContext.fetch(fetchRequest)
-			return fetchedResults
-		} catch {}
-		return []
+			return .success(fetchedResults)
+		} catch let error {
+			return .failure(error)
+		}
 	}
 }
 

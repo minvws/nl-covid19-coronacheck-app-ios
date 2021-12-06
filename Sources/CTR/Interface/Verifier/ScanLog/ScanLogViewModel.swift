@@ -27,6 +27,7 @@ class ScanLogViewModel {
 	@Bindable private(set) var appInUseSince: String
 	@Bindable private(set) var listHeader: String
 	@Bindable private(set) var displayEntries: [ScanLogDisplayEntry] = []
+	@Bindable private(set) var alert: AlertContent?
 
 	init(
 		coordinator: OpenUrlProtocol,
@@ -42,9 +43,6 @@ class ScanLogViewModel {
 		message = L.scan_log_message("\(scanLogStorageMinutes)")
 		listHeader = L.scan_log_list_header(scanLogStorageMinutes)
 
-		let entries = scanManager?.getScanEntries(seconds: configuration.scanLogStorageSeconds ?? 3600) ?? []
-		displayEntries.append(contentsOf: ScanLogDataSource(entries: entries).getDisplayEntries())
-
 		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
 		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-12 * 60))
 		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
@@ -59,6 +57,29 @@ class ScanLogViewModel {
 		//		ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-2 * 60))
 		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1.5 * 60))
 		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1 * 60))
+
+		handleScanEntries(scanLogStorageMinutes)
+	}
+
+	private func handleScanEntries(_ scanLogStorageMinutes: Int) {
+
+		guard let scanManager = scanManager else { return }
+
+		let result = scanManager.getScanEntries(seconds: scanLogStorageMinutes)
+		switch result {
+			case let .success(log):
+				displayEntries.append(contentsOf: ScanLogDataSource(entries: log).getDisplayEntries())
+			case .failure:
+				let code = ErrorCode(flow: .scanFlow, step: .showLog, clientCode: .coreDataFetchError)
+				alert = AlertContent(
+					title: L.generalErrorTitle(),
+					subTitle: L.generalErrorTechnicalCustom("\(code)"),
+					cancelAction: nil,
+					cancelTitle: nil,
+					okAction: nil,
+					okTitle: L.generalClose()
+				)
+		}
 	}
 
 	func openUrl(_ url: URL) {
@@ -196,4 +217,16 @@ struct ScanLogDataSource: Logging {
 
 		return (lowerBound: lowerBound, higherBound: higherBound)
 	}
+}
+
+extension ErrorCode.Flow {
+
+	static let scanFlow = ErrorCode.Flow(value: "1")
+}
+
+// MARK: ErrorCode.Step (Scan log flow)
+
+extension ErrorCode.Step {
+
+	static let showLog = ErrorCode.Step(value: "30")
 }
