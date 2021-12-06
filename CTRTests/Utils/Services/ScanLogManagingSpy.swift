@@ -42,14 +42,14 @@ class ScanLogManagingSpy: ScanLogManaging {
 
 	var invokedAddScanEntry = false
 	var invokedAddScanEntryCount = 0
-	var invokedAddScanEntryParameters: (highRisk: Bool, date: Date)?
-	var invokedAddScanEntryParametersList = [(highRisk: Bool, date: Date)]()
+	var invokedAddScanEntryParameters: (riskLevel: RiskLevel, date: Date)?
+	var invokedAddScanEntryParametersList = [(riskLevel: RiskLevel, date: Date)]()
 
-	func addScanEntry(highRisk: Bool, date: Date) {
+	func addScanEntry(riskLevel: RiskLevel, date: Date) {
 		invokedAddScanEntry = true
 		invokedAddScanEntryCount += 1
-		invokedAddScanEntryParameters = (highRisk, date)
-		invokedAddScanEntryParametersList.append((highRisk, date))
+		invokedAddScanEntryParameters = (riskLevel, date)
+		invokedAddScanEntryParametersList.append((riskLevel, date))
 	}
 }
 
