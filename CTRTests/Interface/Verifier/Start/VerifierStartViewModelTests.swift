@@ -22,6 +22,7 @@ class VerifierStartViewModelTests: XCTestCase {
 	private var userSettingsSpy: UserSettingsSpy!
 	private var riskLevelManagerSpy: RiskLevelManagerSpy!
 	private var scanLockManagerSpy: ScanLockManagerSpy!
+	private var scanLogManagerSpy: ScanLogManagingSpy!
 
 	override func setUp() {
 
@@ -42,6 +43,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		userSettingsSpy = UserSettingsSpy()
+		scanLogManagerSpy = ScanLogManagingSpy()
 
 		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
@@ -50,6 +52,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		Services.use(cryptoLibUtilitySpy)
 		Services.use(cryptoManagerSpy)
 		Services.use(clockDeviationManagerSpy)
+		Services.use(scanLogManagerSpy)
 	}
 
 	override func tearDown() {
@@ -239,5 +242,21 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Assert
 		expect(self.clockDeviationManagerSpy.invokedAppendDeviationChangeObserverCount) == 1
 		expect(self.sut.shouldShowClockDeviationWarning) == true
+	}
+
+	func test_init_shouldCall_scanManagerRemoveOldEntries() {
+
+		// Given
+
+		// When
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
+			userSettings: userSettingsSpy
+		)
+
+		// Then
+		expect(self.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == true
 	}
 }

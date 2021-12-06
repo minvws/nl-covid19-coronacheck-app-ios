@@ -51,6 +51,18 @@ class ScanLogManagingSpy: ScanLogManaging {
 		invokedAddScanEntryParameters = (riskLevel, date)
 		invokedAddScanEntryParametersList.append((riskLevel, date))
 	}
+
+	var invokedDeleteExpiredScanLogEntries = false
+	var invokedDeleteExpiredScanLogEntriesCount = 0
+	var invokedDeleteExpiredScanLogEntriesParameters: (seconds: Int, Void)?
+	var invokedDeleteExpiredScanLogEntriesParametersList = [(seconds: Int, Void)]()
+
+	func deleteExpiredScanLogEntries(seconds: Int) {
+		invokedDeleteExpiredScanLogEntries = true
+		invokedDeleteExpiredScanLogEntriesCount += 1
+		invokedDeleteExpiredScanLogEntriesParameters = (seconds, ())
+		invokedDeleteExpiredScanLogEntriesParametersList.append((seconds, ()))
+	}
 }
 
 extension ScanLogManagingSpy {
