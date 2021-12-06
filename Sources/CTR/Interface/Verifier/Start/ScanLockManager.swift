@@ -23,7 +23,7 @@ final class ScanLockManager: ScanLockManaging {
 	private struct Constants {
 		static let keychainService: String = {
 			guard !ProcessInfo.processInfo.isTesting else { return UUID().uuidString }
-			return "CryptoManager\(Configuration().getEnvironment())"
+			return "ScanLockManager\(Configuration().getEnvironment())"
 		}()
 	}
 	
