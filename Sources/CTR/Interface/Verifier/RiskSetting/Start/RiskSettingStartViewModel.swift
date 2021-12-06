@@ -12,6 +12,8 @@ final class RiskSettingStartViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
+	private let userSettings: UserSettingsProtocol
+	
 	/// The title of the scene
 	@Bindable private(set) var title: String = L.verifier_risksetting_start_title()
 	
@@ -21,9 +23,12 @@ final class RiskSettingStartViewModel: Logging {
 	
 	@Bindable private(set) var readMoreButtonTitle: String = L.verifier_risksetting_start_readmore()
 	
-	init(coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)) {
+	init(
+		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
+		userSettings: UserSettingsProtocol) {
 		
 		self.coordinator = coordinator
+		self.userSettings = userSettings
 	}
 	
 	func showReadMore() {
@@ -34,6 +39,7 @@ final class RiskSettingStartViewModel: Logging {
 	
 	func showRiskSetting() {
 		
-		coordinator?.userWishesToSetRiskLevel()
+		let riskSetting = userSettings.scanRiskLevelValue
+		coordinator?.userWishesToSetRiskLevel(shouldSelectSetting: riskSetting == nil)
 	}
 }

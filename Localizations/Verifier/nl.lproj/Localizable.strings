@@ -127,6 +127,11 @@
 "verifier_menu_risksetting" = "Scan-instelling";
 "verifier_result_access_title_highrisk" = "2G controle klaar";
 "verifier_risksetting_active_title" = "Scan-instelling aanpassen";
+"verifier_risksetting_confirmation_button" = "Bevestigen";
+"verifier_risksetting_confirmation_dialog_message" = "Als je wisselt van scan-instelling moet je 5 minuten wachten voordat je weer kunt scannen.";
+"verifier_risksetting_confirmation_dialog_negative_button" = "Nee, terug";
+"verifier_risksetting_confirmation_dialog_positive_button" = "Ja, aanpassen";
+"verifier_risksetting_confirmation_dialog_title" = "Weet je zeker dat je de  instelling wilt aanpassen?";
 "verifier_risksetting_firsttimeuse_header" = "Stel in of je 2G- of 3G-toegang gaat geven. Controleer voordat je gaat scannen altijd welk soort toegang jouw locatie mag geven.";
 "verifier_risksetting_firsttimeuse_title" = "Kies je scan-instelling";
 "verifier_risksetting_highrisk_subtitle" = "Je kunt alleen QR-codes scannen van bezoekers met een vaccinatie- of herstelbewijs.";

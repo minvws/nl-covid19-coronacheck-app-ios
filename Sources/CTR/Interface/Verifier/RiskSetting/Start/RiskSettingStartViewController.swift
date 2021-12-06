@@ -41,6 +41,10 @@ final class RiskSettingStartViewController: BaseViewController {
 		viewModel.$primaryTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		viewModel.$readMoreButtonTitle.binding = { [weak self] in self?.sceneView.readMoreButtonTitle = $0 }
 		
+		sceneView.readMoreCommand = { [weak self] in
+			
+			self?.viewModel.showReadMore()
+		}
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
 			
 			self?.viewModel.showRiskSetting()

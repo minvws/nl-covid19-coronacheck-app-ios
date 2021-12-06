@@ -11,13 +11,13 @@ import SnapshotTesting
 import Nimble
 import Rswift
 
-final class RiskSettingViewControllerTests: XCTestCase {
+final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	// MARK: Subject under test
-	private var sut: RiskSettingViewController!
+	private var sut: RiskSettingSelectedViewController!
 	
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var viewModel: RiskSettingViewModel!
+	private var viewModel: RiskSettingSelectedViewModel!
 	private var userSettingsSpy: UserSettingsSpy!
 	
 	var window = UIWindow()
@@ -40,17 +40,17 @@ final class RiskSettingViewControllerTests: XCTestCase {
 	func test_bindings() {
 		// Given
 		userSettingsSpy.stubbedScanRiskLevelValue = .low
-		viewModel = RiskSettingViewModel(
+		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
 		)
-		sut = RiskSettingViewController(viewModel: viewModel)
+		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 		
 		// When
 		
 		// Then
-		expect(self.sut.title) == L.verifier_risksetting_active_title()
+		expect(self.sut.sceneView.title) == L.verifier_risksetting_active_title()
 		expect(self.sut.sceneView.header) == L.verifier_risksetting_firsttimeuse_header()
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifier_risksetting_lowrisk_title()
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskSubtitle) == L.verifier_risksetting_lowrisk_subtitle()
@@ -58,18 +58,17 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifier_risksetting_highrisk_title()
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-		expect(self.sut.sceneView.moreButtonTitle) == L.verifier_risksetting_readmore()
 		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
 	}
 	
 	func test_riskSetting_low() {
 		// Given
 		userSettingsSpy.stubbedScanRiskLevelValue = .low
-		viewModel = RiskSettingViewModel(
+		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
 		)
-		sut = RiskSettingViewController(viewModel: viewModel)
+		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 		
 		// When
@@ -84,11 +83,11 @@ final class RiskSettingViewControllerTests: XCTestCase {
 	func test_riskSetting_high() {
 		// Given
 		userSettingsSpy.stubbedScanRiskLevelValue = .high
-		viewModel = RiskSettingViewModel(
+		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
 		)
-		sut = RiskSettingViewController(viewModel: viewModel)
+		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 		
 		// When

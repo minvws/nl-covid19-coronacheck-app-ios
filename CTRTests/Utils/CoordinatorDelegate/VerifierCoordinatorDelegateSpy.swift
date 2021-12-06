@@ -125,10 +125,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 
 	var invokedUserWishesToSetRiskLevel = false
 	var invokedUserWishesToSetRiskLevelCount = 0
+	var invokedUserWishesToSetRiskLevelParameters: (shouldSelectSetting: Bool, Void)?
+	var invokedUserWishesToSetRiskLevelParametersList = [(shouldSelectSetting: Bool, Void)]()
 
-	func userWishesToSetRiskLevel() {
+	func userWishesToSetRiskLevel(shouldSelectSetting: Bool) {
 		invokedUserWishesToSetRiskLevel = true
 		invokedUserWishesToSetRiskLevelCount += 1
+		invokedUserWishesToSetRiskLevelParameters = (shouldSelectSetting, ())
+		invokedUserWishesToSetRiskLevelParametersList.append((shouldSelectSetting, ()))
 	}
 
 	var invokedOpenUrl = false

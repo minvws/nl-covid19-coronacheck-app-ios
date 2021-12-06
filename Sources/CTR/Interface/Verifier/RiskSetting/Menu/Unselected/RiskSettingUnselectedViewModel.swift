@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class RiskSettingViewModel: Logging {
+final class RiskSettingUnselectedViewModel: Logging {
 	
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
@@ -15,8 +15,7 @@ final class RiskSettingViewModel: Logging {
 	private let userSettings: UserSettingsProtocol
 	
 	/// The title of the scene
-	@Bindable private(set) var title = L.verifier_risksetting_active_title()
-	@Bindable private(set) var header = L.verifier_risksetting_firsttimeuse_header()
+	@Bindable private(set) var title = L.verifier_risksetting_firsttimeuse_title()
 	@Bindable private(set) var lowRiskTitle = L.verifier_risksetting_lowrisk_title()
 	@Bindable private(set) var lowRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
 	@Bindable private(set) var lowRiskAccessibilityLabel = "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
@@ -24,10 +23,16 @@ final class RiskSettingViewModel: Logging {
 	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
 	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
 	@Bindable private(set) var moreButtonTitle = L.verifier_risksetting_readmore()
-	@Bindable private(set) var primaryButtonTitle = ""
+	@Bindable private(set) var primaryButtonTitle = L.verifier_risksetting_confirmation_button()
+	@Bindable private(set) var errorMessage = L.verification_policy_selection_error_message()
+	@Bindable private(set) var shouldDisplayNotSetError = false
 	@Bindable private(set) var riskLevel: RiskLevel?
 	
-	var selectRisk: RiskLevel?
+	var selectRisk: RiskLevel? {
+		didSet {
+			shouldDisplayNotSetError = false
+		}
+	}
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
@@ -49,6 +54,10 @@ final class RiskSettingViewModel: Logging {
 	
 	func confirmSetting() {
 		
-		userSettings.scanRiskLevelValue = selectRisk
+		if selectRisk == nil {
+			shouldDisplayNotSetError = true
+		} else {
+			userSettings.scanRiskLevelValue = selectRisk
+		}
 	}
 }

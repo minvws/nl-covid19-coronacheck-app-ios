@@ -106,3 +106,4 @@
 /* MARK: - URL */
 "verifier.url.faq" = "https://coronacheck.nl/en/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/en/gebruikersvoorwaarden-in-app";
+"verifier_risksetting_confirmation_dialog_title" = "Are you sure you want to change the setting?";

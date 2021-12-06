@@ -40,7 +40,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	func navigateToDeniedAccess()
 	
-	func userWishesToSetRiskLevel()
+	func userWishesToSetRiskLevel(shouldSelectSetting: Bool)
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -244,14 +244,24 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		}
 	}
 	
-	func userWishesToSetRiskLevel() {
+	func userWishesToSetRiskLevel(shouldSelectSetting: Bool) {
 		
-		let viewController = RiskSettingViewController(
-			viewModel: RiskSettingViewModel(
-				coordinator: self,
-				userSettings: UserSettings()
+		let viewController: UIViewController
+		if shouldSelectSetting {
+			viewController = RiskSettingUnselectedViewController(
+				viewModel: RiskSettingUnselectedViewModel(
+					coordinator: self,
+					userSettings: UserSettings()
+				)
 			)
-		)
+		} else {
+			viewController = RiskSettingSelectedViewController(
+				viewModel: RiskSettingSelectedViewModel(
+					coordinator: self,
+					userSettings: UserSettings()
+				)
+			)
+		}
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 }
@@ -314,7 +324,8 @@ extension VerifierCoordinator: MenuDelegate {
 			case .riskSetting:
 				let destination = RiskSettingStartViewController(
 					viewModel: RiskSettingStartViewModel(
-						coordinator: self
+						coordinator: self,
+						userSettings: UserSettings()
 					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)

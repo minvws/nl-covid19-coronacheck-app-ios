@@ -10,10 +10,10 @@ import XCTest
 import Nimble
 import Rswift
 
-final class RiskSettingViewModelTests: XCTestCase {
+final class RiskSettingSelectedViewModelTests: XCTestCase {
 	
 	/// Subject under test
-	private var sut: RiskSettingViewModel!
+	private var sut: RiskSettingSelectedViewModel!
 	
 	/// The coordinator spy
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
@@ -25,24 +25,13 @@ final class RiskSettingViewModelTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		
-		sut = RiskSettingViewModel(
+		sut = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy
 		)
 	}
 	
 	// MARK: - Tests
-	
-	func test_showReadMore_shouldInvokeCoordinatorOpenUrl() {
-		// Given
-		
-		// When
-		sut.showReadMore()
-		
-		// Then
-		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifier_risksetting_readmore_url()
-	}
 	
 	func test_bindings() {
 		// Given
@@ -58,15 +47,16 @@ final class RiskSettingViewModelTests: XCTestCase {
 		expect(self.sut.highRiskTitle) == L.verifier_risksetting_highrisk_title()
 		expect(self.sut.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
 		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-		expect(self.sut.moreButtonTitle) == L.verifier_risksetting_readmore()
+
 		expect(self.sut.riskLevel) == .low
 	}
 	
-	func test_selectRisk_shouldSetHighRisk() {
+	func test_confirmSetting_shouldSetHighRisk() {
 		// Given
+		sut.selectRisk = .high
 		
 		// When
-		sut.selectRisk = .high
+		sut.confirmSetting()
 		
 		// When
 		expect(self.userSettingsSpy.invokedScanRiskLevelValue) == .high
