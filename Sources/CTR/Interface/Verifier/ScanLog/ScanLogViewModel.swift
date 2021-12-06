@@ -20,6 +20,8 @@ class ScanLogViewModel {
 
 	weak private var scanManager: ScanLogManaging? = Services.scanManager
 
+	private var appInstalledSinceManager: AppInstalledSinceManaging
+
 	private var scanLogStorageMinutes: Int
 
 	@Bindable private(set) var title: String = L.scan_log_title()
@@ -30,14 +32,23 @@ class ScanLogViewModel {
 
 	init(
 		coordinator: OpenUrlProtocol,
-		configuration: RemoteConfiguration
+		configuration: RemoteConfiguration,
+		appInstalledSinceManager: AppInstalledSinceManaging,
+		now: @escaping () -> Date
 	) {
 		self.coordinator = coordinator
+		self.appInstalledSinceManager = appInstalledSinceManager
 		scanLogStorageMinutes = (configuration.scanLogStorageSeconds ?? 3600) / 60
 
-		// Todo: Insert the actual first usage timestamp in the placeholder,
-		// and check if it is older than a month
-		appInUseSince = L.scan_log_footer_long_time()
+		let date = appInstalledSinceManager.usable
+		if date < now().addingTimeInterval(-30 * 24 * 60 * 60) { // Cut off 30 days
+			appInUseSince = L.scan_log_footer_long_time()
+		} else {
+			let dateFormatter = DateFormatter()
+			dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+			dateFormatter.dateFormat = "d MMMM yyyy HH:mm"
+			appInUseSince = L.scan_log_footer_in_use(dateFormatter.string(from: date))
+		}
 
 		message = L.scan_log_message("\(scanLogStorageMinutes)")
 		listHeader = L.scan_log_list_header(scanLogStorageMinutes)

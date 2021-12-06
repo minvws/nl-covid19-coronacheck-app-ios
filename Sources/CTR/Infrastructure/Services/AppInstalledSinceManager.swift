@@ -6,12 +6,23 @@
 */
 
 import Foundation
-final class AppInstalledSinceManager {
+
+protocol AppInstalledSinceManaging {
+
+	var usable: Date { get }
+
+	init(documentDirectoryCreationDate: Date?)
+
+	func update(serverHeaderDate: String, ageHeader: String?)
+
+}
+
+final class AppInstalledSinceManager: AppInstalledSinceManaging {
 	
 	private struct Constants {
 		static let keychainService: String = {
 			guard !ProcessInfo.processInfo.isTesting else { return UUID().uuidString }
-			return "CryptoManager\(Configuration().getEnvironment())"
+			return "AppInstalledSinceManager\(Configuration().getEnvironment())"
 		}()
 	}
 	
