@@ -42,32 +42,33 @@ class VerifierStartViewController: BaseViewController {
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$showInstructionsTitle.binding = { [weak self] in self?.sceneView.showInstructionsTitle = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
+		viewModel.$showsPrimaryButton.binding = { [weak self] in self?.sceneView.showsPrimaryButton = $0 }
 		viewModel.$shouldShowClockDeviationWarning.binding = { [weak self] in
 			self?.sceneView.clockDeviationWarningView.isHidden = !$0
 			self?.sceneView.clockDeviationWarningView.buttonCommand = {
 				self?.viewModel.userDidTapClockDeviationWarningReadMore()
 			}
 		}
+		viewModel.$largeImage.binding = { [weak self] in self?.sceneView.largeImage = $0 }
+		viewModel.$showError.binding = { [weak self] in
+			if $0 {
+				self?.showError(L.generalErrorTitle(), message: L.verifierStartOntimeinternet())
+			}
+		}
+		viewModel.$riskIndicator.binding = { [weak self] in
+			self?.sceneView.setRiskIndicator(params: $0)
+		}
 
 		sceneView.clockDeviationWarningView.message = L.verifierStartClockdeviationwarningMessage()
 		sceneView.clockDeviationWarningView.buttonTitle = L.verifierStartClockdeviationwarningButton()
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
-
 			self?.viewModel.primaryButtonTapped()
 		}
 
 		sceneView.showInstructionsButtonTappedCommand = { [weak self] in
 			self?.viewModel.showInstructionsButtonTapped()
 		}
-
-		viewModel.$showError.binding = { [weak self] in
-			if $0 {
-				self?.showError(L.generalErrorTitle(), message: L.verifierStartOntimeinternet())
-			}
-		}
-
-		sceneView.headerImage = I.scanStartLowRisk()
     }
 
 	override func viewWillAppear(_ animated: Bool) {

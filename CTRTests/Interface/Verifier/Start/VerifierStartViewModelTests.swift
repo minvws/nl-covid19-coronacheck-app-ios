@@ -20,6 +20,8 @@ class VerifierStartViewModelTests: XCTestCase {
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var clockDeviationManagerSpy: ClockDeviationManagerSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var scanLockManagerSpy: ScanLockManagerSpy!
 
 	override func setUp() {
 
@@ -33,6 +35,11 @@ class VerifierStartViewModelTests: XCTestCase {
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.verifier
 		)
+		
+		riskLevelManagerSpy = RiskLevelManagerSpy()
+		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy = ScanLockManagerSpy()
+		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		userSettingsSpy = UserSettingsSpy()
 
@@ -58,6 +65,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -80,6 +89,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		userSettingsSpy.stubbedScanInstructionShown = false
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -100,6 +111,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		cryptoManagerSpy.stubbedHasPublicKeysResult = true
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -119,6 +132,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		cryptoManagerSpy.stubbedHasPublicKeysResult = false
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -136,6 +151,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		userSettingsSpy.stubbedScanInstructionShown = false
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -158,6 +175,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -173,6 +192,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -188,6 +209,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -208,6 +231,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 

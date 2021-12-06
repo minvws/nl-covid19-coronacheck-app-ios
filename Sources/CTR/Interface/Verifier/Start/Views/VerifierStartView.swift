@@ -29,7 +29,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
         return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
-	let contentTextView: TextView = {
+	private let contentTextView: TextView = {
 
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +52,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	}()
 
 	/// Footer view with primary button
-	let footerButtonView: FooterButtonView = {
+	private let footerButtonView: FooterButtonView = {
 		let footerView = FooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false
 		return footerView
@@ -63,6 +63,25 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isHidden = true
 		return view
+	}()
+
+	private let riskIndicatorStackView: UIStackView = {
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .horizontal
+		view.spacing = 8 // ViewTraits.Spacing.aboveButton
+		return view
+	}()
+
+	private let riskIndicatorIconView: RiskIndicatorIconView = {
+		let view = RiskIndicatorIconView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
+	private let riskIndicatorLabel: Label = {
+		let label = Label(subhead: "")
+		return label
 	}()
 
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
@@ -93,6 +112,11 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 
 		addSubview(clockDeviationWarningView)
 		addSubview(footerButtonView)
+		
+		footerButtonView.buttonStackView.insertArrangedSubview(riskIndicatorStackView, at: 0)
+
+		riskIndicatorStackView.addArrangedSubview(riskIndicatorIconView)
+		riskIndicatorStackView.addArrangedSubview(riskIndicatorLabel)
 	}
 
 	/// Setup the constraints
@@ -161,7 +185,10 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 			// ClockDeviationWarningView
 			clockDeviationWarningView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: ViewTraits.margin),
 			clockDeviationWarningView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: ViewTraits.margin),
-			clockDeviationWarningView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -ViewTraits.margin)
+			clockDeviationWarningView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -ViewTraits.margin),
+			
+			riskIndicatorIconView.heightAnchor.constraint(equalTo: riskIndicatorLabel.heightAnchor),
+			riskIndicatorIconView.heightAnchor.constraint(equalTo: riskIndicatorIconView.widthAnchor)
 		])
 	}
 
@@ -189,7 +216,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		}
 	}
 
-	/// The  message
+	/// The message
 	var message: String? {
 		didSet {
 			contentTextView.html(message)
@@ -209,6 +236,25 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 			showInstructionsButton.setTitle(showInstructionsTitle, for: .normal)
 		}
 	}
+	
+	var showsPrimaryButton: Bool = true {
+		didSet {
+			footerButtonView.primaryButton.isHidden = !showsPrimaryButton
+		}
+	}
+	
+	func setRiskIndicator(params: (UIColor, String)?) {
+		guard let params = params else {
+			riskIndicatorStackView.isHidden = true
+			return
+		}
+		riskIndicatorStackView.isHidden = false
+		riskIndicatorIconView.tintColor = params.0
+		riskIndicatorLabel.attributedText = .makeFromHtml(
+			text: params.1,
+			style: .bodyDark
+		)
+	}
 
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
@@ -217,9 +263,9 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	var showInstructionsButtonTappedCommand: (() -> Void)?
 
 	/// The header image
-	var headerImage: UIImage? {
+	var largeImage: UIImage? {
 		didSet {
-			headerImageView.image = headerImage
+			headerImageView.image = largeImage
 		}
 	}
 
@@ -235,4 +281,5 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 
 		headerImageView.isHidden = false
 	}
+
 }

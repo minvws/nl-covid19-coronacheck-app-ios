@@ -48,7 +48,7 @@ class ScanLogViewModelTests: XCTestCase {
 		expect(self.sut.title) == L.scan_log_title()
 		expect(self.sut.message) == L.scan_log_message("60")
 		expect(self.sut.appInUseSince) == L.scan_log_footer_long_time()
-		expect(self.sut.listHeader) == L.scan_log_list_header("60")
+		expect(self.sut.listHeader) == L.scan_log_list_header(60)
 	}
 
 	func test_openUrl() throws {
