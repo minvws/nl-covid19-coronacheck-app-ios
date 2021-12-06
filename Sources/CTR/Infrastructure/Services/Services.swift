@@ -26,6 +26,8 @@ final class Services {
 	private static var couplingManagingType: CouplingManaging.Type = CouplingManager.self
 	private static var mappingManagingType: MappingManaging.Type = MappingManager.self
 	private static var clockDeviationType: ClockDeviationManaging.Type = ClockDeviationManager.self
+	private static var riskLevelManagerType: RiskLevelManaging.Type = RiskLevelManager.self
+	private static var scanLockManagerType: ScanLockManaging.Type = ScanLockManager.self
 	private static var scanLogManagingType: ScanLogManaging.Type = ScanLogManager.self
 
 	// MARK: use override for testing
@@ -93,6 +95,11 @@ final class Services {
 	static func use(_ clockDeviationManaging: ClockDeviationManaging) {
 
 		clockDeviationManager = clockDeviationManaging
+	}
+
+	static func use(_ scanLockManaging: ScanLockManaging) {
+
+		scanLockManager = scanLockManaging
 	}
 
 	static func use(_ walletManaging: WalletManaging) {
@@ -179,6 +186,8 @@ final class Services {
 	)
 
 	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
+	static private(set) var scanLockManager: ScanLockManaging = scanLockManagerType.init()
+	static private(set) var riskLevelManager: RiskLevelManaging = riskLevelManagerType.init()
 
 	static private(set) var scanManager: ScanLogManaging = scanLogManagingType.init(
 		dataStoreManager: dataStoreManager
