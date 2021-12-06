@@ -106,6 +106,7 @@ struct ScanLogDataSource: Logging {
 	let timeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "HH:mm"
+		formatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		return formatter
 	}()
 
