@@ -58,6 +58,7 @@ final class RiskSettingUnselectedViewModel: Logging {
 			shouldDisplayNotSetError = true
 		} else {
 			userSettings.scanRiskLevelValue = selectRisk
+			coordinator?.navigateToVerifierWelcome()
 		}
 	}
 }

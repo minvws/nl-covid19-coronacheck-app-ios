@@ -105,7 +105,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	/// Navigate to verifier welcome scene
 	func navigateToVerifierWelcome() {
 
-		if let existingStartViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierStartViewController }) {
+		if sidePanel?.selectedViewController == dashboardNavigationController,
+			let existingStartViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierStartViewController }) {
 			dashboardNavigationController?.popToViewController(existingStartViewController, animated: true)
 		} else {
 

@@ -43,5 +43,6 @@ final class RiskSettingSelectedViewModel: Logging {
 	func confirmSetting() {
 		
 		userSettings.scanRiskLevelValue = selectRisk
+		coordinator?.navigateToVerifierWelcome()
 	}
 }
