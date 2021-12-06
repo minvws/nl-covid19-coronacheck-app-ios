@@ -64,4 +64,19 @@ class ScanLogViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
 	}
+
+	func test_coredata_error() {
+
+		// Given
+		scanLogManagingSpy.stubbedGetScanEntriesResult = .failure(NSError(domain: "CoronaCheck", code: 4, userInfo: nil))
+		let config: RemoteConfiguration = .default
+
+		// When
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
+
+		// Then
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title) == L.generalErrorTitle()
+		expect(self.sut.alert?.subTitle) == L.generalErrorTechnicalCustom("i 130 000 062")
+	}
 }
