@@ -50,6 +50,10 @@ final class RiskSettingSelectedViewController: BaseViewController {
 			
 			self?.viewModel.selectRisk = riskSetting
 		}
+		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
+			
+			self?.viewModel.confirmSetting()
+		}
 		
 		addBackButton()
 	}

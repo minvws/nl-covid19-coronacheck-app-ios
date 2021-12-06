@@ -16,19 +16,33 @@ final class RiskSettingStartViewModel: Logging {
 	
 	/// The title of the scene
 	@Bindable private(set) var title: String = L.verifier_risksetting_start_title()
-	
 	@Bindable private(set) var header: String = L.verifier_risksetting_start_header()
-	
 	@Bindable private(set) var primaryTitle: String = L.verifier_risksetting_setting_button()
-	
 	@Bindable private(set) var readMoreButtonTitle: String = L.verifier_risksetting_start_readmore()
+	@Bindable private(set) var changeRiskTitle: String = L.verifier_risksetting_changeselection_3g()
+	@Bindable private(set) var changeRiskSubtitle: String = L.verifier_risksetting_lowrisk_subtitle()
+	@Bindable private(set) var changeRiskButton: String = L.verifier_risksetting_changeselection_button()
+	@Bindable private(set) var hasUnselectedRiskLevel: Bool
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
-		userSettings: UserSettingsProtocol) {
+		userSettings: UserSettingsProtocol
+	) {
 		
 		self.coordinator = coordinator
 		self.userSettings = userSettings
+		
+		hasUnselectedRiskLevel = userSettings.scanRiskLevelValue == nil
+		if let riskSetting = userSettings.scanRiskLevelValue {
+			switch riskSetting {
+				case .low:
+					changeRiskTitle = L.verifier_risksetting_changeselection_3g()
+					changeRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
+				case .high:
+					changeRiskTitle = L.verifier_risksetting_changeselection_2g()
+					changeRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
+			}
+		}
 	}
 	
 	func showReadMore() {

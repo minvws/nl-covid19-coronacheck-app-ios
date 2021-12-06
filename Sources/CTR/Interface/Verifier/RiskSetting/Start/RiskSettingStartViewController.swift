@@ -25,6 +25,8 @@ final class RiskSettingStartViewController: BaseViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	override var enableSwipeBack: Bool { false }
+	
 	// MARK: View lifecycle
 	
 	override func loadView() {
@@ -40,12 +42,20 @@ final class RiskSettingStartViewController: BaseViewController {
 		viewModel.$header.binding = { [weak self] in self?.sceneView.header = $0 }
 		viewModel.$primaryTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		viewModel.$readMoreButtonTitle.binding = { [weak self] in self?.sceneView.readMoreButtonTitle = $0 }
+		viewModel.$changeRiskTitle.binding = { [weak self] in self?.sceneView.changeRiskSettingView.title = $0 }
+		viewModel.$changeRiskSubtitle.binding = { [weak self] in self?.sceneView.changeRiskSettingView.subtitle = $0 }
+		viewModel.$changeRiskButton.binding = { [weak self] in self?.sceneView.changeRiskSettingView.changeButtonTitle = $0 }
+		viewModel.$hasUnselectedRiskLevel.binding = { [weak self] in self?.sceneView.hasUnselectedRiskState = $0 }
 		
 		sceneView.readMoreCommand = { [weak self] in
 			
 			self?.viewModel.showReadMore()
 		}
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
+			
+			self?.viewModel.showRiskSetting()
+		}
+		sceneView.changeRiskSettingView.changeButtonCommand = { [weak self] in
 			
 			self?.viewModel.showRiskSetting()
 		}

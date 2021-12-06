@@ -1,8 +1,11 @@
 "general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
 "new.terms.highlights" = "<b>Here's what changed</b><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";
+"new_in_app_risksetting_subtitle" = "Only visitors with a vaccination or recovery certificate get 2G access. 3G access is given to visitors carrying a test certificate. Check in advance which kind of access your location can give.";
+"new_in_app_risksetting_title" = "2G or 3G access";
 "new_in_app_subtitle" = "New in the app";
 "updateApp.content" = "To continue, install the latest version of the app";
+"verification_policy_selection_error_message" = "Choose a setting to continue";
 /* Koptekst in de over de app pagina */
 "verifier.about.readmore" = "Read more:";
 "verifier.about.text" = "CoronaCheck Scanner is created so that certain locations and activities can open their doors again. Think for example of football matches and concerts. Visitors create a coronavirus pass of a vaccination, a negative test result or if they've had corona and are recovered. With this app, only visitors with a coronavirus pass gain access. This way, the Netherlands can head out more often.";
@@ -20,11 +23,11 @@
 "verifier.consent.message.underlined" = "acceptable use policy";
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "Acceptable use policy";
-"verifier.denied.message.five" = "<p>Please ask the visitor to contact the CoronaCheck help desk.</p>";
-"verifier.denied.message.four" = "<p><b>Still looking at a red screen?</b></p>";
-"verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";
-"verifier.denied.message.six" = "<p><b>Please note:</b> Without a green screen with check mark, you can’t grant the visitor access.</p>";
-"verifier.denied.message.three" = "<ul><li>Verify if the time is set correctly on the visitor's phone and yours. Make sure to set the date and time to ‘set automatically’.</li><li>Verify if the visitor is showing an original certificate. A screenshot of a certificate may cause problems.</li><li>Ask the visitor to completely shut down the app and restart it. Please scan the QR code again after.</li></ul>";
+"verifier.denied.message.five" = "<p>Ask the visitor to contact the CoronaCheck help desk.</p>";
+"verifier.denied.message.four" = "<p><b>Does the screen stay red?</b></p>";
+"verifier.denied.message.one" = "<p>A red screen with a cross means the QR code does not comply with the Dutch regulations, or is not valid for locations with 2G access.</p>";
+"verifier.denied.message.six" = "<p><b>Please note:</b> without a screen with check mark, the visitor cannot be given access.</p>";
+"verifier.denied.message.three" = "<ul><li>Check if the time is set correctly, on the visitor's phone as well as your own. Make sure date and time are set to 'set automatically'.</li><li>Check if the visitor is showing an original certificate. A screenshot of their certificate may cause problems.</li><li>Ask the visitor to completely close the app, and restart it. Please rescan the QR code after.</li></ul>";
 "verifier.denied.message.two" = "<b>Here’s what you can do:</b>";
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "What should I do?";
@@ -50,7 +53,7 @@
 "verifier.result.access.identityverified" = "Details are correct";
 "verifier.result.access.readmore" = "Something is wrong";
 /* MARK: - Verifier Result */
-"verifier.result.access.title" = "Check done";
+"verifier.result.access.title" = "3G check done";
 "verifier.result.alert.dcc.message" = "You have scanned an international QR code. In the Netherlands, CoronaCheck users should show their Dutch QR code.";
 "verifier.result.alert.dcc.title" = "Ask for a Dutch QR code";
 "verifier.result.alert.unknown.message" = "Ask the visitor to show a QR code of a coronavirus pass.";
@@ -97,7 +100,7 @@
 "verifier.start.clockdeviationwarning.button" = "Read more";
 "verifier.start.clockdeviationwarning.message" = "Check your phone's time settings. They might be incorrect.";
 "verifier.start.header" = "Scan your visitors' QR codes";
-"verifier.start.message" = "Is the QR code valid, and are the details the same as on the proof of identity? Then you can grant the visitor access.";
+"verifier.start.message" = "Is the QR code valid for your location, and are the details the same as on the proof of identity? Then you can give the visitor access.";
 "verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR codes";
@@ -106,4 +109,30 @@
 /* MARK: - URL */
 "verifier.url.faq" = "https://coronacheck.nl/en/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/en/gebruikersvoorwaarden-in-app";
+"verifier_home_countdown_subtitle" = "You have to wait for 5 minutes because you changed your scan settings while scanning.";
+"verifier_home_countdown_title" = "You can scan again in %@";
+"verifier_menu_risksetting" = "Scan setting";
+"verifier_result_access_title_highrisk" = "2G check done";
+"verifier_risksetting_active_title" = "Change scan setting";
+"verifier_risksetting_confirmation_button" = "Confirm";
+"verifier_risksetting_confirmation_dialog_message" = "If you change scan settings, you have to wait for 5 minutes before you can scan again.";
+"verifier_risksetting_confirmation_dialog_negative_button" = "No, go back";
+"verifier_risksetting_confirmation_dialog_positive_button" = "Yes, change";
 "verifier_risksetting_confirmation_dialog_title" = "Are you sure you want to change the setting?";
+"verifier_risksetting_firsttimeuse_header" = "For your location, please specify if you're going to give 2G or 3G access. Check which kind of access you can give before you start scanning.";
+"verifier_risksetting_firsttimeuse_title" = "Choose your scan setting";
+"verifier_risksetting_highrisk_subtitle" = "You can only give access to visitors with a vaccination or recovery certificate.";
+"verifier_risksetting_highrisk_title" = "2G access";
+"verifier_risksetting_lowrisk_subtitle" = "You can give access to visitors with a test, vaccination or recovery certificate.";
+"verifier_risksetting_lowrisk_title" = "3G access";
+"verifier_risksetting_readmore" = "Which kind of access can I give?";
+"verifier_risksetting_readmore_url" = "https://coronacheck.nl/en/faq-scanner-in-app";
+"verifier_risksetting_setting_button" = "Set setting";
+"verifier_risksetting_start_header" = "For your location, please specify if you're going to give 2G or 3G access. Check which kind of access you can give before you start scanning.";
+"verifier_risksetting_start_readmore" = "Which kind of access can I give?";
+"verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/en/faq-scanner-in-app";
+"verifier_risksetting_start_title" = "Scan setting";
+"verifier_scanner_policy_indication_2g" = "2G access";
+"verifier_scanner_policy_indication_3g" = "3G access";
+"verifier_start_scan_qr_policy_indication_2g" = "Set to <b>2G</b> access";
+"verifier_start_scan_qr_policy_indication_3g" = "Set to <b>3G</b> access";

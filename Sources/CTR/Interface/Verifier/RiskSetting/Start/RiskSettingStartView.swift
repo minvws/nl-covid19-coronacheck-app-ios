@@ -18,6 +18,7 @@ final class RiskSettingStartView: BaseView {
 		}
 		enum Spacing {
 			static let headerToReadMoreButton: CGFloat = 16
+			static let readMoreButtonToChangeRiskView: CGFloat = 40
 		}
 		enum Header {
 			static let lineHeight: CGFloat = 22
@@ -36,7 +37,9 @@ final class RiskSettingStartView: BaseView {
 	}()
 	
 	private let readMoreButton: Button = {
-		return Button(style: .textLabelBlue)
+		let button = Button(style: .textLabelBlue)
+		button.contentHorizontalAlignment = .leading
+		return button
 	}()
 	
 	let footerButtonView: FooterButtonView = {
@@ -45,10 +48,25 @@ final class RiskSettingStartView: BaseView {
 		return view
 	}()
 	
+	let changeRiskSettingView: ChangeRiskSettingView = {
+		let view = ChangeRiskSettingView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
+	/// Scroll view bottom constraint
+	var bottomScrollViewConstraint: NSLayoutConstraint?
+	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
+	
 	override func setupViews() {
 		super.setupViews()
 		
 		readMoreButton.touchUpInside(self, action: #selector(readMore))
+		
+		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
+			let translatedOffset = scrollView.translatedBottomScrollOffset
+			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
+		}
 	}
 	
 	override func setupViewHierarchy() {
@@ -58,6 +76,7 @@ final class RiskSettingStartView: BaseView {
 		addSubview(footerButtonView)
 		scrollView.addSubview(headerLabel)
 		scrollView.addSubview(readMoreButton)
+		scrollView.addSubview(changeRiskSettingView)
 	}
 	
 	override func setupViewConstraints() {
@@ -67,8 +86,17 @@ final class RiskSettingStartView: BaseView {
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			{
+				let constraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+				bottomScrollViewConstraint = constraint
+				return constraint
+			}(),
 			
-			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			{
+				let constraint = footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor)
+				constraint.priority = .defaultLow
+				return constraint
+			}(),
 			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
 			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -86,11 +114,15 @@ final class RiskSettingStartView: BaseView {
 												constant: ViewTraits.Spacing.headerToReadMoreButton),
 			readMoreButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
 												 constant: ViewTraits.Margin.edge),
-			readMoreButton.rightAnchor.constraint(lessThanOrEqualTo: scrollView.rightAnchor,
+			readMoreButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
 												  constant: -ViewTraits.Margin.edge),
 			
-			headerLabel.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
-												constant: -ViewTraits.Margin.edge)
+			changeRiskSettingView.topAnchor.constraint(equalTo: readMoreButton.bottomAnchor,
+													   constant: ViewTraits.Spacing.readMoreButtonToChangeRiskView),
+			changeRiskSettingView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+			changeRiskSettingView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			changeRiskSettingView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
+														  constant: -ViewTraits.Margin.edge)
 		])
 	}
 	
@@ -116,10 +148,12 @@ final class RiskSettingStartView: BaseView {
 	
 	var readMoreCommand: (() -> Void)?
 	
-	var hideFooterButtonView: Bool? {
+	var hasUnselectedRiskState: Bool? {
 		didSet {
-			guard let hideFooterButtonView = hideFooterButtonView else { return }
-			footerButtonView.isHidden = hideFooterButtonView
+			guard let hasUnselectedRiskState = hasUnselectedRiskState else { return }
+			footerButtonView.isHidden = !hasUnselectedRiskState
+			changeRiskSettingView.isHidden = hasUnselectedRiskState
+			bottomScrollViewConstraint?.isActive = !hasUnselectedRiskState
 		}
 	}
 }
