@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ScanLogDisplayEntry {
+enum ScanLogDisplayEntry: Equatable {
 
 	case message (message: String)
 
@@ -42,21 +42,6 @@ class ScanLogViewModel {
 		message = L.scan_log_message("\(scanLogStorageMinutes)")
 		listHeader = L.scan_log_list_header(scanLogStorageMinutes)
 
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-12 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-10 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-9 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-8 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-7 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-6 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-5 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-4 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-3 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-2 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1.5 * 60))
-//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1 * 60))
-
 		handleScanEntries(scanLogStorageSeconds)
 	}
 
@@ -69,16 +54,21 @@ class ScanLogViewModel {
 			case let .success(log):
 				displayEntries.append(contentsOf: ScanLogDataSource(entries: log).getDisplayEntries())
 			case .failure:
-				let code = ErrorCode(flow: .scanFlow, step: .showLog, clientCode: .coreDataFetchError)
-				alert = AlertContent(
-					title: L.generalErrorTitle(),
-					subTitle: L.generalErrorTechnicalCustom("\(code)"),
-					cancelAction: nil,
-					cancelTitle: nil,
-					okAction: nil,
-					okTitle: L.generalClose()
-				)
+				handleCoreDataError()
 		}
+	}
+
+	private func handleCoreDataError() {
+
+		let code = ErrorCode(flow: .scanFlow, step: .showLog, clientCode: .coreDataFetchError)
+		alert = AlertContent(
+			title: L.generalErrorTitle(),
+			subTitle: L.generalErrorTechnicalCustom("\(code)"),
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: nil,
+			okTitle: L.generalClose()
+		)
 	}
 
 	func openUrl(_ url: URL) {
@@ -89,12 +79,28 @@ class ScanLogViewModel {
 
 struct ScanLogDataSource: Logging {
 
-	struct LineItem {
+	struct ScanLogLineItem {
 		var mode: String
 		var count = 0
 		var skew: Bool = false
 		var from: Date?
 		var to: Date?
+
+		mutating func updateToDate(_ scanDate: Date) {
+			if let itemTo = to {
+				to = max(scanDate, itemTo)
+			} else {
+				to = scanDate
+			}
+		}
+
+		mutating func updateFromDate(_ scanDate: Date) {
+			if let itemFrom = from {
+				from = min(scanDate, itemFrom)
+			} else {
+				from = scanDate
+			}
+		}
 	}
 
 	let timeFormatter: DateFormatter = {
@@ -114,34 +120,28 @@ struct ScanLogDataSource: Logging {
 		guard !entries.isEmpty else {
 			return [.message(message: L.scan_log_list_no_items())]
 		}
-		return sortAndSplitEtc()
+		return populateLog(sortedEntries: entries.sortedByIdentifier())
 	}
 
-	func sortAndSplitEtc() -> [ScanLogDisplayEntry] {
+	private func populateLog(sortedEntries: [ScanLogEntry]) -> [ScanLogDisplayEntry] {
 
-		let sortedEntries = entries.sortedByIdentifier()
 		var currentTime: Date?
-		var lineItem: LineItem?
-		var log: [LineItem] = []
+		var lineItem: ScanLogLineItem?
+		var log: [ScanLogLineItem] = []
 
 		sortedEntries.forEach { scan in
-
-//			logInfo("entry \(scan.identifier) \(scan.mode) \(scan.date)")
-
 			guard let scanDate = scan.date, let scanMode = scan.mode else {
 				return
 			}
 
-			if lineItem == nil ||
-				scanMode != lineItem?.mode ||
-				(currentTime != nil &&
-				 currentTime! > scanDate) {
+			if lineItem == nil || scanMode != lineItem?.mode ||
+				(currentTime != nil && currentTime! > scanDate) {
 				if let item = lineItem {
 					// We had a previous line item, put it on the log stack.
 					log.append(item)
 				}
 				// Switch occurred
-				lineItem = LineItem(mode: scanMode)
+				lineItem = ScanLogLineItem(mode: scanMode)
 				if let currentTime = currentTime, currentTime > scanDate {
 					lineItem?.skew = true
 				}
@@ -149,18 +149,8 @@ struct ScanLogDataSource: Logging {
 
 			currentTime = scanDate
 			lineItem?.count += 1
-
-			if let lineItemTo = lineItem?.to {
-				lineItem?.to = max(scanDate, lineItemTo)
-			} else {
-				lineItem?.to = scanDate
-			}
-
-			if let lineItemFrom = lineItem?.from {
-				lineItem?.from = min(scanDate, lineItemFrom)
-			} else {
-				lineItem?.from = scanDate
-			}
+			lineItem?.updateToDate(scanDate)
+			lineItem?.updateFromDate(scanDate)
 		}
 
 		if let item = lineItem {
@@ -171,8 +161,8 @@ struct ScanLogDataSource: Logging {
 		// We want to display last switch first, so finally reverse the log
 		log = log.reversed()
 
+		// Convert to display entries
 		var result = [ScanLogDisplayEntry]()
-
 		var firstItem = true
 		log.forEach { item in
 
@@ -181,11 +171,10 @@ struct ScanLogDataSource: Logging {
 				result.append(scanLogDisplayEntry)
 			}
 		}
-
 		return result
 	}
 
-	private func convert(_ item: LineItem, replaceToDate: Bool) -> ScanLogDisplayEntry? {
+	private func convert(_ item: ScanLogLineItem, replaceToDate: Bool) -> ScanLogDisplayEntry? {
 
 		// logDebug("convert lineItem : \(item)")
 
