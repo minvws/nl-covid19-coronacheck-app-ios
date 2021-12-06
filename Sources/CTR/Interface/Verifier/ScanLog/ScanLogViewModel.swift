@@ -20,8 +20,6 @@ class ScanLogViewModel {
 
 	weak private var scanManager: ScanLogManaging? = Services.scanManager
 
-	private var scanLogStorageMinutes: Int
-
 	@Bindable private(set) var title: String = L.scan_log_title()
 	@Bindable private(set) var message: String
 	@Bindable private(set) var appInUseSince: String
@@ -34,7 +32,8 @@ class ScanLogViewModel {
 		configuration: RemoteConfiguration
 	) {
 		self.coordinator = coordinator
-		scanLogStorageMinutes = (configuration.scanLogStorageSeconds ?? 3600) / 60
+		let scanLogStorageSeconds: Int = configuration.scanLogStorageSeconds ?? 3600
+		let scanLogStorageMinutes: Int = scanLogStorageSeconds / 60
 
 		// Todo: Insert the actual first usage timestamp in the placeholder,
 		// and check if it is older than a month
@@ -43,22 +42,22 @@ class ScanLogViewModel {
 		message = L.scan_log_message("\(scanLogStorageMinutes)")
 		listHeader = L.scan_log_list_header(scanLogStorageMinutes)
 
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-12 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-10 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-9 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-8 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-7 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-6 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-5 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-4 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-3 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-2 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1.5 * 60))
-		//		ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-12 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-11 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-10 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-9 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-8 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-7 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-6 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-5 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-4 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-3 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .high, date: Date().addingTimeInterval(-2 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1.5 * 60))
+//				ScanLogManager().addScanEntry(riskLevel: .low, date: Date().addingTimeInterval(-1 * 60))
 
-		handleScanEntries(scanLogStorageMinutes)
+		handleScanEntries(scanLogStorageSeconds)
 	}
 
 	private func handleScanEntries(_ scanLogStorageMinutes: Int) {
