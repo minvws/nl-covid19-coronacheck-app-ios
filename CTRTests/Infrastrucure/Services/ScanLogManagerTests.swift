@@ -69,7 +69,7 @@ class ScanLogManagerTests: XCTestCase {
 		expect(result).to(beEmpty())
 	}
 
-	func test_getScanEntries_oneScan_inTimeWindow_highrisk() throws {
+	func test_getScanEntries_oneScan_inTimeWindow_highRisk() throws {
 
 		// Given
 		let date = Date()
@@ -84,7 +84,7 @@ class ScanLogManagerTests: XCTestCase {
 		expect(result.first?.mode) == ScanLogManager.highRisk
 	}
 
-	func test_getScanEntries_oneScan_inTimeWindow_lowisk() throws {
+	func test_getScanEntries_oneScan_inTimeWindow_lowRisk() throws {
 
 		// Given
 		let date = Date()
@@ -110,5 +110,33 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Then
 		expect(result).to(beEmpty())
+	}
+
+	func test_deleteScans_oneScan_outsideTimeWindow() throws {
+
+		// Given
+		let date = Date().addingTimeInterval(ago * 4000 * seconds)
+		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+
+		// When
+		sut.deleteExpiredScanLogEntries(seconds: 3600)
+		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
+
+		// Then
+		expect(result).to(beEmpty())
+	}
+
+	func test_deleteScans_oneScan_inTimeWindow() throws {
+
+		// Given
+		let date = Date().addingTimeInterval(ago * 3000 * seconds)
+		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+
+		// When
+		sut.deleteExpiredScanLogEntries(seconds: 3600)
+		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
+
+		// Then
+		expect(result).toNot(beEmpty())
 	}
 }
