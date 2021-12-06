@@ -22,6 +22,8 @@ class VerifierStartViewControllerTests: XCTestCase {
 	private var cryptoLibUtilitySpy: CryptoLibUtilitySpy!
 	private var clockDeviationManagerSpy: ClockDeviationManagerSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var scanLockManagerSpy: ScanLockManagerSpy!
 	
 	var window = UIWindow()
 
@@ -31,6 +33,11 @@ class VerifierStartViewControllerTests: XCTestCase {
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
+		riskLevelManagerSpy = RiskLevelManagerSpy()
+		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy = ScanLockManagerSpy()
+		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
+		
 		cryptoLibUtilitySpy = CryptoLibUtilitySpy(
 			now: { now },
 			userSettings: UserSettingsSpy(),
@@ -49,6 +56,8 @@ class VerifierStartViewControllerTests: XCTestCase {
 
 		viewModel = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 		sut = VerifierStartViewController(viewModel: viewModel)

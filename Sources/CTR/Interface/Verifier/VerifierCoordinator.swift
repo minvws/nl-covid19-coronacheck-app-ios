@@ -109,7 +109,9 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 			let dashboardViewController = VerifierStartViewController(
 				viewModel: VerifierStartViewModel(
-					coordinator: self
+					coordinator: self,
+					scanLockProvider: Services.scanLockManager,
+					riskLevelProvider: Services.riskLevelManager
 				)
 			)
 
