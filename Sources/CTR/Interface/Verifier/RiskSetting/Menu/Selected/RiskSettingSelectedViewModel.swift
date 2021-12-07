@@ -54,7 +54,7 @@ final class RiskSettingSelectedViewModel: Logging {
 	
 	func confirmSetting() {
 		
-		if didWeScanQRs {
+		if didWeScanQRs, riskLevel != selectRisk {
 			displayAlert()
 		} else {
 			saveSettingAndGoBackToStart()
