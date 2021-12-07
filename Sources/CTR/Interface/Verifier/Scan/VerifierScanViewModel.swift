@@ -21,8 +21,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// Coordination Delegate
 	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
 
-	var userSettings: UserSettingsProtocol
-
 	// MARK: - Bindable properties
 
 	/// The title of the scene
@@ -43,13 +41,9 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(
-		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol),
-		userSettings: UserSettingsProtocol
-	) {
+	init(coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)) {
 
 		self.theCoordinator = coordinator
-		self.userSettings = userSettings
 
 		self.title = L.verifierScanTitle()
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
@@ -64,8 +58,9 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		let currentRiskLevel = userSettings.scanRiskLevelValue
-		scanLogManager?.addScanEntry(riskLevel: currentRiskLevel, date: Date())
+		if let riskLevel = riskLevelManager?.state {
+			scanLogManager?.addScanEntry(riskLevel: riskLevel, date: Date())
+		}
 
 		if let verificationResult = cryptoManager?.verifyQRMessage(message) {
 			switch Int64(verificationResult.status) {

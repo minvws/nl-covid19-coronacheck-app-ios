@@ -204,8 +204,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		} else {
 			let destination = VerifierScanViewController(
 				viewModel: VerifierScanViewModel(
-					coordinator: self,
-					userSettings: userSettings
+					coordinator: self
 				)
 			)
 			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
