@@ -31,6 +31,7 @@ class ScanLogViewControllerTests: XCTestCase {
 
 		scanLogManagingSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagingSpy)
+		scanLogManagingSpy.stubbedGetScanEntriesResult = .success([])
 
 		appInstalledSinceManagingSpy = AppInstalledSinceManagingSpy()
 		appInstalledSinceManagingSpy.stubbedFirstUseDate = now.addingTimeInterval(31 * days * ago)

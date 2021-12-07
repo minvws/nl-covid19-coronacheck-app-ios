@@ -590,7 +590,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		
 		let alertController = UIAlertController(
 			title: L.generalErrorTitle(),
-			message: String(format: L.generalErrorTechnicalCustom("\(code)")),
+			message: L.generalErrorTechnicalCustom("\(code)"),
 			preferredStyle: .alert
 		)
 
