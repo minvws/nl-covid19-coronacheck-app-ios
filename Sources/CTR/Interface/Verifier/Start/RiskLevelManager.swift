@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol RiskLevelManaging {
+protocol RiskLevelManaging: AnyObject {
 	var state: RiskLevel? { get }
 	
 	init()

@@ -15,6 +15,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
 
 	weak var scanLogManager: ScanLogManaging? = Services.scanLogManager
+	weak var riskLevelManager: RiskLevelManaging? = Services.riskLevelManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
@@ -35,6 +36,8 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	@Bindable private(set) var alert: AlertContent?
 
 	@Bindable private(set) var shouldResumeScanning: Bool?
+	
+	@Bindable private(set) var riskLevel: RiskLevel?
 
 	/// Initializer
 	/// - Parameters:
@@ -50,6 +53,8 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.title = L.verifierScanTitle()
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
+		
+		self.riskLevel = riskLevelManager?.state
 
 		super.init(coordinator: coordinator)
 	}

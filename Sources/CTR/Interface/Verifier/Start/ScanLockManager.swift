@@ -8,11 +8,12 @@
 import UIKit
 
 protocol ScanLockManaging {
-	func appendObserver(_ observer: @escaping (ScanLockManager.State) -> Void) -> ScanLockManager.ObserverToken
-	func removeObserver(token: ScanLockManager.ObserverToken)
+	var state: ScanLockManager.State { get }
 	
 	init()
 	func lock()
+	func appendObserver(_ observer: @escaping (ScanLockManager.State) -> Void) -> ScanLockManager.ObserverToken
+	func removeObserver(token: ScanLockManager.ObserverToken)
 }
 
 final class ScanLockManager: ScanLockManaging {
