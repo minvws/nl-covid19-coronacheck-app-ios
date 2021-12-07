@@ -113,12 +113,10 @@ class AppCoordinator: Coordinator, Logging {
 			)
 
 			// If the firstUseDate is nil, and we get a server header, that means a new installation.
-			if self?.appInstalledSinceManager?.firstUseDate == nil {
-				self?.appInstalledSinceManager?.update(
-					serverHeaderDate: serverDateString,
-					ageHeader: httpResponse.allHeaderFields["Age"] as? String
-				)
-			}
+			self?.appInstalledSinceManager?.update(
+				serverHeaderDate: serverDateString,
+				ageHeader: httpResponse.allHeaderFields["Age"] as? String
+			)
 		}]
 	}
 
@@ -317,9 +315,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
 			case .withinTTL:
 				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
 				// Use the documents directory creation date.
-				if self.appInstalledSinceManager?.firstUseDate == nil {
-					self.appInstalledSinceManager?.update(documentsDirectoryCreationDate: self.appInstalledSinceManager?.getDocumentsDirectoryCreationDate())
-				}
+				self.appInstalledSinceManager?.update(documentsDirectoryCreationDate: self.appInstalledSinceManager?.getDocumentsDirectoryCreationDate())
 				startApplication()
 
 			case .noActionNeeded:

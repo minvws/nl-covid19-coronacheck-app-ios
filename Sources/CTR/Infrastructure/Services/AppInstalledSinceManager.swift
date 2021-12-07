@@ -55,6 +55,9 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 	/// e.g. "Sat, 07 Aug 2021 12:12:57 GMT"
 	func update(serverHeaderDate: String, ageHeader: String?) {
 
+		// it can only be set once
+		guard appInstalledDate == nil else { return }
+
 		guard var serverDate = serverHeaderDateFormatter.date(from: serverHeaderDate) else { return }
 
 		if let ageHeader = ageHeader {
@@ -67,6 +70,9 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 	}
 
 	func update(documentsDirectoryCreationDate: Date?) {
+
+		// it can only be set once
+		guard appInstalledDate == nil else { return }
 
 		if let date = documentsDirectoryCreationDate {
 			appInstalledDate = date
