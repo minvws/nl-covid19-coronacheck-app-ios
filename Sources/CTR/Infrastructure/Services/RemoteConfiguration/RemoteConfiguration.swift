@@ -114,10 +114,13 @@ struct RemoteConfiguration: Codable, Equatable {
 
 	var internationalQRRelevancyDays: Int?
 
+	/// The minimum number of seconds between switching risk level
 	var scanLockSeconds: Int?
 
+	/// The number of seconds we show a warning before switching risk level
 	var scanLockWarningSeconds: Int?
 
+	/// The number of seconds to keep scan entries in the log
 	var scanLogStorageSeconds: Int?
 
 	/// Key mapping
