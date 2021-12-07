@@ -149,6 +149,7 @@
 "verifier_risksetting_start_readmore" = "Welk soort toegang mag ik geven?";
 "verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier_risksetting_start_title" = "Scan-instelling";
+"verifier_scan_instructions_back_to_start" = "Terug naar start";
 "verifier_scanner_policy_indication_2g" = "2G-toegang";
 "verifier_scanner_policy_indication_3g" = "3G-toegang";
 "verifier_start_scan_qr_policy_indication_2g" = "<b>2G</b>-toegang ingesteld";

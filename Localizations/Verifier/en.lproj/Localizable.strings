@@ -126,6 +126,7 @@
 "verifier_home_countdown_title" = "You can scan again in %@";
 "verifier_menu_risksetting" = "Scan setting";
 "verifier_result_access_title_highrisk" = "2G check done";
+"verifier_risksetting_active_lock_warning_header" = "<p><b>Please note:</b> if you change scan settings while scanning, you have to wait for 5 minutes before you can scan again.</p>";
 "verifier_risksetting_active_title" = "Change scan setting";
 "verifier_risksetting_changeselection_2g" = "Set to 2G access";
 "verifier_risksetting_changeselection_3g" = "Set to 3G access";
@@ -148,6 +149,7 @@
 "verifier_risksetting_start_readmore" = "Which kind of access can I give?";
 "verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/en/faq-scanner-in-app";
 "verifier_risksetting_start_title" = "Scan setting";
+"verifier_scan_instructions_back_to_start" = "Back to start";
 "verifier_scanner_policy_indication_2g" = "2G access";
 "verifier_scanner_policy_indication_3g" = "3G access";
 "verifier_start_scan_qr_policy_indication_2g" = "Set to <b>2G</b> access";
