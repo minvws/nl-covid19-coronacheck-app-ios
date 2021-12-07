@@ -24,10 +24,12 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
 		userSettingsSpy.stubbedScanRiskLevelValue = .low
+		let config: RemoteConfiguration = .default
 		
 		sut = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			configuration: config
 		)
 	}
 	

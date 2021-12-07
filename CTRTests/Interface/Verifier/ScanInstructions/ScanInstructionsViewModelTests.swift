@@ -31,11 +31,10 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		userSettingsSpy.stubbedScanInstructionShown = true
 
 		// Act
-		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
 		sut.finishScanInstructions()
 
 		// Assert
-		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
 	}
 
 	func test_userTappedBackOnFirstPage_callsCoordinator() {
@@ -120,6 +119,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 	func test_nextButtonTitleChangesOnLastPage() {
 		userSettingsSpy.stubbedScanInstructionShown = true
+		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		let pages = [
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),

@@ -39,10 +39,12 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	func test_bindings() {
 		// Given
+		let config: RemoteConfiguration = .default
 		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			configuration: config
 		)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
@@ -63,10 +65,12 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_low() {
 		// Given
+		let config: RemoteConfiguration = .default
 		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			configuration: config
 		)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
@@ -82,10 +86,12 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_high() {
 		// Given
+		let config: RemoteConfiguration = .default
 		userSettingsSpy.stubbedScanRiskLevelValue = .high
 		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			configuration: config
 		)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
