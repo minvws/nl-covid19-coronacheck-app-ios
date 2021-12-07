@@ -12,6 +12,24 @@ class ScanLockManagerSpy: ScanLockManaging {
 
 	required init() {}
 
+	var invokedStateGetter = false
+	var invokedStateGetterCount = 0
+	var stubbedState: ScanLockManager.State!
+
+	var state: ScanLockManager.State {
+		invokedStateGetter = true
+		invokedStateGetterCount += 1
+		return stubbedState
+	}
+
+	var invokedLock = false
+	var invokedLockCount = 0
+
+	func lock() {
+		invokedLock = true
+		invokedLockCount += 1
+	}
+
 	var invokedAppendObserver = false
 	var invokedAppendObserverCount = 0
 	var stubbedAppendObserverObserverResult: (ScanLockManager.State, Void)?
@@ -36,13 +54,5 @@ class ScanLockManagerSpy: ScanLockManaging {
 		invokedRemoveObserverCount += 1
 		invokedRemoveObserverParameters = (token, ())
 		invokedRemoveObserverParametersList.append((token, ()))
-	}
-
-	var invokedLock = false
-	var invokedLockCount = 0
-
-	func lock() {
-		invokedLock = true
-		invokedLockCount += 1
 	}
 }
