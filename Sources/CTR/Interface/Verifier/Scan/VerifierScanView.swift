@@ -166,7 +166,7 @@ final class RiskLevelIndicator: BaseView {
 	
 	override func setupViews() {
 		translatesAutoresizingMaskIntoConstraints = false
-		backgroundColor = .gray
+		backgroundColor = .white
 		
 		isAccessibilityElement = true
 	}
