@@ -75,7 +75,7 @@ class ScanLogViewModelTests: XCTestCase {
 		let config: RemoteConfiguration = .default
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
 
 		// Then
 		expect(self.sut.alert).toEventuallyNot(beNil())
@@ -90,7 +90,7 @@ class ScanLogViewModelTests: XCTestCase {
 		let config: RemoteConfiguration = .default
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(1))
@@ -107,7 +107,7 @@ class ScanLogViewModelTests: XCTestCase {
 		config.scanLogStorageSeconds = Int(Date().timeIntervalSince1970 - now.timeIntervalSince1970 + 3600)
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(1))
@@ -125,7 +125,7 @@ class ScanLogViewModelTests: XCTestCase {
 		config.scanLogStorageSeconds = Int(Date().timeIntervalSince1970 - now.timeIntervalSince1970 + 3600)
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(1))
@@ -143,7 +143,7 @@ class ScanLogViewModelTests: XCTestCase {
 		config.scanLogStorageSeconds = Int(Date().timeIntervalSince1970 - now.timeIntervalSince1970 + 3600)
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(2))
@@ -179,7 +179,7 @@ class ScanLogViewModelTests: XCTestCase {
 		config.scanLogStorageSeconds = Int(Date().timeIntervalSince1970 - now.timeIntervalSince1970 + 3600)
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(4))
