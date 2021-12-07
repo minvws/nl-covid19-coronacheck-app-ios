@@ -14,7 +14,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
 
-	weak var scanLogManager: ScanLogManaging? = Services.scanManager
+	weak var scanLogManager: ScanLogManaging? = Services.scanLogManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?

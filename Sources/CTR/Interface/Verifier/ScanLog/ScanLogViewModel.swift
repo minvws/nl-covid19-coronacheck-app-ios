@@ -18,7 +18,7 @@ class ScanLogViewModel {
 
 	weak private var coordinator: OpenUrlProtocol?
 
-	weak private var scanManager: ScanLogManaging? = Services.scanManager
+	weak private var scanManager: ScanLogManaging? = Services.scanLogManager
 
 	@Bindable private(set) var title: String = L.scan_log_title()
 	@Bindable private(set) var message: String

@@ -17,6 +17,8 @@ protocol ScanLogManaging: AnyObject {
 	func getScanEntries(seconds: Int) -> Result<[ScanLogEntry], Error>
 
 	func addScanEntry(riskLevel: RiskLevel, date: Date)
+
+	func deleteExpiredScanLogEntries(seconds: Int)
 }
 
 class ScanLogManager: ScanLogManaging {
@@ -62,6 +64,22 @@ class ScanLogManager: ScanLogManaging {
 
 			// Update the auto_increment identifier
 			entry?.identifier = entry?.autoId ?? 0
+			dataStoreManager.save(context)
+		}
+	}
+
+	func deleteExpiredScanLogEntries(seconds: Int) {
+
+		let untilDate = Date().addingTimeInterval(TimeInterval(seconds) * -1)
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			let result = ScanLogEntryModel.listEntriesUpTo(date: untilDate, managedContext: context)
+			switch result {
+				case let .success(entries):
+					entries.forEach { context.delete($0) }
+				case .failure:
+					break
+			}
 			dataStoreManager.save(context)
 		}
 	}
