@@ -116,6 +116,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = true
+		riskLevelManagerSpy.stubbedState = .low
 		loadView()
 
 		// When
@@ -133,6 +134,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		let alertVerifier = AlertVerifier()
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = false
+		riskLevelManagerSpy.stubbedState = .low
 		loadView()
 
 		// When

@@ -109,6 +109,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = true
+		riskLevelManagerSpy.stubbedState = .low
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			scanLockProvider: scanLockManagerSpy,
@@ -130,6 +131,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = false
+		riskLevelManagerSpy.stubbedState = .low
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			scanLockProvider: scanLockManagerSpy,
