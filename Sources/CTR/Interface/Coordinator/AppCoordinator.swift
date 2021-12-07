@@ -315,7 +315,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
 			case .withinTTL:
 				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
 				// Use the documents directory creation date.
-				self.appInstalledSinceManager?.update(documentsDirectoryCreationDate: self.appInstalledSinceManager?.getDocumentsDirectoryCreationDate())
+				self.appInstalledSinceManager?.update(dateProvider: FileManager.default)
 				startApplication()
 
 			case .noActionNeeded:

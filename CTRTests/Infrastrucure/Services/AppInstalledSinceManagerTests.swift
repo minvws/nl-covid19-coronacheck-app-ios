@@ -57,9 +57,11 @@ class AppInstalledSinceManagerTests: XCTestCase {
 	func test_addingDocumentsDirectoryDate() {
 
 		// Given
+		let provider = DateProvider()
+		provider.stubbedGetDocumentsDirectoryCreationDateResult = now
 
 		// When
-		sut.update(documentsDirectoryCreationDate: now)
+		sut.update(dateProvider: provider)
 
 		// Then
 		expect(self.sut.firstUseDate) == now
@@ -76,7 +78,7 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		expect(self.sut.firstUseDate).to(beNil())
 	}
 
-	func test_canOnlyBeSetOnce() {
+	func test_canOnlyBeSetOnce_serverUpdates() {
 
 		// Given
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "0")
@@ -86,5 +88,32 @@ class AppInstalledSinceManagerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.firstUseDate) == now
+	}
+
+	func test_canOnlyBeSetOnce_providerAndServer() {
+
+		// Given
+		let provider = DateProvider()
+		provider.stubbedGetDocumentsDirectoryCreationDateResult = now
+		sut.update(dateProvider: provider)
+
+		// When
+		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "120")
+
+		// Then
+		expect(self.sut.firstUseDate) == now
+	}
+
+	class DateProvider: DocumentsDirectoryCreationDateProtocol {
+
+		var invokedGetDocumentsDirectoryCreationDate = false
+		var invokedGetDocumentsDirectoryCreationDateCount = 0
+		var stubbedGetDocumentsDirectoryCreationDateResult: Date!
+
+		func getDocumentsDirectoryCreationDate() -> Date? {
+			invokedGetDocumentsDirectoryCreationDate = true
+			invokedGetDocumentsDirectoryCreationDateCount += 1
+			return stubbedGetDocumentsDirectoryCreationDateResult
+		}
 	}
 }

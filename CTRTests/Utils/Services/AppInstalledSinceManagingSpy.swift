@@ -36,24 +36,14 @@ class AppInstalledSinceManagingSpy: AppInstalledSinceManaging {
 
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
-	var invokedUpdateParameters: (documentsDirectoryCreationDate: Date?, Void)?
-	var invokedUpdateParametersList = [(documentsDirectoryCreationDate: Date?, Void)]()
+	var invokedUpdateParameters: (dateProvider: DocumentsDirectoryCreationDateProtocol, Void)?
+	var invokedUpdateParametersList = [(dateProvider: DocumentsDirectoryCreationDateProtocol, Void)]()
 
-	func update(documentsDirectoryCreationDate: Date?) {
+	func update(dateProvider: DocumentsDirectoryCreationDateProtocol) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
-		invokedUpdateParameters = (documentsDirectoryCreationDate, ())
-		invokedUpdateParametersList.append((documentsDirectoryCreationDate, ()))
-	}
-
-	var invokedGetDocumentsDirectoryCreationDate = false
-	var invokedGetDocumentsDirectoryCreationDateCount = 0
-	var stubbedGetDocumentsDirectoryCreationDateResult: Date!
-
-	func getDocumentsDirectoryCreationDate() -> Date? {
-		invokedGetDocumentsDirectoryCreationDate = true
-		invokedGetDocumentsDirectoryCreationDateCount += 1
-		return stubbedGetDocumentsDirectoryCreationDateResult
+		invokedUpdateParameters = (dateProvider, ())
+		invokedUpdateParametersList.append((dateProvider, ()))
 	}
 
 	var invokedReset = false

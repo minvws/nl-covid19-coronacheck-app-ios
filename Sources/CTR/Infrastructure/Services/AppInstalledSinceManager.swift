@@ -15,9 +15,7 @@ protocol AppInstalledSinceManaging: AnyObject {
 
 	func update(serverHeaderDate: String, ageHeader: String?)
 
-	func update(documentsDirectoryCreationDate: Date?)
-
-	func getDocumentsDirectoryCreationDate() -> Date?
+	func update(dateProvider: DocumentsDirectoryCreationDateProtocol)
 
 	func reset()
 }
@@ -69,24 +67,32 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		appInstalledDate = serverDate
 	}
 
-	func update(documentsDirectoryCreationDate: Date?) {
+	func update(dateProvider: DocumentsDirectoryCreationDateProtocol) {
 
 		// it can only be set once
 		guard appInstalledDate == nil else { return }
 
-		if let date = documentsDirectoryCreationDate {
+		if let date = dateProvider.getDocumentsDirectoryCreationDate() {
 			appInstalledDate = date
 		}
 	}
 
-	func getDocumentsDirectoryCreationDate() -> Date? {
-		guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last,
-			  let attributes = try? FileManager.default.attributesOfItem(atPath: documentsURL.path)
-		else { return nil }
-		return attributes[.creationDate] as? Date
-	}
-
 	func reset() {
 		appInstalledDate = nil
+	}
+}
+
+protocol DocumentsDirectoryCreationDateProtocol {
+
+	func getDocumentsDirectoryCreationDate() -> Date?
+}
+
+extension FileManager: DocumentsDirectoryCreationDateProtocol {
+
+	func getDocumentsDirectoryCreationDate() -> Date? {
+		guard let documentsURL = urls(for: .documentDirectory, in: .userDomainMask).last,
+			  let attributes = try? attributesOfItem(atPath: documentsURL.path)
+		else { return nil }
+		return attributes[.creationDate] as? Date
 	}
 }
