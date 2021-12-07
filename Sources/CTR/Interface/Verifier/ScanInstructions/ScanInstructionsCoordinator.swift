@@ -65,8 +65,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	}
 	
 	func userWishesToSelectRiskSetting() {
-		let viewModel = RiskSettingInstructionViewModel(coordinator: self,
-														userSettings: UserSettings())
+		let viewModel = RiskSettingInstructionViewModel(coordinator: self)
 		let viewController = RiskSettingInstructionViewController(viewModel: viewModel)
 		navigationController.pushViewController(viewController, animated: true)
 	}

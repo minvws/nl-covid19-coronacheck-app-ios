@@ -26,6 +26,7 @@ class ScanInstructionsViewModel {
 	}
 
 	private let userSettings: UserSettingsProtocol
+	private let riskLevelManager: RiskLevelManaging
 	private var shouldShowRiskSetting = false
 
 	/// Initializer
@@ -36,15 +37,17 @@ class ScanInstructionsViewModel {
 	init(
 		coordinator: ScanInstructionsCoordinatorDelegate,
 		pages: [ScanInstructionsPage],
-		userSettings: UserSettingsProtocol
+		userSettings: UserSettingsProtocol,
+		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
 	) {
 		
 		self.coordinator = coordinator
 		self.pages = pages
 		self.userSettings = userSettings
+		self.riskLevelManager = riskLevelManager
 		self.currentPage = 0
 		
-		shouldShowRiskSetting = userSettings.scanRiskLevelValue == nil
+		shouldShowRiskSetting = riskLevelManager.state == nil
 		updateState()
 	}
 	

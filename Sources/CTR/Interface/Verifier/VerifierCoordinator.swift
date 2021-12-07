@@ -140,8 +140,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			viewModel: CheckIdentityViewModel(
 				coordinator: self,
 				verificationDetails: verificationDetails,
-				isDeepLinkEnabled: thirdPartyScannerApp != nil,
-				userSettings: userSettings
+				isDeepLinkEnabled: thirdPartyScannerApp != nil
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
@@ -203,8 +202,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		} else {
 			let destination = VerifierScanViewController(
 				viewModel: VerifierScanViewModel(
-					coordinator: self,
-					userSettings: userSettings
+					coordinator: self
 				)
 			)
 			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
@@ -253,15 +251,13 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		if shouldSelectSetting {
 			viewController = RiskSettingUnselectedViewController(
 				viewModel: RiskSettingUnselectedViewModel(
-					coordinator: self,
-					userSettings: UserSettings()
+					coordinator: self
 				)
 			)
 		} else {
 			viewController = RiskSettingSelectedViewController(
 				viewModel: RiskSettingSelectedViewModel(
 					coordinator: self,
-					userSettings: UserSettings(),
 					configuration: remoteConfigManager.storedConfiguration
 				)
 			)
@@ -328,8 +324,7 @@ extension VerifierCoordinator: MenuDelegate {
 			case .riskSetting:
 				let destination = RiskSettingStartViewController(
 					viewModel: RiskSettingStartViewModel(
-						coordinator: self,
-						userSettings: UserSettings()
+						coordinator: self
 					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)

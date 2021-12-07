@@ -19,7 +19,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// Coordination Delegate
 	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
 
-	var userSettings: UserSettingsProtocol
+	private let riskLevelManager: RiskLevelManaging
 
 	// MARK: - Bindable properties
 
@@ -41,11 +41,11 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	///   - coordinator: the coordinator delegate
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol),
-		userSettings: UserSettingsProtocol
+		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
 	) {
 
 		self.theCoordinator = coordinator
-		self.userSettings = userSettings
+		self.riskLevelManager = riskLevelManager
 
 		self.title = L.verifierScanTitle()
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
@@ -58,7 +58,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		guard let currentRiskLevel = userSettings.scanRiskLevelValue else {
+		guard let currentRiskLevel = riskLevelManager.state else {
 			fatalError("Risk level should be set")
 		}
 		scanLogManager?.addScanEntry(riskLevel: currentRiskLevel, date: Date())

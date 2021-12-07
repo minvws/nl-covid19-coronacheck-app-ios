@@ -12,7 +12,7 @@ final class RiskSettingSelectedViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
-	private let userSettings: UserSettingsProtocol
+	private let riskLevelManager: RiskLevelManaging
 	private let scanLogManager: ScanLogManaging
 	
 	/// The title of the scene
@@ -33,16 +33,16 @@ final class RiskSettingSelectedViewModel: Logging {
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
-		userSettings: UserSettingsProtocol,
+		riskLevelManager: RiskLevelManaging = Services.riskLevelManager,
 		scanLogManager: ScanLogManaging = Services.scanManager,
 		configuration: RemoteConfiguration
 	) {
 		
 		self.coordinator = coordinator
-		self.userSettings = userSettings
+		self.riskLevelManager = riskLevelManager
 		self.scanLogManager = scanLogManager
 		
-		let selectedRisk = userSettings.scanRiskLevelValue
+		let selectedRisk = riskLevelManager.state
 		riskLevel = selectedRisk
 		selectRisk = selectedRisk
 		
@@ -79,7 +79,7 @@ private extension RiskSettingSelectedViewModel {
 	
 	func saveSettingAndGoBackToStart() {
 		
-		userSettings.scanRiskLevelValue = selectRisk
+		riskLevelManager.update(riskLevel: selectRisk)
 		coordinator?.navigateToVerifierWelcome()
 	}
 }

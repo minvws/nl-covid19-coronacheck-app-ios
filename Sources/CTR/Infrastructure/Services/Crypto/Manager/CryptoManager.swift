@@ -38,7 +38,7 @@ class CryptoManager: CryptoManaging, Logging {
 	
 	private let cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility
 	
-	private let userSettings: UserSettingsProtocol = UserSettings()
+	private let riskLevelManager: RiskLevelManaging = Services.riskLevelManager
 	
 	/// Initializer
 	required init() {
@@ -136,7 +136,7 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		
 		let proofQREncoded = message.data(using: .utf8)
-		guard let riskSetting = userSettings.scanRiskLevelValue else {
+		guard let riskSetting = riskLevelManager.state else {
 			fatalError("Risk level should be set")
 		}
 		let verificationPolicy = riskSetting.policy

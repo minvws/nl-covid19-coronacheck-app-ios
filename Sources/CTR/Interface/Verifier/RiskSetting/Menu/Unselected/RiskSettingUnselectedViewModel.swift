@@ -12,7 +12,7 @@ final class RiskSettingUnselectedViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
-	private let userSettings: UserSettingsProtocol
+	private let riskLevelManager: RiskLevelManaging
 	
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_firsttimeuse_title()
@@ -36,12 +36,13 @@ final class RiskSettingUnselectedViewModel: Logging {
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
-		userSettings: UserSettingsProtocol) {
+		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
+	) {
 		
 		self.coordinator = coordinator
-		self.userSettings = userSettings
+		self.riskLevelManager = riskLevelManager
 		
-		let selectedRisk = userSettings.scanRiskLevelValue
+		let selectedRisk = riskLevelManager.state
 		riskLevel = selectedRisk
 		selectRisk = selectedRisk
 	}
@@ -57,7 +58,7 @@ final class RiskSettingUnselectedViewModel: Logging {
 		if selectRisk == nil {
 			shouldDisplayNotSetError = true
 		} else {
-			userSettings.scanRiskLevelValue = selectRisk
+			riskLevelManager.update(riskLevel: selectRisk)
 			coordinator?.navigateToVerifierWelcome()
 		}
 	}

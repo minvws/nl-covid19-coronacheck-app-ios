@@ -12,7 +12,7 @@ final class RiskSettingStartViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
-	private let userSettings: UserSettingsProtocol
+	private let riskLevelManager: RiskLevelManaging
 	
 	/// The title of the scene
 	@Bindable private(set) var title: String = L.verifier_risksetting_start_title()
@@ -26,14 +26,14 @@ final class RiskSettingStartViewModel: Logging {
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
-		userSettings: UserSettingsProtocol
+		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
 	) {
 		
 		self.coordinator = coordinator
-		self.userSettings = userSettings
+		self.riskLevelManager = riskLevelManager
 		
-		hasUnselectedRiskLevel = userSettings.scanRiskLevelValue == nil
-		if let riskSetting = userSettings.scanRiskLevelValue {
+		hasUnselectedRiskLevel = riskLevelManager.state == nil
+		if let riskSetting = riskLevelManager.state {
 			switch riskSetting {
 				case .low:
 					changeRiskTitle = L.verifier_risksetting_changeselection_3g()
@@ -53,7 +53,6 @@ final class RiskSettingStartViewModel: Logging {
 	
 	func showRiskSetting() {
 		
-		let riskSetting = userSettings.scanRiskLevelValue
-		coordinator?.userWishesToSetRiskLevel(shouldSelectSetting: riskSetting == nil)
+		coordinator?.userWishesToSetRiskLevel(shouldSelectSetting: hasUnselectedRiskLevel)
 	}
 }
