@@ -12,6 +12,16 @@ class RiskLevelManagerSpy: RiskLevelManaging {
 
 	required init() {}
 
+	var invokedStateGetter = false
+	var invokedStateGetterCount = 0
+	var stubbedState: RiskLevel!
+
+	var state: RiskLevel? {
+		invokedStateGetter = true
+		invokedStateGetterCount += 1
+		return stubbedState
+	}
+
 	var invokedAppendObserver = false
 	var invokedAppendObserverCount = 0
 	var stubbedAppendObserverObserverResult: (RiskLevel?, Void)?
