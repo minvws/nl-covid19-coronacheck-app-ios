@@ -14,6 +14,7 @@ final class RiskSettingSelectedViewModel: Logging {
 	
 	private let riskLevelManager: RiskLevelManaging
 	private let scanLogManager: ScanLogManaging
+	private let scanLockManager: ScanLockManaging
 	
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_active_title()
@@ -35,12 +36,14 @@ final class RiskSettingSelectedViewModel: Logging {
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
 		riskLevelManager: RiskLevelManaging = Services.riskLevelManager,
 		scanLogManager: ScanLogManaging = Services.scanLogManager,
+		scanLockManager: ScanLockManager = Services.scanLockManager,
 		configuration: RemoteConfiguration
 	) {
 		
 		self.coordinator = coordinator
 		self.riskLevelManager = riskLevelManager
 		self.scanLogManager = scanLogManager
+		self.scanLockManager = scanLockManager
 		
 		let selectedRisk = riskLevelManager.state
 		riskLevel = selectedRisk
@@ -79,7 +82,7 @@ private extension RiskSettingSelectedViewModel {
 	
 	func saveSettingAndGoBackToStart(enablingLock: Bool) {
 		if enablingLock {
-			Services.scanLockManager.lock()
+			scanLockManager.lock()
 		}
 		riskLevelManager.update(riskLevel: selectRisk)
 		coordinator?.navigateToVerifierWelcome()
