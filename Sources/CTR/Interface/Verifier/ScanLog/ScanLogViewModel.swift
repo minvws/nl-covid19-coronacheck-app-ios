@@ -45,7 +45,7 @@ class ScanLogViewModel {
 
 	private func handleScanEntries(_ scanLogStorageSeconds: Int) {
 
-		guard let scanManager = scanManager else { return }
+		guard let scanLogManager = scanLogManager else { return }
 
 		let result = scanLogManager.getScanEntries(withinLastNumberOfSeconds: scanLogStorageSeconds)
 		switch result {

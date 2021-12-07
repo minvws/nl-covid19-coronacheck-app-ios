@@ -36,7 +36,7 @@ final class RiskSettingSelectedViewModel: Logging {
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
 		riskLevelManager: RiskLevelManaging = Services.riskLevelManager,
 		scanLogManager: ScanLogManaging = Services.scanLogManager,
-		scanLockManager: ScanLockManager = Services.scanLockManager,
+		scanLockManager: ScanLockManaging = Services.scanLockManager,
 		configuration: RemoteConfiguration
 	) {
 		
