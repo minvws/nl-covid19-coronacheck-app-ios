@@ -223,7 +223,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let viewController = ScanLogViewController(
 			viewModel: ScanLogViewModel(
 				coordinator: self,
-				configuration: remoteConfigManager.storedConfiguration
+				configuration: remoteConfigManager.storedConfiguration,
+				now: { Date() }
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
