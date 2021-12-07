@@ -140,7 +140,6 @@ final class Services {
         return networkManagingType.init(configuration: networkConfiguration)
     }()
 
-
 	static private(set) var appInstalledSinceManager: AppInstalledSinceManaging = appInstalledSinceManagingType.init()
 
 	static private(set) var cryptoLibUtility: CryptoLibUtilityProtocol = cryptoLibUtilityType.init(
