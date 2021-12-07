@@ -17,7 +17,8 @@ final class RiskSettingSelectedView: BaseView {
 			static let edge: CGFloat = 20
 		}
 		enum Spacing {
-			static let headerToControls: CGFloat = 32
+			static let stackViewToControls: CGFloat = 32
+			static let titleToHeader: CGFloat = 24
 		}
 		enum Title {
 			static let lineHeight: CGFloat = 32
@@ -42,6 +43,13 @@ final class RiskSettingSelectedView: BaseView {
 	private let headerLabel: TextView = {
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
+	private let labelStackView: UIStackView = {
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
 		return view
 	}()
 	
@@ -75,9 +83,9 @@ final class RiskSettingSelectedView: BaseView {
 		
 		addSubview(scrollView)
 		addSubview(footerButtonView)
-		scrollView.addSubview(titleLabel)
-		scrollView.addSubview(headerLabel)
+		scrollView.addSubview(labelStackView)
 		scrollView.addSubview(riskSettingControlsView)
+		labelStackView.addArrangedSubview(titleLabel)
 	}
 	
 	override func setupViewConstraints() {
@@ -93,26 +101,17 @@ final class RiskSettingSelectedView: BaseView {
 			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
-			titleLabel.topAnchor.constraint(equalTo: scrollView.topAnchor,
+			labelStackView.topAnchor.constraint(equalTo: scrollView.topAnchor,
 											constant: ViewTraits.Margin.top),
-			titleLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
+			labelStackView.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
 											 constant: ViewTraits.Margin.edge),
-			titleLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
+			labelStackView.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
 											  constant: -ViewTraits.Margin.edge),
-			titleLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
+			labelStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
 											  constant: -2 * ViewTraits.Margin.edge),
 			
-			headerLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-											 constant: ViewTraits.Margin.top),
-			headerLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
-											  constant: ViewTraits.Margin.edge),
-			headerLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
-											   constant: -ViewTraits.Margin.edge),
-			headerLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
-											   constant: -2 * ViewTraits.Margin.edge),
-			
-			riskSettingControlsView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor,
-														 constant: ViewTraits.Spacing.headerToControls),
+			riskSettingControlsView.topAnchor.constraint(equalTo: labelStackView.bottomAnchor,
+														 constant: ViewTraits.Spacing.stackViewToControls),
 			riskSettingControlsView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
 			riskSettingControlsView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
 			riskSettingControlsView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
@@ -133,6 +132,11 @@ final class RiskSettingSelectedView: BaseView {
 	
 	var header: String? {
 		didSet {
+			if headerLabel.attributedText == nil, header != nil {
+				labelStackView.addArrangedSubview(headerLabel)
+				labelStackView.setCustomSpacing(ViewTraits.Spacing.titleToHeader, after: titleLabel)
+			}
+			
 			headerLabel.attributedText = .makeFromHtml(text: header, style: .bodyDark)
 		}
 	}
