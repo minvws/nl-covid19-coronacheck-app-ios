@@ -16,7 +16,7 @@ final class RiskSettingSelectedViewModel: Logging {
 	
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_active_title()
-	@Bindable private(set) var header = L.verifier_risksetting_firsttimeuse_header()
+	@Bindable private(set) var header = L.verifier_risksetting_active_lock_warning_header()
 	@Bindable private(set) var lowRiskTitle = L.verifier_risksetting_lowrisk_title()
 	@Bindable private(set) var lowRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
 	@Bindable private(set) var lowRiskAccessibilityLabel = "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"

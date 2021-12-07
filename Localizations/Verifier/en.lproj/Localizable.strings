@@ -4,11 +4,22 @@
 "new_in_app_risksetting_subtitle" = "Only visitors with a vaccination or recovery certificate get 2G access. 3G access is given to visitors carrying a test certificate. Check in advance which kind of access your location can give.";
 "new_in_app_risksetting_title" = "2G or 3G access";
 "new_in_app_subtitle" = "New in the app";
+"scan_log_footer_in_use" = "App in use since";
+"scan_log_footer_long_time" = "App in use for longer than one month";
+"scan_log_list_clock_skew_detected" = "Date or time changed";
+"scan_log_list_entry" = "Scanned between %1$li and %2$li certificates";
+"scan_log_list_header" = "Last %li minutes";
+"scan_log_list_highrisk" = "2G";
+"scan_log_list_lowrisk" = "3G";
+"scan_log_list_no_items" = "No certificates scanned";
+"scan_log_list_now" = "now";
+"scan_log_message" = "<p>The scan setting log keeps track of the type of access used during scanning. A civil enforcement officer may request access to this log.</p><p>For privacy reasons, only scan settings used in the last %@ minutes are saved on this phone. No personal information is saved. You can read more about this in the <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">frequently asked questions</a>.</p></p>";
+"scan_log_title" = "Scan setting log";
 "updateApp.content" = "To continue, install the latest version of the app";
 "verification_policy_selection_error_message" = "Choose a setting to continue";
 /* Koptekst in de over de app pagina */
 "verifier.about.readmore" = "Read more:";
-"verifier.about.text" = "CoronaCheck Scanner is created so that certain locations and activities can open their doors again. Think for example of football matches and concerts. Visitors create a coronavirus pass of a vaccination, a negative test result or if they've had corona and are recovered. With this app, only visitors with a coronavirus pass gain access. This way, the Netherlands can head out more often.";
+"verifier.about.text" = "CoronaCheck Scanner is created to help certain places and activities safely open their doors. Think about football matches and cafes, for example.\n\nVisitors can create a coronavirus pass with a QR code of their vaccination, negative test result, or recovery from coronavirus. Using this app, only visitors with a coronavirus pass are given access. This way, more and more places can be visited safely.";
 /* MARK: - Verifier About */
 "verifier.about.title" = "About this app";
 "verifier.clockDeviationDetected.message" = "<p>In order to properly use the CoronaCheck Scanner app, it is important that the time on your phone is set correctly. For example, if the clock on your phone is a few minutes ahead, an error might occur while verifying a coronavirus pass.</p><p><a href=\"%@\">Go to your phone's settings</a> and set Date & Time to 'set automatically'.</p>";
@@ -109,11 +120,16 @@
 /* MARK: - URL */
 "verifier.url.faq" = "https://coronacheck.nl/en/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/en/gebruikersvoorwaarden-in-app";
+"verifier_about_this_app_law_enforcement" = "For enforcement";
+"verifier_about_this_app_scan_log" = "Scan setting log";
 "verifier_home_countdown_subtitle" = "You have to wait for 5 minutes because you changed your scan settings while scanning.";
 "verifier_home_countdown_title" = "You can scan again in %@";
 "verifier_menu_risksetting" = "Scan setting";
 "verifier_result_access_title_highrisk" = "2G check done";
 "verifier_risksetting_active_title" = "Change scan setting";
+"verifier_risksetting_changeselection_2g" = "Set to 2G access";
+"verifier_risksetting_changeselection_3g" = "Set to 3G access";
+"verifier_risksetting_changeselection_button" = "Change";
 "verifier_risksetting_confirmation_button" = "Confirm";
 "verifier_risksetting_confirmation_dialog_message" = "If you change scan settings, you have to wait for 5 minutes before you can scan again.";
 "verifier_risksetting_confirmation_dialog_negative_button" = "No, go back";

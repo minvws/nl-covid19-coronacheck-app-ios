@@ -39,8 +39,10 @@ final class RiskSettingSelectedView: BaseView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
-	private let headerLabel: Label = {
-		return Label(body: nil).header().multiline()
+	private let headerLabel: TextView = {
+		let view = TextView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
 	}()
 	
 	let riskSettingControlsView: RiskSettingControlsView = {
@@ -131,9 +133,7 @@ final class RiskSettingSelectedView: BaseView {
 	
 	var header: String? {
 		didSet {
-			headerLabel.attributedText = header?.setLineHeight(ViewTraits.Header.lineHeight,
-															   kerning: ViewTraits.Header.kerning,
-															   textColor: Theme.colors.dark)
+			headerLabel.attributedText = .makeFromHtml(text: header, style: .bodyDark)
 		}
 	}
 }
