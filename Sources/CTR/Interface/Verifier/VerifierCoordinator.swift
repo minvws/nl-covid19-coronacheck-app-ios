@@ -261,7 +261,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			viewController = RiskSettingSelectedViewController(
 				viewModel: RiskSettingSelectedViewModel(
 					coordinator: self,
-					userSettings: UserSettings()
+					userSettings: UserSettings(),
+					configuration: remoteConfigManager.storedConfiguration
 				)
 			)
 		}
