@@ -10,7 +10,7 @@ import UIKit
 protocol ScanInstructionsCoordinatorDelegate: AnyObject {
 
 	/// The user pressed continue on the currently displayed page
-	func userDidCompletePages()
+	func userDidCompletePages(hasScanLock: Bool)
 
 	/// User pressed back on first page, thus cancelling this flow
 	func userDidCancelScanInstructions()
@@ -20,7 +20,7 @@ protocol ScanInstructionsCoordinatorDelegate: AnyObject {
 
 protocol ScanInstructionsDelegate: AnyObject {
 	func scanInstructionsWasCancelled()
-	func scanInstructionsDidFinish()
+	func scanInstructionsDidFinish(hasScanLock: Bool)
 }
 
 class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordinatorDelegate, OpenUrlProtocol {
@@ -34,12 +34,19 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	private let pagesFactory: ScanInstructionsFactoryProtocol = ScanInstructionsFactory()
 	private let pages: [ScanInstructionsPage]
 	private let isOpenedFromMenu: Bool
+	private let configuration: RemoteConfiguration
 
-	init(navigationController: UINavigationController, delegate: ScanInstructionsDelegate, isOpenedFromMenu: Bool) {
+	init(
+		navigationController: UINavigationController,
+		delegate: ScanInstructionsDelegate,
+		isOpenedFromMenu: Bool,
+		configuration: RemoteConfiguration = Services.remoteConfigManager.storedConfiguration
+	) {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
 		self.isOpenedFromMenu = isOpenedFromMenu
+		self.configuration = configuration
 
 		pages = pagesFactory.create()
 	}
@@ -50,14 +57,15 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		let viewModel = ScanInstructionsViewModel(
 			coordinator: self,
 			pages: pages,
-			userSettings: UserSettings()
+			userSettings: UserSettings(),
+			configuration: configuration
 		)
 		let viewController = ScanInstructionsViewController(viewModel: viewModel)
 		navigationController.pushOrReplaceTopViewController(with: viewController, animated: !isOpenedFromMenu)
 	}
 
-	func userDidCompletePages() {
-		delegate?.scanInstructionsDidFinish()
+	func userDidCompletePages(hasScanLock: Bool) {
+		delegate?.scanInstructionsDidFinish(hasScanLock: hasScanLock)
 	}
 
 	func userDidCancelScanInstructions() {

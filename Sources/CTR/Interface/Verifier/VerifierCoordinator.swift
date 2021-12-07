@@ -271,11 +271,16 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 extension VerifierCoordinator: ScanInstructionsDelegate {
 
 	/// User completed (or skipped) the Scan Instructions flow
-	func scanInstructionsDidFinish() {
+	func scanInstructionsDidFinish(hasScanLock: Bool) {
 		userSettings.scanInstructionShown = true
 
 		removeScanInstructionsCoordinator()
-		navigateToScan()
+		
+		if hasScanLock {
+			navigateToVerifierWelcome()
+		} else {
+			navigateToScan()
+		}
 	}
 
 	/// User cancelled the flow (i.e. back button), thus don't proceed to scan.

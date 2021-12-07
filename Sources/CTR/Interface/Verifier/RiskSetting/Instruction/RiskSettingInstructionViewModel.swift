@@ -60,7 +60,7 @@ final class RiskSettingInstructionViewModel: Logging {
 			shouldDisplayNotSetError = true
 		} else {
 			riskLevelManager.update(riskLevel: selectRisk)
-			coordinator?.userDidCompletePages()
+			coordinator?.userDidCompletePages(hasScanLock: false)
 		}
 	}
 }

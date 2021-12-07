@@ -28,8 +28,8 @@ final class RiskSettingSelectedViewModel: Logging {
 	@Bindable private(set) var riskLevel: RiskLevel?
 	@Bindable private(set) var alert: AlertContent?
 	
+	private var didWeScanQRs: Bool = false
 	var selectRisk: RiskLevel?
-	var didWeScanQRs: Bool = false
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
