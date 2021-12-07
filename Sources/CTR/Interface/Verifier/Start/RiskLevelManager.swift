@@ -8,10 +8,11 @@
 import Foundation
 
 protocol RiskLevelManaging {
-	func appendObserver(_ observer: @escaping (RiskLevel?) -> Void) -> RiskLevelManager.ObserverToken
-	func removeObserver(token: RiskLevelManager.ObserverToken)
+	var state: RiskLevel? { get }
 	
 	init()
+	func appendObserver(_ observer: @escaping (RiskLevel?) -> Void) -> RiskLevelManager.ObserverToken
+	func removeObserver(token: RiskLevelManager.ObserverToken)
 }
 
 final class RiskLevelManager: RiskLevelManaging {
