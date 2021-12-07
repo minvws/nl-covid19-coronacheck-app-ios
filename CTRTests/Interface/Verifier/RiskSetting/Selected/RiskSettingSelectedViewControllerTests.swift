@@ -19,6 +19,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: RiskSettingSelectedViewModel!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var scanLogManagingSpy: ScanLogManagingSpy!
 	
 	var window = UIWindow()
 	
@@ -27,12 +28,22 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
+
+		scanLogManagingSpy = ScanLogManagingSpy()
+		scanLogManagingSpy.stubbedDidWeScanQRsResult = false
+		Services.use(scanLogManagingSpy)
 	}
 	
 	func loadView() {
 		
 		window.addSubview(sut.view)
 		RunLoop.current.run(until: Date())
+	}
+
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
 	}
 	
 	// MARK: - Tests
@@ -53,7 +64,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.sceneView.title) == L.verifier_risksetting_active_title()
-		expect(self.sut.sceneView.header) == L.verifier_risksetting_firsttimeuse_header()
+		expect(self.sut.sceneView.header).to(beNil())
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifier_risksetting_lowrisk_title()
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskSubtitle) == L.verifier_risksetting_lowrisk_subtitle()
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"

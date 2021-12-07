@@ -18,6 +18,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 	/// The coordinator spy
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var scanLogManagingSpy: ScanLogManagingSpy!
 	
 	override func setUp() {
 		super.setUp()
@@ -25,12 +26,22 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		userSettingsSpy.stubbedScanRiskLevelValue = .low
 		let config: RemoteConfiguration = .default
+
+		scanLogManagingSpy = ScanLogManagingSpy()
+		scanLogManagingSpy.stubbedDidWeScanQRsResult = false
+		Services.use(scanLogManagingSpy)
 		
 		sut = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
 			userSettings: userSettingsSpy,
 			configuration: config
 		)
+	}
+
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
 	}
 	
 	// MARK: - Tests
@@ -42,7 +53,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.title) == L.verifier_risksetting_active_title()
-		expect(self.sut.header) == L.verifier_risksetting_firsttimeuse_header()
+		expect(self.sut.header).to(beNil())
 		expect(self.sut.lowRiskTitle) == L.verifier_risksetting_lowrisk_title()
 		expect(self.sut.lowRiskSubtitle) == L.verifier_risksetting_lowrisk_subtitle()
 		expect(self.sut.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
