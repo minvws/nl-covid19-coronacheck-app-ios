@@ -11,21 +11,34 @@ import Nimble
 
 class VerifierCoordinatorTests: XCTestCase {
 
-	var sut: VerifierCoordinator!
+	private var sut: VerifierCoordinator!
 
-	var navigationSpy: NavigationControllerSpy!
-
-	var window = UIWindow()
+	private var navigationSpy: NavigationControllerSpy!
+	private var scanLogManagerSpy: ScanLogManagingSpy!
+	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var window = UIWindow()
 
 	override func setUp() {
 
 		super.setUp()
+
+		riskLevelManagerSpy = RiskLevelManagerSpy()
+		Services.use(riskLevelManagerSpy)
+		
+		scanLogManagerSpy = ScanLogManagingSpy()
+		Services.use(scanLogManagerSpy)
 
 		navigationSpy = NavigationControllerSpy()
 		sut = VerifierCoordinator(
 			navigationController: navigationSpy,
 			window: window
 		)
+	}
+
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
 	}
 
 	// MARK: - Tests
@@ -37,6 +50,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		onboardingSpy.stubbedNeedsOnboarding = false
 		onboardingSpy.stubbedNeedsConsent = false
 		sut.onboardingManager = onboardingSpy
+		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
 
 		let forcedInformationSpy = ForcedInformationManagerSpy()
 		forcedInformationSpy.stubbedNeedsUpdating = false

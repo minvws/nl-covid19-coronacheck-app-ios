@@ -41,7 +41,7 @@ class ScanInstructionsViewModel {
 		pages: [ScanInstructionsPage],
 		userSettings: UserSettingsProtocol,
 		riskLevelManager: RiskLevelManaging = Services.riskLevelManager,
-		scanLogManager: ScanLogManaging = Services.scanManager,
+		scanLogManager: ScanLogManaging = Services.scanLogManager,
 		configuration: RemoteConfiguration
 	) {
 		

@@ -47,7 +47,7 @@ class ScanLogView: ScrolledStackView {
 
 	private let listHeaderLabel: Label = {
 
-		return Label(bodySemiBold: nil)
+		return Label(bodySemiBold: nil).multiline().header()
 	}()
 
 	/// The stack view for the menu items

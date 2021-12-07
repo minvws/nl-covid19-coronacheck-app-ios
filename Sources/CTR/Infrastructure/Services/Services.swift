@@ -115,7 +115,12 @@ final class Services {
 
 	static func use(_ scanLogManaging: ScanLogManaging) {
 
-		scanManager = scanLogManaging
+		scanLogManager = scanLogManaging
+	}
+
+	static func use(_ riskLevelManaging: RiskLevelManaging) {
+
+		riskLevelManager = riskLevelManaging
 	}
 
 	// MARK: Static access
@@ -197,7 +202,7 @@ final class Services {
 	static private(set) var scanLockManager: ScanLockManaging = scanLockManagerType.init()
 	static private(set) var riskLevelManager: RiskLevelManaging = riskLevelManagerType.init()
 
-	static private(set) var scanManager: ScanLogManaging = scanLogManagingType.init(
+	static private(set) var scanLogManager: ScanLogManaging = scanLogManagingType.init(
 		dataStoreManager: dataStoreManager
 	)
 
@@ -253,7 +258,7 @@ final class Services {
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.flavor
 		)
-		scanManager = scanLogManagingType.init(
+		scanLogManager = scanLogManagingType.init(
 			dataStoreManager: dataStoreManager
 		)
 	}

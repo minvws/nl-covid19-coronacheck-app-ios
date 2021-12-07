@@ -14,9 +14,11 @@ protocol ScanLogManaging: AnyObject {
 
 	func didWeScanQRs(seconds: Int) -> Bool
 
-	func getScanEntries(seconds: Int) -> [ScanLogEntry]
+	func getScanEntries(seconds: Int) -> Result<[ScanLogEntry], Error>
 
 	func addScanEntry(riskLevel: RiskLevel, date: Date)
+
+	func deleteExpiredScanLogEntries(seconds: Int)
 }
 
 class ScanLogManager: ScanLogManaging {
@@ -33,12 +35,15 @@ class ScanLogManager: ScanLogManaging {
 
 	func didWeScanQRs(seconds: Int) -> Bool {
 
-		return !getScanEntries(seconds: seconds).isEmpty
+		switch getScanEntries(seconds: seconds) {
+			case .success(let log): return !log.isEmpty
+			case .failure: return false
+		}
 	}
 
-	func getScanEntries(seconds: Int) -> [ScanLogEntry] {
+	func getScanEntries(seconds: Int) -> Result<[ScanLogEntry], Error> {
 
-		var result: [ScanLogEntry] = []
+		var result: Result<[ScanLogEntry], Error> = .success([])
 		let fromDate = Date().addingTimeInterval(TimeInterval(seconds) * -1)
 
 		let context = dataStoreManager.managedObjectContext()
@@ -59,6 +64,22 @@ class ScanLogManager: ScanLogManaging {
 
 			// Update the auto_increment identifier
 			entry?.identifier = entry?.autoId ?? 0
+			dataStoreManager.save(context)
+		}
+	}
+
+	func deleteExpiredScanLogEntries(seconds: Int) {
+
+		let untilDate = Date().addingTimeInterval(TimeInterval(seconds) * -1)
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			let result = ScanLogEntryModel.listEntriesUpTo(date: untilDate, managedContext: context)
+			switch result {
+				case let .success(entries):
+					entries.forEach { context.delete($0) }
+				case .failure:
+					break
+			}
 			dataStoreManager.save(context)
 		}
 	}

@@ -24,6 +24,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 	private var userSettingsSpy: UserSettingsSpy!
 	private var riskLevelManagerSpy: RiskLevelManagerSpy!
 	private var scanLockManagerSpy: ScanLockManagerSpy!
+	private var scanLogManagerSpy: ScanLogManagingSpy!
 	
 	var window = UIWindow()
 
@@ -50,9 +51,11 @@ class VerifierStartViewControllerTests: XCTestCase {
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
 		userSettingsSpy = UserSettingsSpy()
+		scanLogManagerSpy = ScanLogManagingSpy()
 		Services.use(cryptoLibUtilitySpy)
 		Services.use(cryptoManagerSpy)
 		Services.use(clockDeviationManagerSpy)
+		Services.use(scanLogManagerSpy)
 
 		viewModel = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,

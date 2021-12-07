@@ -17,9 +17,9 @@ class VerifierScanViewModelTests: XCTestCase {
 
     /// The coordinator spy
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
-	private var riskLevelManagingSpy: RiskLevelManagerSpy!
 	private var cryptoSpy: CryptoManagerSpy!
 	private var scanLogManagingSpy: ScanLogManagingSpy!
+	private var riskLevelManagingSpy: RiskLevelManagerSpy!
 
     override func setUp() {
 
@@ -27,13 +27,15 @@ class VerifierScanViewModelTests: XCTestCase {
         verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoSpy = CryptoManagerSpy()
 		Services.use(cryptoSpy)
+
 		riskLevelManagingSpy = RiskLevelManagerSpy()
 		riskLevelManagingSpy.stubbedState = .high
+		Services.use(riskLevelManagingSpy)
 
 		scanLogManagingSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagingSpy)
 
-		sut = VerifierScanViewModel( coordinator: verifyCoordinatorDelegateSpy, riskLevelManager: riskLevelManagingSpy)
+		sut = VerifierScanViewModel( coordinator: verifyCoordinatorDelegateSpy)
     }
 
 	override func tearDown() {

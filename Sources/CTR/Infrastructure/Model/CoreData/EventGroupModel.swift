@@ -20,18 +20,16 @@ class EventGroupModel {
 		wallet: Wallet,
 		managedContext: NSManagedObjectContext) -> EventGroup? {
 
-		if let object = NSEntityDescription.insertNewObject(
-			forEntityName: entityName,
-			into: managedContext) as? EventGroup {
-
-			object.type = type.rawValue
-			object.providerIdentifier = providerIdentifier
-			object.maxIssuedAt = maxIssuedAt
-			object.jsonData = jsonData
-			object.wallet = wallet
-
-			return object
+		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? EventGroup else {
+			return nil
 		}
-		return nil
+
+		object.type = type.rawValue
+		object.providerIdentifier = providerIdentifier
+		object.maxIssuedAt = maxIssuedAt
+		object.jsonData = jsonData
+		object.wallet = wallet
+
+		return object
 	}
 }
