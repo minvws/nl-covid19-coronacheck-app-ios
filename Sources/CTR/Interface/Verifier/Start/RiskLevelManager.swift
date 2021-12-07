@@ -17,17 +17,38 @@ protocol RiskLevelManaging {
 final class RiskLevelManager: RiskLevelManaging {
 	typealias ObserverToken = UUID
 	
+	// MARK: - Types
+
+	private struct Constants {
+		static let keychainService: String = {
+			guard !ProcessInfo.processInfo.isTesting else { return UUID().uuidString }
+			return "RiskLevelManager\(Configuration().getEnvironment())"
+		}()
+	}
+	
+	// MARK: - Vars
+	
 	fileprivate(set) var state: RiskLevel? {
-		didSet {
+		get {
+			keychainRiskLevel
+		}
+		set {
+			keychainRiskLevel = newValue
 			notifyObservers()
 		}
 	}
 	private var observers = [ObserverToken: (RiskLevel?) -> Void]()
 	
-	required init() {
-		// Todo: persist the risk level across launches (keychain).
-		state = nil
+	@Keychain(name: "riskLevel", service: Constants.keychainService, clearOnReinstall: false)
+	fileprivate var keychainRiskLevel: RiskLevel? = .none // swiftlint:disable:this let_var_whitespace
+	
+	required init() {}
+	
+	func update(riskLevel: RiskLevel?) {
+		state = riskLevel
 	}
+	
+	// MARK: - Observer notifications
 	
 	/// Be careful to use weak references to your observers within the closure, and
 	/// to unregister your observer using the returned `ObserverToken`.
@@ -42,8 +63,9 @@ final class RiskLevelManager: RiskLevelManaging {
 	}
 
 	private func notifyObservers() {
+		let newState = state
 		observers.values.forEach { callback in
-			callback(state)
+			callback(newState)
 		}
 	}
 }
