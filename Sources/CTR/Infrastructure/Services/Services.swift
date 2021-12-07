@@ -204,6 +204,7 @@ final class Services {
 	/// Reset all the data
 	static func reset() {
 
+		appInstalledSinceManager.reset()
 		walletManager.removeExistingEventGroups()
 		walletManager.removeExistingGreenCards()
 		onboardingManager.reset()

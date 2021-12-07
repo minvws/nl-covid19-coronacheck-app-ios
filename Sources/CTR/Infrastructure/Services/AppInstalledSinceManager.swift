@@ -18,6 +18,8 @@ protocol AppInstalledSinceManaging: AnyObject {
 	func update(documentsDirectoryCreationDate: Date?)
 
 	func getDocumentsDirectoryCreationDate() -> Date?
+
+	func reset()
 }
 
 final class AppInstalledSinceManager: AppInstalledSinceManaging {
@@ -76,5 +78,9 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 			  let attributes = try? FileManager.default.attributesOfItem(atPath: documentsURL.path)
 		else { return nil }
 		return attributes[.creationDate] as? Date
+	}
+
+	func reset() {
+		appInstalledDate = nil
 	}
 }

@@ -12,7 +12,7 @@ import Nimble
 
 class AppInstalledSinceManagerTests: XCTestCase {
 
-	func testAddingServerDateWithoutAge() {
+	func test_addingServerDate_withoutAge() {
 
 		// Given
 		let sut = AppInstalledSinceManager()
@@ -21,54 +21,53 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: nil)
 
 		// Then
-		expect(sut.usable) == now
+		expect(sut.firstUseDate) == now
 	}
-	
-	func testAddingServerDateWithZeroAge() {
+
+	func test_addingServerDate_withZeroAge() {
 
 		// Given
 		let sut = AppInstalledSinceManager()
 
 		// When
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "0")
-		
-		expect(sut.usable) == now
+
+		expect(sut.firstUseDate) == now
 	}
-	
-	func testAddingServerDateWithAge() {
+
+	func test_addingServerDate_withAge() {
 
 		// Given
 		let sut = AppInstalledSinceManager()
 
 		// When
-		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:04:39 GMT", ageHeader: "120")
+		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "120")
 
 		// Then
-		expect(sut.usable) == now.addingTimeInterval(120 * seconds)
+		expect(sut.firstUseDate) == now.addingTimeInterval(120 * seconds)
 	}
-	
-	func testWithoutServer() {
+
+	func test_addingDocumentsDirectoryDate() {
 
 		// Given
-		let documentDirectoryCreationDate = now.addingTimeInterval(30 * days * ago)
+		let sut = AppInstalledSinceManager()
 
 		// When
-		let sut = AppInstalledSinceManager(documentDirectoryCreationDate: documentDirectoryCreationDate)
+		sut.update(documentsDirectoryCreationDate: now)
 
 		// Then
-		expect(sut.usable) == documentDirectoryCreationDate
+		expect(sut.firstUseDate) == now
 	}
-	
-	func testWithServerAndDirectoryCreationDate() {
+
+	func test_reset() {
 
 		// Given
-		let documentDirectoryCreationDate = now.addingTimeInterval(30 * days * ago)
-		let sut = AppInstalledSinceManager(documentDirectoryCreationDate: documentDirectoryCreationDate)
+		let sut = AppInstalledSinceManager()
 
 		// When
-		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:04:39 GMT", ageHeader: "120")
+		sut.reset()
 
 		// Then
-		expect(sut.usable) == now.addingTimeInterval(120 * seconds)
+		expect(sut.firstUseDate).to(beNil())
 	}
 }
