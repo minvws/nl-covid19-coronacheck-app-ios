@@ -15,12 +15,16 @@ class VerifierCoordinatorTests: XCTestCase {
 
 	private var navigationSpy: NavigationControllerSpy!
 	private var scanLogManagerSpy: ScanLogManagingSpy!
+	private var riskLevelManagerSpy: RiskLevelManagerSpy!
 	private var window = UIWindow()
 
 	override func setUp() {
 
 		super.setUp()
 
+		riskLevelManagerSpy = RiskLevelManagerSpy()
+		Services.use(riskLevelManagerSpy)
+		
 		scanLogManagerSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagerSpy)
 
@@ -46,6 +50,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		onboardingSpy.stubbedNeedsOnboarding = false
 		onboardingSpy.stubbedNeedsConsent = false
 		sut.onboardingManager = onboardingSpy
+		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
 
 		let forcedInformationSpy = ForcedInformationManagerSpy()
 		forcedInformationSpy.stubbedNeedsUpdating = false

@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -228,28 +227,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedDeviceAuthenticationWarningShownGetter = true
 			invokedDeviceAuthenticationWarningShownGetterCount += 1
 			return stubbedDeviceAuthenticationWarningShown
-		}
-	}
-
-	var invokedScanRiskLevelValueSetter = false
-	var invokedScanRiskLevelValueSetterCount = 0
-	var invokedScanRiskLevelValue: RiskLevel?
-	var invokedScanRiskLevelValueList = [RiskLevel]()
-	var invokedScanRiskLevelValueGetter = false
-	var invokedScanRiskLevelValueGetterCount = 0
-	var stubbedScanRiskLevelValue: RiskLevel!
-
-	var scanRiskLevelValue: RiskLevel {
-		set {
-			invokedScanRiskLevelValueSetter = true
-			invokedScanRiskLevelValueSetterCount += 1
-			invokedScanRiskLevelValue = newValue
-			invokedScanRiskLevelValueList.append(newValue)
-		}
-		get {
-			invokedScanRiskLevelValueGetter = true
-			invokedScanRiskLevelValueGetterCount += 1
-			return stubbedScanRiskLevelValue
 		}
 	}
 

@@ -27,8 +27,6 @@ protocol UserSettingsProtocol: AnyObject {
 	var lastSeenRecommendedUpdate: String? { get set }
 
 	var deviceAuthenticationWarningShown: Bool { get set }
-	
-	var scanRiskLevelValue: RiskLevel { get set }
 
 	// Flags for upgrading to Multiple DCCs:
 	var didCompleteEUVaccinationMigration: Bool { get set }
@@ -75,9 +73,6 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
-	
-	@UserDefaults(key: "scanRiskLevelValue")
-	var scanRiskLevelValue: RiskLevel = .low // swiftlint:disable:this let_var_whitespace
 
 	// MARK: - Multiple DCC migration:
 
@@ -124,7 +119,6 @@ extension UserSettings {
 			"didCompleteEUVaccinationMigration",
 			"didDismissEUVaccinationMigrationSuccessBanner",
 			"deviceAuthenticationWarningShown",
-			"scanRiskSettingValue",
 			"shouldCheckRecoveryGreenCardRevisedValidity",
 			"shouldShowRecoveryValidityExtensionCard",
 			"shouldShowRecoveryValidityReinstationCard",

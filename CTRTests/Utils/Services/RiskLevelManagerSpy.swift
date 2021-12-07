@@ -5,7 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import XCTest
 @testable import CTR
 
 class RiskLevelManagerSpy: RiskLevelManaging {
@@ -20,6 +20,18 @@ class RiskLevelManagerSpy: RiskLevelManaging {
 		invokedStateGetter = true
 		invokedStateGetterCount += 1
 		return stubbedState
+	}
+
+	var invokedUpdate = false
+	var invokedUpdateCount = 0
+	var invokedUpdateParameters: (riskLevel: RiskLevel?, Void)?
+	var invokedUpdateParametersList = [(riskLevel: RiskLevel?, Void)]()
+
+	func update(riskLevel: RiskLevel?) {
+		invokedUpdate = true
+		invokedUpdateCount += 1
+		invokedUpdateParameters = (riskLevel, ())
+		invokedUpdateParametersList.append((riskLevel, ()))
 	}
 
 	var invokedAppendObserver = false

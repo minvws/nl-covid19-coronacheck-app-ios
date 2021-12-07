@@ -466,4 +466,16 @@ class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, Verifie
 		invokedNavigateToDeniedAccess = true
 		invokedNavigateToDeniedAccessCount += 1
 	}
+
+	var invokedUserWishesToSetRiskLevel = false
+	var invokedUserWishesToSetRiskLevelCount = 0
+	var invokedUserWishesToSetRiskLevelParameters: (shouldSelectSetting: Bool, Void)?
+	var invokedUserWishesToSetRiskLevelParametersList = [(shouldSelectSetting: Bool, Void)]()
+
+	func userWishesToSetRiskLevel(shouldSelectSetting: Bool) {
+		invokedUserWishesToSetRiskLevel = true
+		invokedUserWishesToSetRiskLevelCount += 1
+		invokedUserWishesToSetRiskLevelParameters = (shouldSelectSetting, ())
+		invokedUserWishesToSetRiskLevelParametersList.append((shouldSelectSetting, ()))
+	}
 }

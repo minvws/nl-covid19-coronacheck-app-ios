@@ -282,7 +282,7 @@ extension VerifierStartViewModel {
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }
 
-		if userSettings.scanInstructionShown {
+		if userSettings.scanInstructionShown, riskLevelProvider.state != nil {
 			if let crypto = cryptoManager, crypto.hasPublicKeys() {
 				coordinator?.didFinish(.userTappedProceedToScan)
 			} else {

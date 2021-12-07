@@ -27,8 +27,8 @@ final class RiskSettingControl: UIControl {
 			static let kerning: CGFloat = -0.41
 		}
 		enum Subtitle {
-			static let lineHeight: CGFloat = 18
-			static let kerning: CGFloat = -0.24
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
 		}
 		enum Colors {
 			static let highlighted = UIColor(white: 0.98, alpha: 1)
@@ -43,11 +43,11 @@ final class RiskSettingControl: UIControl {
 	}()
 	
 	private let titleLabel: Label = {
-		return Label(body: nil).header().multiline()
+		return Label(bodySemiBold: nil).header().multiline()
 	}()
 	
 	private let subtitleLabel: Label = {
-		return Label(subhead: nil).multiline()
+		return Label(body: nil).multiline()
 	}()
 	
 	override init(frame: CGRect) {

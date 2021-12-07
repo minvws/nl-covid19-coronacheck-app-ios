@@ -7,16 +7,15 @@
 
 import Foundation
 
-final class RiskSettingInstructionViewModel: Logging {
+final class RiskSettingUnselectedViewModel: Logging {
 	
 	/// Coordination Delegate
-	weak private var coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol)?
+	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
 	private let riskLevelManager: RiskLevelManaging
 	
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_firsttimeuse_title()
-	@Bindable private(set) var header = L.verifier_risksetting_firsttimeuse_header()
 	@Bindable private(set) var lowRiskTitle = L.verifier_risksetting_lowrisk_title()
 	@Bindable private(set) var lowRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
 	@Bindable private(set) var lowRiskAccessibilityLabel = "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
@@ -24,7 +23,7 @@ final class RiskSettingInstructionViewModel: Logging {
 	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
 	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
 	@Bindable private(set) var moreButtonTitle = L.verifier_risksetting_readmore()
-	@Bindable private(set) var primaryButtonTitle = L.verifierScaninstructionsButtonStartscanning()
+	@Bindable private(set) var primaryButtonTitle = L.verifier_risksetting_confirmation_button()
 	@Bindable private(set) var errorMessage = L.verification_policy_selection_error_message()
 	@Bindable private(set) var shouldDisplayNotSetError = false
 	@Bindable private(set) var riskLevel: RiskLevel?
@@ -36,7 +35,7 @@ final class RiskSettingInstructionViewModel: Logging {
 	}
 	
 	init(
-		coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol),
+		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
 		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
 	) {
 		
@@ -54,13 +53,13 @@ final class RiskSettingInstructionViewModel: Logging {
 		coordinator?.openUrl(url, inApp: true)
 	}
 	
-	func startScanner() {
+	func confirmSetting() {
 		
 		if selectRisk == nil {
 			shouldDisplayNotSetError = true
 		} else {
 			riskLevelManager.update(riskLevel: selectRisk)
-			coordinator?.userDidCompletePages(hasScanLock: false)
+			coordinator?.navigateToVerifierWelcome()
 		}
 	}
 }

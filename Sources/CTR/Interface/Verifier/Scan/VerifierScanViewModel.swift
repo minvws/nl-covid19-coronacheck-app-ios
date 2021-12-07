@@ -15,6 +15,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
 
 	weak var scanLogManager: ScanLogManaging? = Services.scanLogManager
+	
 	weak var riskLevelManager: RiskLevelManaging? = Services.riskLevelManager
 
 	/// Coordination Delegate
@@ -40,7 +41,9 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)) {
+	init(
+		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)
+	) {
 
 		self.theCoordinator = coordinator
 
@@ -57,9 +60,10 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		if let riskLevel = riskLevelManager?.state {
-			scanLogManager?.addScanEntry(riskLevel: riskLevel, date: Date())
+		guard let currentRiskLevel = riskLevelManager?.state else {
+			fatalError("Risk level should be set")
 		}
+		scanLogManager?.addScanEntry(riskLevel: currentRiskLevel, date: Date())
 
 		if let verificationResult = cryptoManager?.verifyQRMessage(message) {
 			switch Int64(verificationResult.status) {

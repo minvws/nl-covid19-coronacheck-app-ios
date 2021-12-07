@@ -39,6 +39,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func navigateToVerifiedAccess(_ verifiedType: VerifiedType)
 	
 	func navigateToDeniedAccess()
+	
+	func userWishesToSetRiskLevel(shouldSelectSetting: Bool)
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -107,7 +109,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	/// Navigate to verifier welcome scene
 	func navigateToVerifierWelcome() {
 
-		if let existingStartViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierStartViewController }) {
+		if sidePanel?.selectedViewController == dashboardNavigationController,
+			let existingStartViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierStartViewController }) {
 			dashboardNavigationController?.popToViewController(existingStartViewController, animated: true)
 		} else {
 
@@ -141,8 +144,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			viewModel: CheckIdentityViewModel(
 				coordinator: self,
 				verificationDetails: verificationDetails,
-				isDeepLinkEnabled: thirdPartyScannerApp != nil,
-				userSettings: userSettings
+				isDeepLinkEnabled: thirdPartyScannerApp != nil
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
@@ -247,6 +249,26 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			navigateToScan()
 		}
 	}
+	
+	func userWishesToSetRiskLevel(shouldSelectSetting: Bool) {
+		
+		let viewController: UIViewController
+		if shouldSelectSetting {
+			viewController = RiskSettingUnselectedViewController(
+				viewModel: RiskSettingUnselectedViewModel(
+					coordinator: self
+				)
+			)
+		} else {
+			viewController = RiskSettingSelectedViewController(
+				viewModel: RiskSettingSelectedViewModel(
+					coordinator: self,
+					configuration: remoteConfigManager.storedConfiguration
+				)
+			)
+		}
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
 }
 
 // MARK: ScanInstructions Delegate
@@ -254,11 +276,16 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 extension VerifierCoordinator: ScanInstructionsDelegate {
 
 	/// User completed (or skipped) the Scan Instructions flow
-	func scanInstructionsDidFinish() {
+	func scanInstructionsDidFinish(hasScanLock: Bool) {
 		userSettings.scanInstructionShown = true
 
 		removeScanInstructionsCoordinator()
-		navigateToScan()
+		
+		if hasScanLock {
+			navigateToVerifierWelcome()
+		} else {
+			navigateToScan()
+		}
 	}
 
 	/// User cancelled the flow (i.e. back button), thus don't proceed to scan.
@@ -305,10 +332,9 @@ extension VerifierCoordinator: MenuDelegate {
 				startChildCoordinator(coordinator)
 				
 			case .riskSetting:
-				let destination = RiskSettingViewController(
-					viewModel: RiskSettingViewModel(
-						coordinator: self,
-						userSettings: userSettings
+				let destination = RiskSettingStartViewController(
+					viewModel: RiskSettingStartViewModel(
+						coordinator: self
 					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)

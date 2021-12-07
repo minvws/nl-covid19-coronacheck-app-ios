@@ -7,13 +7,13 @@
 
 import UIKit
 
-final class RiskSettingViewController: BaseViewController {
+final class RiskSettingSelectedViewController: BaseViewController {
 	
-	private let viewModel: RiskSettingViewModel
+	private let viewModel: RiskSettingSelectedViewModel
 
-	let sceneView = RiskSettingView()
+	let sceneView = RiskSettingSelectedView()
 
-	init(viewModel: RiskSettingViewModel) {
+	init(viewModel: RiskSettingSelectedViewModel) {
 
 		self.viewModel = viewModel
 
@@ -35,7 +35,7 @@ final class RiskSettingViewController: BaseViewController {
 
 		super.viewDidLoad()
 		
-		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$header.binding = { [weak self] in self?.sceneView.header = $0 }
 		viewModel.$lowRiskTitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.lowRiskTitle = $0 }
 		viewModel.$lowRiskSubtitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.lowRiskSubtitle = $0 }
@@ -43,16 +43,19 @@ final class RiskSettingViewController: BaseViewController {
 		viewModel.$highRiskTitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskTitle = $0 }
 		viewModel.$highRiskSubtitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskSubtitle = $0 }
 		viewModel.$highRiskAccessibilityLabel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskAccessibilityLabel = $0 }
-		viewModel.$moreButtonTitle.binding = { [weak self] in self?.sceneView.moreButtonTitle = $0 }
+		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		viewModel.$riskLevel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.riskLevel = $0 }
+		viewModel.$alert.binding = { [weak self] in self?.showAlert($0, okActionIsDestructive: true) }
 		
 		sceneView.riskSettingControlsView.selectRiskCommand = { [weak self] riskSetting in
 			
 			self?.viewModel.selectRisk = riskSetting
 		}
-		sceneView.readMoreCommand = { [weak self] in
+		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
 			
-			self?.viewModel.showReadMore()
+			self?.viewModel.confirmSetting()
 		}
+		
+		addBackButton()
 	}
 }

@@ -92,10 +92,14 @@ class ScanInstructionsCoordinatorDelegateSpy: Coordinator, ScanInstructionsCoord
 
 	var invokedUserDidCompletePages = false
 	var invokedUserDidCompletePagesCount = 0
+	var invokedUserDidCompletePagesParameters: (hasScanLock: Bool, Void)?
+	var invokedUserDidCompletePagesParametersList = [(hasScanLock: Bool, Void)]()
 
-	func userDidCompletePages() {
+	func userDidCompletePages(hasScanLock: Bool) {
 		invokedUserDidCompletePages = true
 		invokedUserDidCompletePagesCount += 1
+		invokedUserDidCompletePagesParameters = (hasScanLock, ())
+		invokedUserDidCompletePagesParametersList.append((hasScanLock, ()))
 	}
 
 	var invokedUserDidCancelScanInstructions = false

@@ -10,39 +10,41 @@ import XCTest
 import Nimble
 import Rswift
 
-final class RiskSettingViewModelTests: XCTestCase {
+final class RiskSettingSelectedViewModelTests: XCTestCase {
 	
 	/// Subject under test
-	private var sut: RiskSettingViewModel!
+	private var sut: RiskSettingSelectedViewModel!
 	
 	/// The coordinator spy
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var userSettingsSpy: UserSettingsSpy!
+	private var riskLevelManagingSpy: RiskLevelManagerSpy!
+	private var scanLogManagingSpy: ScanLogManagingSpy!
 	
 	override func setUp() {
 		super.setUp()
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		userSettingsSpy = UserSettingsSpy()
-		userSettingsSpy.stubbedScanRiskLevelValue = .low
+		riskLevelManagingSpy = RiskLevelManagerSpy()
+		riskLevelManagingSpy.stubbedState = .low
+		let config: RemoteConfiguration = .default
+
+		scanLogManagingSpy = ScanLogManagingSpy()
+		scanLogManagingSpy.stubbedDidWeScanQRsResult = false
+		Services.use(scanLogManagingSpy)
 		
-		sut = RiskSettingViewModel(
+		sut = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			riskLevelManager: riskLevelManagingSpy,
+			configuration: config
 		)
+	}
+
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
 	}
 	
 	// MARK: - Tests
-	
-	func test_showReadMore_shouldInvokeCoordinatorOpenUrl() {
-		// Given
-		
-		// When
-		sut.showReadMore()
-		
-		// Then
-		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifier_risksetting_readmore_url()
-	}
 	
 	func test_bindings() {
 		// Given
@@ -51,24 +53,40 @@ final class RiskSettingViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.title) == L.verifier_risksetting_active_title()
-		expect(self.sut.header) == L.verifier_risksetting_firsttimeuse_header()
+		expect(self.sut.header).to(beNil())
 		expect(self.sut.lowRiskTitle) == L.verifier_risksetting_lowrisk_title()
 		expect(self.sut.lowRiskSubtitle) == L.verifier_risksetting_lowrisk_subtitle()
 		expect(self.sut.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
 		expect(self.sut.highRiskTitle) == L.verifier_risksetting_highrisk_title()
 		expect(self.sut.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
 		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-		expect(self.sut.moreButtonTitle) == L.verifier_risksetting_readmore()
+
 		expect(self.sut.riskLevel) == .low
 	}
-	
-	func test_selectRisk_shouldSetHighRisk() {
-		// Given
+
+	func test_header_withWarning() {
 		
+		// Given
+		scanLogManagingSpy.stubbedDidWeScanQRsResult = true
 		// When
+		sut = RiskSettingSelectedViewModel(
+			coordinator: coordinatorSpy,
+			riskLevelManager: riskLevelManagingSpy,
+			configuration: .default
+		)
+
+		// Then
+		expect(self.sut.header) == L.verifier_risksetting_active_lock_warning_header()
+	}
+
+	func test_confirmSetting_shouldSetHighRisk() {
+		// Given
 		sut.selectRisk = .high
 		
 		// When
-		expect(self.userSettingsSpy.invokedScanRiskLevelValue) == .high
+		sut.confirmSetting()
+		
+		// When
+		expect(self.riskLevelManagingSpy.invokedStateGetter) == true
 	}
 }

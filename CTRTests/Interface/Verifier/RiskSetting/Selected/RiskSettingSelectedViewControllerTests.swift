@@ -11,14 +11,15 @@ import SnapshotTesting
 import Nimble
 import Rswift
 
-final class RiskSettingViewControllerTests: XCTestCase {
+final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	// MARK: Subject under test
-	private var sut: RiskSettingViewController!
+	private var sut: RiskSettingSelectedViewController!
 	
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var viewModel: RiskSettingViewModel!
-	private var userSettingsSpy: UserSettingsSpy!
+	private var viewModel: RiskSettingSelectedViewModel!
+	private var riskLevelManagingSpy: RiskLevelManagerSpy!
+	private var scanLogManagingSpy: ScanLogManagingSpy!
 	
 	var window = UIWindow()
 	
@@ -26,7 +27,11 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		super.setUp()
 		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		userSettingsSpy = UserSettingsSpy()
+		riskLevelManagingSpy = RiskLevelManagerSpy()
+
+		scanLogManagingSpy = ScanLogManagingSpy()
+		scanLogManagingSpy.stubbedDidWeScanQRsResult = false
+		Services.use(scanLogManagingSpy)
 	}
 	
 	func loadView() {
@@ -34,42 +39,51 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		window.addSubview(sut.view)
 		RunLoop.current.run(until: Date())
 	}
+
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
 	
 	// MARK: - Tests
 	
 	func test_bindings() {
 		// Given
-		userSettingsSpy.stubbedScanRiskLevelValue = .low
-		viewModel = RiskSettingViewModel(
+		let config: RemoteConfiguration = .default
+		riskLevelManagingSpy.stubbedState = .low
+		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			riskLevelManager: riskLevelManagingSpy,
+			configuration: config
 		)
-		sut = RiskSettingViewController(viewModel: viewModel)
+		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 		
 		// When
 		
 		// Then
-		expect(self.sut.title) == L.verifier_risksetting_active_title()
-		expect(self.sut.sceneView.header) == L.verifier_risksetting_firsttimeuse_header()
+		expect(self.sut.sceneView.title) == L.verifier_risksetting_active_title()
+		expect(self.sut.sceneView.header).to(beNil())
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifier_risksetting_lowrisk_title()
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskSubtitle) == L.verifier_risksetting_lowrisk_subtitle()
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifier_risksetting_highrisk_title()
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-		expect(self.sut.sceneView.moreButtonTitle) == L.verifier_risksetting_readmore()
 		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
 	}
 	
 	func test_riskSetting_low() {
 		// Given
-		userSettingsSpy.stubbedScanRiskLevelValue = .low
-		viewModel = RiskSettingViewModel(
+		let config: RemoteConfiguration = .default
+		riskLevelManagingSpy.stubbedState = .low
+		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			riskLevelManager: riskLevelManagingSpy,
+			configuration: config
 		)
-		sut = RiskSettingViewController(viewModel: viewModel)
+		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 		
 		// When
@@ -83,12 +97,14 @@ final class RiskSettingViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_high() {
 		// Given
-		userSettingsSpy.stubbedScanRiskLevelValue = .high
-		viewModel = RiskSettingViewModel(
+		let config: RemoteConfiguration = .default
+		riskLevelManagingSpy.stubbedState = .high
+		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			riskLevelManager: riskLevelManagingSpy,
+			configuration: config
 		)
-		sut = RiskSettingViewController(viewModel: viewModel)
+		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 		
 		// When
@@ -96,6 +112,29 @@ final class RiskSettingViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .high
 		
+		// Snapshot
+		sut.assertImage()
+	}
+
+	func test_warning() {
+		// Given
+		scanLogManagingSpy.stubbedDidWeScanQRsResult = true
+
+		let config: RemoteConfiguration = .default
+		riskLevelManagingSpy.stubbedState = .high
+		viewModel = RiskSettingSelectedViewModel(
+			coordinator: coordinatorSpy,
+			riskLevelManager: riskLevelManagingSpy,
+			configuration: config
+		)
+		sut = RiskSettingSelectedViewController(viewModel: viewModel)
+		loadView()
+
+		// When
+
+		// Then
+		expect(self.sut.sceneView.header) == L.verifier_risksetting_active_lock_warning_header()
+
 		// Snapshot
 		sut.assertImage()
 	}

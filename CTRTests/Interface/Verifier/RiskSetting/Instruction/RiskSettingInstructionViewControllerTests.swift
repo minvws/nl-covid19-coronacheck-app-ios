@@ -18,7 +18,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	private var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
 	private var viewModel: RiskSettingInstructionViewModel!
-	private var userSettingsSpy: UserSettingsSpy!
+	private var riskLevelManagingSpy: RiskLevelManagerSpy!
 	
 	var window = UIWindow()
 	
@@ -26,7 +26,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 		super.setUp()
 		
 		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
-		userSettingsSpy = UserSettingsSpy()
+		riskLevelManagingSpy = RiskLevelManagerSpy()
 	}
 	
 	func loadView() {
@@ -39,10 +39,10 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_bindings() {
 		// Given
-		userSettingsSpy.stubbedScanRiskLevelValue = .low
+		riskLevelManagingSpy.stubbedState = .low
 		viewModel = RiskSettingInstructionViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			riskLevelManager: riskLevelManagingSpy
 		)
 		sut = RiskSettingInstructionViewController(viewModel: viewModel)
 		loadView()
@@ -66,10 +66,10 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_riskSetting_low() {
 		// Given
-		userSettingsSpy.stubbedScanRiskLevelValue = .low
+		riskLevelManagingSpy.stubbedState = .low
 		viewModel = RiskSettingInstructionViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			riskLevelManager: riskLevelManagingSpy
 		)
 		sut = RiskSettingInstructionViewController(viewModel: viewModel)
 		loadView()
@@ -85,10 +85,10 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_riskSetting_high() {
 		// Given
-		userSettingsSpy.stubbedScanRiskLevelValue = .high
+		riskLevelManagingSpy.stubbedState = .high
 		viewModel = RiskSettingInstructionViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy
+			riskLevelManager: riskLevelManagingSpy
 		)
 		sut = RiskSettingInstructionViewController(viewModel: viewModel)
 		loadView()

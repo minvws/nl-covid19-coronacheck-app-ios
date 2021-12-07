@@ -26,6 +26,10 @@ class ScanInstructionsViewModel {
 	}
 
 	private let userSettings: UserSettingsProtocol
+	private let riskLevelManager: RiskLevelManaging
+	private let scanLogManager: ScanLogManaging
+	private var shouldShowRiskSetting = false
+	private var hasScanLock = false
 
 	/// Initializer
 	/// - Parameters:
@@ -35,13 +39,24 @@ class ScanInstructionsViewModel {
 	init(
 		coordinator: ScanInstructionsCoordinatorDelegate,
 		pages: [ScanInstructionsPage],
-		userSettings: UserSettingsProtocol) {
+		userSettings: UserSettingsProtocol,
+		riskLevelManager: RiskLevelManaging = Services.riskLevelManager,
+		scanLogManager: ScanLogManaging = Services.scanLogManager,
+		configuration: RemoteConfiguration
+	) {
 		
 		self.coordinator = coordinator
 		self.pages = pages
 		self.userSettings = userSettings
+		self.riskLevelManager = riskLevelManager
+		self.scanLogManager = scanLogManager
 		self.currentPage = 0
-
+		
+		shouldShowRiskSetting = riskLevelManager.state == nil
+		if let scanLock = configuration.scanLockWarningSeconds {
+			hasScanLock = scanLogManager.didWeScanQRs(seconds: scanLock)
+		}
+		
 		updateState()
 	}
 	
@@ -55,16 +70,16 @@ class ScanInstructionsViewModel {
 	
 	func finishScanInstructions() {
 		
-		if userSettings.scanInstructionShown {
-			coordinator?.userDidCompletePages()
-		} else {
+		if shouldShowRiskSetting {
 			coordinator?.userWishesToSelectRiskSetting()
+		} else {
+			coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
 		}
 	}
 	
 	func finishSelectRiskSetting() {
 		
-		coordinator?.userDidCompletePages()
+		coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
 	}
 
 	/// i.e. exit the Scan Instructions
@@ -84,8 +99,12 @@ class ScanInstructionsViewModel {
 			return currentPage < lastPage
 		}()
 		
-		if currentPage == lastPage, userSettings.scanInstructionShown {
-			nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
+		if currentPage == lastPage, !shouldShowRiskSetting {
+			if hasScanLock {
+				nextButtonTitle = L.verifier_scan_instructions_back_to_start()
+			} else {
+				nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
+			}
 		} else {
 			nextButtonTitle = L.generalNext()
 		}
