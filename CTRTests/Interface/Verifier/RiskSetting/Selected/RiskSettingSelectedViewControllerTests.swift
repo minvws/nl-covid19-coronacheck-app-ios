@@ -115,4 +115,27 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		// Snapshot
 		sut.assertImage()
 	}
+
+	func test_warning() {
+		// Given
+		scanLogManagingSpy.stubbedDidWeScanQRsResult = true
+
+		let config: RemoteConfiguration = .default
+		userSettingsSpy.stubbedScanRiskLevelValue = .high
+		viewModel = RiskSettingSelectedViewModel(
+			coordinator: coordinatorSpy,
+			userSettings: userSettingsSpy,
+			configuration: config
+		)
+		sut = RiskSettingSelectedViewController(viewModel: viewModel)
+		loadView()
+
+		// When
+
+		// Then
+		expect(self.sut.sceneView.header) == L.verifier_risksetting_active_lock_warning_header()
+
+		// Snapshot
+		sut.assertImage()
+	}
 }
