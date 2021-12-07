@@ -43,11 +43,11 @@ class ScanLogViewModel {
 		handleScanEntries(scanLogStorageSeconds)
 	}
 
-	private func handleScanEntries(_ scanLogStorageMinutes: Int) {
+	private func handleScanEntries(_ scanLogStorageSeconds: Int) {
 
 		guard let scanManager = scanManager else { return }
 
-		let result = scanManager.getScanEntries(seconds: scanLogStorageMinutes)
+		let result = scanManager.getScanEntries(seconds: scanLogStorageSeconds)
 		switch result {
 			case let .success(log):
 				displayEntries.append(contentsOf: ScanLogDataSource(entries: log).getDisplayEntries())
@@ -88,8 +88,9 @@ class ScanLogViewModel {
 	}
 }
 
-struct ScanLogDataSource: Logging {
+private struct ScanLogDataSource: Logging {
 
+	// One record of similar scan log entries
 	struct ScanLogLineItem {
 		var mode: String
 		var count = 0
@@ -141,6 +142,15 @@ struct ScanLogDataSource: Logging {
 		var lineItem: ScanLogLineItem?
 		var log: [ScanLogLineItem] = []
 
+		// Loop over all of the scan log entries ordered by the auto_increment identifier (`sortedEntries`)
+		// We're trying to add entries into one record (`ScanLogLineItem`), as long as:
+		// - the mode (2G / 3G) does not change
+		// - the time keeps decreasing (if not -> clock manipulation detected)
+		// If one of the two conditions fail, we append that record to the log (`log: [ScanLogLineItem]`) and
+		// create a new one
+		// The last record is not added within the loop, we add that first thing when the loops finishes.
+		// Unfortunately, most of the properties are optionals, so lots of unwrapping.
+
 		sortedEntries.forEach { scan in
 			guard let scanDate = scan.date, let scanMode = scan.mode else {
 				return
@@ -159,6 +169,7 @@ struct ScanLogDataSource: Logging {
 				}
 			}
 
+			// Update the current lineItem with the values from the scan log entry
 			currentTime = scanDate
 			lineItem?.count += 1
 			lineItem?.updateToDate(scanDate)
@@ -166,7 +177,7 @@ struct ScanLogDataSource: Logging {
 		}
 
 		if let item = lineItem {
-			// At the end of the loop, process the last lineItem.
+			// At the end of the loop, add the last lineItem to the log.
 			log.append(item)
 		}
 
@@ -189,15 +200,15 @@ struct ScanLogDataSource: Logging {
 	private func convert(_ item: ScanLogLineItem, replaceToDate: Bool) -> ScanLogDisplayEntry? {
 
 		// logDebug("convert lineItem : \(item)")
-		let roundedToTens = roundToTens(count: item.count)
+		let roundedToTens = roundToTens(count: item.count) // i.e. 5 -> 1 - 10, 15 -> 10 -> 20 etc.
 		guard let itemFrom = item.from, let itemTo = item.to else {
 			return nil
 		}
 		var timeTo = timeFormatter.string(from: itemTo)
 		if replaceToDate {
-			timeTo = L.scan_log_list_now()
+			timeTo = L.scan_log_list_now() // first entry in the stack should have `HH:mm - now`
 		}
-
+		// Convert to a ScanLogDisplayEntry
 		return ScanLogDisplayEntry.entry(
 			type: item.mode,
 			timeInterval: timeFormatter.string(from: itemFrom) + " - " + timeTo,
