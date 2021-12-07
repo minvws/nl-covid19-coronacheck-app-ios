@@ -26,6 +26,7 @@ class ScanInstructionsViewModel {
 	}
 
 	private let userSettings: UserSettingsProtocol
+	private var shouldShowRiskSetting = false
 
 	/// Initializer
 	/// - Parameters:
@@ -35,13 +36,15 @@ class ScanInstructionsViewModel {
 	init(
 		coordinator: ScanInstructionsCoordinatorDelegate,
 		pages: [ScanInstructionsPage],
-		userSettings: UserSettingsProtocol) {
+		userSettings: UserSettingsProtocol
+	) {
 		
 		self.coordinator = coordinator
 		self.pages = pages
 		self.userSettings = userSettings
 		self.currentPage = 0
-
+		
+		shouldShowRiskSetting = userSettings.scanRiskLevelValue == nil
 		updateState()
 	}
 	
@@ -55,10 +58,10 @@ class ScanInstructionsViewModel {
 	
 	func finishScanInstructions() {
 		
-		if userSettings.scanInstructionShown {
-			coordinator?.userDidCompletePages()
-		} else {
+		if shouldShowRiskSetting {
 			coordinator?.userWishesToSelectRiskSetting()
+		} else {
+			coordinator?.userDidCompletePages()
 		}
 	}
 	
@@ -84,7 +87,7 @@ class ScanInstructionsViewModel {
 			return currentPage < lastPage
 		}()
 		
-		if currentPage == lastPage, userSettings.scanInstructionShown {
+		if currentPage == lastPage, !shouldShowRiskSetting {
 			nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 		} else {
 			nextButtonTitle = L.generalNext()
