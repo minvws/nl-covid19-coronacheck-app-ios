@@ -16,6 +16,7 @@ class ScanLogViewModelTests: XCTestCase {
 	private var sut: ScanLogViewModel!
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var scanLogManagingSpy: ScanLogManagingSpy!
+	private var appInstalledSinceManagingSpy: AppInstalledSinceManagingSpy!
 
 	override func setUp() {
 
@@ -27,7 +28,10 @@ class ScanLogViewModelTests: XCTestCase {
 		scanLogManagingSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagingSpy)
 
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
+		appInstalledSinceManagingSpy = AppInstalledSinceManagingSpy()
+		Services.use(appInstalledSinceManagingSpy)
+
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
 	}
 
 	override func tearDown() {
@@ -47,7 +51,6 @@ class ScanLogViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.scan_log_title()
 		expect(self.sut.message) == L.scan_log_message("60")
-		expect(self.sut.appInUseSince) == L.scan_log_footer_long_time()
 		expect(self.sut.listHeader) == L.scan_log_list_header(60)
 	}
 
@@ -62,5 +65,44 @@ class ScanLogViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
+	}
+
+	func test_firstUseDate_noDate() {
+
+		// Given
+		appInstalledSinceManagingSpy.stubbedFirstUseDate = nil
+		let config: RemoteConfiguration = .default
+
+		// When
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+
+		// Then
+		expect(self.sut.appInUseSince).to(beNil())
+	}
+
+	func test_firstUseDate_now() {
+
+		// Given
+		appInstalledSinceManagingSpy.stubbedFirstUseDate = now
+		let config: RemoteConfiguration = .default
+
+		// When
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+
+		// Then
+		expect(self.sut.appInUseSince) == L.scan_log_footer_in_use("15 juli 2021 17:02")
+	}
+
+	func test_firstUseDate_older() {
+
+		// Given
+		appInstalledSinceManagingSpy.stubbedFirstUseDate = now.addingTimeInterval(31 * days * ago)
+		let config: RemoteConfiguration = .default
+
+		// When
+		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+
+		// Then
+		expect(self.sut.appInUseSince) == L.scan_log_footer_long_time()
 	}
 }

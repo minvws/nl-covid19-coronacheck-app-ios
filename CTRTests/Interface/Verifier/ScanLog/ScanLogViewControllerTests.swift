@@ -18,7 +18,8 @@ class ScanLogViewControllerTests: XCTestCase {
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: ScanLogViewModel!
 	private var scanLogManagingSpy: ScanLogManagingSpy!
-	
+	private var appInstalledSinceManagingSpy: AppInstalledSinceManagingSpy!
+
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
@@ -31,7 +32,11 @@ class ScanLogViewControllerTests: XCTestCase {
 		scanLogManagingSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagingSpy)
 
-		viewModel = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config)
+		appInstalledSinceManagingSpy = AppInstalledSinceManagingSpy()
+		appInstalledSinceManagingSpy.stubbedFirstUseDate = now.addingTimeInterval(31 * days * ago)
+		Services.use(appInstalledSinceManagingSpy)
+
+		viewModel = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
 		sut = ScanLogViewController(viewModel: viewModel)
 	}
 
