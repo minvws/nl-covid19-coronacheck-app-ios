@@ -63,6 +63,10 @@ class VerifierScanViewController: ScanViewController {
 				self?.showPermissionError()
 			}
 		}
+		
+		viewModel.$riskLevel.binding = { [weak self] in
+			self?.sceneView.riskLevel = $0
+		}
 
 		sceneView.moreInformationButtonCommand = { [viewModel] in
 			viewModel.didTapMoreInformationButton()
