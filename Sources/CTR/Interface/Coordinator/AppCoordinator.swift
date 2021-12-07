@@ -49,6 +49,8 @@ class AppCoordinator: Coordinator, Logging {
 
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
 
+	private weak var appInstalledSinceManager: AppInstalledSinceManaging? = Services.appInstalledSinceManager
+
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
 	init(scene: UIWindowScene, navigationController: UINavigationController) {
@@ -97,7 +99,7 @@ class AppCoordinator: Coordinator, Logging {
 			Services.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
 		}]
 
-		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendReloadObserver { _, _, urlResponse in
+		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendReloadObserver {[weak self] _, _, urlResponse in
 
 			/// Fish for the server Date in the network response, and use that to maintain
 			/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
@@ -109,6 +111,14 @@ class AppCoordinator: Coordinator, Logging {
 				serverHeaderDate: serverDateString,
 				ageHeader: httpResponse.allHeaderFields["Age"] as? String
 			)
+
+			// If the firstUseDate is nil, and we get a server header, that means a new installation.
+			if self?.appInstalledSinceManager?.firstUseDate == nil {
+				self?.appInstalledSinceManager?.update(
+					serverHeaderDate: serverDateString,
+					ageHeader: httpResponse.allHeaderFields["Age"] as? String
+				)
+			}
 		}]
 	}
 
@@ -304,7 +314,15 @@ extension AppCoordinator: AppCoordinatorDelegate {
     func handleLaunchState(_ state: LaunchState) {
 
 		switch state {
-			case .noActionNeeded, .withinTTL:
+			case .withinTTL:
+				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
+				// Use the documents directory creation date.
+				if self.appInstalledSinceManager?.firstUseDate == nil {
+					self.appInstalledSinceManager?.update(documentsDirectoryCreationDate: self.appInstalledSinceManager?.getDocumentsDirectoryCreationDate())
+				}
+				startApplication()
+
+			case .noActionNeeded:
 				startApplication()
 				
 			case .internetRequired:

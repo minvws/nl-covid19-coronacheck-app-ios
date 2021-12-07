@@ -7,14 +7,17 @@
 
 import Foundation
 
-protocol AppInstalledSinceManaging {
+protocol AppInstalledSinceManaging: AnyObject {
 
-	var usable: Date { get }
+	var firstUseDate: Date? { get }
 
-	init(documentDirectoryCreationDate: Date?)
+	init()
 
 	func update(serverHeaderDate: String, ageHeader: String?)
 
+	func update(documentsDirectoryCreationDate: Date?)
+
+	func getDocumentsDirectoryCreationDate() -> Date?
 }
 
 final class AppInstalledSinceManager: AppInstalledSinceManaging {
@@ -26,8 +29,8 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		}()
 	}
 	
-	@Keychain(name: "appInstalledDateFromServer", service: Constants.keychainService, clearOnReinstall: true)
-	private var appInstalledDateFromServer: Date? = nil // swiftlint:disable:this let_var_whitespace redundant_optional_initialization
+	@Keychain(name: "appInstalledDate", service: Constants.keychainService, clearOnReinstall: true)
+	private var appInstalledDate: Date? = nil // swiftlint:disable:this let_var_whitespace redundant_optional_initialization
 	
 	private lazy var serverHeaderDateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
@@ -36,37 +39,39 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		return dateFormatter
 	}()
 	
-	var usable: Date {
-		// TODO: allow Date()?
-		return appInstalledDateFromServer ?? documentsDirectoryCreationDate ?? Date()
+	var firstUseDate: Date? {
+		return appInstalledDate
 	}
 	
 	// MARK: - Init
-	
-	let documentsDirectoryCreationDate: Date?
-	
-	init(documentDirectoryCreationDate: Date? = AppInstalledSinceManager.documentsDirectoryCreationDate()) {
-		self.documentsDirectoryCreationDate = documentDirectoryCreationDate
+
+	required init() {
+		// Required by Protocol
 	}
 	
 	/// Update using the Server Response Header string
 	/// e.g. "Sat, 07 Aug 2021 12:12:57 GMT"
 	func update(serverHeaderDate: String, ageHeader: String?) {
-		guard var serverDate = serverHeaderDateFormatter.date(from: serverHeaderDate)
-		else { return }
 
-		appInstalledDateFromServer = serverDate
+		guard var serverDate = serverHeaderDateFormatter.date(from: serverHeaderDate) else { return }
+
 		if let ageHeader = ageHeader {
 			
 			// CDN has a stale Date, but adds an Age field in seconds.
 			let age = TimeInterval(ageHeader) ?? 0
 			serverDate = serverDate.addingTimeInterval(age)
 		}
+		appInstalledDate = serverDate
 	}
-	
-	// MARK: - Static functions
-	
-	private static func documentsDirectoryCreationDate() -> Date? {
+
+	func update(documentsDirectoryCreationDate: Date?) {
+
+		if let date = documentsDirectoryCreationDate {
+			appInstalledDate = date
+		}
+	}
+
+	func getDocumentsDirectoryCreationDate() -> Date? {
 		guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last,
 			  let attributes = try? FileManager.default.attributesOfItem(atPath: documentsURL.path)
 		else { return nil }

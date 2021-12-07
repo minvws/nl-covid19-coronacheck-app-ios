@@ -10,7 +10,8 @@ import Reachability
 
 /// Global container for the different services used in the app
 final class Services {
-	
+
+	private static var appInstalledSinceManagingType: AppInstalledSinceManaging.Type = AppInstalledSinceManager.self
 	private static var cryptoLibUtilityType: CryptoLibUtilityProtocol.Type = CryptoLibUtility.self
 	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
 	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
@@ -31,6 +32,11 @@ final class Services {
 	private static var scanLogManagingType: ScanLogManaging.Type = ScanLogManager.self
 
 	// MARK: use override for testing
+
+	static func use(_ appInstalledSinceManaging: AppInstalledSinceManaging) {
+
+		appInstalledSinceManager = appInstalledSinceManaging
+	}
 
 	static func use(_ cryptoManaging: CryptoManaging) {
 
@@ -134,6 +140,9 @@ final class Services {
         return networkManagingType.init(configuration: networkConfiguration)
     }()
 
+
+	static private(set) var appInstalledSinceManager: AppInstalledSinceManaging = appInstalledSinceManagingType.init()
+
 	static private(set) var cryptoLibUtility: CryptoLibUtilityProtocol = cryptoLibUtilityType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
@@ -206,6 +215,7 @@ final class Services {
 
 	static func revertToDefaults() {
 
+		appInstalledSinceManager = appInstalledSinceManagingType.init()
 		cryptoManager = cryptoManagingType.init()
 		deviceAuthenticationDetector = deviceAuthenticationType.init()
 		dataStoreManager = dataStoreManagingType.init(StorageType.persistent, flavor: AppFlavor.flavor)

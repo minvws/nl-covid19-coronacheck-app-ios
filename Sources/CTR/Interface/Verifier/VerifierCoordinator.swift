@@ -220,7 +220,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			viewModel: ScanLogViewModel(
 				coordinator: self,
 				configuration: remoteConfigManager.storedConfiguration,
-				appInstalledSinceManager: AppInstalledSinceManager(),
 				now: { Date() }
 			)
 		)
