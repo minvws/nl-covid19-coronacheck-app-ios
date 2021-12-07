@@ -19,29 +19,27 @@ class ScanLogViewModel {
 	weak private var coordinator: OpenUrlProtocol?
 
 	weak private var scanManager: ScanLogManaging? = Services.scanLogManager
+	weak private var appInstalledSinceManager: AppInstalledSinceManaging? = Services.appInstalledSinceManager
 
 	@Bindable private(set) var title: String = L.scan_log_title()
 	@Bindable private(set) var message: String
-	@Bindable private(set) var appInUseSince: String
+	@Bindable private(set) var appInUseSince: String?
 	@Bindable private(set) var listHeader: String
 	@Bindable private(set) var displayEntries: [ScanLogDisplayEntry] = []
 	@Bindable private(set) var alert: AlertContent?
 
 	init(
 		coordinator: OpenUrlProtocol,
-		configuration: RemoteConfiguration
+		configuration: RemoteConfiguration,
+		now: @escaping () -> Date
 	) {
 		self.coordinator = coordinator
 		let scanLogStorageSeconds: Int = configuration.scanLogStorageSeconds ?? 3600
 		let scanLogStorageMinutes: Int = scanLogStorageSeconds / 60
 
-		// Todo: Insert the actual first usage timestamp in the placeholder,
-		// and check if it is older than a month
-		appInUseSince = L.scan_log_footer_long_time()
-
 		message = L.scan_log_message("\(scanLogStorageMinutes)")
 		listHeader = L.scan_log_list_header(scanLogStorageMinutes)
-
+		handleFirstUseDate(now)
 		handleScanEntries(scanLogStorageSeconds)
 	}
 
@@ -69,6 +67,19 @@ class ScanLogViewModel {
 			okAction: nil,
 			okTitle: L.generalClose()
 		)
+	}
+
+	private func handleFirstUseDate(_ now: @escaping () -> Date) {
+
+		guard let firstUseDate = appInstalledSinceManager?.firstUseDate else { return }
+		if firstUseDate < now().addingTimeInterval(-30 * 24 * 60 * 60) { // Cut off 30 days
+			appInUseSince = L.scan_log_footer_long_time()
+		} else {
+			let dateFormatter = DateFormatter()
+			dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+			dateFormatter.dateFormat = "d MMMM yyyy HH:mm"
+			appInUseSince = L.scan_log_footer_in_use(dateFormatter.string(from: firstUseDate))
+		}
 	}
 
 	func openUrl(_ url: URL) {
@@ -178,7 +189,6 @@ struct ScanLogDataSource: Logging {
 	private func convert(_ item: ScanLogLineItem, replaceToDate: Bool) -> ScanLogDisplayEntry? {
 
 		// logDebug("convert lineItem : \(item)")
-
 		let roundedToTens = roundToTens(count: item.count)
 		guard let itemFrom = item.from, let itemTo = item.to else {
 			return nil
@@ -214,7 +224,6 @@ extension ErrorCode.Flow {
 }
 
 // MARK: ErrorCode.Step (Scan log flow)
-
 extension ErrorCode.Step {
 
 	static let showLog = ErrorCode.Step(value: "30")
