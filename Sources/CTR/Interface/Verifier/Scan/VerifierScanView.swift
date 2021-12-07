@@ -13,9 +13,15 @@ final class VerifierScanView: BaseView {
 	private struct ViewTraits {
 
 		static let margin: CGFloat = 20.0
+		static let maskSpacing: CGFloat = 50.0
 	}
 	
 	let scanView = ScanView()
+	
+	var riskLevel: RiskLevel? {
+		get { riskLevelIndicator.riskLevel }
+		set { riskLevelIndicator.riskLevel = newValue }
+	}
 	
 	private let moreInformationButton = Button(style: Button.ButtonType.textLabelBlue)
 	
@@ -32,6 +38,8 @@ final class VerifierScanView: BaseView {
 		return scrollView
 	}()
 	
+	private let riskLevelIndicator = RiskLevelIndicator()
+	
 	override func setupViews() {
 		super.setupViews()
 		
@@ -47,6 +55,7 @@ final class VerifierScanView: BaseView {
 		addSubview(dummyView)
 		addSubview(scrollView)
 		scrollView.addSubview(moreInformationButton)
+		addSubview(riskLevelIndicator)
 	}
 	
 	override func setupViewConstraints() {
@@ -54,14 +63,14 @@ final class VerifierScanView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			
-			// Dummy
-			dummyView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.margin
-			),
+			dummyView.topAnchor.constraint(equalTo: scanView.maskLayoutGuide.topAnchor),
 			dummyView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			dummyView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			dummyView.heightAnchor.constraint(equalTo: widthAnchor),
+			dummyView.bottomAnchor.constraint(equalTo: scanView.maskLayoutGuide.bottomAnchor, constant: ViewTraits.maskSpacing),
+			
+			// Risk level button
+			riskLevelIndicator.centerXAnchor.constraint(equalTo: scanView.maskLayoutGuide.centerXAnchor),
+			riskLevelIndicator.bottomAnchor.constraint(equalTo: scanView.maskLayoutGuide.bottomAnchor, constant: -ViewTraits.margin),
 
 			// ScrollView
 			scrollView.topAnchor.constraint(equalTo: dummyView.bottomAnchor),
@@ -115,4 +124,74 @@ final class VerifierScanView: BaseView {
 	}
 	
 	var moreInformationButtonCommand: (() -> Void)?
+}
+
+final class RiskLevelIndicator: BaseView {
+	
+	var riskLevel: RiskLevel? {
+		didSet { updateForRiskLevel() }
+	}
+	
+	private let indicatorImageView: UIImageView = {
+		
+		let imageView = UIImageView(image: I.riskEllipse())
+		imageView.widthAnchor.constraint(equalToConstant: 12).isActive = true
+		imageView.contentMode = .scaleAspectFit
+		
+		return imageView
+	}()
+	
+	private let titleLabel = Label(subhead: nil)
+	
+	init(riskLevel: RiskLevel? = nil) {
+		
+		self.riskLevel = riskLevel
+		
+		super.init(frame: .zero)
+		
+		updateForRiskLevel()
+	}
+	
+	required init?(coder: NSCoder) {
+		
+		super.init(coder: coder)
+	}
+	
+	override func layoutSubviews() {
+		
+		super.layoutSubviews()
+	
+		layer.cornerRadius = bounds.height / 2
+	}
+	
+	override func setupViews() {
+		translatesAutoresizingMaskIntoConstraints = false
+		backgroundColor = .white
+		
+		isAccessibilityElement = true
+	}
+
+	override func setupViewHierarchy() {
+		HStack(spacing: 8,
+			   indicatorImageView,
+			   titleLabel)
+			.embed(in: self, insets: .leftRight(16) + .topBottom(8))
+	}
+	
+	private func updateForRiskLevel() {
+		isHidden = false
+		
+		switch riskLevel {
+			case .high:
+				titleLabel.text = L.verifier_risksetting_highrisk_title()
+				accessibilityLabel = L.verifier_risksetting_highrisk_title()
+				indicatorImageView.tintColor = Theme.colors.primary
+			case .low:
+				titleLabel.text = L.verifier_risksetting_lowrisk_title()
+				accessibilityLabel = L.verifier_risksetting_lowrisk_title()
+				indicatorImageView.tintColor = Theme.colors.access
+			case .none:
+				isHidden = true
+		}
+	}
 }
