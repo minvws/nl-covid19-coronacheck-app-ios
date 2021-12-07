@@ -47,7 +47,7 @@ class ScanLogViewModel {
 
 		guard let scanManager = scanManager else { return }
 
-		let result = scanManager.getScanEntries(seconds: scanLogStorageSeconds)
+		let result = scanLogManager.getScanEntries(withinLastNumberOfSeconds: scanLogStorageSeconds)
 		switch result {
 			case let .success(log):
 				displayEntries.append(contentsOf: ScanLogDataSource(entries: log).getDisplayEntries())

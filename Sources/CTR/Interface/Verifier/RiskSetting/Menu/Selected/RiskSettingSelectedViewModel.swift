@@ -28,8 +28,8 @@ final class RiskSettingSelectedViewModel: Logging {
 	@Bindable private(set) var riskLevel: RiskLevel?
 	@Bindable private(set) var alert: AlertContent?
 	
-	private var didWeScanQRs: Bool = false
 	var selectRisk: RiskLevel?
+	private var didWeRecentlyScanQRs: Bool = false
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
@@ -47,14 +47,14 @@ final class RiskSettingSelectedViewModel: Logging {
 		selectRisk = selectedRisk
 		
 		guard let scanLock = configuration.scanLockWarningSeconds else { return }
-		didWeScanQRs = scanLogManager.didWeScanQRs(seconds: scanLock)
+		didWeRecentlyScanQRs = scanLogManager.didWeScanQRs(withinLastNumberOfSeconds: scanLock)
 		
-		header = didWeScanQRs ? L.verifier_risksetting_active_lock_warning_header() : nil
+		header = didWeRecentlyScanQRs ? L.verifier_risksetting_active_lock_warning_header() : nil
 	}
 	
 	func confirmSetting() {
 		
-		if didWeScanQRs, riskLevel != selectRisk {
+		if didWeRecentlyScanQRs, riskLevel != selectRisk {
 			displayAlert()
 		} else {
 			saveSettingAndGoBackToStart()
