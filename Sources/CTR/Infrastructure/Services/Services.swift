@@ -118,6 +118,11 @@ final class Services {
 		scanLogManager = scanLogManaging
 	}
 
+	static func use(_ riskLevelManaging: RiskLevelManaging) {
+
+		riskLevelManager = riskLevelManaging
+	}
+
 	// MARK: Static access
     
     static private(set) var networkManager: NetworkManaging = {
