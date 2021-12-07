@@ -57,7 +57,7 @@ final class RiskSettingSelectedViewModel: Logging {
 		if didWeRecentlyScanQRs, riskLevel != selectRisk {
 			displayAlert()
 		} else {
-			saveSettingAndGoBackToStart()
+			saveSettingAndGoBackToStart(enablingLock: false)
 		}
 	}
 }
@@ -71,14 +71,16 @@ private extension RiskSettingSelectedViewModel {
 			subTitle: L.verifier_risksetting_confirmation_dialog_message(),
 			cancelTitle: L.verifier_risksetting_confirmation_dialog_negative_button(),
 			okAction: { [weak self] _ in
-				self?.saveSettingAndGoBackToStart()
+				self?.saveSettingAndGoBackToStart(enablingLock: true)
 			},
 			okTitle: L.verifier_risksetting_confirmation_dialog_positive_button()
 		)
 	}
 	
-	func saveSettingAndGoBackToStart() {
-		
+	func saveSettingAndGoBackToStart(enablingLock: Bool) {
+		if enablingLock {
+			Services.scanLockManager.lock()
+		}
 		riskLevelManager.update(riskLevel: selectRisk)
 		coordinator?.navigateToVerifierWelcome()
 	}
