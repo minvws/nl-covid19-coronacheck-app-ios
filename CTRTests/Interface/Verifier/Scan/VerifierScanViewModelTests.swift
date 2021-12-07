@@ -17,7 +17,7 @@ class VerifierScanViewModelTests: XCTestCase {
 
     /// The coordinator spy
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
-	private var userSettingsSpy: UserSettingsSpy!
+	private var riskLevelManagingSpy: RiskLevelManagerSpy!
 	private var cryptoSpy: CryptoManagerSpy!
 	private var scanLogManagingSpy: ScanLogManagingSpy!
 
@@ -27,13 +27,13 @@ class VerifierScanViewModelTests: XCTestCase {
         verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoSpy = CryptoManagerSpy()
 		Services.use(cryptoSpy)
-		userSettingsSpy = UserSettingsSpy()
-		userSettingsSpy.stubbedScanRiskLevelValue = .high
+		riskLevelManagingSpy = RiskLevelManagerSpy()
+		riskLevelManagingSpy.stubbedState = .high
 
 		scanLogManagingSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagingSpy)
 
-		sut = VerifierScanViewModel( coordinator: verifyCoordinatorDelegateSpy, userSettings: userSettingsSpy)
+		sut = VerifierScanViewModel( coordinator: verifyCoordinatorDelegateSpy, riskLevelManager: riskLevelManagingSpy)
     }
 
 	override func tearDown() {
@@ -69,7 +69,7 @@ class VerifierScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_shouldAddScanLogEntry_lowRisk() {
 
 		// Given
-		userSettingsSpy.stubbedScanRiskLevelValue = .low
+		riskLevelManagingSpy.stubbedState = .low
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
@@ -82,7 +82,7 @@ class VerifierScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_shouldAddScanLogEntry_highRisk() {
 
 		// Given
-		userSettingsSpy.stubbedScanRiskLevelValue = .high
+		riskLevelManagingSpy.stubbedState = .high
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")

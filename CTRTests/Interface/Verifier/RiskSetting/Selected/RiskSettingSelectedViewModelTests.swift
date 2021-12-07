@@ -17,14 +17,14 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 	
 	/// The coordinator spy
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var userSettingsSpy: UserSettingsSpy!
+	private var riskLevelManagingSpy: RiskLevelManagerSpy!
 	private var scanLogManagingSpy: ScanLogManagingSpy!
 	
 	override func setUp() {
 		super.setUp()
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		userSettingsSpy = UserSettingsSpy()
-		userSettingsSpy.stubbedScanRiskLevelValue = .low
+		riskLevelManagingSpy = RiskLevelManagerSpy()
+		riskLevelManagingSpy.stubbedState = .low
 		let config: RemoteConfiguration = .default
 
 		scanLogManagingSpy = ScanLogManagingSpy()
@@ -33,7 +33,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		
 		sut = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy,
+			riskLevelManager: riskLevelManagingSpy,
 			configuration: config
 		)
 	}
@@ -71,7 +71,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		// When
 		sut = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy,
+			riskLevelManager: riskLevelManagingSpy,
 			configuration: .default
 		)
 
@@ -87,6 +87,6 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		sut.confirmSetting()
 		
 		// When
-		expect(self.userSettingsSpy.invokedScanRiskLevelValue) == .high
+		expect(self.riskLevelManagingSpy.invokedStateGetter) == true
 	}
 }

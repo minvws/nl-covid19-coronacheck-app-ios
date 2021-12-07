@@ -15,18 +15,29 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	var sut: ScanInstructionsViewModel!
 	var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
 	var userSettingsSpy: UserSettingsSpy!
+	var riskLevelManagingSpy: RiskLevelManagerSpy!
+	var scanLogManagingSpy: ScanLogManagingSpy!
+	var configuration: RemoteConfiguration!
 
 	override func setUp() {
 		super.setUp()
 		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
 		userSettingsSpy = UserSettingsSpy()
+		riskLevelManagingSpy = RiskLevelManagerSpy()
+		scanLogManagingSpy = ScanLogManagingSpy()
+		configuration = .default
 	}
 
 	func test_finishScanInstructions_callsCoordinator() {
 
 		// Arrange
 		sut = ScanInstructionsViewModel(
-			coordinator: coordinatorSpy, pages: [], userSettings: userSettingsSpy
+			coordinator: coordinatorSpy,
+			pages: [],
+			userSettings: userSettingsSpy,
+			riskLevelManager: riskLevelManagingSpy,
+			scanLogManager: scanLogManagingSpy,
+			configuration: configuration
 		)
 		userSettingsSpy.stubbedScanInstructionShown = true
 
@@ -40,7 +51,12 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	func test_userTappedBackOnFirstPage_callsCoordinator() {
 
 		// Arrange
-		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: [], userSettings: userSettingsSpy)
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: [],
+										userSettings: userSettingsSpy,
+										riskLevelManager: riskLevelManagingSpy,
+										scanLogManager: scanLogManagingSpy,
+										configuration: configuration)
 
 		// Act
 		expect(self.coordinatorSpy.invokedUserDidCancelScanInstructions) == false
@@ -60,7 +76,12 @@ class ScanInstructionsViewModelTests: XCTestCase {
 				step: .redScreenNowWhat
 			)
 		]
-		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: pages,
+										userSettings: userSettingsSpy,
+										riskLevelManager: riskLevelManagingSpy,
+										scanLogManager: scanLogManagingSpy,
+										configuration: configuration)
 
 		// Act
 		let viewController = sut.scanInstructionsViewController(forPage: pages[0])
@@ -86,7 +107,12 @@ class ScanInstructionsViewModelTests: XCTestCase {
 				step: .redScreenNowWhat
 			)
 		]
-		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: pages,
+										userSettings: userSettingsSpy,
+										riskLevelManager: riskLevelManagingSpy,
+										scanLogManager: scanLogManagingSpy,
+										configuration: configuration)
 		expect(self.sut.shouldShowSkipButton) == true
 
 		sut.userDidChangeCurrentPage(toPageIndex: 1)
@@ -110,7 +136,12 @@ class ScanInstructionsViewModelTests: XCTestCase {
 				step: .redScreenNowWhat
 			)
 		]
-		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: pages,
+										userSettings: userSettingsSpy,
+										riskLevelManager: riskLevelManagingSpy,
+										scanLogManager: scanLogManagingSpy,
+										configuration: configuration)
 		expect(self.sut.shouldShowSkipButton) == false
 
 		sut.userDidChangeCurrentPage(toPageIndex: 1)
@@ -119,7 +150,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 	func test_nextButtonTitleChangesOnLastPage() {
 		userSettingsSpy.stubbedScanInstructionShown = true
-		userSettingsSpy.stubbedScanRiskLevelValue = .low
+		riskLevelManagingSpy.stubbedState = .low
 		let pages = [
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
@@ -134,7 +165,12 @@ class ScanInstructionsViewModelTests: XCTestCase {
 				step: .redScreenNowWhat
 			)
 		]
-		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: pages,
+										userSettings: userSettingsSpy,
+										riskLevelManager: riskLevelManagingSpy,
+										scanLogManager: scanLogManagingSpy,
+										configuration: configuration)
 		expect(self.sut.nextButtonTitle) == L.generalNext()
 
 		sut.userDidChangeCurrentPage(toPageIndex: 1)

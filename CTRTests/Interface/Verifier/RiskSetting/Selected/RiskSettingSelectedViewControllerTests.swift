@@ -18,7 +18,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: RiskSettingSelectedViewModel!
-	private var userSettingsSpy: UserSettingsSpy!
+	private var riskLevelManagingSpy: RiskLevelManagerSpy!
 	private var scanLogManagingSpy: ScanLogManagingSpy!
 	
 	var window = UIWindow()
@@ -27,7 +27,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		super.setUp()
 		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		userSettingsSpy = UserSettingsSpy()
+		riskLevelManagingSpy = RiskLevelManagerSpy()
 
 		scanLogManagingSpy = ScanLogManagingSpy()
 		scanLogManagingSpy.stubbedDidWeScanQRsResult = false
@@ -51,10 +51,10 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	func test_bindings() {
 		// Given
 		let config: RemoteConfiguration = .default
-		userSettingsSpy.stubbedScanRiskLevelValue = .low
+		riskLevelManagingSpy.stubbedState = .low
 		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy,
+			riskLevelManager: riskLevelManagingSpy,
 			configuration: config
 		)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
@@ -77,10 +77,10 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	func test_riskSetting_low() {
 		// Given
 		let config: RemoteConfiguration = .default
-		userSettingsSpy.stubbedScanRiskLevelValue = .low
+		riskLevelManagingSpy.stubbedState = .low
 		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy,
+			riskLevelManager: riskLevelManagingSpy,
 			configuration: config
 		)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
@@ -98,10 +98,10 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	func test_riskSetting_high() {
 		// Given
 		let config: RemoteConfiguration = .default
-		userSettingsSpy.stubbedScanRiskLevelValue = .high
+		riskLevelManagingSpy.stubbedState = .high
 		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy,
+			riskLevelManager: riskLevelManagingSpy,
 			configuration: config
 		)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
@@ -121,10 +121,10 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		scanLogManagingSpy.stubbedDidWeScanQRsResult = true
 
 		let config: RemoteConfiguration = .default
-		userSettingsSpy.stubbedScanRiskLevelValue = .high
+		riskLevelManagingSpy.stubbedState = .high
 		viewModel = RiskSettingSelectedViewModel(
 			coordinator: coordinatorSpy,
-			userSettings: userSettingsSpy,
+			riskLevelManager: riskLevelManagingSpy,
 			configuration: config
 		)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
