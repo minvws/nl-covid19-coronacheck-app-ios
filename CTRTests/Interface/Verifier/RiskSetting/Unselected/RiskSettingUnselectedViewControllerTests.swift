@@ -13,9 +13,10 @@ import Rswift
 
 final class RiskSettingUnselectedViewControllerTests: XCTestCase {
 
-	// MARK: Subject under test
+	/// Subject under test
 	private var sut: RiskSettingUnselectedViewController!
 	
+	/// The coordinator spy
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var riskLevelManagingSpy: RiskLevelManagerSpy!
 	private var viewModel: RiskSettingUnselectedViewModel!
@@ -39,12 +40,6 @@ final class RiskSettingUnselectedViewControllerTests: XCTestCase {
 		
 		window.addSubview(sut.view)
 		RunLoop.current.run(until: Date())
-	}
-
-	override func tearDown() {
-		super.tearDown()
-
-		Services.revertToDefaults()
 	}
 	
 	// MARK: - Tests
