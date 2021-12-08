@@ -59,7 +59,7 @@ class VerifierCoordinator: SharedCoordinator {
 			setupMenu()
 			
 			Services.scanLogManager.deleteExpiredScanLogEntries(
-				seconds: Services.remoteConfigManager.storedConfiguration.scanLogStorageSeconds  ?? 3600
+				seconds: Services.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
 			)
 			
 			navigateToVerifierWelcome()
