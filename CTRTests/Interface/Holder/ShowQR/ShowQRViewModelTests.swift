@@ -173,6 +173,7 @@ class ShowQRViewModelTests: XCTestCase {
 			firstNameInitial: "R",
 			lastNameInitial: "P",
 			credentialVersion: "2",
+			category: "3",
 			specimen: "0",
 			paperProof: "0",
 			validFrom: "\(Date())",
@@ -225,7 +226,7 @@ class ShowQRViewModelTests: XCTestCase {
 			greenCards: [greenCard],
 			thirdPartyTicketAppName: nil
 		)
-		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 2, totalDose: 2))
 		let expectedDetails: [DCCQRDetails] = [
 			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: "Corona, Check"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.dateOfBirth, value: "01-06-2021"),
@@ -237,7 +238,7 @@ class ShowQRViewModelTests: XCTestCase {
 			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: "01-06-2021"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: "Nederland / The Netherlands"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: "Test"),
-			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: "1234")
+			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: "test")
 		]
 
 		// When
