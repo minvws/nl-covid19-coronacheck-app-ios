@@ -207,7 +207,7 @@ extension QRCard {
 		let origins = QRCard.GreenCard.Origin.origins(fromDBOrigins: dbOrigins, now: now())
 
 		return [QRCard(
-			region: .netherlands(evaluateCredentials: { greencard, date in
+			region: .netherlands(evaluateCredentialAttributes: { greencard, date in
 				// Dig around to match the `UI Greencard` back with the `DB Greencard`:
 				return Evaluators.evaluateDomesticCredentialAttributes(date: date, dbGreencard: dbGreencard)
 			}),
@@ -234,7 +234,7 @@ extension QRCard {
 		}
 
 		return [QRCard(
-			region: .europeanUnion(evaluateEUCredentialAttributes: { greencard, date in
+			region: .europeanUnion(evaluateCredentialAttributes: { greencard, date in
 				// Dig around to match the `UI Greencard` back with the `DB Greencard`:
 				guard let dbGreenCardOriginPair = dbGreencardGroup.first(where: { tuples in greencard.id == tuples.0.objectID })
 				else { return nil }
