@@ -26,8 +26,8 @@ extension HolderDashboardViewModel {
 
 		/// Represents the region that the Greencard applies to
 		enum Region {
-			case netherlands
-			case europeanUnion(evaluateDCC: (QRCard.GreenCard, Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
+			case netherlands // evaluateCredentials: (QRCard.GreenCard, Date) -> DomesticCredentialAttributes
+			case europeanUnion(evaluateEUCredentialAttributes: (QRCard.GreenCard, Date) -> EuCredentialAttributes?)
 		}
 
 		struct GreenCard: Equatable {
@@ -120,7 +120,7 @@ extension QRCard.Region: Equatable {
 		switch (lhs, rhs) {
 			case (.netherlands, .netherlands): return true
 			case (.europeanUnion, .europeanUnion):
-				// No need to compare the evaluateDCC function
+				// No need to compare the evaluateEUCredentialAttributes function
 				return true
 			default:
 				return false

@@ -164,7 +164,7 @@ extension QRCard {
 		}
 
 		/// For a given date and greencard, return the DCC (used to calculate "X of Y doses" labels in the UI):
-		static func evaluateDigitalCovidCertificate(date: Date, dbGreencard: DBGreenCard) -> EuCredentialAttributes.DigitalCovidCertificate? {
+		static func evaluateEUCredentialAttributes(date: Date, dbGreencard: DBGreenCard) -> EuCredentialAttributes? {
 			guard !dbGreencard.isDeleted else { return nil }
 
 			guard dbGreencard.type == GreenCardType.eu.rawValue,
@@ -175,7 +175,9 @@ extension QRCard {
 				return nil
 			}
 
-			return euCredentialAttributes.digitalCovidCertificate
+			return euCredentialAttributes
+		}
+
 		}
 	}
 
@@ -216,13 +218,13 @@ extension QRCard {
 		}
 
 		return [QRCard(
-			region: .europeanUnion(evaluateDCC: { greencard, date in
+			region: .europeanUnion(evaluateEUCredentialAttributes: { greencard, date in
 				// Dig around to match the `UI Greencard` back with the `DB Greencard`:
 				guard let dbGreenCardOriginPair = dbGreencardGroup.first(where: { tuples in greencard.id == tuples.0.objectID })
 				else { return nil }
 
 				let dbGreencard = dbGreenCardOriginPair.0
-				return Evaluators.evaluateDigitalCovidCertificate(date: date, dbGreencard: dbGreencard)
+				return Evaluators.evaluateEUCredentialAttributes(date: date, dbGreencard: dbGreencard)
 			}),
 			greencards: uiGreencards,
 			shouldShowErrorBeneathCard: { // This one doesn't need to be (and isn't) dynamically evaluated
