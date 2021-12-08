@@ -59,4 +59,12 @@ class RiskLevelManagerSpy: RiskLevelManaging {
 		invokedRemoveObserverParameters = (token, ())
 		invokedRemoveObserverParametersList.append((token, ()))
 	}
+
+	var invokedReset = false
+	var invokedResetCount = 0
+
+	func reset() {
+		invokedReset = true
+		invokedResetCount += 1
+	}
 }

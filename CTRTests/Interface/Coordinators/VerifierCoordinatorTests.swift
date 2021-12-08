@@ -48,6 +48,32 @@ class VerifierCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 	
+	func testStartForcedInformation() {
+
+		// Given
+		let onboardingSpy = OnboardingManagerSpy()
+		onboardingSpy.stubbedNeedsOnboarding = false
+		onboardingSpy.stubbedNeedsConsent = false
+		sut.onboardingManager = onboardingSpy
+
+		let forcedInformationSpy = ForcedInformationManagerSpy()
+		forcedInformationSpy.stubbedNeedsUpdating = true
+		forcedInformationSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+			image: nil,
+			tagline: "test",
+			title: "test",
+			content: "test"
+		)
+		sut.forcedInformationManager = forcedInformationSpy
+
+		// When
+		sut.start()
+
+		// Then
+		XCTAssertFalse(sut.childCoordinators.isEmpty)
+		XCTAssertTrue(sut.childCoordinators.first is ForcedInformationCoordinator)
+	}
+	
 	func testFinishForcedInformation() {
 
 		// Given

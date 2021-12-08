@@ -14,7 +14,8 @@ protocol ScanLockManaging {
 	func lock()
 	func appendObserver(_ observer: @escaping (ScanLockManager.State) -> Void) -> ScanLockManager.ObserverToken
 	func removeObserver(token: ScanLockManager.ObserverToken)
-	
+	func reset()
+
 	static var configScanLockDuration: TimeInterval { get }
 }
 
@@ -160,6 +161,13 @@ final class ScanLockManager: ScanLockManaging {
 		observers.values.forEach { callback in
 			callback(state)
 		}
+	}
+
+	func reset() {
+		
+		observers = [:]
+		keychainScanLockUntil = .distantPast
+		state = .unlocked
 	}
 }
 

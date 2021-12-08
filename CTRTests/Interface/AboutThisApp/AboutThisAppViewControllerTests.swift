@@ -86,7 +86,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.sut.title) == L.verifierAboutTitle()
 		expect(self.sut.sceneView.message) == L.verifierAboutText()
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(4))
+			.to(haveCount(5))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(2))
 		expect(self.sut.sceneView.appVersion).toNot(beNil())
