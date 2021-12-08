@@ -307,6 +307,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 		Services.use(scanLogManagerSpy)
 		let scanLockManagerSpy = ScanLockManagerSpy()
 		Services.use(scanLockManagerSpy)
+		let riskLevelManagerSpy = RiskLevelManagerSpy()
+		Services.use(riskLevelManagerSpy)
 
 		// When
 		sut.resetDataAndRestart()
@@ -320,6 +322,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(forcedInfoSpy.invokedReset) == true
 		expect(scanLogManagerSpy.invokedReset) == false
 		expect(scanLockManagerSpy.invokedReset) == false
+		expect(riskLevelManagerSpy.invokedReset) == false
 		expect(self.userSettingsSpy.invokedReset) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
@@ -360,6 +363,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 		Services.use(scanLogManagerSpy)
 		let scanLockManagerSpy = ScanLockManagerSpy()
 		Services.use(scanLockManagerSpy)
+		let riskLevelManagerSpy = RiskLevelManagerSpy()
+		Services.use(riskLevelManagerSpy)
 
 		// When
 		sut.resetDataAndRestart()
@@ -373,6 +378,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(forcedInfoSpy.invokedReset) == true
 		expect(scanLogManagerSpy.invokedReset) == true
 		expect(scanLockManagerSpy.invokedReset) == true
+		expect(riskLevelManagerSpy.invokedReset) == true
 		expect(self.userSettingsSpy.invokedReset) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}

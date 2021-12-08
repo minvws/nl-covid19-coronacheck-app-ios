@@ -200,12 +200,14 @@ final class Services {
 		cryptoLibUtility.reset()
 		forcedInformationManager.reset()
 
-		if flavor == .holder {
-			walletManager.removeExistingEventGroups()
-			walletManager.removeExistingGreenCards()
-		} else {
-			scanLockManager.reset()
-			scanLogManager.reset()
+		switch flavor {
+			case .holder:
+				walletManager.removeExistingEventGroups()
+				walletManager.removeExistingGreenCards()
+			case .verifier:
+				riskLevelManager.reset()
+				scanLockManager.reset()
+				scanLogManager.reset()
 		}
 	}
 

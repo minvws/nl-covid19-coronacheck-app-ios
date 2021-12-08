@@ -14,7 +14,6 @@ protocol ScanLockManaging {
 	func lock()
 	func appendObserver(_ observer: @escaping (ScanLockManager.State) -> Void) -> ScanLockManager.ObserverToken
 	func removeObserver(token: ScanLockManager.ObserverToken)
-
 	func reset()
 }
 
