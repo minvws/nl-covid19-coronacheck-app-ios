@@ -204,6 +204,7 @@ final class Services {
 			walletManager.removeExistingEventGroups()
 			walletManager.removeExistingGreenCards()
 		} else {
+			scanLockManager.reset()
 			scanLogManager.reset()
 		}
 	}

@@ -305,6 +305,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 		Services.use(forcedInfoSpy)
 		let scanLogManagerSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagerSpy)
+		let scanLockManagerSpy = ScanLockManagerSpy()
+		Services.use(scanLockManagerSpy)
 
 		// When
 		sut.resetDataAndRestart()
@@ -317,6 +319,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(onboardingSpy.invokedReset) == true
 		expect(forcedInfoSpy.invokedReset) == true
 		expect(scanLogManagerSpy.invokedReset) == false
+		expect(scanLockManagerSpy.invokedReset) == false
 		expect(self.userSettingsSpy.invokedReset) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
@@ -330,7 +333,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 			flavor: AppFlavor.verifier,
 			userSettings: userSettingsSpy
 		)
-		
+
 		let walletSpy = WalletManagerSpy()
 		Services.use(walletSpy)
 		let remoteConfigSpy = RemoteConfigManagingSpy(
@@ -355,6 +358,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 		Services.use(forcedInfoSpy)
 		let scanLogManagerSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagerSpy)
+		let scanLockManagerSpy = ScanLockManagerSpy()
+		Services.use(scanLockManagerSpy)
 
 		// When
 		sut.resetDataAndRestart()
@@ -367,6 +372,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(onboardingSpy.invokedReset) == true
 		expect(forcedInfoSpy.invokedReset) == true
 		expect(scanLogManagerSpy.invokedReset) == true
+		expect(scanLockManagerSpy.invokedReset) == true
 		expect(self.userSettingsSpy.invokedReset) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
