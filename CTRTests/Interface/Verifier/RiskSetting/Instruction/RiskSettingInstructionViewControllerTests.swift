@@ -62,6 +62,8 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 		expect(self.sut.sceneView.moreButtonTitle) == L.verifier_risksetting_readmore()
 		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
 		expect(self.sut.sceneView.footerButtonView.primaryTitle) == L.verifierScaninstructionsButtonStartscanning()
+		expect(self.sut.sceneView.errorMessage) == L.verification_policy_selection_error_message()
+		expect(self.sut.sceneView.hasErrorState) == false
 	}
 	
 	func test_riskSetting_low() {

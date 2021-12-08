@@ -60,6 +60,8 @@ final class RiskSettingInstructionViewModelTests: XCTestCase {
 		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
 		expect(self.sut.moreButtonTitle) == L.verifier_risksetting_readmore()
 		expect(self.sut.primaryButtonTitle) == L.verifierScaninstructionsButtonStartscanning()
+		expect(self.sut.errorMessage) == L.verification_policy_selection_error_message()
+		expect(self.sut.shouldDisplayNotSetError) == false
 		expect(self.sut.riskLevel) == .low
 	}
 	
@@ -70,6 +72,21 @@ final class RiskSettingInstructionViewModelTests: XCTestCase {
 		sut.startScanner()
 		
 		// Then
+		expect(self.sut.shouldDisplayNotSetError) = false
+		expect(self.riskLevelManagingSpy.invokedUpdateParameters?.riskLevel) == .low
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
+	}
+	
+	func test_startScanner_whenUnselected_shouldDisplayError() {
+		// Given
+		riskLevelManagingSpy.stubbedState == nil
+		
+		// When
+		sut.startScanner()
+		
+		// Then
+		expect(self.sut.shouldDisplayNotSetError) = true
+		expect(self.riskLevelManagingSpy.invokedUpdate) == false
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
 	}
 }
