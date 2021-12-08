@@ -16,6 +16,7 @@ class ForcedInformationManagerTests: XCTestCase {
 	override func setUp() {
 
 		sut = ForcedInformationManager()
+		sut.factory = HolderForcedInformationFactory()
 		super.setUp()
 	}
 
@@ -50,7 +51,7 @@ class ForcedInformationManagerTests: XCTestCase {
 		XCTAssertFalse(sut.needsUpdating)
 	}
 
-	func test_getUpdatePage() {
+	func test_getUpdatePage_holder() {
 
 		// Given
 		let expectedPage = ForcedInformationPage(
@@ -59,6 +60,24 @@ class ForcedInformationManagerTests: XCTestCase {
 			title: L.holderUpdatepageTitleTab(),
 			content: L.holderUpdatepageContentTab()
 		)
+
+		// When
+		let actualPage = sut.getUpdatePage()
+
+		// Then
+		XCTAssertEqual(actualPage, expectedPage)
+	}
+	
+	func test_getUpdatePage_verifier() {
+
+		// Given
+		let expectedPage = ForcedInformationPage(
+			image: I.onboarding.tabbarNL(),
+			tagline: L.new_in_app_subtitle(),
+			title: L.new_in_app_risksetting_title(),
+			content: L.new_in_app_risksetting_subtitle()
+		)
+		sut.factory = VerifierForcedInformationFactory()
 
 		// When
 		let actualPage = sut.getUpdatePage()
