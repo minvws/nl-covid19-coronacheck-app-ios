@@ -19,7 +19,7 @@
 "verification_policy_selection_error_message" = "Maak een keuze om door te gaan";
 /* Koptekst in de over de app pagina */
 "verifier.about.readmore" = "Lees meer:";
-"verifier.about.text" = "CoronaCheck Scanner is ontwikkeld zodat bepaalde plekken en activiteiten veilig hun deuren kunnen openen. Denk bijvoorbeeld aan voetbalwedstrijden en café’s. \n\nBezoekers maken een coronabewijs met een QR-code van hun vaccinatie, negatieve testuitslag, of herstel van corona. Met behulp van deze app krijgen alleen bezoekers met zo’n coronabewijs toegang. Zo kunnen steeds meer plekken veilig bezocht worden.";
+"verifier.about.text" = "<p>CoronaCheck Scanner is ontwikkeld zodat bepaalde plekken en activiteiten veilig hun deuren kunnen openen. Denk bijvoorbeeld aan voetbalwedstrijden en cafés.</p><p> Bezoekers maken een coronabewijs met een QR-code van hun vaccinatie, negatieve testuitslag, of herstel van corona. Met behulp van deze app krijgen alleen bezoekers met zo’n coronabewijs toegang. Zo kunnen steeds meer plekken veilig bezocht worden.</p>";
 /* MARK: - Verifier About */
 "verifier.about.title" = "Over deze app";
 "verifier.clockDeviationDetected.message" = "<p>Om de CoronaCheck Scanner-app goed te kunnen gebruiken, is het belangrijk dat de tijd op je telefoon goed staat ingesteld. Loopt je telefoon bijvoorbeeld een paar minuten voor? Dan kan er een fout ontstaan tijdens de controle van een coronabewijs.</p><p><a href=\"%@\">Ga naar de instellingen</a> van je telefoon en zet de datum en tijd op 'automatisch instellen'.</p>";

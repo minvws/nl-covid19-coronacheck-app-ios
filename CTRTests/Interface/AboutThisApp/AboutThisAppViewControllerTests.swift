@@ -51,7 +51,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 
 	// MARK: Test
 
-	func test_content() {
+	func test_content_holder() {
 
 		// Given
 
@@ -63,6 +63,32 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.message) == L.holderAboutText()
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(6))
+		expect(self.sut.sceneView.appVersion).toNot(beNil())
+
+		sut.assertImage()
+	}
+
+	func test_content_verifier() {
+
+		// Given
+		let viewModel = AboutThisAppViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
+		)
+		sut = AboutThisAppViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == L.verifierAboutTitle()
+		expect(self.sut.sceneView.message) == L.verifierAboutText()
+		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
+			.to(haveCount(4))
+		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
+			.to(haveCount(2))
 		expect(self.sut.sceneView.appVersion).toNot(beNil())
 
 		sut.assertImage()
