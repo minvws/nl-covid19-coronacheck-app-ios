@@ -166,7 +166,7 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(N
 
 FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded, NSString* _Nullable verificationPolicy);
 
-FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerifyWithTime(NSData* _Nullable proofQREncoded, int64_t unixTimeSeconds);
+FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerifyWithTime(NSData* _Nullable proofQREncoded, NSString* _Nullable verificationPolicy, int64_t unixTimeSeconds);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreWrappedErrorResult(NSError* _Nullable err, NSString* _Nullable prefix);
 
