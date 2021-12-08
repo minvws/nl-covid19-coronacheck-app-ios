@@ -13,7 +13,7 @@
 "scan_log_list_lowrisk" = "3G";
 "scan_log_list_no_items" = "No certificates scanned";
 "scan_log_list_now" = "now";
-"scan_log_message" = "<p>The scan setting log keeps track of the type of access used during scanning. A civil enforcement officer may request access to this log.</p><p>For privacy reasons, only scan settings used in the last %@ minutes are saved on this phone. No personal information is saved. You can read more about this in the <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">frequently asked questions</a>.</p>";
+"scan_log_message" = "<p>The scan setting log keeps track of the type of access used during scanning. A civil enforcement officer may request access to this log.</p><p>For privacy reasons, only scan settings used in the last %li minutes are saved on this phone. No personal information is saved. You can read more about this in the <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">frequently asked questions</a>.</p>";
 "scan_log_title" = "Scan setting log";
 "updateApp.content" = "To continue, install the latest version of the app";
 "verification_policy_selection_error_message" = "Choose a setting to continue";
