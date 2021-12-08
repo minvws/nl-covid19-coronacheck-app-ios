@@ -132,7 +132,7 @@
 "verifier_risksetting_changeselection_3g" = "Set to 3G access";
 "verifier_risksetting_changeselection_button" = "Change";
 "verifier_risksetting_confirmation_button" = "Confirm";
-"verifier_risksetting_confirmation_dialog_message" = "If you change scan settings, you have to wait for 5 minutes before you can scan again.";
+"verifier_risksetting_confirmation_dialog_message" = "If you change scan settings, you have to wait for %li minutes before you can scan again.";
 "verifier_risksetting_confirmation_dialog_negative_button" = "No, go back";
 "verifier_risksetting_confirmation_dialog_positive_button" = "Yes, change";
 "verifier_risksetting_confirmation_dialog_title" = "Are you sure you want to change the setting?";
