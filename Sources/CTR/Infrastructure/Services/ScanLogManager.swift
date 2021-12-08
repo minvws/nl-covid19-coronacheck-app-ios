@@ -12,9 +12,9 @@ protocol ScanLogManaging: AnyObject {
 
 	init( dataStoreManager: DataStoreManaging)
 
-	func didWeScanQRs(seconds: Int) -> Bool
+	func didWeScanQRs(withinLastNumberOfSeconds: Int) -> Bool
 
-	func getScanEntries(seconds: Int) -> Result<[ScanLogEntry], Error>
+	func getScanEntries(withinLastNumberOfSeconds: Int) -> Result<[ScanLogEntry], Error>
 
 	func addScanEntry(riskLevel: RiskLevel, date: Date)
 
@@ -33,15 +33,15 @@ class ScanLogManager: ScanLogManaging {
 		self.dataStoreManager = dataStoreManager
 	}
 
-	func didWeScanQRs(seconds: Int) -> Bool {
+	func didWeScanQRs(withinLastNumberOfSeconds seconds: Int) -> Bool {
 
-		switch getScanEntries(seconds: seconds) {
+		switch getScanEntries(withinLastNumberOfSeconds: seconds) {
 			case .success(let log): return !log.isEmpty
 			case .failure: return false
 		}
 	}
 
-	func getScanEntries(seconds: Int) -> Result<[ScanLogEntry], Error> {
+	func getScanEntries(withinLastNumberOfSeconds seconds: Int) -> Result<[ScanLogEntry], Error> {
 
 		var result: Result<[ScanLogEntry], Error> = .success([])
 		let fromDate = Date().addingTimeInterval(TimeInterval(seconds) * -1)

@@ -18,7 +18,7 @@ class ScanLogViewModel {
 
 	weak private var coordinator: OpenUrlProtocol?
 
-	weak private var scanManager: ScanLogManaging? = Services.scanLogManager
+	weak private var scanLogManager: ScanLogManaging? = Services.scanLogManager
 	weak private var appInstalledSinceManager: AppInstalledSinceManaging? = Services.appInstalledSinceManager
 
 	@Bindable private(set) var title: String = L.scan_log_title()
@@ -45,9 +45,9 @@ class ScanLogViewModel {
 
 	private func handleScanEntries(_ scanLogStorageSeconds: Int) {
 
-		guard let scanManager = scanManager else { return }
+		guard let scanLogManager = scanLogManager else { return }
 
-		let result = scanManager.getScanEntries(seconds: scanLogStorageSeconds)
+		let result = scanLogManager.getScanEntries(withinLastNumberOfSeconds: scanLogStorageSeconds)
 		switch result {
 			case let .success(log):
 				displayEntries.append(contentsOf: ScanLogDataSource(entries: log).getDisplayEntries())
