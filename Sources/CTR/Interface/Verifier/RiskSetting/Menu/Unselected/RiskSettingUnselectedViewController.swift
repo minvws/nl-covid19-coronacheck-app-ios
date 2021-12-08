@@ -43,7 +43,6 @@ final class RiskSettingUnselectedViewController: BaseViewController {
 		viewModel.$highRiskSubtitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskSubtitle = $0 }
 		viewModel.$highRiskAccessibilityLabel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskAccessibilityLabel = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
-		viewModel.$riskLevel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.riskLevel = $0 }
 		viewModel.$errorMessage.binding = { [weak self] in self?.sceneView.errorMessage = $0 }
 		viewModel.$shouldDisplayNotSetError.binding = { [weak self] in self?.sceneView.hasErrorState = $0 }
 		
