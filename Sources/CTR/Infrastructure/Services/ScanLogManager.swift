@@ -19,6 +19,8 @@ protocol ScanLogManaging: AnyObject {
 	func addScanEntry(riskLevel: RiskLevel, date: Date)
 
 	func deleteExpiredScanLogEntries(seconds: Int)
+
+	func reset()
 }
 
 class ScanLogManager: ScanLogManaging {
@@ -74,6 +76,21 @@ class ScanLogManager: ScanLogManaging {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			let result = ScanLogEntryModel.listEntriesUpTo(date: untilDate, managedContext: context)
+			switch result {
+				case let .success(entries):
+					entries.forEach { context.delete($0) }
+				case .failure:
+					break
+			}
+			dataStoreManager.save(context)
+		}
+	}
+
+	func reset() {
+
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			let result = ScanLogEntryModel.listEntries(managedContext: context)
 			switch result {
 				case let .success(entries):
 					entries.forEach { context.delete($0) }

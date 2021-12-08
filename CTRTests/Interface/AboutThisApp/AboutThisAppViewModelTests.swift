@@ -95,10 +95,11 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.verifierAboutText()
 		expect(self.sut.menu).to(haveCount(2))
 		expect(self.sut.menu[0].key) == L.verifierAboutReadmore()
-		expect(self.sut.menu[0].value).to(haveCount(3))
+		expect(self.sut.menu[0].value).to(haveCount(4))
 		expect(self.sut.menu[0].value[0].identifier) == .privacyStatement
 		expect(self.sut.menu[0].value[1].identifier) == AboutThisAppMenuIdentifier.accessibility
 		expect(self.sut.menu[0].value[2].identifier) == .colophon
+		expect(self.sut.menu[0].value[3].identifier) == .reset
 
 		expect(self.sut.menu[1].key) == L.verifier_about_this_app_law_enforcement()
 		expect(self.sut.menu[1].value).to(haveCount(1))
@@ -277,7 +278,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString.contains("scanner-test")) == true
 	}
 
-	func test_resetData() {
+	func test_resetData_holder() {
 
 		// Given
 		let walletSpy = WalletManagerSpy()
@@ -302,6 +303,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 		Services.use(onboardingSpy)
 		let forcedInfoSpy = ForcedInformationManagerSpy()
 		Services.use(forcedInfoSpy)
+		let scanLogManagerSpy = ScanLogManagingSpy()
+		Services.use(scanLogManagerSpy)
 
 		// When
 		sut.resetDataAndRestart()
@@ -313,6 +316,57 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(cryptoLibUtilitySpy.invokedReset) == true
 		expect(onboardingSpy.invokedReset) == true
 		expect(forcedInfoSpy.invokedReset) == true
+		expect(scanLogManagerSpy.invokedReset) == false
+		expect(self.userSettingsSpy.invokedReset) == true
+		expect(self.coordinatorSpy.invokedRestart) == true
+	}
+
+	func test_resetData_verifier() {
+
+		// Given
+		sut = AboutThisAppViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
+		)
+		
+		let walletSpy = WalletManagerSpy()
+		Services.use(walletSpy)
+		let remoteConfigSpy = RemoteConfigManagingSpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			reachability: ReachabilitySpy(),
+			networkManager: NetworkSpy()
+		)
+		remoteConfigSpy.stubbedStoredConfiguration = .default
+		Services.use(remoteConfigSpy)
+		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(
+			now: { now },
+			userSettings: UserSettingsSpy(),
+			reachability: ReachabilitySpy(),
+			fileStorage: FileStorage(),
+			flavor: AppFlavor.flavor
+		)
+		Services.use(cryptoLibUtilitySpy)
+		let onboardingSpy = OnboardingManagerSpy()
+		Services.use(onboardingSpy)
+		let forcedInfoSpy = ForcedInformationManagerSpy()
+		Services.use(forcedInfoSpy)
+		let scanLogManagerSpy = ScanLogManagingSpy()
+		Services.use(scanLogManagerSpy)
+
+		// When
+		sut.resetDataAndRestart()
+
+		// Then
+		expect(walletSpy.invokedRemoveExistingGreenCards) == false
+		expect(walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(remoteConfigSpy.invokedReset) == true
+		expect(cryptoLibUtilitySpy.invokedReset) == true
+		expect(onboardingSpy.invokedReset) == true
+		expect(forcedInfoSpy.invokedReset) == true
+		expect(scanLogManagerSpy.invokedReset) == true
 		expect(self.userSettingsSpy.invokedReset) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
