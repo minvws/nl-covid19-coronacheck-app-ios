@@ -79,7 +79,6 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 			configuration: .default
 		)
 		
-
 		// When
 
 		// Then
