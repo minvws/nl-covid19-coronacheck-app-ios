@@ -213,8 +213,8 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 			vaccinations: [
 				EuCredentialAttributes.Vaccination(
 					certificateIdentifier: "test",
-					country: "NLS",
-					diseaseAgentTargeted: "test",
+					country: "Nederland / The Netherlands",
+					diseaseAgentTargeted: "1234",
 					doseNumber: doseNumber,
 					dateOfVaccination: "2021-06-01",
 					issuer: "Test",
@@ -744,23 +744,16 @@ extension EventFlow.AccessToken {
 }
 
 extension EuCredentialAttributes {
-	static var fakeVaccination: EuCredentialAttributes {
+	static func fake(dcc: EuCredentialAttributes.DigitalCovidCertificate) -> EuCredentialAttributes {
 		EuCredentialAttributes(
 			credentialVersion: 1,
-			digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate(
-				dateOfBirth: "2021-06-01",
-				name: EuCredentialAttributes.Name(
-					familyName: "Corona",
-					standardisedFamilyName: "CORONA",
-					givenName: "Check",
-					standardisedGivenName: "CHECK"
-				),
-				schemaVersion: "1.0.0",
-				vaccinations: [ EuCredentialAttributes.Vaccination.vaccination]
-			),
+			digitalCovidCertificate: dcc,
 			expirationTime: Date().timeIntervalSince1970 + 3600,
 			issuedAt: Date().timeIntervalSince1970,
 			issuer: "NL"
 		)
+	}
+	static func fakeVaccination(dcc: EuCredentialAttributes.DigitalCovidCertificate = .sampleWithVaccine(doseNumber: 1, totalDose: 2)) -> EuCredentialAttributes {
+		fake(dcc: dcc)
 	}
 }

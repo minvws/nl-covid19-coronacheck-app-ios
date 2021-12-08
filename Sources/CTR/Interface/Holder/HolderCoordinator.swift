@@ -48,6 +48,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
 
 	func userWishesMoreInfoAboutClockDeviation()
+	
+	func userWishesMoreInfoAboutTestOnlyValidFor3G()
 
 	func userWishesMoreInfoAboutUpgradingEUVaccinations()
 
@@ -478,13 +480,19 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
+	}
+	
+	func userWishesMoreInfoAboutTestOnlyValidFor3G() {
+		let title: String = L.holder_my_overview_3g_test_validity_bottom_sheet_title()
+		let message: String = L.holder_my_overview_3g_test_validity_bottom_sheet_body()
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
 		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
 		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 
 	func userWishesMoreInfoAboutUpgradingEUVaccinations() {

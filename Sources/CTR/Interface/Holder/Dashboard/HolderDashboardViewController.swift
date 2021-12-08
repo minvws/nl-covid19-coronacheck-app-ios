@@ -19,6 +19,7 @@ class HolderDashboardViewController: BaseViewController {
         case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case testOnlyValidFor3G(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         
         // Errors:
         case errorMessage(message: String, didTapTryAgain: () -> Void)
@@ -233,7 +234,8 @@ private extension HolderDashboardViewController.Card {
 				let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 				let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
 				let .recoveryValidityExtensionAvailable(message, callToActionButtonText, didTapCallToAction),
-				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction):
+				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
+				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
 					title: message,

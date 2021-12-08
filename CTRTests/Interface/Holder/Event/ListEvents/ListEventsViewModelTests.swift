@@ -261,7 +261,7 @@ class ListEventsViewModelTests: XCTestCase {
 	func test_somethingIsWrong_dccVaccination_notAvailable() {
 
 		// Given
-		cryptoSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination
+		cryptoSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,

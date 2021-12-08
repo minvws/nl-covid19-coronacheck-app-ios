@@ -26,8 +26,8 @@ extension HolderDashboardViewModel {
 
 		/// Represents the region that the Greencard applies to
 		enum Region {
-			case netherlands
-			case europeanUnion(evaluateDCC: (QRCard.GreenCard, Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
+			case netherlands(evaluateCredentialAttributes: (QRCard.GreenCard, Date) -> DomesticCredentialAttributes?)
+			case europeanUnion(evaluateCredentialAttributes: (QRCard.GreenCard, Date) -> EuCredentialAttributes?)
 		}
 
 		struct GreenCard: Equatable {
@@ -104,6 +104,16 @@ extension HolderDashboardViewModel {
 				.sorted()
 				.last ?? .distantPast
 		}
+		
+		func contains3GTest(now: Date) -> Bool {
+			guard case let .netherlands(credentialEvaluator) = region else { return false }
+			
+			let has3GTestGreencard = greencards.contains { greencard in
+				guard greencard.origins.contains(where: { $0.type == .test }) else { return false }
+				return !(credentialEvaluator(greencard, now)?.is2G ?? false)
+			}
+			return has3GTestGreencard
+		}
 	}
 
 	struct ExpiredQR: Equatable {
@@ -120,7 +130,7 @@ extension QRCard.Region: Equatable {
 		switch (lhs, rhs) {
 			case (.netherlands, .netherlands): return true
 			case (.europeanUnion, .europeanUnion):
-				// No need to compare the evaluateDCC function
+				// No need to compare the associated-value `evaluate` functions
 				return true
 			default:
 				return false
