@@ -192,15 +192,23 @@ final class Services {
 	)
 
 	/// Reset all the data
-	static func reset() {
+	static func reset(flavor: AppFlavor) {
 
 		appInstalledSinceManager.reset()
-		walletManager.removeExistingEventGroups()
-		walletManager.removeExistingGreenCards()
 		onboardingManager.reset()
 		remoteConfigManager.reset()
 		cryptoLibUtility.reset()
 		forcedInformationManager.reset()
+
+		switch flavor {
+			case .holder:
+				walletManager.removeExistingEventGroups()
+				walletManager.removeExistingGreenCards()
+			case .verifier:
+				riskLevelManager.reset()
+				scanLockManager.reset()
+				scanLogManager.reset()
+		}
 	}
 
 	static func revertToDefaults() {

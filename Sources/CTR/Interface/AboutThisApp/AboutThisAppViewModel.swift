@@ -107,12 +107,17 @@ class AboutThisAppViewModel: Logging {
 
 	private func setupMenuVerifier() {
 
+		var topList: [AboutThisAppMenuOption] = [
+			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.verifierMenuPrivacy()) ,
+			AboutThisAppMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
+			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
+		]
+		if Configuration().getEnvironment() != "production" {
+			topList.append(AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle()))
+		}
+
 		menu = [
-			L.verifierAboutReadmore(): [
-				AboutThisAppMenuOption(identifier: .privacyStatement, name: L.verifierMenuPrivacy()) ,
-				AboutThisAppMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
-				AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
-			],
+			L.verifierAboutReadmore(): topList,
 			L.verifier_about_this_app_law_enforcement(): [
 				AboutThisAppMenuOption(identifier: .scanlog, name: L.verifier_about_this_app_scan_log())
 			]
@@ -180,7 +185,7 @@ class AboutThisAppViewModel: Logging {
 
 	func resetDataAndRestart() {
 
-		Services.reset()
+		Services.reset(flavor: flavor)
 		self.userSettings.reset()
 		self.coordinator?.restart()
 	}

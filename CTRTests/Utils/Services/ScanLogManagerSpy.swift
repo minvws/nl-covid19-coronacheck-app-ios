@@ -63,6 +63,14 @@ class ScanLogManagingSpy: ScanLogManaging {
 		invokedDeleteExpiredScanLogEntriesParameters = (seconds, ())
 		invokedDeleteExpiredScanLogEntriesParametersList.append((seconds, ()))
 	}
+
+	var invokedReset = false
+	var invokedResetCount = 0
+
+	func reset() {
+		invokedReset = true
+		invokedResetCount += 1
+	}
 }
 
 extension ScanLogManagingSpy {

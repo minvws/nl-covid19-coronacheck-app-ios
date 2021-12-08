@@ -14,6 +14,7 @@ protocol RiskLevelManaging: AnyObject {
 	func update(riskLevel: RiskLevel?)
 	func appendObserver(_ observer: @escaping (RiskLevel?) -> Void) -> RiskLevelManager.ObserverToken
 	func removeObserver(token: RiskLevelManager.ObserverToken)
+	func reset()
 }
 
 final class RiskLevelManager: RiskLevelManaging {
@@ -69,6 +70,13 @@ final class RiskLevelManager: RiskLevelManaging {
 		observers.values.forEach { callback in
 			callback(newState)
 		}
+	}
+
+	func reset() {
+
+		observers = [:]
+		keychainRiskLevel = .none
+		state = keychainRiskLevel
 	}
 }
 
