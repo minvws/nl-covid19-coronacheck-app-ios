@@ -55,6 +55,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	private let footerButtonView: FooterButtonView = {
 		let footerView = FooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false
+		footerView.buttonStackView.alignment = .center
 		return footerView
 	}()
 

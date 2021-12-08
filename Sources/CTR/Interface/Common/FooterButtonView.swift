@@ -39,7 +39,7 @@ final class FooterButtonView: BaseView {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.axis = .vertical
-		stackView.alignment = .center
+		stackView.alignment = .fill // Subviews should have equal width
 		stackView.spacing = ViewTraits.Spacing.buttonStack
 		return stackView
 	}()
