@@ -54,7 +54,7 @@ class ScanInstructionsViewModel {
 		
 		shouldShowRiskSetting = riskLevelManager.state == nil
 		if let scanLock = configuration.scanLockWarningSeconds {
-			hasScanLock = scanLogManager.didWeScanQRs(seconds: scanLock)
+			hasScanLock = scanLogManager.didWeScanQRs(withinLastNumberOfSeconds: scanLock)
 		}
 		
 		updateState()

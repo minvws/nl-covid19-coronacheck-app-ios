@@ -14,29 +14,29 @@ class ScanLogManagingSpy: ScanLogManaging {
 
 	var invokedDidWeScanQRs = false
 	var invokedDidWeScanQRsCount = 0
-	var invokedDidWeScanQRsParameters: (seconds: Int, Void)?
-	var invokedDidWeScanQRsParametersList = [(seconds: Int, Void)]()
+	var invokedDidWeScanQRsParameters: (withinLastNumberOfSeconds: Int, Void)?
+	var invokedDidWeScanQRsParametersList = [(withinLastNumberOfSeconds: Int, Void)]()
 	var stubbedDidWeScanQRsResult: Bool! = false
 
-	func didWeScanQRs(seconds: Int) -> Bool {
+	func didWeScanQRs(withinLastNumberOfSeconds: Int) -> Bool {
 		invokedDidWeScanQRs = true
 		invokedDidWeScanQRsCount += 1
-		invokedDidWeScanQRsParameters = (seconds, ())
-		invokedDidWeScanQRsParametersList.append((seconds, ()))
+		invokedDidWeScanQRsParameters = (withinLastNumberOfSeconds, ())
+		invokedDidWeScanQRsParametersList.append((withinLastNumberOfSeconds, ()))
 		return stubbedDidWeScanQRsResult
 	}
 
 	var invokedGetScanEntries = false
 	var invokedGetScanEntriesCount = 0
-	var invokedGetScanEntriesParameters: (seconds: Int, Void)?
-	var invokedGetScanEntriesParametersList = [(seconds: Int, Void)]()
+	var invokedGetScanEntriesParameters: (withinLastNumberOfSeconds: Int, Void)?
+	var invokedGetScanEntriesParametersList = [(withinLastNumberOfSeconds: Int, Void)]()
 	var stubbedGetScanEntriesResult: Result<[ScanLogEntry], Error>!
 
-	func getScanEntries(seconds: Int) -> Result<[ScanLogEntry], Error> {
+	func getScanEntries(withinLastNumberOfSeconds: Int) -> Result<[ScanLogEntry], Error> {
 		invokedGetScanEntries = true
 		invokedGetScanEntriesCount += 1
-		invokedGetScanEntriesParameters = (seconds, ())
-		invokedGetScanEntriesParametersList.append((seconds, ()))
+		invokedGetScanEntriesParameters = (withinLastNumberOfSeconds, ())
+		invokedGetScanEntriesParametersList.append((withinLastNumberOfSeconds, ()))
 		return stubbedGetScanEntriesResult
 	}
 

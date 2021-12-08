@@ -26,7 +26,7 @@ class ScanLogManagerTests: XCTestCase {
 		// Given
 
 		// When
-		let result = sut.didWeScanQRs(seconds: 3600)
+		let result = sut.didWeScanQRs(withinLastNumberOfSeconds: 3600)
 
 		// Then
 		expect(result) == false
@@ -39,7 +39,7 @@ class ScanLogManagerTests: XCTestCase {
 		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
-		let result = sut.didWeScanQRs(seconds: 3600)
+		let result = sut.didWeScanQRs(withinLastNumberOfSeconds: 3600)
 
 		// Then
 		expect(result) == true
@@ -52,7 +52,7 @@ class ScanLogManagerTests: XCTestCase {
 		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
-		let result = sut.didWeScanQRs(seconds: 3600)
+		let result = sut.didWeScanQRs(withinLastNumberOfSeconds: 3600)
 
 		// Then
 		expect(result) == false
@@ -63,7 +63,7 @@ class ScanLogManagerTests: XCTestCase {
 		// Given
 
 		// When
-		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
+		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
 
 		// Then
 		expect(result).to(beEmpty())
@@ -76,7 +76,7 @@ class ScanLogManagerTests: XCTestCase {
 		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
-		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
+		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
 
 		// Then
 		expect(result).toNot(beEmpty())
@@ -91,7 +91,7 @@ class ScanLogManagerTests: XCTestCase {
 		sut.addScanEntry(riskLevel: RiskLevel.low, date: date)
 
 		// When
-		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
+		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
 
 		// Then
 		expect(result).toNot(beEmpty())
@@ -106,7 +106,7 @@ class ScanLogManagerTests: XCTestCase {
 		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
-		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
+		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
 
 		// Then
 		expect(result).to(beEmpty())
@@ -120,7 +120,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// When
 		sut.deleteExpiredScanLogEntries(seconds: 3600)
-		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
+		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
 
 		// Then
 		expect(result).to(beEmpty())
@@ -134,7 +134,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// When
 		sut.deleteExpiredScanLogEntries(seconds: 3600)
-		let result = try XCTUnwrap(sut.getScanEntries(seconds: 3600).successValue)
+		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
 
 		// Then
 		expect(result).toNot(beEmpty())

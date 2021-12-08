@@ -14,6 +14,7 @@ final class RiskSettingSelectedViewModel: Logging {
 	
 	private let riskLevelManager: RiskLevelManaging
 	private let scanLogManager: ScanLogManaging
+	private let scanLockManager: ScanLockManaging
 	
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_active_title()
@@ -28,36 +29,38 @@ final class RiskSettingSelectedViewModel: Logging {
 	@Bindable private(set) var riskLevel: RiskLevel?
 	@Bindable private(set) var alert: AlertContent?
 	
-	private var didWeScanQRs: Bool = false
 	var selectRisk: RiskLevel?
+	private var didWeRecentlyScanQRs: Bool = false
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
 		riskLevelManager: RiskLevelManaging = Services.riskLevelManager,
 		scanLogManager: ScanLogManaging = Services.scanLogManager,
+		scanLockManager: ScanLockManaging = Services.scanLockManager,
 		configuration: RemoteConfiguration
 	) {
 		
 		self.coordinator = coordinator
 		self.riskLevelManager = riskLevelManager
 		self.scanLogManager = scanLogManager
+		self.scanLockManager = scanLockManager
 		
 		let selectedRisk = riskLevelManager.state
 		riskLevel = selectedRisk
 		selectRisk = selectedRisk
 		
 		guard let scanLock = configuration.scanLockWarningSeconds else { return }
-		didWeScanQRs = scanLogManager.didWeScanQRs(seconds: scanLock)
+		didWeRecentlyScanQRs = scanLogManager.didWeScanQRs(withinLastNumberOfSeconds: scanLock)
 		
-		header = didWeScanQRs ? L.verifier_risksetting_active_lock_warning_header() : nil
+		header = didWeRecentlyScanQRs ? L.verifier_risksetting_active_lock_warning_header() : nil
 	}
 	
 	func confirmSetting() {
 		
-		if didWeScanQRs, riskLevel != selectRisk {
+		if didWeRecentlyScanQRs, riskLevel != selectRisk {
 			displayAlert()
 		} else {
-			saveSettingAndGoBackToStart()
+			saveSettingAndGoBackToStart(enablingLock: false)
 		}
 	}
 }
@@ -71,14 +74,16 @@ private extension RiskSettingSelectedViewModel {
 			subTitle: L.verifier_risksetting_confirmation_dialog_message(),
 			cancelTitle: L.verifier_risksetting_confirmation_dialog_negative_button(),
 			okAction: { [weak self] _ in
-				self?.saveSettingAndGoBackToStart()
+				self?.saveSettingAndGoBackToStart(enablingLock: true)
 			},
 			okTitle: L.verifier_risksetting_confirmation_dialog_positive_button()
 		)
 	}
 	
-	func saveSettingAndGoBackToStart() {
-		
+	func saveSettingAndGoBackToStart(enablingLock: Bool) {
+		if enablingLock {
+			scanLockManager.lock()
+		}
 		riskLevelManager.update(riskLevel: selectRisk)
 		coordinator?.navigateToVerifierWelcome()
 	}
