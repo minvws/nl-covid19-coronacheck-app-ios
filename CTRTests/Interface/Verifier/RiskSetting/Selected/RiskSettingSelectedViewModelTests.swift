@@ -85,6 +85,24 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		expect(self.sut.header) == L.verifier_risksetting_active_lock_warning_header(5)
 	}
 	
+	func test_header_withoutWarning() {
+		
+		// Given
+		scanLogManagingSpy.stubbedDidWeScanQRsResult = false
+		sut = RiskSettingSelectedViewModel(
+			coordinator: coordinatorSpy,
+			riskLevelManager: riskLevelManagingSpy,
+			scanLogManager: scanLogManagingSpy,
+			scanLockManager: scanLockManagingSpy,
+			configuration: .default
+		)
+		
+		// When
+
+		// Then
+		expect(self.sut.header).to(beNil())
+	}
+	
 	func test_confirmSetting_shouldSetHighRisk() {
 		// Given
 		sut = RiskSettingSelectedViewModel(
