@@ -76,7 +76,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.header) == L.verifier_risksetting_active_lock_warning_header()
+		expect(self.sut.header) == L.verifier_risksetting_active_lock_warning_header(5)
 	}
 
 	func test_confirmSetting_shouldSetHighRisk() {

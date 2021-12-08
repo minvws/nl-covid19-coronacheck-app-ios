@@ -4,7 +4,7 @@
 "new_in_app_risksetting_subtitle" = "Only visitors with a vaccination or recovery certificate get 2G access. 3G access is given to visitors carrying a test certificate. Check in advance which kind of access your location can give.";
 "new_in_app_risksetting_title" = "2G or 3G access";
 "new_in_app_subtitle" = "New in the app";
-"scan_log_footer_in_use" = "App in use since";
+"scan_log_footer_in_use" = "App in use since %@";
 "scan_log_footer_long_time" = "App in use for longer than one month";
 "scan_log_list_clock_skew_detected" = "Date or time changed";
 "scan_log_list_entry" = "Scanned between %1$li and %2$li certificates";
@@ -122,11 +122,11 @@
 "verifier.url.privacy" = "https://coronacheck.nl/en/gebruikersvoorwaarden-in-app";
 "verifier_about_this_app_law_enforcement" = "For enforcement";
 "verifier_about_this_app_scan_log" = "Scan setting log";
-"verifier_home_countdown_subtitle" = "You have to wait for 5 minutes because you changed your scan settings while scanning.";
+"verifier_home_countdown_subtitle" = "You have to wait for %li minutes because you changed your scan settings while scanning.";
 "verifier_home_countdown_title" = "You can scan again in %@";
 "verifier_menu_risksetting" = "Scan setting";
 "verifier_result_access_title_highrisk" = "2G check done";
-"verifier_risksetting_active_lock_warning_header" = "<p><b>Please note:</b> if you change scan settings while scanning, you have to wait for 5 minutes before you can scan again.</p>";
+"verifier_risksetting_active_lock_warning_header" = "<p><b>Please note:</b> if you change scan settings while scanning, you have to wait for %li minutes before you can scan again.</p>";
 "verifier_risksetting_active_title" = "Change scan setting";
 "verifier_risksetting_changeselection_2g" = "Set to 2G access";
 "verifier_risksetting_changeselection_3g" = "Set to 3G access";
