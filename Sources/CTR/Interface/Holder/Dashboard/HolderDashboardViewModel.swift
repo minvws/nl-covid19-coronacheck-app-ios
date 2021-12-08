@@ -15,6 +15,7 @@ protocol HolderDashboardCardUserActionHandling {
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion)
 	func didTapDeviceHasClockDeviationMoreInfo()
+	func didTapTestOnlyValidFor3GMoreInfo()
 	func didTapMultipleDCCUpgradeMoreInfo()
 	func didTapMultipleDCCUpgradeCompletedMoreInfo()
 	func didTapMultipleDCCUpgradeCompletedClose()
@@ -478,6 +479,10 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		coordinator?.userWishesMoreInfoAboutClockDeviation()
 	}
 	
+	func didTapTestOnlyValidFor3GMoreInfo() {
+		coordinator?.userWishesMoreInfoAboutTestOnlyValidFor3G()
+	}
+	
 	func didTapMultipleDCCUpgradeMoreInfo() {
 		coordinator?.userWishesMoreInfoAboutUpgradingEUVaccinations()
 	}
@@ -542,6 +547,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		cards += VCCard.makeRecoveryValidityCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
+		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(state: state, validityRegion: validityRegion, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
