@@ -30,6 +30,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		Services.use(scanLogManagerSpy)
 
 		scanLockManagerSpy = ScanLockManagerSpy()
+		scanLockManagerSpy.stubbedState = .unlocked
 		Services.use(scanLockManagerSpy)
 
 		navigationSpy = NavigationControllerSpy()
@@ -74,5 +75,21 @@ class VerifierCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+
+	func test_shouldCall_scanManagerRemoveOldEntries() {
+
+		// Given
+		let onboardingSpy = OnboardingManagerSpy()
+		onboardingSpy.stubbedNeedsOnboarding = false
+		onboardingSpy.stubbedNeedsConsent = false
+		sut.onboardingManager = onboardingSpy
+		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
+
+		sut.start()
+		
+		// Then
+		expect(self.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == true
 	}
 }
