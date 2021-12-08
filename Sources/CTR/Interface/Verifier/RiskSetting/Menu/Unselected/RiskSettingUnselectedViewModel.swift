@@ -22,11 +22,9 @@ final class RiskSettingUnselectedViewModel: Logging {
 	@Bindable private(set) var highRiskTitle = L.verifier_risksetting_highrisk_title()
 	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
 	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-	@Bindable private(set) var moreButtonTitle = L.verifier_risksetting_readmore()
 	@Bindable private(set) var primaryButtonTitle = L.verifier_risksetting_confirmation_button()
 	@Bindable private(set) var errorMessage = L.verification_policy_selection_error_message()
 	@Bindable private(set) var shouldDisplayNotSetError = false
-	@Bindable private(set) var riskLevel: RiskLevel?
 	
 	var selectRisk: RiskLevel? {
 		didSet {
@@ -41,16 +39,6 @@ final class RiskSettingUnselectedViewModel: Logging {
 		
 		self.coordinator = coordinator
 		self.riskLevelManager = riskLevelManager
-		
-		let selectedRisk = riskLevelManager.state
-		riskLevel = selectedRisk
-		selectRisk = selectedRisk
-	}
-	
-	func showReadMore() {
-		guard let url = URL(string: L.verifier_risksetting_readmore_url()) else { return }
-		
-		coordinator?.openUrl(url, inApp: true)
 	}
 	
 	func confirmSetting() {
