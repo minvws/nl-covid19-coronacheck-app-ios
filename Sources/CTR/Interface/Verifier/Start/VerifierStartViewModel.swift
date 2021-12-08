@@ -22,7 +22,7 @@ class VerifierStartViewModel: Logging {
 		case noLevelSet
 		case lowRisk
 		case highRisk
-		case locked(mode: Mode, timeRemaining: TimeInterval)
+		case locked(mode: Mode, timeRemaining: TimeInterval, totalDuration: TimeInterval)
 
 		var title: String {
 			L.verifierStartTitle()
@@ -30,9 +30,8 @@ class VerifierStartViewModel: Logging {
 		
 		var header: String {
 			switch self {
-				case .locked(_, let timeRemaining):
-					let formatter = timeRemaining > 59 ? Mode.minuteFormatter : Mode.secondFormatter
-					let timeRemainingString = formatter.string(from: timeRemaining) ?? "-"
+				case .locked(_, let timeRemaining, _):
+					let timeRemainingString = Mode.timeFormatter.string(from: timeRemaining) ?? "-"
 					return L.verifier_home_countdown_title(timeRemainingString, preferredLanguages: nil)
 					
 				default:
@@ -52,7 +51,14 @@ class VerifierStartViewModel: Logging {
 		}
 		
 		var message: String {
-			L.verifierStartMessage()
+			switch self {
+				case let .locked(_, _, totalDuration):
+					let minutes = Int((totalDuration / 60).rounded(.up))
+					return L.verifier_home_countdown_subtitle(minutes)
+
+				default:
+					return L.verifierStartMessage()
+			}
 		}
 		
 		var primaryButtonTitle: String {
@@ -79,26 +85,21 @@ class VerifierStartViewModel: Logging {
 		
 		var riskIndicator: (UIColor, String)? {
 			switch self {
-				case .highRisk, .locked(.highRisk, _):
+				case .highRisk, .locked(.highRisk, _, _):
 					return (Theme.colors.primary, L.verifier_start_scan_qr_policy_indication_2g())
-				case .lowRisk, .locked(.lowRisk, _):
+				case .lowRisk, .locked(.lowRisk, _, _):
 					return (Theme.colors.access, L.verifier_start_scan_qr_policy_indication_3g())
 				default:
 					return nil
 			}
 		}
 		
-		private static var minuteFormatter: DateComponentsFormatter = {
+		private static var timeFormatter: DateComponentsFormatter = {
 			let formatter = DateComponentsFormatter()
-			formatter.unitsStyle = .full
-			formatter.allowedUnits = [.minute]
-			return formatter
-		}()
-		
-		private static var secondFormatter: DateComponentsFormatter = {
-			let formatter = DateComponentsFormatter()
-			formatter.unitsStyle = .full
-			formatter.allowedUnits = [.second]
+			formatter.allowedUnits = [.minute, .second]
+			formatter.collapsesLargestUnit = false
+			formatter.unitsStyle = .positional
+			formatter.zeroFormattingBehavior = .pad
 			return formatter
 		}()
 	}
@@ -127,10 +128,10 @@ class VerifierStartViewModel: Logging {
 	
 	private lazy var lockLabelCountdownTimer: Timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
 		guard let self = self,
-			  case let .locked(mode, timeRemaining) = self.mode,
+			  case let .locked(mode, timeRemaining, totalDuration) = self.mode,
 			  timeRemaining > 0
 		else { return }
-		self.mode = .locked(mode: mode, timeRemaining: timeRemaining - 1)
+		self.mode = .locked(mode: mode, timeRemaining: timeRemaining - 1, totalDuration: totalDuration)
 	}
 
 	// MARK: - Observer tokens
@@ -182,7 +183,11 @@ class VerifierStartViewModel: Logging {
 			guard let self = self else { return }
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
+
+		// Pass current scanLockProvider state in immediately to configure `self.mode`
+		lockStateDidChange(lockState: scanLockProvider.state)
 		
+		// Then observer for changes:
 		scanLockObserverToken = scanLockProvider.appendObserver { [weak self] lockState in
 			self?.lockStateDidChange(lockState: lockState)
 		}
@@ -220,15 +225,17 @@ class VerifierStartViewModel: Logging {
 			switch (mode, lockState) {
 
 				// We're already locked, but maybe the `until` time has changed?
-				case let (.locked(prelockMode, _), .locked(until)):
-					mode = .locked(mode: prelockMode, timeRemaining: until.timeIntervalSinceNow)
+				case let (.locked(prelockMode, _, _), .locked(until)):
+					let totalDuration = type(of: scanLockProvider).configScanLockDuration
+					mode = .locked(mode: prelockMode, timeRemaining: until.timeIntervalSinceNow, totalDuration: totalDuration)
 
 				// We're not already locked, but must now lock:
 				case (_, .locked(let until)):
-					mode = .locked(mode: mode, timeRemaining: until.timeIntervalSinceNow)
+					let totalDuration = type(of: scanLockProvider).configScanLockDuration
+					mode = .locked(mode: mode, timeRemaining: until.timeIntervalSinceNow, totalDuration: totalDuration)
 
 				// We're locked, but must unlock:
-				case let (.locked(prelockMode, _), .unlocked):
+				case let (.locked(prelockMode, _, _), .unlocked):
 					mode = prelockMode
 
 				// We're not locked and so unlocking does nothing:
@@ -244,12 +251,12 @@ class VerifierStartViewModel: Logging {
 			switch (mode, riskLevel) {
 				
 				// RiskLevel changed, but we're locked. Just update the lock:
-				case let (.locked(_, timeRemaining), .high):
-					mode = .locked(mode: .highRisk, timeRemaining: timeRemaining)
-				case let (.locked(_, timeRemaining), .low):
-					mode = .locked(mode: .lowRisk, timeRemaining: timeRemaining)
-				case let (.locked(_, timeRemaining), .none):
-					mode = .locked(mode: .noLevelSet, timeRemaining: timeRemaining)
+				case let (.locked(_, timeRemaining, totalDuration), .high):
+					mode = .locked(mode: .highRisk, timeRemaining: timeRemaining, totalDuration: totalDuration)
+				case let (.locked(_, timeRemaining, totalDuration), .low):
+					mode = .locked(mode: .lowRisk, timeRemaining: timeRemaining, totalDuration: totalDuration)
+				case let (.locked(_, timeRemaining, totalDuration), .none):
+					mode = .locked(mode: .noLevelSet, timeRemaining: timeRemaining, totalDuration: totalDuration)
 				
 				// Risk Level changed: update mode
 				case (_, .high):
