@@ -28,9 +28,11 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		configuration = .default
 	}
 
-	func test_finishScanInstructions_callsCoordinator() {
+	func test_finishScanInstructions_whenRiskSettingIsShown_shouldInvokeUserDidCompletePages() {
 
 		// Arrange
+		riskLevelManagingSpy.stubbedState = .low
+		userSettingsSpy.stubbedScanInstructionShown = true
 		sut = ScanInstructionsViewModel(
 			coordinator: coordinatorSpy,
 			pages: [],
@@ -39,12 +41,34 @@ class ScanInstructionsViewModelTests: XCTestCase {
 			scanLogManager: scanLogManagingSpy,
 			configuration: configuration
 		)
-		userSettingsSpy.stubbedScanInstructionShown = true
 
 		// Act
 		sut.finishScanInstructions()
 
 		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == false
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
+	}
+	
+	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting() {
+
+		// Arrange
+		userSettingsSpy.stubbedScanInstructionShown = true
+		riskLevelManagingSpy.stubbedState = nil
+		sut = ScanInstructionsViewModel(
+			coordinator: coordinatorSpy,
+			pages: [],
+			userSettings: userSettingsSpy,
+			riskLevelManager: riskLevelManagingSpy,
+			scanLogManager: scanLogManagingSpy,
+			configuration: configuration
+		)
+
+		// Act
+		sut.finishScanInstructions()
+
+		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == true
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
 	}
 
@@ -175,5 +199,35 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 		sut.userDidChangeCurrentPage(toPageIndex: 1)
 		expect(self.sut.nextButtonTitle) == L.verifierScaninstructionsButtonStartscanning()
+	}
+	
+	func test_nextButtonTitleChangesOnLastPage_whenScanLockIsEnabled() {
+		userSettingsSpy.stubbedScanInstructionShown = true
+		riskLevelManagingSpy.stubbedState = .low
+		scanLogManagingSpy.stubbedDidWeScanQRsResult = true
+		let pages = [
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
+				step: .redScreenNowWhat
+			),
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
+				step: .redScreenNowWhat
+			)
+		]
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: pages,
+										userSettings: userSettingsSpy,
+										riskLevelManager: riskLevelManagingSpy,
+										scanLogManager: scanLogManagingSpy,
+										configuration: configuration)
+		expect(self.sut.nextButtonTitle) == L.generalNext()
+
+		sut.userDidChangeCurrentPage(toPageIndex: 1)
+		expect(self.sut.nextButtonTitle) == L.verifier_scan_instructions_back_to_start()
 	}
 }

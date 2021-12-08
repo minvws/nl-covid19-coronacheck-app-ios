@@ -72,20 +72,24 @@ final class RiskSettingInstructionViewModelTests: XCTestCase {
 		sut.startScanner()
 		
 		// Then
-		expect(self.sut.shouldDisplayNotSetError) = false
+		expect(self.sut.shouldDisplayNotSetError) == false
 		expect(self.riskLevelManagingSpy.invokedUpdateParameters?.riskLevel) == .low
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
 	}
 	
 	func test_startScanner_whenUnselected_shouldDisplayError() {
 		// Given
-		riskLevelManagingSpy.stubbedState == nil
+		riskLevelManagingSpy.stubbedState = nil
+		sut = RiskSettingInstructionViewModel(
+			coordinator: coordinatorSpy,
+			riskLevelManager: riskLevelManagingSpy
+		)
 		
 		// When
 		sut.startScanner()
 		
 		// Then
-		expect(self.sut.shouldDisplayNotSetError) = true
+		expect(self.sut.shouldDisplayNotSetError) == true
 		expect(self.riskLevelManagingSpy.invokedUpdate) == false
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
 	}
