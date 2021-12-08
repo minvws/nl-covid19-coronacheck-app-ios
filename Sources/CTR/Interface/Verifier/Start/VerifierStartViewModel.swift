@@ -197,8 +197,6 @@ class VerifierStartViewModel: Logging {
 		}
 
 		lockLabelCountdownTimer.fire()
-
-		cleanupScanLog()
 	}
 	
 	deinit {
@@ -274,11 +272,6 @@ class VerifierStartViewModel: Logging {
 
 		// Fetch the public keys from the issuer
 		cryptoLibUtility?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: nil, completion: nil)
-	}
-
-	private func cleanupScanLog() {
-
-		scanLogManager?.deleteExpiredScanLogEntries(seconds: remoteConfigurationManager?.storedConfiguration.scanLogStorageSeconds ?? 3600)
 	}
 }
 

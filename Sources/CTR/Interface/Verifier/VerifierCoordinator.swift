@@ -57,6 +57,11 @@ class VerifierCoordinator: SharedCoordinator {
 
 		handleOnboarding(factory: onboardingFactory) {
 			setupMenu()
+			
+			Services.scanLogManager.deleteExpiredScanLogEntries(
+				seconds: Services.remoteConfigManager.storedConfiguration.scanLogStorageSeconds  ?? 3600
+			)
+			
 			navigateToVerifierWelcome()
 		}
 	}
