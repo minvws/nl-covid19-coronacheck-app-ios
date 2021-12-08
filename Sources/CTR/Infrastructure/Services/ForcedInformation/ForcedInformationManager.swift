@@ -57,15 +57,15 @@ class ForcedInformationManager: ForcedInformationManaging {
 	@Keychain(name: "data", service: Constants.keychainService, clearOnReinstall: true)
 	private var forcedInformationData: ForcedInformationData = .empty
 
-	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
-	var factory: ForcedInformationFactory?
-
 	// MARK: - ForcedInformationManaging
 
 	// Initialize
 	required init() {
 		// Required by protocol
 	}
+	
+	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
+	var factory: ForcedInformationFactory?
 
 	/// Do we need show any updates? True if we do
 	var needsUpdating: Bool {
