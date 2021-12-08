@@ -178,6 +178,19 @@ extension QRCard {
 			return euCredentialAttributes
 		}
 
+		/// For a given date and greencard, return the DomesticCredentialAttributes:
+		static func evaluateDomesticCredentialAttributes(date: Date, dbGreencard: DBGreenCard) -> DomesticCredentialAttributes? {
+			guard !dbGreencard.isDeleted else { return nil }
+
+			guard dbGreencard.type == GreenCardType.domestic.rawValue,
+				  let credential = dbGreencard.currentOrNextActiveCredential(forDate: date),
+				  let data = credential.data,
+				  let domesticCredentialAttributes = Services.cryptoManager.readDomesticCredentials(data)
+			else {
+				return nil
+			}
+
+			return domesticCredentialAttributes
 		}
 	}
 
@@ -194,7 +207,10 @@ extension QRCard {
 		let origins = QRCard.GreenCard.Origin.origins(fromDBOrigins: dbOrigins, now: now())
 
 		return [QRCard(
-			region: .netherlands,
+			region: .netherlands(evaluateCredentials: { greencard, date in
+				// Dig around to match the `UI Greencard` back with the `DB Greencard`:
+				return Evaluators.evaluateDomesticCredentialAttributes(date: date, dbGreencard: dbGreencard)
+			}),
 			greencards: [GreenCard(id: dbGreencard.objectID, origins: origins)],
 			shouldShowErrorBeneathCard: !dbGreencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
 			evaluateEnabledState: { date in

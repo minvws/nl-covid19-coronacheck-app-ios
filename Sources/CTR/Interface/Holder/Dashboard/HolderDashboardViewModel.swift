@@ -77,6 +77,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		var shouldShowRecoveryValidityReinstationCompleteBanner: Bool = false
 		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
 
+		var shouldShowDomestic3GTestBanner: Bool = false
+		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
 			!qrCards.isEmpty || !regionFilteredExpiredCards(validityRegion: validityRegion).isEmpty
@@ -204,11 +206,17 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 
 	private func setupDatasource() {
 		datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
+			guard let self = self else { return }
+			
 			DispatchQueue.main.async {
-				self?.state.qrCards = qrCardDataItems
-				self?.state.expiredGreenCards += expiredGreenCards
-
-				self?.dccMigrationNotificationManager.reload()
+				var state = self.state
+				state.qrCards = qrCardDataItems
+				state.expiredGreenCards += expiredGreenCards
+				state.shouldShowDomestic3GTestBanner = qrCardDataItems.contains(where: { qrCard in
+					qrCard.contains3GTest(now: self.now())
+			   })
+				self.state = state
+				self.dccMigrationNotificationManager.reload()
 			}
 		}
 	}

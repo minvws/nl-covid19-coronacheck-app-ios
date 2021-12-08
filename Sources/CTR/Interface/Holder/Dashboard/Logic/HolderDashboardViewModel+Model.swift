@@ -104,6 +104,16 @@ extension HolderDashboardViewModel {
 				.sorted()
 				.last ?? .distantPast
 		}
+		
+		func contains3GTest(now: Date) -> Bool {
+			guard case let .netherlands(credentialEvaluator) = region else { return false }
+			
+			let has3GTestGreencard = greencards.contains { greencard in
+				guard greencard.origins.contains(where: { $0.type == .test }) else { return false }
+				return !(credentialEvaluator(greencard, now)?.is2G ?? false)
+			}
+			return has3GTestGreencard
+		}
 	}
 
 	struct ExpiredQR: Equatable {
