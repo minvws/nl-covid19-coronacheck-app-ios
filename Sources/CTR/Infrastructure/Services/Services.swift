@@ -146,7 +146,6 @@ final class Services {
     }()
 
 	static private(set) var appInstalledSinceManager: AppInstalledSinceManaging = appInstalledSinceManagingType.init()
-
 	static private(set) var cryptoLibUtility: CryptoLibUtilityProtocol = cryptoLibUtilityType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
@@ -154,54 +153,40 @@ final class Services {
 		fileStorage: FileStorage(),
 		flavor: AppFlavor.flavor
 	)
-
 	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
-
 	static private(set) var deviceAuthenticationDetector: DeviceAuthenticationProtocol = deviceAuthenticationType.init()
-	
 	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(
 		StorageType.persistent,
 		flavor: AppFlavor.flavor
 	)
-
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
-
 	static private(set) var jailBreakDetector: JailBreakProtocol = jailBreakType.init()
-
 	static private(set) var greenCardLoader: GreenCardLoading = greenCardLoadingType.init(
 		networkManager: networkManager,
 		cryptoManager: cryptoManager,
 		walletManager: walletManager
 	)
-
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
 		reachability: try? Reachability(),
 		networkManager: networkManager
 	)
-
 	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init()
-
 	static private(set) var openIdManager: OpenIdManaging = openIdManagerType.init()
-
 	static private(set) var walletManager: WalletManaging = walletManagingType.init(
 		dataStoreManager: dataStoreManager
 	)
-
 	static private(set) var couplingManager: CouplingManaging = couplingManagingType.init(
 		cryptoManager: cryptoManager,
 		networkManager: networkManager
 	)
-
 	static private(set) var mappingManager: MappingManaging = mappingManagingType.init(
 		remoteConfigManager: remoteConfigManager
 	)
-
 	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
 	static private(set) var scanLockManager: ScanLockManaging = scanLockManagerType.init()
 	static private(set) var riskLevelManager: RiskLevelManaging = riskLevelManagerType.init()
-
 	static private(set) var scanLogManager: ScanLogManaging = scanLogManagingType.init(
 		dataStoreManager: dataStoreManager
 	)
@@ -258,8 +243,10 @@ final class Services {
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.flavor
 		)
+		scanLockManager = scanLockManagerType.init()
 		scanLogManager = scanLogManagingType.init(
 			dataStoreManager: dataStoreManager
 		)
+		riskLevelManager = riskLevelManagerType.init()
 	}
 }

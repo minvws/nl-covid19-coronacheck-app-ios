@@ -64,7 +64,7 @@ class ScanLogViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.scan_log_title()
-		expect(self.sut.sceneView.message) == L.scan_log_message("60")
+		expect(self.sut.sceneView.message) == L.scan_log_message(60)
 		expect(self.sut.sceneView.footer) == L.scan_log_footer_long_time()
 		expect(self.sut.sceneView.listHeader) == L.scan_log_list_header(60)
 
