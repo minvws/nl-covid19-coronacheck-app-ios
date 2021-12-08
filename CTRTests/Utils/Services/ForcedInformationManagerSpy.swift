@@ -12,6 +12,28 @@ class ForcedInformationManagerSpy: ForcedInformationManaging {
 
 	required init() {}
 
+	var invokedFactorySetter = false
+	var invokedFactorySetterCount = 0
+	var invokedFactory: ForcedInformationFactory?
+	var invokedFactoryList = [ForcedInformationFactory?]()
+	var invokedFactoryGetter = false
+	var invokedFactoryGetterCount = 0
+	var stubbedFactory: ForcedInformationFactory!
+
+	var factory: ForcedInformationFactory? {
+		set {
+			invokedFactorySetter = true
+			invokedFactorySetterCount += 1
+			invokedFactory = newValue
+			invokedFactoryList.append(newValue)
+		}
+		get {
+			invokedFactoryGetter = true
+			invokedFactoryGetterCount += 1
+			return stubbedFactory
+		}
+	}
+
 	var invokedNeedsUpdatingGetter = false
 	var invokedNeedsUpdatingGetterCount = 0
 	var stubbedNeedsUpdating: Bool! = false

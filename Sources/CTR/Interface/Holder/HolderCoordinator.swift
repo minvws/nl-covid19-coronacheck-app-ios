@@ -138,6 +138,8 @@ class HolderCoordinator: SharedCoordinator {
 	override func start() {
 
 		handleOnboarding(factory: onboardingFactory) {
+			
+			forcedInformationManager.factory = HolderForcedInformationFactory()
 
 			if forcedInformationManager.needsUpdating {
 				// Show Forced Information

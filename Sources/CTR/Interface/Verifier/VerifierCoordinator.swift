@@ -56,8 +56,22 @@ class VerifierCoordinator: SharedCoordinator {
 	override func start() {
 
 		handleOnboarding(factory: onboardingFactory) {
-			setupMenu()
-			navigateToVerifierWelcome()
+			
+			forcedInformationManager.factory = VerifierForcedInformationFactory()
+			
+			if forcedInformationManager.needsUpdating {
+				// Show Forced Information
+				let coordinator = ForcedInformationCoordinator(
+					navigationController: navigationController,
+					forcedInformationManager: forcedInformationManager,
+					delegate: self
+				)
+				startChildCoordinator(coordinator)
+			} else {
+				
+				setupMenu()
+				navigateToVerifierWelcome()
+			}
 		}
 	}
 
