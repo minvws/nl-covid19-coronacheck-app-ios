@@ -26,7 +26,7 @@ extension HolderDashboardViewModel {
 
 		/// Represents the region that the Greencard applies to
 		enum Region {
-			case netherlands // evaluateCredentials: (QRCard.GreenCard, Date) -> DomesticCredentialAttributes
+			case netherlands(evaluateCredentials: (QRCard.GreenCard, Date) -> DomesticCredentialAttributes?)
 			case europeanUnion(evaluateEUCredentialAttributes: (QRCard.GreenCard, Date) -> EuCredentialAttributes?)
 		}
 
