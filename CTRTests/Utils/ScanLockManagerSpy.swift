@@ -11,7 +11,7 @@ import Foundation
 class ScanLockManagerSpy: ScanLockManaging {
 
 	required init() {}
-
+	
 	var invokedStateGetter = false
 	var invokedStateGetterCount = 0
 	var stubbedState: ScanLockManager.State!
@@ -55,4 +55,8 @@ class ScanLockManagerSpy: ScanLockManaging {
 		invokedRemoveObserverParameters = (token, ())
 		invokedRemoveObserverParametersList.append((token, ()))
 	}
+}
+
+extension ScanLockManagerSpy {
+	static var configScanLockDuration: TimeInterval { return 30 }
 }
