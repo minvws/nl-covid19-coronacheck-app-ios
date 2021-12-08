@@ -41,6 +41,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
 		scanLockManagerSpy = ScanLockManagerSpy()
 		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy.stubbedState = .unlocked
+		
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		userSettingsSpy = UserSettingsSpy()
 		scanLogManagerSpy = ScanLogManagingSpy()

@@ -113,6 +113,10 @@ class VerifierCoordinatorTests: XCTestCase {
 		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
 		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
 
+		let forcedInformationSpy = ForcedInformationManagerSpy()
+		forcedInformationSpy.stubbedNeedsUpdating = false
+		sut.forcedInformationManager = forcedInformationSpy
+		
 		sut.start()
 		
 		// Then
