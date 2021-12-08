@@ -133,7 +133,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		// When
 
 		// Then
-		expect(self.sut.sceneView.header) == L.verifier_risksetting_active_lock_warning_header()
+		expect(self.sut.sceneView.header) == L.verifier_risksetting_active_lock_warning_header(5)
 
 		// Snapshot
 		sut.assertImage()

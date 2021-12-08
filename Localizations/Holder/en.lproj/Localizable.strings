@@ -664,6 +664,10 @@
 "holder.vaccination.status.complete.recovery" = "yes (I’ve had coronavirus earlier)";
 "holder.vaccination.wrong.body" = "<p>Please contact the care provider who vaccinated you. This can be the GGD, your general practitioner, or a doctor belonging to a healthcare facility. They can help you change these details.</p>";
 "holder.vaccination.wrong.title" = "Is something wrong?";
+"holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
+"holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
+"holder_my_overview_3g_test_validity_bottom_sheet_title" = "Test certificate only valid for 3G access";
+"holder_my_overview_3g_test_validity_card" = "Your test certificate is only valid for 3G access within the Netherlands";
 /* MARK: - Internet Required */
 "internet.required.button" = "Try again";
 "internet.required.text" = "To start the app, you need to be connected to the internet.";

@@ -51,7 +51,7 @@ class ScanLogViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.scan_log_title()
-		expect(self.sut.message) == L.scan_log_message("60")
+		expect(self.sut.message) == L.scan_log_message(60)
 		expect(self.sut.listHeader) == L.scan_log_list_header(60)
 	}
 

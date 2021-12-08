@@ -15,6 +15,7 @@ class VerifierCoordinatorTests: XCTestCase {
 
 	private var navigationSpy: NavigationControllerSpy!
 	private var scanLogManagerSpy: ScanLogManagingSpy!
+	private var scanLockManagerSpy: ScanLockManagerSpy!
 	private var riskLevelManagerSpy: RiskLevelManagerSpy!
 	private var window = UIWindow()
 
@@ -27,6 +28,9 @@ class VerifierCoordinatorTests: XCTestCase {
 		
 		scanLogManagerSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagerSpy)
+
+		scanLockManagerSpy = ScanLockManagerSpy()
+		Services.use(scanLockManagerSpy)
 
 		navigationSpy = NavigationControllerSpy()
 		sut = VerifierCoordinator(
@@ -77,6 +81,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		onboardingSpy.stubbedNeedsConsent = false
 		sut.onboardingManager = onboardingSpy
 		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
 
 		let forcedInformationSpy = ForcedInformationManagerSpy()
 		forcedInformationSpy.stubbedNeedsUpdating = false

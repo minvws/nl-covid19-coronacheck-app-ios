@@ -37,7 +37,7 @@ class ScanLogViewModel {
 		let scanLogStorageSeconds: Int = configuration.scanLogStorageSeconds ?? 3600
 		let scanLogStorageMinutes: Int = scanLogStorageSeconds / 60
 
-		message = L.scan_log_message("\(scanLogStorageMinutes)")
+		message = L.scan_log_message(scanLogStorageMinutes)
 		listHeader = L.scan_log_list_header(scanLogStorageMinutes)
 		handleFirstUseDate(now)
 		handleScanEntries(scanLogStorageSeconds)

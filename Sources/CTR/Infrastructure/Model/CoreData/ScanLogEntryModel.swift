@@ -70,6 +70,21 @@ class ScanLogEntryModel {
 			return .failure(error)
 		}
 	}
+
+	/// List all the entries
+	/// - Parameters:
+	///   - managedContext: the managed object context
+	/// - Returns: list of scan log entries
+	class func listEntries(managedContext: NSManagedObjectContext) -> Result<[ScanLogEntry], Error> {
+
+		let fetchRequest = NSFetchRequest<ScanLogEntry>(entityName: entityName)
+		do {
+			let fetchedResults = try managedContext.fetch(fetchRequest)
+			return .success(fetchedResults)
+		} catch let error {
+			return .failure(error)
+		}
+	}
 }
 
 extension Array {

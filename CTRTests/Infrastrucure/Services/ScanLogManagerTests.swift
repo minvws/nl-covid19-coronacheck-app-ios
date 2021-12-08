@@ -139,4 +139,25 @@ class ScanLogManagerTests: XCTestCase {
 		// Then
 		expect(result).toNot(beEmpty())
 	}
+
+	func test_reset() {
+
+		// Given
+		let date = Date()
+		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+
+		// When
+		sut.reset()
+
+		var list = [ScanLogEntry]()
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			list = ScanLogEntryModel.listEntries(managedContext: context).successValue ?? []
+		}
+
+		// Then
+		expect(list).toEventually(beEmpty())
+	}
 }

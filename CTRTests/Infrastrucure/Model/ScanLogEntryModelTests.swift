@@ -224,4 +224,23 @@ class ScanLogEntryModelTests: XCTestCase {
 		expect(list).toEventuallyNot(beEmpty())
 		expect(list).toEventually(haveCount(2))
 	}
+
+	func test_listEntries() {
+
+		// Given
+		var list = [ScanLogEntry]()
+		let date = Date()
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			ScanLogEntryModel.create(mode: "test_listEntries_first", date: date.addingTimeInterval(ago * 30 * seconds), managedContext: context)
+			ScanLogEntryModel.create(mode: "test_listEntries_second", date: date.addingTimeInterval(ago * 20 * seconds), managedContext: context)
+			ScanLogEntryModel.create(mode: "test_listEntries_third", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
+			// When
+			list = ScanLogEntryModel.listEntries(managedContext: context).successValue ?? []
+		}
+		// Then
+		expect(list).toEventuallyNot(beEmpty())
+		expect(list).toEventually(haveCount(3))
+	}
 }
