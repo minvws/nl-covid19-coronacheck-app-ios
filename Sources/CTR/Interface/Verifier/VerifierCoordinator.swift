@@ -70,6 +70,9 @@ class VerifierCoordinator: SharedCoordinator {
 			} else {
 				
 				setupMenu()
+				Services.scanLogManager.deleteExpiredScanLogEntries(
+					seconds: Services.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
+				)
 				navigateToVerifierWelcome()
 			}
 		}

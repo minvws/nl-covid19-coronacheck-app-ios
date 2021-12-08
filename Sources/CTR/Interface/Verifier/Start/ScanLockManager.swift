@@ -15,6 +15,8 @@ protocol ScanLockManaging {
 	func appendObserver(_ observer: @escaping (ScanLockManager.State) -> Void) -> ScanLockManager.ObserverToken
 	func removeObserver(token: ScanLockManager.ObserverToken)
 	func reset()
+
+	static var configScanLockDuration: TimeInterval { get }
 }
 
 final class ScanLockManager: ScanLockManaging {
@@ -37,7 +39,7 @@ final class ScanLockManager: ScanLockManaging {
 	// MARK: - Static
 	
 	/// Query the Remote Config Manager for the scan lock duration.
-	private static var configScanLockDuration: TimeInterval {
+	static var configScanLockDuration: TimeInterval {
 		TimeInterval(Services.remoteConfigManager.storedConfiguration.scanLockSeconds ?? 300)
 	}
 	

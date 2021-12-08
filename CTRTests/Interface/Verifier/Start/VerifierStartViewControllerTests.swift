@@ -38,6 +38,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
 		scanLockManagerSpy = ScanLockManagerSpy()
 		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy.stubbedState = .unlocked
 		
 		cryptoLibUtilitySpy = CryptoLibUtilitySpy(
 			now: { now },
@@ -52,6 +53,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
 		userSettingsSpy = UserSettingsSpy()
 		scanLogManagerSpy = ScanLogManagingSpy()
+		
 		Services.use(cryptoLibUtilitySpy)
 		Services.use(cryptoManagerSpy)
 		Services.use(clockDeviationManagerSpy)

@@ -41,6 +41,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
 		scanLockManagerSpy = ScanLockManagerSpy()
 		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy.stubbedState = .unlocked
+		
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		userSettingsSpy = UserSettingsSpy()
 		scanLogManagerSpy = ScanLogManagingSpy()
@@ -244,21 +246,5 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Assert
 		expect(self.clockDeviationManagerSpy.invokedAppendDeviationChangeObserverCount) == 1
 		expect(self.sut.shouldShowClockDeviationWarning) == true
-	}
-
-	func test_init_shouldCall_scanManagerRemoveOldEntries() {
-
-		// Given
-
-		// When
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			scanLockProvider: scanLockManagerSpy,
-			riskLevelProvider: riskLevelManagerSpy,
-			userSettings: userSettingsSpy
-		)
-
-		// Then
-		expect(self.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == true
 	}
 }

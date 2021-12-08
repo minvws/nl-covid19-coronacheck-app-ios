@@ -32,6 +32,9 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		Services.use(scanLogManagingSpy)
 		
 		scanLockManagingSpy = ScanLockManagerSpy()
+		scanLockManagingSpy.stubbedState = .unlocked
+		scanLockManagingSpy.stubbedAppendObserverResult = UUID()
+		
 		Services.use(scanLockManagingSpy)
 	}
 
