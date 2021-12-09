@@ -13,7 +13,7 @@ class ScanLogViewController: BaseViewController {
 
 	let sceneView = ScanLogView()
 
-	override var enableSwipeBack: Bool { false }
+	override var enableSwipeBack: Bool { true }
 
 	init(viewModel: ScanLogViewModel) {
 
