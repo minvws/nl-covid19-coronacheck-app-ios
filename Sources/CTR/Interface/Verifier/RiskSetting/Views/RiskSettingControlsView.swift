@@ -116,6 +116,13 @@ final class RiskSettingControlsView: BaseView {
 			highRiskControl.isSelected = riskLevel.isHigh
 		}
 	}
+
+	var hasError: Bool = false {
+		didSet {
+			lowRiskControl.hasError = hasError
+			highRiskControl.hasError = hasError
+		}
+	}
 	
 	var selectRiskCommand: ((RiskLevel) -> Void)?
 }

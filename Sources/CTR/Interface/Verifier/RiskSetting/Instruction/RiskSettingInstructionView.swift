@@ -192,6 +192,7 @@ final class RiskSettingInstructionView: BaseView {
 		didSet {
 			guard let hasError = hasErrorState else { return }
 			errorView.isHidden = !hasError
+			riskSettingControlsView.hasError = hasError
 		}
 	}
 }
