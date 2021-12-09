@@ -187,17 +187,13 @@ class VerifierStartViewModel: Logging {
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
 
-		// Pass current scanLockProvider state in immediately to configure `self.mode`
+		// Pass current states in immediately to configure `self.mode`:
 		lockStateDidChange(lockState: scanLockProvider.state)
+		riskLevelDidChange(riskLevel: riskLevelProvider.state)
 		
-		// Then observer for changes:
-		scanLockObserverToken = scanLockProvider.appendObserver { [weak self] lockState in
-			self?.lockStateDidChange(lockState: lockState)
-		}
-		
-		riskLevelObserverToken = riskLevelProvider.appendObserver { [weak self] riskLevel in
-			self?.riskLevelDidChange(riskLevel: riskLevel)
-		}
+		// Then observe for changes:
+		scanLockObserverToken = scanLockProvider.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
+		riskLevelObserverToken = riskLevelProvider.appendObserver { [weak self] in self?.riskLevelDidChange(riskLevel: $0) }
 
 		lockLabelCountdownTimer.fire()
 	}
