@@ -139,20 +139,13 @@ class HolderCoordinator: SharedCoordinator {
 	// Designated starter method
 	override func start() {
 
-		handleOnboarding(factory: onboardingFactory) {
+		handleOnboarding(
+			onboardingFactory: onboardingFactory,
+			forcedInformationFactory: HolderForcedInformationFactory()
+		) {
 			
-			forcedInformationManager.factory = HolderForcedInformationFactory()
-
-			if forcedInformationManager.needsUpdating {
-				// Show Forced Information
-				let coordinator = ForcedInformationCoordinator(
-					navigationController: navigationController,
-					forcedInformationManager: forcedInformationManager,
-					delegate: self
-				)
-				startChildCoordinator(coordinator)
-			} else if let unhandledUniversalLink = unhandledUniversalLink {
-
+			if let unhandledUniversalLink = unhandledUniversalLink {
+				
 				// Attempt to consume the universal link again:
 				self.unhandledUniversalLink = nil // prevent potential infinite loops
 				navigateToHolderStart {
