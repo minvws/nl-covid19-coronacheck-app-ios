@@ -180,7 +180,6 @@
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Are you able to connect to the internet soon?";
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
-"holder.dcc.alert.message" = "You can try to add a paper certificate again later.";
 "holder.dcc.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
 "holder.dcc.list.action" = "Add certificate";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
@@ -426,7 +425,6 @@
 "holder.provider.message" = "Does the test point out you don't have coronavirus? Then you can use the test result to create a certificate. Please specify where you were tested.";
 /* MARK: - Holder Choose Provider */
 "holder.provider.title" = "Make QR code";
-"holder.recovery.alert.message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder.recovery.list.message" = "If the details about your test are correct, you can create a recovery certificate.";
 "holder.recovery.list.title" = "Are the details correct?";
 "holder.recovery.nolist.action" = "To my certificates";
@@ -527,7 +525,6 @@
 "holder.showqr.screenshotwarning.subtitle" = "Use the QR code in the app";
 "holder.showqr.screenshotwarning.title" = "A screenshot is not a valid certificate";
 "holder.showqr.showqr" = "Show anyway";
-"holder.test.alert.message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder.test.list.title" = "Retrieve test result";
 "holder.test.nolist.action" = "To my certificates";
 "holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>. Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
@@ -630,7 +627,6 @@
 "holder.vaccination.about.off.dcc" = "Dose %@ of %@";
 "holder.vaccination.about.text" = "About your vaccination";
 "holder.vaccination.alert.continue" = "No, continue";
-"holder.vaccination.alert.message" = "Doing so will stop the creation of your certificate. You will have to retrieve your details again later.";
 "holder.vaccination.alert.stop" = "Yes, go back";
 "holder.vaccination.alert.title" = "Are you sure you want to go back?";
 "holder.vaccination.element.combined" = "<p>Data retrieved from: %@ and %@</p>";
@@ -666,9 +662,13 @@
 "holder.vaccination.wrong.title" = "Is something wrong?";
 "holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
 "holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
-"holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>A Dutch test certificate is only valid in places with 3G access. This means that you cannot use your test certificate to get access to places with 2G access.</p><p><b>What is the difference between 3G and 2G?</b><br />The Gs determine which people can be given access: only those who were vaccinated and/or have recovered (2G), or people who tested negative as well (3G).</p><ul><li>3G access means you can enter places with a test, vaccination or recovery certificate.</li><li>2G access means you <u>cannot</u> enter places with a test certificate. You'll need a vaccination or recovery certificate.</li></ul><p><a href=\"http://coronacheck.nl\">You can read more about 3G and 2G here.</a></p>";
+"holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
+"holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>A Dutch test certificate is only valid in places with 3G access. This means that you cannot use your test certificate to get access to places with 2G access.</p><p><b>What is the difference between 3G and 2G?</b><br />The Gs determine which people can be given access: only those who were vaccinated and/or have recovered (2G), or people who tested negative as well (3G).</p><ul><li>3G access means you can enter places with a test, vaccination or recovery certificate.</li><li>2G access means you <u>cannot</u> enter places with a test certificate. You'll need a vaccination or recovery certificate.</li></ul><p><a href=\"https://www.rijksoverheid.nl/2g\">You can read more about 3G and 2G here</a></p> (in Dutch).";
 "holder_my_overview_3g_test_validity_bottom_sheet_title" = "Test certificate only valid for 3G access";
 "holder_my_overview_3g_test_validity_card" = "Your test certificate is only valid for 3G access within the Netherlands";
+"holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
+"holder_test_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
+"holder_vaccination_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your details again later.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Try again";
 "internet.required.text" = "To start the app, you need to be connected to the internet.";
