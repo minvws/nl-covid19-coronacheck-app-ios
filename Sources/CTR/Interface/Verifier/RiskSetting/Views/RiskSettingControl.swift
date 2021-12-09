@@ -159,4 +159,14 @@ final class RiskSettingControl: UIControl {
 	}
 	
 	var onTapCommand: (() -> Void)?
+
+	var hasError: Bool = false {
+		didSet {
+			if hasError {
+				iconImageView.image = I.toggle.error()
+			} else {
+				iconImageView.image = I.radioButton.normal()
+			}
+		}
+	}
 }
