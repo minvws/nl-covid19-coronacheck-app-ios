@@ -232,7 +232,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	}
 
 	/// The title of the showInstructions Button
-	var showInstructionsTitle: String = "" {
+	var showInstructionsTitle: String? {
 		didSet {
 			showInstructionsButton.setTitle(showInstructionsTitle, for: .normal)
 		}

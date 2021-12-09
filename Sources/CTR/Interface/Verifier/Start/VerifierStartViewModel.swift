@@ -65,8 +65,11 @@ class VerifierStartViewModel: Logging {
 			L.verifierStartButtonTitle()
 		}
 		
-		var showInstructionsTitle: String {
-			L.verifierStartButtonShowinstructions()
+		var showInstructionsTitle: String? {
+			switch self {
+				case .locked: return nil
+				default: return L.verifierStartButtonShowinstructions()
+			}
 		}
 		
 		var allowsClockDeviationWarning: Bool {
@@ -116,7 +119,7 @@ class VerifierStartViewModel: Logging {
 	@Bindable private(set) var message: String = ""
 	@Bindable private(set) var primaryButtonTitle: String = ""
 	@Bindable private(set) var showsPrimaryButton: Bool = true
-	@Bindable private(set) var showInstructionsTitle: String = ""
+	@Bindable private(set) var showInstructionsTitle: String?
 	@Bindable private(set) var showError: Bool = false
 	@Bindable private(set) var shouldShowClockDeviationWarning = false
 	@Bindable private(set) var riskIndicator: (UIColor, String)?
