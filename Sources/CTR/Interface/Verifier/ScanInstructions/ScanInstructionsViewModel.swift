@@ -27,9 +27,10 @@ class ScanInstructionsViewModel {
 
 	private let userSettings: UserSettingsProtocol
 	private let riskLevelManager: RiskLevelManaging
-	private let scanLogManager: ScanLogManaging
+	private let scanLockManager: ScanLockManaging
 	private var shouldShowRiskSetting = false
 	private var hasScanLock = false
+	private var scanLockObserverToken: ScanLockManager.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:
@@ -41,23 +42,25 @@ class ScanInstructionsViewModel {
 		pages: [ScanInstructionsPage],
 		userSettings: UserSettingsProtocol,
 		riskLevelManager: RiskLevelManaging = Services.riskLevelManager,
-		scanLogManager: ScanLogManaging = Services.scanLogManager,
-		configuration: RemoteConfiguration
+		scanLockManager: ScanLockManaging = Services.scanLockManager
 	) {
 		
 		self.coordinator = coordinator
 		self.pages = pages
 		self.userSettings = userSettings
 		self.riskLevelManager = riskLevelManager
-		self.scanLogManager = scanLogManager
+		self.scanLockManager = scanLockManager
 		self.currentPage = 0
 		
 		shouldShowRiskSetting = riskLevelManager.state == nil
-		if let scanLock = configuration.scanLockWarningSeconds {
-			hasScanLock = scanLogManager.didWeScanQRs(withinLastNumberOfSeconds: scanLock)
-		}
 		
+		hasScanLock = scanLockManager.state != .unlocked
 		updateState()
+		
+		scanLockObserverToken = scanLockManager.appendObserver { [weak self] lockState in
+			self?.hasScanLock = lockState != .unlocked
+			self?.updateState()
+		}
 	}
 	
 	func scanInstructionsViewController(forPage page: ScanInstructionsPage) -> ScanInstructionsPageViewController {
