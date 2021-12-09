@@ -26,7 +26,7 @@ final class RiskSettingUnselectedView: BaseView {
 		}
 	}
 	
-	private let scrollView: UIScrollView = {
+	let scrollView: UIScrollView = {
 		let scrollView = UIScrollView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		return scrollView
@@ -48,7 +48,7 @@ final class RiskSettingUnselectedView: BaseView {
 		return view
 	}()
 	
-	private let errorView: ErrorView = {
+	let errorView: ErrorView = {
 		let view = ErrorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isHidden = true
@@ -138,14 +138,6 @@ final class RiskSettingUnselectedView: BaseView {
 			guard let hasError = hasErrorState else { return }
 			errorView.isHidden = !hasError
 			riskSettingControlsView.hasError = hasError
-			if hasError {
-				// https://stackoverflow.com/a/952768/443270
-				let bottomOffset = CGPoint(
-					x: 0,
-					y: scrollView.contentSize.height - scrollView.bounds.height + scrollView.contentInset.bottom
-				)
-				scrollView.setContentOffset(bottomOffset, animated: true)
-			}
 		}
 	}
 }
