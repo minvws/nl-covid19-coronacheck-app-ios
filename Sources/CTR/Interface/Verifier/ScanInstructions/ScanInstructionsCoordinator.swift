@@ -34,19 +34,16 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	private let pagesFactory: ScanInstructionsFactoryProtocol = ScanInstructionsFactory()
 	private let pages: [ScanInstructionsPage]
 	private let isOpenedFromMenu: Bool
-	private let configuration: RemoteConfiguration
 
 	init(
 		navigationController: UINavigationController,
 		delegate: ScanInstructionsDelegate,
-		isOpenedFromMenu: Bool,
-		configuration: RemoteConfiguration = Services.remoteConfigManager.storedConfiguration
+		isOpenedFromMenu: Bool
 	) {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
 		self.isOpenedFromMenu = isOpenedFromMenu
-		self.configuration = configuration
 
 		pages = pagesFactory.create()
 	}
@@ -57,8 +54,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		let viewModel = ScanInstructionsViewModel(
 			coordinator: self,
 			pages: pages,
-			userSettings: UserSettings(),
-			configuration: configuration
+			userSettings: UserSettings()
 		)
 		let viewController = ScanInstructionsViewController(viewModel: viewModel)
 		navigationController.pushOrReplaceTopViewController(with: viewController, animated: !isOpenedFromMenu)
