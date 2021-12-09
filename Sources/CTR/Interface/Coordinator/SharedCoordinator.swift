@@ -105,16 +105,19 @@ extension SharedCoordinator {
 
 	/// Handle the onboarding
 	/// - Parameters:
-	///   - factory: the onboarding factory for the content
+	///   - onboardingFactory: the onboarding factory for the content
+	///   - forcedInformationFactory: the forced information factory to display updated content
 	///   - onCompletion: the completion handler when onboarding is done
-	func handleOnboarding(factory: OnboardingFactoryProtocol, onCompletion: () -> Void) {
+	func handleOnboarding(onboardingFactory: OnboardingFactoryProtocol, forcedInformationFactory: ForcedInformationFactory, onCompletion: () -> Void) {
+		
+		forcedInformationManager.factory = forcedInformationFactory
 
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: factory
+				factory: onboardingFactory
 			)
 			startChildCoordinator(coordinator)
 			return
@@ -124,12 +127,21 @@ extension SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: factory
+				factory: onboardingFactory
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent(shouldHideBackButton: true)
 			return
 
+		} else if forcedInformationManager.needsUpdating {
+			// Show Forced Information
+			   let coordinator = ForcedInformationCoordinator(
+				   navigationController: navigationController,
+				   forcedInformationManager: forcedInformationManager,
+				   delegate: self
+			   )
+			   startChildCoordinator(coordinator)
+			return
 		}
 		onCompletion()
 	}

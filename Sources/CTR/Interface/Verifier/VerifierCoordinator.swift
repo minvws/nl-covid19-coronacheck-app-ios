@@ -54,27 +54,17 @@ class VerifierCoordinator: SharedCoordinator {
 
 	// Designated starter method
 	override func start() {
-
-		handleOnboarding(factory: onboardingFactory) {
+		
+		handleOnboarding(
+			onboardingFactory: onboardingFactory,
+			forcedInformationFactory: VerifierForcedInformationFactory()
+		) {
 			
-			forcedInformationManager.factory = VerifierForcedInformationFactory()
-			
-			if forcedInformationManager.needsUpdating {
-				// Show Forced Information
-				let coordinator = ForcedInformationCoordinator(
-					navigationController: navigationController,
-					forcedInformationManager: forcedInformationManager,
-					delegate: self
-				)
-				startChildCoordinator(coordinator)
-			} else {
-				
-				setupMenu()
-				Services.scanLogManager.deleteExpiredScanLogEntries(
-					seconds: Services.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
-				)
-				navigateToVerifierWelcome()
-			}
+			setupMenu()
+			Services.scanLogManager.deleteExpiredScanLogEntries(
+				seconds: Services.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
+			)
+			navigateToVerifierWelcome()
 		}
 	}
 
