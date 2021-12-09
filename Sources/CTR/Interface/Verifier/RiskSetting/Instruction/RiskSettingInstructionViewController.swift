@@ -47,7 +47,12 @@ final class RiskSettingInstructionViewController: BaseViewController {
 		viewModel.$riskLevel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.riskLevel = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		viewModel.$errorMessage.binding = { [weak self] in self?.sceneView.errorMessage = $0 }
-		viewModel.$shouldDisplayNotSetError.binding = { [weak self] in self?.sceneView.hasErrorState = $0 }
+		viewModel.$shouldDisplayNotSetError.binding = { [weak self] in
+			self?.sceneView.hasErrorState = $0
+			if $0 {
+				self?.scrollToBottomIfNotCompletelyVisible()
+			}
+		}
 		
 		sceneView.riskSettingControlsView.selectRiskCommand = { [weak self] riskSetting in
 			
@@ -63,5 +68,20 @@ final class RiskSettingInstructionViewController: BaseViewController {
 		}
 		
 		addBackButton()
+	}
+
+	func scrollToBottomIfNotCompletelyVisible() {
+
+		let scrollView = sceneView.scrollView
+
+		// Only scroll when not completely visible
+		guard !scrollView.bounds.contains(sceneView.errorView.frame) else { return }
+
+		// https://stackoverflow.com/a/952768/443270
+		let bottomOffset = CGPoint(
+			x: 0,
+			y: scrollView.contentSize.height - scrollView.bounds.height + scrollView.contentInset.bottom
+		)
+		scrollView.setContentOffset(bottomOffset, animated: true)
 	}
 }

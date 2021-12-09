@@ -26,7 +26,7 @@ final class RiskSettingUnselectedView: BaseView {
 		}
 	}
 	
-	private let scrollView: UIScrollView = {
+	let scrollView: UIScrollView = {
 		let scrollView = UIScrollView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		return scrollView
@@ -48,7 +48,7 @@ final class RiskSettingUnselectedView: BaseView {
 		return view
 	}()
 	
-	private let errorView: ErrorView = {
+	let errorView: ErrorView = {
 		let view = ErrorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isHidden = true
