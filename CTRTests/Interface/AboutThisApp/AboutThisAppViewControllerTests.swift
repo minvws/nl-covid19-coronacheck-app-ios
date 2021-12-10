@@ -17,6 +17,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	private var sut: AboutThisAppViewController!
 	private var coordinatorSpy: AboutThisAppViewModelCoordinatorSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 	
 	var window: UIWindow!
 
@@ -24,6 +25,10 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	override func setUp() {
 
 		super.setUp()
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		Services.use(featureFlagManagerSpy)
+
 		coordinatorSpy = AboutThisAppViewModelCoordinatorSpy()
 		userSettingsSpy = UserSettingsSpy()
 		let viewModel = AboutThisAppViewModel(
@@ -68,7 +73,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
-	func test_content_verifier() {
+	func test_content_verifier_verificationPolicyEnabled() {
 
 		// Given
 		let viewModel = AboutThisAppViewModel(
@@ -85,10 +90,39 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.verifierAboutTitle()
 		expect(self.sut.sceneView.message) == L.verifierAboutText()
+		expect(self.sut.sceneView.menuStackView.arrangedSubviews)
+				.to(haveCount(2))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(5))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(2))
+		expect(self.sut.sceneView.appVersion).toNot(beNil())
+
+		sut.assertImage()
+	}
+
+	func test_content_verifier_verificationPolicyDisabled() {
+
+		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		let viewModel = AboutThisAppViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
+		)
+		sut = AboutThisAppViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == L.verifierAboutTitle()
+		expect(self.sut.sceneView.message) == L.verifierAboutText()
+		expect(self.sut.sceneView.menuStackView.arrangedSubviews)
+			.to(haveCount(1))
+		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
+			.to(haveCount(5))
 		expect(self.sut.sceneView.appVersion).toNot(beNil())
 
 		sut.assertImage()

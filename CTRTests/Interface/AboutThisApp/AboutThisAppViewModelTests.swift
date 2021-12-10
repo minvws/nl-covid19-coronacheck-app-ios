@@ -16,6 +16,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 	private var coordinatorSpy: AboutThisAppViewModelCoordinatorSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	private static var initialTimeZone: TimeZone?
+	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 
 	override class func setUp() {
 		super.setUp()
@@ -33,6 +34,10 @@ class AboutThisAppViewModelTests: XCTestCase {
 
 	override func setUp() {
 		super.setUp()
+
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		Services.use(featureFlagManagerSpy)
 
 		coordinatorSpy = AboutThisAppViewModelCoordinatorSpy()
 		userSettingsSpy = UserSettingsSpy()
@@ -78,7 +83,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.sut.appVersion.contains("testInitHolder")) == true
 	}
 
-	func test_initializationWithVerifier() {
+	func test_initializationWithVerifier_verificationPolicyEnabled() {
 
 		// Given
 
@@ -104,6 +109,32 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.sut.menu[1].key) == L.verifier_about_this_app_law_enforcement()
 		expect(self.sut.menu[1].value).to(haveCount(1))
 		expect(self.sut.menu[1].value[0].identifier) == .scanlog
+		expect(self.sut.appVersion.contains("testInitVerifier")) == true
+	}
+
+	func test_initializationWithVerifier_verificationPolicyDisabled() {
+
+		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+
+		// When
+		sut = AboutThisAppViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
+			flavor: AppFlavor.verifier,
+			userSettings: userSettingsSpy
+		)
+
+		// Then
+		expect(self.sut.title) == L.verifierAboutTitle()
+		expect(self.sut.message) == L.verifierAboutText()
+		expect(self.sut.menu).to(haveCount(1))
+		expect(self.sut.menu[0].key) == L.verifierAboutReadmore()
+		expect(self.sut.menu[0].value).to(haveCount(4))
+		expect(self.sut.menu[0].value[0].identifier) == .privacyStatement
+		expect(self.sut.menu[0].value[1].identifier) == AboutThisAppMenuIdentifier.accessibility
+		expect(self.sut.menu[0].value[2].identifier) == .colophon
+		expect(self.sut.menu[0].value[3].identifier) == .reset
 		expect(self.sut.appVersion.contains("testInitVerifier")) == true
 	}
 
