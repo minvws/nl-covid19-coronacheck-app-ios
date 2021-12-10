@@ -12,6 +12,8 @@ enum VerifierStartResult {
 	case userTappedProceedToScan
 
 	case userTappedProceedToScanInstructions
+	
+	case userTappedProceedToInstructionsOrRiskSetting
 }
 
 class VerifierStartViewModel: Logging {
@@ -290,7 +292,7 @@ extension VerifierStartViewModel {
 			}
 		} else {
 			// Show the scan instructions the first time no matter what link was tapped
-			coordinator?.didFinish(.userTappedProceedToScanInstructions)
+			coordinator?.didFinish(.userTappedProceedToInstructionsOrRiskSetting)
 		}
 	}
 

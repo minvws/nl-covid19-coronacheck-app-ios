@@ -34,6 +34,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	private let pagesFactory: ScanInstructionsFactoryProtocol = ScanInstructionsFactory()
 	private let pages: [ScanInstructionsPage]
 	private let isOpenedFromMenu: Bool
+	private let allowSkipInstruction: Bool
 	private let riskLevelManager: RiskLevelManaging
 	private let userSettings: UserSettingsProtocol
 
@@ -41,6 +42,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		navigationController: UINavigationController,
 		delegate: ScanInstructionsDelegate,
 		isOpenedFromMenu: Bool,
+		allowSkipInstruction: Bool,
 		userSettings: UserSettingsProtocol = UserSettings(),
 		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
 	) {
@@ -48,6 +50,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		self.navigationController = navigationController
 		self.delegate = delegate
 		self.isOpenedFromMenu = isOpenedFromMenu
+		self.allowSkipInstruction = allowSkipInstruction
 		self.userSettings = userSettings
 		self.riskLevelManager = riskLevelManager
 
@@ -59,7 +62,10 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 
 		let viewController: UIViewController
 		
-		if !isOpenedFromMenu, userSettings.scanInstructionShown, riskLevelManager.state == nil {
+		if !isOpenedFromMenu,
+		   allowSkipInstruction,
+		   userSettings.scanInstructionShown,
+		   riskLevelManager.state == nil {
 			let viewModel = RiskSettingInstructionViewModel(coordinator: self)
 			viewController = RiskSettingInstructionViewController(viewModel: viewModel)
 		} else {

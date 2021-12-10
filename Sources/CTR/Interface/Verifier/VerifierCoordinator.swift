@@ -18,7 +18,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	func navigateToScan()
 
-	func navigateToScanInstruction()
+	func navigateToScanInstruction(allowSkipInstruction: Bool)
 
 	/// Display content
 	/// - Parameters:
@@ -141,7 +141,10 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				navigateToScan()
 
 			case .userTappedProceedToScanInstructions:
-				navigateToScanInstruction()
+				navigateToScanInstruction(allowSkipInstruction: false)
+				
+			case .userTappedProceedToInstructionsOrRiskSetting:
+				navigateToScanInstruction(allowSkipInstruction: true)
 		}
 	}
 	
@@ -195,12 +198,13 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
 	}
 
-	func navigateToScanInstruction() {
+	func navigateToScanInstruction(allowSkipInstruction: Bool) {
 
 		let coordinator = ScanInstructionsCoordinator(
 			navigationController: dashboardNavigationController!,
 			delegate: self,
-			isOpenedFromMenu: false
+			isOpenedFromMenu: false,
+			allowSkipInstruction: allowSkipInstruction
 		)
 		startChildCoordinator(coordinator)
 	}
@@ -333,7 +337,8 @@ extension VerifierCoordinator: MenuDelegate {
 				let coordinator = ScanInstructionsCoordinator(
 					navigationController: dashboardNavigationController!,
 					delegate: self,
-					isOpenedFromMenu: true
+					isOpenedFromMenu: true,
+					allowSkipInstruction: false
 				)
 				startChildCoordinator(coordinator)
 				

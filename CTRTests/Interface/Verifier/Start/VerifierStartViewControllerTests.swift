@@ -112,7 +112,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
-			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
+			.to(equal(.userTappedProceedToInstructionsOrRiskSetting), description: "Result should match")
 		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == true
 	}
 
