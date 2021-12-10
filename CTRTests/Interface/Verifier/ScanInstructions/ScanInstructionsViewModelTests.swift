@@ -17,6 +17,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	var userSettingsSpy: UserSettingsSpy!
 	var riskLevelManagingSpy: RiskLevelManagerSpy!
 	var scanLockManagingSpy: ScanLockManagerSpy!
+	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 
 	override func setUp() {
 		super.setUp()
@@ -24,6 +25,10 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		riskLevelManagingSpy = RiskLevelManagerSpy()
 		scanLockManagingSpy = ScanLockManagerSpy()
+
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		Services.use(featureFlagManagerSpy)
 		
 		scanLockManagingSpy.stubbedAppendObserverResult = UUID()
 		scanLockManagingSpy.stubbedState = .unlocked
@@ -51,7 +56,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		expect(self.userSettingsSpy.invokedScanInstructionShownSetter) == true
 	}
 	
-	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting() {
+	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting_verificationPolicyEnabled() {
 
 		// Arrange
 		userSettingsSpy.stubbedScanInstructionShown = true
@@ -71,6 +76,30 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		// Assert
 		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == true
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
+		expect(self.userSettingsSpy.invokedScanInstructionShownSetter) == true
+	}
+
+	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting_verificationPolicyDisabled() {
+
+		// Arrange
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		userSettingsSpy.stubbedScanInstructionShown = true
+		riskLevelManagingSpy.stubbedState = nil
+		scanLockManagingSpy.stubbedState = .unlocked
+		sut = ScanInstructionsViewModel(
+			coordinator: coordinatorSpy,
+			pages: [],
+			userSettings: userSettingsSpy,
+			riskLevelManager: riskLevelManagingSpy,
+			scanLockManager: scanLockManagingSpy
+		)
+
+		// Act
+		sut.finishScanInstructions()
+
+		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == false
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
 		expect(self.userSettingsSpy.invokedScanInstructionShownSetter) == true
 	}
 

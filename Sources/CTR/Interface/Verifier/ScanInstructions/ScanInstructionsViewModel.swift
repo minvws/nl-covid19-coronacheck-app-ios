@@ -51,8 +51,10 @@ class ScanInstructionsViewModel {
 		self.riskLevelManager = riskLevelManager
 		self.scanLockManager = scanLockManager
 		self.currentPage = 0
-		
-		shouldShowRiskSetting = riskLevelManager.state == nil
+
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			shouldShowRiskSetting = riskLevelManager.state == nil
+		}
 		
 		hasScanLock = scanLockManager.state != .unlocked
 		updateState()
