@@ -125,6 +125,8 @@ extension HolderDashboardViewModel {
 		
 		// Ignores greencards with no category
 		func isa3GTestTheOnlyCurrentlyValidOrigin(now: Date) -> Bool {
+			guard Services.featureFlagManager.isVerificationPolicyEnabled() else { return false }
+
 			guard case let .netherlands(credentialEvaluator) = region else { return false }
 			
 			// Find greencards where there IS a valid 3G test, but no currently-valid recovery or vaccine:
