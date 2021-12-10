@@ -20,6 +20,7 @@ class VerifierScanViewModelTests: XCTestCase {
 	private var cryptoSpy: CryptoManagerSpy!
 	private var scanLogManagingSpy: ScanLogManagingSpy!
 	private var riskLevelManagingSpy: RiskLevelManagerSpy!
+	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 
     override func setUp() {
 
@@ -31,6 +32,9 @@ class VerifierScanViewModelTests: XCTestCase {
 		riskLevelManagingSpy = RiskLevelManagerSpy()
 		riskLevelManagingSpy.stubbedState = .high
 		Services.use(riskLevelManagingSpy)
+
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		Services.use(featureFlagManagerSpy)
 
 		scanLogManagingSpy = ScanLogManagingSpy()
 		Services.use(scanLogManagingSpy)
@@ -68,9 +72,10 @@ class VerifierScanViewModelTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToScanInstruction) == true
 	}
 
-	func test_parseQRMessage_shouldAddScanLogEntry_lowRisk() {
+	func test_parseQRMessage_shouldAddScanLogEntry_lowRisk_verificationPolicyEnabled() {
 
 		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		riskLevelManagingSpy.stubbedState = .low
 
 		// When
@@ -81,9 +86,22 @@ class VerifierScanViewModelTests: XCTestCase {
 		expect(self.scanLogManagingSpy.invokedAddScanEntryParameters?.riskLevel) == .low
 	}
 
-	func test_parseQRMessage_shouldAddScanLogEntry_highRisk() {
+	func test_parseQRMessage_shouldAddScanLogEntry_lowRisk_verification_policyDisabled() {
 
 		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		riskLevelManagingSpy.stubbedState = .low
+
+		// When
+		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
+
+		// Then
+		expect(self.scanLogManagingSpy.invokedAddScanEntry) == false	}
+
+	func test_parseQRMessage_shouldAddScanLogEntry_highRisk_verificationPolicyEnabled() {
+
+		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		riskLevelManagingSpy.stubbedState = .high
 
 		// When
@@ -92,6 +110,19 @@ class VerifierScanViewModelTests: XCTestCase {
 		// Then
 		expect(self.scanLogManagingSpy.invokedAddScanEntry) == true
 		expect(self.scanLogManagingSpy.invokedAddScanEntryParameters?.riskLevel) == .high
+	}
+
+	func test_parseQRMessage_shouldAddScanLogEntry_highRisk_verification_policyDisabled() {
+
+		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		riskLevelManagingSpy.stubbedState = .high
+
+		// When
+		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
+
+		// Then
+		expect(self.scanLogManagingSpy.invokedAddScanEntry) == false
 	}
 
 	func test_parseQRMessage_whenDCCIsNL_shouldDisplayAlert() {
