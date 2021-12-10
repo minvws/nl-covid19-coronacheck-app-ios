@@ -44,9 +44,12 @@ struct DomesticCredentialAttributes: Codable {
 		return specimen == "1"
 	}
 	
-	var is2G: Bool {
-		
-		return category == "2"
+	var riskLevel: RiskLevel? {
+		switch category {
+			case "2": return .high
+			case "3": return .low
+			default: return nil
+		}
 	}
 
 	/// Map the identity of the holder
