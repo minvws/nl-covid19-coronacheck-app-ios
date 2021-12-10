@@ -89,7 +89,11 @@ extension QRCard {
 						expirationTime: origin.expirationTime,
 						expiryIsBeyondThreeYearsFromNow: origin.expiryIsBeyondThreeYearsFromNow(now: now),
 						isCurrentlyValid: origin.isCurrentlyValid(now: now),
-						is2G: credentialsEvaluator(greencard, now)?.is2G ?? false
+						riskLevel: credentialsEvaluator(greencard, now)?.riskLevel,
+						shouldShowRiskLevel: greencard.hasValid3GTestWithoutAValidVaccineOrAValidRecovery(
+							credentialEvaluator: credentialsEvaluator,
+							now: now
+					   )
 					)
 					
 				case (.validityHasNotYetBegun, .netherlands, .test):
@@ -199,7 +203,7 @@ private func validityText_hasBegun_domestic_vaccination(doseNumber: Int?, validF
 	)
 }
 
-private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool, is2G: Bool) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool, riskLevel: RiskLevel?, shouldShowRiskLevel: Bool) -> HolderDashboardViewController.ValidityText {
 	let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
 	let formatter = HolderDashboardViewModel.dateWithDayAndTimeFormatter
 	let dateString = formatter.string(from: expirationTime)
@@ -207,8 +211,14 @@ private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsB
 	let titleString = QRCodeOriginType.test.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString: String = {
 		let value = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
-		let riskModeSuffix = is2G ? L.holder_dashboard_qr_validity_suffix_2g() : L.holder_dashboard_qr_validity_suffix_3g()
-		return value + " " + riskModeSuffix
+		switch (riskLevel, shouldShowRiskLevel) {
+			case (.high, true):
+				return value + " " + L.holder_dashboard_qr_validity_suffix_2g()
+			case (.low, true):
+				return value + " " + L.holder_dashboard_qr_validity_suffix_3g()
+			default:
+				return value
+		}
 	}()
 	return .init(
 		lines: [titleString, valueString],

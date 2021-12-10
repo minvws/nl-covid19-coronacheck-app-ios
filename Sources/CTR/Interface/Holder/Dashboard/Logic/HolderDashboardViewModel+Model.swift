@@ -64,6 +64,24 @@ extension HolderDashboardViewModel {
 					return expirationTime > now.addingTimeInterval(threeYearsFromNow)
 				}
 			}
+				
+			func hasValid3GTestWithoutAValidVaccineOrAValidRecovery(
+				credentialEvaluator: (HolderDashboardViewModel.QRCard.GreenCard, Date) -> DomesticCredentialAttributes?,
+				now: Date
+			) -> Bool {
+				let currentlyValidOrigins = origins.filter({ $0.isCurrentlyValid(now: now) })
+				
+				// Check contains currently valid test origin:
+				guard origins.contains(where: { $0.type == .test }) else { return false }
+				
+				// Check if the greencard riskLevel is low:
+				let isExplicitly3G = credentialEvaluator(self, now)?.riskLevel == .low
+				
+				let hasValidVaccine = currentlyValidOrigins.contains { $0.type == .vaccination }
+				let hasValidRecovery = currentlyValidOrigins.contains { $0.type == .recovery }
+				
+				return isExplicitly3G && !hasValidVaccine && !hasValidRecovery
+			}
 		}
 
 		let region: Region // A QR Card only has one region
@@ -105,14 +123,16 @@ extension HolderDashboardViewModel {
 				.last ?? .distantPast
 		}
 		
-		func contains3GTest(now: Date) -> Bool {
+		// Ignores greencards with no category
+		func isa3GTestTheOnlyCurrentlyValidOrigin(now: Date) -> Bool {
 			guard case let .netherlands(credentialEvaluator) = region else { return false }
 			
-			let has3GTestGreencard = greencards.contains { greencard in
-				guard greencard.origins.contains(where: { $0.type == .test }) else { return false }
-				return !(credentialEvaluator(greencard, now)?.is2G ?? false)
+			// Find greencards where there IS a valid 3G test, but no currently-valid recovery or vaccine:
+			let matchingGreenCards = greencards.filter { greencard in
+				greencard.hasValid3GTestWithoutAValidVaccineOrAValidRecovery(credentialEvaluator: credentialEvaluator, now: now)
 			}
-			return has3GTestGreencard
+			
+			return matchingGreenCards.count == greencards.count
 		}
 	}
 
