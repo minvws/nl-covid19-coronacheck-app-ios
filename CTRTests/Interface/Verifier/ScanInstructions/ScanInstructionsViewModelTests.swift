@@ -48,6 +48,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		// Assert
 		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == false
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
+		expect(self.userSettingsSpy.invokedScanInstructionShownSetter) == true
 	}
 	
 	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting() {
@@ -70,6 +71,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		// Assert
 		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == true
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
+		expect(self.userSettingsSpy.invokedScanInstructionShownSetter) == true
 	}
 
 	func test_userTappedBackOnFirstPage_callsCoordinator() {

@@ -214,7 +214,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				state.qrCards = qrCardDataItems
 				state.expiredGreenCards += expiredGreenCards
 				state.shouldShowDomestic3GTestBanner = qrCardDataItems.contains(where: { qrCard in
-					qrCard.contains3GTest(now: self.now())
+					// Assume that domestic has just one greencard.
+					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: self.now())
 			   })
 				self.state = state
 				self.dccMigrationNotificationManager.reload()
