@@ -15,6 +15,8 @@ class AboutThisAppViewController: BaseViewController {
 	/// The view
 	let sceneView = AboutThisAppView()
 
+	override var enableSwipeBack: Bool { false }
+
 	// MARK: Initializers
 
 	/// Initializer
