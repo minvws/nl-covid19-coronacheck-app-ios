@@ -12,6 +12,8 @@ final class PaperProofStartViewController: BaseViewController {
 	private let viewModel: PaperProofStartViewModel
 	
 	let sceneView = PaperProofStartView()
+
+	override var enableSwipeBack: Bool { false }
 	
 	init(viewModel: PaperProofStartViewModel) {
 		
