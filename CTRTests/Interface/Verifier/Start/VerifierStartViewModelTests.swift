@@ -23,6 +23,7 @@ class VerifierStartViewModelTests: XCTestCase {
 	private var riskLevelManagerSpy: RiskLevelManagerSpy!
 	private var scanLockManagerSpy: ScanLockManagerSpy!
 	private var scanLogManagerSpy: ScanLogManagingSpy!
+	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 
 	override func setUp() {
 
@@ -51,10 +52,14 @@ class VerifierStartViewModelTests: XCTestCase {
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
 
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+
 		Services.use(cryptoLibUtilitySpy)
 		Services.use(cryptoManagerSpy)
 		Services.use(clockDeviationManagerSpy)
 		Services.use(scanLogManagerSpy)
+		Services.use(featureFlagManagerSpy)
 	}
 
 	override func tearDown() {
@@ -68,6 +73,7 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_defaultContent() {
 
 		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			scanLockProvider: scanLockManagerSpy,
