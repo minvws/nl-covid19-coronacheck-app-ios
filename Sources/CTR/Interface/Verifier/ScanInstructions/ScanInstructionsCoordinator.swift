@@ -41,7 +41,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		navigationController: UINavigationController,
 		delegate: ScanInstructionsDelegate,
 		isOpenedFromMenu: Bool,
-		userSettings: UserSettingsProtocol = UserSettings()
+		userSettings: UserSettingsProtocol = UserSettings(),
 		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
 	) {
 
