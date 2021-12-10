@@ -34,16 +34,22 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	private let pagesFactory: ScanInstructionsFactoryProtocol = ScanInstructionsFactory()
 	private let pages: [ScanInstructionsPage]
 	private let isOpenedFromMenu: Bool
+	private let riskLevelManager: RiskLevelManaging
+	private let userSettings: UserSettingsProtocol
 
 	init(
 		navigationController: UINavigationController,
 		delegate: ScanInstructionsDelegate,
-		isOpenedFromMenu: Bool
+		isOpenedFromMenu: Bool,
+		userSettings: UserSettingsProtocol = UserSettings()
+		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
 	) {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
 		self.isOpenedFromMenu = isOpenedFromMenu
+		self.userSettings = userSettings
+		self.riskLevelManager = riskLevelManager
 
 		pages = pagesFactory.create()
 	}
@@ -51,12 +57,20 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	// Designated starter method
 	func start() {
 
-		let viewModel = ScanInstructionsViewModel(
-			coordinator: self,
-			pages: pages,
-			userSettings: UserSettings()
-		)
-		let viewController = ScanInstructionsViewController(viewModel: viewModel)
+		let viewController: UIViewController
+		
+		if !isOpenedFromMenu, userSettings.scanInstructionShown, riskLevelManager.state == nil {
+			let viewModel = RiskSettingInstructionViewModel(coordinator: self)
+			viewController = RiskSettingInstructionViewController(viewModel: viewModel)
+		} else {
+			let viewModel = ScanInstructionsViewModel(
+				coordinator: self,
+				pages: pages,
+				userSettings: UserSettings()
+			)
+			viewController = ScanInstructionsViewController(viewModel: viewModel)
+		}
+		
 		navigationController.pushOrReplaceTopViewController(with: viewController, animated: !isOpenedFromMenu)
 	}
 

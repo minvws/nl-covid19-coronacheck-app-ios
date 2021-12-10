@@ -284,7 +284,6 @@ extension VerifierCoordinator: ScanInstructionsDelegate {
 
 	/// User completed (or skipped) the Scan Instructions flow
 	func scanInstructionsDidFinish(hasScanLock: Bool) {
-		userSettings.scanInstructionShown = true
 
 		removeScanInstructionsCoordinator()
 		
