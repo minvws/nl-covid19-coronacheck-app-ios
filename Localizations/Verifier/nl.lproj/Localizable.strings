@@ -36,7 +36,8 @@
 "verifier.consent.title" = "Voorwaarden voor gebruik";
 "verifier.denied.message.five" = "<p>Vraag de bezoeker contact op te nemen met de helpdesk van CoronaCheck.</p>";
 "verifier.denied.message.four" = "<p><b>Blijft het scherm rood?</b></p>";
-"verifier.denied.message.one" = "<p>Een rood scherm met kruis betekent dat de QR-code niet aan Nederlandse eisen voldoet, of niet geldig is op plekken met 2G-toegang.</p>";
+"verifier.denied.message.one" = "<p>Een rood scherm betekent dat de QR-code niet aan Nederlandse eisen voldoet.</p>";
+"verifier.denied.message.one_2g" = "<p>Een rood scherm met kruis betekent dat de QR-code niet aan Nederlandse eisen voldoet, of niet geldig is op plekken met 2G-toegang.</p>";
 "verifier.denied.message.six" = "<p><b>Let op:</b> zonder scherm met vinkje mag de bezoeker niet toegelaten worden.</p>";
 "verifier.denied.message.three" = "<ul><li>Controleer of de tijd goed staat ingesteld op de telefoon van de bezoeker en die van jou. Zorg dat de datum en tijd op ‘automatisch instellen’ staan.</li><li>Controleer of de bezoeker een origineel bewijs laat zien. Een screenshot van een bewijs kan voor problemen zorgen.</li><li>Vraag de bezoeker om de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li></ul>";
 "verifier.denied.message.two" = "<b>Dit kun je doen:</b>";

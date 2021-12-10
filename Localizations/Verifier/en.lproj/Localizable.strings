@@ -36,7 +36,8 @@
 "verifier.consent.title" = "Acceptable use policy";
 "verifier.denied.message.five" = "<p>Ask the visitor to contact the CoronaCheck help desk.</p>";
 "verifier.denied.message.four" = "<p><b>Does the screen stay red?</b></p>";
-"verifier.denied.message.one" = "<p>A red screen with a cross means the QR code does not comply with the Dutch regulations, or is not valid for locations with 2G access.</p>";
+"verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";
+"verifier.denied.message.one_2g" = "<p>A red screen with a cross means the QR code does not comply with the Dutch regulations, or is not valid for locations with 2G access.</p>";
 "verifier.denied.message.six" = "<p><b>Please note:</b> without a screen with check mark, the visitor cannot be given access.</p>";
 "verifier.denied.message.three" = "<ul><li>Check if the time is set correctly, on the visitor's phone as well as your own. Make sure date and time are set to 'set automatically'.</li><li>Check if the visitor is showing an original certificate. A screenshot of their certificate may cause problems.</li><li>Ask the visitor to completely close the app, and restart it. Please rescan the QR code after.</li></ul>";
 "verifier.denied.message.two" = "<b>Here’s what you can do:</b>";
