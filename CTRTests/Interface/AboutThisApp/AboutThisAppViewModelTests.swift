@@ -451,10 +451,14 @@ class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, Verifie
 
 	var invokedNavigateToScanInstruction = false
 	var invokedNavigateToScanInstructionCount = 0
+	var invokedNavigateToScanInstructionParameters: (allowSkipInstruction: Bool, Void)?
+	var invokedNavigateToScanInstructionParametersList = [(allowSkipInstruction: Bool, Void)]()
 
-	func navigateToScanInstruction() {
+	func navigateToScanInstruction(allowSkipInstruction: Bool) {
 		invokedNavigateToScanInstruction = true
 		invokedNavigateToScanInstructionCount += 1
+		invokedNavigateToScanInstructionParameters = (allowSkipInstruction, ())
+		invokedNavigateToScanInstructionParametersList.append((allowSkipInstruction, ()))
 	}
 
 	var invokedDisplayContent = false

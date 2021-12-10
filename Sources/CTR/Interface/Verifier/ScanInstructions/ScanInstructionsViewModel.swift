@@ -73,6 +73,8 @@ class ScanInstructionsViewModel {
 	
 	func finishScanInstructions() {
 		
+		userSettings.scanInstructionShown = true
+		
 		if shouldShowRiskSetting {
 			coordinator?.userWishesToSelectRiskSetting()
 		} else {
