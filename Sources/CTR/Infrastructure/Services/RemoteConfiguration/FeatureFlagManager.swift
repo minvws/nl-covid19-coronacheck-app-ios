@@ -22,6 +22,6 @@ class FeatureFlagManager: FeatureFlagManaging {
 
 	func isVerificationPolicyEnabled() -> Bool {
 
-		return false
+		return true
 	}
 }
