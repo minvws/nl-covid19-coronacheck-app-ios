@@ -19,6 +19,8 @@ class ChooseQRCodeTypeViewController: BaseViewController {
 	
 	private let isRootViewController: Bool
 
+	override var enableSwipeBack: Bool { !isRootViewController }
+
 	let sceneView = ChooseQRCodeTypeView()
 
 	init(viewModel: ChooseQRCodeTypeViewModel, isRootViewController: Bool) {
