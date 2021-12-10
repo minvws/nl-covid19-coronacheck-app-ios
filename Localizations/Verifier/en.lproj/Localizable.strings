@@ -126,7 +126,9 @@
 "verifier_home_countdown_subtitle" = "You have to wait for %li minutes because you changed your scan settings while scanning.";
 "verifier_home_countdown_title" = "You can scan again in %@";
 "verifier_menu_risksetting" = "Scan setting";
+"verifier_result_access_title" = "Check done";
 "verifier_result_access_title_highrisk" = "2G check done";
+"verifier_result_access_title_lowrisk" = "3G check done";
 "verifier_risksetting_active_lock_warning_header" = "<p><b>Please note:</b> if you change scan settings while scanning, you have to wait for %li minutes before you can scan again.</p>";
 "verifier_risksetting_active_title" = "Change scan setting";
 "verifier_risksetting_changeselection_2g" = "Set to 2G access";

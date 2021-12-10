@@ -34,13 +34,23 @@ final class VerifiedAccessViewModel: Logging {
 		
 		self.coordinator = coordinator
 		self.verifiedType = verifiedType
-		
-		switch verifiedType {
-			case .verified(let riskLevel) where riskLevel.isHigh,
-					.demo(let riskLevel) where riskLevel.isHigh:
-				accessTitle = L.verifier_result_access_title_highrisk()
-			default:
-				accessTitle = L.verifierResultAccessTitle()
+
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			switch verifiedType {
+				case .verified(let riskLevel) where riskLevel.isHigh,
+						.demo(let riskLevel) where riskLevel.isHigh:
+					accessTitle = L.verifier_result_access_title_highrisk()
+				default:
+					accessTitle = L.verifier_result_access_title_lowrisk()
+			}
+		} else {
+			switch verifiedType {
+				case .verified:
+					self.verifiedType = .verified(.low)
+				case .demo:
+					self.verifiedType = .demo(.low)
+			}
+			accessTitle = L.verifier_result_access_title()
 		}
 		
 		addObservers()

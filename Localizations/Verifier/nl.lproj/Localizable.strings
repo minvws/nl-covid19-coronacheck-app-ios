@@ -126,7 +126,9 @@
 "verifier_home_countdown_subtitle" = "Je moet %li minuten wachten omdat je tijdens het scannen jouw scan-instelling hebt aangepast.";
 "verifier_home_countdown_title" = "Je kunt weer scannen over %@";
 "verifier_menu_risksetting" = "Scan-instelling";
+"verifier_result_access_title" = "Controle klaar";
 "verifier_result_access_title_highrisk" = "2G-controle klaar";
+"verifier_result_access_title_lowrisk" = "3G-controle klaar";
 "verifier_risksetting_active_lock_warning_header" = "<p><b>Let op:</b> Als je tijdens het scannen wisselt van scan-instelling moet je %li minuten wachten voordat je weer kunt scannen.</p>";
 "verifier_risksetting_active_title" = "Scan-instelling aanpassen";
 "verifier_risksetting_changeselection_2g" = "2G-toegang ingesteld";
