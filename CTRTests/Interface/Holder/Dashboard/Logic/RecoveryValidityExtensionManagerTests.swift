@@ -23,12 +23,7 @@ class RecoveryValidityExtensionManagerTests: XCTestCase {
 		super.setUp()
 
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigManagerSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 
 		remoteConfigManagerSpy.stubbedStoredConfiguration = {
 			var config: RemoteConfiguration = .default

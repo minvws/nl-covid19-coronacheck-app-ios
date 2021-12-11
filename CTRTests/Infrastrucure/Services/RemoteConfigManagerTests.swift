@@ -17,18 +17,21 @@ class RemoteConfigManagerTests: XCTestCase {
 	private var networkSpy: NetworkSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	private var reachabilitySpy: ReachabilitySpy!
-
+	private var secureUserSettingsSpy: SecureUserSettingsSpy!
+	
 	override func setUp() {
 
 		networkSpy = NetworkSpy(configuration: .development)
 		userSettingsSpy = UserSettingsSpy()
 		reachabilitySpy = ReachabilitySpy()
-
+		secureUserSettingsSpy = SecureUserSettingsSpy()
+		
 		sut = RemoteConfigManager(
 			now: { now },
 			userSettings: userSettingsSpy,
 			reachability: reachabilitySpy,
-			networkManager: networkSpy
+			networkManager: networkSpy,
+			secureUserSettings: secureUserSettingsSpy
 		)
 		sut.reset()
 		

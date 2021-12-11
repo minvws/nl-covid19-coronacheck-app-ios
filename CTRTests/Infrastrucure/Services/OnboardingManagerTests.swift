@@ -11,11 +11,13 @@ import XCTest
 class OnboardingManagerTests: XCTestCase {
 
 	// MARK: - Setup
-	var sut = OnboardingManager()
-
+	var sut = OnboardingManager(secureUserSettings: SecureUserSettings())
+	var secureUserSettingsSpy: SecureUserSettingsSpy!
+	
 	override func setUp() {
 
-		sut = OnboardingManager()
+		secureUserSettingsSpy = SecureUserSettingsSpy()
+		sut = OnboardingManager(secureUserSettings: secureUserSettingsSpy)
 		super.setUp()
 	}
 

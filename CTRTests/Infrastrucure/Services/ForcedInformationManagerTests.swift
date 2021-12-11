@@ -12,12 +12,14 @@ class ForcedInformationManagerTests: XCTestCase {
 
 	// MARK: - Setup
 	var sut: ForcedInformationManager!
-
+	private var secureUserSettingsSpy: SecureUserSettingsSpy!
+	
 	override func setUp() {
-
-		sut = ForcedInformationManager()
-		sut.factory = HolderForcedInformationFactory()
 		super.setUp()
+		secureUserSettingsSpy = SecureUserSettingsSpy()
+		
+		sut = ForcedInformationManager(secureUserSettings: secureUserSettingsSpy)
+		sut.factory = HolderForcedInformationFactory()
 	}
 
 	override func tearDown() {
