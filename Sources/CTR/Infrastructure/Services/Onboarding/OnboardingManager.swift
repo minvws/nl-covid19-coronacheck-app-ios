@@ -10,7 +10,7 @@ import Foundation
 protocol OnboardingManaging: AnyObject {
 
 	// Initialize
-	init()
+	init(secureUserSettings: SecureUserSettingsProtocol) 
 
 	/// Do we need onboarding? True if we do
 	var needsOnboarding: Bool { get }
@@ -34,7 +34,7 @@ class OnboardingManager: OnboardingManaging, Logging {
 	var loggingCategory: String = "OnboardingManager"
 
 	/// The onboarding data to persist
-	private struct OnboardingData: Codable {
+	struct OnboardingData: Codable {
 
 		/// The user needs to do the onboarding
 		var needsOnboarding: Bool
@@ -48,19 +48,16 @@ class OnboardingManager: OnboardingManaging, Logging {
 		}
 	}
 
-	private struct Constants {
-
-		/// The key chain service
-		static let keychainService = "OnboardingManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+	// keychained onboardings data
+	private var onboardingData: OnboardingData {
+		get { secureUserSettings.onboardingData }
+		set { secureUserSettings.onboardingData = newValue }
 	}
 
-	// keychained onboardings data
-	@Keychain(name: "onboardingData", service: Constants.keychainService, clearOnReinstall: true)
-	private var onboardingData: OnboardingData = .empty
+	private let secureUserSettings: SecureUserSettingsProtocol
 
-	/// Initializer
-	required init() {
-		// Required by protocol
+	required init(secureUserSettings: SecureUserSettingsProtocol) {
+		self.secureUserSettings = secureUserSettings
 	}
 
 	/// Do we need onboarding? True if we do
@@ -90,6 +87,6 @@ class OnboardingManager: OnboardingManaging, Logging {
 	/// Reset the manager
 	func reset() {
 
-		$onboardingData.clearData()
+		SecureUserSettings().$onboardingData.clearData()
 	}
 }

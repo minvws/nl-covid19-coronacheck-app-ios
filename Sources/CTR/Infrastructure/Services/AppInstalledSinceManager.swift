@@ -11,7 +11,7 @@ protocol AppInstalledSinceManaging: AnyObject {
 
 	var firstUseDate: Date? { get }
 
-	init()
+	init(secureUserSettings: SecureUserSettingsProtocol) 
 
 	func update(serverHeaderDate: String, ageHeader: String?)
 
@@ -22,15 +22,10 @@ protocol AppInstalledSinceManaging: AnyObject {
 
 final class AppInstalledSinceManager: AppInstalledSinceManaging {
 	
-	private struct Constants {
-		static let keychainService: String = {
-			guard !ProcessInfo.processInfo.isTesting else { return UUID().uuidString }
-			return "AppInstalledSinceManager\(Configuration().getEnvironment())"
-		}()
+	private var appInstalledDate: Date? {
+		get { secureUserSettings.appInstalledDate }
+		set { secureUserSettings.appInstalledDate = newValue }
 	}
-	
-	@Keychain(name: "appInstalledDate", service: Constants.keychainService, clearOnReinstall: true)
-	private var appInstalledDate: Date? = nil // swiftlint:disable:this let_var_whitespace redundant_optional_initialization
 	
 	private lazy var serverHeaderDateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
@@ -43,12 +38,14 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		return appInstalledDate
 	}
 	
+	private let secureUserSettings: SecureUserSettingsProtocol
+	
 	// MARK: - Init
 
-	required init() {
-		// Required by Protocol
+	required init(secureUserSettings: SecureUserSettingsProtocol = SecureUserSettings()) {
+		self.secureUserSettings = secureUserSettings
 	}
-	
+ 
 	/// Update using the Server Response Header string
 	/// e.g. "Sat, 07 Aug 2021 12:12:57 GMT"
 	func update(serverHeaderDate: String, ageHeader: String?) {
