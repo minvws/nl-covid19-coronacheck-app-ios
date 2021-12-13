@@ -115,13 +115,18 @@ class AboutThisAppViewModel: Logging {
 		if Configuration().getEnvironment() != "production" {
 			topList.append(AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle()))
 		}
-
-		menu = [
-			L.verifierAboutReadmore(): topList,
-			L.verifier_about_this_app_law_enforcement(): [
-				AboutThisAppMenuOption(identifier: .scanlog, name: L.verifier_about_this_app_scan_log())
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			menu = [
+				L.verifierAboutReadmore(): topList,
+				L.verifier_about_this_app_law_enforcement(): [
+					AboutThisAppMenuOption(identifier: .scanlog, name: L.verifier_about_this_app_scan_log())
+				]
 			]
-		]
+		} else {
+			menu = [
+				L.verifierAboutReadmore(): topList
+			]
+		}
 	}
 
 	func menuOptionSelected(_ identifier: AboutThisAppMenuIdentifier) {

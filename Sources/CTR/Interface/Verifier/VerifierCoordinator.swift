@@ -391,13 +391,17 @@ extension VerifierCoordinator: MenuDelegate {
 	/// Get the items for the top menu
 	/// - Returns: the top menu items
 	func getTopMenuItems() -> [MenuItem] {
-		
-		return [
+
+		var list = [
 			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
-			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions()),
-			MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting())
+			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions())
 		]
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			list.append(MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting()))
+		}
+		return list
 	}
+	
 	/// Get the items for the bottom menu
 	/// - Returns: the bottom menu items
 	func getBottomMenuItems() -> [MenuItem] {

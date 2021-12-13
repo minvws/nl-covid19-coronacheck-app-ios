@@ -36,7 +36,8 @@
 "verifier.consent.title" = "Voorwaarden voor gebruik";
 "verifier.denied.message.five" = "<p>Vraag de bezoeker contact op te nemen met de helpdesk van CoronaCheck.</p>";
 "verifier.denied.message.four" = "<p><b>Blijft het scherm rood?</b></p>";
-"verifier.denied.message.one" = "<p>Een rood scherm met kruis betekent dat de QR-code niet aan Nederlandse eisen voldoet, of niet geldig is op plekken met 2G-toegang.</p>";
+"verifier.denied.message.one" = "<p>Een rood scherm betekent dat de QR-code niet aan Nederlandse eisen voldoet.</p>";
+"verifier.denied.message.one_2g" = "<p>Een rood scherm met kruis betekent dat de QR-code niet aan Nederlandse eisen voldoet, of niet geldig is op plekken met 2G-toegang.</p>";
 "verifier.denied.message.six" = "<p><b>Let op:</b> zonder scherm met vinkje mag de bezoeker niet toegelaten worden.</p>";
 "verifier.denied.message.three" = "<ul><li>Controleer of de tijd goed staat ingesteld op de telefoon van de bezoeker en die van jou. Zorg dat de datum en tijd op ‘automatisch instellen’ staan.</li><li>Controleer of de bezoeker een origineel bewijs laat zien. Een screenshot van een bewijs kan voor problemen zorgen.</li><li>Vraag de bezoeker om de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li></ul>";
 "verifier.denied.message.two" = "<b>Dit kun je doen:</b>";
@@ -125,7 +126,9 @@
 "verifier_home_countdown_subtitle" = "Je moet %li minuten wachten omdat je tijdens het scannen jouw scan-instelling hebt aangepast.";
 "verifier_home_countdown_title" = "Je kunt weer scannen over %@";
 "verifier_menu_risksetting" = "Scan-instelling";
+"verifier_result_access_title" = "Controle klaar";
 "verifier_result_access_title_highrisk" = "2G-controle klaar";
+"verifier_result_access_title_lowrisk" = "3G-controle klaar";
 "verifier_risksetting_active_lock_warning_header" = "<p><b>Let op:</b> Als je tijdens het scannen wisselt van scan-instelling moet je %li minuten wachten voordat je weer kunt scannen.</p>";
 "verifier_risksetting_active_title" = "Scan-instelling aanpassen";
 "verifier_risksetting_changeselection_2g" = "2G-toegang ingesteld";
@@ -154,3 +157,6 @@
 "verifier_scanner_policy_indication_3g" = "3G-toegang";
 "verifier_start_scan_qr_policy_indication_2g" = "<b>2G</b>-toegang ingesteld";
 "verifier_start_scan_qr_policy_indication_3g" = "<b>3G</b>-toegang ingesteld";
+
+"scan_instructions_4_description_2g" = "Kleurt je scherm groen met een vinkje? Dan is de QR-code geldig en kloppen de gegevens met het identiteitsbewijs. Je mag de bezoeker toegang geven.";
+"scan_instructions_4_title_2g" = "Groen scherm = toegang";

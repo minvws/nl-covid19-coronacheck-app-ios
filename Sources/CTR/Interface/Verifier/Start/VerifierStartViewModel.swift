@@ -189,15 +189,17 @@ class VerifierStartViewModel: Logging {
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
 
-		// Pass current states in immediately to configure `self.mode`:
-		lockStateDidChange(lockState: scanLockProvider.state)
-		riskLevelDidChange(riskLevel: riskLevelProvider.state)
-		
-		// Then observe for changes:
-		scanLockObserverToken = scanLockProvider.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
-		riskLevelObserverToken = riskLevelProvider.appendObserver { [weak self] in self?.riskLevelDidChange(riskLevel: $0) }
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			// Pass current states in immediately to configure `self.mode`:
+			lockStateDidChange(lockState: scanLockProvider.state)
+			riskLevelDidChange(riskLevel: riskLevelProvider.state)
 
-		lockLabelCountdownTimer.fire()
+			// Then observe for changes:
+			scanLockObserverToken = scanLockProvider.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
+			riskLevelObserverToken = riskLevelProvider.appendObserver { [weak self] in self?.riskLevelDidChange(riskLevel: $0) }
+
+			lockLabelCountdownTimer.fire()
+		}
 	}
 	
 	deinit {
@@ -283,7 +285,7 @@ extension VerifierStartViewModel {
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }
 
-		if userSettings.scanInstructionShown, riskLevelProvider.state != nil {
+		if userSettings.scanInstructionShown, (riskLevelProvider.state != nil || !Services.featureFlagManager.isVerificationPolicyEnabled()) {
 			if let crypto = cryptoManager, crypto.hasPublicKeys() {
 				coordinator?.didFinish(.userTappedProceedToScan)
 			} else {
