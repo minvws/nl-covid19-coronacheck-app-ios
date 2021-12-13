@@ -157,3 +157,6 @@
 "verifier_scanner_policy_indication_3g" = "3G-toegang";
 "verifier_start_scan_qr_policy_indication_2g" = "<b>2G</b>-toegang ingesteld";
 "verifier_start_scan_qr_policy_indication_3g" = "<b>3G</b>-toegang ingesteld";
+
+"scan_instructions_4_description_2g" = "Kleurt je scherm groen met een vinkje? Dan is de QR-code geldig en kloppen de gegevens met het identiteitsbewijs. Je mag de bezoeker toegang geven.";
+"scan_instructions_4_title_2g" = "Groen scherm = toegang";

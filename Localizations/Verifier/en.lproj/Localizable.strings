@@ -157,3 +157,6 @@
 "verifier_scanner_policy_indication_3g" = "3G access";
 "verifier_start_scan_qr_policy_indication_2g" = "Set to <b>2G</b> access";
 "verifier_start_scan_qr_policy_indication_3g" = "Set to <b>3G</b> access";
+
+"scan_instructions_4_description_2g" = "Does your screen turn green and show a checkmark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";
+"scan_instructions_4_title_2g" = "Green screen = access";
