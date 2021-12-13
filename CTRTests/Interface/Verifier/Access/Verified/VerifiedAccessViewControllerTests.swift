@@ -207,7 +207,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
         
         // Then
         expect(self.sut.sceneView.title) == L.verifier_result_access_title()
-        expect(self.sut.preferredStatusBarStyle) == .lightContent
+        expect(self.sut.preferredStatusBarStyle) == .default
         
         // Snapshot
         sut.assertImage()

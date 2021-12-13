@@ -38,10 +38,11 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
         let requiredVersion = verificationPolicyVersion.fullVersionString()
         let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
         
-        guard requiredVersion.compare(currentVersion, options: .numeric) != .orderedAscending else {
+        guard requiredVersion.compare(currentVersion, options: .numeric) != .orderedDescending else {
             // Current version is lower than the required version -> Disabled
             return false
         }
+        
         // Current version is higher or equal to the required version -> Enabled
 		return true
 	}
