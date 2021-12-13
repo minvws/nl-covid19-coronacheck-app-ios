@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class ForcedInformationCoordinatorTests: XCTestCase {
 
@@ -14,7 +15,7 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 
 	var navigationSpy: NavigationControllerSpy!
 
-	var managerSpy: ForcedInformationManagerSpy!
+	var forcedInformantionManagerSpy: ForcedInformationManagerSpy!
 
 	var delegateSpy: ForcedInformationDelegateSpy!
 
@@ -23,11 +24,11 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 		super.setUp()
 
 		navigationSpy = NavigationControllerSpy()
-		managerSpy = ForcedInformationManagerSpy()
+		forcedInformantionManagerSpy = ForcedInformationManagerSpy()
 		delegateSpy = ForcedInformationDelegateSpy()
 		sut = ForcedInformationCoordinator(
 			navigationController: navigationSpy,
-			forcedInformationManager: managerSpy,
+			forcedInformationManager: forcedInformantionManagerSpy,
 			delegate: delegateSpy
 		)
 	}
@@ -38,7 +39,7 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 	func test_start_shouldInvokeFinishForcedInformation() {
 
 		// Given
-		managerSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+		forcedInformantionManagerSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
 			image: nil,
 			tagline: "test",
 			title: "test",
@@ -49,36 +50,36 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 		sut.start()
 
 		// Then
-		XCTAssertTrue(navigationSpy.viewControllers.count == 1)
-		XCTAssertFalse(delegateSpy.invokedFinishForcedInformation)
+        expect(self.navigationSpy.viewControllers).to(haveCount(1))
+        expect(self.delegateSpy.invokedFinishForcedInformation) == false
 	}
 	
 	/// Test the start methoud without update page
 	func test_start_withoutUpdatePage() {
 		
 		// Given
-		managerSpy.stubbedGetUpdatePageResult = nil
+		forcedInformantionManagerSpy.stubbedGetUpdatePageResult = nil
 
 		// When
 		sut.start()
 
 		// Then
-		XCTAssertTrue(navigationSpy.viewControllers.isEmpty)
-		XCTAssertTrue(delegateSpy.invokedFinishForcedInformation)
+        expect(self.navigationSpy.viewControllers).to(beEmpty())
+        expect(self.delegateSpy.invokedFinishForcedInformation) == true
 	}
 
 	/// Test the start method without consent content
 	func testStartWithoutConsent() {
 
 		// Given
-		managerSpy.stubbedGetConsentResult = nil
+		forcedInformantionManagerSpy.stubbedGetConsentResult = nil
 
 		// When
 		sut.start()
 
 		// Then
-		XCTAssertTrue(navigationSpy.viewControllers.isEmpty)
-		XCTAssertTrue(delegateSpy.invokedFinishForcedInformation)
+        expect(self.navigationSpy.viewControllers).to(beEmpty())
+        expect(self.delegateSpy.invokedFinishForcedInformation) == true
 	}
 
 	/// Test the did finish method with consent agreed
@@ -91,8 +92,8 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 		sut.didFinish(result)
 
 		// Then
-		XCTAssertTrue(managerSpy.invokedConsentGiven)
-		XCTAssertTrue(delegateSpy.invokedFinishForcedInformation)
+        expect(self.forcedInformantionManagerSpy.invokedConsentGiven) == true
+        expect(self.delegateSpy.invokedFinishForcedInformation) == true
 	}
 
 	/// Test the did finish method with consent viewed
@@ -105,7 +106,7 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 		sut.didFinish(result)
 
 		// Then
-		XCTAssertTrue(managerSpy.invokedConsentGiven)
-		XCTAssertTrue(delegateSpy.invokedFinishForcedInformation)
+        expect(self.forcedInformantionManagerSpy.invokedConsentGiven) == true
+        expect(self.delegateSpy.invokedFinishForcedInformation) == true
 	}
 }

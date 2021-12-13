@@ -7,13 +7,18 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class ForcedInformationManagerTests: XCTestCase {
 
 	// MARK: - Setup
 	var sut: ForcedInformationManager!
+    var featureFlagManagerSpy: FeatureFlagManagerSpy!
 
 	override func setUp() {
+        
+        featureFlagManagerSpy = FeatureFlagManagerSpy()
+        Services.use(featureFlagManagerSpy)
 
 		sut = ForcedInformationManager()
 		sut.factory = HolderForcedInformationFactory()
@@ -23,6 +28,7 @@ class ForcedInformationManagerTests: XCTestCase {
 	override func tearDown() {
 
 		sut.reset()
+        Services.revertToDefaults()
 		super.tearDown()
 	}
 
@@ -37,8 +43,36 @@ class ForcedInformationManagerTests: XCTestCase {
 		// When
 
 		// Then
-		XCTAssertTrue(sut.needsUpdating)
+        expect(self.sut.needsUpdating) == true
 	}
+    
+    /// Test needs updating
+    func testGetNeedsUpdating_verifier_verificationPolicyEnabled() {
+
+        // Given
+        featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+        sut.factory = VerifierForcedInformationFactory()
+        sut.reset()
+
+        // When
+
+        // Then
+        expect(self.sut.needsUpdating) == true
+    }
+    
+    /// Test needs updating
+    func testGetNeedsUpdating_verifier_verificationPolicyDisabled() {
+
+        // Given
+        featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+        sut.factory = VerifierForcedInformationFactory()
+        sut.reset()
+
+        // When
+
+        // Then
+        expect(self.sut.needsUpdating) == false
+    }
 
 	func testConsentGiven() {
 
@@ -48,7 +82,7 @@ class ForcedInformationManagerTests: XCTestCase {
 		sut.consentGiven()
 
 		// Then
-		XCTAssertFalse(sut.needsUpdating)
+        expect(self.sut.needsUpdating) == false
 	}
 
 	func test_getUpdatePage_holder() {
@@ -65,7 +99,7 @@ class ForcedInformationManagerTests: XCTestCase {
 		let actualPage = sut.getUpdatePage()
 
 		// Then
-		XCTAssertEqual(actualPage, expectedPage)
+        expect(actualPage) == expectedPage
 	}
 	
 	func test_getUpdatePage_verifier() {
@@ -83,6 +117,6 @@ class ForcedInformationManagerTests: XCTestCase {
 		let actualPage = sut.getUpdatePage()
 
 		// Then
-		XCTAssertEqual(actualPage, expectedPage)
+        expect(actualPage) == expectedPage
 	}
 }
