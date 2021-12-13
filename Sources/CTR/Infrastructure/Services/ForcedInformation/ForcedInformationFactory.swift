@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import Foundation
 
@@ -42,6 +42,6 @@ struct VerifierForcedInformationFactory: ForcedInformationFactory {
 			content: L.new_in_app_risksetting_subtitle()
 		)],
 					 consent: nil,
-                     version: Services.featureFlagManager.isVerificationPolicyEnabled() ? 5 : 0)
+					 version: Services.featureFlagManager.isVerificationPolicyEnabled() ? 5 : 0)
 	}
 }
