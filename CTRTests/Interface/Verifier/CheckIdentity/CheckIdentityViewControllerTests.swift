@@ -10,7 +10,6 @@ import XCTest
 import SnapshotTesting
 import Nimble
 import Clcore
-import SwiftUI
 
 final class CheckIdentityViewControllerTests: XCTestCase {
 	
