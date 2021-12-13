@@ -58,7 +58,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.accessTitle) == L.verifierResultAccessTitle()
+		expect(self.sut.accessTitle) == L.verifier_result_access_title_lowrisk()
 	}
 	
 	func test_accessTitle_demoLowRisk_verificationPolicyDisabled() {
@@ -116,7 +116,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.accessTitle) == L.verifierResultAccessTitle()
+		expect(self.sut.accessTitle) == L.verifier_result_access_title_lowrisk()
 	}
 	
 	func test_accessTitle_verifiedLowRisk_verificationPolicyDisabled() {

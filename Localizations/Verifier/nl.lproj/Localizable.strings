@@ -4,6 +4,8 @@
 "new_in_app_risksetting_subtitle" = "Alleen bezoekers met een vaccinatie- of herstelbewijs krijgen 2G-toegang. 3G-toegang krijgen ook bezoekers met een testbewijs. Check van tevoren welk soort toegang jouw locatie mag geven.";
 "new_in_app_risksetting_title" = "2G- of 3G-toegang";
 "new_in_app_subtitle" = "Nieuw in de app";
+"scan_instructions_4_description_2G" = "Zie je een vinkje op je scherm? Dan is de QR-code geldig en kloppen de gegevens met het identiteitsbewijs. Je mag de bezoeker toegang geven.";
+"scan_instructions_4_title_2G" = "Vinkje = toegang";
 "scan_log_footer_in_use" = "App in gebruik sinds %@";
 "scan_log_footer_long_time" = "App langer dan een maand in gebruik";
 "scan_log_list_clock_skew_detected" = "Datum of tijd aangepast";
@@ -15,6 +17,7 @@
 "scan_log_list_now" = "nu";
 "scan_log_message" = "<p>De scan-instelling log houdt bij welk soort toegang is gebruikt tijdens het scannen. Een BOA kan vragen om deze log te bekijken.</p><p>Om privacyredenen worden alleen de scan-instellingen van de laatste %li minuten opgeslagen op deze telefoon. Er worden geen persoonsgegevens opgeslagen. Lees meer in de <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">meestgestelde vragen</a>.</p>";
 "scan_log_title" = "Scan-instelling log";
+"scan_qr_description_2G" = "Is de QR-code geldig voor jouw locatie en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
 "updateApp.content" = "Je hebt de laatste versie van de app nodig om verder te gaan.";
 "verification_policy_selection_error_message" = "Maak een keuze om door te gaan";
 /* Koptekst in de over de app pagina */
@@ -36,9 +39,10 @@
 "verifier.consent.title" = "Voorwaarden voor gebruik";
 "verifier.denied.message.five" = "<p>Vraag de bezoeker contact op te nemen met de helpdesk van CoronaCheck.</p>";
 "verifier.denied.message.four" = "<p><b>Blijft het scherm rood?</b></p>";
-"verifier.denied.message.one" = "<p>Een rood scherm betekent dat de QR-code niet aan Nederlandse eisen voldoet.</p>";
-"verifier.denied.message.one_2g" = "<p>Een rood scherm met kruis betekent dat de QR-code niet aan Nederlandse eisen voldoet, of niet geldig is op plekken met 2G-toegang.</p>";
-"verifier.denied.message.six" = "<p><b>Let op:</b> zonder scherm met vinkje mag de bezoeker niet toegelaten worden.</p>";
+"verifier.denied.message.one" = "<p>Een rood scherm met kruis betekent dat de QR-code niet aan Nederlandse eisen voldoet.</p>";
+"verifier.denied.message.one_2G" = "<p>Een rood scherm met kruis betekent dat de QR-code niet aan Nederlandse eisen voldoet, of niet geldig is op plekken met 2G-toegang.</p>";
+"verifier.denied.message.six" = "<p><b>Let op:</b> zonder groen scherm met vinkje mag de bezoeker niet toegelaten worden.</p>";
+"verifier.denied.message.six_2G" = "<p><b>Let op:</b> zonder scherm met vinkje mag de bezoeker niet toegelaten worden.</p>";
 "verifier.denied.message.three" = "<ul><li>Controleer of de tijd goed staat ingesteld op de telefoon van de bezoeker en die van jou. Zorg dat de datum en tijd op ‘automatisch instellen’ staan.</li><li>Controleer of de bezoeker een origineel bewijs laat zien. Een screenshot van een bewijs kan voor problemen zorgen.</li><li>Vraag de bezoeker om de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li></ul>";
 "verifier.denied.message.two" = "<b>Dit kun je doen:</b>";
 /* MARK: - Verifier Denied Instructions */
@@ -64,8 +68,6 @@
 "verifier.result.access.dcc" = "Internationaal bewijs";
 "verifier.result.access.identityverified" = "Gegevens kloppen";
 "verifier.result.access.readmore" = "Er klopt iets niet";
-/* MARK: - Verifier Result */
-"verifier.result.access.title" = "3G-controle klaar";
 "verifier.result.alert.dcc.message" = "Je hebt een internationale QR-code gescand. Gebruikers van CoronaCheck moeten in Nederland hun Nederlandse QR-code laten zien.";
 "verifier.result.alert.dcc.title" = "Vraag naar de Nederlandse QR-code";
 "verifier.result.alert.unknown.message" = "Vraag de bezoeker een QR-code van een coronabewijs te laten zien.";
@@ -112,7 +114,7 @@
 "verifier.start.clockdeviationwarning.button" = "Lees meer";
 "verifier.start.clockdeviationwarning.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
 "verifier.start.header" = "Scan de QR-codes van je bezoekers";
-"verifier.start.message" = "Is de QR-code geldig voor jouw locatie en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
+"verifier.start.message" = "Is de QR-code geldig en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
 "verifier.start.ontimeinternet" = "De app heeft eenmalig internet nodig om de laatste gegevens op te halen.";
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-codes";
@@ -157,6 +159,3 @@
 "verifier_scanner_policy_indication_3g" = "3G-toegang";
 "verifier_start_scan_qr_policy_indication_2g" = "<b>2G</b>-toegang ingesteld";
 "verifier_start_scan_qr_policy_indication_3g" = "<b>3G</b>-toegang ingesteld";
-
-"scan_instructions_4_description_2g" = "Kleurt je scherm groen met een vinkje? Dan is de QR-code geldig en kloppen de gegevens met het identiteitsbewijs. Je mag de bezoeker toegang geven.";
-"scan_instructions_4_title_2g" = "Groen scherm = toegang";
