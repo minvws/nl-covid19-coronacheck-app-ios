@@ -116,8 +116,13 @@ final class CheckIdentityViewModel: Logging {
 	func showVerifiedAccess() {
 		
 		let verifiedType: VerifiedType
-		guard let riskSetting = riskLevelManager.state else {
-			fatalError("Risk level should be set")
+		var riskSetting: RiskLevel = .low
+		
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			guard let state = riskLevelManager.state else {
+				fatalError("Risk level should be set")
+			}
+			riskSetting = state
 		}
 		
 		if verificationDetails.isSpecimen == "1" {
