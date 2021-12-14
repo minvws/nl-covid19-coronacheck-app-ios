@@ -175,7 +175,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 		
 		// Then
-		expect(self.sut.mode.allowsShowScanInstructions) == false
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == false
 	}
 
@@ -196,7 +195,6 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 		
 		// Then
-		expect(self.sut.mode.allowsShowScanInstructions) == true
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
 	}
 	
