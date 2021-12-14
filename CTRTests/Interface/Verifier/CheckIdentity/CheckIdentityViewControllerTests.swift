@@ -19,6 +19,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	private var verifierCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: CheckIdentityViewModel!
 	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 	
 	var window = UIWindow()
 	
@@ -28,6 +29,10 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		verifierCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		riskLevelManagerSpy = RiskLevelManagerSpy()
 		riskLevelManagerSpy.stubbedState = .low
+		
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		Services.use(featureFlagManagerSpy)
 	}
 	
 	func loadView() {
@@ -222,6 +227,50 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .demo(.high)
+	}
+	
+	func test_primaryButtonTapped_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
+		// Given
+		riskLevelManagerSpy.stubbedState = .high
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		viewModel = CheckIdentityViewModel(
+			coordinator: verifierCoordinatorDelegateSpy,
+			verificationDetails: MobilecoreVerificationDetails(),
+			isDeepLinkEnabled: true,
+			riskLevelManager: riskLevelManagerSpy
+		)
+		sut = CheckIdentityViewController(viewModel: viewModel)
+		loadView()
+		
+		// When
+		sut.sceneView.footerButtonView.primaryButtonTappedCommand?()
+		
+		// Then
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .verified(.low)
+	}
+	
+	func test_primaryButtonTapped_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
+		// Given
+		riskLevelManagerSpy.stubbedState = .high
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		let details = MobilecoreVerificationDetails()
+		details.isSpecimen = "1"
+		viewModel = CheckIdentityViewModel(
+			coordinator: verifierCoordinatorDelegateSpy,
+			verificationDetails: details,
+			isDeepLinkEnabled: true,
+			riskLevelManager: riskLevelManagerSpy
+		)
+		sut = CheckIdentityViewController(viewModel: viewModel)
+		loadView()
+		
+		// When
+		sut.sceneView.identityVerifiedTappedCommand?()
+		
+		// Then
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .demo(.low)
 	}
 	
 	func test_readMoreTapped_shouldNavigateToVerifiedInfo() {
