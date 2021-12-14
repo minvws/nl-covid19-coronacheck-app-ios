@@ -88,6 +88,13 @@ class VerifierStartViewModel: Logging {
 			}
 		}
 		
+		var allowsShowScanInstructions: Bool {
+			switch self {
+				case .locked: return false
+				default: return true
+			}
+		}
+		
 		var riskIndicator: (UIColor, String)? {
 			switch self {
 				case .highRisk, .locked(.highRisk, _, _):
@@ -299,6 +306,8 @@ extension VerifierStartViewModel {
 	}
 
 	func showInstructionsButtonTapped() {
+		
+		guard mode.allowsShowScanInstructions || !Services.featureFlagManager.isVerificationPolicyEnabled() else { return }
 		coordinator?.didFinish(.userTappedProceedToScanInstructions)
 	}
 
