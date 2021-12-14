@@ -84,6 +84,9 @@ final class VerifiedAccessView: BaseView {
 				return constraint
 			}()
 		])
+		
+		// For landscape mode
+		titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 	}
 	
 	// MARK: - Public Access
