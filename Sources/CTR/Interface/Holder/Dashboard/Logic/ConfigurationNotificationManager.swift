@@ -70,7 +70,6 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 		timer = Timer.scheduledTimer(withTimeInterval: timeBeforeConfigAlmostOutOfDateWarning, repeats: false) { [weak self] _ in
 
 			DispatchQueue.main.async {
-				self?.logDebug("Timer ringing! Ring a ding a dinging")
 				callback?()
 				self?.stopTimer()
 			}

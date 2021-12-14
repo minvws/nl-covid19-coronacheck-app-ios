@@ -43,6 +43,8 @@ final class EventDetailsViewController: BaseViewController {
 		
 		viewModel.$details.binding = { [weak self] in self?.sceneView.details = $0 }
 
+		viewModel.$footer.binding = { [weak self] in self?.sceneView.footer = $0 }
+
 		viewModel.$hideForCapture.binding = { [weak self] in self?.sceneView.handleScreenCapture(shouldHide: $0) }
 	}
 }

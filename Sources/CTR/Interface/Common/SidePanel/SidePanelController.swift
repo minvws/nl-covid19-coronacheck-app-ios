@@ -73,7 +73,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 			navItem.leftBarButtonItem = .create(config)
 		}
     }
-
+	
 	override open func viewDidLoad() {
 
 		super.viewDidLoad()
@@ -268,6 +268,12 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 			superview: view
 		)
     }
+	
+	// MARK: - Status bars
+	
+	override open var childForStatusBarStyle: UIViewController? {
+		return self.selectedViewController
+	}
 
     // MARK: - Private functions
 

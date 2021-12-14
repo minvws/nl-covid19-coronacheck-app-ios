@@ -119,12 +119,10 @@ extension ListEventsViewModel {
 	func determineErrorCodeFlow(remoteEvents: [RemoteEvent]) -> ErrorCode.Flow {
 
 		switch eventMode {
-			case .vaccination:
-				return ErrorCode.Flow.vaccination
-			case .paperflow:
-				return ErrorCode.Flow.hkvi
-			case .recovery:
-				return ErrorCode.Flow.recovery
+			case .vaccination: return ErrorCode.Flow.vaccination
+			case .paperflow: return ErrorCode.Flow.hkvi
+			case .positiveTest: return ErrorCode.Flow.positiveTest
+			case .recovery: return ErrorCode.Flow.recovery
 			case .test:
 
 				if let identifier = remoteEvents.first?.wrapper.providerIdentifier {

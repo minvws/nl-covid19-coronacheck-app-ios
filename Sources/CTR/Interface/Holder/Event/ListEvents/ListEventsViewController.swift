@@ -63,7 +63,7 @@ class ListEventsViewController: BaseViewController {
 
 			switch $0 {
 				case let .feedback(content):
-					self?.setForNoEvents(content)
+					self?.setForFeedback(content)
 				case let .loading(content):
 					self?.setForLoadingState(content)
 				case let .listEvents(content, rows):
@@ -77,11 +77,6 @@ class ListEventsViewController: BaseViewController {
 
 		viewModel.$shouldPrimaryButtonBeEnabled.binding = { [weak self] in
 			self?.sceneView.primaryButton.isEnabled = $0
-		}
-
-		sceneView.contentTextView.linkTouched { [weak self] url in
-
-			self?.viewModel.openUrl(url)
 		}
 
 		viewModel.$hideForCapture.binding = { [weak self] in
@@ -116,6 +111,7 @@ class ListEventsViewController: BaseViewController {
 
 		sceneView.spinner.isHidden = true
 		displayContent(content)
+		sceneView.setEventStackVisibility(ishidden: false)
 
 		// Remove previously added rows:
 		removeExistingRows()
@@ -134,11 +130,13 @@ class ListEventsViewController: BaseViewController {
 			.forEach(self.sceneView.addVaccinationEventView)
 	}
 
-	private func setForNoEvents(_ content: Content) {
+	private func setForFeedback(_ content: Content) {
 
 		sceneView.spinner.isHidden = true
+		sceneView.setEventStackVisibility(ishidden: true)
 		displayContent(content)
 		removeExistingRows()
+		navigationItem.leftBarButtonItem = nil
 	}
 
 	private func displayContent(_ content: Content) {
@@ -146,6 +144,11 @@ class ListEventsViewController: BaseViewController {
 		// Texts
 		sceneView.title = content.title
 		sceneView.message = content.subTitle
+
+		sceneView.contentTextView.linkTouched { [weak self] url in
+
+			self?.viewModel.openUrl(url)
+		}
 
 		// Button
 		if let actionTitle = content.primaryActionTitle {
@@ -158,6 +161,11 @@ class ListEventsViewController: BaseViewController {
 		sceneView.primaryButtonTappedCommand = content.primaryAction
 		sceneView.somethingIsWrongTappedCommand = content.secondaryAction
 		sceneView.somethingIsWrongButtonTitle = content.secondaryActionTitle
+		
+		UIAccessibility.post(
+			notification: .screenChanged,
+			argument: [sceneView.title, sceneView.message].compactMap { $0 }.joined(separator: ". ")
+		)
 	}
 }
 

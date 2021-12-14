@@ -15,12 +15,15 @@ final class OnboardingConsentView: BaseView {
 		// Dimensions
 		static let titleLineHeight: CGFloat = 26
 		static let messageLineHeight: CGFloat = 22
+		static let maxButtonHeightMultiplier: CGFloat = 0.3
 
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let bottomConsentMargin: CGFloat = 8.0
 		static let itemSpacing: CGFloat = 24.0
 		static let iconToLabelSpacing: CGFloat = 16.0
+		static let consentButtonToErrorSpacing: CGFloat = 5.0
+		static let errorViewMargin: CGFloat = 8.0
 	}
 
 	/// The scrollview
@@ -86,7 +89,14 @@ final class OnboardingConsentView: BaseView {
 		return button
 	}()
 	
-	private var bottomStackViewConstraint: NSLayoutConstraint?
+	let errorView: ErrorView = {
+		
+		let view = ErrorView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		return view
+	}()
+	
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 
 	/// setup the views
@@ -146,11 +156,7 @@ final class OnboardingConsentView: BaseView {
 				constant: -2.0 * ViewTraits.margin
 			),
 			stackView.centerXAnchor.constraint(equalTo: scrollView.contentView.centerXAnchor),
-			{
-				let constraint = stackView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.contentView.bottomAnchor, constant: -ViewTraits.margin)
-				bottomStackViewConstraint = constraint
-				return constraint
-			}(),
+			stackView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.contentView.bottomAnchor, constant: -ViewTraits.margin),
 
 			// Footer view
 			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
@@ -191,7 +197,13 @@ final class OnboardingConsentView: BaseView {
 
 	var consent: String? {
 		didSet {
-			consentButton.setTitle(consent, for: .normal)
+			consentButton.title = consent
+		}
+	}
+	
+	var consentError: String? {
+		didSet {
+			errorView.error = consentError
 		}
 	}
 
@@ -225,27 +237,36 @@ final class OnboardingConsentView: BaseView {
 	/// Setup the consent button. By default hidden.
 	func setupConsentButton() {
 		
-		scrollView.contentView.addSubview(consentButton)
-		bottomStackViewConstraint?.isActive = false
+		footerButtonView.buttonStackView.alignment = .center
+		
+		footerButtonView.buttonStackView.insertArrangedSubview(consentButton, at: 0)
+		footerButtonView.buttonStackView.insertArrangedSubview(errorView, at: 1)
 		
 		NSLayoutConstraint.activate([
-			// Consent button
-			consentButton.topAnchor.constraint(
-				greaterThanOrEqualTo: stackView.bottomAnchor,
-				constant: ViewTraits.itemSpacing
+			errorView.widthAnchor.constraint(
+				equalTo: consentButton.widthAnchor,
+				constant: -2 * ViewTraits.errorViewMargin
 			),
-			consentButton.leftAnchor.constraint(
-				equalTo: scrollView.contentView.leftAnchor,
-				constant: ViewTraits.margin
+			// Buttons have a maximum height for large font size
+			consentButton.heightAnchor.constraint(
+				lessThanOrEqualTo: safeAreaLayoutGuide.heightAnchor,
+				multiplier: ViewTraits.maxButtonHeightMultiplier
 			),
-			consentButton.rightAnchor.constraint(
-				equalTo: scrollView.contentView.rightAnchor,
-				constant: -ViewTraits.margin
-			),
-			consentButton.bottomAnchor.constraint(
-				equalTo: scrollView.contentView.bottomAnchor,
-				constant: -ViewTraits.bottomConsentMargin
+			primaryButton.heightAnchor.constraint(
+				lessThanOrEqualTo: safeAreaLayoutGuide.heightAnchor,
+				multiplier: ViewTraits.maxButtonHeightMultiplier
 			)
 		])
+	}
+	
+	var hasErrorState: Bool? {
+		didSet {
+			guard let hasError = hasErrorState else { return }
+			consentButton.hasError = hasError
+			errorView.isHidden = !hasError
+			
+			let spacing = hasError ? ViewTraits.consentButtonToErrorSpacing : footerButtonView.buttonStackView.spacing
+			footerButtonView.buttonStackView.setCustomSpacing(spacing, after: consentButton)
+		}
 	}
 }

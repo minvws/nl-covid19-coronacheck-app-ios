@@ -100,8 +100,8 @@ class TokenEntryViewController: BaseViewController {
 		}
 		
 		viewModel.$fieldErrorMessage.binding = { [weak self] message in
-			if let message = message {
-				UIAccessibility.post(notification: .announcement, argument: message)
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				UIAccessibility.post(notification: .layoutChanged, argument: self?.sceneView.errorView)
 			}
 			self?.sceneView.fieldErrorMessage = message
 		}
@@ -279,25 +279,27 @@ class TokenEntryViewController: BaseViewController {
 	// MARK: Alerts
 	
 	func displayResendVerificationConfirmationAlert() {
-		
-		let alertController = UIAlertController(
-			title: viewModel.confirmResendVerificationAlertTitle,
-			message: viewModel.confirmResendVerificationAlertMessage,
-			preferredStyle: .actionSheet
-		)
-		alertController.addAction(UIAlertAction(
-			title: viewModel.confirmResendVerificationAlertOkayButton,
-			style: .default) { [weak self] _ in
-			guard let self = self else { return }
-			self.sceneView.verificationEntryView.inputField.text = nil
-			self.viewModel.resendVerificationCodeButtonTapped()
-		})
-		alertController.addAction(UIAlertAction(
-			title: viewModel.confirmResendVerificationAlertCancelButton,
-			style: .cancel
-		))
 
-		self.present(alertController, animated: true)
+		guard let title = viewModel.confirmResendVerificationAlertTitle,
+			  let subTitle = viewModel.confirmResendVerificationAlertMessage,
+			  let okTitle = viewModel.confirmResendVerificationAlertOkayButton else {
+			return
+		}
+
+		let alert = AlertContent(
+			title: title,
+			subTitle: subTitle,
+			cancelAction: nil,
+			cancelTitle: viewModel.confirmResendVerificationAlertCancelButton,
+			okAction: { [weak self] _ in
+				guard let self = self else { return }
+				self.sceneView.verificationEntryView.inputField.text = nil
+				self.viewModel.resendVerificationCodeButtonTapped()
+			},
+			okTitle: okTitle
+		)
+
+		showAlert(alert, preferredAction: viewModel.confirmResendVerificationAlertOkayButton)
 	}
 }
 

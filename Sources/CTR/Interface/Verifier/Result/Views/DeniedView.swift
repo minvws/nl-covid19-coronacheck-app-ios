@@ -154,4 +154,8 @@ final class DeniedView: BaseView, AccessViewable {
 	func secondaryTitle(_ title: String?) {
 		secondaryButton.title = title
 	}
+	
+	func focusAccessibility() {
+		UIAccessibility.post(notification: .screenChanged, argument: self.titleLabel)
+	}
 }

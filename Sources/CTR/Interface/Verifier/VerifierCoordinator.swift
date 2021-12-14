@@ -57,9 +57,9 @@ class VerifierCoordinator: SharedCoordinator {
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(delegate: self)
 		)
-		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
+		sidePanel = SidePanelController(sideController: NavigationController(rootViewController: menu))
 
-		dashboardNavigationController = UINavigationController()
+		dashboardNavigationController = NavigationController()
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
@@ -263,15 +263,15 @@ extension VerifierCoordinator: MenuDelegate {
 				openUrl(faqUrl, inApp: true)
 				
 			case .about :
-				let destination = AboutViewController(
-					viewModel: AboutViewModel(
+				let destination = AboutThisAppViewController(
+					viewModel: AboutThisAppViewModel(
 						coordinator: self,
 						versionSupplier: versionSupplier,
 						flavor: AppFlavor.flavor,
 						userSettings: UserSettings()
 					)
 				)
-				aboutNavigationController = UINavigationController(rootViewController: destination)
+				aboutNavigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
 				
 			default:
@@ -279,7 +279,7 @@ extension VerifierCoordinator: MenuDelegate {
 				
 				let destinationViewController = PlaceholderViewController()
 				destinationViewController.placeholder = "\(identifier)"
-				let navigationController = UINavigationController(rootViewController: destinationViewController)
+				let navigationController = NavigationController(rootViewController: destinationViewController)
 				sidePanel?.selectedViewController = navigationController
 		}
 		fixRotation()

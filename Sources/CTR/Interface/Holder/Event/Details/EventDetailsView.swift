@@ -32,6 +32,12 @@ final class EventDetailsView: BaseView {
 		view.spacing = 0
 		return view
 	}()
+
+	/// The footer text
+	private let footerTextView: TextView = {
+
+		return TextView()
+	}()
 	
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
@@ -79,11 +85,19 @@ final class EventDetailsView: BaseView {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details)
+			stackView.addArrangedSubview(footerTextView)
 		}
 	}
 	
 	func handleScreenCapture(shouldHide: Bool) {
 		stackView.isHidden = shouldHide
+	}
+
+	/// The message
+	var footer: String? {
+		didSet {
+			footerTextView.attributedText = .makeFromHtml(text: footer, style: .bodyDark)
+		}
 	}
 }
 

@@ -120,7 +120,7 @@ class NetworkManager: Logging {
 								}
 							}
 						case let .failure(decodeError):
-							if let networkError = self.inspect(response: networkResponse.urlResponse) {
+							if let networkError = NetworkError.inspect(response: networkResponse.urlResponse) {
 								// Is there a actual network error? Report that rather than the signed response decode fail.
 								completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: networkError)))
 							} else {
@@ -160,7 +160,7 @@ class NetworkManager: Logging {
 
 						case let .failure(responseError):
 							// Did we experience a network error?
-							let networkError = self.inspect(response: networkResponse.urlResponse)
+							let networkError = NetworkError.inspect(response: networkResponse.urlResponse)
 							// Decode to a server response
 							let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: networkResponse.data)
 							completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError)))
@@ -177,7 +177,7 @@ class NetworkManager: Logging {
 		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
 
 		// Did we experience a network error?
-		let networkError = self.inspect(response: urlResponse)
+		let networkError = NetworkError.inspect(response: urlResponse)
 
 		// Decode to the expected object
 		let decodedResult: Result<Object, NetworkError> = decodeJson(json: decodedPayloadData)
@@ -238,7 +238,7 @@ class NetworkManager: Logging {
 			return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .invalidResponse))
 		}
 
-		if let networkError = self.inspect(response: response), networkError == .serverBusy {
+		if let networkError = NetworkError.inspect(response: response), networkError == .serverBusy {
 			return .failure(.error(statusCode: response.httpStatusCode, response: nil, error: .serverBusy))
 		}
 
@@ -274,30 +274,6 @@ class NetworkManager: Logging {
 		} catch {
 			self.logError("Error Deserializing \(Object.self):\nError: \(error)\nRaw json: \(String(decoding: json, as: UTF8.self))")
 			return .failure(.cannotDeserialize)
-		}
-	}
-
-	/// Checks for valid HTTPResponse and status codes
-	private func inspect(response: URLResponse) -> NetworkError? {
-		guard let response = response as? HTTPURLResponse else {
-			return .invalidResponse
-		}
-		
-		switch response.statusCode {
-			case 200 ... 299:
-				return nil
-			case 304:
-				return .responseCached
-			case 300 ... 399:
-				return .redirection
-			case 429:
-				return .serverBusy
-			case 400 ... 499:
-				return .resourceNotFound
-			case 500 ... 599:
-				return .serverError
-			default:
-				return .invalidResponse
 		}
 	}
 	
@@ -485,7 +461,7 @@ extension NetworkManager: NetworkManaging {
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse, URLResponse), ServerError>) -> Void) {
 
 		guard let providerUrl = provider.resultURL else {
 			self.logError("No url provided for \(provider)")
@@ -510,7 +486,7 @@ extension NetworkManager: NetworkManaging {
 			proceedToSuccessIfResponseIs400: true,
 			completion: { (result: Result<(EventFlow.EventResultWrapper, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
-					completion(result.map { decodable, signedResponse, _, _ in (decodable, signedResponse) })
+					completion(result.map { decodable, signedResponse, _, urlResponse in (decodable, signedResponse, urlResponse) })
 				}
 			}
 		)

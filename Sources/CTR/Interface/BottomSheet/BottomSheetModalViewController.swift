@@ -36,6 +36,11 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		button.accessibilityIdentifier = "CloseButton"
 		button.accessibilityLabel = L.generalClose()
 		button.tintColor = Theme.colors.dark
+		if #available(iOS 13.0, *) {
+			button.addInteraction(UILargeContentViewerInteraction())
+			button.showsLargeContentViewer = true
+			button.largeContentTitle = L.generalClose()
+		}
 		return button
 	}()
 	
@@ -106,6 +111,8 @@ private extension BottomSheetModalViewController {
 		view.clipsToBounds = true
 		
 		closeButton.addTarget(self, action: #selector(dismissModal), for: .touchUpInside)
+		
+		childViewController.view.isAccessibilityElement = true
 	}
 	
 	func setupViewHierarchy() {

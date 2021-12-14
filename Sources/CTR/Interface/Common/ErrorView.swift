@@ -13,15 +13,18 @@ class ErrorView: BaseView {
 	private struct ViewTraits {
 		
 		// Dimension
-		static let imageSize: CGFloat = 12.0
-		static let lineHeight: CGFloat = 18.0
-		static let errorKerning: CGFloat = 0.25
+		static let imageSize: CGFloat = 16.0
 		
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let textLeadingMargin: CGFloat = 8.0
 		static let imageTopMargin: CGFloat = 5.0
-		static let labelTopMargin: CGFloat = 2.0
+		
+		enum Font {
+			static let font: UIFont = Theme.fonts.subhead
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+		}
 	}
 	
 	/// The error image
@@ -58,9 +61,11 @@ class ErrorView: BaseView {
 		
 		super.setupViewConstraints()
 		
+		let iconOffset = ViewTraits.Font.lineHeight - ViewTraits.Font.font.ascender
+		
 		NSLayoutConstraint.activate([
 			
-			// Header
+			// Image View
 			errorImageView.leadingAnchor.constraint( equalTo: leadingAnchor),
 			errorImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageSize),
 			errorImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageSize),
@@ -72,7 +77,7 @@ class ErrorView: BaseView {
 			// Title
 			errorLabel.topAnchor.constraint(
 				equalTo: topAnchor,
-				constant: ViewTraits.labelTopMargin
+				constant: iconOffset
 			),
 			errorLabel.leadingAnchor.constraint(
 				equalTo: errorImageView.trailingAnchor,
@@ -89,10 +94,18 @@ class ErrorView: BaseView {
 	var error: String? {
 		didSet {
 			errorLabel.attributedText = error?.setLineHeight(
-				ViewTraits.lineHeight,
-				kerning: ViewTraits.errorKerning,
+				ViewTraits.Font.lineHeight,
+				kerning: ViewTraits.Font.kerning,
 				textColor: Theme.colors.utilityError
 			)
+			
+			if let error = error {
+				accessibilityValue = error
+				accessibilityLabel = L.generalNotification()
+ 				isAccessibilityElement = true
+			} else {
+				isAccessibilityElement = false
+			}
 		}
 	}
 }

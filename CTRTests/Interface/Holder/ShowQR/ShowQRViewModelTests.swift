@@ -18,13 +18,15 @@ class ShowQRViewModelTests: XCTestCase {
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	var dataStoreManager: DataStoreManaging!
 	var cryptoManagerSpy: CryptoManagerSpy!
+	var notificationCenterSpy: NotificationCenterSpy!
 
 	override func setUp() {
 		super.setUp()
 		dataStoreManager = DataStoreManager(.inMemory)
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-
+		notificationCenterSpy = NotificationCenterSpy()
+		
 		Services.use(cryptoManagerSpy)
 	}
 
@@ -223,36 +225,7 @@ class ShowQRViewModelTests: XCTestCase {
 			greenCards: [greenCard],
 			thirdPartyTicketAppName: nil
 		)
-		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes(
-			credentialVersion: 1,
-			digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate(
-				dateOfBirth: "2021-06-01",
-				name: EuCredentialAttributes.Name(
-					familyName: "Corona",
-					standardisedFamilyName: "CORONA",
-					givenName: "Check",
-					standardisedGivenName: "CHECK"
-				),
-				schemaVersion: "1.0.0",
-				vaccinations: [
-					EuCredentialAttributes.Vaccination(
-						certificateIdentifier: "test",
-						country: "NLS",
-						diseaseAgentTargeted: "test",
-						doseNumber: 2,
-						dateOfVaccination: "2021-06-01",
-						issuer: "Test",
-						marketingAuthorizationHolder: "Test",
-						medicalProduct: "Test",
-						totalDose: 2,
-						vaccineOrProphylaxis: "test"
-					)
-				]
-			),
-			expirationTime: Date().timeIntervalSince1970,
-			issuedAt: Date().timeIntervalSince1970 + 3600,
-			issuer: "NL"
-		)
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination
 		let expectedDetails: [DCCQRDetails] = [
 			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: "Corona, Check"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.dateOfBirth, value: "01-06-2021"),
@@ -262,9 +235,9 @@ class ShowQRViewModelTests: XCTestCase {
 			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: "Test"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: "2 / 2"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: "01-06-2021"),
-			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: "NLS"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: "Nederland / The Netherlands"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: "Test"),
-			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: "test")
+			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: "1234")
 		]
 
 		// When
@@ -300,5 +273,30 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyTicketApp) == true
+	}
+	
+	func test_minimisingApp_clears_thirdpartyappbutton() throws {
+		// Arrange
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+		notificationCenterSpy.stubbedAddObserverForNameResult = NSObject()
+		notificationCenterSpy.stubbedAddObserverForNameBlockResult = (Notification(name: UIApplication.didEnterBackgroundNotification, object: nil, userInfo: nil), ())
+		// Act
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: "RollerDiscoParties",
+			notificationCenter: notificationCenterSpy
+		)
+
+		let (name, _, _) = notificationCenterSpy.invokedAddObserverForNameParameters!
+		expect(name) == UIApplication.didEnterBackgroundNotification
+
+		expect(self.sut.thirdPartyTicketAppButtonTitle).to(beNil())
 	}
 }

@@ -189,6 +189,93 @@ class WalletManagerTests: XCTestCase {
 
 		// Then
 		expect(list).to(haveCount(3))
+	}
 
+	func test_fetchSignedEvents_noEvents() {
+
+		// Given
+
+		// When
+		let signedEvents = sut.fetchSignedEvents()
+
+		// Then
+		expect(signedEvents).to(beEmpty())
+	}
+
+	func test_fetchSignedEvents_oneEvent() {
+
+		// Given
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "CoronaCheck",
+			jsonData: Data("test".utf8),
+			issuedAt: Date()
+		)
+
+		// When
+		let signedEvents = sut.fetchSignedEvents()
+
+		// Then
+		expect(signedEvents).toNot(beEmpty())
+		expect(signedEvents).to(contain("test"))
+	}
+
+	func test_fetchSignedEvents_twoEvents() {
+
+		// Given
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "CoronaCheck",
+			jsonData: Data("test".utf8),
+			issuedAt: Date()
+		)
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "CoronaCheck",
+			jsonData: Data("vaccination".utf8),
+			issuedAt: Date()
+		)
+
+		// When
+		let signedEvents = sut.fetchSignedEvents()
+
+		// Then
+		expect(signedEvents).toNot(beEmpty())
+		expect(signedEvents).to(contain("test"))
+		expect(signedEvents).to(contain("vaccination"))
+	}
+
+	func test_hasEventGroup_vaccination() {
+
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GGD",
+			jsonData: Data(),
+			issuedAt: Date()
+		)
+
+		// When
+		let hasEventGroup = sut.hasEventGroup(type: "vaccination", providerIdentifier: "GGD")
+
+		// Then
+		expect(hasEventGroup) == true
+	}
+
+	func test_hasEventGroup_recovery() {
+
+		// Given
+		sut.storeEventGroup(
+			.recovery,
+			providerIdentifier: "DCC",
+			jsonData: Data(),
+			issuedAt: Date()
+		)
+
+		// When
+		let hasEventGroup = sut.hasEventGroup(type: "recovery", providerIdentifier: EventFlow.paperproofIdentier)
+
+		// Then
+		expect(hasEventGroup) == true
 	}
 }

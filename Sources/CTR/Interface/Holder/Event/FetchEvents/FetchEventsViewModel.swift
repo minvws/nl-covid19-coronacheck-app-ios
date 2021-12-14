@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -12,7 +11,7 @@ final class FetchEventsViewModel: Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	private var tvsToken: String
+	private var tvsToken: TVSAuthorizationToken
 	private var eventMode: EventMode
 	private let networkManager: NetworkManaging = Services.networkManager
 	private let mappingManager: MappingManaging = Services.mappingManager
@@ -36,23 +35,13 @@ final class FetchEventsViewModel: Logging {
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
-		tvsToken: String,
+		tvsToken: TVSAuthorizationToken,
 		eventMode: EventMode) {
 		self.coordinator = coordinator
 		self.tvsToken = tvsToken
 		self.eventMode = eventMode
 
-		viewState = .loading(
-			content: Content(
-				title: eventMode.title,
-				subTitle: nil,
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
-
+		viewState = .loading(content: Content(title: eventMode.fetching))
 		fetchEventProvidersWithAccessTokens(completion: handleFetchEventProvidersWithAccessTokensResponse)
 	}
 
@@ -134,7 +123,7 @@ final class FetchEventsViewModel: Logging {
 				displayServerUnreachable()
 
 			case (true, _, true): // No results and >=1 network had an error
-				let errorCodes = mapServerErrors(serverErrors, for: flow, step: step)
+				let errorCodes = mapServerErrors(serverErrors, for: eventMode.flow, step: step)
 				displayErrorCodeForUnomiAndEvent(errorCodes)
 
 			case (false, true, _), // Some results and >=1 network was busy (5.5.3)
@@ -163,7 +152,7 @@ final class FetchEventsViewModel: Logging {
 			nextAction: { someEventsMightBeMissing in
 				if hasNoResults && !unomiServerErrors.isEmpty {
 					self.logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
-					let errorCodes = self.mapServerErrors(unomiServerErrors, for: self.flow, step: .unomi)
+					let errorCodes = self.mapServerErrors(unomiServerErrors, for: self.eventMode.flow, step: .unomi)
 					self.displayErrorCodeForUnomiAndEvent(errorCodes)
 				} else {
 					self.coordinator?.fetchEventsScreenDidFinish(
@@ -252,13 +241,13 @@ final class FetchEventsViewModel: Logging {
 
 		if let providerError = remoteEventProvidersResult?.failureError {
 			self.logError("Error getting event providers: \(providerError)")
-			errorCodes.append(self.convert(providerError, for: self.flow, step: .providers))
+			errorCodes.append(self.convert(providerError, for: eventMode.flow, step: .providers))
 			serverErrors.append(providerError)
 		}
 
 		if let accessError = accessTokenResult?.failureError {
 			self.logError("Error getting access tokens: \(accessError)")
-			errorCodes.append(self.convert(accessError, for: self.flow, step: .accessTokens))
+			errorCodes.append(self.convert(accessError, for: eventMode.flow, step: .accessTokens))
 			serverErrors.append(accessError)
 		}
 
@@ -287,6 +276,8 @@ final class FetchEventsViewModel: Logging {
 				}
 			case .paperflow:
 				return [] // Paperflow is not part of FetchEvents.
+			case .positiveTest:
+				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
 			case .test:
 				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.negativeTest) }
 			case .vaccination:
@@ -294,38 +285,24 @@ final class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private var flow: ErrorCode.Flow {
-
-		switch eventMode {
-			case .vaccination:
-				return .vaccination
-			case .paperflow:
-				return .hkvi
-			case .recovery:
-				return .recovery
-			case .test:
-				return .ggdTest
-		}
-	}
-
 	private func mapNoProviderAvailable() -> ErrorCode? {
 
 		switch eventMode {
 			case .recovery:
-				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
+				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
 			case .paperflow:
 				return nil
-			case .test:
-				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)
+			case .test, .positiveTest:
+				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)
 			case .vaccination:
-				return ErrorCode(flow: self.flow, step: .providers, clientCode: ErrorCode.ClientCode.noVaccinationProviderAvailable)
+				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noVaccinationProviderAvailable)
 		}
 	}
 
 	private func fetchEventAccessTokens(completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 
 		progressIndicationCounter.increment()
-		networkManager.fetchEventAccessTokens(tvsToken: tvsToken) { [weak self] result in
+		networkManager.fetchEventAccessTokens(tvsToken: tvsToken.idTokenString) { [weak self] result in
 			completion(result)
 			self?.progressIndicationCounter.decrement()
 		}
@@ -506,8 +483,9 @@ private extension EventMode {
 	/// Translate EventMode into a string that can be passed to the network as a query string
 	var queryFilterValue: String {
 		switch self {
+			case .paperflow: return "" // Not used
+			case .positiveTest: return "positivetest,recovery"
 			case .recovery: return "positivetest,recovery"
-			case .paperflow: return ""
 			case .test: return "negativetest"
 			case .vaccination: return "vaccination"
 		}
@@ -516,8 +494,9 @@ private extension EventMode {
 
 extension FetchEventsViewModel {
 
+	static let detailedCodeNonceExpired: Int = 99708
+	static let detailedCodeTvsSessionExpired: Int = 99710
 	static let detailedCodeNoBSN: Int = 99782
-	static let detailedCodeSessionExpired: Int = 99708
 }
 
 // MARK: - Error states
@@ -556,40 +535,63 @@ private extension FetchEventsViewModel {
 
 	func handleErrorCodesForAccesTokenAndProviders(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
-		let hasNoBSN = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }.isEmpty
-		let sessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeSessionExpired }.isEmpty
-		let serverUnreachable = !serverErrors.filter { serverError in
+		// No BSN
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }) else {
+			displayNoBSN()
+			return
+		}
+
+		// Expired Nonce
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeNonceExpired }) else {
+			displayNonceOrTVSExpired()
+			return
+		}
+
+		// Expired TVS token
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeTvsSessionExpired }) else {
+			if eventMode == .positiveTest {
+				// This is recoverable, so redirect to login
+				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)
+			} else {
+				displayNonceOrTVSExpired()
+			}
+			return
+		}
+
+		// Unreachable
+		guard serverErrors.filter({ serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .serverUnreachableTimedOut || error == .serverUnreachableInvalidHost || error == .serverUnreachableConnectionLost
 			}
 			return false
-		}.isEmpty
-		let serverBusy = !serverErrors.filter { serverError in
+		}).isEmpty else {
+			displayServerUnreachable(errorCodes)
+			return
+		}
+
+		// Server Busy
+		guard serverErrors.filter({ serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .serverBusy
 			}
 			return false
-		}.isEmpty
-		let noInternet = !serverErrors.filter { serverError in
+		}).isEmpty else {
+			displayServerBusy(errorCodes)
+			return
+		}
+
+		// No Internet
+		guard serverErrors.filter({ serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .noInternetConnection
 			}
 			return false
-		}.isEmpty
-
-		if hasNoBSN {
-			displayNoBSN()
-		} else if sessionExpired {
-			displaySessionExpired()
-		} else if serverUnreachable {
-			displayServerUnreachable(errorCodes)
-		} else if serverBusy {
-			displayServerBusy(errorCodes)
-		} else if noInternet {
+		}).isEmpty else {
 			displayNoInternet()
-		} else {
-			displayErrorCodeForAccessTokenAndProviders(errorCodes)
+			return
 		}
+
+		displayErrorCodeForAccessTokenAndProviders(errorCodes)
 	}
 
 	func displayNoBSN() {
@@ -607,7 +609,7 @@ private extension FetchEventsViewModel {
 		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
-	func displaySessionExpired() {
+	func displayNonceOrTVSExpired() {
 
 		let content = Content(
 			title: L.holderErrorstateNosessionTitle(),

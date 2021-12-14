@@ -111,6 +111,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToCreateARecoveryQRCount += 1
 	}
 
+	var invokedUserWishesToFetchPositiveTests = false
+	var invokedUserWishesToFetchPositiveTestsCount = 0
+
+	func userWishesToFetchPositiveTests() {
+		invokedUserWishesToFetchPositiveTests = true
+		invokedUserWishesToFetchPositiveTestsCount += 1
+	}
+
 	var invokedUserDidScanRequestToken = false
 	var invokedUserDidScanRequestTokenCount = 0
 	var invokedUserDidScanRequestTokenParameters: (requestToken: RequestToken, Void)?
@@ -177,6 +185,38 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
 		invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = true
 		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = false
+	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount = 0
+
+	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
+		invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = true
+		invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompleted = false
+	var invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompletedCount = 0
+
+	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted() {
+		invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompleted = true
+		invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompletedCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompleted = false
+	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompletedCount = 0
+
+	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {
+		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompleted = true
+		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompletedCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompleted = false
+	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompletedCount = 0
+
+	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted() {
+		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompleted = true
+		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompletedCount += 1
 	}
 
 	var invokedOpenUrl = false

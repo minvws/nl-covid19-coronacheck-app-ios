@@ -20,9 +20,29 @@ protocol MappingManaging {
 	func getDisplayCountry(_ country: String) -> String
 	
 	func getDisplayFacility(_ facility: String) -> String
+
+	func getTestType(_ code: String? ) -> String?
+
+	func getTestName(_ code: String? ) -> String?
+
+	func getTestManufacturer(_ code: String? ) -> String?
+
+	func isRatTest(_ code: String?) -> Bool
+
+	func getHpkData(_ code: String? ) -> HPKData?
+
+	func getVaccinationBrand(_ code: String? ) -> String?
+
+	func getVaccinationType(_ code: String? ) -> String?
+
+	func getVaccinationManufacturer(_ code: String? ) -> String?
+
+	func getNlTestType(_ code: String? ) -> String?
 }
 
 class MappingManager: MappingManaging, Logging {
+
+	static let RATTest = "LP217198-3"
 
 	let remoteConfigManager: RemoteConfigManaging
 
@@ -66,4 +86,53 @@ class MappingManager: MappingManaging, Logging {
 		return L.holderDccListFacility()
 	}
 
+	// MARK: Test
+
+	func getTestType(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euTestTypes?.first(where: { $0.code == code })?.name
+	}
+
+	func getTestName(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euTestNames?.first(where: { $0.code == code })?.name
+	}
+
+	func getTestManufacturer(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euTestManufacturers?.first(where: { $0.code == code })?.name
+	}
+
+	func isRatTest(_ code: String?) -> Bool {
+
+		return code == MappingManager.RATTest
+	}
+
+	// Vaccination
+
+	func getHpkData(_ code: String? ) -> HPKData? {
+
+		return remoteConfigManager.storedConfiguration.hpkCodes?.first(where: { $0.code == code })
+	}
+
+	func getVaccinationBrand(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euBrands?.first(where: { $0.code == code })?.name
+	}
+
+	func getVaccinationType(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euVaccinationTypes?.first(where: { $0.code == code })?.name
+	}
+
+	func getVaccinationManufacturer(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.euManufacturers?.first(where: { $0.code == code })?.name
+	}
+
+	// Test 2.0
+	func getNlTestType(_ code: String? ) -> String? {
+
+		return remoteConfigManager.storedConfiguration.nlTestTypes?.first(where: { $0.code == code })?.name
+	}
 }

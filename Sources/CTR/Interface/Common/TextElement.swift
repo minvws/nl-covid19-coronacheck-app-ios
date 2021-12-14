@@ -27,11 +27,7 @@ class TextElement: UITextView, UITextViewDelegate {
         setup()
         
         self.attributedText = attributedText
-        
-        // Improve accessibility by trimming whitespace and newline characters
-        if let mutableAttributedText = attributedText.mutableCopy() as? NSMutableAttributedString {
-            accessibilityAttributedValue = mutableAttributedText.trim()
-        }
+		setupAttributedStringLinks()
     }
     
     ///  Initializes the TextView with the given string
@@ -64,6 +60,46 @@ class TextElement: UITextView, UITextViewDelegate {
             .underlineColor: Theme.colors.iosBlue
         ]
     }
+	
+	private func setupAttributedStringLinks() {
+		// Improve accessibility by trimming whitespace and newline characters
+		if let mutableAttributedText = attributedText.mutableCopy() as? NSMutableAttributedString {
+			accessibilityAttributedValue = mutableAttributedText.trim()
+		}
+		
+		if let linkNSRange = attributedText.rangeOfFirstLink,
+		   let linkRange = Range(linkNSRange, in: attributedText.string) {
+			
+			// Add word "(Link)" after reading the portion of text that is tappable:
+			// e.g. "Tap here (Link) to go to page"
+			accessibilityValue = {
+				var textWithWordLinkAdded = attributedText.string
+				textWithWordLinkAdded.insert(contentsOf: " (\(L.generalUrlLink().lowercased()))", at: linkRange.upperBound)
+				return textWithWordLinkAdded
+			}()
+
+			// Work out the title of the linked text:
+			let linkTitle = attributedText.attributedSubstring(from: linkNSRange).string
+
+			if #available(iOS 13.0, *) {
+				// Label the paragraph with the link title (VoiceControl), whilst
+				// preventing _audibly_ labelling the whole paragraph with the link title (VoiceOver).
+				accessibilityUserInputLabels = [linkTitle]
+			} else {
+				// Non-ideal fallback for <iOS 13: label the paragraph using the link name, so that
+				// the user can tap it using Voice Control. (i.e. also reads it out using Voice Over too).
+				accessibilityLabel = linkTitle
+			}
+
+			accessibilityTraits = .link
+			isAccessibilityElement = true
+		} else {
+			self.accessibilityLabel = nil
+			self.accessibilityValue = nil
+			self.accessibilityTraits = .staticText
+			self.isAccessibilityElement = false
+		}
+	}
     
     /// Calculates the intrisic content size
     override var intrinsicContentSize: CGSize {
@@ -80,7 +116,7 @@ class TextElement: UITextView, UITextViewDelegate {
     ///
     /// - parameter handler: The closure to be called when the user selects a link
     @discardableResult
-    func linkTouched(handler: @escaping (URL) -> Void) -> Self {
+	func linkTouched(handler: @escaping (URL) -> Void) -> Self {
         isSelectable = true
         linkHandlers.append(handler)
         return self

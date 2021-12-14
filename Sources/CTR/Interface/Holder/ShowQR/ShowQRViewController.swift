@@ -13,7 +13,6 @@ class ShowQRViewController: BaseViewController {
 
 	private let viewModel: ShowQRViewModel
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-	var previousOrientation: UIInterfaceOrientation?
 
 	/// Initializer
 	/// - Parameter viewModel: view model
@@ -43,7 +42,6 @@ class ShowQRViewController: BaseViewController {
 		setupPages()
 		setupBinding()
 		addBackButton()
-		viewModel.setBrightness()
 	}
 
 	private func setupBinding() {
@@ -70,16 +68,16 @@ class ShowQRViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
+		viewModel.setBrightness()
 		sceneView.play()
-		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 	}
-
-	override func viewWillDisappear(_ animated: Bool) {
-
-		super.viewWillDisappear(animated)
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		
+		super.viewDidDisappear(animated)
 		viewModel.setBrightness(reset: true)
-		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
+		OrientationUtility.unlockOrientation()
 	}
 }
 

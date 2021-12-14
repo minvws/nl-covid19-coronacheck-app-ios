@@ -24,7 +24,7 @@ class EventStartViewControllerTests: XCTestCase {
 
 		super.setUp()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination, validAfterDays: 11)
+		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
 		sut = EventStartViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
@@ -74,7 +74,7 @@ class EventStartViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .vaccination)
 	}
 
 	func test_secondaryButtonTapped() {

@@ -39,6 +39,65 @@ extension TestProvider {
     }
 }
 
+extension EventFlow.EventProvider {
+
+	static var vaccinationProvider: EventFlow.EventProvider {
+		EventFlow.EventProvider(
+			identifier: "CC",
+			name: "CoronaCheck",
+			unomiURL: URL(string: "https://coronacheck.nl"),
+			eventURL: URL(string: "https://coronacheck.nl"),
+			cmsCertificate: "test",
+			tlsCertificate: "test",
+			accessToken: nil,
+			eventInformationAvailable: nil,
+			usages: [.vaccination]
+		)
+	}
+
+	static var positiveTestProvider: EventFlow.EventProvider {
+		EventFlow.EventProvider(
+			identifier: "CC",
+			name: "CoronaCheck",
+			unomiURL: URL(string: "https://coronacheck.nl"),
+			eventURL: URL(string: "https://coronacheck.nl"),
+			cmsCertificate: "test",
+			tlsCertificate: "test",
+			accessToken: nil,
+			eventInformationAvailable: nil,
+			usages: [.positiveTest]
+		)
+	}
+
+	static var recoveryProvider: EventFlow.EventProvider {
+		EventFlow.EventProvider(
+			identifier: "CC",
+			name: "CoronaCheck",
+			unomiURL: URL(string: "https://coronacheck.nl"),
+			eventURL: URL(string: "https://coronacheck.nl"),
+			cmsCertificate: "test",
+			tlsCertificate: "test",
+			accessToken: nil,
+			eventInformationAvailable: nil,
+			usages: [.recovery]
+		)
+	}
+
+	static var negativeTestProvider: EventFlow.EventProvider {
+		EventFlow.EventProvider(
+			identifier: "CC",
+			name: "CoronaCheck",
+			unomiURL: URL(string: "https://coronacheck.nl"),
+			eventURL: URL(string: "https://coronacheck.nl"),
+			cmsCertificate: "test",
+			tlsCertificate: "test",
+			accessToken: nil,
+			eventInformationAvailable: nil,
+			usages: [.negativeTest]
+		)
+	}
+}
+
 extension EventFlow.EventResultWrapper {
 	
 	static var fakeComplete: EventFlow.EventResultWrapper {
@@ -90,6 +149,42 @@ extension EventFlow.EventResultWrapper {
 			result: nil
 		)
 	}
+
+	static var fakeVaccinationResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.vaccinationEvent]
+	)
+
+	static var fakeRecoveryResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.recoveryEvent]
+	)
+
+	static var fakePositiveTestResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.positiveTestEvent]
+	)
+
+	static var fakeNegativeTestResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.negativeTestEvent]
+	)
 }
 
 extension RequestToken {
@@ -160,6 +255,456 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 	}
 }
 
+extension RemoteGreenCards.Response {
+
+	static var domesticAndInternationalVaccination: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "vaccination",
+						eventTime: Date(),
+						expirationTime: Date(),
+						validFrom: Date(),
+						doseNumber: 1
+					)
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "vaccination",
+							eventTime: Date(),
+							expirationTime: Date(),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+
+	static var internationalOnly: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: nil,
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "vaccination",
+							eventTime: Date(),
+							expirationTime: Date(),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+
+	static var multipleDCC: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "vaccination",
+						eventTime: Date(),
+						expirationTime: Date(),
+						validFrom: Date(),
+						doseNumber: 2
+					)
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "vaccination",
+							eventTime: Date(),
+							expirationTime: Date(),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential1"
+				),
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "vaccination",
+							eventTime: Date(),
+							expirationTime: Date(),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential2"
+				)
+			]
+		)
+	}
+
+	static var noOrigins: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+
+	static var domesticAndInternationalVaccinationAndRecovery: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "vaccination",
+						eventTime: Date(),
+						expirationTime: Date().addingTimeInterval(30 * days),
+						validFrom: Date(),
+						doseNumber: 1
+					),
+					RemoteGreenCards.Origin(
+						type: "recovery",
+						eventTime: Date(),
+						expirationTime: Date().addingTimeInterval(30 * days),
+						validFrom: Date(),
+						doseNumber: nil
+					)
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "vaccination",
+							eventTime: Date(),
+							expirationTime: Date().addingTimeInterval(30 * days),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential"
+				),
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "recovery",
+							eventTime: Date(),
+							expirationTime: Date().addingTimeInterval(30 * days),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+
+	static var domesticAndInternationalRecovery: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "recovery",
+						eventTime: Date(),
+						expirationTime: Date().addingTimeInterval(30 * days),
+						validFrom: Date(),
+						doseNumber: nil
+					)
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "recovery",
+							eventTime: Date(),
+							expirationTime: Date().addingTimeInterval(30 * days),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+
+	static var domesticAndInternationalExpiredRecovery: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "recovery",
+						eventTime: Date().addingTimeInterval(400 * days * ago),
+						expirationTime: Date().addingTimeInterval(30 * days * ago),
+						validFrom: Date().addingTimeInterval(400 * days * ago),
+						doseNumber: nil
+					)
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "recovery",
+							eventTime: Date(),
+							expirationTime: Date().addingTimeInterval(30 * days),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+
+	static var domesticAndInternationalExpiredRecoveryValidVaccination: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "vaccination",
+						eventTime: Date(),
+						expirationTime: Date().addingTimeInterval(30 * days),
+						validFrom: Date(),
+						doseNumber: 1
+					),
+					RemoteGreenCards.Origin(
+						type: "recovery",
+						eventTime: Date().addingTimeInterval(400 * days * ago),
+						expirationTime: Date().addingTimeInterval(30 * days * ago),
+						validFrom: Date().addingTimeInterval(400 * days * ago),
+						doseNumber: nil
+					)
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "vaccination",
+							eventTime: Date(),
+							expirationTime: Date().addingTimeInterval(30 * days),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential"
+				),
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin(
+							type: "recovery",
+							eventTime: Date(),
+							expirationTime: Date().addingTimeInterval(30 * days),
+							validFrom: Date(),
+							doseNumber: nil
+						)
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+}
+
+extension EventFlow.Identity {
+
+	static var fakeIdentity: EventFlow.Identity {
+		EventFlow.Identity(
+			infix: "",
+			firstName: "Corona",
+			lastName: "Check",
+			birthDateString: "2021-05-16"
+		)
+	}
+}
+
+extension EventFlow.Event {
+
+	static var negativeTestEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "test",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: EventFlow.TestEvent(
+				sampleDateString: "2021-07-01",
+				negativeResult: true,
+				positiveResult: nil,
+				facility: "GGD XL Factory",
+				type: "LP217198-3",
+				name: "Antigen Test",
+				manufacturer: "1213"
+			),
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil
+		)
+	}
+
+	static var positiveTestEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "test",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: EventFlow.TestEvent(
+				sampleDateString: "2021-07-01",
+				negativeResult: nil,
+				positiveResult: true,
+				facility: "GGD XL Factory",
+				type: "LP217198-3",
+				name: "Antigen Test",
+				manufacturer: "1213"
+			),
+			recovery: nil,
+			dccEvent: nil
+		)
+	}
+
+	static var vaccinationEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccination",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: EventFlow.VaccinationEvent(
+				dateString: "2021-05-16",
+				hpkCode: nil,
+				type: nil,
+				manufacturer: "ORG-100030215",
+				brand: "EU/1/20/1528",
+				doseNumber: 1,
+				totalDoses: 2,
+				country: "NLD",
+				completedByMedicalStatement: nil,
+				completedByPersonalStatement: nil,
+				completionReason: nil
+			),
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil
+		)
+	}
+
+	static var recoveryEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccination",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: EventFlow.RecoveryEvent(
+				sampleDate: "2021-07-01",
+				validFrom: "2021-07-12",
+				validUntil: "2022-12-31"
+			),
+			dccEvent: nil
+		)
+	}
+}
+
+extension SignedResponse {
+	static var fakeResponse: SignedResponse {
+		SignedResponse(
+			payload: "payload",
+			signature: "signature"
+		)
+	}
+}
+
+extension TestResult {
+
+	static var negativeResult: TestResult {
+		TestResult(
+			unique: "test",
+			sampleDate: "2021-01-01T12:00:00",
+			testType: "PCR",
+			negativeResult: true,
+			holder: TestHolderIdentity(
+				firstNameInitial: "T",
+				lastNameInitial: "D",
+				birthDay: "12",
+				birthMonth: "12"
+			)
+		)
+	}
+}
+
+extension EuCredentialAttributes.TestEntry {
+
+	static var negativeTest: EuCredentialAttributes.TestEntry {
+		EuCredentialAttributes.TestEntry(
+			certificateIdentifier: "1234",
+			country: "NL",
+			diseaseAgentTargeted: "840539006",
+			issuer: "Ministry of Health Welfare and Sport",
+			marketingAuthorizationHolder: "1213",
+			name: "fake negativeTest",
+			sampleDate: "2021-11-17T16:00:00+01:00",
+			testResult: "260415000",
+			testCenter: "Facility approved by the State of The Netherlands",
+			typeOfTest: "LP217198-3"
+		)
+	}
+}
+
+extension EuCredentialAttributes.Vaccination {
+
+	static var vaccination: EuCredentialAttributes.Vaccination {
+		EuCredentialAttributes.Vaccination(
+			certificateIdentifier: "1234",
+			country: "NLD",
+			diseaseAgentTargeted: "840539006",
+			doseNumber: 2,
+			dateOfVaccination: "2021-06-01",
+			issuer: "Test",
+			marketingAuthorizationHolder: "Test",
+			medicalProduct: "Test",
+			totalDose: 2,
+			vaccineOrProphylaxis: "test"
+		)
+	}
+}
+
+extension EuCredentialAttributes.RecoveryEntry {
+	static var recovery: EuCredentialAttributes.RecoveryEntry {
+		EuCredentialAttributes.RecoveryEntry(
+			certificateIdentifier: "1234",
+			country: "NL",
+			diseaseAgentTargeted: "840539006",
+			expiresAt: "2022-12-31",
+			firstPositiveTestDate: "2021-07-01",
+			issuer: "Facility approved by the State of The Netherlands",
+			validFrom: "2021-07-12"
+		)
+	}
+}
+
 extension UIImage {
 
 	static func withColor(_ color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
@@ -170,5 +715,52 @@ extension UIImage {
 			rendererContext.fill(CGRect(origin: .zero, size: size))
 		}
 		return image
+	}
+}
+
+extension TVSAuthorizationToken {
+	
+	static var test: TVSAuthorizationToken = .init(idTokenString: "test", expiration: now.addingTimeInterval(5 * minutes * fromNow))
+}
+
+extension EventFlow.EventInformationAvailable {
+	static var fakeInformationIsAvailable: EventFlow.EventInformationAvailable {
+		EventFlow.EventInformationAvailable(
+			providerIdentifier: "CC",
+			protocolVersion: "3.0",
+			informationAvailable: true
+		)
+	}
+}
+
+extension EventFlow.AccessToken {
+	static var fakeTestToken: EventFlow.AccessToken {
+		EventFlow.AccessToken(
+			providerIdentifier: "CC",
+			unomiAccessToken: "unomi test",
+			eventAccessToken: "event test"
+		)
+	}
+}
+
+extension EuCredentialAttributes {
+	static var fakeVaccination: EuCredentialAttributes {
+		EuCredentialAttributes(
+			credentialVersion: 1,
+			digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate(
+				dateOfBirth: "2021-06-01",
+				name: EuCredentialAttributes.Name(
+					familyName: "Corona",
+					standardisedFamilyName: "CORONA",
+					givenName: "Check",
+					standardisedGivenName: "CHECK"
+				),
+				schemaVersion: "1.0.0",
+				vaccinations: [ EuCredentialAttributes.Vaccination.vaccination]
+			),
+			expirationTime: Date().timeIntervalSince1970 + 3600,
+			issuedAt: Date().timeIntervalSince1970,
+			issuer: "NL"
+		)
 	}
 }

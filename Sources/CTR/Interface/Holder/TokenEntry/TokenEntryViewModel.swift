@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length
+// swiftlint:disable type_body_length file_length
 
 import UIKit
 
@@ -347,14 +347,14 @@ class TokenEntryViewModel {
 			provider: provider,
 			token: requestToken,
 			code: verificationCode,
-			completion: { [weak self] (result: Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) in
+			completion: { [weak self] (result: Result<(EventFlow.EventResultWrapper, SignedResponse, URLResponse), ServerError>) in
 
 				guard let self = self else { return }
 				self.fieldErrorMessage = nil
 
 				switch result {
 					case let .success(remoteEvent):
-						self.handleSuccessFetchResult(remoteEvent, verificationCode: verificationCode)
+						self.handleSuccessFetchResult(remoteEvent, verificationCode: verificationCode, provider: provider)
 
 					case let .failure(.error(statusCode, serverResponse, networkError)),
 						 let .failure(.provider(_, statusCode, serverResponse, networkError)):
@@ -381,12 +381,12 @@ class TokenEntryViewModel {
 		)
 	}
 
-	func handleSuccessFetchResult(_ remoteEvent: RemoteEvent, verificationCode: String?) {
+	func handleSuccessFetchResult(_ remoteEvent: (EventFlow.EventResultWrapper, SignedResponse, URLResponse), verificationCode: String?, provider: TestProvider) {
 
 		switch remoteEvent.0.status {
 			case .complete, .pending:
 				self.screenHasCompleted = true
-				self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
+				self.coordinator?.userWishesToMakeQRFromNegativeTest(RemoteEvent(wrapper: remoteEvent.0, signedResponse: remoteEvent.1))
 			case .verificationRequired:
 				if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
 					// the user has just submitted a wrong verification code & should see an error message
@@ -400,9 +400,19 @@ class TokenEntryViewModel {
 				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
 			default:
-				self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
-				self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
-				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+				if let networkError = NetworkError.inspect(response: remoteEvent.2) {
+					self.displayError(ServerError.provider(
+							provider: provider.identifier,
+							statusCode: remoteEvent.2.httpStatusCode,
+							response: nil,
+							error: networkError
+						))
+				} else {
+
+					self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
+					self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
+					self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+				}
 		}
 	}
 

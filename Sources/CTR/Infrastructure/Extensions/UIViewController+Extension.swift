@@ -11,9 +11,34 @@ extension UIViewController {
 	
 	/// Set up translucent navigation bar. By default, navigation bar has an opaque background
 	func setupTranslucentNavigationBar() {
-		navigationController?.navigationBar.isTranslucent = true
-		navigationController?.navigationBar.backgroundColor = .clear
-		navigationController?.navigationBar.barTintColor = .clear
+		if #available(iOS 15.0, *) {
+			let appearance = UINavigationBarAppearance()
+			appearance.configureWithTransparentBackground()
+			navigationController?.navigationBar.standardAppearance = appearance
+			navigationController?.navigationBar.scrollEdgeAppearance = appearance
+		} else {
+			navigationController?.navigationBar.isTranslucent = true
+			navigationController?.navigationBar.backgroundColor = .clear
+			navigationController?.navigationBar.barTintColor = .clear
+		}
+	}
+	
+	/// Set the navigation bar's title color. For use with iOS 15.
+	/// - Parameters:
+	///   - color: The color to apply
+	func overrideNavigationBarTitleColor(with color: UIColor) {
+		
+		let textAttributes = [
+			NSAttributedString.Key.foregroundColor: color,
+			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
+		]
+		navigationController?.navigationBar.titleTextAttributes = textAttributes
+		navigationController?.navigationBar.tintColor = color
+		
+		if #available(iOS 15.0, *) {
+			navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: color]
+			navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: color]
+		}
 	}
 	
 	/// Presents a view controller as bottom sheet modal
