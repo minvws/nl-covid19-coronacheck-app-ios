@@ -158,6 +158,46 @@ class VerifierStartViewModelTests: XCTestCase {
 		expect(self.sut.showError) == true
 	}
 
+	func test_primaryButtonTapped_locked_verificationPolicyEnabled() {
+		
+		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		riskLevelManagerSpy.stubbedState = .low
+		scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
+			userSettings: userSettingsSpy
+		)
+		
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == false
+	}
+
+	func test_primaryButtonTapped_locked_verificationPolicyDisabled() {
+		
+		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		riskLevelManagerSpy.stubbedState = .low
+		scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
+			userSettings: userSettingsSpy
+		)
+		
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
+	}
+	
 	func test_showInstructionsButtonTapped() {
 
 		// Given
