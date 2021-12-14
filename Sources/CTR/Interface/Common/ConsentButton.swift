@@ -70,6 +70,13 @@ final class ConsentButton: UIControl {
 
 	// MARK: - Private
 	
+	/// When button height is made smaller, title label will be scrollable
+	private let scrollView: UIScrollView = {
+		let scrollView = UIScrollView()
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		return scrollView
+	}()
+	
 	private let titleLabel: Label = {
 		return Label(subhead: nil).multiline()
 	}()
@@ -93,13 +100,17 @@ final class ConsentButton: UIControl {
 		addTarget(self, action: #selector(touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])
 		addTarget(self, action: #selector(toggle), for: .touchUpInside)
 		addTarget(self, action: #selector(touchDownAnimation), for: .touchDown)
+		
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapScrollView))
+		scrollView.addGestureRecognizer(tapGesture)
 	}
 
 	/// Setup the view hierarchy
 	private func setupViewHierarchy() {
 
 		addSubview(iconImageView)
-		addSubview(titleLabel)
+		addSubview(scrollView)
+		scrollView.addSubview(titleLabel)
 	}
 
 	/// Setup all the constraints
@@ -117,10 +128,22 @@ final class ConsentButton: UIControl {
 			iconImageView.widthAnchor.constraint(equalToConstant: ViewTraits.Dimension.icon),
 			iconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.Dimension.icon),
 			
-			titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: ViewTraits.Spacing.iconToLabel),
-			titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.Margin.horizontal),
-			titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.vertical),
-			titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Margin.vertical)
+			scrollView.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: ViewTraits.Spacing.iconToLabel),
+			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.Margin.horizontal),
+			scrollView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.vertical),
+			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Margin.vertical),
+			
+			titleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+			titleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+			titleLabel.topAnchor.constraint(equalTo: scrollView.topAnchor),
+			titleLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			titleLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+			
+			{
+				let constraint = scrollView.heightAnchor.constraint(equalTo: titleLabel.heightAnchor)
+				constraint.priority = .defaultLow
+				return constraint
+			}()
 		])
 	}
 
@@ -153,6 +176,15 @@ final class ConsentButton: UIControl {
 		UIButton.animate(withDuration: ViewTraits.Animation.duration, animations: {
 			self.transform = CGAffineTransform.identity
 		})
+	}
+	
+	@objc private func tapScrollView() {
+		
+		sendActions(for: .touchDown)
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+			self.sendActions(for: .touchUpInside)
+		}
 	}
 	
 	// MARK: Public Access
