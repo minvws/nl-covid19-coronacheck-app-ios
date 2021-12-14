@@ -56,7 +56,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.title) == L.verifierResultAccessTitle()
+		expect(self.sut.sceneView.title) == L.verifier_result_access_title_lowrisk()
 		expect(self.sut.preferredStatusBarStyle) == .default
 		
 		// Snapshot
@@ -141,7 +141,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.title) == L.verifierResultAccessTitle()
+		expect(self.sut.sceneView.title) == L.verifier_result_access_title_lowrisk()
 		expect(self.sut.preferredStatusBarStyle) == .default
 		
 		// Snapshot

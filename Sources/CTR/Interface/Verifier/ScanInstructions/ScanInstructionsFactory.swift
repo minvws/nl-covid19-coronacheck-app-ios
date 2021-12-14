@@ -78,13 +78,12 @@ struct ScanInstructionsFactory: ScanInstructionsFactoryProtocol {
 		
 		if Services.featureFlagManager.isVerificationPolicyEnabled() {
 			pages[3] = ScanInstructionsPage(
-				title: L.scan_instructions_4_title_2g(),
-				message: L.scan_instructions_4_description_2g(),
+				title: L.scan_instructions_4_title_2G(),
+				message: L.scan_instructions_4_description_2G(),
 				animationName: ScanInstructionsStep.verificationPoliciyAccess.animationName,
 				step: .verificationPoliciyAccess
 			)
 		}
-		
 		return pages
 	}
 }
