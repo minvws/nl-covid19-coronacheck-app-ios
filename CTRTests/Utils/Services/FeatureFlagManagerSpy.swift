@@ -10,15 +10,22 @@ import XCTest
 
 class FeatureFlagManagerSpy: FeatureFlagManaging {
 
-	required init() {}
+    required init(versionSupplier: AppVersionSupplierProtocol?) {}
 
-	var invokedIsVerificationPolicyEnabled = false
-	var invokedIsVerificationPolicyEnabledCount = 0
-	var stubbedIsVerificationPolicyEnabledResult: Bool! = false
+    var invokedIsVerificationPolicyEnabled = false
+    var invokedIsVerificationPolicyEnabledCount = 0
+    var stubbedIsVerificationPolicyEnabledResult: Bool! = false
 
-	func isVerificationPolicyEnabled() -> Bool {
-		invokedIsVerificationPolicyEnabled = true
-		invokedIsVerificationPolicyEnabledCount += 1
-		return stubbedIsVerificationPolicyEnabledResult
-	}
+    func isVerificationPolicyEnabled() -> Bool {
+        invokedIsVerificationPolicyEnabled = true
+        invokedIsVerificationPolicyEnabledCount += 1
+        return stubbedIsVerificationPolicyEnabledResult
+    }
+}
+
+extension FeatureFlagManagerSpy {
+    
+    convenience init() {
+        self.init(versionSupplier: AppVersionSupplier())
+    }
 }
