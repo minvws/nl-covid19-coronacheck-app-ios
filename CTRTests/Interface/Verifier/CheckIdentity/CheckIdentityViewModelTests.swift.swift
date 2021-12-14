@@ -17,12 +17,17 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	private var verifierCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 	
 	override func setUp() {
 		super.setUp()
 		
 		verifierCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		riskLevelManagerSpy = RiskLevelManagerSpy()
+		
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		Services.use(featureFlagManagerSpy)
 		
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
@@ -112,6 +117,44 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .demo(.high)
+	}
+	
+	func test_showVerifiedAccess_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
+		// Given
+		riskLevelManagerSpy.stubbedState = .high
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		sut = CheckIdentityViewModel(
+			coordinator: verifierCoordinatorDelegateSpy,
+			verificationDetails: MobilecoreVerificationDetails(),
+			isDeepLinkEnabled: true,
+			riskLevelManager: riskLevelManagerSpy
+		)
+		
+		// When
+		sut.showVerifiedAccess()
+		
+		// Then
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .verified(.low)
+	}
+	
+	func test_showVerifiedAccess_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
+		// Given
+		riskLevelManagerSpy.stubbedState = .high
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		let details = MobilecoreVerificationDetails()
+		details.isSpecimen = "1"
+		sut = CheckIdentityViewModel(
+			coordinator: verifierCoordinatorDelegateSpy,
+			verificationDetails: details,
+			isDeepLinkEnabled: true,
+			riskLevelManager: riskLevelManagerSpy
+		)
+		
+		// When
+		sut.showVerifiedAccess()
+		
+		// Then
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .demo(.low)
 	}
 	
 	func test_showDccInfo_shouldDisplayVerified() {
