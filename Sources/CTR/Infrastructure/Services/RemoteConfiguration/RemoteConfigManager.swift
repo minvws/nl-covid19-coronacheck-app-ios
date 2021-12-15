@@ -18,7 +18,8 @@ protocol RemoteConfigManaging: AnyObject {
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
 		reachability: ReachabilityProtocol?,
-		networkManager: NetworkManaging
+		networkManager: NetworkManaging,
+		secureUserSettings: SecureUserSettingsProtocol
 	)
 
 	func appendUpdateObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
@@ -37,18 +38,14 @@ protocol RemoteConfigManaging: AnyObject {
 class RemoteConfigManager: RemoteConfigManaging {
 	typealias ObserverToken = UUID
 
-	// MARK: - Types
-
-	private struct Constants {
-		static let keychainService = "RemoteConfigManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
-	}
-
 	// MARK: - Vars
 
 	private(set) var isLoading = false
 
-	@Keychain(name: "storedConfiguration", service: Constants.keychainService, clearOnReinstall: false)
-	private(set) var storedConfiguration: RemoteConfiguration = .default // swiftlint:disable:this let_var_whitespace
+	private(set) var storedConfiguration: RemoteConfiguration {
+		get { secureUserSettings.storedConfiguration }
+		set { secureUserSettings.storedConfiguration = newValue }
+	}
 	private var configUpdateObservers = [ObserverToken: (RemoteConfiguration, Data, URLResponse) -> Void]()
 	private var configReloadObservers = [ObserverToken: (RemoteConfiguration, Data, URLResponse) -> Void]()
 
@@ -58,6 +55,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 	private let userSettings: UserSettingsProtocol
 	private let networkManager: NetworkManaging
 	private let reachability: ReachabilityProtocol?
+	private let secureUserSettings: SecureUserSettingsProtocol
 	
 	// MARK: - Setup
 
@@ -65,12 +63,15 @@ class RemoteConfigManager: RemoteConfigManaging {
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
 		reachability: ReachabilityProtocol?,
-		networkManager: NetworkManaging = Services.networkManager) {
+		networkManager: NetworkManaging = Services.networkManager,
+		secureUserSettings: SecureUserSettingsProtocol
+	) {
 
 		self.now = now
 		self.userSettings = userSettings
 		self.reachability = reachability
 		self.networkManager = networkManager
+		self.secureUserSettings = secureUserSettings
 
 		registerTriggers()
 	}

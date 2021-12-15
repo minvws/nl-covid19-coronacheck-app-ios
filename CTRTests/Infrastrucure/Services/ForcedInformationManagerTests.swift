@@ -14,15 +14,18 @@ class ForcedInformationManagerTests: XCTestCase {
 	// MARK: - Setup
 	var sut: ForcedInformationManager!
 	var featureFlagManagerSpy: FeatureFlagManagerSpy!
+	private var secureUserSettingsSpy: SecureUserSettingsSpy!
 	
 	override func setUp() {
+		super.setUp()
+		secureUserSettingsSpy = SecureUserSettingsSpy()
+		secureUserSettingsSpy.stubbedForcedInformationData = .empty
 		
 		featureFlagManagerSpy = FeatureFlagManagerSpy()
 		Services.use(featureFlagManagerSpy)
 		
-		sut = ForcedInformationManager()
+		sut = ForcedInformationManager(secureUserSettings: secureUserSettingsSpy)
 		sut.factory = HolderForcedInformationFactory()
-		super.setUp()
 	}
 	
 	override func tearDown() {
@@ -82,7 +85,7 @@ class ForcedInformationManagerTests: XCTestCase {
 		sut.consentGiven()
 		
 		// Then
-		expect(self.sut.needsUpdating) == false
+		expect(self.secureUserSettingsSpy.invokedForcedInformationData?.lastSeenVersion) == sut.factory?.information.version
 	}
 	
 	func test_getUpdatePage_holder() {

@@ -8,9 +8,15 @@
 import XCTest
 @testable import CTR
 
+extension RiskLevelManagerSpy {
+	convenience init() {
+		self.init(secureUserSettings: SecureUserSettingsSpy())
+	}
+}
+
 class RiskLevelManagerSpy: RiskLevelManaging {
 
-	required init() {}
+	required init(secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedStateGetter = false
 	var invokedStateGetterCount = 0

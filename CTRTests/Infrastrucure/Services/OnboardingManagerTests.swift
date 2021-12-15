@@ -11,11 +11,15 @@ import XCTest
 class OnboardingManagerTests: XCTestCase {
 
 	// MARK: - Setup
-	var sut = OnboardingManager()
-
+	var sut = OnboardingManager(secureUserSettings: SecureUserSettings())
+	var secureUserSettingsSpy: SecureUserSettingsSpy!
+	
 	override func setUp() {
 
-		sut = OnboardingManager()
+		secureUserSettingsSpy = SecureUserSettingsSpy()
+		secureUserSettingsSpy.stubbedOnboardingData = .empty
+		
+		sut = OnboardingManager(secureUserSettings: secureUserSettingsSpy)
 		super.setUp()
 	}
 
@@ -58,10 +62,8 @@ class OnboardingManagerTests: XCTestCase {
 		// When
 		sut.finishOnboarding()
 
-		let value = sut.needsOnboarding
-
 		// Then
-		XCTAssertFalse(value, "needs onboarding should be false")
+		XCTAssertFalse(secureUserSettingsSpy.invokedOnboardingData?.needsOnboarding ?? true, "needs onboarding should be false")
 	}
 
 	func testConsentGiven() {
@@ -71,9 +73,7 @@ class OnboardingManagerTests: XCTestCase {
 		// When
 		sut.consentGiven()
 
-		let value = sut.needsConsent
-
 		// Then
-		XCTAssertFalse(value, "needs consent should be false")
+		XCTAssertFalse(secureUserSettingsSpy.invokedOnboardingData?.needsConsent ?? true, "needs consent should be false")
 	}
 }

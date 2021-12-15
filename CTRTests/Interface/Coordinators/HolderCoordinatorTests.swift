@@ -73,12 +73,7 @@ class HolderCoordinatorTests: XCTestCase {
 		forcedInformationSpy.stubbedNeedsUpdating = false
 		sut.forcedInformationManager = forcedInformationSpy
 
-		let remoteConfigManagerSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		let remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
 		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default

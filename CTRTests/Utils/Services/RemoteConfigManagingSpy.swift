@@ -8,9 +8,15 @@
 import XCTest
 @testable import CTR
 
+extension RemoteConfigManagingSpy {
+	convenience init() {
+		self.init(now: { now }, userSettings: UserSettingsSpy(), reachability: ReachabilitySpy(), networkManager: NetworkSpy(), secureUserSettings: SecureUserSettings())
+	}
+}
+
 class RemoteConfigManagingSpy: RemoteConfigManaging {
 
-	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, reachability: ReachabilityProtocol?, networkManager: NetworkManaging) {}
+	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, reachability: ReachabilityProtocol?, networkManager: NetworkManaging, secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedStoredConfigurationGetter = false
 	var invokedStoredConfigurationGetterCount = 0

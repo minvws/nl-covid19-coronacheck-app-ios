@@ -314,12 +314,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		let walletSpy = WalletManagerSpy()
 		Services.use(walletSpy)
-		let remoteConfigSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		let remoteConfigSpy = RemoteConfigManagingSpy()
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		Services.use(remoteConfigSpy)
 		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(
@@ -370,12 +365,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		
 		let walletSpy = WalletManagerSpy()
 		Services.use(walletSpy)
-		let remoteConfigSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		let remoteConfigSpy = RemoteConfigManagingSpy()
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		Services.use(remoteConfigSpy)
 		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(

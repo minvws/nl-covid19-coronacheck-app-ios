@@ -8,9 +8,15 @@
 import XCTest
 @testable import CTR
 
+extension OnboardingManagerSpy {
+	convenience init() {
+		self.init(secureUserSettings: SecureUserSettings())
+	}
+}
+
 class OnboardingManagerSpy: OnboardingManaging {
 
-	required init() {}
+	required init(secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedNeedsOnboardingGetter = false
 	var invokedNeedsOnboardingGetterCount = 0

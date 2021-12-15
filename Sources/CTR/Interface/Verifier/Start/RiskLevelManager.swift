@@ -10,7 +10,7 @@ import Foundation
 protocol RiskLevelManaging: AnyObject {
 	var state: RiskLevel? { get }
 	
-	init()
+	init(secureUserSettings: SecureUserSettingsProtocol)
 	func update(riskLevel: RiskLevel?)
 	func appendObserver(_ observer: @escaping (RiskLevel?) -> Void) -> RiskLevelManager.ObserverToken
 	func removeObserver(token: RiskLevelManager.ObserverToken)
@@ -19,15 +19,6 @@ protocol RiskLevelManaging: AnyObject {
 
 final class RiskLevelManager: RiskLevelManaging {
 	typealias ObserverToken = UUID
-	
-	// MARK: - Types
-
-	private struct Constants {
-		static let keychainService: String = {
-			guard !ProcessInfo.processInfo.isTesting else { return UUID().uuidString }
-			return "RiskLevelManager\(Configuration().getEnvironment())"
-		}()
-	}
 	
 	// MARK: - Vars
 	
@@ -40,12 +31,21 @@ final class RiskLevelManager: RiskLevelManaging {
 			notifyObservers()
 		}
 	}
+	
+	fileprivate var keychainRiskLevel: RiskLevel? {
+		get { secureUserSettings.riskLevel }
+		set { secureUserSettings.riskLevel = newValue }
+	}
+
 	private var observers = [ObserverToken: (RiskLevel?) -> Void]()
 	
-	@Keychain(name: "riskLevel", service: Constants.keychainService, clearOnReinstall: false)
-	fileprivate var keychainRiskLevel: RiskLevel? = .none // swiftlint:disable:this let_var_whitespace
+	// MARK: - Dependencies
 	
-	required init() {}
+	private let secureUserSettings: SecureUserSettingsProtocol
+	
+	required init(secureUserSettings: SecureUserSettingsProtocol) {
+		self.secureUserSettings = secureUserSettings
+	}
 	
 	func update(riskLevel: RiskLevel?) {
 		state = riskLevel
