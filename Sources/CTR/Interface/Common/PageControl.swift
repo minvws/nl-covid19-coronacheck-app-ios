@@ -17,10 +17,11 @@ final class PageControl: BaseView {
 	private enum ViewTraits {
 		
 		enum Size {
-			static let indicator: CGFloat = 10
+            static let deselected: CGFloat = 3
+			static let selected: CGFloat = 7
 		}
 		enum Spacing {
-			static let indicator: CGFloat = 8
+			static let indicator: CGFloat = 13
 		}
 		enum Scale {
 			static let indicator: CGFloat = 1.25
@@ -39,9 +40,9 @@ final class PageControl: BaseView {
 	private var indicators: [UIView] = []
 	private let stackView: UIStackView = {
 		let stackView = UIStackView()
-		stackView.alignment = .fill
+		stackView.alignment = .center
 		stackView.axis = .horizontal
-		stackView.distribution = .fillEqually
+		stackView.distribution = .equalSpacing
 		stackView.spacing = ViewTraits.Spacing.indicator
 		return stackView
 	}()
@@ -62,12 +63,6 @@ final class PageControl: BaseView {
 		backgroundColor = .clear
 	}
 	
-	override func setupViewHierarchy() {
-		super.setupViewHierarchy()
-		
-		addSubview(stackView)
-	}
-	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
@@ -84,9 +79,9 @@ final class PageControl: BaseView {
 	}
 	
 	override var intrinsicContentSize: CGSize {
-		let height: CGFloat = ViewTraits.Size.indicator
+		let height: CGFloat = ViewTraits.Size.selected
 		let count = CGFloat(numberOfPages)
-		let width: CGFloat = (count * ViewTraits.Size.indicator) + (count - 1) * ViewTraits.Spacing.indicator
+		let width: CGFloat = (count * ViewTraits.Size.deselected) + (count - 1) * ViewTraits.Spacing.indicator
 		return CGSize(width: width, height: height)
 	}
 }
@@ -96,8 +91,14 @@ private extension PageControl {
 	func addRoundIndicator(isSelected: Bool) -> UIView {
 		let indicator = UIView()
 		indicator.backgroundColor = isSelected ? ViewTraits.Color.selected : ViewTraits.Color.deselected
-		indicator.frame = CGRect(origin: .zero, size: CGSize(width: ViewTraits.Size.indicator, height: ViewTraits.Size.indicator))
-		indicator.layer.cornerRadius = indicator.bounds.height / 2
+        indicator.layer.cornerRadius = ViewTraits.Size.deselected / 2
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            indicator.widthAnchor.constraint(equalToConstant: ViewTraits.Size.deselected),
+            indicator.heightAnchor.constraint(equalToConstant: ViewTraits.Size.deselected)
+        ])
+        
 		return indicator
 	}
 	
@@ -113,8 +114,10 @@ private extension PageControl {
 		guard currentPageIndex + 1 < numberOfPages else { return }
 		currentPageIndex += 1
 		let currentIndicator = indicators[currentPageIndex]
+        let previousIndicator = indicators[currentPageIndex - 1]
 		UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
 			currentIndicator.backgroundColor = ViewTraits.Color.selected
+            previousIndicator.backgroundColor = ViewTraits.Color.deselected
 			currentIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.indicator, y: ViewTraits.Scale.indicator)
 		}, completion: { finished in
 			if finished {
@@ -131,6 +134,7 @@ private extension PageControl {
 		let previousIndicator = indicators[currentPageIndex - 1]
 		UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
 			currentIndicator.backgroundColor = ViewTraits.Color.deselected
+            previousIndicator.backgroundColor = ViewTraits.Color.selected
 			previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.indicator, y: ViewTraits.Scale.indicator)
 		}, completion: { finished in
 			if finished {
