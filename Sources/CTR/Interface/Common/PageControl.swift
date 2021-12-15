@@ -36,7 +36,7 @@ final class PageControl: BaseView {
 		}
 	}
 	
-	private var currentPageIndex: Int = 0
+	private(set) var currentPageIndex: Int = 0
 	
 	private var indicators: [UIView] = []
 	private let stackView: UIStackView = {
@@ -51,7 +51,10 @@ final class PageControl: BaseView {
 	/// Set number of pages. Indicators shown when more than one page is set.
 	var numberOfPages: Int = 0 {
 		didSet {
-			guard numberOfPages > 1 else { return }
+			let showIndicators = numberOfPages > 1
+			isHidden = !showIndicators
+			
+			guard showIndicators else { return }
 			if currentPageIndex >= numberOfPages {
 				currentPageIndex = 0
 			}
@@ -111,6 +114,8 @@ private extension PageControl {
 	}
 	
 	func addIndicators(for count: Int) {
+		stackView.removeArrangedSubviews()
+		
 		for index in 0..<count {
 			let indicator = addRoundIndicator(isSelected: index <= currentPageIndex)
 			stackView.addArrangedSubview(indicator)
