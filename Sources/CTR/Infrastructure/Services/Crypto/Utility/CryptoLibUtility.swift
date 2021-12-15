@@ -39,7 +39,7 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	func checkFile(_ file: CryptoLibUtility.File)
 
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: (() -> Void)?,
 		completion: ((Result<Bool, ServerError>) -> Void)?)
 
@@ -110,11 +110,11 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	func registerTriggers() {
 
 		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 
 		reachability?.whenReachable = { [weak self] _ in
-			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 		try? reachability?.startNotifier()
 	}
@@ -183,7 +183,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	}
 
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: (() -> Void)?,
 		completion: ((Result<Bool, ServerError>) -> Void)?) {
 
@@ -193,7 +193,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		let newValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
 			configuration: Services.remoteConfigManager.storedConfiguration,
 			lastFetchedTimestamp: userSettings.issuerKeysFetchedTimestamp,
-			isAppFirstLaunch: isAppFirstLaunch,
+			isAppLaunching: isAppLaunching,
 			now: now
 		)
 

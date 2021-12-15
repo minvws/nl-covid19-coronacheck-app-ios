@@ -27,7 +27,7 @@ protocol RemoteConfigManaging: AnyObject {
 
 	func removeObserver(token: ObserverToken)
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: @escaping () -> Void,
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
 
@@ -79,11 +79,11 @@ class RemoteConfigManager: RemoteConfigManaging {
 	func registerTriggers() {
 
 		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 
 		reachability?.whenReachable = { [weak self] _ in
-			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 		try? reachability?.startNotifier()
 	}
@@ -140,7 +140,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 	///						- RemoteConfiguration: the latest configuration.
 	///
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: @escaping () -> Void,
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
 		guard !isLoading else { return }
@@ -149,7 +149,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 		let newValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
 			configuration: storedConfiguration,
 			lastFetchedTimestamp: userSettings.configFetchedTimestamp,
-			isAppFirstLaunch: isAppFirstLaunch,
+			isAppLaunching: isAppLaunching,
 			now: now
 		)
 
@@ -167,7 +167,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 			default: break
 		}
 
-		// Note: the `isAppFirstLaunch` parameter is respected in calculating the `newValidity`
+		// Note: the `isAppLaunching` parameter is respected in calculating the `newValidity`
 		// and thus the `guard` will not trigger during first launch
 		//
 		// This also means that during first launch, `reloadObservers` will always be called back.

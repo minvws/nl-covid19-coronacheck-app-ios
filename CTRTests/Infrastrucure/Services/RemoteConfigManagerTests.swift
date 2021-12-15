@@ -53,7 +53,7 @@ class RemoteConfigManagerTests: XCTestCase {
 			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
 
 			// When
-			self.sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
+			self.sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 				//
 			}, completion: { state in
 
@@ -72,7 +72,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		waitUntil(timeout: .seconds(10)) { done in
 			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 			// When
-			self.sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
+			self.sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 				//
 			}, completion: { state in
 
@@ -91,7 +91,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		var hitCallback = false
 
 		// Act
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 			hitCallback = true
 		}, completion: { _ in
 			// should be true by the time this completion is called:
@@ -112,7 +112,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		var didNotHitCallback = true
 
 		// Act
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 			didNotHitCallback = false
 		}, completion: { _ in })
 
@@ -130,7 +130,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		var didNotHitCallback = true
 
 		// Act 
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 			didNotHitCallback = false
 		}, completion: { _ in })
 
@@ -162,7 +162,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
 		var didCallTTLCallback: Bool = false
 		sut.update(
-			isAppFirstLaunch: false,
+			isAppLaunching: false,
 			immediateCallbackIfWithinTTL: { didCallTTLCallback = true },
 			completion: { result in
 			receivedResult = result
@@ -201,7 +201,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
 		var didCallTTLCallback: Bool = false
 		sut.update(
-			isAppFirstLaunch: false,
+			isAppLaunching: false,
 			immediateCallbackIfWithinTTL: { didCallTTLCallback = true },
 			completion: { result in
 			receivedResult = result
@@ -251,7 +251,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
 		var didCallTTLCallback: Bool = false
 		sut.update(
-			isAppFirstLaunch: true,
+			isAppLaunching: true,
 			immediateCallbackIfWithinTTL: { didCallTTLCallback = true },
 			completion: { result in
 			receivedResult = result
@@ -300,7 +300,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
 		var didCallTTLCallback: Bool = false
 		sut.update(
-			isAppFirstLaunch: true,
+			isAppLaunching: true,
 			immediateCallbackIfWithinTTL: { didCallTTLCallback = true },
 			completion: { result in
 			receivedResult = result
@@ -325,8 +325,8 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Arrange
 
 		// Act
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 
 		// Assert
 		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 1
@@ -344,7 +344,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Act
 		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
 
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { result in
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { result in
 			receivedResult = result
 		})
 
@@ -363,7 +363,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 
 		// Act
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 
 		// Assert
 		expect(self.userSettingsSpy.invokedConfigFetchedTimestamp) == now.timeIntervalSince1970
@@ -390,7 +390,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Act
 		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
 
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { result in
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { result in
 			receivedResult = result
 		})
 
@@ -428,7 +428,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Act
 		var receivedResult: Result<(Bool, RemoteConfiguration), ServerError>?
 
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { result in
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { result in
 			receivedResult = result
 		})
 
