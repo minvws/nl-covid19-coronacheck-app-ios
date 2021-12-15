@@ -18,11 +18,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	func navigateToScan()
 
-	func navigateToScanInstruction()
-
-	/// Navigate to the scan result
-	/// - Parameter attributes: the scanned result
-	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult)
+	func navigateToScanInstruction(allowSkipInstruction: Bool)
 
 	/// Display content
 	/// - Parameters:
@@ -33,8 +29,18 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutClockDeviation()
 	
 	func navigateToVerifiedInfo()
+
+	func userWishesToOpenScanLog()
 	
 	func userWishesToLaunchThirdPartyScannerApp()
+	
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails)
+	
+	func navigateToVerifiedAccess(_ verifiedType: VerifiedType)
+	
+	func navigateToDeniedAccess()
+	
+	func userWishesToSetRiskLevel(shouldSelectSetting: Bool)
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -44,11 +50,20 @@ class VerifierCoordinator: SharedCoordinator {
 	
 	private var thirdPartyScannerApp: (name: String, returnURL: URL)?
 
+	private var userSettings: UserSettingsProtocol = UserSettings()
+
 	// Designated starter method
 	override func start() {
-
-		handleOnboarding(factory: onboardingFactory) {
+		
+		handleOnboarding(
+			onboardingFactory: onboardingFactory,
+			forcedInformationFactory: VerifierForcedInformationFactory()
+		) {
+			
 			setupMenu()
+			Services.scanLogManager.deleteExpiredScanLogEntries(
+				seconds: Services.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
+			)
 			navigateToVerifierWelcome()
 		}
 	}
@@ -75,6 +90,10 @@ class VerifierCoordinator: SharedCoordinator {
 				else {
 					return true
 				}
+			
+				// Is the user currently permitted to scan?
+				guard Services.scanLockManager.state == .unlocked && Services.riskLevelManager.state != nil
+				else { return true } // handled (but ignored)
 				
 				thirdPartyScannerApp = (name: matchingMetadata.name, returnURL: returnURL)
 				
@@ -97,13 +116,16 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	/// Navigate to verifier welcome scene
 	func navigateToVerifierWelcome() {
 
-		if let existingStartViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierStartViewController }) {
+		if sidePanel?.selectedViewController == dashboardNavigationController,
+			let existingStartViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierStartViewController }) {
 			dashboardNavigationController?.popToViewController(existingStartViewController, animated: true)
 		} else {
 
 			let dashboardViewController = VerifierStartViewController(
 				viewModel: VerifierStartViewModel(
-					coordinator: self
+					coordinator: self,
+					scanLockProvider: Services.scanLockManager,
+					riskLevelProvider: Services.riskLevelManager
 				)
 			)
 
@@ -119,19 +141,42 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				navigateToScan()
 
 			case .userTappedProceedToScanInstructions:
-				navigateToScanInstruction()
+				navigateToScanInstruction(allowSkipInstruction: false)
+				
+			case .userTappedProceedToInstructionsOrRiskSetting:
+				navigateToScanInstruction(allowSkipInstruction: true)
 		}
 	}
-
-	/// Navigate to the scan result
-	/// - Parameter attributes: the scanned result
-	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult) {
+	
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails) {
 		
-		let viewController = VerifierResultViewController(
-			viewModel: VerifierResultViewModel(
+		let viewController = CheckIdentityViewController(
+			viewModel: CheckIdentityViewModel(
 				coordinator: self,
-				verificationResult: verificationResult,
+				verificationDetails: verificationDetails,
 				isDeepLinkEnabled: thirdPartyScannerApp != nil
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
+	
+	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
+		
+		let viewController = VerifiedAccessViewController(
+			viewModel: VerifiedAccessViewModel(
+				coordinator: self,
+				verifiedType: verifiedType
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushWithFadeAnimation(with: viewController,
+																							  animationDuration: VerifiedAccessViewTraits.Animation.verifiedDuration)
+	}
+	
+	func navigateToDeniedAccess() {
+		
+		let viewController = DeniedAccessViewController(
+			viewModel: DeniedAccessViewModel(
+				coordinator: self
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
@@ -153,12 +198,13 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
 	}
 
-	func navigateToScanInstruction() {
+	func navigateToScanInstruction(allowSkipInstruction: Bool) {
 
 		let coordinator = ScanInstructionsCoordinator(
 			navigationController: dashboardNavigationController!,
 			delegate: self,
-			isOpenedFromMenu: false
+			isOpenedFromMenu: false,
+			allowSkipInstruction: allowSkipInstruction
 		)
 		startChildCoordinator(coordinator)
 	}
@@ -169,7 +215,11 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		if let existingScanViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierScanViewController }) {
 			dashboardNavigationController?.popToViewController(existingScanViewController, animated: true)
 		} else {
-			let destination = VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: self))
+			let destination = VerifierScanViewController(
+				viewModel: VerifierScanViewModel(
+					coordinator: self
+				)
+			)
 			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
 		}
 	}
@@ -178,6 +228,18 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let title: String = L.verifierClockDeviationDetectedTitle()
 		let message: String = L.verifierClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+
+	func userWishesToOpenScanLog() {
+
+		let viewController = ScanLogViewController(
+			viewModel: ScanLogViewModel(
+				coordinator: self,
+				configuration: remoteConfigManager.storedConfiguration,
+				now: { Date() }
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 	
 	func navigateToVerifiedInfo() {
@@ -198,6 +260,26 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			navigateToScan()
 		}
 	}
+	
+	func userWishesToSetRiskLevel(shouldSelectSetting: Bool) {
+		
+		let viewController: UIViewController
+		if shouldSelectSetting {
+			viewController = RiskSettingUnselectedViewController(
+				viewModel: RiskSettingUnselectedViewModel(
+					coordinator: self
+				)
+			)
+		} else {
+			viewController = RiskSettingSelectedViewController(
+				viewModel: RiskSettingSelectedViewModel(
+					coordinator: self,
+					configuration: remoteConfigManager.storedConfiguration
+				)
+			)
+		}
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
 }
 
 // MARK: ScanInstructions Delegate
@@ -205,11 +287,15 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 extension VerifierCoordinator: ScanInstructionsDelegate {
 
 	/// User completed (or skipped) the Scan Instructions flow
-	func scanInstructionsDidFinish() {
-		UserSettings().scanInstructionShown = true
+	func scanInstructionsDidFinish(hasScanLock: Bool) {
 
 		removeScanInstructionsCoordinator()
-		navigateToScan()
+		
+		if hasScanLock {
+			navigateToVerifierWelcome()
+		} else {
+			navigateToScan()
+		}
 	}
 
 	/// User cancelled the flow (i.e. back button), thus don't proceed to scan.
@@ -251,9 +337,19 @@ extension VerifierCoordinator: MenuDelegate {
 				let coordinator = ScanInstructionsCoordinator(
 					navigationController: dashboardNavigationController!,
 					delegate: self,
-					isOpenedFromMenu: true
+					isOpenedFromMenu: true,
+					allowSkipInstruction: false
 				)
 				startChildCoordinator(coordinator)
+				
+			case .riskSetting:
+				let destination = RiskSettingStartViewController(
+					viewModel: RiskSettingStartViewModel(
+						coordinator: self
+					)
+				)
+				navigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = navigationController
 
 			case .support:
 				guard let faqUrl = URL(string: L.verifierUrlFaq()) else {
@@ -295,12 +391,17 @@ extension VerifierCoordinator: MenuDelegate {
 	/// Get the items for the top menu
 	/// - Returns: the top menu items
 	func getTopMenuItems() -> [MenuItem] {
-		
-		return [
+
+		var list = [
 			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
 			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions())
 		]
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			list.append(MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting()))
+		}
+		return list
 	}
+	
 	/// Get the items for the bottom menu
 	/// - Returns: the bottom menu items
 	func getBottomMenuItems() -> [MenuItem] {

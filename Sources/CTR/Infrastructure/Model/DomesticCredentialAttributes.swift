@@ -14,6 +14,7 @@ struct DomesticCredentialAttributes: Codable {
 	let firstNameInitial: String
 	let lastNameInitial: String
 	let credentialVersion: String
+	let category: String
 	let specimen: String
 	let paperProof: String
 	let validFrom: String
@@ -26,6 +27,7 @@ struct DomesticCredentialAttributes: Codable {
 		case firstNameInitial
 		case lastNameInitial
 		case credentialVersion
+		case category
 		case specimen = "isSpecimen"
 		case paperProof = "isPaperProof"
 		case validFrom
@@ -40,6 +42,14 @@ struct DomesticCredentialAttributes: Codable {
 	var isSpecimen: Bool {
 
 		return specimen == "1"
+	}
+	
+	var riskLevel: RiskLevel? {
+		switch category {
+			case "2": return .high
+			case "3": return .low
+			default: return nil
+		}
 	}
 
 	/// Map the identity of the holder

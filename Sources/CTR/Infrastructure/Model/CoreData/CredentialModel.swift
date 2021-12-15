@@ -20,19 +20,17 @@ class CredentialModel {
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Credential? {
 
-		if let object = NSEntityDescription.insertNewObject(
-			forEntityName: entityName,
-			into: managedContext) as? Credential {
-
-			object.data = data
-			object.version = version
-			object.validFrom = validFrom
-			object.expirationTime = expirationTime
-			object.greenCard = greenCard
-
-			return object
+		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? Credential else {
+			return nil
 		}
-		return nil
+
+		object.data = data
+		object.version = version
+		object.validFrom = validFrom
+		object.expirationTime = expirationTime
+		object.greenCard = greenCard
+
+		return object
 	}
 }
 

@@ -10,11 +10,13 @@ import Reachability
 
 /// Global container for the different services used in the app
 final class Services {
-	
+
+	private static var appInstalledSinceManagingType: AppInstalledSinceManaging.Type = AppInstalledSinceManager.self
 	private static var cryptoLibUtilityType: CryptoLibUtilityProtocol.Type = CryptoLibUtility.self
 	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
 	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
 	private static var deviceAuthenticationType: DeviceAuthenticationProtocol.Type = DeviceAuthenticationDetector.self
+	private static var featureFlagManagingType: FeatureFlagManaging.Type = FeatureFlagManager.self
 	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
 	private static var jailBreakType: JailBreakProtocol.Type = JailBreakDetector.self
 	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
@@ -26,8 +28,16 @@ final class Services {
 	private static var couplingManagingType: CouplingManaging.Type = CouplingManager.self
 	private static var mappingManagingType: MappingManaging.Type = MappingManager.self
 	private static var clockDeviationType: ClockDeviationManaging.Type = ClockDeviationManager.self
+	private static var riskLevelManagerType: RiskLevelManaging.Type = RiskLevelManager.self
+	private static var scanLockManagerType: ScanLockManaging.Type = ScanLockManager.self
+	private static var scanLogManagingType: ScanLogManaging.Type = ScanLogManager.self
 
 	// MARK: use override for testing
+
+	static func use(_ appInstalledSinceManaging: AppInstalledSinceManaging) {
+
+		appInstalledSinceManager = appInstalledSinceManaging
+	}
 
 	static func use(_ cryptoManaging: CryptoManaging) {
 
@@ -47,6 +57,11 @@ final class Services {
 	static func use(_ jailBreakProtocol: JailBreakProtocol) {
 
 		jailBreakDetector = jailBreakProtocol
+	}
+
+	static func use(_ featureFlagManaging: FeatureFlagManaging) {
+
+		featureFlagManager = featureFlagManaging
 	}
 
 	static func use(_ forcedInformationManaging: ForcedInformationManaging) {
@@ -94,9 +109,24 @@ final class Services {
 		clockDeviationManager = clockDeviationManaging
 	}
 
+	static func use(_ scanLockManaging: ScanLockManaging) {
+
+		scanLockManager = scanLockManaging
+	}
+
 	static func use(_ walletManaging: WalletManaging) {
 
 		walletManager = walletManaging
+	}
+
+	static func use(_ scanLogManaging: ScanLogManaging) {
+
+		scanLogManager = scanLogManaging
+	}
+
+	static func use(_ riskLevelManaging: RiskLevelManaging) {
+
+		riskLevelManager = riskLevelManaging
 	}
 
 	// MARK: Static access
@@ -121,6 +151,7 @@ final class Services {
         return networkManagingType.init(configuration: networkConfiguration)
     }()
 
+	static private(set) var appInstalledSinceManager: AppInstalledSinceManaging = appInstalledSinceManagingType.init()
 	static private(set) var cryptoLibUtility: CryptoLibUtilityProtocol = cryptoLibUtilityType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
@@ -128,68 +159,77 @@ final class Services {
 		fileStorage: FileStorage(),
 		flavor: AppFlavor.flavor
 	)
-
 	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
-
 	static private(set) var deviceAuthenticationDetector: DeviceAuthenticationProtocol = deviceAuthenticationType.init()
-	
-	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
-
+	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(
+		StorageType.persistent,
+		flavor: AppFlavor.flavor
+	)
+	static private(set) var featureFlagManager: FeatureFlagManaging = featureFlagManagingType.init(
+        versionSupplier: AppVersionSupplier()
+    )
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
-
 	static private(set) var jailBreakDetector: JailBreakProtocol = jailBreakType.init()
-
 	static private(set) var greenCardLoader: GreenCardLoading = greenCardLoadingType.init(
 		networkManager: networkManager,
 		cryptoManager: cryptoManager,
 		walletManager: walletManager
 	)
-
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
 		reachability: try? Reachability(),
 		networkManager: networkManager
 	)
-
 	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init()
-
 	static private(set) var openIdManager: OpenIdManaging = openIdManagerType.init()
-
 	static private(set) var walletManager: WalletManaging = walletManagingType.init(
 		dataStoreManager: dataStoreManager
 	)
-
 	static private(set) var couplingManager: CouplingManaging = couplingManagingType.init(
 		cryptoManager: cryptoManager,
 		networkManager: networkManager
 	)
-
 	static private(set) var mappingManager: MappingManaging = mappingManagingType.init(
 		remoteConfigManager: remoteConfigManager
 	)
-
 	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
+	static private(set) var scanLockManager: ScanLockManaging = scanLockManagerType.init()
+	static private(set) var riskLevelManager: RiskLevelManaging = riskLevelManagerType.init()
+	static private(set) var scanLogManager: ScanLogManaging = scanLogManagingType.init(
+		dataStoreManager: dataStoreManager
+	)
 
 	/// Reset all the data
-	static func reset() {
+	static func reset(flavor: AppFlavor) {
 
-		walletManager.removeExistingEventGroups()
-		walletManager.removeExistingGreenCards()
+		appInstalledSinceManager.reset()
 		onboardingManager.reset()
 		remoteConfigManager.reset()
 		cryptoLibUtility.reset()
 		forcedInformationManager.reset()
+
+		switch flavor {
+			case .holder:
+				walletManager.removeExistingEventGroups()
+				walletManager.removeExistingGreenCards()
+			case .verifier:
+				riskLevelManager.reset()
+				scanLockManager.reset()
+				scanLogManager.reset()
+		}
 	}
 
 	static func revertToDefaults() {
 
+		appInstalledSinceManager = appInstalledSinceManagingType.init()
 		cryptoManager = cryptoManagingType.init()
 		deviceAuthenticationDetector = deviceAuthenticationType.init()
-		dataStoreManager = dataStoreManagingType.init(StorageType.persistent)
+		dataStoreManager = dataStoreManagingType.init(StorageType.persistent, flavor: AppFlavor.flavor)
 		walletManager = walletManagingType.init(
 			dataStoreManager: dataStoreManager
 		)
+        featureFlagManager = featureFlagManagingType.init(versionSupplier: AppVersionSupplier())
 		forcedInformationManager = forcedInformationManagingType.init()
 		jailBreakDetector = jailBreakType.init()
 		greenCardLoader = greenCardLoadingType.init(
@@ -221,5 +261,10 @@ final class Services {
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.flavor
 		)
+		scanLockManager = scanLockManagerType.init()
+		scanLogManager = scanLogManagingType.init(
+			dataStoreManager: dataStoreManager
+		)
+		riskLevelManager = riskLevelManagerType.init()
 	}
 }

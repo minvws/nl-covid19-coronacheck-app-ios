@@ -180,7 +180,6 @@
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Are you able to connect to the internet soon?";
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
-"holder.dcc.alert.message" = "You can try to add a paper certificate again later.";
 "holder.dcc.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
 "holder.dcc.list.action" = "Add certificate";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
@@ -426,7 +425,6 @@
 "holder.provider.message" = "Does the test point out you don't have coronavirus? Then you can use the test result to create a certificate. Please specify where you were tested.";
 /* MARK: - Holder Choose Provider */
 "holder.provider.title" = "Make QR code";
-"holder.recovery.alert.message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder.recovery.list.message" = "If the details about your test are correct, you can create a recovery certificate.";
 "holder.recovery.list.title" = "Are the details correct?";
 "holder.recovery.nolist.action" = "To my certificates";
@@ -527,7 +525,6 @@
 "holder.showqr.screenshotwarning.subtitle" = "Use the QR code in the app";
 "holder.showqr.screenshotwarning.title" = "A screenshot is not a valid certificate";
 "holder.showqr.showqr" = "Show anyway";
-"holder.test.alert.message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder.test.list.title" = "Retrieve test result";
 "holder.test.nolist.action" = "To my certificates";
 "holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>. Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
@@ -630,7 +627,6 @@
 "holder.vaccination.about.off.dcc" = "Dose %@ of %@";
 "holder.vaccination.about.text" = "About your vaccination";
 "holder.vaccination.alert.continue" = "No, continue";
-"holder.vaccination.alert.message" = "Doing so will stop the creation of your certificate. You will have to retrieve your details again later.";
 "holder.vaccination.alert.stop" = "Yes, go back";
 "holder.vaccination.alert.title" = "Are you sure you want to go back?";
 "holder.vaccination.element.combined" = "<p>Data retrieved from: %@ and %@</p>";
@@ -664,6 +660,15 @@
 "holder.vaccination.status.complete.recovery" = "yes (I’ve had coronavirus earlier)";
 "holder.vaccination.wrong.body" = "<p>Please contact the care provider who vaccinated you. This can be the GGD, your general practitioner, or a doctor belonging to a healthcare facility. They can help you change these details.</p>";
 "holder.vaccination.wrong.title" = "Is something wrong?";
+"holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
+"holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
+"holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
+"holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>A Dutch test certificate is only valid in places with 3G access. This means that you cannot use your test certificate to get access to places with 2G access.</p><p><b>What is the difference between 3G and 2G?</b><br />The Gs determine which people can be given access: only those who were vaccinated and/or have recovered (2G), or people who tested negative as well (3G).</p><ul><li>3G access means you can enter places with a test, vaccination or recovery certificate.</li><li>2G access means you <u>cannot</u> enter places with a test certificate. You'll need a vaccination or recovery certificate.</li></ul><p><a href=\"https://www.government.nl/2G\">You can read more about 3G and 2G here</a>.</p>";
+"holder_my_overview_3g_test_validity_bottom_sheet_title" = "Test certificate only valid for 3G access";
+"holder_my_overview_3g_test_validity_card" = "Your test certificate is only valid for 3G access within the Netherlands";
+"holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
+"holder_test_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
+"holder_vaccination_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your details again later.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Try again";
 "internet.required.text" = "To start the app, you need to be connected to the internet.";
@@ -680,6 +685,7 @@
 "new.terms.highlights" = "<b>This has changed</b><ul><li>Initials and day and month of birth are included in the QR code</li><li>This data is displayed on the Scanner app for ID verification purposes</li></ul>";
 /* MARK: - New Terms */
 "new.terms.title" = "We've updated our policy";
+"qr_explanation_description_domestic_2G" = "<p>Your Dutch QR code says you have a valid test certificate, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "recommended.updateApp.action.cancel" = "No, will do it later";
 "recommended.updateApp.action.ok" = "Install update";
 "recommended.updateApp.subtitle" = "There's a new version of the app available.";

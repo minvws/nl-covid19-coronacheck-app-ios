@@ -81,7 +81,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_whenQRIsDCC_shouldInvokeCoordinator() {
 		// Given
 		let message = "HC1:MOCK:MESSAGE"
-		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		
 		// When
 		sut.parseQRMessage(message)

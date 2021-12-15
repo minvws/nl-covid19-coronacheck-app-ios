@@ -151,6 +151,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
 	}
 
+	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = false
+	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount = 0
+
+	func userWishesMoreInfoAboutTestOnlyValidFor3G() {
+		invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = true
+		invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount += 1
+	}
+
 	var invokedUserWishesMoreInfoAboutUpgradingEUVaccinations = false
 	var invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount = 0
 

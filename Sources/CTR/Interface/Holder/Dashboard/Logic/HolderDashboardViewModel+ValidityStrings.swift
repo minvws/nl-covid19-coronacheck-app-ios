@@ -39,7 +39,7 @@ extension QRCard {
 				// -- EU Vaccines --
 					
 				case (_, .europeanUnion(let dccEvaluator), .vaccination):
-					if let euVaccination = dccEvaluator(greencard, now)?.vaccinations?.first,
+					if let euVaccination = dccEvaluator(greencard, now)?.digitalCovidCertificate.vaccinations?.first,
 					   let doseNumber = euVaccination.doseNumber,
 					   let totalDose = euVaccination.totalDose {
 						return validityText_hasBegun_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), validFrom: origin.eventDate)
@@ -50,7 +50,7 @@ extension QRCard {
 				// -- EU Tests --
 					
 				case (_, .europeanUnion(let dccEvaluator), .test):
-					if let euTest = dccEvaluator(greencard, now)?.tests?.first {
+					if let euTest = dccEvaluator(greencard, now)?.digitalCovidCertificate.tests?.first {
 						let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
 						return validityText_hasBegun_eu_test(testType: testType, validFrom: origin.eventDate)
 					} else {
@@ -82,17 +82,22 @@ extension QRCard {
 				case (.validityHasNotYetBegun, .netherlands, .vaccination):
 					return validityText_hasNotYetBegun_netherlands_vaccination(doseNumber: origin.doseNumber, qrCard: qrCard, validFrom: origin.validFromDate, now: now)
 				
-				case (.validityHasNotYetBegun, .netherlands, .test):
-					return validityText_hasNotYetBegun_netherlands_test(qrCard: qrCard, origin: origin, now: now)
-					
 				// -- Domestic Tests --
 					
-				case (.validityHasBegun, .netherlands, .test):
+				case (.validityHasBegun, .netherlands(let credentialsEvaluator), .test):
 					return validityText_hasBegun_domestic_test(
 						expirationTime: origin.expirationTime,
 						expiryIsBeyondThreeYearsFromNow: origin.expiryIsBeyondThreeYearsFromNow(now: now),
-						isCurrentlyValid: origin.isCurrentlyValid(now: now)
+						isCurrentlyValid: origin.isCurrentlyValid(now: now),
+						riskLevel: credentialsEvaluator(greencard, now)?.riskLevel,
+						shouldShowRiskLevel: greencard.hasValid3GTestWithoutAValidVaccineOrAValidRecovery(
+							credentialEvaluator: credentialsEvaluator,
+							now: now
+					   )
 					)
+					
+				case (.validityHasNotYetBegun, .netherlands, .test):
+					return validityText_hasNotYetBegun_netherlands_test(qrCard: qrCard, origin: origin, now: now)
 					
 				// -- Domestic Recoveries --
 					
@@ -198,13 +203,23 @@ private func validityText_hasBegun_domestic_vaccination(doseNumber: Int?, validF
 	)
 }
 
-private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool, riskLevel: RiskLevel?, shouldShowRiskLevel: Bool) -> HolderDashboardViewController.ValidityText {
 	let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
 	let formatter = HolderDashboardViewModel.dateWithDayAndTimeFormatter
 	let dateString = formatter.string(from: expirationTime)
 
 	let titleString = QRCodeOriginType.test.localizedProof.capitalizingFirstLetter() + ":"
-	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	let valueString: String = {
+		let value = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+		switch (riskLevel, shouldShowRiskLevel) {
+			case (.high, true):
+				return value + (Services.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_2g() : "")
+			case (.low, true):
+				return value + (Services.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_3g() : "")
+			default:
+				return value
+		}
+	}()
 	return .init(
 		lines: [titleString, valueString],
 		kind: .current
@@ -267,8 +282,7 @@ private func validityText_hasNotYetBegun_eu_recovery(validFrom: Date, expiration
 	)
 }
 
-// Caveats!
-// - "future validity" for a test probably won't happen..
+// Caveat: - "future validity" for a test probably won't happen..
 private func validityText_hasNotYetBegun_netherlands_test(qrCard: QRCard, origin: QRCard.GreenCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
 	let prefix: String = L.holderDashboardQrValidityDatePrefixValidFrom()
 	let validFromDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: origin.validFromDate)

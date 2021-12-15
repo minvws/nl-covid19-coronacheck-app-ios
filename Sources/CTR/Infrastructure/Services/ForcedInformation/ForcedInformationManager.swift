@@ -11,6 +11,9 @@ protocol ForcedInformationManaging {
 
 	// Initialize
 	init()
+	
+	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
+	var factory: ForcedInformationFactory? { get set }
 
 	/// Do we need show any updates? True if we do
 	var needsUpdating: Bool { get }
@@ -52,19 +55,7 @@ class ForcedInformationManager: ForcedInformationManaging {
 
 	// keychained stored data
 	@Keychain(name: "data", service: Constants.keychainService, clearOnReinstall: true)
-	private var data: ForcedInformationData = .empty
-
-	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
-	private var information: ForcedInformation = ForcedInformation(
-		pages: [ForcedInformationPage(
-			image: isNL ? I.onboarding.tabbarNL() : I.onboarding.tabbarEN(),
-			tagline: L.holderUpdatepageTagline(),
-			title: L.holderUpdatepageTitleTab(),
-			content: L.holderUpdatepageContentTab()
-		)],
-		consent: nil,
-		version: 4
-	)
+	private var forcedInformationData: ForcedInformationData = .empty
 
 	// MARK: - ForcedInformationManaging
 
@@ -72,37 +63,40 @@ class ForcedInformationManager: ForcedInformationManaging {
 	required init() {
 		// Required by protocol
 	}
+	
+	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
+	var factory: ForcedInformationFactory?
 
 	/// Do we need show any updates? True if we do
 	var needsUpdating: Bool {
-		return data.lastSeenVersion < information.version
+		guard let currentVersion = factory?.information.version else {
+			return false
+		}
+		return forcedInformationData.lastSeenVersion < currentVersion
 	}
 	
 	func getUpdatePage() -> ForcedInformationPage? {
-		
-		return information.pages.first
+
+		return factory?.information.pages.first
 	}
 
 	/// Is there any consent that needs to be displayed?
 	/// - Returns: optional consent
 	func getConsent() -> ForcedInformationConsent? {
 
-		return information.consent
+		return factory?.information.consent
 	}
 
 	/// User has given consent, update the version
 	func consentGiven() {
 
-		data.lastSeenVersion = information.version
+		guard let currentVersion = factory?.information.version else { return }
+		forcedInformationData.lastSeenVersion = currentVersion
 	}
 
 	/// Reset the manager, clear all the data
 	func reset() {
 
-		$data.clearData()
-	}
-	
-	private static var isNL: Bool {
-		return "nl" == Locale.current.languageCode
+		$forcedInformationData.clearData()
 	}
 }

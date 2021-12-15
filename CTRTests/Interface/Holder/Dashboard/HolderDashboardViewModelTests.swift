@@ -27,6 +27,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var migrationNotificationManagerSpy: DCCMigrationNotificationManagerSpy!
 	private var recoveryValidityExtensionManagerSpy: RecoveryValidityExtensionManagerProtocol!
 	private var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
+	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 	private static var initialTimeZone: TimeZone?
 
 	override class func setUp() {
@@ -67,7 +68,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 		recoveryValidityExtensionManagerSpy = RecoveryValidityExtensionManagerSpy()
 		migrationNotificationManagerSpy = DCCMigrationNotificationManagerSpy()
 		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 
+		Services.use(featureFlagManagerSpy)
 		Services.use(cryptoManagerSpy)
 		Services.use(remoteConfigSpy)
 		
@@ -225,7 +229,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
@@ -271,7 +275,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
@@ -316,13 +320,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
 			),
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
@@ -400,7 +404,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
@@ -523,7 +527,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
@@ -553,7 +557,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
@@ -593,13 +597,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
 			),
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
@@ -649,7 +653,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
@@ -689,7 +693,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
@@ -758,7 +762,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()])],
 				shouldShowErrorBeneathCard: true,
 				evaluateEnabledState: { _ in true }
@@ -795,7 +799,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -851,7 +855,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 2)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -900,7 +904,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.valid30DaysAgo_vaccination_expires60SecondsFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -951,7 +955,65 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in
+					DomesticCredentialAttributes.sample(category: "3")
+				}),
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneHourAgo_test_expires23HoursFromNow()])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(4))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
+			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
+		}))
+		expect(self.sut.domesticCards[1]).toEventually(beTestOnlyValidFor3GCard())
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02 voor 3G-toegang"
+
+			// Exercise the validityText with different sample dates:
+			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
+			expect(futureValidityTexts[0].kind) == .current
+			expect(futureValidityTexts[0].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(futureValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02 voor 3G-toegang"
+
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
+
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
+		}))
+		expect(self.sut.domesticCards[3]).toEventually(beRecommendCoronaMelderCard())
+	}
+
+	func test_datasourceupdate_singleCurrentlyValidDomesticTest_verificationPolicyDisabled() {
+
+		// Arrange
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in
+					DomesticCredentialAttributes.sample(category: "3")
+				}),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneHourAgo_test_expires23HoursFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1003,7 +1065,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneHourAgo_recovery_expires300DaysFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1054,8 +1116,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
-					return .sampleWithVaccine(doseNumber: 1, totalDose: 2)
+				region: .europeanUnion(evaluateCredentialAttributes: { (greencard: QRCard.GreenCard, date: Date) in
+					return EuCredentialAttributes.fakeVaccination()
 				}),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
@@ -1108,8 +1170,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
-					return .sampleWithVaccine(doseNumber: 1, totalDose: 2)
+				region: .europeanUnion(evaluateCredentialAttributes: { (greencard: QRCard.GreenCard, date: Date)  in
+					return EuCredentialAttributes.fakeVaccination()
 				}),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.valid30DaysAgo_vaccination_expires60SecondsFromNow()])],
 				shouldShowErrorBeneathCard: false,
@@ -1161,8 +1223,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
-					return .sampleWithVaccine(doseNumber: 0, totalDose: 2)
+				region: .europeanUnion(evaluateCredentialAttributes: { (greencard: QRCard.GreenCard, date: Date) in
+					return EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 0, totalDose: 2))
 				}),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
@@ -1209,8 +1271,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
-					return .sampleWithVaccine(doseNumber: nil, totalDose: 2)
+				region: .europeanUnion(evaluateCredentialAttributes: { (greencard: QRCard.GreenCard, date: Date) in
+					return EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: nil, totalDose: 2))
 				}),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
@@ -1264,7 +1326,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in .sampleWithTest() }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in return EuCredentialAttributes.fake(dcc: .sampleWithTest()) }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneHourAgo_test_expires23HoursFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1316,7 +1378,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneHourAgo_recovery_expires300DaysFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1363,7 +1425,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [
 					.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1),
 					.validIn48Hours_recovery_expires300DaysFromNow()
@@ -1427,7 +1489,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [
 					.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1),
 					.validOneHourAgo_test_expires23HoursFromNow(),
@@ -1447,7 +1509,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroDomestic()
 			expect(buttonTitle).to(beNil())
 		}))
-
+		
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(
 			test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
@@ -1473,7 +1535,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [
 					.valid30DaysAgo_vaccination_expires60SecondsFromNow(),
 					.validOneHourAgo_test_expires23HoursFromNow(),
@@ -1515,7 +1577,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [
 					.valid30DaysAgo_vaccination_expires60SecondsFromNow(),
 					.validOneDayAgo_test_expires5MinutesFromNow(),
@@ -1535,7 +1597,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroDomestic()
 			expect(buttonTitle).to(beNil())
 		}))
-
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
@@ -1564,19 +1625,19 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: vaccineGreenCardID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			),
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: recoveryGreenCardID, origins: [.validOneHourAgo_recovery_expires300DaysFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			),
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: testGreenCardID, origins: [.validOneHourAgo_test_expires23HoursFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1640,7 +1701,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [
 					.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1),
 					.validOneHourAgo_test_expires23HoursFromNow(),
@@ -1688,19 +1749,19 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: vaccineGreenCardID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			),
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: recoveryGreenCardID, origins: [.validOneHourAgo_recovery_expires300DaysFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			),
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: testGreenCardID, origins: [.validOneHourAgo_test_expires23HoursFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1740,7 +1801,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: vaccineGreenCardID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1769,7 +1830,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expires30DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1820,7 +1881,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expires30DaysFromNow(doseNumber: 2)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1872,7 +1933,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .netherlands,
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_recovery_expires300DaysFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1925,7 +1986,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expires30DaysFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -1971,7 +2032,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { _, _ in nil }),
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_recovery_expires300DaysFromNow()])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
@@ -2138,11 +2199,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
+				region: .europeanUnion(evaluateCredentialAttributes: { (greencard: QRCard.GreenCard, date: Date) in
 					if greencard.id === oneOfTwoGreencardObjectID {
-						return .sampleWithVaccine(doseNumber: 1, totalDose: 2)
+						return EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 1, totalDose: 2))
 					} else if greencard.id === twoOfTwoGreencardObjectID {
-						return .sampleWithVaccine(doseNumber: 2, totalDose: 2)
+						return EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 2, totalDose: 2))
 					} else {
 						fail("Unrecognised greencard received in closure")
 						return nil
@@ -2208,15 +2269,15 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
-				region: .europeanUnion(evaluateDCC: { (greencard: QRCard.GreenCard, date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
+				region: .europeanUnion(evaluateCredentialAttributes: { (greencard: QRCard.GreenCard, date: Date) in
 					if greencard.id === oneOfTwoGreencardObjectID {
-						return .sampleWithVaccine(doseNumber: 1, totalDose: 2)
+						return EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 1, totalDose: 2))
 					} else if greencard.id === twoOfTwoGreencardObjectID {
-						return .sampleWithVaccine(doseNumber: 2, totalDose: 2)
+						return EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 2, totalDose: 2))
 					} else if greencard.id === threeOfTwoGreencardObjectID {
-						return .sampleWithVaccine(doseNumber: 3, totalDose: 2)
+						return EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 3, totalDose: 2))
 					} else if greencard.id === threeOfThreeGreencardObjectID {
-						return .sampleWithVaccine(doseNumber: 3, totalDose: 3)
+						return EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 3, totalDose: 3))
 					} else {
 						fail("Unrecognised greencard received in closure")
 						return nil
@@ -2676,6 +2737,17 @@ private func beRecommendCoronaMelderCard() -> Predicate<HolderDashboardViewContr
 	return Predicate.define("be .beRecommendCoronaMelderCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case .recommendCoronaMelder = actual {
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+private func beTestOnlyValidFor3GCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .beTestOnlyValidFor3GCard with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .testOnlyValidFor3G(message2, callToActionButtonText, didTapCallToAction) = actual {
+			test(message2, callToActionButtonText, didTapCallToAction)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)

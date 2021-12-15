@@ -106,12 +106,24 @@ extension UserSettings {
 		// Clear user defaults:
 		// We can not simply loop over all the keys, as some are needed for clear on reinstall for the keychain items.
 		let userDefaults = Foundation.UserDefaults.standard
-		["scanInstructionShown", "jailbreakWarningShown", "dashboardRegionToggleValue", "configFetchedTimestamp", "configFetchedHash",
-		"issuerKeysFetchedTimestamp", "lastScreenshotTime", "lastRecommendUpdateDismissalTimestamp", "lastSeenRecommendedUpdate",
-		"deviceAuthenticationWarningShown", "didCompleteEUVaccinationMigration", "didDismissEUVaccinationMigrationSuccessBanner",
-		 "shouldCheckRecoveryGreenCardRevisedValidity", "shouldShowRecoveryValidityExtensionCard",
-		 "shouldShowRecoveryValidityReinstationCard", "hasDismissedRecoveryValidityExtensionCompletionCard",
-		 "hasDismissedRecoveryValidityReinstationCompletionCard"]
-			.forEach(userDefaults.removeObject(forKey:))
+		[	"scanInstructionShown",
+			"jailbreakWarningShown",
+			"dashboardRegionToggleValue",
+			"configFetchedTimestamp",
+			"configFetchedHash",
+			"issuerKeysFetchedTimestamp",
+			"lastScreenshotTime",
+			"lastRecommendUpdateDismissalTimestamp",
+			"lastSeenRecommendedUpdate",
+			"deviceAuthenticationWarningShown",
+			"didCompleteEUVaccinationMigration",
+			"didDismissEUVaccinationMigrationSuccessBanner",
+			"deviceAuthenticationWarningShown",
+			"shouldCheckRecoveryGreenCardRevisedValidity",
+			"shouldShowRecoveryValidityExtensionCard",
+			"shouldShowRecoveryValidityReinstationCard",
+			"hasDismissedRecoveryValidityExtensionCompletionCard",
+			"hasDismissedRecoveryValidityReinstationCompletionCard"
+		].forEach(userDefaults.removeObject(forKey:))
 	}
 }

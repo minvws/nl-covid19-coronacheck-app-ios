@@ -212,6 +212,21 @@ extension HolderDashboardViewController.Card {
 		return [HolderDashboardViewController.Card.recommendCoronaMelder]
 	}
 	
+	static func makeTestOnlyValidFor3GCard(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		guard validityRegion == .domestic else { return [] }
+		guard state.shouldShowDomestic3GTestBanner else { return [] }
+		
+		return [HolderDashboardViewController.Card.testOnlyValidFor3G(
+			message: L.holder_my_overview_3g_test_validity_card(),
+			callToActionButtonText: L.generalReadmore(),
+			didTapCallToAction: actionHandler.didTapTestOnlyValidFor3GMoreInfo)
+		]
+	}
+	
 	/// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 	/// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
 	static func makeOriginNotValidInThisRegionCard(

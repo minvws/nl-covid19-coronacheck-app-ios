@@ -38,6 +38,8 @@ class CryptoManager: CryptoManaging, Logging {
 	
 	private let cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility
 	
+	private let riskLevelManager: RiskLevelManaging = Services.riskLevelManager
+	
 	/// Initializer
 	required init() {
 		
@@ -134,12 +136,22 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		
 		let proofQREncoded = message.data(using: .utf8)
+
+		let verificationPolicy: String
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			guard let riskSetting = riskLevelManager.state else {
+				fatalError("Risk level should be set")
+			}
+			verificationPolicy = riskSetting.policy
+		} else {
+			verificationPolicy = MobilecoreVERIFICATION_POLICY_3G
+		}
 		
-		guard let result = MobilecoreVerify(proofQREncoded) else {
+		guard let result = MobilecoreVerify(proofQREncoded, verificationPolicy) else {
 			logError("Could not verify QR")
 			return nil
 		}
-		
+
 		return result
 	}
 	
