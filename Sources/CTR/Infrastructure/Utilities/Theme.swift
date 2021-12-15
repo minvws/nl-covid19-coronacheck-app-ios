@@ -215,8 +215,6 @@ final class Colors {
 	
 	var secondaryText: UIColor { return color(for: "SecondaryText") }
 
-	var iosBlue: UIColor { return color(for: "IosBlue") }
-
     var tertiary: UIColor { return color(for: "TertiaryColor") }
 
 	var gray: UIColor { return color(for: "DotGray") }

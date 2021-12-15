@@ -16,7 +16,7 @@ class ScanInstructionsViewController: BaseViewController {
 	private let skipButton: UIButton = {
 		let button = UIButton(type: .custom)
 		button.setTitle(L.verifierScaninstructionsNavigationSkipbuttonTitle(), for: .normal)
-		button.setTitleColor(Theme.colors.iosBlue, for: .normal)
+		button.setTitleColor(Theme.colors.primary, for: .normal)
 		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
 		button.translatesAutoresizingMaskIntoConstraints = false
 
