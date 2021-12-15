@@ -173,16 +173,18 @@ class ShowQRViewModel: Logging {
 	}
 
 	private func showDomesticDetails(_ data: Data) {
-
+		
 		if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {
 			let identity = domesticCredentialAttributes
 				.mapIdentity(months: String.shortMonths)
 				.map({ $0.isEmpty ? "_" : $0 })
 				.joined(separator: " ")
-
+			
+			let body: String = Services.featureFlagManager.isVerificationPolicyEnabled() ? L.qr_explanation_description_domestic_2G(identity) : L.holderShowqrDomesticAboutMessage(identity)
+			
 			coordinator?.presentInformationPage(
 				title: L.holderShowqrDomesticAboutTitle(),
-				body: L.holderShowqrDomesticAboutMessage(identity),
+				body: body,
 				hideBodyForScreenCapture: true,
 				openURLsInApp: true
 			)

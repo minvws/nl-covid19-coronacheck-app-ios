@@ -19,6 +19,7 @@ class ShowQRViewModelTests: XCTestCase {
 	var dataStoreManager: DataStoreManaging!
 	var cryptoManagerSpy: CryptoManagerSpy!
 	var notificationCenterSpy: NotificationCenterSpy!
+	var featureFlagManagerSpy: FeatureFlagManagerSpy!
 
 	override func setUp() {
 		super.setUp()
@@ -26,7 +27,10 @@ class ShowQRViewModelTests: XCTestCase {
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
 		notificationCenterSpy = NotificationCenterSpy()
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		
+		Services.use(featureFlagManagerSpy)
 		Services.use(cryptoManagerSpy)
 	}
 
@@ -153,8 +157,10 @@ class ShowQRViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == false
 	}
 
-	func test_moreInformation_domesticGreenCard_validCredential() throws {
+	func test_moreInformation_domesticGreenCard_validCredential_verificationPolicyEnabled() throws {
+
 		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createTestGreenCard(
 				dataStoreManager: dataStoreManager,
@@ -186,7 +192,45 @@ class ShowQRViewModelTests: XCTestCase {
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrDomesticAboutTitle()
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.body).to(contain("R P 30"))
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.body) == L.qr_explanation_description_domestic_2G("R P 30 MEI")
+	}
+	
+	func test_moreInformation_domesticGreenCard_validCredential_verificationPolicyDisabled() throws {
+
+		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			thirdPartyTicketAppName: nil
+		)
+		cryptoManagerSpy.stubbedReadDomesticCredentialsResult = DomesticCredentialAttributes(
+			birthDay: "30",
+			birthMonth: "5",
+			firstNameInitial: "R",
+			lastNameInitial: "P",
+			credentialVersion: "2",
+			category: "3",
+			specimen: "0",
+			paperProof: "0",
+			validFrom: "\(Date())",
+			validForHours: "24"
+		)
+		
+		// When
+		sut?.showMoreInformation()
+		
+		// Then
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrDomesticAboutTitle()
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.body) == L.holderShowqrDomesticAboutMessage("R P 30 MEI")
 	}
 
 	func test_moreInformation_domesticGreenCard_validCredential_unreadableData() throws {
