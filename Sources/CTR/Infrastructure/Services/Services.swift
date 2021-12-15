@@ -10,148 +10,15 @@ import Reachability
 
 /// Global container for the different services used in the app
 final class Services {
-
-	private static var appInstalledSinceManagingType: AppInstalledSinceManaging.Type = AppInstalledSinceManager.self
-	private static var cryptoLibUtilityType: CryptoLibUtilityProtocol.Type = CryptoLibUtility.self
-	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
-	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
-	private static var deviceAuthenticationType: DeviceAuthenticationProtocol.Type = DeviceAuthenticationDetector.self
-	private static var featureFlagManagingType: FeatureFlagManaging.Type = FeatureFlagManager.self
-	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
-	private static var jailBreakType: JailBreakProtocol.Type = JailBreakDetector.self
-	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
-    private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
-	private static var openIdManagerType: OpenIdManaging.Type = OpenIdManager.self
-	private static var remoteConfigManagingType: RemoteConfigManaging.Type = RemoteConfigManager.self
-	private static var walletManagingType: WalletManaging.Type = WalletManager.self
-	private static var greenCardLoadingType: GreenCardLoading.Type = GreenCardLoader.self
-	private static var couplingManagingType: CouplingManaging.Type = CouplingManager.self
-	private static var mappingManagingType: MappingManaging.Type = MappingManager.self
-	private static var clockDeviationType: ClockDeviationManaging.Type = ClockDeviationManager.self
-	private static var riskLevelManagerType: RiskLevelManaging.Type = RiskLevelManager.self
-	private static var scanLockManagerType: ScanLockManaging.Type = ScanLockManager.self
-	private static var scanLogManagingType: ScanLogManaging.Type = ScanLogManager.self
-
-	// MARK: use override for testing
-
-	static func use(_ appInstalledSinceManaging: AppInstalledSinceManaging) {
-
-		appInstalledSinceManager = appInstalledSinceManaging
-	}
-
-	static func use(_ cryptoManaging: CryptoManaging) {
-
-		cryptoManager = cryptoManaging
-	}
-
-	static func use(_ cryptoUtilityProtocol: CryptoLibUtilityProtocol) {
-
-		cryptoLibUtility = cryptoUtilityProtocol
-	}
-
-	static func use(_ deviceAuthenticationProtocol: DeviceAuthenticationProtocol) {
-
-		deviceAuthenticationDetector = deviceAuthenticationProtocol
-	}
-
-	static func use(_ jailBreakProtocol: JailBreakProtocol) {
-
-		jailBreakDetector = jailBreakProtocol
-	}
-
-	static func use(_ featureFlagManaging: FeatureFlagManaging) {
-
-		featureFlagManager = featureFlagManaging
-	}
-
-	static func use(_ forcedInformationManaging: ForcedInformationManaging) {
-
-		forcedInformationManager = forcedInformationManaging
-	}
-
-    static func use(_ networkManaging: NetworkManaging) {
-
-        networkManager = networkManaging
-    }
-
-    static func use(_ remoteConfigManaging: RemoteConfigManaging) {
-
-		remoteConfigManager = remoteConfigManaging
-    }
-
-    static func use(_ onboardingManaging: OnboardingManaging) {
-
-		onboardingManager = onboardingManaging
-    }
-
-	static func use(_ openIdManaging: OpenIdManaging) {
-
-		openIdManager = openIdManaging
-	}
-
-	static func use(_ greenCardLoading: GreenCardLoading) {
-
-		greenCardLoader = greenCardLoading
-	}
-
-	static func use(_ couplingManaging: CouplingManaging) {
-
-		couplingManager = couplingManaging
-	}
-
-	static func use(_ mappingManaging: MappingManaging) {
-
-		mappingManager = mappingManaging
-	}
-
-	static func use(_ clockDeviationManaging: ClockDeviationManaging) {
-
-		clockDeviationManager = clockDeviationManaging
-	}
-
-	static func use(_ scanLockManaging: ScanLockManaging) {
-
-		scanLockManager = scanLockManaging
-	}
-
-	static func use(_ walletManaging: WalletManaging) {
-
-		walletManager = walletManaging
-	}
-
-	static func use(_ scanLogManaging: ScanLogManaging) {
-
-		scanLogManager = scanLogManaging
-	}
-
-	static func use(_ riskLevelManaging: RiskLevelManaging) {
-
-		riskLevelManager = riskLevelManaging
-	}
-
-	// MARK: Static access
-    
-    static private(set) var networkManager: NetworkManaging = {
-        let networkConfiguration: NetworkConfiguration
-
-        let configurations: [String: NetworkConfiguration] = [
-            NetworkConfiguration.development.name: NetworkConfiguration.development,
-            NetworkConfiguration.acceptance.name: NetworkConfiguration.acceptance,
-            NetworkConfiguration.production.name: NetworkConfiguration.production
-        ]
-
-        let fallbackConfiguration = NetworkConfiguration.development
-
-        if let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String {
-            networkConfiguration = configurations[networkConfigurationValue] ?? fallbackConfiguration
-        } else {
-            networkConfiguration = fallbackConfiguration
-        }
-        
-        return networkManagingType.init(configuration: networkConfiguration)
-    }()
-
+	
+	// MARK: - Static access to Services
+	
 	static private(set) var appInstalledSinceManager: AppInstalledSinceManaging = appInstalledSinceManagingType.init(secureUserSettings: SecureUserSettings())
+	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
+	static private(set) var couplingManager: CouplingManaging = couplingManagingType.init(
+		cryptoManager: cryptoManager,
+		networkManager: networkManager
+	)
 	static private(set) var cryptoLibUtility: CryptoLibUtilityProtocol = cryptoLibUtilityType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
@@ -160,21 +27,45 @@ final class Services {
 		flavor: AppFlavor.flavor
 	)
 	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init(secureUserSettings: SecureUserSettings())
-	static private(set) var deviceAuthenticationDetector: DeviceAuthenticationProtocol = deviceAuthenticationType.init()
 	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(
 		StorageType.persistent,
 		flavor: AppFlavor.flavor
 	)
-	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init(secureUserSettings: SecureUserSettings())
+	static private(set) var deviceAuthenticationDetector: DeviceAuthenticationProtocol = deviceAuthenticationType.init()
 	static private(set) var featureFlagManager: FeatureFlagManaging = featureFlagManagingType.init(
-        versionSupplier: AppVersionSupplier()
-    )
-	static private(set) var jailBreakDetector: JailBreakProtocol = jailBreakType.init()
+		versionSupplier: AppVersionSupplier()
+	)
+	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init(secureUserSettings: SecureUserSettings())
 	static private(set) var greenCardLoader: GreenCardLoading = greenCardLoadingType.init(
 		networkManager: networkManager,
 		cryptoManager: cryptoManager,
 		walletManager: walletManager
 	)
+	static private(set) var jailBreakDetector: JailBreakProtocol = jailBreakType.init()
+	static private(set) var mappingManager: MappingManaging = mappingManagingType.init(
+		remoteConfigManager: remoteConfigManager
+	)
+	static private(set) var networkManager: NetworkManaging = {
+		let networkConfiguration: NetworkConfiguration
+
+		let configurations: [String: NetworkConfiguration] = [
+			NetworkConfiguration.development.name: NetworkConfiguration.development,
+			NetworkConfiguration.acceptance.name: NetworkConfiguration.acceptance,
+			NetworkConfiguration.production.name: NetworkConfiguration.production
+		]
+
+		let fallbackConfiguration = NetworkConfiguration.development
+
+		if let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String {
+			networkConfiguration = configurations[networkConfigurationValue] ?? fallbackConfiguration
+		} else {
+			networkConfiguration = fallbackConfiguration
+		}
+		
+		return networkManagingType.init(configuration: networkConfiguration)
+	}()
+	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init(secureUserSettings: SecureUserSettings())
+	static private(set) var openIdManager: OpenIdManaging = openIdManagerType.init()
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
@@ -182,33 +73,46 @@ final class Services {
 		networkManager: networkManager,
 		secureUserSettings: SecureUserSettings()
 	)
-	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init(secureUserSettings: SecureUserSettings())
-	static private(set) var openIdManager: OpenIdManaging = openIdManagerType.init()
-	static private(set) var walletManager: WalletManaging = walletManagingType.init(
-		dataStoreManager: dataStoreManager
-	)
-	static private(set) var couplingManager: CouplingManaging = couplingManagingType.init(
-		cryptoManager: cryptoManager,
-		networkManager: networkManager
-	)
-	static private(set) var mappingManager: MappingManaging = mappingManagingType.init(
-		remoteConfigManager: remoteConfigManager
-	)
-	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
-	static private(set) var scanLockManager: ScanLockManaging = scanLockManagerType.init()
 	static private(set) var riskLevelManager: RiskLevelManaging = riskLevelManagerType.init(secureUserSettings: SecureUserSettings())
+	static private(set) var scanLockManager: ScanLockManaging = scanLockManagerType.init()
 	static private(set) var scanLogManager: ScanLogManaging = scanLogManagingType.init(
 		dataStoreManager: dataStoreManager
 	)
-
-	/// Reset all the data
+	static private(set) var walletManager: WalletManaging = walletManagingType.init(
+		dataStoreManager: dataStoreManager
+	)
+	
+	// MARK: - Define the implementing types of each Service
+	
+	private static var appInstalledSinceManagingType: AppInstalledSinceManaging.Type = AppInstalledSinceManager.self
+	private static var clockDeviationType: ClockDeviationManaging.Type = ClockDeviationManager.self
+	private static var couplingManagingType: CouplingManaging.Type = CouplingManager.self
+	private static var cryptoLibUtilityType: CryptoLibUtilityProtocol.Type = CryptoLibUtility.self
+	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
+	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
+	private static var deviceAuthenticationType: DeviceAuthenticationProtocol.Type = DeviceAuthenticationDetector.self
+	private static var featureFlagManagingType: FeatureFlagManaging.Type = FeatureFlagManager.self
+	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
+	private static var greenCardLoadingType: GreenCardLoading.Type = GreenCardLoader.self
+	private static var jailBreakType: JailBreakProtocol.Type = JailBreakDetector.self
+	private static var mappingManagingType: MappingManaging.Type = MappingManager.self
+	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
+	private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
+	private static var openIdManagerType: OpenIdManaging.Type = OpenIdManager.self
+	private static var remoteConfigManagingType: RemoteConfigManaging.Type = RemoteConfigManager.self
+	private static var riskLevelManagerType: RiskLevelManaging.Type = RiskLevelManager.self
+	private static var scanLockManagerType: ScanLockManaging.Type = ScanLockManager.self
+	private static var scanLogManagingType: ScanLogManaging.Type = ScanLogManager.self
+	private static var walletManagingType: WalletManaging.Type = WalletManager.self
+ 
+	/// Reset all the data within applicable Services
 	static func reset(flavor: AppFlavor) {
 
 		appInstalledSinceManager.reset()
-		onboardingManager.reset()
-		remoteConfigManager.reset()
 		cryptoLibUtility.reset()
 		forcedInformationManager.reset()
+		onboardingManager.reset()
+		remoteConfigManager.reset()
 
 		switch flavor {
 			case .holder:
@@ -225,37 +129,21 @@ final class Services {
 
 		appInstalledSinceManager = appInstalledSinceManagingType.init(secureUserSettings: SecureUserSettings())
 		cryptoManager = cryptoManagingType.init(secureUserSettings: SecureUserSettings())
-		deviceAuthenticationDetector = deviceAuthenticationType.init()
 		dataStoreManager = dataStoreManagingType.init(StorageType.persistent, flavor: AppFlavor.flavor)
-		walletManager = walletManagingType.init(
-			dataStoreManager: dataStoreManager
-		)
+		deviceAuthenticationDetector = deviceAuthenticationType.init()
         featureFlagManager = featureFlagManagingType.init(versionSupplier: AppVersionSupplier())
 		forcedInformationManager = forcedInformationManagingType.init(secureUserSettings: SecureUserSettings())
-		jailBreakDetector = jailBreakType.init()
 		greenCardLoader = greenCardLoadingType.init(
 			networkManager: networkManager,
 			cryptoManager: cryptoManager,
 			walletManager: walletManager
 		)
-		remoteConfigManager = remoteConfigManagingType.init(
-			now: { Date() },
-			userSettings: UserSettings(),
-			reachability: try? Reachability(),
-			networkManager: networkManager,
-			secureUserSettings: SecureUserSettings()
-		)
-		onboardingManager = onboardingManagingType.init(secureUserSettings: SecureUserSettings())
-		openIdManager = openIdManagerType.init()
-
+		jailBreakDetector = jailBreakType.init()
+		clockDeviationManager = clockDeviationType.init()
 		couplingManager = couplingManagingType.init(
 			cryptoManager: cryptoManager,
 			networkManager: networkManager
 		)
-		mappingManager = mappingManagingType.init(
-			remoteConfigManager: remoteConfigManager
-		)
-		clockDeviationManager = clockDeviationType.init()
 		cryptoLibUtility = cryptoLibUtilityType.init(
 			now: { Date() },
 			userSettings: UserSettings(),
@@ -263,10 +151,51 @@ final class Services {
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.flavor
 		)
+		mappingManager = mappingManagingType.init(
+			remoteConfigManager: remoteConfigManager
+		)
+		onboardingManager = onboardingManagingType.init(secureUserSettings: SecureUserSettings())
+		openIdManager = openIdManagerType.init()
+		remoteConfigManager = remoteConfigManagingType.init(
+			now: { Date() },
+			userSettings: UserSettings(),
+			reachability: try? Reachability(),
+			networkManager: networkManager,
+			secureUserSettings: SecureUserSettings()
+		)
+		riskLevelManager = riskLevelManagerType.init(secureUserSettings: SecureUserSettings())
 		scanLockManager = scanLockManagerType.init()
 		scanLogManager = scanLogManagingType.init(
 			dataStoreManager: dataStoreManager
 		)
-		riskLevelManager = riskLevelManagerType.init(secureUserSettings: SecureUserSettings())
+		walletManager = walletManagingType.init(
+			dataStoreManager: dataStoreManager
+		)
 	}
 }
+
+#if DEBUG
+// MARK: - A `use` override for testing:
+
+extension Services {
+	static func use(_ appInstalledSinceManaging: AppInstalledSinceManaging) { appInstalledSinceManager = appInstalledSinceManaging }
+	static func use(_ clockDeviationManaging: ClockDeviationManaging) { clockDeviationManager = clockDeviationManaging }
+	static func use(_ couplingManaging: CouplingManaging) { couplingManager = couplingManaging }
+	static func use(_ cryptoManaging: CryptoManaging) { cryptoManager = cryptoManaging }
+	static func use(_ cryptoUtilityProtocol: CryptoLibUtilityProtocol) { cryptoLibUtility = cryptoUtilityProtocol }
+	static func use(_ deviceAuthenticationProtocol: DeviceAuthenticationProtocol) { deviceAuthenticationDetector = deviceAuthenticationProtocol }
+	static func use(_ featureFlagManaging: FeatureFlagManaging) { featureFlagManager = featureFlagManaging }
+	static func use(_ forcedInformationManaging: ForcedInformationManaging) { forcedInformationManager = forcedInformationManaging }
+	static func use(_ greenCardLoading: GreenCardLoading) { greenCardLoader = greenCardLoading }
+	static func use(_ jailBreakProtocol: JailBreakProtocol) { jailBreakDetector = jailBreakProtocol }
+	static func use(_ mappingManaging: MappingManaging) { mappingManager = mappingManaging }
+	static func use(_ openIdManaging: OpenIdManaging) { openIdManager = openIdManaging }
+	static func use(_ riskLevelManaging: RiskLevelManaging) { riskLevelManager = riskLevelManaging }
+	static func use(_ scanLockManaging: ScanLockManaging) { scanLockManager = scanLockManaging }
+	static func use(_ scanLogManaging: ScanLogManaging) { scanLogManager = scanLogManaging }
+	static func use(_ walletManaging: WalletManaging) { walletManager = walletManaging }
+	static func use(_ networkManaging: NetworkManaging) { networkManager = networkManaging }
+	static func use(_ onboardingManaging: OnboardingManaging) { onboardingManager = onboardingManaging }
+	static func use(_ remoteConfigManaging: RemoteConfigManaging) { remoteConfigManager = remoteConfigManaging }
+}
+#endif
