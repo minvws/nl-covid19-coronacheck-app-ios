@@ -73,9 +73,7 @@ class OnboardingManagerTests: XCTestCase {
 		// When
 		sut.consentGiven()
 
-		let value = sut.needsConsent
-
 		// Then
-		XCTAssertFalse(secureUserSettingsSpy.invokedOnboardingData?.needsConsent ?? true, "needs consent should be false") 
+		XCTAssertFalse(secureUserSettingsSpy.invokedOnboardingData?.needsConsent ?? true, "needs consent should be false")
 	}
 }
