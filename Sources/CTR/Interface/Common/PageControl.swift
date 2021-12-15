@@ -24,7 +24,8 @@ final class PageControl: BaseView {
 			static let indicator: CGFloat = 13
 		}
 		enum Scale {
-			static let indicator: CGFloat = 1.25
+            static let indicator: CGFloat = 2.5
+            static let animation: CGFloat = 2.75
 		}
 		enum Duration {
 			static let animation: TimeInterval = 0.15
@@ -99,6 +100,10 @@ private extension PageControl {
             indicator.heightAnchor.constraint(equalToConstant: ViewTraits.Size.deselected)
         ])
         
+        if isSelected {
+            indicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.indicator, y: ViewTraits.Scale.indicator)
+        }
+        
 		return indicator
 	}
 	
@@ -118,11 +123,12 @@ private extension PageControl {
 		UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
 			currentIndicator.backgroundColor = ViewTraits.Color.selected
             previousIndicator.backgroundColor = ViewTraits.Color.deselected
-			currentIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.indicator, y: ViewTraits.Scale.indicator)
-		}, completion: { finished in
-			if finished {
-				UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
-					currentIndicator.transform = .identity
+			currentIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
+            previousIndicator.transform = .identity
+        }, completion: { finished in
+            if finished {
+                UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
+                    currentIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.indicator, y: ViewTraits.Scale.indicator)
 				})
 			}
 		})
@@ -135,12 +141,13 @@ private extension PageControl {
 		UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
 			currentIndicator.backgroundColor = ViewTraits.Color.deselected
             previousIndicator.backgroundColor = ViewTraits.Color.selected
-			previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.indicator, y: ViewTraits.Scale.indicator)
-		}, completion: { finished in
-			if finished {
-				UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
-					previousIndicator.transform = .identity
-				})
+			previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
+            currentIndicator.transform = .identity
+        }, completion: { finished in
+            if finished {
+                UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
+                    previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.indicator, y: ViewTraits.Scale.indicator)
+                })
 				self.currentPageIndex -= 1
 			}
 		})
