@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import UIKit
 
@@ -17,15 +17,15 @@ final class PageControl: BaseView {
 	private enum ViewTraits {
 		
 		enum Size {
-            static let deselected: CGFloat = 3
+			static let deselected: CGFloat = 3
 			static let selected: CGFloat = 7
 		}
 		enum Spacing {
 			static let indicator: CGFloat = 13
 		}
 		enum Scale {
-            static let indicator: CGFloat = 2.5
-            static let animation: CGFloat = 2.75
+			static let selected: CGFloat = 2.5
+			static let animation: CGFloat = 2.85
 		}
 		enum Duration {
 			static let animation: TimeInterval = 0.15
@@ -48,8 +48,10 @@ final class PageControl: BaseView {
 		return stackView
 	}()
 	
+	/// Set number of pages. Indicators shown when more than one page is set.
 	var numberOfPages: Int = 0 {
 		didSet {
+			guard numberOfPages > 1 else { return }
 			if currentPageIndex >= numberOfPages {
 				currentPageIndex = 0
 			}
@@ -72,6 +74,7 @@ final class PageControl: BaseView {
 	
 	func update(for page: Int) {
 		guard currentPageIndex != page else { return }
+		
 		if page > currentPageIndex {
 			nextPage()
 		} else {
@@ -92,18 +95,18 @@ private extension PageControl {
 	func addRoundIndicator(isSelected: Bool) -> UIView {
 		let indicator = UIView()
 		indicator.backgroundColor = isSelected ? ViewTraits.Color.selected : ViewTraits.Color.deselected
-        indicator.layer.cornerRadius = ViewTraits.Size.deselected / 2
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            indicator.widthAnchor.constraint(equalToConstant: ViewTraits.Size.deselected),
-            indicator.heightAnchor.constraint(equalToConstant: ViewTraits.Size.deselected)
-        ])
-        
-        if isSelected {
-            indicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.indicator, y: ViewTraits.Scale.indicator)
-        }
-        
+		indicator.layer.cornerRadius = ViewTraits.Size.deselected / 2
+		indicator.translatesAutoresizingMaskIntoConstraints = false
+		
+		NSLayoutConstraint.activate([
+			indicator.widthAnchor.constraint(equalToConstant: ViewTraits.Size.deselected),
+			indicator.heightAnchor.constraint(equalToConstant: ViewTraits.Size.deselected)
+		])
+		
+		if isSelected {
+			indicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
+		}
+		
 		return indicator
 	}
 	
@@ -117,39 +120,49 @@ private extension PageControl {
 	
 	func nextPage() {
 		guard currentPageIndex + 1 < numberOfPages else { return }
+		
 		currentPageIndex += 1
 		let currentIndicator = indicators[currentPageIndex]
-        let previousIndicator = indicators[currentPageIndex - 1]
-		UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
+		let previousIndicator = indicators[currentPageIndex - 1]
+		
+		UIView.animate(withDuration: ViewTraits.Duration.animation,
+					   delay: 0,
+					   options: [.beginFromCurrentState, .curveEaseOut],
+					   animations: {
 			currentIndicator.backgroundColor = ViewTraits.Color.selected
-            previousIndicator.backgroundColor = ViewTraits.Color.deselected
+			previousIndicator.backgroundColor = ViewTraits.Color.deselected
 			currentIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
-            previousIndicator.transform = .identity
-        }, completion: { finished in
-            if finished {
-                UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
-                    currentIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.indicator, y: ViewTraits.Scale.indicator)
-				})
-			}
+			previousIndicator.transform = .identity
+		}, completion: { finished in
+			guard finished else { return }
+			
+			UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
+				currentIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
+			})
 		})
 	}
 	
 	func previousPage() {
 		guard currentPageIndex - 1 >= 0, currentPageIndex < indicators.count else { return }
+		
 		let currentIndicator = indicators[currentPageIndex]
 		let previousIndicator = indicators[currentPageIndex - 1]
-		UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
+		
+		UIView.animate(withDuration: ViewTraits.Duration.animation,
+					   delay: 0,
+					   options: [.beginFromCurrentState, .curveEaseOut],
+					   animations: {
 			currentIndicator.backgroundColor = ViewTraits.Color.deselected
-            previousIndicator.backgroundColor = ViewTraits.Color.selected
+			previousIndicator.backgroundColor = ViewTraits.Color.selected
 			previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
-            currentIndicator.transform = .identity
-        }, completion: { finished in
-            if finished {
-                UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
-                    previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.indicator, y: ViewTraits.Scale.indicator)
-                })
-				self.currentPageIndex -= 1
-			}
+			currentIndicator.transform = .identity
+		}, completion: { finished in
+			guard finished else { return }
+			
+			UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
+				previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
+			})
+			self.currentPageIndex -= 1
 		})
 	}
 }
