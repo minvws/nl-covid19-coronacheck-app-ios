@@ -50,8 +50,10 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.title = L.verifierScanTitle()
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
-		
-		self.riskLevel = riskLevelManager?.state
+
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			self.riskLevel = riskLevelManager?.state
+		}
 
 		super.init(coordinator: coordinator)
 	}
@@ -60,10 +62,13 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		guard let currentRiskLevel = riskLevelManager?.state else {
-			fatalError("Risk level should be set")
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+
+			guard let currentRiskLevel = riskLevelManager?.state else {
+				fatalError("Risk level should be set")
+			}
+			scanLogManager?.addScanEntry(riskLevel: currentRiskLevel, date: Date())
 		}
-		scanLogManager?.addScanEntry(riskLevel: currentRiskLevel, date: Date())
 
 		if let verificationResult = cryptoManager?.verifyQRMessage(message) {
 			switch Int64(verificationResult.status) {
@@ -87,7 +92,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 				default:
 					
 					theCoordinator?.navigateToDeniedAccess()
-					
 			}
 		}
 	}
@@ -111,6 +115,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 	func didTapMoreInformationButton() {
 
-		theCoordinator?.navigateToScanInstruction()
+		theCoordinator?.navigateToScanInstruction(allowSkipInstruction: false)
 	}
 }

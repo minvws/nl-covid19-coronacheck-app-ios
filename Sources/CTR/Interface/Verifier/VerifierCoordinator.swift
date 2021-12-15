@@ -18,7 +18,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	func navigateToScan()
 
-	func navigateToScanInstruction()
+	func navigateToScanInstruction(allowSkipInstruction: Bool)
 
 	/// Display content
 	/// - Parameters:
@@ -141,7 +141,10 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				navigateToScan()
 
 			case .userTappedProceedToScanInstructions:
-				navigateToScanInstruction()
+				navigateToScanInstruction(allowSkipInstruction: false)
+				
+			case .userTappedProceedToInstructionsOrRiskSetting:
+				navigateToScanInstruction(allowSkipInstruction: true)
 		}
 	}
 	
@@ -195,12 +198,13 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
 	}
 
-	func navigateToScanInstruction() {
+	func navigateToScanInstruction(allowSkipInstruction: Bool) {
 
 		let coordinator = ScanInstructionsCoordinator(
 			navigationController: dashboardNavigationController!,
 			delegate: self,
-			isOpenedFromMenu: false
+			isOpenedFromMenu: false,
+			allowSkipInstruction: allowSkipInstruction
 		)
 		startChildCoordinator(coordinator)
 	}
@@ -284,7 +288,6 @@ extension VerifierCoordinator: ScanInstructionsDelegate {
 
 	/// User completed (or skipped) the Scan Instructions flow
 	func scanInstructionsDidFinish(hasScanLock: Bool) {
-		userSettings.scanInstructionShown = true
 
 		removeScanInstructionsCoordinator()
 		
@@ -334,7 +337,8 @@ extension VerifierCoordinator: MenuDelegate {
 				let coordinator = ScanInstructionsCoordinator(
 					navigationController: dashboardNavigationController!,
 					delegate: self,
-					isOpenedFromMenu: true
+					isOpenedFromMenu: true,
+					allowSkipInstruction: false
 				)
 				startChildCoordinator(coordinator)
 				
@@ -387,13 +391,17 @@ extension VerifierCoordinator: MenuDelegate {
 	/// Get the items for the top menu
 	/// - Returns: the top menu items
 	func getTopMenuItems() -> [MenuItem] {
-		
-		return [
+
+		var list = [
 			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
-			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions()),
-			MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting())
+			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions())
 		]
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			list.append(MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting()))
+		}
+		return list
 	}
+	
 	/// Get the items for the bottom menu
 	/// - Returns: the bottom menu items
 	func getBottomMenuItems() -> [MenuItem] {

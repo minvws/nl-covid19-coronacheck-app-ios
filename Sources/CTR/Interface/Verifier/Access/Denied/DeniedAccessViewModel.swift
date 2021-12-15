@@ -70,12 +70,14 @@ final class DeniedAccessViewModel: Logging {
 		let bulletSpacing: CGFloat = -24
 		let spacing: CGFloat = 16
 
-		let textViews = [(TextView(htmlText: L.verifierDeniedMessageOne()), spacing),
-						 (TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
-						 (TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
-						 (TextView(htmlText: L.verifierDeniedMessageFour()), 0),
-						 (TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
-						 (TextView(htmlText: L.verifierDeniedMessageSix()), spacing)]
+		let textViews = [
+			(TextView(htmlText: Services.featureFlagManager.isVerificationPolicyEnabled() ? L.verifierDeniedMessageOne_2G() : L.verifierDeniedMessageOne()), spacing),
+			(TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
+			(TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
+			(TextView(htmlText: L.verifierDeniedMessageFour()), 0),
+			(TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
+			(TextView(htmlText: Services.featureFlagManager.isVerificationPolicyEnabled() ? L.verifierDeniedMessageSix_2G() : L.verifierDeniedMessageSix()), spacing)
+		]
 
 		coordinator?.displayContent(
 			title: L.verifierDeniedTitle(),

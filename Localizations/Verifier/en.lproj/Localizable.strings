@@ -4,6 +4,8 @@
 "new_in_app_risksetting_subtitle" = "Only visitors with a vaccination or recovery certificate get 2G access. 3G access is given to visitors carrying a test certificate. Check in advance which kind of access your location can give.";
 "new_in_app_risksetting_title" = "2G or 3G access";
 "new_in_app_subtitle" = "New in the app";
+"scan_instructions_4_description_2G" = "Does your screen show a check mark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";
+"scan_instructions_4_title_2G" = "Check mark = access";
 "scan_log_footer_in_use" = "App in use since %@";
 "scan_log_footer_long_time" = "App in use for longer than one month";
 "scan_log_list_clock_skew_detected" = "Date or time changed";
@@ -15,6 +17,7 @@
 "scan_log_list_now" = "now";
 "scan_log_message" = "<p>The scan setting log keeps track of the type of access used during scanning. A civil enforcement officer may request access to this log.</p><p>For privacy reasons, only scan settings used in the last %li minutes are saved on this phone. No personal information is saved. You can read more about this in the <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">frequently asked questions</a>.</p>";
 "scan_log_title" = "Scan setting log";
+"scan_qr_description_2G" = "Is the QR code valid for your location, and are the details the same as on the proof of identity? Then you can give the visitor access.";
 "updateApp.content" = "To continue, install the latest version of the app";
 "verification_policy_selection_error_message" = "Choose a setting to continue";
 /* Koptekst in de over de app pagina */
@@ -36,8 +39,10 @@
 "verifier.consent.title" = "Acceptable use policy";
 "verifier.denied.message.five" = "<p>Ask the visitor to contact the CoronaCheck help desk.</p>";
 "verifier.denied.message.four" = "<p><b>Does the screen stay red?</b></p>";
-"verifier.denied.message.one" = "<p>A red screen with a cross means the QR code does not comply with the Dutch regulations, or is not valid for locations with 2G access.</p>";
-"verifier.denied.message.six" = "<p><b>Please note:</b> without a screen with check mark, the visitor cannot be given access.</p>";
+"verifier.denied.message.one" = "<p>A red screen with a cross means the QR code does not comply with the Dutch regulations.</p>";
+"verifier.denied.message.one_2G" = "<p>A red screen with a cross means the QR code does not comply with the Dutch regulations, or is not valid for locations with 2G access.</p>";
+"verifier.denied.message.six" = "<p><b>Please note:</b> without a green screen with check mark, the visitor cannot be given access.</p>";
+"verifier.denied.message.six_2G" = "<p><b>Please note:</b> without a screen with check mark, the visitor cannot be given access.</p>";
 "verifier.denied.message.three" = "<ul><li>Check if the time is set correctly, on the visitor's phone as well as your own. Make sure date and time are set to 'set automatically'.</li><li>Check if the visitor is showing an original certificate. A screenshot of their certificate may cause problems.</li><li>Ask the visitor to completely close the app, and restart it. Please rescan the QR code after.</li></ul>";
 "verifier.denied.message.two" = "<b>Here’s what you can do:</b>";
 /* MARK: - Verifier Denied Instructions */
@@ -63,8 +68,6 @@
 "verifier.result.access.dcc" = "International certificate";
 "verifier.result.access.identityverified" = "Details are correct";
 "verifier.result.access.readmore" = "Something is wrong";
-/* MARK: - Verifier Result */
-"verifier.result.access.title" = "3G check done";
 "verifier.result.alert.dcc.message" = "You have scanned an international QR code. In the Netherlands, CoronaCheck users should show their Dutch QR code.";
 "verifier.result.alert.dcc.title" = "Ask for a Dutch QR code";
 "verifier.result.alert.unknown.message" = "Ask the visitor to show a QR code of a coronavirus pass.";
@@ -97,7 +100,7 @@
 "verifier.scaninstructions.checkonlythevisibledata.title" = "Sometimes not all details are shown";
 "verifier.scaninstructions.checkthedetails.message" = "For visitors aged 14 and over, always check if the details on your screen are the same as on the visitor's proof of identity. This way, you can ensure the QR code belongs to the visitor.";
 "verifier.scaninstructions.checkthedetails.title" = "Check the proof of identity";
-"verifier.scaninstructions.greenScreenIsAccess.message" = "Does your screen turn green and show a checkmark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";
+"verifier.scaninstructions.greenScreenIsAccess.message" = "Does your screen turn green and show a check mark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";
 "verifier.scaninstructions.greenScreenIsAccess.title" = "Green screen = access";
 "verifier.scaninstructions.navigation.skipbutton.title" = "Skip";
 "verifier.scaninstructions.navigation.title" = "About scanning";
@@ -111,7 +114,7 @@
 "verifier.start.clockdeviationwarning.button" = "Read more";
 "verifier.start.clockdeviationwarning.message" = "Check your phone's time settings. They might be incorrect.";
 "verifier.start.header" = "Scan your visitors' QR codes";
-"verifier.start.message" = "Is the QR code valid for your location, and are the details the same as on the proof of identity? Then you can give the visitor access.";
+"verifier.start.message" = "Is the QR code valid and are the details the same as on the proof of identity? Then you can give the visitor access.";
 "verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR codes";
@@ -125,7 +128,9 @@
 "verifier_home_countdown_subtitle" = "You have to wait for %li minutes because you changed your scan settings while scanning.";
 "verifier_home_countdown_title" = "You can scan again in %@";
 "verifier_menu_risksetting" = "Scan setting";
+"verifier_result_access_title" = "Check done";
 "verifier_result_access_title_highrisk" = "2G check done";
+"verifier_result_access_title_lowrisk" = "3G check done";
 "verifier_risksetting_active_lock_warning_header" = "<p><b>Please note:</b> if you change scan settings while scanning, you have to wait for %li minutes before you can scan again.</p>";
 "verifier_risksetting_active_title" = "Change scan setting";
 "verifier_risksetting_changeselection_2g" = "Set to 2G access";

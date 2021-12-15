@@ -16,6 +16,7 @@ final class Services {
 	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
 	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
 	private static var deviceAuthenticationType: DeviceAuthenticationProtocol.Type = DeviceAuthenticationDetector.self
+	private static var featureFlagManagingType: FeatureFlagManaging.Type = FeatureFlagManager.self
 	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
 	private static var jailBreakType: JailBreakProtocol.Type = JailBreakDetector.self
 	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
@@ -56,6 +57,11 @@ final class Services {
 	static func use(_ jailBreakProtocol: JailBreakProtocol) {
 
 		jailBreakDetector = jailBreakProtocol
+	}
+
+	static func use(_ featureFlagManaging: FeatureFlagManaging) {
+
+		featureFlagManager = featureFlagManaging
 	}
 
 	static func use(_ forcedInformationManaging: ForcedInformationManaging) {
@@ -160,6 +166,9 @@ final class Services {
 		flavor: AppFlavor.flavor
 	)
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init(secureUserSettings: SecureUserSettings())
+	static private(set) var featureFlagManager: FeatureFlagManaging = featureFlagManagingType.init(
+        versionSupplier: AppVersionSupplier()
+    )
 	static private(set) var jailBreakDetector: JailBreakProtocol = jailBreakType.init()
 	static private(set) var greenCardLoader: GreenCardLoading = greenCardLoadingType.init(
 		networkManager: networkManager,
@@ -221,6 +230,7 @@ final class Services {
 		walletManager = walletManagingType.init(
 			dataStoreManager: dataStoreManager
 		)
+        featureFlagManager = featureFlagManagingType.init(versionSupplier: AppVersionSupplier())
 		forcedInformationManager = forcedInformationManagingType.init(secureUserSettings: SecureUserSettings())
 		jailBreakDetector = jailBreakType.init()
 		greenCardLoader = greenCardLoadingType.init(

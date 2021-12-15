@@ -484,7 +484,7 @@ private extension EventMode {
 	var queryFilterValue: String {
 		switch self {
 			case .paperflow: return "" // Not used
-			case .positiveTest: return "positivetest"
+			case .positiveTest: return "positivetest,recovery"
 			case .recovery: return "positivetest,recovery"
 			case .test: return "negativetest"
 			case .vaccination: return "vaccination"

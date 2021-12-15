@@ -685,6 +685,7 @@
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Initialen en geboortedag en -maand zijn opgenomen in QR-code</li><li>Deze gegevens worden getoond op de Scanner-app voor controle van het identiteitsbewijs</li></ul>";
 /* MARK: - New Terms */
 "new.terms.title" = "Onze voorwaarden zijn vernieuwd";
+"qr_explanation_description_domestic_2G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig testbewijs hebt en minimale gegevens.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "recommended.updateApp.action.cancel" = "Nee, doe ik later";
 "recommended.updateApp.action.ok" = "Installeer update";
 "recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";
