@@ -76,12 +76,7 @@ class CryptoLibUtilityTests: XCTestCase {
 	func test_update_withinTTL_callsbackImmediately() {
 
 		// Arrange
-		let remoteConfigSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		let remoteConfigSpy = RemoteConfigManagingSpy()
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		remoteConfigSpy.stubbedStoredConfiguration.configTTL = 3600
 		remoteConfigSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60

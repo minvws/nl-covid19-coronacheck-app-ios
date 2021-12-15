@@ -8,9 +8,15 @@
 import XCTest
 @testable import CTR
 
+extension ForcedInformationManagerSpy {
+	convenience init() {
+		self.init(secureUserSettings: SecureUserSettings())
+	}
+}
+
 class ForcedInformationManagerSpy: ForcedInformationManaging {
 
-	required init() {}
+	required init(secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedFactorySetter = false
 	var invokedFactorySetterCount = 0

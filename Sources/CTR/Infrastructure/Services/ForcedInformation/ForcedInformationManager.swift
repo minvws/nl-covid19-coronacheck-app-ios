@@ -10,7 +10,7 @@ import Foundation
 protocol ForcedInformationManaging {
 
 	// Initialize
-	init()
+	init(secureUserSettings: SecureUserSettingsProtocol)
 	
 	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
 	var factory: ForcedInformationFactory? { get set }
@@ -36,7 +36,7 @@ protocol ForcedInformationManaging {
 class ForcedInformationManager: ForcedInformationManaging {
 
 	/// The forced information data to persist
-	private struct ForcedInformationData: Codable {
+	struct ForcedInformationData: Codable {
 
 		/// The last seen / accepted version by the user
 		var lastSeenVersion: Int
@@ -47,23 +47,21 @@ class ForcedInformationManager: ForcedInformationManaging {
 		}
 	}
 
-	private struct Constants {
-
-		/// The key chain service
-		static let keychainService = "ForcedInformationManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+	private var forcedInformationData: ForcedInformationData {
+		get { secureUserSettings.forcedInformationData }
+		set { secureUserSettings.forcedInformationData = newValue }
 	}
 
-	// keychained stored data
-	@Keychain(name: "data", service: Constants.keychainService, clearOnReinstall: true)
-	private var forcedInformationData: ForcedInformationData = .empty
-
+	// MARK: - Dependencies
+	
+	private let secureUserSettings: SecureUserSettingsProtocol
+	
 	// MARK: - ForcedInformationManaging
 
-	// Initialize
-	required init() {
-		// Required by protocol
+	required init(secureUserSettings: SecureUserSettingsProtocol) {
+		self.secureUserSettings = secureUserSettings
 	}
-	
+		
 	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
 	var factory: ForcedInformationFactory?
 
@@ -97,6 +95,6 @@ class ForcedInformationManager: ForcedInformationManaging {
 	/// Reset the manager, clear all the data
 	func reset() {
 
-		$forcedInformationData.clearData()
+		SecureUserSettings().$forcedInformationData.clearData()
 	}
 }
