@@ -325,7 +325,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 extension GreenCardModel {
 
-	static func createTestGreenCard(dataStoreManager: DataStoreManaging, type: GreenCardType, withValidCredential: Bool) -> GreenCard? {
+	static func createTestGreenCard(dataStoreManager: DataStoreManaging, type: GreenCardType, withValidCredential: Bool, forType: OriginType? = nil) -> GreenCard? {
 
 		var result: GreenCard?
 		let context = dataStoreManager.managedObjectContext()
@@ -344,6 +344,19 @@ extension GreenCardModel {
 						data: Data(),
 						validFrom: Date(timeIntervalSince1970: now),
 						expirationTime: Date(timeIntervalSince1970: expiration),
+						greenCard: greenCard,
+						managedContext: context
+					)
+				}
+				if let type = forType, let greenCard = result {
+					let now = Date().timeIntervalSince1970 - 200
+					let expiration = now + 3600
+					OriginModel.create(
+						type: type,
+						eventDate: Date(timeIntervalSince1970: now),
+						expirationTime: Date(timeIntervalSince1970: expiration),
+						validFromDate: Date(timeIntervalSince1970: now),
+						doseNumber: nil,
 						greenCard: greenCard,
 						managedContext: context
 					)
