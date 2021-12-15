@@ -38,11 +38,15 @@ class EventStartViewModel: Logging {
 				self.title = L.holderRecoveryStartTitle()
 				self.message = L.holderRecoveryStartMessage()
 				self.primaryButtonIcon = I.digid()
-			case .test, .paperflow:
+			case .paperflow:
 				// Should be changed when we want test 3.0 to use this page. Skipped in the current flow.
 				self.title = ""
 				self.message = ""
 				self.primaryButtonIcon = nil
+			case .test:
+				self.title = "A"
+				self.message = "B"
+				self.primaryButtonIcon = I.digid()
 			case .positiveTest:
 				self.title = L.holderPositiveTestStartTitle()
 				self.message = L.holderPositiveTestStartMessage()

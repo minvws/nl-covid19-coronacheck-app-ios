@@ -124,6 +124,11 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		startWithVaccination()
 	}
 
+	func startWithNegativeTest() {
+		
+		startWith(.test)
+	}
+	
 	func startWithVaccination() {
 
 		startWith(.vaccination)
@@ -150,11 +155,6 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	func startWithScannedEvent(_ event: RemoteEvent) {
 
 		navigateToListEvents([event], eventMode: .paperflow, eventsMightBeMissing: false)
-	}
-
-	func startWithTVS(eventMode: EventMode) {
-		
-		navigateToLogin(eventMode: eventMode)
 	}
 
 	// MARK: - Universal Link handling
@@ -263,29 +263,6 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		}
 	}
 
-	private func navigateBackToTestStart() {
-		
-		let popBackToViewController = navigationController.viewControllers.first {
-			
-			switch $0 {
-				case is ChooseTestLocationViewController:
-					return true
-				// Fallback when GGD is not available
-				case is ChooseQRCodeTypeViewController:
-					return true
-				default:
-					return false
-			}
-		}
-		if let popBackToViewController = popBackToViewController {
-			
-			navigationController.popToViewController(
-				popBackToViewController,
-				animated: true
-			)
-		}
-	}
-
 	private func displayError(content: Content, backAction: @escaping () -> Void) {
 
 		let viewController = ErrorStateViewController(
@@ -378,9 +355,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	private func goBack(_ eventMode: EventMode) {
 
 		switch eventMode {
-			case .test:
-				navigateBackToTestStart()
-			case .recovery, .vaccination, .positiveTest:
+			case .test, .recovery, .vaccination, .positiveTest:
 				navigateBackToEventStart()
 			case .paperflow:
 				delegate?.eventFlowDidCancel()
