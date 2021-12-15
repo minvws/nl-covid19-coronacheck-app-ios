@@ -72,7 +72,6 @@ class ScanInstructionsViewController: BaseViewController {
 				return viewController
 			}
 			self.sceneView.pageControl.numberOfPages = $0.count
-			self.sceneView.pageControl.currentPage = 0
 		}
 
 		viewModel.$shouldShowSkipButton.binding = { [weak self] shouldShowSkipButton in
@@ -137,7 +136,7 @@ class ScanInstructionsViewController: BaseViewController {
 		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
-		sceneView.pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
+//		sceneView.pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
 	}
 	
 	/// User tapped on the button
@@ -168,7 +167,7 @@ class ScanInstructionsViewController: BaseViewController {
 extension ScanInstructionsViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
-		sceneView.pageControl.currentPage = index
+		sceneView.pageControl.update(for: index)
 		viewModel.userDidChangeCurrentPage(toPageIndex: index)
 	}
 }

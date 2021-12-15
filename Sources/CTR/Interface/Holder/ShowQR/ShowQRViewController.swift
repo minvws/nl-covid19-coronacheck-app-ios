@@ -134,7 +134,6 @@ extension ShowQRViewController {
 				return
 			}
 
-			self.sceneView.pageControl.currentPage = $0
 			self.pageViewController.startAtIndex($0)
 			self.updateControlVisibility()
 		}
@@ -150,7 +149,7 @@ extension ShowQRViewController {
 		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
-		sceneView.pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
+//		sceneView.pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
 	}
 
 	/// User tapped on the page control
@@ -175,7 +174,7 @@ extension ShowQRViewController {
 extension ShowQRViewController: PageViewControllerDelegate {
 
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
-		sceneView.pageControl.currentPage = index
+		sceneView.pageControl.update(for: index)
 		viewModel.userDidChangeCurrentPage(toPageIndex: index)
 		updateControlVisibility()
 	}

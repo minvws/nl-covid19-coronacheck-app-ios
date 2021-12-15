@@ -18,7 +18,8 @@ class OnboardingView: BaseView {
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let ribbonOffset: CGFloat = 15.0
-		static let pageControlMargin: CGFloat = 12.0
+		static let pageControlSpacing: CGFloat = 16.0
+		static let pageControlSpacingSmallScreen: CGFloat = 8.0
 	}
 
 	/// The government ribbon
@@ -38,12 +39,10 @@ class OnboardingView: BaseView {
 	}()
 
 	/// The control buttons
-	let pageControl: UIPageControl = {
+	let pageControl: PageControl = {
 		
-		let view = UIPageControl()
+		let view = PageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.pageIndicatorTintColor = Theme.colors.grey2
-		view.currentPageIndicatorTintColor = Theme.colors.primary
 		return view
 	}()
 	
@@ -128,7 +127,7 @@ class OnboardingView: BaseView {
 			// Page Control
 			pageControl.bottomAnchor.constraint(
 				equalTo: primaryButton.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.pageControlMargin),
+				constant: UIDevice.current.isSmallScreen ? -ViewTraits.pageControlSpacingSmallScreen : -ViewTraits.pageControlSpacing),
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 	}
