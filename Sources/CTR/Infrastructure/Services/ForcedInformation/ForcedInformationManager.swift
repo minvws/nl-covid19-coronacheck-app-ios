@@ -10,7 +10,7 @@ import Foundation
 protocol ForcedInformationManaging {
 
 	// Initialize
-	init(secureUserSettings: SecureUserSettingsProtocol) 
+	init(secureUserSettings: SecureUserSettingsProtocol)
 	
 	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
 	var factory: ForcedInformationFactory? { get set }
