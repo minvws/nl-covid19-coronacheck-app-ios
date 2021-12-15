@@ -56,7 +56,7 @@ class VaccinationEventView: BaseView {
 		super.setupViews()
 		view?.backgroundColor = Theme.colors.viewControllerBackground
 		messageLabel.textColor = Theme.colors.grey1
-		linkLabel.textColor = Theme.colors.iosBlue
+		linkLabel.textColor = Theme.colors.primary
 		backgroundButton.addTarget(
 			self,
 			action: #selector(disclaimerButtonTapped),
@@ -180,7 +180,7 @@ class VaccinationEventView: BaseView {
 			linkLabel.attributedText = link?.setLineHeight(
 				ViewTraits.titleLineHeight,
 				kerning: ViewTraits.titleKerning,
-				textColor: Theme.colors.iosBlue
+				textColor: Theme.colors.primary
 			)
 			setAccessibilityLabel()
 		}
