@@ -39,13 +39,13 @@ class EventStartViewModel: Logging {
 				self.message = L.holderRecoveryStartMessage()
 				self.primaryButtonIcon = I.digid()
 			case .paperflow:
-				// Should be changed when we want test 3.0 to use this page. Skipped in the current flow.
+				// this is not the start scene for the paper flow.
 				self.title = ""
 				self.message = ""
 				self.primaryButtonIcon = nil
 			case .test:
-				self.title = "A"
-				self.message = "B"
+				self.title = L.holder_negativetest_ggd_title()
+				self.message = L.holder_negativetest_ggd_message()
 				self.primaryButtonIcon = I.digid()
 			case .positiveTest:
 				self.title = L.holderPositiveTestStartTitle()

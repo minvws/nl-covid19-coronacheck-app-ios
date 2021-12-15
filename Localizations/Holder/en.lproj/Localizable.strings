@@ -463,7 +463,7 @@
 /* MARK: - Holder Scanner */
 "holder.scanner.title" = "Scan QR code";
 "holder.showqr.details" = "Details";
-"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal information. While it states that your certificate is valid, it doesn't specify if you've been tested or vaccinated.</p><p>The QR code also contains the first letter of your first and last name and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
+"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal information. While it states that your certificate is valid, it doesn't specify if you've been tested, recovered or vaccinated.</p><p>The QR code also contains the first letter of your first and last name and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.domestic.title" = "Dutch QR";
