@@ -25,6 +25,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		reachabilitySpy = ReachabilitySpy()
 		secureUserSettingsSpy = SecureUserSettingsSpy()
+		secureUserSettingsSpy.stubbedStoredConfiguration = .default
 		
 		sut = RemoteConfigManager(
 			now: { now },
@@ -33,7 +34,6 @@ class RemoteConfigManagerTests: XCTestCase {
 			networkManager: networkSpy,
 			secureUserSettings: secureUserSettingsSpy
 		)
-		sut.reset()
 		
 		super.setUp()
 	}
@@ -141,31 +141,21 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(self.sut.isLoading) == false
 	}
 
-	func test_update_withinTTL_butOutsideMinimumRefreshInterval_doesRefresh() {
+	func test_update_withinTTL_butOutsideMinimumRefreshInterval_doesRefresh() throws {
 
-		// Load a new configuration into RemoteConfigurationManager to start with
-		// (currently not an easy way to change it from using .default)
-		var config = RemoteConfiguration.default
-		config.configMinimumIntervalSeconds = 60
-		config.configTTL = 3600
-
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((config, config.data, URLResponse())), ())
-
-		var completedFirstLoad = false
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { result in
-			if case .success((true, _)) = result {
-				completedFirstLoad = true
-			}
-		})
-		expect(completedFirstLoad).toEventually(beTrue())
-
-		// Setup the real test:
-		// within TTL but outside minimum interval
+		// Arrange:
+		// Put in place a "previously loaded" config:
+		let existingStoredConfig = RemoteConfiguration.default
+		userSettingsSpy.stubbedConfigFetchedHash = existingStoredConfig.hash
+		secureUserSettingsSpy.stubbedStoredConfiguration = existingStoredConfig
+		
+		// Now perform a request to fetch a "new config":
+		// within TTL but outside minimum interval, to fetch the `newConfig`:
 		var newConfig = RemoteConfiguration.default
 		newConfig.minimumVersionMessage = "This was changed"
 
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(100 * seconds * ago).timeIntervalSince1970
+		// (within TTL (3600) but outside minimum interval (300)):
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(400 * seconds * ago).timeIntervalSince1970
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfig, newConfig.data, URLResponse())), ())
 
 		// Act
@@ -185,35 +175,25 @@ class RemoteConfigManagerTests: XCTestCase {
 			default:
 				assertionFailure("Didn't receive expected result")
 		}
-
-		expect(self.sut.storedConfiguration) == newConfig
+		
+		expect(self.secureUserSettingsSpy.invokedStoredConfigurationList.last) == newConfig
 		expect(self.sut.isLoading) == false
 	}
 
 	func test_update_withinTTL_withinMinimumRefreshInterval_doesNotRefresh() {
 
-		// Load a new configuration into RemoteConfigurationManager to start with
-		// (currently not an easy way to change it from using .default)
-		var firstConfig = RemoteConfiguration.default
-		firstConfig.configMinimumIntervalSeconds = 60
-		firstConfig.configTTL = 3600
-
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((firstConfig, firstConfig.data, URLResponse())), ())
-
-		var completedFirstLoad = false
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { result in
-			if case .success((true, _)) = result {
-				completedFirstLoad = true
-			}
-		})
-		expect(completedFirstLoad).toEventually(beTrue())
+		// Arrange:
+		// Put in place a "previously loaded" config:
+		let existingStoredConfig = RemoteConfiguration.default
+		userSettingsSpy.stubbedConfigFetchedHash = existingStoredConfig.hash
+		secureUserSettingsSpy.stubbedStoredConfiguration = existingStoredConfig
 
 		// Setup the real test:
 		// within TTL but outside minimum interval
 		var newConfig = RemoteConfiguration.default
 		newConfig.minimumVersionMessage = "This was changed"
 
+		// (within TTL (3600) and minimum interval (300)):
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(5 * seconds * ago).timeIntervalSince1970
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfig, newConfig.data, URLResponse())), ())
 
@@ -231,36 +211,25 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(didCallTTLCallback) == true
 
 		switch receivedResult {
-			case .success((false, firstConfig)): break
+			case .success((false, existingStoredConfig)): break
 			default:
 				assertionFailure("Didn't receive expected result")
 		}
 
-		expect(self.sut.storedConfiguration) == firstConfig
+		expect(self.secureUserSettingsSpy.invokedStoredConfigurationSetter) == false
 		expect(self.sut.isLoading) == false
 	}
 
 	func test_update_withinTTL_withinMinimumRefreshInterval_onAppFirstLaunch_doesRefresh_withNewConfig() {
 
-		// Load a new configuration into RemoteConfigurationManager to start with
-		// (currently not an easy way to change it from using .default)
-		var firstConfig = RemoteConfiguration.default
-		firstConfig.configMinimumIntervalSeconds = 60
-		firstConfig.configTTL = 3600
-
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((firstConfig, firstConfig.data, URLResponse())), ())
-
-		var completedFirstLoad = false
-		sut.update(isAppFirstLaunch: true, immediateCallbackIfWithinTTL: {}, completion: { result in
-			if case .success((true, _)) = result {
-				completedFirstLoad = true
-			}
-		})
-		expect(completedFirstLoad).toEventually(beTrue())
-
-		// Setup the real test:
-		// within TTL but outside minimum interval
+		// Arrange:
+		// Put in place a "previously loaded" config:
+		let existingStoredConfig = RemoteConfiguration.default
+		userSettingsSpy.stubbedConfigFetchedHash = existingStoredConfig.hash
+		secureUserSettingsSpy.stubbedStoredConfiguration = existingStoredConfig
+		
+		// Now perform a request to fetch a "new config":
+		// within TTL but outside minimum interval, to fetch the `newConfig`:
 		var newConfig = RemoteConfiguration.default
 		newConfig.minimumVersionMessage = "This was changed"
 
@@ -297,7 +266,7 @@ class RemoteConfigManagerTests: XCTestCase {
 				assertionFailure("Didn't receive expected result")
 		}
 
-		expect(self.sut.storedConfiguration) == newConfig
+		expect(self.secureUserSettingsSpy.invokedStoredConfiguration) == newConfig
 		expect(self.sut.isLoading) == false
 
 		expect(reloadObserverReceivedConfiguration) == newConfig
@@ -306,27 +275,14 @@ class RemoteConfigManagerTests: XCTestCase {
 
 	func test_update_withinTTL_withinMinimumRefreshInterval_onAppFirstLaunch_doesRefresh_withUnchangedConfig() {
 
-		// Load a new configuration into RemoteConfigurationManager to start with
-		// (currently not an easy way to change it from using .default)
-		var firstConfig = RemoteConfiguration.default
-		firstConfig.configMinimumIntervalSeconds = 60
-		firstConfig.configTTL = 3600
-
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
-		userSettingsSpy.stubbedConfigFetchedHash = firstConfig.hash
-
-		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((firstConfig, firstConfig.data, URLResponse())), ())
-
-		var completedFirstLoad = false
-		sut.update(isAppFirstLaunch: true, immediateCallbackIfWithinTTL: {}, completion: { result in
-			if case .success((false, _)) = result {
-				completedFirstLoad = true
-			}
-		})
-		expect(completedFirstLoad).toEventually(beTrue())
-
-		// Setup the real test:
-		// within TTL but outside minimum interval
+		// Arrange:
+		// Put in place a "previously loaded" config:
+		let existingStoredConfig = RemoteConfiguration.default
+		userSettingsSpy.stubbedConfigFetchedHash = existingStoredConfig.hash
+		secureUserSettingsSpy.stubbedStoredConfiguration = existingStoredConfig
+		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((existingStoredConfig, existingStoredConfig.data, URLResponse())), ())
+		
+		// (within TTL (3600) and minimum interval (300)):
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(5 * seconds * ago).timeIntervalSince1970
 
 		// Add observer callbacks:
@@ -353,15 +309,15 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Assert
 		expect(didCallTTLCallback) == true
 
-		guard (receivedResult?.successValue)! == (false, firstConfig) else {
+		guard (receivedResult?.successValue)! == (false, existingStoredConfig) else {
 			fail("Didn't receive expected result \(String(describing: receivedResult))")
 			return
 		}
 
-		expect(self.sut.storedConfiguration) == firstConfig
+		expect(self.sut.storedConfiguration) == existingStoredConfig
 		expect(self.sut.isLoading) == false
 
-		expect(reloadObserverReceivedConfiguration) == firstConfig
+		expect(reloadObserverReceivedConfiguration) == existingStoredConfig
 		expect(updateObserverReceivedConfiguration).to(beNil()) // no update so no callback expected here.
 	}
 

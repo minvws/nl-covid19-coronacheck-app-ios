@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class ForcedInformationManagerTests: XCTestCase {
 
@@ -17,6 +18,7 @@ class ForcedInformationManagerTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		secureUserSettingsSpy = SecureUserSettingsSpy()
+		secureUserSettingsSpy.stubbedForcedInformationData = .empty
 		
 		sut = ForcedInformationManager(secureUserSettings: secureUserSettingsSpy)
 		sut.factory = HolderForcedInformationFactory()
@@ -50,7 +52,7 @@ class ForcedInformationManagerTests: XCTestCase {
 		sut.consentGiven()
 
 		// Then
-		XCTAssertFalse(sut.needsUpdating)
+		expect(self.secureUserSettingsSpy.invokedForcedInformationData?.lastSeenVersion) == sut.factory?.information.version
 	}
 
 	func test_getUpdatePage_holder() {
