@@ -104,7 +104,7 @@ class OnboardingViewController: BaseViewController {
 		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
-//		sceneView.pageControl.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
+		sceneView.pageControl.delegate = self
 	}
 	
 	/// User tapped on the button
@@ -116,16 +116,6 @@ class OnboardingViewController: BaseViewController {
 		} else {
 			// Move to the next page
 			pageViewController.nextPage()
-		}
-	}
-
-	/// User tapped on the page control
-	@objc func valueChanged(_ pageControl: UIPageControl) {
-
-		if pageControl.currentPage > pageViewController.currentIndex {
-			pageViewController.nextPage()
-		} else {
-			pageViewController.previousPage()
 		}
 	}
 }
@@ -156,4 +146,17 @@ extension OnboardingViewController: OnboardingPageViewControllerDelegate {
         }
         return false
     }
+}
+
+// MARK: - PageControlDelegate
+
+extension OnboardingViewController: PageControlDelegate {
+	
+	func pageControl(_ pageControl: PageControl, didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int) {
+		if currentPageIndex > previousPageIndex {
+			pageViewController.nextPage()
+		} else {
+			pageViewController.previousPage()
+		}
+	}
 }
