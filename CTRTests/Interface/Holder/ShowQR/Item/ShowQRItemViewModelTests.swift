@@ -51,7 +51,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
@@ -76,7 +76,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true
@@ -106,7 +106,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: false
@@ -130,7 +130,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: false
@@ -155,7 +155,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
@@ -183,7 +183,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true
@@ -211,7 +211,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: false
@@ -237,7 +237,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: false
@@ -265,7 +265,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		userSettingsSpy.stubbedLastScreenshotTime = now.addingTimeInterval(-10)
 
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: false
@@ -289,7 +289,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 	func testHideForCapture() throws {
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
@@ -320,7 +320,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 extension GreenCardModel {
 
-	static func createTestGreenCard(dataStoreManager: DataStoreManaging, type: GreenCardType, withValidCredential: Bool) -> GreenCard? {
+	static func createFakeGreenCard(dataStoreManager: DataStoreManaging, type: GreenCardType, withValidCredential: Bool, originType: OriginType? = nil) -> GreenCard? {
 
 		var result: GreenCard?
 		let context = dataStoreManager.managedObjectContext()
@@ -339,6 +339,19 @@ extension GreenCardModel {
 						data: Data(),
 						validFrom: Date(timeIntervalSince1970: now),
 						expirationTime: Date(timeIntervalSince1970: expiration),
+						greenCard: greenCard,
+						managedContext: context
+					)
+				}
+				if let type = originType, let greenCard = result {
+					let now = Date().timeIntervalSince1970 - 200
+					let expiration = now + 3600
+					OriginModel.create(
+						type: type,
+						eventDate: Date(timeIntervalSince1970: now),
+						expirationTime: Date(timeIntervalSince1970: expiration),
+						validFromDate: Date(timeIntervalSince1970: now),
+						doseNumber: nil,
 						greenCard: greenCard,
 						managedContext: context
 					)
