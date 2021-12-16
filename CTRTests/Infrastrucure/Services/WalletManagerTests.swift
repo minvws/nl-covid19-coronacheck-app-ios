@@ -13,14 +13,23 @@ class WalletManagerTests: XCTestCase {
 
 	private var sut: WalletManager!
 	private var dataStoreManager: DataStoreManaging!
+	private var cryptoManagerSpy: CryptoManagerSpy!
 
 	override func setUp() {
 
 		super.setUp()
 		dataStoreManager = DataStoreManager(.inMemory)
+		cryptoManagerSpy = CryptoManagerSpy()
+		Services.use(cryptoManagerSpy)
 		sut = WalletManager(dataStoreManager: dataStoreManager)
 	}
 
+	override func tearDown() {
+		
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+	
 	func test_initializer() {
 
 		// Given
@@ -278,4 +287,261 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(hasEventGroup) == true
 	}
+	
+	func test_expireEventGroups_noEvents() {
+		
+		// Given
+		// When
+		sut.expireEventGroups(vaccinationValidity: 0, recoveryValidity: 0, testValidity: 0)
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(0))
+	}
+	
+	func test_expireEventGroups_oneVaccination_notExpired() {
+		
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		// When
+		sut.expireEventGroups(vaccinationValidity: 11, recoveryValidity: nil, testValidity: nil)
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(1))
+	}
+	
+	func test_expireEventGroups_oneVaccination_expired() {
+		
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		// When
+		sut.expireEventGroups(vaccinationValidity: 9, recoveryValidity: nil, testValidity: nil)
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(0))
+	}
+	
+	func test_expireEventGroups_oneVaccination_expired_oneVaccination_notExpired() {
+		
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "CC",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(20 * hours * ago)
+		)
+		
+		// When
+		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: nil, testValidity: nil)
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(1))
+	}
+	
+	func test_expireEventGroups_oneVaccination_notExpired_oneRecovery_notExpired_oneTest_notExpired() {
+		
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		sut.storeEventGroup(
+			.recovery,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		// When
+		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: 15, testValidity: 15)
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(3))
+	}
+	
+	func test_expireEventGroups_oneVaccination_expired_oneRecovery_notExpired_oneTest_notExpired() {
+		
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		sut.storeEventGroup(
+			.recovery,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		// When
+		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 15, testValidity: 15)
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(2))
+	}
+	
+	func test_expireEventGroups_oneVaccination_expired_oneRecovery_expired_oneTest_notExpired() {
+		
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		sut.storeEventGroup(
+			.recovery,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		// When
+		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 15)
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(1))
+	}
+	
+	func test_expireEventGroups_oneVaccination_expired_oneRecovery_expired_oneTest_expired() {
+		
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		sut.storeEventGroup(
+			.recovery,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
+		// When
+		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 5)
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(0))
+	}
+	
+	func test_removeExistingGreenCards_noGreenCards() {
+		
+		// Given
+		// When
+		sut.removeExistingGreenCards()
+		
+		// Then
+		expect(self.sut.listGreenCards()).to(haveCount(0))
+	}
+	
+	func test_removeExistingGreenCards_oneGreenCard() {
+		
+		// Given
+		cryptoManagerSpy.stubbedCreateCredentialResult = .failure(CryptoError.unknown)
+		_ = sut.storeDomesticGreenCard(
+			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
+			cryptoManager: cryptoManagerSpy
+		)
+		
+		// When
+		sut.removeExistingGreenCards()
+		
+		// Then
+		expect(self.sut.listGreenCards()).to(haveCount(0))
+	}
+	
+	func test_removeExistingGreenCards_twoGreenCards() {
+		
+		// Given
+		cryptoManagerSpy.stubbedCreateCredentialResult = .failure(CryptoError.unknown)
+		_ = sut.storeDomesticGreenCard(
+			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
+			cryptoManager: cryptoManagerSpy
+		)
+		_ = sut.storeDomesticGreenCard(
+			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
+			cryptoManager: cryptoManagerSpy
+		)
+		
+		// When
+		sut.removeExistingGreenCards()
+		
+		// Then
+		expect(self.sut.listGreenCards()).to(haveCount(0))
+	}
+	
+	//	func test_storeDomesticGreenCard() throws {
+	//
+	//		// Given
+	//		let dddd = DomesticCredentialAttributes.fakeAttributes
+	//		let xxxx = try JSONEncoder().encode(dddd)
+	//		cryptoManagerSpy.stubbedCreateCredentialResult = .success(xxxx)
+	//
+	//		// When
+	//		let success = sut.storeDomesticGreenCard(
+	//			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
+	//			cryptoManager: cryptoManagerSpy
+	//		)
+	//
+	//		// Then
+	//		expect(success) == true
+	//		expect(self.sut.listGreenCards()).to(haveCount(1))
+	//
+	//	}
 }
