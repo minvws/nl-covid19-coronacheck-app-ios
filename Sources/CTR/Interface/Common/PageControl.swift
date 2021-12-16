@@ -112,7 +112,7 @@ final class PageControl: BaseView {
 	}
 	
 	override var accessibilityValue: String? {
-		get { "Pagina \(currentPageIndex + 1) van \(numberOfPages)" }
+		get { L.general_pagecontrol_accessibility_value(currentPageIndex + 1, numberOfPages) }
 		set { super.accessibilityValue = newValue }
 	}
 	

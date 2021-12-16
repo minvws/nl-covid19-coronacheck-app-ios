@@ -61,6 +61,7 @@
 "general.vaccination" = "vaccination";
 "general.vaccinationcertificate" = "vaccination certificate";
 "general.vaccinationdate" = "Vaccination date";
+"general_pagecontrol_accessibility_value" = "Page %d of %d";
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Read more:";
