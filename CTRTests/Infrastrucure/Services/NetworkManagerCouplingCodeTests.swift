@@ -31,7 +31,7 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_invalidInput() throws {
 		
 		// Given
-		let expectation = self.expectation(description: "coupling code success called")
+		let expectation = self.expectation(description: "test_checkCouplingStatus_invalidInput")
 		// This will not serialize into a valid JSONObject
 		let bogusStr = try XCTUnwrap(String(bytes: [0xD8, 0x00] as [UInt8], encoding: String.Encoding.utf16BigEndian))
 		let testDictionary: [String: AnyObject] = ["test": bogusStr as AnyObject]
@@ -54,7 +54,7 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_validResponse() {
 		
 		// Given
-		let expectation = self.expectation(description: "coupling code success called")
+		let expectation = self.expectation(description: "test_checkCouplingStatus_validResponse")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -76,7 +76,7 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_invalidResponse() {
 		
 		// Given
-		let expectation = self.expectation(description: "coupling code success called")
+		let expectation = self.expectation(description: "test_checkCouplingStatus_invalidResponse")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -98,7 +98,7 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_noInternet() {
 		
 		// Given
-		let expectation = self.expectation(description: "coupling code success called")
+		let expectation = self.expectation(description: "test_checkCouplingStatus_noInternet")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -120,7 +120,7 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_serverBusy() {
 		
 		// Given
-		let expectation = self.expectation(description: "coupling code success called")
+		let expectation = self.expectation(description: "test_checkCouplingStatus_serverBusy")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -141,7 +141,7 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_timeOut() {
 		
 		// Given
-		let expectation = self.expectation(description: "coupling code success called")
+		let expectation = self.expectation(description: "test_checkCouplingStatus_timeOut")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -163,7 +163,7 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_invalidHost() {
 		
 		// Given
-		let expectation = self.expectation(description: "coupling code success called")
+		let expectation = self.expectation(description: "test_checkCouplingStatus_invalidHost")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -185,7 +185,7 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_networkConnectionLost() {
 		
 		// Given
-		let expectation = self.expectation(description: "coupling code success called")
+		let expectation = self.expectation(description: "test_checkCouplingStatus_networkConnectionLost")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -207,7 +207,7 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_unknownError() {
 		
 		// Given
-		let expectation = self.expectation(description: "coupling code success called")
+		let expectation = self.expectation(description: "test_checkCouplingStatus_unknownError")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -229,7 +229,7 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_serverErrorMessage() {
 		
 		// Given
-		let expectation = self.expectation(description: "coupling code success called")
+		let expectation = self.expectation(description: "test_checkCouplingStatus_serverErrorMessage")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
