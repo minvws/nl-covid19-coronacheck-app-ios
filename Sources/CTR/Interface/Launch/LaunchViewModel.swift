@@ -157,7 +157,7 @@ class LaunchViewModel: Logging {
 		isUpdatingConfiguration = true
 
 		remoteConfigManager?.update(
-			isAppFirstLaunch: true,
+			isAppLaunching: true,
 			immediateCallbackIfWithinTTL: {
 				self.cryptoLibUtility?.checkFile(.remoteConfiguration)
 				completion(.withinTTL)
@@ -243,7 +243,7 @@ class LaunchViewModel: Logging {
 		isUpdatingIssuerPublicKeys = true
 
 		cryptoLibUtility?.update(
-			isAppFirstLaunch: true,
+			isAppLaunching: true,
 			immediateCallbackIfWithinTTL: {
 				self.cryptoLibUtility?.checkFile(.publicKeys)
 				completion(.withinTTL)

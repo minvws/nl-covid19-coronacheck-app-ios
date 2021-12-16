@@ -8,9 +8,15 @@
 import XCTest
 @testable import CTR
 
+extension AppInstalledSinceManagingSpy {
+	convenience init() {
+		self.init(secureUserSettings: SecureUserSettings())
+	}
+}
+
 class AppInstalledSinceManagingSpy: AppInstalledSinceManaging {
 
-	required init() {}
+	required init(secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedFirstUseDateGetter = false
 	var invokedFirstUseDateGetterCount = 0

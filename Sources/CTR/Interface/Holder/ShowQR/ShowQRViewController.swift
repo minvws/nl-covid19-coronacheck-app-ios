@@ -97,7 +97,7 @@ extension ShowQRViewController {
 			target: self,
 			action: action,
 			content: .text(L.holderShowqrDetails()),
-			tintColor: Theme.colors.iosBlue,
+			tintColor: Theme.colors.primary,
 			accessibilityIdentifier: "InformationButton",
 			accessibilityLabel: accessibilityLabel)
 		navigationItem.rightBarButtonItem = .create(config)

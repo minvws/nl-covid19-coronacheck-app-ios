@@ -44,7 +44,7 @@ class Button: UIButton {
 				case .roundedClear:
 					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
 				case .textLabelBlue:
-					return isEnabled ? Theme.colors.iosBlue : Theme.colors.grey2
+					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
 				case .roundedBlueBorder:
 					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
 			}

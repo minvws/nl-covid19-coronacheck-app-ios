@@ -31,12 +31,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		cryptoManagerSpy = CryptoManagerSpy()
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 
-		remoteConfigManagerSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
@@ -45,7 +40,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		Services.use(remoteConfigManagerSpy)
 
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
@@ -96,7 +91,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
@@ -125,7 +120,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true
@@ -153,7 +148,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true
@@ -183,7 +178,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true
@@ -212,7 +207,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true

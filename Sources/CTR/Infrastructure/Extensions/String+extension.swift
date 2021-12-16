@@ -52,7 +52,7 @@ extension String {
 
 		let underlineRange = (self as NSString).range(of: underlined)
 		let attributes: [NSAttributedString.Key: Any] = [
-			.foregroundColor: Theme.colors.iosBlue,
+			.foregroundColor: Theme.colors.primary,
 			.underlineStyle: NSUnderlineStyle.single.rawValue
 		]
 		let attributedText = NSMutableAttributedString(

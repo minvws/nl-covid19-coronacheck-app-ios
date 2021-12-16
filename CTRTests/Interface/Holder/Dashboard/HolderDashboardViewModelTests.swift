@@ -56,12 +56,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		remoteConfigSpy = RemoteConfigManagingSpy()
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()

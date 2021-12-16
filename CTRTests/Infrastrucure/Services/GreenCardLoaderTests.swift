@@ -18,12 +18,7 @@ class GreenCardLoaderTests: XCTestCase {
 		super.setUp()
 
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigManagerSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 	}
 
 	func test_earlyExitIfLaunchDateNotReached() {

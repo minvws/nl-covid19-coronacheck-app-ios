@@ -24,13 +24,6 @@ final class ScanLockManager: ScanLockManaging {
 	
 	// MARK: - Types
 
-	private struct Constants {
-		static let keychainService: String = {
-			guard !ProcessInfo.processInfo.isTesting else { return UUID().uuidString }
-			return "ScanLockManager\(Configuration().getEnvironment())"
-		}()
-	}
-	
 	enum State: Equatable {
 		case locked(until: Date)
 		case unlocked
@@ -47,16 +40,21 @@ final class ScanLockManager: ScanLockManaging {
 	
 	@Atomic<State> fileprivate(set) var state: State = .unlocked
 	private var observers = [ObserverToken: (State) -> Void]()
-	
-	@Keychain(name: "scanLockUntil", service: Constants.keychainService, clearOnReinstall: false)
-	fileprivate var keychainScanLockUntil: Date = .distantPast // swiftlint:disable:this let_var_whitespace
-	
 	private var recheckTimer: Timer?
+	private var keychainScanLockUntil: Date {
+		get {
+			return secureUserSettings.scanLockUntil
+		}
+		set {
+			secureUserSettings.scanLockUntil = newValue
+		}
+	}
 	
 	// MARK: - Dependencies
 	
 	private let now: () -> Date
 	private let notificationCenter: NotificationCenterProtocol
+	private let secureUserSettings: SecureUserSettingsProtocol
 	
 	convenience init() {
 		self.init(now: { Date() }, notificationCenter: NotificationCenter.default)
@@ -69,9 +67,14 @@ final class ScanLockManager: ScanLockManaging {
 	// never clear the userdefaults/keychain values, but just check if we're within the
 	// lock window or not.
 	//
-	required init(now: @escaping () -> Date, notificationCenter: NotificationCenterProtocol = NotificationCenter.default) {
+	required init(
+		now: @escaping () -> Date,
+		notificationCenter: NotificationCenterProtocol = NotificationCenter.default,
+		secureUserSettings: SecureUserSettingsProtocol = SecureUserSettings()
+	) {
 		self.now = now
 		self.notificationCenter = notificationCenter
+		self.secureUserSettings = secureUserSettings
 		
 		// Set the correct value of state:
 		if keychainScanLockUntil > now() {
@@ -170,19 +173,3 @@ final class ScanLockManager: ScanLockManaging {
 		state = .unlocked
 	}
 }
-
-#if DEBUG
-extension ScanLockManaging {
-	
-	/// LLDB:
-	/// `e import CTR`
-	/// `Services.scanLockManager.unlock()`
-	/// `Services.scanLockManager.lock()`
-	/// etc
-	func unlock() {
-		let casted = self as! ScanLockManager // swiftlint:disable:this force_cast
-		casted.keychainScanLockUntil = .distantPast
-		casted.state = .unlocked
-	}
-}
-#endif

@@ -18,12 +18,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		remoteConfigManagerSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		Services.use(remoteConfigManagerSpy)
 		
 		appVersionSupplierSpy = AppVersionSupplierSpy(version: "2.7.0", build: "1")

@@ -30,12 +30,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 		networkSpy = NetworkSpy(configuration: .development)
 		cryptoSpy = CryptoManagerSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		remoteConfigSpy = RemoteConfigManagingSpy()
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()

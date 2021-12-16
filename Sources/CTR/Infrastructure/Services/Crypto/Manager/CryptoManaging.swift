@@ -22,7 +22,7 @@ struct PrepareIssueEnvelope: Codable {
 
 protocol CryptoManaging: AnyObject {
 	
-	init()
+	init(secureUserSettings: SecureUserSettingsProtocol)
 	
 	// MARK: Encryption
 	

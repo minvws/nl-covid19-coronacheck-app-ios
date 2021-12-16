@@ -57,7 +57,8 @@ class VerifierStartViewModel: Logging {
 				case let .locked(_, _, totalDuration):
 					let minutes = Int((totalDuration / 60).rounded(.up))
 					return L.verifier_home_countdown_subtitle(minutes)
-
+				case .highRisk:
+					return L.scan_qr_description_2G()
 				default:
 					return L.verifierStartMessage()
 			}
@@ -281,7 +282,7 @@ class VerifierStartViewModel: Logging {
 	private func updatePublicKeys() {
 
 		// Fetch the public keys from the issuer
-		cryptoLibUtility?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: nil, completion: nil)
+		cryptoLibUtility?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: nil, completion: nil)
 	}
 }
 
