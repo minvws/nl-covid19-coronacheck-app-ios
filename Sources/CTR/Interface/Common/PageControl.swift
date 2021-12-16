@@ -23,6 +23,9 @@ final class PageControl: BaseView {
 		enum Spacing {
 			static let indicator: CGFloat = 13
 		}
+		enum Margin {
+			static let horizontal: CGFloat = 20
+		}
 		enum Scale {
 			static let selected: CGFloat = 2.5
 			static let animation: CGFloat = 2.85
@@ -68,10 +71,15 @@ final class PageControl: BaseView {
 	}()
 	private var isAnimating = false
 	
+	// MARK: Setup & Overrides
+	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
-		stackView.embed(in: self, insets: .leftRight(ViewTraits.Spacing.indicator))
+		stackView.embed(
+			in: self,
+			insets: .leftRight(ViewTraits.Margin.horizontal)
+		)
 	}
 	
 	override func setupAccessibility() {
@@ -79,16 +87,6 @@ final class PageControl: BaseView {
 		
 		isAccessibilityElement = true
 		accessibilityTraits = .adjustable
-	}
-	
-	func update(for page: Int) {
-		guard currentPageIndex != page else { return }
-
-		if page > currentPageIndex {
-			selectNextPageIndicator()
-		} else {
-			selectPreviousPageIndicator()
-		}
 	}
 	
 	override var intrinsicContentSize: CGSize {
@@ -117,7 +115,23 @@ final class PageControl: BaseView {
 		get { "Pagina \(currentPageIndex + 1) van \(numberOfPages)" }
 		set { super.accessibilityValue = newValue }
 	}
+	
+	// MARK: - Public Access
+	
+	/// Update selected page indicator
+	/// - Parameter pageIndex: Page index to have selected state
+	func update(for pageIndex: Int) {
+		guard currentPageIndex != pageIndex else { return }
+
+		if pageIndex > currentPageIndex {
+			selectNextPageIndicator()
+		} else {
+			selectPreviousPageIndicator()
+		}
+	}
 }
+
+// MARK: - Private
 
 private extension PageControl {
 	
