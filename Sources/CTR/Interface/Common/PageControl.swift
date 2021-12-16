@@ -7,9 +7,9 @@
 
 import UIKit
 
-protocol PageControlViewDelegate: AnyObject {
+protocol PageControlDelegate: AnyObject {
 	
-	func pageControl(_ pageControl: PageControl, didChangePage page: Int, previousPage: Int)
+	func pageControl(_ pageControl: PageControl, didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int)
 }
 
 final class PageControl: BaseView {
@@ -36,17 +36,11 @@ final class PageControl: BaseView {
 		}
 	}
 	
-	private(set) var currentPageIndex: Int = 0
+	/// The delegate to get current and previous page index
+	weak var delegate: PageControlDelegate?
 	
-	private var indicators: [UIView] = []
-	private let stackView: UIStackView = {
-		let stackView = UIStackView()
-		stackView.alignment = .center
-		stackView.axis = .horizontal
-		stackView.distribution = .equalSpacing
-		stackView.spacing = ViewTraits.Spacing.indicator
-		return stackView
-	}()
+	/// Get current page index
+	private(set) var currentPageIndex: Int = 0
 	
 	/// Set number of pages. Indicators shown when more than one page is set.
 	var numberOfPages: Int = 0 {
@@ -63,37 +57,77 @@ final class PageControl: BaseView {
 		}
 	}
 	
-	override func setupViews() {
-		super.setupViews()
-		
-		backgroundColor = .clear
-	}
+	private var indicators: [UIView] = []
+	private let stackView: UIStackView = {
+		let stackView = UIStackView()
+		stackView.alignment = .center
+		stackView.axis = .horizontal
+		stackView.distribution = .equalSpacing
+		stackView.spacing = ViewTraits.Spacing.indicator
+		return stackView
+	}()
+	private var isAnimating = false
 	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
-		stackView.embed(in: self)
+		stackView.embed(in: self, insets: .leftRight(ViewTraits.Spacing.indicator))
+	}
+	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		isAccessibilityElement = true
+		accessibilityTraits = .adjustable
 	}
 	
 	func update(for page: Int) {
 		guard currentPageIndex != page else { return }
-		
+
 		if page > currentPageIndex {
-			nextPage()
+			selectNextPageIndicator()
 		} else {
-			previousPage()
+			selectPreviousPageIndicator()
 		}
 	}
 	
 	override var intrinsicContentSize: CGSize {
 		let height: CGFloat = ViewTraits.Size.selected
 		let count = CGFloat(numberOfPages)
-		let width: CGFloat = (count * ViewTraits.Size.deselected) + (count - 1) * ViewTraits.Spacing.indicator
+		let margins = 2 * ViewTraits.Spacing.indicator
+		let width: CGFloat = (count * ViewTraits.Size.deselected) + (count - 1) * ViewTraits.Spacing.indicator + margins
 		return CGSize(width: width, height: height)
+	}
+	
+	override func accessibilityIncrement() {
+		guard canGoToNexPage else { return }
+		
+		let nextIndex = currentPageIndex + 1
+		delegate?.pageControl(self, didChangeToPageIndex: nextIndex, previousPageIndex: currentPageIndex)
+	}
+	
+	override func accessibilityDecrement() {
+		guard canGoToPreviousPage else { return }
+		
+		let previousIndex = currentPageIndex - 1
+		delegate?.pageControl(self, didChangeToPageIndex: previousIndex, previousPageIndex: currentPageIndex)
+	}
+	
+	override var accessibilityValue: String? {
+		get { "Pagina \(currentPageIndex + 1) van \(numberOfPages)" }
+		set { super.accessibilityValue = newValue }
 	}
 }
 
 private extension PageControl {
+	
+	var canGoToNexPage: Bool {
+		return currentPageIndex + 1 < numberOfPages
+	}
+	
+	var canGoToPreviousPage: Bool {
+		return currentPageIndex - 1 >= 0
+	}
 	
 	func addRoundIndicator(isSelected: Bool) -> UIView {
 		let indicator = UIView()
@@ -123,8 +157,8 @@ private extension PageControl {
 		}
 	}
 	
-	func nextPage() {
-		guard currentPageIndex + 1 < numberOfPages else { return }
+	func selectNextPageIndicator() {
+		guard canGoToNexPage else { return }
 		
 		currentPageIndex += 1
 		let currentIndicator = indicators[currentPageIndex]
@@ -147,8 +181,8 @@ private extension PageControl {
 		})
 	}
 	
-	func previousPage() {
-		guard currentPageIndex - 1 >= 0, currentPageIndex < indicators.count else { return }
+	func selectPreviousPageIndicator() {
+		guard canGoToPreviousPage else { return }
 		
 		let currentIndicator = indicators[currentPageIndex]
 		let previousIndicator = indicators[currentPageIndex - 1]
