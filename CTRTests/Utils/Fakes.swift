@@ -476,6 +476,15 @@ extension RemoteGreenCards.DomesticGreenCard {
 			createCredentialMessages: "test"
 		)
 	}
+	
+	static var fakeRecoveryGreenCardExpiresIn30Days: RemoteGreenCards.DomesticGreenCard {
+		RemoteGreenCards.DomesticGreenCard(
+			origins: [
+				RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
+			],
+			createCredentialMessages: "test"
+		)
+	}
 }
 
 extension EventFlow.Identity {

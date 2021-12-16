@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 @testable import CTR
 import XCTest
@@ -477,7 +478,7 @@ class WalletManagerTests: XCTestCase {
 		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 5)
 		
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(0))
+		expect(self.sut.listEventGroups()).to(beEmpty())
 	}
 	
 	func test_removeExistingGreenCards_noGreenCards() {
@@ -487,7 +488,7 @@ class WalletManagerTests: XCTestCase {
 		sut.removeExistingGreenCards()
 		
 		// Then
-		expect(self.sut.listGreenCards()).to(haveCount(0))
+		expect(self.sut.listGreenCards()).to(beEmpty())
 	}
 	
 	func test_removeExistingGreenCards_oneGreenCard() {
@@ -503,7 +504,7 @@ class WalletManagerTests: XCTestCase {
 		sut.removeExistingGreenCards()
 		
 		// Then
-		expect(self.sut.listGreenCards()).to(haveCount(0))
+		expect(self.sut.listGreenCards()).to(beEmpty())
 	}
 	
 	func test_removeExistingGreenCards_twoGreenCards() {
@@ -523,25 +524,133 @@ class WalletManagerTests: XCTestCase {
 		sut.removeExistingGreenCards()
 		
 		// Then
-		expect(self.sut.listGreenCards()).to(haveCount(0))
+		expect(self.sut.listGreenCards()).to(beEmpty())
 	}
 	
-	//	func test_storeDomesticGreenCard() throws {
-	//
-	//		// Given
-	//		let dddd = DomesticCredentialAttributes.fakeAttributes
-	//		let xxxx = try JSONEncoder().encode(dddd)
-	//		cryptoManagerSpy.stubbedCreateCredentialResult = .success(xxxx)
-	//
-	//		// When
-	//		let success = sut.storeDomesticGreenCard(
-	//			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
-	//			cryptoManager: cryptoManagerSpy
-	//		)
-	//
-	//		// Then
-	//		expect(success) == true
-	//		expect(self.sut.listGreenCards()).to(haveCount(1))
-	//
-	//	}
+	func test_storeDomesticGreenCard_vaccination() throws {
+		
+		// Given
+		let domesticCredentials: [DomesticCredential] = [
+			DomesticCredential(
+				credential: Data("test".utf8),
+				attributes: DomesticCredentialAttributes.sample(category: "3")
+			)
+		]
+		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
+		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
+		let jsonData = Data(jsonString.utf8)
+		cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		
+		// When
+		let success = sut.storeDomesticGreenCard(
+			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
+			cryptoManager: cryptoManagerSpy
+		)
+		
+		// Then
+		expect(success) == true
+		expect(self.sut.listGreenCards()).to(haveCount(1))
+		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(1))
+		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
+		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+	}
+	
+	func test_storeDomesticGreenCard_recovery() throws {
+		
+		// Given
+		let domesticCredentials: [DomesticCredential] = [
+			DomesticCredential(
+				credential: Data("test".utf8),
+				attributes: DomesticCredentialAttributes.sample(category: "3")
+			)
+		]
+		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
+		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
+		let jsonData = Data(jsonString.utf8)
+		cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		
+		// When
+		let success = sut.storeDomesticGreenCard(
+			RemoteGreenCards.DomesticGreenCard.fakeRecoveryGreenCardExpiresIn30Days,
+			cryptoManager: cryptoManagerSpy
+		)
+		
+		// Then
+		expect(success) == true
+		expect(self.sut.listGreenCards()).to(haveCount(1))
+		expect(self.sut.listOrigins(type: .vaccination)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .recovery)).to(haveCount(1))
+		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+	}
+	
+	func test_storeInternationalGreenCard_vaccination() throws {
+		
+		// Given
+		let internationalGreenCard = RemoteGreenCards.EuGreenCard(
+			origins: [RemoteGreenCards.Origin.fakeVaccinationOrigin],
+			credential: "test_storeInternationalGreenCard_vaccination"
+		)
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
+			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
+		)
+		
+		// When
+		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
+		
+		// Then
+		expect(success) == true
+		expect(self.sut.listGreenCards()).to(haveCount(1))
+		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(1))
+		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
+		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+	}
+
+	func test_storeInternationalGreenCard_recovery() throws {
+		
+		// Given
+		let internationalGreenCard = RemoteGreenCards.EuGreenCard(
+			origins: [RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days],
+			credential: "test_storeInternationalGreenCard_recovery"
+		)
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
+			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
+		)
+		
+		// When
+		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
+		
+		// Then
+		expect(success) == true
+		expect(self.sut.listGreenCards()).to(haveCount(1))
+		expect(self.sut.listOrigins(type: .vaccination)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .recovery)).to(haveCount(1))
+		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+	}
+	
+	func test_storeInternationalGreenCard_twoVaccinations() throws {
+		
+		// Given
+		let internationalGreenCard = RemoteGreenCards.EuGreenCard(
+			origins: [RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days],
+			credential: "test_storeInternationalGreenCard_twoVaccinations"
+		)
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
+			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
+		)
+		
+		// When
+		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
+		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
+		
+		// Then
+		expect(self.sut.listGreenCards()).to(haveCount(2))
+		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(2))
+		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
+		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+	}
 }
