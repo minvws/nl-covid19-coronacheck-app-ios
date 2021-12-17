@@ -61,6 +61,7 @@
 "general.vaccination" = "vaccinatie";
 "general.vaccinationcertificate" = "vaccinatiebewijs";
 "general.vaccinationdate" = "Vaccinatiedatum";
+"general_pagecontrol_accessibility_value" = "Pagina %d van %d";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Lees meer:";
@@ -463,7 +464,7 @@
 /* MARK: - Holder Scanner */
 "holder.scanner.title" = "Scan QR-code";
 "holder.showqr.details" = "Details";
-"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. Er staat wel dat je een geldig bewijs hebt, maar niet of je een test hebt gedaan of gevaccineerd bent.</p><p>In de QR-code staat ook de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
+"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. Er staat wel dat je een geldig bewijs hebt, maar niet of je een test hebt gedaan, hersteld of gevaccineerd bent.</p><p>In de QR-code staat ook de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
 "holder.showqr.domestic.title" = "Nederlandse QR";
@@ -666,6 +667,8 @@
 "holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>Een Nederlands testbewijs is alleen geldig op plekken met 3G-toegang. Dit betekent dat je met je testbewijs geen toegang krijgt tot plekken waar 2G geldt.</p><p><b>Wat is het verschil tussen 3G en 2G?</b><br />De ‘G’ staat voor Getest, Gevaccineerd, of Genezen (hersteld van corona).</p><ul><li>3G-toegang krijg je met een test-, vaccinatie- of herstelbewijs.</li><li>2G-toegang krijg je <u>niet</u> met een testbewijs. Hiervoor heb je een vaccinatie- of herstelbewijs nodig.</li></ul><p><a href=\"https://www.rijksoverheid.nl/2g\">Lees hier meer over 3G en 2G</a>.</p>";
 "holder_my_overview_3g_test_validity_bottom_sheet_title" = "Testbewijs alleen geldig voor 3G-toegang";
 "holder_my_overview_3g_test_validity_card" = "Je testbewijs is alleen geldig voor 3G-toegang in Nederland";
+"holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";
+"holder_negativetest_ggd_title" = "Testuitslag ophalen";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_test_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_vaccination_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";
@@ -686,10 +689,12 @@
 /* MARK: - New Terms */
 "new.terms.title" = "Onze voorwaarden zijn vernieuwd";
 "qr_explanation_description_domestic_2G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig testbewijs hebt en minimale gegevens.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
-"recommended.updateApp.action.cancel" = "Nee, doe ik later";
-"recommended.updateApp.action.ok" = "Installeer update";
-"recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";
-"recommended.updateApp.title" = "Wil je de app updaten?";
+"recommended.updateApp.action.cancel" = "Doe ik later";
+"recommended.updateApp.action.ok" = "Nu updaten";
+"recommended.updateApp.subtitle" = "Voorkomen dat je moet updaten als je ergens naar binnen wilt of de grens over gaat? Update nu al naar een nieuwere versie.";
+"recommended.updateApp.title" = "Update alvast je app";
+"recommended_update_card_action" = "Nu updaten";
+"recommended_update_card_description" = "Je kunt de app al naar een nieuwere versie updaten";
 "updateApp.button" = "Installeer update";
 "updateApp.content" = "Download de laatste versie van de app om verder te gaan.";
 /* MARK: - Update App */
