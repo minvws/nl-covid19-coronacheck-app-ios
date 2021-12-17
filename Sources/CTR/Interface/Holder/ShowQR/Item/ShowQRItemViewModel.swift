@@ -23,8 +23,8 @@ class ShowQRItemViewModel: Logging {
 	// MARK: - vars
 
 	weak private var delegate: ShowQRItemViewModelDelegate?
-	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
-	weak private var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
+	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
+	weak private var remoteConfigManager: RemoteConfigManaging? = Current.remoteConfigManager
 
 	weak var validityTimer: Timer?
 	weak private var screenshotWarningTimer: Timer?
@@ -109,7 +109,7 @@ class ShowQRItemViewModel: Logging {
 			}
 		}
 
-		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+		clockDeviationObserverToken = Current.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
 			self?.validityTimer?.fire()
 		}
 
@@ -117,7 +117,7 @@ class ShowQRItemViewModel: Logging {
 	}
 
 	deinit {
-		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
+		clockDeviationObserverToken.map(Current.clockDeviationManager.removeDeviationChangeObserver)
 	}
 
 	func updateQRVisibility() {

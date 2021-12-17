@@ -14,9 +14,9 @@ class ShowQRViewModel: Logging {
 
 	weak private var coordinator: HolderCoordinatorDelegate?
 
-	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
-	weak private var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
-	private var mappingManager: MappingManaging? = Services.mappingManager
+	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
+	weak private var remoteConfigManager: RemoteConfigManaging? = Current.remoteConfigManager
+	private var mappingManager: MappingManaging? = Current.mappingManager
 	private let notificationCenter: NotificationCenterProtocol
 
 	private var previousBrightness: CGFloat?
@@ -197,7 +197,7 @@ class ShowQRViewModel: Logging {
 		if let origins = greenCard.castOrigins(),
 		   origins.contains(where: { $0.type == OriginType.test.rawValue }),
 		   domesticCredentialAttributes.riskLevel == .low,
-		   Services.featureFlagManager.isVerificationPolicyEnabled() { // and the verification policy is enabled
+		   Current.featureFlagManager.isVerificationPolicyEnabled() { // and the verification policy is enabled
 			return L.qr_explanation_description_domestic_2G(identity)
 		}
 		

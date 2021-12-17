@@ -86,7 +86,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	private let flavor: AppFlavor
 	private let now: () -> Date
 	private let userSettings: UserSettingsProtocol
-	private let networkManager: NetworkManaging = Services.networkManager
+	private let networkManager: NetworkManaging = Current.networkManager
 	private let reachability: ReachabilityProtocol?
 
 	// MARK: - Setup
@@ -191,7 +191,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		isLoading = true
 
 		let newValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
-			configuration: Services.remoteConfigManager.storedConfiguration,
+			configuration: Current.remoteConfigManager.storedConfiguration,
 			lastFetchedTimestamp: userSettings.issuerKeysFetchedTimestamp,
 			isAppLaunching: isAppLaunching,
 			now: now

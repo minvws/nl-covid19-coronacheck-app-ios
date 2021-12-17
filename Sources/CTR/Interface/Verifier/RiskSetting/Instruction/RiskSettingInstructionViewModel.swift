@@ -37,7 +37,7 @@ final class RiskSettingInstructionViewModel: Logging {
 	
 	init(
 		coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol),
-		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
+		riskLevelManager: RiskLevelManaging = Current.riskLevelManager
 	) {
 		
 		self.coordinator = coordinator

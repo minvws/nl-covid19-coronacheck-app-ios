@@ -147,8 +147,8 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		}
 	}
 
-	private let walletManager: WalletManaging = Services.walletManager
-	private let greencardLoader: GreenCardLoading = Services.greenCardLoader
+	private let walletManager: WalletManaging = Current.walletManager
+	private let greencardLoader: GreenCardLoading = Current.greenCardLoader
 	private let reachability: ReachabilityProtocol?
 
 	private let now: () -> Date

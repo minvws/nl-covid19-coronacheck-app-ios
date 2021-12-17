@@ -33,7 +33,7 @@ final class ScanLockManager: ScanLockManaging {
 	
 	/// Query the Remote Config Manager for the scan lock duration.
 	static var configScanLockDuration: TimeInterval {
-		TimeInterval(Services.remoteConfigManager.storedConfiguration.scanLockSeconds ?? 300)
+		TimeInterval(Current.remoteConfigManager.storedConfiguration.scanLockSeconds ?? 300)
 	}
 	
 	// MARK: - Vars

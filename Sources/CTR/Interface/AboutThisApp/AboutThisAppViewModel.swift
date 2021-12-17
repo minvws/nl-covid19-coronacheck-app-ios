@@ -115,7 +115,7 @@ class AboutThisAppViewModel: Logging {
 		if Configuration().getEnvironment() != "production" {
 			topList.append(AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle()))
 		}
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			menu = [
 				L.verifierAboutReadmore(): topList,
 				L.verifier_about_this_app_law_enforcement(): [
@@ -191,7 +191,7 @@ class AboutThisAppViewModel: Logging {
 
 	func resetDataAndRestart() {
 
-		Services.reset(flavor: flavor)
+		Current.reset(flavor: flavor)
 		self.userSettings.reset()
 		self.coordinator?.restart()
 	}

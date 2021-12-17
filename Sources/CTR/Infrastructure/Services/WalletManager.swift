@@ -73,7 +73,7 @@ class WalletManager: WalletManaging, Logging {
 
 	private var dataStoreManager: DataStoreManaging
 
-	required init( dataStoreManager: DataStoreManaging = Services.dataStoreManager) {
+	required init( dataStoreManager: DataStoreManaging = Current.dataStoreManager) {
 
 		self.dataStoreManager = dataStoreManager
 

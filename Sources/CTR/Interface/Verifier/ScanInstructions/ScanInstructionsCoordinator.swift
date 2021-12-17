@@ -44,7 +44,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		isOpenedFromMenu: Bool,
 		allowSkipInstruction: Bool,
 		userSettings: UserSettingsProtocol = UserSettings(),
-		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
+		riskLevelManager: RiskLevelManaging = Current.riskLevelManager
 	) {
 
 		self.navigationController = navigationController

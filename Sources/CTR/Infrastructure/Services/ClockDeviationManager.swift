@@ -62,14 +62,14 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 
 	required convenience init() {
 		self.init(
-			remoteConfigManager: Services.remoteConfigManager,
+			remoteConfigManager: Current.remoteConfigManager,
 			currentSystemUptime: { ClockDeviationManager.currentSystemUptime() },
 			now: { Date() }
 		)
 	}
 
 	required init(
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+		remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager,
 		currentSystemUptime: @escaping () -> __darwin_time_t? = { ClockDeviationManager.currentSystemUptime() },
 		now: @escaping () -> Date = { Date() }
 	) {

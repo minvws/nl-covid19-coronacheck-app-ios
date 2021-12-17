@@ -62,7 +62,7 @@ final class CheckIdentityViewModel: Logging {
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
 		verificationDetails: MobilecoreVerificationDetails,
 		isDeepLinkEnabled: Bool,
-		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
+		riskLevelManager: RiskLevelManaging = Current.riskLevelManager
 	) {
 		
 		self.coordinator = coordinator
@@ -118,7 +118,7 @@ final class CheckIdentityViewModel: Logging {
 		let verifiedType: VerifiedType
 		var riskSetting: RiskLevel = .low
 		
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			guard let state = riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
 				return

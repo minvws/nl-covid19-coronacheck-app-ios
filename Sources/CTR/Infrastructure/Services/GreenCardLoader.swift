@@ -56,9 +56,9 @@ class GreenCardLoader: GreenCardLoading, Logging {
 	private let walletManager: WalletManaging
 
 	required init(
-		networkManager: NetworkManaging = Services.networkManager,
-		cryptoManager: CryptoManaging = Services.cryptoManager,
-		walletManager: WalletManaging = Services.walletManager) {
+		networkManager: NetworkManaging = Current.networkManager,
+		cryptoManager: CryptoManaging = Current.cryptoManager,
+		walletManager: WalletManaging = Current.walletManager) {
 
 		self.networkManager = networkManager
 		self.cryptoManager = cryptoManager
@@ -106,7 +106,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 									// ~~ 📆 TEMPORARY - will be removed in 1 month ~~
 									GreenCardLoader.temporary___updateRecoveryExtensionValidityFlags(
 										userSettings: UserSettings(),
-										remoteConfigManager: Services.remoteConfigManager,
+										remoteConfigManager: Current.remoteConfigManager,
 										now: { Date() }
 									)
 

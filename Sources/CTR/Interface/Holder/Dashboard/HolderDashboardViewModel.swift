@@ -141,8 +141,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	// Dependencies:
 	private let now: () -> Date
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
-	private let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+	private weak var cryptoManager: CryptoManaging? = Current.cryptoManager
+	private let remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
 	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private let userSettings: UserSettingsProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
@@ -179,7 +179,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			qrCards: [],
 			expiredGreenCards: [],
 			isRefreshingStrippen: false,
-			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false,
+			deviceHasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false,
 			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
 				now: now(),
 				remoteConfiguration: remoteConfigManager.storedConfiguration
@@ -203,7 +203,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
             self?.recoveryValidityExtensionManager.reload()
 		}
 
-		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+		clockDeviationObserverToken = Current.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
 			self?.state.deviceHasClockDeviation = hasClockDeviation
 			self?.datasource.reload() // this could cause some QR code states to change, so reload.
 		}
@@ -211,7 +211,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 
 	deinit {
 		notificationCenter.removeObserver(self)
-		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
+		clockDeviationObserverToken.map(Current.clockDeviationManager.removeDeviationChangeObserver)
 		remoteConfigUpdateObserverToken.map(remoteConfigManager.removeObserver)
 		remoteConfigUpdatesConfigurationWarningToken.map(remoteConfigManager.removeObserver)
 	}

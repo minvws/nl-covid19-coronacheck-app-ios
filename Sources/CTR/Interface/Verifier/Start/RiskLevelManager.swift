@@ -85,7 +85,7 @@ extension RiskLevelManaging {
 	
 	/// LLDB:
 	/// `e import CTR`
-	/// `Services.riskLevelManager.set(riskLevel: .high)`
+	/// `Current.riskLevelManager.set(riskLevel: .high)`
 	func set(riskLevel: RiskLevel) {
 		let casted = self as! RiskLevelManager // swiftlint:disable:this force_cast
 		casted.state = riskLevel

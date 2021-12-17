@@ -41,8 +41,8 @@ class ScanInstructionsViewModel {
 		coordinator: ScanInstructionsCoordinatorDelegate,
 		pages: [ScanInstructionsPage],
 		userSettings: UserSettingsProtocol,
-		riskLevelManager: RiskLevelManaging = Services.riskLevelManager,
-		scanLockManager: ScanLockManaging = Services.scanLockManager
+		riskLevelManager: RiskLevelManaging = Current.riskLevelManager,
+		scanLockManager: ScanLockManaging = Current.scanLockManager
 	) {
 		
 		self.coordinator = coordinator
@@ -52,7 +52,7 @@ class ScanInstructionsViewModel {
 		self.scanLockManager = scanLockManager
 		self.currentPage = 0
 
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			shouldShowRiskSetting = riskLevelManager.state == nil
 		}
 		

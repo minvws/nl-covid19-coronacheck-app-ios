@@ -156,14 +156,14 @@ class VerifierStartViewModel: Logging {
 	// MARK: - Dependencies
 	
 	private weak var coordinator: VerifierCoordinatorDelegate?
-	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
-	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
+	private weak var cryptoManager: CryptoManaging? = Current.cryptoManager
+	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Current.cryptoLibUtility
 	private var userSettings: UserSettingsProtocol
-	private let clockDeviationManager: ClockDeviationManaging = Services.clockDeviationManager
+	private let clockDeviationManager: ClockDeviationManaging = Current.clockDeviationManager
 	private let scanLockProvider: ScanLockManaging
 	private let riskLevelProvider: RiskLevelManaging
-	private weak var scanLogManager: ScanLogManaging? = Services.scanLogManager
-	private weak var remoteConfigurationManager: RemoteConfigManaging? = Services.remoteConfigManager
+	private weak var scanLogManager: ScanLogManaging? = Current.scanLogManager
+	private weak var remoteConfigurationManager: RemoteConfigManaging? = Current.remoteConfigManager
 	
 	/// Initializer
 	/// - Parameters:
@@ -197,7 +197,7 @@ class VerifierStartViewModel: Logging {
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
 
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			// Pass current states in immediately to configure `self.mode`:
 			lockStateDidChange(lockState: scanLockProvider.state)
 			riskLevelDidChange(riskLevel: riskLevelProvider.state)
@@ -293,7 +293,7 @@ extension VerifierStartViewModel {
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }
 
-		if userSettings.scanInstructionShown, (riskLevelProvider.state != nil || !Services.featureFlagManager.isVerificationPolicyEnabled()) {
+		if userSettings.scanInstructionShown, (riskLevelProvider.state != nil || !Current.featureFlagManager.isVerificationPolicyEnabled()) {
 			if let crypto = cryptoManager, crypto.hasPublicKeys() {
 				coordinator?.didFinish(.userTappedProceedToScan)
 			} else {
@@ -308,7 +308,7 @@ extension VerifierStartViewModel {
 
 	func showInstructionsButtonTapped() {
 		
-		guard mode.allowsShowScanInstructions || !Services.featureFlagManager.isVerificationPolicyEnabled() else { return }
+		guard mode.allowsShowScanInstructions || !Current.featureFlagManager.isVerificationPolicyEnabled() else { return }
 		coordinator?.didFinish(.userTappedProceedToScanInstructions)
 	}
 

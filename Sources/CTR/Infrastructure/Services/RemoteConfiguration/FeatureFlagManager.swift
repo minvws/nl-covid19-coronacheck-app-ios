@@ -18,7 +18,7 @@ protocol FeatureFlagManaging {
 
 class FeatureFlagManager: FeatureFlagManaging, Logging {
 	
-	weak var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
+	weak var remoteConfigManager: RemoteConfigManaging? = Current.remoteConfigManager
 	private var versionSupplier: AppVersionSupplierProtocol?
 	
 	required init(versionSupplier: AppVersionSupplierProtocol?) {

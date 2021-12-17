@@ -21,7 +21,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 
 	let cryptoManager: CryptoManaging
 
-	required init(cryptoManager: CryptoManaging = Services.cryptoManager) {
+	required init(cryptoManager: CryptoManaging = Current.cryptoManager) {
 
 		self.cryptoManager = cryptoManager
 	}

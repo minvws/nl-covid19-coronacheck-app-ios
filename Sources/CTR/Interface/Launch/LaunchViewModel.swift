@@ -13,12 +13,12 @@ class LaunchViewModel: Logging {
 	private weak var coordinator: AppCoordinatorDelegate?
 
 	private var versionSupplier: AppVersionSupplierProtocol?
-	private weak var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
+	private weak var remoteConfigManager: RemoteConfigManaging? = Current.remoteConfigManager
 	private weak var walletManager: WalletManaging?
-	private weak var jailBreakDetector: JailBreakProtocol? = Services.jailBreakDetector
-	private weak var deviceAuthenticationDetector: DeviceAuthenticationProtocol? = Services.deviceAuthenticationDetector
+	private weak var jailBreakDetector: JailBreakProtocol? = Current.jailBreakDetector
+	private weak var deviceAuthenticationDetector: DeviceAuthenticationProtocol? = Current.deviceAuthenticationDetector
 	private var userSettings: UserSettingsProtocol?
-	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
+	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Current.cryptoLibUtility
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
@@ -61,9 +61,9 @@ class LaunchViewModel: Logging {
 			? L.holderLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 			: L.verifierLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 
-		walletManager = flavor == .holder ? Services.walletManager : nil
+		walletManager = flavor == .holder ? Current.walletManager : nil
 
-		remoteConfigManagerUpdateToken = Services.remoteConfigManager.appendReloadObserver { [weak self] remoteConfig, rawData, urlResponse in
+		remoteConfigManagerUpdateToken = Current.remoteConfigManager.appendReloadObserver { [weak self] remoteConfig, rawData, urlResponse in
 			self?.cryptoLibUtility?.checkFile(.remoteConfiguration)
 			self?.checkWallet()
 		}
@@ -73,7 +73,7 @@ class LaunchViewModel: Logging {
 
 	deinit {
 		remoteConfigManagerUpdateToken.map {
-			Services.remoteConfigManager.removeObserver(token: $0)
+			Current.remoteConfigManager.removeObserver(token: $0)
 		}
 	}
 

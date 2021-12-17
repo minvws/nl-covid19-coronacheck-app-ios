@@ -90,12 +90,12 @@ class HolderCoordinator: SharedCoordinator {
 	let recoveryValidityExtensionManager: RecoveryValidityExtensionManager = {
 		RecoveryValidityExtensionManager(
 			userHasRecoveryEvents: {
-				let eventGroups = Services.walletManager.listEventGroups()
+				let eventGroups = Current.walletManager.listEventGroups()
 				let hasRecoveryEvents = eventGroups.contains { $0.type == OriginType.recovery.rawValue }
 				return hasRecoveryEvents
 			},
 			userHasUnexpiredRecoveryGreencards: {
-				let unexpiredGreencards = Services.walletManager.greencardsWithUnexpiredOrigins(
+				let unexpiredGreencards = Current.walletManager.greencardsWithUnexpiredOrigins(
 					now: Date(),
 					ofOriginType: OriginType.recovery
 				)
@@ -105,13 +105,13 @@ class HolderCoordinator: SharedCoordinator {
 			},
 			userHasPaperflowRecoveryGreencards: {
 
-				return Services.walletManager.hasEventGroup(
+				return Current.walletManager.hasEventGroup(
 					type: EventMode.recovery.rawValue,
 					providerIdentifier: EventFlow.paperproofIdentier
 				)
 			},
 			userSettings: UserSettings(),
-			remoteConfigManager: Services.remoteConfigManager,
+			remoteConfigManager: Current.remoteConfigManager,
 			now: { Date() }
 		)
 	}()

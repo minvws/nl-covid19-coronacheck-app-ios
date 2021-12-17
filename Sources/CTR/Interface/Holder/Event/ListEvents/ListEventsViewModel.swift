@@ -12,11 +12,11 @@ class ListEventsViewModel: Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	private let walletManager: WalletManaging = Services.walletManager
-	let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-	private let greenCardLoader: GreenCardLoading = Services.greenCardLoader
-	let cryptoManager: CryptoManaging? = Services.cryptoManager
-	let mappingManager: MappingManaging = Services.mappingManager
+	private let walletManager: WalletManaging = Current.walletManager
+	let remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
+	private let greenCardLoader: GreenCardLoading = Current.greenCardLoader
+	let cryptoManager: CryptoManaging? = Current.cryptoManager
+	let mappingManager: MappingManaging = Current.mappingManager
 	private let identityChecker: IdentityCheckerProtocol
 
 	var eventMode: EventMode

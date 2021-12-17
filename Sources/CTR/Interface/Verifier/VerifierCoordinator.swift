@@ -61,8 +61,8 @@ class VerifierCoordinator: SharedCoordinator {
 		) {
 			
 			setupMenu()
-			Services.scanLogManager.deleteExpiredScanLogEntries(
-				seconds: Services.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
+			Current.scanLogManager.deleteExpiredScanLogEntries(
+				seconds: Current.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
 			)
 			navigateToVerifierWelcome()
 		}
@@ -92,7 +92,7 @@ class VerifierCoordinator: SharedCoordinator {
 				}
 			
 				// Is the user currently permitted to scan?
-				guard Services.scanLockManager.state == .unlocked && Services.riskLevelManager.state != nil
+				guard Current.scanLockManager.state == .unlocked && Current.riskLevelManager.state != nil
 				else { return true } // handled (but ignored)
 				
 				thirdPartyScannerApp = (name: matchingMetadata.name, returnURL: returnURL)
@@ -124,8 +124,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			let dashboardViewController = VerifierStartViewController(
 				viewModel: VerifierStartViewModel(
 					coordinator: self,
-					scanLockProvider: Services.scanLockManager,
-					riskLevelProvider: Services.riskLevelManager
+					scanLockProvider: Current.scanLockManager,
+					riskLevelProvider: Current.riskLevelManager
 				)
 			)
 
@@ -396,7 +396,7 @@ extension VerifierCoordinator: MenuDelegate {
 			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
 			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions())
 		]
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			list.append(MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting()))
 		}
 		return list

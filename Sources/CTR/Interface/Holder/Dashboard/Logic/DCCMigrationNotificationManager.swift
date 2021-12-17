@@ -39,7 +39,7 @@ final class DCCMigrationNotificationManager: DCCMigrationNotificationManagerProt
 			return
 		}
 
-		guard !Services.walletManager.canSkipMultiDCCUpgrade() else {
+		guard !Current.walletManager.canSkipMultiDCCUpgrade() else {
 
 			// next time skip check.
 			userSettings.didCompleteEUVaccinationMigration = true
@@ -49,7 +49,7 @@ final class DCCMigrationNotificationManager: DCCMigrationNotificationManagerProt
 			return
 		}
 
-		if Services.walletManager.shouldShowMultiDCCUpgradeBanner(userSettings: userSettings) {
+		if Current.walletManager.shouldShowMultiDCCUpgradeBanner(userSettings: userSettings) {
 
 			showUpgradeAvailableBanner()
 		}

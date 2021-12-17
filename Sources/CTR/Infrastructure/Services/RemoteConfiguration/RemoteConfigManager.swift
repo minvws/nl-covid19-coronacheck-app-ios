@@ -63,7 +63,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
 		reachability: ReachabilityProtocol?,
-		networkManager: NetworkManaging = Services.networkManager,
+		networkManager: NetworkManaging = Current.networkManager,
 		secureUserSettings: SecureUserSettingsProtocol
 	) {
 
