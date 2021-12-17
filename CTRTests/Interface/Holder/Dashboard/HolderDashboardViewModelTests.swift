@@ -73,7 +73,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
 
-	func vendSut(dashboardRegionToggleValue: QRCodeValidityRegion) -> HolderDashboardViewModel {
+	func vendSut(dashboardRegionToggleValue: QRCodeValidityRegion, appVersion: String = "1.0.0") -> HolderDashboardViewModel {
 
 		userSettingsSpy.stubbedDashboardRegionToggleValue = dashboardRegionToggleValue
 
@@ -85,6 +85,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			dccMigrationNotificationManager: migrationNotificationManagerSpy,
 			recoveryValidityExtensionManager: recoveryValidityExtensionManagerSpy,
 			configurationNotificationManager: configurationNotificationManagerSpy,
+			versionSupplier: AppVersionSupplierSpy(version: appVersion),
 			now: { now }
 		)
 	}
@@ -309,6 +310,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Error Message should now be gone:
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
 	}
+	
 	func test_strippen_domesticandinternational_startLoading_shouldClearError() {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
@@ -2403,6 +2405,42 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutOutdatedConfig) == true
 	}
 	
+	func test_recommendUpdate_recommendedVersion_higherActionVersion() {
+		
+		// Arrange
+		remoteConfigSpy.stubbedStoredConfiguration.recommendedVersion = "1.2.0"
+
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic, appVersion: "1.1.0")
+
+		// Assert
+		expect(self.sut.domesticCards[1]).toEventually(beRecommendedUpdateCard())
+	}
+	
+	func test_recommendUpdate_recommendedVersion_lowerActionVersion() {
+		
+		// Arrange
+		remoteConfigSpy.stubbedStoredConfiguration.recommendedVersion = "1.0.0"
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic, appVersion: "1.1.0")
+		
+		// Assert
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_recommendUpdate_recommendedVersion_equalActionVersion() {
+		
+		// Arrange
+		remoteConfigSpy.stubbedStoredConfiguration.recommendedVersion = "1.1.0"
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic, appVersion: "1.1.0")
+		
+		// Assert
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
 	// MARK: - HolderDashboardCardUserActionHandling callbacks
 	
 	func test_actionhandling_didTapConfigAlmostOutOfDateCTA() {
@@ -2625,6 +2663,31 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter) == true
 	}
+	
+	func test_actionhandling_didTapRecommenedUpdate_noUrl() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapRecommendedUpdate()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
+	}
+	
+	func test_actionhandling_didTapRecommenedUpdate() {
+		
+		// Arrange
+		remoteConfigSpy.stubbedStoredConfiguration.appStoreURL = URL(string: "https://apple.com")
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapRecommendedUpdate()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == true
+	}
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
@@ -2742,6 +2805,17 @@ private func beTestOnlyValidFor3GCard(test: @escaping (String, String, () -> Voi
 	return Predicate.define("be .beTestOnlyValidFor3GCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .testOnlyValidFor3G(message2, callToActionButtonText, didTapCallToAction) = actual {
+			test(message2, callToActionButtonText, didTapCallToAction)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+private func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .beRecommendedUpdateCard with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .recommendedUpdate(message2, callToActionButtonText, didTapCallToAction) = actual {
 			test(message2, callToActionButtonText, didTapCallToAction)
 			return PredicateResult(status: .matches, message: message)
 		}
