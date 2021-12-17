@@ -3,7 +3,7 @@
 TMPDIR=${TMPDIR:-/tmp}
 set -e
 
-OPENSSL=${OPENSSL:-/usr/local/Cellar/openssl\@1.1/1.1.1l_1/bin/openssl}
+OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1m/bin/openssl}
 
 # Create a 'staat der nederlanden' root certificate that looks like
 # the real thing. 
@@ -59,7 +59,7 @@ SUBJ="/C=NL/O=Ministerie van Volksgezondheid, Welzijn en Sport/OU=Corona Alerter
 $OPENSSL req -new -keyout client.key -nodes -subj "${SUBJ}" |\
 $OPENSSL x509 \
 	-extfile  ext.cnf.$$ -extensions leaf \
-	-req -CAkey sub-ca.key -CA sub-ca.pem -set_serial 0xdeadbeefdeadbeefc0de -out client.pub
+	-req -days 365 -CAkey sub-ca.key -CA sub-ca.pem -set_serial 0xdeadbeefdeadbeefc0de -out client.pub
 rm ext.cnf.$$
 
 cat client.key client.pub > client.crt
