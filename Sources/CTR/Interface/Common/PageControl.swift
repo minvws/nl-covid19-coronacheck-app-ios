@@ -69,37 +69,37 @@ final class PageControl: BaseView {
 		stackView.spacing = ViewTraits.Spacing.indicator
 		return stackView
 	}()
-    private let buttonStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.isAccessibilityElement = false
-        return stackView
-    }()
-    
+	private let buttonStackView: UIStackView = {
+		let stackView = UIStackView()
+		stackView.axis = .horizontal
+		stackView.distribution = .fillEqually
+		stackView.isAccessibilityElement = false
+		return stackView
+	}()
+	
 	// MARK: Setup & Overrides
-    
-    override func setupViewHierarchy() {
-        super.setupViewHierarchy()
-        
-        let previousButton = UIButton()
-        previousButton.addTarget(self, action: #selector(navigateToPreviousPage), for: .touchUpInside)
-        previousButton.isAccessibilityElement = false
-        buttonStackView.addArrangedSubview(previousButton)
-        let nextButton = UIButton()
-        nextButton.addTarget(self, action: #selector(navigateToNextPage), for: .touchUpInside)
-        nextButton.isAccessibilityElement = false
-        buttonStackView.addArrangedSubview(nextButton)
-    }
+	
+	override func setupViewHierarchy() {
+		super.setupViewHierarchy()
+		
+		let previousButton = UIButton()
+		previousButton.addTarget(self, action: #selector(navigateToPreviousPage), for: .touchUpInside)
+		previousButton.isAccessibilityElement = false
+		buttonStackView.addArrangedSubview(previousButton)
+		let nextButton = UIButton()
+		nextButton.addTarget(self, action: #selector(navigateToNextPage), for: .touchUpInside)
+		nextButton.isAccessibilityElement = false
+		buttonStackView.addArrangedSubview(nextButton)
+	}
 	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
-        indicatorStackView.embed(
+		indicatorStackView.embed(
 			in: self,
 			insets: .leftRight(ViewTraits.Margin.extraHorizontalTapArea)
 		)
-        buttonStackView.embed(in: self)
+		buttonStackView.embed(in: self)
 	}
 	
 	override func setupAccessibility() {
@@ -136,7 +136,7 @@ final class PageControl: BaseView {
 	/// - Parameter pageIndex: Page index to have selected state
 	func update(for pageIndex: Int) {
 		guard currentPageIndex != pageIndex else { return }
-
+		
 		if pageIndex > currentPageIndex {
 			selectNextPageIndicator()
 		} else {
@@ -156,20 +156,20 @@ private extension PageControl {
 	var canGoToPreviousPage: Bool {
 		return currentPageIndex - 1 >= 0
 	}
-    
-    @objc func navigateToNextPage() {
-        guard canGoToNexPage else { return }
-        
-        let nextIndex = currentPageIndex + 1
-        delegate?.pageControl(self, didChangeToPageIndex: nextIndex, previousPageIndex: currentPageIndex)
-    }
-    
-    @objc func navigateToPreviousPage() {
-        guard canGoToPreviousPage else { return }
-        
-        let previousIndex = currentPageIndex - 1
-        delegate?.pageControl(self, didChangeToPageIndex: previousIndex, previousPageIndex: currentPageIndex)
-    }
+	
+	@objc func navigateToNextPage() {
+		guard canGoToNexPage else { return }
+		
+		let nextIndex = currentPageIndex + 1
+		delegate?.pageControl(self, didChangeToPageIndex: nextIndex, previousPageIndex: currentPageIndex)
+	}
+	
+	@objc func navigateToPreviousPage() {
+		guard canGoToPreviousPage else { return }
+		
+		let previousIndex = currentPageIndex - 1
+		delegate?.pageControl(self, didChangeToPageIndex: previousIndex, previousPageIndex: currentPageIndex)
+	}
 	
 	func addRoundIndicator(isSelected: Bool) -> UIView {
 		let indicator = UIView()
@@ -190,11 +190,11 @@ private extension PageControl {
 	}
 	
 	func addIndicators(for count: Int) {
-        indicatorStackView.removeArrangedSubviews()
+		indicatorStackView.removeArrangedSubviews()
 		
 		for index in 0..<count {
 			let indicator = addRoundIndicator(isSelected: index <= currentPageIndex)
-            indicatorStackView.addArrangedSubview(indicator)
+			indicatorStackView.addArrangedSubview(indicator)
 			indicators.append(indicator)
 		}
 	}
@@ -210,15 +210,15 @@ private extension PageControl {
 					   delay: 0,
 					   options: [.beginFromCurrentState, .curveEaseOut],
 					   animations: {
-            nextIndicator.backgroundColor = ViewTraits.Color.selected
+			nextIndicator.backgroundColor = ViewTraits.Color.selected
 			previousIndicator.backgroundColor = ViewTraits.Color.deselected
-            nextIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
+			nextIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
 			previousIndicator.transform = .identity
 		}, completion: { finished in
 			guard finished else { return }
 			
 			UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
-                nextIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
+				nextIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
 			})
 		})
 	}
@@ -226,7 +226,7 @@ private extension PageControl {
 	func selectPreviousPageIndicator() {
 		guard canGoToPreviousPage else { return }
 		
-        currentPageIndex -= 1
+		currentPageIndex -= 1
 		let nextIndicator = indicators[currentPageIndex + 1]
 		let previousIndicator = indicators[currentPageIndex]
 		
@@ -234,10 +234,10 @@ private extension PageControl {
 					   delay: 0,
 					   options: [.beginFromCurrentState, .curveEaseOut],
 					   animations: {
-            nextIndicator.backgroundColor = ViewTraits.Color.deselected
+			nextIndicator.backgroundColor = ViewTraits.Color.deselected
 			previousIndicator.backgroundColor = ViewTraits.Color.selected
 			previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
-            nextIndicator.transform = .identity
+			nextIndicator.transform = .identity
 		}, completion: { finished in
 			guard finished else { return }
 			
