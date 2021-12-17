@@ -20,7 +20,7 @@ extension DomesticCredentialAttributes {
 			category: category ?? "",
 			specimen: "0",
 			paperProof: "0",
-			validFrom: "\(Date())",
+			validFrom: "\(Date().timeIntervalSince1970)",
 			validForHours: "24"
 		)
 	}

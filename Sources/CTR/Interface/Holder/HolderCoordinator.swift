@@ -255,6 +255,18 @@ class HolderCoordinator: SharedCoordinator {
 			eventCoordinator.startWithRecovery()
 		}
 	}
+	
+	private func startEventFlowForNegativeTest() {
+		
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithNegativeTest()
+		}
+	}
 
 	private func startEventFlowForPositiveTests() {
 
@@ -433,15 +445,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToCreateANegativeTestQRFromGGD() {
-
-		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
-			let eventCoordinator = EventCoordinator(
-				navigationController: navController,
-				delegate: self
-			)
-			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithTVS(eventMode: EventMode.test)
-		}
+		startEventFlowForNegativeTest()
 	}
 
 	func userWishesToCreateAVaccinationQR() {

@@ -72,7 +72,6 @@ class ScanInstructionsViewController: BaseViewController {
 				return viewController
 			}
 			self.sceneView.pageControl.numberOfPages = $0.count
-			self.sceneView.pageControl.currentPage = 0
 		}
 
 		viewModel.$shouldShowSkipButton.binding = { [weak self] shouldShowSkipButton in
@@ -137,7 +136,7 @@ class ScanInstructionsViewController: BaseViewController {
 		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
-		sceneView.pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
+		sceneView.pageControl.delegate = self
 	}
 	
 	/// User tapped on the button
@@ -151,16 +150,6 @@ class ScanInstructionsViewController: BaseViewController {
 			pageViewController.nextPage()
 		}
 	}
-
-	/// User tapped on the page control
-	@objc func pageControlValueChanged(_ pageControl: UIPageControl) {
-
-		if pageControl.currentPage > pageViewController.currentIndex {
-			pageViewController.nextPage()
-		} else {
-			pageViewController.previousPage()
-		}
-	}
 }
 
 // MARK: - PageViewControllerDelegate
@@ -168,7 +157,7 @@ class ScanInstructionsViewController: BaseViewController {
 extension ScanInstructionsViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
-		sceneView.pageControl.currentPage = index
+		sceneView.pageControl.update(for: index)
 		viewModel.userDidChangeCurrentPage(toPageIndex: index)
 	}
 }
@@ -188,4 +177,17 @@ extension ScanInstructionsViewController: ScanInstructionsPageViewControllerDele
         }
         return false
     }
+}
+
+// MARK: - PageControlDelegate
+
+extension ScanInstructionsViewController: PageControlDelegate {
+	
+	func pageControl(_ pageControl: PageControl, didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int) {
+		if currentPageIndex > previousPageIndex {
+			pageViewController.nextPage()
+		} else {
+			pageViewController.previousPage()
+		}
+	}
 }
