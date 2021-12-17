@@ -91,6 +91,11 @@ struct DomesticCredential: Codable {
 		case attributes
 	}
 
+	init(credential: Data?, attributes: DomesticCredentialAttributes) {
+		self.credential = credential
+		self.attributes = attributes
+	}
+
 	init(from decoder: Decoder) throws {
 
 		let container = try decoder.container(keyedBy: CodingKeys.self)
