@@ -38,6 +38,7 @@ class HolderDashboardViewController: BaseViewController {
 		
 		// Recommendations
 		case recommendCoronaMelder
+		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -235,7 +236,8 @@ private extension HolderDashboardViewController.Card {
 				let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
 				let .recoveryValidityExtensionAvailable(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
-				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction):
+				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction),
+				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
