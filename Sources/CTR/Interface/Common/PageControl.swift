@@ -24,7 +24,7 @@ final class PageControl: BaseView {
 			static let indicator: CGFloat = 13
 		}
 		enum Margin {
-			static let horizontal: CGFloat = 20
+			static let extraHorizontalTapArea: CGFloat = 40
 		}
 		enum Scale {
 			static let selected: CGFloat = 2.5
@@ -61,7 +61,7 @@ final class PageControl: BaseView {
 	}
 	
 	private var indicators: [UIView] = []
-	private let stackView: UIStackView = {
+	private let indicatorStackView: UIStackView = {
 		let stackView = UIStackView()
 		stackView.alignment = .center
 		stackView.axis = .horizontal
@@ -69,17 +69,37 @@ final class PageControl: BaseView {
 		stackView.spacing = ViewTraits.Spacing.indicator
 		return stackView
 	}()
-	private var isAnimating = false
-	
+    private let buttonStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.isAccessibilityElement = false
+        return stackView
+    }()
+    
 	// MARK: Setup & Overrides
+    
+    override func setupViewHierarchy() {
+        super.setupViewHierarchy()
+        
+        let previousButton = UIButton()
+        previousButton.addTarget(self, action: #selector(navigateToPreviousPage), for: .touchUpInside)
+        previousButton.isAccessibilityElement = false
+        buttonStackView.addArrangedSubview(previousButton)
+        let nextButton = UIButton()
+        nextButton.addTarget(self, action: #selector(navigateToNextPage), for: .touchUpInside)
+        nextButton.isAccessibilityElement = false
+        buttonStackView.addArrangedSubview(nextButton)
+    }
 	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
-		stackView.embed(
+        indicatorStackView.embed(
 			in: self,
-			insets: .leftRight(ViewTraits.Margin.horizontal)
+			insets: .leftRight(ViewTraits.Margin.extraHorizontalTapArea)
 		)
+        buttonStackView.embed(in: self)
 	}
 	
 	override func setupAccessibility() {
@@ -92,23 +112,17 @@ final class PageControl: BaseView {
 	override var intrinsicContentSize: CGSize {
 		let height: CGFloat = ViewTraits.Size.selected
 		let count = CGFloat(numberOfPages)
-		let margins = 2 * ViewTraits.Spacing.indicator
+		let margins = 2 * ViewTraits.Margin.extraHorizontalTapArea
 		let width: CGFloat = (count * ViewTraits.Size.deselected) + (count - 1) * ViewTraits.Spacing.indicator + margins
 		return CGSize(width: width, height: height)
 	}
 	
 	override func accessibilityIncrement() {
-		guard canGoToNexPage else { return }
-		
-		let nextIndex = currentPageIndex + 1
-		delegate?.pageControl(self, didChangeToPageIndex: nextIndex, previousPageIndex: currentPageIndex)
+		navigateToNextPage()
 	}
 	
 	override func accessibilityDecrement() {
-		guard canGoToPreviousPage else { return }
-		
-		let previousIndex = currentPageIndex - 1
-		delegate?.pageControl(self, didChangeToPageIndex: previousIndex, previousPageIndex: currentPageIndex)
+		navigateToPreviousPage()
 	}
 	
 	override var accessibilityValue: String? {
@@ -142,6 +156,20 @@ private extension PageControl {
 	var canGoToPreviousPage: Bool {
 		return currentPageIndex - 1 >= 0
 	}
+    
+    @objc func navigateToNextPage() {
+        guard canGoToNexPage else { return }
+        
+        let nextIndex = currentPageIndex + 1
+        delegate?.pageControl(self, didChangeToPageIndex: nextIndex, previousPageIndex: currentPageIndex)
+    }
+    
+    @objc func navigateToPreviousPage() {
+        guard canGoToPreviousPage else { return }
+        
+        let previousIndex = currentPageIndex - 1
+        delegate?.pageControl(self, didChangeToPageIndex: previousIndex, previousPageIndex: currentPageIndex)
+    }
 	
 	func addRoundIndicator(isSelected: Bool) -> UIView {
 		let indicator = UIView()
@@ -162,11 +190,11 @@ private extension PageControl {
 	}
 	
 	func addIndicators(for count: Int) {
-		stackView.removeArrangedSubviews()
+        indicatorStackView.removeArrangedSubviews()
 		
 		for index in 0..<count {
 			let indicator = addRoundIndicator(isSelected: index <= currentPageIndex)
-			stackView.addArrangedSubview(indicator)
+            indicatorStackView.addArrangedSubview(indicator)
 			indicators.append(indicator)
 		}
 	}
