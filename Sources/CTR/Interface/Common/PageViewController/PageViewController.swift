@@ -50,8 +50,10 @@ final class PageViewController: UIPageViewController {
 			self.inProgress = false
 			completion?(completed)
 
-			if let view = viewControllers?.first?.view {
-				UIAccessibility.post(notification: .screenChanged, argument: view)
+			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+				if let view = viewControllers?.first?.view {
+					UIAccessibility.post(notification: .screenChanged, argument: view)
+				}
 			}
 		}
 	}

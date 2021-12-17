@@ -199,7 +199,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.nextButton.isHidden) == true
 		expect(self.sut.sceneView.previousButton.isHidden) == false
 		expect(self.sut.sceneView.pageControl.isHidden) == false
-		expect(self.sut.sceneView.pageControl.currentPage) == 1
+		expect(self.sut.sceneView.pageControl.currentPageIndex) == 1
 		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
 	}
 
@@ -229,7 +229,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.nextButton.isHidden).toEventually(beTrue())
 		expect(self.sut.sceneView.previousButton.isHidden).toEventually(beFalse())
 		expect(self.sut.sceneView.pageControl.isHidden) == false
-		expect(self.sut.sceneView.pageControl.currentPage).toEventually(equal(1))
+		expect(self.sut.sceneView.pageControl.currentPageIndex).toEventually(equal(1))
 		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
 	}
 

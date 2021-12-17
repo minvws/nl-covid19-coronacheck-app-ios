@@ -27,7 +27,7 @@ class ShowQRView: BaseView {
 		}
 		enum Spacing {
 			static let dosageToButton: CGFloat = 10
-			static let buttonToPageControl: CGFloat = 10
+			static let buttonToPageControl: CGFloat = 16
 			static let containerToReturnToThirdPartyAppButton: CGFloat = 24
 		}
 	}
@@ -43,13 +43,10 @@ class ShowQRView: BaseView {
 	}()
 
 	/// The control buttons
-	let pageControl: UIPageControl = {
+	let pageControl: PageControl = {
 
-		let view = UIPageControl()
+		let view = PageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.pageIndicatorTintColor = Theme.colors.grey2
-		view.currentPageIndicatorTintColor = Theme.colors.primary
-		view.hidesForSinglePage = true
 		return view
 	}()
 
