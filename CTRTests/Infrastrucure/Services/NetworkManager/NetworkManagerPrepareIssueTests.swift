@@ -11,10 +11,10 @@ import Nimble
 import OHHTTPStubs
 import OHHTTPStubsSwift
 
-class NetworkManagerEventAccessTokenTests: XCTestCase {
+class NetworkManagerPrepareIssueTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v7/holder/access_tokens"
+	private let path = "/v7/holder/prepare_issue"
 	
 	override func setUp() {
 		
@@ -28,20 +28,17 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		HTTPStubs.removeAllStubs()
 	}
 	
-	func test_fetchEventAccessTokens_validResponse() {
+	func test_prepareIssue_validResponse() {
 
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_validResponse")
-		let token = "test_fetchEventAccessTokens_validResponse"
+		let expectation = self.expectation(description: "test_prepareIssue_validResponse")
 
 		stub(condition: isPath(path)) { _ in
-			// Return valid tokens
+			// Return valid PrepareIssueEnvelope
 			return HTTPStubsResponse(
 				jsonObject: [
-					"tokens": [
-						["provider_identifier": "ZZZ", "unomi": "test unomi ZZZ", "event": "test event ZZZ"],
-						["provider_identifier": "GGD", "unomi": "test unomi GGD", "event": "test event GGD"]
-					]
+					"stoken": "test stoken",
+					"prepareIssueMessage": "test message"
 				],
 				statusCode: 200,
 				headers: nil
@@ -49,24 +46,23 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
+		sut.prepareIssue { result in
 
 			// Then
 			expect(result.isSuccess) == true
-			expect(result.successValue).to(haveCount(2))
-			expect(result.successValue?[0].providerIdentifier) == "ZZZ"
-			expect(result.successValue?[1].providerIdentifier) == "GGD"
+			expect(result.successValue?.stoken) == "test stoken"
+			expect(result.successValue?.prepareIssueMessage) == "test message"
+
 			expectation.fulfill()
 		}
 
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	func test_fetchEventAccessTokens_invalidResponse() {
+	func test_prepareIssue_invalidResponse() {
 
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_invalidResponse")
-		let token = "test_fetchEventAccessTokens_invalidResponse"
+		let expectation = self.expectation(description: "test_prepareIssue_invalidResponse")
 
 		stub(condition: isPath(path)) { _ in
 			// Return status accepted
@@ -74,7 +70,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
+		sut.prepareIssue { result in
 
 			// Then
 			expect(result.isFailure) == true
@@ -85,11 +81,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	func test_fetchEventAccessTokens_noInternet() {
+	func test_prepareIssue_noInternet() {
 
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_noInternet")
-		let token = "test_fetchEventAccessTokens_noInternet"
+		let expectation = self.expectation(description: "test_prepareIssue_noInternet")
 
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.notConnectedToInternet.rawValue)
@@ -97,7 +92,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
+		sut.prepareIssue { result in
 
 			// Then
 			expect(result.isFailure) == true
@@ -108,18 +103,17 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	func test_fetchEventAccessTokens_serverBusy() {
+	func test_prepareIssue_serverBusy() {
 
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_serverBusy")
-		let token = "test_fetchEventAccessTokens_serverBusy"
+		let expectation = self.expectation(description: "test_prepareIssue_serverBusy")
 
 		stub(condition: isPath(path)) { _ in
 			return HTTPStubsResponse(data: Data(), statusCode: 429, headers: nil)
 		}
 
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
+		sut.prepareIssue { result in
 
 			// Then
 			expect(result.isFailure) == true
@@ -130,11 +124,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	func test_fetchEventAccessTokens_timeOut() {
+	func test_prepareIssue_timeOut() {
 
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_timeOut")
-		let token = "test_fetchEventAccessTokens_timeOut"
+		let expectation = self.expectation(description: "test_prepareIssue_timeOut")
 
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.timedOut.rawValue)
@@ -142,7 +135,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
+		sut.prepareIssue { result in
 
 			// Then
 			expect(result.isFailure) == true
@@ -153,11 +146,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	func test_fetchEventAccessTokens_invalidHost() {
+	func test_prepareIssue_invalidHost() {
 
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_invalidHost")
-		let token = "test_fetchEventAccessTokens_invalidHost"
+		let expectation = self.expectation(description: "test_prepareIssue_invalidHost")
 
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cannotFindHost.rawValue)
@@ -165,7 +157,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
+		sut.prepareIssue { result in
 
 			// Then
 			expect(result.isFailure) == true
@@ -176,11 +168,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	func test_fetchEventAccessTokens_networkConnectionLost() {
+	func test_prepareIssue_networkConnectionLost() {
 
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_networkConnectionLost")
-		let token = "test_fetchEventAccessTokens_networkConnectionLost"
+		let expectation = self.expectation(description: "test_prepareIssue_networkConnectionLost")
 
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.networkConnectionLost.rawValue)
@@ -188,7 +179,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
+		sut.prepareIssue { result in
 
 			// Then
 			expect(result.isFailure) == true
@@ -199,11 +190,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	func test_fetchEventAccessTokens_unknownError() {
+	func test_prepareIssue_unknownError() {
 
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_unknownError")
-		let token = "test_fetchEventAccessTokens_unknownError"
+		let expectation = self.expectation(description: "test_prepareIssue_unknownError")
 
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.unknown.rawValue)
@@ -211,7 +201,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
+		sut.prepareIssue { result in
 
 			// Then
 			expect(result.isFailure) == true
@@ -222,18 +212,17 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	func test_fetchEventAccessTokens_serverErrorMessage() {
+	func test_prepareIssue_serverErrorMessage() {
 
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_serverErrorMessage")
-		let token = "test_fetchEventAccessTokens_serverErrorMessage"
+		let expectation = self.expectation(description: "test_prepareIssue_serverErrorMessage")
 
 		stub(condition: isPath(path)) { _ in
 			return HTTPStubsResponse(jsonObject: ["status": "error", "code": 99702], statusCode: 500, headers: nil)
 		}
 
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
+		sut.prepareIssue { result in
 
 			// Then
 			expect(result.isFailure) == true
