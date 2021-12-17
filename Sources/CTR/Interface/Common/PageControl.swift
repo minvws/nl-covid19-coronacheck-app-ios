@@ -175,22 +175,22 @@ private extension PageControl {
 		guard canGoToNexPage else { return }
 		
 		currentPageIndex += 1
-		let currentIndicator = indicators[currentPageIndex]
+		let nextIndicator = indicators[currentPageIndex]
 		let previousIndicator = indicators[currentPageIndex - 1]
 		
 		UIView.animate(withDuration: ViewTraits.Duration.animation,
 					   delay: 0,
 					   options: [.beginFromCurrentState, .curveEaseOut],
 					   animations: {
-			currentIndicator.backgroundColor = ViewTraits.Color.selected
+            nextIndicator.backgroundColor = ViewTraits.Color.selected
 			previousIndicator.backgroundColor = ViewTraits.Color.deselected
-			currentIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
+            nextIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
 			previousIndicator.transform = .identity
 		}, completion: { finished in
 			guard finished else { return }
 			
 			UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
-				currentIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
+                nextIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
 			})
 		})
 	}
@@ -198,24 +198,24 @@ private extension PageControl {
 	func selectPreviousPageIndicator() {
 		guard canGoToPreviousPage else { return }
 		
-		let currentIndicator = indicators[currentPageIndex]
-		let previousIndicator = indicators[currentPageIndex - 1]
+        currentPageIndex -= 1
+		let nextIndicator = indicators[currentPageIndex + 1]
+		let previousIndicator = indicators[currentPageIndex]
 		
 		UIView.animate(withDuration: ViewTraits.Duration.animation,
 					   delay: 0,
 					   options: [.beginFromCurrentState, .curveEaseOut],
 					   animations: {
-			currentIndicator.backgroundColor = ViewTraits.Color.deselected
+            nextIndicator.backgroundColor = ViewTraits.Color.deselected
 			previousIndicator.backgroundColor = ViewTraits.Color.selected
 			previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
-			currentIndicator.transform = .identity
+            nextIndicator.transform = .identity
 		}, completion: { finished in
 			guard finished else { return }
 			
 			UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
 				previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
 			})
-			self.currentPageIndex -= 1
 		})
 	}
 }
