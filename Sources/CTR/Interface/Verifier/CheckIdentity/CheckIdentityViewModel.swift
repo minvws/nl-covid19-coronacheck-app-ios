@@ -120,7 +120,8 @@ final class CheckIdentityViewModel: Logging {
 		
 		if Services.featureFlagManager.isVerificationPolicyEnabled() {
 			guard let state = riskLevelManager.state else {
-				fatalError("Risk level should be set")
+				assertionFailure("Risk level should be set")
+				return
 			}
 			riskSetting = state
 		}
