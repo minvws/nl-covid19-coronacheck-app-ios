@@ -15,6 +15,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 	var cryptoSpy: CryptoManagerSpy!
 	var flowSpy: PaperProofFlowDelegateSpy!
 	var navigationSpy: NavigationControllerSpy!
+	var couplingManagerSpy: CouplingManagerSpy!
 
 	override func setUp() {
 
@@ -22,7 +23,12 @@ class PaperProofCoordinatorTests: XCTestCase {
 		cryptoSpy = CryptoManagerSpy()
 		flowSpy = PaperProofFlowDelegateSpy()
 		navigationSpy = NavigationControllerSpy()
-
+		couplingManagerSpy = CouplingManagerSpy(
+			cryptoManager: CryptoManagerSpy(),
+			networkManager: NetworkSpy(configuration: .development)
+		)
+		
+		Services.use(couplingManagerSpy)
 		Services.use(cryptoSpy)
 
 		sut = PaperProofCoordinator(delegate: flowSpy)
@@ -99,6 +105,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 
 		// Given
 		sut.token = nil
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .accepted)), ())
 
 		// When
 		sut.userWishesToCreateACertificate(message: "test")
