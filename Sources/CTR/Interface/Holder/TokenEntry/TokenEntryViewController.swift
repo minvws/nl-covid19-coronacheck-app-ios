@@ -17,15 +17,19 @@ class TokenEntryViewController: BaseViewController {
 	
 	private let viewModel: TokenEntryViewModel
 	private var tapGestureRecognizer: UITapGestureRecognizer?
+	private let isRootViewController: Bool
 	
 	let sceneView = TokenEntryView()
 	
-	init(viewModel: TokenEntryViewModel) {
+	init(viewModel: TokenEntryViewModel, isRootViewController: Bool = false) {
 		
 		self.viewModel = viewModel
-
+		self.isRootViewController = isRootViewController
+		
 		super.init(nibName: nil, bundle: nil)
 	}
+	
+	override var enableSwipeBack: Bool { !isRootViewController }
 	
 	@available(*, unavailable)
 	required init?(coder: NSCoder) {
@@ -50,8 +54,10 @@ class TokenEntryViewController: BaseViewController {
 		sceneView.verificationEntryView.inputField.delegate = self
 		sceneView.verificationEntryView.inputField.tag = TextFieldTag.verificationEntry.rawValue
 		
-		// Only show an arrow as back button
-		addBackButton()
+		if !isRootViewController {
+			// Show back button in navigation push
+			addBackButton()
+		}
 	}
 	
 	func setupBinding() {
