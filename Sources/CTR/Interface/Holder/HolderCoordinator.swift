@@ -288,8 +288,7 @@ class HolderCoordinator: SharedCoordinator {
 				coordinator: self,
 				requestToken: token,
 				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false)
-			),
-			isRootViewController: false
+			)
 		)
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
@@ -686,15 +685,8 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = navigationController
 				
 			case .visitorPass:
-				let destination = TokenEntryViewController(
-					viewModel: TokenEntryViewModel(
-						coordinator: self,
-						requestToken: nil,
-						tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false)
-					),
-					isRootViewController: true
-				)
-				
+
+				let destination = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
 				navigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
 
