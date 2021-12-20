@@ -493,6 +493,10 @@ errit:
 /// Extract the X509 from a certificate, returns null if failed.
 /// @param certificateData the data of the certificate
 - (nullable X509*) getX509: (NSData *) certificateData {
+	
+	if (certificateData == NULL || certificateData.length == 0) {
+		return NULL;
+	}
 
 	BIO *blob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length);
 	if (blob == NULL) {
