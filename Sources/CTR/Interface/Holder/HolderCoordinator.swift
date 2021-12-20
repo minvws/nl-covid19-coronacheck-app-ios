@@ -717,8 +717,9 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
+			MenuItem(identifier: .about, title: L.holderMenuAbout()),
 			MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
-			MenuItem(identifier: .about, title: L.holderMenuAbout())
+			MenuItem(identifier: .visitorPass, title: L.holder_menu_visitorpass())
 		]
 	}
 }
