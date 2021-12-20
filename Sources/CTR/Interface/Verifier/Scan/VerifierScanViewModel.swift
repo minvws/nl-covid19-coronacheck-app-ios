@@ -65,7 +65,8 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		if Services.featureFlagManager.isVerificationPolicyEnabled() {
 
 			guard let currentRiskLevel = riskLevelManager?.state else {
-				fatalError("Risk level should be set")
+				assertionFailure("Risk level should be set")
+				return
 			}
 			scanLogManager?.addScanEntry(riskLevel: currentRiskLevel, date: Date())
 		}

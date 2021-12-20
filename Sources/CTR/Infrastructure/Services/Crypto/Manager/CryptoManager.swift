@@ -138,7 +138,8 @@ class CryptoManager: CryptoManaging, Logging {
 		let verificationPolicy: String
 		if Services.featureFlagManager.isVerificationPolicyEnabled() {
 			guard let riskSetting = riskLevelManager.state else {
-				fatalError("Risk level should be set")
+				assertionFailure("Risk level should be set")
+				return nil
 			}
 			verificationPolicy = riskSetting.policy
 		} else {
