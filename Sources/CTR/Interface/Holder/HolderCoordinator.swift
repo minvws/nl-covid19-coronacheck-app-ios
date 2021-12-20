@@ -320,6 +320,7 @@ class HolderCoordinator: SharedCoordinator {
 				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
 				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
 				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
+				versionSupplier: versionSupplier,
 				now: { Date() }
 			)
 		)

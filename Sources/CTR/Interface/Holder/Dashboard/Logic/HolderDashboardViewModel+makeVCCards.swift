@@ -286,6 +286,20 @@ extension HolderDashboardViewController.Card {
 		)]
 	}
 	
+	static func makeRecommendedUpdateCard(
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		guard state.shouldShowRecommendedUpdateBanner else { return [] }
+		return [
+			.recommendedUpdate(
+				message: L.recommended_update_card_description(),
+				callToActionButtonText: L.recommended_update_card_action(),
+				didTapCallToAction: actionHandler.didTapRecommendedUpdate
+			)
+		]
+	}
+
 	/// Map a `QRCard` to a `VC.Card`:
 	static func makeQRCards(
 		state: HolderDashboardViewModel.State,

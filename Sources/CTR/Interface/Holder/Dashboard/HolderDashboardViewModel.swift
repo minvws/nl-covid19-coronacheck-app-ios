@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import UIKit
 import CoreData
@@ -21,6 +22,7 @@ protocol HolderDashboardCardUserActionHandling {
 	func didTapMultipleDCCUpgradeCompletedClose()
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
 	func didTapRetryLoadQRCards()
+	func didTapRecommendedUpdate()
 	func didTapRecoveryValidityExtensionAvailableMoreInfo()
 	func didTapRecoveryValidityExtensionCompleteMoreInfo()
 	func didTapRecoveryValidityExtensionCompleteClose()
@@ -79,6 +81,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
 
 		var shouldShowDomestic3GTestBanner: Bool = false
+	
+		var shouldShowRecommendedUpdateBanner: Bool = false
 		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -141,6 +145,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	private let dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
 	private var recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol
 	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
+	private var versionSupplier: AppVersionSupplierProtocol?
 
 	// MARK: - Initializer
 	init(
@@ -151,6 +156,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol,
 		recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
+		versionSupplier: AppVersionSupplierProtocol?,
 		now: @escaping () -> Date
 	) {
 
@@ -163,6 +169,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		self.dccMigrationNotificationManager = dccMigrationNotificationManager
 		self.recoveryValidityExtensionManager = recoveryValidityExtensionManager
 		self.configurationNotificationManager = configurationNotificationManager
+		self.versionSupplier = versionSupplier
 
 		self.state = State(
 			qrCards: [],
@@ -183,6 +190,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		setupDCCMigrationNotificationManager()
 		setupRecoveryValidityExtensionManager()
 		setupConfigNotificationManager()
+		setupRecommendedVersion()
 
 		// If the config ever changes, reload dependencies:
 		remoteConfigUpdateObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
@@ -271,6 +279,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			)
 			self.recoveryValidityExtensionManager.reload()
 			self.registerForConfigAlmostOutOfDateUpdate()
+			self.setupRecommendedVersion()
 		}
 	}
 
@@ -391,6 +400,13 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		}
 	}
 	
+	fileprivate func setupRecommendedVersion() {
+		
+		let recommendedVersion = remoteConfigManager.storedConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
+		let currentVersion = versionSupplier?.getCurrentVersion().fullVersionString() ?? "1.0.0"
+		self.state.shouldShowRecommendedUpdateBanner = recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending
+	}
+	
 	// MARK: - NSNotification
 	
 	fileprivate func setupNotificationListeners() {
@@ -504,6 +520,14 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		strippenRefresher.load()
 	}
 	
+	func didTapRecommendedUpdate() {
+		
+		guard let url = remoteConfigManager.storedConfiguration.appStoreURL else {
+			return
+		}
+		openUrl(url)
+	}
+	
 	func didTapRecoveryValidityExtensionAvailableMoreInfo() {
 		coordinator?.userWishesMoreInfoAboutRecoveryValidityExtension()
 	}
@@ -543,6 +567,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeMultipleDCCMigrationCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecoveryValidityCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler)

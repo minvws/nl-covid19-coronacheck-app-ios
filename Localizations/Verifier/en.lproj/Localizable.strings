@@ -123,7 +123,7 @@
 /* MARK: - URL */
 "verifier.url.faq" = "https://coronacheck.nl/en/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/en/gebruikersvoorwaarden-in-app";
-"verifier_about_this_app_law_enforcement" = "For enforcement";
+"verifier_about_this_app_law_enforcement" = "For enforcement:";
 "verifier_about_this_app_scan_log" = "Scan setting log";
 "verifier_home_countdown_subtitle" = "You have to wait for %li minutes because you changed your scan settings while scanning.";
 "verifier_home_countdown_title" = "You can scan again in %@";
