@@ -62,10 +62,7 @@ class ScanLogViewController: BaseViewController {
 			guard let strongSelf = self else { return }
 
 			// Clear all items
-			strongSelf.sceneView.logStackView.arrangedSubviews.forEach {
-				strongSelf.sceneView.logStackView.removeArrangedSubview($0)
-				$0.removeFromSuperview()
-			}
+			strongSelf.sceneView.logStackView.removeArrangedSubviews()
 
 			// Starting Line
 			strongSelf.sceneView.addLineToLogStackView()

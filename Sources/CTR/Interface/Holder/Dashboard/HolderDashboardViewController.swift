@@ -156,10 +156,7 @@ class HolderDashboardViewController: BaseViewController {
 			card.makeView(openURLHandler: { [weak viewModel] url in viewModel?.openUrl(url) })
 		}
 		
-		stackView.arrangedSubviews.forEach {
-			stackView.removeArrangedSubview($0)
-			$0.removeFromSuperview()
-		}
+		stackView.removeArrangedSubviews()
 		
 		cardViews.forEach {
 			stackView.addArrangedSubview($0)

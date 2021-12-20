@@ -231,10 +231,7 @@ class QRCardView: BaseView {
 	private func reapplyLabels(now: Date = Date()) {
 
 		// Remove previous labels
-		verticalLabelsStackView.arrangedSubviews.forEach { arrangedView in
-			verticalLabelsStackView.removeArrangedSubview(arrangedView)
-			arrangedView.removeFromSuperview()
-		}
+		verticalLabelsStackView.removeArrangedSubviews()
  
 		guard let validityTexts = validityTexts?(now) else { return }
 
