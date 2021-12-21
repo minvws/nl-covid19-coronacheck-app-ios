@@ -27,10 +27,7 @@ final class VisitorPassStartViewModel: Logging {
 
 	/// Initializer
 	/// - Parameters:
-	///   - coordinator: The coordinator to open Url
-	///   - title: The title of the page
-	///   - message: The message of the page
-	///   - buttonTitle: The title of the button
+	///   - coordinator: The holder coordinator
 	init(coordinator: OpenUrlProtocol & HolderCoordinatorDelegate) {
 
 		self.coordinator = coordinator
