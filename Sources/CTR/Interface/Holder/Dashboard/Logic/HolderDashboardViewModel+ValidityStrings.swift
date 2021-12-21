@@ -77,7 +77,13 @@ extension QRCard {
 				// -- Domestic Vaccinations --
 					
 				case (.validityHasBegun, .netherlands, .vaccination):
-					return validityText_hasBegun_domestic_vaccination(doseNumber: origin.doseNumber, validFrom: origin.validFromDate)
+					let expiryIsBeyondThreeYearsFromNow = origin.expiryIsBeyondThreeYearsFromNow(now: now)
+					return validityText_hasBegun_domestic_vaccination(
+						expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
+						doseNumber: origin.doseNumber,
+						validFrom: origin.validFromDate,
+						expirationTime: origin.expirationTime
+					)
 				
 				case (.validityHasNotYetBegun, .netherlands, .vaccination):
 					return validityText_hasNotYetBegun_netherlands_vaccination(doseNumber: origin.doseNumber, qrCard: qrCard, validFrom: origin.validFromDate, now: now)
@@ -180,10 +186,7 @@ private func validityText_hasBegun_eu_fallback(origin: QRCard.GreenCard.Origin, 
 	)
 }
 
-private func validityText_hasBegun_domestic_vaccination(doseNumber: Int?, validFrom: Date) -> HolderDashboardViewController.ValidityText {
-	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
-	let dateString = formatter.string(from: validFrom)
-	let prefix = L.holderDashboardQrValidityDatePrefixValidFrom()
+private func validityText_hasBegun_domestic_vaccination(expiryIsBeyondThreeYearsFromNow: Bool, doseNumber: Int?, validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 
 	let titleString: String = {
 		var string = ""
@@ -196,7 +199,11 @@ private func validityText_hasBegun_domestic_vaccination(doseNumber: Int?, validF
 		return string
 	}()
 	
-	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
+	let dateString: String = expiryIsBeyondThreeYearsFromNow ? formatter.string(from: validFrom) : formatter.string(from: expirationTime)
+	let prefix: String = expiryIsBeyondThreeYearsFromNow ? L.holderDashboardQrValidityDatePrefixValidFrom() : L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+	let valueString: String = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	
 	return .init(
 		lines: [titleString, valueString],
 		kind: .current
