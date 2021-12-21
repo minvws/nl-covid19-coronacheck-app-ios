@@ -77,10 +77,24 @@ extension QRCard {
 				// -- Domestic Vaccinations --
 					
 				case (.validityHasBegun, .netherlands, .vaccination):
-					return validityText_hasBegun_domestic_vaccination(doseNumber: origin.doseNumber, validFrom: origin.validFromDate)
+					let expiryIsBeyondThreeYearsFromNow = origin.expiryIsBeyondThreeYearsFromNow(now: now)
+					return validityText_hasBegun_domestic_vaccination(
+						expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
+						doseNumber: origin.doseNumber,
+						validFrom: origin.validFromDate,
+						expirationTime: origin.expirationTime
+					)
 				
 				case (.validityHasNotYetBegun, .netherlands, .vaccination):
-					return validityText_hasNotYetBegun_netherlands_vaccination(doseNumber: origin.doseNumber, qrCard: qrCard, validFrom: origin.validFromDate, now: now)
+					let expiryIsBeyondThreeYearsFromNow = origin.expiryIsBeyondThreeYearsFromNow(now: now)
+					return validityText_hasNotYetBegun_netherlands_vaccination(
+						expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
+						doseNumber: origin.doseNumber,
+						qrCard: qrCard,
+						validFrom: origin.validFromDate,
+						now: now,
+						expirationTime: origin.expirationTime
+					)
 				
 				// -- Domestic Tests --
 					
@@ -180,10 +194,7 @@ private func validityText_hasBegun_eu_fallback(origin: QRCard.GreenCard.Origin, 
 	)
 }
 
-private func validityText_hasBegun_domestic_vaccination(doseNumber: Int?, validFrom: Date) -> HolderDashboardViewController.ValidityText {
-	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
-	let dateString = formatter.string(from: validFrom)
-	let prefix = L.holderDashboardQrValidityDatePrefixValidFrom()
+private func validityText_hasBegun_domestic_vaccination(expiryIsBeyondThreeYearsFromNow: Bool, doseNumber: Int?, validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 
 	let titleString: String = {
 		var string = ""
@@ -196,10 +207,41 @@ private func validityText_hasBegun_domestic_vaccination(doseNumber: Int?, validF
 		return string
 	}()
 	
-	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
+	let dateString: String = expiryIsBeyondThreeYearsFromNow ? formatter.string(from: validFrom) : formatter.string(from: expirationTime)
+	let prefix: String = expiryIsBeyondThreeYearsFromNow ? L.holderDashboardQrValidityDatePrefixValidFrom() : L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+	let valueString: String = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	
 	return .init(
 		lines: [titleString, valueString],
 		kind: .current
+	)
+}
+
+private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondThreeYearsFromNow: Bool, doseNumber: Int?, qrCard: QRCard, validFrom: Date, now: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+	let prefix: String = L.holderDashboardQrValidityDatePrefixValidFrom()
+	let validFromDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: validFrom)
+	
+	let titleString: String = {
+		var string = ""
+		string += QRCodeOriginType.vaccination.localizedProof.capitalizingFirstLetter()
+		if let doseNumber = doseNumber, doseNumber > 0 {
+			let dosePluralised = doseNumber == 1 ? L.generalDose() : L.generalDoses()
+			string += " (\(doseNumber) \(dosePluralised))"
+		}
+		string += ":"
+		return string
+	}()
+	
+	var valueString = (prefix + " " + validFromDateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	if !expiryIsBeyondThreeYearsFromNow {
+		let validUntilDateString = HolderDashboardViewModel.dateWithoutTimeFormatter.string(from: expirationTime)
+		valueString = (valueString + " " + L.generalUptoandincluding() + " " + validUntilDateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	}
+	
+	return .init(
+		lines: [titleString, valueString],
+		kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
 	)
 }
 
@@ -288,28 +330,6 @@ private func validityText_hasNotYetBegun_netherlands_test(qrCard: QRCard, origin
 	let validFromDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: origin.validFromDate)
 
 	let titleString = origin.type.localizedProof.capitalizingFirstLetter() + ":"
-	let valueString = (prefix + " " + validFromDateString).trimmingCharacters(in: .whitespacesAndNewlines)
-	return .init(
-		lines: [titleString, valueString],
-		kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-	)
-}
-
-private func validityText_hasNotYetBegun_netherlands_vaccination(doseNumber: Int?, qrCard: QRCard, validFrom: Date, now: Date) -> HolderDashboardViewController.ValidityText {
-	let prefix: String = L.holderDashboardQrValidityDatePrefixValidFrom()
-	let validFromDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: validFrom)
-
-	let titleString: String = {
-		var string = ""
-		string += QRCodeOriginType.vaccination.localizedProof.capitalizingFirstLetter()
-		if let doseNumber = doseNumber, doseNumber > 0 {
-			let dosePluralised = doseNumber == 1 ? L.generalDose() : L.generalDoses()
-			string += " (\(doseNumber) \(dosePluralised))"
-		}
-		string += ":"
-		return string
-	}()
-	
 	let valueString = (prefix + " " + validFromDateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
 		lines: [titleString, valueString],
