@@ -846,6 +846,62 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard())
 	}
 	
+	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_lessthan3years() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.valid5DaysAgo_vaccination_expires25DaysFromNow()])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
+			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
+		}))
+		
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[0].lines[1]) == "geldig tot 9 augustus 2021"
+			
+			// Exercise the validityText with different sample dates:
+			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * days * fromNow))
+			expect(futureValidityTexts[0].kind) == .current
+			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(futureValidityTexts[0].lines[1]) == "geldig tot 9 augustus 2021"
+			
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
+			
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+		
+		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
+		
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard())
+	}
+	
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_secondDose() {
 
 		// Arrange
