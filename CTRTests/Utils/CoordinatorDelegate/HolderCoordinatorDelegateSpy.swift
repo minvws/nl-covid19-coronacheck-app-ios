@@ -71,6 +71,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToCreateANegativeTestQRCount += 1
 	}
 
+	var invokedUserWishesToCreateAVisitorPass = false
+	var invokedUserWishesToCreateAVisitorPassCount = 0
+
+	func userWishesToCreateAVisitorPass() {
+		invokedUserWishesToCreateAVisitorPass = true
+		invokedUserWishesToCreateAVisitorPassCount += 1
+	}
+
 	var invokedUserWishesToChooseLocation = false
 	var invokedUserWishesToChooseLocationCount = 0
 
