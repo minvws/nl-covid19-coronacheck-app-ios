@@ -451,6 +451,16 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			doseNumber: nil
 		)
 	}
+	
+	static func validOneDayAgo_vaccination_expiresMoreThan3YearsFromNow(doseNumber: Int?) -> HolderDashboardViewModel.QRCard.GreenCard.Origin {
+		.init(
+			type: QRCodeOriginType.vaccination,
+			eventDate: now.addingTimeInterval(1 * day * ago),
+			expirationTime: now.addingTimeInterval(3.1 * years * fromNow),
+			validFromDate: now.addingTimeInterval(1 * day * ago),
+			doseNumber: doseNumber
+		)
+	}
 
 	// Valid in future
 
@@ -463,6 +473,16 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			doseNumber: doseNumber
 		)
 	}
+	
+	static func validIn48Hours_vaccination_expiresMoreThan3YearsFromNow(doseNumber: Int) -> HolderDashboardViewModel.QRCard.GreenCard.Origin {
+		.init(
+			type: QRCodeOriginType.vaccination,
+			eventDate: now.addingTimeInterval(5 * days * ago),
+			expirationTime: now.addingTimeInterval(3.1 * years * fromNow),
+			validFromDate: now.addingTimeInterval(48 * hours * fromNow),
+			doseNumber: doseNumber
+		)
+	}
 
 	static func validIn48Hours_recovery_expires300DaysFromNow() -> HolderDashboardViewModel.QRCard.GreenCard.Origin {
 		.init(
@@ -471,16 +491,6 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			expirationTime: now.addingTimeInterval(300 * days * fromNow),
 			validFromDate: now.addingTimeInterval(48 * hour * fromNow),
 			doseNumber: nil
-		)
-	}
-	
-	static func validOneDayAgo_vaccination_expiresMoreThan3YearsFromNow(doseNumber: Int?) -> HolderDashboardViewModel.QRCard.GreenCard.Origin {
-		.init(
-			type: QRCodeOriginType.vaccination,
-			eventDate: now.addingTimeInterval(1 * day * ago),
-			expirationTime: now.addingTimeInterval(3.1 * years * fromNow),
-			validFromDate: now.addingTimeInterval(1 * day * ago),
-			doseNumber: doseNumber
 		)
 	}
 

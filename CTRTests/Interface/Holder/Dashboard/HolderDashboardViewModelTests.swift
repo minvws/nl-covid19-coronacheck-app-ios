@@ -1884,7 +1884,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expires30DaysFromNow(doseNumber: 1)])],
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expiresMoreThan3YearsFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			)
@@ -1928,6 +1928,57 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
+	func test_datasourceupdate_singleNotYetValidDomesticVaccination_lessThan3Years() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validIn48Hours_vaccination_expires30DaysFromNow(doseNumber: 1)])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
+			expect(message) == L.holderDashboardIntroDomestic()
+			expect(buttonTitle).to(beNil())
+		}))
+		
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 t/m 14 augustus 2021"
+			
+			// Exercise the validityText with different sample dates:
+			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow))
+			expect(futureValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 t/m 14 augustus 2021"
+			
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
+			
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
+	}
+	
 	func test_datasourceupdate_singleNotYetValidDomesticVaccination_dose2() {
 
 		// Arrange
@@ -1960,13 +2011,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
 			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (2 doses)" + ":"
-			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02"
+			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 t/m 14 augustus 2021"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
 			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (2 doses)" + ":"
-			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02"
+			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 t/m 14 augustus 2021"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
