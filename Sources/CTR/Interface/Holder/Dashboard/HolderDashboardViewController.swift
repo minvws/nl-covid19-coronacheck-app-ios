@@ -32,6 +32,9 @@ class HolderDashboardViewController: BaseViewController {
         case recoveryValidityExtensionAvailable(title: String, buttonText: String, didTapCallToAction: () -> Void)
         case recoveryValidityExtensionDidComplete(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 
+		// Vaccination & Recovery Validity
+		case newValidityInfo(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		
         // QR Cards:
         case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
         case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
@@ -241,9 +244,10 @@ private extension HolderDashboardViewController.Card {
 					closeButtonCommand: nil,
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
 				))
-
+				
 			case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				 let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+				let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .newValidityInfo(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,

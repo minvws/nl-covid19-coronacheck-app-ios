@@ -36,9 +36,11 @@ protocol UserSettingsProtocol: AnyObject {
 	var shouldCheckRecoveryGreenCardRevisedValidity: Bool { get set }
 	var shouldShowRecoveryValidityExtensionCard: Bool { get set }
 	var shouldShowRecoveryValidityReinstationCard: Bool { get set }
+
 	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool { get set }
 	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool { get set }
-	
+	var hasDismissedNewValidityInfoCard: Bool { get set }
+
 	func reset()
 }
 
@@ -98,6 +100,9 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "hasDismissedRecoveryValidityReinstationCompletionCard", defaultValue: true)
 	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "hasDismissedNewValidityInfoCard", defaultValue: false)
+	var hasDismissedNewValidityInfoCard: Bool // swiftlint:disable:this let_var_whitespace
 }
 
 extension UserSettings {
@@ -123,7 +128,8 @@ extension UserSettings {
 			"shouldShowRecoveryValidityExtensionCard",
 			"shouldShowRecoveryValidityReinstationCard",
 			"hasDismissedRecoveryValidityExtensionCompletionCard",
-			"hasDismissedRecoveryValidityReinstationCompletionCard"
+			"hasDismissedRecoveryValidityReinstationCompletionCard",
+			"hasDismissedNewValidityInfoCard"
 		].forEach(userDefaults.removeObject(forKey:))
 	}
 }

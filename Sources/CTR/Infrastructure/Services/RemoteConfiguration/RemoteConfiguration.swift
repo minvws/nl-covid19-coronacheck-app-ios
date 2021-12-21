@@ -122,7 +122,9 @@ struct RemoteConfiguration: Codable, Equatable {
 
 	/// The number of seconds to keep scan entries in the log
 	var scanLogStorageSeconds: Int?
-    
+
+	var showNewValidityInfoCard: Bool?
+	
 	var verificationPolicyVersion: String?
 
 	/// Key mapping
@@ -161,6 +163,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case scanLockSeconds = "scanLockSeconds"
 		case scanLockWarningSeconds = "scanLockWarningSeconds"
 		case scanLogStorageSeconds = "scanLogStorageSeconds"
+		case showNewValidityInfoCard = "showNewValidityInfoCard"
 		case verificationPolicyVersion = "iOSEnableVerificationPolicyVersion"
 	}
 

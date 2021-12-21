@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -381,6 +382,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedHasDismissedRecoveryValidityReinstationCompletionCardGetter = true
 			invokedHasDismissedRecoveryValidityReinstationCompletionCardGetterCount += 1
 			return stubbedHasDismissedRecoveryValidityReinstationCompletionCard
+		}
+	}
+
+	var invokedHasDismissedNewValidityInfoCardSetter = false
+	var invokedHasDismissedNewValidityInfoCardSetterCount = 0
+	var invokedHasDismissedNewValidityInfoCard: Bool?
+	var invokedHasDismissedNewValidityInfoCardList = [Bool]()
+	var invokedHasDismissedNewValidityInfoCardGetter = false
+	var invokedHasDismissedNewValidityInfoCardGetterCount = 0
+	var stubbedHasDismissedNewValidityInfoCard: Bool! = false
+
+	var hasDismissedNewValidityInfoCard: Bool {
+		set {
+			invokedHasDismissedNewValidityInfoCardSetter = true
+			invokedHasDismissedNewValidityInfoCardSetterCount += 1
+			invokedHasDismissedNewValidityInfoCard = newValue
+			invokedHasDismissedNewValidityInfoCardList.append(newValue)
+		}
+		get {
+			invokedHasDismissedNewValidityInfoCardGetter = true
+			invokedHasDismissedNewValidityInfoCardGetterCount += 1
+			return stubbedHasDismissedNewValidityInfoCard
 		}
 	}
 
