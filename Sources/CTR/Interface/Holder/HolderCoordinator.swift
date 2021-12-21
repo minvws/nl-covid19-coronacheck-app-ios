@@ -728,12 +728,19 @@ extension HolderCoordinator: MenuDelegate {
 	/// Get the items for the bottom menu
 	/// - Returns: the bottom menu items
 	func getBottomMenuItems() -> [MenuItem] {
-
-		return [
-			MenuItem(identifier: .about, title: L.holderMenuAbout()),
-			MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
-			MenuItem(identifier: .visitorPass, title: L.holder_menu_visitorpass())
-		]
+		
+		if Services.featureFlagManager.isVisitorPassEnabled() {
+			return [
+				MenuItem(identifier: .about, title: L.holderMenuAbout()),
+				MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
+				MenuItem(identifier: .visitorPass, title: L.holder_menu_visitorpass())
+			]
+		} else {
+			return [
+				MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
+				MenuItem(identifier: .about, title: L.holderMenuAbout())
+			]
+		}
 	}
 }
 
