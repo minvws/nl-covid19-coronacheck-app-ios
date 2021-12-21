@@ -30,6 +30,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateAQR()
 
 	func userWishesToCreateANegativeTestQR()
+	
+	func userWishesToCreateAVisitorPass()
 
 	func userWishesToChooseLocation()
 
@@ -420,6 +422,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func userWishesToCreateANegativeTestQR() {
 		navigateToTokenEntry()
+	}
+	
+	func userWishesToCreateAVisitorPass() {
+		logInfo("Todo: userWishesToCreateAVisitorPass")
+		// navigateToTokenEntry()
 	}
 
 	func userWishesToChooseLocation() {

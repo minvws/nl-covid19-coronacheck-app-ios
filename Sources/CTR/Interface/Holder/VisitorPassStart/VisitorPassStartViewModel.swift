@@ -18,7 +18,7 @@ final class VisitorPassStartViewModel: Logging {
 	@Bindable private(set) var title: String = L.visitorpass_start_title()
 
 	/// The message of the information page
-	@Bindable private(set) var message: String = L.visitorpass_start_message()
+	@Bindable private(set) var message: String
 	
 	/// The title of the button
 	@Bindable private(set) var buttonTitle: String = L.visitorpass_start_action()
@@ -34,6 +34,9 @@ final class VisitorPassStartViewModel: Logging {
 	init(coordinator: OpenUrlProtocol & HolderCoordinatorDelegate) {
 
 		self.coordinator = coordinator
+		
+		let visitorPassValidityDays = Services.remoteConfigManager.storedConfiguration.visitorPassValidityDays ?? 14
+		message = L.visitorpass_start_message(visitorPassValidityDays)
 	}
 
 	// MARK: - Methods
@@ -45,5 +48,6 @@ final class VisitorPassStartViewModel: Logging {
 	
 	func navigateToTokenEntry() {
 		
+		coordinator?.userWishesToCreateAVisitorPass()
 	}
 }

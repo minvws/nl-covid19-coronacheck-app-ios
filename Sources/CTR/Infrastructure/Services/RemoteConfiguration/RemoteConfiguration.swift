@@ -124,6 +124,8 @@ struct RemoteConfiguration: Codable, Equatable {
 	var scanLogStorageSeconds: Int?
     
 	var verificationPolicyVersion: String?
+	
+	var visitorPassValidityDays: Int?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -162,6 +164,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case scanLockWarningSeconds = "scanLockWarningSeconds"
 		case scanLogStorageSeconds = "scanLogStorageSeconds"
 		case verificationPolicyVersion = "iOSEnableVerificationPolicyVersion"
+		case visitorPassValidityDays = "visitorPassValidityDays"
 	}
 
 	init(minVersion: String) {
@@ -198,6 +201,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.scanLockWarningSeconds = 3600
 		config.scanLogStorageSeconds = 3600
 		config.verificationPolicyVersion = "0"
+		config.visitorPassValidityDays = 14
 		return config
 	}
 
