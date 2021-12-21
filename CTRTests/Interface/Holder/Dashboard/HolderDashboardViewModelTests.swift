@@ -797,7 +797,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expiresMoreThan3YearsFromNow(doseNumber: 1)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			)
@@ -825,10 +825,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 
 			// Exercise the validityText with different sample dates:
-			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow))
+			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(1 * years * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
 			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
-			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
+			expect(futureValidityTexts[0].lines[1]) == "geldig tot 20 augustus 2024"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
@@ -853,7 +853,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 2)])],
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expiresMoreThan3YearsFromNow(doseNumber: 2)])],
 				shouldShowErrorBeneathCard: false,
 				evaluateEnabledState: { _ in true }
 			)
@@ -927,7 +927,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
 			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
-			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 15 juni 2021"
+			expect(nowValidityTexts[0].lines[1]) == "geldig tot 15 juli 2021"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow))
@@ -1424,7 +1424,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: sampleGreencardObjectID, origins: [
-					.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1),
+					.validOneDayAgo_vaccination_expiresMoreThan3YearsFromNow(doseNumber: 1),
 					.validIn48Hours_recovery_expires300DaysFromNow()
 				])],
 				shouldShowErrorBeneathCard: false,
