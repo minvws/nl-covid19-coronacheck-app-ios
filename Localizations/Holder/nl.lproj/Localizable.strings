@@ -663,7 +663,7 @@
 "holder.vaccination.wrong.title" = "Klopt er iets niet?";
 "holder_dashboard_newvaliditybanner_action" = "Lees meer op Rijksoverheid.nl";
 "holder_dashboard_newvaliditybanner_title" = "De geldigheid van coronabewijzen wordt aangepast";
-"holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/";
+"holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
 "holder_dashboard_qr_validity_suffix_2g" = "voor 2G-toegang";
 "holder_dashboard_qr_validity_suffix_3g" = "voor 3G-toegang";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
