@@ -30,6 +30,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateAQR()
 
 	func userWishesToCreateANegativeTestQR()
+	
+	func userWishesToCreateAVisitorPass()
 
 	func userWishesToChooseLocation()
 
@@ -421,6 +423,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesToCreateANegativeTestQR() {
 		navigateToTokenEntry()
 	}
+	
+	func userWishesToCreateAVisitorPass() {
+		logInfo("Todo: userWishesToCreateAVisitorPass")
+		// navigateToTokenEntry()
+	}
 
 	func userWishesToChooseLocation() {
 		if isGGDEnabled {
@@ -683,6 +690,12 @@ extension HolderCoordinator: MenuDelegate {
 				coordinator.navigationController = navigationController
 				startChildCoordinator(coordinator)
 				sidePanel?.selectedViewController = navigationController
+				
+			case .visitorPass:
+
+				let destination = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
+				navigationController = NavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = navigationController
 
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
@@ -717,8 +730,9 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
+			MenuItem(identifier: .about, title: L.holderMenuAbout()),
 			MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
-			MenuItem(identifier: .about, title: L.holderMenuAbout())
+			MenuItem(identifier: .visitorPass, title: L.holder_menu_visitorpass())
 		]
 	}
 }
