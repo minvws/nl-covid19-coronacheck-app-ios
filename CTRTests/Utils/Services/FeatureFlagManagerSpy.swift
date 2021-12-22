@@ -12,6 +12,16 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 
 	required init(versionSupplier: AppVersionSupplierProtocol?) {}
 
+	var invokedIsNewValidityInfoBannerEnabled = false
+	var invokedIsNewValidityInfoBannerEnabledCount = 0
+	var stubbedIsNewValidityInfoBannerEnabledResult: Bool! = false
+
+	func isNewValidityInfoBannerEnabled() -> Bool {
+		invokedIsNewValidityInfoBannerEnabled = true
+		invokedIsNewValidityInfoBannerEnabledCount += 1
+		return stubbedIsNewValidityInfoBannerEnabledResult
+	}
+
 	var invokedIsVerificationPolicyEnabled = false
 	var invokedIsVerificationPolicyEnabledCount = 0
 	var stubbedIsVerificationPolicyEnabledResult: Bool! = false

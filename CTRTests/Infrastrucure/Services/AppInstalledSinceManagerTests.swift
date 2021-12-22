@@ -18,7 +18,7 @@ class AppInstalledSinceManagerTests: XCTestCase {
 
 		super.setUp()
 		sut = AppInstalledSinceManager()
-		sut.reset()
+		Services.secureUserSettings.reset()
 	}
 
 	func test_addingServerDate_withoutAge() {
@@ -72,7 +72,7 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		// Given
 
 		// When
-		sut.reset()
+		Services.secureUserSettings.reset()
 
 		// Then
 		expect(self.sut.firstUseDate).to(beNil())

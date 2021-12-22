@@ -82,6 +82,14 @@ extension HolderDashboardViewModel {
 				
 				return isExplicitly3G && !hasValidVaccine && !hasValidRecovery
 			}
+			
+			func hasValidVaccineOrAValidRecovery(now: Date) -> Bool {
+				
+				let currentlyValidOrigins = origins.filter({ $0.isCurrentlyValid(now: now) })
+				let hasValidVaccine = currentlyValidOrigins.contains { $0.type == .vaccination }
+				let hasValidRecovery = currentlyValidOrigins.contains { $0.type == .recovery }
+				return hasValidVaccine || hasValidRecovery
+			}
 		}
 
 		let region: Region // A QR Card only has one region
@@ -135,6 +143,16 @@ extension HolderDashboardViewModel {
 			}
 			
 			return matchingGreenCards.count == greencards.count
+		}
+		
+		func hasValidVaccineOrAValidRecovery(now: Date) -> Bool {
+			guard case .netherlands = region else { return false }
+
+			// Find greencards where there IS a currently-valid recovery or vaccine:
+			let matchingGreenCards = greencards.filter { greencard in
+				greencard.hasValidVaccineOrAValidRecovery(now: now)
+			}
+			return !matchingGreenCards.isEmpty
 		}
 	}
 

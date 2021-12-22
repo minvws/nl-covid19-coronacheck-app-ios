@@ -19,6 +19,7 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		super.setUp()
 		remoteConfigManagerSpy = RemoteConfigManagingSpy()
+		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		Services.use(remoteConfigManagerSpy)
 		
 		appVersionSupplierSpy = AppVersionSupplierSpy(version: "2.7.0", build: "1")
@@ -97,6 +98,34 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		// When
 		let enabled = sut.isVerificationPolicyEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+		
+	func test_isNewValidityInfoBannerEnabled_remoteConfig_enabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.showNewValidityInfoCard = true
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.isNewValidityInfoBannerEnabled()
+		
+		// Then
+		expect(enabled) == true
+	}
+	
+	func test_isNewValidityInfoBannerEnabled_remoteConfig_disabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.showNewValidityInfoCard = false
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.isNewValidityInfoBannerEnabled()
 		
 		// Then
 		expect(enabled) == false

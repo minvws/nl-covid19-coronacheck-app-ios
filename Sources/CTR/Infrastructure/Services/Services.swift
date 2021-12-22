@@ -13,7 +13,7 @@ final class Services {
 	
 	// MARK: - Static access to Services
 	
-	static private(set) var appInstalledSinceManager: AppInstalledSinceManaging = appInstalledSinceManagingType.init(secureUserSettings: SecureUserSettings())
+	static private(set) var appInstalledSinceManager: AppInstalledSinceManaging = appInstalledSinceManagingType.init(secureUserSettings: secureUserSettings)
 	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
 	static private(set) var couplingManager: CouplingManaging = couplingManagingType.init(
 		cryptoManager: cryptoManager,
@@ -26,7 +26,7 @@ final class Services {
 		fileStorage: FileStorage(),
 		flavor: AppFlavor.flavor
 	)
-	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init(secureUserSettings: SecureUserSettings())
+	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init(secureUserSettings: secureUserSettings)
 	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(
 		StorageType.persistent,
 		flavor: AppFlavor.flavor
@@ -35,7 +35,7 @@ final class Services {
 	static private(set) var featureFlagManager: FeatureFlagManaging = featureFlagManagingType.init(
 		versionSupplier: AppVersionSupplier()
 	)
-	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init(secureUserSettings: SecureUserSettings())
+	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init(secureUserSettings: secureUserSettings)
 	static private(set) var greenCardLoader: GreenCardLoading = greenCardLoadingType.init(
 		networkManager: networkManager,
 		cryptoManager: cryptoManager,
@@ -64,20 +64,21 @@ final class Services {
 		
 		return networkManagingType.init(configuration: networkConfiguration)
 	}()
-	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init(secureUserSettings: SecureUserSettings())
+	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init(secureUserSettings: secureUserSettings)
 	static private(set) var openIdManager: OpenIdManaging = openIdManagerType.init()
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init(
 		now: { Date() },
 		userSettings: UserSettings(),
 		reachability: try? Reachability(),
 		networkManager: networkManager,
-		secureUserSettings: SecureUserSettings()
+		secureUserSettings: secureUserSettings
 	)
-	static private(set) var riskLevelManager: RiskLevelManaging = riskLevelManagerType.init(secureUserSettings: SecureUserSettings())
+	static private(set) var riskLevelManager: RiskLevelManaging = riskLevelManagerType.init(secureUserSettings: secureUserSettings)
 	static private(set) var scanLockManager: ScanLockManaging = scanLockManagerType.init()
 	static private(set) var scanLogManager: ScanLogManaging = scanLogManagingType.init(
 		dataStoreManager: dataStoreManager
 	)
+	static private(set) var secureUserSettings: SecureUserSettingsProtocol = SecureUserSettings() // there should only ever be one SecureUserSettings()
 	static private(set) var walletManager: WalletManaging = walletManagingType.init(
 		dataStoreManager: dataStoreManager
 	)
@@ -108,10 +109,8 @@ final class Services {
 	/// Reset all the data within applicable Services
 	static func reset(flavor: AppFlavor) {
 
-		appInstalledSinceManager.reset()
+		secureUserSettings.reset()
 		cryptoLibUtility.reset()
-		forcedInformationManager.reset()
-		onboardingManager.reset()
 		remoteConfigManager.reset()
 
 		switch flavor {
@@ -127,12 +126,12 @@ final class Services {
 
 	static func revertToDefaults() {
 
-		appInstalledSinceManager = appInstalledSinceManagingType.init(secureUserSettings: SecureUserSettings())
-		cryptoManager = cryptoManagingType.init(secureUserSettings: SecureUserSettings())
+		appInstalledSinceManager = appInstalledSinceManagingType.init(secureUserSettings: secureUserSettings)
+		cryptoManager = cryptoManagingType.init(secureUserSettings: secureUserSettings)
 		dataStoreManager = dataStoreManagingType.init(StorageType.persistent, flavor: AppFlavor.flavor)
 		deviceAuthenticationDetector = deviceAuthenticationType.init()
         featureFlagManager = featureFlagManagingType.init(versionSupplier: AppVersionSupplier())
-		forcedInformationManager = forcedInformationManagingType.init(secureUserSettings: SecureUserSettings())
+		forcedInformationManager = forcedInformationManagingType.init(secureUserSettings: secureUserSettings)
 		greenCardLoader = greenCardLoadingType.init(
 			networkManager: networkManager,
 			cryptoManager: cryptoManager,
@@ -154,16 +153,16 @@ final class Services {
 		mappingManager = mappingManagingType.init(
 			remoteConfigManager: remoteConfigManager
 		)
-		onboardingManager = onboardingManagingType.init(secureUserSettings: SecureUserSettings())
+		onboardingManager = onboardingManagingType.init(secureUserSettings: secureUserSettings)
 		openIdManager = openIdManagerType.init()
 		remoteConfigManager = remoteConfigManagingType.init(
 			now: { Date() },
 			userSettings: UserSettings(),
 			reachability: try? Reachability(),
 			networkManager: networkManager,
-			secureUserSettings: SecureUserSettings()
+			secureUserSettings: secureUserSettings
 		)
-		riskLevelManager = riskLevelManagerType.init(secureUserSettings: SecureUserSettings())
+		riskLevelManager = riskLevelManagerType.init(secureUserSettings: secureUserSettings)
 		scanLockManager = scanLockManagerType.init()
 		scanLogManager = scanLogManagingType.init(
 			dataStoreManager: dataStoreManager
