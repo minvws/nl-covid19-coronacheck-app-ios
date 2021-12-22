@@ -530,7 +530,7 @@
 "holder.test.nolist.action" = "Naar mijn bewijzen";
 "holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de  <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Heb je al een testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.test.nolist.title" = "Geen testuitslag beschikbaar";
-"holder.testresults.alert.cancel" = "Nee, ga verder";
+"holder.testresults.alert.cancel" = "Nee";
 "holder.testresults.alert.message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder.testresults.alert.ok" = "Ja, terug";
 "holder.testresults.alert.title" = "Weet je zeker dat je terug wilt?";
@@ -627,7 +627,7 @@
 "holder.vaccination.about.off" = "%@ van %@";
 "holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Dose %@ of %@";
 "holder.vaccination.about.text" = "Over jouw vaccinatie";
-"holder.vaccination.alert.continue" = "Nee, ga verder";
+"holder.vaccination.alert.continue" = "Nee";
 "holder.vaccination.alert.stop" = "Ja, terug";
 "holder.vaccination.alert.title" = "Weet je zeker dat je terug wilt?";
 "holder.vaccination.element.combined" = "<p>Gegevens opgehaald bij: %@ en %@</p>";
