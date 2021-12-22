@@ -79,7 +79,8 @@ private extension RiskSettingSelectedViewModel {
 			okAction: { [weak self] _ in
 				self?.saveSettingAndGoBackToStart(enablingLock: true)
 			},
-			okTitle: L.verifier_risksetting_confirmation_dialog_positive_button()
+			okTitle: L.verifier_risksetting_confirmation_dialog_positive_button(),
+			okActionIsDestructive: true
 		)
 	}
 	
