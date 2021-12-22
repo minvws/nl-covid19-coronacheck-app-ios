@@ -184,7 +184,8 @@ class AboutThisAppViewModel: Logging {
 			okAction: { [weak self] _ in
 				self?.resetDataAndRestart()
 			},
-			okTitle: L.holderCleardataAlertRemove()
+			okTitle: L.holderCleardataAlertRemove(),
+			okActionIsDestructive: true
 		)
 	}
 

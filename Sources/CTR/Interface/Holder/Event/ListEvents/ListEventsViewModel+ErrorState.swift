@@ -23,7 +23,9 @@ extension ListEventsViewModel {
 			okAction: { _ in
 				onReplace()
 			},
-			okTitle: L.holderEventIdentityAlertOk()
+			okTitle: L.holderEventIdentityAlertOk(),
+			okActionIsDestructive: true,
+			okActionIsPreferred: true
 		)
 	}
 
@@ -41,7 +43,8 @@ extension ListEventsViewModel {
 					}
 				}
 			},
-			okTitle: L.holderVaccinationErrorAgain()
+			okTitle: L.holderVaccinationErrorAgain(),
+			okActionIsPreferred: true
 		)
 	}
 
@@ -76,7 +79,8 @@ extension ListEventsViewModel {
 					}
 				}
 			},
-			okTitle: L.generalRetry()
+			okTitle: L.generalRetry(),
+			okActionIsPreferred: true
 		)
 	}
 

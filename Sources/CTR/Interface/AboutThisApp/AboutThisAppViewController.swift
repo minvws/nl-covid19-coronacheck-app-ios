@@ -47,7 +47,7 @@ class AboutThisAppViewController: BaseViewController {
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$appVersion.binding = { [weak self] in self?.sceneView.appVersion = $0 }
 		viewModel.$configVersion.binding = { [weak self] in self?.sceneView.configVersion = $0 }
-		viewModel.$alert.binding = { [weak self] in self?.showAlert($0, okActionIsDestructive: true) }
+		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
 		setupMenuOptions()
 	}
