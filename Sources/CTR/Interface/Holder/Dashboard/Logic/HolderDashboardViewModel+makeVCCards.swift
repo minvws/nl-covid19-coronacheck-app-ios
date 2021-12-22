@@ -300,15 +300,15 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 
-	static func makeNewValidityInfoCard(
+	static func makeNewValidityInfoForVaccinationAndRecoveriesCard(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
-		guard validityRegion == .domestic, state.shouldShowNewValidityInfoBanner else { return [] }
+		guard validityRegion == .domestic, state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner else { return [] }
 		return [
-			.newValidityInfo(
+			.newValidityInfoForVaccinationAndRecoveries(
 				title: L.holder_dashboard_newvaliditybanner_title(),
 				buttonText: L.holder_dashboard_newvaliditybanner_action(),
 				didTapCallToAction: actionHandler.didTapNewValidityBannerMoreInfo,

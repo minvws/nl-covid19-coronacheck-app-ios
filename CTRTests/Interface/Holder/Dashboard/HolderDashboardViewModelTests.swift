@@ -871,7 +871,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(buttonTitle).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards[1]).toEventually(beNewValidityInfoCard(test: { message, buttonTitle, _, _ in
+		expect(self.sut.domesticCards[1]).toEventually(beNewValidityInfoForVaccinationAndRecoveriesCard(test: { message, buttonTitle, _, _ in
 			expect(message) == L.holder_dashboard_newvaliditybanner_title()
 			expect(buttonTitle) == L.holder_dashboard_newvaliditybanner_action()
 		}))
@@ -2993,10 +2993,10 @@ private func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void
 	}
 }
 
-private func beNewValidityInfoCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .beNewValidityInfoCard with matching values") { expression, message in
+private func beNewValidityInfoForVaccinationAndRecoveriesCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .beNewValidityInfoForVaccinationAndRecoveriesCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
-		   case let .newValidityInfo(message2, callToActionButtonText, didTapCallToAction, didTapToClose) = actual {
+		   case let .newValidityInfoForVaccinationAndRecoveries(message2, callToActionButtonText, didTapCallToAction, didTapToClose) = actual {
 			test(message2, callToActionButtonText, didTapCallToAction, didTapToClose)
 			return PredicateResult(status: .matches, message: message)
 		}

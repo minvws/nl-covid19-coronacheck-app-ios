@@ -86,7 +86,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	
 		var shouldShowRecommendedUpdateBanner: Bool = false
 		
-		var shouldShowNewValidityInfoBanner: Bool = false
+		var shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner: Bool = false
 		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -230,7 +230,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: self.now())
 				})
 				// New Validity Banner
-				state.shouldShowNewValidityInfoBanner = !self.userSettings.hasDismissedNewValidityInfoCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled() &&
+				state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !self.userSettings.hasDismissedNewValidityInfoCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled() &&
 					qrCardDataItems.contains(where: { qrCard in
 					qrCard.hasValidVaccineOrAValidRecovery(now: self.now())
 				})
@@ -458,7 +458,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				state.shouldShowRecoveryValidityReinstationAvailableBanner = false
 			}
 
-			state.shouldShowNewValidityInfoBanner = state.shouldShowNewValidityInfoBanner && !self.userSettings.hasDismissedNewValidityInfoCard
+			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner && !self.userSettings.hasDismissedNewValidityInfoCard
 			
 			self.state = state
 		}
@@ -597,7 +597,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
 		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeNewValidityInfoCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
