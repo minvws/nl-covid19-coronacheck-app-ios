@@ -56,7 +56,7 @@
 "general.testdate" = "Testdatum";
 "general.testresult" = "testuitslag";
 "general.testtype" = "Type test";
-"general.uptoandincluding" = "t/m";
+"general.uptoandincluding" = "tot";
 "general.url.link" = "Link";
 "general.vaccination" = "vaccinatie";
 "general.vaccinationcertificate" = "vaccinatiebewijs";
@@ -661,6 +661,9 @@
 "holder.vaccination.status.complete.recovery" = "ja (eerder corona gehad)";
 "holder.vaccination.wrong.body" = "<p>Neem contact op met de zorgverlener waar je bent gevaccineerd. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.vaccination.wrong.title" = "Klopt er iets niet?";
+"holder_dashboard_newvaliditybanner_action" = "Lees meer op Rijksoverheid.nl";
+"holder_dashboard_newvaliditybanner_title" = "De geldigheid van coronabewijzen wordt aangepast";
+"holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
 "holder_dashboard_qr_validity_suffix_2g" = "voor 2G-toegang";
 "holder_dashboard_qr_validity_suffix_3g" = "voor 3G-toegang";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";

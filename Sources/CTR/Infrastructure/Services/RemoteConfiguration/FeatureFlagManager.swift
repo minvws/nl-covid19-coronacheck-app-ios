@@ -11,6 +11,8 @@ protocol FeatureFlagManaging {
 	
 	init(versionSupplier: AppVersionSupplierProtocol?)
 	
+	func isNewValidityInfoBannerEnabled() -> Bool
+	
 	func isVerificationPolicyEnabled() -> Bool
 }
 
@@ -22,6 +24,11 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	required init(versionSupplier: AppVersionSupplierProtocol?) {
 		
 		self.versionSupplier = versionSupplier
+	}
+	
+	func isNewValidityInfoBannerEnabled() -> Bool {
+		
+		return remoteConfigManager?.storedConfiguration.showNewValidityInfoCard ?? true
 	}
 	
 	func isVerificationPolicyEnabled() -> Bool {
