@@ -26,13 +26,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v6"]
+			path: ["v7"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api-cdn.acc.coronacheck.nl" : "verifier-api-cdn.acc.coronacheck.nl",
 			port: nil,
-			path: ["v6"]
+			path: ["v7"]
 		)
 	)
 
@@ -42,13 +42,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v6"]
+			path: ["v7"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api-cdn.acc.coronacheck.nl" : "verifier-api-cdn.acc.coronacheck.nl",
 			port: nil,
-			path: ["v6"]
+			path: ["v7"]
 		)
 	)
 
@@ -58,13 +58,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.coronacheck.nl" : "verifier-api.coronacheck.nl",
 			port: nil,
-			path: ["v6"]
+			path: ["v7"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api-cdn.coronacheck.nl" : "verifier-api-cdn.coronacheck.nl",
 			port: nil,
-			path: ["v6"]
+			path: ["v7"]
 		)
 	)
 

@@ -8,9 +8,37 @@
 import XCTest
 @testable import CTR
 
+extension ForcedInformationManagerSpy {
+	convenience init() {
+		self.init(secureUserSettings: SecureUserSettings())
+	}
+}
+
 class ForcedInformationManagerSpy: ForcedInformationManaging {
 
-	required init() {}
+	required init(secureUserSettings: SecureUserSettingsProtocol) {}
+
+	var invokedFactorySetter = false
+	var invokedFactorySetterCount = 0
+	var invokedFactory: ForcedInformationFactory?
+	var invokedFactoryList = [ForcedInformationFactory?]()
+	var invokedFactoryGetter = false
+	var invokedFactoryGetterCount = 0
+	var stubbedFactory: ForcedInformationFactory!
+
+	var factory: ForcedInformationFactory? {
+		set {
+			invokedFactorySetter = true
+			invokedFactorySetterCount += 1
+			invokedFactory = newValue
+			invokedFactoryList.append(newValue)
+		}
+		get {
+			invokedFactoryGetter = true
+			invokedFactoryGetterCount += 1
+			return stubbedFactory
+		}
+	}
 
 	var invokedNeedsUpdatingGetter = false
 	var invokedNeedsUpdatingGetterCount = 0
@@ -48,13 +76,5 @@ class ForcedInformationManagerSpy: ForcedInformationManaging {
 	func consentGiven() {
 		invokedConsentGiven = true
 		invokedConsentGivenCount += 1
-	}
-
-	var invokedReset = false
-	var invokedResetCount = 0
-
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
 	}
 }

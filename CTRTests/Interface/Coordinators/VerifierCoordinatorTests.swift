@@ -11,15 +11,27 @@ import Nimble
 
 class VerifierCoordinatorTests: XCTestCase {
 
-	var sut: VerifierCoordinator!
+	private var sut: VerifierCoordinator!
 
-	var navigationSpy: NavigationControllerSpy!
-
-	var window = UIWindow()
+	private var navigationSpy: NavigationControllerSpy!
+	private var scanLogManagerSpy: ScanLogManagingSpy!
+	private var scanLockManagerSpy: ScanLockManagerSpy!
+	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var window = UIWindow()
 
 	override func setUp() {
 
 		super.setUp()
+
+		riskLevelManagerSpy = RiskLevelManagerSpy()
+		Services.use(riskLevelManagerSpy)
+		
+		scanLogManagerSpy = ScanLogManagingSpy()
+		Services.use(scanLogManagerSpy)
+
+		scanLockManagerSpy = ScanLockManagerSpy()
+		scanLockManagerSpy.stubbedState = .unlocked
+		Services.use(scanLockManagerSpy)
 
 		navigationSpy = NavigationControllerSpy()
 		sut = VerifierCoordinator(
@@ -28,7 +40,39 @@ class VerifierCoordinatorTests: XCTestCase {
 		)
 	}
 
+	override func tearDown() {
+
+		super.tearDown()
+		Services.revertToDefaults()
+	}
+
 	// MARK: - Tests
+	
+	func testStartForcedInformation() {
+
+		// Given
+		let onboardingSpy = OnboardingManagerSpy()
+		onboardingSpy.stubbedNeedsOnboarding = false
+		onboardingSpy.stubbedNeedsConsent = false
+		sut.onboardingManager = onboardingSpy
+
+		let forcedInformationSpy = ForcedInformationManagerSpy()
+		forcedInformationSpy.stubbedNeedsUpdating = true
+		forcedInformationSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+			image: nil,
+			tagline: "test",
+			title: "test",
+			content: "test"
+		)
+		sut.forcedInformationManager = forcedInformationSpy
+
+		// When
+		sut.start()
+
+		// Then
+		XCTAssertFalse(sut.childCoordinators.isEmpty)
+		XCTAssertTrue(sut.childCoordinators.first is ForcedInformationCoordinator)
+	}
 	
 	func testFinishForcedInformation() {
 
@@ -37,6 +81,8 @@ class VerifierCoordinatorTests: XCTestCase {
 		onboardingSpy.stubbedNeedsOnboarding = false
 		onboardingSpy.stubbedNeedsConsent = false
 		sut.onboardingManager = onboardingSpy
+		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
 
 		let forcedInformationSpy = ForcedInformationManagerSpy()
 		forcedInformationSpy.stubbedNeedsUpdating = false
@@ -55,5 +101,25 @@ class VerifierCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+
+	func test_shouldCall_scanManagerRemoveOldEntries() {
+
+		// Given
+		let onboardingSpy = OnboardingManagerSpy()
+		onboardingSpy.stubbedNeedsOnboarding = false
+		onboardingSpy.stubbedNeedsConsent = false
+		sut.onboardingManager = onboardingSpy
+		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
+
+		let forcedInformationSpy = ForcedInformationManagerSpy()
+		forcedInformationSpy.stubbedNeedsUpdating = false
+		sut.forcedInformationManager = forcedInformationSpy
+		
+		sut.start()
+		
+		// Then
+		expect(self.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == true
 	}
 }

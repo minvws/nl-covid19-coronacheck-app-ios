@@ -17,12 +17,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 	override func setUp() {
 
 		super.setUp()
-		remoteConfigManagerSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		mappingManagerSpy = MappingManagerSpy(remoteConfigManager: remoteConfigManagerSpy)
 		Services.use(mappingManagerSpy)

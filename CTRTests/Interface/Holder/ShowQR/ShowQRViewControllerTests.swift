@@ -31,12 +31,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		cryptoManagerSpy = CryptoManagerSpy()
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 
-		remoteConfigManagerSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
@@ -45,7 +40,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		Services.use(remoteConfigManagerSpy)
 
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
@@ -96,7 +91,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
@@ -125,7 +120,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true
@@ -153,7 +148,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true
@@ -183,7 +178,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true
@@ -204,7 +199,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.nextButton.isHidden) == true
 		expect(self.sut.sceneView.previousButton.isHidden) == false
 		expect(self.sut.sceneView.pageControl.isHidden) == false
-		expect(self.sut.sceneView.pageControl.currentPage) == 1
+		expect(self.sut.sceneView.pageControl.currentPageIndex) == 1
 		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
 	}
 
@@ -212,7 +207,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true
@@ -234,7 +229,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.nextButton.isHidden).toEventually(beTrue())
 		expect(self.sut.sceneView.previousButton.isHidden).toEventually(beFalse())
 		expect(self.sut.sceneView.pageControl.isHidden) == false
-		expect(self.sut.sceneView.pageControl.currentPage).toEventually(equal(1))
+		expect(self.sut.sceneView.pageControl.currentPageIndex).toEventually(equal(1))
 		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
 	}
 

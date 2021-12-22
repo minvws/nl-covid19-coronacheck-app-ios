@@ -30,12 +30,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 		networkSpy = NetworkSpy(configuration: .development)
 		cryptoSpy = CryptoManagerSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		remoteConfigSpy = RemoteConfigManagingSpy()
 		remoteConfigSpy.stubbedStoredConfiguration = .default
 		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
@@ -261,7 +256,7 @@ class ListEventsViewModelTests: XCTestCase {
 	func test_somethingIsWrong_dccVaccination_notAvailable() {
 
 		// Given
-		cryptoSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination
+		cryptoSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,

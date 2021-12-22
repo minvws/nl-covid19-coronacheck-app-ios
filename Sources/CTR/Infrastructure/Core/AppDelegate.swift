@@ -146,6 +146,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 		UINavigationBar.appearance().tintColor = color
 		UINavigationBar.appearance().barTintColor = Theme.colors.viewControllerBackground
 		
+		// Tint default buttons of UIAlertController
+		UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = Theme.colors.primary
+		
 		if #available(iOS 15.0, *) {
 			// By default iOS 15 has no shadow bottom separator
 			UINavigationBar.appearance().standardAppearance.titleTextAttributes = [.foregroundColor: color]

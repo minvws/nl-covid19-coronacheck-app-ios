@@ -212,6 +212,21 @@ extension HolderDashboardViewController.Card {
 		return [HolderDashboardViewController.Card.recommendCoronaMelder]
 	}
 	
+	static func makeTestOnlyValidFor3GCard(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		guard validityRegion == .domestic else { return [] }
+		guard state.shouldShowDomestic3GTestBanner else { return [] }
+		
+		return [HolderDashboardViewController.Card.testOnlyValidFor3G(
+			message: L.holder_my_overview_3g_test_validity_card(),
+			callToActionButtonText: L.generalReadmore(),
+			didTapCallToAction: actionHandler.didTapTestOnlyValidFor3GMoreInfo)
+		]
+	}
+	
 	/// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 	/// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
 	static func makeOriginNotValidInThisRegionCard(
@@ -271,10 +286,41 @@ extension HolderDashboardViewController.Card {
 		)]
 	}
 	
+	static func makeRecommendedUpdateCard(
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		guard state.shouldShowRecommendedUpdateBanner else { return [] }
+		return [
+			.recommendedUpdate(
+				message: L.recommended_update_card_description(),
+				callToActionButtonText: L.recommended_update_card_action(),
+				didTapCallToAction: actionHandler.didTapRecommendedUpdate
+			)
+		]
+	}
+
+	static func makeNewValidityInfoForVaccinationAndRecoveriesCard(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		
+		guard validityRegion == .domestic, state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner else { return [] }
+		return [
+			.newValidityInfoForVaccinationAndRecoveries(
+				title: L.holder_dashboard_newvaliditybanner_title(),
+				buttonText: L.holder_dashboard_newvaliditybanner_action(),
+				didTapCallToAction: actionHandler.didTapNewValidityBannerMoreInfo,
+				didTapClose: actionHandler.didTapNewValidiyBannerClose
+			)
+		]
+	}
+	
 	/// Map a `QRCard` to a `VC.Card`:
 	static func makeQRCards(
-		state: HolderDashboardViewModel.State,
 		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
 		remoteConfigManager: RemoteConfigManaging
 	) -> [HolderDashboardViewController.Card] {

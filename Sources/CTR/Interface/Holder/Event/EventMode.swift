@@ -48,10 +48,10 @@ enum EventMode: String {
 	var alertBody: String {
 
 		switch self {
-			case .paperflow: return L.holderDccAlertMessage()
-			case .recovery, .positiveTest: return L.holderRecoveryAlertMessage()
-			case .test: return L.holderTestAlertMessage()
-			case .vaccination: return L.holderVaccinationAlertMessage()
+			case .paperflow: return L.holder_dcc_alert_message()
+			case .recovery, .positiveTest: return L.holder_recovery_alert_message()
+			case .test: return L.holder_test_alert_message()
+			case .vaccination: return L.holder_vaccination_alert_message()
 		}
 	}
 

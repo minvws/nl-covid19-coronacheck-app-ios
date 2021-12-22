@@ -76,9 +76,9 @@ class EventStartViewModelTests: XCTestCase {
 		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
 
 		// Then
-		expect(self.sut.title) == ""
-		expect(self.sut.message) == ""
-		expect(self.sut.primaryButtonIcon).to(beNil())
+		expect(self.sut.title) == L.holder_negativetest_ggd_title()
+		expect(self.sut.message) == L.holder_negativetest_ggd_message()
+		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
 
 	func test_backButtonTapped() {

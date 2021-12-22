@@ -44,7 +44,7 @@ class Button: UIButton {
 				case .roundedClear:
 					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
 				case .textLabelBlue:
-					return isEnabled ? Theme.colors.iosBlue : Theme.colors.grey2
+					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
 				case .roundedBlueBorder:
 					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
 			}
@@ -60,14 +60,14 @@ class Button: UIButton {
 		var contentEdgeInsets: UIEdgeInsets {
 			switch self {
 				case .textLabelBlue: return .zero
-				case .roundedBlueImage: return .topBottom(15) + .left(56) + .right(44)
+				case .roundedBlueImage: return .topBottom(15) + .left(44) + .right(56)
 				default: return .topBottom(15) + .leftRight(56)
 			}
 		}
 		
 		var imageEdgeInsets: UIEdgeInsets {
 			switch self {
-				case .roundedBlueImage: return .left(12) + .right(-12)
+				case .roundedBlueImage: return .left(-12) + .right(12)
 				default: return .zero
 			}
 		}
@@ -201,10 +201,13 @@ class Button: UIButton {
 		imageEdgeInsets = style.imageEdgeInsets
 		
 		if style == .roundedBlueImage {
-			// Position image to the right of the label
-			semanticContentAttribute = .forceRightToLeft
 			// Increase size
 			imageView?.layer.transform = CATransform3DMakeScale(1.1, 1.1, 1.1)
+			// Position image to the right of the label
+			let flipTransform = CGAffineTransform(scaleX: -1.0, y: 1.0)
+			transform = flipTransform
+			titleLabel?.transform = flipTransform
+			imageView?.transform = flipTransform
 		}
 		
 		setNeedsLayout()

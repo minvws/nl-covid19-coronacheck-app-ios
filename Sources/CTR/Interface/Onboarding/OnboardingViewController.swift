@@ -63,11 +63,7 @@ class OnboardingViewController: BaseViewController {
 				return onboardingPageViewController
 			}
 			
-			// Only display page control for multiple pages
-			if $0.count > 1 {
-				self.sceneView.pageControl.numberOfPages = $0.count
-				self.sceneView.pageControl.currentPage = 0
-			}
+			self.sceneView.pageControl.numberOfPages = $0.count
 		}
 		
 		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
@@ -108,7 +104,7 @@ class OnboardingViewController: BaseViewController {
 		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
-		sceneView.pageControl.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
+		sceneView.pageControl.delegate = self
 	}
 	
 	/// User tapped on the button
@@ -122,16 +118,6 @@ class OnboardingViewController: BaseViewController {
 			pageViewController.nextPage()
 		}
 	}
-
-	/// User tapped on the page control
-	@objc func valueChanged(_ pageControl: UIPageControl) {
-
-		if pageControl.currentPage > pageViewController.currentIndex {
-			pageViewController.nextPage()
-		} else {
-			pageViewController.previousPage()
-		}
-	}
 }
 
 // MARK: - PageViewControllerDelegate
@@ -139,7 +125,7 @@ class OnboardingViewController: BaseViewController {
 extension OnboardingViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
-		sceneView.pageControl.currentPage = index
+		sceneView.pageControl.update(for: index)
         sceneView.ribbonView.isAccessibilityElement = index == 0
 		navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
 	}
@@ -160,4 +146,17 @@ extension OnboardingViewController: OnboardingPageViewControllerDelegate {
         }
         return false
     }
+}
+
+// MARK: - PageControlDelegate
+
+extension OnboardingViewController: PageControlDelegate {
+	
+	func pageControl(_ pageControl: PageControl, didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int) {
+		if currentPageIndex > previousPageIndex {
+			pageViewController.nextPage()
+		} else {
+			pageViewController.previousPage()
+		}
+	}
 }

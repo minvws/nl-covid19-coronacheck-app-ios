@@ -10,18 +10,20 @@ import UIKit
 protocol ScanInstructionsCoordinatorDelegate: AnyObject {
 
 	/// The user pressed continue on the currently displayed page
-	func userDidCompletePages()
+	func userDidCompletePages(hasScanLock: Bool)
 
 	/// User pressed back on first page, thus cancelling this flow
 	func userDidCancelScanInstructions()
+	
+	func userWishesToSelectRiskSetting()
 }
 
 protocol ScanInstructionsDelegate: AnyObject {
 	func scanInstructionsWasCancelled()
-	func scanInstructionsDidFinish()
+	func scanInstructionsDidFinish(hasScanLock: Bool)
 }
 
-class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordinatorDelegate {
+class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordinatorDelegate, OpenUrlProtocol {
 
 	weak var delegate: ScanInstructionsDelegate?
 
@@ -32,12 +34,25 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	private let pagesFactory: ScanInstructionsFactoryProtocol = ScanInstructionsFactory()
 	private let pages: [ScanInstructionsPage]
 	private let isOpenedFromMenu: Bool
+	private let allowSkipInstruction: Bool
+	private let riskLevelManager: RiskLevelManaging
+	private let userSettings: UserSettingsProtocol
 
-	init(navigationController: UINavigationController, delegate: ScanInstructionsDelegate, isOpenedFromMenu: Bool) {
+	init(
+		navigationController: UINavigationController,
+		delegate: ScanInstructionsDelegate,
+		isOpenedFromMenu: Bool,
+		allowSkipInstruction: Bool,
+		userSettings: UserSettingsProtocol = UserSettings(),
+		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
+	) {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
 		self.isOpenedFromMenu = isOpenedFromMenu
+		self.allowSkipInstruction = allowSkipInstruction
+		self.userSettings = userSettings
+		self.riskLevelManager = riskLevelManager
 
 		pages = pagesFactory.create()
 	}
@@ -45,21 +60,38 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	// Designated starter method
 	func start() {
 
-		let viewModel = ScanInstructionsViewModel(
-			coordinator: self,
-			pages: pages,
-			userSettings: UserSettings()
-		)
-		let viewController = ScanInstructionsViewController(viewModel: viewModel)
+		let viewController: UIViewController
+		
+		if !isOpenedFromMenu,
+		   allowSkipInstruction,
+		   userSettings.scanInstructionShown,
+		   riskLevelManager.state == nil {
+			let viewModel = RiskSettingInstructionViewModel(coordinator: self)
+			viewController = RiskSettingInstructionViewController(viewModel: viewModel)
+		} else {
+			let viewModel = ScanInstructionsViewModel(
+				coordinator: self,
+				pages: pages,
+				userSettings: UserSettings()
+			)
+			viewController = ScanInstructionsViewController(viewModel: viewModel)
+		}
+		
 		navigationController.pushOrReplaceTopViewController(with: viewController, animated: !isOpenedFromMenu)
 	}
 
-	func userDidCompletePages() {
-		delegate?.scanInstructionsDidFinish()
+	func userDidCompletePages(hasScanLock: Bool) {
+		delegate?.scanInstructionsDidFinish(hasScanLock: hasScanLock)
 	}
 
 	func userDidCancelScanInstructions() {
 		delegate?.scanInstructionsWasCancelled()
+	}
+	
+	func userWishesToSelectRiskSetting() {
+		let viewModel = RiskSettingInstructionViewModel(coordinator: self)
+		let viewController = RiskSettingInstructionViewController(viewModel: viewModel)
+		navigationController.pushViewController(viewController, animated: true)
 	}
 
 	// MARK: - Universal Link handling

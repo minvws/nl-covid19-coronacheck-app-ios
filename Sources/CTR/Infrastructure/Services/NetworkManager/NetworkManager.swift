@@ -152,6 +152,14 @@ class NetworkManager: Logging {
 
 				case let .success(networkResponse):
 
+					// Try to cast to ServerResponse.
+					// The Object might have all optional properties and be decodable with the ServerResponse
+					let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: networkResponse.data)
+					if let successValue = serverResponseResult.successValue {
+						completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: successValue, error: .serverError)))
+						return
+					}
+					
 					// Decode to the expected object
 					let decodedResult: Result<Object, NetworkError> = self.decodeJson(json: networkResponse.data)
 					switch decodedResult {

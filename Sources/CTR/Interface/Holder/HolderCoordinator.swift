@@ -48,6 +48,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
 
 	func userWishesMoreInfoAboutClockDeviation()
+	
+	func userWishesMoreInfoAboutTestOnlyValidFor3G()
 
 	func userWishesMoreInfoAboutUpgradingEUVaccinations()
 
@@ -137,18 +139,13 @@ class HolderCoordinator: SharedCoordinator {
 	// Designated starter method
 	override func start() {
 
-		handleOnboarding(factory: onboardingFactory) {
-
-			if forcedInformationManager.needsUpdating {
-				// Show Forced Information
-				let coordinator = ForcedInformationCoordinator(
-					navigationController: navigationController,
-					forcedInformationManager: forcedInformationManager,
-					delegate: self
-				)
-				startChildCoordinator(coordinator)
-			} else if let unhandledUniversalLink = unhandledUniversalLink {
-
+		handleOnboarding(
+			onboardingFactory: onboardingFactory,
+			forcedInformationFactory: HolderForcedInformationFactory()
+		) {
+			
+			if let unhandledUniversalLink = unhandledUniversalLink {
+				
 				// Attempt to consume the universal link again:
 				self.unhandledUniversalLink = nil // prevent potential infinite loops
 				navigateToHolderStart {
@@ -258,6 +255,18 @@ class HolderCoordinator: SharedCoordinator {
 			eventCoordinator.startWithRecovery()
 		}
 	}
+	
+	private func startEventFlowForNegativeTest() {
+		
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithNegativeTest()
+		}
+	}
 
 	private func startEventFlowForPositiveTests() {
 
@@ -311,6 +320,7 @@ class HolderCoordinator: SharedCoordinator {
 				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
 				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
 				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
+				versionSupplier: versionSupplier,
 				now: { Date() }
 			)
 		)
@@ -435,15 +445,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToCreateANegativeTestQRFromGGD() {
-
-		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
-			let eventCoordinator = EventCoordinator(
-				navigationController: navController,
-				delegate: self
-			)
-			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithTVS(eventMode: EventMode.test)
-		}
+		startEventFlowForNegativeTest()
 	}
 
 	func userWishesToCreateAVaccinationQR() {
@@ -476,13 +478,19 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
+	}
+	
+	func userWishesMoreInfoAboutTestOnlyValidFor3G() {
+		let title: String = L.holder_my_overview_3g_test_validity_bottom_sheet_title()
+		let message: String = L.holder_my_overview_3g_test_validity_bottom_sheet_body()
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
 		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
 		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 
 	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
@@ -590,7 +598,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		
 		let alertController = UIAlertController(
 			title: L.generalErrorTitle(),
-			message: String(format: L.generalErrorTechnicalCustom("\(code)")),
+			message: L.generalErrorTechnicalCustom("\(code)"),
 			preferredStyle: .alert
 		)
 

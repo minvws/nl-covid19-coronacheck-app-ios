@@ -171,7 +171,8 @@ extension ExtendRecoveryValidityViewModel {
 			okAction: { [weak self] _ in
 				self?.load()
 			},
-			okTitle: L.generalRetry()
+			okTitle: L.generalRetry(),
+			okActionIsPreferred: true
 		)
 	}
 

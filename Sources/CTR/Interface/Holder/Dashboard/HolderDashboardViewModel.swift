@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import UIKit
 import CoreData
@@ -15,17 +16,21 @@ protocol HolderDashboardCardUserActionHandling {
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion)
 	func didTapDeviceHasClockDeviationMoreInfo()
+	func didTapTestOnlyValidFor3GMoreInfo()
 	func didTapMultipleDCCUpgradeMoreInfo()
 	func didTapMultipleDCCUpgradeCompletedMoreInfo()
 	func didTapMultipleDCCUpgradeCompletedClose()
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
 	func didTapRetryLoadQRCards()
+	func didTapRecommendedUpdate()
 	func didTapRecoveryValidityExtensionAvailableMoreInfo()
 	func didTapRecoveryValidityExtensionCompleteMoreInfo()
 	func didTapRecoveryValidityExtensionCompleteClose()
 	func didTapRecoveryValidityReinstationAvailableMoreInfo()
 	func didTapRecoveryValidityReinstationCompleteMoreInfo()
 	func didTapRecoveryValidityReinstationCompleteClose()
+	func didTapNewValidityBannerMoreInfo()
+	func didTapNewValidiyBannerClose()
 }
 
 final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHandling {
@@ -77,6 +82,12 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		var shouldShowRecoveryValidityReinstationCompleteBanner: Bool = false
 		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
 
+		var shouldShowDomestic3GTestBanner: Bool = false
+	
+		var shouldShowRecommendedUpdateBanner: Bool = false
+		
+		var shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner: Bool = false
+		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
 			!qrCards.isEmpty || !regionFilteredExpiredCards(validityRegion: validityRegion).isEmpty
@@ -138,6 +149,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	private let dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol
 	private var recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol
 	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
+	private var versionSupplier: AppVersionSupplierProtocol?
 
 	// MARK: - Initializer
 	init(
@@ -148,6 +160,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		dccMigrationNotificationManager: DCCMigrationNotificationManagerProtocol,
 		recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
+		versionSupplier: AppVersionSupplierProtocol?,
 		now: @escaping () -> Date
 	) {
 
@@ -160,6 +173,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		self.dccMigrationNotificationManager = dccMigrationNotificationManager
 		self.recoveryValidityExtensionManager = recoveryValidityExtensionManager
 		self.configurationNotificationManager = configurationNotificationManager
+		self.versionSupplier = versionSupplier
 
 		self.state = State(
 			qrCards: [],
@@ -180,6 +194,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		setupDCCMigrationNotificationManager()
 		setupRecoveryValidityExtensionManager()
 		setupConfigNotificationManager()
+		setupRecommendedVersion()
 
 		// If the config ever changes, reload dependencies:
 		remoteConfigUpdateObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
@@ -204,11 +219,24 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 
 	private func setupDatasource() {
 		datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
+			guard let self = self else { return }
+			
 			DispatchQueue.main.async {
-				self?.state.qrCards = qrCardDataItems
-				self?.state.expiredGreenCards += expiredGreenCards
-
-				self?.dccMigrationNotificationManager.reload()
+				var state = self.state
+				state.qrCards = qrCardDataItems
+				state.expiredGreenCards += expiredGreenCards
+				state.shouldShowDomestic3GTestBanner = qrCardDataItems.contains(where: { qrCard in
+					// Assume that domestic has just one greencard.
+					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: self.now())
+				})
+				// New Validity Banner
+				state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !self.userSettings.hasDismissedNewValidityInfoCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled() &&
+					qrCardDataItems.contains(where: { qrCard in
+					qrCard.hasValidVaccineOrAValidRecovery(now: self.now())
+				})
+				
+				self.state = state
+				self.dccMigrationNotificationManager.reload()
 			}
 		}
 	}
@@ -261,6 +289,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			)
 			self.recoveryValidityExtensionManager.reload()
 			self.registerForConfigAlmostOutOfDateUpdate()
+			self.setupRecommendedVersion()
 		}
 	}
 
@@ -381,6 +410,13 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		}
 	}
 	
+	fileprivate func setupRecommendedVersion() {
+		
+		let recommendedVersion = remoteConfigManager.storedConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
+		let currentVersion = versionSupplier?.getCurrentVersion().fullVersionString() ?? "1.0.0"
+		self.state.shouldShowRecommendedUpdateBanner = recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending
+	}
+	
 	// MARK: - NSNotification
 	
 	fileprivate func setupNotificationListeners() {
@@ -422,6 +458,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				state.shouldShowRecoveryValidityReinstationAvailableBanner = false
 			}
 
+			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner && !self.userSettings.hasDismissedNewValidityInfoCard
+			
 			self.state = state
 		}
 	}
@@ -470,6 +508,10 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		coordinator?.userWishesMoreInfoAboutClockDeviation()
 	}
 	
+	func didTapTestOnlyValidFor3GMoreInfo() {
+		coordinator?.userWishesMoreInfoAboutTestOnlyValidFor3G()
+	}
+	
 	func didTapMultipleDCCUpgradeMoreInfo() {
 		coordinator?.userWishesMoreInfoAboutUpgradingEUVaccinations()
 	}
@@ -488,6 +530,14 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	
 	func didTapRetryLoadQRCards() {
 		strippenRefresher.load()
+	}
+	
+	func didTapRecommendedUpdate() {
+		
+		guard let url = remoteConfigManager.storedConfiguration.appStoreURL else {
+			return
+		}
+		openUrl(url)
 	}
 	
 	func didTapRecoveryValidityExtensionAvailableMoreInfo() {
@@ -514,6 +564,17 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		userSettings.hasDismissedRecoveryValidityReinstationCompletionCard = true
 	}
 	
+	func didTapNewValidityBannerMoreInfo() {
+		
+		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+		openUrl(url)
+	}
+	
+	func didTapNewValidiyBannerClose() {
+		
+		userSettings.hasDismissedNewValidityInfoCard = true
+	}
+	
 	// MARK: - Static Methods
 	
 	private static func assembleCards(
@@ -529,13 +590,16 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeMultipleDCCMigrationCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecoveryValidityCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
+		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeQRCards(state: state, validityRegion: validityRegion, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
+		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}

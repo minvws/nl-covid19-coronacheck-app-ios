@@ -9,9 +9,15 @@ import XCTest
 @testable import CTR
 import Clcore
 
+extension CryptoManagerSpy {
+	convenience init() {
+		self.init(secureUserSettings: SecureUserSettings())
+	}
+}
+
 class CryptoManagerSpy: CryptoManaging {
 
-	required init() {}
+	required init(secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedSetNonce = false
 	var invokedSetNonceCount = 0

@@ -17,7 +17,8 @@ class ScanInstructionsView: BaseView {
 		
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let pageControlMargin: CGFloat = 12.0
+		static let pageControlSpacing: CGFloat = 16.0
+		static let pageControlSpacingSmallScreen: CGFloat = 8.0
 	}
 
 	/// The container for the the onboarding views
@@ -29,12 +30,10 @@ class ScanInstructionsView: BaseView {
 	}()
 
 	/// The control buttons
-	let pageControl: UIPageControl = {
+	let pageControl: PageControl = {
 
-		let view = UIPageControl()
+		let view = PageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.pageIndicatorTintColor = Theme.colors.grey2
-		view.currentPageIndicatorTintColor = Theme.colors.primary
 		return view
 	}()
 	
@@ -106,7 +105,7 @@ class ScanInstructionsView: BaseView {
 			// Page Control
 			pageControl.bottomAnchor.constraint(
 				equalTo: primaryButton.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.pageControlMargin),
+				constant: UIDevice.current.isSmallScreen ? -ViewTraits.pageControlSpacingSmallScreen : -ViewTraits.pageControlSpacing),
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 	}
