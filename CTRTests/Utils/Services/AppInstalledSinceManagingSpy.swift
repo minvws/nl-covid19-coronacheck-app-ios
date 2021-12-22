@@ -51,12 +51,4 @@ class AppInstalledSinceManagingSpy: AppInstalledSinceManaging {
 		invokedUpdateParameters = (dateProvider, ())
 		invokedUpdateParametersList.append((dateProvider, ()))
 	}
-
-	var invokedReset = false
-	var invokedResetCount = 0
-
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
-	}
 }

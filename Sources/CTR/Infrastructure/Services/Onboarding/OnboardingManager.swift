@@ -23,9 +23,6 @@ protocol OnboardingManaging: AnyObject {
 
 	/// Give consent
 	func consentGiven()
-
-	/// Reset the manager
-	func reset()
 }
 
 /// - Tag: OnboardingManager
@@ -82,11 +79,5 @@ class OnboardingManager: OnboardingManaging, Logging {
 	func consentGiven() {
 
 		onboardingData.needsConsent = false
-	}
-
-	/// Reset the manager
-	func reset() {
-
-		SecureUserSettings().$onboardingData.clearData()
 	}
 }

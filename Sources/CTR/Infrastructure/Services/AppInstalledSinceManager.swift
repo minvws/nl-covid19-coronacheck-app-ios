@@ -16,8 +16,6 @@ protocol AppInstalledSinceManaging: AnyObject {
 	func update(serverHeaderDate: String, ageHeader: String?)
 
 	func update(dateProvider: DocumentsDirectoryCreationDateProtocol)
-
-	func reset()
 }
 
 final class AppInstalledSinceManager: AppInstalledSinceManaging {
@@ -72,10 +70,6 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		if let date = dateProvider.getDocumentsDirectoryCreationDate() {
 			appInstalledDate = date
 		}
-	}
-
-	func reset() {
-		appInstalledDate = nil
 	}
 }
 
