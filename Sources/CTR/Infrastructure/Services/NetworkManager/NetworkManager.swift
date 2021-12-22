@@ -154,7 +154,7 @@ class NetworkManager: Logging {
 
 					// Try to cast to ServerResponse.
 					// The Object might have all optional properties and be decodable with the ServerResponse
-					let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: networkResponse.data)
+					let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: networkResponse.data, logError: false)
 					if let successValue = serverResponseResult.successValue {
 						completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: successValue, error: .serverError)))
 						return
@@ -270,7 +270,7 @@ class NetworkManager: Logging {
 	/// Utility function to decode JSON
 	/// - Parameter json: the json data
 	/// - Returns: decoded json as Object, or a network error
-	private func decodeJson<Object: Decodable>(json: Data) -> Result<Object, NetworkError> {
+	private func decodeJson<Object: Decodable>(json: Data, logError: Bool = true) -> Result<Object, NetworkError> {
 
 		let decoder = JSONDecoder()
 		decoder.dateDecodingStrategy = .iso8601
@@ -280,7 +280,9 @@ class NetworkManager: Logging {
 			self.logVerbose("Response Object: \(object)")
 			return .success(object)
 		} catch {
-			self.logError("Error Deserializing \(Object.self):\nError: \(error)\nRaw json: \(String(decoding: json, as: UTF8.self))")
+			if logError {
+				self.logError("Error Deserializing \(Object.self):\nError: \(error)\nRaw json: \(String(decoding: json, as: UTF8.self))")
+			}
 			return .failure(.cannotDeserialize)
 		}
 	}
