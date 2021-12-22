@@ -203,11 +203,11 @@ class Button: UIButton {
 		if style == .roundedBlueImage {
 			// Increase size
 			imageView?.layer.transform = CATransform3DMakeScale(1.1, 1.1, 1.1)
-            // Position image to the right of the label
-            let flipTransform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-            transform = flipTransform
-            titleLabel?.transform = flipTransform
-            imageView?.transform = flipTransform
+			// Position image to the right of the label
+			let flipTransform = CGAffineTransform(scaleX: -1.0, y: 1.0)
+			transform = flipTransform
+			titleLabel?.transform = flipTransform
+			imageView?.transform = flipTransform
 		}
 		
 		setNeedsLayout()
