@@ -105,6 +105,7 @@
 @property (nonatomic) NSString* _Nonnull error;
 @end
 
+FOUNDATION_EXPORT const int64_t MobilecoreCREATE_CREDENTIAL_VERSION;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISEASE_TARGETED_COVID_19;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDOB_EMPTY_VALUE;
 FOUNDATION_EXPORT const int64_t MobilecoreHCERT_SPECIMEN_EXPIRATION_TIME;
