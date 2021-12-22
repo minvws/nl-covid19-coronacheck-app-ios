@@ -44,6 +44,7 @@ class CryptoManager: CryptoManaging, Logging {
 		// Initialize crypto library
 		cryptoLibUtility.initialize()
 		generateSecretKey()
+	}
 	
 	func generateSecretKey() {
 		
