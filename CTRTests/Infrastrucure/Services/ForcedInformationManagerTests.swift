@@ -30,7 +30,7 @@ class ForcedInformationManagerTests: XCTestCase {
 	
 	override func tearDown() {
 		
-		sut.reset()
+		Services.secureUserSettings.reset()
 		Services.revertToDefaults()
 		super.tearDown()
 	}
@@ -41,7 +41,7 @@ class ForcedInformationManagerTests: XCTestCase {
 	func testGetNeedsUpdating() {
 		
 		// Given
-		sut.reset()
+		Services.secureUserSettings.reset()
 		
 		// When
 		
@@ -55,7 +55,7 @@ class ForcedInformationManagerTests: XCTestCase {
 		// Given
 		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		sut.factory = VerifierForcedInformationFactory()
-		sut.reset()
+		Services.secureUserSettings.reset()
 		
 		// When
 		
@@ -69,7 +69,7 @@ class ForcedInformationManagerTests: XCTestCase {
 		// Given
 		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		sut.factory = VerifierForcedInformationFactory()
-		sut.reset()
+		Services.secureUserSettings.reset()
 		
 		// When
 		

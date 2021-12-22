@@ -25,7 +25,7 @@ class OnboardingManagerTests: XCTestCase {
 
 	override func tearDown() {
 
-		sut.reset()
+		Services.secureUserSettings.reset()
 		super.tearDown()
 	}
 
@@ -34,7 +34,7 @@ class OnboardingManagerTests: XCTestCase {
 	func testGetNeedsOnboarding() {
 
 		// Given
-		sut.reset()
+		Services.secureUserSettings.reset()
 
 		// When
 		let value = sut.needsOnboarding
@@ -46,7 +46,7 @@ class OnboardingManagerTests: XCTestCase {
 	func testGetNeedsConsent() {
 
 		// Given
-		sut.reset()
+		Services.secureUserSettings.reset()
 
 		// When
 		let value = sut.needsConsent

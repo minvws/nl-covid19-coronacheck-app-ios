@@ -181,8 +181,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(walletSpy.invokedRemoveExistingEventGroups) == true
 		expect(remoteConfigSpy.invokedReset) == true
 		expect(cryptoLibUtilitySpy.invokedReset) == true
-		expect(onboardingSpy.invokedReset) == true
-		expect(forcedInfoSpy.invokedReset) == true
 		expect(self.userSettingsSpy.invokedReset) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}

@@ -344,8 +344,6 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(walletSpy.invokedRemoveExistingEventGroups) == true
 		expect(remoteConfigSpy.invokedReset) == true
 		expect(cryptoLibUtilitySpy.invokedReset) == true
-		expect(onboardingSpy.invokedReset) == true
-		expect(forcedInfoSpy.invokedReset) == true
 		expect(scanLogManagerSpy.invokedReset) == false
 		expect(scanLockManagerSpy.invokedReset) == false
 		expect(riskLevelManagerSpy.invokedReset) == false
@@ -395,8 +393,6 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(walletSpy.invokedRemoveExistingEventGroups) == false
 		expect(remoteConfigSpy.invokedReset) == true
 		expect(cryptoLibUtilitySpy.invokedReset) == true
-		expect(onboardingSpy.invokedReset) == true
-		expect(forcedInfoSpy.invokedReset) == true
 		expect(scanLogManagerSpy.invokedReset) == true
 		expect(scanLockManagerSpy.invokedReset) == true
 		expect(riskLevelManagerSpy.invokedReset) == true
