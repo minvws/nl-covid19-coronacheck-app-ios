@@ -72,6 +72,8 @@ protocol CryptoManaging: AnyObject {
 	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
 
 	func readEuCredentials(_ data: Data) -> EuCredentialAttributes?
+	
+	func generateSecretKey()
 }
 
 /// The errors returned by the crypto library

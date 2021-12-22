@@ -112,6 +112,7 @@ final class Services {
 		secureUserSettings.reset()
 		cryptoLibUtility.reset()
 		remoteConfigManager.reset()
+		cryptoManager.generateSecretKey()
 
 		switch flavor {
 			case .holder:
