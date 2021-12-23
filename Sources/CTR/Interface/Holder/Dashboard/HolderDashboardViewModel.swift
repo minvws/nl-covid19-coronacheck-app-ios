@@ -230,12 +230,6 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 					// Assume that domestic has just one greencard.
 					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: self.now())
 				})
-//				// New Validity Banner
-//				state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !self.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled() &&
-//					qrCardDataItems.contains(where: { qrCard in
-//					qrCard.hasValidVaccineOrAValidRecovery(now: self.now())
-//				})
-				
 				self.state = state
 				self.dccMigrationNotificationManager.reload()
 			}
@@ -311,15 +305,18 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	
 	private func setupNewValidityInfoForVaccinationsAndRecoveriesBanner() {
 		
-		if userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard {
+		if userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled() {
+			// Set checked = true, do this only once
+			userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = false
 			
-			if !Services.walletManager.greencardsWithUnexpiredOrigins(now: now(), ofOriginType: OriginType.recovery).isEmpty || !Services.walletManager.greencardsWithUnexpiredOrigins(now: now(), ofOriginType: OriginType.vaccination).isEmpty {
+			let hasDomesticRecoveryGreenCards = Services.walletManager.hasDomesticGreenCard(originType: OriginType.recovery.rawValue)
+			let hasDomesticVaccinationGreenCards = Services.walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
+			if hasDomesticRecoveryGreenCards || hasDomesticVaccinationGreenCards {
+				// if we have a domestic recovery or vaccination, show the banner.
 				userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
 			}
-			userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = true
 		}
-		
-		state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled()
+		state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !self.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled()
 	}
 
 	// MARK: - View Lifecycle callbacks:
@@ -471,8 +468,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				state.shouldShowRecoveryValidityExtensionAvailableBanner = false
 				state.shouldShowRecoveryValidityReinstationAvailableBanner = false
 			}
-
-//			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner && !self.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard
+			
+			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !self.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled()
 			
 			self.state = state
 		}

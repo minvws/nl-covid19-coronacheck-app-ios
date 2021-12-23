@@ -407,6 +407,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetter = false
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount = 0
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool?
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardList = [Bool]()
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetter = false
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount = 0
+	var stubbedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool! = false
+
+	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool {
+		set {
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetter = true
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount += 1
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = newValue
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardList.append(newValue)
+		}
+		get {
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetter = true
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount += 1
+			return stubbedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard
+		}
+	}
+
 	var invokedReset = false
 	var invokedResetCount = 0
 
