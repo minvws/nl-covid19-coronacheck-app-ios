@@ -28,7 +28,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	
 	func isNewValidityInfoBannerEnabled() -> Bool {
 		
-		return remoteConfigManager?.storedConfiguration.showNewValidityInfoCard ?? true
+		return remoteConfigManager?.storedConfiguration.showNewValidityInfoCard ?? false
 	}
 	
 	func isVerificationPolicyEnabled() -> Bool {
