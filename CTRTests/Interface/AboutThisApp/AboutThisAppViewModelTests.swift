@@ -335,6 +335,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 		Services.use(scanLockManagerSpy)
 		let riskLevelManagerSpy = RiskLevelManagerSpy()
 		Services.use(riskLevelManagerSpy)
+		let cryptoManagerSpy = CryptoManagerSpy()
+		Services.use(cryptoManagerSpy)
 		
 		// When
 		sut.resetDataAndRestart()
@@ -344,6 +346,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(walletSpy.invokedRemoveExistingEventGroups) == true
 		expect(remoteConfigSpy.invokedReset) == true
 		expect(cryptoLibUtilitySpy.invokedReset) == true
+		expect(cryptoManagerSpy.invokedGenerateSecretKey) == true
 		expect(scanLogManagerSpy.invokedReset) == false
 		expect(scanLockManagerSpy.invokedReset) == false
 		expect(riskLevelManagerSpy.invokedReset) == false
