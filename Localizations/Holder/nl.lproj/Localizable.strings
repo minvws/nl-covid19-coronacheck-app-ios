@@ -166,7 +166,7 @@
 "holder.dashboard.qr.validityDate.automaticallyBecomesValidOn" = "Wordt automatisch geldig";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "wordt automatisch geldig over";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf";
-"holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Voorkom verspreiding van het coronavirus, gebruik ook <a href=\"https://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a>.</p>";
+"holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Voorkom verspreiding van het coronavirus, gebruik ook <a href=\"itms-apps://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a>.</p>";
 "holder.dashboard.recoveryvalidityextension.extensionavailable.banner.title" = "Je kunt je Nederlandse herstelbewijs verlengen";
 "holder.dashboard.recoveryvalidityextension.extensioncomplete.banner.title" = "Je Nederlandse herstelbewijs is verlengd";
 "holder.dashboard.recoveryvalidityextension.reinstationavailable.banner.title" = "Je kunt je verlopen Nederlandse herstelbewijs terugzetten";
