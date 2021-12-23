@@ -166,7 +166,7 @@
 "holder.dashboard.qr.validityDate.automaticallyBecomesValidOn" = "automatically becomes valid";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
-"holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Prevent the spread of coronavirus, use <a href=\"https://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a> too.</p>";
+"holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Prevent the spread of coronavirus, use <a href=\"itms-apps://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a> too.</p>";
 "holder.dashboard.recoveryvalidityextension.extensionavailable.banner.title" = "You can extend your Dutch recovery certificate";
 "holder.dashboard.recoveryvalidityextension.extensioncomplete.banner.title" = "Your Dutch recovery certificate has been extended";
 "holder.dashboard.recoveryvalidityextension.reinstationavailable.banner.title" = "You can restore your expired Dutch recovery certificate";
