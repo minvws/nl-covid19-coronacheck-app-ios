@@ -305,7 +305,7 @@ extension HolderDashboardViewController.Card {
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
-		
+	
 		guard validityRegion == .domestic, state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner else { return [] }
 		return [
 			.newValidityInfoForVaccinationAndRecoveries(

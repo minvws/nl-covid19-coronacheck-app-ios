@@ -385,25 +385,47 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedHasDismissedNewValidityInfoCardSetter = false
-	var invokedHasDismissedNewValidityInfoCardSetterCount = 0
-	var invokedHasDismissedNewValidityInfoCard: Bool?
-	var invokedHasDismissedNewValidityInfoCardList = [Bool]()
-	var invokedHasDismissedNewValidityInfoCardGetter = false
-	var invokedHasDismissedNewValidityInfoCardGetterCount = 0
-	var stubbedHasDismissedNewValidityInfoCard: Bool! = false
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetter = false
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount = 0
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool?
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardList = [Bool]()
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetter = false
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount = 0
+	var stubbedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool! = false
 
-	var hasDismissedNewValidityInfoCard: Bool {
+	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool {
 		set {
-			invokedHasDismissedNewValidityInfoCardSetter = true
-			invokedHasDismissedNewValidityInfoCardSetterCount += 1
-			invokedHasDismissedNewValidityInfoCard = newValue
-			invokedHasDismissedNewValidityInfoCardList.append(newValue)
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetter = true
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount += 1
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = newValue
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardList.append(newValue)
 		}
 		get {
-			invokedHasDismissedNewValidityInfoCardGetter = true
-			invokedHasDismissedNewValidityInfoCardGetterCount += 1
-			return stubbedHasDismissedNewValidityInfoCard
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetter = true
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount += 1
+			return stubbedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard
+		}
+	}
+
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetter = false
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount = 0
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool?
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardList = [Bool]()
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetter = false
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount = 0
+	var stubbedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool! = false
+
+	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool {
+		set {
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetter = true
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount += 1
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = newValue
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardList.append(newValue)
+		}
+		get {
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetter = true
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount += 1
+			return stubbedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard
 		}
 	}
 
