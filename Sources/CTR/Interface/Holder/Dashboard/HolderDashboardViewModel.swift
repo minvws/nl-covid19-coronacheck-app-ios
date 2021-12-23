@@ -195,6 +195,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		setupRecoveryValidityExtensionManager()
 		setupConfigNotificationManager()
 		setupRecommendedVersion()
+		setupNewValidityInfoForVaccinationsAndRecoveriesBanner()
 
 		// If the config ever changes, reload dependencies:
 		remoteConfigUpdateObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
@@ -229,11 +230,11 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 					// Assume that domestic has just one greencard.
 					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: self.now())
 				})
-				// New Validity Banner
-				state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !self.userSettings.hasDismissedNewValidityInfoCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled() &&
-					qrCardDataItems.contains(where: { qrCard in
-					qrCard.hasValidVaccineOrAValidRecovery(now: self.now())
-				})
+//				// New Validity Banner
+//				state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !self.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled() &&
+//					qrCardDataItems.contains(where: { qrCard in
+//					qrCard.hasValidVaccineOrAValidRecovery(now: self.now())
+//				})
 				
 				self.state = state
 				self.dccMigrationNotificationManager.reload()
@@ -306,6 +307,19 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				remoteConfiguration: self.remoteConfigManager.storedConfiguration
 			)
 		}
+	}
+	
+	private func setupNewValidityInfoForVaccinationsAndRecoveriesBanner() {
+		
+		if userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard {
+			
+			if !Services.walletManager.greencardsWithUnexpiredOrigins(now: now(), ofOriginType: OriginType.recovery).isEmpty || !Services.walletManager.greencardsWithUnexpiredOrigins(now: now(), ofOriginType: OriginType.vaccination).isEmpty {
+				userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
+			}
+			userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = true
+		}
+		
+		state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled()
 	}
 
 	// MARK: - View Lifecycle callbacks:
@@ -458,7 +472,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				state.shouldShowRecoveryValidityReinstationAvailableBanner = false
 			}
 
-			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner && !self.userSettings.hasDismissedNewValidityInfoCard
+//			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner && !self.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard
 			
 			self.state = state
 		}
@@ -572,7 +586,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	
 	func didTapNewValidiyBannerClose() {
 		
-		userSettings.hasDismissedNewValidityInfoCard = true
+		userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = true
 	}
 	
 	// MARK: - Static Methods
