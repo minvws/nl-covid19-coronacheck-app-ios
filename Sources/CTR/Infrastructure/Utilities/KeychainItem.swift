@@ -49,7 +49,7 @@ class KeychainItem<T: Codable> {
 		}
 	}
 
-	private let queue = DispatchQueue(label: "nl.coronacheck.kechainserialqueue.\(UUID().uuidString)")
+	private let queue = DispatchQueue(label: "nl.coronacheck.keychainserialqueue.\(UUID().uuidString)")
 	private let name: String
 	private let service: String?
 
