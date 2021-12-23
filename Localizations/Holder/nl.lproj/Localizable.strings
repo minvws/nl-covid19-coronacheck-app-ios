@@ -706,5 +706,15 @@
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
 "updateApp.title" = "Tijd voor een update";
 "visitorpass_start_action" = "Gegevens ophalen";
-"visitorpass_start_message" = "<p>Ben jij buiten de Europese Unie gevaccineerd en op bezoek in Nederland? Dan kan je een bezoekersbewijs maken waarmee je plekken in Nederland kan bezoeken die een coronatoegangsbewijs vragen.</p><p>Het bewijs is %li dagen geldig na aanvraag.</p><p><b>Een bezoekersbewijs maken:</b><ul><li>Laat je vaccinatiegegevens en identiteitsbewijs controleren bij een <a href=\"https://coronacheck.nl/\">VWS loket</a>.</li>\n<li>Haal je vaccinatie beoordeling op in de app.</li><li>Maak een test afspraak bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>.</li><li>Voeg je negatieve testuitslag toe aan de app.</li></ul></p>";
+"visitorpass_start_message" = "<p>Ben jij buiten de Europese Unie gevaccineerd en op bezoek in Nederland? Dan kan je een bezoekersbewijs maken waarmee je plekken in Nederland kan bezoeken die een coronatoegangsbewijs vragen.</p><p>Kijk voor meer informatie op <a href=\"https://www.Rijksoverheid.nl/bezoekersbewijs\">www.Rijksoverheid.nl/bezoekersbewijs</a>.</p>";
 "visitorpass_start_title" = "Een bezoekersbewijs maken";
+
+"visitorpass_tokenentry_title" = "Vaccinatie beoordeling toevoegen";
+"visitorpass_tokenentry_text" = "Vul jouw kortverblijfcode in. Deze heb je van het VWS loket gekregen.";
+"visitorpass_tokenentry_token_title" = "Bezoekerscode";
+"visitorpass_tokenentry_token_placeholder" = "Bijv. KVT-3839287262-F1";
+"visitorpass_tokenentry_token_placeholder_screenreader" = "Vul hier je bezoekerscode in";
+
+"visitorpass_tokenentry_error_empty_code" = "Graag eerst een verificatiecode invullen";
+"visitorpass_tokenentry_error_empty_token" = "Graag eerst een bezoekerscode invullen";
+"visitorpass_tokenentry_error_invalid code" = "Geen geldige bezoekerscode";

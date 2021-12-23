@@ -283,13 +283,14 @@ class HolderCoordinator: SharedCoordinator {
 	}
 
 	/// Navigate to the token entry scene
-	func navigateToTokenEntry(_ token: RequestToken? = nil) {
+	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: TokenRetrievalMode = .negativeTest) {
 
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false)
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false),
+				tokenRetrievalMode: retrievalMode
 			)
 		)
 
@@ -425,8 +426,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToCreateAVisitorPass() {
-		logInfo("Todo: userWishesToCreateAVisitorPass")
-		// navigateToTokenEntry()
+		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 
 	func userWishesToChooseLocation() {

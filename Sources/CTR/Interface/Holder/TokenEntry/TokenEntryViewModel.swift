@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum TokenRetrievalMode {
+	case negativeTest
+	case visitorPass
+}
+
 class TokenEntryViewModel {
 
 	/// There are four "modes" for user entry
@@ -23,7 +28,7 @@ class TokenEntryViewModel {
 		case regular
 		case withRequestTokenProvided(originalRequestToken: RequestToken)
 	}
-
+	
 	// MARK: - Bindable Strings
 
 	/// The navbar title
@@ -92,6 +97,7 @@ class TokenEntryViewModel {
 		}
 	}
 	private var initializationMode: InitializationMode
+	private var tokenRetrievalMode: TokenRetrievalMode
 	private var hasEverMadeFieldsVisible: Bool = false
 
 	/// Instead of updating `shouldEnableNextButton` directly, internal logic
@@ -136,19 +142,21 @@ class TokenEntryViewModel {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		requestToken: RequestToken?,
-		tokenValidator: TokenValidatorProtocol) {
-
+		tokenValidator: TokenValidatorProtocol,
+		tokenRetrievalMode: TokenRetrievalMode = .negativeTest) {
+		
 		self.coordinator = coordinator
 		self.requestToken = requestToken
 		self.tokenValidator = tokenValidator
 		self.message = nil
-
+		
 		if let unwrappedToken = requestToken {
 			self.initializationMode = .withRequestTokenProvided(originalRequestToken: unwrappedToken)
 		} else {
 			self.initializationMode = .regular
 		}
-
+		self.tokenRetrievalMode = tokenRetrievalMode
+		
 		if let unwrappedToken = requestToken {
 			self.fetchProviders(unwrappedToken, verificationCode: nil)
 		}
@@ -251,7 +259,7 @@ class TokenEntryViewModel {
 
 		if currentInputMode == .inputVerificationCode || currentInputMode == .inputTokenWithVerificationCode {
 			guard let verification = verificationInput, !verification.isEmpty else {
-				fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode)
+				fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode, forRetrievalMode: tokenRetrievalMode)
 				return
 			}
 			fieldErrorMessage = nil
@@ -261,7 +269,7 @@ class TokenEntryViewModel {
 		} else {
 
 			guard let tokenInput = tokenInput, !tokenInput.isEmpty else {
-				fieldErrorMessage = Strings.tokenIsEmpty(forMode: initializationMode)
+				fieldErrorMessage = Strings.tokenIsEmpty(forMode: initializationMode, forRetrievalMode: tokenRetrievalMode)
 				return
 			}
 
@@ -269,7 +277,7 @@ class TokenEntryViewModel {
 				self.requestToken = requestToken
 				fetchProviders(requestToken, verificationCode: nil)
 			} else {
-				fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
+				fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode, forRetrievalMode: tokenRetrievalMode)
 			}
 		}
 	}
@@ -285,7 +293,7 @@ class TokenEntryViewModel {
 			fieldErrorMessage = nil
 			fetchProviders(requestToken, verificationCode: sanitizedVerification)
 		} else {
-			fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode)
+			fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode, forRetrievalMode: tokenRetrievalMode)
 		}
 	}
 
@@ -336,7 +344,7 @@ class TokenEntryViewModel {
 		logVerbose("fetching result with \(provider.resultURLString)")
 
 		if provider.resultURL == nil {
-			fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+			fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode, forRetrievalMode: tokenRetrievalMode)
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
@@ -365,7 +373,7 @@ class TokenEntryViewModel {
 							case .serverUnreachableInvalidHost, .serverUnreachableConnectionLost, .serverUnreachableTimedOut:
 								self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
 							case .invalidRequest:
-								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode, forRetrievalMode: self.tokenRetrievalMode)
 							default:
 								self.displayError(ServerError.provider(
 									provider: provider.identifier,
@@ -396,7 +404,7 @@ class TokenEntryViewModel {
 				self.verificationCodeIsKnownToBeRequired = true
 
 			case .invalid:
-				self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+				self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode, forRetrievalMode: self.tokenRetrievalMode)
 				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
 			default:
@@ -504,10 +512,10 @@ class TokenEntryViewModel {
 
 	private func updateText(_ newInputMode: InputMode) {
 
-		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
-		title = Strings.title(forMode: initializationMode)
-		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode)
-		tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode)
+		message = Strings.text(forMode: initializationMode, inputMode: newInputMode, forRetrievalMode: tokenRetrievalMode)
+		title = Strings.title(forMode: initializationMode, forRetrievalMode: tokenRetrievalMode)
+		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode, forRetrievalMode: tokenRetrievalMode)
+		tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode, forRetrievalMode: tokenRetrievalMode)
 		verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode)
 		verificationInfo = Strings.verificationInfo(forMode: initializationMode)
 		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
@@ -568,24 +576,28 @@ extension TokenEntryViewModel.InitializationMode {
 extension TokenEntryViewModel {
 
 	struct Strings {
-		fileprivate static func title(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
+		fileprivate static func title(forMode mode: InitializationMode, forRetrievalMode retrievalMode: TokenRetrievalMode) -> String {
+			switch (mode, retrievalMode) {
+				case (.regular, .negativeTest):
 					return L.holderTokenentryRegularflowTitle()
-				case .withRequestTokenProvided:
+				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowTitle()
+				case (_, .visitorPass):
+					return L.visitorpass_tokenentry_title()
 			}
 		}
 
-		fileprivate static func text(forMode initializationMode: InitializationMode, inputMode: InputMode) -> String? {
-			switch (initializationMode, inputMode) {
+		fileprivate static func text(forMode initializationMode: InitializationMode, inputMode: InputMode, forRetrievalMode retrievalMode: TokenRetrievalMode) -> String? {
+			switch (initializationMode, inputMode, retrievalMode) {
 
-				case (_, .none):
+				case (_, .none, _):
 					return nil
-				case (.regular, _):
+				case (.regular, _, .negativeTest):
 					return L.holderTokenentryRegularflowText()
-				case (.withRequestTokenProvided, _):
+				case (.withRequestTokenProvided, _, .negativeTest):
 					return L.holderTokenentryUniversallinkflowText()
+				case (_, _, .visitorPass):
+					return L.visitorpass_tokenentry_text()
 			}
 		}
 
@@ -598,12 +610,14 @@ extension TokenEntryViewModel {
 			}
 		}
 
-		fileprivate static func errorInvalidCode(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
+		fileprivate static func errorInvalidCode(forMode mode: InitializationMode, forRetrievalMode retrievalMode: TokenRetrievalMode) -> String {
+			switch (mode, retrievalMode) {
+				case (.regular, .negativeTest):
 					return L.holderTokenentryRegularflowErrorInvalidCode()
-				case .withRequestTokenProvided:
+				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
+				case (_, .visitorPass):
+					return L.visitorpass_tokenentry_error_invalidCode()
 			}
 		}
 
@@ -616,21 +630,25 @@ extension TokenEntryViewModel {
 			}
 		}
 
-		fileprivate static func tokenIsEmpty(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
+		fileprivate static func tokenIsEmpty(forMode mode: InitializationMode, forRetrievalMode retrievalMode: TokenRetrievalMode) -> String {
+			switch (mode, retrievalMode) {
+				case (.regular, .negativeTest):
 					return L.holderTokenentryRegularflowErrorEmptytoken()
-				case .withRequestTokenProvided:
+				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowErrorEmptytoken()
+				case (_, .visitorPass):
+					return L.visitorpass_tokenentry_error_empty_token()
 			}
 		}
 
-		fileprivate static func codeIsEmpty(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
+		fileprivate static func codeIsEmpty(forMode mode: InitializationMode, forRetrievalMode retrievalMode: TokenRetrievalMode) -> String {
+			switch (mode, retrievalMode) {
+				case (.regular, .negativeTest):
 					return L.holderTokenentryRegularflowErrorEmptycode()
-				case .withRequestTokenProvided:
+				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowErrorEmptycode()
+				case (_, .visitorPass):
+					return L.visitorpass_tokenentry_error_empty_code()
 			}
 		}
 
@@ -643,28 +661,36 @@ extension TokenEntryViewModel {
 			}
 		}
 
-		fileprivate static func tokenEntryHeaderTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
+		fileprivate static func tokenEntryHeaderTitle(forMode mode: InitializationMode, forRetrievalMode retrievalMode: TokenRetrievalMode) -> String {
+			switch (mode, retrievalMode) {
+				case (.regular, .negativeTest):
 					return L.holderTokenentryRegularflowTokenTitle()
-				case .withRequestTokenProvided:
+				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowTokenTitle()
+				case (_, .visitorPass):
+					return L.visitorpass_tokenentry_token_title()
 			}
 		}
 
-		fileprivate static func tokenEntryPlaceholder(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
+		fileprivate static func tokenEntryPlaceholder(forMode mode: InitializationMode, forRetrievalMode retrievalMode: TokenRetrievalMode) -> String {
+			switch (mode, retrievalMode) {
+				case (.regular, .negativeTest):
 					if UIAccessibility.isVoiceOverRunning {
 						return L.holderTokenentryRegularflowTokenPlaceholderScreenreader()
 					} else {
 						return L.holderTokenentryRegularflowTokenPlaceholder()
 					}
-				case .withRequestTokenProvided:
+				case (.withRequestTokenProvided, .negativeTest):
 					if UIAccessibility.isVoiceOverRunning {
 						return L.holderTokenentryUniversallinkflowTokenPlaceholderScreenreader()
 					} else {
 						return L.holderTokenentryUniversallinkflowTokenPlaceholder()
+					}
+				case (_, .visitorPass):
+					if UIAccessibility.isVoiceOverRunning {
+						return L.visitorpass_tokenentry_token_placeholder_screenreader()
+					} else {
+						return L.visitorpass_tokenentry_token_placeholder()
 					}
 			}
 		}
