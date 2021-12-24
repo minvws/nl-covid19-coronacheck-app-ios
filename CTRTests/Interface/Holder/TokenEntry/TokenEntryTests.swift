@@ -1552,7 +1552,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.userHasNoTokenButtonTapped()
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedPresentInformationPage) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesMoreInfoAboutNoTestToken) == true
 	}
 
 	// MARK: - Other
@@ -1604,7 +1604,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		return TokenEntryViewModel(
 			coordinator: holderCoordinatorSpy,
 			requestToken: requestToken,
-			tokenValidator: tokenValidatorSpy
+			tokenValidator: tokenValidatorSpy,
+			inputRetrievalCodeMode: .negativeTest
 		)
 	}
 }

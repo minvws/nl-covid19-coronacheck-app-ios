@@ -711,6 +711,7 @@
 
 "visitorpass_tokenentry_title" = "Vaccinatie beoordeling toevoegen";
 "visitorpass_tokenentry_text" = "Vul jouw kortverblijfcode in. Deze heb je van het VWS loket gekregen.";
+"visitorpass_tokenentry_next" = "Volgende";
 "visitorpass_tokenentry_token_title" = "Bezoekerscode";
 "visitorpass_tokenentry_token_placeholder" = "Bijv. KVT-3839287262-F1";
 "visitorpass_tokenentry_token_placeholder_screenreader" = "Vul hier je bezoekerscode in";
@@ -722,3 +723,7 @@
 "visitorpass_tokenentry_button_notoken" = "Heb je geen bezoekerscode?";
 "visitorpass_tokenentry_modal_notoken_title" = "Heb je geen bezoekerscode?";
 "visitorpass_tokenentry_modal_notoken_details" = "<p>Je krijgt van het VWS loket een bezoekerscode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met het loket.</p>";
+
+"visitorpass_tokenentry_verification_title" = "Verificatiecode";
+"visitorpass_tokenentry_verification_placeholder" = "Bijv. 123456";
+"visitorpass_tokenentry_verification_info" = "Je krijgt een code via sms of e-mail";

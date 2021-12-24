@@ -54,7 +54,7 @@ class VisitorPassStartViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.visitorpass_start_title()
-		expect(self.sut.sceneView.message) == L.visitorpass_start_message(14)
+		expect(self.sut.sceneView.message) == L.visitorpass_start_message()
 		expect(self.sut.sceneView.primaryTitle) == L.visitorpass_start_action()
 	}
 	

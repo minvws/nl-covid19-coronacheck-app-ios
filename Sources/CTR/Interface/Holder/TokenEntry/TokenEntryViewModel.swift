@@ -11,6 +11,15 @@ import UIKit
 enum InputRetrievalCodeMode {
 	case negativeTest
 	case visitorPass
+	
+	func getFlow() -> ErrorCode.Flow {
+		switch self {
+			case .negativeTest:
+				return .commercialTest
+			case .visitorPass:
+				return .visitorPass
+		}
+	}
 }
 
 class TokenEntryViewModel {
@@ -319,7 +328,7 @@ class TokenEntryViewModel {
 							case .noInternetConnection:
 								self.displayNoInternet(requestToken, verificationCode: verificationCode)
 							case .serverUnreachableInvalidHost, .serverUnreachableTimedOut, .serverUnreachableConnectionLost:
-								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled)
+								let errorCode = ErrorCode(flow: self.inputRetrievalCodeMode.getFlow(), step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled)
 								self.displayServerUnreachable(errorCode)
 							default:
 								self.displayError(serverError)
@@ -516,10 +525,10 @@ class TokenEntryViewModel {
 		title = Strings.title(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
 		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
 		tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode)
-		verificationInfo = Strings.verificationInfo(forMode: initializationMode)
-		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
-		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
+		verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		verificationInfo = Strings.verificationInfo(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		primaryTitle = Strings.primaryTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
 		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
 		userNeedsATokenButtonTitle = Strings.notokenButtonTitle(forInputRetrievalCodeMode: inputRetrievalCodeMode)
 		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
@@ -704,39 +713,47 @@ extension TokenEntryViewModel {
 			}
 		}
 
-		fileprivate static func verificationEntryHeaderTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
+		fileprivate static func verificationEntryHeaderTitle(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
+			switch (mode, retrievalMode) {
+				case (.regular, .negativeTest):
 					return L.holderTokenentryRegularflowVerificationTitle()
-				case .withRequestTokenProvided:
+				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowVerificationTitle()
+				case (_, .visitorPass):
+					return L.visitorpass_tokenentry_verification_title()
 			}
 		}
 
-		fileprivate static func verificationInfo(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
+		fileprivate static func verificationInfo(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
+			switch (mode, retrievalMode) {
+				case (.regular, .negativeTest):
 					return L.holderTokenentryRegularflowVerificationInfo()
-				case .withRequestTokenProvided:
+				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowVerificationInfo()
+				case (_, .visitorPass):
+					return L.visitorpass_tokenentry_verification_info()
 			}
 		}
 
-		fileprivate static func verificationPlaceholder(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
+		fileprivate static func verificationPlaceholder(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
+			switch (mode, retrievalMode) {
+				case (.regular, .negativeTest):
 					return L.holderTokenentryRegularflowVerificationPlaceholder()
-				case .withRequestTokenProvided:
+				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowVerificationPlaceholder()
+				case (_, .visitorPass):
+					return L.visitorpass_tokenentry_verification_placeholder()
 			}
 		}
 
-		fileprivate static func primaryTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
+		fileprivate static func primaryTitle(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
+			switch (mode, retrievalMode) {
+				case (.regular, .negativeTest):
 					return L.holderTokenentryRegularflowNext()
-				case .withRequestTokenProvided:
+				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowNext()
+				case (_, .visitorPass):
+					return L.visitorpass_tokenentry_next()
 			}
 		}
 
@@ -859,17 +876,19 @@ extension TokenEntryViewModel {
 	}
 
 	private func getBodyForError(_ serverError: ServerError) -> String {
+		
+		let flow = inputRetrievalCodeMode.getFlow()
 
 		if case let .error(statusCode, serverResponse, error) = serverError {
 			// this is an error fetching the providers
 			switch error {
 				case .serverBusy:
-					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: .commercialTest, step: .providers, errorCode: "429"))")
+					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: flow, step: .providers, errorCode: "429"))")
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: flow, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateServerMessage("\(errorCode)")
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: flow, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateClientMessage("\(errorCode)")
 				default:
 					break
@@ -879,12 +898,12 @@ extension TokenEntryViewModel {
 			// this is an error getting the test result.
 			switch error {
 				case .serverBusy:
-					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "429"))")
+					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: flow, step: .testResult, provider: provider, errorCode: "429"))")
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: flow, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: flow, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				default:
 					break
