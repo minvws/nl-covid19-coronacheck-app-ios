@@ -251,8 +251,8 @@ class WalletManager: WalletManaging, Logging {
 
 						context.delete(greenCard)
 					}
+					dataStoreManager.save(context)
 				}
-				dataStoreManager.save(context)
 			}
 		}
 	}
@@ -325,7 +325,9 @@ class WalletManager: WalletManaging, Logging {
 								}
 						}
 					}
-					dataStoreManager.save(context)
+					if result {
+						dataStoreManager.save(context)
+					}
 				}
 			} else {
 				result = false
