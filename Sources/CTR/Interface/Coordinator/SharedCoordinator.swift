@@ -172,8 +172,8 @@ extension SharedCoordinator: OpenUrlProtocol {
 	func openUrl(_ url: URL, inApp: Bool) {
 
 		var shouldOpenInApp = inApp
-		if url.scheme == "tel" {
-			// Do not open phone numbers in app, doesn't work & will crash.
+		if url.scheme == "tel" || url.scheme == "itms-apps" {
+			// Do not open phone numbers or appstore links in app, doesn't work & will crash.
 			shouldOpenInApp = false
 		}
 

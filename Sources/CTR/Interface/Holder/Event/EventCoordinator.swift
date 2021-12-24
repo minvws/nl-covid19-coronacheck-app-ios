@@ -251,13 +251,38 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 
-	private func navigateBackToEventStart() {
+	@discardableResult private func navigateBackToEventStart() -> Bool {
 
 		if let eventStartViewController = navigationController.viewControllers
 			.first(where: { $0 is EventStartViewController }) {
 
 			navigationController.popToViewController(
 				eventStartViewController,
+				animated: true
+			)
+			return true
+		}
+		return false
+	}
+	
+	private func navigateBackToTestStart() {
+		
+		let popBackToViewController = navigationController.viewControllers.first {
+			
+			switch $0 {
+				case is ChooseTestLocationViewController:
+					return true
+					// Fallback when GGD is not available
+				case is ChooseQRCodeTypeViewController:
+					return true
+				default:
+					return false
+			}
+		}
+		if let popBackToViewController = popBackToViewController {
+			
+			navigationController.popToViewController(
+				popBackToViewController,
 				animated: true
 			)
 		}
@@ -355,8 +380,12 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	private func goBack(_ eventMode: EventMode) {
 
 		switch eventMode {
-			case .test, .recovery, .vaccination, .positiveTest:
+			case .recovery, .vaccination, .positiveTest:
 				navigateBackToEventStart()
+			case .test:
+				if !navigateBackToEventStart() {
+					navigateBackToTestStart()
+				}
 			case .paperflow:
 				delegate?.eventFlowDidCancel()
 		}

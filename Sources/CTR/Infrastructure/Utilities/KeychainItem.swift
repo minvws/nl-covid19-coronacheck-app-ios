@@ -27,26 +27,29 @@ class KeychainItem<T: Codable> {
 
 	var exists: Bool {
 		
-		var query = baseQuery()
-		query[kSecMatchLimit as String] = kSecMatchLimitOne
-		query[kSecReturnAttributes as String] = kCFBooleanTrue
-		query[kSecReturnData as String] = kCFBooleanFalse
-		query[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
+		queue.sync {
+			var query = baseQuery()
+			query[kSecMatchLimit as String] = kSecMatchLimitOne
+			query[kSecReturnAttributes as String] = kCFBooleanTrue
+			query[kSecReturnData as String] = kCFBooleanFalse
+			query[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
 
-		var queryResult: AnyObject?
-		let status = withUnsafeMutablePointer(to: &queryResult) {
-			SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
-		}
+			var queryResult: AnyObject?
+			let status = withUnsafeMutablePointer(to: &queryResult) {
+				SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+			}
 
-		switch status {
-			case errSecInteractionNotAllowed, noErr:
-				return true
+			switch status {
+				case errSecInteractionNotAllowed, noErr:
+					return true
 
-			default:
-				return false
+				default:
+					return false
+			}
 		}
 	}
 
+	private let queue = DispatchQueue(label: "nl.coronacheck.keychainserialqueue.\(UUID().uuidString)")
 	private let name: String
 	private let service: String?
 
