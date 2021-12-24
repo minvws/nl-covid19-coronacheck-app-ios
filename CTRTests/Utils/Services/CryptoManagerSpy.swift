@@ -142,4 +142,12 @@ class CryptoManagerSpy: CryptoManaging {
 		invokedReadEuCredentialsParametersList.append((data, ()))
 		return stubbedReadEuCredentialsResult
 	}
+
+	var invokedGenerateSecretKey = false
+	var invokedGenerateSecretKeyCount = 0
+
+	func generateSecretKey() {
+		invokedGenerateSecretKey = true
+		invokedGenerateSecretKeyCount += 1
+	}
 }

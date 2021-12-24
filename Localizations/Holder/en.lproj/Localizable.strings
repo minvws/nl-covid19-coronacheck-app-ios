@@ -166,7 +166,7 @@
 "holder.dashboard.qr.validityDate.automaticallyBecomesValidOn" = "automatically becomes valid";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
-"holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Prevent the spread of coronavirus, use <a href=\"https://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a> too.</p>";
+"holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Prevent the spread of coronavirus, use <a href=\"itms-apps://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a> too.</p>";
 "holder.dashboard.recoveryvalidityextension.extensionavailable.banner.title" = "You can extend your Dutch recovery certificate";
 "holder.dashboard.recoveryvalidityextension.extensioncomplete.banner.title" = "Your Dutch recovery certificate has been extended";
 "holder.dashboard.recoveryvalidityextension.reinstationavailable.banner.title" = "You can restore your expired Dutch recovery certificate";
@@ -530,7 +530,7 @@
 "holder.test.nolist.action" = "To my certificates";
 "holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>. Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.test.nolist.title" = "No test result available";
-"holder.testresults.alert.cancel" = "No, continue";
+"holder.testresults.alert.cancel" = "No";
 "holder.testresults.alert.message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder.testresults.alert.ok" = "Yes, go back";
 "holder.testresults.alert.title" = "Are you sure you want to go back?";
@@ -627,7 +627,7 @@
 "holder.vaccination.about.off" = "%@ of %@";
 "holder.vaccination.about.off.dcc" = "Dose %@ of %@";
 "holder.vaccination.about.text" = "About your vaccination";
-"holder.vaccination.alert.continue" = "No, continue";
+"holder.vaccination.alert.continue" = "No";
 "holder.vaccination.alert.stop" = "Yes, go back";
 "holder.vaccination.alert.title" = "Are you sure you want to go back?";
 "holder.vaccination.element.combined" = "<p>Data retrieved from: %@ and %@</p>";
@@ -663,7 +663,7 @@
 "holder.vaccination.wrong.title" = "Is something wrong?";
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
-"holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/corona-certificate";
+"holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
 "holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
 "holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";

@@ -39,8 +39,10 @@ protocol UserSettingsProtocol: AnyObject {
 
 	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool { get set }
 	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool { get set }
-	var hasDismissedNewValidityInfoCard: Bool { get set }
-
+	
+	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
+	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
+	
 	func reset()
 }
 
@@ -101,8 +103,13 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "hasDismissedRecoveryValidityReinstationCompletionCard", defaultValue: true)
 	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool // swiftlint:disable:this let_var_whitespace
 
-	@UserDefaults(key: "hasDismissedNewValidityInfoCard", defaultValue: false)
-	var hasDismissedNewValidityInfoCard: Bool // swiftlint:disable:this let_var_whitespace
+	// MARK: - Validity Information Banner for Vaccinations and Recoveries
+	
+	@UserDefaults(key: "hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
+	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
+	
+	@UserDefaults(key: "shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
+	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
 }
 
 extension UserSettings {
@@ -129,7 +136,8 @@ extension UserSettings {
 			"shouldShowRecoveryValidityReinstationCard",
 			"hasDismissedRecoveryValidityExtensionCompletionCard",
 			"hasDismissedRecoveryValidityReinstationCompletionCard",
-			"hasDismissedNewValidityInfoCard"
+			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
+			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard"
 		].forEach(userDefaults.removeObject(forKey:))
 	}
 }
