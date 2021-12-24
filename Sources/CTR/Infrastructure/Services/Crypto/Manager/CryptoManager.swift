@@ -43,6 +43,10 @@ class CryptoManager: CryptoManaging, Logging {
 		
 		// Initialize crypto library
 		cryptoLibUtility.initialize()
+		generateSecretKey()
+	}
+	
+	func generateSecretKey() {
 		
 		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
 			if let result = MobilecoreGenerateHolderSk(),
