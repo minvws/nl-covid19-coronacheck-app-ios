@@ -718,3 +718,7 @@
 "visitorpass_tokenentry_error_empty_code" = "Graag eerst een verificatiecode invullen";
 "visitorpass_tokenentry_error_empty_token" = "Graag eerst een bezoekerscode invullen";
 "visitorpass_tokenentry_error_invalid code" = "Geen geldige bezoekerscode";
+
+"visitorpass_tokenentry_button_notoken" = "Heb je geen bezoekerscode?";
+"visitorpass_tokenentry_modal_notoken_title" = "Heb je geen bezoekerscode?";
+"visitorpass_tokenentry_modal_notoken_details" = "<p>Je krijgt van het VWS loket een bezoekerscode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met het loket.</p>";

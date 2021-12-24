@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -80,6 +81,10 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func migrateEUVaccinationDidComplete()
 
 	func extendRecoveryValidityDidComplete()
+	
+	func userWishesMoreInfoAboutNoTestToken()
+	
+	func userWishesMoreInfoAboutNoVisitorPassToken()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -283,14 +288,14 @@ class HolderCoordinator: SharedCoordinator {
 	}
 
 	/// Navigate to the token entry scene
-	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: TokenRetrievalMode = .negativeTest) {
+	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
 
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				requestToken: token,
 				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false),
-				tokenRetrievalMode: retrievalMode
+				inputRetrievalCodeMode: retrievalMode
 			)
 		)
 
@@ -628,6 +633,27 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
+	
+	func userWishesMoreInfoAboutNoTestToken() {
+		
+		presentInformationPage(
+			title: L.holderTokenentryModalNotokenTitle(),
+			body: L.holderTokenentryModalNotokenDetails(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
+	func userWishesMoreInfoAboutNoVisitorPassToken() {
+		
+		presentInformationPage(
+			title: L.visitorpass_tokenentry_modal_notoken_title(),
+			body: L.visitorpass_tokenentry_modal_notoken_details(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
 }
 
 // MARK: - MenuDelegate
