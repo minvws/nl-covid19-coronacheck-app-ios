@@ -719,6 +719,8 @@
 "visitorpass_tokenentry_error_empty_code" = "Graag eerst een verificatiecode invullen";
 "visitorpass_tokenentry_error_empty_token" = "Graag eerst een bezoekerscode invullen";
 "visitorpass_tokenentry_error_invalid code" = "Geen geldige bezoekerscode";
+"visitorpass_tokenentry_error_unknown_provider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
+"visitorpass_tokenentry_error_invalid_combination" = "Geen geldige combinatie";
 
 "visitorpass_tokenentry_button_notoken" = "Heb je geen bezoekerscode?";
 "visitorpass_tokenentry_modal_notoken_title" = "Heb je geen bezoekerscode?";
@@ -727,3 +729,10 @@
 "visitorpass_tokenentry_verification_title" = "Verificatiecode";
 "visitorpass_tokenentry_verification_placeholder" = "Bijv. 123456";
 "visitorpass_tokenentry_verification_info" = "Je krijgt een code via sms of e-mail";
+"visitorpass_tokenentry_verification_notoken" = "Geen verificatiecode gekregen?";
+
+"visitorpass_tokenentry_confirmresendverificationalert_cancelbutton" = "Sluiten";
+"visitorpass_tokenentry_confirmresendverificationalert_message" = "Je krijgt de verificatiecode via een sms of e-mail. Niks gekregen? Klik hieronder op ‘stuur opnieuw’ voor een nieuwe code.";
+"visitorpass_tokenentry_confirmresendverificationalert_okbutton" = "Stuur opnieuw";
+"visitorpass_tokenentry_confirmresendverificationalert_title" = "Geen verificatiecode gekregen?";
+
