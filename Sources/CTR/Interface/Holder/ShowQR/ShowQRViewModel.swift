@@ -181,6 +181,8 @@ class ShowQRViewModel: Logging {
 				hideBodyForScreenCapture: true,
 				openURLsInApp: true
 			)
+		} else {
+			logError("Can't read the domestic credentials")
 		}
 	}
 	
