@@ -14,7 +14,7 @@ struct DomesticCredentialAttributes: Codable {
 	let firstNameInitial: String
 	let lastNameInitial: String
 	let credentialVersion: String
-	let category: String
+	let category: String?
 	let specimen: String
 	let paperProof: String
 	let validFrom: String
