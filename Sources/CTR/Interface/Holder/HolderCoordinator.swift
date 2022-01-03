@@ -647,8 +647,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutNoVisitorPassToken() {
 		
 		presentInformationPage(
-			title: L.visitorpass_tokenentry_modal_notoken_title(),
-			body: L.visitorpass_tokenentry_modal_notoken_details(),
+			title: L.visitorpass_token_modal_notoken_title(),
+			body: L.visitorpass_token_modal_notoken_details(),
 			hideBodyForScreenCapture: false,
 			openURLsInApp: true
 		)

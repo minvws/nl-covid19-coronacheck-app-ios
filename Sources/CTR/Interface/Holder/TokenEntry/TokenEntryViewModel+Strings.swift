@@ -19,7 +19,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowTitle()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_title()
+					return L.visitorpass_token_title()
 			}
 		}
 
@@ -33,7 +33,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, _, .negativeTest):
 					return L.holderTokenentryUniversallinkflowText()
 				case (_, _, .visitorPass):
-					return L.visitorpass_tokenentry_text()
+					return L.visitorpass_token_text()
 			}
 		}
 		
@@ -43,7 +43,7 @@ extension TokenEntryViewModel {
 				case .negativeTest:
 					return L.holderTokenentryButtonNotoken()
 				case .visitorPass:
-					return L.visitorpass_tokenentry_button_notoken()
+					return L.visitorpass_token_button_notoken()
 			}
 		}
 		
@@ -55,7 +55,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowRetryTitle()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_verification_notoken()
+					return L.visitorpass_code_verification_not_received_button()
 			}
 		}
 		
@@ -66,7 +66,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_error_invalidCode()
+					return L.visitorpass_token_error_invalid_code()
 			}
 		}
 		
@@ -77,7 +77,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowErrorInvalidCombination()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_error_invalid_combination()
+					return L.visitorpass_token_error_invalid_combination()
 			}
 		}
 		
@@ -88,7 +88,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowErrorEmptytoken()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_error_empty_token()
+					return L.visitorpass_token_error_empty_token()
 			}
 		}
 		
@@ -99,7 +99,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowErrorEmptycode()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_error_empty_code()
+					return L.visitorpass_token_error_empty_code()
 			}
 		}
 		
@@ -110,7 +110,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowErrorUnknownprovider()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_error_unknown_provider()
+					return L.visitorpass_token_error_unknown_provider()
 			}
 		}
 		
@@ -121,7 +121,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowTokenTitle()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_token_title()
+					return L.visitorpass_token_input_title()
 			}
 		}
 		
@@ -141,9 +141,9 @@ extension TokenEntryViewModel {
 					}
 				case (_, .visitorPass):
 					if UIAccessibility.isVoiceOverRunning {
-						return L.visitorpass_tokenentry_token_placeholder_screenreader()
+						return L.visitorpass_token_input_placeholder_screenreader()
 					} else {
-						return L.visitorpass_tokenentry_token_placeholder()
+						return L.visitorpass_token_input_placeholder()
 					}
 			}
 		}
@@ -155,7 +155,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowVerificationTitle()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_verification_title()
+					return L.visitorpass_code_input()
 			}
 		}
 		
@@ -166,7 +166,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowVerificationInfo()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_verification_info()
+					return L.visitorpass_code_verification_input_explanation()
 			}
 		}
 		
@@ -177,7 +177,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowVerificationPlaceholder()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_verification_placeholder()
+					return L.visitorpass_code_verification_placeholder()
 			}
 		}
 		
@@ -188,7 +188,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowNext()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_next()
+					return L.visitorpass_token_next()
 			}
 		}
 		
@@ -201,7 +201,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertTitle()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_confirmresendverificationalert_title()
+					return L.visitorpass_code_confirmresendverificationalert_title()
 			}
 		}
 		
@@ -212,7 +212,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertMessage()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_confirmresendverificationalert_message()
+					return L.visitorpass_code_confirmresendverificationalert_message()
 			}
 		}
 		
@@ -223,7 +223,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertOkaybutton()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_confirmresendverificationalert_okbutton()
+					return L.visitorpass_code_confirmresendverificationalert_okbutton()
 			}
 		}
 		
@@ -234,7 +234,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertCancelbutton()
 				case (_, .visitorPass):
-					return L.visitorpass_tokenentry_confirmresendverificationalert_cancelbutton()
+					return L.visitorpass_code_confirmresendverificationalert_cancelbutton()
 			}
 		}
 	}
