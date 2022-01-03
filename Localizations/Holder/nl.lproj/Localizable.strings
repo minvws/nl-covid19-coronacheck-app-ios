@@ -710,11 +710,11 @@
 "visitorpass_start_title" = "Een bezoekersbewijs maken";
 
 "visitorpass_tokenentry_title" = "Vaccinatie beoordeling toevoegen";
-"visitorpass_tokenentry_text" = "Vul jouw kortverblijfcode in. Deze heb je van het VWS loket gekregen.";
+"visitorpass_tokenentry_text" = "Vul jouw beoordelingscode in. Deze heb je van het XXX loket gekregen toen jouw vaccinatie werd beoordeeld.";
 "visitorpass_tokenentry_next" = "Volgende";
-"visitorpass_tokenentry_token_title" = "Bezoekerscode";
+"visitorpass_tokenentry_token_title" = "Beoordelingscode";
 "visitorpass_tokenentry_token_placeholder" = "Bijv. KVT-3839287262-F1";
-"visitorpass_tokenentry_token_placeholder_screenreader" = "Vul hier je bezoekerscode in";
+"visitorpass_tokenentry_token_placeholder_screenreader" = "Vul hier je Beoordelingscode in";
 
 "visitorpass_tokenentry_error_empty_code" = "Graag eerst een verificatiecode invullen";
 "visitorpass_tokenentry_error_empty_token" = "Graag eerst een bezoekerscode invullen";
