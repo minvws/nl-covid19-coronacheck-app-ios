@@ -230,7 +230,7 @@ class ListEventsViewModel: Logging {
 		}
 
 		switch eventModeForStorage {
-			case .paperflow, .test:
+			case .vaccinationassessment, .paperflow, .test:
 				completeFlow()
 			case .positiveTest:
 				handleSuccessForPositiveTest(greencardResponse, eventModeForStorage: eventModeForStorage)

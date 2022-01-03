@@ -357,17 +357,6 @@ extension LoginTVSViewModel {
 				return nil
 		}
 	}
-
-	private var flow: ErrorCode.Flow {
-
-		switch eventMode {
-			case .paperflow: return .hkvi
-			case .positiveTest: return .positiveTest
-			case .recovery: return .recovery
-			case .test: return .ggdTest
-			case .vaccination: return .vaccination
-		}
-	}
 }
 
 // MARK: ErrorCode.ClientCode
