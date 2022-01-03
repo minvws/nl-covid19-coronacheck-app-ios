@@ -85,7 +85,7 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
-	func test_eventGroupV3_removeEventv3() throws {
+	func test_eventGroupV3_remoteEventv3() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3Identity))
@@ -98,7 +98,7 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
-	func test_eventGroupV2_removeEventv3() throws {
+	func test_eventGroupV2_remoteEventv3() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV2Identity))
@@ -111,7 +111,7 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
-	func test_eventGroupV3_removeEventv2() throws {
+	func test_eventGroupV3_remoteEventv2() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3Identity))
@@ -124,7 +124,7 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
-	func test_eventGroupV3_removeEventV3Alternative() throws {
+	func test_eventGroupV3_remoteEventV3Alternative() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3Identity))
@@ -136,8 +136,21 @@ class IdentityCheckerTests: XCTestCase {
 		// Then
 		expect(matched) == false
 	}
+	
+	func test_eventGroupV3Alternative_remoteEventV3AlternativeLowercase() throws {
+		
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityAlternative))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternativeLowerCase, signedResponse: nil)
+		
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+		
+		// Then
+		expect(matched) == true
+	}
 
-	func test_eventGroupV3Alternative_removeEventv3() throws {
+	func test_eventGroupV3Alternative_remoteEventv3() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityAlternative))
@@ -150,7 +163,7 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == false
 	}
 
-	func test_eventGroupV3Alternative_removeEventv3Alternative() throws {
+	func test_eventGroupV3Alternative_remoteEventv3Alternative() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityAlternative))
@@ -163,7 +176,7 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
-	func test_eventGroupV3Diacritic_removeEventv3Alternative() throws {
+	func test_eventGroupV3Diacritic_remoteEventv3Alternative() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic))
@@ -176,7 +189,7 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
-	func test_eventGroupV3Alternative_removeEventv3Diacritic() throws {
+	func test_eventGroupV3Alternative_remoteEventv3Diacritic() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityAlternative))
@@ -189,7 +202,7 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
-	func test_eventGroupV3Diacritic_removeEventv3Diacritic_identicalDiacritic() throws {
+	func test_eventGroupV3Diacritic_remoteEventv3Diacritic_identicalDiacritic() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic))
@@ -202,7 +215,7 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
-	func test_eventGroupV3Diacritic_removeEventv3AlternativeDiacritic() throws {
+	func test_eventGroupV3Diacritic_remoteEventv3AlternativeDiacritic() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityFirstNameWithDiacriticAlternative))
@@ -228,6 +241,19 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
+	func test_eventGroupV2IdentityAlternative_remoteEventV3IdentityAlternative2LowerCase() throws {
+		
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV2IdentityAlternative))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative2LowerCase, signedResponse: nil)
+		
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+		
+		// Then
+		expect(matched) == true
+	}
+
 	func test_eventGroupV2IdentityAlternative_remoteEventV3IdentityAlternative2() throws {
 
 		// Given
@@ -237,6 +263,19 @@ class IdentityCheckerTests: XCTestCase {
 		// When
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
 
+		// Then
+		expect(matched) == true
+	}
+	
+	func test_eventGroupV2IdentityAlternativeLowerCase_remoteEventV3IdentityAlternative2() throws {
+		
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV2IdentityAlternativeLowerCase))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative2, signedResponse: nil)
+		
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+		
 		// Then
 		expect(matched) == true
 	}
@@ -335,12 +374,32 @@ extension EventFlow.EventResultWrapper {
 			result: nil
 		)
 	}
+	
+	static var fakeWithV3IdentityAlternativeLowerCase: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "rool", lastName: "paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
 
 	static var fakeWithV3IdentityAlternative2: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
 			protocolVersion: "3,0",
 			identity: EventFlow.Identity(infix: nil, firstName: "Henk", lastName: "Paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+	
+	static var fakeWithV3IdentityAlternative2LowerCase: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "henk", lastName: "paap", birthDateString: "1970-05-27"),
 			status: .complete,
 			result: nil
 		)
@@ -401,6 +460,27 @@ extension EventFlow.EventResultWrapper {
 				holder: TestHolderIdentity(
 					firstNameInitial: "H",
 					lastNameInitial: "P",
+					birthDay: "27",
+					birthMonth: "5"
+				)
+			)
+		)
+	}
+	
+	static var fakeWithV2IdentityAlternativeLowerCase: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "2,0",
+			identity: nil,
+			status: .complete,
+			result: TestResult(
+				unique: "test",
+				sampleDate: "2021-01-01T12:00:00",
+				testType: "PCR",
+				negativeResult: true,
+				holder: TestHolderIdentity(
+					firstNameInitial: "h",
+					lastNameInitial: "p",
 					birthDay: "27",
 					birthMonth: "5"
 				)
