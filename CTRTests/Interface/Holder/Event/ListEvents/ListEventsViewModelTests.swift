@@ -1945,7 +1945,8 @@ class ListEventsViewModelTests: XCTestCase {
 						negativeTest: nil,
 						positiveTest: nil,
 						recovery: nil,
-						dccEvent: nil
+						dccEvent: nil,
+						assessment: nil
 					)
 				]
 			),
@@ -1973,7 +1974,8 @@ class ListEventsViewModelTests: XCTestCase {
 						dccEvent: EventFlow.DccEvent(
 							credential: CouplingManager.vaccinationDCC,
 							couplingCode: "NDREB5"
-						)
+						),
+						assessment: nil
 					)
 				]
 			),
