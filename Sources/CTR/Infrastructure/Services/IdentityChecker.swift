@@ -210,6 +210,6 @@ extension TestHolderIdentity {
 
 	func asIdentityTuple() -> IdentityTuple {
 
-		return (firstNameInitial: firstNameInitial, lastNameInitial: lastNameInitial, day: birthDay, month: birthMonth)
+		return (firstNameInitial: firstNameInitial.uppercased(), lastNameInitial: lastNameInitial.uppercased(), day: birthDay, month: birthMonth)
 	}
 }
