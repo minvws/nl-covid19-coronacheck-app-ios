@@ -41,11 +41,11 @@ final class ScanNextInstructionView: BaseView {
 	}()
 	
 	private let subtitleLabel: Label = {
-		return Label(title1: nil, montserrat: true).multiline().header()
+		return Label(bodySemiBold: nil).multiline().header()
 	}()
 	
 	private let titleLabel: Label = {
-		return Label(bodySemiBold: nil).multiline().header()
+		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
 	private let headerLabel: Label = {
