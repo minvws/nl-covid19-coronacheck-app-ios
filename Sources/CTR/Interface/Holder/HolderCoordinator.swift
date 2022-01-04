@@ -449,6 +449,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToCreateAVisitorPass() {
+//		navigateToTokenEntry(RequestToken(token: "QTULGFYS26T98U", protocolVersion: "3.0", providerIdentifier: "ZZZ"), retrievalMode: .visitorPass)
+		
 		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 

@@ -750,3 +750,5 @@
 "holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";
 
 "general_visitor_pass" = "bezoekersbewijs";
+
+"visitorpass_deeplink_text" = "Vul jouw verificatiecode in om je vaccinatie beoordeling op te halen.";

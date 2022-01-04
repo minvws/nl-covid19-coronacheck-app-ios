@@ -29,6 +29,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		tokenValidatorSpy = TokenValidatorSpy()
 
 		Services.use(networkManagerSpy)
+		
+		isRecording = true
 	}
 
 	override func tearDown() {

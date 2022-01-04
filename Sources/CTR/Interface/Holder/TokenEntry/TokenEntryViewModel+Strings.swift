@@ -32,8 +32,10 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowText()
 				case (.withRequestTokenProvided, _, .negativeTest):
 					return L.holderTokenentryUniversallinkflowText()
-				case (_, _, .visitorPass):
+				case (.regular, _, .visitorPass):
 					return L.visitorpass_token_text()
+				case (.withRequestTokenProvided, _, .visitorPass):
+					return L.visitorpass_deeplink_text()
 			}
 		}
 		
