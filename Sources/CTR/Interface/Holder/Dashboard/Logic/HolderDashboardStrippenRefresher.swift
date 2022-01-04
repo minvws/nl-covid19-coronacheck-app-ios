@@ -151,13 +151,12 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 	private let greencardLoader: GreenCardLoading = Current.greenCardLoader
 	private let reachability: ReachabilityProtocol?
 
-	private let now: () -> Date
+	private let now: () -> Date = Current.now
 	private let minimumThresholdOfValidCredentialsTriggeringRefresh: Int // (values <= this number trigger refresh.)
 	private var retryAfterNetworkFailureTimer: Timer?
 
-	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, reachability: ReachabilityProtocol?, now: @escaping () -> Date) {
+	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, reachability: ReachabilityProtocol?) {
 		self.minimumThresholdOfValidCredentialsTriggeringRefresh = minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh
-		self.now = now
 
 		let expiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh,

@@ -23,7 +23,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 	func test_settingDidUpdateCallbackTriggersReloadWithCallback() {
 		// Arrange
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		// Act
 		var wasUpdated: Bool = false
@@ -42,7 +42,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 			(greencardType: "domestic", originType: "vaccination")
 		]
 
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		// Act
 		var cards = [HolderDashboardViewModel.QRCard]()
@@ -68,7 +68,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 			(greencardType: "eu", originType: "vaccination")
 		]
 
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		// Act
 		var cards = [HolderDashboardViewModel.QRCard]()
@@ -94,7 +94,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greencard]
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -128,7 +128,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greencard]
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -162,7 +162,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greencard]
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -209,7 +209,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = greencards
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -262,7 +262,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = greencards
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -315,7 +315,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = greencards
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()

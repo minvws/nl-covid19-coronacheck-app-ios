@@ -31,11 +31,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	}
 
 	private var reloadTimer: Timer?
-	private let now: () -> Date
-
-	init(now: @escaping () -> Date) {
-		self.now = now
-	}
+	private let now: () -> Date = Current.now
 
 	// Calls fetch, then updates subscribers.
 

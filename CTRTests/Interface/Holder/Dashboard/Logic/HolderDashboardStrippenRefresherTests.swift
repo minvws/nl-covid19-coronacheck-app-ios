@@ -34,8 +34,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act
@@ -53,8 +52,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act
@@ -72,8 +70,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act
@@ -94,8 +91,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
@@ -114,8 +110,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -149,8 +144,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -183,8 +177,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -217,8 +210,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act
@@ -238,11 +230,11 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 			(.failure(GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: 429, response: nil, error: .serverBusy))), ())
 
 		var fakeNow: Date = now
+		Current.now = { fakeNow }
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { fakeNow }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -273,8 +265,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -309,8 +300,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -346,8 +336,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -381,8 +370,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -403,8 +391,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		expect(self.environmentSpies.greenCardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentials) == false

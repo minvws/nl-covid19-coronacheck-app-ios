@@ -309,11 +309,10 @@ class HolderCoordinator: SharedCoordinator {
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
-				datasource: HolderDashboardQRCardDatasource(now: { Date() }),
+				datasource: HolderDashboardQRCardDatasource(),
 				strippenRefresher: DashboardStrippenRefresher(
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
-					reachability: try? Reachability(),
-					now: { Date() }
+					reachability: try? Reachability()
 				),
 				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: Current.userSettings),
 				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
