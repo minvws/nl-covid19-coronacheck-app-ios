@@ -10,9 +10,10 @@ import CoreData
 
 enum OriginType: String {
 
-	case vaccination
 	case recovery
 	case test
+	case vaccination
+	case vaccinationassessment
 }
 
 class OriginModel {

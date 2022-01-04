@@ -748,3 +748,5 @@
 "holder_event_vaccination_assessment_about_subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Uniek beoordelingscode:";
 "holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";
+
+"general_visitor_pass" = "bezoekersbewijs";

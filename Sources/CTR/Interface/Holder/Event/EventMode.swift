@@ -23,7 +23,7 @@ enum EventMode: String {
 			case .recovery: return L.generalRecoverystatement()
 			case .test: return L.generalTestresult()
 			case .vaccination: return L.generalVaccination()
-			case .vaccinationassessment: return "** TODO **"
+			case .vaccinationassessment: return L.general_visitor_pass()
 		}
 	}
 
@@ -74,11 +74,9 @@ enum EventMode: String {
 	var originsMismatchBody: String {
 		switch self {
 			case .paperflow: return L.holderEventOriginmismatchDccBody()
-			case .positiveTest: return ""
-			case .recovery: return L.holderEventOriginmismatchRecoveryBody()
+			case .positiveTest, .recovery, .vaccinationassessment: return "" // No origin check for vaccination assessment, positive test or recovery
 			case .test: return L.holderEventOriginmismatchTestBody()
 			case .vaccination: return L.holderEventOriginmismatchVaccinationBody()
-			case .vaccinationassessment: return "** TODO **"
 		}
 	}
 }
