@@ -207,6 +207,24 @@ class HolderCoordinator: SharedCoordinator {
 					}
 				}
 				return true
+				
+			case .redeemVaccinationAssessment(let requestToken):
+				
+				// Need to handle two situations:
+				// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
+				//   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
+				//      that after the user has completed these screens.
+				// - the user is somewhere in the Holder app, and the nav stack can just be replaced.
+				
+				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
+					self.unhandledUniversalLink = universalLink
+				} else {
+					// Do it on the next runloop, to standardise all the entry points to this function:
+					DispatchQueue.main.async { [self] in
+						navigateToTokenEntry(requestToken, retrievalMode: .visitorPass)
+					}
+				}
+				return true
 
 			case .thirdPartyTicketApp(let returnURL):
 				guard let returnURL = returnURL,
