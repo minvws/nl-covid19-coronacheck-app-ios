@@ -17,9 +17,8 @@ class ScanLogViewControllerTests: XCTestCase {
 
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: ScanLogViewModel!
-	private var scanLogManagingSpy: ScanLogManagingSpy!
-	private var appInstalledSinceManagingSpy: AppInstalledSinceManagingSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
@@ -27,24 +26,10 @@ class ScanLogViewControllerTests: XCTestCase {
 
 		super.setUp()
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		let config: RemoteConfiguration = .default
+		environmentSpies = setupEnvironmentSpies()
 
-		scanLogManagingSpy = ScanLogManagingSpy()
-		Services.use(scanLogManagingSpy)
-		scanLogManagingSpy.stubbedGetScanEntriesResult = .success([])
-
-		appInstalledSinceManagingSpy = AppInstalledSinceManagingSpy()
-		appInstalledSinceManagingSpy.stubbedFirstUseDate = now.addingTimeInterval(31 * days * ago)
-		Services.use(appInstalledSinceManagingSpy)
-
-		viewModel = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+		viewModel = ScanLogViewModel(coordinator: coordinatorSpy)
 		sut = ScanLogViewController(viewModel: viewModel)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func loadView() {

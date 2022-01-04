@@ -20,17 +20,9 @@ class FeatureFlagManagerTests: XCTestCase {
 		super.setUp()
 		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
-		Services.use(remoteConfigManagerSpy)
-		
 		appVersionSupplierSpy = AppVersionSupplierSpy(version: "2.7.0", build: "1")
 		
-		sut = FeatureFlagManager(versionSupplier: appVersionSupplierSpy)
-	}
-	
-	override func tearDown() {
-		
-		super.tearDown()
-		Services.revertToDefaults()
+		sut = FeatureFlagManager(versionSupplier: appVersionSupplierSpy, remoteConfigManager: remoteConfigManagerSpy)
 	}
 	
 	func test_isVerificationPolicyEnabled_remoteConfig_nil() {

@@ -14,9 +14,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 	
 	private var sut: AboutThisAppViewModel!
 	private var coordinatorSpy: AboutThisAppViewModelCoordinatorSpy!
-	private var userSettingsSpy: UserSettingsSpy!
+	private var environmentSpies: EnvironmentSpies!
 	private static var initialTimeZone: TimeZone?
-	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 	
 	override class func setUp() {
 		super.setUp()
@@ -34,25 +33,13 @@ class AboutThisAppViewModelTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		
-		featureFlagManagerSpy = FeatureFlagManagerSpy()
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		Services.use(featureFlagManagerSpy)
-		
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = AboutThisAppViewModelCoordinatorSpy()
-		userSettingsSpy = UserSettingsSpy()
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
-	}
-	
-	override func tearDown() {
-		
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 	
 	// MARK: Tests
@@ -65,8 +52,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		
 		// Then
@@ -91,8 +77,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		
 		// Then
@@ -115,14 +100,13 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_initializationWithVerifier_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		
 		// Then
@@ -156,8 +140,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		
 		// When
@@ -174,8 +157,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		// When
 		sut.menuOptionSelected(.accessibility)
@@ -191,8 +173,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		// When
 		sut.menuOptionSelected(.colophon)
@@ -208,8 +189,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		
 		// When
@@ -226,8 +206,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		// When
 		sut.menuOptionSelected(.colophon)
@@ -239,15 +218,14 @@ class AboutThisAppViewModelTests: XCTestCase {
 	
 	func test_configVersionFooter_forVerifier() {
 		
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
-		userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
 		
 		// Given
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "verifier"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		// When
 		
@@ -257,15 +235,14 @@ class AboutThisAppViewModelTests: XCTestCase {
 	
 	func test_configVersionFooter_forHolder() {
 		
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
-		userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
 		
 		// Given
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "holder"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		// When
 		
@@ -279,8 +256,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		// When
 		sut.menuOptionSelected(.reset)
@@ -298,8 +274,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		// When
 		sut.menuOptionSelected(.deeplink)
@@ -312,94 +287,47 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_resetData_holder() {
 		
 		// Given
-		let walletSpy = WalletManagerSpy()
-		Services.use(walletSpy)
-		let remoteConfigSpy = RemoteConfigManagingSpy()
-		remoteConfigSpy.stubbedStoredConfiguration = .default
-		Services.use(remoteConfigSpy)
-		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			fileStorage: FileStorage(),
-			flavor: AppFlavor.flavor
-		)
-		Services.use(cryptoLibUtilitySpy)
-		let onboardingSpy = OnboardingManagerSpy()
-		Services.use(onboardingSpy)
-		let forcedInfoSpy = ForcedInformationManagerSpy()
-		Services.use(forcedInfoSpy)
-		let scanLogManagerSpy = ScanLogManagingSpy()
-		Services.use(scanLogManagerSpy)
-		let scanLockManagerSpy = ScanLockManagerSpy()
-		Services.use(scanLockManagerSpy)
-		let riskLevelManagerSpy = RiskLevelManagerSpy()
-		Services.use(riskLevelManagerSpy)
-		let cryptoManagerSpy = CryptoManagerSpy()
-		Services.use(cryptoManagerSpy)
 		
 		// When
-		sut.resetDataAndRestart()
+		sut.wipePersistedData()
 		
 		// Then
-		expect(walletSpy.invokedRemoveExistingGreenCards) == true
-		expect(walletSpy.invokedRemoveExistingEventGroups) == true
-		expect(remoteConfigSpy.invokedReset) == true
-		expect(cryptoLibUtilitySpy.invokedReset) == true
-		expect(cryptoManagerSpy.invokedGenerateSecretKey) == true
-		expect(scanLogManagerSpy.invokedReset) == false
-		expect(scanLockManagerSpy.invokedReset) == false
-		expect(riskLevelManagerSpy.invokedReset) == false
-		expect(self.userSettingsSpy.invokedReset) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.forcedInformationManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == false
+		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == false
+		expect(self.environmentSpies.riskLevelManagerSpy.invokedWipePersistedData) == false
+		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
 	
 	func test_resetData_verifier() {
-		
+
 		// Given
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
-		
-		let walletSpy = WalletManagerSpy()
-		Services.use(walletSpy)
-		let remoteConfigSpy = RemoteConfigManagingSpy()
-		remoteConfigSpy.stubbedStoredConfiguration = .default
-		Services.use(remoteConfigSpy)
-		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			fileStorage: FileStorage(),
-			flavor: AppFlavor.flavor
-		)
-		Services.use(cryptoLibUtilitySpy)
-		let onboardingSpy = OnboardingManagerSpy()
-		Services.use(onboardingSpy)
-		let forcedInfoSpy = ForcedInformationManagerSpy()
-		Services.use(forcedInfoSpy)
-		let scanLogManagerSpy = ScanLogManagingSpy()
-		Services.use(scanLogManagerSpy)
-		let scanLockManagerSpy = ScanLockManagerSpy()
-		Services.use(scanLockManagerSpy)
-		let riskLevelManagerSpy = RiskLevelManagerSpy()
-		Services.use(riskLevelManagerSpy)
-		
+
 		// When
-		sut.resetDataAndRestart()
-		
+		sut.wipePersistedData()
+
 		// Then
-		expect(walletSpy.invokedRemoveExistingGreenCards) == false
-		expect(walletSpy.invokedRemoveExistingEventGroups) == false
-		expect(remoteConfigSpy.invokedReset) == true
-		expect(cryptoLibUtilitySpy.invokedReset) == true
-		expect(scanLogManagerSpy.invokedReset) == true
-		expect(scanLockManagerSpy.invokedReset) == true
-		expect(riskLevelManagerSpy.invokedReset) == true
-		expect(self.userSettingsSpy.invokedReset) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.forcedInformationManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.riskLevelManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
 	
@@ -408,8 +336,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		// When
 		sut.menuOptionSelected(.scanlog)

@@ -61,17 +61,16 @@ final class EnvironmentSpies {
 	var featureFlagManagerSpy: FeatureFlagManagerSpy = {
 		let spy = FeatureFlagManagerSpy()
 		spy.stubbedIsVerificationPolicyEnabledResult = true
+		spy.stubbedIsNewValidityInfoBannerEnabledResult = false
 		return spy
 	}()
 	
-	// TODO: should this be on the environment?
 	var forcedInformationManagerSpy: ForcedInformationManagerSpy = {
 		let spy = ForcedInformationManagerSpy()
 		spy.stubbedNeedsUpdating = false
 		return spy
 	}()
 	
-	// TODO: should this be on the environment?
 	var greenCardLoaderSpy: GreenCardLoaderSpy = {
 		let spy = GreenCardLoaderSpy()
 		return spy
@@ -93,7 +92,6 @@ final class EnvironmentSpies {
 		return spy
 	}()
 	
-	// TODO: should this be on the environment?
 	var onboardingManagerSpy: OnboardingManagerSpy = {
 		let spy = OnboardingManagerSpy()
 		spy.stubbedNeedsOnboarding = false

@@ -15,23 +15,15 @@ class FetchEventsViewModelTests: XCTestCase {
 	/// Subject under test
 	var sut: FetchEventsViewModel!
 	var coordinatorSpy: EventCoordinatorDelegateSpy!
-	var networkSpy: NetworkSpy!
+	private var environmentSpies: EnvironmentSpies!
 
 	override func setUp() {
-
 		super.setUp()
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		networkSpy = NetworkSpy(configuration: .development)
-		Services.use(networkSpy)
+		environmentSpies = setupEnvironmentSpies()
 
 		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: .test, eventMode: .vaccination)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func test_backButtonTapped_loadingState() {
@@ -83,8 +75,8 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenOK_providersRequestTimeOut() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 
 		// When
@@ -107,9 +99,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenRequestTimeOut_providersOK() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -131,9 +123,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenRequestTimeOut_providersRequestTimeOut() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 
 		// When
@@ -156,8 +148,8 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenOK_providersNoInternet() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
 		// When
@@ -178,9 +170,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenNoInternet_providersOK() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -200,9 +192,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenNoInternet_providersNoInternet() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
 		// When
@@ -223,8 +215,8 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenOK_providersServerBusy() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 
 		// When
@@ -247,9 +239,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenServerBusy_providersServerBusy() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 
 		// When
@@ -272,9 +264,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenServerBusy_providersOk() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -296,9 +288,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenServerUnreachableTimeOut_providersOk() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 		(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -320,9 +312,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenServerUnreachableConnectionLost_providersOk() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 		(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -344,9 +336,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenServerUnreachableInvalidHost_providersOk() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 		(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -368,9 +360,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenNoInternetConnection_providersOk() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 		(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -390,9 +382,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenNoBSN() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeNoBSN), error: .serverError)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -414,9 +406,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessToken_TVSSessionExpired_vaccination() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeTvsSessionExpired), error: .serverError)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -438,9 +430,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessToken_TVSSessionExpired_positiveTest() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 		(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeTvsSessionExpired), error: .serverError)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.positiveTestProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.positiveTestProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -457,9 +449,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessToken_nonceExpired() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 		(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeNonceExpired), error: .serverError)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -481,9 +473,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenOtherServerError() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99000), error: .serverError)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -505,9 +497,9 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_accessTokenOtherServerError_providerOtherServerError() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99000), error: .serverError)), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99001), error: .serverError)), ())
 
 		// When
@@ -531,10 +523,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_noProviderForEventMode_vaccination() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.positiveTestProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.positiveTestProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -556,10 +548,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_noProviderForEventMode_positiveTest() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -581,10 +573,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_noProviderForEventMode_recovery() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -606,10 +598,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_noProviderForEventMode_negativeTest() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -632,10 +624,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_happyFlow_willInvokeCoordinator() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -660,10 +652,10 @@ class FetchEventsViewModelTests: XCTestCase {
 			events: []
 		)
 
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -679,11 +671,11 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_unomiServerBusy_eventOk() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -703,10 +695,10 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_unomiOK_eventServerBusy() {
 
 		// Given
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 
 		// When

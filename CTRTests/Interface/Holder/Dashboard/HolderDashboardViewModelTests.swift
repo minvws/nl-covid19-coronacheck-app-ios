@@ -16,18 +16,14 @@ class HolderDashboardViewModelTests: XCTestCase {
 	/// Subject under test
 	private var sut: HolderDashboardViewModel!
 	private var configSpy: ConfigurationGeneralSpy!
-	private var cryptoManagerSpy: CryptoManagerSpy!
-	private var dataStoreManager: DataStoreManager!
 	private var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	private var datasourceSpy: HolderDashboardDatasourceSpy!
 	private var strippenRefresherSpy: DashboardStrippenRefresherSpy!
-	private var userSettingsSpy: UserSettingsSpy!
 	private var sampleGreencardObjectID: NSManagedObjectID!
-	private var remoteConfigSpy: RemoteConfigManagingSpy!
 	private var migrationNotificationManagerSpy: DCCMigrationNotificationManagerSpy!
 	private var recoveryValidityExtensionManagerSpy: RecoveryValidityExtensionManagerProtocol!
 	private var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
-	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
+	private var environmentSpies: EnvironmentSpies!
 	private static var initialTimeZone: TimeZone?
 
 	override class func setUp() {
@@ -42,52 +38,34 @@ class HolderDashboardViewModelTests: XCTestCase {
 		if let timeZone = initialTimeZone {
 			NSTimeZone.default = timeZone
 		}
-		Services.revertToDefaults()
 	}
 
 	override func setUp() {
 		super.setUp()
+		environmentSpies = setupEnvironmentSpies()
 
-		Services.use(NetworkSpy())
 		configSpy = ConfigurationGeneralSpy()
-		cryptoManagerSpy = CryptoManagerSpy()
-		dataStoreManager = DataStoreManager(.inMemory)
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
-		userSettingsSpy = UserSettingsSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy()
-		remoteConfigSpy.stubbedStoredConfiguration = .default
-		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
-		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
 		recoveryValidityExtensionManagerSpy = RecoveryValidityExtensionManagerSpy()
 		migrationNotificationManagerSpy = DCCMigrationNotificationManagerSpy()
 		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
-		featureFlagManagerSpy = FeatureFlagManagerSpy()
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = false
-
-		Services.use(featureFlagManagerSpy)
-		Services.use(cryptoManagerSpy)
-		Services.use(remoteConfigSpy)
-		
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
 
 	func vendSut(dashboardRegionToggleValue: QRCodeValidityRegion, appVersion: String = "1.0.0") -> HolderDashboardViewModel {
 
-		userSettingsSpy.stubbedDashboardRegionToggleValue = dashboardRegionToggleValue
+		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = dashboardRegionToggleValue
 
 		return HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			datasource: datasourceSpy,
 			strippenRefresher: strippenRefresherSpy,
-			userSettings: userSettingsSpy,
 			dccMigrationNotificationManager: migrationNotificationManagerSpy,
 			recoveryValidityExtensionManager: recoveryValidityExtensionManagerSpy,
 			configurationNotificationManager: configurationNotificationManagerSpy,
-			versionSupplier: AppVersionSupplierSpy(version: appVersion),
-			now: { now }
+			versionSupplier: AppVersionSupplierSpy(version: appVersion)
 		)
 	}
 
@@ -99,7 +77,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.primaryButtonTitle) == L.holderMenuProof()
 		expect(self.sut.hasAddCertificateMode) == true
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
-		
+
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
 		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
 		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
@@ -133,7 +111,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(image) == I.dashboard.domestic()
 			expect(title) == L.holderDashboardEmptyDomesticTitle()
 		}))
-		
+
 		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardEmptyInternationalMessage()
 			expect(buttonTitle) == L.holderDashboardEmptyInternationalButton()
@@ -146,6 +124,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	func test_viewWillAppear_triggersDatasourceReload() {
 		// Arrange
+		
+		// remove this default value because otherwise this tangentially triggers a reload:
+		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = nil
+		
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		expect(self.datasourceSpy.invokedReload) == false
 
@@ -158,6 +140,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	func test_didBecomeActiveNotification_triggersDatasourceReload() {
 		// Arrange
+		
+		// remove this default value because otherwise this tangentially triggers a reload:
+		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = nil
+		
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		expect(self.datasourceSpy.invokedReload) == false
 
@@ -195,6 +181,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 	// MARK: - Strippen Loading
 
 	func test_strippen_stopsLoading_shouldTriggerDatasourceReload() {
+		// remove this default value because otherwise this tangentially triggers a reload:
+		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = nil
+		
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		expect(self.datasourceSpy.invokedReload) == false
@@ -503,7 +492,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
 		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
 		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
-		
+
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
 		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
 		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
@@ -743,7 +732,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
 		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
 		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
-		
+
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
 		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
 		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
@@ -839,9 +828,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		
+
 		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
-		
+
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard())
@@ -850,8 +839,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_newValidityBannerDisabled() {
 		
 		// Arrange
-		featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = false
-		userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = false
+		environmentSpies.userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -908,8 +897,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_newValidityBannerEnabled() {
 
 		// Arrange
-		featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = true
-		userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = true
+		environmentSpies.userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -971,15 +960,15 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_checkNewValidityBannerEnabled() {
 		
 		// Arrange
-		featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = true
-		userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
-		userSettingsSpy.shouldCheckRecoveryGreenCardRevisedValidity = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = true
+		environmentSpies.userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
+		environmentSpies.userSettingsSpy.shouldCheckRecoveryGreenCardRevisedValidity = true
 
 		// Act
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		// Assert
-		expect(self.userSettingsSpy.invokedShouldCheckRecoveryGreenCardRevisedValidity) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedShouldCheckRecoveryGreenCardRevisedValidity) == true
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_lessthan3years() {
@@ -1037,7 +1026,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard())
 	}
-	
+
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_secondDose() {
 
 		// Arrange
@@ -1083,7 +1072,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		
+
 		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
 	}
 
@@ -1195,7 +1184,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidDomesticTest_verificationPolicyDisabled() {
 
 		// Arrange
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
@@ -1505,8 +1494,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 	}
 
 	func test_datasourceupdate_singleCurrentlyValidInternationalTest() {
-		remoteConfigSpy.stubbedStoredConfiguration = .default
-		remoteConfigSpy.stubbedStoredConfiguration.euTestTypes = [
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.euTestTypes = [
 			.init(code: "LP6464-4", name: "PCR (NAAT)")
 		]
 
@@ -1666,7 +1655,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		
+
 		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
 	}
 
@@ -1698,7 +1687,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(message) == L.holderDashboardIntroDomestic()
 			expect(buttonTitle).to(beNil())
 		}))
-		
+
 		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(
 			test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 
@@ -1714,7 +1703,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 				expect(expiryCountdownEvaluator?(now)).to(beNil())
 			}
 		))
-		
+
 		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
 	}
 
@@ -1929,7 +1918,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_tripleCurrentlyValidInternationalVaccinationButViewingDomesticTab() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
+		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let vaccineGreenCardID = NSManagedObjectID()
@@ -1983,7 +1972,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccinationButViewingDomesticTab_tappingMoreInfo() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
+		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let vaccineGreenCardID = NSManagedObjectID()
@@ -2317,7 +2306,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_domesticExpired() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
+		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
@@ -2349,7 +2338,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_domesticExpired_tapForMoreInfo() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
+		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
@@ -2588,13 +2577,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_registersForRemoteConfigChanges_affectingStrippenRefresher() {
 
 		// Arrange
-		remoteConfigSpy.stubbedAppendUpdateObserverObserverResult = (RemoteConfiguration.default, Data(), URLResponse())
+		environmentSpies.remoteConfigManagerSpy.stubbedAppendUpdateObserverObserverResult = (RemoteConfiguration.default, Data(), URLResponse())
 
 		// Act
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		// Assert
-		
+
 		// First: during `.init`
 		// Second: when it receives the `stubbedAppendUpdateObserverObserverResult` value above.
 		expect(self.strippenRefresherSpy.invokedLoadCount) == 2
@@ -2611,16 +2600,16 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.domesticCards[1]).to(beConfigurationAlmostOutOfDateCard())
 		expect(self.sut.internationalCards[1]).to(beConfigurationAlmostOutOfDateCard())
-		
+
 		// only during .init
-		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerCount) == 1
+		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerCount) == 2
 	}
 
 	func test_configIsAlmostOutOfDate_userTappedOnCard_domesticTab() {
 
 		// Arrange
 		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		// Act
@@ -2636,7 +2625,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Arrange
 		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		// Act
@@ -2651,7 +2640,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_recommendUpdate_recommendedVersion_higherActionVersion() {
 		
 		// Arrange
-		remoteConfigSpy.stubbedStoredConfiguration.recommendedVersion = "1.2.0"
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.2.0"
 
 		// Act
 		sut = vendSut(dashboardRegionToggleValue: .domestic, appVersion: "1.1.0")
@@ -2663,7 +2652,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_recommendUpdate_recommendedVersion_lowerActionVersion() {
 		
 		// Arrange
-		remoteConfigSpy.stubbedStoredConfiguration.recommendedVersion = "1.0.0"
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.0.0"
 		
 		// Act
 		sut = vendSut(dashboardRegionToggleValue: .domestic, appVersion: "1.1.0")
@@ -2675,7 +2664,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_recommendUpdate_recommendedVersion_equalActionVersion() {
 		
 		// Arrange
-		remoteConfigSpy.stubbedStoredConfiguration.recommendedVersion = "1.1.0"
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.1.0"
 		
 		// Act
 		sut = vendSut(dashboardRegionToggleValue: .domestic, appVersion: "1.1.0")
@@ -2685,25 +2674,25 @@ class HolderDashboardViewModelTests: XCTestCase {
 	}
 	
 	// MARK: - HolderDashboardCardUserActionHandling callbacks
-	
+
 	func test_actionhandling_didTapConfigAlmostOutOfDateCTA() {
 
 		// Arrange
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapConfigAlmostOutOfDateCTA()
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutOutdatedConfigCount) == 1
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutOutdatedConfigParameters?.validUntil) == "15 juli 18:02"
 	}
-	
+
 	func test_actionhandling_didTapCloseExpiredQR() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
+		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let expiredRecovery = HolderDashboardViewModel.ExpiredQR(region: .domestic, type: .recovery)
@@ -2716,44 +2705,44 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard())
 		expect(self.sut.domesticCards[2]).toEventually(beExpiredQRCard())
-		
+
 		// Close first expired QR:
 		sut.didTapCloseExpiredQR(expiredQR: expiredRecovery)
-		
+
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard(test: { title, _ in
 			expect(title) == "Je bewijs is verlopen." // Upcoming: future feature, the expiry message will soon identify the QR removed.
 		}))
-		
+
 		// Close second expired QR:
 		sut.didTapCloseExpiredQR(expiredQR: expiredTest)
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
 		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
 		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
 	}
-	
+
 	func test_actionhandling_didTapOriginNotValidInThisRegionMoreInfo_vaccination_domestic() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapOriginNotValidInThisRegionMoreInfo(originType: .vaccination, validityRegion: .domestic)
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount) == 1
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQR) == false
 	}
-	
+
 	func test_actionhandling_didTapOriginNotValidInThisRegionMoreInfo() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
-		
+
 		// Act
 		sut.didTapOriginNotValidInThisRegionMoreInfo(originType: .vaccination, validityRegion: .europeanUnion)
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRCount) == 1
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.originType) == .vaccination
@@ -2761,150 +2750,150 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.availableRegion) == .domestic
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutIncompleteDutchVaccination) == false
 	}
-	
+
 	func test_actionhandling_didTapDeviceHasClockDeviationMoreInfo() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapDeviceHasClockDeviationMoreInfo()
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutClockDeviationCount) == 1
 	}
-	
+
 	func test_actionhandling_didTapMultipleDCCUpgradeMoreInfo() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapMultipleDCCUpgradeMoreInfo()
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount) == 1
 	}
-	
+
 	func test_actionhandling_didTapMultipleDCCUpgradeCompletedMoreInfo() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapMultipleDCCUpgradeCompletedMoreInfo()
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompletedCount) == 1
 	}
-	
+
 	func test_actionhandling_didTapMultipleDCCUpgradeCompletedClose() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapMultipleDCCUpgradeCompletedClose()
-		
+
 		// Assert
-		expect(self.userSettingsSpy.invokedDidDismissEUVaccinationMigrationSuccessBanner) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedDidDismissEUVaccinationMigrationSuccessBanner) == true
 	}
-	
+
 	func test_actionhandling_didTapShowQR() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		let values = [NSManagedObjectID()]
 		sut.didTapShowQR(greenCardObjectIDs: values)
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs) === values
 	}
-	
+
 	func test_actionhandling_didTapRetryLoadQRCards() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapRetryLoadQRCards()
-		
+
 		// Assert
 		expect(self.strippenRefresherSpy.invokedLoadCount) == 2
 	}
-	
+
 	func test_actionhandling_didTapRecoveryValidityExtensionAvailableMoreInfo() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapRecoveryValidityExtensionAvailableMoreInfo()
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount) == 1
 	}
-	
+
 	func test_actionhandling_didTapRecoveryValidityExtensionCompleteMoreInfo() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapRecoveryValidityExtensionCompleteMoreInfo()
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompletedCount) == 1
 	}
-	
+
 	func test_actionhandling_didTapRecoveryValidityExtensionCompleteClose() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapRecoveryValidityExtensionCompleteClose()
-		
+
 		// Assert
-		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityExtensionCompletionCardSetter) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedRecoveryValidityExtensionCompletionCardSetter) == true
 	}
-	
+
 	func test_actionhandling_didTapRecoveryValidityReinstationAvailableMoreInfo() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapRecoveryValidityReinstationAvailableMoreInfo()
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount) == 1
 	}
-	
+
 	func test_actionhandling_didTapRecoveryValidityReinstationCompleteMoreInfo() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapRecoveryValidityReinstationCompleteMoreInfo()
-		
+
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompletedCount) == 1
 	}
-	
+
 	func test_actionhandling_didTapRecoveryValidityReinstationCompleteClose() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
-		
+
 		// Act
 		sut.didTapRecoveryValidityReinstationCompleteClose()
-		
+
 		// Assert
-		expect(self.userSettingsSpy.invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter) == true
 	}
 	
 	func test_actionhandling_didTapRecommenedUpdate_noUrl() {
@@ -2922,7 +2911,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_actionhandling_didTapRecommenedUpdate() {
 		
 		// Arrange
-		remoteConfigSpy.stubbedStoredConfiguration.appStoreURL = URL(string: "https://apple.com")
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = URL(string: "https://apple.com")
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		
 		// Act

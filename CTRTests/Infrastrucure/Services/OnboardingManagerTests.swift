@@ -11,7 +11,7 @@ import XCTest
 class OnboardingManagerTests: XCTestCase {
 
 	// MARK: - Setup
-	var sut = OnboardingManager(secureUserSettings: SecureUserSettings())
+	var sut: OnboardingManager!
 	var secureUserSettingsSpy: SecureUserSettingsSpy!
 	
 	override func setUp() {
@@ -23,18 +23,11 @@ class OnboardingManagerTests: XCTestCase {
 		super.setUp()
 	}
 
-	override func tearDown() {
-
-		Services.secureUserSettings.reset()
-		super.tearDown()
-	}
-
 	// MARK: - Tests
 
 	func testGetNeedsOnboarding() {
 
 		// Given
-		Services.secureUserSettings.reset()
 
 		// When
 		let value = sut.needsOnboarding
@@ -46,7 +39,6 @@ class OnboardingManagerTests: XCTestCase {
 	func testGetNeedsConsent() {
 
 		// Given
-		Services.secureUserSettings.reset()
 
 		// When
 		let value = sut.needsConsent

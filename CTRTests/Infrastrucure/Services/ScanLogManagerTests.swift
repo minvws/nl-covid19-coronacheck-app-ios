@@ -149,7 +149,7 @@ class ScanLogManagerTests: XCTestCase {
 		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
 
 		// When
-		sut.reset()
+		sut.wipePersistedData()
 
 		var list = [ScanLogEntry]()
 		let context = dataStoreManager.managedObjectContext()

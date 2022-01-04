@@ -10,8 +10,6 @@ import XCTest
 
 class FeatureFlagManagerSpy: FeatureFlagManaging {
 
-	required init(versionSupplier: AppVersionSupplierProtocol?) {}
-
 	var invokedIsNewValidityInfoBannerEnabled = false
 	var invokedIsNewValidityInfoBannerEnabledCount = 0
 	var stubbedIsNewValidityInfoBannerEnabledResult: Bool! = false
