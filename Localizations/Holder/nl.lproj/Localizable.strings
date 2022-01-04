@@ -714,6 +714,7 @@
 "visitorpass_code_verification_input_explanation" = "Je krijgt een code via sms of e-mail";
 "visitorpass_code_verification_not_received_button" = "Geen verificatiecode gekregen?";
 "visitorpass_code_verification_placeholder" = "Bijv. 123456";
+"visitorpass_code_error_invalid_code" = "Deze reviewcode is verlopen";
 "visitorpass_start_action" = "Gegevens ophalen";
 "visitorpass_start_message" = "<p>Ben jij buiten de Europese Unie gevaccineerd en op bezoek in Nederland? Dan kan je een bezoekersbewijs maken waarmee je plekken in Nederland kan bezoeken die een coronatoegangsbewijs vragen.</p><p>Kijk voor meer informatie op <a href=\"https://www.Rijksoverheid.nl/bezoekersbewijs\">www.Rijksoverheid.nl/bezoekersbewijs</a>.</p>";
 "visitorpass_start_title" = "Een bezoekersbewijs maken";

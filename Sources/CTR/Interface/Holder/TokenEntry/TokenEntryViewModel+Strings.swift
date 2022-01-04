@@ -65,8 +65,10 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowErrorInvalidCode()
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
-				case (_, .visitorPass):
+				case (.regular, .visitorPass):
 					return L.visitorpass_token_error_invalid_code()
+				case (.withRequestTokenProvided, .visitorPass):
+					return L.visitorpass_code_error_invalid_code()
 			}
 		}
 		
