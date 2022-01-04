@@ -9,8 +9,12 @@ import Foundation
 import Clcore
 
 enum RiskLevel: Codable {
+	/// 3G policy
 	case low
+	/// 2G policy
 	case high
+	/// 2G+ policy
+	case highPlus
 	
 	var isLow: Bool {
 		return self == .low
@@ -20,12 +24,19 @@ enum RiskLevel: Codable {
 		return self == .high
 	}
 	
+	var isHighPlus: Bool {
+		return self == .highPlus
+	}
+	
 	var policy: String {
 		switch self {
 			case .low:
 				return MobilecoreVERIFICATION_POLICY_3G
 			case .high:
 				return MobilecoreVERIFICATION_POLICY_2G
+			case .highPlus:
+				// Update
+				return ""
 		}
 	}
 }

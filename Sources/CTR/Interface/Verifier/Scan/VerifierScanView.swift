@@ -182,14 +182,18 @@ final class RiskLevelIndicator: BaseView {
 		isHidden = false
 		
 		switch riskLevel {
-			case .high:
-				titleLabel.text = L.verifier_risksetting_highrisk_title()
-				accessibilityLabel = L.verifier_risksetting_highrisk_title()
-				indicatorImageView.tintColor = Theme.colors.primary
 			case .low:
-				titleLabel.text = L.verifier_risksetting_lowrisk_title()
-				accessibilityLabel = L.verifier_risksetting_lowrisk_title()
+				titleLabel.text = L.verifier_scanner_policy_indication_3g()
+				accessibilityLabel = L.verifier_scanner_policy_indication_3g()
 				indicatorImageView.tintColor = Theme.colors.access
+			case .high:
+				titleLabel.text = L.verifier_scanner_policy_indication_2g()
+				accessibilityLabel = L.verifier_scanner_policy_indication_2g()
+				indicatorImageView.tintColor = Theme.colors.primary
+			case .highPlus:
+				titleLabel.text = L.verifier_scanner_policy_indication_2g_plus()
+				accessibilityLabel = L.verifier_scanner_policy_indication_2g_plus()
+				indicatorImageView.tintColor = Theme.colors.dark
 			case .none:
 				isHidden = true
 		}

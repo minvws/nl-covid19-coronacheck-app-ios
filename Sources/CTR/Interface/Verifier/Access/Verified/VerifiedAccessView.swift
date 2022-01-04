@@ -119,6 +119,8 @@ extension VerifiedType {
 						return C.accessColor()
 					case .high:
 						return C.primaryColor()
+					case .highPlus:
+						return C.darkColor()
 				}
 			case .demo:
 				return C.grey4()
