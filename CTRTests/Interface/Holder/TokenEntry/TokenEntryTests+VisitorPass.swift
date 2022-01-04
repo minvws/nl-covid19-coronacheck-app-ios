@@ -49,14 +49,14 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.resendVerificationButtonTitle) == L.visitorpass_code_verification_not_received_button()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.networkErrorAlert).to(beNil())
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
-		expect(self.sut.confirmResendVerificationAlertTitle) == L.visitorpass_code_confirmresendverificationalert_title()
-		expect(self.sut.confirmResendVerificationAlertMessage) == L.visitorpass_code_confirmresendverificationalert_message()
-		expect(self.sut.confirmResendVerificationAlertOkayButton) == L.visitorpass_code_confirmresendverificationalert_okbutton()
-		expect(self.sut.confirmResendVerificationAlertCancelButton) == L.visitorpass_code_confirmresendverificationalert_cancelbutton()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.confirmResendVerificationAlertTitle) == L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
+		expect(self.sut.confirmResendVerificationAlertMessage) == L.holderTokenentryRegularflowConfirmresendverificationalertMessage()
+		expect(self.sut.confirmResendVerificationAlertOkayButton) == L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()
+		expect(self.sut.confirmResendVerificationAlertCancelButton) == L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -74,14 +74,14 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.resendVerificationButtonTitle) == L.visitorpass_code_verification_not_received_button()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.networkErrorAlert).to(beNil())
-		expect(self.sut.title) == L.visitorpass_token_title()
+		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
-		expect(self.sut.confirmResendVerificationAlertTitle) == L.visitorpass_code_confirmresendverificationalert_title()
-		expect(self.sut.confirmResendVerificationAlertMessage) == L.visitorpass_code_confirmresendverificationalert_message()
-		expect(self.sut.confirmResendVerificationAlertOkayButton) == L.visitorpass_code_confirmresendverificationalert_okbutton()
-		expect(self.sut.confirmResendVerificationAlertCancelButton) == L.visitorpass_code_confirmresendverificationalert_cancelbutton()
+		expect(self.sut.confirmResendVerificationAlertTitle) == L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
+		expect(self.sut.confirmResendVerificationAlertMessage) == L.holderTokenentryRegularflowConfirmresendverificationalertMessage()
+		expect(self.sut.confirmResendVerificationAlertOkayButton) == L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()
+		expect(self.sut.confirmResendVerificationAlertCancelButton) == L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -108,8 +108,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -129,8 +129,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -150,8 +150,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -176,8 +176,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -199,8 +199,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_empty_token()
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -220,8 +220,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_empty_token()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -242,12 +242,12 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
+		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
 		expect(self.sut.networkErrorAlert).to(beNil())
-		expect(self.sut.title) == L.visitorpass_token_title()
+		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -323,8 +323,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.shouldShowResendVerificationButton) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -418,8 +418,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -440,7 +440,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
+		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
@@ -461,7 +461,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.token.token) == RequestToken.fake.token
 		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
 		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
+		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
@@ -482,7 +482,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		// Assert
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
+		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -502,7 +502,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		// Assert
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
+		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -521,14 +521,14 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.resendVerificationButtonTitle) == L.visitorpass_code_verification_not_received_button()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -549,8 +549,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -574,8 +574,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -620,8 +620,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage) == L.visitorpass_code_error_invalid_code()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -678,8 +678,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.networkErrorAlert).to(beNil())
@@ -714,8 +714,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -774,8 +774,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -805,8 +805,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.code) == verificationInput
 		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
 		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -835,8 +835,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		// Assert
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -863,8 +863,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		// Assert
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -891,14 +891,14 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == L.visitorpass_code_error_invalid_code()
-		expect(self.sut.resendVerificationButtonTitle) == L.visitorpass_code_verification_not_received_button()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -925,14 +925,14 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_invalid_combination()
-		expect(self.sut.resendVerificationButtonTitle) == L.visitorpass_code_verification_not_received_button()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -960,8 +960,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage) == L.visitorpass_code_error_invalid_code()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -991,8 +991,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.fieldErrorMessage) == "Unhandled: unknown"
 		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -1022,8 +1022,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage) == L.visitorpass_code_error_invalid_code()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -1046,8 +1046,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1068,8 +1068,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1090,8 +1090,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1110,8 +1110,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1158,8 +1158,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1181,8 +1181,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1205,8 +1205,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1227,8 +1227,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1249,8 +1249,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1269,13 +1269,13 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.sut.resendVerificationButtonTitle) == L.visitorpass_code_verification_not_received_button()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1300,12 +1300,12 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.resendVerificationButtonTitle) == L.visitorpass_code_verification_not_received_button()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1330,12 +1330,12 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.resendVerificationButtonTitle) == L.visitorpass_code_verification_not_received_button()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1358,8 +1358,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_invalid_code()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1384,8 +1384,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage) == "Unhandled: unknown"
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1408,8 +1408,8 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_invalid_code()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.visitorpass_token_title()
-		expect(self.sut.message) == L.visitorpass_token_text()
+		expect(self.sut.title) == L.visitorpass_code_title()
+		expect(self.sut.message) == L.visitorpass_code_description()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1434,9 +1434,9 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == false
 		expect(self.sut.message).to(beNil())
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.resendVerificationButtonTitle) == L.visitorpass_code_verification_not_received_button()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.networkErrorAlert).to(beNil())
-		expect(self.sut.title) == L.visitorpass_token_title()
+		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 
@@ -1509,10 +1509,10 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.message) == L.visitorpass_token_text()
-		expect(self.sut.resendVerificationButtonTitle) == L.visitorpass_code_verification_not_received_button()
+		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.networkErrorAlert).to(beNil())
-		expect(self.sut.title) == L.visitorpass_token_title()
+		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.fieldErrorMessage).to(beNil())
 
 		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.token) == .fake
