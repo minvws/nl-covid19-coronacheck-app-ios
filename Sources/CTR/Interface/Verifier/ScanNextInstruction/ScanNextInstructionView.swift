@@ -102,13 +102,13 @@ final class ScanNextInstructionView: BaseView {
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
 			subtitleLabel.topAnchor.constraint(equalTo: scrollView.topAnchor,
-											constant: ViewTraits.Margin.top),
+											   constant: ViewTraits.Margin.top),
 			subtitleLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
-											 constant: ViewTraits.Margin.edge),
+												constant: ViewTraits.Margin.edge),
 			subtitleLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
-											  constant: -ViewTraits.Margin.edge),
+												 constant: -ViewTraits.Margin.edge),
 			subtitleLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
-											  constant: -2 * ViewTraits.Margin.edge),
+												 constant: -2 * ViewTraits.Margin.edge),
 			
 			titleLabel.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor,
 											constant: ViewTraits.Spacing.subtitleToTitle),
