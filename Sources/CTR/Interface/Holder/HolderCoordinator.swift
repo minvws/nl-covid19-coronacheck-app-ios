@@ -51,8 +51,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutTestOnlyValidFor3G()
 
-	func userWishesMoreInfoAboutUpgradingEUVaccinations()
-
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
 	
     func userWishesMoreInfoAboutRecoveryValidityExtension()
@@ -60,8 +58,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutRecoveryValidityReinstation()
 	
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
-
-	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted()
 
 	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted()
 	
@@ -317,7 +313,6 @@ class HolderCoordinator: SharedCoordinator {
 					now: { Date() }
 				),
 				userSettings: UserSettings(),
-				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
 				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
 				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
 				versionSupplier: versionSupplier,
@@ -493,19 +488,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 
-	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
-		let viewModel = MigrateEUVaccinationViewModel(
-			backAction: { [weak self] in
-				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
-			},
-			greencardLoader: GreenCardLoader(),
-			userSettings: userSettings
-		)
-		viewModel.coordinator = self
-		let viewController = MigrateEUVaccinationViewController(viewModel: viewModel)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
-	}
-
 	func userWishesMoreInfoAboutRecoveryValidityExtension() {
 		let viewModel = ExtendRecoveryValidityViewModel(
 			mode: .extend,
@@ -538,15 +520,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
 		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
-	}
-	
-	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted() {
-		presentInformationPage(
-			title: L.holderEuvaccinationswereupgradedTitle(),
-			body: L.holderEuvaccinationswereupgradedMessage(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
 	}
 	
 	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {

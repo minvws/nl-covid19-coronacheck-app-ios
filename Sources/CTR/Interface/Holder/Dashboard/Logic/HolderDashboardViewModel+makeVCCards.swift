@@ -59,27 +59,6 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 
-	static func makeMultipleDCCMigrationCards(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		
-		guard validityRegion == .europeanUnion else { return [] }
-		
-		if state.shouldShowEUVaccinationUpdateBanner {
-			return HolderDashboardViewController.Card.makeMultipleDCCMigrationUpdateCard(
-				didTapCallToAction: actionHandler.didTapMultipleDCCUpgradeMoreInfo
-			)
-		} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
-			return HolderDashboardViewController.Card.makeMultipleDCCMigrationUpdateCompletedCard(
-				didTapCallToAction: actionHandler.didTapMultipleDCCUpgradeCompletedMoreInfo,
-				didTapClose: actionHandler.didTapMultipleDCCUpgradeCompletedClose
-			)
-		}
-		return []
-	}
-	
 	static func makeRecoveryValidityCards(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
