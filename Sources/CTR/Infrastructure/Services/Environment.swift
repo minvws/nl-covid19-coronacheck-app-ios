@@ -174,39 +174,52 @@ private let walletManager = WalletManager(dataStoreManager: datastoreManager)
 
 // MARK: - 3: Instantiate the Environment using private dependencies:
 
-private let environment = Environment(
-	now: now,
-	appInstalledSinceManager: appInstalledSinceManager,
-	clockDeviationManager: clockDeviationManager,
-	couplingManager: couplingManager,
-	cryptoLibUtility: cryptoLibUtility,
-	cryptoManager: cryptoManager,
-	dataStoreManager: datastoreManager,
-	deviceAuthenticationDetector: deviceAuthenticationDetector,
-	featureFlagManager: featureFlagManager,
-	forcedInformationManager: forcedInformationManager,
-	greenCardLoader: greenCardLoader,
-	jailBreakDetector: jailBreakDetector,
-	mappingManager: mappingManager,
-	networkManager: networkManager,
-	onboardingManager: onboardingManager,
-	openIdManager: openIdManager,
-	remoteConfigManager: remoteConfigManager,
-	riskLevelManager: riskLevelManager,
-	scanLockManager: scanLockManager,
-	scanLogManager: scanLogManager,
-	secureUserSettings: secureUserSettings,
-	userSettings: userSettings,
-	walletManager: walletManager
-)
+private let environment: () -> Environment = {
+	
+	guard !ProcessInfo().isUnitTesting else {
+		fatalError("During unit testing, real services should not be instantiated during Environment setup.")
+	}
+	
+	return Environment(
+		now: now,
+		appInstalledSinceManager: appInstalledSinceManager,
+		clockDeviationManager: clockDeviationManager,
+		couplingManager: couplingManager,
+		cryptoLibUtility: cryptoLibUtility,
+		cryptoManager: cryptoManager,
+		dataStoreManager: datastoreManager,
+		deviceAuthenticationDetector: deviceAuthenticationDetector,
+		featureFlagManager: featureFlagManager,
+		forcedInformationManager: forcedInformationManager,
+		greenCardLoader: greenCardLoader,
+		jailBreakDetector: jailBreakDetector,
+		mappingManager: mappingManager,
+		networkManager: networkManager,
+		onboardingManager: onboardingManager,
+		openIdManager: openIdManager,
+		remoteConfigManager: remoteConfigManager,
+		riskLevelManager: riskLevelManager,
+		scanLockManager: scanLockManager,
+		scanLogManager: scanLogManager,
+		secureUserSettings: secureUserSettings,
+		userSettings: userSettings,
+		walletManager: walletManager
+	)
+}
 
 // MARK: - 4: Set `Current` global value to Environment
 
 // For debug builds (i.e. development, unit tests, etc) the Current Environment
 // can be mutated at runtime. For Release builds, this is not allowed.
+//
+// Global vars are always instantiated lazily, so during unit tests the
+// above definition of Environment containing the real services will not actually be created.
 
 #if DEBUG
-var Current: Environment = environment
+var Current: Environment! = {
+	guard !ProcessInfo().isUnitTesting else { return nil }
+	return environment()
+}()
 #else
-let Current: Environment = environment
+let Current: Environment! = environment()
 #endif
