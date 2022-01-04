@@ -8,15 +8,7 @@
 import XCTest
 @testable import CTR
 
-extension RemoteConfigManagingSpy {
-	convenience init() {
-		self.init(now: { now }, userSettings: UserSettingsSpy(), reachability: ReachabilitySpy(), networkManager: NetworkSpy(), secureUserSettings: SecureUserSettings())
-	}
-}
-
 class RemoteConfigManagingSpy: RemoteConfigManaging {
-
-	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, reachability: ReachabilityProtocol?, networkManager: NetworkManaging, secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedStoredConfigurationGetter = false
 	var invokedStoredConfigurationGetterCount = 0
@@ -91,11 +83,11 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 		}
 	}
 
-	var invokedReset = false
-	var invokedResetCount = 0
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
 
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

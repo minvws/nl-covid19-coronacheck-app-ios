@@ -32,10 +32,3 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedIsVerificationPolicyEnabledResult
 	}
 }
-
-extension FeatureFlagManagerSpy {
-    
-    convenience init() {
-        self.init(versionSupplier: AppVersionSupplier())
-    }
-}
