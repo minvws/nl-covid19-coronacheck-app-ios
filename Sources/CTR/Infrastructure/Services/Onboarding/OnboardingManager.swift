@@ -84,6 +84,6 @@ class OnboardingManager: OnboardingManaging, Logging {
 	/// Reset the manager
 	func wipePersistedData() {
 
-		SecureUserSettings().$onboardingData.clearData()
+		secureUserSettings.onboardingData = SecureUserSettings.Defaults.onboardingData
 	}
 }

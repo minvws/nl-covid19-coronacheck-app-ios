@@ -92,6 +92,6 @@ class ForcedInformationManager: ForcedInformationManaging {
 	/// Reset the manager, clear all the data
 	func wipePersistedData() {
 
-		SecureUserSettings().$forcedInformationData.clearData()
+		secureUserSettings.forcedInformationData = SecureUserSettings.Defaults.forcedInformationData
 	}
 }

@@ -25,9 +25,9 @@ class ScanInstructionsViewModel {
 		}
 	}
 
-	private let userSettings: UserSettingsProtocol
-	private let riskLevelManager: RiskLevelManaging
-	private let scanLockManager: ScanLockManaging
+	private let userSettings: UserSettingsProtocol = Current.userSettings
+	private let riskLevelManager: RiskLevelManaging = Current.riskLevelManager
+	private let scanLockManager: ScanLockManaging = Current.scanLockManager
 	private var shouldShowRiskSetting = false
 	private var hasScanLock = false
 	private var scanLockObserverToken: ScanLockManager.ObserverToken?
@@ -39,17 +39,11 @@ class ScanInstructionsViewModel {
 	///   - numberOfPages: the total number of pages
 	init(
 		coordinator: ScanInstructionsCoordinatorDelegate,
-		pages: [ScanInstructionsPage],
-		userSettings: UserSettingsProtocol,
-		riskLevelManager: RiskLevelManaging = Current.riskLevelManager,
-		scanLockManager: ScanLockManaging = Current.scanLockManager
+		pages: [ScanInstructionsPage]
 	) {
 		
 		self.coordinator = coordinator
 		self.pages = pages
-		self.userSettings = userSettings
-		self.riskLevelManager = riskLevelManager
-		self.scanLockManager = scanLockManager
 		self.currentPage = 0
 
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {

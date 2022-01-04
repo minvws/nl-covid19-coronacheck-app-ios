@@ -18,9 +18,6 @@ class ScanLogViewModel {
 
 	weak private var coordinator: OpenUrlProtocol?
 
-	weak private var scanLogManager: ScanLogManaging? = Current.scanLogManager
-	weak private var appInstalledSinceManager: AppInstalledSinceManaging? = Current.appInstalledSinceManager
-
 	@Bindable private(set) var title: String = L.scan_log_title()
 	@Bindable private(set) var message: String
 	@Bindable private(set) var appInUseSince: String?
@@ -28,26 +25,20 @@ class ScanLogViewModel {
 	@Bindable private(set) var displayEntries: [ScanLogDisplayEntry] = []
 	@Bindable private(set) var alert: AlertContent?
 
-	init(
-		coordinator: OpenUrlProtocol,
-		configuration: RemoteConfiguration,
-		now: @escaping () -> Date
-	) {
+	init(coordinator: OpenUrlProtocol) {
 		self.coordinator = coordinator
-		let scanLogStorageSeconds: Int = configuration.scanLogStorageSeconds ?? 3600
+		let scanLogStorageSeconds: Int = Current.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
 		let scanLogStorageMinutes: Int = scanLogStorageSeconds / 60
 
 		message = L.scan_log_message(scanLogStorageMinutes)
 		listHeader = L.scan_log_list_header(scanLogStorageMinutes)
-		handleFirstUseDate(now)
+		handleFirstUseDate(Current.now)
 		handleScanEntries(scanLogStorageSeconds)
 	}
 
 	private func handleScanEntries(_ scanLogStorageSeconds: Int) {
 
-		guard let scanLogManager = scanLogManager else { return }
-
-		let result = scanLogManager.getScanEntries(withinLastNumberOfSeconds: scanLogStorageSeconds)
+		let result = Current.scanLogManager.getScanEntries(withinLastNumberOfSeconds: scanLogStorageSeconds)
 		switch result {
 			case let .success(log):
 				displayEntries.append(contentsOf: ScanLogDataSource(entries: log).getDisplayEntries())
@@ -71,7 +62,7 @@ class ScanLogViewModel {
 
 	private func handleFirstUseDate(_ now: @escaping () -> Date) {
 
-		guard let firstUseDate = appInstalledSinceManager?.firstUseDate else { return }
+		guard let firstUseDate = Current.appInstalledSinceManager.firstUseDate else { return }
 		if firstUseDate < now().addingTimeInterval(-30 * 24 * 60 * 60) { // Cut off 30 days
 			appInUseSince = L.scan_log_footer_long_time()
 		} else {

@@ -122,11 +122,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		} else {
 
 			let dashboardViewController = VerifierStartViewController(
-				viewModel: VerifierStartViewModel(
-					coordinator: self,
-					scanLockProvider: Current.scanLockManager,
-					riskLevelProvider: Current.riskLevelManager
-				)
+				viewModel: VerifierStartViewModel(coordinator: self)
 			)
 
 			dashboardNavigationController?.setViewControllers([dashboardViewController], animated: false)
@@ -234,9 +230,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 		let viewController = ScanLogViewController(
 			viewModel: ScanLogViewModel(
-				coordinator: self,
-				configuration: remoteConfigManager.storedConfiguration,
-				now: { Date() }
+				coordinator: self
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
@@ -273,8 +267,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		} else {
 			viewController = RiskSettingSelectedViewController(
 				viewModel: RiskSettingSelectedViewModel(
-					coordinator: self,
-					configuration: remoteConfigManager.storedConfiguration
+					coordinator: self
 				)
 			)
 		}
@@ -363,8 +356,7 @@ extension VerifierCoordinator: MenuDelegate {
 					viewModel: AboutThisAppViewModel(
 						coordinator: self,
 						versionSupplier: versionSupplier,
-						flavor: AppFlavor.flavor,
-						userSettings: UserSettings()
+						flavor: AppFlavor.flavor
 					)
 				)
 				aboutNavigationController = NavigationController(rootViewController: destination)

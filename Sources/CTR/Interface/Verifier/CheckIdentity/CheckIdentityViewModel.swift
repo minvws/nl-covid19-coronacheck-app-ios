@@ -23,8 +23,6 @@ final class CheckIdentityViewModel: Logging {
 	
 	private let screenCaptureDetector = ScreenCaptureDetector()
 	
-	private let riskLevelManager: RiskLevelManaging
-	
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
 	
@@ -61,14 +59,12 @@ final class CheckIdentityViewModel: Logging {
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
 		verificationDetails: MobilecoreVerificationDetails,
-		isDeepLinkEnabled: Bool,
-		riskLevelManager: RiskLevelManaging = Current.riskLevelManager
+		isDeepLinkEnabled: Bool
 	) {
 		
 		self.coordinator = coordinator
 		self.verificationDetails = verificationDetails
 		self.isDeepLinkEnabled = isDeepLinkEnabled
-		self.riskLevelManager = riskLevelManager
 		
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -119,7 +115,7 @@ final class CheckIdentityViewModel: Logging {
 		var riskSetting: RiskLevel = .low
 		
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {
-			guard let state = riskLevelManager.state else {
+			guard let state = Current.riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
 				return
 			}

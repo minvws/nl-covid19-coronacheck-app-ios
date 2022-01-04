@@ -55,8 +55,6 @@ class ShowQRItemViewModel: Logging {
 
 	@Bindable private(set) var visibilityState: ShowQRItemView.VisibilityState = .loading
 
-	private let userSettings: UserSettingsProtocol
-	private let now: () -> Date
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 
 	/// Initializer
@@ -69,9 +67,7 @@ class ShowQRItemViewModel: Logging {
 		delegate: ShowQRItemViewModelDelegate,
 		greenCard: GreenCard,
 		qrShouldInitiallyBeHidden: Bool = false,
-		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector(),
-		userSettings: UserSettingsProtocol = UserSettings(),
-		now: @escaping () -> Date = Date.init
+		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()
 	) {
 
 		self.delegate = delegate
@@ -79,8 +75,6 @@ class ShowQRItemViewModel: Logging {
 		self.screenCaptureDetector = screenCaptureDetector
 		self.qrShouldBeHidden = qrShouldInitiallyBeHidden
 		self.qrShouldInitiallyBeHidden = qrShouldInitiallyBeHidden
-		self.userSettings = userSettings
-		self.now = now
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			qrAccessibility = L.holderShowqrDomesticQrTitle()
@@ -96,16 +90,18 @@ class ShowQRItemViewModel: Logging {
 
 		screenCaptureDetector.screenshotWasTakenCallback = { [weak self] in
 			guard self?.screenIsBlockedForScreenshotWithSecondsRemaining == nil else { return }
-			userSettings.lastScreenshotTime = now()
-			self?.screenshotWasTaken(blockQRUntil: now().addingTimeInterval(ShowQRItemViewModel.screenshotWarningMessageDuration))
+			
+			let now = Current.now()
+			Current.userSettings.lastScreenshotTime = now
+			self?.screenshotWasTaken(blockQRUntil: now.addingTimeInterval(ShowQRItemViewModel.screenshotWarningMessageDuration))
 		}
 
-		if let lastScreenshotTime = userSettings.lastScreenshotTime {
+		if let lastScreenshotTime = Current.userSettings.lastScreenshotTime {
 			let expiryDate = lastScreenshotTime.addingTimeInterval(ShowQRItemViewModel.screenshotWarningMessageDuration)
-			if expiryDate > now() {
+			if expiryDate > Current.now() {
 				screenshotWasTaken(blockQRUntil: expiryDate)
 			} else {
-				userSettings.lastScreenshotTime = nil
+				Current.userSettings.lastScreenshotTime = nil
 			}
 		}
 
@@ -164,7 +160,7 @@ class ShowQRItemViewModel: Logging {
 		screenshotWarningTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
 			guard let self = self else { return }
 
-			let timeRemaining = blockQRUntil.timeIntervalSince(self.now())
+			let timeRemaining = blockQRUntil.timeIntervalSince(Current.now())
 
 			if timeRemaining <= 1 {
 				timer.invalidate()

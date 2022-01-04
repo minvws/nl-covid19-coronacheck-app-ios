@@ -25,7 +25,7 @@ protocol SecureUserSettingsProtocol: AnyObject {
 }
 
 class SecureUserSettings: SecureUserSettingsProtocol {
-	fileprivate struct Defaults {
+	struct Defaults {
 		static var scanLockUntil: Date = .distantPast
 		static var appInstalledDate: Date? = nil
 		static var cryptoData: CryptoManager.CryptoData = .empty

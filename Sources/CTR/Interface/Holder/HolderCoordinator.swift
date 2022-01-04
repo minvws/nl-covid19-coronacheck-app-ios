@@ -84,7 +84,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 class HolderCoordinator: SharedCoordinator {
 
-	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 
 	let recoveryValidityExtensionManager: RecoveryValidityExtensionManager = {
@@ -316,12 +315,10 @@ class HolderCoordinator: SharedCoordinator {
 					reachability: try? Reachability(),
 					now: { Date() }
 				),
-				userSettings: UserSettings(),
-				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
+				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: Current.userSettings),
 				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
-				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
-				versionSupplier: versionSupplier,
-				now: { Date() }
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings),
+				versionSupplier: versionSupplier
 			)
 		)
 		dashboardNavigationController = NavigationController(rootViewController: dashboardViewController)
@@ -499,7 +496,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 			},
 			greencardLoader: Current.greenCardLoader,
-			userSettings: userSettings
+			userSettings: Current.userSettings
 		)
 		viewModel.coordinator = self
 		let viewController = MigrateEUVaccinationViewController(viewModel: viewModel)
@@ -513,7 +510,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 			},
 			greencardLoader: Current.greenCardLoader,
-			userSettings: userSettings
+			userSettings: Current.userSettings
 		)
 		viewModel.coordinator = self
 		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
@@ -527,7 +524,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 			},
 			greencardLoader: Current.greenCardLoader,
-			userSettings: userSettings
+			userSettings: Current.userSettings
 		)
 		viewModel.coordinator = self
 		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
@@ -659,8 +656,7 @@ extension HolderCoordinator: MenuDelegate {
 					viewModel: AboutThisAppViewModel(
 						coordinator: self,
 						versionSupplier: versionSupplier,
-						flavor: AppFlavor.flavor,
-						userSettings: UserSettings()
+						flavor: AppFlavor.flavor
 					)
 				)
 				aboutNavigationController = NavigationController(rootViewController: destination)

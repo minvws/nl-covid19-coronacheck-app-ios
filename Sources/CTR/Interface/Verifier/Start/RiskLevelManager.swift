@@ -10,7 +10,6 @@ import Foundation
 protocol RiskLevelManaging: AnyObject {
 	var state: RiskLevel? { get }
 	
-	init(secureUserSettings: SecureUserSettingsProtocol)
 	func update(riskLevel: RiskLevel?)
 	func appendObserver(_ observer: @escaping (RiskLevel?) -> Void) -> RiskLevelManager.ObserverToken
 	func removeObserver(token: RiskLevelManager.ObserverToken)

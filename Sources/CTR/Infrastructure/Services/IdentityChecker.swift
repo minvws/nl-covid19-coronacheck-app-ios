@@ -19,13 +19,6 @@ protocol IdentityCheckerProtocol {
 
 class IdentityChecker: IdentityCheckerProtocol, Logging {
 
-	let cryptoManager: CryptoManaging
-
-	required init(cryptoManager: CryptoManaging) {
-
-		self.cryptoManager = cryptoManager
-	}
-
 	/// Check if the identities in event groups and remote events match
 	/// - Parameters:
 	///   - eventGroups: the event groups
@@ -97,7 +90,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 					}
 				} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
 					if let credentialData = object.credential.data(using: .utf8),
-					   let euCredentialAttributes = cryptoManager.readEuCredentials(credentialData) {
+					   let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) {
 						identities.append(euCredentialAttributes.identity)
 					}
 				}

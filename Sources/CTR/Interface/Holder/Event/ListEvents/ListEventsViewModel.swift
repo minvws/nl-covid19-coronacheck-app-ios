@@ -14,7 +14,7 @@ class ListEventsViewModel: Logging {
 
 	private let walletManager: WalletManaging = Current.walletManager
 	let remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
-	private let greenCardLoader: GreenCardLoading = Current.greenCardLoader
+	private let greenCardLoader: GreenCardLoading
 	let cryptoManager: CryptoManaging? = Current.cryptoManager
 	let mappingManager: MappingManaging = Current.mappingManager
 	private let identityChecker: IdentityCheckerProtocol
@@ -50,11 +50,13 @@ class ListEventsViewModel: Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
 		remoteEvents: [RemoteEvent],
-		identityChecker: IdentityCheckerProtocol,
-		eventsMightBeMissing: Bool = false
+		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
+		eventsMightBeMissing: Bool = false,
+		greenCardLoader: GreenCardLoading
 	) {
 
 		self.coordinator = coordinator
+		self.greenCardLoader = greenCardLoader
 		self.eventMode = eventMode
 		self.identityChecker = identityChecker
 		

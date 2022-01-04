@@ -53,7 +53,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 	private let networkManager: NetworkManaging
 	private let cryptoManager: CryptoManaging
 	private let walletManager: WalletManaging
-	private let remoteConfigManager: RemoteConfigManager
+	private let remoteConfigManager: RemoteConfigManaging
 	private let userSettings: UserSettingsProtocol
 	
 	required init(
@@ -61,7 +61,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		networkManager: NetworkManaging,
 		cryptoManager: CryptoManaging,
 		walletManager: WalletManaging,
-		remoteConfigManager: RemoteConfigManager,
+		remoteConfigManager: RemoteConfigManaging,
 		userSettings: UserSettingsProtocol
 	) {
 

@@ -40,7 +40,7 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 	
 	// MARK: - Init
 
-	required init(secureUserSettings: SecureUserSettingsProtocol = SecureUserSettings()) {
+	required init(secureUserSettings: SecureUserSettingsProtocol) {
 		self.secureUserSettings = secureUserSettings
 	}
  

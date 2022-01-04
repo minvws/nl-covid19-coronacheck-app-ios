@@ -40,8 +40,6 @@ class AboutThisAppViewModel: Logging {
 
 	private var flavor: AppFlavor
 
-	private let userSettings: UserSettingsProtocol
-
 	// MARK: - Bindable
 
 	@Bindable private(set) var title: String
@@ -61,12 +59,10 @@ class AboutThisAppViewModel: Logging {
 	init(
 		coordinator: (OpenUrlProtocol & Restartable),
 		versionSupplier: AppVersionSupplierProtocol,
-		flavor: AppFlavor,
-		userSettings: UserSettingsProtocol) {
+		flavor: AppFlavor) {
 
 		self.coordinator = coordinator
 		self.flavor = flavor
-		self.userSettings = userSettings
 
 		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
 		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
@@ -76,8 +72,8 @@ class AboutThisAppViewModel: Logging {
 			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
 
 		configVersion = {
-			guard let timestamp = userSettings.configFetchedTimestamp,
-				  let hash = userSettings.configFetchedHash
+			guard let timestamp = Current.userSettings.configFetchedTimestamp,
+				  let hash = Current.userSettings.configFetchedHash
 			else { return nil }
 
 			// 13-10-2021 00:00
@@ -192,7 +188,6 @@ class AboutThisAppViewModel: Logging {
 	func wipePersistedData() {
 
 		Current.wipePersistedData(flavor: flavor)
-		self.userSettings.wipePersistedData()
 		self.coordinator?.restart()
 	}
 
