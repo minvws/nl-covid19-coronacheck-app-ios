@@ -148,7 +148,7 @@
 "verifier_risksetting_lowrisk_subtitle" = "You can give access to visitors with a test, vaccination or recovery certificate.";
 "verifier_risksetting_lowrisk_title" = "3G access";
 "verifier_risksetting_readmore" = "Which kind of access can I give?";
-"verifier_risksetting_readmore_url" = "https://coronacheck.nl/en/faq-scanner-in-app";
+"verifier_risksetting_readmore_url" = "https://www.government.nl/whichaccess";
 "verifier_risksetting_setting_button" = "Set setting";
 "verifier_risksetting_start_header" = "For your location, please specify if you're going to give 2G or 3G access. Check which kind of access you can give before you start scanning.";
 "verifier_risksetting_start_readmore" = "Which kind of access can I give?";
