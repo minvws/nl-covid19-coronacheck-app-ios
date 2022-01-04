@@ -31,6 +31,16 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		invokedIsVerificationPolicyEnabledCount += 1
 		return stubbedIsVerificationPolicyEnabledResult
 	}
+
+	var invokedIsVisitorPassEnabled = false
+	var invokedIsVisitorPassEnabledCount = 0
+	var stubbedIsVisitorPassEnabledResult: Bool! = false
+
+	func isVisitorPassEnabled() -> Bool {
+		invokedIsVisitorPassEnabled = true
+		invokedIsVisitorPassEnabledCount += 1
+		return stubbedIsVisitorPassEnabledResult
+	}
 }
 
 extension FeatureFlagManagerSpy {
