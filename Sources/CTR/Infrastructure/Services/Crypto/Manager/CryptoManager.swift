@@ -32,14 +32,23 @@ class CryptoManager: CryptoManaging, Logging {
 		set { secureUserSettings.cryptoData = newValue }
 	}
 	
-	private let cryptoLibUtility: CryptoLibUtilityProtocol = Current.cryptoLibUtility
-	private let riskLevelManager: RiskLevelManaging = Current.riskLevelManager
+	private let cryptoLibUtility: CryptoLibUtilityProtocol
+	private let riskLevelManager: RiskLevelManaging
 	private let secureUserSettings: SecureUserSettingsProtocol
+	private let featureFlagManager: FeatureFlagManaging
 	
 	/// Initializer
 
-	required init(secureUserSettings: SecureUserSettingsProtocol) {
+	required init(
+		secureUserSettings: SecureUserSettingsProtocol,
+		cryptoLibUtility: CryptoLibUtilityProtocol,
+		riskLevelManager: RiskLevelManaging,
+		featureFlagManager: FeatureFlagManaging
+	) {
 		self.secureUserSettings = secureUserSettings
+		self.cryptoLibUtility = cryptoLibUtility
+		self.riskLevelManager = riskLevelManager
+		self.featureFlagManager = featureFlagManager
 		
 		// Initialize crypto library
 		cryptoLibUtility.initialize()
@@ -140,7 +149,7 @@ class CryptoManager: CryptoManaging, Logging {
 		let proofQREncoded = message.data(using: .utf8)
 
 		let verificationPolicy: String
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if featureFlagManager.isVerificationPolicyEnabled() {
 			guard let riskSetting = riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
 				return nil

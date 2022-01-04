@@ -50,7 +50,7 @@ class ListEventsViewModel: Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
 		remoteEvents: [RemoteEvent],
-		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
+		identityChecker: IdentityCheckerProtocol,
 		eventsMightBeMissing: Bool = false
 	) {
 

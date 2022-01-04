@@ -11,8 +11,6 @@ protocol AppInstalledSinceManaging: AnyObject {
 
 	var firstUseDate: Date? { get }
 
-	init(secureUserSettings: SecureUserSettingsProtocol)
-
 	func update(serverHeaderDate: String, ageHeader: String?)
 
 	func update(dateProvider: DocumentsDirectoryCreationDateProtocol)

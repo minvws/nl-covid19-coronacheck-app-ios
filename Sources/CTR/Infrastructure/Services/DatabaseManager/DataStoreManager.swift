@@ -14,8 +14,6 @@ enum StorageType {
 
 protocol DataStoreManaging {
 
-	init(_ storageType: StorageType, flavor: AppFlavor)
-
 	/// Get a context to perform a query on
 	/// - Returns: the main context
 	func managedObjectContext() -> NSManagedObjectContext

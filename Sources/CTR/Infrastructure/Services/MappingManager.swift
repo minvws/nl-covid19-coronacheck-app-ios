@@ -9,8 +9,6 @@ import Foundation
 
 protocol MappingManaging {
 
-	init(remoteConfigManager: RemoteConfigManaging)
-
 	func setEventProviders(_ providers: [EventFlow.EventProvider])
 
 	func getProviderIdentifierMapping(_ code: String? ) -> String?

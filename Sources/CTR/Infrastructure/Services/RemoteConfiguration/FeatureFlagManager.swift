@@ -9,32 +9,34 @@ import Foundation
 
 protocol FeatureFlagManaging {
 	
-	init(versionSupplier: AppVersionSupplierProtocol?)
-	
 	func isNewValidityInfoBannerEnabled() -> Bool
-	
 	func isVerificationPolicyEnabled() -> Bool
 }
 
 class FeatureFlagManager: FeatureFlagManaging, Logging {
 	
-	weak var remoteConfigManager: RemoteConfigManaging? = Current.remoteConfigManager
+	private var remoteConfigManager: RemoteConfigManaging
 	private var versionSupplier: AppVersionSupplierProtocol?
 	
-	required init(versionSupplier: AppVersionSupplierProtocol?) {
+	required init(
+		versionSupplier: AppVersionSupplierProtocol?,
+		remoteConfigManager: RemoteConfigManaging
+	) {
 		
 		self.versionSupplier = versionSupplier
+		self.remoteConfigManager = remoteConfigManager
 	}
 	
 	func isNewValidityInfoBannerEnabled() -> Bool {
 		
-		return remoteConfigManager?.storedConfiguration.showNewValidityInfoCard ?? false
+		return remoteConfigManager.storedConfiguration.showNewValidityInfoCard ?? false
 	}
 	
 	func isVerificationPolicyEnabled() -> Bool {
 		
+		let configuration = remoteConfigManager.storedConfiguration
+		
 		guard let versionSupplier = versionSupplier,
-			  let configuration = remoteConfigManager?.storedConfiguration,
 			  let verificationPolicyVersion = configuration.verificationPolicyVersion else { return false }
 		
 		guard verificationPolicyVersion != "0" else {

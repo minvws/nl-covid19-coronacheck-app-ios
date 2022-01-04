@@ -10,8 +10,6 @@ import CoreData
 
 protocol ScanLogManaging: AnyObject {
 
-	init( dataStoreManager: DataStoreManaging)
-
 	func didWeScanQRs(withinLastNumberOfSeconds: Int) -> Bool
 
 	func getScanEntries(withinLastNumberOfSeconds: Int) -> Result<[ScanLogEntry], Error>
@@ -30,7 +28,7 @@ class ScanLogManager: ScanLogManaging {
 
 	private var dataStoreManager: DataStoreManaging
 
-	required init( dataStoreManager: DataStoreManaging = Current.dataStoreManager) {
+	required init(dataStoreManager: DataStoreManaging) {
 
 		self.dataStoreManager = dataStoreManager
 	}

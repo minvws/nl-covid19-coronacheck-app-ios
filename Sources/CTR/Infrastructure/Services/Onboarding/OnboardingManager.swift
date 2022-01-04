@@ -9,9 +9,6 @@ import Foundation
 
 protocol OnboardingManaging: AnyObject {
 
-	// Initialize
-	init(secureUserSettings: SecureUserSettingsProtocol)
-
 	/// Do we need onboarding? True if we do
 	var needsOnboarding: Bool { get }
 

@@ -209,6 +209,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 				coordinator: self,
 				eventMode: eventMode,
 				remoteEvents: remoteEvents,
+				identityChecker: IdentityChecker(cryptoManager: Current.cryptoManager),
 				eventsMightBeMissing: eventsMightBeMissing
 			)
 		)

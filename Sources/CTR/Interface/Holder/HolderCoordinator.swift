@@ -498,7 +498,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			backAction: { [weak self] in
 				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 			},
-			greencardLoader: GreenCardLoader(),
+			greencardLoader: Current.greenCardLoader,
 			userSettings: userSettings
 		)
 		viewModel.coordinator = self
@@ -512,7 +512,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			backAction: { [weak self] in
 				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 			},
-			greencardLoader: GreenCardLoader(),
+			greencardLoader: Current.greenCardLoader,
 			userSettings: userSettings
 		)
 		viewModel.coordinator = self
@@ -526,7 +526,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			backAction: { [weak self] in
 				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 			},
-			greencardLoader: GreenCardLoader(),
+			greencardLoader: Current.greenCardLoader,
 			userSettings: userSettings
 		)
 		viewModel.coordinator = self

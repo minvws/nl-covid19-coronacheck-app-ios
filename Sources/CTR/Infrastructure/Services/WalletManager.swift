@@ -36,8 +36,6 @@ protocol WalletManaging: AnyObject {
 
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool
 
-	init( dataStoreManager: DataStoreManaging)
-
 	/// List all the event groups
 	/// - Returns: all the event groups
 	func listEventGroups() -> [EventGroup]
@@ -73,7 +71,7 @@ class WalletManager: WalletManaging, Logging {
 
 	private var dataStoreManager: DataStoreManaging
 
-	required init( dataStoreManager: DataStoreManaging = Current.dataStoreManager) {
+	required init( dataStoreManager: DataStoreManaging) {
 
 		self.dataStoreManager = dataStoreManager
 

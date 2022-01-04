@@ -21,13 +21,6 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	/// Initialize core library
 	func initialize()
 
-	init(
-		now: @escaping () -> Date,
-		userSettings: UserSettingsProtocol,
-		reachability: ReachabilityProtocol?,
-		fileStorage: FileStorage,
-		flavor: AppFlavor)
-	
 	/// Store data in documents directory
 	/// - Parameters:
 	///   - data: Data that needs to be saved
@@ -86,22 +79,27 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	private let flavor: AppFlavor
 	private let now: () -> Date
 	private let userSettings: UserSettingsProtocol
-	private let networkManager: NetworkManaging = Current.networkManager
+	private let networkManager: NetworkManaging
 	private let reachability: ReachabilityProtocol?
+	private let remoteConfigManager: RemoteConfigManaging
 
 	// MARK: - Setup
 
 	init(
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
+		networkManager: NetworkManaging,
+		remoteConfigManager: RemoteConfigManaging,
 		reachability: ReachabilityProtocol?,
 		fileStorage: FileStorage = FileStorage(),
 		flavor: AppFlavor = AppFlavor.flavor) {
 
 		self.now = now
+		self.networkManager = networkManager
 		self.fileStorage = fileStorage
 		self.flavor = flavor
 		self.userSettings = userSettings
+		self.remoteConfigManager = remoteConfigManager
 		self.shouldInitialize = .empty
 		self.reachability = reachability
 		registerTriggers()
@@ -191,7 +189,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		isLoading = true
 
 		let newValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
-			configuration: Current.remoteConfigManager.storedConfiguration,
+			configuration: remoteConfigManager.storedConfiguration,
 			lastFetchedTimestamp: userSettings.issuerKeysFetchedTimestamp,
 			isAppLaunching: isAppLaunching,
 			now: now
