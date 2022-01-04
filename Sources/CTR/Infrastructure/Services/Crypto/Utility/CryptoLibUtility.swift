@@ -37,7 +37,7 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 		completion: ((Result<Bool, ServerError>) -> Void)?)
 
 	/// Reset to default
-	func reset()
+	func wipePersistedData()
 }
 
 final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
@@ -241,7 +241,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	}
 
 	/// Reset to default
-	func reset() {
+	func wipePersistedData() {
 
 		/// Remove existing files
 		if fileStorage.fileExists(CryptoLibUtility.File.publicKeys.name) {

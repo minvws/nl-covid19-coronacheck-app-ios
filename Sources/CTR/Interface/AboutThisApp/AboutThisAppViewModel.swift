@@ -182,17 +182,17 @@ class AboutThisAppViewModel: Logging {
 			cancelAction: nil,
 			cancelTitle: L.generalCancel(),
 			okAction: { [weak self] _ in
-				self?.resetDataAndRestart()
+				self?.wipePersistedData()
 			},
 			okTitle: L.holderCleardataAlertRemove(),
 			okActionIsDestructive: true
 		)
 	}
 
-	func resetDataAndRestart() {
+	func wipePersistedData() {
 
-		Current.reset(flavor: flavor)
-		self.userSettings.reset()
+		Current.wipePersistedData(flavor: flavor)
+		self.userSettings.wipePersistedData()
 		self.coordinator?.restart()
 	}
 

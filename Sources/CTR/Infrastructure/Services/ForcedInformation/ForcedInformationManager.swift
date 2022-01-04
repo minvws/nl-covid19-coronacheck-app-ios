@@ -25,6 +25,9 @@ protocol ForcedInformationManaging {
 
 	/// Give consent
 	func consentGiven()
+
+	/// Reset the manager
+	func wipePersistedData()
 }
 
 class ForcedInformationManager: ForcedInformationManaging {
@@ -84,5 +87,11 @@ class ForcedInformationManager: ForcedInformationManaging {
 
 		guard let currentVersion = factory?.information.version else { return }
 		forcedInformationData.lastSeenVersion = currentVersion
+	}
+
+	/// Reset the manager, clear all the data
+	func wipePersistedData() {
+
+		SecureUserSettings().$forcedInformationData.clearData()
 	}
 }

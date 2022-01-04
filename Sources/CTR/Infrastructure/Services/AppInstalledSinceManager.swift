@@ -10,10 +10,12 @@ import Foundation
 protocol AppInstalledSinceManaging: AnyObject {
 
 	var firstUseDate: Date? { get }
-
+	
 	func update(serverHeaderDate: String, ageHeader: String?)
 
 	func update(dateProvider: DocumentsDirectoryCreationDateProtocol)
+
+	func wipePersistedData()
 }
 
 final class AppInstalledSinceManager: AppInstalledSinceManaging {
@@ -68,6 +70,10 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		if let date = dateProvider.getDocumentsDirectoryCreationDate() {
 			appInstalledDate = date
 		}
+	}
+
+	func wipePersistedData() {
+		appInstalledDate = nil
 	}
 }
 

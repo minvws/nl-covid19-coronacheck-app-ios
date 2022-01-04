@@ -18,7 +18,7 @@ protocol ScanLogManaging: AnyObject {
 
 	func deleteExpiredScanLogEntries(seconds: Int)
 
-	func reset()
+	func wipePersistedData()
 }
 
 class ScanLogManager: ScanLogManaging {
@@ -84,7 +84,7 @@ class ScanLogManager: ScanLogManaging {
 		}
 	}
 
-	func reset() {
+	func wipePersistedData() {
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {

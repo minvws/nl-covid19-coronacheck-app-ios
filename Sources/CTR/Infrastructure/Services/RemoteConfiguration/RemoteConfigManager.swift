@@ -23,7 +23,7 @@ protocol RemoteConfigManaging: AnyObject {
 		immediateCallbackIfWithinTTL: @escaping () -> Void,
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
 
-	func reset()
+	func wipePersistedData()
 }
 
 /// The remote configuration manager
@@ -227,7 +227,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 extension RemoteConfigManager {
 
-	func reset() {
+	func wipePersistedData() {
 		storedConfiguration = .default
 	}
 }

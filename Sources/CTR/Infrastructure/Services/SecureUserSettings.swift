@@ -21,7 +21,7 @@ protocol SecureUserSettingsProtocol: AnyObject {
 	var storedConfiguration: RemoteConfiguration { get set }
 	var riskLevel: RiskLevel? { get set }
 	
-	func reset()
+	func wipePersistedData()
 }
 
 class SecureUserSettings: SecureUserSettingsProtocol {
@@ -59,7 +59,7 @@ class SecureUserSettings: SecureUserSettingsProtocol {
 
 extension SecureUserSettings {
 
-	func reset() {
+	func wipePersistedData() {
 		scanLockUntil = Defaults.scanLockUntil
 		appInstalledDate = Defaults.appInstalledDate
 		cryptoData = Defaults.cryptoData
