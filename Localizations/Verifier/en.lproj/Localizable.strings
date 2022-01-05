@@ -134,9 +134,11 @@
 "verifier_result_access_title_highrisk" = "2G check done";
 "verifier_result_access_title_lowrisk" = "3G check done";
 "verifier_risksetting_2g_plus_subtitle" = "You can only give access to visitors with a vaccination or recovery certificate and a test certificate.";
+"verifier_risksetting_2g_plus_title" = "2G+ access";
 "verifier_risksetting_active_lock_warning_header" = "<p><b>Please note:</b> if you change scan settings while scanning, you have to wait for %li minutes before you can scan again.</p>";
 "verifier_risksetting_active_title" = "Change scan setting";
 "verifier_risksetting_changeselection_2g" = "Set to 2G access";
+"verifier_risksetting_changeselection_2g_plus" = "Set to 2G+ access";
 "verifier_risksetting_changeselection_3g" = "Set to 3G access";
 "verifier_risksetting_changeselection_button" = "Change";
 "verifier_risksetting_confirmation_button" = "Confirm";

@@ -9,7 +9,7 @@ import UIKit
 
 final class RiskIndicatorIconView: BaseView {
 	
-	private let imageView = UIImageView(image: I.riskEllipse())
+	private let imageView = UIImageView(image: I.scanner.riskEllipse())
 	
 	/// Setup all the views
 	override func setupViews() {

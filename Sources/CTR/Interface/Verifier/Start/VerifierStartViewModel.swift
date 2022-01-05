@@ -45,13 +45,13 @@ class VerifierStartViewModel: Logging {
 		var largeImage: UIImage? {
 			switch self {
 				case .noLevelSet, .lowRisk:
-					return I.scanStartLowRisk()
+					return I.scanner.scanStartLowRisk()
 				case .highRisk:
-					return I.scanStartHighRisk()
+					return I.scanner.scanStartHighRisk()
 				case .highPlusRisk:
-					return I.scanStartHighRisk()
+					return I.scanner.scanStartHighPlusRisk()
 				case .locked:
-					return I.scanStartLocked()
+					return I.scanner.scanStartLocked()
 			}
 		}
 		

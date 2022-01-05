@@ -133,7 +133,9 @@
 "verifier_result_access_title_2g_plus" = "2G+ controle klaar";
 "verifier_result_access_title_highrisk" = "2G-controle klaar";
 "verifier_result_access_title_lowrisk" = "3G-controle klaar";
+"verifier_result_denied_personal_data_mismatch_title" = "De QR-codes hebben niet dezelfde persoonsgegevens";
 "verifier_risksetting_2g_plus_subtitle" = "Je kunt alleen toegang geven aan bezoekers met een vaccinatie- of herstelbewijs én een testbewijs.";
+"verifier_risksetting_2g_plus_title" = "2G+ toegang";
 "verifier_risksetting_active_lock_warning_header" = "<p><b>Let op:</b> Als je tijdens het scannen wisselt van scan-instelling moet je %li minuten wachten voordat je weer kunt scannen.</p>";
 "verifier_risksetting_active_title" = "Scan-instelling aanpassen";
 "verifier_risksetting_changeselection_2g" = "2G-toegang ingesteld";
@@ -172,5 +174,5 @@
 "verifier_scannextinstruction_title_supplemental" = "Scan nu een vaccinatie- of herstelbewijs";
 "verifier_scannextinstruction_title_test" = "Scan nu het testbewijs";
 "verifier_start_scan_qr_policy_indication_2g" = "<b>2G</b>-toegang ingesteld";
-"verifier_start_scan_qr_policy_indication_2g_plus" = "<b>2G+</b>toegang ingesteld";
+"verifier_start_scan_qr_policy_indication_2g_plus" = "<b>2G+</b> toegang ingesteld";
 "verifier_start_scan_qr_policy_indication_3g" = "<b>3G</b>-toegang ingesteld";

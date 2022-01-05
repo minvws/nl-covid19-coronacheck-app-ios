@@ -134,7 +134,7 @@ final class RiskLevelIndicator: BaseView {
 	
 	private let indicatorImageView: UIImageView = {
 		
-		let imageView = UIImageView(image: I.riskEllipse())
+		let imageView = UIImageView(image: I.scanner.riskEllipse())
 		imageView.widthAnchor.constraint(equalToConstant: 12).isActive = true
 		imageView.contentMode = .scaleAspectFit
 		
