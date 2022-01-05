@@ -14,31 +14,16 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 	/// Subject under test
 	var sut: HolderDashboardQRCardDatasource!
-
-	var cryptoManagerSpy: CryptoManagerSpy!
-	var dataStoreManager: DataStoreManager!
-	var walletManagingSpy: WalletManagerSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 		super.setUp()
-
-		cryptoManagerSpy = CryptoManagerSpy()
-		dataStoreManager = DataStoreManager(.inMemory)
-		walletManagingSpy = WalletManagerSpy()
-
-		Services.use(cryptoManagerSpy)
-		Services.use(walletManagingSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
+		environmentSpies = setupEnvironmentSpies()
 	}
 
 	func test_settingDidUpdateCallbackTriggersReloadWithCallback() {
 		// Arrange
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		// Act
 		var wasUpdated: Bool = false
@@ -52,12 +37,12 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 	func test_fetching_removes_expired_greencards() {
 		// Arrange
-		_ = GreenCard.sampleDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: dataStoreManager)
-		self.walletManagingSpy.stubbedRemoveExpiredGreenCardsResult = [
+		_ = GreenCard.sampleDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedRemoveExpiredGreenCardsResult = [
 			(greencardType: "domestic", originType: "vaccination")
 		]
 
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		// Act
 		var cards = [HolderDashboardViewModel.QRCard]()
@@ -68,7 +53,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		}
 
 		// Assert
-		expect(self.walletManagingSpy.invokedRemoveExpiredGreenCards) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExpiredGreenCards) == true
 		expect(expiredQRs.count) == 1
 		expect(expiredQRs.first?.type) == .vaccination
 		expect(cards.count) == 0
@@ -77,13 +62,13 @@ class HolderDashboardDatasourceTests: XCTestCase {
 	func test_fetching_removes_expired_multiple_greencards() {
 
 		// Arrange
-		_ = GreenCard.sampleInternationalMultipleExpiredDCC(dataStoreManager: dataStoreManager)
-		self.walletManagingSpy.stubbedRemoveExpiredGreenCardsResult = [
+		_ = GreenCard.sampleInternationalMultipleExpiredDCC(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedRemoveExpiredGreenCardsResult = [
 			(greencardType: "eu", originType: "vaccination"),
 			(greencardType: "eu", originType: "vaccination")
 		]
 
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		// Act
 		var cards = [HolderDashboardViewModel.QRCard]()
@@ -94,7 +79,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		}
 
 		// Assert
-		expect(self.walletManagingSpy.invokedRemoveExpiredGreenCards) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExpiredGreenCards) == true
 		expect(expiredQRs.count) == 2
 		expect(expiredQRs.first?.type) == .vaccination
 		expect(expiredQRs.first?.region) == .europeanUnion
@@ -105,11 +90,11 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 	func test_fetching_fetchesExpiringDomesticGreencard() {
 		// Arrange
-		let greencard = GreenCard.sampleDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		walletManagingSpy.stubbedListGreenCardsResult = [greencard]
+		let greencard = GreenCard.sampleDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greencard]
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -139,11 +124,11 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 	func test_fetching_expiredWithMoreToFetchDomesticGreencard() {
 		// Arrange
-		let greencard = GreenCard.sampleDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: dataStoreManager)
-		walletManagingSpy.stubbedListGreenCardsResult = [greencard]
+		let greencard = GreenCard.sampleDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greencard]
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -173,11 +158,11 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 	func test_fetching_domestic_origins_are_grouped_into_one_card() {
 		// Arrange
-		let greencard = GreenCard.sampleDomesticCredentialsVaccinationExpiringIn10DaysWithMoreToFetchWithValidTest(dataStoreManager: dataStoreManager)
-		walletManagingSpy.stubbedListGreenCardsResult = [greencard]
+		let greencard = GreenCard.sampleDomesticCredentialsVaccinationExpiringIn10DaysWithMoreToFetchWithValidTest(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greencard]
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -220,11 +205,11 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 	func test_fetching_international_greencards_with_different_origins_are_not_grouped() {
 		// Arrange
-		let greencards = GreenCard.sampleInternationalCredentialsVaccinationExpiringIn10DaysWithMoreToFetchWithValidTest(dataStoreManager: dataStoreManager)
-		walletManagingSpy.stubbedListGreenCardsResult = greencards
+		let greencards = GreenCard.sampleInternationalCredentialsVaccinationExpiringIn10DaysWithMoreToFetchWithValidTest(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = greencards
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -273,11 +258,11 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 	func test_fetching_international_single_greencard_with_different_origins_are_not_grouped() {
 		// Arrange
-		let greencards = GreenCard.sampleInternationalCredentialsVaccinationExpiringIn10DaysWithMoreToFetchWithValidTest(dataStoreManager: dataStoreManager)
-		walletManagingSpy.stubbedListGreenCardsResult = greencards
+		let greencards = GreenCard.sampleInternationalCredentialsVaccinationExpiringIn10DaysWithMoreToFetchWithValidTest(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = greencards
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -326,11 +311,11 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 	func test_fetching_international_multiple_greencards_with_same_origins_are_grouped() {
 		// Arrange
-		let greencards = GreenCard.sampleInternationalMultipleVaccineDCC(dataStoreManager: dataStoreManager)
-		walletManagingSpy.stubbedListGreenCardsResult = greencards
+		let greencards = GreenCard.sampleInternationalMultipleVaccineDCC(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = greencards
 
 		// Act
-		sut = HolderDashboardQRCardDatasource(now: { now })
+		sut = HolderDashboardQRCardDatasource()
 
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()

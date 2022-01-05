@@ -10,8 +10,6 @@ import XCTest
 
 class OpenIdManagerSpy: OpenIdManaging {
 
-	required init() {}
-
 	var invokedRequestAccessToken = false
 	var invokedRequestAccessTokenCount = 0
 	var stubbedRequestAccessTokenOnCompletionResult: (TVSAuthorizationToken, Void)?

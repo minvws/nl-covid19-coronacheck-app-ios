@@ -12,12 +12,12 @@ import Nimble
 final class DeniedAccessViewModelTests: XCTestCase {
 	
 	private var sut: DeniedAccessViewModel!
-	
+	private var environmentSpies: EnvironmentSpies!
 	private var verifierCoordinatorSpy: VerifierCoordinatorDelegateSpy!
 	
 	override func setUp() {
 		super.setUp()
-		
+		environmentSpies = setupEnvironmentSpies()
 		verifierCoordinatorSpy = VerifierCoordinatorDelegateSpy()
 		
 		sut = DeniedAccessViewModel(coordinator: verifierCoordinatorSpy)

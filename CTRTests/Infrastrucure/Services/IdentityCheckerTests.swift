@@ -12,15 +12,13 @@ import Nimble
 class IdentityCheckerTests: XCTestCase {
 
 	var sut: IdentityChecker!
-	var cryptoSpy: CryptoManagerSpy!
-	var dataStoreManager: DataStoreManaging!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 		super.setUp()
 
-		dataStoreManager = DataStoreManager(.inMemory)
-		cryptoSpy = CryptoManagerSpy()
-		sut = IdentityChecker(cryptoManager: cryptoSpy)
+		environmentSpies = setupEnvironmentSpies()
+		sut = IdentityChecker()
 	}
 
 	// MARK: - Tests
@@ -288,7 +286,7 @@ class IdentityCheckerTests: XCTestCase {
 		if let payloadData = try? JSONEncoder().encode(wrapper) {
 		   let base64String = payloadData.base64EncodedString()
 			let signedResponse = SignedResponse(payload: base64String, signature: "does not matter for this test")
-			let context = dataStoreManager.managedObjectContext()
+			let context = environmentSpies.dataStoreManager.managedObjectContext()
 			context.performAndWait {
 				if let wallet = WalletModel.createTestWallet(managedContext: context),
 				   let jsonData = try? JSONEncoder().encode(signedResponse) {

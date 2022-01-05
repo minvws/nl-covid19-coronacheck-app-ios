@@ -10,8 +10,6 @@ import XCTest
 
 class JailBreakProtocolSpy: JailBreakProtocol {
 
-	required init() {}
-
 	var invokedIsJailBroken = false
 	var invokedIsJailBrokenCount = 0
 	var stubbedIsJailBrokenResult: Bool! = false

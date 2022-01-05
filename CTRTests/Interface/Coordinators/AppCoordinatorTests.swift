@@ -17,11 +17,12 @@ class AppCoordinatorTests: XCTestCase {
 	var navigationSpy: NavigationControllerSpy!
 
 	var window = UIWindow()
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
-
 		super.setUp()
-
+		
+		environmentSpies = setupEnvironmentSpies()
 		navigationSpy = NavigationControllerSpy()
 		sut = AppCoordinator(
 			navigationController: navigationSpy

@@ -21,13 +21,6 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	/// Initialize core library
 	func initialize()
 
-	init(
-		now: @escaping () -> Date,
-		userSettings: UserSettingsProtocol,
-		reachability: ReachabilityProtocol?,
-		fileStorage: FileStorage,
-		flavor: AppFlavor)
-	
 	/// Store data in documents directory
 	/// - Parameters:
 	///   - data: Data that needs to be saved
@@ -44,7 +37,7 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 		completion: ((Result<Bool, ServerError>) -> Void)?)
 
 	/// Reset to default
-	func reset()
+	func wipePersistedData()
 }
 
 final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
@@ -86,22 +79,27 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	private let flavor: AppFlavor
 	private let now: () -> Date
 	private let userSettings: UserSettingsProtocol
-	private let networkManager: NetworkManaging = Services.networkManager
+	private let networkManager: NetworkManaging
 	private let reachability: ReachabilityProtocol?
+	private let remoteConfigManager: RemoteConfigManaging
 
 	// MARK: - Setup
 
 	init(
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
+		networkManager: NetworkManaging,
+		remoteConfigManager: RemoteConfigManaging,
 		reachability: ReachabilityProtocol?,
 		fileStorage: FileStorage = FileStorage(),
 		flavor: AppFlavor = AppFlavor.flavor) {
 
 		self.now = now
+		self.networkManager = networkManager
 		self.fileStorage = fileStorage
 		self.flavor = flavor
 		self.userSettings = userSettings
+		self.remoteConfigManager = remoteConfigManager
 		self.shouldInitialize = .empty
 		self.reachability = reachability
 		registerTriggers()
@@ -191,7 +189,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		isLoading = true
 
 		let newValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
-			configuration: Services.remoteConfigManager.storedConfiguration,
+			configuration: remoteConfigManager.storedConfiguration,
 			lastFetchedTimestamp: userSettings.issuerKeysFetchedTimestamp,
 			isAppLaunching: isAppLaunching,
 			now: now
@@ -243,7 +241,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	}
 
 	/// Reset to default
-	func reset() {
+	func wipePersistedData() {
 
 		/// Remove existing files
 		if fileStorage.fileExists(CryptoLibUtility.File.publicKeys.name) {

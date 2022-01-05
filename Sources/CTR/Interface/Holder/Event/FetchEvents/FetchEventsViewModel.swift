@@ -13,8 +13,8 @@ final class FetchEventsViewModel: Logging {
 
 	private var tvsToken: TVSAuthorizationToken
 	private var eventMode: EventMode
-	private let networkManager: NetworkManaging = Services.networkManager
-	private let mappingManager: MappingManaging = Services.mappingManager
+	private let networkManager: NetworkManaging = Current.networkManager
+	private let mappingManager: MappingManaging = Current.mappingManager
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in

@@ -255,9 +255,9 @@ private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsB
 		let value = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
 		switch (riskLevel, shouldShowRiskLevel) {
 			case (.high, true):
-				return value + (Services.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_2g() : "")
+				return value + (Current.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_2g() : "")
 			case (.low, true):
-				return value + (Services.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_3g() : "")
+				return value + (Current.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_3g() : "")
 			default:
 				return value
 		}

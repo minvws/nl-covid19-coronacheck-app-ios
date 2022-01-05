@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import UIKit
 import CoreData
@@ -107,7 +106,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	var dashboardRegionToggleValue: QRCodeValidityRegion {
 		didSet {
 			DispatchQueue.global().async {
-				self.userSettings.dashboardRegionToggleValue = self.dashboardRegionToggleValue
+				Current.userSettings.dashboardRegionToggleValue = self.dashboardRegionToggleValue
 			}
 		}
 	}
@@ -133,12 +132,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
 
 	// Dependencies:
-	private let now: () -> Date
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
-	private let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
-	private let userSettings: UserSettingsProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private var recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol
 	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
@@ -149,19 +144,15 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
 		datasource: HolderDashboardQRCardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
-		userSettings: UserSettingsProtocol,
 		recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
-		versionSupplier: AppVersionSupplierProtocol?,
-		now: @escaping () -> Date
+		versionSupplier: AppVersionSupplierProtocol?
 	) {
 
 		self.coordinator = coordinator
 		self.datasource = datasource
 		self.strippenRefresher = strippenRefresher
-		self.userSettings = userSettings
-		self.now = now
-		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
+		self.dashboardRegionToggleValue = Current.userSettings.dashboardRegionToggleValue
 		self.recoveryValidityExtensionManager = recoveryValidityExtensionManager
 		self.configurationNotificationManager = configurationNotificationManager
 		self.versionSupplier = versionSupplier
@@ -170,10 +161,10 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			qrCards: [],
 			expiredGreenCards: [],
 			isRefreshingStrippen: false,
-			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false,
+			deviceHasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false,
 			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
-				now: now(),
-				remoteConfiguration: remoteConfigManager.storedConfiguration
+				now: Current.now(),
+				remoteConfiguration: Current.remoteConfigManager.storedConfiguration
 			)
 		)
 
@@ -188,12 +179,12 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		setupNewValidityInfoForVaccinationsAndRecoveriesBanner()
 
 		// If the config ever changes, reload dependencies:
-		remoteConfigUpdateObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
+		remoteConfigUpdateObserverToken = Current.remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
             self?.strippenRefresher.load()
             self?.recoveryValidityExtensionManager.reload()
 		}
 
-		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+		clockDeviationObserverToken = Current.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
 			self?.state.deviceHasClockDeviation = hasClockDeviation
 			self?.datasource.reload() // this could cause some QR code states to change, so reload.
 		}
@@ -201,9 +192,9 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 
 	deinit {
 		notificationCenter.removeObserver(self)
-		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
-		remoteConfigUpdateObserverToken.map(remoteConfigManager.removeObserver)
-		remoteConfigUpdatesConfigurationWarningToken.map(remoteConfigManager.removeObserver)
+		clockDeviationObserverToken.map(Current.clockDeviationManager.removeDeviationChangeObserver)
+		remoteConfigUpdateObserverToken.map(Current.remoteConfigManager.removeObserver)
+		remoteConfigUpdatesConfigurationWarningToken.map(Current.remoteConfigManager.removeObserver)
 	}
 
 	// MARK: - Setup
@@ -218,8 +209,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				state.expiredGreenCards += expiredGreenCards
 				state.shouldShowDomestic3GTestBanner = qrCardDataItems.contains(where: { qrCard in
 					// Assume that domestic has just one greencard.
-					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: self.now())
-				})
+					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: Current.now())
+			   })
 				self.state = state
 			}
 		}
@@ -246,16 +237,16 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		}
 		recoveryValidityExtensionManager.reload()
 	}
-
+	
 	func setupConfigNotificationManager() {
 
 		registerForConfigAlmostOutOfDateUpdate()
-		remoteConfigUpdatesConfigurationWarningToken = remoteConfigManager.appendReloadObserver { [weak self] config, _, _ in
+		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.appendReloadObserver { [weak self] config, _, _ in
 
 			guard let self = self else { return }
 
 			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
-				now: self.now(),
+				now: Current.now(),
 				remoteConfiguration: config
 			)
 			self.recoveryValidityExtensionManager.reload()
@@ -267,32 +258,35 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	private func registerForConfigAlmostOutOfDateUpdate() {
 
 		configurationNotificationManager.registerForAlmostOutOfDateUpdate(
-			now: self.now(),
-			remoteConfiguration: remoteConfigManager.storedConfiguration) { [weak self] in
+			now: Current.now(),
+			remoteConfiguration: Current.remoteConfigManager.storedConfiguration) { [weak self] in
 
 			guard let self = self else { return }
 
 			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
-				now: self.now(),
-				remoteConfiguration: self.remoteConfigManager.storedConfiguration
+				now: Current.now(),
+				remoteConfiguration: Current.remoteConfigManager.storedConfiguration
 			)
 		}
 	}
 	
 	private func setupNewValidityInfoForVaccinationsAndRecoveriesBanner() {
+		let userSettings = Current.userSettings
+		let featureFlagManager = Current.featureFlagManager
+		let walletManager = Current.walletManager
 		
-		if userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled() {
+		if userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard && featureFlagManager.isNewValidityInfoBannerEnabled() {
 			// Set checked = true, do this only once
 			userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = false
 			
-			let hasDomesticRecoveryGreenCards = Services.walletManager.hasDomesticGreenCard(originType: OriginType.recovery.rawValue)
-			let hasDomesticVaccinationGreenCards = Services.walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
+			let hasDomesticRecoveryGreenCards = walletManager.hasDomesticGreenCard(originType: OriginType.recovery.rawValue)
+			let hasDomesticVaccinationGreenCards = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
 			if hasDomesticRecoveryGreenCards || hasDomesticVaccinationGreenCards {
 				// if we have a domestic recovery or vaccination, show the banner.
 				userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
 			}
 		}
-		state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !self.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled()
+		state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && featureFlagManager.isNewValidityInfoBannerEnabled()
 	}
 
 	// MARK: - View Lifecycle callbacks:
@@ -312,16 +306,16 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			forValidityRegion: .domestic,
 			state: state,
 			actionHandler: self,
-			remoteConfigManager: remoteConfigManager,
-			now: now()
+			remoteConfigManager: Current.remoteConfigManager,
+			now: Current.now()
 		)
 
 		internationalCards = HolderDashboardViewModel.assembleCards(
 			forValidityRegion: .europeanUnion,
 			state: state,
 			actionHandler: self,
-			remoteConfigManager: remoteConfigManager,
-			now: now()
+			remoteConfigManager: Current.remoteConfigManager,
+			now: Current.now()
 		)
 
 		hasAddCertificateMode = state.qrCards.isEmpty
@@ -363,7 +357,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 
 			case (.noInternet, .expiring(let expiryDate), false):
 				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Presenting alert.")
-				currentlyPresentedAlert = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher, now: now())
+				currentlyPresentedAlert = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher, now: Current.now())
 
 			// ❤️‍🩹 NETWORK ERRORS: Refresher has entered a failed state (i.e. Server Error)
 
@@ -399,7 +393,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	
 	fileprivate func setupRecommendedVersion() {
 		
-		let recommendedVersion = remoteConfigManager.storedConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
+		let recommendedVersion = Current.remoteConfigManager.storedConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
 		let currentVersion = versionSupplier?.getCurrentVersion().fullVersionString() ?? "1.0.0"
 		self.state.shouldShowRecommendedUpdateBanner = recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending
 	}
@@ -432,15 +426,15 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 
 			var state = self.state
 
-			state.shouldShowRecoveryValidityExtensionCompleteBanner = !self.userSettings.hasDismissedRecoveryValidityExtensionCompletionCard
-			state.shouldShowRecoveryValidityReinstationCompleteBanner = !self.userSettings.hasDismissedRecoveryValidityReinstationCompletionCard
+			state.shouldShowRecoveryValidityExtensionCompleteBanner = !Current.userSettings.hasDismissedRecoveryValidityExtensionCompletionCard
+			state.shouldShowRecoveryValidityReinstationCompleteBanner = !Current.userSettings.hasDismissedRecoveryValidityReinstationCompletionCard
 			
-			if !self.userSettings.hasDismissedRecoveryValidityExtensionCompletionCard || !self.userSettings.hasDismissedRecoveryValidityReinstationCompletionCard {
+			if !Current.userSettings.hasDismissedRecoveryValidityExtensionCompletionCard || !Current.userSettings.hasDismissedRecoveryValidityReinstationCompletionCard {
 				state.shouldShowRecoveryValidityExtensionAvailableBanner = false
 				state.shouldShowRecoveryValidityReinstationAvailableBanner = false
 			}
 			
-			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !self.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Services.featureFlagManager.isNewValidityInfoBannerEnabled()
+			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Current.featureFlagManager.isNewValidityInfoBannerEnabled()
 			
 			self.state = state
 		}
@@ -460,8 +454,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	// MARK: - HolderDashboardCardUserActionHandling
 	
 	func didTapConfigAlmostOutOfDateCTA() {
-		guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
-			  let timeToLive = remoteConfigManager.storedConfiguration.configTTL else { return }
+		guard let configFetchedTimestamp = Current.userSettings.configFetchedTimestamp,
+			  let timeToLive = Current.remoteConfigManager.storedConfiguration.configTTL else { return }
 		
 		let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLive))
 		let configValidUntilDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: configValidUntilDate)
@@ -504,7 +498,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	
 	func didTapRecommendedUpdate() {
 		
-		guard let url = remoteConfigManager.storedConfiguration.appStoreURL else {
+		guard let url = Current.remoteConfigManager.storedConfiguration.appStoreURL else {
 			return
 		}
 		openUrl(url)
@@ -519,7 +513,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	}
 	
 	func didTapRecoveryValidityExtensionCompleteClose() {
-		userSettings.hasDismissedRecoveryValidityExtensionCompletionCard = true
+		Current.userSettings.hasDismissedRecoveryValidityExtensionCompletionCard = true
 	}
 	
 	func didTapRecoveryValidityReinstationAvailableMoreInfo() {
@@ -531,7 +525,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	}
 	
 	func didTapRecoveryValidityReinstationCompleteClose() {
-		userSettings.hasDismissedRecoveryValidityReinstationCompletionCard = true
+		Current.userSettings.hasDismissedRecoveryValidityReinstationCompletionCard = true
 	}
 	
 	func didTapNewValidityBannerMoreInfo() {
@@ -542,7 +536,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	
 	func didTapNewValidiyBannerClose() {
 		
-		userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = true
+		Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = true
 	}
 	
 	// MARK: - Static Methods

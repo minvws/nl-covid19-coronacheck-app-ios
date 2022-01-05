@@ -17,9 +17,8 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	private var sut: RiskSettingSelectedViewController!
 	
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
+	private var environmentSpies: EnvironmentSpies!
 	private var viewModel: RiskSettingSelectedViewModel!
-	private var riskLevelManagingSpy: RiskLevelManagerSpy!
-	private var scanLogManagingSpy: ScanLogManagingSpy!
 	
 	var window = UIWindow()
 	
@@ -27,11 +26,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		super.setUp()
 		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		riskLevelManagingSpy = RiskLevelManagerSpy()
-
-		scanLogManagingSpy = ScanLogManagingSpy()
-		scanLogManagingSpy.stubbedDidWeScanQRsResult = false
-		Services.use(scanLogManagingSpy)
+		environmentSpies = setupEnvironmentSpies()
 	}
 	
 	func loadView() {
@@ -39,24 +34,14 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		window.addSubview(sut.view)
 		RunLoop.current.run(until: Date())
 	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
-	}
 	
 	// MARK: - Tests
 	
 	func test_bindings() {
 		// Given
-		let config: RemoteConfiguration = .default
-		riskLevelManagingSpy.stubbedState = .low
-		viewModel = RiskSettingSelectedViewModel(
-			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagingSpy,
-			configuration: config
-		)
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		
+		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 		
@@ -76,13 +61,8 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_low() {
 		// Given
-		let config: RemoteConfiguration = .default
-		riskLevelManagingSpy.stubbedState = .low
-		viewModel = RiskSettingSelectedViewModel(
-			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagingSpy,
-			configuration: config
-		)
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 		
@@ -97,13 +77,8 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_high() {
 		// Given
-		let config: RemoteConfiguration = .default
-		riskLevelManagingSpy.stubbedState = .high
-		viewModel = RiskSettingSelectedViewModel(
-			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagingSpy,
-			configuration: config
-		)
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 		
@@ -118,15 +93,9 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 
 	func test_warning() {
 		// Given
-		scanLogManagingSpy.stubbedDidWeScanQRsResult = true
-
-		let config: RemoteConfiguration = .default
-		riskLevelManagingSpy.stubbedState = .high
-		viewModel = RiskSettingSelectedViewModel(
-			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagingSpy,
-			configuration: config
-		)
+		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 
@@ -141,15 +110,10 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	func test_warningHidden() {
 		// Given
-		scanLogManagingSpy.stubbedDidWeScanQRsResult = false
+		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = false
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
 
-		let config: RemoteConfiguration = .default
-		riskLevelManagingSpy.stubbedState = .low
-		viewModel = RiskSettingSelectedViewModel(
-			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagingSpy,
-			configuration: config
-		)
+		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
 

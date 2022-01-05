@@ -14,23 +14,17 @@ class WalletManagerTests: XCTestCase {
 
 	private var sut: WalletManager!
 	private var dataStoreManager: DataStoreManaging!
-	private var cryptoManagerSpy: CryptoManagerSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 
 		super.setUp()
+		environmentSpies = setupEnvironmentSpies()
+		
 		dataStoreManager = DataStoreManager(.inMemory)
-		cryptoManagerSpy = CryptoManagerSpy()
-		Services.use(cryptoManagerSpy)
 		sut = WalletManager(dataStoreManager: dataStoreManager)
 	}
 
-	override func tearDown() {
-		
-		super.tearDown()
-		Services.revertToDefaults()
-	}
-	
 	func test_initializer() {
 
 		// Given
@@ -494,10 +488,10 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExistingGreenCards_oneGreenCard() {
 		
 		// Given
-		cryptoManagerSpy.stubbedCreateCredentialResult = .failure(CryptoError.unknown)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .failure(CryptoError.unknown)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
-			cryptoManager: cryptoManagerSpy
+			cryptoManager: environmentSpies.cryptoManagerSpy
 		)
 		
 		// When
@@ -510,14 +504,14 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExistingGreenCards_twoGreenCards() {
 		
 		// Given
-		cryptoManagerSpy.stubbedCreateCredentialResult = .failure(CryptoError.unknown)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .failure(CryptoError.unknown)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
-			cryptoManager: cryptoManagerSpy
+			cryptoManager: environmentSpies.cryptoManagerSpy
 		)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
-			cryptoManager: cryptoManagerSpy
+			cryptoManager: environmentSpies.cryptoManagerSpy
 		)
 		
 		// When
@@ -539,12 +533,12 @@ class WalletManagerTests: XCTestCase {
 		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
 		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
 		let jsonData = Data(jsonString.utf8)
-		cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
-			cryptoManager: cryptoManagerSpy
+			cryptoManager: environmentSpies.cryptoManagerSpy
 		)
 		
 		// Then
@@ -568,12 +562,12 @@ class WalletManagerTests: XCTestCase {
 		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
 		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
 		let jsonData = Data(jsonString.utf8)
-		cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeRecoveryGreenCardExpiresIn30Days,
-			cryptoManager: cryptoManagerSpy
+			cryptoManager: environmentSpies.cryptoManagerSpy
 		)
 		
 		// Then
@@ -592,12 +586,12 @@ class WalletManagerTests: XCTestCase {
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOrigin],
 			credential: "test_storeInternationalGreenCard_vaccination"
 		)
-		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
 			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
 		)
 		
 		// When
-		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
+		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: environmentSpies.cryptoManagerSpy)
 		
 		// Then
 		expect(success) == true
@@ -615,12 +609,12 @@ class WalletManagerTests: XCTestCase {
 			origins: [RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days],
 			credential: "test_storeInternationalGreenCard_recovery"
 		)
-		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
 			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
 		)
 		
 		// When
-		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
+		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: environmentSpies.cryptoManagerSpy)
 		
 		// Then
 		expect(success) == true
@@ -638,13 +632,13 @@ class WalletManagerTests: XCTestCase {
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days],
 			credential: "test_storeInternationalGreenCard_twoVaccinations"
 		)
-		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
 			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
 		)
 		
 		// When
-		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
-		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
+		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: environmentSpies.cryptoManagerSpy)
+		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: environmentSpies.cryptoManagerSpy)
 		
 		// Then
 		expect(self.sut.listGreenCards()).to(haveCount(2))

@@ -16,8 +16,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	// MARK: Subject under test
 	private var sut: AboutThisAppViewController!
 	private var coordinatorSpy: AboutThisAppViewModelCoordinatorSpy!
-	private var userSettingsSpy: UserSettingsSpy!
-	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
+	private var environmentSpies: EnvironmentSpies!
 	
 	var window: UIWindow!
 	
@@ -25,27 +24,17 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		featureFlagManagerSpy = FeatureFlagManagerSpy()
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		Services.use(featureFlagManagerSpy)
-		
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = AboutThisAppViewModelCoordinatorSpy()
-		userSettingsSpy = UserSettingsSpy()
+
 		let viewModel = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		
 		sut = AboutThisAppViewController(viewModel: viewModel)
 		window = UIWindow()
-	}
-	
-	override func tearDown() {
-		
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 	
 	func loadView() {
@@ -79,8 +68,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		let viewModel = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		sut = AboutThisAppViewController(viewModel: viewModel)
 		
@@ -104,12 +92,11 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	func test_content_verifier_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let viewModel = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		sut = AboutThisAppViewController(viewModel: viewModel)
 		
@@ -152,23 +139,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	func test_resetData() throws {
 		
 		// Given
-		let walletSpy = WalletManagerSpy()
-		Services.use(walletSpy)
-		let remoteConfigSpy = RemoteConfigManagingSpy()
-		remoteConfigSpy.stubbedStoredConfiguration = RemoteConfiguration.default
-		Services.use(remoteConfigSpy)
-		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			fileStorage: FileStorage(),
-			flavor: AppFlavor.flavor
-		)
-		Services.use(cryptoLibUtilitySpy)
-		let onboardingSpy = OnboardingManagerSpy()
-		Services.use(onboardingSpy)
-		let forcedInfoSpy = ForcedInformationManagerSpy()
-		Services.use(forcedInfoSpy)
 		let alertVerifier = AlertVerifier()
 		loadView()
 		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[4] as? SimpleDisclosureButton)?.primaryButtonTapped()
@@ -177,11 +147,13 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		try alertVerifier.executeAction(forButton: L.holderCleardataAlertRemove())
 		
 		// Then
-		expect(walletSpy.invokedRemoveExistingGreenCards) == true
-		expect(walletSpy.invokedRemoveExistingEventGroups) == true
-		expect(remoteConfigSpy.invokedReset) == true
-		expect(cryptoLibUtilitySpy.invokedReset) == true
-		expect(self.userSettingsSpy.invokedReset) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.forcedInformationManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
 }

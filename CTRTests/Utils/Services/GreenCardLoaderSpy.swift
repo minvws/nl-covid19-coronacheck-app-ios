@@ -10,8 +10,6 @@ import Foundation
 
 class GreenCardLoaderSpy: GreenCardLoading {
 
-	required init(networkManager: NetworkManaging, cryptoManager: CryptoManaging, walletManager: WalletManaging) {}
-
 	var invokedSignTheEventsIntoGreenCardsAndCredentials = false
 	var invokedSignTheEventsIntoGreenCardsAndCredentialsCount = 0
 	var stubbedSignTheEventsIntoGreenCardsAndCredentialsResponseEvaluatorResult: (RemoteGreenCards.Response, Void)?
@@ -28,13 +26,5 @@ class GreenCardLoaderSpy: GreenCardLoading {
 		if let result = stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult {
 			completion(result.0)
 		}
-	}
-}
-
-extension GreenCardLoaderSpy {
-
-	convenience init() {
-
-		self.init(networkManager: NetworkSpy(), cryptoManager: CryptoManagerSpy(), walletManager: WalletManagerSpy())
 	}
 }

@@ -14,26 +14,18 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	/// Subject under test
 	private var sut: CheckIdentityViewModel!
-	
+	private var environmentSpies: EnvironmentSpies!
 	private var verifierCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
-	private var riskLevelManagerSpy: RiskLevelManagerSpy!
-	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 	
 	override func setUp() {
 		super.setUp()
-		
+		environmentSpies = setupEnvironmentSpies()
 		verifierCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
-		riskLevelManagerSpy = RiskLevelManagerSpy()
-		
-		featureFlagManagerSpy = FeatureFlagManagerSpy()
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		Services.use(featureFlagManagerSpy)
 		
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 	}
 	
@@ -85,12 +77,11 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenVerified_shouldNavigateToVerifiedAccess() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// When
@@ -102,14 +93,13 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenDemo_shouldNavigateToVerifiedAccess() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// When
@@ -121,13 +111,12 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .high
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// When
@@ -139,15 +128,14 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .high
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// When
@@ -165,8 +153,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// Then
@@ -182,8 +169,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// Then
@@ -199,8 +185,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// Then
@@ -216,8 +201,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// Then
@@ -233,8 +217,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// Then
@@ -250,8 +233,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// Then
@@ -267,8 +249,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// Then
@@ -288,8 +269,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		
 		// Then

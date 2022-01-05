@@ -15,10 +15,8 @@ class ShowQRViewControllerTests: XCTestCase {
 	var sut: ShowQRViewController!
 
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
-	var cryptoManagerSpy: CryptoManagerSpy!
-	var dataStoreManager: DataStoreManaging!
 	var viewModel: ShowQRViewModel!
-	var remoteConfigManagerSpy: RemoteConfigManagingSpy!
+	private var environmentSpies: EnvironmentSpies!
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
@@ -26,22 +24,12 @@ class ShowQRViewControllerTests: XCTestCase {
 	override func setUpWithError() throws {
 
 		try super.setUpWithError()
-		dataStoreManager = DataStoreManager(.inMemory)
+		environmentSpies = setupEnvironmentSpies()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		cryptoManagerSpy = CryptoManagerSpy()
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
-
-		remoteConfigManagerSpy = RemoteConfigManagingSpy()
-		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
-		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
-		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
- 
-		Services.use(cryptoManagerSpy)
-		Services.use(remoteConfigManagerSpy)
 
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
 			)
@@ -54,12 +42,6 @@ class ShowQRViewControllerTests: XCTestCase {
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 		window = UIWindow()
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func loadView() {
@@ -92,7 +74,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
 			)
@@ -121,7 +103,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)
@@ -149,7 +131,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)
@@ -179,7 +161,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)
@@ -208,7 +190,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)

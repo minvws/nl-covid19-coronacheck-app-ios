@@ -13,26 +13,19 @@ class ForcedInformationManagerTests: XCTestCase {
 	
 	// MARK: - Setup
 	var sut: ForcedInformationManager!
-	var featureFlagManagerSpy: FeatureFlagManagerSpy!
 	private var secureUserSettingsSpy: SecureUserSettingsSpy!
+	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		super.setUp()
+		environmentSpies = setupEnvironmentSpies()
+		
+		// The direct dependencies of Managers are still injected in the init:
 		secureUserSettingsSpy = SecureUserSettingsSpy()
 		secureUserSettingsSpy.stubbedForcedInformationData = .empty
-		
-		featureFlagManagerSpy = FeatureFlagManagerSpy()
-		Services.use(featureFlagManagerSpy)
-		
 		sut = ForcedInformationManager(secureUserSettings: secureUserSettingsSpy)
-		sut.factory = HolderForcedInformationFactory()
-	}
-	
-	override func tearDown() {
 		
-		Services.secureUserSettings.reset()
-		Services.revertToDefaults()
-		super.tearDown()
+		sut.factory = HolderForcedInformationFactory()
 	}
 	
 	// MARK: - Tests
@@ -41,7 +34,7 @@ class ForcedInformationManagerTests: XCTestCase {
 	func testGetNeedsUpdating() {
 		
 		// Given
-		Services.secureUserSettings.reset()
+		sut.wipePersistedData()
 		
 		// When
 		
@@ -53,9 +46,10 @@ class ForcedInformationManagerTests: XCTestCase {
 	func testGetNeedsUpdating_verifier_verificationPolicyEnabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		
 		sut.factory = VerifierForcedInformationFactory()
-		Services.secureUserSettings.reset()
+		sut.wipePersistedData()
 		
 		// When
 		
@@ -67,9 +61,9 @@ class ForcedInformationManagerTests: XCTestCase {
 	func testGetNeedsUpdating_verifier_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		sut.factory = VerifierForcedInformationFactory()
-		Services.secureUserSettings.reset()
+		sut.wipePersistedData()
 		
 		// When
 		
