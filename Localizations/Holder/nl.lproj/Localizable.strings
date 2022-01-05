@@ -62,6 +62,7 @@
 "general.vaccinationcertificate" = "vaccinatiebewijs";
 "general.vaccinationdate" = "Vaccinatiedatum";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
+"general_visitor_pass" = "bezoekersbewijs";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Lees meer:";
@@ -112,10 +113,6 @@
 "holder.consent.message.underlined" = "privacyverklaring";
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app jouw gegevens";
-"holder.dashboard.card.euvaccinationswereupgraded.button" = "Lees meer";
-"holder.dashboard.card.euvaccinationswereupgraded.message" = "Je internationale vaccinatiebewijs is vernieuwd";
-"holder.dashboard.card.upgradeeuvaccination.button" = "Lees meer";
-"holder.dashboard.card.upgradeeuvaccination.message" = "Je kunt je internationale vaccinatiebewijs vernieuwen";
 "holder.dashboard.clockDeviationDetected.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
 "holder.dashboard.configIsAlmostOutOfDate.card.button" = "Lees meer";
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Maak binnenkort verbinding met het internet";
@@ -561,7 +558,7 @@
 "holder.testresults.wrong.body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.button.notoken" = "Heb je geen ophaalcode?";
-"holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een ophaalcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met je testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
+"holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een ophaalcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met je testlocatie.</p>";
 "holder.tokenentry.modal.notoken.title" = "Heb je geen ophaalcode?";
 "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
 "holder.tokenentry.regularflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail. Niks gekregen? Klik hieronder op ‘stuur opnieuw’ voor een nieuwe code.";
@@ -609,9 +606,6 @@
 "holder.updatepage.tagline" = "Nieuw in de app";
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title.tab" = "Een Nederlands en internationaal tabblad";
-"holder.upgradeeuvaccination.button" = "Vernieuw bewijs";
-"holder.upgradeeuvaccination.message" = "<p>Binnenkort vernieuwen we voor iedereen het vaccinatiebewijs. Daardoor krijg je ook toegang tot QR-codes van eerdere prikken.</p><p>Dat is bijvoorbeeld handig voor mensen die ergens heen willen waar hun laatste prik nog niet geldig is.</p><p>Je kunt je bewijs ook nu alvast vernieuwen als je dat wilt.</p>";
-"holder.upgradeeuvaccination.title" = "Vaccinatiebewijs vernieuwen";
 /* Link naar web accessibility pagina */
 "holder.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
 /* MARK: - URL */
@@ -667,6 +661,8 @@
 "holder_dashboard_qr_validity_suffix_2g" = "voor 2G-toegang";
 "holder_dashboard_qr_validity_suffix_3g" = "voor 3G-toegang";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
+/* Menu item for short stay route */
+"holder_menu_visitorpass" = "Bezoekersbewijs maken";
 "holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>Een Nederlands testbewijs is alleen geldig op plekken met 3G-toegang. Dit betekent dat je met je testbewijs geen toegang krijgt tot plekken waar 2G geldt.</p><p><b>Wat is het verschil tussen 3G en 2G?</b><br />De ‘G’ staat voor Getest, Gevaccineerd, of Genezen (hersteld van corona).</p><ul><li>3G-toegang krijg je met een test-, vaccinatie- of herstelbewijs.</li><li>2G-toegang krijg je <u>niet</u> met een testbewijs. Hiervoor heb je een vaccinatie- of herstelbewijs nodig.</li></ul><p><a href=\"https://www.rijksoverheid.nl/2g\">Lees hier meer over 3G en 2G</a>.</p>";
 "holder_my_overview_3g_test_validity_bottom_sheet_title" = "Testbewijs alleen geldig voor 3G-toegang";
 "holder_my_overview_3g_test_validity_card" = "Je testbewijs is alleen geldig voor 3G-toegang in Nederland";
@@ -703,3 +699,23 @@
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
 "updateApp.title" = "Tijd voor een update";
+"visitorpass_code_description" = "Vul je reviewcode in. Deze code begint met KVT- en heb je van de Visitor Pass Desk gekregen toen jouw vaccinatie werd beoordeeld.";
+"visitorpass_code_error_invalid_code" = "Deze reviewcode is verlopen";
+"visitorpass_code_review_button" = "Heb je geen reviewcode?";
+"visitorpass_code_review_input" = "Reviewcode";
+"visitorpass_code_review_placeholder" = "Bijv. KVT-3839287262-F1";
+"visitorpass_code_review_placeholder_screenreader" = "Vul hier je reviewcode in";
+"visitorpass_code_title" = "Vaccinatie review ophalen";
+"visitorpass_event_name" = "Vaccinatie beoordeling";
+"visitorpass_events_description" = "Kloppen de gegevens? Als de gegevens kloppen kun je je vaccinatie boordeling toevoegen aan de app.";
+"visitorpass_start_action" = "Gegevens ophalen";
+"visitorpass_start_message" = "<p>Ben je buiten de Europese Unie gevaccineerd en op bezoek in Nederland?  Dan kun je van jouw vaccinatie review en een negatieve testuitslag een bezoekersbewijs maken.</p><p>Met je bezoekersbewijs krijg je toegang tot plekken en activiteiten in Nederland die vragen om een coronatoegangsbewijs.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/bezoekersbewijs\">www.rijksoverheid.nl/bezoekersbewijs</a>.</p>";
+"visitorpass_start_title" = "Een bezoekersbewijs maken";
+"visitorpass_token_error_empty_code" = "Graag eerst een verificatiecode invullen";
+"visitorpass_token_error_empty_token" = "Graag eerst een reviewcode invullen";
+"visitorpass_token_error_invalid_code" = "Geen geldige reviewcode";
+"visitorpass_token_error_invalid_combination" = "Geen geldige combinatie";
+"visitorpass_token_error_unknown_provider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
+"visitorpass_token_modal_notoken_details" = "<p>Je krijgt van het VWS loket een reviewcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met het loket.</p>";
+"visitorpass_token_modal_notoken_title" = "Heb je geen reviewcode?";
+"visitorpass_token_next" = "Volgende";

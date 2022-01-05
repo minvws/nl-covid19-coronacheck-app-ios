@@ -112,10 +112,6 @@
 "holder.consent.message.underlined" = "privacy statement";
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";
-"holder.dashboard.card.euvaccinationswereupgraded.button" = "Read more";
-"holder.dashboard.card.euvaccinationswereupgraded.message" = "Your international vaccination certificate has been renewed";
-"holder.dashboard.card.upgradeeuvaccination.button" = "Read more";
-"holder.dashboard.card.upgradeeuvaccination.message" = "You can renew your international vaccination certificate";
 "holder.dashboard.clockDeviationDetected.message" = "Check your phone's time settings. They might be incorrect.";
 "holder.dashboard.configIsAlmostOutOfDate.card.button" = "Read more";
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
@@ -561,7 +557,7 @@
 "holder.testresults.wrong.body" = "<p>Please contact the test location. They can help you change your details.</p>";
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.button.notoken" = "Don't have a retrieval code?";
-"holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p><p>You may need to get tested again.</p>";
+"holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p>";
 "holder.tokenentry.modal.notoken.title" = "Don't have a retrieval code?";
 "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton" = "Close";
 "holder.tokenentry.regularflow.confirmresendverificationalert.message" = "You receive the verification code via text or email. Didn't get one? Click ‘send again’ below for a new code.";
@@ -609,9 +605,6 @@
 "holder.updatepage.tagline" = "New in the app";
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title.tab" = "A Dutch and an international tab";
-"holder.upgradeeuvaccination.button" = "Renew certificate";
-"holder.upgradeeuvaccination.message" = "<p>Soon we will renew everyone's vaccination certificate. As a result, you'll get access to QR codes of earlier vaccinations.</p><p>This can be useful for people who want to go to a place where their latest vaccination is not yet valid.</p><p>If you want to, you can also renew your certificate now.</p>";
-"holder.upgradeeuvaccination.title" = "Renew vaccination certificate";
 /* Link naar web accessibility pagina */
 "holder.url.accessibility" = "https://coronacheck.nl/en/accessibility-in-app";
 /* MARK: - URL */
@@ -667,6 +660,9 @@
 "holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
 "holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
+"holder_event_vaccination_assessment_about_date_of_birth" = "Date of birth:";
+"holder_event_vaccination_assessment_about_name" = "Name:";
+"holder_event_vaccination_assessment_about_subtitle" = "The following details were retrieved:";
 "holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>A Dutch test certificate is only valid in places with 3G access. This means that you cannot use your test certificate to get access to places with 2G access.</p><p><b>What is the difference between 3G and 2G?</b><br />The Gs determine which people can be given access: only those who were vaccinated and/or have recovered (2G), or people who tested negative as well (3G).</p><ul><li>3G access means you can enter places with a test, vaccination or recovery certificate.</li><li>2G access means you <u>cannot</u> enter places with a test certificate. You'll need a vaccination or recovery certificate.</li></ul><p><a href=\"https://www.government.nl/2g\">You can read more about 3G and 2G here</a>.</p>";
 "holder_my_overview_3g_test_validity_bottom_sheet_title" = "Test certificate only valid for 3G access";
 "holder_my_overview_3g_test_validity_card" = "Your test certificate is only valid for 3G access within the Netherlands";
@@ -675,6 +671,7 @@
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_test_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_vaccination_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your details again later.";
+"holder_vaccination_assessment_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Try again";
 "internet.required.text" = "To start the app, you need to be connected to the internet.";
@@ -703,3 +700,9 @@
 /* MARK: - Update App */
 "updateApp.error.message" = "Can't open App Store";
 "updateApp.title" = "Time for an update";
+"visitorpass_code_review_input" = "Review code";
+"visitorpass_token_error_empty_code" = "Please fill out a verification code first";
+"visitorpass_token_error_invalid_combination" = "No valid combination";
+"visitorpass_token_error_unknown_provider" = "This test location is not known to us. Please contact the location who tested you.";
+"visitorpass_token_input_placeholder" = "E.g. KVT-3839287262-F1";
+"visitorpass_token_next" = "Next";

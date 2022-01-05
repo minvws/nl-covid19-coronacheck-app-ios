@@ -28,10 +28,6 @@ protocol UserSettingsProtocol: AnyObject {
 
 	var deviceAuthenticationWarningShown: Bool { get set }
 
-	// Flags for upgrading to Multiple DCCs:
-	var didCompleteEUVaccinationMigration: Bool { get set }
-	var didDismissEUVaccinationMigrationSuccessBanner: Bool { get set }
-
 	// Flags for extension of Recovery validity:
 	var shouldCheckRecoveryGreenCardRevisedValidity: Bool { get set }
 	var shouldShowRecoveryValidityExtensionCard: Bool { get set }
@@ -78,14 +74,6 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
 
-	// MARK: - Multiple DCC migration:
-
-	@UserDefaults(key: "didCompleteEUVaccinationMigration", defaultValue: false)
-	var didCompleteEUVaccinationMigration: Bool // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "didDismissEUVaccinationMigrationSuccessBanner", defaultValue: false)
-	var didDismissEUVaccinationMigrationSuccessBanner: Bool // swiftlint:disable:this let_var_whitespace
-
 	// MARK: - Extension of Recovery validity:
 
 	@UserDefaults(key: "shouldCheckRecoveryGreenCardRevisedValidity", defaultValue: true)
@@ -128,8 +116,6 @@ extension UserSettings {
 			"lastRecommendUpdateDismissalTimestamp",
 			"lastSeenRecommendedUpdate",
 			"deviceAuthenticationWarningShown",
-			"didCompleteEUVaccinationMigration",
-			"didDismissEUVaccinationMigrationSuccessBanner",
 			"deviceAuthenticationWarningShown",
 			"shouldCheckRecoveryGreenCardRevisedValidity",
 			"shouldShowRecoveryValidityExtensionCard",

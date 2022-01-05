@@ -30,6 +30,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateAQR()
 
 	func userWishesToCreateANegativeTestQR()
+	
+	func userWishesToCreateAVisitorPass()
 
 	func userWishesToChooseLocation()
 
@@ -51,8 +53,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutTestOnlyValidFor3G()
 
-	func userWishesMoreInfoAboutUpgradingEUVaccinations()
-
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
 	
     func userWishesMoreInfoAboutRecoveryValidityExtension()
@@ -60,8 +60,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutRecoveryValidityReinstation()
 	
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
-
-	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted()
 
 	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted()
 	
@@ -78,6 +76,10 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func migrateEUVaccinationDidComplete()
 
 	func extendRecoveryValidityDidComplete()
+	
+	func userWishesMoreInfoAboutNoTestToken()
+	
+	func userWishesMoreInfoAboutNoVisitorPassToken()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -280,13 +282,14 @@ class HolderCoordinator: SharedCoordinator {
 	}
 
 	/// Navigate to the token entry scene
-	func navigateToTokenEntry(_ token: RequestToken? = nil) {
+	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
 
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false)
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false),
+				inputRetrievalCodeMode: retrievalMode
 			)
 		)
 
@@ -314,7 +317,6 @@ class HolderCoordinator: SharedCoordinator {
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
 					reachability: try? Reachability()
 				),
-				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: Current.userSettings),
 				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
 				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings),
 				versionSupplier: versionSupplier
@@ -417,6 +419,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesToCreateANegativeTestQR() {
 		navigateToTokenEntry()
 	}
+	
+	func userWishesToCreateAVisitorPass() {
+		navigateToTokenEntry(retrievalMode: .visitorPass)
+	}
 
 	func userWishesToChooseLocation() {
 		if isGGDEnabled {
@@ -489,19 +495,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 
-	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
-		let viewModel = MigrateEUVaccinationViewModel(
-			backAction: { [weak self] in
-				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
-			},
-			greencardLoader: Current.greenCardLoader,
-			userSettings: Current.userSettings
-		)
-		viewModel.coordinator = self
-		let viewController = MigrateEUVaccinationViewController(viewModel: viewModel)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
-	}
-
 	func userWishesMoreInfoAboutRecoveryValidityExtension() {
 		let viewModel = ExtendRecoveryValidityViewModel(
 			mode: .extend,
@@ -534,15 +527,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
 		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
-	}
-	
-	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted() {
-		presentInformationPage(
-			title: L.holderEuvaccinationswereupgradedTitle(),
-			body: L.holderEuvaccinationswereupgradedMessage(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
 	}
 	
 	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {
@@ -617,6 +601,27 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
+	
+	func userWishesMoreInfoAboutNoTestToken() {
+		
+		presentInformationPage(
+			title: L.holderTokenentryModalNotokenTitle(),
+			body: L.holderTokenentryModalNotokenDetails(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
+	func userWishesMoreInfoAboutNoVisitorPassToken() {
+		
+		presentInformationPage(
+			title: L.visitorpass_token_modal_notoken_title(),
+			body: L.visitorpass_token_modal_notoken_details(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
 }
 
 // MARK: - MenuDelegate
@@ -678,6 +683,12 @@ extension HolderCoordinator: MenuDelegate {
 				coordinator.navigationController = navigationController
 				startChildCoordinator(coordinator)
 				sidePanel?.selectedViewController = navigationController
+				
+			case .visitorPass:
+
+				let destination = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
+				navigationController = NavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = navigationController
 
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
@@ -710,11 +721,19 @@ extension HolderCoordinator: MenuDelegate {
 	/// Get the items for the bottom menu
 	/// - Returns: the bottom menu items
 	func getBottomMenuItems() -> [MenuItem] {
-
-		return [
-			MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
-			MenuItem(identifier: .about, title: L.holderMenuAbout())
-		]
+		
+		if Current.featureFlagManager.isVisitorPassEnabled() {
+			return [
+				MenuItem(identifier: .about, title: L.holderMenuAbout()),
+				MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
+				MenuItem(identifier: .visitorPass, title: L.holder_menu_visitorpass())
+			]
+		} else {
+			return [
+				MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
+				MenuItem(identifier: .about, title: L.holderMenuAbout())
+			]
+		}
 	}
 }
 

@@ -20,7 +20,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var datasourceSpy: HolderDashboardDatasourceSpy!
 	private var strippenRefresherSpy: DashboardStrippenRefresherSpy!
 	private var sampleGreencardObjectID: NSManagedObjectID!
-	private var migrationNotificationManagerSpy: DCCMigrationNotificationManagerSpy!
 	private var recoveryValidityExtensionManagerSpy: RecoveryValidityExtensionManagerProtocol!
 	private var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
 	private var environmentSpies: EnvironmentSpies!
@@ -49,7 +48,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		recoveryValidityExtensionManagerSpy = RecoveryValidityExtensionManagerSpy()
-		migrationNotificationManagerSpy = DCCMigrationNotificationManagerSpy()
 		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
@@ -62,7 +60,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			datasource: datasourceSpy,
 			strippenRefresher: strippenRefresherSpy,
-			dccMigrationNotificationManager: migrationNotificationManagerSpy,
 			recoveryValidityExtensionManager: recoveryValidityExtensionManagerSpy,
 			configurationNotificationManager: configurationNotificationManagerSpy,
 			versionSupplier: AppVersionSupplierSpy(version: appVersion)
@@ -2761,42 +2758,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutClockDeviationCount) == 1
-	}
-
-	func test_actionhandling_didTapMultipleDCCUpgradeMoreInfo() {
-
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		// Act
-		sut.didTapMultipleDCCUpgradeMoreInfo()
-
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount) == 1
-	}
-
-	func test_actionhandling_didTapMultipleDCCUpgradeCompletedMoreInfo() {
-
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		// Act
-		sut.didTapMultipleDCCUpgradeCompletedMoreInfo()
-
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompletedCount) == 1
-	}
-
-	func test_actionhandling_didTapMultipleDCCUpgradeCompletedClose() {
-
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		// Act
-		sut.didTapMultipleDCCUpgradeCompletedClose()
-
-		// Assert
-		expect(self.environmentSpies.userSettingsSpy.invokedDidDismissEUVaccinationMigrationSuccessBanner) == true
 	}
 
 	func test_actionhandling_didTapShowQR() {

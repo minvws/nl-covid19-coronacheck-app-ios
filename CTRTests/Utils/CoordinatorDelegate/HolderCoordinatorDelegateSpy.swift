@@ -71,6 +71,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToCreateANegativeTestQRCount += 1
 	}
 
+	var invokedUserWishesToCreateAVisitorPass = false
+	var invokedUserWishesToCreateAVisitorPassCount = 0
+
+	func userWishesToCreateAVisitorPass() {
+		invokedUserWishesToCreateAVisitorPass = true
+		invokedUserWishesToCreateAVisitorPassCount += 1
+	}
+
 	var invokedUserWishesToChooseLocation = false
 	var invokedUserWishesToChooseLocationCount = 0
 
@@ -289,6 +297,22 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func extendRecoveryValidityDidComplete() {
 		invokedExtendRecoveryValidityDidComplete = true
 		invokedExtendRecoveryValidityDidCompleteCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutNoTestToken = false
+	var invokedUserWishesMoreInfoAboutNoTestTokenCount = 0
+
+	func userWishesMoreInfoAboutNoTestToken() {
+		invokedUserWishesMoreInfoAboutNoTestToken = true
+		invokedUserWishesMoreInfoAboutNoTestTokenCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutNoVisitorPassToken = false
+	var invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount = 0
+
+	func userWishesMoreInfoAboutNoVisitorPassToken() {
+		invokedUserWishesMoreInfoAboutNoVisitorPassToken = true
+		invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount += 1
 	}
 
 	var invokedDismiss = false
