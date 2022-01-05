@@ -412,7 +412,7 @@ extension RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
 			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
 				origins: [
-					RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days,
+					RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days
 				],
 				createCredentialMessages: "test"
 			),

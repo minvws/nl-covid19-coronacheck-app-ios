@@ -2047,6 +2047,26 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	
+	func test_emptyState_recovery() throws {
+		
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: []
+		)
+		
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		expect(feedback.title) == L.holderRecoveryNolistTitle()
+		expect(feedback.subTitle) == L.holderRecoveryNolistMessage()
+		expect(feedback.primaryActionTitle) == L.holderRecoveryNolistAction()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+	
 	func test_emptyState_vaccinationAssessement() throws {
 		
 		// Given
