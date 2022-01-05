@@ -35,7 +35,7 @@ extension TokenEntryViewModel {
 				case (.regular, _, .visitorPass):
 					return L.visitorpass_code_description()
 				case (.withRequestTokenProvided, _, .visitorPass):
-					return L.visitorpass_deeplink_text()
+					return L.visitorpass_code_description_deeplink()
 			}
 		}
 		
@@ -96,12 +96,10 @@ extension TokenEntryViewModel {
 		
 		static func codeIsEmpty(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
 			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+				case (.regular, .negativeTest), (_, .visitorPass):
 					return L.holderTokenentryRegularflowErrorEmptycode()
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowErrorEmptycode()
-				case (_, .visitorPass):
-					return L.visitorpass_token_error_empty_code()
 			}
 		}
 		
