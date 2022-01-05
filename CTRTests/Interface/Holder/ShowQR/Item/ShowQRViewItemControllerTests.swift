@@ -15,36 +15,23 @@ class ShowQRViewItemControllerTests: XCTestCase {
 	var sut: ShowQRItemViewController!
 
 	var delegateSpy: ShowQRItemViewModelDelegateSpy!
-	var cryptoManagerSpy: CryptoManagerSpy!
-	var dataStoreManager: DataStoreManaging!
 	var screenCaptureDetector: ScreenCaptureDetectorSpy!
-	var userSettingsSpy: UserSettingsSpy!
 	var viewModel: ShowQRItemViewModel!
-	var remoteConfigManagingSpy: RemoteConfigManagingSpy!
 	var window = UIWindow()
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	// MARK: Test lifecycle
 
 	override func setUpWithError() throws {
 
 		try super.setUpWithError()
-		dataStoreManager = DataStoreManager(.inMemory)
+		environmentSpies = setupEnvironmentSpies()
 		delegateSpy = ShowQRItemViewModelDelegateSpy()
-		cryptoManagerSpy = CryptoManagerSpy()
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 		screenCaptureDetector = ScreenCaptureDetectorSpy()
-		userSettingsSpy = UserSettingsSpy()
-		remoteConfigManagingSpy = RemoteConfigManagingSpy()
-		remoteConfigManagingSpy.stubbedStoredConfiguration = .default
-		remoteConfigManagingSpy.stubbedAppendReloadObserverResult = UUID()
-		remoteConfigManagingSpy.stubbedAppendUpdateObserverResult = UUID()
-		
-		Services.use(cryptoManagerSpy)
-		Services.use(remoteConfigManagingSpy)
 
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
 			)
@@ -53,17 +40,10 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		viewModel = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			screenCaptureDetector: screenCaptureDetector
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)
 		window = UIWindow()
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func loadView() {
@@ -79,15 +59,14 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
 			)
 		)
 		viewModel = ShowQRItemViewModel(
 			delegate: delegateSpy,
-			greenCard: greenCard,
-			userSettings: userSettingsSpy
+			greenCard: greenCard
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)
 
@@ -104,15 +83,14 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)
 		)
 		viewModel = ShowQRItemViewModel(
 			delegate: delegateSpy,
-			greenCard: greenCard,
-			userSettings: userSettingsSpy
+			greenCard: greenCard
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)
 

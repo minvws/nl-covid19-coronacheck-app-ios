@@ -21,7 +21,7 @@ class RemoteConfigManagerTests: XCTestCase {
 	
 	override func setUp() {
 
-		networkSpy = NetworkSpy(configuration: .development)
+		networkSpy = NetworkSpy()
 		userSettingsSpy = UserSettingsSpy()
 		reachabilitySpy = ReachabilitySpy()
 		secureUserSettingsSpy = SecureUserSettingsSpy()

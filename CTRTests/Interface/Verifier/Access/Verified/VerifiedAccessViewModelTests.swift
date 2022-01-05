@@ -15,21 +15,13 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	private var sut: VerifiedAccessViewModel!
 	
 	private var verifierCoordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
+	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		super.setUp()
 		
 		verifierCoordinatorSpy = VerifierCoordinatorDelegateSpy()
-		featureFlagManagerSpy = FeatureFlagManagerSpy()
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		Services.use(featureFlagManagerSpy)
-	}
-	
-	override func tearDown() {
-		
-		super.tearDown()
-		Services.revertToDefaults()
+		environmentSpies = setupEnvironmentSpies()
 	}
 	
 	func test_dismiss_shouldNavigateBackToStart() {
@@ -64,7 +56,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_demoLowRisk_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(
@@ -93,7 +85,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_demoHighRisk_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(
@@ -122,7 +114,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_verifiedLowRisk_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(
@@ -151,7 +143,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_verifiedHighRisk_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(

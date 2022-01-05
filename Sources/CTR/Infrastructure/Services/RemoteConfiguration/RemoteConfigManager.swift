@@ -14,14 +14,6 @@ protocol RemoteConfigManaging: AnyObject {
 
 	var storedConfiguration: RemoteConfiguration { get }
 
-	init(
-		now: @escaping () -> Date,
-		userSettings: UserSettingsProtocol,
-		reachability: ReachabilityProtocol?,
-		networkManager: NetworkManaging,
-		secureUserSettings: SecureUserSettingsProtocol
-	)
-
 	func appendUpdateObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
 	func appendReloadObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
 
@@ -31,7 +23,7 @@ protocol RemoteConfigManaging: AnyObject {
 		immediateCallbackIfWithinTTL: @escaping () -> Void,
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
 
-	func reset()
+	func wipePersistedData()
 }
 
 /// The remote configuration manager
@@ -63,7 +55,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
 		reachability: ReachabilityProtocol?,
-		networkManager: NetworkManaging = Services.networkManager,
+		networkManager: NetworkManaging,
 		secureUserSettings: SecureUserSettingsProtocol
 	) {
 
@@ -235,7 +227,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 extension RemoteConfigManager {
 
-	func reset() {
+	func wipePersistedData() {
 		storedConfiguration = .default
 	}
 }

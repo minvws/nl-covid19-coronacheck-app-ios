@@ -37,7 +37,7 @@ final class RiskSettingUnselectedViewModel: Logging {
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
-		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
+		riskLevelManager: RiskLevelManaging = Current.riskLevelManager
 	) {
 		
 		self.coordinator = coordinator

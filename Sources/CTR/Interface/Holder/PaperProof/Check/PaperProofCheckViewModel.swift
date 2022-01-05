@@ -11,7 +11,7 @@ class PaperProofCheckViewModel: Logging {
 
 	weak var coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)?
 
-	private let couplingManager: CouplingManaging = Services.couplingManager
+	private let couplingManager: CouplingManaging = Current.couplingManager
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in

@@ -11,7 +11,7 @@ import AppAuth
 class LoginTVSViewModel: Logging {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var openIdManager: OpenIdManaging? = Services.openIdManager
+	private weak var openIdManager: OpenIdManaging? = Current.openIdManager
 
 	private var eventMode: EventMode
 

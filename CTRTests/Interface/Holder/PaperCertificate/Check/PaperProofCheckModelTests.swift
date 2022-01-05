@@ -13,31 +13,20 @@ class PaperProofCheckModelTests: XCTestCase {
 
 	var sut: PaperProofCheckViewModel!
 	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
-	var couplingManagerSpy: CouplingManagerSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 		super.setUp()
-
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
-		couplingManagerSpy = CouplingManagerSpy(
-			cryptoManager: CryptoManagerSpy(),
-			networkManager: NetworkSpy(configuration: .development)
-		)
-		Services.use(couplingManagerSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func test_success_accepted_wrongDCC() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .accepted)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -63,9 +52,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_success_accepted_correctDCC() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .accepted)), ())
-		couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
 			identity: nil,
@@ -88,9 +77,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_success_blocked() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -114,9 +103,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_success_expired() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -140,9 +129,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_success_rejected() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -166,9 +155,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_serverBusy() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: 429, response: nil, error: .serverBusy)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -192,9 +181,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_noInternet() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -213,9 +202,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_requestTimeOut() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -240,9 +229,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_responseCached() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: 304, response: nil, error: .responseCached)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -266,9 +255,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_resourceNotFound() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: 404, response: ServerResponse(status: "error", code: 99707), error: .resourceNotFound)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -292,9 +281,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_serverError() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: 500, response: ServerResponse(status: "error", code: 99707), error: .serverError)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -318,9 +307,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_invalidResponse() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -344,9 +333,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_invalidRequest() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -370,9 +359,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_invalidSignature() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .invalidSignature)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -396,9 +385,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_cannotDeserialize() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .cannotDeserialize)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -422,9 +411,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_cannotSerialize() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .cannotSerialize)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -448,8 +437,6 @@ class PaperProofCheckModelTests: XCTestCase {
 }
 
 class CouplingManagerSpy: CouplingManaging {
-
-	required init(cryptoManager: CryptoManaging, networkManager: NetworkManaging) {}
 
 	var invokedConvert = false
 	var invokedConvertCount = 0

@@ -8,15 +8,7 @@
 import XCTest
 @testable import CTR
 
-extension OnboardingManagerSpy {
-	convenience init() {
-		self.init(secureUserSettings: SecureUserSettings())
-	}
-}
-
 class OnboardingManagerSpy: OnboardingManaging {
-
-	required init(secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedNeedsOnboardingGetter = false
 	var invokedNeedsOnboardingGetterCount = 0
@@ -52,5 +44,13 @@ class OnboardingManagerSpy: OnboardingManaging {
 	func consentGiven() {
 		invokedConsentGiven = true
 		invokedConsentGivenCount += 1
+	}
+
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
+
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

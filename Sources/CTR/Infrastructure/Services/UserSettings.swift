@@ -39,7 +39,7 @@ protocol UserSettingsProtocol: AnyObject {
 	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	
-	func reset()
+	func wipePersistedData()
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -102,7 +102,7 @@ class UserSettings: UserSettingsProtocol {
 
 extension UserSettings {
 
-	func reset() {
+	func wipePersistedData() {
 		// Clear user defaults:
 		// We can not simply loop over all the keys, as some are needed for clear on reinstall for the keychain items.
 		let userDefaults = Foundation.UserDefaults.standard

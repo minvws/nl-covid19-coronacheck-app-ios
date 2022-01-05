@@ -16,24 +16,15 @@ class LoginTVSViewModelTests: XCTestCase {
 	private var sut: LoginTVSViewModel!
 
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
-	private var openIDSpy: OpenIdManagerSpy!
 	private var appAuthStateSpy: AppAuthStateSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 
 		super.setUp()
-
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		openIDSpy = OpenIdManagerSpy()
 		appAuthStateSpy = AppAuthStateSpy()
-
-		Services.use(openIDSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func test_loadingState_vaccinationMode() {
@@ -170,7 +161,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnCompletionResult = (.test, ())
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (.test, ())
 
 		// When
 		sut.login()
@@ -194,7 +185,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut), ())
 
 		// When
@@ -222,7 +213,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 429, userInfo: [NSLocalizedDescriptionKey: "login_required"]), ())
 
 		// When
@@ -250,7 +241,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
 
 		// When
@@ -268,7 +259,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.userCanceledAuthorizationFlow.rawValue, userInfo: nil), ())
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.userCanceledAuthorizationFlow.rawValue, userInfo: nil), ())
 
 		// When
 		sut.login()
@@ -305,7 +296,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDGeneralErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
@@ -348,7 +339,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDOAuthAuthorizationErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
@@ -390,7 +381,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDOAuthTokenErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
@@ -419,7 +410,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// When
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: OIDResourceServerAuthorizationErrorDomain, code: 123, userInfo: nil), ())
 		sut.login()
 
@@ -457,7 +448,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDOAuthRegistrationErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
