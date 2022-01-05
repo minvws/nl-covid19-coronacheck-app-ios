@@ -87,18 +87,17 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 class HolderCoordinator: SharedCoordinator {
 
-	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 
 	let recoveryValidityExtensionManager: RecoveryValidityExtensionManager = {
 		RecoveryValidityExtensionManager(
 			userHasRecoveryEvents: {
-				let eventGroups = Services.walletManager.listEventGroups()
+				let eventGroups = Current.walletManager.listEventGroups()
 				let hasRecoveryEvents = eventGroups.contains { $0.type == OriginType.recovery.rawValue }
 				return hasRecoveryEvents
 			},
 			userHasUnexpiredRecoveryGreencards: {
-				let unexpiredGreencards = Services.walletManager.greencardsWithUnexpiredOrigins(
+				let unexpiredGreencards = Current.walletManager.greencardsWithUnexpiredOrigins(
 					now: Date(),
 					ofOriginType: OriginType.recovery
 				)
@@ -108,13 +107,13 @@ class HolderCoordinator: SharedCoordinator {
 			},
 			userHasPaperflowRecoveryGreencards: {
 
-				return Services.walletManager.hasEventGroup(
+				return Current.walletManager.hasEventGroup(
 					type: EventMode.recovery.rawValue,
 					providerIdentifier: EventFlow.paperproofIdentier
 				)
 			},
 			userSettings: UserSettings(),
-			remoteConfigManager: Services.remoteConfigManager,
+			remoteConfigManager: Current.remoteConfigManager,
 			now: { Date() }
 		)
 	}()
@@ -332,17 +331,14 @@ class HolderCoordinator: SharedCoordinator {
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
-				datasource: HolderDashboardQRCardDatasource(now: { Date() }),
+				datasource: HolderDashboardQRCardDatasource(),
 				strippenRefresher: DashboardStrippenRefresher(
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
-					reachability: try? Reachability(),
-					now: { Date() }
+					reachability: try? Reachability()
 				),
-				userSettings: UserSettings(),
 				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
-				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
-				versionSupplier: versionSupplier,
-				now: { Date() }
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings),
+				versionSupplier: versionSupplier
 			)
 		)
 		dashboardNavigationController = NavigationController(rootViewController: dashboardViewController)
@@ -526,8 +522,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			backAction: { [weak self] in
 				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 			},
-			greencardLoader: GreenCardLoader(),
-			userSettings: userSettings
+			greencardLoader: Current.greenCardLoader,
+			userSettings: Current.userSettings
 		)
 		viewModel.coordinator = self
 		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
@@ -540,8 +536,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			backAction: { [weak self] in
 				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 			},
-			greencardLoader: GreenCardLoader(),
-			userSettings: userSettings
+			greencardLoader: Current.greenCardLoader,
+			userSettings: Current.userSettings
 		)
 		viewModel.coordinator = self
 		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
@@ -685,8 +681,7 @@ extension HolderCoordinator: MenuDelegate {
 					viewModel: AboutThisAppViewModel(
 						coordinator: self,
 						versionSupplier: versionSupplier,
-						flavor: AppFlavor.flavor,
-						userSettings: UserSettings()
+						flavor: AppFlavor.flavor
 					)
 				)
 				aboutNavigationController = NavigationController(rootViewController: destination)
@@ -748,7 +743,7 @@ extension HolderCoordinator: MenuDelegate {
 	/// - Returns: the bottom menu items
 	func getBottomMenuItems() -> [MenuItem] {
 		
-		if Services.featureFlagManager.isVisitorPassEnabled() {
+		if Current.featureFlagManager.isVisitorPassEnabled() {
 			return [
 				MenuItem(identifier: .about, title: L.holderMenuAbout()),
 				MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),

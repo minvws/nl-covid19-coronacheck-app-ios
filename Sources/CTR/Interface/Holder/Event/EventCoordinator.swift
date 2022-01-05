@@ -225,7 +225,9 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 				coordinator: self,
 				eventMode: eventMode,
 				remoteEvents: remoteEvents,
-				eventsMightBeMissing: eventsMightBeMissing
+				identityChecker: IdentityChecker(),
+				eventsMightBeMissing: eventsMightBeMissing,
+				greenCardLoader: Current.greenCardLoader
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)

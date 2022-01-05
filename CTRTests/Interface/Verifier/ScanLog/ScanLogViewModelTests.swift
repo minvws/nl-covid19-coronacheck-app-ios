@@ -15,30 +15,16 @@ class ScanLogViewModelTests: XCTestCase {
 	/// Subject under test
 	private var sut: ScanLogViewModel!
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var scanLogManagingSpy: ScanLogManagingSpy!
-	private var appInstalledSinceManagingSpy: AppInstalledSinceManagingSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
-
 		super.setUp()
-
+		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier)
+		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		let config: RemoteConfiguration = .default
 
-		scanLogManagingSpy = ScanLogManagingSpy()
-		Services.use(scanLogManagingSpy)
-		scanLogManagingSpy.stubbedGetScanEntriesResult = .success([])
-
-		appInstalledSinceManagingSpy = AppInstalledSinceManagingSpy()
-		Services.use(appInstalledSinceManagingSpy)
-
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
+		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 	}
 
 	// MARK: - Tests
@@ -71,11 +57,10 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_coredata_error() {
 
 		// Given
-		scanLogManagingSpy.stubbedGetScanEntriesResult = .failure(NSError(domain: "CoronaCheck", code: 4, userInfo: nil))
-		let config: RemoteConfiguration = .default
+		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .failure(NSError(domain: "CoronaCheck", code: 4, userInfo: nil))
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 
 		// Then
 		expect(self.sut.alert).toEventuallyNot(beNil())
@@ -86,11 +71,10 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_no_log() {
 
 		// Given
-		scanLogManagingSpy.stubbedGetScanEntriesResult = .success([])
-		let config: RemoteConfiguration = .default
+		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([])
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(1))
@@ -98,16 +82,17 @@ class ScanLogViewModelTests: XCTestCase {
 	}
 
 	func test_oneEntry() {
-
+		
 		// Given
-		let scanManager = ScanLogManager(dataStoreManager: DataStoreManager(.inMemory, flavor: .verifier))
-		Services.use(scanManager)
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(24 * minutes * ago))
+		let entry: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry])
+		
 		var config: RemoteConfiguration = .default
 		config.scanLogStorageSeconds = Int(Date().timeIntervalSince1970 - now.timeIntervalSince1970 + 3600)
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = config
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(1))
@@ -117,15 +102,16 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_twoEntries_sameMode() {
 
 		// Given
-		let scanManager = ScanLogManager(dataStoreManager: DataStoreManager(.inMemory, flavor: .verifier))
-		Services.use(scanManager)
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(24 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(22 * minutes * ago))
+		let entry1: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry2: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry1, entry2])
+		
 		var config: RemoteConfiguration = .default
 		config.scanLogStorageSeconds = Int(Date().timeIntervalSince1970 - now.timeIntervalSince1970 + 3600)
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = config
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(1))
@@ -135,15 +121,16 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_twoEntries_differentMode() {
 
 		// Given
-		let scanManager = ScanLogManager(dataStoreManager: DataStoreManager(.inMemory, flavor: .verifier))
-		Services.use(scanManager)
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(24 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .high, date: now.addingTimeInterval(22 * minutes * ago))
+		let entry1: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry2: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry1, entry2])
+		
 		var config: RemoteConfiguration = .default
 		config.scanLogStorageSeconds = Int(Date().timeIntervalSince1970 - now.timeIntervalSince1970 + 3600)
-
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(2))
@@ -154,32 +141,33 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_complexList() {
 
 		// Given
-		let scanManager = ScanLogManager(dataStoreManager: DataStoreManager(.inMemory, flavor: .verifier))
-		Services.use(scanManager)
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(24 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(22 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(20 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .high, date: now.addingTimeInterval(15 * minutes * ago)) // Mode Switch
-		scanManager.addScanEntry(riskLevel: .high, date: now.addingTimeInterval(14 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .high, date: now.addingTimeInterval(12 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .high, date: now.addingTimeInterval(14 * minutes * ago)) // Clock reset
-		scanManager.addScanEntry(riskLevel: .high, date: now.addingTimeInterval(11 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(9 * minutes * ago)) // Another mode switch
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(8 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(7 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(6 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(5 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(4 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(3 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(2 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(1 * minutes * ago))
-		scanManager.addScanEntry(riskLevel: .low, date: now.addingTimeInterval(0 * minutes * ago))
+		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(20 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(15 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!, // Mode Switch
+			ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(14 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(12 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(14 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!, // Clock reset
+			ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(11 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(9 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!, // Another mode switch
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(8 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(7 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(6 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(5 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(4 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(3 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(2 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(1 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(0 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!
+		])
 
 		var config: RemoteConfiguration = .default
 		config.scanLogStorageSeconds = Int(Date().timeIntervalSince1970 - now.timeIntervalSince1970 + 3600)
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = config
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(4))
@@ -192,11 +180,10 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_firstUseDate_noDate() {
 
 		// Given
-		appInstalledSinceManagingSpy.stubbedFirstUseDate = nil
-		let config: RemoteConfiguration = .default
+		environmentSpies.appInstalledSinceManagerSpy.stubbedFirstUseDate = nil
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 
 		// Then
 		expect(self.sut.appInUseSince).to(beNil())
@@ -205,11 +192,10 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_firstUseDate_now() {
 
 		// Given
-		appInstalledSinceManagingSpy.stubbedFirstUseDate = now
-		let config: RemoteConfiguration = .default
+		environmentSpies.appInstalledSinceManagerSpy.stubbedFirstUseDate = now
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 
 		// Then
 		expect(self.sut.appInUseSince) == L.scan_log_footer_in_use("15 juli 2021 17:02")
@@ -218,11 +204,10 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_firstUseDate_older() {
 
 		// Given
-		appInstalledSinceManagingSpy.stubbedFirstUseDate = now.addingTimeInterval(31 * days * ago)
-		let config: RemoteConfiguration = .default
+		environmentSpies.appInstalledSinceManagerSpy.stubbedFirstUseDate = now.addingTimeInterval(31 * days * ago)
 
 		// When
-		sut = ScanLogViewModel(coordinator: coordinatorSpy, configuration: config, now: { now })
+		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 
 		// Then
 		expect(self.sut.appInUseSince) == L.scan_log_footer_long_time()

@@ -23,7 +23,7 @@ protocol ShowQRDatasourceProtocol {
 
 class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
-	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
+	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
 
 	private let internationalQRRelevancyDays: TimeInterval
 

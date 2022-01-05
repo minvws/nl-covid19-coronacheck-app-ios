@@ -10,11 +10,10 @@ import UIKit
 protocol ScanLockManaging {
 	var state: ScanLockManager.State { get }
 	
-	init()
 	func lock()
 	func appendObserver(_ observer: @escaping (ScanLockManager.State) -> Void) -> ScanLockManager.ObserverToken
 	func removeObserver(token: ScanLockManager.ObserverToken)
-	func reset()
+	func wipePersistedData()
 
 	static var configScanLockDuration: TimeInterval { get }
 }
@@ -33,7 +32,7 @@ final class ScanLockManager: ScanLockManaging {
 	
 	/// Query the Remote Config Manager for the scan lock duration.
 	static var configScanLockDuration: TimeInterval {
-		TimeInterval(Services.remoteConfigManager.storedConfiguration.scanLockSeconds ?? 300)
+		TimeInterval(Current.remoteConfigManager.storedConfiguration.scanLockSeconds ?? 300)
 	}
 	
 	// MARK: - Vars
@@ -56,10 +55,6 @@ final class ScanLockManager: ScanLockManaging {
 	private let notificationCenter: NotificationCenterProtocol
 	private let secureUserSettings: SecureUserSettingsProtocol
 	
-	convenience init() {
-		self.init(now: { Date() }, notificationCenter: NotificationCenter.default)
-	}
-	
 	// It is important to remember that even if the user puts their system time
 	// forward (defeating the lock timer mechanism), that the scanner functionality
 	// will not work correctly, thus the user will need to eventually fix the system
@@ -70,7 +65,7 @@ final class ScanLockManager: ScanLockManaging {
 	required init(
 		now: @escaping () -> Date,
 		notificationCenter: NotificationCenterProtocol = NotificationCenter.default,
-		secureUserSettings: SecureUserSettingsProtocol = SecureUserSettings()
+		secureUserSettings: SecureUserSettingsProtocol
 	) {
 		self.now = now
 		self.notificationCenter = notificationCenter
@@ -166,7 +161,7 @@ final class ScanLockManager: ScanLockManaging {
 		}
 	}
 
-	func reset() {
+	func wipePersistedData() {
 		
 		observers = [:]
 		keychainScanLockUntil = .distantPast

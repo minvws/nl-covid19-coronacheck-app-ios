@@ -10,8 +10,6 @@ import XCTest
 
 class NetworkSpy: NetworkManaging {
 
-	required init(configuration: NetworkConfiguration) {}
-
 	var invokedNetworkConfigurationGetter = false
 	var invokedNetworkConfigurationGetterCount = 0
 	var stubbedNetworkConfiguration: NetworkConfiguration!
@@ -190,12 +188,5 @@ class NetworkSpy: NetworkManaging {
 		if let result = stubbedCheckCouplingStatusCompletionResult {
 			completion(result.0)
 		}
-	}
-}
-
-extension NetworkSpy {
-
-	convenience init() {
-		self.init(configuration: .development)
 	}
 }

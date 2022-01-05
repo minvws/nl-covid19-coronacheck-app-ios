@@ -11,8 +11,6 @@ import AppAuthEnterpriseUserAgent
 
 protocol OpenIdManaging: AnyObject {
 
-	init()
-
 	/// Request an access token
 	/// - Parameters:
 	///   - onCompletion: completion handler with optional access token

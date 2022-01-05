@@ -38,7 +38,7 @@ class NegativeTestDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event) -> [EventDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -78,7 +78,7 @@ class NegativeTestV2DetailsGenerator {
 
 	static func getDetails(testResult: TestResult) -> [EventDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		guard let sampleDate = Formatter.getDateFrom(dateString8601: testResult.sampleDate) else {
 			return []
@@ -119,7 +119,7 @@ class PositiveTestDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event) -> [EventDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -159,7 +159,7 @@ class DCCTestDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, test: EuCredentialAttributes.TestEntry) -> [EventDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -200,7 +200,7 @@ class VaccinationDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String) -> [EventDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -260,7 +260,7 @@ class DCCVaccinationDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, vaccination: EuCredentialAttributes.Vaccination) -> [EventDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -351,7 +351,7 @@ class DCCRecoveryDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, recovery: EuCredentialAttributes.RecoveryEntry) -> [EventDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)

@@ -16,11 +16,13 @@ class SharedCoordinatorTests: XCTestCase {
 	private var window = UIWindow()
 	private var onboardingFactorySpy: OnboardingFactorySpy!
 	private var forcedInformationFactorySpy: ForcedInformationFactorySpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 
 		super.setUp()
-
+		environmentSpies = setupEnvironmentSpies()
+		
 		navigationSpy = NavigationControllerSpy()
 		onboardingFactorySpy = OnboardingFactorySpy()
 		forcedInformationFactorySpy = ForcedInformationFactorySpy()
@@ -36,10 +38,9 @@ class SharedCoordinatorTests: XCTestCase {
 	func test_needsOnboarding() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = true
-		onboardingSpy.stubbedNeedsConsent = true
-		sut.onboardingManager = onboardingSpy
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
+		
 		var completed = false
 
 		// When
@@ -58,10 +59,9 @@ class SharedCoordinatorTests: XCTestCase {
 	func test_needsConsent() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = true
-		sut.onboardingManager = onboardingSpy
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
+		
 		var completed = false
 
 		// When
@@ -80,10 +80,8 @@ class SharedCoordinatorTests: XCTestCase {
 	func test_doesNotNeedOnboarding() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = false
-		sut.onboardingManager = onboardingSpy
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		var completed = false
 
 		// When
@@ -101,9 +99,9 @@ class SharedCoordinatorTests: XCTestCase {
 	func test_needsForcedInformation() {
 		
 		// Given
-		let forcedInformationSpy = ForcedInformationManagerSpy()
-		forcedInformationSpy.stubbedNeedsUpdating = true
-		sut.forcedInformationManager = forcedInformationSpy
+		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = true
+		environmentSpies.forcedInformationManagerSpy.stubbedGetUpdatePageResult = ForcedInformationPage(image: nil, tagline: "", title: "", content: "")
+		
 		var completed = false
 
 		// When
@@ -116,6 +114,6 @@ class SharedCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(completed) == false
-		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators).toEventually(haveCount(1))
 	}
 }
