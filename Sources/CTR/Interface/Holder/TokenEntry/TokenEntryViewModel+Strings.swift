@@ -19,7 +19,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowTitle()
 				case (_, .visitorPass):
-					return L.visitorpass_token_title()
+					return L.visitorpass_code_title()
 			}
 		}
 
@@ -33,7 +33,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, _, .negativeTest):
 					return L.holderTokenentryUniversallinkflowText()
 				case (_, _, .visitorPass):
-					return L.visitorpass_token_text()
+					return L.visitorpass_code_description()
 			}
 		}
 		
@@ -43,19 +43,17 @@ extension TokenEntryViewModel {
 				case .negativeTest:
 					return L.holderTokenentryButtonNotoken()
 				case .visitorPass:
-					return L.visitorpass_token_button_notoken()
+					return L.visitorpass_code_review_button()
 			}
 		}
 		
 		// Secondary button: No verification code
 		static func resendVerificationButtonTitle(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
 			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+				case (.regular, .negativeTest), (_, .visitorPass):
 					return L.holderTokenentryRegularflowRetryTitle()
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowRetryTitle()
-				case (_, .visitorPass):
-					return L.visitorpass_code_verification_not_received_button()
 			}
 		}
 		
@@ -123,7 +121,7 @@ extension TokenEntryViewModel {
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowTokenTitle()
 				case (_, .visitorPass):
-					return L.visitorpass_token_input_title()
+					return L.visitorpass_code_review_input()
 			}
 		}
 		
@@ -143,43 +141,37 @@ extension TokenEntryViewModel {
 					}
 				case (_, .visitorPass):
 					if UIAccessibility.isVoiceOverRunning {
-						return L.visitorpass_token_input_placeholder_screenreader()
+						return L.visitorpass_code_review_placeholder_screenreader()
 					} else {
-						return L.visitorpass_token_input_placeholder()
+						return L.visitorpass_code_review_placeholder()
 					}
 			}
 		}
 		
 		static func verificationEntryHeaderTitle(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
 			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+				case (.regular, .negativeTest), (_, .visitorPass):
 					return L.holderTokenentryRegularflowVerificationTitle()
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowVerificationTitle()
-				case (_, .visitorPass):
-					return L.visitorpass_code_input()
 			}
 		}
 		
 		static func verificationInfo(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
 			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+				case (.regular, .negativeTest), (_, .visitorPass):
 					return L.holderTokenentryRegularflowVerificationInfo()
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowVerificationInfo()
-				case (_, .visitorPass):
-					return L.visitorpass_code_verification_input_explanation()
 			}
 		}
 		
 		static func verificationPlaceholder(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
 			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+				case (.regular, .negativeTest), (_, .visitorPass):
 					return L.holderTokenentryRegularflowVerificationPlaceholder()
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowVerificationPlaceholder()
-				case (_, .visitorPass):
-					return L.visitorpass_code_verification_placeholder()
 			}
 		}
 		
@@ -198,45 +190,37 @@ extension TokenEntryViewModel {
 		
 		static func confirmResendVerificationAlertTitle(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
 			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+				case (.regular, .negativeTest), (_, .visitorPass):
 					return L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertTitle()
-				case (_, .visitorPass):
-					return L.visitorpass_code_confirmresendverificationalert_title()
 			}
 		}
 		
 		static func confirmResendVerificationAlertMessage(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
 			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+				case (.regular, .negativeTest), (_, .visitorPass):
 					return L.holderTokenentryRegularflowConfirmresendverificationalertMessage()
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertMessage()
-				case (_, .visitorPass):
-					return L.visitorpass_code_confirmresendverificationalert_message()
 			}
 		}
 		
 		static func confirmResendVerificationAlertOkayButton(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
 			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+				case (.regular, .negativeTest), (_, .visitorPass):
 					return L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertOkaybutton()
-				case (_, .visitorPass):
-					return L.visitorpass_code_confirmresendverificationalert_okbutton()
 			}
 		}
 		
 		static func confirmResendVerificationAlertCancelButton(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
 			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+				case (.regular, .negativeTest), (_, .visitorPass):
 					return L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton()
 				case (.withRequestTokenProvided, .negativeTest):
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertCancelbutton()
-				case (_, .visitorPass):
-					return L.visitorpass_code_confirmresendverificationalert_cancelbutton()
 			}
 		}
 	}
