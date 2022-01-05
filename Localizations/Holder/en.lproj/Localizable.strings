@@ -112,10 +112,6 @@
 "holder.consent.message.underlined" = "privacy statement";
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";
-"holder.dashboard.card.euvaccinationswereupgraded.button" = "Read more";
-"holder.dashboard.card.euvaccinationswereupgraded.message" = "Your international vaccination certificate has been renewed";
-"holder.dashboard.card.upgradeeuvaccination.button" = "Read more";
-"holder.dashboard.card.upgradeeuvaccination.message" = "You can renew your international vaccination certificate";
 "holder.dashboard.clockDeviationDetected.message" = "Check your phone's time settings. They might be incorrect.";
 "holder.dashboard.configIsAlmostOutOfDate.card.button" = "Read more";
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
@@ -609,9 +605,6 @@
 "holder.updatepage.tagline" = "New in the app";
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title.tab" = "A Dutch and an international tab";
-"holder.upgradeeuvaccination.button" = "Renew certificate";
-"holder.upgradeeuvaccination.message" = "<p>Soon we will renew everyone's vaccination certificate. As a result, you'll get access to QR codes of earlier vaccinations.</p><p>This can be useful for people who want to go to a place where their latest vaccination is not yet valid.</p><p>If you want to, you can also renew your certificate now.</p>";
-"holder.upgradeeuvaccination.title" = "Renew vaccination certificate";
 /* Link naar web accessibility pagina */
 "holder.url.accessibility" = "https://coronacheck.nl/en/accessibility-in-app";
 /* MARK: - URL */
