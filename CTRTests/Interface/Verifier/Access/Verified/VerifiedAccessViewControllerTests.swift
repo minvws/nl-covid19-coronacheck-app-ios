@@ -119,6 +119,49 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 	
+	func test_demo_riskLevelHighPlus_verificationPolicyEnabled() {
+		
+		// Given
+		sut = VerifiedAccessViewController(
+			viewModel: .init(
+				coordinator: verifierCoordinatorSpy,
+				verifiedType: .demo(.highPlus)
+			)
+		)
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.verifier_result_access_title_2g_plus()
+		expect(self.sut.preferredStatusBarStyle) == .default
+		
+		// Snapshot
+		sut.assertImage()
+	}
+	
+	func test_demo_riskLevelHighPlus_verificationPolicyDisabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		sut = VerifiedAccessViewController(
+			viewModel: .init(
+				coordinator: verifierCoordinatorSpy,
+				verifiedType: .demo(.highPlus)
+			)
+		)
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.verifier_result_access_title()
+		expect(self.sut.preferredStatusBarStyle) == .default
+		
+		// Snapshot
+		sut.assertImage()
+	}
+	
 	func test_verified_riskLevelLow_verificationPolicyEnabled() {
 		// Given
 		sut = VerifiedAccessViewController(
@@ -190,6 +233,49 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
 				verifiedType: .verified(.high)
+			)
+		)
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.verifier_result_access_title()
+		expect(self.sut.preferredStatusBarStyle) == .default
+		
+		// Snapshot
+		sut.assertImage()
+	}
+	
+	func test_verified_riskLevelHighPlus_verificationPolicyEnabled() {
+		
+		// Given
+		sut = VerifiedAccessViewController(
+			viewModel: .init(
+				coordinator: verifierCoordinatorSpy,
+				verifiedType: .verified(.highPlus)
+			)
+		)
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.verifier_result_access_title_2g_plus()
+		expect(self.sut.preferredStatusBarStyle) == .lightContent
+		
+		// Snapshot
+		sut.assertImage()
+	}
+	
+	func test_verified_riskLevelHighPlus_verificationPolicyDisabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		sut = VerifiedAccessViewController(
+			viewModel: .init(
+				coordinator: verifierCoordinatorSpy,
+				verifiedType: .verified(.highPlus)
 			)
 		)
 		
