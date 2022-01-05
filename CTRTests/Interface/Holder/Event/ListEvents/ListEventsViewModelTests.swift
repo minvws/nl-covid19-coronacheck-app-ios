@@ -256,7 +256,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventVaccinationAssessment]
+			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			greenCardLoader: greenCardLoader
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -654,10 +655,11 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventVaccinationAssessment]
+			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			greenCardLoader: greenCardLoader
 		)
 		
-		walletSpy.stubbedStoreEventGroupResult = false
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -668,9 +670,9 @@ class ListEventsViewModelTests: XCTestCase {
 		content.primaryAction?()
 		
 		// Then
-		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
-		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
-		expect(self.networkSpy.invokedFetchGreencards) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards) == false
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.sut.alert).to(beNil())
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
@@ -1979,22 +1981,23 @@ class ListEventsViewModelTests: XCTestCase {
 	func test_successVaccinationAssessment_domesticOnly() throws {
 		
 		// Given
-		walletSpy.stubbedStoreEventGroupResult = true
-		walletSpy.stubbedStoreEuGreenCardResult = true
-		walletSpy.stubbedStoreDomesticGreenCardResult = true
-		walletSpy.stubbedFetchSignedEventsResult = ["test"]
-		walletSpy.stubbedHasDomesticGreenCardResult = false
-		networkSpy.stubbedFetchGreencardsCompletionResult =
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 		(.success(RemoteGreenCards.Response.domesticVaccinationAssessment), ())
-		networkSpy.stubbedPrepareIssueCompletionResult =
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
-		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
-		cryptoSpy.stubbedGetStokenResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventVaccinationAssessment]
+			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			greenCardLoader: greenCardLoader
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2006,12 +2009,12 @@ class ListEventsViewModelTests: XCTestCase {
 		content.primaryAction?()
 		
 		// Then
-		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
-		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
-		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
-		expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beFalse())
-		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beFalse())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
 			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
@@ -2024,7 +2027,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: []
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
@@ -2044,7 +2048,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .positiveTest,
-			remoteEvents: []
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
@@ -2064,7 +2069,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
-			remoteEvents: []
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
@@ -2084,7 +2090,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: []
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
@@ -2104,7 +2111,8 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: []
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
