@@ -148,7 +148,7 @@
 "verifier_risksetting_lowrisk_subtitle" = "Je kunt toegang geven aan bezoekers met een test-, vaccinatie- of herstelbewijs.";
 "verifier_risksetting_lowrisk_title" = "3G-toegang";
 "verifier_risksetting_readmore" = "Welk soort toegang mag ik geven?";
-"verifier_risksetting_readmore_url" = "https://coronacheck.nl/nl/faq-scanner-in-app";
+"verifier_risksetting_readmore_url" = "https://www.rijksoverheid.nl/welketoegang";
 "verifier_risksetting_setting_button" = "Instellen";
 "verifier_risksetting_start_header" = "Stel voor jouw locatie in of je 2G- of 3G-toegang gaat geven. Controleer voordat je gaat scannen welk soort toegang je mag geven.";
 "verifier_risksetting_start_readmore" = "Welk soort toegang mag ik geven?";
@@ -157,5 +157,14 @@
 "verifier_scan_instructions_back_to_start" = "Terug naar start";
 "verifier_scanner_policy_indication_2g" = "2G-toegang";
 "verifier_scanner_policy_indication_3g" = "3G-toegang";
+"verifier_scannextinstruction_button_deny_access_supplemental" = "Geen aanvullend bewijs";
+"verifier_scannextinstruction_button_deny_access_test" = "Geen testbewijs";
+"verifier_scannextinstruction_button_scan_next_supplemental" = "Scan aanvullend bewijs";
+"verifier_scannextinstruction_button_scan_next_test" = "Scan testbewijs";
+"verifier_scannextinstruction_header_supplemental" = "Het gescande bewijs niet voldoende. Zonder een vaccinatie- of herstelbewijs mag je de bezoeker geen toegang geven.";
+"verifier_scannextinstruction_header_test" = "Het gescande bewijs niet voldoende. Zonder testbewijs mag je de bezoeker geen toegang geven.";
+"verifier_scannextinstruction_subtitle" = "Bewijs 1 uit 2 gescand";
+"verifier_scannextinstruction_title_supplemental" = "Scan nu een vaccinatie- of herstelbewijs";
+"verifier_scannextinstruction_title_test" = "Scan nu het testbewijs";
 "verifier_start_scan_qr_policy_indication_2g" = "<b>2G</b>-toegang ingesteld";
 "verifier_start_scan_qr_policy_indication_3g" = "<b>3G</b>-toegang ingesteld";

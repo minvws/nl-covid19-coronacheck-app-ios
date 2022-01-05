@@ -59,27 +59,6 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 
-	static func makeMultipleDCCMigrationCards(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		
-		guard validityRegion == .europeanUnion else { return [] }
-		
-		if state.shouldShowEUVaccinationUpdateBanner {
-			return HolderDashboardViewController.Card.makeMultipleDCCMigrationUpdateCard(
-				didTapCallToAction: actionHandler.didTapMultipleDCCUpgradeMoreInfo
-			)
-		} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
-			return HolderDashboardViewController.Card.makeMultipleDCCMigrationUpdateCompletedCard(
-				didTapCallToAction: actionHandler.didTapMultipleDCCUpgradeCompletedMoreInfo,
-				didTapClose: actionHandler.didTapMultipleDCCUpgradeCompletedClose
-			)
-		}
-		return []
-	}
-	
 	static func makeRecoveryValidityCards(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
@@ -107,32 +86,6 @@ extension HolderDashboardViewController.Card {
 			)
 		}
 		return []
-	}
-	
-	static func makeMultipleDCCMigrationUpdateCard(
-		didTapCallToAction: @escaping () -> Void
-	) -> [HolderDashboardViewController.Card] {
-		return [
-			.migrateYourInternationalVaccinationCertificate(
-				message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
-				callToActionButtonText: L.generalReadmore(),
-				didTapCallToAction: didTapCallToAction
-			)
-		]
-	}
-	
-	static func makeMultipleDCCMigrationUpdateCompletedCard(
-		didTapCallToAction: @escaping () -> Void,
-		didTapClose: @escaping () -> Void
-	) -> [HolderDashboardViewController.Card] {
-		return [
-			.migratingYourInternationalVaccinationCertificateDidComplete(
-				message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
-				callToActionButtonText: L.generalReadmore(),
-				didTapCallToAction: didTapCallToAction,
-				didTapClose: didTapClose
-			)
-		]
 	}
 	
 	static func makeExpiredQRCard(
