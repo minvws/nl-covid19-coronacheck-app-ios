@@ -312,9 +312,9 @@ extension ListEventsViewModel {
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
-		let formattedTestDate: String = dataRow.event.assessment?.dateString
+		let formattedTestDate: String = dataRow.event.assessment?.dateTimeString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printAssessmentDateFormatter.string) ?? (dataRow.event.assessment?.dateString ?? "")
+			.map(ListEventsViewModel.printAssessmentDateFormatter.string) ?? (dataRow.event.assessment?.dateTimeString ?? "")
 
 		return ListEventsViewController.Row(
 			title: L.holder_event_vaccination_assessment_element_title(),

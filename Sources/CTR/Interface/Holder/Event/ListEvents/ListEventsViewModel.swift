@@ -473,7 +473,7 @@ class ListEventsViewModel: Logging {
 				if $0.vaccination != nil {
 					return $0.vaccination?.dateString
 				} else if $0.assessment != nil {
-					return $0.assessment?.dateString
+					return $0.assessment?.dateTimeString
 				} else if $0.negativeTest != nil {
 					return $0.negativeTest?.sampleDateString
 				} else if $0.recovery != nil {

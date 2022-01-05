@@ -185,6 +185,15 @@ extension EventFlow.EventResultWrapper {
 		result: nil,
 		events: [EventFlow.Event.negativeTestEvent]
 	)
+	
+	static var fakeVaccinationAssessmentResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.vaccinationAssessmentEvent]
+	)
 }
 
 extension RequestToken {
@@ -282,6 +291,16 @@ extension RemoteGreenCards.Origin {
 			type: "recovery",
 			eventTime: Date(),
 			expirationTime: Date().addingTimeInterval(30 * days),
+			validFrom: Date(),
+			doseNumber: nil
+		)
+	}
+	
+	static var fakeVaccinationAssessmentOriginExpiringIn14Days: RemoteGreenCards.Origin {
+		RemoteGreenCards.Origin(
+			type: "vaccinationassessment",
+			eventTime: Date(),
+			expirationTime: Date().addingTimeInterval(14 * days),
 			validFrom: Date(),
 			doseNumber: nil
 		)
@@ -386,6 +405,18 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			]
+		)
+	}
+	
+	static var domesticVaccinationAssessment: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days,
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: []
 		)
 	}
 
@@ -586,6 +617,24 @@ extension EventFlow.Event {
 			),
 			dccEvent: nil,
 			assessment: nil
+		)
+	}
+	
+	static var vaccinationAssessmentEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccinationassessment",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil,
+			assessment: EventFlow.VaccinationAssessment(
+				dateTimeString: "2022-01-05T12:42:42Z",
+				country: "NLD",
+				verified: true
+			)
 		)
 	}
 }

@@ -353,13 +353,13 @@ struct EventFlow {
 	
 	struct VaccinationAssessment: Codable, Equatable {
 		
-		let dateString: String?
+		let dateTimeString: String?
 		let country: String?
 		let verified: Bool
 		
 		enum CodingKeys: String, CodingKey {
 			
-			case dateString = "assessmentDate"
+			case dateTimeString = "assessmentDate"
 			case country
 			case verified = "digitallyVerified"
 		}
@@ -369,7 +369,7 @@ struct EventFlow {
 		/// - Returns: optional date
 		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 			
-			if let dateString = dateString {
+			if let dateString = dateTimeString {
 				return  dateformatter.date(from: dateString)
 			}
 			return nil
