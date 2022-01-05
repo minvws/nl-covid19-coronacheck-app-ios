@@ -88,32 +88,6 @@ extension HolderDashboardViewController.Card {
 		return []
 	}
 	
-	static func makeMultipleDCCMigrationUpdateCard(
-		didTapCallToAction: @escaping () -> Void
-	) -> [HolderDashboardViewController.Card] {
-		return [
-			.migrateYourInternationalVaccinationCertificate(
-				message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
-				callToActionButtonText: L.generalReadmore(),
-				didTapCallToAction: didTapCallToAction
-			)
-		]
-	}
-	
-	static func makeMultipleDCCMigrationUpdateCompletedCard(
-		didTapCallToAction: @escaping () -> Void,
-		didTapClose: @escaping () -> Void
-	) -> [HolderDashboardViewController.Card] {
-		return [
-			.migratingYourInternationalVaccinationCertificateDidComplete(
-				message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
-				callToActionButtonText: L.generalReadmore(),
-				didTapCallToAction: didTapCallToAction,
-				didTapClose: didTapClose
-			)
-		]
-	}
-	
 	static func makeExpiredQRCard(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
