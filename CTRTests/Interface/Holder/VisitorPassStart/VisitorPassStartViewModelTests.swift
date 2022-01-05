@@ -40,7 +40,7 @@ final class VisitorPassStartViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.title) == L.visitorpass_start_title()
-		expect(self.sut.message) == L.visitorpass_start_message(14)
+		expect(self.sut.message) == L.visitorpass_start_message()
 		expect(self.sut.buttonTitle) == L.visitorpass_start_action()
 	}
 	

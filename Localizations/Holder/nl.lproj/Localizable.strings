@@ -62,6 +62,7 @@
 "general.vaccinationcertificate" = "vaccinatiebewijs";
 "general.vaccinationdate" = "Vaccinatiedatum";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
+"general_visitor_pass" = "bezoekersbewijs";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Lees meer:";
@@ -557,7 +558,7 @@
 "holder.testresults.wrong.body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.button.notoken" = "Heb je geen ophaalcode?";
-"holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een ophaalcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met je testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
+"holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een ophaalcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met je testlocatie.</p>";
 "holder.tokenentry.modal.notoken.title" = "Heb je geen ophaalcode?";
 "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
 "holder.tokenentry.regularflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail. Niks gekregen? Klik hieronder op ‘stuur opnieuw’ voor een nieuwe code.";
@@ -698,6 +699,23 @@
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
 "updateApp.title" = "Tijd voor een update";
+"visitorpass_code_description" = "Vul je reviewcode in. Deze code begint met KVT- en heb je van de Visitor Pass Desk gekregen toen jouw vaccinatie werd beoordeeld.";
+"visitorpass_code_error_invalid_code" = "Deze reviewcode is verlopen";
+"visitorpass_code_review_button" = "Heb je geen reviewcode?";
+"visitorpass_code_review_input" = "Reviewcode";
+"visitorpass_code_review_placeholder" = "Bijv. KVT-3839287262-F1";
+"visitorpass_code_review_placeholder_screenreader" = "Vul hier je reviewcode in";
+"visitorpass_code_title" = "Vaccinatie review ophalen";
+"visitorpass_event_name" = "Vaccinatie beoordeling";
+"visitorpass_events_description" = "Kloppen de gegevens? Als de gegevens kloppen kun je je vaccinatie boordeling toevoegen aan de app.";
 "visitorpass_start_action" = "Gegevens ophalen";
-"visitorpass_start_message" = "<p>Ben jij buiten de Europese Unie gevaccineerd en op bezoek in Nederland? Dan kan je een bezoekersbewijs maken waarmee je plekken in Nederland kan bezoeken die een coronatoegangsbewijs vragen.</p><p>Het bewijs is %li dagen geldig na aanvraag.</p><p><b>Een bezoekersbewijs maken:</b><ul><li>Laat je vaccinatiegegevens en identiteitsbewijs controleren bij een <a href=\"https://coronacheck.nl/\">VWS loket</a>.</li>\n<li>Haal je vaccinatie beoordeling op in de app.</li><li>Maak een test afspraak bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>.</li><li>Voeg je negatieve testuitslag toe aan de app.</li></ul></p>";
+"visitorpass_start_message" = "<p>Ben je buiten de Europese Unie gevaccineerd en op bezoek in Nederland?  Dan kun je van jouw vaccinatie review en een negatieve testuitslag een bezoekersbewijs maken.</p><p>Met je bezoekersbewijs krijg je toegang tot plekken en activiteiten in Nederland die vragen om een coronatoegangsbewijs.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/bezoekersbewijs\">www.rijksoverheid.nl/bezoekersbewijs</a>.</p>";
 "visitorpass_start_title" = "Een bezoekersbewijs maken";
+"visitorpass_token_error_empty_code" = "Graag eerst een verificatiecode invullen";
+"visitorpass_token_error_empty_token" = "Graag eerst een reviewcode invullen";
+"visitorpass_token_error_invalid_code" = "Geen geldige reviewcode";
+"visitorpass_token_error_invalid_combination" = "Geen geldige combinatie";
+"visitorpass_token_error_unknown_provider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
+"visitorpass_token_modal_notoken_details" = "<p>Je krijgt van het VWS loket een reviewcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met het loket.</p>";
+"visitorpass_token_modal_notoken_title" = "Heb je geen reviewcode?";
+"visitorpass_token_next" = "Volgende";

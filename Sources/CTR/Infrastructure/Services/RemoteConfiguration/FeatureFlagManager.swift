@@ -57,7 +57,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	}
 	
 	func isVisitorPassEnabled() -> Bool {
-
+		
 		return remoteConfigManager?.storedConfiguration.visitorPassEnabled ?? false
 	}
 }
