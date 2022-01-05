@@ -49,7 +49,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
 
-	private weak var appInstalledSinceManager: AppInstalledSinceManaging? = Services.appInstalledSinceManager
+	private weak var appInstalledSinceManager: AppInstalledSinceManaging? = Current.appInstalledSinceManager
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -68,7 +68,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	deinit {
 		remoteConfigManagerObserverTokens.forEach {
-			Services.remoteConfigManager.removeObserver(token: $0)
+			Current.remoteConfigManager.removeObserver(token: $0)
 		}
 	}
 
@@ -94,12 +94,12 @@ class AppCoordinator: Coordinator, Logging {
 		// Attach behaviours that we want the RemoteConfigManager to perform
 		// each time it refreshes the config in future:
 
-		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
+		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
 			// Mark remote config loaded
-			Services.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
+			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
 		}]
 
-		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendReloadObserver {[weak self] _, _, urlResponse in
+		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver {[weak self] _, _, urlResponse in
 
 			/// Fish for the server Date in the network response, and use that to maintain
 			/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
@@ -107,7 +107,7 @@ class AppCoordinator: Coordinator, Logging {
 			guard let httpResponse = urlResponse as? HTTPURLResponse,
 				  let serverDateString = httpResponse.allHeaderFields["Date"] as? String else { return }
 
-			Services.clockDeviationManager.update(
+			Current.clockDeviationManager.update(
 				serverHeaderDate: serverDateString,
 				ageHeader: httpResponse.allHeaderFields["Age"] as? String
 			)
@@ -294,7 +294,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	var isLunhCheckEnabled: Bool {
 		
-		return Services.remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
+		return Current.remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
 	}
 }
 

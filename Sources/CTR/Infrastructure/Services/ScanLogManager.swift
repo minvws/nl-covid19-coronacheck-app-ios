@@ -10,8 +10,6 @@ import CoreData
 
 protocol ScanLogManaging: AnyObject {
 
-	init( dataStoreManager: DataStoreManaging)
-
 	func didWeScanQRs(withinLastNumberOfSeconds: Int) -> Bool
 
 	func getScanEntries(withinLastNumberOfSeconds: Int) -> Result<[ScanLogEntry], Error>
@@ -20,7 +18,7 @@ protocol ScanLogManaging: AnyObject {
 
 	func deleteExpiredScanLogEntries(seconds: Int)
 
-	func reset()
+	func wipePersistedData()
 }
 
 class ScanLogManager: ScanLogManaging {
@@ -30,7 +28,7 @@ class ScanLogManager: ScanLogManaging {
 
 	private var dataStoreManager: DataStoreManaging
 
-	required init( dataStoreManager: DataStoreManaging = Services.dataStoreManager) {
+	required init(dataStoreManager: DataStoreManaging) {
 
 		self.dataStoreManager = dataStoreManager
 	}
@@ -86,7 +84,7 @@ class ScanLogManager: ScanLogManaging {
 		}
 	}
 
-	func reset() {
+	func wipePersistedData() {
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {

@@ -16,12 +16,12 @@ final class DeniedAccessViewControllerTests: XCTestCase {
 	private var sut: DeniedAccessViewController!
 	
 	private var verifierCoordinatorSpy: VerifierCoordinatorDelegateSpy!
-	
+	private var environmentSpies: EnvironmentSpies!
 	var window = UIWindow()
 	
 	override func setUp() {
 		super.setUp()
-		
+		environmentSpies = setupEnvironmentSpies()
 		verifierCoordinatorSpy = VerifierCoordinatorDelegateSpy()
 		
 		sut = DeniedAccessViewController(

@@ -9,9 +9,6 @@ import Foundation
 
 protocol ForcedInformationManaging {
 
-	// Initialize
-	init(secureUserSettings: SecureUserSettingsProtocol)
-	
 	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
 	var factory: ForcedInformationFactory? { get set }
 
@@ -28,6 +25,9 @@ protocol ForcedInformationManaging {
 
 	/// Give consent
 	func consentGiven()
+
+	/// Reset the manager
+	func wipePersistedData()
 }
 
 class ForcedInformationManager: ForcedInformationManaging {
@@ -87,5 +87,11 @@ class ForcedInformationManager: ForcedInformationManaging {
 
 		guard let currentVersion = factory?.information.version else { return }
 		forcedInformationData.lastSeenVersion = currentVersion
+	}
+
+	/// Reset the manager, clear all the data
+	func wipePersistedData() {
+
+		secureUserSettings.forcedInformationData = SecureUserSettings.Defaults.forcedInformationData
 	}
 }

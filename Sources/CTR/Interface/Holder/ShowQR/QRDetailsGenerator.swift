@@ -30,7 +30,7 @@ class NegativeTestQRDetailsGenerator {
 
 	static func getDetails(euCredentialAttributes: EuCredentialAttributes, test: EuCredentialAttributes.TestEntry) -> [DCCQRDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)
@@ -77,7 +77,7 @@ class VaccinationQRDetailsGenerator {
 
 	static func getDetails(euCredentialAttributes: EuCredentialAttributes, vaccination: EuCredentialAttributes.Vaccination) -> [DCCQRDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
@@ -114,7 +114,7 @@ class RecoveryQRDetailsGenerator {
 
 	static func getDetails(euCredentialAttributes: EuCredentialAttributes, recovery: EuCredentialAttributes.RecoveryEntry) -> [DCCQRDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)

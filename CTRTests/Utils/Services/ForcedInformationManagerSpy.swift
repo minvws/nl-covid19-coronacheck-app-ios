@@ -8,15 +8,7 @@
 import XCTest
 @testable import CTR
 
-extension ForcedInformationManagerSpy {
-	convenience init() {
-		self.init(secureUserSettings: SecureUserSettings())
-	}
-}
-
 class ForcedInformationManagerSpy: ForcedInformationManaging {
-
-	required init(secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedFactorySetter = false
 	var invokedFactorySetterCount = 0
@@ -76,5 +68,13 @@ class ForcedInformationManagerSpy: ForcedInformationManaging {
 	func consentGiven() {
 		invokedConsentGiven = true
 		invokedConsentGivenCount += 1
+	}
+
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
+
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

@@ -10,8 +10,6 @@ import XCTest
 
 final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 
-	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, reachability: ReachabilityProtocol?, fileStorage: FileStorage, flavor: AppFlavor) {}
-
 	var invokedHasPublicKeysGetter = false
 	var invokedHasPublicKeysGetterCount = 0
 	var stubbedHasPublicKeys: Bool! = false
@@ -87,11 +85,11 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		}
 	}
 
-	var invokedReset = false
-	var invokedResetCount = 0
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
 
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

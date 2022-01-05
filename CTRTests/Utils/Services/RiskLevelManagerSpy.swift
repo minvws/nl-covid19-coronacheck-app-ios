@@ -8,15 +8,7 @@
 import XCTest
 @testable import CTR
 
-extension RiskLevelManagerSpy {
-	convenience init() {
-		self.init(secureUserSettings: SecureUserSettingsSpy())
-	}
-}
-
 class RiskLevelManagerSpy: RiskLevelManaging {
-
-	required init(secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedStateGetter = false
 	var invokedStateGetterCount = 0
@@ -66,11 +58,11 @@ class RiskLevelManagerSpy: RiskLevelManaging {
 		invokedRemoveObserverParametersList.append((token, ()))
 	}
 
-	var invokedReset = false
-	var invokedResetCount = 0
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
 
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

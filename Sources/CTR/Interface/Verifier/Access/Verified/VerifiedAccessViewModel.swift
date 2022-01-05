@@ -35,7 +35,7 @@ final class VerifiedAccessViewModel: Logging {
 		self.coordinator = coordinator
 		self.verifiedType = verifiedType
 
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			switch verifiedType {
 				case .verified(let riskLevel) where riskLevel.isHigh,
 						.demo(let riskLevel) where riskLevel.isHigh:

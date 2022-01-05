@@ -11,31 +11,20 @@ import Nimble
 
 class EventDetailsGeneratorTest: XCTestCase {
 
-	private var mappingManagerSpy: MappingManagerSpy!
-	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
-
 		super.setUp()
-		remoteConfigManagerSpy = RemoteConfigManagingSpy()
-		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
-		mappingManagerSpy = MappingManagerSpy(remoteConfigManager: remoteConfigManagerSpy)
-		Services.use(mappingManagerSpy)
+		environmentSpies = setupEnvironmentSpies()
 	}
-
-	override class func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
-	}
-
+	
 	func testNegativeTestDetailsGenerator() {
 
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let event = EventFlow.Event.negativeTestEvent
-		mappingManagerSpy.stubbedGetTestManufacturerResult = "testNegativeTestGenerator"
-		mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
+		environmentSpies.mappingManagerSpy.stubbedGetTestManufacturerResult = "testNegativeTestGenerator"
+		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
 
 		// When
 		let details = NegativeTestDetailsGenerator.getDetails(identity: identity, event: event)
@@ -75,8 +64,8 @@ class EventDetailsGeneratorTest: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let event = EventFlow.Event.positiveTestEvent
-		mappingManagerSpy.stubbedGetTestManufacturerResult = "testPositiveTestGenerator"
-		mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
+		environmentSpies.mappingManagerSpy.stubbedGetTestManufacturerResult = "testPositiveTestGenerator"
+		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
 
 		// When
 		let details = PositiveTestDetailsGenerator.getDetails(identity: identity, event: event)
@@ -100,10 +89,10 @@ class EventDetailsGeneratorTest: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let dccTest = EuCredentialAttributes.TestEntry.negativeTest
-		mappingManagerSpy.stubbedGetTestManufacturerResult = "testDCCNegativeTestGenerator"
-		mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
-		mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
-		mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
+		environmentSpies.mappingManagerSpy.stubbedGetTestManufacturerResult = "testDCCNegativeTestGenerator"
+		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 
 		// When
 		let details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest)
@@ -130,10 +119,10 @@ class EventDetailsGeneratorTest: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let event = EventFlow.Event.vaccinationEvent
-		mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
-		mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
-		mappingManagerSpy.stubbedGetVaccinationManufacturerMappingResult = "Biontech"
-		mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
 
 		// When
 		let details = VaccinationDetailsGenerator.getDetails(identity: identity, event: event, providerIdentifier: "CC")
@@ -177,11 +166,11 @@ class EventDetailsGeneratorTest: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let dccVaccination = EuCredentialAttributes.Vaccination.vaccination
-		mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
-		mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
-		mappingManagerSpy.stubbedGetVaccinationManufacturerMappingResult = "Biontech"
-		mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
-		mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 
 		// When
 		let details = DCCVaccinationDetailsGenerator.getDetails(identity: identity, vaccination: dccVaccination)
@@ -227,8 +216,8 @@ class EventDetailsGeneratorTest: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let dccRecovery = EuCredentialAttributes.RecoveryEntry.recovery
-		mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
-		mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 
 		// When
 		let details = DCCRecoveryDetailsGenerator.getDetails(identity: identity, recovery: dccRecovery)

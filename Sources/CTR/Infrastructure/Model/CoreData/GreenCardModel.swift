@@ -38,7 +38,7 @@ class GreenCardModel {
 		var result = [GreenCard]()
 		for objectID in objectIDs {
 			do {
-				if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: objectID) as? GreenCard {
+				if let greenCard = try Current.dataStoreManager.managedObjectContext().existingObject(with: objectID) as? GreenCard {
 					result.append(greenCard)
 				}
 			} catch let error {

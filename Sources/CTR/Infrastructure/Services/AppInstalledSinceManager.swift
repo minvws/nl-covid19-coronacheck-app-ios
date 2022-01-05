@@ -10,12 +10,12 @@ import Foundation
 protocol AppInstalledSinceManaging: AnyObject {
 
 	var firstUseDate: Date? { get }
-
-	init(secureUserSettings: SecureUserSettingsProtocol)
-
+	
 	func update(serverHeaderDate: String, ageHeader: String?)
 
 	func update(dateProvider: DocumentsDirectoryCreationDateProtocol)
+
+	func wipePersistedData()
 }
 
 final class AppInstalledSinceManager: AppInstalledSinceManaging {
@@ -40,7 +40,7 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 	
 	// MARK: - Init
 
-	required init(secureUserSettings: SecureUserSettingsProtocol = SecureUserSettings()) {
+	required init(secureUserSettings: SecureUserSettingsProtocol) {
 		self.secureUserSettings = secureUserSettings
 	}
  
@@ -70,6 +70,10 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		if let date = dateProvider.getDocumentsDirectoryCreationDate() {
 			appInstalledDate = date
 		}
+	}
+
+	func wipePersistedData() {
+		appInstalledDate = nil
 	}
 }
 

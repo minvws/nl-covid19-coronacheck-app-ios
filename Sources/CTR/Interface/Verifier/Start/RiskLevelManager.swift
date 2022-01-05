@@ -10,11 +10,10 @@ import Foundation
 protocol RiskLevelManaging: AnyObject {
 	var state: RiskLevel? { get }
 	
-	init(secureUserSettings: SecureUserSettingsProtocol)
 	func update(riskLevel: RiskLevel?)
 	func appendObserver(_ observer: @escaping (RiskLevel?) -> Void) -> RiskLevelManager.ObserverToken
 	func removeObserver(token: RiskLevelManager.ObserverToken)
-	func reset()
+	func wipePersistedData()
 }
 
 final class RiskLevelManager: RiskLevelManaging {
@@ -72,7 +71,7 @@ final class RiskLevelManager: RiskLevelManaging {
 		}
 	}
 
-	func reset() {
+	func wipePersistedData() {
 
 		observers = [:]
 		keychainRiskLevel = .none
@@ -85,7 +84,7 @@ extension RiskLevelManaging {
 	
 	/// LLDB:
 	/// `e import CTR`
-	/// `Services.riskLevelManager.set(riskLevel: .high)`
+	/// `Current.riskLevelManager.set(riskLevel: .high)`
 	func set(riskLevel: RiskLevel) {
 		let casted = self as! RiskLevelManager // swiftlint:disable:this force_cast
 		casted.state = riskLevel

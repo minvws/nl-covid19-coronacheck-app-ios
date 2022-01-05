@@ -8,10 +8,16 @@
 import Foundation
 @testable import CTR
 
+extension ScanLockManagerSpy {
+	static var configScanLockDuration: TimeInterval {
+		return 10
+	}
+}
+
 class ScanLockManagerSpy: ScanLockManaging {
 
 	required init() {}
-	
+
 	var invokedStateGetter = false
 	var invokedStateGetterCount = 0
 	var stubbedState: ScanLockManager.State!
@@ -56,15 +62,11 @@ class ScanLockManagerSpy: ScanLockManaging {
 		invokedRemoveObserverParametersList.append((token, ()))
 	}
 
-	var invokedReset = false
-	var invokedResetCount = 0
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
 
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
-}
-
-extension ScanLockManagerSpy {
-	static var configScanLockDuration: TimeInterval { return 30 }
 }

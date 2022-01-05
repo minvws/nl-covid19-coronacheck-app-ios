@@ -14,24 +14,13 @@ class VerifierCoordinatorTests: XCTestCase {
 	private var sut: VerifierCoordinator!
 
 	private var navigationSpy: NavigationControllerSpy!
-	private var scanLogManagerSpy: ScanLogManagingSpy!
-	private var scanLockManagerSpy: ScanLockManagerSpy!
-	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var environmentSpies: EnvironmentSpies!
 	private var window = UIWindow()
 
 	override func setUp() {
 
 		super.setUp()
-
-		riskLevelManagerSpy = RiskLevelManagerSpy()
-		Services.use(riskLevelManagerSpy)
-		
-		scanLogManagerSpy = ScanLogManagingSpy()
-		Services.use(scanLogManagerSpy)
-
-		scanLockManagerSpy = ScanLockManagerSpy()
-		scanLockManagerSpy.stubbedState = .unlocked
-		Services.use(scanLockManagerSpy)
+		environmentSpies = setupEnvironmentSpies()
 
 		navigationSpy = NavigationControllerSpy()
 		sut = VerifierCoordinator(
@@ -40,31 +29,21 @@ class VerifierCoordinatorTests: XCTestCase {
 		)
 	}
 
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
-	}
-
 	// MARK: - Tests
 	
 	func testStartForcedInformation() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = false
-		sut.onboardingManager = onboardingSpy
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
-		let forcedInformationSpy = ForcedInformationManagerSpy()
-		forcedInformationSpy.stubbedNeedsUpdating = true
-		forcedInformationSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = true
+		environmentSpies.forcedInformationManagerSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
 			image: nil,
 			tagline: "test",
 			title: "test",
 			content: "test"
 		)
-		sut.forcedInformationManager = forcedInformationSpy
 
 		// When
 		sut.start()
@@ -77,21 +56,12 @@ class VerifierCoordinatorTests: XCTestCase {
 	func testFinishForcedInformation() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = false
-		sut.onboardingManager = onboardingSpy
-		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
-		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
-
-		let forcedInformationSpy = ForcedInformationManagerSpy()
-		forcedInformationSpy.stubbedNeedsUpdating = false
-		sut.forcedInformationManager = forcedInformationSpy
+		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = false
 
 		sut.childCoordinators = [
 			ForcedInformationCoordinator(
 				navigationController: navigationSpy,
-				forcedInformationManager: ForcedInformationManagerSpy(),
+				forcedInformationManager: environmentSpies.forcedInformationManagerSpy,
 				delegate: sut
 			)
 		]
@@ -106,20 +76,13 @@ class VerifierCoordinatorTests: XCTestCase {
 	func test_shouldCall_scanManagerRemoveOldEntries() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = false
-		sut.onboardingManager = onboardingSpy
-		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
-		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
-
-		let forcedInformationSpy = ForcedInformationManagerSpy()
-		forcedInformationSpy.stubbedNeedsUpdating = false
-		sut.forcedInformationManager = forcedInformationSpy
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = false
 		
 		sut.start()
 		
 		// Then
-		expect(self.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == true
+		expect(self.environmentSpies.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == true
 	}
 }

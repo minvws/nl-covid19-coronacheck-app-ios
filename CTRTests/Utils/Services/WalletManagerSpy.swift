@@ -10,8 +10,6 @@ import XCTest
 
 class WalletManagerSpy: WalletManaging {
 
-	required init(dataStoreManager: DataStoreManaging) {}
-
 	var invokedStoreEventGroup = false
 	var invokedStoreEventGroupCount = 0
 	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date)?
@@ -212,11 +210,5 @@ class WalletManagerSpy: WalletManaging {
 		invokedHasEventGroupParameters = (type, providerIdentifier)
 		invokedHasEventGroupParametersList.append((type, providerIdentifier))
 		return stubbedHasEventGroupResult
-	}
-}
-
-extension WalletManagerSpy {
-	convenience init() {
-		self.init(dataStoreManager: DataStoreManager(.inMemory))
 	}
 }
