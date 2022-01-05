@@ -76,6 +76,10 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func migrateEUVaccinationDidComplete()
 
 	func extendRecoveryValidityDidComplete()
+	
+	func userWishesMoreInfoAboutNoTestToken()
+	
+	func userWishesMoreInfoAboutNoVisitorPassToken()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -279,13 +283,14 @@ class HolderCoordinator: SharedCoordinator {
 	}
 
 	/// Navigate to the token entry scene
-	func navigateToTokenEntry(_ token: RequestToken? = nil) {
+	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
 
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false)
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false),
+				inputRetrievalCodeMode: retrievalMode
 			)
 		)
 
@@ -420,8 +425,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToCreateAVisitorPass() {
-		logInfo("Todo: userWishesToCreateAVisitorPass")
-		// navigateToTokenEntry()
+		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 
 	func userWishesToChooseLocation() {
@@ -601,6 +605,27 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
+	
+	func userWishesMoreInfoAboutNoTestToken() {
+		
+		presentInformationPage(
+			title: L.holderTokenentryModalNotokenTitle(),
+			body: L.holderTokenentryModalNotokenDetails(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
+	func userWishesMoreInfoAboutNoVisitorPassToken() {
+		
+		presentInformationPage(
+			title: L.visitorpass_token_modal_notoken_title(),
+			body: L.visitorpass_token_modal_notoken_details(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
 }
 
 // MARK: - MenuDelegate

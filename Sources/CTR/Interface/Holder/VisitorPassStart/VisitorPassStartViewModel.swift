@@ -31,9 +31,7 @@ final class VisitorPassStartViewModel: Logging {
 	init(coordinator: OpenUrlProtocol & HolderCoordinatorDelegate) {
 
 		self.coordinator = coordinator
-		
-		let visitorPassValidityDays = Services.remoteConfigManager.storedConfiguration.visitorPassValidityDays ?? 14
-		message = L.visitorpass_start_message(visitorPassValidityDays)
+		message = L.visitorpass_start_message()
 	}
 
 	// MARK: - Methods

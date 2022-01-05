@@ -299,6 +299,22 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedExtendRecoveryValidityDidCompleteCount += 1
 	}
 
+	var invokedUserWishesMoreInfoAboutNoTestToken = false
+	var invokedUserWishesMoreInfoAboutNoTestTokenCount = 0
+
+	func userWishesMoreInfoAboutNoTestToken() {
+		invokedUserWishesMoreInfoAboutNoTestToken = true
+		invokedUserWishesMoreInfoAboutNoTestTokenCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutNoVisitorPassToken = false
+	var invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount = 0
+
+	func userWishesMoreInfoAboutNoVisitorPassToken() {
+		invokedUserWishesMoreInfoAboutNoVisitorPassToken = true
+		invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount += 1
+	}
+
 	var invokedDismiss = false
 	var invokedDismissCount = 0
 
