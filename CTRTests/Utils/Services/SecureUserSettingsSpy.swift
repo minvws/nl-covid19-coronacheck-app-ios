@@ -163,11 +163,11 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedReset = false
-	var invokedResetCount = 0
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
 
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

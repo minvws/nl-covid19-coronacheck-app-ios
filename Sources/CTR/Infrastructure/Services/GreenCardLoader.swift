@@ -8,8 +8,6 @@
 import Foundation
 
 protocol GreenCardLoading {
-	init(networkManager: NetworkManaging, cryptoManager: CryptoManaging, walletManager: WalletManaging)
-
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
 		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void)
@@ -51,18 +49,28 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		}
 	}
 
+	private let now: () -> Date
 	private let networkManager: NetworkManaging
 	private let cryptoManager: CryptoManaging
 	private let walletManager: WalletManaging
-
+	private let remoteConfigManager: RemoteConfigManaging
+	private let userSettings: UserSettingsProtocol
+	
 	required init(
-		networkManager: NetworkManaging = Services.networkManager,
-		cryptoManager: CryptoManaging = Services.cryptoManager,
-		walletManager: WalletManaging = Services.walletManager) {
+		now: @escaping () -> Date,
+		networkManager: NetworkManaging,
+		cryptoManager: CryptoManaging,
+		walletManager: WalletManaging,
+		remoteConfigManager: RemoteConfigManaging,
+		userSettings: UserSettingsProtocol
+	) {
 
+		self.now = now
 		self.networkManager = networkManager
 		self.cryptoManager = cryptoManager
 		self.walletManager = walletManager
+		self.remoteConfigManager = remoteConfigManager
+		self.userSettings = userSettings
 	}
 
 	func signTheEventsIntoGreenCardsAndCredentials(
@@ -105,9 +113,9 @@ class GreenCardLoader: GreenCardLoading, Logging {
 
 									// ~~ 📆 TEMPORARY - will be removed in 1 month ~~
 									GreenCardLoader.temporary___updateRecoveryExtensionValidityFlags(
-										userSettings: UserSettings(),
-										remoteConfigManager: Services.remoteConfigManager,
-										now: { Date() }
+										userSettings: self.userSettings,
+										remoteConfigManager: self.remoteConfigManager,
+										now: self.now
 									)
 
 									completion(.success(greenCardResponse))

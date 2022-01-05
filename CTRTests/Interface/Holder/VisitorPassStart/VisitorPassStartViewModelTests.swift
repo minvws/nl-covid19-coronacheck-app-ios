@@ -13,23 +13,14 @@ final class VisitorPassStartViewModelTests: XCTestCase {
 	
 	var sut: VisitorPassStartViewModel!
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
-	var remoteConfigSpy: RemoteConfigManagingSpy!
+	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		super.setUp()
-
-		remoteConfigSpy = RemoteConfigManagingSpy()
-		remoteConfigSpy.stubbedStoredConfiguration = .default
-		Services.use(remoteConfigSpy)
-		
+		environmentSpies = setupEnvironmentSpies()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		sut = VisitorPassStartViewModel(coordinator: holderCoordinatorDelegateSpy)
-	}
-	
-	override func tearDown() {
 		
-		super.tearDown()
-		Services.revertToDefaults()
+		sut = VisitorPassStartViewModel(coordinator: holderCoordinatorDelegateSpy)
 	}
 	
 	func test_content() {

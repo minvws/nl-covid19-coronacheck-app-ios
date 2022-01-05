@@ -38,11 +38,11 @@ class SharedCoordinator: Coordinator, Logging {
 	/// The side panel controller that holds both the menu and the main view
 	var sidePanel: SidePanelController?
 
-	var onboardingManager: OnboardingManaging = Services.onboardingManager
-	var forcedInformationManager: ForcedInformationManaging = Services.forcedInformationManager
-	var cryptoManager: CryptoManaging = Services.cryptoManager
+	var onboardingManager: OnboardingManaging = Current.onboardingManager
+	var forcedInformationManager: ForcedInformationManaging = Current.forcedInformationManager
+	var cryptoManager: CryptoManaging = Current.cryptoManager
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
-	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+	var remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
 	var versionSupplier = AppVersionSupplier()
 	var childCoordinators: [Coordinator] = []
 

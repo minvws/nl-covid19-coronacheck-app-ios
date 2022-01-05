@@ -10,8 +10,6 @@ import XCTest
 
 class ScanLogManagingSpy: ScanLogManaging {
 
-	required init(dataStoreManager: DataStoreManaging) {}
-
 	var invokedDidWeScanQRs = false
 	var invokedDidWeScanQRsCount = 0
 	var invokedDidWeScanQRsParameters: (withinLastNumberOfSeconds: Int, Void)?
@@ -64,17 +62,11 @@ class ScanLogManagingSpy: ScanLogManaging {
 		invokedDeleteExpiredScanLogEntriesParametersList.append((seconds, ()))
 	}
 
-	var invokedReset = false
-	var invokedResetCount = 0
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
 
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
-	}
-}
-
-extension ScanLogManagingSpy {
-	convenience init() {
-		self.init(dataStoreManager: DataStoreManager(.inMemory, flavor: .verifier))
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

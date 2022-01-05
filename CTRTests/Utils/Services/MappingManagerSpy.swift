@@ -9,8 +9,6 @@
 
 class MappingManagerSpy: MappingManaging {
 
-	required init(remoteConfigManager: RemoteConfigManaging) {}
-
 	var invokedSetEventProviders = false
 	var invokedSetEventProvidersCount = 0
 	var invokedSetEventProvidersParameters: (providers: [EventFlow.EventProvider], Void)?
@@ -177,18 +175,18 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetVaccinationTypeResult
 	}
 
-	var invokedGetVaccinationManufacturerMapping = false
-	var invokedGetVaccinationManufacturerMappingCount = 0
-	var invokedGetVaccinationManufacturerMappingParameters: (code: String?, Void)?
-	var invokedGetVaccinationManufacturerMappingParametersList = [(code: String?, Void)]()
-	var stubbedGetVaccinationManufacturerMappingResult: String!
+	var invokedGetVaccinationManufacturer = false
+	var invokedGetVaccinationManufacturerCount = 0
+	var invokedGetVaccinationManufacturerParameters: (code: String?, Void)?
+	var invokedGetVaccinationManufacturerParametersList = [(code: String?, Void)]()
+	var stubbedGetVaccinationManufacturerResult: String!
 
 	func getVaccinationManufacturer(_ code: String? ) -> String? {
-		invokedGetVaccinationManufacturerMapping = true
-		invokedGetVaccinationManufacturerMappingCount += 1
-		invokedGetVaccinationManufacturerMappingParameters = (code, ())
-		invokedGetVaccinationManufacturerMappingParametersList.append((code, ()))
-		return stubbedGetVaccinationManufacturerMappingResult
+		invokedGetVaccinationManufacturer = true
+		invokedGetVaccinationManufacturerCount += 1
+		invokedGetVaccinationManufacturerParameters = (code, ())
+		invokedGetVaccinationManufacturerParametersList.append((code, ()))
+		return stubbedGetVaccinationManufacturerResult
 	}
 
 	var invokedGetNlTestType = false

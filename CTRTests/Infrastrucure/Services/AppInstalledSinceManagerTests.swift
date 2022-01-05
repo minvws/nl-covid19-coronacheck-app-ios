@@ -13,12 +13,13 @@ import Nimble
 class AppInstalledSinceManagerTests: XCTestCase {
 
 	var sut: AppInstalledSinceManager!
-
+	var secureUserSettingsSpy: SecureUserSettingsSpy!
+	
 	override func setUp() {
 
 		super.setUp()
-		sut = AppInstalledSinceManager()
-		Services.secureUserSettings.reset()
+		secureUserSettingsSpy = SecureUserSettingsSpy()
+		sut = AppInstalledSinceManager(secureUserSettings: secureUserSettingsSpy)
 	}
 
 	func test_addingServerDate_withoutAge() {
@@ -29,7 +30,7 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: nil)
 
 		// Then
-		expect(self.sut.firstUseDate) == now
+		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now
 	}
 
 	func test_addingServerDate_withZeroAge() {
@@ -40,7 +41,7 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "0")
 
 		// Then
-		expect(self.sut.firstUseDate) == now
+		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now
 	}
 
 	func test_addingServerDate_withAge() {
@@ -51,7 +52,7 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "120")
 
 		// Then
-		expect(self.sut.firstUseDate) == now.addingTimeInterval(120 * seconds)
+		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now.addingTimeInterval(120 * seconds)
 	}
 
 	func test_addingDocumentsDirectoryDate() {
@@ -64,7 +65,7 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		sut.update(dateProvider: provider)
 
 		// Then
-		expect(self.sut.firstUseDate) == now
+		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now
 	}
 
 	func test_reset() {
@@ -72,16 +73,16 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		// Given
 
 		// When
-		Services.secureUserSettings.reset()
+		sut.wipePersistedData()
 
 		// Then
-		expect(self.sut.firstUseDate).to(beNil())
+		expect(self.secureUserSettingsSpy.invokedAppInstalledDate).to(beNil())
 	}
 
 	func test_canOnlyBeSetOnce_serverUpdates() {
 
 		// Given
-		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "0")
+		secureUserSettingsSpy.stubbedAppInstalledDate = now
 
 		// When
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "120")
@@ -96,12 +97,15 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		let provider = DateProvider()
 		provider.stubbedGetDocumentsDirectoryCreationDateResult = now
 		sut.update(dateProvider: provider)
+		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now
+		
+		secureUserSettingsSpy.stubbedAppInstalledDate = now
 
 		// When
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "120")
 
 		// Then
-		expect(self.sut.firstUseDate) == now
+		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now
 	}
 
 	class DateProvider: DocumentsDirectoryCreationDateProtocol {

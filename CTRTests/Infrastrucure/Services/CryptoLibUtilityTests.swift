@@ -16,22 +16,26 @@ class CryptoLibUtilityTests: XCTestCase {
 	private var networkSpy: NetworkSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	private var reachabilitySpy: ReachabilitySpy!
+	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
 
 	override func setUp() {
 
 		super.setUp()
-		networkSpy = NetworkSpy(configuration: .development)
-		Services.use(networkSpy)
+		networkSpy = NetworkSpy()
 		userSettingsSpy = UserSettingsSpy()
 		reachabilitySpy = ReachabilitySpy()
-
-		sut = CryptoLibUtility(now: { now }, userSettings: userSettingsSpy, reachability: reachabilitySpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
+		remoteConfigManagerSpy = RemoteConfigManagingSpy()
+		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		remoteConfigManagerSpy.stubbedStoredConfiguration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
+		
+		sut = CryptoLibUtility(
+			now: { now },
+			userSettings: userSettingsSpy,
+			networkManager: networkSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			reachability: reachabilitySpy
+		)
 	}
 
 	/// Test the crypto lib utility  update call no result from the api
@@ -76,11 +80,9 @@ class CryptoLibUtilityTests: XCTestCase {
 	func test_update_withinTTL_callsbackImmediately() {
 
 		// Arrange
-		let remoteConfigSpy = RemoteConfigManagingSpy()
-		remoteConfigSpy.stubbedStoredConfiguration = .default
-		remoteConfigSpy.stubbedStoredConfiguration.configTTL = 3600
-		remoteConfigSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
-		Services.use(remoteConfigSpy)
+		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		remoteConfigManagerSpy.stubbedStoredConfiguration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
 
 		userSettingsSpy.stubbedIssuerKeysFetchedTimestamp = now.addingTimeInterval(10 * minutes * ago).timeIntervalSince1970
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())

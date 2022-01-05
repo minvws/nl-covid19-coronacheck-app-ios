@@ -9,8 +9,6 @@ import Foundation
 
 protocol CouplingManaging {
 
-	init(cryptoManager: CryptoManaging, networkManager: NetworkManaging )
-
 	///  Convert a dcc to an event wrapper
 	/// - Parameters:
 	///   - dcc: The string representation of a digital covid certificate

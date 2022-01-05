@@ -8,15 +8,7 @@
 import XCTest
 @testable import CTR
 
-extension AppInstalledSinceManagingSpy {
-	convenience init() {
-		self.init(secureUserSettings: SecureUserSettings())
-	}
-}
-
 class AppInstalledSinceManagingSpy: AppInstalledSinceManaging {
-
-	required init(secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedFirstUseDateGetter = false
 	var invokedFirstUseDateGetterCount = 0
@@ -50,5 +42,13 @@ class AppInstalledSinceManagingSpy: AppInstalledSinceManaging {
 		invokedUpdateCount += 1
 		invokedUpdateParameters = (dateProvider, ())
 		invokedUpdateParametersList.append((dateProvider, ()))
+	}
+
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
+
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

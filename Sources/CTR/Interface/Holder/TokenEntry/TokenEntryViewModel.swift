@@ -92,7 +92,7 @@ class TokenEntryViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let networkManager: NetworkManaging? = Services.networkManager
+	private let networkManager: NetworkManaging? = Current.networkManager
 	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:

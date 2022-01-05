@@ -10,7 +10,7 @@ import UIKit
 class PaperProofScanViewModel: ScanPermissionViewModel {
 	
 	/// The crypto manager
-	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
+	weak var cryptoManager: CryptoManaging? = Current.cryptoManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)?

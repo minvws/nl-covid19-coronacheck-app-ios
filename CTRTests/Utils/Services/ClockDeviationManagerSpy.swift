@@ -10,8 +10,6 @@ import Foundation
 
 class ClockDeviationManagerSpy: ClockDeviationManaging {
 
-	required init() {}
-
 	var invokedHasSignificantDeviationGetter = false
 	var invokedHasSignificantDeviationGetterCount = 0
 	var stubbedHasSignificantDeviation: Bool!

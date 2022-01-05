@@ -17,18 +17,15 @@ final class RiskSettingInstructionViewModelTests: XCTestCase {
 	
 	/// The coordinator spy
 	private var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
-	private var riskLevelManagingSpy: RiskLevelManagerSpy!
+	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		super.setUp()
 		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
-		riskLevelManagingSpy = RiskLevelManagerSpy()
-		riskLevelManagingSpy.stubbedState = .low
+		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
 		
-		sut = RiskSettingInstructionViewModel(
-			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagingSpy
-		)
+		sut = RiskSettingInstructionViewModel(coordinator: coordinatorSpy)
 	}
 	
 	// MARK: - Tests
@@ -73,24 +70,21 @@ final class RiskSettingInstructionViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.shouldDisplayNotSetError) == false
-		expect(self.riskLevelManagingSpy.invokedUpdateParameters?.riskLevel) == .low
+		expect(self.environmentSpies.riskLevelManagerSpy.invokedUpdateParameters?.riskLevel) == .low
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
 	}
 	
 	func test_startScanner_whenUnselected_shouldDisplayError() {
 		// Given
-		riskLevelManagingSpy.stubbedState = nil
-		sut = RiskSettingInstructionViewModel(
-			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagingSpy
-		)
+		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		sut = RiskSettingInstructionViewModel(coordinator: coordinatorSpy)
 		
 		// When
 		sut.startScanner()
 		
 		// Then
 		expect(self.sut.shouldDisplayNotSetError) == true
-		expect(self.riskLevelManagingSpy.invokedUpdate) == false
+		expect(self.environmentSpies.riskLevelManagerSpy.invokedUpdate) == false
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
 	}
 }

@@ -22,8 +22,6 @@ struct PrepareIssueEnvelope: Codable {
 
 protocol CryptoManaging: AnyObject {
 	
-	init(secureUserSettings: SecureUserSettingsProtocol)
-	
 	// MARK: Encryption
 	
 	/// Set the nonce

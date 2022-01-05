@@ -156,62 +156,45 @@ class VerifierStartViewModel: Logging {
 	// MARK: - Dependencies
 	
 	private weak var coordinator: VerifierCoordinatorDelegate?
-	private weak var cryptoManager: CryptoManaging? = Services.cryptoManager
-	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
-	private var userSettings: UserSettingsProtocol
-	private let clockDeviationManager: ClockDeviationManaging = Services.clockDeviationManager
-	private let scanLockProvider: ScanLockManaging
-	private let riskLevelProvider: RiskLevelManaging
-	private weak var scanLogManager: ScanLogManaging? = Services.scanLogManager
-	private weak var remoteConfigurationManager: RemoteConfigManaging? = Services.remoteConfigManager
 	
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - userSettings: the user managed settings
-	init(
-		coordinator: VerifierCoordinatorDelegate,
-		scanLockProvider: ScanLockManaging,
-		riskLevelProvider: RiskLevelManaging,
-		userSettings: UserSettingsProtocol = UserSettings()
-	) {
+	init(coordinator: VerifierCoordinatorDelegate) {
 
 		self.coordinator = coordinator
-		self.scanLockProvider = scanLockProvider
-		self.riskLevelProvider = riskLevelProvider
-		self.userSettings = userSettings
 
 		// Add a `didSet` callback to the Atomic<Mode>:
 		$mode.projectedValue.didSet = { [weak self] atomic in
 			guard let self = self else { return }
 			
 			let newMode: Mode = atomic.wrappedValue
-			self.reloadUI(forMode: newMode, hasClockDeviation: self.clockDeviationManager.hasSignificantDeviation ?? false)
+			self.reloadUI(forMode: newMode, hasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false)
 		}
 		
-		reloadUI(forMode: mode, hasClockDeviation: clockDeviationManager.hasSignificantDeviation ?? false)
+		reloadUI(forMode: mode, hasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false)
 		
 		// Add an observer for when Clock Deviation is detected/undetected:
-		clockDeviationObserverToken = clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+		clockDeviationObserverToken = Current.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
 			guard let self = self else { return }
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
 
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			// Pass current states in immediately to configure `self.mode`:
-			lockStateDidChange(lockState: scanLockProvider.state)
-			riskLevelDidChange(riskLevel: riskLevelProvider.state)
+			lockStateDidChange(lockState: Current.scanLockManager.state)
+			riskLevelDidChange(riskLevel: Current.riskLevelManager.state)
 
 			// Then observe for changes:
-			scanLockObserverToken = scanLockProvider.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
-			riskLevelObserverToken = riskLevelProvider.appendObserver { [weak self] in self?.riskLevelDidChange(riskLevel: $0) }
+			scanLockObserverToken = Current.scanLockManager.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
+			riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] in self?.riskLevelDidChange(riskLevel: $0) }
 
 			lockLabelCountdownTimer.fire()
 		}
 	}
 	
 	deinit {
-		clockDeviationObserverToken.map(clockDeviationManager.removeDeviationChangeObserver)
+		clockDeviationObserverToken.map(Current.clockDeviationManager.removeDeviationChangeObserver)
 		lockLabelCountdownTimer.invalidate()
 	}
 	
@@ -235,12 +218,12 @@ class VerifierStartViewModel: Logging {
 
 				// We're already locked, but maybe the `until` time has changed?
 				case let (.locked(prelockMode, _, _), .locked(until)):
-					let totalDuration = type(of: scanLockProvider).configScanLockDuration
+					let totalDuration = type(of: Current.scanLockManager).configScanLockDuration
 					mode = .locked(mode: prelockMode, timeRemaining: until.timeIntervalSinceNow, totalDuration: totalDuration)
 
 				// We're not already locked, but must now lock:
 				case (_, .locked(let until)):
-					let totalDuration = type(of: scanLockProvider).configScanLockDuration
+					let totalDuration = type(of: Current.scanLockManager).configScanLockDuration
 					mode = .locked(mode: mode, timeRemaining: until.timeIntervalSinceNow, totalDuration: totalDuration)
 
 				// We're locked, but must unlock:
@@ -282,7 +265,7 @@ class VerifierStartViewModel: Logging {
 	private func updatePublicKeys() {
 
 		// Fetch the public keys from the issuer
-		cryptoLibUtility?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: nil, completion: nil)
+		Current.cryptoLibUtility.update(isAppLaunching: false, immediateCallbackIfWithinTTL: nil, completion: nil)
 	}
 }
 
@@ -293,8 +276,8 @@ extension VerifierStartViewModel {
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }
 
-		if userSettings.scanInstructionShown, (riskLevelProvider.state != nil || !Services.featureFlagManager.isVerificationPolicyEnabled()) {
-			if let crypto = cryptoManager, crypto.hasPublicKeys() {
+		if Current.userSettings.scanInstructionShown, (Current.riskLevelManager.state != nil || !Current.featureFlagManager.isVerificationPolicyEnabled()) {
+			if Current.cryptoManager.hasPublicKeys() {
 				coordinator?.didFinish(.userTappedProceedToScan)
 			} else {
 				updatePublicKeys()
@@ -308,7 +291,7 @@ extension VerifierStartViewModel {
 
 	func showInstructionsButtonTapped() {
 		
-		guard mode.allowsShowScanInstructions || !Services.featureFlagManager.isVerificationPolicyEnabled() else { return }
+		guard mode.allowsShowScanInstructions || !Current.featureFlagManager.isVerificationPolicyEnabled() else { return }
 		coordinator?.didFinish(.userTappedProceedToScanInstructions)
 	}
 

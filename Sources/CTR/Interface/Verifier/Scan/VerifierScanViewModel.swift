@@ -12,11 +12,11 @@ import Clcore
 class VerifierScanViewModel: ScanPermissionViewModel {
 
 	/// The crypto manager
-	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
+	weak var cryptoManager: CryptoManaging? = Current.cryptoManager
 
-	weak var scanLogManager: ScanLogManaging? = Services.scanLogManager
+	weak var scanLogManager: ScanLogManaging? = Current.scanLogManager
 	
-	weak var riskLevelManager: RiskLevelManaging? = Services.riskLevelManager
+	weak var riskLevelManager: RiskLevelManaging? = Current.riskLevelManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
@@ -51,7 +51,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
 
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			self.riskLevel = riskLevelManager?.state
 		}
 
@@ -62,7 +62,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 
 			guard let currentRiskLevel = riskLevelManager?.state else {
 				assertionFailure("Risk level should be set")
