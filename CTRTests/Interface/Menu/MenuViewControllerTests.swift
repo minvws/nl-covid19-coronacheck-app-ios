@@ -7,16 +7,17 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class MenuViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: MenuViewController?
+	var sut: MenuViewController!
 
 	/// The coordinator spy
 	var menuDelegateSpy = MenuDelegateSpy()
 
-	var viewModel: MenuViewModel?
+	var viewModel: MenuViewModel!
 
 	var window = UIWindow()
 
@@ -26,7 +27,7 @@ class MenuViewControllerTests: XCTestCase {
 
 		menuDelegateSpy = MenuDelegateSpy()
 		viewModel = MenuViewModel(delegate: menuDelegateSpy)
-		sut = MenuViewController(viewModel: viewModel!)
+		sut = MenuViewController(viewModel: viewModel)
 	}
 
 	override func tearDown() {
@@ -35,11 +36,9 @@ class MenuViewControllerTests: XCTestCase {
 	}
 
 	func loadView() {
-
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+		
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: - Tests
@@ -51,11 +50,11 @@ class MenuViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		viewModel?.topMenu = items
+		viewModel.topMenu = items
 
 		// Then
-		XCTAssertEqual(sut?.sceneView.topStackView.arrangedSubviews.count, items.count, "There should be two top menu items")
-		XCTAssertEqual(sut?.sceneView.bottomStackView.arrangedSubviews.count, 0, "There should be no bottom menu items")
+		expect(self.sut.sceneView.topStackView.arrangedSubviews).to(haveCount(items.count))
+		expect(self.sut.sceneView.bottomStackView.arrangedSubviews).to(beEmpty())
 	}
 
 	func testBotomMenu() {
@@ -65,11 +64,11 @@ class MenuViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		viewModel?.bottomMenu = items
+		viewModel.bottomMenu = items
 
 		// Then
-		XCTAssertEqual(sut?.sceneView.topStackView.arrangedSubviews.count, 0, "There should be no top menu items")
-		XCTAssertEqual(sut?.sceneView.bottomStackView.arrangedSubviews.count, items.count, "There should be two bottom menu items")
+		expect(self.sut.sceneView.bottomStackView.arrangedSubviews).to(haveCount(items.count))
+		expect(self.sut.sceneView.topStackView.arrangedSubviews).to(beEmpty())
 	}
 
 	func testCloseMenu() {
@@ -78,10 +77,10 @@ class MenuViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut?.closeButtonTapped()
+		sut.closeButtonTapped()
 
 		// Then
-		XCTAssertTrue(menuDelegateSpy.closeMenuCalled, "Close Menu delegate method should be called")
+		expect(self.menuDelegateSpy.invokedCloseMenu) == true
 	}
 
 	func testTopMenuItemClicked() {
@@ -89,14 +88,14 @@ class MenuViewControllerTests: XCTestCase {
 		// Given
 		let items = [MenuItem(identifier: .faq, title: "faq"), MenuItem(identifier: .about, title: "about")]
 		loadView()
-		viewModel?.topMenu = items
+		viewModel.topMenu = items
 
 		// When
-		(sut?.sceneView.topStackView.arrangedSubviews.first as? MenuItemView)?.primaryButton.sendActions(for: .touchUpInside)
+		(sut.sceneView.topStackView.arrangedSubviews.first as? MenuItemView)?.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(menuDelegateSpy.openMenuItemCalled, "Open Menu Item delegate method should be called")
-		XCTAssertEqual(menuDelegateSpy.openMenuItemIdentifier, .faq, "Menu Item Identifier should match")
+		expect(self.menuDelegateSpy.invokedOpenMenuItem) == true
+		expect(self.menuDelegateSpy.invokedOpenMenuItemParameters?.0) == .faq
 	}
 
 	func testBotomMenuItemClicked() {
@@ -104,13 +103,13 @@ class MenuViewControllerTests: XCTestCase {
 		// Given
 		let items = [MenuItem(identifier: .about, title: "about"), MenuItem(identifier: .faq, title: "faq")]
 		loadView()
-		viewModel?.bottomMenu = items
+		viewModel.bottomMenu = items
 
 		// When
-		(sut?.sceneView.bottomStackView.arrangedSubviews.first as? MenuItemView)?.primaryButton.sendActions(for: .touchUpInside)
+		(sut.sceneView.bottomStackView.arrangedSubviews.first as? MenuItemView)?.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(menuDelegateSpy.openMenuItemCalled, "Open Menu Item delegate method should be called")
-		XCTAssertEqual(menuDelegateSpy.openMenuItemIdentifier, .about, "Menu Item Identifier should match")
+		expect(self.menuDelegateSpy.invokedOpenMenuItem) == true
+		expect(self.menuDelegateSpy.invokedOpenMenuItemParameters?.0) == .about
 	}
 }

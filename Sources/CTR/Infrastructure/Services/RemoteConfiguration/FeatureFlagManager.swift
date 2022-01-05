@@ -14,6 +14,8 @@ protocol FeatureFlagManaging {
 	func isNewValidityInfoBannerEnabled() -> Bool
 	
 	func isVerificationPolicyEnabled() -> Bool
+	
+	func isVisitorPassEnabled() -> Bool
 }
 
 class FeatureFlagManager: FeatureFlagManaging, Logging {
@@ -52,5 +54,10 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		
 		// Current version is higher or equal to the required version -> Enabled
 		return true
+	}
+	
+	func isVisitorPassEnabled() -> Bool {
+
+		return remoteConfigManager?.storedConfiguration.visitorPassEnabled ?? false
 	}
 }

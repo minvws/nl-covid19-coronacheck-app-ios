@@ -667,6 +667,8 @@
 "holder_dashboard_qr_validity_suffix_2g" = "voor 2G-toegang";
 "holder_dashboard_qr_validity_suffix_3g" = "voor 3G-toegang";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
+/* Menu item for short stay route */
+"holder_menu_visitorpass" = "Bezoekersbewijs maken";
 "holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>Een Nederlands testbewijs is alleen geldig op plekken met 3G-toegang. Dit betekent dat je met je testbewijs geen toegang krijgt tot plekken waar 2G geldt.</p><p><b>Wat is het verschil tussen 3G en 2G?</b><br />De ‘G’ staat voor Getest, Gevaccineerd, of Genezen (hersteld van corona).</p><ul><li>3G-toegang krijg je met een test-, vaccinatie- of herstelbewijs.</li><li>2G-toegang krijg je <u>niet</u> met een testbewijs. Hiervoor heb je een vaccinatie- of herstelbewijs nodig.</li></ul><p><a href=\"https://www.rijksoverheid.nl/2g\">Lees hier meer over 3G en 2G</a>.</p>";
 "holder_my_overview_3g_test_validity_bottom_sheet_title" = "Testbewijs alleen geldig voor 3G-toegang";
 "holder_my_overview_3g_test_validity_card" = "Je testbewijs is alleen geldig voor 3G-toegang in Nederland";
@@ -703,3 +705,6 @@
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
 "updateApp.title" = "Tijd voor een update";
+"visitorpass_start_action" = "Gegevens ophalen";
+"visitorpass_start_message" = "<p>Ben jij buiten de Europese Unie gevaccineerd en op bezoek in Nederland? Dan kan je een bezoekersbewijs maken waarmee je plekken in Nederland kan bezoeken die een coronatoegangsbewijs vragen.</p><p>Het bewijs is %li dagen geldig na aanvraag.</p><p><b>Een bezoekersbewijs maken:</b><ul><li>Laat je vaccinatiegegevens en identiteitsbewijs controleren bij een <a href=\"https://coronacheck.nl/\">VWS loket</a>.</li>\n<li>Haal je vaccinatie beoordeling op in de app.</li><li>Maak een test afspraak bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>.</li><li>Voeg je negatieve testuitslag toe aan de app.</li></ul></p>";
+"visitorpass_start_title" = "Een bezoekersbewijs maken";

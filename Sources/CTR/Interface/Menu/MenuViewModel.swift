@@ -33,6 +33,7 @@ enum MenuIdentifier {
 	case faq
 	case about
 	case riskSetting
+	case visitorPass
 }
 
 struct MenuItem {
