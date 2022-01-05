@@ -695,11 +695,9 @@ extension HolderCoordinator: MenuDelegate {
 				
 			case .visitorPass:
 				
-				userWishesMoreInfoAboutCompletingVaccinationAssessment()
-
-//				let destination = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
-//				navigationController = NavigationController(rootViewController: destination)
-//				sidePanel?.selectedViewController = navigationController
+				let destination = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
+				navigationController = NavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = navigationController
 
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
