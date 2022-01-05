@@ -14,22 +14,17 @@ final class VisitorPassCompleteCertificateViewModel: Logging {
 	init(coordinatorDelegate: (HolderCoordinatorDelegate & OpenUrlProtocol)?) {
 		
 		self.content = Content(
-			title: "Maak je bezoekersbewijs compleet",
-			subTitle: "<p>Om je bezoekersbewijs compleet te maken heb je een negatieve testuitslag nodig van minder dan 24 uur oud.</p><p>Heb je nog geen coronatest gedaan? Maak dan eerst een afspraak.</p>",
-			primaryActionTitle: "Testuitslag ophalen",
+			title: L.holder_completecertificate_title(),
+			subTitle: L.holder_completecertificate_body(),
+			primaryActionTitle: L.holder_completecertificate_button_fetchnegativetest(),
 			primaryAction: {
 				coordinatorDelegate?.userWishesToCreateANegativeTestQR()
 			},
-			secondaryActionTitle: "Maak een testafspraak",
+			secondaryActionTitle: L.holder_completecertificate_button_makeappointement(),
 			secondaryAction: {
-				guard let url = URL(string: "https://coronacheck.nl") else { return }
+				guard let url = URL(string: L.holderUrlAppointment()) else { return }
 				coordinatorDelegate?.openUrl(url, inApp: true)
 			}
 		)
 	}
-	// holder_completecertificate_title
-	// holder_completecertificate_body
-	// holder_completecertificate_link
-	// holder_completecertificate_url
-	// holder_completecertificate_button
 }

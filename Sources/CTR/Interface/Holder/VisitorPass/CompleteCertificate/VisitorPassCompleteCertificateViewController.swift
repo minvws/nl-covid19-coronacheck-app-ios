@@ -11,7 +11,7 @@ import UIKit
 class VisitorPassCompleteCertificateViewController: BaseViewController {
 
 	private let viewModel: VisitorPassCompleteCertificateViewModel
-	private let sceneView = VisitorPassCompleteCertificateView()
+	let sceneView = VisitorPassCompleteCertificateView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
