@@ -41,6 +41,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func navigateToDeniedAccess()
 	
 	func userWishesToSetRiskLevel(shouldSelectSetting: Bool)
+	
+	func navigateToScanNextInstruction(_ scanNext: ScanNext)
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -278,6 +280,17 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				)
 			)
 		}
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
+	func navigateToScanNextInstruction(_ scanNext: ScanNext) {
+		
+		let viewController = ScanNextInstructionViewController(
+			viewModel: ScanNextInstructionViewModel(
+				coordinator: self,
+				scanNext: scanNext
+			)
+		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 }
