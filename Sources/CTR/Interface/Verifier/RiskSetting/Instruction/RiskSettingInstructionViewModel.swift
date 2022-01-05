@@ -12,8 +12,6 @@ final class RiskSettingInstructionViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol)?
 	
-	private let riskLevelManager: RiskLevelManaging
-	
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_firsttimeuse_title()
 	@Bindable private(set) var header = L.verifier_risksetting_firsttimeuse_header()
@@ -35,15 +33,11 @@ final class RiskSettingInstructionViewModel: Logging {
 		}
 	}
 	
-	init(
-		coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol),
-		riskLevelManager: RiskLevelManaging = Current.riskLevelManager
-	) {
+	init(coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol)) {
 		
 		self.coordinator = coordinator
-		self.riskLevelManager = riskLevelManager
 		
-		let selectedRisk = riskLevelManager.state
+		let selectedRisk = Current.riskLevelManager.state
 		riskLevel = selectedRisk
 		selectRisk = selectedRisk
 	}
@@ -59,7 +53,7 @@ final class RiskSettingInstructionViewModel: Logging {
 		if selectRisk == nil {
 			shouldDisplayNotSetError = true
 		} else {
-			riskLevelManager.update(riskLevel: selectRisk)
+			Current.riskLevelManager.update(riskLevel: selectRisk)
 			coordinator?.userDidCompletePages(hasScanLock: false)
 		}
 	}

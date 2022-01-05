@@ -18,15 +18,14 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	private var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
 	private var viewModel: RiskSettingInstructionViewModel!
-	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var environmentSpies: EnvironmentSpies!
 	
 	var window = UIWindow()
 	
-	override  func setUp() {
+	override func setUp() {
 		super.setUp()
-		
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
-		riskLevelManagerSpy = RiskLevelManagerSpy()
 	}
 	
 	func loadView() {
@@ -39,11 +38,9 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_bindings() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .low
-		viewModel = RiskSettingInstructionViewModel(
-			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagerSpy
-		)
+		
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		viewModel = RiskSettingInstructionViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingInstructionViewController(viewModel: viewModel)
 		loadView()
 		
@@ -68,11 +65,9 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_riskSetting_low() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .low
-		viewModel = RiskSettingInstructionViewModel(
-			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagerSpy
-		)
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		viewModel = RiskSettingInstructionViewModel(coordinator: coordinatorSpy)
+		
 		sut = RiskSettingInstructionViewController(viewModel: viewModel)
 		loadView()
 		
@@ -87,10 +82,9 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_riskSetting_high() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
 		viewModel = RiskSettingInstructionViewModel(
-			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagerSpy
+			coordinator: coordinatorSpy
 		)
 		sut = RiskSettingInstructionViewController(viewModel: viewModel)
 		loadView()
