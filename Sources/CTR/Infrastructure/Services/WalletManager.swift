@@ -48,10 +48,11 @@ protocol WalletManaging: AnyObject {
 
 	/// Expire event groups that are no longer valid
 	/// - Parameters:
-	///   - vaccinationValidity: the max validity for vaccination
-	///   - recoveryValidity: the max validity for recovery
-	///   - testValidity: the max validity for test
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?)
+	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
+	///   - recoveryValidity: the max validity for recovery  (in HOURS)
+	///   - testValidity: the max validity for test  (in HOURS)
+	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
+	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
 	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard]
@@ -123,10 +124,11 @@ class WalletManager: WalletManaging, Logging {
 
 	/// Expire event groups that are no longer valid
 	/// - Parameters:
-	///   - vaccinationValidity: the max validity for vaccination (in hours)
-	///   - recoveryValidity: the max validity for recovery (in hours)
-	///   - testValidity: the max validity for test (in hours)
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?) {
+	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
+	///   - recoveryValidity: the max validity for recovery  (in HOURS)
+	///   - testValidity: the max validity for test  (in HOURS)
+	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
+	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?) {
 
 		if let maxValidity = vaccinationValidity {
 			findAndExpireEventGroups(for: .vaccination, maxValidity: maxValidity)
@@ -134,10 +136,15 @@ class WalletManager: WalletManaging, Logging {
 
 		if let maxValidity = recoveryValidity {
 			findAndExpireEventGroups(for: .recovery, maxValidity: maxValidity)
+			findAndExpireEventGroups(for: .positiveTest, maxValidity: maxValidity)
 		}
 
 		if let maxValidity = testValidity {
 			findAndExpireEventGroups(for: .test, maxValidity: maxValidity)
+		}
+		
+		if let maxValidity = vaccinationAssessmentValidity {
+			findAndExpireEventGroups(for: .vaccinationassessment, maxValidity: maxValidity)
 		}
 	}
 

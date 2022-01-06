@@ -30,6 +30,11 @@ class EventStartViewModel: Logging {
 		self.eventMode = eventMode
 
 		switch eventMode {
+			case .vaccinationassessment:
+				// this is not the start scene for the assessment flow
+				self.title = ""
+				self.message = ""
+				self.primaryButtonIcon = nil
 			case .vaccination:
 				self.title = L.holderVaccinationStartTitle()
 				self.message = L.holderVaccinationStartMessage()

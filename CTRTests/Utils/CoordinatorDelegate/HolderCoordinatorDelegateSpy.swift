@@ -43,16 +43,16 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
 	}
 
-	var invokedUserWishesToMakeQRFromNegativeTest = false
-	var invokedUserWishesToMakeQRFromNegativeTestCount = 0
-	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteEvent: RemoteEvent, Void)?
-	var invokedUserWishesToMakeQRFromNegativeTestParametersList = [(remoteEvent: RemoteEvent, Void)]()
+	var invokedUserWishesToMakeQRFromRemoteEvent = false
+	var invokedUserWishesToMakeQRFromRemoteEventCount = 0
+	var invokedUserWishesToMakeQRFromRemoteEventParameters: (remoteEvent: RemoteEvent, Void)?
+	var invokedUserWishesToMakeQRFromRemoteEventParametersList = [(remoteEvent: RemoteEvent, Void)]()
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
-		invokedUserWishesToMakeQRFromNegativeTest = true
-		invokedUserWishesToMakeQRFromNegativeTestCount += 1
-		invokedUserWishesToMakeQRFromNegativeTestParameters = (remoteEvent, ())
-		invokedUserWishesToMakeQRFromNegativeTestParametersList.append((remoteEvent, ()))
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent) {
+		invokedUserWishesToMakeQRFromRemoteEvent = true
+		invokedUserWishesToMakeQRFromRemoteEventCount += 1
+		invokedUserWishesToMakeQRFromRemoteEventParameters = (remoteEvent, ())
+		invokedUserWishesToMakeQRFromRemoteEventParametersList.append((remoteEvent, ()))
 	}
 
 	var invokedUserWishesToCreateAQR = false

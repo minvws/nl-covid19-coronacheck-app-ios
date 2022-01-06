@@ -518,7 +518,8 @@ extension EventFlow.Event {
 			),
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil
+			dccEvent: nil,
+			assessment: nil
 		)
 	}
 
@@ -539,7 +540,8 @@ extension EventFlow.Event {
 				manufacturer: "1213"
 			),
 			recovery: nil,
-			dccEvent: nil
+			dccEvent: nil,
+			assessment: nil
 		)
 	}
 
@@ -564,7 +566,8 @@ extension EventFlow.Event {
 			negativeTest: nil,
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil
+			dccEvent: nil,
+			assessment: nil
 		)
 	}
 
@@ -581,7 +584,8 @@ extension EventFlow.Event {
 				validFrom: "2021-07-12",
 				validUntil: "2022-12-31"
 			),
-			dccEvent: nil
+			dccEvent: nil,
+			assessment: nil
 		)
 	}
 }

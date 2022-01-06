@@ -469,7 +469,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message).to(beNil())
@@ -489,7 +489,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message).to(beNil())
@@ -822,7 +822,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message) == L.holderTokenentryUniversallinkflowText()
@@ -850,7 +850,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message) == L.holderTokenentryUniversallinkflowText()
@@ -1236,7 +1236,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
 
@@ -1258,7 +1258,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
 
@@ -1448,7 +1448,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.networkErrorAlert).to(beNil())
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message).to(beNil())
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
