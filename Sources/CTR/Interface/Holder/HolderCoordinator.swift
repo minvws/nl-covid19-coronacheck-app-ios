@@ -51,6 +51,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInfoAboutClockDeviation()
 	
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
+	
 	func userWishesMoreInfoAboutTestOnlyValidFor3G()
 
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
@@ -476,6 +478,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
+	
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
+		
+		let destination = VisitorPassCompleteCertificateViewController(viewModel: VisitorPassCompleteCertificateViewModel(coordinatorDelegate: self))
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
 
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
@@ -685,7 +693,7 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = navigationController
 				
 			case .visitorPass:
-
+				
 				let destination = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
 				navigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
