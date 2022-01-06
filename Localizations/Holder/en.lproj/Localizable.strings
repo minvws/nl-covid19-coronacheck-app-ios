@@ -660,8 +660,6 @@
 "holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
 "holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
-"holder_event_vaccination_assessment_about_date_of_birth" = "Date of birth:";
-"holder_event_vaccination_assessment_about_name" = "Name:";
 "holder_event_vaccination_assessment_about_subtitle" = "The following details were retrieved:";
 "holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>A Dutch test certificate is only valid in places with 3G access. This means that you cannot use your test certificate to get access to places with 2G access.</p><p><b>What is the difference between 3G and 2G?</b><br />The Gs determine which people can be given access: only those who were vaccinated and/or have recovered (2G), or people who tested negative as well (3G).</p><ul><li>3G access means you can enter places with a test, vaccination or recovery certificate.</li><li>2G access means you <u>cannot</u> enter places with a test certificate. You'll need a vaccination or recovery certificate.</li></ul><p><a href=\"https://www.government.nl/2g\">You can read more about 3G and 2G here</a>.</p>";
 "holder_my_overview_3g_test_validity_bottom_sheet_title" = "Test certificate only valid for 3G access";
@@ -671,7 +669,6 @@
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_test_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_vaccination_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your details again later.";
-"holder_vaccination_assessment_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Try again";
 "internet.required.text" = "To start the app, you need to be connected to the internet.";
@@ -701,7 +698,6 @@
 "updateApp.error.message" = "Can't open App Store";
 "updateApp.title" = "Time for an update";
 "visitorpass_code_review_input" = "Review code";
-"visitorpass_token_error_empty_code" = "Please fill out a verification code first";
 "visitorpass_token_error_invalid_combination" = "No valid combination";
 "visitorpass_token_error_unknown_provider" = "This test location is not known to us. Please contact the location who tested you.";
 "visitorpass_token_next" = "Next";

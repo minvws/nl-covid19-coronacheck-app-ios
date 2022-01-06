@@ -23,7 +23,7 @@ enum EventMode: String {
 			case .recovery: return L.generalRecoverystatement()
 			case .test: return L.generalTestresult()
 			case .vaccination: return L.generalVaccination()
-			case .vaccinationassessment: return L.general_visitor_pass()
+			case .vaccinationassessment: return L.general_visitorPass()
 		}
 	}
 
@@ -56,7 +56,7 @@ enum EventMode: String {
 			case .recovery, .positiveTest: return L.holder_recovery_alert_message()
 			case .test: return L.holder_test_alert_message()
 			case .vaccination: return L.holder_vaccination_alert_message()
-			case .vaccinationassessment: return L.holder_vaccination_assessment_alert_message()
+			case .vaccinationassessment: return L.holder_event_vaccination_assessment_alert_message()
 		}
 	}
 

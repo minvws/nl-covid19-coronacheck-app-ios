@@ -151,7 +151,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		
 		var mode: EventMode = .test
 		
-		if events.first?.wrapper.events?.first?.assessment != nil {
+		if events.first?.wrapper.events?.first?.vaccinationAssessment != nil {
 			mode = .vaccinationassessment
 		} else if events.first?.wrapper.events?.first?.dccEvent != nil {
 			mode = .paperflow

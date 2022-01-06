@@ -62,7 +62,7 @@
 "general.vaccinationcertificate" = "vaccinatiebewijs";
 "general.vaccinationdate" = "Vaccinatiedatum";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
-"general_visitor_pass" = "bezoekersbewijs";
+"general_visitorPass" = "bezoekersbewijs";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Lees meer:";
@@ -655,6 +655,10 @@
 "holder.vaccination.status.complete.recovery" = "ja (eerder corona gehad)";
 "holder.vaccination.wrong.body" = "<p>Neem contact op met de zorgverlener waar je bent gevaccineerd. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.vaccination.wrong.title" = "Klopt er iets niet?";
+"holder_completecertificate_body" = "<p>Om je bezoekersbewijs compleet te maken heb je een negatieve testuitslag nodig van minder dan 24 uur oud.</p><p>Heb je nog geen coronatest gedaan? Maak dan eerst een afspraak.</p>";
+"holder_completecertificate_button_fetchnegativetest" = "Testuitslag ophalen";
+"holder_completecertificate_button_makeappointement" = "Maak een testafspraak";
+"holder_completecertificate_title" = "Maak je bezoekersbewijs compleet";
 "holder_dashboard_newvaliditybanner_action" = "Lees meer op Rijksoverheid.nl";
 "holder_dashboard_newvaliditybanner_title" = "De geldigheid van coronabewijzen wordt aangepast";
 "holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
@@ -666,12 +670,13 @@
 "holder_event_vaccination_assessment_about_name" = "Naam:";
 "holder_event_vaccination_assessment_about_subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Uniek beoordelingscode:";
+"holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen. ";
 "holder_event_vaccination_assessment_element_subtitle" = "<p>Beoordelingsdaturm: %@</p><p>Naam: %@</p><p>Geboortedatum: %@</p>";
 "holder_event_vaccination_assessment_element_title" = "Vaccinatie review";
 "holder_event_vaccination_assessment_list_message" = "Als de gegevens kloppen kun je jouw vaccinatie review toevoegen aan de app.";
 "holder_event_vaccination_assessment_list_title" = "Kloppen de gegevens?";
 "holder_event_vaccination_assessment_nolist_action" = "Naar mijn bewijzen";
-"holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatie review beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatie review beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a></p>";
 "holder_event_vaccination_assessment_nolist_title" = "Geen vaccinatie review beschikbaar";
 "holder_event_vaccination_assessment_wrong_body" = "<p>Neem contact op met het loket waar jouw vaccinatie is beoordeeld. Zij kunnen je helpen je gegevens aan te passen.</p>";
 /* Menu item for short stay route */
@@ -684,7 +689,6 @@
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_test_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_vaccination_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";
-"holder_vaccination_assessment_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";
 "internet.required.text" = "Om de app op te starten heb je internet nodig.";
@@ -714,22 +718,19 @@
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
 "updateApp.title" = "Tijd voor een update";
 "visitorpass_code_description" = "Vul je reviewcode in. Deze code begint met KVT- en heb je van de Visitor Pass Desk gekregen toen jouw vaccinatie werd beoordeeld.";
+/* visitorpass_deeplink_text */
+"visitorpass_code_description_deeplink" = "Vul jouw verificatiecode in om je vaccinatie beoordeling op te halen.";
 "visitorpass_code_error_invalid_code" = "Deze reviewcode is verlopen";
 "visitorpass_code_review_button" = "Heb je geen reviewcode?";
 "visitorpass_code_review_input" = "Reviewcode";
 "visitorpass_code_review_placeholder" = "Bijv. KVT-3839287262-F1";
 "visitorpass_code_review_placeholder_screenreader" = "Vul hier je reviewcode in";
 "visitorpass_code_title" = "Vaccinatie review ophalen";
-/* visitorpass_deeplink_text */
-"visitorpass_deeplink_text" = "Vul jouw reviewcode in om je vaccinatie beoordeling op te halen.";
-"visitorpass_event_name" = "Vaccinatie beoordeling";
-"visitorpass_events_description" = "Kloppen de gegevens? Als de gegevens kloppen kun je je vaccinatie boordeling toevoegen aan de app.";
 "visitorpass_start_action" = "Gegevens ophalen";
 "visitorpass_start_message" = "<p>Ben je buiten de Europese Unie gevaccineerd en op bezoek in Nederland?  Dan kun je van jouw vaccinatie review en een negatieve testuitslag een bezoekersbewijs maken.</p><p>Met je bezoekersbewijs krijg je toegang tot plekken en activiteiten in Nederland die vragen om een coronatoegangsbewijs.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/bezoekersbewijs\">www.rijksoverheid.nl/bezoekersbewijs</a>.</p>";
 "visitorpass_start_title" = "Een bezoekersbewijs maken";
-"visitorpass_token_error_empty_code" = "Graag eerst een verificatiecode invullen";
 "visitorpass_token_error_empty_token" = "Graag eerst een reviewcode invullen";
-"visitorpass_token_error_invalid_code" = "Geen geldige reviewcode";
+"visitorpass_token_error_invalid_code" = "Dit is geen geldige reviewcode";
 "visitorpass_token_error_invalid_combination" = "Geen geldige combinatie";
 "visitorpass_token_error_unknown_provider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt van het VWS loket een reviewcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met het loket.</p>";

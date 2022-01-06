@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -50,6 +51,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
 
 	func userWishesMoreInfoAboutClockDeviation()
+	
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	
 	func userWishesMoreInfoAboutTestOnlyValidFor3G()
 
@@ -198,6 +201,24 @@ class HolderCoordinator: SharedCoordinator {
 					// Do it on the next runloop, to standardise all the entry points to this function:
 					DispatchQueue.main.async { [self] in
 						navigateToTokenEntry(requestToken)
+					}
+				}
+				return true
+				
+			case .redeemVaccinationAssessment(let requestToken):
+				
+				// Need to handle two situations:
+				// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
+				//   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
+				//      that after the user has completed these screens.
+				// - the user is somewhere in the Holder app, and the nav stack can just be replaced.
+				
+				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
+					self.unhandledUniversalLink = universalLink
+				} else {
+					// Do it on the next runloop, to standardise all the entry points to this function:
+					DispatchQueue.main.async { [self] in
+						navigateToTokenEntry(requestToken, retrievalMode: .visitorPass)
 					}
 				}
 				return true
@@ -421,6 +442,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToCreateAVisitorPass() {
+//		navigateToTokenEntry(RequestToken(token: "QTULGFYS26T98U", protocolVersion: "3.0", providerIdentifier: "ZZZ"), retrievalMode: .visitorPass)
+		
 		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 
@@ -475,6 +498,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
+	}
+	
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
+		
+		let destination = VisitorPassCompleteCertificateViewController(viewModel: VisitorPassCompleteCertificateViewModel(coordinatorDelegate: self))
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	func userWishesMoreInfoAboutClockDeviation() {
@@ -685,7 +714,7 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = navigationController
 				
 			case .visitorPass:
-
+				
 				let destination = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
 				navigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController

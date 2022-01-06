@@ -304,9 +304,9 @@ class VaccinationAssessementDetailsGenerator {
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
-		let formattedAssessmentDate: String = event.assessment?.dateString
+		let formattedAssessmentDate: String = event.vaccinationAssessment?.dateTimeString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printTestDateFormatter.string) ?? (event.assessment?.dateString ?? "")
+			.map(EventDetailsGenerator.printTestDateFormatter.string) ?? (event.vaccinationAssessment?.dateTimeString ?? "")
 
 		return [
 			EventDetails(field: EventDetailsVaccinationAssessment.subtitle, value: nil),
