@@ -65,7 +65,8 @@ class CouplingManager: CouplingManaging, Logging {
 							negativeTest: nil,
 							positiveTest: nil,
 							recovery: nil,
-							dccEvent: dccEvent
+							dccEvent: dccEvent,
+							vaccinationAssessment: nil
 						)
 					]
 				)

@@ -287,7 +287,7 @@ class WalletManagerTests: XCTestCase {
 		
 		// Given
 		// When
-		sut.expireEventGroups(vaccinationValidity: 0, recoveryValidity: 0, testValidity: 0)
+		sut.expireEventGroups(vaccinationValidity: 0, recoveryValidity: 0, testValidity: 0, vaccinationAssessmentValidity: 0)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(0))
@@ -304,7 +304,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 11, recoveryValidity: nil, testValidity: nil)
+		sut.expireEventGroups(vaccinationValidity: 11, recoveryValidity: nil, testValidity: nil, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(1))
@@ -321,7 +321,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 9, recoveryValidity: nil, testValidity: nil)
+		sut.expireEventGroups(vaccinationValidity: 9, recoveryValidity: nil, testValidity: nil, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(0))
@@ -345,13 +345,13 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: nil, testValidity: nil)
+		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: nil, testValidity: nil, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(1))
 	}
 	
-	func test_expireEventGroups_oneVaccination_notExpired_oneRecovery_notExpired_oneTest_notExpired() {
+	func test_expireEventGroups_oneVaccination_notExpired_oneRecovery_notExpired_oneTest_oneVaccinationAssessment_notExpired() {
 		
 		// Given
 		sut.storeEventGroup(
@@ -375,11 +375,18 @@ class WalletManagerTests: XCTestCase {
 			issuedAt: Date().addingTimeInterval(10 * hours * ago)
 		)
 		
+		sut.storeEventGroup(
+			.vaccinationassessment,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: 15, testValidity: 15)
+		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: 15, testValidity: 15, vaccinationAssessmentValidity: 15)
 		
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(3))
+		expect(self.sut.listEventGroups()).to(haveCount(4))
 	}
 	
 	func test_expireEventGroups_oneVaccination_expired_oneRecovery_notExpired_oneTest_notExpired() {
@@ -407,7 +414,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 15, testValidity: 15)
+		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 15, testValidity: 15, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(2))
@@ -438,13 +445,13 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 15)
+		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 15, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(1))
 	}
 	
-	func test_expireEventGroups_oneVaccination_expired_oneRecovery_expired_oneTest_expired() {
+	func test_expireEventGroups_oneVaccination_expired_oneRecovery_expired_oneTest_expired_oneVaccinationAssessment_expired() {
 		
 		// Given
 		sut.storeEventGroup(
@@ -468,8 +475,15 @@ class WalletManagerTests: XCTestCase {
 			issuedAt: Date().addingTimeInterval(10 * hours * ago)
 		)
 		
+		sut.storeEventGroup(
+			.vaccinationassessment,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+		)
+		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 5)
+		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 5, vaccinationAssessmentValidity: 5)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(beEmpty())
@@ -547,6 +561,7 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(1))
 		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
 		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 	}
 	
@@ -576,6 +591,37 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listOrigins(type: .vaccination)).to(beEmpty())
 		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
 		expect(self.sut.listOrigins(type: .recovery)).to(haveCount(1))
+		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
+		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+	}
+	
+	func test_storeDomesticGreenCard_vaccinationAssessment() throws {
+		
+		// Given
+		let domesticCredentials: [DomesticCredential] = [
+			DomesticCredential(
+				credential: Data("test".utf8),
+				attributes: DomesticCredentialAttributes.sample(category: "3")
+			)
+		]
+		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
+		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
+		let jsonData = Data(jsonString.utf8)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		
+		// When
+		let success = sut.storeDomesticGreenCard(
+			RemoteGreenCards.DomesticGreenCard.fakeVaccinationAssessmentGreenCardExpiresIn14Days,
+			cryptoManager: environmentSpies.cryptoManagerSpy
+		)
+		
+		// Then
+		expect(success) == true
+		expect(self.sut.listGreenCards()).to(haveCount(1))
+		expect(self.sut.listOrigins(type: .vaccination)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(haveCount(1))
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 	}
 	
@@ -599,6 +645,7 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(1))
 		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
 		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
+		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 	}
 

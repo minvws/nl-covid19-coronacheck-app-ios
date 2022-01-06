@@ -148,8 +148,24 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	}
 
 	func startWithListTestEvents(_ events: [RemoteEvent]) {
+		
+		var mode: EventMode = .test
+		
+		if events.first?.wrapper.events?.first?.vaccinationAssessment != nil {
+			mode = .vaccinationassessment
+		} else if events.first?.wrapper.events?.first?.dccEvent != nil {
+			mode = .paperflow
+		} else if events.first?.wrapper.events?.first?.positiveTest != nil {
+			mode = .positiveTest
+		} else if events.first?.wrapper.events?.first?.negativeTest != nil {
+			mode = .test
+		} else if events.first?.wrapper.events?.first?.recovery != nil {
+			mode = .recovery
+		} else if events.first?.wrapper.events?.first?.vaccination != nil {
+			mode = .vaccination
+		}
 
-		navigateToListEvents(events, eventMode: .test, eventsMightBeMissing: false)
+		navigateToListEvents(events, eventMode: mode, eventsMightBeMissing: false)
 	}
 
 	func startWithScannedEvent(_ event: RemoteEvent) {
@@ -289,6 +305,18 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 			)
 		}
 	}
+	
+	private func navigateBackToVisitorPassStart() {
+		
+		if let eventStartViewController = navigationController.viewControllers
+			.first(where: { $0 is VisitorPassStartViewController }) {
+			
+			navigationController.popToViewController(
+				eventStartViewController,
+				animated: true
+			)
+		}
+	}
 
 	private func displayError(content: Content, backAction: @escaping () -> Void) {
 
@@ -382,6 +410,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	private func goBack(_ eventMode: EventMode) {
 
 		switch eventMode {
+			case .vaccinationassessment:
+				navigateBackToVisitorPassStart()
 			case .recovery, .vaccination, .positiveTest:
 				navigateBackToEventStart()
 			case .test:
@@ -431,6 +461,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				title: L.holderErrorstateLoginTitle(),
 				message: {
 					switch eventMode {
+						case .vaccinationassessment: return "** TODO **"
 						case .recovery:
 							return L.holderErrorstateLoginMessageRecovery()
 						case .paperflow:

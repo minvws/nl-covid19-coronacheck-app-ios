@@ -149,7 +149,10 @@ class ListEventsViewModel: Logging {
 				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
 				// > 0 -> Success
 
-				guard eventModeForStorage != .positiveTest, eventModeForStorage != .recovery  else {
+				guard eventModeForStorage != .positiveTest, eventModeForStorage != .recovery, eventModeForStorage != .vaccinationassessment else {
+					// For recovery we handle the response outside of this loop.
+					// for positive test we never get a positive test origin, there is no such thing
+					// for vaccination assessment we only get one if we combine it with a negative test.
 					return true
 				}
 
@@ -232,7 +235,7 @@ class ListEventsViewModel: Logging {
 		}
 
 		switch eventModeForStorage {
-			case .paperflow, .test:
+			case .vaccinationassessment, .paperflow, .test:
 				completeFlow()
 			case .positiveTest:
 				handleSuccessForPositiveTest(greencardResponse, eventModeForStorage: eventModeForStorage)
@@ -412,6 +415,7 @@ class ListEventsViewModel: Logging {
 		var success = true
 
 		if replaceExistingEventGroups {
+			// Replace when there is a identity mismatch
 			walletManager.removeExistingEventGroups()
 		}
 
@@ -438,7 +442,7 @@ class ListEventsViewModel: Logging {
 				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(eventModeForStorage)]")
 			}
 
-			// Store the new events
+			// Store the new event group
 			if let maxIssuedAt = getMaxIssuedAt(wrapper: response.wrapper),
 			   let jsonData = data {
 				success = success && walletManager.storeEventGroup(
@@ -470,6 +474,8 @@ class ListEventsViewModel: Logging {
 			.compactMap {
 				if $0.vaccination != nil {
 					return $0.vaccination?.dateString
+				} else if $0.vaccinationAssessment != nil {
+					return $0.vaccinationAssessment?.dateTimeString
 				} else if $0.negativeTest != nil {
 					return $0.negativeTest?.sampleDateString
 				} else if $0.recovery != nil {

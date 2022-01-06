@@ -43,16 +43,16 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
 	}
 
-	var invokedUserWishesToMakeQRFromNegativeTest = false
-	var invokedUserWishesToMakeQRFromNegativeTestCount = 0
-	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteEvent: RemoteEvent, Void)?
-	var invokedUserWishesToMakeQRFromNegativeTestParametersList = [(remoteEvent: RemoteEvent, Void)]()
+	var invokedUserWishesToMakeQRFromRemoteEvent = false
+	var invokedUserWishesToMakeQRFromRemoteEventCount = 0
+	var invokedUserWishesToMakeQRFromRemoteEventParameters: (remoteEvent: RemoteEvent, Void)?
+	var invokedUserWishesToMakeQRFromRemoteEventParametersList = [(remoteEvent: RemoteEvent, Void)]()
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
-		invokedUserWishesToMakeQRFromNegativeTest = true
-		invokedUserWishesToMakeQRFromNegativeTestCount += 1
-		invokedUserWishesToMakeQRFromNegativeTestParameters = (remoteEvent, ())
-		invokedUserWishesToMakeQRFromNegativeTestParametersList.append((remoteEvent, ()))
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent) {
+		invokedUserWishesToMakeQRFromRemoteEvent = true
+		invokedUserWishesToMakeQRFromRemoteEventCount += 1
+		invokedUserWishesToMakeQRFromRemoteEventParameters = (remoteEvent, ())
+		invokedUserWishesToMakeQRFromRemoteEventParametersList.append((remoteEvent, ()))
 	}
 
 	var invokedUserWishesToCreateAQR = false
@@ -159,20 +159,20 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
 	}
 
+	var invokedUserWishesMoreInfoAboutCompletingVaccinationAssessment = false
+	var invokedUserWishesMoreInfoAboutCompletingVaccinationAssessmentCount = 0
+
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
+		invokedUserWishesMoreInfoAboutCompletingVaccinationAssessment = true
+		invokedUserWishesMoreInfoAboutCompletingVaccinationAssessmentCount += 1
+	}
+
 	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = false
 	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount = 0
 
 	func userWishesMoreInfoAboutTestOnlyValidFor3G() {
 		invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = true
 		invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount += 1
-	}
-
-	var invokedUserWishesMoreInfoAboutUpgradingEUVaccinations = false
-	var invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount = 0
-
-	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
-		invokedUserWishesMoreInfoAboutUpgradingEUVaccinations = true
-		invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount += 1
 	}
 
 	var invokedUserWishesMoreInfoAboutOutdatedConfig = false
@@ -209,14 +209,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
 		invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = true
 		invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount += 1
-	}
-
-	var invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompleted = false
-	var invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompletedCount = 0
-
-	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted() {
-		invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompleted = true
-		invokedUserWishesMoreInfoAboutMultipleDCCUpgradeCompletedCount += 1
 	}
 
 	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompleted = false

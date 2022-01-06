@@ -297,6 +297,27 @@ class DCCVaccinationDetailsGenerator {
 	}
 }
 
+class VaccinationAssessementDetailsGenerator {
+	
+	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event) -> [EventDetails] {
+		
+		let formattedBirthDate: String = identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+		let formattedAssessmentDate: String = event.vaccinationAssessment?.dateTimeString
+			.flatMap(Formatter.getDateFrom)
+			.map(EventDetailsGenerator.printTestDateFormatter.string) ?? (event.vaccinationAssessment?.dateTimeString ?? "")
+
+		return [
+			EventDetails(field: EventDetailsVaccinationAssessment.subtitle, value: nil),
+			EventDetails(field: EventDetailsVaccinationAssessment.name, value: identity.fullName),
+			EventDetails(field: EventDetailsVaccinationAssessment.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsVaccinationAssessment.date, value: formattedAssessmentDate),
+			EventDetails(field: EventDetailsVaccinationAssessment.uniqueIdentifer, value: event.unique)
+		]
+	}
+}
+
 class RecoveryDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event) -> [EventDetails] {

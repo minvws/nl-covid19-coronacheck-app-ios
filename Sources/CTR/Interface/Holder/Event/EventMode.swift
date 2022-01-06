@@ -14,6 +14,7 @@ enum EventMode: String {
 	case recovery
 	case test
 	case vaccination
+	case vaccinationassessment
 
 	var localized: String {
 		switch self {
@@ -22,6 +23,7 @@ enum EventMode: String {
 			case .recovery: return L.generalRecoverystatement()
 			case .test: return L.generalTestresult()
 			case .vaccination: return L.generalVaccination()
+			case .vaccinationassessment: return L.general_visitorPass()
 		}
 	}
 
@@ -32,6 +34,7 @@ enum EventMode: String {
 			case .recovery: return L.holderFetcheventsRecoveryTitle()
 			case .test: return L.holderFetcheventsNegativeTestTitle()
 			case .vaccination: return L.holderFetcheventsVaccinationTitle()
+			case .vaccinationassessment: return L.holderDccListTitle()
 		}
 	}
 
@@ -42,6 +45,7 @@ enum EventMode: String {
 			case .recovery: return L.holderRecoveryListTitle()
 			case .test: return L.holderTestresultsResultsTitle()
 			case .vaccination: return L.holderVaccinationListTitle()
+			case .vaccinationassessment: return L.holder_event_vaccination_assessment_list_title()
 		}
 	}
 
@@ -52,6 +56,7 @@ enum EventMode: String {
 			case .recovery, .positiveTest: return L.holder_recovery_alert_message()
 			case .test: return L.holder_test_alert_message()
 			case .vaccination: return L.holder_vaccination_alert_message()
+			case .vaccinationassessment: return L.holder_event_vaccination_assessment_alert_message()
 		}
 	}
 
@@ -62,14 +67,14 @@ enum EventMode: String {
 			case .recovery: return L.holderRecoveryListMessage()
 			case .test: return L.holderTestresultsResultsText()
 			case .vaccination: return L.holderVaccinationListMessage()
+			case .vaccinationassessment: return L.holder_event_vaccination_assessment_list_message()
 		}
 	}
 
 	var originsMismatchBody: String {
 		switch self {
 			case .paperflow: return L.holderEventOriginmismatchDccBody()
-			case .positiveTest: return ""
-			case .recovery: return L.holderEventOriginmismatchRecoveryBody()
+			case .positiveTest, .recovery, .vaccinationassessment: return "" // No origin check for vaccination assessment, positive test or recovery
 			case .test: return L.holderEventOriginmismatchTestBody()
 			case .vaccination: return L.holderEventOriginmismatchVaccinationBody()
 		}
@@ -86,6 +91,7 @@ extension EventMode {
 			case .recovery: return .recovery
 			case .test: return .ggdTest
 			case .vaccination: return .vaccination
+			case .vaccinationassessment: return .visitorPass
 		}
 	}
 }

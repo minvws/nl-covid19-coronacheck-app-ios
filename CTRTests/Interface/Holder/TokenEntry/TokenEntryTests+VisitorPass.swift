@@ -168,7 +168,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -471,7 +471,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
@@ -491,7 +491,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
@@ -519,7 +519,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -670,7 +670,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.networkErrorAlert).to(beNil())
@@ -706,7 +706,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -766,7 +766,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -797,7 +797,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -824,10 +824,10 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -852,10 +852,10 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -889,7 +889,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -923,7 +923,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -952,7 +952,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -983,7 +983,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage) == "Unhandled: unknown"
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -1014,7 +1014,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -1217,7 +1217,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message) == L.visitorpass_code_description()
 
@@ -1239,7 +1239,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message) == L.visitorpass_code_description()
 
@@ -1429,7 +1429,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.networkErrorAlert).to(beNil())
 		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message).to(beNil())
-		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1500,7 +1500,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.message) == L.visitorpass_code_description()
+		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.networkErrorAlert).to(beNil())
 		expect(self.sut.title) == L.visitorpass_code_title()
