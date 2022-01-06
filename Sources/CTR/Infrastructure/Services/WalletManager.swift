@@ -69,9 +69,10 @@ class WalletManager: WalletManaging, Logging {
 	private var dataStoreManager: DataStoreManaging
 
 	required init( dataStoreManager: DataStoreManaging) {
-
+		
 		self.dataStoreManager = dataStoreManager
 
+		guard AppFlavor.flavor == .holder else { return }
 		createMainWalletIfNotExists()
 	}
 

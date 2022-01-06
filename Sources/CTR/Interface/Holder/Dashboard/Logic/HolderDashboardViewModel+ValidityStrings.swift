@@ -129,6 +129,12 @@ extension QRCard {
 						validFrom: origin.validFromDate,
 						expirationTime: origin.expirationTime
 					)
+					
+					// -- Domestic Vaccination Assessements --
+				case (.validityHasBegun, _, .vaccinationassessment):
+					return validityText_hasBegun_domestic_vaccinationAssessment(expirationTime: origin.expirationTime)
+				case (.validityHasNotYetBegun, _, .vaccinationassessment):
+					return validityText_hasNotYetBegun_domestic_vaccinationAssessment(expirationTime: origin.expirationTime)
 			}
 		}
 	}
@@ -167,7 +173,7 @@ private func validityText_hasBegun_eu_fallback(origin: QRCard.GreenCard.Origin, 
 		switch origin.type {
 			case .vaccination, .recovery:
 				return HolderDashboardViewModel.dateWithoutTimeFormatter
-			case .test:
+			case .test, .vaccinationassessment:
 				return HolderDashboardViewModel.dateWithDayAndTimeFormatter
 		}
 	}
@@ -334,5 +340,33 @@ private func validityText_hasNotYetBegun_netherlands_test(qrCard: QRCard, origin
 	return .init(
 		lines: [titleString, valueString],
 		kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+	)
+}
+
+private func validityText_hasBegun_domestic_vaccinationAssessment(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+	
+	let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+	let formatter = HolderDashboardViewModel.dateWithDayAndTimeFormatter
+	let dateString = formatter.string(from: expirationTime)
+	
+	let titleString = QRCodeOriginType.vaccinationassessment.localizedProof.capitalizingFirstLetter() + ":"
+	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	return .init(
+		lines: [titleString, valueString],
+		kind: .current
+	)
+}
+
+private func validityText_hasNotYetBegun_domestic_vaccinationAssessment(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+	
+	let prefix = L.holderDashboardQrValidityDatePrefixValidFrom()
+	let formatter = HolderDashboardViewModel.dateWithDayAndTimeFormatter
+	let dateString = formatter.string(from: expirationTime)
+	
+	let titleString = QRCodeOriginType.vaccinationassessment.localizedProof.capitalizingFirstLetter() + ":"
+	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	return .init(
+		lines: [titleString, valueString],
+		kind: .current
 	)
 }
