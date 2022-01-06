@@ -210,6 +210,7 @@ struct EventFlow {
 		let positiveTest: TestEvent?
 		let recovery: RecoveryEvent?
 		let dccEvent: DccEvent?
+		let assessment: VaccinationAssessment?
 
 		enum CodingKeys: String, CodingKey {
 
@@ -221,6 +222,7 @@ struct EventFlow {
 			case positiveTest = "positivetest"
 			case recovery
 			case dccEvent
+			case assessment = "vaccinationassessment"
 		}
 
 		func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
@@ -343,6 +345,31 @@ struct EventFlow {
 		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 
 			if let dateString = sampleDateString {
+				return  dateformatter.date(from: dateString)
+			}
+			return nil
+		}
+	}
+	
+	struct VaccinationAssessment: Codable, Equatable {
+		
+		let dateString: String?
+		let country: String?
+		let verified: Bool
+		
+		enum CodingKeys: String, CodingKey {
+			
+			case dateString = "assessmentDate"
+			case country
+			case verified = "digitallyVerified"
+		}
+		
+		/// Get the date for this event
+		/// - Parameter dateformatter: the date formatter
+		/// - Returns: optional date
+		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+			
+			if let dateString = dateString {
 				return  dateformatter.date(from: dateString)
 			}
 			return nil

@@ -661,6 +661,19 @@
 "holder_dashboard_qr_validity_suffix_2g" = "voor 2G-toegang";
 "holder_dashboard_qr_validity_suffix_3g" = "voor 3G-toegang";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
+"holder_event_vaccination_assessment_about_date" = "Beoordelingdatum:";
+"holder_event_vaccination_assessment_about_date_of_birth" = "Geboortedatum:";
+"holder_event_vaccination_assessment_about_name" = "Naam:";
+"holder_event_vaccination_assessment_about_subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder_event_vaccination_assessment_about_unique_identifier" = "Uniek beoordelingscode:";
+"holder_event_vaccination_assessment_element_subtitle" = "<p>Beoordelingsdaturm: %@</p><p>Naam: %@</p><p>Geboortedatum: %@</p>";
+"holder_event_vaccination_assessment_element_title" = "Vaccinatie review";
+"holder_event_vaccination_assessment_list_message" = "Als de gegevens kloppen kun je jouw vaccinatie review toevoegen aan de app.";
+"holder_event_vaccination_assessment_list_title" = "Kloppen de gegevens?";
+"holder_event_vaccination_assessment_nolist_action" = "Naar mijn bewijzen";
+"holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatie review beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_event_vaccination_assessment_nolist_title" = "Geen vaccinatie review beschikbaar";
+"holder_event_vaccination_assessment_wrong_body" = "<p>Neem contact op met het loket waar jouw vaccinatie is beoordeeld. Zij kunnen je helpen je gegevens aan te passen.</p>";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs maken";
 "holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>Een Nederlands testbewijs is alleen geldig op plekken met 3G-toegang. Dit betekent dat je met je testbewijs geen toegang krijgt tot plekken waar 2G geldt.</p><p><b>Wat is het verschil tussen 3G en 2G?</b><br />De ‘G’ staat voor Getest, Gevaccineerd, of Genezen (hersteld van corona).</p><ul><li>3G-toegang krijg je met een test-, vaccinatie- of herstelbewijs.</li><li>2G-toegang krijg je <u>niet</u> met een testbewijs. Hiervoor heb je een vaccinatie- of herstelbewijs nodig.</li></ul><p><a href=\"https://www.rijksoverheid.nl/2g\">Lees hier meer over 3G en 2G</a>.</p>";
@@ -671,6 +684,7 @@
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_test_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_vaccination_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";
+"holder_vaccination_assessment_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";
 "internet.required.text" = "Om de app op te starten heb je internet nodig.";
@@ -706,6 +720,8 @@
 "visitorpass_code_review_placeholder" = "Bijv. KVT-3839287262-F1";
 "visitorpass_code_review_placeholder_screenreader" = "Vul hier je reviewcode in";
 "visitorpass_code_title" = "Vaccinatie review ophalen";
+/* visitorpass_deeplink_text */
+"visitorpass_deeplink_text" = "Vul jouw reviewcode in om je vaccinatie beoordeling op te halen.";
 "visitorpass_event_name" = "Vaccinatie beoordeling";
 "visitorpass_events_description" = "Kloppen de gegevens? Als de gegevens kloppen kun je je vaccinatie boordeling toevoegen aan de app.";
 "visitorpass_start_action" = "Gegevens ophalen";

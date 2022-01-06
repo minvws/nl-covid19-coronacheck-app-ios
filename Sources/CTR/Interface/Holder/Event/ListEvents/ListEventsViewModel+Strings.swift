@@ -13,6 +13,8 @@ extension ListEventsViewModel {
 
 		static func somethingIsWrongBody(forEventMode mode: EventMode) -> String? {
 			switch mode {
+				case .vaccinationassessment:
+					return L.holder_event_vaccination_assessment_wrong_body()
 				case .paperflow:
 					return nil
 				case .recovery:
