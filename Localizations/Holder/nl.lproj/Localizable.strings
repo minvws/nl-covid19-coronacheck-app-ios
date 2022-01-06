@@ -666,8 +666,6 @@
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Maak bewijs compleet";
 "holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatie review is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve corona testuitslag";
-"holder_dashboard_visitorpassmodal_international_body" = "<p>Je bezoekersbewijs is alleen in Nederland geldig. Wil je naar een ander land? Check de regels van het land dat je wilt bezoeken.</p>\n<p><b>Meer weten?</b><br />Lees meer op <a href=\"https://www.rijksoverheid.nl/bezoekersbewijs\">www.rijksoverheid.nl/bezoekersbewijs</a>.</p>";
-"holder_dashboard_visitorpassmodal_international_title" = "Over je bezoekersbewijs";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs maken";
@@ -676,6 +674,8 @@
 "holder_my_overview_3g_test_validity_card" = "Je testbewijs is alleen geldig voor 3G-toegang in Nederland";
 "holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";
 "holder_negativetest_ggd_title" = "Testuitslag ophalen";
+"holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Je bezoekersbewijs is alleen in Nederland geldig. Wil je naar een ander land? Check de regels van het land dat je wilt bezoeken.</p>\n<p><b>Meer weten?</b><br />Lees meer op <a href=\"https://www.rijksoverheid.nl/bezoekersbewijs\">www.rijksoverheid.nl/bezoekersbewijs</a>.</p>";
+"holder_notvalidinthisregionmodal_visitorpass_international_title" = "Over je bezoekersbewijs";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_test_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_vaccination_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";

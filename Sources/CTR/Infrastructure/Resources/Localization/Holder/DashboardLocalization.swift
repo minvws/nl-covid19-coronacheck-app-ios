@@ -30,9 +30,9 @@ extension String {
 			case (.recovery, .europeanUnion):
 				return L.holderDashboardNotValidInThisRegionScreenEuRecoveryTitle()
 			case (.vaccinationassessment, .domestic):
-				return L.holder_dashboard_visitorpassmodal_international_title() // Should not happen
+				return L.holder_notvalidinthisregionmodal_visitorpass_international_title() // Should not happen
 			case (.vaccinationassessment, .europeanUnion):
-				return L.holder_dashboard_visitorpassmodal_international_title()
+				return L.holder_notvalidinthisregionmodal_visitorpass_international_title()
 		}
 	}
 
@@ -51,9 +51,9 @@ extension String {
 			case (.recovery, .europeanUnion):
 				return L.holderDashboardNotValidInThisRegionScreenEuRecoveryMessage()
 			case (.vaccinationassessment, .domestic):
-				return L.holder_dashboard_visitorpassmodal_international_body() // Should not happen
+				return L.holder_notvalidinthisregionmodal_visitorpass_international_body() // Should not happen
 			case (.vaccinationassessment, .europeanUnion):
-				return L.holder_dashboard_visitorpassmodal_international_body()
+				return L.holder_notvalidinthisregionmodal_visitorpass_international_body()
 		}
 	}
 }
