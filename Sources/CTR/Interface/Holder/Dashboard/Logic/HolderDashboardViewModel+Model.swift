@@ -36,7 +36,7 @@ extension HolderDashboardViewModel {
 
 			struct Origin: Equatable { // swiftlint:disable:this nesting
 
-				let type: QRCodeOriginType // vaccination | test | recovery
+				let type: QRCodeOriginType // vaccination | test | recovery | vaccinationassessment
 				let eventDate: Date
 				let expirationTime: Date
 				let validFromDate: Date

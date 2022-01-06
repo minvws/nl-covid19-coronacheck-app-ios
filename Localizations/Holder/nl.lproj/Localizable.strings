@@ -62,7 +62,7 @@
 "general.vaccinationcertificate" = "vaccinatiebewijs";
 "general.vaccinationdate" = "Vaccinatiedatum";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
-"general_visitor_pass" = "bezoekersbewijs";
+"general_visitorPass" = "bezoekersbewijs";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Lees meer:";
@@ -660,6 +660,14 @@
 "holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
 "holder_dashboard_qr_validity_suffix_2g" = "voor 2G-toegang";
 "holder_dashboard_qr_validity_suffix_3g" = "voor 3G-toegang";
+"holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Je bezoekersbewijs is niet geldig buiten Nederland";
+"holder_dashboard_visitorpasseexpiredbanner_title" = "Je bezoekersbewijs is verlopen";
+"holder_dashboard_visitorpassexpired_body" = "<p>Een bezoekersbewijs is geldig tot %li dagen na de beoordeling van je vaccinatie. Blijf je langer in Nederland? Dan kun je opnieuw een bezoekersbewijs aanvragen. Ga voor meer informatie naar <a href=\"https://www.rijksoverheid.nl/bezoekersbewijs\">www.rijksoverheid.nl/bezoekersbewijs</a>.</p>";
+"holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
+"holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Maak bewijs compleet";
+"holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatie review is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve corona testuitslag";
+"holder_dashboard_visitorpassmodal_international_body" = "<p>Je bezoekersbewijs is alleen in Nederland geldig. Wil je naar een ander land? Check de regels van het land dat je wilt bezoeken.</p>\n<p><b>Meer weten?</b><br />Lees meer op <a href=\"https://www.rijksoverheid.nl/bezoekersbewijs\">www.rijksoverheid.nl/bezoekersbewijs</a>.</p>";
+"holder_dashboard_visitorpassmodal_international_title" = "Over je bezoekersbewijs";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs maken";
