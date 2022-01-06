@@ -194,7 +194,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 		expect(testOrigin?.eventDate) == now.addingTimeInterval(4 * hours * ago)
 		expect(testOrigin?.expirationTime) == now.addingTimeInterval(20 * hours * fromNow)
-		expect(testOrigin?.customSortIndex) == 2
+		expect(testOrigin?.customSortIndex) == 3
 		expect(testOrigin?.expiryIsBeyondThreeYearsFromNow(now: now)) == false
 		expect(testOrigin?.isCurrentlyValid(now: now)) == true
 		expect(testOrigin?.isNotYetExpired(now: now)) == true
@@ -248,7 +248,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(secondGreencard.origins.count) == 1
 		expect(secondGreencard.origins.first?.eventDate) == now.addingTimeInterval(4 * hours * ago)
 		expect(secondGreencard.origins.first?.expirationTime) == now.addingTimeInterval(20 * hours * fromNow)
-		expect(secondGreencard.origins.first?.customSortIndex) == 2
+		expect(secondGreencard.origins.first?.customSortIndex) == 3
 		expect(secondGreencard.origins.first?.expiryIsBeyondThreeYearsFromNow(now: now)) == false
 		expect(secondGreencard.origins.first?.isCurrentlyValid(now: now)) == true
 		expect(secondGreencard.origins.first?.isNotYetExpired(now: now)) == true
@@ -301,7 +301,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(secondGreencard.origins.count) == 1
 		expect(secondGreencard.origins.first?.eventDate) == now.addingTimeInterval(4 * hours * ago)
 		expect(secondGreencard.origins.first?.expirationTime) == now.addingTimeInterval(20 * hours * fromNow)
-		expect(secondGreencard.origins.first?.customSortIndex) == 2
+		expect(secondGreencard.origins.first?.customSortIndex) == 3
 		expect(secondGreencard.origins.first?.expiryIsBeyondThreeYearsFromNow(now: now)) == false
 		expect(secondGreencard.origins.first?.isCurrentlyValid(now: now)) == true
 		expect(secondGreencard.origins.first?.isNotYetExpired(now: now)) == true
