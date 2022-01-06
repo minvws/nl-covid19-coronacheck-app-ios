@@ -431,7 +431,8 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 						negativeTest: nil,
 						positiveTest: nil,
 						recovery: nil,
-						dccEvent: nil
+						dccEvent: nil,
+						assessment: nil
 					)
 				]
 			),

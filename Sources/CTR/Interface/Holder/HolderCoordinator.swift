@@ -25,7 +25,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent)
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent)
 
 	func userWishesToCreateAQR()
 
@@ -50,6 +50,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
 
 	func userWishesMoreInfoAboutClockDeviation()
+	
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	
 	func userWishesMoreInfoAboutTestOnlyValidFor3G()
 
@@ -404,7 +406,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentAsBottomSheet(viewController)
 	}
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent) {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
@@ -475,6 +477,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
+	}
+	
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
+		
+		let destination = VisitorPassCompleteCertificateViewController(viewModel: VisitorPassCompleteCertificateViewModel(coordinatorDelegate: self))
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	func userWishesMoreInfoAboutClockDeviation() {
@@ -685,7 +693,7 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = navigationController
 				
 			case .visitorPass:
-
+				
 				let destination = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
 				navigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController

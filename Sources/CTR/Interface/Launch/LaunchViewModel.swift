@@ -213,12 +213,14 @@ class LaunchViewModel: Logging {
 
 	private func checkWallet() {
 
+		// All params are in hours
 		let configuration = Current.remoteConfigManager.storedConfiguration
 
 		walletManager?.expireEventGroups(
 			vaccinationValidity: (configuration.vaccinationEventValidityDays ?? 730) * 24,
 			recoveryValidity: (configuration.recoveryEventValidityDays ?? 365) * 24,
-			testValidity: configuration.testEventValidityHours
+			testValidity: configuration.testEventValidityHours,
+			vaccinationAssessmentValidity: (configuration.vaccinationAssessementEventValidityDays ?? 14) * 24
 		)
 	}
 

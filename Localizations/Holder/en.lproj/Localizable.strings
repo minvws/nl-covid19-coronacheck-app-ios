@@ -704,5 +704,4 @@
 "visitorpass_token_error_empty_code" = "Please fill out a verification code first";
 "visitorpass_token_error_invalid_combination" = "No valid combination";
 "visitorpass_token_error_unknown_provider" = "This test location is not known to us. Please contact the location who tested you.";
-"visitorpass_token_input_placeholder" = "E.g. KVT-3839287262-F1";
 "visitorpass_token_next" = "Next";

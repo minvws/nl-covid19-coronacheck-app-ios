@@ -287,7 +287,7 @@ class WalletManagerTests: XCTestCase {
 		
 		// Given
 		// When
-		sut.expireEventGroups(vaccinationValidity: 0, recoveryValidity: 0, testValidity: 0)
+		sut.expireEventGroups(vaccinationValidity: 0, recoveryValidity: 0, testValidity: 0, vaccinationAssessmentValidity: 0)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(0))
@@ -304,7 +304,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 11, recoveryValidity: nil, testValidity: nil)
+		sut.expireEventGroups(vaccinationValidity: 11, recoveryValidity: nil, testValidity: nil, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(1))
@@ -321,7 +321,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 9, recoveryValidity: nil, testValidity: nil)
+		sut.expireEventGroups(vaccinationValidity: 9, recoveryValidity: nil, testValidity: nil, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(0))
@@ -345,7 +345,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: nil, testValidity: nil)
+		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: nil, testValidity: nil, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(1))
@@ -376,7 +376,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: 15, testValidity: 15)
+		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: 15, testValidity: 15, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(3))
@@ -407,7 +407,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 15, testValidity: 15)
+		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 15, testValidity: 15, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(2))
@@ -438,7 +438,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 15)
+		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 15, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(1))
@@ -469,7 +469,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 5)
+		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 5, vaccinationAssessmentValidity: nil)
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(beEmpty())

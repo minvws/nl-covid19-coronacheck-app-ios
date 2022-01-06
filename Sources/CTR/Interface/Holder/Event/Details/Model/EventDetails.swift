@@ -83,6 +83,39 @@ enum EventDetailsVaccination: EventDetailable {
 	}
 }
 
+enum EventDetailsVaccinationAssessment: EventDetailable {
+	case subtitle
+	case name
+	case dateOfBirth
+	case date
+	case uniqueIdentifer
+	
+	var isRequired: Bool {
+		return true
+	}
+	
+	var displayTitle: String {
+		switch self {
+			case .subtitle: return L.holder_event_vaccination_assessment_about_subtitle()
+			case .name: return L.holder_event_vaccination_assessment_about_name()
+			case .dateOfBirth: return L.holder_event_vaccination_assessment_about_date_of_birth()
+			case .date: return L.holder_event_vaccination_assessment_about_date()
+			case .uniqueIdentifer: return L.holder_event_vaccination_assessment_about_unique_identifier()
+		}
+	}
+	
+	var hasLineBreak: Bool {
+		switch self {
+			case .subtitle, .dateOfBirth: return true
+			default: return false
+		}
+	}
+	
+	var isSeparator: Bool {
+		return false
+	}
+}
+
 enum EventDetailsTest: EventDetailable {
 	case subtitle
 	case name

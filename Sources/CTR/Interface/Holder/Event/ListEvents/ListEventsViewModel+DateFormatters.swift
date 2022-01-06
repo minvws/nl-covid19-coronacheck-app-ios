@@ -30,6 +30,14 @@ extension ListEventsViewModel {
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
+	
+	static let printAssessmentDateFormatter: DateFormatter = {
+		
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "EEEE d MMMM"
+		return dateFormatter
+	}()
 
 	static let printTestDateYearFormatter: DateFormatter = {
 
