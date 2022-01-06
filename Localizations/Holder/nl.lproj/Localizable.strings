@@ -719,3 +719,6 @@
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt van het VWS loket een reviewcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met het loket.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen reviewcode?";
 "visitorpass_token_next" = "Volgende";
+
+"holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatie review is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve corona testuitslag";
+"holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Maak bewijs compleet";

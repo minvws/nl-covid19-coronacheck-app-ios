@@ -135,7 +135,8 @@ extension HolderDashboardViewController.Card {
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
 		guard !state.dashboardHasQRCards(for: validityRegion) else { return [] }
-		
+		guard !state.shouldShowVaccinationAssessmentEventPresentAndOriginIsMissingBanner(for: validityRegion) else { return [] }
+	
 		switch validityRegion {
 			case .domestic:
 				guard let domesticImage = I.dashboard.domestic() else { return [] }
@@ -266,6 +267,22 @@ extension HolderDashboardViewController.Card {
 				buttonText: L.holder_dashboard_newvaliditybanner_action(),
 				didTapCallToAction: actionHandler.didTapNewValidityBannerMoreInfo,
 				didTapClose: actionHandler.didTapNewValidiyBannerClose
+			)
+		]
+	}
+	
+	static func makeVaccinationAssessmentEventPresentAndOriginIsMissingCard(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+	
+		guard state.shouldShowVaccinationAssessmentEventPresentAndOriginIsMissingBanner(for: validityRegion) else { return [] }
+		return [
+			.vaccinationAssessmentEventPresentAndOriginIsMissing(
+				title: L.holder_dashboard_visitorpassincompletebanner_title(),
+				buttonText: L.holder_dashboard_visitorpassincompletebanner_button_makecomplete(),
+				didTapCallToAction: actionHandler.didTapVaccinationAssessmentEventAndNoOriginMoreInfo
 			)
 		]
 	}

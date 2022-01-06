@@ -27,6 +27,7 @@ protocol HolderDashboardCardUserActionHandling {
 	func didTapRecoveryValidityReinstationCompleteClose()
 	func didTapNewValidityBannerMoreInfo()
 	func didTapNewValidiyBannerClose()
+	func didTapVaccinationAssessmentEventAndNoOriginMoreInfo()
 }
 
 final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHandling {
@@ -81,9 +82,18 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		
 		var shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner: Bool = false
 		
+		var shouldShowVaccinationAssessmentEventPresentAndOriginIsMissingBanner: Bool = true
+		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
 			!qrCards.isEmpty || !regionFilteredExpiredCards(validityRegion: validityRegion).isEmpty
+		}
+		
+		func shouldShowVaccinationAssessmentEventPresentAndOriginIsMissingBanner(for validityRegion: QRCodeValidityRegion) -> Bool {
+			if validityRegion == .europeanUnion {
+				return false
+			}
+			return shouldShowVaccinationAssessmentEventPresentAndOriginIsMissingBanner
 		}
 		
 		func regionFilteredQRCards(validityRegion: QRCodeValidityRegion) -> [QRCard] {
@@ -539,6 +549,11 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = true
 	}
 	
+	func didTapVaccinationAssessmentEventAndNoOriginMoreInfo() {
+		
+		logDebug("Todo didTapVaccinationAssessmentEventAndNoOriginMoreInfo")
+	}
+	
 	// MARK: - Static Methods
 	
 	private static func assembleCards(
@@ -561,6 +576,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
 		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeVaccinationAssessmentEventPresentAndOriginIsMissingCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)

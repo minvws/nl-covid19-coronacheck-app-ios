@@ -35,6 +35,9 @@ class HolderDashboardViewController: BaseViewController {
 		// Vaccination & Recovery Validity
 		case newValidityInfoForVaccinationAndRecoveries(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 		
+		// Vaccination Assessment
+		case vaccinationAssessmentEventPresentAndOriginIsMissing(title: String, buttonText: String, didTapCallToAction: () -> Void)
+		
         // QR Cards:
         case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
         case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
@@ -237,7 +240,8 @@ private extension HolderDashboardViewController.Card {
 				let .recoveryValidityExtensionAvailable(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
 				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction),
-				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction):
+				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction),
+				let .vaccinationAssessmentEventPresentAndOriginIsMissing(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
