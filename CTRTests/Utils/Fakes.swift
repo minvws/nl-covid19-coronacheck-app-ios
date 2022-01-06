@@ -516,6 +516,15 @@ extension RemoteGreenCards.DomesticGreenCard {
 			createCredentialMessages: "test"
 		)
 	}
+	
+	static var fakeVaccinationAssessmentGreenCardExpiresIn14Days: RemoteGreenCards.DomesticGreenCard {
+		RemoteGreenCards.DomesticGreenCard(
+			origins: [
+				RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days
+			],
+			createCredentialMessages: "test"
+		)
+	}
 }
 
 extension EventFlow.Identity {
@@ -550,7 +559,7 @@ extension EventFlow.Event {
 			positiveTest: nil,
 			recovery: nil,
 			dccEvent: nil,
-			assessment: nil
+			vaccinationAssessment: nil
 		)
 	}
 
@@ -572,7 +581,7 @@ extension EventFlow.Event {
 			),
 			recovery: nil,
 			dccEvent: nil,
-			assessment: nil
+			vaccinationAssessment: nil
 		)
 	}
 
@@ -598,7 +607,7 @@ extension EventFlow.Event {
 			positiveTest: nil,
 			recovery: nil,
 			dccEvent: nil,
-			assessment: nil
+			vaccinationAssessment: nil
 		)
 	}
 
@@ -616,7 +625,7 @@ extension EventFlow.Event {
 				validUntil: "2022-12-31"
 			),
 			dccEvent: nil,
-			assessment: nil
+			vaccinationAssessment: nil
 		)
 	}
 	
@@ -630,7 +639,7 @@ extension EventFlow.Event {
 			positiveTest: nil,
 			recovery: nil,
 			dccEvent: nil,
-			assessment: EventFlow.VaccinationAssessment(
+			vaccinationAssessment: EventFlow.VaccinationAssessment(
 				dateTimeString: "2022-01-05T12:42:42Z",
 				country: "NLD",
 				verified: true

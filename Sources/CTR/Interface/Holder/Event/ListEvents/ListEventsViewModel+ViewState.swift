@@ -65,7 +65,7 @@ extension ListEventsViewModel {
 	private func isEventAllowed(_ event: EventFlow.Event) -> Bool {
 
 		switch eventMode {
-			case .vaccinationassessment: return event.assessment != nil
+			case .vaccinationassessment: return event.vaccinationAssessment != nil
 			case .paperflow: return event.dccEvent != nil
 			case .positiveTest: return event.positiveTest != nil
 			case .recovery: return event.positiveTest != nil || event.recovery != nil
@@ -188,7 +188,7 @@ extension ListEventsViewModel {
 
 			if currentRow.event.recovery != nil {
 				rows.append(getRowFromRecoveryEvent(dataRow: currentRow))
-			} else if currentRow.event.assessment != nil {
+			} else if currentRow.event.vaccinationAssessment != nil {
 				rows.append(getRowFromAssessementEvent(dataRow: currentRow))
 			} else if currentRow.event.positiveTest != nil {
 				rows.append(getRowFromPositiveTestEvent(dataRow: currentRow))
@@ -312,9 +312,9 @@ extension ListEventsViewModel {
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
-		let formattedTestDate: String = dataRow.event.assessment?.dateTimeString
+		let formattedTestDate: String = dataRow.event.vaccinationAssessment?.dateTimeString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printAssessmentDateFormatter.string) ?? (dataRow.event.assessment?.dateTimeString ?? "")
+			.map(ListEventsViewModel.printAssessmentDateFormatter.string) ?? (dataRow.event.vaccinationAssessment?.dateTimeString ?? "")
 
 		return ListEventsViewController.Row(
 			title: L.holder_event_vaccination_assessment_element_title(),

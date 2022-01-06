@@ -432,7 +432,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 						positiveTest: nil,
 						recovery: nil,
 						dccEvent: nil,
-						assessment: nil
+						vaccinationAssessment: nil
 					)
 				]
 			),

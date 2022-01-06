@@ -2197,7 +2197,7 @@ class ListEventsViewModelTests: XCTestCase {
 						positiveTest: nil,
 						recovery: nil,
 						dccEvent: nil,
-						assessment: nil
+						vaccinationAssessment: nil
 					)
 				]
 			),
@@ -2226,7 +2226,7 @@ class ListEventsViewModelTests: XCTestCase {
 							credential: CouplingManager.vaccinationDCC,
 							couplingCode: "NDREB5"
 						),
-						assessment: nil
+						vaccinationAssessment: nil
 					)
 				]
 			),

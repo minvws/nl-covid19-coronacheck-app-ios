@@ -210,7 +210,7 @@ struct EventFlow {
 		let positiveTest: TestEvent?
 		let recovery: RecoveryEvent?
 		let dccEvent: DccEvent?
-		let assessment: VaccinationAssessment?
+		let vaccinationAssessment: VaccinationAssessment?
 
 		enum CodingKeys: String, CodingKey {
 
@@ -222,7 +222,7 @@ struct EventFlow {
 			case positiveTest = "positivetest"
 			case recovery
 			case dccEvent
-			case assessment = "vaccinationassessment"
+			case vaccinationAssessment = "vaccinationassessment"
 		}
 
 		func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
@@ -235,6 +235,9 @@ struct EventFlow {
 			}
 			if recovery != nil {
 				return recovery?.getDate(with: dateformatter)
+			}
+			if vaccinationAssessment != nil {
+				return vaccinationAssessment?.getDate(with: dateformatter)
 			}
 			return positiveTest?.getDate(with: dateformatter)
 		}
