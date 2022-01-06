@@ -249,6 +249,34 @@ class ListEventsViewModelTests: XCTestCase {
 				hideBodyForScreenCapture: false
 			)
 	}
+	
+	func test_somethingIsWrong_vaccinationAssessment_tapped() {
+		
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccinationassessment,
+			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.secondaryAction?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
+			.moreInformation(
+				title: L.holderVaccinationWrongTitle(),
+				body: L.holder_event_vaccination_assessment_wrong_body(),
+				hideBodyForScreenCapture: false
+			)
+	}
 
 	func test_somethingIsWrong_dccVaccination_notAvailable() {
 
@@ -617,6 +645,43 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 160 CC 056")
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+	}
+	
+	func test_makeQR_saveEventGroupError_eventModeVaccinationAssessmet() throws {
+		
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccinationassessment,
+			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			greenCardLoader: greenCardLoader
+		)
+		
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards) == false
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+		expect(self.sut.alert).to(beNil())
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.holderErrorstateTitle()
+		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 960 CC 056")
 		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1913,6 +1978,154 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
+	func test_successVaccinationAssessment_domesticOnly() throws {
+		
+		// Given
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticVaccinationAssessment), ())
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+		
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccinationassessment,
+			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beFalse())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+		expect(self.sut.alert).toEventually(beNil())
+	}
+	
+	func test_emptyState_negativeTest() throws {
+		
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .test,
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		expect(feedback.title) == L.holderTestNolistTitle()
+		expect(feedback.subTitle) == L.holderTestNolistMessage()
+		expect(feedback.primaryActionTitle) == L.holderTestNolistAction()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+	
+	func test_emptyState_positiveTest() throws {
+		
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .positiveTest,
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		expect(feedback.title) == L.holderPositiveTestNolistTitle()
+		expect(feedback.subTitle) == L.holderPositiveTestNolistMessage()
+		expect(feedback.primaryActionTitle) == L.holderPositiveTestNolistAction()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+	
+	func test_emptyState_paperflow() throws {
+		
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .paperflow,
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		expect(feedback.title) == L.holderCheckdccExpiredTitle()
+		expect(feedback.subTitle) == L.holderCheckdccExpiredMessage()
+		expect(feedback.primaryActionTitle) == L.holderCheckdccExpiredActionTitle()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+	
+	func test_emptyState_recovery() throws {
+		
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		expect(feedback.title) == L.holderRecoveryNolistTitle()
+		expect(feedback.subTitle) == L.holderRecoveryNolistMessage()
+		expect(feedback.primaryActionTitle) == L.holderRecoveryNolistAction()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+	
+	func test_emptyState_vaccinationAssessement() throws {
+		
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccinationassessment,
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		expect(feedback.title) == L.holder_event_vaccination_assessment_nolist_title()
+		expect(feedback.subTitle) == L.holder_event_vaccination_assessment_nolist_message()
+		expect(feedback.primaryActionTitle) == L.holder_event_vaccination_assessment_nolist_action()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+	
 	// MARK: Default values
 
 	private var fakeRemoteEventVaccination: RemoteEvent {
@@ -1939,6 +2152,13 @@ class ListEventsViewModelTests: XCTestCase {
 	private var fakeRemoteEventNegativeTest: RemoteEvent {
 		RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	private var fakeRemoteEventVaccinationAssessment: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeVaccinationAssessmentResultWrapper,
 			signedResponse: SignedResponse.fakeResponse
 		)
 	}
@@ -1977,7 +2197,7 @@ class ListEventsViewModelTests: XCTestCase {
 						positiveTest: nil,
 						recovery: nil,
 						dccEvent: nil,
-						assessment: nil
+						vaccinationAssessment: nil
 					)
 				]
 			),
@@ -2006,7 +2226,7 @@ class ListEventsViewModelTests: XCTestCase {
 							credential: CouplingManager.vaccinationDCC,
 							couplingCode: "NDREB5"
 						),
-						assessment: nil
+						vaccinationAssessment: nil
 					)
 				]
 			),
