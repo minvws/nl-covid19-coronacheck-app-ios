@@ -420,6 +420,8 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], 
 				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEUVaccination())
 			case (_, .domestic):
 				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEU(originType.localizedProof))
+			case (.vaccinationassessment, .europeanUnion):
+				return (originType, L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title())
 			case (_, .europeanUnion):
 				return (originType, L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(originType.localizedProof))
 		}
