@@ -35,7 +35,7 @@ enum RiskLevel: Codable {
 			case .high:
 				return MobilecoreVERIFICATION_POLICY_2G
 			case .highPlus:
-				// Update
+				// Update when working on ticket #3087
 				return ""
 		}
 	}
