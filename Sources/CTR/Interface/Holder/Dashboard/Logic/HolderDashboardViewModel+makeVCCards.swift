@@ -282,7 +282,7 @@ extension HolderDashboardViewController.Card {
 			.completeYourVaccinationAssessment(
 				title: L.holder_dashboard_visitorpassincompletebanner_title(),
 				buttonText: L.holder_dashboard_visitorpassincompletebanner_button_makecomplete(),
-				didTapCallToAction: actionHandler.didTapVaccinationAssessmentEventAndNoOriginMoreInfo
+				didTapCallToAction: actionHandler.didTapCompleteYourVaccinationAssessmentMoreInfo
 			)
 		]
 	}

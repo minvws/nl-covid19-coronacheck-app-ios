@@ -28,7 +28,7 @@ protocol HolderDashboardCardUserActionHandling {
 	func didTapRecoveryValidityReinstationCompleteClose()
 	func didTapNewValidityBannerMoreInfo()
 	func didTapNewValidiyBannerClose()
-	func didTapVaccinationAssessmentEventAndNoOriginMoreInfo()
+	func didTapCompleteYourVaccinationAssessmentMoreInfo()
 }
 
 final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHandling {
@@ -556,7 +556,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = true
 	}
 	
-	func didTapVaccinationAssessmentEventAndNoOriginMoreInfo() {
+	func didTapCompleteYourVaccinationAssessmentMoreInfo() {
 		
 		coordinator?.userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	}
