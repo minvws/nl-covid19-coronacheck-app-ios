@@ -64,6 +64,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
+	func userWishesMoreInfoAboutExpiredDomesticVaccination()
+
 	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted()
 	
 	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted()
@@ -557,6 +559,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
 		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
 	}
 	
 	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {

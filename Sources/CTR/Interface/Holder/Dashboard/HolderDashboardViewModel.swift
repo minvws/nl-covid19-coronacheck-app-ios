@@ -14,6 +14,7 @@ import Reachability
 protocol HolderDashboardCardUserActionHandling {
 	func didTapConfigAlmostOutOfDateCTA()
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
+	func didTapExpiredDomesticVaccinationQRMoreInfo()
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion)
 	func didTapDeviceHasClockDeviationMoreInfo()
 	func didTapTestOnlyValidFor3GMoreInfo()
@@ -483,6 +484,10 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
 	}
 	
+	func didTapExpiredDomesticVaccinationQRMoreInfo() {
+		coordinator?.userWishesMoreInfoAboutExpiredDomesticVaccination()
+	}
+	
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion) {
 		switch (originType, validityRegion) {
 			// special case, has it's own screen:
@@ -556,9 +561,16 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = true
 	}
 	
+	
 	func didTapCompleteYourVaccinationAssessmentMoreInfo() {
 		
 		coordinator?.userWishesMoreInfoAboutCompletingVaccinationAssessment()
+	}
+		
+	func didTapExpiredVaccinationQRMoreInfo() {
+		coordinator?.userWishesMoreInfoAboutExpiredDomesticVaccination()
+	}
+	
 	}
 	
 	// MARK: - Static Methods
