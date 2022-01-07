@@ -22,6 +22,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var sampleGreencardObjectID: NSManagedObjectID!
 	private var recoveryValidityExtensionManagerSpy: RecoveryValidityExtensionManagerProtocol!
 	private var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
+	private var vaccinationAssessmentNotificationManagerSpy: VaccinationAssessmentNotificationManagerSpy!
 	private var environmentSpies: EnvironmentSpies!
 	private static var initialTimeZone: TimeZone?
 
@@ -49,6 +50,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		recoveryValidityExtensionManagerSpy = RecoveryValidityExtensionManagerSpy()
 		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
+		vaccinationAssessmentNotificationManagerSpy = VaccinationAssessmentNotificationManagerSpy()
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
 
@@ -62,6 +64,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			strippenRefresher: strippenRefresherSpy,
 			recoveryValidityExtensionManager: recoveryValidityExtensionManagerSpy,
 			configurationNotificationManager: configurationNotificationManagerSpy,
+			vaccinationAssessmentNotificationManager: vaccinationAssessmentNotificationManagerSpy,
 			versionSupplier: AppVersionSupplierSpy(version: appVersion)
 		)
 	}
@@ -2670,6 +2673,67 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
 	}
 	
+	// MARK: - Vaccination Assessment
+	
+	func test_vaccinationassessment_domestic_shouldShow() {
+		
+		// Arrange
+		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = true
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards[1]).toEventually(beCompleteYourVaccinationAssessmentCard(test: { message, buttonTitle, _ in
+			expect(message) == L.holder_dashboard_visitorpassincompletebanner_title()
+			expect(buttonTitle) == L.holder_dashboard_visitorpassincompletebanner_button_makecomplete()
+		}))
+	}
+	
+	func test_vaccinationassessment_domestic_shouldNotShow() {
+		
+		// Arrange
+		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = false
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_vaccinationassessment_international_shouldShow() {
+	
+		// Arrange
+		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = true
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_vaccinationassessment_international_shouldNotShow() {
+		
+		// Arrange
+		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = false
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
 	// MARK: - HolderDashboardCardUserActionHandling callbacks
 
 	func test_actionhandling_didTapConfigAlmostOutOfDateCTA() {
@@ -2881,6 +2945,18 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == true
 	}
+	
+	func test_actionhandling_didTapCompleteYourVaccinationAssessmentMoreInfo() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapCompleteYourVaccinationAssessmentMoreInfo()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutCompletingVaccinationAssessment) == true
+	}
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
@@ -3021,6 +3097,17 @@ private func beNewValidityInfoForVaccinationAndRecoveriesCard(test: @escaping (S
 		if let actual = try expression.evaluate(),
 		   case let .newValidityInfoForVaccinationAndRecoveries(message2, callToActionButtonText, didTapCallToAction, didTapToClose) = actual {
 			test(message2, callToActionButtonText, didTapCallToAction, didTapToClose)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+private func beCompleteYourVaccinationAssessmentCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .headerMessage with matching value") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .completeYourVaccinationAssessment(message2, callToActionButtonText, didTapCallToAction) = actual {
+			test(message2, callToActionButtonText, didTapCallToAction)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)
