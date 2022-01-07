@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol VaccinationAssessmentNotificationnManagerProtocol {
+protocol VaccinationAssessmentNotificationManagerProtocol {
 	
 	func hasVaccinationAssessmentEventButNoOrigin(now: Date) -> Bool
 }
 
-final class VaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationnManagerProtocol {
+final class VaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManagerProtocol {
 	
 	func hasVaccinationAssessmentEventButNoOrigin(now: Date) -> Bool {
 	

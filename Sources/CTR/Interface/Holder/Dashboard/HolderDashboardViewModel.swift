@@ -148,7 +148,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private var recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol
 	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
-	private var vaccinationAssessmentNotificationnManager: VaccinationAssessmentNotificationnManagerProtocol
+	private var vaccinationAssessmentNotificationnManager: VaccinationAssessmentNotificationManagerProtocol
 	private var versionSupplier: AppVersionSupplierProtocol?
 
 	// MARK: - Initializer
@@ -158,7 +158,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		strippenRefresher: DashboardStrippenRefreshing,
 		recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
-		vaccinationAssessmentNotificationnManager: VaccinationAssessmentNotificationnManagerProtocol,
+		vaccinationAssessmentNotificationnManager: VaccinationAssessmentNotificationManagerProtocol,
 		versionSupplier: AppVersionSupplierProtocol?
 	) {
 
