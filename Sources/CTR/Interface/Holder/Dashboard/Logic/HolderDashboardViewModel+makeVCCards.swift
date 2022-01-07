@@ -271,7 +271,7 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
-	static func makeVaccinationAssessmentEventPresentAndOriginIsMissingCard(
+	static func makeCompleteYourVaccinationAssessmentCard(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
@@ -279,7 +279,7 @@ extension HolderDashboardViewController.Card {
 	
 		guard state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
 		return [
-			.vaccinationAssessmentEventPresentAndOriginIsMissing(
+			.completeYourVaccinationAssessment(
 				title: L.holder_dashboard_visitorpassincompletebanner_title(),
 				buttonText: L.holder_dashboard_visitorpassincompletebanner_button_makecomplete(),
 				didTapCallToAction: actionHandler.didTapVaccinationAssessmentEventAndNoOriginMoreInfo
