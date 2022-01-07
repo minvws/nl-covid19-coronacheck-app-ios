@@ -51,6 +51,6 @@ final class ScanNextInstructionViewModel: Logging {
 	
 	func denyAccess() {
 		
-		coordinator?.navigateToDeniedAccess()
+		coordinator?.navigateToDeniedAccess(.invalid)
 	}
 }

@@ -25,7 +25,7 @@ final class DeniedAccessViewControllerTests: XCTestCase {
 		verifierCoordinatorSpy = VerifierCoordinatorDelegateSpy()
 		
 		sut = DeniedAccessViewController(
-			viewModel: .init(coordinator: verifierCoordinatorSpy)
+			viewModel: .init(coordinator: verifierCoordinatorSpy, deniedAccessReason: .invalid)
 		)
 	}
 	

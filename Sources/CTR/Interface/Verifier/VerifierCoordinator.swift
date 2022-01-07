@@ -38,7 +38,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	func navigateToVerifiedAccess(_ verifiedAccess: VerifiedAccess)
 	
-	func navigateToDeniedAccess()
+	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason)
 	
 	func userWishesToSetRiskLevel(shouldSelectSetting: Bool)
 	
@@ -170,11 +170,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 																							  animationDuration: VerifiedAccessViewTraits.Animation.verifiedDuration)
 	}
 	
-	func navigateToDeniedAccess() {
+	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason) {
 		
 		let viewController = DeniedAccessViewController(
 			viewModel: DeniedAccessViewModel(
-				coordinator: self
+				coordinator: self,
+				deniedAccessReason: deniedAccessReason
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)

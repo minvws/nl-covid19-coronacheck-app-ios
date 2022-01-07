@@ -20,7 +20,7 @@ final class DeniedAccessViewModelTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		verifierCoordinatorSpy = VerifierCoordinatorDelegateSpy()
 		
-		sut = DeniedAccessViewModel(coordinator: verifierCoordinatorSpy)
+		sut = DeniedAccessViewModel(coordinator: verifierCoordinatorSpy, deniedAccessReason: .invalid)
 	}
 	
 	func test_binding() {
