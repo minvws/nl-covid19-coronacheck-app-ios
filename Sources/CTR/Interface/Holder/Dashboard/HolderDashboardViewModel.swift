@@ -83,18 +83,18 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		
 		var shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner: Bool = false
 		
-		var shouldShowVaccinationAssessmentEventPresentAndOriginIsMissingBanner: Bool = true
+		var shouldShowCompleteYourVaccinationAssessmentBanner: Bool = false
 		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
 			!qrCards.isEmpty || !regionFilteredExpiredCards(validityRegion: validityRegion).isEmpty
 		}
 		
-		func shouldShowVaccinationAssessmentEventPresentAndOriginIsMissingBanner(for validityRegion: QRCodeValidityRegion) -> Bool {
+		func shouldShowCompleteYourVaccinationAssessmentBanner(for validityRegion: QRCodeValidityRegion) -> Bool {
 			if validityRegion == .europeanUnion {
 				return false
 			}
-			return shouldShowVaccinationAssessmentEventPresentAndOriginIsMissingBanner
+			return shouldShowCompleteYourVaccinationAssessmentBanner
 		}
 		
 		func regionFilteredQRCards(validityRegion: QRCodeValidityRegion) -> [QRCard] {
@@ -148,6 +148,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private var recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol
 	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
+	private var vaccinationAssessmentNotificationnManager: VaccinationAssessmentNotificationnManagerProtocol
 	private var versionSupplier: AppVersionSupplierProtocol?
 
 	// MARK: - Initializer
@@ -157,6 +158,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		strippenRefresher: DashboardStrippenRefreshing,
 		recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
+		vaccinationAssessmentNotificationnManager: VaccinationAssessmentNotificationnManagerProtocol,
 		versionSupplier: AppVersionSupplierProtocol?
 	) {
 
@@ -166,6 +168,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		self.dashboardRegionToggleValue = Current.userSettings.dashboardRegionToggleValue
 		self.recoveryValidityExtensionManager = recoveryValidityExtensionManager
 		self.configurationNotificationManager = configurationNotificationManager
+		self.vaccinationAssessmentNotificationnManager = vaccinationAssessmentNotificationnManager
 		self.versionSupplier = versionSupplier
 
 		self.state = State(
@@ -176,7 +179,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
 				now: Current.now(),
 				remoteConfiguration: Current.remoteConfigManager.storedConfiguration
-			)
+			),
+			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationnManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
 		)
 
 		didUpdate(oldState: nil, newState: state)
@@ -222,6 +226,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 					// Assume that domestic has just one greencard.
 					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: Current.now())
 			   })
+				state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationnManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
+				
 				self.state = state
 			}
 		}
@@ -329,7 +335,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			now: Current.now()
 		)
 
-		hasAddCertificateMode = state.qrCards.isEmpty
+		hasAddCertificateMode = state.qrCards.isEmpty && !state.shouldShowCompleteYourVaccinationAssessmentBanner
 	}
 
 	fileprivate func strippenRefresherDidUpdate(oldRefresherState: DashboardStrippenRefresher.State?, refresherState: DashboardStrippenRefresher.State) {

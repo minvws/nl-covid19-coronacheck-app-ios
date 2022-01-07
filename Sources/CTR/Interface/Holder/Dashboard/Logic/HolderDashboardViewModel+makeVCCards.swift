@@ -135,7 +135,7 @@ extension HolderDashboardViewController.Card {
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
 		guard !state.dashboardHasQRCards(for: validityRegion) else { return [] }
-		guard !state.shouldShowVaccinationAssessmentEventPresentAndOriginIsMissingBanner(for: validityRegion) else { return [] }
+		guard !state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
 	
 		switch validityRegion {
 			case .domestic:
@@ -277,7 +277,7 @@ extension HolderDashboardViewController.Card {
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 	
-		guard state.shouldShowVaccinationAssessmentEventPresentAndOriginIsMissingBanner(for: validityRegion) else { return [] }
+		guard state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
 		return [
 			.vaccinationAssessmentEventPresentAndOriginIsMissing(
 				title: L.holder_dashboard_visitorpassincompletebanner_title(),
