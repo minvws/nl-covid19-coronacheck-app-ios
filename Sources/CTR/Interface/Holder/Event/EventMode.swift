@@ -71,12 +71,13 @@ enum EventMode: String {
 		}
 	}
 
-	var originsMismatchBody: String {
+	func originsMismatchBody(_ errorCode: ErrorCode) -> String {
+		
 		switch self {
-			case .paperflow: return L.holderEventOriginmismatchDccBody()
+			case .paperflow: return L.holderEventOriginmismatchDccBody("\(errorCode)")
 			case .positiveTest, .recovery, .vaccinationassessment: return "" // No origin check for vaccination assessment, positive test or recovery
-			case .test: return L.holderEventOriginmismatchTestBody()
-			case .vaccination: return L.holderEventOriginmismatchVaccinationBody()
+			case .test: return L.holderEventOriginmismatchTestBody("\(errorCode)")
+			case .vaccination: return L.holderEventOriginmismatchVaccinationBody("\(errorCode)")
 		}
 	}
 }

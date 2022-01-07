@@ -483,11 +483,13 @@ extension ListEventsViewModel {
 	}
 
 	internal func cannotCreateEventsState() -> ListEventsViewController.State {
+		
+		let errorCode = ErrorCode(flow: eventMode.flow, step: .signer, clientCode: ErrorCode.ClientCode.originMismatch)
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderEventOriginmismatchTitle(),
-			subTitle: eventMode.originsMismatchBody,
-			primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction()
+			subTitle: eventMode.originsMismatchBody(errorCode),
+			primaryActionTitle: L.holderErrorstateOverviewAction()
 		)
 	}
 
