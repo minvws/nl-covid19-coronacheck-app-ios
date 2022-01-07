@@ -562,6 +562,29 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
+		
+		let viewModel = ContentViewModel(
+			coordinator: self,
+			content: Content(
+				title: L.holder_expiredDomesticVaccinationModal_title(),
+				subTitle: L.holder_expiredDomesticVaccinationModal_body(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
+				secondaryAction: { [weak self] in
+					self?.sidePanel?.selectedViewController?.dismiss(animated: true) {
+						self?.userWishesToCreateAVaccinationQR() 
+					}
+				}
+			),
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			},
+			hideBodyForScreenCapture: false
+		)
+		
+		let viewController = ContentViewController(viewModel: viewModel)
+		presentAsBottomSheet(viewController)
 	}
 	
 	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {
