@@ -8,7 +8,7 @@
 import UIKit
 
 /// The access options
-enum VerifiedType: Equatable {
+enum VerifiedAccess: Equatable {
 
 	case verified(RiskLevel)
 	case demo(RiskLevel)
@@ -25,18 +25,18 @@ final class VerifiedAccessViewModel: Logging {
 	/// The title of the scene
 	@Bindable private(set) var accessTitle: String
 	
-	@Bindable private(set) var verifiedType: VerifiedType
+	@Bindable private(set) var verifiedAccess: VerifiedAccess
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		verifiedType: VerifiedType
+		verifiedAccess: VerifiedAccess
 	) {
 		
 		self.coordinator = coordinator
-		self.verifiedType = verifiedType
+		self.verifiedAccess = verifiedAccess
 
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {
-			switch verifiedType {
+			switch verifiedAccess {
 				case .verified(let riskLevel) where riskLevel.isHighPlus,
 						.demo(let riskLevel) where riskLevel.isHighPlus:
 					accessTitle = L.verifier_result_access_title_2g_plus()
@@ -47,11 +47,11 @@ final class VerifiedAccessViewModel: Logging {
 					accessTitle = L.verifier_result_access_title_lowrisk()
 			}
 		} else {
-			switch verifiedType {
+			switch verifiedAccess {
 				case .verified:
-					self.verifiedType = .verified(.low)
+					self.verifiedAccess = .verified(.low)
 				case .demo:
-					self.verifiedType = .demo(.low)
+					self.verifiedAccess = .demo(.low)
 			}
 			accessTitle = L.verifier_result_access_title()
 		}

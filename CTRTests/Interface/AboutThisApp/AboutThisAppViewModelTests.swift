@@ -466,14 +466,14 @@ class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, Verifie
 
 	var invokedNavigateToVerifiedAccess = false
 	var invokedNavigateToVerifiedAccessCount = 0
-	var invokedNavigateToVerifiedAccessParameters: (verifiedType: VerifiedType, Void)?
-	var invokedNavigateToVerifiedAccessParametersList = [(verifiedType: VerifiedType, Void)]()
+	var invokedNavigateToVerifiedAccessParameters: (verifiedAccess: VerifiedAccess, Void)?
+	var invokedNavigateToVerifiedAccessParametersList = [(verifiedAccess: VerifiedAccess, Void)]()
 
-	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
+	func navigateToVerifiedAccess(_ verifiedAccess: VerifiedAccess) {
 		invokedNavigateToVerifiedAccess = true
 		invokedNavigateToVerifiedAccessCount += 1
-		invokedNavigateToVerifiedAccessParameters = (verifiedType, ())
-		invokedNavigateToVerifiedAccessParametersList.append((verifiedType, ()))
+		invokedNavigateToVerifiedAccessParameters = (verifiedAccess, ())
+		invokedNavigateToVerifiedAccessParametersList.append((verifiedAccess, ()))
 	}
 
 	var invokedNavigateToDeniedAccess = false

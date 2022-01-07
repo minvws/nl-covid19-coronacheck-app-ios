@@ -39,7 +39,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .demo(.low)
+				verifiedAccess: .demo(.low)
 			)
 		)
 		
@@ -61,7 +61,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .demo(.low)
+				verifiedAccess: .demo(.low)
 			)
 		)
 		
@@ -82,7 +82,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .demo(.high)
+				verifiedAccess: .demo(.high)
 			)
 		)
 		
@@ -104,7 +104,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .demo(.high)
+				verifiedAccess: .demo(.high)
 			)
 		)
 		
@@ -125,7 +125,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .demo(.highPlus)
+				verifiedAccess: .demo(.highPlus)
 			)
 		)
 		
@@ -147,7 +147,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .demo(.highPlus)
+				verifiedAccess: .demo(.highPlus)
 			)
 		)
 		
@@ -167,7 +167,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .verified(.low)
+				verifiedAccess: .verified(.low)
 			)
 		)
 		
@@ -189,7 +189,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .verified(.low)
+				verifiedAccess: .verified(.low)
 			)
 		)
 		
@@ -210,7 +210,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .verified(.high)
+				verifiedAccess: .verified(.high)
 			)
 		)
 		
@@ -232,7 +232,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .verified(.high)
+				verifiedAccess: .verified(.high)
 			)
 		)
 		
@@ -253,7 +253,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .verified(.highPlus)
+				verifiedAccess: .verified(.highPlus)
 			)
 		)
 		
@@ -275,7 +275,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedType: .verified(.highPlus)
+				verifiedAccess: .verified(.highPlus)
 			)
 		)
 		
