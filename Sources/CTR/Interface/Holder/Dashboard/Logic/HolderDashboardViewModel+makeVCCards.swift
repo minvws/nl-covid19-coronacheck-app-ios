@@ -98,8 +98,8 @@ extension HolderDashboardViewController.Card {
 			.compactMap { expiredQR -> HolderDashboardViewController.Card? in
 				
 				let message = String.holderDashboardQRExpired(
-					localizedRegion: expiredQR.region.localizedAdjective,
-					localizedOriginType: expiredQR.type.localizedProof
+					originType: expiredQR.type,
+					region: expiredQR.region
 				)
 				
 				return .expiredQR(

@@ -662,6 +662,13 @@
 "holder_dashboard_newvaliditybanner_action" = "Lees meer op Rijksoverheid.nl";
 "holder_dashboard_newvaliditybanner_title" = "De geldigheid van coronabewijzen wordt aangepast";
 "holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
+"holder_dashboard_originExpiredBanner_domesticRecovery_title" = "Je Nederlandse herstelbewijs is verlopen";
+"holder_dashboard_originExpiredBanner_domesticTest_title" = "Je Nederlandse testbewijs is verlopen";
+"holder_dashboard_originExpiredBanner_domesticVaccine_title" = "Je Nederlandse vaccinatiebewijs is verlopen";
+"holder_dashboard_originExpiredBanner_internationalRecovery_title" = "Je internationale herstelbewijs is verlopen";
+"holder_dashboard_originExpiredBanner_internationalTest_title" = "Je internationale testbewijs is verlopen";
+"holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Je internationale vaccinatiebewijs is verlopen";
+"holder_dashboard_originExpiredBanner_visitorPass_title" = "Je bezoekersbewijs is verlopen";
 "holder_dashboard_qr_validity_suffix_2g" = "voor 2G-toegang";
 "holder_dashboard_qr_validity_suffix_3g" = "voor 3G-toegang";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Je bezoekersbewijs is niet geldig buiten Nederland";
