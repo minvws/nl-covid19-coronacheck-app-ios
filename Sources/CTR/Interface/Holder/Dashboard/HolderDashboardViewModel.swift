@@ -319,7 +319,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	fileprivate func didUpdate(oldState: State?, newState: State) {
 		guard state != oldState // save recomputation effort if `==`
 		else { return }
-
+		
 		domesticCards = HolderDashboardViewModel.assembleCards(
 			forValidityRegion: .domestic,
 			state: state,
@@ -561,7 +561,6 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = true
 	}
 	
-	
 	func didTapCompleteYourVaccinationAssessmentMoreInfo() {
 		
 		coordinator?.userWishesMoreInfoAboutCompletingVaccinationAssessment()
@@ -569,8 +568,6 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		
 	func didTapExpiredVaccinationQRMoreInfo() {
 		coordinator?.userWishesMoreInfoAboutExpiredDomesticVaccination()
-	}
-	
 	}
 	
 	// MARK: - Static Methods

@@ -41,7 +41,9 @@ class ContentViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$secondaryButtonTitle.binding = { [weak self] in self?.sceneView.secondaryButtonTitle = $0 }
+		viewModel.$secondaryButtonTitle.binding = { [weak self] in
+			self?.sceneView.secondaryButtonTitle = $0
+		}
 		viewModel.$hideForCapture.binding = { [weak self] in
 			self?.sceneView.handleScreenCapture(shouldHide: $0)
 		}
@@ -49,7 +51,6 @@ class ContentViewController: BaseViewController {
 		sceneView.messageLinkTapHandler = { [weak viewModel] url in
 			viewModel?.userDidTapURL(url: url)
 		}
-		
 		sceneView.secondaryButtonTappedCommand = { [weak viewModel] in
 			viewModel?.userDidTapSecondaryButton()
 		}

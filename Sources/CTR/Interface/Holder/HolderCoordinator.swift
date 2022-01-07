@@ -572,9 +572,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				primaryAction: nil,
 				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
 				secondaryAction: { [weak self] in
-					self?.sidePanel?.selectedViewController?.dismiss(animated: true) {
-						self?.userWishesToCreateAVaccinationQR() 
-					}
+					guard let self = self else { return }
+					self.sidePanel?.selectedViewController?.dismiss(
+						animated: true,
+						completion: self.userWishesToCreateAVaccinationQR
+					)
 				}
 			),
 			linkTapHander: { [weak self] url in

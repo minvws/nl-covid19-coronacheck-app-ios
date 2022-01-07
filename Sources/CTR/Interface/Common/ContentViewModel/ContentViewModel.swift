@@ -36,13 +36,13 @@ class ContentViewModel {
 	init(
 		coordinator: Dismissable,
 		content: Content,
-		linkTapHander: ((URL) -> Void)? = nil, // TODO: merge with Content?
+		linkTapHander: ((URL) -> Void)? = nil, // todo: merge this into Content?
 		hideBodyForScreenCapture: Bool = false) {
 
 		self.content = content
 		self.coordinator = coordinator
 		self.title = content.title
-		self.message = content.subTitle ?? "" 
+		self.message = content.subTitle ?? ""
 		self.secondaryButtonTitle = content.secondaryActionTitle
 		self.linkTapHander = linkTapHander
 		self.hideBodyForScreenCapture = hideBodyForScreenCapture

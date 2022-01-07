@@ -40,7 +40,6 @@ class ContentView: BaseView {
 		return TextView()
 	}()
 
-	
 	let secondaryButton: Button = {
 
 		let button = Button(title: "", style: .textLabelBlue)
