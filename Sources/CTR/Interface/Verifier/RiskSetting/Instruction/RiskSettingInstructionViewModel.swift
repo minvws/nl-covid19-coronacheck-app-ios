@@ -21,6 +21,9 @@ final class RiskSettingInstructionViewModel: Logging {
 	@Bindable private(set) var highRiskTitle = L.verifier_risksetting_highrisk_title()
 	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
 	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
+	@Bindable private(set) var highPlusRiskTitle = L.verifier_risksetting_2g_plus_title()
+	@Bindable private(set) var highPlusRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
+	@Bindable private(set) var highPlusRiskAccessibilityLabel = "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
 	@Bindable private(set) var moreButtonTitle = L.verifier_risksetting_readmore()
 	@Bindable private(set) var primaryButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 	@Bindable private(set) var errorMessage = L.verification_policy_selection_error_message()

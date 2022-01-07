@@ -24,6 +24,7 @@ class VerifierStartViewModel: Logging {
 		case noLevelSet
 		case lowRisk
 		case highRisk
+		case highPlusRisk
 		case locked(mode: Mode, timeRemaining: TimeInterval, totalDuration: TimeInterval)
 
 		var title: String {
@@ -44,11 +45,13 @@ class VerifierStartViewModel: Logging {
 		var largeImage: UIImage? {
 			switch self {
 				case .noLevelSet, .lowRisk:
-					return I.scanStartLowRisk()
+					return I.scanner.scanStartLowRisk()
 				case .highRisk:
-					return I.scanStartHighRisk()
+					return I.scanner.scanStartHighRisk()
+				case .highPlusRisk:
+					return I.scanner.scanStartHighPlusRisk()
 				case .locked:
-					return I.scanStartLocked()
+					return I.scanner.scanStartLocked()
 			}
 		}
 		
@@ -57,7 +60,7 @@ class VerifierStartViewModel: Logging {
 				case let .locked(_, _, totalDuration):
 					let minutes = Int((totalDuration / 60).rounded(.up))
 					return L.verifier_home_countdown_subtitle(minutes)
-				case .highRisk:
+				case .highRisk, .highPlusRisk:
 					return L.scan_qr_description_2G()
 				default:
 					return L.verifierStartMessage()
@@ -98,6 +101,8 @@ class VerifierStartViewModel: Logging {
 		
 		var riskIndicator: (UIColor, String)? {
 			switch self {
+				case .highPlusRisk, .locked(.highPlusRisk, _, _):
+					return (Theme.colors.dark, L.verifier_start_scan_qr_policy_indication_2g_plus())
 				case .highRisk, .locked(.highRisk, _, _):
 					return (Theme.colors.primary, L.verifier_start_scan_qr_policy_indication_2g())
 				case .lowRisk, .locked(.lowRisk, _, _):
@@ -251,6 +256,8 @@ class VerifierStartViewModel: Logging {
 					mode = .locked(mode: .noLevelSet, timeRemaining: timeRemaining, totalDuration: totalDuration)
 				
 				// Risk Level changed: update mode
+				case (_, .highPlus):
+					mode = .highPlusRisk
 				case (_, .high):
 					mode = .highRisk
 				case (_, .low):

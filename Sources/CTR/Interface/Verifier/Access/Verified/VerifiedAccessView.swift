@@ -119,6 +119,8 @@ extension VerifiedType {
 						return C.accessColor()
 					case .high:
 						return C.primaryColor()
+					case .highPlus:
+						return C.darkColor()
 				}
 			case .demo:
 				return C.grey4()
@@ -126,7 +128,7 @@ extension VerifiedType {
 	}
 	
 	var tintColor: UIColor? {
-		if case .verified(let risk) = self, risk.isHigh {
+		if case .verified(let risk) = self, risk.isHigh || risk.isHighPlus {
 			return .white
 		} else {
 			return C.darkColor()

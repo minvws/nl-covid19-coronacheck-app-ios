@@ -73,7 +73,7 @@ extension VerifiedType {
 	
 	var statusBarStyle: UIStatusBarStyle {
 		
-		if case .verified(let risk) = self, risk.isHigh {
+		if case .verified(let risk) = self, risk.isHigh || risk.isHighPlus {
 			return .lightContent
 		} else {
 			return .default
