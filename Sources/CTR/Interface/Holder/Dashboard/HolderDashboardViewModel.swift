@@ -91,7 +91,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		}
 		
 		func shouldShowCompleteYourVaccinationAssessmentBanner(for validityRegion: QRCodeValidityRegion) -> Bool {
-			if validityRegion == .europeanUnion {
+			guard validityRegion == .domestic else {
 				return false
 			}
 			return shouldShowCompleteYourVaccinationAssessmentBanner
@@ -148,7 +148,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private var recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol
 	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
-	private var vaccinationAssessmentNotificationnManager: VaccinationAssessmentNotificationManagerProtocol
+	private var vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManagerProtocol
 	private var versionSupplier: AppVersionSupplierProtocol?
 
 	// MARK: - Initializer
@@ -158,7 +158,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		strippenRefresher: DashboardStrippenRefreshing,
 		recoveryValidityExtensionManager: RecoveryValidityExtensionManagerProtocol,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
-		vaccinationAssessmentNotificationnManager: VaccinationAssessmentNotificationManagerProtocol,
+		vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManagerProtocol,
 		versionSupplier: AppVersionSupplierProtocol?
 	) {
 
@@ -168,7 +168,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		self.dashboardRegionToggleValue = Current.userSettings.dashboardRegionToggleValue
 		self.recoveryValidityExtensionManager = recoveryValidityExtensionManager
 		self.configurationNotificationManager = configurationNotificationManager
-		self.vaccinationAssessmentNotificationnManager = vaccinationAssessmentNotificationnManager
+		self.vaccinationAssessmentNotificationManager = vaccinationAssessmentNotificationManager
 		self.versionSupplier = versionSupplier
 
 		self.state = State(
@@ -180,7 +180,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				now: Current.now(),
 				remoteConfiguration: Current.remoteConfigManager.storedConfiguration
 			),
-			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationnManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
+			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
 		)
 
 		didUpdate(oldState: nil, newState: state)
@@ -226,7 +226,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 					// Assume that domestic has just one greencard.
 					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: Current.now())
 			   })
-				state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationnManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
+				state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
 				
 				self.state = state
 			}

@@ -64,7 +64,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			strippenRefresher: strippenRefresherSpy,
 			recoveryValidityExtensionManager: recoveryValidityExtensionManagerSpy,
 			configurationNotificationManager: configurationNotificationManagerSpy,
-			vaccinationAssessmentNotificationnManager: vaccinationAssessmentNotificationManagerSpy,
+			vaccinationAssessmentNotificationManager: vaccinationAssessmentNotificationManagerSpy,
 			versionSupplier: AppVersionSupplierSpy(version: appVersion)
 		)
 	}
@@ -2675,7 +2675,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	
 	// MARK: - Vaccination Assessment
 	
-	func test_vaccinationasssment_domestic() {
+	func test_vaccinationassessment_domestic_shouldShow() {
 		
 		// Arrange
 		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = true
@@ -2692,10 +2692,38 @@ class HolderDashboardViewModelTests: XCTestCase {
 		}))
 	}
 	
-	func test_vaccinationasssment_international() {
+	func test_vaccinationassessment_domestic_shouldNotShow() {
+		
+		// Arrange
+		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = false
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_vaccinationassessment_international_shouldShow() {
 	
 		// Arrange
 		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = true
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_vaccinationassessment_international_shouldNotShow() {
+		
+		// Arrange
+		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = false
 		
 		// Act
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)

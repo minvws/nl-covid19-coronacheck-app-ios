@@ -340,7 +340,7 @@ class HolderCoordinator: SharedCoordinator {
 				),
 				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
 				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings),
-				vaccinationAssessmentNotificationnManager: VaccinationAssessmentNotificationManager(),
+				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
 				versionSupplier: versionSupplier
 			)
 		)

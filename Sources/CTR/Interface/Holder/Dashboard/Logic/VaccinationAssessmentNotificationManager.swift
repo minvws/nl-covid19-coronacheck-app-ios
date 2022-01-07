@@ -21,25 +21,23 @@ final class VaccinationAssessmentNotificationManager: VaccinationAssessmentNotif
 	
 	private func hasValidVaccinationAssessmentOrigin(_ now: Date) -> Bool {
 		
-		let originType = OriginType.vaccinationassessment
-		return !Current.walletManager.greencardsWithUnexpiredOrigins(now: now, ofOriginType: originType).isEmpty
+		return !Current.walletManager.greencardsWithUnexpiredOrigins(now: now, ofOriginType: OriginType.vaccinationassessment).isEmpty
 	}
 	
 	private func hasValidVaccinationAssessmentEventGroup(_ now: Date) -> Bool {
 		
-		let originType = OriginType.vaccinationassessment
 		let validityDays = Current.remoteConfigManager.storedConfiguration.vaccinationAssessementEventValidityDays ?? 14
 		let validityDaysTimeInterval = TimeInterval(validityDays * 24 * 60 * 60)
 		
 		return !Current.walletManager.listEventGroups()
 			// Filter for vaccinationassessment
-			.filter { $0.type == originType.rawValue }
+			.filter { $0.type == OriginType.vaccinationassessment.rawValue }
 			// Filter for validity
 			.filter {
-				if let maxIssuedAt = $0.maxIssuedAt {
-					return maxIssuedAt.addingTimeInterval(validityDaysTimeInterval) > now
+				guard let maxIssuedAt = $0.maxIssuedAt else {
+					return false
 				}
-				return false
+				return maxIssuedAt.addingTimeInterval(validityDaysTimeInterval) > now
 			}
 			.isEmpty
 	}
