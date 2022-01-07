@@ -14,6 +14,7 @@ final class DeniedAccessView: BaseView {
 		enum Margin {
 			static let top: CGFloat = 4
 			static let secondaryButtonBottom: CGFloat = 8
+			static let horizontal: CGFloat = 32
 		}
 		enum Spacing {
 			static let views: CGFloat = UIDevice.current.isSmallScreen ? 24 : 40
@@ -116,8 +117,8 @@ final class DeniedAccessView: BaseView {
 			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor),
 			
 			stackView.topAnchor.constraint(equalTo: scrollView.contentView.topAnchor),
-			stackView.leftAnchor.constraint(equalTo: scrollView.contentView.leftAnchor),
-			stackView.rightAnchor.constraint(equalTo: scrollView.contentView.rightAnchor),
+			stackView.leftAnchor.constraint(equalTo: scrollView.contentView.leftAnchor, constant: ViewTraits.Margin.horizontal),
+			stackView.rightAnchor.constraint(equalTo: scrollView.contentView.rightAnchor, constant: -ViewTraits.Margin.horizontal),
 			
 			{
 				let constraint = imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.imageWidth)
@@ -164,6 +165,7 @@ final class DeniedAccessView: BaseView {
 	var secondaryTitle: String? {
 		didSet {
 			secondaryButton.title = secondaryTitle
+			secondaryButton.isHidden = secondaryTitle == nil
 		}
 	}
 	
