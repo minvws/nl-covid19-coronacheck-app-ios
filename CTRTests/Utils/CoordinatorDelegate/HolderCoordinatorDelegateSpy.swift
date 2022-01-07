@@ -211,6 +211,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount += 1
 	}
 
+	var invokedUserWishesMoreInfoAboutExpiredDomesticVaccination = false
+	var invokedUserWishesMoreInfoAboutExpiredDomesticVaccinationCount = 0
+
+	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
+		invokedUserWishesMoreInfoAboutExpiredDomesticVaccination = true
+		invokedUserWishesMoreInfoAboutExpiredDomesticVaccinationCount += 1
+	}
+
 	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompleted = false
 	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompletedCount = 0
 
