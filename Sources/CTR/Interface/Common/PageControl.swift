@@ -56,6 +56,7 @@ final class PageControl: BaseView {
 				currentPageIndex = 0
 			}
 			addIndicators(for: numberOfPages)
+			selectPageIndicator(for: currentPageIndex)
 			setNeedsLayout()
 		}
 	}
@@ -137,10 +138,10 @@ final class PageControl: BaseView {
 	func update(for pageIndex: Int) {
 		guard currentPageIndex != pageIndex else { return }
 		
-		if pageIndex > currentPageIndex {
-			selectNextPageIndicator()
-		} else {
-			selectPreviousPageIndicator()
+		if pageIndex > currentPageIndex, canGoToNexPage {
+			selectPageIndicator(for: pageIndex)
+		} else if canGoToPreviousPage {
+			selectPageIndicator(for: pageIndex)
 		}
 	}
 }
@@ -171,9 +172,9 @@ private extension PageControl {
 		delegate?.pageControl(self, didChangeToPageIndex: previousIndex, previousPageIndex: currentPageIndex)
 	}
 	
-	func addRoundIndicator(isSelected: Bool) -> UIView {
+	func addRoundIndicator() -> UIView {
 		let indicator = UIView()
-		indicator.backgroundColor = isSelected ? ViewTraits.Color.selected : ViewTraits.Color.deselected
+		indicator.backgroundColor = ViewTraits.Color.deselected
 		indicator.layer.cornerRadius = ViewTraits.Size.deselected / 2
 		indicator.translatesAutoresizingMaskIntoConstraints = false
 		
@@ -182,67 +183,43 @@ private extension PageControl {
 			indicator.heightAnchor.constraint(equalToConstant: ViewTraits.Size.deselected)
 		])
 		
-		if isSelected {
-			indicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
-		}
-		
 		return indicator
 	}
 	
 	func addIndicators(for count: Int) {
 		indicatorStackView.removeArrangedSubviews()
 		
-		for index in 0..<count {
-			let indicator = addRoundIndicator(isSelected: index <= currentPageIndex)
+		for _ in 0..<count {
+			let indicator = addRoundIndicator()
 			indicatorStackView.addArrangedSubview(indicator)
 			indicators.append(indicator)
 		}
 	}
 	
-	func selectNextPageIndicator() {
-		guard canGoToNexPage else { return }
-		
-		currentPageIndex += 1
-		let nextIndicator = indicators[currentPageIndex]
-		let previousIndicator = indicators[currentPageIndex - 1]
+	func selectPageIndicator(for pageIndex: Int) {
+		currentPageIndex = pageIndex
 		
 		UIView.animate(withDuration: ViewTraits.Duration.animation,
 					   delay: 0,
-					   options: [.beginFromCurrentState, .curveEaseOut],
+					   options: [.curveEaseOut],
 					   animations: {
-			nextIndicator.backgroundColor = ViewTraits.Color.selected
-			previousIndicator.backgroundColor = ViewTraits.Color.deselected
-			nextIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
-			previousIndicator.transform = .identity
+			for (index, indicator) in self.indicators.enumerated() {
+				if index == pageIndex {
+					indicator.backgroundColor = ViewTraits.Color.selected
+					indicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
+				} else {
+					indicator.backgroundColor = ViewTraits.Color.deselected
+					indicator.transform = .identity
+				}
+			}
 		}, completion: { finished in
 			guard finished else { return }
 			
-			UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
-				nextIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
-			})
-		})
-	}
-	
-	func selectPreviousPageIndicator() {
-		guard canGoToPreviousPage else { return }
-		
-		currentPageIndex -= 1
-		let nextIndicator = indicators[currentPageIndex + 1]
-		let previousIndicator = indicators[currentPageIndex]
-		
-		UIView.animate(withDuration: ViewTraits.Duration.animation,
-					   delay: 0,
-					   options: [.beginFromCurrentState, .curveEaseOut],
-					   animations: {
-			nextIndicator.backgroundColor = ViewTraits.Color.deselected
-			previousIndicator.backgroundColor = ViewTraits.Color.selected
-			previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.animation, y: ViewTraits.Scale.animation)
-			nextIndicator.transform = .identity
-		}, completion: { finished in
-			guard finished else { return }
-			
-			UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
-				previousIndicator.transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
+			UIView.animate(withDuration: ViewTraits.Duration.animation,
+						   delay: 0,
+						   options: [.curveEaseOut],
+						   animations: {
+				self.indicators[pageIndex].transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
 			})
 		})
 	}
