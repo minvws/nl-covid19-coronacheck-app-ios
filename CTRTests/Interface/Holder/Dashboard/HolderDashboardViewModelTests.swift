@@ -2312,26 +2312,35 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .domestic, type: .recovery),
 			.init(region: .domestic, type: .test),
-			.init(region: .domestic, type: .vaccination)
+			.init(region: .domestic, type: .vaccination),
+			.init(region: .domestic, type: .vaccinationassessment)
 		]
 
 		// Act
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(4))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
 			expect(buttonTitle).to(beNil())
 		}))
 		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard(test: { message, _ in
-			expect(message) == L.holderDashboardQrExpired()
+			expect(message) == L.holder_dashboard_originExpiredBanner_domesticRecovery_title()
 		}))
 		expect(self.sut.domesticCards[2]).toEventually(beExpiredQRCard(test: { message, _ in
-			expect(message) == L.holderDashboardQrExpired()
+			expect(message) == L.holder_dashboard_originExpiredBanner_domesticTest_title()
 		}))
-		expect(self.sut.domesticCards[3]).toEventually(beExpiredQRCard(test: { message, _ in
-			expect(message) == L.holderDashboardQrExpired()
+		expect(self.sut.domesticCards[3]).toEventually(beExpiredVaccinationQRCard(test: { message, callToActionButtonText, callToAction, _ in
+			expect(message) == L.holder_dashboard_originExpiredBanner_domesticVaccine_title()
+			expect(callToActionButtonText) == L.generalReadmore()
+			
+			callToAction() // user taps..
+			
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutExpiredDomesticVaccination) == true
+		}))
+		expect(self.sut.domesticCards[4]).toEventually(beExpiredQRCard(test: { message, _ in
+			expect(message) == L.holder_dashboard_originExpiredBanner_visitorPass_title()
 		}))
 	}
 
@@ -2356,7 +2365,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		expect(domesticCards[0]).toEventually(beHeaderMessageCard())
 		expect(domesticCards[1]).toEventually(beExpiredQRCard(test: { message, didTapClose in
-			expect(message) == L.holderDashboardQrExpired()
+			expect(message) == L.holder_dashboard_originExpiredBanner_domesticRecovery_title()
 			didTapClose()
 
 			// Check the non-cached value now to check that the Expired QR row was removed:
@@ -2375,26 +2384,30 @@ class HolderDashboardViewModelTests: XCTestCase {
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .europeanUnion, type: .recovery),
 			.init(region: .europeanUnion, type: .test),
-			.init(region: .europeanUnion, type: .vaccination)
+			.init(region: .europeanUnion, type: .vaccination),
+			.init(region: .europeanUnion, type: .vaccinationassessment)
 		]
 
 		// Act
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 
 		// Assert
-		expect(self.sut.internationalCards).toEventually(haveCount(4))
+		expect(self.sut.internationalCards).toEventually(haveCount(5))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		})
 		expect(self.sut.internationalCards[1]).toEventually(beExpiredQRCard(test: { message, _ in
-			expect(message) == L.holderDashboardQrExpired()
+			expect(message) == L.holder_dashboard_originExpiredBanner_internationalRecovery_title()
 		}))
 		expect(self.sut.internationalCards[2]).toEventually(beExpiredQRCard(test: { message, _ in
-			expect(message) == L.holderDashboardQrExpired()
+			expect(message) == L.holder_dashboard_originExpiredBanner_internationalTest_title()
 		}))
 		expect(self.sut.internationalCards[3]).toEventually(beExpiredQRCard(test: { message, _ in
-			expect(message) == L.holderDashboardQrExpired()
+			expect(message) == L.holder_dashboard_originExpiredBanner_internationalVaccine_title()
+		}))
+		expect(self.sut.internationalCards[4]).toEventually(beExpiredQRCard(test: { message, _ in
+			expect(message) == L.holder_dashboard_originExpiredBanner_visitorPass_title()
 		}))
 	}
 
@@ -2773,7 +2786,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard(test: { title, _ in
-			expect(title) == "Je bewijs is verlopen." // Upcoming: future feature, the expiry message will soon identify the QR removed.
+			// The expired test card should remain:
+			expect(title) == L.holder_dashboard_originExpiredBanner_domesticTest_title()
 		}))
 
 		// Close second expired QR:
@@ -3032,6 +3046,17 @@ private func beExpiredQRCard(test: @escaping (String, () -> Void) -> Void = { _,
 		if let actual = try expression.evaluate(),
 		   case let .expiredQR(message2, didTapClose) = actual {
 			test(message2, didTapClose)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+private func beExpiredVaccinationQRCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .expiredVaccinationQR with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .expiredVaccinationQR(message2, callToActionButtonText2, didTapCallToAction2, didTapClose2) = actual {
+			test(message2, callToActionButtonText2, didTapCallToAction2, didTapClose2)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)

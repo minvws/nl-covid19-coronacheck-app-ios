@@ -7,17 +7,17 @@
 
 import UIKit
 
-class InformationViewController: BaseViewController {
+class ContentViewController: BaseViewController {
 
 	/// The model
-	private let viewModel: InformationViewModel
+	private let viewModel: ContentViewModel
 
 	/// The view
-	let sceneView = InformationView()
+	let sceneView = ContentView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: InformationViewModel) {
+	init(viewModel: ContentViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -41,14 +41,18 @@ class InformationViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-
-		sceneView.linkTapHandler = { [weak viewModel] url in
-			viewModel?.userDidTapURL(url: url)
+		viewModel.$secondaryButtonTitle.binding = { [weak self] in
+			self?.sceneView.secondaryButtonTitle = $0
+		}
+		viewModel.$hideForCapture.binding = { [weak self] in
+			self?.sceneView.handleScreenCapture(shouldHide: $0)
 		}
 
-		viewModel.$hideForCapture.binding = { [weak self] in
-
-			self?.sceneView.handleScreenCapture(shouldHide: $0)
+		sceneView.messageLinkTapHandler = { [weak viewModel] url in
+			viewModel?.userDidTapURL(url: url)
+		}
+		sceneView.secondaryButtonTappedCommand = { [weak viewModel] in
+			viewModel?.userDidTapSecondaryButton()
 		}
 	}
 }
