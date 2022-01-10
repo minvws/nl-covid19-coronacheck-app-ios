@@ -289,12 +289,10 @@ final private class ScreenBrightnessManager {
 		self.initialBrightness = initialBrightness
 	}
 	
-	/// Adjust the brightness
-	/// - Parameter reset: True if we reset to previous value
 	func setFullBrightness() {
 
 		let brightnessStep: CGFloat = 0.02
-		var iterations = 0 // a basic guard against fighting with an external brightness loop (preventing infinite loop):
+		var iterations = 0 // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
 		let animationID = UUID()
 		latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
 		Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
@@ -315,7 +313,7 @@ final private class ScreenBrightnessManager {
 		}
 		
 		let brightnessStep: CGFloat = 0.02
-		var iterations = 0 // a basic guard against fighting with an external brightness loop (preventing infinite loop):
+		var iterations = 0 // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
 		let animationID = UUID()
 		latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
 		Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
