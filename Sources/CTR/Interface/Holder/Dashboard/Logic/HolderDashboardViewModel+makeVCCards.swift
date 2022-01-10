@@ -339,9 +339,9 @@ extension HolderDashboardViewModel.QRCard {
 							nextOrigin.expirationTime > result ? nextOrigin.expirationTime : result
 						}
 
-						// if all origins will be expired in next six hours:
-						let sixHours: TimeInterval = 6 * 60 * 60
-						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < now.addingTimeInterval(sixHours)
+						// if all origins will be expired in next 24 hours:
+						let countdownTimerVisibleThreshold: TimeInterval = 24 * 60 * 60
+						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < now.addingTimeInterval(countdownTimerVisibleThreshold)
 						else { return nil }
  
 						let fiveMinutes: TimeInterval = 5 * 60
@@ -350,8 +350,8 @@ extension HolderDashboardViewModel.QRCard {
 								// e.g. "4 minuten en 15 seconden"
 								return HolderDashboardViewModel.hmsRelativeFormatter
 							} else {
-								// e.g. "5 uur 59 min"
-								return HolderDashboardViewModel.hmRelativeFormatter
+								// e.g. "23 hrs, 59 min"
+								return HolderDashboardViewModel.hmShortRelativeFormatter
 							}
 						}()
 

@@ -67,6 +67,17 @@ extension HolderDashboardViewModel {
 		return formatter
 	}()
 
+	/// e.g. `"23 hrs, 59 min"`
+	/// 	 `23 uur, 59 min`
+	/// 	 `"1 min"`
+	static let hmShortRelativeFormatter: DateComponentsFormatter = {
+		let formatter = DateComponentsFormatter()
+		formatter.unitsStyle = .short
+		formatter.maximumUnitCount = 2
+		formatter.allowedUnits = [.hour, .minute]
+		return formatter
+	}()
+
 	/// e.g. `"3 days"`
 	/// 	 `"0 days"`
 	static let daysRelativeFormatter: DateComponentsFormatter = {
