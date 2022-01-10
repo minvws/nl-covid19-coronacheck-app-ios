@@ -1157,7 +1157,7 @@ class ListEventsViewModelTests: XCTestCase {
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
 		expect(feedback.subTitle) == L.holderEventOriginmismatchVaccinationBody("i 280 000 058")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	
@@ -1200,7 +1200,7 @@ class ListEventsViewModelTests: XCTestCase {
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
 		expect(feedback.subTitle) == L.holderEventOriginmismatchTestBody("i 480 000 058")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	
