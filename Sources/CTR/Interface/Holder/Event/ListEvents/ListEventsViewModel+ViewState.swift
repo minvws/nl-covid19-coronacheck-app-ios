@@ -483,11 +483,13 @@ extension ListEventsViewModel {
 	}
 
 	internal func cannotCreateEventsState() -> ListEventsViewController.State {
+		
+		let errorCode = ErrorCode(flow: eventMode.flow, step: .signer, clientCode: ErrorCode.ClientCode.originMismatch)
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderEventOriginmismatchTitle(),
-			subTitle: eventMode.originsMismatchBody,
-			primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction()
+			subTitle: eventMode.originsMismatchBody(errorCode),
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -498,7 +500,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderVaccinationNolistTitle(),
 			subTitle: L.holderVaccinationNolistMessage(),
-			primaryActionTitle: L.holderVaccinationNolistAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -509,7 +511,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderTestNolistTitle(),
 			subTitle: L.holderTestNolistMessage(),
-			primaryActionTitle: L.holderTestNolistAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 	
@@ -520,7 +522,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holder_event_vaccination_assessment_nolist_title(),
 			subTitle: L.holder_event_vaccination_assessment_nolist_message(),
-			primaryActionTitle: L.holder_event_vaccination_assessment_nolist_action()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -531,7 +533,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderCheckdccExpiredTitle(),
 			subTitle: L.holderCheckdccExpiredMessage(),
-			primaryActionTitle: L.holderCheckdccExpiredActionTitle()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -543,7 +545,7 @@ extension ListEventsViewModel {
 			content: Content(
 				title: L.holderVaccinationInternationlQROnlyTitle(),
 				subTitle: L.holderVaccinationInternationlQROnlyMessage(),
-				primaryActionTitle: L.holderVaccinationNolistAction(),
+				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(.stop)
 				},
@@ -563,7 +565,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestNolistTitle(),
 			subTitle: L.holderPositiveTestNolistMessage(),
-			primaryActionTitle: L.holderPositiveTestNolistAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -572,7 +574,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestInapplicableTitle(),
 			subTitle: L.holderPositiveTestInapplicableMessage(),
-			primaryActionTitle: L.holderPositiveTestInapplicableAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -581,7 +583,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestRecoveryAndVaccinationTitle(),
 			subTitle: L.holderPositiveTestRecoveryAndVaccinationMessage(),
-			primaryActionTitle: L.holderPositiveTestRecoveryAndVaccinationAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -590,7 +592,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestRecoveryOnlyTitle(),
 			subTitle: L.holderPositiveTestRecoveryOnlyMessage(),
-			primaryActionTitle: L.holderPositiveTestRecoveryOnlyAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -601,7 +603,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryNolistTitle(),
 			subTitle: L.holderRecoveryNolistMessage(),
-			primaryActionTitle: L.holderRecoveryNolistAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -610,7 +612,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryRecoveryAndVaccinationTitle(),
 			subTitle: L.holderRecoveryRecoveryAndVaccinationMessage(),
-			primaryActionTitle: L.holderRecoveryRecoveryAndVaccinationAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -619,7 +621,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryVaccinationOnlyTitle(),
 			subTitle: L.holderRecoveryVaccinationOnlyMessage(),
-			primaryActionTitle: L.holderRecoveryVaccinationOnlyAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -628,7 +630,7 @@ extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryTooOldTitle(),
 			subTitle: L.holderRecoveryTooOldMessage(),
-			primaryActionTitle: L.holderRecoveryNolistAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 }
@@ -642,7 +644,7 @@ private extension ListEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderTestresultsPendingTitle(),
 			subTitle: L.holderTestresultsPendingText(),
-			primaryActionTitle: L.holderTestNolistAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 

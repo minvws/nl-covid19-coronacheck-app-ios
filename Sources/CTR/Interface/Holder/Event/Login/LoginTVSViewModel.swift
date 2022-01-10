@@ -136,7 +136,7 @@ extension LoginTVSViewModel {
 		displayError(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
-			primaryActionTitle: L.holderErrorstateOverviewAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -145,7 +145,7 @@ extension LoginTVSViewModel {
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
 			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.loginTVSScreenDidFinish(.stop)
 			},
@@ -160,7 +160,7 @@ extension LoginTVSViewModel {
 		displayError(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 

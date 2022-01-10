@@ -308,6 +308,13 @@ extension RemoteGreenCards.Origin {
 }
 
 extension RemoteGreenCards.Response {
+	
+	static var emptyResponse: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: nil,
+			euGreenCards: []
+		)
+	}
 
 	static var domesticAndInternationalVaccination: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(

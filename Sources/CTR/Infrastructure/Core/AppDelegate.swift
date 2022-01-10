@@ -17,8 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 	// login flow
 	var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
-	var previousBrightness: CGFloat?
-
     /// set orientations you want to be allowed in this property by default
     var orientationLock = UIInterfaceOrientationMask.all
 
@@ -27,7 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 		didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
 		styleUI()
-		previousBrightness = UIScreen.main.brightness
 
 		if #available(iOS 13.0, *) {
 			// Use Scene lifecycle
@@ -97,24 +94,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 
         return appCoordinator?.receive(universalLink: universalLink) ?? false
     }
-
-	func applicationDidEnterBackground(_ application: UIApplication) {
-		if let brightness = previousBrightness {
-			UIScreen.main.brightness = brightness
-		}
-	}
-
-	func applicationWillResignActive(_ application: UIApplication) {
-		if let brightness = previousBrightness {
-			UIScreen.main.brightness = brightness
-		}
-	}
-
-	func applicationWillTerminate(_ application: UIApplication) {
-		if let brightness = previousBrightness {
-			UIScreen.main.brightness = brightness
-		}
-	}
 
 	// MARK: Orientation
 
