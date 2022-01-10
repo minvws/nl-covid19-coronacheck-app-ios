@@ -97,6 +97,35 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		expect(self.sut.accessTitle) == L.verifier_result_access_title()
 	}
 	
+	func test_accessTitle_demoHighPlusRisk_verificationPolicyEnabled() {
+		
+		// Given
+		
+		// When
+		sut = VerifiedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			verifiedType: .demo(.highPlus)
+		)
+		
+		// Then
+		expect(self.sut.accessTitle) == L.verifier_result_access_title_2g_plus()
+	}
+	
+	func test_accessTitle_demoHighPlusRisk_verificationPolicyDisabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		
+		// When
+		sut = VerifiedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			verifiedType: .demo(.highPlus)
+		)
+		
+		// Then
+		expect(self.sut.accessTitle) == L.verifier_result_access_title()
+	}
+	
 	func test_accessTitle_verifiedLowRisk_verificationPolicyEnabled() {
 		
 		// Given
@@ -149,6 +178,35 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
 			verifiedType: .verified(.high)
+		)
+		
+		// Then
+		expect(self.sut.accessTitle) == L.verifier_result_access_title()
+	}
+	
+	func test_accessTitle_verifiedHighPlusRisk_verificationPolicyEnabled() {
+		
+		// Given
+		
+		// When
+		sut = VerifiedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			verifiedType: .verified(.highPlus)
+		)
+		
+		// Then
+		expect(self.sut.accessTitle) == L.verifier_result_access_title_2g_plus()
+	}
+	
+	func test_accessTitle_verifiedHighPlusRisk_verificationPolicyDisabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		
+		// When
+		sut = VerifiedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			verifiedType: .verified(.highPlus)
 		)
 		
 		// Then

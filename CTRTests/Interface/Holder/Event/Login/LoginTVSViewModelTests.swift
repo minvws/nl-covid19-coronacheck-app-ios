@@ -198,7 +198,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
 			expect(content.primaryAction).toNot(beNil())
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).toNot(beNil())
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -226,7 +226,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
 			expect(content.subTitle) == L.generalNetworkwasbusyErrorcode("i 210 000 429")
 			expect(content.primaryAction).toNot(beNil())
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).to(beNil())
 			expect(content.secondaryActionTitle).to(beNil())
 		} else {
@@ -307,7 +307,7 @@ class LoginTVSViewModelTests: XCTestCase {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
-				expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {
@@ -350,7 +350,7 @@ class LoginTVSViewModelTests: XCTestCase {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
-				expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {
@@ -392,7 +392,7 @@ class LoginTVSViewModelTests: XCTestCase {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
-				expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {
@@ -421,7 +421,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
 			expect(content.primaryAction).toNot(beNil())
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).toNot(beNil())
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -459,7 +459,7 @@ class LoginTVSViewModelTests: XCTestCase {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
-				expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {

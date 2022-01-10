@@ -532,7 +532,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderVaccinationNolistTitle()
 		expect(feedback.subTitle) == L.holderVaccinationNolistMessage()
-		expect(feedback.primaryActionTitle) == L.holderVaccinationNolistAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
@@ -570,7 +570,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 260 CC 056")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -608,7 +608,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 360 CC 056")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -645,7 +645,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 160 CC 056")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 	
@@ -682,7 +682,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 960 CC 056")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -722,7 +722,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 270 CC 003")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -764,7 +764,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 270 000 004")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -806,7 +806,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.generalNetworkwasbusyTitle()
 		expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 270 000 429")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
@@ -848,7 +848,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 270 CC 020")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -890,7 +890,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateServerMessage("i 270 CC 500 99857")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -935,7 +935,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 280 CC 003")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -979,7 +979,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 280 000 004")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -1024,7 +1024,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.generalNetworkwasbusyTitle()
 		expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 280 000 429")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
@@ -1069,7 +1069,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 280 CC 020")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -1114,7 +1114,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateServerMessage("i 280 CC 500 99857")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -1248,7 +1248,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 290 CC 055")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -1466,7 +1466,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 270 CC 020")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -1499,7 +1499,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 270 CC 053")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -1532,7 +1532,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 270 CC 054")
-		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -1593,7 +1593,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderVaccinationInternationlQROnlyTitle()
 		expect(feedback.subTitle) == L.holderVaccinationInternationlQROnlyMessage()
-		expect(feedback.primaryActionTitle) == L.holderVaccinationNolistAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderVaccinationInternationlQROnlyAction()
 	}
 
@@ -1641,7 +1641,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderPositiveTestRecoveryAndVaccinationTitle()
 		expect(feedback.subTitle) == L.holderPositiveTestRecoveryAndVaccinationMessage()
-		expect(feedback.primaryActionTitle) == L.holderPositiveTestRecoveryAndVaccinationAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
@@ -1689,7 +1689,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderPositiveTestRecoveryOnlyTitle()
 		expect(feedback.subTitle) == L.holderPositiveTestRecoveryOnlyMessage()
-		expect(feedback.primaryActionTitle) == L.holderPositiveTestRecoveryOnlyAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
@@ -1737,7 +1737,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderPositiveTestInapplicableTitle()
 		expect(feedback.subTitle) == L.holderPositiveTestInapplicableMessage()
-		expect(feedback.primaryActionTitle) == L.holderPositiveTestInapplicableAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
@@ -1827,7 +1827,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderRecoveryTooOldTitle()
 		expect(feedback.subTitle) == L.holderRecoveryTooOldMessage()
-		expect(feedback.primaryActionTitle) == L.holderTestNolistAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
@@ -1876,7 +1876,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderRecoveryRecoveryAndVaccinationTitle()
 		expect(feedback.subTitle) == L.holderRecoveryRecoveryAndVaccinationMessage()
-		expect(feedback.primaryActionTitle) == L.holderRecoveryRecoveryAndVaccinationAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
@@ -1968,7 +1968,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderRecoveryVaccinationOnlyTitle()
 		expect(feedback.subTitle) == L.holderRecoveryVaccinationOnlyMessage()
-		expect(feedback.primaryActionTitle) == L.holderRecoveryVaccinationOnlyAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
@@ -2017,7 +2017,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderRecoveryTooOldTitle()
 		expect(feedback.subTitle) == L.holderRecoveryTooOldMessage()
-		expect(feedback.primaryActionTitle) == L.holderRecoveryNolistAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
@@ -2124,7 +2124,7 @@ class ListEventsViewModelTests: XCTestCase {
 		
 		expect(feedback.title) == L.holderTestNolistTitle()
 		expect(feedback.subTitle) == L.holderTestNolistMessage()
-		expect(feedback.primaryActionTitle) == L.holderTestNolistAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	
@@ -2145,7 +2145,7 @@ class ListEventsViewModelTests: XCTestCase {
 		
 		expect(feedback.title) == L.holderPositiveTestNolistTitle()
 		expect(feedback.subTitle) == L.holderPositiveTestNolistMessage()
-		expect(feedback.primaryActionTitle) == L.holderPositiveTestNolistAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	
@@ -2166,7 +2166,7 @@ class ListEventsViewModelTests: XCTestCase {
 		
 		expect(feedback.title) == L.holderCheckdccExpiredTitle()
 		expect(feedback.subTitle) == L.holderCheckdccExpiredMessage()
-		expect(feedback.primaryActionTitle) == L.holderCheckdccExpiredActionTitle()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	
@@ -2187,7 +2187,7 @@ class ListEventsViewModelTests: XCTestCase {
 		
 		expect(feedback.title) == L.holderRecoveryNolistTitle()
 		expect(feedback.subTitle) == L.holderRecoveryNolistMessage()
-		expect(feedback.primaryActionTitle) == L.holderRecoveryNolistAction()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	
@@ -2208,7 +2208,7 @@ class ListEventsViewModelTests: XCTestCase {
 		
 		expect(feedback.title) == L.holder_event_vaccination_assessment_nolist_title()
 		expect(feedback.subTitle) == L.holder_event_vaccination_assessment_nolist_message()
-		expect(feedback.primaryActionTitle) == L.holder_event_vaccination_assessment_nolist_action()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	

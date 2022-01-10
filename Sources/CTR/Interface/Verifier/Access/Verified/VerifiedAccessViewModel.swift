@@ -37,6 +37,9 @@ final class VerifiedAccessViewModel: Logging {
 
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			switch verifiedType {
+				case .verified(let riskLevel) where riskLevel.isHighPlus,
+						.demo(let riskLevel) where riskLevel.isHighPlus:
+					accessTitle = L.verifier_result_access_title_2g_plus()
 				case .verified(let riskLevel) where riskLevel.isHigh,
 						.demo(let riskLevel) where riskLevel.isHigh:
 					accessTitle = L.verifier_result_access_title_highrisk()

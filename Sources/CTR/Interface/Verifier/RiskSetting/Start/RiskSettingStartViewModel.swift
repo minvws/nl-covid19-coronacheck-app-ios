@@ -41,6 +41,9 @@ final class RiskSettingStartViewModel: Logging {
 				case .high:
 					changeRiskTitle = L.verifier_risksetting_changeselection_2g()
 					changeRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
+				case .highPlus:
+					changeRiskTitle = L.verifier_risksetting_changeselection_2g_plus()
+					changeRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
 			}
 		}
 	}
