@@ -41,9 +41,9 @@ final class VerifiedAccessViewController: BaseViewController, Logging {
 		addCloseButton(action: #selector(closeButtonTapped))
 		
 		viewModel.$accessTitle.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$verifiedType.binding = { [weak self] in
+		viewModel.$verifiedAccess.binding = { [weak self] in
 			
-			self?.sceneView.verifiedType = $0
+			self?.sceneView.verifiedAccess = $0
 			self?.navigationItem.leftBarButtonItem?.tintColor = $0.tintColor
 		}
 	}
@@ -57,7 +57,7 @@ final class VerifiedAccessViewController: BaseViewController, Logging {
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		
-		return viewModel.verifiedType.statusBarStyle
+		return viewModel.verifiedAccess.statusBarStyle
 	}
 }
 
@@ -69,7 +69,7 @@ private extension VerifiedAccessViewController {
 	}
 }
 
-extension VerifiedType {
+extension VerifiedAccess {
 	
 	var statusBarStyle: UIStatusBarStyle {
 		
