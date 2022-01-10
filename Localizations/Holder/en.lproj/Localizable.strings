@@ -314,11 +314,10 @@
 "holder.event.identity.alert.title" = "Want to replace your certificate?";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.title" = "No test result available";
-"holder.event.originmismatch.dcc.body" = "At this moment, we can't make a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost.</a>";
-"holder.event.originmismatch.recovery.body" = "At this moment, we can't make a certificate from your positive test result. This can have various causes. Read more on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a>";
-"holder.event.originmismatch.test.body" = "At this moment, we can't make a certificate from your negative test result. This can have various causes. Read more on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a>";
+"holder.event.originmismatch.dcc.body" = "<p>At this moment, we can't make a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder.event.originmismatch.test.body" = "<p>At this moment, we can't make a certificate from your negative test result. This can have various causes. Read more on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder.event.originmismatch.title" = "We can't make a certificate";
-"holder.event.originmismatch.vaccination.body" = "At this moment, we can't make a certificate from your vaccination. Read more on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a>";
+"holder.event.originmismatch.vaccination.body" = "<p>At this moment, we can't make a certificate from your vaccination. Read more on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website or there is an outage. We can't retrieve your details now. Please try again later.";

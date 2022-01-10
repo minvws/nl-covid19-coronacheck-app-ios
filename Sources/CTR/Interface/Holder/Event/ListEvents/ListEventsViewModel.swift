@@ -512,5 +512,6 @@ extension ErrorCode.ClientCode {
 	static let failedToGenerateCommitmentMessage = ErrorCode.ClientCode(value: "054")
 	static let failedToSaveGreenCards = ErrorCode.ClientCode(value: "055")
 	static let storingEvents = ErrorCode.ClientCode(value: "056")
+	static let originMismatch = ErrorCode.ClientCode(value: "058")
 	static let unhandled = ErrorCode.ClientCode(value: "999")
 }
