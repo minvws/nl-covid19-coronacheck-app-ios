@@ -183,7 +183,7 @@ extension ExtendRecoveryValidityViewModel {
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
 			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.navigateBackToStart()
 			},
@@ -214,7 +214,7 @@ extension ExtendRecoveryValidityViewModel {
 		let content = Content(
 			title: title,
 			subTitle: message,
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.navigateBackToStart()
 			},

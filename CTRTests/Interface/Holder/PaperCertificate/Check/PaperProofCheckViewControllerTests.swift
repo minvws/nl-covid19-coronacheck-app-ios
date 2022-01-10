@@ -53,7 +53,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.title) == L.holderCheckdccBlockedTitle()
 		expect(self.sut.sceneView.message) == L.holderCheckdccBlockedMessage()
-		expect(self.sut.sceneView.primaryTitle) == L.holderCheckdccBlockedActionTitle()
+		expect(self.sut.sceneView.primaryTitle) == L.general_toMyOverview()
 
 		sut.assertImage()
 	}
@@ -100,7 +100,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.title) == L.holderCheckdccExpiredTitle()
 		expect(self.sut.sceneView.message) == L.holderCheckdccExpiredMessage()
-		expect(self.sut.sceneView.primaryTitle) == L.holderCheckdccExpiredActionTitle()
+		expect(self.sut.sceneView.primaryTitle) == L.general_toMyOverview()
 
 		sut.assertImage()
 	}

@@ -88,7 +88,7 @@ class PaperProofCheckViewModel: Logging {
 			content: Content(
 				title: L.holderCheckdccBlockedTitle(),
 				subTitle: L.holderCheckdccBlockedMessage(),
-				primaryActionTitle: L.holderCheckdccBlockedActionTitle(),
+				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.userWantsToGoBackToDashboard()
 				},
@@ -104,7 +104,7 @@ class PaperProofCheckViewModel: Logging {
 			content: Content(
 				title: L.holderCheckdccExpiredTitle(),
 				subTitle: L.holderCheckdccExpiredMessage(),
-				primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
+				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.userWantsToGoBackToDashboard()
 				},
@@ -161,7 +161,7 @@ class PaperProofCheckViewModel: Logging {
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
 			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: {[weak self] in
 				self?.coordinator?.userWantsToGoBackToDashboard()
 			},
@@ -193,7 +193,7 @@ class PaperProofCheckViewModel: Logging {
 		let content = Content(
 			title: L.holderErrorstateTitle(),
 			subTitle: subTitle,
-			primaryActionTitle: L.holderErrorstateOverviewAction(),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: {[weak self] in
 				self?.coordinator?.userWantsToGoBackToDashboard()
 			},
