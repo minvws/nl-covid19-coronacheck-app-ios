@@ -292,16 +292,16 @@ final private class ScreenBrightnessManager {
 	func setFullBrightness() {
 
 		let brightnessStep: CGFloat = 0.02
-		var iterations = 0 // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
+		var iterationsPermitted = 1 / brightnessStep // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
 		let animationID = UUID()
 		latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
 		Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-			guard iterations < 100,
+			guard iterationsPermitted > 0,
 				self.latestAnimation == animationID,
 				UIScreen.main.brightness < 1
 			else { timer.invalidate(); return }
 			
-			iterations += 1
+			iterationsPermitted -= 1
 			UIScreen.main.brightness += brightnessStep
 		}
 	}
@@ -313,17 +313,17 @@ final private class ScreenBrightnessManager {
 		}
 		
 		let brightnessStep: CGFloat = 0.02
-		var iterations = 0 // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
+		var iterationsPermitted = 1 / brightnessStep // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
 		let animationID = UUID()
 		latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
 		Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-			guard iterations < 100,
+			guard iterationsPermitted > 0,
 				self.latestAnimation == animationID,
 				self.initialBrightness < UIScreen.main.brightness,
 				UIScreen.main.brightness > brightnessStep
 			else { timer.invalidate(); return }
 			
-			iterations += 1
+			iterationsPermitted -= 1
 			UIScreen.main.brightness -= brightnessStep
 		}
 	}
