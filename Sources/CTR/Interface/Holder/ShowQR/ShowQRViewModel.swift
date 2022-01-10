@@ -86,7 +86,7 @@ class ShowQRViewModel: Logging {
 
 	private var currentPage: Int {
 		didSet {
-			logVerbose("current page set to \(currentPage)")
+			logDebug("current page set to \(currentPage)")
 			handleVaccinationDosageInformation()
 		}
 	}
@@ -215,9 +215,7 @@ class ShowQRViewModel: Logging {
 			   let doseNumber = euVaccination.doseNumber,
 			   let totalDose = euVaccination.totalDose {
 				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
-				if euVaccination.isOverVaccinated {
-					relevancyInformation = L.holderShowqrOvervaccinated()
-				} else if dataSource.shouldGreenCardBeHidden(greenCard) {
+				if dataSource.shouldGreenCardBeHidden(greenCard) {
 					relevancyInformation = L.holderShowqrNotneeded()
 				} else {
 					relevancyInformation = nil
@@ -325,15 +323,5 @@ extension ShowQRViewModel: ShowQRItemViewModelDelegate {
 
 	func itemIsNotValid() {
 		coordinator?.navigateBackToStart()
-	}
-}
-
-private extension EuCredentialAttributes.Vaccination {
-
-	var isOverVaccinated: Bool {
-		guard let doseNumber = doseNumber, let totalDose = totalDose else {
-			return false
-		}
-		return doseNumber > totalDose
 	}
 }

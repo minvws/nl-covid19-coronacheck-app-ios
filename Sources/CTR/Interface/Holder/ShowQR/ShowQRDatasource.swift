@@ -130,12 +130,12 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 	func getIndexForMostRelevantGreenCard() -> Int {
 
-		// Rule 1: If available, return 2/2 (older than internationalQRRelevancyDays days)
-		for card in fullyVaccinatedGreenCards where card.totalDose == 2 {
-			if let index = items.firstIndex(where: { $0.greenCard == card.greenCard }) {
-				return index
-			}
-		}
+//		// Rule 1: If available, return 2/2 (older than internationalQRRelevancyDays days)
+//		for card in fullyVaccinatedGreenCards where card.totalDose == 2 {
+//			if let index = items.firstIndex(where: { $0.greenCard == card.greenCard }) {
+//				return index
+//			}
+//		}
 
 		// Rule 2: return highest fully vaccinated card (older than internationalQRRelevancyDays days)
 		if let card = fullyVaccinatedGreenCards.first {
