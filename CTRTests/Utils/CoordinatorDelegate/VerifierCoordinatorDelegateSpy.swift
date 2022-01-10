@@ -109,22 +109,26 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 
 	var invokedNavigateToVerifiedAccess = false
 	var invokedNavigateToVerifiedAccessCount = 0
-	var invokedNavigateToVerifiedAccessParameters: (verifiedType: VerifiedType, Void)?
-	var invokedNavigateToVerifiedAccessParametersList = [(verifiedType: VerifiedType, Void)]()
+	var invokedNavigateToVerifiedAccessParameters: (verifiedAccess: VerifiedAccess, Void)?
+	var invokedNavigateToVerifiedAccessParametersList = [(verifiedAccess: VerifiedAccess, Void)]()
 
-	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
+	func navigateToVerifiedAccess(_ verifiedAccess: VerifiedAccess) {
 		invokedNavigateToVerifiedAccess = true
 		invokedNavigateToVerifiedAccessCount += 1
-		invokedNavigateToVerifiedAccessParameters = (verifiedType, ())
-		invokedNavigateToVerifiedAccessParametersList.append((verifiedType, ()))
+		invokedNavigateToVerifiedAccessParameters = (verifiedAccess, ())
+		invokedNavigateToVerifiedAccessParametersList.append((verifiedAccess, ()))
 	}
 
 	var invokedNavigateToDeniedAccess = false
 	var invokedNavigateToDeniedAccessCount = 0
+	var invokedNavigateToDeniedAccessParameters: (deniedAccessReason: DeniedAccessReason, Void)?
+	var invokedNavigateToDeniedAccessParametersList = [(deniedAccessReason: DeniedAccessReason, Void)]()
 
-	func navigateToDeniedAccess() {
+	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason) {
 		invokedNavigateToDeniedAccess = true
 		invokedNavigateToDeniedAccessCount += 1
+		invokedNavigateToDeniedAccessParameters = (deniedAccessReason, ())
+		invokedNavigateToDeniedAccessParametersList.append((deniedAccessReason, ()))
 	}
 
 	var invokedUserWishesToSetRiskLevel = false

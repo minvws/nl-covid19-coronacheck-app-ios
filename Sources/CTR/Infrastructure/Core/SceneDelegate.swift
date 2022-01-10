@@ -13,8 +13,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?
 
-	var previousBrightness: CGFloat?
-
     /// If your app is __not__ running, the system delivers
     /// the Universal Link to this delegate method after launch:
 	func scene(
@@ -28,8 +26,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		guard !ProcessInfo().isUnitTesting else { return }
 			
-		previousBrightness = UIScreen.main.brightness
-
 		appCoordinator = AppCoordinator(scene: windowScene, navigationController: NavigationController())
 		appCoordinator?.start()
 
@@ -73,9 +69,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func sceneWillResignActive(_ scene: UIScene) {
 		// Called when the scene will move from an active state to an inactive state.
 		// This may occur due to temporary interruptions (ex. an incoming phone call).
-		if let brightness = previousBrightness {
-			UIScreen.main.brightness = brightness
-		}
 	}
 
 	func sceneWillEnterForeground(_ scene: UIScene) {
@@ -87,9 +80,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// Called as the scene transitions from the foreground to the background.
 		// Use this method to save data, release shared resources, and store enough scene-specific state information
 		// to restore the scene back to its current state.
-
-		if let brightness = previousBrightness {
-			UIScreen.main.brightness = brightness
-		}
 	}
 }

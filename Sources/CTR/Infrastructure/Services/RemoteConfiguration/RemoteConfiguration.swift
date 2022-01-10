@@ -127,7 +127,7 @@ struct RemoteConfiguration: Codable, Equatable {
 	
 	var verificationPolicyVersion: String?
 	
-	var vaccinationAssessementEventValidityDays: Int?
+	var vaccinationAssessmentEventValidityDays: Int?
 	
 	var visitorPassEnabled: Bool?
 
@@ -169,10 +169,10 @@ struct RemoteConfiguration: Codable, Equatable {
 		case scanLogStorageSeconds = "scanLogStorageSeconds"
 		case showNewValidityInfoCard = "showNewValidityInfoCard"
 		case verificationPolicyVersion = "iOSEnableVerificationPolicyVersion"
-		case vaccinationAssessementEventValidityDays = "vaccinationAssessementEventValidityDays"
+		case vaccinationAssessmentEventValidityDays = "vaccinationAssessmentEventValidityDays"
 		case visitorPassEnabled = "visitorPassEnabled"
 	}
-
+	
 	init(minVersion: String) {
 
 		self.minimumVersion = minVersion
@@ -207,7 +207,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.scanLockWarningSeconds = 3600
 		config.scanLogStorageSeconds = 3600
 		config.verificationPolicyVersion = "0"
-		config.vaccinationAssessementEventValidityDays = 14
+		config.vaccinationAssessmentEventValidityDays = 14
 		config.visitorPassEnabled = true
 		return config
 	}

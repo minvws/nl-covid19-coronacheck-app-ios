@@ -196,7 +196,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .verified(.high)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.high)
 	}
 	
 	func test_primaryButtonTapped_whenDemo_shouldNavigateToVerfiedInfo() {
@@ -217,7 +217,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .demo(.high)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.high)
 	}
 	
 	func test_primaryButtonTapped_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
@@ -237,7 +237,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .verified(.low)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.low)
 	}
 	
 	func test_primaryButtonTapped_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
@@ -259,7 +259,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .demo(.low)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.low)
 	}
 	
 	func test_readMoreTapped_shouldNavigateToVerifiedInfo() {

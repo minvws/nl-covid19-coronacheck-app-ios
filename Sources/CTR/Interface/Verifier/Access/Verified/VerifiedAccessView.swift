@@ -100,16 +100,16 @@ final class VerifiedAccessView: BaseView {
 		}
 	}
 	
-	var verifiedType: VerifiedType? {
+	var verifiedAccess: VerifiedAccess? {
 		didSet {
-			backgroundColor = verifiedType?.backgroundColor
-			imageView.tintColor = verifiedType?.tintColor
-			titleLabel.textColor = verifiedType?.tintColor
+			backgroundColor = verifiedAccess?.backgroundColor
+			imageView.tintColor = verifiedAccess?.tintColor
+			titleLabel.textColor = verifiedAccess?.tintColor
 		}
 	}
 }
 
-extension VerifiedType {
+extension VerifiedAccess {
 	
 	var backgroundColor: UIColor? {
 		switch self {

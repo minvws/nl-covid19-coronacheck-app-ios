@@ -98,15 +98,23 @@ extension HolderDashboardViewController.Card {
 			.compactMap { expiredQR -> HolderDashboardViewController.Card? in
 				
 				let message = String.holderDashboardQRExpired(
-					localizedRegion: expiredQR.region.localizedAdjective,
-					localizedOriginType: expiredQR.type.localizedProof
+					originType: expiredQR.type,
+					region: expiredQR.region
 				)
+				let didTapClose = {
+					actionHandler.didTapCloseExpiredQR(expiredQR: expiredQR)
+				}
 				
-				return .expiredQR(
-					message: message,
-					didTapClose: {
-						actionHandler.didTapCloseExpiredQR(expiredQR: expiredQR)
-					})
+				if case .vaccination = expiredQR.type, case .domestic = expiredQR.region {
+					return .expiredVaccinationQR(
+						message: message,
+						callToActionButtonText: L.generalReadmore(),
+						didTapCallToAction: actionHandler.didTapExpiredDomesticVaccinationQRMoreInfo,
+						didTapClose: didTapClose
+					)
+				} else {
+					return .expiredQR(message: message, didTapClose: didTapClose)
+				}
 			}
 	}
 	

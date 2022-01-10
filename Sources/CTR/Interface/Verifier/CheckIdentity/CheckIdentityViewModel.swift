@@ -111,7 +111,7 @@ final class CheckIdentityViewModel: Logging {
 	
 	func showVerifiedAccess() {
 		
-		let verifiedType: VerifiedType
+		let verifiedAccess: VerifiedAccess
 		var riskSetting: RiskLevel = .low
 		
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {
@@ -123,13 +123,13 @@ final class CheckIdentityViewModel: Logging {
 		}
 		
 		if verificationDetails.isSpecimen == "1" {
-			verifiedType = .demo(riskSetting)
+			verifiedAccess = .demo(riskSetting)
 		} else {
-			verifiedType = .verified(riskSetting)
+			verifiedAccess = .verified(riskSetting)
 		}
 		
 		stopAutoCloseTimer()
-		coordinator?.navigateToVerifiedAccess(verifiedType)
+		coordinator?.navigateToVerifiedAccess(verifiedAccess)
 	}
 	
 	func showMoreInformation() {

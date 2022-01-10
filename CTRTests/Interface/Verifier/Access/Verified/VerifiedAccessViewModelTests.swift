@@ -29,7 +29,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// Given
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.low)
+			verifiedAccess: .verified(.low)
 		)
 		
 		// When
@@ -46,7 +46,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .demo(.low)
+			verifiedAccess: .demo(.low)
 		)
 		
 		// Then
@@ -61,7 +61,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .demo(.low)
+			verifiedAccess: .demo(.low)
 		)
 		
 		// Then
@@ -75,7 +75,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .demo(.high)
+			verifiedAccess: .demo(.high)
 		)
 		
 		// Then
@@ -90,7 +90,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .demo(.high)
+			verifiedAccess: .demo(.high)
 		)
 		
 		// Then
@@ -104,7 +104,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .demo(.highPlus)
+			verifiedAccess: .demo(.highPlus)
 		)
 		
 		// Then
@@ -119,7 +119,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .demo(.highPlus)
+			verifiedAccess: .demo(.highPlus)
 		)
 		
 		// Then
@@ -133,7 +133,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.low)
+			verifiedAccess: .verified(.low)
 		)
 		
 		// Then
@@ -148,7 +148,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.low)
+			verifiedAccess: .verified(.low)
 		)
 		
 		// Then
@@ -162,7 +162,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.high)
+			verifiedAccess: .verified(.high)
 		)
 		
 		// Then
@@ -177,7 +177,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.high)
+			verifiedAccess: .verified(.high)
 		)
 		
 		// Then
@@ -191,7 +191,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.highPlus)
+			verifiedAccess: .verified(.highPlus)
 		)
 		
 		// Then
@@ -206,7 +206,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.highPlus)
+			verifiedAccess: .verified(.highPlus)
 		)
 		
 		// Then

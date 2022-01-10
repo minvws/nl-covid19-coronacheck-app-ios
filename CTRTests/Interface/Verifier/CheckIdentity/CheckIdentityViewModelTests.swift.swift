@@ -88,7 +88,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut.showVerifiedAccess()
 		
 		// Then
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .verified(.high)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.high)
 	}
 	
 	func test_showVerifiedAccess_whenDemo_shouldNavigateToVerifiedAccess() {
@@ -106,7 +106,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut.showVerifiedAccess()
 		
 		// Then
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .demo(.high)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.high)
 	}
 	
 	func test_showVerifiedAccess_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
@@ -123,7 +123,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut.showVerifiedAccess()
 		
 		// Then
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .verified(.low)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.low)
 	}
 	
 	func test_showVerifiedAccess_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
@@ -142,7 +142,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut.showVerifiedAccess()
 		
 		// Then
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .demo(.low)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.low)
 	}
 	
 	func test_showDccInfo_shouldDisplayVerified() {

@@ -92,7 +92,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 				default:
 					
-					theCoordinator?.navigateToDeniedAccess()
+					theCoordinator?.navigateToDeniedAccess(.invalid)
 			}
 		}
 	}

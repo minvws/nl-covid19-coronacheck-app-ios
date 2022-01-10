@@ -623,7 +623,7 @@ extension TokenEntryViewModel {
 		let content = Content(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.navigateBackToStart()
 			},
@@ -701,11 +701,9 @@ extension TokenEntryViewModel {
 		switch serverError {
 			case let .error(_, _, error), let .provider(_, _, _, error):
 				switch error {
-					case .serverBusy:
-						return L.generalNetworkwasbusyButton()
-					case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
+					case .serverBusy, .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
 						 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-						return L.holderErrorstateOverviewAction()
+						return L.general_toMyOverview()
 					default:
 						break
 				}

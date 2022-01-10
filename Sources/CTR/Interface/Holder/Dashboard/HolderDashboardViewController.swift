@@ -16,6 +16,7 @@ class HolderDashboardViewController: BaseViewController {
 
         // Warnings:
         case expiredQR(message: String, didTapClose: () -> Void)
+        case expiredVaccinationQR(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
         case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
@@ -24,10 +25,6 @@ class HolderDashboardViewController: BaseViewController {
         // Errors:
         case errorMessage(message: String, didTapTryAgain: () -> Void)
         
-        // Multiple DCC:
-        case migrateYourInternationalVaccinationCertificate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
-        case migratingYourInternationalVaccinationCertificateDidComplete(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-
         // Recovery Validity Extension
         case recoveryValidityExtensionAvailable(title: String, buttonText: String, didTapCallToAction: () -> Void)
         case recoveryValidityExtensionDidComplete(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
@@ -236,7 +233,6 @@ private extension HolderDashboardViewController.Card {
 			// Message Cards with a message + CTA button
 			case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
 				let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
-				let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
 				let .recoveryValidityExtensionAvailable(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
 				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction),
@@ -249,9 +245,9 @@ private extension HolderDashboardViewController.Card {
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
 				))
 				
-			case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+			case let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
