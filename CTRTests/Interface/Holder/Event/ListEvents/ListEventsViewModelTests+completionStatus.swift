@@ -204,7 +204,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completedByPersonalStatement: nil,
 			completionReason: EventFlow.VaccinationEvent.CompletionReason.none
 		)
-		let completionStatus = L.holderVaccinationStatusComplete()
+		let completionStatus = L.holder_eventdetails_vaccinationStatus_complete()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -244,7 +244,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completedByPersonalStatement: nil,
 			completionReason: .recovery
 		)
-		let completionStatus = L.holderVaccinationStatusCompleteRecovery()
+		let completionStatus = L.holder_eventdetails_vaccinationStatus_recovery()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -276,15 +276,15 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		expect(completionReason.value) == completionStatus
 	}
 	
-	func test_vaccinationrow_completionStatus_complete_fromPriorEvent() {
+	func test_vaccinationrow_completionStatus_complete_fromFirstVaccinationElsewhere() {
 
 		// Given
 		let remoteEvent = remoteVaccinationEvent(
 			completedByMedicalStatement: true,
 			completedByPersonalStatement: nil,
-			completionReason: .priorEvent
+			completionReason: .firstVaccinationElsewhere
 		)
-		let completionStatus = L.holderVaccinationStatusCompletePriorevent()
+		let completionStatus = L.holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -324,7 +324,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completedByPersonalStatement: false,
 			completionReason: nil
 		)
-		let completionStatus = L.holderVaccinationStatusComplete()
+		let completionStatus = L.holder_eventdetails_vaccinationStatus_complete()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -364,7 +364,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completedByPersonalStatement: true,
 			completionReason: nil
 		)
-		let completionStatus = L.holderVaccinationStatusComplete()
+		let completionStatus = L.holder_eventdetails_vaccinationStatus_complete()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,

@@ -633,9 +633,9 @@
 "holder.vaccination.start.nodigid" = "Ik heb geen DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/digid-aanvragen-activeren#hoe-vraag-ik-digid-aan";
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
-"holder.vaccination.status.complete" = "ja";
-"holder.vaccination.status.complete.priorevent" = "ja (ergens anders gevaccineerd)";
-"holder.vaccination.status.complete.recovery" = "ja (eerder corona gehad)";
+"holder_eventdetails_vaccinationStatus_complete" = "ja";
+"holder_eventdetails_vaccinationStatus_recovery" = "ja (eerder corona gehad)";
+"holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere" = "ja (ergens anders gevaccineerd)";
 "holder.vaccination.wrong.body" = "<p>Neem contact op met de zorgverlener waar je bent gevaccineerd. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.vaccination.wrong.title" = "Klopt er iets niet?";
 "holder_completecertificate_body" = "<p>Om je bezoekersbewijs compleet te maken heb je een negatieve testuitslag nodig van minder dan 24 uur oud.</p><p>Heb je nog geen coronatest gedaan? Maak dan eerst een afspraak.</p>";
