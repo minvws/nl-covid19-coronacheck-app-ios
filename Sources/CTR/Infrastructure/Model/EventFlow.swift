@@ -306,7 +306,7 @@ struct EventFlow {
 		enum CompletionReason: String, Codable, Equatable {
 			case none = ""
 			case recovery = "recovery"
-			case priorEvent = "priorevent"
+			case firstVaccinationElsewhere = "first-vaccination-elsewhere"
 		}
 
 		/// Get the date for this event
