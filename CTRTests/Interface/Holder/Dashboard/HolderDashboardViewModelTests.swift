@@ -2331,8 +2331,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[2]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holder_dashboard_originExpiredBanner_domesticTest_title()
 		}))
-		expect(self.sut.domesticCards[3]).toEventually(beExpiredQRCard(test: { message, _ in
+		expect(self.sut.domesticCards[3]).toEventually(beExpiredVaccinationQRCard(test: { message, callToActionButtonText, callToAction, _ in
 			expect(message) == L.holder_dashboard_originExpiredBanner_domesticVaccine_title()
+			expect(callToActionButtonText) == L.generalReadmore()
+			
+			callToAction() // user taps..
+			
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutExpiredDomesticVaccination) == true
 		}))
 		expect(self.sut.domesticCards[4]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holder_dashboard_originExpiredBanner_visitorPass_title()
@@ -3041,6 +3046,17 @@ private func beExpiredQRCard(test: @escaping (String, () -> Void) -> Void = { _,
 		if let actual = try expression.evaluate(),
 		   case let .expiredQR(message2, didTapClose) = actual {
 			test(message2, didTapClose)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+private func beExpiredVaccinationQRCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .expiredVaccinationQR with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .expiredVaccinationQR(message2, callToActionButtonText2, didTapCallToAction2, didTapClose2) = actual {
+			test(message2, callToActionButtonText2, didTapCallToAction2, didTapClose2)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)
