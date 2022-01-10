@@ -220,7 +220,7 @@ class LaunchViewModel: Logging {
 			vaccinationValidity: (configuration.vaccinationEventValidityDays ?? 730) * 24,
 			recoveryValidity: (configuration.recoveryEventValidityDays ?? 365) * 24,
 			testValidity: configuration.testEventValidityHours,
-			vaccinationAssessmentValidity: (configuration.vaccinationAssessementEventValidityDays ?? 14) * 24
+			vaccinationAssessmentValidity: (configuration.vaccinationAssessmentEventValidityDays ?? 14) * 24
 		)
 	}
 
