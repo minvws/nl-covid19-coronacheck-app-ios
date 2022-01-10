@@ -390,8 +390,8 @@ private extension EventFlow.VaccinationEvent {
 		// Vaccination completed: Optional clarification for completion
 		switch completionReason {
 			case .recovery:
-				return L.holder_eventdetails_vaccinationStatus_complete()
-			case .priorEvent:
+				return L.holder_eventdetails_vaccinationStatus_recovery()
+			case .firstVaccinationElsewhere:
 				return L.holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere()
 			default:
 				return L.holder_eventdetails_vaccinationStatus_complete()

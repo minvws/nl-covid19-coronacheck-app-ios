@@ -365,15 +365,15 @@
 "holder.notest.body" = "<p>Voor een testbewijs moet je eerst een test doen bij een aangesloten testlocatie. Blijkt uit de test dat je geen corona hebt? Dan kun je een bewijs maken.</p>";
 "holder.notest.button.title" = "Maak een afspraak";
 "holder.notest.title" = "Ben je nog niet getest?";
-"holder.onboarding.message.privacy" = "De app maakt twee QR-codes: een QR-code voor Nederland en een internationale. Beide QR-codes vind je in de app. Reis je buiten Nederland? Gebruik dan je internationale QR-code.";
-"holder.onboarding.message.safely" = "Jouw gezondheid en die van anderen is belangrijk. Daarom vragen sommige landen of plekken om een coronabewijs. Alleen met dit bewijs krijg je toegang.";
-"holder.onboarding.message.validity" = "Deze app maakt van jouw vaccinatie, testuitslag of herstel een QR-code. Dat is jouw bewijs. De QR-code wordt gecheckt bij de ingang van plekken en activiteiten. Of aan de grens.";
-"holder.onboarding.message.yourqr" = "<p>De app kan een coronabewijs voor jou maken als:</p><ul><li>Je bent gevaccineerd</li><li>Uit een test blijkt dat je geen corona hebt</li><li>Uit een test blijkt dat je corona hebt gehad en bent hersteld</li></ul>";
+"holder.onboarding.message.privacy" = "De app maakt QR-codes voor in Nederland en het buitenland. Ga je de grens over? Gebruik dan je internationale QR-code.";
+"holder.onboarding.message.safely" = "Jouw gezondheid en die van anderen is belangrijk. Laat daarom je coronabewijs zien om veilig toegang te krijgen tot plekken. Of als je op reis gaat.";
+"holder.onboarding.message.validity" = "De QR-code op je bewijs wordt gecheckt bij de ingang van plekken en activiteiten. Of aan de grens.";
+"holder.onboarding.message.yourqr" = "<p>Met deze app kun je een bewijs maken als je bent:</p><ul><li>Gevaccineerd</li><li>Hersteld van corona</li><li>Getest en geen corona hebt</li></ul>";
 "holder.onboarding.title.privacy" = "QR-codes voor Nederland en internationaal";
 /* MARK: - Holder Onboarding */
-"holder.onboarding.title.safely" = "Alleen toegang met een bewijs";
-"holder.onboarding.title.validity" = "QR-code = jouw bewijs";
-"holder.onboarding.title.yourqr" = "Bewijs van test of vaccinatie";
+"holder.onboarding.title.safely" = "Krijg toegang met je bewijs";
+"holder.onboarding.title.validity" = "Je bewijs heeft een QR-code";
+"holder.onboarding.title.yourqr" = "Bewijs van vaccinatie, herstel, of test";
 "holder.paperproof.internationalQROnly.message" = "Met de gegevens in internationale QR-codes kan ook direct een Nederlands bewijs gemaakt worden. Zo hoef je ze niet allebei te scannen.";
 "holder.paperproof.internationalQROnly.title" = "Waarom alleen internationaal?";
 "holder.paperproof.notoken.action" = "Voeg bewijs toe via DigiD";
