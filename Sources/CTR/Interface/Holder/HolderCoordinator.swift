@@ -64,6 +64,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
+	func userWishesMoreInfoAboutExpiredDomesticVaccination()
+
 	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted()
 	
 	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted()
@@ -557,6 +559,34 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
 		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
+		
+		let viewModel = ContentViewModel(
+			coordinator: self,
+			content: Content(
+				title: L.holder_expiredDomesticVaccinationModal_title(),
+				subTitle: L.holder_expiredDomesticVaccinationModal_body(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
+				secondaryAction: { [weak self] in
+					guard let self = self else { return }
+					self.sidePanel?.selectedViewController?.dismiss(
+						animated: true,
+						completion: self.userWishesToCreateAVaccinationQR
+					)
+				}
+			),
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			},
+			hideBodyForScreenCapture: false
+		)
+		
+		let viewController = ContentViewController(viewModel: viewModel)
+		presentAsBottomSheet(viewController)
 	}
 	
 	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {
