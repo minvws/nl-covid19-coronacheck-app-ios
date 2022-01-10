@@ -91,7 +91,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 220 000 004")
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -115,7 +115,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 004")
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -140,7 +140,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 220 000 004<br />i 230 000 004")
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -231,7 +231,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
 			expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 220 000 429")
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle).to(beNil())
 		}))
 	}
@@ -256,7 +256,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
 			expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 220 000 429<br />i 230 000 429")
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle).to(beNil())
 		}))
 	}
@@ -280,7 +280,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
 			expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 230 000 429")
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle).to(beNil())
 		}))
 	}
@@ -304,7 +304,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 004")
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -328,7 +328,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 005")
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -352,7 +352,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 002")
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -398,7 +398,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateNobsnTitle()
 			expect(feedback.subTitle) == L.holderErrorstateNobsnMessage()
-			expect(feedback.primaryActionTitle) == L.holderErrorstateNobsnAction()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle).to(beNil())
 		}))
 	}
@@ -489,7 +489,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.holderErrorstateServerMessage("i 230 000 500 99000")
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -515,7 +515,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 230 000 500 99000"))
 			expect(feedback.subTitle).to(contain("i 220 000 500 99001"))
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -540,7 +540,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 220 000 082"))
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -565,7 +565,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 820 000 080"))
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -590,7 +590,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 320 000 081"))
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}
@@ -616,7 +616,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 420 000 080"))
-			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
 	}

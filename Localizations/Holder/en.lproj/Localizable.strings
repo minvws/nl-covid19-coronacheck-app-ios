@@ -39,7 +39,6 @@
 "general.menu.open" = "Open side menu";
 "general.menu.version" = "App version %@ (%@)";
 "general.netherlands" = "The Netherlands";
-"general.networkwasbusy.button" = "To my certificates";
 "general.networkwasbusy.errorcode" = "<p>Please try again later.</p><p><b>Error code:</b><br />%@</p>";
 "general.networkwasbusy.text" = "Please try again later.";
 "general.networkwasbusy.title" = "Sorry, it's very busy at the moment";
@@ -62,6 +61,7 @@
 "general.vaccinationcertificate" = "vaccination certificate";
 "general.vaccinationdate" = "Vaccination date";
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
+"general_toMyOverview" = "To my certificates";
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Read more:";
@@ -80,10 +80,8 @@
 "holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/en/faq-in-app\">Go here</a> to read which information the QR code contains.";
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Your QR code has been made";
-"holder.checkdcc.blocked.actionTitle" = "To my certificates";
 "holder.checkdcc.blocked.message" = "<p>For safety reasons, you won't be able to add this QR code to the app temporarily.</p><p>You can try again after 24 hours.</p>";
 "holder.checkdcc.blocked.title" = "Too many attempts";
-"holder.checkdcc.expired.actionTitle" = "To my certificates";
 "holder.checkdcc.expired.message" = "<p>This paper certificate is no longer valid. This may have various causes:</p><ul><li>Your vaccination or recovery certificate is still valid, but the paper certificate isn’t. Please request a new paper coronavirus pass from the healthcare provider who vaccinated or tested you.</li><li>Your vaccination or recovery has expired.</li></ul>";
 "holder.checkdcc.expired.title" = "This paper certificate has expired";
 "holder.checkdcc.rejected.actionTitle" = "Try again";
@@ -260,13 +258,11 @@
 "holder.errorstate.login.title" = "Login was cancelled";
 "holder.errorstate.malfunctions.title" = "Check the latest outages";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/en/";
-"holder.errorstate.nobsn.action" = "To my certificates";
 "holder.errorstate.nobsn.message" = "The healthcare provider who vaccinated or tested you can help you further. Contact them and let them know the CoronaCheck app couldn’t find a social security number.";
 "holder.errorstate.nobsn.title" = "No social security number found";
 "holder.errorstate.nosession.action" = "Start over";
 "holder.errorstate.nosession.message" = "You’ve waited too long. For safety reasons, you were logged out. Login again with your DigiD to retrieve your details.";
 "holder.errorstate.nosession.title" = "Your session has expired";
-"holder.errorstate.overview.action" = "To my certificates";
 "holder.errorstate.server.message" = "<p>We are working to solve the problem. Do you want to try again later?</p><p><b>Error code:</b><br />%@</p>";
 "holder.errorstate.server.messages" = "<p>We are working hard to solve this problem. Could you please try again later?</p><p><b>Error codes:</b><br />%@</p>";
 "holder.errorstate.someresult.message" = "Due to increased traffic or an outage, some of your details may be missing. Are you missing a vaccination? Please come back later and retrieve your details again.";
@@ -316,7 +312,6 @@
 "holder.event.identity.alert.message" = "You created a certificate earlier. The details on it differ from those that have just been retrieved. Therefore you can only replace it.";
 "holder.event.identity.alert.ok" = "Yes, replace";
 "holder.event.identity.alert.title" = "Want to replace your certificate?";
-"holder.event.nolist.action" = "To my certificates";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.title" = "No test result available";
 "holder.event.originmismatch.dcc.body" = "At this moment, we can't make a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost.</a>";
@@ -324,10 +319,8 @@
 "holder.event.originmismatch.test.body" = "At this moment, we can't make a certificate from your negative test result. This can have various causes. Read more on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a>";
 "holder.event.originmismatch.title" = "We can't make a certificate";
 "holder.event.originmismatch.vaccination.body" = "At this moment, we can't make a certificate from your vaccination. Read more on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a>";
-"holder.fetchevents.error.noresults.networkerror.button" = "To my certificates";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
-"holder.fetchevents.error.noresults.networkwasbusy.button" = "To my certificates";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website or there is an outage. We can't retrieve your details now. Please try again later.";
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, it is really busy";
 "holder.fetchevents.negativeTest.title" = "Retrieve test result";
@@ -399,18 +392,14 @@
 "holder.paperproof.startscanning.international" = "Why only international?";
 "holder.paperproof.startscanning.message" = "<p>Use your phone's camera to scan the <b>international QR code</b> on your paper certificate.</p><p>Do you have multiple international QR codes? Please retake these steps for every QR code you want to add to the app.</p>";
 "holder.paperproof.startscanning.title" = "Scan your international QR code";
-"holder.positiveTest.inapplicable.action" = "To my certificates";
 "holder.positiveTest.inapplicable.message" = "<p>You were tested positive after your first vaccination. Your test result is therefore not suitable for creating a Dutch certificate.</p><p>Check the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for more information.</p>";
 "holder.positiveTest.inapplicable.title" = "Positive test result is not suitable";
 "holder.positiveTest.list.message" = "If the details about your test are correct, you can create a certificate.";
 "holder.positiveTest.list.title" = "Are the details correct?";
-"holder.positiveTest.nolist.action" = "To my certificates";
 "holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Please contact your test location to verify if your details were entered into the system correctly.</p>";
 "holder.positiveTest.nolist.title" = "No positive test result available";
-"holder.positiveTest.recoveryAndVaccination.action" = "To my certificates";
 "holder.positiveTest.recoveryAndVaccination.message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
 "holder.positiveTest.recoveryAndVaccination.title" = "Created vaccination and recovery certificates";
-"holder.positiveTest.recoveryOnly.action" = "To my certificates";
 "holder.positiveTest.recoveryOnly.message" = "<p>You tested positive after your first vaccination. Your test result is therefore not suitable for creating a Dutch vaccination certificate. However, a recovery certificate has been created.</p><p>Check the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for more information.</p>";
 "holder.positiveTest.recoveryOnly.title" = "Created only a recovery certificate";
 "holder.positiveTest.start.message" = "Log in with DigiD. Details about your positive test will be retrieved automatically.";
@@ -424,17 +413,14 @@
 "holder.provider.title" = "Make QR code";
 "holder.recovery.list.message" = "If the details about your test are correct, you can create a recovery certificate.";
 "holder.recovery.list.title" = "Are the details correct?";
-"holder.recovery.nolist.action" = "To my certificates";
 "holder.recovery.nolist.message" = "<p>Were you just tested? It can take a few hours before your positive test result is available. Please try again later.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.nolist.title" = "No positive test result available";
-"holder.recovery.recoveryAndVaccination.action" = "To my certificates";
 "holder.recovery.recoveryAndVaccination.message" = "<p>A recovery certificate has been created.</p><p>Because you were tested positive before your first vaccination, one shot means you're fully vaccinated. Therefore, a full vaccination certificate has been created as well.</p>";
 "holder.recovery.recoveryAndVaccination.title" = "Recovery and vaccination certificates created";
 "holder.recovery.start.message" = "Have you had coronavirus? Then you can make a recovery certificate of the positive test result. Log in with DigiD to retrieve your test result.";
 "holder.recovery.start.title" = "Retrieve recovery details";
 "holder.recovery.tooOld.message" = "<p>It has been too long ago since you tested positive for coronavirus. Therefore, your test result is no longer valid. Unfortunately, you cannot create a recovery certificate.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.tooOld.title" = "Positive test result no longer valid";
-"holder.recovery.vaccinationOnly.action" = "To my certificates";
 "holder.recovery.vaccinationOnly.message" = "<p>You were tested positive for coronavirus longer too long ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>Because you were tested positive before your first vaccination, one shot means you’re fully vaccinated. Therefore, a full vaccination certificate has been created instead.</p><p>For more information, please check the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.vaccinationOnly.title" = "Vaccination certificate instead of recovery certificate";
 "holder.recovery.wrong.body" = "<p>Please contact your test location. They can help you change these details.</p>";
@@ -523,7 +509,6 @@
 "holder.showqr.screenshotwarning.title" = "A screenshot is not a valid certificate";
 "holder.showqr.showqr" = "Show anyway";
 "holder.test.list.title" = "Retrieve test result";
-"holder.test.nolist.action" = "To my certificates";
 "holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>. Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.test.nolist.title" = "No test result available";
 "holder.testresults.alert.cancel" = "No";
@@ -641,7 +626,6 @@
 "holder.vaccination.list.title" = "Are the details correct?";
 "holder.vaccination.list.wrong" = "Is something wrong?";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
-"holder.vaccination.nolist.action" = "To my certificates";
 "holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Got vaccinated recently? It can take a few hours until your details are available. </p>";
 "holder.vaccination.nolist.title" = "Vaccinations not available";
 "holder.vaccination.start.action" = "Log in with DigiD";
