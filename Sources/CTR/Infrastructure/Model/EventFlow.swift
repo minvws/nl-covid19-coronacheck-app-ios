@@ -38,6 +38,14 @@ struct EventFlow {
 		case negativeTest = "nt"
 		case recovery = "r"
 		case vaccination = "v"
+		case none = ""
+		
+		/// Custom initializer to default to unknown state
+		/// - Parameter decoder: the decoder
+		/// - Throws: Decoding error
+		init(from decoder: Decoder) throws {
+			self = try ProviderUsage(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .none
+		}
 	}
 
 	// A Vaccination Event Provider (VEP)
