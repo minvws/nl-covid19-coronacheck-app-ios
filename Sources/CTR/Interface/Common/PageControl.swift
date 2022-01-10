@@ -56,8 +56,7 @@ final class PageControl: BaseView {
 				currentPageIndex = 0
 			}
 			addIndicators(for: numberOfPages)
-			selectPageIndicator(for: currentPageIndex)
-			setNeedsLayout()
+			selectPageIndicator(for: currentPageIndex, isInitialSelection: true)
 		}
 	}
 	
@@ -139,9 +138,9 @@ final class PageControl: BaseView {
 		guard currentPageIndex != pageIndex else { return }
 		
 		if pageIndex > currentPageIndex, canGoToNexPage {
-			selectPageIndicator(for: pageIndex)
+			selectPageIndicator(for: pageIndex, isInitialSelection: false)
 		} else if canGoToPreviousPage {
-			selectPageIndicator(for: pageIndex)
+			selectPageIndicator(for: pageIndex, isInitialSelection: false)
 		}
 	}
 }
@@ -189,19 +188,19 @@ private extension PageControl {
 	func addIndicators(for count: Int) {
 		indicatorStackView.removeArrangedSubviews()
 		
-		for _ in 0..<count {
+		(0..<count).forEach { _ in
 			let indicator = addRoundIndicator()
 			indicatorStackView.addArrangedSubview(indicator)
 			indicators.append(indicator)
 		}
 	}
 	
-	func selectPageIndicator(for pageIndex: Int) {
+	func selectPageIndicator(for pageIndex: Int, isInitialSelection: Bool) {
 		currentPageIndex = pageIndex
 		
 		UIView.animate(withDuration: ViewTraits.Duration.animation,
 					   delay: 0,
-					   options: [.curveEaseOut],
+					   options: [.beginFromCurrentState, .curveEaseOut],
 					   animations: {
 			for (index, indicator) in self.indicators.enumerated() {
 				if index == pageIndex {
@@ -213,12 +212,9 @@ private extension PageControl {
 				}
 			}
 		}, completion: { finished in
-			guard finished else { return }
+			guard finished, !isInitialSelection else { return }
 			
-			UIView.animate(withDuration: ViewTraits.Duration.animation,
-						   delay: 0,
-						   options: [.curveEaseOut],
-						   animations: {
+			UIView.animate(withDuration: ViewTraits.Duration.animation, animations: {
 				self.indicators[pageIndex].transform = CGAffineTransform(scaleX: ViewTraits.Scale.selected, y: ViewTraits.Scale.selected)
 			})
 		})
