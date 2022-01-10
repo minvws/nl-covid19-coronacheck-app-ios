@@ -10,6 +10,68 @@ import UIKit
 
 class ShowQRViewModel: Logging {
 
+	// MARK: - Private types
+	final private class ScreenBrightnessManager {
+		
+		private let initialBrightness: CGFloat
+		private var latestAnimation: UUID?
+		private let notificationCenter: NotificationCenterProtocol
+		
+		init(initialBrightness: CGFloat = UIScreen.main.brightness, notificationCenter: NotificationCenterProtocol) {
+			self.initialBrightness = initialBrightness
+			self.notificationCenter = notificationCenter
+			
+			notificationCenter.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+				self?.animateToFullBrightness()
+			}
+			notificationCenter.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
+				guard let self = self else { return }
+				
+				// Immediately back to initial brightness as we left the app:
+				UIScreen.main.brightness = self.initialBrightness
+			}
+		}
+		
+		func animateToFullBrightness() {
+
+			let brightnessStep: CGFloat = 0.03
+			var iterationsPermitted = 1 / brightnessStep // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
+			let animationID = UUID()
+			latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
+			Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { timer in
+				guard iterationsPermitted > 0,
+					self.latestAnimation == animationID,
+					UIScreen.main.brightness < 1
+				else { timer.invalidate(); return }
+				
+				iterationsPermitted -= 1
+				UIScreen.main.brightness += brightnessStep
+			}
+		}
+		
+		func animateToInitialBrightness() {
+			guard (0...1).contains(initialBrightness) else {
+				UIScreen.main.brightness = 1
+				return
+			}
+			
+			let brightnessStep: CGFloat = 0.03
+			var iterationsPermitted = 1 / brightnessStep // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
+			let animationID = UUID()
+			latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
+			Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { timer in
+				guard iterationsPermitted > 0,
+					self.latestAnimation == animationID,
+					self.initialBrightness < UIScreen.main.brightness,
+					UIScreen.main.brightness > brightnessStep
+				else { timer.invalidate(); return }
+				
+				iterationsPermitted -= 1
+				UIScreen.main.brightness -= brightnessStep
+			}
+		}
+	}
+
 	// MARK: - private variables
 
 	weak private var coordinator: HolderCoordinatorDelegate?
@@ -60,7 +122,7 @@ class ShowQRViewModel: Logging {
 	) {
 
 		self.coordinator = coordinator
-		self.screenBrightnessManager = ScreenBrightnessManager()
+		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
 		self.dataSource = ShowQRDatasource(
 			greenCards: greenCards,
 			internationalQRRelevancyDays: TimeInterval(remoteConfigManager?.storedConfiguration.internationalQRRelevancyDays ?? 28)
@@ -100,10 +162,6 @@ class ShowQRViewModel: Logging {
 
 	private func setupListeners() {
 
-		notificationCenter.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.screenBrightnessManager.setFullBrightness()
-		}
-
 		// When the app is backgrounded, the holdercoordinator clears the reference to the third-party ticket app
 		// so we should hide that from the UI on this screen too.
 		notificationCenter.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
@@ -112,11 +170,11 @@ class ShowQRViewModel: Logging {
 	}
 
 	func viewWillAppear() {
-		screenBrightnessManager.setFullBrightness()
+		screenBrightnessManager.animateToFullBrightness()
 	}
 	
 	func viewWillDisappear() {
-		screenBrightnessManager.resetToInitialBrightness()
+		screenBrightnessManager.animateToInitialBrightness()
 	}
 	
 	func userDidChangeCurrentPage(toPageIndex pageIndex: Int) {
@@ -277,54 +335,5 @@ private extension EuCredentialAttributes.Vaccination {
 			return false
 		}
 		return doseNumber > totalDose
-	}
-}
-
-final private class ScreenBrightnessManager {
-	
-	private let initialBrightness: CGFloat
-	private var latestAnimation: UUID?
-	
-	init(initialBrightness: CGFloat = UIScreen.main.brightness) {
-		self.initialBrightness = initialBrightness
-	}
-	
-	func setFullBrightness() {
-
-		let brightnessStep: CGFloat = 0.03
-		var iterationsPermitted = 1 / brightnessStep // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
-		let animationID = UUID()
-		latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
-		Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { timer in
-			guard iterationsPermitted > 0,
-				self.latestAnimation == animationID,
-				UIScreen.main.brightness < 1
-			else { timer.invalidate(); return }
-			
-			iterationsPermitted -= 1
-			UIScreen.main.brightness += brightnessStep
-		}
-	}
-	
-	func resetToInitialBrightness() {
-		guard (0...1).contains(initialBrightness) else {
-			UIScreen.main.brightness = 1
-			return
-		}
-		
-		let brightnessStep: CGFloat = 0.03
-		var iterationsPermitted = 1 / brightnessStep // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
-		let animationID = UUID()
-		latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
-		Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { timer in
-			guard iterationsPermitted > 0,
-				self.latestAnimation == animationID,
-				self.initialBrightness < UIScreen.main.brightness,
-				UIScreen.main.brightness > brightnessStep
-			else { timer.invalidate(); return }
-			
-			iterationsPermitted -= 1
-			UIScreen.main.brightness -= brightnessStep
-		}
 	}
 }
