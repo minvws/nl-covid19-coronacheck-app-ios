@@ -26,6 +26,8 @@ protocol UserSettingsProtocol: AnyObject {
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? { get set }
 	var lastSeenRecommendedUpdate: String? { get set }
 
+	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? { get set }
+	
 	var deviceAuthenticationWarningShown: Bool { get set }
 
 	// Flags for extension of Recovery validity:
@@ -70,6 +72,9 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "lastSeenRecommendedUpdate", defaultValue: nil)
 	var lastSeenRecommendedUpdate: String? // swiftlint:disable:this let_var_whitespace
+	
+	@UserDefaults(key: "lastSuccessfulCompletionOfAddCertificateFlowDate", defaultValue: nil)
+	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? // swiftlint:disable:this let_var_whitespace
 
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
