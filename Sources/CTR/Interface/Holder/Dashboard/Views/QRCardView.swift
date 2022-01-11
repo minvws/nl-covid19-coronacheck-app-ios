@@ -265,11 +265,6 @@ class QRCardView: BaseView {
 					verticalLabelsStackView.setCustomSpacing(22, after: becomesValidLabel)
 				}
 			}
-
-			// Add some padding after the last label
-			if let lastLabel = verticalLabelsStackView.arrangedSubviews.last as? Label {
-				verticalLabelsStackView.setCustomSpacing(22, after: lastLabel)
-			}
 		}
 
 		if let expiryEvaluator = expiryEvaluator {
