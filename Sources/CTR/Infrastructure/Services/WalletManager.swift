@@ -282,7 +282,7 @@ class WalletManager: WalletManaging, Logging {
 							.contains(where: { ($0.expirationTime ?? .distantPast) > Date() })
 
 						if hasValidOrFutureOrigins {
-							break
+							continue
 						} else {
 							let lastExpiredOrigin = origins.sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) }).last
 
