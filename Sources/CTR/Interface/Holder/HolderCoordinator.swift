@@ -129,11 +129,6 @@ class HolderCoordinator: SharedCoordinator {
 
 	/// If set, this should be handled at the first opportunity:
 	private var unhandledUniversalLink: UniversalLink?
-
-	/// Restricts access to GGD test provider login
-	private var isGGDEnabled: Bool {
-		return remoteConfigManager.storedConfiguration.isGGDEnabled == true
-	}
 	
 	// MARK: - Setup
 	
@@ -311,7 +306,7 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false),
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()),
 				inputRetrievalCodeMode: retrievalMode
 			)
 		)
@@ -445,13 +440,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToCreateAVisitorPass() {
-//		navigateToTokenEntry(RequestToken(token: "QTULGFYS26T98U", protocolVersion: "3.0", providerIdentifier: "ZZZ"), retrievalMode: .visitorPass)
 		
 		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 
 	func userWishesToChooseLocation() {
-		if isGGDEnabled {
+		if Current.featureFlagManager.isGGDEnabled() {
 			navigateToChooseTestLocation()
 		} else {
 			// Fallback when GGD is not available

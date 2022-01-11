@@ -292,11 +292,6 @@ class AppCoordinator: Coordinator, Logging {
 				return true
 		}
 	}
-
-	var isLunhCheckEnabled: Bool {
-		
-		return Current.remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
-	}
 }
 
 // MARK: - AppCoordinatorDelegate

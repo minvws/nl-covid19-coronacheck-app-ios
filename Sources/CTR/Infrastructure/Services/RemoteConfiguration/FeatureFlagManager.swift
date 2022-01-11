@@ -9,9 +9,16 @@ import Foundation
 
 protocol FeatureFlagManaging {
 	
+	///  Can we use the GGD for negative tests?
+	/// - Returns: True if we can
+	func isGGDEnabled() -> Bool
+	
+	///  Should we use the luhn check for tokens?
+	/// - Returns: True if we can
+	func isLuhnCheckEnabled() -> Bool
+	
 	func isNewValidityInfoBannerEnabled() -> Bool
 	func isVerificationPolicyEnabled() -> Bool
-	
 	func isVisitorPassEnabled() -> Bool
 }
 
@@ -27,6 +34,20 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		
 		self.versionSupplier = versionSupplier
 		self.remoteConfigManager = remoteConfigManager
+	}
+	
+	///  Can we use the GGD for negative tests?
+	/// - Returns: True if we can
+	func isGGDEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.isGGDEnabled ?? false
+	}
+	
+	///  Should we use the luhn check for tokens?
+	/// - Returns: True if we can
+	func isLuhnCheckEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
 	}
 	
 	func isNewValidityInfoBannerEnabled() -> Bool {
