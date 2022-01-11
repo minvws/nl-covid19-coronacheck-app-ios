@@ -86,7 +86,7 @@ class ShowQRViewModel: Logging {
 
 	private var currentPage: Int {
 		didSet {
-			logDebug("current page set to \(currentPage)")
+			logVerbose("current page set to \(currentPage)")
 			handleVaccinationDosageInformation()
 		}
 	}
