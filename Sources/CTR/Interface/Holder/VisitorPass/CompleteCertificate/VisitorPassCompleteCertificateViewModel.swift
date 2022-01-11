@@ -11,7 +11,11 @@ final class VisitorPassCompleteCertificateViewModel: Logging {
 	
 	@Bindable private(set) var content: Content
 	
+	weak private var coordinatorDelegate: (HolderCoordinatorDelegate & OpenUrlProtocol)?
+	
 	init(coordinatorDelegate: (HolderCoordinatorDelegate & OpenUrlProtocol)?) {
+	
+		self.coordinatorDelegate = coordinatorDelegate
 		
 		self.content = Content(
 			title: L.holder_completecertificate_title(),
@@ -20,11 +24,13 @@ final class VisitorPassCompleteCertificateViewModel: Logging {
 			primaryAction: {
 				coordinatorDelegate?.userWishesToCreateANegativeTestQR()
 			},
-			secondaryActionTitle: L.holder_completecertificate_button_makeappointement(),
-			secondaryAction: {
-				guard let url = URL(string: L.holderUrlAppointment()) else { return }
-				coordinatorDelegate?.openUrl(url, inApp: true)
-			}
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
+	}
+	
+	func openUrl(_ url: URL) {
+		
+		coordinatorDelegate?.openUrl(url, inApp: true)
 	}
 }

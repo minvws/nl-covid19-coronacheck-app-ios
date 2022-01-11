@@ -46,7 +46,7 @@ class VisitorPassCompleteCertificateViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.title) == L.holder_completecertificate_title()
 		expect(self.sut.sceneView.message) == L.holder_completecertificate_body()
 		expect(self.sut.sceneView.primaryTitle) == L.holder_completecertificate_button_fetchnegativetest()
-		expect(self.sut.sceneView.secondaryButtonTitle) == L.holder_completecertificate_button_makeappointement()
+		expect(self.sut.sceneView.secondaryButtonTitle).to(beNil())
 		
 		sut.assertImage(containedInNavigationController: true)
 	}
@@ -61,17 +61,5 @@ class VisitorPassCompleteCertificateViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateANegativeTestQR) == true
-	}
-	
-	func test_secondaryActionButtonTapped_shouldCallCoordinator_toOpenUrl() {
-		
-		// Given
-		loadView()
-		
-		// When
-		sut.sceneView.secondaryButtonTapped()
-		
-		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == true
 	}
 }
