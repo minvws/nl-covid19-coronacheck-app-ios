@@ -31,7 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Possibly we launched via a Universal Link. If so, pass it to the AppCoordinator:
         if let userActivity = connectionOptions.userActivities.first,
-           let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: appCoordinator?.isLunhCheckEnabled ?? false) {
+           let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) {
             appCoordinator?.receive(universalLink: activity)
         }
 	}
@@ -39,7 +39,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// If your app was __already running__ (or suspended in memory), this delegate
     /// callback will receive the UserActivity when a universal link is tapped:
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        guard let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: appCoordinator?.isLunhCheckEnabled ?? false) else { return }
+        guard let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) else { return }
         appCoordinator?.receive(universalLink: activity)
     }
 

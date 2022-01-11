@@ -292,11 +292,6 @@ class AppCoordinator: Coordinator, Logging {
 				return true
 		}
 	}
-
-	var isLunhCheckEnabled: Bool {
-		
-		return Current.featureFlagManager.isLuhnCheckEnabled()
-	}
 }
 
 // MARK: - AppCoordinatorDelegate
