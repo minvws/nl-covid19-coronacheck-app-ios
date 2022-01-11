@@ -10,6 +10,26 @@ import XCTest
 
 class FeatureFlagManagerSpy: FeatureFlagManaging {
 
+	var invokedIsGGDEnabled = false
+	var invokedIsGGDEnabledCount = 0
+	var stubbedIsGGDEnabledResult: Bool! = false
+
+	func isGGDEnabled() -> Bool {
+		invokedIsGGDEnabled = true
+		invokedIsGGDEnabledCount += 1
+		return stubbedIsGGDEnabledResult
+	}
+
+	var invokedIsLuhnCheckEnabled = false
+	var invokedIsLuhnCheckEnabledCount = 0
+	var stubbedIsLuhnCheckEnabledResult: Bool! = false
+
+	func isLuhnCheckEnabled() -> Bool {
+		invokedIsLuhnCheckEnabled = true
+		invokedIsLuhnCheckEnabledCount += 1
+		return stubbedIsLuhnCheckEnabledResult
+	}
+
 	var invokedIsNewValidityInfoBannerEnabled = false
 	var invokedIsNewValidityInfoBannerEnabledCount = 0
 	var stubbedIsNewValidityInfoBannerEnabledResult: Bool! = false
