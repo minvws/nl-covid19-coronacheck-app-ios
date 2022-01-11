@@ -42,6 +42,11 @@ class VisitorPassCompleteCertificateViewController: BaseViewController {
 		viewModel.$content.binding = { [weak self] in
 			self?.displayContent($0)
 		}
+		
+		sceneView.contentTextView.linkTouched { [weak self] url in
+			
+			self?.viewModel.openUrl(url)
+		}
 	}
 	
 	override var enableSwipeBack: Bool { true }

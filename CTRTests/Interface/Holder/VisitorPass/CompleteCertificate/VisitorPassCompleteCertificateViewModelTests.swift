@@ -32,7 +32,7 @@ final class VisitorPassCompleteCertificateViewModelTests: XCTestCase {
 		expect(self.sut.content.title) == L.holder_completecertificate_title()
 		expect(self.sut.content.subTitle) == L.holder_completecertificate_body()
 		expect(self.sut.content.primaryActionTitle) == L.holder_completecertificate_button_fetchnegativetest()
-		expect(self.sut.content.secondaryActionTitle) == L.holder_completecertificate_button_makeappointement()
+		expect(self.sut.content.secondaryActionTitle).to(beNil())
 	}
 	
 	func test_primaryAction_shouldCallCoordinator_toNavigate() {
@@ -46,12 +46,13 @@ final class VisitorPassCompleteCertificateViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateANegativeTestQR) == true
 	}
 	
-	func test_secondaryAction_shouldCallCoordinator_toOpenUrl() {
+	func test_openUrl_shouldCallCoordinator() throws {
 		
 		// Given
+		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
 		
 		// When
-		sut.content.secondaryAction?()
+		sut.openUrl(url)
 		
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == true
