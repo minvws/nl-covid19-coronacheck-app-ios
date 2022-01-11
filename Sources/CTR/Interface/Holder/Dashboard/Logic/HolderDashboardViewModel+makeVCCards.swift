@@ -350,8 +350,8 @@ extension HolderDashboardViewModel.QRCard {
 								// e.g. "4 minuten en 15 seconden"
 								return HolderDashboardViewModel.hmsRelativeFormatter
 							} else {
-								// e.g. "23 hrs, 59 min"
-								return HolderDashboardViewModel.hmShortRelativeFormatter
+								// e.g. "23 uur en 59 minuten"
+								return HolderDashboardViewModel.hmRelativeFormatter
 							}
 						}()
 
