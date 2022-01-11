@@ -54,6 +54,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
+	
 	func userWishesMoreInfoAboutTestOnlyValidFor3G()
 
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
@@ -501,6 +503,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		
 		let destination = VisitorPassCompleteCertificateViewController(viewModel: VisitorPassCompleteCertificateViewModel(coordinatorDelegate: self))
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+	
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
+		let title: String = L.holder_notvalidinthisregionmodal_visitorpass_international_title()
+		let message: String = L.holder_notvalidinthisregionmodal_visitorpass_international_body()
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 
 	func userWishesMoreInfoAboutClockDeviation() {

@@ -2730,7 +2730,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
 		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards[1]).toEventually(beVaccinationAssessmentInvalidOutsideNLCard(test: { message, buttonTitle, _ in
+			expect(message) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
+			expect(buttonTitle) == L.generalReadmore()
+		}))
 	}
 	
 	func test_vaccinationassessment_international_shouldNotShow() {
@@ -2971,6 +2974,18 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutCompletingVaccinationAssessment) == true
 	}
+	
+	func test_actionhandling_didTapVaccinationAssessmentInvalidOutsideNLMoreInfo() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		
+		// Act
+		sut.didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL) == true
+	}
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
@@ -3129,9 +3144,20 @@ private func beNewValidityInfoForVaccinationAndRecoveriesCard(test: @escaping (S
 }
 
 private func beCompleteYourVaccinationAssessmentCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .headerMessage with matching value") { expression, message in
+	return Predicate.define("be .beCompleteYourVaccinationAssessmentCard with matching value") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .completeYourVaccinationAssessment(message2, callToActionButtonText, didTapCallToAction) = actual {
+			test(message2, callToActionButtonText, didTapCallToAction)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+private func beVaccinationAssessmentInvalidOutsideNLCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .beVaccinationAssessmentInvalidOutsideNLCard with matching value") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .vaccinationAssessmentInvalidOutsideNL(message2, callToActionButtonText, didTapCallToAction) = actual {
 			test(message2, callToActionButtonText, didTapCallToAction)
 			return PredicateResult(status: .matches, message: message)
 		}
