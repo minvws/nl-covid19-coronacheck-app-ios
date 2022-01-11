@@ -10,6 +10,16 @@ import XCTest
 
 class FeatureFlagManagerSpy: FeatureFlagManaging {
 
+	var invokedIsGGDEnabled = false
+	var invokedIsGGDEnabledCount = 0
+	var stubbedIsGGDEnabledResult: Bool! = false
+
+	func isGGDEnabled() -> Bool {
+		invokedIsGGDEnabled = true
+		invokedIsGGDEnabledCount += 1
+		return stubbedIsGGDEnabledResult
+	}
+
 	var invokedIsNewValidityInfoBannerEnabled = false
 	var invokedIsNewValidityInfoBannerEnabledCount = 0
 	var stubbedIsNewValidityInfoBannerEnabledResult: Bool! = false

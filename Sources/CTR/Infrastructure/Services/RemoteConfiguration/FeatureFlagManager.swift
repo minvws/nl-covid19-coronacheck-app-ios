@@ -9,9 +9,11 @@ import Foundation
 
 protocol FeatureFlagManaging {
 	
+	///  Can we use the GGD for negative tests?
+	/// - Returns: True if we can
+	func isGGDEnabled() -> Bool
 	func isNewValidityInfoBannerEnabled() -> Bool
 	func isVerificationPolicyEnabled() -> Bool
-	
 	func isVisitorPassEnabled() -> Bool
 }
 
@@ -27,6 +29,13 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		
 		self.versionSupplier = versionSupplier
 		self.remoteConfigManager = remoteConfigManager
+	}
+	
+	///  Can we use the GGD for negative tests?
+	/// - Returns: True if we can
+	func isGGDEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.isGGDEnabled ?? false
 	}
 	
 	func isNewValidityInfoBannerEnabled() -> Bool {
