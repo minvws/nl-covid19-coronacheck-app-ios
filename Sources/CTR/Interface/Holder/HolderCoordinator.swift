@@ -306,7 +306,7 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false),
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()),
 				inputRetrievalCodeMode: retrievalMode
 			)
 		)

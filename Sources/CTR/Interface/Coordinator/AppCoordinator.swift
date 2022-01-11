@@ -295,7 +295,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	var isLunhCheckEnabled: Bool {
 		
-		return Current.remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
+		return Current.featureFlagManager.isLuhnCheckEnabled()
 	}
 }
 

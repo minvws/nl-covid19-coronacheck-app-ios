@@ -20,6 +20,16 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedIsGGDEnabledResult
 	}
 
+	var invokedIsLuhnCheckEnabled = false
+	var invokedIsLuhnCheckEnabledCount = 0
+	var stubbedIsLuhnCheckEnabledResult: Bool! = false
+
+	func isLuhnCheckEnabled() -> Bool {
+		invokedIsLuhnCheckEnabled = true
+		invokedIsLuhnCheckEnabledCount += 1
+		return stubbedIsLuhnCheckEnabledResult
+	}
+
 	var invokedIsNewValidityInfoBannerEnabled = false
 	var invokedIsNewValidityInfoBannerEnabledCount = 0
 	var stubbedIsNewValidityInfoBannerEnabledResult: Bool! = false
