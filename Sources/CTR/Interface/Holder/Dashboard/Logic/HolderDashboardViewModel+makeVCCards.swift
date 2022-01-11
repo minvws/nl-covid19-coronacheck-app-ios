@@ -144,6 +144,7 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 		guard !state.dashboardHasQRCards(for: validityRegion) else { return [] }
 		guard !state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
+		guard !state.shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for: validityRegion) else { return [] }
 	
 		switch validityRegion {
 			case .domestic:
@@ -291,6 +292,22 @@ extension HolderDashboardViewController.Card {
 				title: L.holder_dashboard_visitorpassincompletebanner_title(),
 				buttonText: L.holder_dashboard_visitorpassincompletebanner_button_makecomplete(),
 				didTapCallToAction: actionHandler.didTapCompleteYourVaccinationAssessmentMoreInfo
+			)
+		]
+	}
+	
+	static func makeVaccinationAssessmentInvalidOutsideNLCard(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		
+		guard state.shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for: validityRegion) else { return [] }
+		return [
+			.vaccinationAssessmentInvalidOutsideNL(
+				title: L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title(),
+				buttonText: L.generalReadmore(),
+				didTapCallToAction: actionHandler.didTapVaccinationAssessmentInvalidOutsideNLMoreInfo
 			)
 		]
 	}

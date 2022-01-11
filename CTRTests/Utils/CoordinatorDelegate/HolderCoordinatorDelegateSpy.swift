@@ -167,6 +167,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutCompletingVaccinationAssessmentCount += 1
 	}
 
+	var invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL = false
+	var invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount = 0
+
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
+		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL = true
+		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount += 1
+	}
+
 	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = false
 	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount = 0
 

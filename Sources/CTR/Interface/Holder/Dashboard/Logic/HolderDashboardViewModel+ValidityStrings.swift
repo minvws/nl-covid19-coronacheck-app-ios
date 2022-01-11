@@ -133,8 +133,9 @@ extension QRCard {
 					// -- Domestic Vaccination Assessements --
 				case (.validityHasBegun, _, .vaccinationassessment):
 					return validityText_hasBegun_domestic_vaccinationAssessment(expirationTime: origin.expirationTime)
+				
 				case (.validityHasNotYetBegun, _, .vaccinationassessment):
-					return validityText_hasNotYetBegun_domestic_vaccinationAssessment(expirationTime: origin.expirationTime)
+					return validityText_hasNotYetBegun_domestic_vaccinationAssessment(validFrom: origin.validFromDate)
 			}
 		}
 	}
@@ -357,11 +358,11 @@ private func validityText_hasBegun_domestic_vaccinationAssessment(expirationTime
 	)
 }
 
-private func validityText_hasNotYetBegun_domestic_vaccinationAssessment(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasNotYetBegun_domestic_vaccinationAssessment(validFrom: Date) -> HolderDashboardViewController.ValidityText {
 	
 	let prefix = L.holderDashboardQrValidityDatePrefixValidFrom()
 	let formatter = HolderDashboardViewModel.dateWithDayAndTimeFormatter
-	let dateString = formatter.string(from: expirationTime)
+	let dateString = formatter.string(from: validFrom)
 	
 	let titleString = QRCodeOriginType.vaccinationassessment.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
