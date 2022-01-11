@@ -34,6 +34,7 @@ class HolderDashboardViewController: BaseViewController {
 		
 		// Vaccination Assessment
 		case completeYourVaccinationAssessment(title: String, buttonText: String, didTapCallToAction: () -> Void)
+		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
 		
         // QR Cards:
         case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
@@ -237,7 +238,8 @@ private extension HolderDashboardViewController.Card {
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
 				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction),
 				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction),
-				let .completeYourVaccinationAssessment(message, callToActionButtonText, didTapCallToAction):
+				let .completeYourVaccinationAssessment(message, callToActionButtonText, didTapCallToAction),
+				let .vaccinationAssessmentInvalidOutsideNL(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
