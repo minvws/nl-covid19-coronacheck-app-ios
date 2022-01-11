@@ -80,7 +80,9 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	}
 	
 	private func removeExpiredEvents() {
-		// Hello Rool
+
+		let configuration = Current.remoteConfigManager.storedConfiguration
+		Current.walletManager.expireEventGroups(configuration: configuration)
 	}
 
 	/// Fetch the Greencards+Origins from Database
