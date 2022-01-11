@@ -123,10 +123,7 @@ class ShowQRViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
-		self.dataSource = ShowQRDatasource(
-			greenCards: greenCards,
-			internationalQRRelevancyDays: TimeInterval(remoteConfigManager?.storedConfiguration.internationalQRRelevancyDays ?? 28)
-		)
+		self.dataSource = ShowQRDatasource(greenCards: greenCards)
 		self.notificationCenter = notificationCenter
 		self.items = dataSource.items
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()

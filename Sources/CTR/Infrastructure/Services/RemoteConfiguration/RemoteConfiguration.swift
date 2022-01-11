@@ -112,8 +112,6 @@ struct RemoteConfiguration: Codable, Equatable {
 	/// Enables luhn check for token validation
 	var isLuhnCheckEnabled: Bool?
 
-	var internationalQRRelevancyDays: Int?
-
 	/// The minimum number of seconds between switching risk level
 	var scanLockSeconds: Int?
 
@@ -162,7 +160,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		case universalLinkPermittedDomains = "universalLinkDomains"
 		case clockDeviationThresholdSeconds = "clockDeviationThresholdSeconds"
 		case isLuhnCheckEnabled = "luhnCheckEnabled"
-		case internationalQRRelevancyDays = "internationalQRRelevancyDays"
 		case recoveryGreencardRevisedValidityLaunchDate = "recoveryGreencardRevisedValidityLaunchDate"
 		case scanLockSeconds = "scanLockSeconds"
 		case scanLockWarningSeconds = "scanLockWarningSeconds"
@@ -201,7 +198,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.universalLinkPermittedDomains = nil
 		config.clockDeviationThresholdSeconds = 30
 		config.isLuhnCheckEnabled = true
-		config.internationalQRRelevancyDays = 28
 		config.recoveryGreencardRevisedValidityLaunchDate = .distantFuture
 		config.scanLockSeconds = 300
 		config.scanLockWarningSeconds = 3600
