@@ -105,8 +105,12 @@ class ListEventsViewModel: Logging {
 	}
 
 	func goBack() {
-
-		coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
+		
+		if let originalEventMode = originalEventMode {
+			coordinator?.listEventsScreenDidFinish(.back(eventMode: originalEventMode))
+		} else {
+			coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
+		}
 	}
 
 	func openUrl(_ url: URL) {
