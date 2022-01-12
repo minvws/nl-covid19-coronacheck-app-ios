@@ -147,7 +147,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		}
 	}
 
-	func startWithListTestEvents(_ events: [RemoteEvent]) {
+	func startWithListTestEvents(_ events: [RemoteEvent], originalMode: EventMode) {
 		
 		var mode: EventMode = .test
 		
@@ -165,7 +165,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 			mode = .vaccination
 		}
 
-		navigateToListEvents(events, eventMode: mode, eventsMightBeMissing: false)
+		navigateToListEvents(events, eventMode: mode, originalMode: originalMode, eventsMightBeMissing: false)
 	}
 
 	func startWithScannedEvent(_ event: RemoteEvent) {
@@ -218,12 +218,14 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	private func navigateToListEvents(
 		_ remoteEvents: [RemoteEvent],
 		eventMode: EventMode,
+		originalMode: EventMode? = nil,
 		eventsMightBeMissing: Bool) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				eventMode: eventMode,
+				originalMode: originalMode,
 				remoteEvents: remoteEvents,
 				identityChecker: IdentityChecker(),
 				eventsMightBeMissing: eventsMightBeMissing,

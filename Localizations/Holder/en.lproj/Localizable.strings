@@ -63,7 +63,7 @@
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
 "general_toMyOverview" = "To my certificates";
 "general_vaccinationAssessment" = "vaccination approval";
-"general_visitorPass" = "Visitor pass:";
+"general_visitorPass" = "visitor pass";
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Read more:";
@@ -571,7 +571,6 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
 "holder.tokenentry.universallinkflow.error.emptycode" = "Please fill out a verification code first";
 "holder.tokenentry.universallinkflow.error.emptytoken" = "Please fill out a retrieval code first";
-"holder.tokenentry.universallinkflow.error.invalid.code" = "This retrieval code has expired";
 "holder.tokenentry.universallinkflow.error.invalid.combination" = "No valid combination";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
 "holder.tokenentry.universallinkflow.next" = "Next";
@@ -654,7 +653,6 @@
 "holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
 "holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Your visitor pass isn’t valid outside of the Netherlands";
-"holder_dashboard_visitorpasseexpiredbanner_title" = "Your visitor pass is expired";
 "holder_dashboard_visitorpassexpired_body" = "<p>A visitor pass is valid up until %li days after review of your vaccination. Are you staying in the Netherlands longer? Then you can request a visitor pass again. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Expired visitor pass";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Complete visitor pass";
@@ -676,7 +674,7 @@
 "holder_eventdetails_vaccinationStatus_complete" = "yes";
 "holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere" = "yes (I have been vaccinated elsewhere)";
 "holder_eventdetails_vaccinationStatus_recovery" = "yes (I’ve had coronavirus earlier)";
-"holder_expiredDomesticVaccinationModal_body" = "<p>To renew your vaccination certificate, you need a booster vaccination. For more information about booster vaccinations, please visit <a href=\"https://www.government.nl/booster\">www.government.nl/booster</a>.</p><p>Did you receive a booster vaccination? Then please retrieve your details again to add it to your certificate.</p>";
+"holder_expiredDomesticVaccinationModal_body" = "<p>To renew your vaccination certificate, you need a booster vaccination. For more information about booster vaccinations, please visit <a href=\"https://www.government.nl/boosterjab-cc\">www.government.nl/boosterjab</a>.</p><p>Did you receive a booster vaccination? Then please retrieve your details again to add it to your certificate.</p>";
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Add booster vaccination";
 "holder_expiredDomesticVaccinationModal_title" = "Expired vaccination certificate";
 /* Menu item for short stay route */
@@ -722,10 +720,9 @@
 "visitorpass_code_description" = "Enter your Vaccination Approval Code (VAC). You received this code from the desk that reviewed your vaccination.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Enter your verification code. You will receive this via text or email.";
-"visitorpass_code_error_invalid_code" = "This VAC code has expired";
 "visitorpass_code_review_button" = "Don't have a VAC code?";
 "visitorpass_code_review_input" = "VAC code";
-"visitorpass_code_review_placeholder" = "E.g. VAC-3839287262-F1";
+"visitorpass_code_review_placeholder" = "E.g. VAC-3839287262-F2";
 "visitorpass_code_review_placeholder_screenreader" = "Enter your VAC code here";
 "visitorpass_code_title" = "Retrieve vaccination approval";
 "visitorpass_start_action" = "Next";

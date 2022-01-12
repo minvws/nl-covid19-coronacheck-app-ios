@@ -63,7 +63,7 @@
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
 "general_toMyOverview" = "Naar mijn bewijzen";
 "general_vaccinationAssessment" = "vaccinatie goedkeuring";
-"general_visitorPass" = "Bezoekersbewijs:";
+"general_visitorPass" = "bezoekersbewijs";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Lees meer:";
@@ -571,7 +571,6 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Geen verificatiecode gekregen?";
 "holder.tokenentry.universallinkflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
 "holder.tokenentry.universallinkflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
-"holder.tokenentry.universallinkflow.error.invalid.code" = "Deze ophaalcode is verlopen";
 "holder.tokenentry.universallinkflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "holder.tokenentry.universallinkflow.next" = "Volgende";
@@ -654,12 +653,14 @@
 "holder_dashboard_qr_validity_suffix_2g" = "voor 2G-toegang";
 "holder_dashboard_qr_validity_suffix_3g" = "voor 3G-toegang";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Je bezoekersbewijs is niet geldig buiten Nederland";
-"holder_dashboard_visitorpasseexpiredbanner_title" = "Je bezoekersbewijs is verlopen";
 "holder_dashboard_visitorpassexpired_body" = "<p>Een bezoekersbewijs is geldig tot %li dagen na de beoordeling van je vaccinatie. Blijf je langer in Nederland? Dan kun je opnieuw een bezoekersbewijs aanvragen. Ga voor meer informatie naar <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Maak bewijs compleet";
 "holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatie goedkeuring is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve corona testuitslag";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Je negatieve testuitslag is succesvol toegevoegd. Maak je bezoekersbewijs compleet met je vaccinatie goedkeuring.</p><p>Hiervoor heb je een Vaccinatie Approval Code (VAC-) van de balie waar je vaccinatie is beoordeeld. Deze code heb je per mail of geprint gekregen.</p>";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negatieve testuitslag toegevoegd";
 "holder_event_vaccination_assessment_about_date" = "Beoordelingsdatum:";
 "holder_event_vaccination_assessment_about_date_of_birth" = "Geboortedatum:";
 "holder_event_vaccination_assessment_about_name" = "Naam:";
@@ -676,7 +677,7 @@
 "holder_eventdetails_vaccinationStatus_complete" = "ja";
 "holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere" = "ja (ergens anders gevaccineerd)";
 "holder_eventdetails_vaccinationStatus_recovery" = "ja (eerder corona gehad)";
-"holder_expiredDomesticVaccinationModal_body" = "<p>Om je vaccinatiebewijs te verlengen heb je en boostervaccinatie nodig. Kijk voor meer informatie over boostervaccinaties op <a href=\"https://www.coronavaccinatie.nl/booster\">www.coronavaccinatie.nl/booster</a>.</p><p>Heb je en boostervaccinatie gehad? Haal opnieuw je gegevens op om deze aan je bewijs toe te voegen.</p>";
+"holder_expiredDomesticVaccinationModal_body" = "<p>Om je vaccinatiebewijs te verlengen heb je en boostervaccinatie nodig. Kijk voor meer informatie over boostervaccinaties op <a href=\"https://www.coronavaccinatie.nl/booster-cc\">www.coronavaccinatie.nl/booster</a>.</p><p>Heb je en boostervaccinatie gehad? Haal opnieuw je gegevens op om deze aan je bewijs toe te voegen.</p>";
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Boostervaccinatie toevoegen";
 "holder_expiredDomesticVaccinationModal_title" = "Verlopen vaccinatiebewijs";
 /* Menu item for short stay route */
@@ -722,10 +723,9 @@
 "visitorpass_code_description" = "Vul je Vaccinatie Approval Code (VAC-) in. Deze heb je van de balie gekregen waar jouw vaccinatie werd beoordeeld.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Vul je verificatiecode in. Deze krijg je via sms of e-mail.";
-"visitorpass_code_error_invalid_code" = "Deze VAC-code is verlopen";
 "visitorpass_code_review_button" = "Heb je geen VAC-code?";
 "visitorpass_code_review_input" = "VAC-code";
-"visitorpass_code_review_placeholder" = "Bijv. VAC-3839287262-F1";
+"visitorpass_code_review_placeholder" = "Bijv. VAC-3839287262-F2";
 "visitorpass_code_review_placeholder_screenreader" = "Vul hier je VAC-code in";
 "visitorpass_code_title" = "Vaccinatie goedkeuring ophalen";
 "visitorpass_start_action" = "Volgende";

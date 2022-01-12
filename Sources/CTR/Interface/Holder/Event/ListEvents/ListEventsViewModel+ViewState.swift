@@ -515,6 +515,22 @@ extension ListEventsViewModel {
 		)
 	}
 	
+	internal func negativeTestInVaccinationAssessmentFlow() -> ListEventsViewController.State {
+
+		return .feedback(
+			content: Content(
+				title: L.holder_event_negativeTestEndstate_addVaccinationAssessment_title(),
+				subTitle: L.holder_event_negativeTestEndstate_addVaccinationAssessment_body(),
+				primaryActionTitle: L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
+	}
+	
 	// MARK: Assessment End State
 	
 	internal func emptyAssessmentState() -> ListEventsViewController.State {
