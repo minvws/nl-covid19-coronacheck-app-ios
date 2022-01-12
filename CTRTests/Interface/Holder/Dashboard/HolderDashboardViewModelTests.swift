@@ -1121,6 +1121,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(24 * hours * ago))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22 * hours * ago))) == "Verloopt over 22 uur en 1 minuut"
 			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 1 minuut"
 		}))
 		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
@@ -1175,8 +1177,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(19 * hours * fromNow))) == "Verloopt over 4 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
 		}))
 		expect(self.sut.domesticCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
@@ -1281,6 +1285,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(23 * hours))) == "Verloopt over 1 uur"
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(1 * hours))) == "Verloopt over 23 uur"
 		}))
 		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
 	}
