@@ -67,7 +67,7 @@ class PaperProofCheckViewModel: Logging {
 			case .accepted: handleAccepted(scannedDcc: scannedDcc, couplingCode: couplingCode)
 			case .blocked: handleBlocked()
 			case .expired: handleExpired()
-			case .rejected: handleRejected()
+			case .rejected, .unknown: handleRejected()
 		}
 	}
 
