@@ -218,6 +218,8 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	/// The message
 	var message: String? {
 		didSet {
+			// Due to TextView rendering issue, check attributedText directly for old value.
+			// This prevents VoiceOver unable to focus on other subviews.
 			guard contentTextView.attributedText?.string != message else { return }
 			contentTextView.html(message)
 		}
