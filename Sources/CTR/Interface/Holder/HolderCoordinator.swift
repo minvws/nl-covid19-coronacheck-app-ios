@@ -54,6 +54,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
+	
 	func userWishesMoreInfoAboutTestOnlyValidFor3G()
 
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
@@ -129,11 +131,6 @@ class HolderCoordinator: SharedCoordinator {
 
 	/// If set, this should be handled at the first opportunity:
 	private var unhandledUniversalLink: UniversalLink?
-
-	/// Restricts access to GGD test provider login
-	private var isGGDEnabled: Bool {
-		return remoteConfigManager.storedConfiguration.isGGDEnabled == true
-	}
 	
 	// MARK: - Setup
 	
@@ -311,7 +308,7 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false),
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()),
 				inputRetrievalCodeMode: retrievalMode
 			)
 		)
@@ -445,13 +442,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToCreateAVisitorPass() {
-//		navigateToTokenEntry(RequestToken(token: "QTULGFYS26T98U", protocolVersion: "3.0", providerIdentifier: "ZZZ"), retrievalMode: .visitorPass)
 		
 		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 
 	func userWishesToChooseLocation() {
-		if isGGDEnabled {
+		if Current.featureFlagManager.isGGDEnabled() {
 			navigateToChooseTestLocation()
 		} else {
 			// Fallback when GGD is not available
@@ -507,6 +503,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		
 		let destination = VisitorPassCompleteCertificateViewController(viewModel: VisitorPassCompleteCertificateViewModel(coordinatorDelegate: self))
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+	
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
+		let title: String = L.holder_notvalidinthisregionmodal_visitorpass_international_title()
+		let message: String = L.holder_notvalidinthisregionmodal_visitorpass_international_body()
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 
 	func userWishesMoreInfoAboutClockDeviation() {

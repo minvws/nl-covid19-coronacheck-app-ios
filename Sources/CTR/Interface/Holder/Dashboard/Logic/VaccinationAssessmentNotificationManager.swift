@@ -26,7 +26,7 @@ final class VaccinationAssessmentNotificationManager: VaccinationAssessmentNotif
 	
 	private func hasValidVaccinationAssessmentEventGroup(_ now: Date) -> Bool {
 		
-		let validityDays = Current.remoteConfigManager.storedConfiguration.vaccinationAssessementEventValidityDays ?? 14
+		let validityDays = Current.remoteConfigManager.storedConfiguration.vaccinationAssessmentEventValidityDays ?? 14
 		let validityDaysTimeInterval = TimeInterval(validityDays * 24 * 60 * 60)
 		
 		return !Current.walletManager.listEventGroups()

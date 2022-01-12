@@ -209,6 +209,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetter = false
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetterCount = 0
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDate: Date?
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateList = [Date?]()
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetter = false
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetterCount = 0
+	var stubbedLastSuccessfulCompletionOfAddCertificateFlowDate: Date!
+
+	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? {
+		set {
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetter = true
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetterCount += 1
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDate = newValue
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDateList.append(newValue)
+		}
+		get {
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetter = true
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetterCount += 1
+			return stubbedLastSuccessfulCompletionOfAddCertificateFlowDate
+		}
+	}
+
 	var invokedDeviceAuthenticationWarningShownSetter = false
 	var invokedDeviceAuthenticationWarningShownSetterCount = 0
 	var invokedDeviceAuthenticationWarningShown: Bool?
@@ -228,50 +250,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedDeviceAuthenticationWarningShownGetter = true
 			invokedDeviceAuthenticationWarningShownGetterCount += 1
 			return stubbedDeviceAuthenticationWarningShown
-		}
-	}
-
-	var invokedDidCompleteEUVaccinationMigrationSetter = false
-	var invokedDidCompleteEUVaccinationMigrationSetterCount = 0
-	var invokedDidCompleteEUVaccinationMigration: Bool?
-	var invokedDidCompleteEUVaccinationMigrationList = [Bool]()
-	var invokedDidCompleteEUVaccinationMigrationGetter = false
-	var invokedDidCompleteEUVaccinationMigrationGetterCount = 0
-	var stubbedDidCompleteEUVaccinationMigration: Bool! = false
-
-	var didCompleteEUVaccinationMigration: Bool {
-		set {
-			invokedDidCompleteEUVaccinationMigrationSetter = true
-			invokedDidCompleteEUVaccinationMigrationSetterCount += 1
-			invokedDidCompleteEUVaccinationMigration = newValue
-			invokedDidCompleteEUVaccinationMigrationList.append(newValue)
-		}
-		get {
-			invokedDidCompleteEUVaccinationMigrationGetter = true
-			invokedDidCompleteEUVaccinationMigrationGetterCount += 1
-			return stubbedDidCompleteEUVaccinationMigration
-		}
-	}
-
-	var invokedDidDismissEUVaccinationMigrationSuccessBannerSetter = false
-	var invokedDidDismissEUVaccinationMigrationSuccessBannerSetterCount = 0
-	var invokedDidDismissEUVaccinationMigrationSuccessBanner: Bool?
-	var invokedDidDismissEUVaccinationMigrationSuccessBannerList = [Bool]()
-	var invokedDidDismissEUVaccinationMigrationSuccessBannerGetter = false
-	var invokedDidDismissEUVaccinationMigrationSuccessBannerGetterCount = 0
-	var stubbedDidDismissEUVaccinationMigrationSuccessBanner: Bool! = false
-
-	var didDismissEUVaccinationMigrationSuccessBanner: Bool {
-		set {
-			invokedDidDismissEUVaccinationMigrationSuccessBannerSetter = true
-			invokedDidDismissEUVaccinationMigrationSuccessBannerSetterCount += 1
-			invokedDidDismissEUVaccinationMigrationSuccessBanner = newValue
-			invokedDidDismissEUVaccinationMigrationSuccessBannerList.append(newValue)
-		}
-		get {
-			invokedDidDismissEUVaccinationMigrationSuccessBannerGetter = true
-			invokedDidDismissEUVaccinationMigrationSuccessBannerGetterCount += 1
-			return stubbedDidDismissEUVaccinationMigrationSuccessBanner
 		}
 	}
 

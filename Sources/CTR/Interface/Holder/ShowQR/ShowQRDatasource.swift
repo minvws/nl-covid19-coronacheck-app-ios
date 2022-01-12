@@ -12,7 +12,7 @@ protocol ShowQRDatasourceProtocol {
 
 	var items: [ShowQRItem] { get }
 
-	init(greenCards: [GreenCard], internationalQRRelevancyDays: TimeInterval)
+	init(greenCards: [GreenCard])
 
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
 
@@ -25,15 +25,12 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
 
-	private let internationalQRRelevancyDays: TimeInterval
-
 	private(set) var items = [ShowQRItem]()
 
 	private var fullyVaccinatedGreenCards = [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)]()
+	private var greencardsWithDosage = [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)]()
 
-	required init(greenCards: [GreenCard], internationalQRRelevancyDays: TimeInterval) {
-
-		self.internationalQRRelevancyDays = internationalQRRelevancyDays
+	required init(greenCards: [GreenCard]) {
 
 		self.items = greenCards
 			.compactMap { greenCard in
@@ -52,7 +49,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 			}
 			.map { ShowQRItem(greenCard: $0.greenCard) }
 
-		self.fullyVaccinatedGreenCards = findFullyVaccinatedGreenCards()
+		self.prepareVaccinatedGreenCards()
 	}
 
 	func getGreenCardForIndex(_ index: Int) -> GreenCard? {
@@ -64,7 +61,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 		return items[index].greenCard
 	}
 
-	private func findFullyVaccinatedGreenCards() -> [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)] {
+	private func prepareVaccinatedGreenCards() {
 
 		let vaccinationGreenCardsWithAttributes: [(greenCard: GreenCard, attributes: EuCredentialAttributes)] = items
 		// only international
@@ -82,31 +79,20 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 		// only with vaccinations
 			.filter { $0.attributes.digitalCovidCertificate.vaccinations?.first != nil }
 
-		// Map with dosage and date information
-		let greencardsWithDateAndDosage: [(greenCard: GreenCard, date: Date, doseNumber: Int, totalDose: Int)] = vaccinationGreenCardsWithAttributes
+		// Map with dosage
+		greencardsWithDosage = vaccinationGreenCardsWithAttributes
 			.compactMap {
 				if let euVaccination = $0.attributes.digitalCovidCertificate.vaccinations?.first,
-				   let eventDate = Formatter.getDateFrom(dateString8601: euVaccination.dateOfVaccination),
 				   let doseNumber = euVaccination.doseNumber,
 				   let totalDose = euVaccination.totalDose {
 
-					return ($0.greenCard, date: eventDate, doseNumber: doseNumber, totalDose: totalDose)
+					return ($0.greenCard, doseNumber: doseNumber, totalDose: totalDose)
 				}
 				return nil
 			}
 
 		// Get the ones that are fully vaccinated
-		let fullyVaccinated = greencardsWithDateAndDosage.filter { $0.doseNumber == $0.totalDose }.sorted { lhs, rhs in lhs.totalDose > rhs.totalDose }
-
-		// Filter older than 28 days
-		let fullyVaccinatedOldEnough = fullyVaccinated.filter {
-			return $0.date < Date().addingTimeInterval(internationalQRRelevancyDays * 24 * 60 * 60 * -1)
-		}
-
-		return fullyVaccinatedOldEnough.map {
-			// Loose the date, no longer needed.
-			($0.greenCard, $0.doseNumber, $0.totalDose)
-		}
+		fullyVaccinatedGreenCards = greencardsWithDosage.filter { $0.doseNumber == $0.totalDose }.sorted { lhs, rhs in lhs.totalDose > rhs.totalDose }
 	}
 
 	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool {
@@ -129,22 +115,21 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 	}
 
 	func getIndexForMostRelevantGreenCard() -> Int {
-
-		// Rule 1: If available, return 2/2 (older than internationalQRRelevancyDays days)
-		for card in fullyVaccinatedGreenCards where card.totalDose == 2 {
-			if let index = items.firstIndex(where: { $0.greenCard == card.greenCard }) {
-				return index
+		
+		// Sort by doseNumber, totalDose
+		let sorted = greencardsWithDosage.sorted { lhs, rhs in
+			if lhs.doseNumber == rhs.doseNumber {
+				return lhs.totalDose > rhs.totalDose
 			}
+			return lhs.doseNumber > rhs.doseNumber
 		}
-
-		// Rule 2: return highest fully vaccinated card (older than internationalQRRelevancyDays days)
-		if let card = fullyVaccinatedGreenCards.first {
-			if let index = items.firstIndex(where: { $0.greenCard == card.greenCard }) {
-				return index
-			}
+		
+		// Rule 1: return the card with the highest doseNumber
+		if let card = sorted.first,
+		   let index = items.firstIndex(where: { $0.greenCard == card.greenCard }) {
+			logVerbose("getIndexForMostRelevantGreenCard -> \(index)")
+			return index
 		}
-
-		// Rule 3: return the last one
-		return items.count - 1
+		return 0
 	}
 }

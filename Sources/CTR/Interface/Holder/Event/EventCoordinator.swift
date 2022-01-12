@@ -306,7 +306,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		}
 	}
 	
-	private func navigateBackToVisitorPassStart() {
+	private func navigateBackToVisitorPassStart() -> Bool {
 		
 		if let eventStartViewController = navigationController.viewControllers
 			.first(where: { $0 is VisitorPassStartViewController }) {
@@ -315,7 +315,9 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 				eventStartViewController,
 				animated: true
 			)
+			return true
 		}
+		return false
 	}
 
 	private func displayError(content: Content, backAction: @escaping () -> Void) {
@@ -411,7 +413,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		switch eventMode {
 			case .vaccinationassessment:
-				navigateBackToVisitorPassStart()
+				if !navigateBackToVisitorPassStart() {
+					navigateBackToTestStart()
+				}
 			case .recovery, .vaccination, .positiveTest:
 				navigateBackToEventStart()
 			case .test:

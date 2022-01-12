@@ -314,7 +314,14 @@ struct EventFlow {
 		enum CompletionReason: String, Codable, Equatable {
 			case none = ""
 			case recovery = "recovery"
-			case priorEvent = "priorevent"
+			case firstVaccinationElsewhere = "first-vaccination-elsewhere"
+			
+			/// Custom initializer to default to none state
+			/// - Parameter decoder: the decoder
+			/// - Throws: Decoding error
+			init(from decoder: Decoder) throws {
+				self = try CompletionReason(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .none
+			}
 		}
 
 		/// Get the date for this event
