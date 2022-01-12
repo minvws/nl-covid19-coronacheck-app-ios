@@ -228,6 +228,8 @@ class ListEventsViewModel: Logging {
 
 	private func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
 
+		Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+		
 		guard eventMode != .paperflow else {
 			// 2701: No special end states for the paperflow
 			completeFlow()
