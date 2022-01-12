@@ -120,6 +120,7 @@ extension UserSettings {
 			"lastScreenshotTime",
 			"lastRecommendUpdateDismissalTimestamp",
 			"lastSeenRecommendedUpdate",
+			"lastSuccessfulCompletionOfAddCertificateFlowDate"
 			"deviceAuthenticationWarningShown",
 			"deviceAuthenticationWarningShown",
 			"shouldCheckRecoveryGreenCardRevisedValidity",
