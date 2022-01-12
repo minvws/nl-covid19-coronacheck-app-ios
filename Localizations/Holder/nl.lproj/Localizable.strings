@@ -571,7 +571,6 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Geen verificatiecode gekregen?";
 "holder.tokenentry.universallinkflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
 "holder.tokenentry.universallinkflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
-"holder.tokenentry.universallinkflow.error.invalid.code" = "Deze ophaalcode is verlopen";
 "holder.tokenentry.universallinkflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "holder.tokenentry.universallinkflow.next" = "Volgende";
@@ -722,7 +721,6 @@
 "visitorpass_code_description" = "Vul je Vaccinatie Approval Code (VAC-) in. Deze heb je van de balie gekregen waar jouw vaccinatie werd beoordeeld.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Vul je verificatiecode in. Deze krijg je via sms of e-mail.";
-"visitorpass_code_error_invalid_code" = "Deze VAC-code is verlopen";
 "visitorpass_code_review_button" = "Heb je geen VAC-code?";
 "visitorpass_code_review_input" = "VAC-code";
 "visitorpass_code_review_placeholder" = "Bijv. VAC-3839287262-F1";

@@ -536,7 +536,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.visitorpass_code_error_invalid_code()
+		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_invalid_code()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
@@ -608,7 +608,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.visitorpass_code_error_invalid_code()
+		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_invalid_code()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
@@ -698,7 +698,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage) == L.visitorpass_code_error_invalid_code()
+		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_invalid_code()
 
 		// Nevertheless, the progress should be stopped.
 		expect(self.sut.shouldShowProgress) == false
@@ -881,7 +881,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.visitorpass_code_error_invalid_code()
+		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_invalid_code()
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
@@ -948,7 +948,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.visitorpass_code_error_invalid_code()
+		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_invalid_code()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
@@ -1010,7 +1010,7 @@ class TokenEntryVisitorPassViewModelTests: XCTestCase {
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.visitorpass_code_error_invalid_code()
+		expect(self.sut.fieldErrorMessage) == L.visitorpass_token_error_invalid_code()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
