@@ -305,6 +305,16 @@ extension RemoteGreenCards.Origin {
 			doseNumber: nil
 		)
 	}
+	
+	static var fakeTesttOriginExpiringIn1Day: RemoteGreenCards.Origin {
+		RemoteGreenCards.Origin(
+			type: "test",
+			eventTime: Date(),
+			expirationTime: Date().addingTimeInterval(1 * days),
+			validFrom: Date(),
+			doseNumber: nil
+		)
+	}
 }
 
 extension RemoteGreenCards.Response {
@@ -439,6 +449,25 @@ extension RemoteGreenCards.Response {
 				RemoteGreenCards.EuGreenCard(
 					origins: [
 						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+	
+	static var domesticAndInternationalTest: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
 					],
 					credential: "test credential"
 				)
