@@ -54,6 +54,10 @@ final class RiskSettingInstructionViewController: BaseViewController {
 			self?.sceneView.hasErrorState = $0
 			if $0 {
 				self?.scrollToBottomIfNotCompletelyVisible()
+				
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+					UIAccessibility.post(notification: .announcement, argument: self?.viewModel.errorMessage)
+				}
 			}
 		}
 		
