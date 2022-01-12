@@ -41,6 +41,7 @@ class VerifierStartViewController: BaseViewController {
 		viewModel.$header.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$showInstructionsTitle.binding = { [weak self] in self?.sceneView.showInstructionsTitle = $0 }
+		viewModel.$showsInstructionsButton.binding = { [weak self] in self?.sceneView.showsInstructionsButton = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 		viewModel.$showsPrimaryButton.binding = { [weak self] in self?.sceneView.showsPrimaryButton = $0 }
 		viewModel.$shouldShowClockDeviationWarning.binding = { [weak self] in

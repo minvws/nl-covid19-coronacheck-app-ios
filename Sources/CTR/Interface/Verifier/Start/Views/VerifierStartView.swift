@@ -44,13 +44,6 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		return button
 	}()
 
-	private let spacer: UIView = {
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground
-		return view
-	}()
-
 	/// Footer view with primary button
 	private let footerButtonView: FooterButtonView = {
 		let footerView = FooterButtonView()
@@ -109,7 +102,6 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(contentTextView)
 		contentView.addSubview(showInstructionsButton)
-		contentView.addSubview(spacer)
 
 		addSubview(clockDeviationWarningView)
 		addSubview(footerButtonView)
@@ -227,20 +219,26 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	/// The title of the primary button
 	var primaryTitle: String = "" {
 		didSet {
-			footerButtonView.primaryButton.setTitle(primaryTitle, for: .normal)
+			footerButtonView.primaryButton.title = primaryTitle
 		}
 	}
 
 	/// The title of the showInstructions Button
 	var showInstructionsTitle: String? {
 		didSet {
-			showInstructionsButton.setTitle(showInstructionsTitle, for: .normal)
+			showInstructionsButton.title = showInstructionsTitle
 		}
 	}
 	
 	var showsPrimaryButton: Bool = true {
 		didSet {
 			footerButtonView.primaryButton.isHidden = !showsPrimaryButton
+		}
+	}
+	
+	var showsInstructionsButton: Bool = true {
+		didSet {
+			showInstructionsButton.isHidden = !showsInstructionsButton
 		}
 	}
 	
@@ -282,5 +280,4 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 
 		headerImageView.isHidden = false
 	}
-
 }
