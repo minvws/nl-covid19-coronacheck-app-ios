@@ -45,6 +45,13 @@ enum UniversalLink: Equatable {
 				}
 
 				self = .redeemVaccinationAssessment(requestToken: requestToken)
+			} else if url.path == "/app/redeem-assessment", let fragment = url.fragment {
+				let tokenValidator = TokenValidator(isLuhnCheckEnabled: isLunhCheckEnabled)
+				guard let requestToken = RequestToken(input: fragment, tokenValidator: tokenValidator) else {
+					return nil
+				}
+				
+				self = .redeemVaccinationAssessment(requestToken: requestToken)
 			} else if url.path == "/app/open" {
 
 				self = .thirdPartyTicketApp(returnURL: createReturnURL(for: url))
