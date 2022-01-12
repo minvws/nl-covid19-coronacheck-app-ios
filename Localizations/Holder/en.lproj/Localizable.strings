@@ -571,7 +571,6 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
 "holder.tokenentry.universallinkflow.error.emptycode" = "Please fill out a verification code first";
 "holder.tokenentry.universallinkflow.error.emptytoken" = "Please fill out a retrieval code first";
-"holder.tokenentry.universallinkflow.error.invalid.code" = "This retrieval code has expired";
 "holder.tokenentry.universallinkflow.error.invalid.combination" = "No valid combination";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
 "holder.tokenentry.universallinkflow.next" = "Next";
@@ -722,7 +721,6 @@
 "visitorpass_code_description" = "Enter your Vaccination Approval Code (VAC). You received this code from the desk that reviewed your vaccination.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Enter your verification code. You will receive this via text or email.";
-"visitorpass_code_error_invalid_code" = "This VAC code has expired";
 "visitorpass_code_review_button" = "Don't have a VAC code?";
 "visitorpass_code_review_input" = "VAC code";
 "visitorpass_code_review_placeholder" = "E.g. VAC-3839287262-F1";

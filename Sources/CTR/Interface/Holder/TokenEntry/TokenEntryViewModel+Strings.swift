@@ -59,16 +59,12 @@ extension TokenEntryViewModel {
 			}
 		}
 		
-		static func errorInvalidCode(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+		static func errorInvalidCode(forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
+			switch retrievalMode {
+				case .negativeTest:
 					return L.holderTokenentryRegularflowErrorInvalidCode()
-				case (.withRequestTokenProvided, .negativeTest):
-					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
-				case (.regular, .visitorPass):
+				case .visitorPass:
 					return L.visitorpass_token_error_invalid_code()
-				case (.withRequestTokenProvided, .visitorPass):
-					return L.visitorpass_code_error_invalid_code()
 			}
 		}
 		
