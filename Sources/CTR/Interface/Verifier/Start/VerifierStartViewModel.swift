@@ -135,6 +135,7 @@ class VerifierStartViewModel: Logging {
 	@Bindable private(set) var primaryButtonTitle: String = ""
 	@Bindable private(set) var showsPrimaryButton: Bool = true
 	@Bindable private(set) var showInstructionsTitle: String?
+	@Bindable private(set) var showsInstructionsButton: Bool = true
 	@Bindable private(set) var showError: Bool = false
 	@Bindable private(set) var shouldShowClockDeviationWarning = false
 	@Bindable private(set) var riskIndicator: (UIColor, String)?
@@ -210,6 +211,7 @@ class VerifierStartViewModel: Logging {
 		primaryButtonTitle = mode.primaryButtonTitle
 		showsPrimaryButton = mode.allowsStartScanning
 		showInstructionsTitle = mode.showInstructionsTitle
+		showsInstructionsButton = mode.allowsShowScanInstructions
 		shouldShowClockDeviationWarning = mode.allowsClockDeviationWarning && hasClockDeviation
 		largeImage = mode.largeImage
 		riskIndicator = mode.riskIndicator
