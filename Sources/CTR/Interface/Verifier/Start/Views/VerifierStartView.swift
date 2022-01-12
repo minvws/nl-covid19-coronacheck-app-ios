@@ -184,6 +184,12 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 			riskIndicatorIconView.heightAnchor.constraint(equalTo: riskIndicatorIconView.widthAnchor)
 		])
 	}
+    
+    override func setupAccessibility() {
+        super.setupAccessibility()
+        
+		titleLabel.accessibilityTraits.insert(.updatesFrequently)
+    }
 
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
@@ -212,6 +218,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	/// The message
 	var message: String? {
 		didSet {
+			guard contentTextView.attributedText?.string != message else { return }
 			contentTextView.html(message)
 		}
 	}

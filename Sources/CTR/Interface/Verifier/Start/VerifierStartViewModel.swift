@@ -211,6 +211,7 @@ class VerifierStartViewModel: Logging {
 		primaryButtonTitle = mode.primaryButtonTitle
 		showsPrimaryButton = mode.allowsStartScanning
 		showInstructionsTitle = mode.showInstructionsTitle
+		showsInstructionsButton = mode.allowsShowScanInstructions
 		shouldShowClockDeviationWarning = mode.allowsClockDeviationWarning && hasClockDeviation
 		largeImage = mode.largeImage
 		riskIndicator = mode.riskIndicator
