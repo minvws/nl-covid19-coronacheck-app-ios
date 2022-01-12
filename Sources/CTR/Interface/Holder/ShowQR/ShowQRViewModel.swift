@@ -123,10 +123,7 @@ class ShowQRViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
-		self.dataSource = ShowQRDatasource(
-			greenCards: greenCards,
-			internationalQRRelevancyDays: TimeInterval(remoteConfigManager?.storedConfiguration.internationalQRRelevancyDays ?? 28)
-		)
+		self.dataSource = ShowQRDatasource(greenCards: greenCards)
 		self.notificationCenter = notificationCenter
 		self.items = dataSource.items
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
@@ -215,9 +212,7 @@ class ShowQRViewModel: Logging {
 			   let doseNumber = euVaccination.doseNumber,
 			   let totalDose = euVaccination.totalDose {
 				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
-				if euVaccination.isOverVaccinated {
-					relevancyInformation = L.holderShowqrOvervaccinated()
-				} else if dataSource.shouldGreenCardBeHidden(greenCard) {
+				if dataSource.shouldGreenCardBeHidden(greenCard) {
 					relevancyInformation = L.holderShowqrNotneeded()
 				} else {
 					relevancyInformation = nil
@@ -325,15 +320,5 @@ extension ShowQRViewModel: ShowQRItemViewModelDelegate {
 
 	func itemIsNotValid() {
 		coordinator?.navigateBackToStart()
-	}
-}
-
-private extension EuCredentialAttributes.Vaccination {
-
-	var isOverVaccinated: Bool {
-		guard let doseNumber = doseNumber, let totalDose = totalDose else {
-			return false
-		}
-		return doseNumber > totalDose
 	}
 }

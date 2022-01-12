@@ -156,7 +156,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.pageControl.numberOfPages) == 1
 	}
 
-	func test_content_euGreenCard_multipleGreenCards() throws {
+	func test_content_euGreenCard_multipleGreenCards_noDosageInformation_shouldShowFirstGreenCard() throws {
 
 		// Given
 		let greenCard = try XCTUnwrap(
@@ -178,10 +178,10 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.holderShowqrEuTitle()
-		expect(self.sut.sceneView.nextButton.isHidden) == true
-		expect(self.sut.sceneView.previousButton.isHidden) == false
+		expect(self.sut.sceneView.nextButton.isHidden) == false
+		expect(self.sut.sceneView.previousButton.isHidden) == true
 		expect(self.sut.sceneView.pageControl.isHidden) == false
-		expect(self.sut.sceneView.pageControl.currentPageIndex) == 1
+		expect(self.sut.sceneView.pageControl.currentPageIndex) == 0
 		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
 	}
 

@@ -500,7 +500,6 @@
 "holder.showqr.eu.title" = "Internationale QR";
 "holder.showqr.nextbutton" = "Volgende QR-code";
 "holder.showqr.notneeded" = "Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.";
-"holder.showqr.overvaccinated" = "Deze QR-code is nog niet overal geldig. Gebruik dan die van een eerdere dosis.";
 "holder.showqr.previousbutton" = "Vorige QR-code";
 "holder.showqr.qr.eu.vaccinecertificatedoses" = "Dosis %@/%@";
 "holder.showqr.qrhidden" = "QR-code verborgen";
