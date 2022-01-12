@@ -286,7 +286,7 @@ class TokenEntryViewModel {
 				self.requestToken = requestToken
 				fetchProviders(requestToken, verificationCode: nil)
 			} else {
-				fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+				fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: inputRetrievalCodeMode)
 			}
 		}
 	}
@@ -353,7 +353,7 @@ class TokenEntryViewModel {
 		logVerbose("fetching result with \(provider.resultURLString)")
 
 		if provider.resultURL == nil {
-			fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+			fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: inputRetrievalCodeMode)
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
@@ -382,7 +382,7 @@ class TokenEntryViewModel {
 							case .serverUnreachableInvalidHost, .serverUnreachableConnectionLost, .serverUnreachableTimedOut:
 								self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
 							case .invalidRequest:
-								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode, forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
+								self.fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
 							default:
 								self.displayError(ServerError.provider(
 									provider: provider.identifier,
@@ -415,7 +415,7 @@ class TokenEntryViewModel {
 				self.verificationCodeIsKnownToBeRequired = true
 
 			case .invalid:
-				self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode, forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
+				self.fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
 				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
 			default:
