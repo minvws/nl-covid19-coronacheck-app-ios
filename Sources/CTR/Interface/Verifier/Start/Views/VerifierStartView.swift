@@ -184,13 +184,13 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 			riskIndicatorIconView.heightAnchor.constraint(equalTo: riskIndicatorIconView.widthAnchor)
 		])
 	}
-    
-    override func setupAccessibility() {
-        super.setupAccessibility()
-        
+	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
 		titleLabel.accessibilityTraits.insert(.updatesFrequently)
-    }
-
+	}
+	
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
 
