@@ -47,10 +47,14 @@ final class RiskSettingUnselectedViewController: BaseViewController {
 		viewModel.$highPlusRiskAccessibilityLabel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highPlusRiskAccessibilityLabel = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		viewModel.$errorMessage.binding = { [weak self] in self?.sceneView.errorMessage = $0 }
-		viewModel.$shouldDisplayNotSetError.binding = {
-			[weak self] in self?.sceneView.hasErrorState = $0
+		viewModel.$shouldDisplayNotSetError.binding = { [weak self] in
+			self?.sceneView.hasErrorState = $0
 			if $0 {
 				self?.scrollToBottomIfNotCompletelyVisible()
+				
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+					UIAccessibility.post(notification: .announcement, argument: self?.viewModel.errorMessage)
+				}
 			}
 		}
 		
