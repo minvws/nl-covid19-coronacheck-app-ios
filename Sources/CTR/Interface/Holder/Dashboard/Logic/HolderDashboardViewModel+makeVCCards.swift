@@ -296,6 +296,22 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
+	static func makeRecommendToAddYourBoosterCard(
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+	
+		guard state.shouldShowRecommendationToAddYourBooster else { return [] }
+		return [
+			.recommendToAddYourBooster(
+				title: L.holder_dashboard_addBoosterBanner_title(),
+				buttonText: L.holder_dashboard_addBoosterBanner_button_addBooster(),
+				didTapCallToAction: actionHandler.didTapRecommendToAddYourBooster,
+				didTapClose: actionHandler.didTapRecommendToAddYourBoosterClose
+			)
+		]
+	}
+	
 	static func makeVaccinationAssessmentInvalidOutsideNLCard(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
@@ -352,17 +368,28 @@ extension HolderDashboardViewModel.QRCard {
 					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: { now in
-						let mostDistantFutureExpiryDate = origins.reduce(now) { result, nextOrigin in
-							nextOrigin.expirationTime > result ? nextOrigin.expirationTime : result
-						}
 
-						// if all origins will be expired in next 24 hours:
-						let countdownTimerVisibleThreshold: TimeInterval = 24 * 60 * 60
+						// Calculate which is the origin with the furthest future expiration:
+						var expiringMostDistantlyInFutureOrigin: GreenCard.Origin?
+						origins.forEach { origin in
+							if origin.expirationTime > (expiringMostDistantlyInFutureOrigin?.expirationTime ?? Date.distantPast) {
+								expiringMostDistantlyInFutureOrigin = origin
+							}
+						}
+						
+						guard let mostDistantFutureExpiryDate = expiringMostDistantlyInFutureOrigin?.expirationTime,
+							  let mostDistantFutureExpiryType = expiringMostDistantlyInFutureOrigin?.type
+						else { return nil }
+						
+						let countdownTimerVisibleThreshold: TimeInterval = mostDistantFutureExpiryType == .test
+							? 6 * 60 * 60 // tests have a countdown for last 6 hours
+							: 24 * 60 * 60 // everything else has countdown for last 24 hours
+						
 						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < now.addingTimeInterval(countdownTimerVisibleThreshold)
 						else { return nil }
  
-						let fiveMinutes: TimeInterval = 5 * 60
 						let formatter: DateComponentsFormatter = {
+							let fiveMinutes: TimeInterval = 5 * 60
 							if mostDistantFutureExpiryDate < now.addingTimeInterval(fiveMinutes) {
 								// e.g. "4 minuten en 15 seconden"
 								return HolderDashboardViewModel.hmsRelativeFormatter

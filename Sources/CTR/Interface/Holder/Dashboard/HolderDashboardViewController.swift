@@ -43,6 +43,7 @@ class HolderDashboardViewController: BaseViewController {
 		// Recommendations
 		case recommendCoronaMelder
 		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case recommendToAddYourBooster(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -229,7 +230,7 @@ private extension HolderDashboardViewController.Card {
 				
 			// Message Cards with only a message + close button
 			case let .expiredQR(message, didTapCloseAction):
-				return MessageCardView(config: .init( title: message, closeButtonCommand: didTapCloseAction, ctaButton: nil))
+				return MessageCardView(config: .init(title: message, closeButtonCommand: didTapCloseAction, ctaButton: nil))
 
 			// Message Cards with a message + CTA button
 			case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
@@ -247,9 +248,11 @@ private extension HolderDashboardViewController.Card {
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
 				))
 				
+			// Message Cards with a message + CTA button + close button
 			case let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
 				let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .recommendToAddYourBooster(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
