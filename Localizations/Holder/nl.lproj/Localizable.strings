@@ -62,8 +62,8 @@
 "general.vaccinationdate" = "Vaccinatiedatum";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
 "general_toMyOverview" = "Naar mijn bewijzen";
-"general_vaccinationAssessment" = "vaccinatie goedkeuring";
-"general_visitorPass" = "Bezoekersbewijs:";
+"general_vaccinationAssessment" = "vaccinatie-beoordeling";
+"general_visitorPass" = "bezoekersbewijs";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Lees meer:";
@@ -135,7 +135,7 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Je herstelbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit kan bijvoorbeeld komen doordat je type test niet voldoet, of doordat deze niet meer geldig is in het buitenland. Alleen van een PCR-test die minder dan 180 dagen oud is kan een internationaal herstelbewijs gemaakt worden. Lees meer over de mogelijke oorzaken op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer</a>.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "Over je herstelbewijs";
-"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet internationaal geldig. Je hebt wel een Nederlandse bewijs.</p><p>Dit kan bijvoorbeeld komen door je type test niet geaccepteerd wordt in andere landen. Laat je opnieuw testen voor een bewijs dat ook internationaal geldig is.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit kan bijvoorbeeld komen door je type test niet geaccepteerd wordt in andere landen. Laat je opnieuw testen voor een bewijs dat ook internationaal geldig is.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "Over je testbewijs";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit kan bijvoorbeeld komen doordat jouw type vaccin niet geaccepteerd wordt in het buitenland.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Over je vaccinatiebewijs";
@@ -319,7 +319,7 @@
 "holder.event.originmismatch.dcc.body" = "<p>Op dit moment kunnen we geen bewijs maken van je gescande QR-code. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
 "holder.event.originmismatch.test.body" = "<p>Op dit moment kunnen we geen bewijs maken van je negatieve testuitslag. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
 "holder.event.originmismatch.title" = "We kunnen geen bewijs maken";
-"holder.event.originmismatch.vaccination.approval.body" = "<p>Op dit moment kunnen we geen bewijs maken van je vaccinatie goedkeuring. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
+"holder.event.originmismatch.vaccination.approval.body" = "<p>Op dit moment kunnen we geen bewijs maken van je vaccinatie-beoordeling. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
 "holder.event.originmismatch.vaccination.body" = "<p>Op dit moment kunnen we geen bewijs maken van je vaccinatie. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
 "holder.fetchevents.error.noresults.networkerror.message" = "Het is niet gelukt om de %@ op te halen. Probeer het nog eens.";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, er gaat iets mis";
@@ -337,7 +337,7 @@
 "holder.incompletedutchvaccination.button.addvaccines" = "Haal mijn vaccinaties op";
 "holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan een Nederlands bewijs.</p>";
 "holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Meer weten?</b><br />Bekijk de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a> voor andere mogelijke oorzaken.</p>";
-"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je volledig gevaccineerd zijn, of hersteld van corona vóór je eerste prik.</p><p><b>Tweede prik gehad?</b><br />Haal opnieuw je vaccinaties op. Je krijgt dan een Nederlands bewijs.</p>";
+"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je volledig gevaccineerd zijn, of hersteld van corona vóór je eerste prik.</p><p><b>Nieuwe gehad?</b><br />Haal opnieuw je vaccinaties op. Je krijgt dan een Nederlands bewijs.</p>";
 "holder.incompletedutchvaccination.title" = "Geen Nederlands vaccinatiebewijs";
 "holder.launch.text" = "We starten de app voor je op...";
 /* MARK: - Holder Launch */
@@ -398,7 +398,7 @@
 "holder.positiveTest.inapplicable.title" = "Positieve testuitslag is niet geschikt";
 "holder.positiveTest.list.message" = "Als de gegevens van je test kloppen kun je een bewijs maken.";
 "holder.positiveTest.list.title" = "Kloppen de gegevens?";
-"holder.positiveTest.nolist.message" = "<p>Ben je net getest? Het kan een paar uur  duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Neem dan contact op met je testlocatie om te controleren of je gegevens goed in het systeem staan.</p>";
+"holder.positiveTest.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Neem dan contact op met je testlocatie om te controleren of je gegevens goed in het systeem staan.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.positiveTest.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.positiveTest.recoveryAndVaccination.message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
 "holder.positiveTest.recoveryAndVaccination.title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
@@ -415,7 +415,7 @@
 "holder.provider.title" = "QR-code maken";
 "holder.recovery.list.message" = "Als de gegevens van je test kloppen kun je een herstelbewijs maken.";
 "holder.recovery.list.title" = "Kloppen de gegevens?";
-"holder.recovery.nolist.message" = "<p>Ben je net getest? Het kan een paar uur  duren voordat jouw positieve testuitslag beschikbaar is. Probeer het later nog eens.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder.recovery.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat jouw positieve testuitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Neem dan contact op met je testlocatie om te controleren of je gegevens goed in het systeem staan.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.recovery.recoveryAndVaccination.message" = "<p>Er is een herstelbewijs gemaakt.</p><p>Omdat je positief getest bent vóór je eerste prik, ben je met één prik volledig gevaccineerd. Daarom is er ook een volledig vaccinatiebewijs gemaakt.</p>";
 "holder.recovery.recoveryAndVaccination.title" = "Herstelbewijs en vaccinatiebewijs gemaakt";
@@ -551,7 +551,7 @@
 "holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Geen verificatiecode gekregen?";
 "holder.tokenentry.regularflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
 "holder.tokenentry.regularflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
-"holder.tokenentry.regularflow.error.invalid.code" = "Geen geldige ophaalcode";
+"holder.tokenentry.regularflow.error.invalid.code" = "Deze code is niet geldig";
 "holder.tokenentry.regularflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.regularflow.error.unknownprovider" = "Deze testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "holder.tokenentry.regularflow.next" = "Volgende";
@@ -571,7 +571,6 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Geen verificatiecode gekregen?";
 "holder.tokenentry.universallinkflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
 "holder.tokenentry.universallinkflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
-"holder.tokenentry.universallinkflow.error.invalid.code" = "Deze ophaalcode is verlopen";
 "holder.tokenentry.universallinkflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "holder.tokenentry.universallinkflow.next" = "Volgende";
@@ -620,7 +619,7 @@
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.internationlQROnly.action" = "Haal mijn testuitslag op";
-"holder.vaccination.internationlQROnly.message" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je volledig gevaccineerd zijn, of hersteld van corona vóór je eerste prik.</p><p><b>Krijg je nog een tweede prik?</b><br />Voeg opnieuw een vaccinatiebewijs toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan ook een Nederlands bewijs.</p>";
+"holder.vaccination.internationlQROnly.message" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je volledig gevaccineerd zijn, of hersteld van corona vóór je eerste prik.</p><p><b>Krijg je nog een nieuwe prik?</b><br />Voeg opnieuw een vaccinatiebewijs toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan ook een Nederlands bewijs.</p>";
 "holder.vaccination.internationlQROnly.title" = "Er is alleen een internationaal bewijs gemaakt";
 "holder.vaccination.list.action" = "Maak bewijs";
 "holder.vaccination.list.message" = "Als de gegevens van je vaccinatie kloppen kun je een bewijs maken.";
@@ -654,29 +653,31 @@
 "holder_dashboard_qr_validity_suffix_2g" = "voor 2G-toegang";
 "holder_dashboard_qr_validity_suffix_3g" = "voor 3G-toegang";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Je bezoekersbewijs is niet geldig buiten Nederland";
-"holder_dashboard_visitorpasseexpiredbanner_title" = "Je bezoekersbewijs is verlopen";
 "holder_dashboard_visitorpassexpired_body" = "<p>Een bezoekersbewijs is geldig tot %li dagen na de beoordeling van je vaccinatie. Blijf je langer in Nederland? Dan kun je opnieuw een bezoekersbewijs aanvragen. Ga voor meer informatie naar <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Maak bewijs compleet";
-"holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatie goedkeuring is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve corona testuitslag";
+"holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatie-beoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve corona testuitslag";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Je negatieve testuitslag is succesvol toegevoegd. Maak je bezoekersbewijs compleet met je vaccinatie-beoordeling.</p><p>Hiervoor heb je een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je per mail of geprint gekregen.</p>";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negatieve testuitslag toegevoegd";
 "holder_event_vaccination_assessment_about_date" = "Beoordelingsdatum:";
 "holder_event_vaccination_assessment_about_date_of_birth" = "Geboortedatum:";
 "holder_event_vaccination_assessment_about_name" = "Naam:";
 "holder_event_vaccination_assessment_about_subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Uniek beoordelingsnummer:";
-"holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het toevoegen van je vaccinatie goedkeuring en moet je later opnieuw je gegevens ophalen.";
+"holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het toevoegen van je vaccinatie-beoordeling en moet je later opnieuw je gegevens ophalen.";
 "holder_event_vaccination_assessment_element_subtitle" = "<p>Beoordelingsdatum: %@</p><p>Naam: %@</p><p>Geboortedatum: %@</p>";
-"holder_event_vaccination_assessment_element_title" = "Vaccinatie goedkeuring";
-"holder_event_vaccination_assessment_list_message" = "Als de gegevens kloppen kun je jouw vaccinatie goedkeuring toevoegen aan de app.";
+"holder_event_vaccination_assessment_element_title" = "Vaccinatie-beoordeling";
+"holder_event_vaccination_assessment_list_message" = "Als de gegevens kloppen kun je jouw vaccinatie-beoordeling toevoegen aan de app.";
 "holder_event_vaccination_assessment_list_title" = "Kloppen de gegevens?";
-"holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatie goedkeuring beschikbaar. Neem contact op met de balie waar jouw vaccinatie is beoordeeld.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
-"holder_event_vaccination_assessment_nolist_title" = "Geen vaccinatie goedkeuring beschikbaar";
+"holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatie-beoordeling beschikbaar. Neem contact op met de balie waar jouw vaccinatie is beoordeeld.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
+"holder_event_vaccination_assessment_nolist_title" = "Geen vaccinatie-beoordeling beschikbaar";
 "holder_event_vaccination_assessment_wrong_body" = "<p>Neem contact op met de balie waar jouw vaccinatie is beoordeeld. Zij kunnen je helpen je gegevens aan te passen. Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_eventdetails_vaccinationStatus_complete" = "ja";
 "holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere" = "ja (ergens anders gevaccineerd)";
 "holder_eventdetails_vaccinationStatus_recovery" = "ja (eerder corona gehad)";
-"holder_expiredDomesticVaccinationModal_body" = "<p>Om je vaccinatiebewijs te verlengen heb je en boostervaccinatie nodig. Kijk voor meer informatie over boostervaccinaties op <a href=\"https://www.coronavaccinatie.nl/booster\">www.coronavaccinatie.nl/booster</a>.</p><p>Heb je en boostervaccinatie gehad? Haal opnieuw je gegevens op om deze aan je bewijs toe te voegen.</p>";
+"holder_expiredDomesticVaccinationModal_body" = "<p>Om je vaccinatiebewijs te verlengen heb je en boostervaccinatie nodig. Kijk voor meer informatie over boostervaccinaties op <a href=\"https://www.coronavaccinatie.nl/booster-cc\">www.coronavaccinatie.nl/booster</a>.</p><p>Heb je en boostervaccinatie gehad? Haal opnieuw je gegevens op om deze aan je bewijs toe te voegen.</p>";
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Boostervaccinatie toevoegen";
 "holder_expiredDomesticVaccinationModal_title" = "Verlopen vaccinatiebewijs";
 /* Menu item for short stay route */
@@ -719,22 +720,21 @@
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
 "updateApp.title" = "Tijd voor een update";
-"visitorpass_code_description" = "Vul je Vaccinatie Approval Code (VAC-) in. Deze heb je van de balie gekregen waar jouw vaccinatie werd beoordeeld.";
+"visitorpass_code_description" = "Vul je beoordelingscode in. Deze heb je van de balie gekregen waar jouw vaccinatie werd beoordeeld.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Vul je verificatiecode in. Deze krijg je via sms of e-mail.";
-"visitorpass_code_error_invalid_code" = "Deze VAC-code is verlopen";
-"visitorpass_code_review_button" = "Heb je geen VAC-code?";
-"visitorpass_code_review_input" = "VAC-code";
-"visitorpass_code_review_placeholder" = "Bijv. VAC-3839287262-F1";
-"visitorpass_code_review_placeholder_screenreader" = "Vul hier je VAC-code in";
-"visitorpass_code_title" = "Vaccinatie goedkeuring ophalen";
+"visitorpass_code_review_button" = "Heb je geen beoordelingscode?";
+"visitorpass_code_review_input" = "Beoordelingscode";
+"visitorpass_code_review_placeholder" = "Bijv. VAC-3839287262-F2";
+"visitorpass_code_review_placeholder_screenreader" = "Vul hier je beoordelingscode in";
+"visitorpass_code_title" = "Vaccinatie-beoordeling ophalen";
 "visitorpass_start_action" = "Volgende";
-"visitorpass_start_message" = "<p>Ben je buiten de Europese Unie gevaccineerd en op bezoek in Nederland?  Dan kun je van jouw vaccinatie goedkeuring en een negatieve testuitslag een bezoekersbewijs maken.</p><p>Met je bezoekersbewijs krijg je toegang tot plekken en activiteiten in Nederland die vragen om een coronatoegangsbewijs.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
+"visitorpass_start_message" = "<p>Ben je buiten de Europese Unie gevaccineerd en op bezoek in Nederland?  Dan kun je van jouw vaccinatie-beoordeling en een negatieve testuitslag een bezoekersbewijs maken.</p><p>Met je bezoekersbewijs krijg je toegang tot plekken en activiteiten in Nederland die vragen om een coronatoegangsbewijs.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_start_title" = "Een bezoekersbewijs toevoegen";
-"visitorpass_token_error_empty_token" = "Graag eerst een VAC-code invullen";
-"visitorpass_token_error_invalid_code" = "Geen geldige VAC-code";
+"visitorpass_token_error_empty_token" = "Graag je beoordelingscode invullen";
+"visitorpass_token_error_invalid_code" = "Deze code is niet geldig";
 "visitorpass_token_error_invalid_combination" = "Geen geldige combinatie";
 "visitorpass_token_error_unknown_provider" = "Deze testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
-"visitorpass_token_modal_notoken_details" = "<p>Je krijgt een Vaccinatie Approval Code (VAC-) van de balie waar je vaccinatie is beoordeeld. Deze code heb je per mail of geprint gekregen. Heb je geen VAC-code? Neem dan contact op met de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
-"visitorpass_token_modal_notoken_title" = "Heb je geen VAC-code?";
+"visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je per mail of geprint gekregen. Heb je geen beoordelingscode? Neem dan contact op met de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
+"visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
 "visitorpass_token_next" = "Volgende";

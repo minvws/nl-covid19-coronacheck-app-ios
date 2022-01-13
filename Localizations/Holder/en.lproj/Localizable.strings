@@ -63,7 +63,7 @@
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
 "general_toMyOverview" = "To my certificates";
 "general_vaccinationAssessment" = "vaccination approval";
-"general_visitorPass" = "Visitor pass:";
+"general_visitorPass" = "visitor pass";
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Read more:";
@@ -135,7 +135,7 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "About your vaccination certificate";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Your recovery certificate is not valid internationally. You’ve only got a Dutch certificate.</p><p>The reason could be that the type of test is not accepted, or that the test is no longer valid abroad. An international recovery certificate can only be made with a PCR-test that is less than 180 days old. Read more about the possible causes on the <a href=\"https://www.coronacheck.nl//en/guidepost\">Guidepost</a>.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "About your recovery certificate";
-"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch certificate was made.</p><p>It's possible your type of test isn't accepted abroad. Get tested again.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch certificate was created.</p><p>It's possible that your type of test isn't accepted abroad. Please get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "About your test certificate";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Your vaccination certificate isn't valid internationally. That's why only a Dutch certificate was made.</p><p>It's possible your type of vaccination isn't accepted abroad.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "About your vaccination certificate";
@@ -337,7 +337,7 @@
 "holder.incompletedutchvaccination.button.addvaccines" = "Retrieve my vaccinations";
 "holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Had coronavirus before your first vaccination?</b><br />Retrieve your positive test result. You will also receive a Dutch certificate then.</p>";
 "holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Want to know more?</b><br />Read the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for other possible reasons.</p>";
-"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>You don't have a Dutch vaccination certificate. To obtain this, you have to either be fully vaccinated, or have recovered from coronavirus before you received your first vaccination.</p><p><b>Had your second vaccination?</b><br />Please retrieve your vaccination details again. You will receive a Dutch certificate.</p>";
+"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>You don't have a Dutch vaccination certificate. To obtain this, you have to either be fully vaccinated, or have recovered from coronavirus before you received your first vaccination.</p><p><b>Had a new vaccination?</b><br />Please retrieve your vaccination details again. You will receive a Dutch certificate.</p>";
 "holder.incompletedutchvaccination.title" = "No Dutch vaccination certificate";
 "holder.launch.text" = "We're starting the app...";
 /* MARK: - Holder Launch */
@@ -398,7 +398,7 @@
 "holder.positiveTest.inapplicable.title" = "Positive test result is not suitable";
 "holder.positiveTest.list.message" = "If the details about your test are correct, you can create a certificate.";
 "holder.positiveTest.list.title" = "Are the details correct?";
-"holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Please contact your test location to verify if your details were entered into the system correctly.</p>";
+"holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Please contact your test location to verify if your details were entered into the system correctly.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.positiveTest.nolist.title" = "No positive test result available";
 "holder.positiveTest.recoveryAndVaccination.message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
 "holder.positiveTest.recoveryAndVaccination.title" = "Created vaccination and recovery certificates";
@@ -415,7 +415,7 @@
 "holder.provider.title" = "Make QR code";
 "holder.recovery.list.message" = "If the details about your test are correct, you can create a recovery certificate.";
 "holder.recovery.list.title" = "Are the details correct?";
-"holder.recovery.nolist.message" = "<p>Were you just tested? It can take a few hours before your positive test result is available. Please try again later.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
+"holder.recovery.nolist.message" = "<p>Were you just tested? It can take a few hours before your positive test result is available. Please try again later.</p><p>Were you tested longer ago? Please contact your test location to verify if your details were entered into the system correctly.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.nolist.title" = "No positive test result available";
 "holder.recovery.recoveryAndVaccination.message" = "<p>A recovery certificate has been created.</p><p>Because you were tested positive before your first vaccination, one shot means you're fully vaccinated. Therefore, a full vaccination certificate has been created as well.</p>";
 "holder.recovery.recoveryAndVaccination.title" = "Recovery and vaccination certificates created";
@@ -551,7 +551,7 @@
 "holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
 "holder.tokenentry.regularflow.error.emptycode" = "Please fill out a verification code first";
 "holder.tokenentry.regularflow.error.emptytoken" = "Please fill out a retrieval code first";
-"holder.tokenentry.regularflow.error.invalid.code" = "Invalid retrieval code";
+"holder.tokenentry.regularflow.error.invalid.code" = "This code is invalid";
 "holder.tokenentry.regularflow.error.invalid.combination" = "No valid combination";
 "holder.tokenentry.regularflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
 "holder.tokenentry.regularflow.next" = "Next";
@@ -571,7 +571,6 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
 "holder.tokenentry.universallinkflow.error.emptycode" = "Please fill out a verification code first";
 "holder.tokenentry.universallinkflow.error.emptytoken" = "Please fill out a retrieval code first";
-"holder.tokenentry.universallinkflow.error.invalid.code" = "This retrieval code has expired";
 "holder.tokenentry.universallinkflow.error.invalid.combination" = "No valid combination";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
 "holder.tokenentry.universallinkflow.next" = "Next";
@@ -620,7 +619,7 @@
 "holder.vaccination.error.message.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.error.title.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.internationlQROnly.action" = "Retrieve my test result";
-"holder.vaccination.internationlQROnly.message" = "<p>You don't have a Dutch vaccination certificate. To obtain this, you have to either be fully vaccinated, or have recovered from coronavirus before you received your first vaccination.</p><p><b>Still have to get a second vaccination?</b><br />Please add a vaccination certificate again after getting your vaccination. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Retrieve your positive test result. You will also receive a Dutch certificate then.</p>";
+"holder.vaccination.internationlQROnly.message" = "<p>You don't have a Dutch vaccination certificate. To obtain this, you have to either be fully vaccinated, or have recovered from coronavirus before you received your first vaccination.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination certificate again after getting your vaccination. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Retrieve your positive test result. You will also receive a Dutch certificate then.</p>";
 "holder.vaccination.internationlQROnly.title" = "Only an international certificate was created";
 "holder.vaccination.list.action" = "Make certificate";
 "holder.vaccination.list.message" = "If the details about your vaccination are correct, you can create a certificate.";
@@ -654,12 +653,14 @@
 "holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
 "holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Your visitor pass isn’t valid outside of the Netherlands";
-"holder_dashboard_visitorpasseexpiredbanner_title" = "Your visitor pass is expired";
 "holder_dashboard_visitorpassexpired_body" = "<p>A visitor pass is valid up until %li days after review of your vaccination. Are you staying in the Netherlands longer? Then you can request a visitor pass again. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Expired visitor pass";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Complete visitor pass";
 "holder_dashboard_visitorpassincompletebanner_title" = "Your vaccination approval has been added. Complete your visitor pass with your negative test result";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Your negative test result was successfully added. Add your vaccination approval to complete your visitor pass.</p><p>To this end, you've received an approval code from the desk that reviewed your vaccination. You’ve received this code either by email or on paper.</p>";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Complete certificate";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negative test result added";
 "holder_event_vaccination_assessment_about_date" = "Review date:";
 "holder_event_vaccination_assessment_about_date_of_birth" = "Date of birth:";
 "holder_event_vaccination_assessment_about_name" = "Name:";
@@ -676,7 +677,7 @@
 "holder_eventdetails_vaccinationStatus_complete" = "yes";
 "holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere" = "yes (I have been vaccinated elsewhere)";
 "holder_eventdetails_vaccinationStatus_recovery" = "yes (I’ve had coronavirus earlier)";
-"holder_expiredDomesticVaccinationModal_body" = "<p>To renew your vaccination certificate, you need a booster vaccination. For more information about booster vaccinations, please visit <a href=\"https://www.government.nl/booster\">www.government.nl/booster</a>.</p><p>Did you receive a booster vaccination? Then please retrieve your details again to add it to your certificate.</p>";
+"holder_expiredDomesticVaccinationModal_body" = "<p>To renew your vaccination certificate, you need a booster vaccination. For more information about booster vaccinations, please visit <a href=\"https://www.government.nl/boosterjab-cc\">www.government.nl/boosterjab</a>.</p><p>Did you receive a booster vaccination? Then please retrieve your details again to add it to your certificate.</p>";
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Add booster vaccination";
 "holder_expiredDomesticVaccinationModal_title" = "Expired vaccination certificate";
 /* Menu item for short stay route */
@@ -719,22 +720,21 @@
 /* MARK: - Update App */
 "updateApp.error.message" = "Can't open App Store";
 "updateApp.title" = "Time for an update";
-"visitorpass_code_description" = "Enter your Vaccination Approval Code (VAC). You received this code from the desk that reviewed your vaccination.";
+"visitorpass_code_description" = "Enter your approval code. You received this code from the desk that reviewed your vaccination.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Enter your verification code. You will receive this via text or email.";
-"visitorpass_code_error_invalid_code" = "This VAC code has expired";
-"visitorpass_code_review_button" = "Don't have a VAC code?";
-"visitorpass_code_review_input" = "VAC code";
-"visitorpass_code_review_placeholder" = "E.g. VAC-3839287262-F1";
-"visitorpass_code_review_placeholder_screenreader" = "Enter your VAC code here";
+"visitorpass_code_review_button" = "Don't have an approval code?";
+"visitorpass_code_review_input" = "Approval code";
+"visitorpass_code_review_placeholder" = "E.g. VAC-3839287262-F2";
+"visitorpass_code_review_placeholder_screenreader" = "Enter your approval code here";
 "visitorpass_code_title" = "Retrieve vaccination approval";
 "visitorpass_start_action" = "Next";
 "visitorpass_start_message" = "<p>Were you vaccinated outside of the European Union, and are you visiting the Netherlands? Then you can use your vaccination approval and negative test result to create a visitor pass.</p><p>You can use your visitor pass to get access to places and activities in the Netherlands that require a coronavirus pass.</p><p>For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "visitorpass_start_title" = "Adding a visitor pass";
-"visitorpass_token_error_empty_token" = "Please fill out a VAC code first";
-"visitorpass_token_error_invalid_code" = "No valid VAC code";
+"visitorpass_token_error_empty_token" = "Please enter your approval code";
+"visitorpass_token_error_invalid_code" = "This code is invalid";
 "visitorpass_token_error_invalid_combination" = "No valid combination";
 "visitorpass_token_error_unknown_provider" = "This test location is not known to us. Please contact the location who tested you.";
-"visitorpass_token_modal_notoken_details" = "<p>You will receive a Vaccination Approval Code (VAC) from the desk that reviewed your vaccination, either by email or on paper. Don't have a VAC code? Please contact the desk you stopped by.</p><p>Didn’t stop by a desk yet to have your vaccination reviewed? For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
-"visitorpass_token_modal_notoken_title" = "Don't have a VAC code?";
+"visitorpass_token_modal_notoken_details" = "<p>You will receive an approval code from the desk that reviewed your vaccination, either by email or on paper. Don't have an approval code? Please contact the desk you stopped by.</p><p>Didn’t stop by a desk yet to have your vaccination reviewed? For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
+"visitorpass_token_modal_notoken_title" = "Don't have an approval code?";
 "visitorpass_token_next" = "Next";
