@@ -45,14 +45,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesToMakeQRFromRemoteEvent = false
 	var invokedUserWishesToMakeQRFromRemoteEventCount = 0
-	var invokedUserWishesToMakeQRFromRemoteEventParameters: (remoteEvent: RemoteEvent, Void)?
-	var invokedUserWishesToMakeQRFromRemoteEventParametersList = [(remoteEvent: RemoteEvent, Void)]()
+	var invokedUserWishesToMakeQRFromRemoteEventParameters: (remoteEvent: RemoteEvent, originalMode: EventMode)?
+	var invokedUserWishesToMakeQRFromRemoteEventParametersList = [(remoteEvent: RemoteEvent, originalMode: EventMode)]()
 
-	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent) {
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode) {
 		invokedUserWishesToMakeQRFromRemoteEvent = true
 		invokedUserWishesToMakeQRFromRemoteEventCount += 1
-		invokedUserWishesToMakeQRFromRemoteEventParameters = (remoteEvent, ())
-		invokedUserWishesToMakeQRFromRemoteEventParametersList.append((remoteEvent, ()))
+		invokedUserWishesToMakeQRFromRemoteEventParameters = (remoteEvent, originalMode)
+		invokedUserWishesToMakeQRFromRemoteEventParametersList.append((remoteEvent, originalMode))
 	}
 
 	var invokedUserWishesToCreateAQR = false
