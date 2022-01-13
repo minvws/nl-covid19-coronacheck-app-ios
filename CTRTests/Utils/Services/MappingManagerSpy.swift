@@ -49,6 +49,20 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetDisplayIssuerResult
 	}
 
+	var invokedGetBiLingualDisplayCountry = false
+	var invokedGetBiLingualDisplayCountryCount = 0
+	var invokedGetBiLingualDisplayCountryParameters: (country: String, Void)?
+	var invokedGetBiLingualDisplayCountryParametersList = [(country: String, Void)]()
+	var stubbedGetBiLingualDisplayCountryResult: String! = ""
+
+	func getBiLingualDisplayCountry(_ country: String) -> String {
+		invokedGetBiLingualDisplayCountry = true
+		invokedGetBiLingualDisplayCountryCount += 1
+		invokedGetBiLingualDisplayCountryParameters = (country, ())
+		invokedGetBiLingualDisplayCountryParametersList.append((country, ()))
+		return stubbedGetBiLingualDisplayCountryResult
+	}
+
 	var invokedGetDisplayCountry = false
 	var invokedGetDisplayCountryCount = 0
 	var invokedGetDisplayCountryParameters: (country: String, Void)?
