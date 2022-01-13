@@ -88,6 +88,7 @@ enum EventDetailsVaccinationAssessment: EventDetailable {
 	case name
 	case dateOfBirth
 	case date
+	case country
 	case uniqueIdentifer
 	
 	var isRequired: Bool {
@@ -100,6 +101,7 @@ enum EventDetailsVaccinationAssessment: EventDetailable {
 			case .name: return L.holder_event_vaccination_assessment_about_name()
 			case .dateOfBirth: return L.holder_event_vaccination_assessment_about_date_of_birth()
 			case .date: return L.holder_event_vaccination_assessment_about_date()
+			case .country: return L.holder_event_vaccination_assessment_about_country()
 			case .uniqueIdentifer: return L.holder_event_vaccination_assessment_about_unique_identifier()
 		}
 	}
