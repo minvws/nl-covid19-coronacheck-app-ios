@@ -148,17 +148,19 @@ class EventDetailsGeneratorTest: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let event = EventFlow.Event.vaccinationAssessmentEvent
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
 
 		// When
 		let details = VaccinationAssessementDetailsGenerator.getDetails(identity: identity, event: event)
 
 		// Then
-		expect(details).to(haveCount(5))
+		expect(details).to(haveCount(6))
 		expect(details[0].value).to(beNil())
 		expect(details[1].value) == "Check, Corona"
 		expect(details[2].value) == "16 mei 2021"
 		expect(details[3].value) == "woensdag 5 januari 13:42"
-		expect(details[4].value) == "1234"
+		expect(details[4].value) == "NL"
+		expect(details[5].value) == "1234"
 	}
 
 	func testDCCVaccinationDetailsGenerator() {

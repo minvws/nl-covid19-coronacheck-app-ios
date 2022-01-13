@@ -117,7 +117,7 @@
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
 "holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until %@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";
 "holder.dashboard.configIsAlmostOutOfDate.page.title" = "Please connect to the internet";
-"holder.dashboard.empty.domestic.message" = "<p>You can add a certificate if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
+"holder.dashboard.empty.domestic.message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
 "holder.dashboard.empty.domestic.title" = "Find your Dutch certificate here later";
 "holder.dashboard.empty.international.button" = "Which certificate is needed where I’m heading?";
 "holder.dashboard.empty.international.message" = "<p>Are you abroad, or planning to cross the border? Then always use your international certificate. Please check before leaving which certificate you need.</p>";
@@ -661,6 +661,7 @@
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Your negative test result was successfully added. Add your vaccination approval to complete your visitor pass.</p><p>To this end, you've received an approval code from the desk that reviewed your vaccination. You’ve received this code either by email or on paper.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Complete certificate";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negative test result added";
+"holder_event_vaccination_assessment_about_country" = "Country:";
 "holder_event_vaccination_assessment_about_date" = "Review date:";
 "holder_event_vaccination_assessment_about_date_of_birth" = "Date of birth:";
 "holder_event_vaccination_assessment_about_name" = "Name:";
