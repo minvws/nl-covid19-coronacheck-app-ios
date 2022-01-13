@@ -661,6 +661,7 @@
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Your negative test result was successfully added. Add your vaccination approval to complete your visitor pass.</p><p>To this end, you've received an approval code from the desk that reviewed your vaccination. You’ve received this code either by email or on paper.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Complete certificate";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negative test result added";
+"holder_event_vaccination_assessment_about_country" = "Country:";
 "holder_event_vaccination_assessment_about_date" = "Review date:";
 "holder_event_vaccination_assessment_about_date_of_birth" = "Date of birth:";
 "holder_event_vaccination_assessment_about_name" = "Name:";
