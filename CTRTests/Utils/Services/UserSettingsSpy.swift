@@ -187,6 +187,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedLastRecommendToAddYourBoosterDismissalDateSetter = false
+	var invokedLastRecommendToAddYourBoosterDismissalDateSetterCount = 0
+	var invokedLastRecommendToAddYourBoosterDismissalDate: Date?
+	var invokedLastRecommendToAddYourBoosterDismissalDateList = [Date?]()
+	var invokedLastRecommendToAddYourBoosterDismissalDateGetter = false
+	var invokedLastRecommendToAddYourBoosterDismissalDateGetterCount = 0
+	var stubbedLastRecommendToAddYourBoosterDismissalDate: Date!
+
+	var lastRecommendToAddYourBoosterDismissalDate: Date? {
+		set {
+			invokedLastRecommendToAddYourBoosterDismissalDateSetter = true
+			invokedLastRecommendToAddYourBoosterDismissalDateSetterCount += 1
+			invokedLastRecommendToAddYourBoosterDismissalDate = newValue
+			invokedLastRecommendToAddYourBoosterDismissalDateList.append(newValue)
+		}
+		get {
+			invokedLastRecommendToAddYourBoosterDismissalDateGetter = true
+			invokedLastRecommendToAddYourBoosterDismissalDateGetterCount += 1
+			return stubbedLastRecommendToAddYourBoosterDismissalDate
+		}
+	}
+
 	var invokedLastSeenRecommendedUpdateSetter = false
 	var invokedLastSeenRecommendedUpdateSetterCount = 0
 	var invokedLastSeenRecommendedUpdate: String?

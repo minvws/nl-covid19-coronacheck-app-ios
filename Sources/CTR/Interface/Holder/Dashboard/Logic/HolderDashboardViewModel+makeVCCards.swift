@@ -296,6 +296,22 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
+	static func makeRecommendToAddYourBoosterCard(
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+	
+		guard state.shouldShowRecommendationToAddYourBooster else { return [] }
+		return [
+			.recommendToAddYourBooster(
+				title: L.holder_dashboard_addBoosterBanner_title(),
+				buttonText: L.holder_dashboard_addBoosterBanner_button_addBooster(),
+				didTapCallToAction: actionHandler.didTapRecommendToAddYourBooster,
+				didTapClose: actionHandler.didTapRecommendToAddYourBoosterClose
+			)
+		]
+	}
+	
 	static func makeVaccinationAssessmentInvalidOutsideNLCard(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
