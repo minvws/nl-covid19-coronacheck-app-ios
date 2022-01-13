@@ -2986,6 +2986,55 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL) == true
 	}
+	
+	func test_actionhandling_didTapRecommendToAddYourBooster() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		// Act
+		sut.didTapRecommendToAddYourBooster()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAVaccinationQR) == true
+	}
+	
+	func test_actionhandling_didTapRecommendToAddYourBoosterClose() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
+				greencards: [.init(id: sampleGreencardObjectID, origins: [
+					.valid30DaysAgo_vaccination_expires60SecondsFromNow()
+				])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		
+		expect(self.sut.domesticCards).toEventually(haveCount(4))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard(test: { message, buttonTitle, _, _ in
+			expect(message) == L.holder_dashboard_addBoosterBanner_title()
+			expect(buttonTitle) == L.holder_dashboard_addBoosterBanner_button_addBooster()
+		}))
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard())
+		expect(self.sut.domesticCards[3]).toEventually(beRecommendCoronaMelderCard())
+		
+		// Act
+		sut.didTapRecommendToAddYourBoosterClose()
+		
+		// Assert
+		expect(self.environmentSpies.userSettingsSpy.invokedLastRecommendToAddYourBoosterDismissalDate) == now
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
+		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
+	}
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
@@ -3126,6 +3175,17 @@ private func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void
 		if let actual = try expression.evaluate(),
 		   case let .recommendedUpdate(message2, callToActionButtonText, didTapCallToAction) = actual {
 			test(message2, callToActionButtonText, didTapCallToAction)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+private func beRecommendToAddYourBoosterCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .recommendToAddYourBooster with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .recommendToAddYourBooster(message2, buttonText, callToActionButtonText, didTapCallToAction) = actual {
+			test(message2, buttonText, callToActionButtonText, didTapCallToAction)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)

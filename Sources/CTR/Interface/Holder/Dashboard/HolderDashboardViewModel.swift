@@ -31,6 +31,8 @@ protocol HolderDashboardCardUserActionHandling {
 	func didTapNewValidiyBannerClose()
 	func didTapCompleteYourVaccinationAssessmentMoreInfo()
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
+	func didTapRecommendToAddYourBooster()
+	func didTapRecommendToAddYourBoosterClose()
 }
 
 final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHandling {
@@ -77,6 +79,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		var shouldShowRecoveryValidityReinstationAvailableBanner: Bool = false
 		var shouldShowRecoveryValidityExtensionCompleteBanner: Bool = false
 		var shouldShowRecoveryValidityReinstationCompleteBanner: Bool = false
+		
 		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
 
 		var shouldShowDomestic3GTestBanner: Bool = false
@@ -86,6 +89,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		var shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner: Bool = false
 		
 		var shouldShowCompleteYourVaccinationAssessmentBanner: Bool = false
+		
+		var shouldShowRecommendationToAddYourBooster: Bool = false
 		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -236,6 +241,13 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: Current.now())
 			   })
 				state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
+				state.shouldShowRecommendationToAddYourBooster = {
+					guard Current.userSettings.lastRecommendToAddYourBoosterDismissalDate == nil else { return false }
+					let contains = qrCardDataItems.contains { card in
+						card.isOfRegion(region: .domestic) && card.origins.contains { $0.type == .vaccination }
+					}
+					return contains
+				}()
 				
 				self.state = state
 			}
@@ -583,6 +595,15 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		coordinator?.userWishesMoreInfoAboutExpiredDomesticVaccination()
 	}
 	
+	func didTapRecommendToAddYourBooster() {
+		coordinator?.userWishesToCreateAVaccinationQR()
+	}
+	
+	func didTapRecommendToAddYourBoosterClose() {
+		Current.userSettings.lastRecommendToAddYourBoosterDismissalDate = Current.now()
+		state.shouldShowRecommendationToAddYourBooster = false
+	}
+	
 	// MARK: - Static Methods
 	
 	private static func assembleCards(
@@ -608,6 +629,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
