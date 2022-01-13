@@ -233,23 +233,20 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			guard let self = self else { return }
 			
 			DispatchQueue.main.async {
-				var state = self.state
-				state.qrCards = qrCardDataItems
-				state.expiredGreenCards += expiredGreenCards
-				state.shouldShowDomestic3GTestBanner = qrCardDataItems.contains(where: { qrCard in
+				self.state.qrCards = qrCardDataItems
+				self.state.expiredGreenCards += expiredGreenCards
+				self.state.shouldShowDomestic3GTestBanner = qrCardDataItems.contains(where: { qrCard in
 					// Assume that domestic has just one greencard.
 					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: Current.now())
 			   })
-				state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
-				state.shouldShowRecommendationToAddYourBooster = {
+				self.state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
+				self.state.shouldShowRecommendationToAddYourBooster = {
 					guard Current.userSettings.lastRecommendToAddYourBoosterDismissalDate == nil else { return false }
 					let contains = qrCardDataItems.contains { card in
 						card.isOfRegion(region: .domestic) && card.origins.contains { $0.type == .vaccination }
 					}
 					return contains
 				}()
-				
-				self.state = state
 			}
 		}
 	}
@@ -266,12 +263,10 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		recoveryValidityExtensionManager.bannerStateCallback = { [weak self] (bannerState: RecoveryValidityExtensionManagerProtocol.BannerType?) in
 			guard let self = self else { return }
 
-			var state = self.state // local copy to prevent 4x state updates
-			state.shouldShowRecoveryValidityExtensionAvailableBanner = bannerState == .extensionAvailable
-			state.shouldShowRecoveryValidityReinstationAvailableBanner = bannerState == .reinstationAvailable
-			state.shouldShowRecoveryValidityExtensionCompleteBanner = bannerState == .extensionDidComplete
-			state.shouldShowRecoveryValidityReinstationCompleteBanner = bannerState == .reinstationDidComplete
-			self.state = state
+			self.state.shouldShowRecoveryValidityExtensionAvailableBanner = bannerState == .extensionAvailable
+			self.state.shouldShowRecoveryValidityReinstationAvailableBanner = bannerState == .reinstationAvailable
+			self.state.shouldShowRecoveryValidityExtensionCompleteBanner = bannerState == .extensionDidComplete
+			self.state.shouldShowRecoveryValidityReinstationCompleteBanner = bannerState == .reinstationDidComplete
 		}
 		recoveryValidityExtensionManager.reload()
 	}
@@ -462,19 +457,15 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	@objc func userDefaultsDidChange() {
 		DispatchQueue.main.async {
 
-			var state = self.state
-
-			state.shouldShowRecoveryValidityExtensionCompleteBanner = !Current.userSettings.hasDismissedRecoveryValidityExtensionCompletionCard
-			state.shouldShowRecoveryValidityReinstationCompleteBanner = !Current.userSettings.hasDismissedRecoveryValidityReinstationCompletionCard
+			self.state.shouldShowRecoveryValidityExtensionCompleteBanner = !Current.userSettings.hasDismissedRecoveryValidityExtensionCompletionCard
+			self.state.shouldShowRecoveryValidityReinstationCompleteBanner = !Current.userSettings.hasDismissedRecoveryValidityReinstationCompletionCard
 			
 			if !Current.userSettings.hasDismissedRecoveryValidityExtensionCompletionCard || !Current.userSettings.hasDismissedRecoveryValidityReinstationCompletionCard {
-				state.shouldShowRecoveryValidityExtensionAvailableBanner = false
-				state.shouldShowRecoveryValidityReinstationAvailableBanner = false
+				self.state.shouldShowRecoveryValidityExtensionAvailableBanner = false
+				self.state.shouldShowRecoveryValidityReinstationAvailableBanner = false
 			}
 			
-			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Current.featureFlagManager.isNewValidityInfoBannerEnabled()
-			
-			self.state = state
+			self.state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Current.featureFlagManager.isNewValidityInfoBannerEnabled()
 		}
 	}
 
