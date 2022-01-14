@@ -804,25 +804,29 @@ extension HolderCoordinator: EventFlowDelegate {
 	func eventFlowDidComplete() {
 
 		/// The user completed the event flow. Go back to the dashboard.
-
 		removeChildCoordinator()
 		navigateToDashboard()
 		navigationController.viewControllers = []
+	}
+	
+	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
+		
+		/// The user completed the event flow, but needs to add a vaccination assessment test (visitor pass flow)
+		removeChildCoordinator()
+		navigationController.popToRootViewController(animated: false)
+		userWishesToCreateAVisitorPass()
 	}
 
 	func eventFlowDidCancel() {
 
 		/// The user cancelled the flow. Go back one page.
-
 		removeChildCoordinator()
-
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 	}
 	
 	func eventFlowDidCancelFromBackSwipe() {
 		
 		/// The user cancelled the flow from back swipe.
-		
 		removeChildCoordinator()
 	}
 }
