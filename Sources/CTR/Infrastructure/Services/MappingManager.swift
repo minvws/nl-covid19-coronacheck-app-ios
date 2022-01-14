@@ -15,6 +15,8 @@ protocol MappingManaging {
 
 	func getDisplayIssuer(_ issuer: String) -> String
 
+	func getBiLingualDisplayCountry(_ country: String) -> String
+	
 	func getDisplayCountry(_ country: String) -> String
 	
 	func getDisplayFacility(_ facility: String) -> String
@@ -70,11 +72,19 @@ class MappingManager: MappingManaging, Logging {
 		return L.holderVaccinationAboutIssuer()
 	}
 
-	func getDisplayCountry(_ country: String) -> String {
+	func getBiLingualDisplayCountry(_ country: String) -> String {
 		guard ["NL", "NLD"].contains(country) else {
 			return country
 		}
 		return L.holderVaccinationAboutCountry()
+	}
+	
+	func getDisplayCountry(_ country: String) -> String {
+		
+		guard ["NL", "NLD"].contains(country) else {
+			return country
+		}
+		return L.generalNetherlands()
 	}
 
 	func getDisplayFacility(_ facility: String) -> String {

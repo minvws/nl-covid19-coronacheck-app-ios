@@ -26,7 +26,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 
-	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent)
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 
 	func userWishesToCreateAQR()
 
@@ -425,7 +425,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentAsBottomSheet(viewController)
 	}
 
-	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent) {
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode) {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
@@ -433,7 +433,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithListTestEvents([remoteEvent])
+			eventCoordinator.startWithListTestEvents([remoteEvent], originalMode: originalMode)
 		}
 	}
 

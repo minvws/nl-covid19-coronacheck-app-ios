@@ -20,6 +20,7 @@ class ListEventsViewModel: Logging {
 	private let identityChecker: IdentityCheckerProtocol
 
 	var eventMode: EventMode
+	var originalEventMode: EventMode?
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -49,6 +50,7 @@ class ListEventsViewModel: Logging {
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
+		originalMode: EventMode? = nil,
 		remoteEvents: [RemoteEvent],
 		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
 		eventsMightBeMissing: Bool = false,
@@ -59,6 +61,7 @@ class ListEventsViewModel: Logging {
 		self.greenCardLoader = greenCardLoader
 		self.eventMode = eventMode
 		self.identityChecker = identityChecker
+		self.originalEventMode = originalMode
 		
 		viewState = .loading(content: Content(title: eventMode.title))
 		hasExistingDomesticVaccination = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
@@ -102,8 +105,12 @@ class ListEventsViewModel: Logging {
 	}
 
 	func goBack() {
-
-		coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
+		
+		if let originalEventMode = originalEventMode {
+			coordinator?.listEventsScreenDidFinish(.back(eventMode: originalEventMode))
+		} else {
+			coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
+		}
 	}
 
 	func openUrl(_ url: URL) {
@@ -237,8 +244,10 @@ class ListEventsViewModel: Logging {
 		}
 
 		switch eventModeForStorage {
-			case .vaccinationassessment, .paperflow, .test:
+			case .vaccinationassessment, .paperflow:
 				completeFlow()
+			case .test:
+				handleSuccessForNegativeTest(greencardResponse, eventModeForStorage: eventModeForStorage)
 			case .positiveTest:
 				handleSuccessForPositiveTest(greencardResponse, eventModeForStorage: eventModeForStorage)
 			case .recovery:
@@ -251,6 +260,21 @@ class ListEventsViewModel: Logging {
 	private func completeFlow() {
 
 		self.coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
+	}
+	
+	private func handleSuccessForNegativeTest(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+		
+		guard eventModeForStorage == .test else { return }
+		
+		// if we entered a negative test in the vaccination assessment flow
+		// AND we do not have a vaccination assessment origin
+		// -> Remind the user to add his/her vaccination assessment
+		if originalEventMode == .vaccinationassessment && !greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccinationassessment.rawValue) {
+			shouldPrimaryButtonBeEnabled = true
+			viewState = negativeTestInVaccinationAssessmentFlow()
+		} else {
+			completeFlow()
+		}
 	}
 
 	private func handleSuccessForVaccination(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {

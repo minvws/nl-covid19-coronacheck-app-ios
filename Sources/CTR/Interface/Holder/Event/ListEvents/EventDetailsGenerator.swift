@@ -301,6 +301,8 @@ class VaccinationAssessementDetailsGenerator {
 	
 	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event) -> [EventDetails] {
 		
+		let mappingManager: MappingManaging = Current.mappingManager
+		
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
@@ -308,11 +310,14 @@ class VaccinationAssessementDetailsGenerator {
 			.flatMap(Formatter.getDateFrom)
 			.map(EventDetailsGenerator.printTestDateFormatter.string) ?? (event.vaccinationAssessment?.dateTimeString ?? "")
 
+		let country = mappingManager.getDisplayCountry(event.vaccinationAssessment?.country ?? "")
+		
 		return [
 			EventDetails(field: EventDetailsVaccinationAssessment.subtitle, value: nil),
 			EventDetails(field: EventDetailsVaccinationAssessment.name, value: identity.fullName),
 			EventDetails(field: EventDetailsVaccinationAssessment.dateOfBirth, value: formattedBirthDate),
 			EventDetails(field: EventDetailsVaccinationAssessment.date, value: formattedAssessmentDate),
+			EventDetails(field: EventDetailsVaccinationAssessment.country, value: country),
 			EventDetails(field: EventDetailsVaccinationAssessment.uniqueIdentifer, value: event.unique)
 		]
 	}
