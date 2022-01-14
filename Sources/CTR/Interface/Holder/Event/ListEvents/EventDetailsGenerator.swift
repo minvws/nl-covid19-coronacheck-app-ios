@@ -312,14 +312,17 @@ class VaccinationAssessementDetailsGenerator {
 
 		let country = mappingManager.getDisplayCountry(event.vaccinationAssessment?.country ?? "")
 		
-		return [
-			EventDetails(field: EventDetailsVaccinationAssessment.subtitle, value: nil),
-			EventDetails(field: EventDetailsVaccinationAssessment.name, value: identity.fullName),
-			EventDetails(field: EventDetailsVaccinationAssessment.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsVaccinationAssessment.date, value: formattedAssessmentDate),
-			EventDetails(field: EventDetailsVaccinationAssessment.country, value: country),
-			EventDetails(field: EventDetailsVaccinationAssessment.uniqueIdentifer, value: event.unique)
+		var list: [EventDetails] = [
+				EventDetails(field: EventDetailsVaccinationAssessment.subtitle, value: nil),
+				EventDetails(field: EventDetailsVaccinationAssessment.name, value: identity.fullName),
+				EventDetails(field: EventDetailsVaccinationAssessment.dateOfBirth, value: formattedBirthDate),
+				EventDetails(field: EventDetailsVaccinationAssessment.date, value: formattedAssessmentDate)
 		]
+		if country != "" {
+			list.append(EventDetails(field: EventDetailsVaccinationAssessment.country, value: country))
+		}
+		list.append(EventDetails(field: EventDetailsVaccinationAssessment.uniqueIdentifer, value: event.unique))
+		return list
 	}
 }
 

@@ -683,6 +683,24 @@ extension EventFlow.Event {
 			)
 		)
 	}
+	
+	static var vaccinationAssessmentEventWithoutCountry: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccinationassessment",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil,
+			vaccinationAssessment: EventFlow.VaccinationAssessment(
+				dateTimeString: "2022-01-05T12:42:42Z",
+				country: nil,
+				verified: true
+			)
+		)
+	}
 }
 
 extension SignedResponse {
