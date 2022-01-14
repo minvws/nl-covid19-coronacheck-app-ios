@@ -139,6 +139,13 @@ class ListEventsViewModel: Logging {
 
 		let eventModeForStorage = getEventModeForStorage(remoteEvents: remoteEvents)
 
+		guard checkEventValidity(eventModeForStorage: eventModeForStorage, remoteEvents: remoteEvents) else {
+		
+			self.viewState = self.vaccinationAssessmentExpired()
+			self.shouldPrimaryButtonBeEnabled = true
+			return
+		}
+		
 		storeEvent(
 			remoteEvents: remoteEvents,
 			eventModeForStorage: eventModeForStorage,
@@ -180,6 +187,29 @@ class ListEventsViewModel: Logging {
 				)
 			})
 		}
+	}
+	
+	func checkEventValidity(eventModeForStorage: EventMode, remoteEvents: [RemoteEvent]) -> Bool {
+	
+		var valid = true
+		if eventModeForStorage == .vaccinationassessment {
+			
+			let now = Current.now()
+			let validityDays = Current.remoteConfigManager.storedConfiguration.vaccinationAssessmentEventValidityDays ?? 14
+			let validityDaysTimeInterval = TimeInterval(validityDays * 24 * 60 * 60)
+			
+			remoteEvents.forEach { remoteEvent in
+				remoteEvent.wrapper.events?.forEach { event in
+					
+					if let assessmentDate = event.vaccinationAssessment?.dateTimeString.flatMap(Formatter.getDateFrom) {
+						if assessmentDate.addingTimeInterval(validityDaysTimeInterval) < now {
+							valid = false
+						}
+					}
+				}
+			}
+		}
+		return valid
 	}
 
 	private func getEventModeForStorage(remoteEvents: [RemoteEvent]) -> EventMode {
@@ -539,5 +569,6 @@ extension ErrorCode.ClientCode {
 	static let failedToSaveGreenCards = ErrorCode.ClientCode(value: "055")
 	static let storingEvents = ErrorCode.ClientCode(value: "056")
 	static let originMismatch = ErrorCode.ClientCode(value: "058")
+	static let vaccinationAssessmentExpired = ErrorCode.ClientCode(value: "059")
 	static let unhandled = ErrorCode.ClientCode(value: "999")
 }

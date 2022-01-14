@@ -492,6 +492,17 @@ extension ListEventsViewModel {
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
+	
+	internal func vaccinationAssessmentExpired() -> ListEventsViewController.State {
+		
+		let errorCode = ErrorCode(flow: eventMode.flow, step: .storingEvents, clientCode: ErrorCode.ClientCode.vaccinationAssessmentExpired)
+		
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holderEventOriginmismatchTitle(),
+			subTitle: L.holderEventOriginmismatchVaccinationApprovalBody("\(errorCode)"),
+			primaryActionTitle: L.general_toMyOverview()
+		)
+	}
 
 	// MARK: Vaccination End State
 
