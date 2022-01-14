@@ -47,6 +47,10 @@ protocol WalletManaging: AnyObject {
 	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)]
 
 	/// Expire event groups that are no longer valid
+	/// - Parameter configuration: remote configuration
+	func expireEventGroups(configuration: RemoteConfiguration)
+	
+	/// Expire event groups that are no longer valid
 	/// - Parameters:
 	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
 	///   - recoveryValidity: the max validity for recovery  (in HOURS)
@@ -121,6 +125,19 @@ class WalletManager: WalletManaging, Logging {
 			}
 		}
 		return success
+	}
+	
+	/// Expire event groups that are no longer valid
+	/// - Parameter configuration: remote configuration
+	func expireEventGroups(configuration: RemoteConfiguration) {
+
+		expireEventGroups(
+			vaccinationValidity: (configuration.vaccinationEventValidityDays ?? 730) * 24,
+			recoveryValidity: (configuration.recoveryEventValidityDays ?? 365) * 24,
+			testValidity: configuration.testEventValidityHours,
+			vaccinationAssessmentValidity: (configuration.vaccinationAssessmentEventValidityDays ?? 14) * 24
+		)
+		
 	}
 
 	/// Expire event groups that are no longer valid
