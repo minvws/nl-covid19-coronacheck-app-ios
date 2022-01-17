@@ -483,10 +483,14 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], 
 		.subtracting(originTypesForCurrentRegion)
 
 	// Map it to user messages:
-	let userMessages = originTypesOnlyInOtherRegion.map { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String) in
+	let userMessages = originTypesOnlyInOtherRegion.compactMap { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String)? in
 		switch (originType, thisRegion) {
 			case (.vaccination, .domestic):
 				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEUVaccination())
+			case (.test, .domestic):
+				let containsDomesticVaccinationAssessment = qrCards.contains(where: { $0.origins.contains { $0.type == .vaccinationassessment } })
+				guard !containsDomesticVaccinationAssessment else { return nil }
+				fallthrough // continue to next case for regular .domestic behavior:
 			case (_, .domestic):
 				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEU(originType.localizedProof))
 			case (.vaccinationassessment, .europeanUnion):

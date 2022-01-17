@@ -2016,6 +2016,94 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutIncompleteDutchVaccination) == true
 		}))
 	}
+	
+	// MARK: - Valid VaccinationAssessment, Test expired
+	
+	func test_datasourceupdate_currentlyValidVaccinationAssessment_expiredTest_domesticTab() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
+				greencards: [.init(id: NSManagedObjectID(), origins: [
+					.init(
+						type: QRCodeOriginType.vaccinationassessment,
+						eventDate: now.addingTimeInterval(72 * hours * ago),
+						expirationTime: now.addingTimeInterval(11 * days * fromNow),
+						validFromDate: now.addingTimeInterval(72 * hours * ago),
+						doseNumber: nil
+					),
+					.init(
+						type: QRCodeOriginType.test,
+						eventDate: now.addingTimeInterval(60 * hours * ago),
+						expirationTime: now.addingTimeInterval(12 * hours * ago),
+						validFromDate: now.addingTimeInterval(60 * hours * ago),
+						doseNumber: nil
+					)
+				])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			),
+			HolderDashboardViewModel.QRCard(
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
+				greencards: [.init(id: NSManagedObjectID(), origins: [
+					.init(
+						type: QRCodeOriginType.test,
+						eventDate: now.addingTimeInterval(60 * hours * ago),
+						expirationTime: now.addingTimeInterval(30 * days * fromNow),
+						validFromDate: now.addingTimeInterval(60 * hours * ago),
+						doseNumber: nil
+					)
+				])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { _, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(2))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == L.general_visitorPass().capitalized + ":"
+			expect(nowValidityTexts[0].lines[1]) == "geldig tot maandag 26 juli 17:02"
+			expect(nowValidityTexts[1].kind) == .past // the expired test (hidden in UI)
+			
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+		expect(self.sut.domesticCards[2]).toEventually(beRecommendCoronaMelderCard())
+		
+		expect(self.sut.internationalCards).toEventually(haveCount(4))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { title, callToActionButtonText, _ in
+			expect(title) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
+			expect(callToActionButtonText) == L.generalReadmore()
+		}))
+		expect(self.sut.internationalCards[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator in
+			// check isLoading
+			expect(title) == L.generalTestcertificate().capitalized
+			expect(isLoading) == false
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[1]) == "geldig tot dinsdag 13 juli 05:02"
+			
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+	}
 
 	// MARK: - Single, Not Yet Valid, Domestic
 
