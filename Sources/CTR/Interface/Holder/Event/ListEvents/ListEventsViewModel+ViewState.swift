@@ -523,7 +523,7 @@ extension ListEventsViewModel {
 				subTitle: L.holder_event_negativeTestEndstate_addVaccinationAssessment_body(),
 				primaryActionTitle: L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete(),
 				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.continue(eventMode: .vaccinationassessment))
+					self?.coordinator?.listEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
 				},
 				secondaryActionTitle: nil,
 				secondaryAction: nil
