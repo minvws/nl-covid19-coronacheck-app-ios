@@ -482,7 +482,7 @@ extension ListEventsViewModel {
 		}
 	}
 
-	internal func cannotCreateEventsState() -> ListEventsViewController.State {
+	internal func originMismatchState() -> ListEventsViewController.State {
 		
 		let errorCode = ErrorCode(flow: eventMode.flow, step: .signer, clientCode: ErrorCode.ClientCode.originMismatch)
 
