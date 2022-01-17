@@ -102,8 +102,8 @@
 "holder.cleardata.alert.subtitle" = "Clearing will delete all data and certificates from the app and return you to the start screen.";
 "holder.cleardata.alert.title" = "Clear all data?";
 "holder.cleardata.menu.title" = "Clear data";
-"holder.clockDeviationDetected.message" = "<p>Your phone’s time settings may be incorrect. Your phone may be a few minutes ahead. To make the best use of the CoronaCheck app, it is important that the time is set correctly.</p><p><a href=\"%@\">Go to settings</a> on your phone and set date and time to ‘set automatically’.</p>";
-"holder.clockDeviationDetected.title" = "Please check your phone’s time settings";
+"holder.clockDeviationDetected.message" = "<p>In order to properly use the CoronaCheck app, it is important that the time on your phone is set correctly. For example, if the clock on your phone is a few minutes ahead, an error might occur while verifying your coronavirus pass.</p><p><a href=\"%@\">Go to your phone's settings</a> and set the date and time to 'set automatically'.</p>";
+"holder.clockDeviationDetected.title" = "Check your phone’s time settings";
 "holder.consent.action" = "Get started";
 "holder.consent.button" = "I have read the privacy statement and understand how CoronaCheck processes my data.";
 "holder.consent.item.1" = "Your data is <b>not centrally stored anywhere</b>";
@@ -112,7 +112,7 @@
 "holder.consent.message.underlined" = "privacy statement";
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";
-"holder.dashboard.clockDeviationDetected.message" = "Check your phone's time settings. They might be incorrect.";
+"holder.dashboard.clockDeviationDetected.message" = "Check your phone's time settings. They might be incorrect";
 "holder.dashboard.configIsAlmostOutOfDate.card.button" = "Read more";
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
 "holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until %@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";
@@ -140,7 +140,7 @@
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Your vaccination certificate isn't valid internationally. That's why only a Dutch certificate was made.</p><p>It's possible your type of vaccination isn't accepted abroad.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "About your vaccination certificate";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Your %@ isn't valid internationally. You've only got a Dutch certificate.";
-"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Your %@ isn't valid in the Netherlands. You've only got an international certificate.";
+"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "You don't have a Dutch %@.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU.vaccination" = "You don't have a Dutch vaccination certificate";
 /* Voice over voor geldigheid QR code */
 "holder.dashboard.qr.am" = "am";
@@ -311,7 +311,7 @@
 "holder.event.element.subtitle.test2" = "<p>Test date: %@</p><p>Your details: %@</p>";
 "holder.event.element.subtitle.test3" = "<p>Test date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
 "holder.event.identity.alert.cancel" = "Stop";
-"holder.event.identity.alert.message" = "The personal details you just retrieved don't match those in your current certificate. You can either stop and have your details changed by the healthcare provider who registered the details for your certificate, or replace your certificate. Your current certificate will then be removed.";
+"holder.event.identity.alert.message" = "The personal details you just retrieved don't match those in your current certificate. You can either stop and have your details changed by the organisation that registered the details for your certificate, or replace your certificate. Your current certificate will then be removed.";
 "holder.event.identity.alert.ok" = "Replace";
 "holder.event.identity.alert.title" = "Want to replace your certificate?";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
@@ -635,7 +635,7 @@
 "holder.vaccination.start.title" = "Retrieve vaccination details";
 "holder.vaccination.wrong.body" = "<p>Please contact the care provider who vaccinated you. This can be the GGD, your general practitioner, or a doctor belonging to a healthcare facility. They can help you change these details.</p>";
 "holder.vaccination.wrong.title" = "Is something wrong?";
-"holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org\">www.testenvoortoegang.org</a>.</p>";
+"holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
@@ -670,7 +670,7 @@
 "holder_event_vaccination_assessment_alert_message" = "Doing so will stop the addition of your vaccination approval and you will have to retrieve your details again later.";
 "holder_event_vaccination_assessment_element_subtitle" = "<p>Review date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
 "holder_event_vaccination_assessment_element_title" = "Vaccination approval";
-"holder_event_vaccination_assessment_list_message" = "Are the details correct? If the details are correct, you can add your vaccination approval to the app.";
+"holder_event_vaccination_assessment_list_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_event_vaccination_assessment_list_title" = "Are the details correct?";
 "holder_event_vaccination_assessment_nolist_message" = "<p>There are no details available about your vaccination approval. Please contact the desk that reviewed your vaccination.</p><p>For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_event_vaccination_assessment_nolist_title" = "No vaccination approval available";
