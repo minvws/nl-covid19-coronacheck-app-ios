@@ -31,8 +31,9 @@ class ScrolledStackView: BaseView {
 	/// The scrollview
 	let scrollView: UIScrollView = {
 
-		let view = UIScrollView(frame: .zero)
+		let view = UIScrollView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.showsHorizontalScrollIndicator = false
 		return view
 	}()
 
