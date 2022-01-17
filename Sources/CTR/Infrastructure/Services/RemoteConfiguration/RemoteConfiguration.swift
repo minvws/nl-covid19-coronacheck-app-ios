@@ -114,6 +114,19 @@ struct RemoteConfiguration: Codable, Equatable {
 
 	var internationalQRRelevancyDays: Int?
 
+	/// The minimum number of seconds between switching risk level
+	var scanLockSeconds: Int?
+
+	/// The number of seconds we show a warning before switching risk level
+	var scanLockWarningSeconds: Int?
+
+	/// The number of seconds to keep scan entries in the log
+	var scanLogStorageSeconds: Int?
+
+	var showNewValidityInfoCard: Bool?
+	
+	var verificationPolicyVersion: String?
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -147,6 +160,11 @@ struct RemoteConfiguration: Codable, Equatable {
 		case isLuhnCheckEnabled = "luhnCheckEnabled"
 		case internationalQRRelevancyDays = "internationalQRRelevancyDays"
 		case recoveryGreencardRevisedValidityLaunchDate = "recoveryGreencardRevisedValidityLaunchDate"
+		case scanLockSeconds = "scanLockSeconds"
+		case scanLockWarningSeconds = "scanLockWarningSeconds"
+		case scanLogStorageSeconds = "scanLogStorageSeconds"
+		case showNewValidityInfoCard = "showNewValidityInfoCard"
+		case verificationPolicyVersion = "iOSEnableVerificationPolicyVersion"
 	}
 
 	init(minVersion: String) {
@@ -179,6 +197,10 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.isLuhnCheckEnabled = true
 		config.internationalQRRelevancyDays = 28
 		config.recoveryGreencardRevisedValidityLaunchDate = .distantFuture
+		config.scanLockSeconds = 300
+		config.scanLockWarningSeconds = 3600
+		config.scanLogStorageSeconds = 3600
+		config.verificationPolicyVersion = "0"
 		return config
 	}
 

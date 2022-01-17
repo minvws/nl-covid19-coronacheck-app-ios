@@ -44,7 +44,7 @@ class Button: UIButton {
 				case .roundedClear:
 					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
 				case .textLabelBlue:
-					return isEnabled ? Theme.colors.iosBlue : Theme.colors.grey2
+					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
 				case .roundedBlueBorder:
 					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
 			}
@@ -60,15 +60,8 @@ class Button: UIButton {
 		var contentEdgeInsets: UIEdgeInsets {
 			switch self {
 				case .textLabelBlue: return .zero
-				case .roundedBlueImage: return .topBottom(15) + .left(56) + .right(44)
+				case .roundedBlueImage: return .topBottom(15) + .left(56) + .right(66)
 				default: return .topBottom(15) + .leftRight(56)
-			}
-		}
-		
-		var imageEdgeInsets: UIEdgeInsets {
-			switch self {
-				case .roundedBlueImage: return .left(12) + .right(-12)
-				default: return .zero
 			}
 		}
 		
@@ -92,6 +85,13 @@ class Button: UIButton {
 			switch self {
 				case .textLabelBlue: return false
 				default: return true
+			}
+		}
+		
+		var imageSpacing: CGFloat {
+			switch self {
+				case .roundedBlueImage: return 12
+				default: return 0
 			}
 		}
     }
@@ -171,23 +171,31 @@ class Button: UIButton {
 
         let horizontalContentPadding = contentEdgeInsets.left + contentEdgeInsets.right
         let verticalContentPadding = contentEdgeInsets.top + contentEdgeInsets.bottom
-		
-		let horizontalImagePadding = abs(imageEdgeInsets.left) + abs(imageEdgeInsets.right)
-		let verticalImagePadding = imageEdgeInsets.top + imageEdgeInsets.bottom
-		
-		let verticalPadding = max(verticalContentPadding, verticalImagePadding)
 
         return CGSize(
-            width: maxWidth + horizontalContentPadding + horizontalImagePadding,
-            height: maxHeight + verticalPadding
+            width: maxWidth + horizontalContentPadding,
+            height: maxHeight + verticalContentPadding
         )
 	}
 	
 	override func setImage(_ image: UIImage?, for state: UIControl.State) {
-		super.setImage(image, for: state)
-		
-		guard style == .roundedBlueImage else { return }
+		guard style == .roundedBlueImage, let titleLabel = titleLabel else {
+			super.setImage(image, for: state)
+			return
+		}
 		contentEdgeInsets = image != nil ? ButtonType.roundedBlueImage.contentEdgeInsets : ButtonType.roundedBlue.contentEdgeInsets
+		
+		if image != nil {
+			// Position image to the right of the label
+			imageView?.translatesAutoresizingMaskIntoConstraints = false
+			imageView?.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: style.imageSpacing).isActive = true
+			imageView?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+			
+			// Increase size
+			imageView?.layer.transform = CATransform3DMakeScale(1.1, 1.1, 1.1)
+		}
+		
+		super.setImage(image, for: state)
 	}
 
     // MARK: - Private
@@ -198,14 +206,6 @@ class Button: UIButton {
 		titleLabel?.font = style.font
 		contentEdgeInsets = style.contentEdgeInsets
 		layer.borderWidth = style.borderWidth
-		imageEdgeInsets = style.imageEdgeInsets
-		
-		if style == .roundedBlueImage {
-			// Position image to the right of the label
-			semanticContentAttribute = .forceRightToLeft
-			// Increase size
-			imageView?.layer.transform = CATransform3DMakeScale(1.1, 1.1, 1.1)
-		}
 		
 		setNeedsLayout()
 	}

@@ -12,8 +12,12 @@ struct AlertContent {
 	var subTitle: String
 	var cancelAction: ((UIAlertAction) -> Void)?
 	var cancelTitle: String?
+	var cancelActionIsDestructive: Bool = false
+	var cancelActionIsPreferred: Bool = false
 	var okAction: ((UIAlertAction) -> Void)?
 	var okTitle: String
+	var okActionIsDestructive: Bool = false
+	var okActionIsPreferred: Bool = false
 }
 
 extension UIViewController {
@@ -21,8 +25,7 @@ extension UIViewController {
 	/// Show an alert
 	/// - Parameters:
 	///   - alertContent: the content of the alert
-	///   - preferredAction: the title of the preferred action
-	func showAlert(_ alertContent: AlertContent?, preferredAction: String? = nil, okActionIsDestructive: Bool = false) {
+	func showAlert(_ alertContent: AlertContent?) {
 
 		guard let content = alertContent else {
 			return
@@ -36,11 +39,11 @@ extension UIViewController {
 
 		let okAction = UIAlertAction(
 			title: content.okTitle,
-			style: okActionIsDestructive ? .destructive : .default,
+			style: content.okActionIsDestructive ? .destructive : .default,
 			handler: content.okAction
 		)
 		alertController.addAction(okAction)
-		if preferredAction == content.okTitle {
+		if content.okActionIsPreferred {
 			alertController.preferredAction = okAction
 		}
 
@@ -48,11 +51,11 @@ extension UIViewController {
 		if let cancelTitle = content.cancelTitle {
 			let cancelAction = UIAlertAction(
 					title: cancelTitle,
-					style: .cancel,
+					style: content.cancelActionIsDestructive ? .destructive : .cancel,
 					handler: content.cancelAction
 				)
 			alertController.addAction(cancelAction)
-			if preferredAction == cancelTitle {
+			if content.cancelActionIsPreferred {
 				alertController.preferredAction = cancelAction
 			}
 		}

@@ -187,7 +187,8 @@ final class FetchEventsViewModel: Logging {
 			},
 			cancelTitle: L.holderVaccinationAlertStop(),
 			okAction: nil,
-			okTitle: L.holderVaccinationAlertContinue()
+			okTitle: L.holderVaccinationAlertContinue(),
+			okActionIsPreferred: true
 		)
 	}
 
@@ -635,7 +636,8 @@ private extension FetchEventsViewModel {
 			okAction: { _ in
 				self.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
-			okTitle: L.generalClose()
+			okTitle: L.generalClose(),
+			okActionIsPreferred: true
 		)
 	}
 
@@ -749,7 +751,8 @@ private extension FetchEventsViewModel {
 				guard let self = self else { return }
 				self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
 			},
-			okTitle: L.generalRetry()
+			okTitle: L.generalRetry(),
+			okActionIsPreferred: true
 		)
 	}
 }

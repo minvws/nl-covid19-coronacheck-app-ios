@@ -296,10 +296,11 @@ class TokenEntryViewController: BaseViewController {
 				self.sceneView.verificationEntryView.inputField.text = nil
 				self.viewModel.resendVerificationCodeButtonTapped()
 			},
-			okTitle: okTitle
+			okTitle: okTitle,
+			okActionIsPreferred: true
 		)
 
-		showAlert(alert, preferredAction: viewModel.confirmResendVerificationAlertOkayButton)
+		showAlert(alert)
 	}
 }
 

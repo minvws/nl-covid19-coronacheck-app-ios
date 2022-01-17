@@ -34,12 +34,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 		screenCaptureDetector = ScreenCaptureDetectorSpy()
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigManagingSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
+		remoteConfigManagingSpy = RemoteConfigManagingSpy()
 		remoteConfigManagingSpy.stubbedStoredConfiguration = .default
 		remoteConfigManagingSpy.stubbedAppendReloadObserverResult = UUID()
 		remoteConfigManagingSpy.stubbedAppendUpdateObserverResult = UUID()
@@ -48,7 +43,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		Services.use(remoteConfigManagingSpy)
 
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
@@ -83,7 +78,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
@@ -108,7 +103,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
+			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: dataStoreManager,
 				type: .eu,
 				withValidCredential: true

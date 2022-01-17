@@ -66,19 +66,19 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
-	var invokedUpdateParameters: (isAppFirstLaunch: Bool, Void)?
-	var invokedUpdateParametersList = [(isAppFirstLaunch: Bool, Void)]()
+	var invokedUpdateParameters: (isAppLaunching: Bool, Void)?
+	var invokedUpdateParametersList = [(isAppLaunching: Bool, Void)]()
 	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
 	var stubbedUpdateCompletionResult: (Result<Bool, ServerError>, Void)?
 
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: (() -> Void)?,
 		completion: ((Result<Bool, ServerError>) -> Void)?) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
-		invokedUpdateParameters = (isAppFirstLaunch, ())
-		invokedUpdateParametersList.append((isAppFirstLaunch, ()))
+		invokedUpdateParameters = (isAppLaunching, ())
+		invokedUpdateParametersList.append((isAppLaunching, ()))
 		if shouldInvokeUpdateImmediateCallbackIfWithinTTL {
 			immediateCallbackIfWithinTTL?()
 		}

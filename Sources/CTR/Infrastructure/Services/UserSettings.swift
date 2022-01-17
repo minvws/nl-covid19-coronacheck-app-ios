@@ -36,8 +36,12 @@ protocol UserSettingsProtocol: AnyObject {
 	var shouldCheckRecoveryGreenCardRevisedValidity: Bool { get set }
 	var shouldShowRecoveryValidityExtensionCard: Bool { get set }
 	var shouldShowRecoveryValidityReinstationCard: Bool { get set }
+
 	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool { get set }
 	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool { get set }
+	
+	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
+	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	
 	func reset()
 }
@@ -98,6 +102,14 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "hasDismissedRecoveryValidityReinstationCompletionCard", defaultValue: true)
 	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool // swiftlint:disable:this let_var_whitespace
+
+	// MARK: - Validity Information Banner for Vaccinations and Recoveries
+	
+	@UserDefaults(key: "hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
+	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
+	
+	@UserDefaults(key: "shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
+	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
 }
 
 extension UserSettings {
@@ -106,12 +118,26 @@ extension UserSettings {
 		// Clear user defaults:
 		// We can not simply loop over all the keys, as some are needed for clear on reinstall for the keychain items.
 		let userDefaults = Foundation.UserDefaults.standard
-		["scanInstructionShown", "jailbreakWarningShown", "dashboardRegionToggleValue", "configFetchedTimestamp", "configFetchedHash",
-		"issuerKeysFetchedTimestamp", "lastScreenshotTime", "lastRecommendUpdateDismissalTimestamp", "lastSeenRecommendedUpdate",
-		"deviceAuthenticationWarningShown", "didCompleteEUVaccinationMigration", "didDismissEUVaccinationMigrationSuccessBanner",
-		 "shouldCheckRecoveryGreenCardRevisedValidity", "shouldShowRecoveryValidityExtensionCard",
-		 "shouldShowRecoveryValidityReinstationCard", "hasDismissedRecoveryValidityExtensionCompletionCard",
-		 "hasDismissedRecoveryValidityReinstationCompletionCard"]
-			.forEach(userDefaults.removeObject(forKey:))
+		[	"scanInstructionShown",
+			"jailbreakWarningShown",
+			"dashboardRegionToggleValue",
+			"configFetchedTimestamp",
+			"configFetchedHash",
+			"issuerKeysFetchedTimestamp",
+			"lastScreenshotTime",
+			"lastRecommendUpdateDismissalTimestamp",
+			"lastSeenRecommendedUpdate",
+			"deviceAuthenticationWarningShown",
+			"didCompleteEUVaccinationMigration",
+			"didDismissEUVaccinationMigrationSuccessBanner",
+			"deviceAuthenticationWarningShown",
+			"shouldCheckRecoveryGreenCardRevisedValidity",
+			"shouldShowRecoveryValidityExtensionCard",
+			"shouldShowRecoveryValidityReinstationCard",
+			"hasDismissedRecoveryValidityExtensionCompletionCard",
+			"hasDismissedRecoveryValidityReinstationCompletionCard",
+			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
+			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard"
+		].forEach(userDefaults.removeObject(forKey:))
 	}
 }

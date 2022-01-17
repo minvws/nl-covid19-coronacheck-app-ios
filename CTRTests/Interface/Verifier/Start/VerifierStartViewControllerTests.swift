@@ -22,6 +22,9 @@ class VerifierStartViewControllerTests: XCTestCase {
 	private var cryptoLibUtilitySpy: CryptoLibUtilitySpy!
 	private var clockDeviationManagerSpy: ClockDeviationManagerSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var scanLockManagerSpy: ScanLockManagerSpy!
+	private var scanLogManagerSpy: ScanLogManagingSpy!
 	
 	var window = UIWindow()
 
@@ -31,6 +34,12 @@ class VerifierStartViewControllerTests: XCTestCase {
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
+		riskLevelManagerSpy = RiskLevelManagerSpy()
+		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy = ScanLockManagerSpy()
+		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy.stubbedState = .unlocked
+		
 		cryptoLibUtilitySpy = CryptoLibUtilitySpy(
 			now: { now },
 			userSettings: UserSettingsSpy(),
@@ -43,12 +52,17 @@ class VerifierStartViewControllerTests: XCTestCase {
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
 		userSettingsSpy = UserSettingsSpy()
+		scanLogManagerSpy = ScanLogManagingSpy()
+		
 		Services.use(cryptoLibUtilitySpy)
 		Services.use(cryptoManagerSpy)
 		Services.use(clockDeviationManagerSpy)
+		Services.use(scanLogManagerSpy)
 
 		viewModel = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 		sut = VerifierStartViewController(viewModel: viewModel)
@@ -98,7 +112,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
-			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
+			.to(equal(.userTappedProceedToInstructionsOrRiskSetting), description: "Result should match")
 		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == true
 	}
 
@@ -107,6 +121,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = true
+		riskLevelManagerSpy.stubbedState = .low
 		loadView()
 
 		// When
@@ -124,6 +139,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		let alertVerifier = AlertVerifier()
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = false
+		riskLevelManagerSpy.stubbedState = .low
 		loadView()
 
 		// When

@@ -9,11 +9,7 @@ import UIKit
 
 class VerifierScanViewController: ScanViewController {
 	
-	struct AlertContent {
-		let title: String
-		let subTitle: String
-		let okTitle: String
-	}
+	let sceneView = VerifierScanView()
 
 	private let viewModel: VerifierScanViewModel
 
@@ -43,8 +39,6 @@ class VerifierScanViewController: ScanViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-
 		viewModel.$moreInformationButtonText.binding = { [weak self] in self?.sceneView.moreInformationButtonText = $0 }
 		
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
@@ -69,6 +63,10 @@ class VerifierScanViewController: ScanViewController {
 				self?.showPermissionError()
 			}
 		}
+		
+		viewModel.$riskLevel.binding = { [weak self] in
+			self?.sceneView.riskLevel = $0
+		}
 
 		sceneView.moreInformationButtonCommand = { [viewModel] in
 			viewModel.didTapMoreInformationButton()
@@ -78,6 +76,12 @@ class VerifierScanViewController: ScanViewController {
 			action: #selector(closeButtonTapped),
 			tintColor: .white
 		)
+	}
+
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		attachCameraViewAndStartRunning(sceneView.scanView.cameraView)
 	}
 
 	override func found(code: String) {

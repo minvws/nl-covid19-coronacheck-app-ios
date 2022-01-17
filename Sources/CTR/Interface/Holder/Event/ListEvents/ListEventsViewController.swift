@@ -72,7 +72,7 @@ class ListEventsViewController: BaseViewController {
 		}
 
 		viewModel.$alert.binding = { [weak self] in
-			self?.showAlert($0, preferredAction: $0?.okTitle)
+			self?.showAlert($0)
 		}
 
 		viewModel.$shouldPrimaryButtonBeEnabled.binding = { [weak self] in

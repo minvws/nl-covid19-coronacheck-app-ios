@@ -12,7 +12,7 @@ import Clcore
 class CryptoManager: CryptoManaging, Logging {
 	
 	/// Structure to hold cryptography data
-	private struct CryptoData: Codable {
+	struct CryptoData: Codable {
 		
 		/// The key of the holder
 		var holderSecretKey: Data?
@@ -27,22 +27,26 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 	}
 	
-	/// Array of constants
-	private struct Constants {
-		static let keychainService = "CryptoManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+	private var cryptoData: CryptoData {
+		get { secureUserSettings.cryptoData }
+		set { secureUserSettings.cryptoData = newValue }
 	}
 	
-	/// The crypto data stored in the keychain
-	@Keychain(name: "cryptoData", service: Constants.keychainService, clearOnReinstall: true)
-	private var cryptoData: CryptoData = .empty
-	
 	private let cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility
+	private let riskLevelManager: RiskLevelManaging = Services.riskLevelManager
+	private let secureUserSettings: SecureUserSettingsProtocol
 	
 	/// Initializer
-	required init() {
+
+	required init(secureUserSettings: SecureUserSettingsProtocol) {
+		self.secureUserSettings = secureUserSettings
 		
 		// Initialize crypto library
 		cryptoLibUtility.initialize()
+		generateSecretKey()
+	}
+	
+	func generateSecretKey() {
 		
 		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
 			if let result = MobilecoreGenerateHolderSk(),
@@ -134,12 +138,23 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		
 		let proofQREncoded = message.data(using: .utf8)
+
+		let verificationPolicy: String
+		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+			guard let riskSetting = riskLevelManager.state else {
+				assertionFailure("Risk level should be set")
+				return nil
+			}
+			verificationPolicy = riskSetting.policy
+		} else {
+			verificationPolicy = MobilecoreVERIFICATION_POLICY_3G
+		}
 		
-		guard let result = MobilecoreVerify(proofQREncoded) else {
+		guard let result = MobilecoreVerify(proofQREncoded, verificationPolicy) else {
 			logError("Could not verify QR")
 			return nil
 		}
-		
+
 		return result
 	}
 	

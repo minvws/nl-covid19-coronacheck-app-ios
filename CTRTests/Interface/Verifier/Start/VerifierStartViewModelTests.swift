@@ -20,6 +20,10 @@ class VerifierStartViewModelTests: XCTestCase {
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var clockDeviationManagerSpy: ClockDeviationManagerSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var scanLockManagerSpy: ScanLockManagerSpy!
+	private var scanLogManagerSpy: ScanLogManagingSpy!
+	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 
 	override func setUp() {
 
@@ -33,16 +37,29 @@ class VerifierStartViewModelTests: XCTestCase {
 			fileStorage: FileStorage(),
 			flavor: AppFlavor.verifier
 		)
+		
+		riskLevelManagerSpy = RiskLevelManagerSpy()
+		riskLevelManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy = ScanLockManagerSpy()
+		scanLockManagerSpy.stubbedAppendObserverResult = UUID()
+		scanLockManagerSpy.stubbedState = .unlocked
+		
 		clockDeviationManagerSpy = ClockDeviationManagerSpy()
 		userSettingsSpy = UserSettingsSpy()
+		scanLogManagerSpy = ScanLogManagingSpy()
 
 		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
 		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
 
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+
 		Services.use(cryptoLibUtilitySpy)
 		Services.use(cryptoManagerSpy)
 		Services.use(clockDeviationManagerSpy)
+		Services.use(scanLogManagerSpy)
+		Services.use(featureFlagManagerSpy)
 	}
 
 	override func tearDown() {
@@ -56,8 +73,11 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_defaultContent() {
 
 		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -80,6 +100,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		userSettingsSpy.stubbedScanInstructionShown = false
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -89,7 +111,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
-			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
+			.to(equal(.userTappedProceedToInstructionsOrRiskSetting), description: "Result should match")
 		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == true
 	}
 
@@ -98,8 +120,11 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = true
+		riskLevelManagerSpy.stubbedState = .low
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -117,8 +142,11 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = false
+		riskLevelManagerSpy.stubbedState = .low
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -130,12 +158,54 @@ class VerifierStartViewModelTests: XCTestCase {
 		expect(self.sut.showError) == true
 	}
 
+	func test_primaryButtonTapped_locked_verificationPolicyEnabled() {
+		
+		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		riskLevelManagerSpy.stubbedState = .low
+		scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
+			userSettings: userSettingsSpy
+		)
+		
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == false
+	}
+
+	func test_primaryButtonTapped_locked_verificationPolicyDisabled() {
+		
+		// Given
+		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		riskLevelManagerSpy.stubbedState = .low
+		scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
+		sut = VerifierStartViewModel(
+			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
+			userSettings: userSettingsSpy
+		)
+		
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
+	}
+	
 	func test_showInstructionsButtonTapped() {
 
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = false
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -158,6 +228,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -173,6 +245,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -188,6 +262,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 
@@ -208,6 +284,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Act
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
+			scanLockProvider: scanLockManagerSpy,
+			riskLevelProvider: riskLevelManagerSpy,
 			userSettings: userSettingsSpy
 		)
 

@@ -18,7 +18,8 @@ protocol RemoteConfigManaging: AnyObject {
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
 		reachability: ReachabilityProtocol?,
-		networkManager: NetworkManaging
+		networkManager: NetworkManaging,
+		secureUserSettings: SecureUserSettingsProtocol
 	)
 
 	func appendUpdateObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
@@ -26,7 +27,7 @@ protocol RemoteConfigManaging: AnyObject {
 
 	func removeObserver(token: ObserverToken)
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: @escaping () -> Void,
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
 
@@ -37,18 +38,14 @@ protocol RemoteConfigManaging: AnyObject {
 class RemoteConfigManager: RemoteConfigManaging {
 	typealias ObserverToken = UUID
 
-	// MARK: - Types
-
-	private struct Constants {
-		static let keychainService = "RemoteConfigManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
-	}
-
 	// MARK: - Vars
 
 	private(set) var isLoading = false
 
-	@Keychain(name: "storedConfiguration", service: Constants.keychainService, clearOnReinstall: false)
-	private(set) var storedConfiguration: RemoteConfiguration = .default // swiftlint:disable:this let_var_whitespace
+	private(set) var storedConfiguration: RemoteConfiguration {
+		get { secureUserSettings.storedConfiguration }
+		set { secureUserSettings.storedConfiguration = newValue }
+	}
 	private var configUpdateObservers = [ObserverToken: (RemoteConfiguration, Data, URLResponse) -> Void]()
 	private var configReloadObservers = [ObserverToken: (RemoteConfiguration, Data, URLResponse) -> Void]()
 
@@ -58,6 +55,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 	private let userSettings: UserSettingsProtocol
 	private let networkManager: NetworkManaging
 	private let reachability: ReachabilityProtocol?
+	private let secureUserSettings: SecureUserSettingsProtocol
 	
 	// MARK: - Setup
 
@@ -65,12 +63,15 @@ class RemoteConfigManager: RemoteConfigManaging {
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
 		reachability: ReachabilityProtocol?,
-		networkManager: NetworkManaging = Services.networkManager) {
+		networkManager: NetworkManaging = Services.networkManager,
+		secureUserSettings: SecureUserSettingsProtocol
+	) {
 
 		self.now = now
 		self.userSettings = userSettings
 		self.reachability = reachability
 		self.networkManager = networkManager
+		self.secureUserSettings = secureUserSettings
 
 		registerTriggers()
 	}
@@ -78,11 +79,11 @@ class RemoteConfigManager: RemoteConfigManaging {
 	func registerTriggers() {
 
 		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 
 		reachability?.whenReachable = { [weak self] _ in
-			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 		try? reachability?.startNotifier()
 	}
@@ -139,7 +140,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 	///						- RemoteConfiguration: the latest configuration.
 	///
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: @escaping () -> Void,
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
 		guard !isLoading else { return }
@@ -148,7 +149,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 		let newValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
 			configuration: storedConfiguration,
 			lastFetchedTimestamp: userSettings.configFetchedTimestamp,
-			isAppFirstLaunch: isAppFirstLaunch,
+			isAppLaunching: isAppLaunching,
 			now: now
 		)
 
@@ -166,7 +167,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 			default: break
 		}
 
-		// Note: the `isAppFirstLaunch` parameter is respected in calculating the `newValidity`
+		// Note: the `isAppLaunching` parameter is respected in calculating the `newValidity`
 		// and thus the `guard` will not trigger during first launch
 		//
 		// This also means that during first launch, `reloadObservers` will always be called back.

@@ -124,6 +124,11 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		startWithVaccination()
 	}
 
+	func startWithNegativeTest() {
+		
+		startWith(.test)
+	}
+	
 	func startWithVaccination() {
 
 		startWith(.vaccination)
@@ -150,11 +155,6 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	func startWithScannedEvent(_ event: RemoteEvent) {
 
 		navigateToListEvents([event], eventMode: .paperflow, eventsMightBeMissing: false)
-	}
-
-	func startWithTVS(eventMode: EventMode) {
-		
-		navigateToLogin(eventMode: eventMode)
 	}
 
 	// MARK: - Universal Link handling
@@ -251,7 +251,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 
-	private func navigateBackToEventStart() {
+	@discardableResult private func navigateBackToEventStart() -> Bool {
 
 		if let eventStartViewController = navigationController.viewControllers
 			.first(where: { $0 is EventStartViewController }) {
@@ -260,9 +260,11 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 				eventStartViewController,
 				animated: true
 			)
+			return true
 		}
+		return false
 	}
-
+	
 	private func navigateBackToTestStart() {
 		
 		let popBackToViewController = navigationController.viewControllers.first {
@@ -270,7 +272,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 			switch $0 {
 				case is ChooseTestLocationViewController:
 					return true
-				// Fallback when GGD is not available
+					// Fallback when GGD is not available
 				case is ChooseQRCodeTypeViewController:
 					return true
 				default:
@@ -378,10 +380,12 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	private func goBack(_ eventMode: EventMode) {
 
 		switch eventMode {
-			case .test:
-				navigateBackToTestStart()
 			case .recovery, .vaccination, .positiveTest:
 				navigateBackToEventStart()
+			case .test:
+				if !navigateBackToEventStart() {
+					navigateBackToTestStart()
+				}
 			case .paperflow:
 				delegate?.eventFlowDidCancel()
 		}

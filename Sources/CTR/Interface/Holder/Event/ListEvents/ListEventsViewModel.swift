@@ -92,8 +92,10 @@ class ListEventsViewModel: Logging {
 				self?.goBack()
 			},
 			cancelTitle: L.holderVaccinationAlertStop(),
+			cancelActionIsDestructive: true,
 			okAction: nil,
-			okTitle: L.holderVaccinationAlertContinue()
+			okTitle: L.holderVaccinationAlertContinue(),
+			okActionIsPreferred: true
  		)
 	}
 

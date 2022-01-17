@@ -19,6 +19,7 @@ class HolderDashboardViewController: BaseViewController {
         case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case testOnlyValidFor3G(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         
         // Errors:
         case errorMessage(message: String, didTapTryAgain: () -> Void)
@@ -31,12 +32,16 @@ class HolderDashboardViewController: BaseViewController {
         case recoveryValidityExtensionAvailable(title: String, buttonText: String, didTapCallToAction: () -> Void)
         case recoveryValidityExtensionDidComplete(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 
+		// Vaccination & Recovery Validity
+		case newValidityInfoForVaccinationAndRecoveries(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		
         // QR Cards:
         case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
         case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 		
 		// Recommendations
 		case recommendCoronaMelder
+		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -154,10 +159,7 @@ class HolderDashboardViewController: BaseViewController {
 			card.makeView(openURLHandler: { [weak viewModel] url in viewModel?.openUrl(url) })
 		}
 		
-		stackView.arrangedSubviews.forEach {
-			stackView.removeArrangedSubview($0)
-			$0.removeFromSuperview()
-		}
+		stackView.removeArrangedSubviews()
 		
 		cardViews.forEach {
 			stackView.addArrangedSubview($0)
@@ -233,16 +235,19 @@ private extension HolderDashboardViewController.Card {
 				let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 				let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
 				let .recoveryValidityExtensionAvailable(message, callToActionButtonText, didTapCallToAction),
-				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction):
+				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
+				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction),
+				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
 					closeButtonCommand: nil,
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
 				))
-
+				
 			case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				 let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+				let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,

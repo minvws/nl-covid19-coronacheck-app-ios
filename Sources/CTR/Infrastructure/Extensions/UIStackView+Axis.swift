@@ -31,6 +31,17 @@ extension UIStackView {
         return self
     }
  
+	func insets(_ insets: NSDirectionalEdgeInsets) {
+		directionalLayoutMargins = insets
+		isLayoutMarginsRelativeArrangement = true
+	}
+	
+	func removeArrangedSubviews() {
+		arrangedSubviews.forEach { subview in
+			removeArrangedSubview(subview)
+			subview.removeFromSuperview()
+		}
+	}
 }
 
 func VStack(spacing: CGFloat = 0, _ views: UIView ...) -> UIStackView {

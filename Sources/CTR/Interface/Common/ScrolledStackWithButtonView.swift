@@ -36,7 +36,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 		super.setupViews()
 		stackView.spacing = ViewTraits.spacing
-		view?.backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = Theme.colors.viewControllerBackground
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in

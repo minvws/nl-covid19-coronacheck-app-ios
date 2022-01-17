@@ -8,9 +8,15 @@
 import XCTest
 @testable import CTR
 
+extension RemoteConfigManagingSpy {
+	convenience init() {
+		self.init(now: { now }, userSettings: UserSettingsSpy(), reachability: ReachabilitySpy(), networkManager: NetworkSpy(), secureUserSettings: SecureUserSettings())
+	}
+}
+
 class RemoteConfigManagingSpy: RemoteConfigManaging {
 
-	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, reachability: ReachabilityProtocol?, networkManager: NetworkManaging) {}
+	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, reachability: ReachabilityProtocol?, networkManager: NetworkManaging, secureUserSettings: SecureUserSettingsProtocol) {}
 
 	var invokedStoredConfigurationGetter = false
 	var invokedStoredConfigurationGetterCount = 0
@@ -64,19 +70,19 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
-	var invokedUpdateParameters: (isAppFirstLaunch: Bool, Void)?
-	var invokedUpdateParametersList = [(isAppFirstLaunch: Bool, Void)]()
+	var invokedUpdateParameters: (isAppLaunching: Bool, Void)?
+	var invokedUpdateParametersList = [(isAppLaunching: Bool, Void)]()
 	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
 	var stubbedUpdateCompletionResult: (Result<(Bool, RemoteConfiguration), ServerError>, Void)?
 
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: @escaping () -> Void,
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
-		invokedUpdateParameters = (isAppFirstLaunch, ())
-		invokedUpdateParametersList.append((isAppFirstLaunch, ()))
+		invokedUpdateParameters = (isAppLaunching, ())
+		invokedUpdateParametersList.append((isAppLaunching, ()))
 		if shouldInvokeUpdateImmediateCallbackIfWithinTTL {
 			immediateCallbackIfWithinTTL()
 		}

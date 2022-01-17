@@ -72,11 +72,10 @@ final class ForcedInformationPageView: ScrolledStackView {
 									  bottom: ViewTraits.margin,
 									  right: 0)
 		// Apply side margins for labels
-		bottomStackView.layoutMargins = UIEdgeInsets(top: 0,
-													 left: ViewTraits.margin,
-													 bottom: 0,
-													 right: ViewTraits.margin)
-		bottomStackView.isLayoutMarginsRelativeArrangement = true
+		bottomStackView.insets(.init(top: 0,
+									 leading: ViewTraits.margin,
+									 bottom: 0,
+									 trailing: ViewTraits.margin))
 	}
 	
 	/// Setup the hierarchy
