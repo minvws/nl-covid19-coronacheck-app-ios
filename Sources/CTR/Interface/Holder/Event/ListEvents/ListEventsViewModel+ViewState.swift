@@ -482,24 +482,13 @@ extension ListEventsViewModel {
 		}
 	}
 
-	internal func cannotCreateEventsState() -> ListEventsViewController.State {
+	internal func originMismatchState() -> ListEventsViewController.State {
 		
 		let errorCode = ErrorCode(flow: eventMode.flow, step: .signer, clientCode: ErrorCode.ClientCode.originMismatch)
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderEventOriginmismatchTitle(),
 			subTitle: eventMode.originsMismatchBody(errorCode),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-	
-	internal func vaccinationAssessmentExpired() -> ListEventsViewController.State {
-		
-		let errorCode = ErrorCode(flow: eventMode.flow, step: .storingEvents, clientCode: ErrorCode.ClientCode.vaccinationAssessmentExpired)
-		
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderEventOriginmismatchTitle(),
-			subTitle: L.holderEventOriginmismatchVaccinationApprovalBody("\(errorCode)"),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
