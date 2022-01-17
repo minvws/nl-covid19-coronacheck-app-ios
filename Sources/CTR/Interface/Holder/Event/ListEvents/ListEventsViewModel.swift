@@ -272,15 +272,14 @@ class ListEventsViewModel: Logging {
 				self.completeFlow()
 			},
 			onNegativeTestOriginOnly: {
+				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				// if we entered a negative test in the vaccination assessment flow
 				// AND we do not have a vaccination assessment origin
 				// -> Remind the user to add his/her vaccination assessment
 				if self.originalEventMode == .vaccinationassessment {
 					self.shouldPrimaryButtonBeEnabled = true
-					Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 					self.viewState = self.negativeTestInVaccinationAssessmentFlow()
 				} else {
-					Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 					self.completeFlow()
 				}
 			},
