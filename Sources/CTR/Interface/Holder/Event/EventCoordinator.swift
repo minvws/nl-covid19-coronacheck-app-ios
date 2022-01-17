@@ -91,6 +91,9 @@ protocol EventFlowDelegate: AnyObject {
 
 	/// The event flow is finished
 	func eventFlowDidComplete()
+	
+	/// The event flow is finished, but go to the vaccination assessment entry
+	func eventFlowDidCompleteButVisitorPassNeedsCompletion()
 
 	func eventFlowDidCancel()
 	
@@ -432,8 +435,14 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	func listEventsScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
-			case .stop, .continue:
+			case .stop:
 				delegate?.eventFlowDidComplete()
+			case .continue(eventMode: let eventmode):
+				if eventmode == .vaccinationassessment {
+					delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
+				} else {
+					delegate?.eventFlowDidComplete()
+				}
 			case .back(let eventMode):
 				goBack(eventMode)
 			case let .error(content: content, backAction: backAction):

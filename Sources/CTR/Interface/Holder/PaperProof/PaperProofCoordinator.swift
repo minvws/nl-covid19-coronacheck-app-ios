@@ -262,6 +262,12 @@ extension PaperProofCoordinator: EventFlowDelegate {
 		cleanup()
 		delegate?.addPaperProofFlowDidFinish()
 	}
+	
+	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
+		
+		// Should not happen.
+		eventFlowDidComplete()
+	}
 
 	func eventFlowDidCancel() {
 
