@@ -83,7 +83,11 @@ final class FooterButtonView: BaseView {
 			buttonStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
 			buttonStackView.leftAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.leftAnchor, constant: ViewTraits.Margin.edge),
 			buttonStackView.rightAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.rightAnchor, constant: -ViewTraits.Margin.edge),
-			buttonStackView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge),
+			{
+				let constraint = buttonStackView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge)
+				topButtonConstraint = constraint
+				return constraint
+			}(),
 			{
 				let constraint = buttonStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -ViewTraits.Margin.edge)
 				bottomButtonConstraint = constraint
@@ -129,6 +133,9 @@ final class FooterButtonView: BaseView {
 			primaryButton.title = primaryTitle
 		}
 	}
+	
+	/// The top constraint for margin changes
+	var topButtonConstraint: NSLayoutConstraint?
 	
 	/// The bottom constraint for keyboard changes
 	var bottomButtonConstraint: NSLayoutConstraint?
