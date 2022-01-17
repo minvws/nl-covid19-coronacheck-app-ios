@@ -39,9 +39,11 @@ enum EventScreenResult: Equatable {
 
 	case startWithPositiveTest
 	
+	case shouldCompleteVaccinationAssessment
+	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest), (.backSwipe, .backSwipe):
+			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest), (.backSwipe, .backSwipe), (.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
 				return true
 			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
@@ -437,12 +439,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .stop:
 				delegate?.eventFlowDidComplete()
-			case .continue(eventMode: let eventmode):
-				if eventmode == .vaccinationassessment {
-					delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
-				} else {
-					delegate?.eventFlowDidComplete()
-				}
+			case .continue:
+				delegate?.eventFlowDidComplete()
 			case .back(let eventMode):
 				goBack(eventMode)
 			case let .error(content: content, backAction: backAction):
@@ -453,6 +451,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToEventDetails(title, details: details, footer: footer)
 			case .startWithPositiveTest:
 				startWithPositiveTest()
+			case .shouldCompleteVaccinationAssessment:
+				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
 			default:
 				break
 		}
