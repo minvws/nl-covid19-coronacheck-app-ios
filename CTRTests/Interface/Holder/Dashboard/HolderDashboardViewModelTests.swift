@@ -2085,9 +2085,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 		
 		expect(self.sut.internationalCards).toEventually(haveCount(4))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { aaa, bbbb, _ in
-			expect(aaa) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
-			expect(bbbb) == L.generalReadmore()
+		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { title, callToActionButtonText, _ in
+			expect(title) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
+			expect(callToActionButtonText) == L.generalReadmore()
 		}))
 		expect(self.sut.internationalCards[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator in
 			// check isLoading
