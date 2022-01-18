@@ -259,7 +259,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
-			expect(content.subTitle).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 120 000 429")))
+			expect(content.body).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 120 000 429")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
 		} else {
 			fail("Invalid state")
@@ -282,7 +282,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowProgress) == false
 		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
-			expect(content.subTitle).toEventually(equal(L.generalErrorServerUnreachableErrorCode("i 120 000 005")))
+			expect(content.body).toEventually(equal(L.generalErrorServerUnreachableErrorCode("i 120 000 005")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
 		} else {
 			fail("Invalid state")
@@ -337,7 +337,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
-			expect(content.subTitle).toEventually(equal(L.holderErrorstateClientMessage("i 120 000 020")))
+			expect(content.body).toEventually(equal(L.holderErrorstateClientMessage("i 120 000 020")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
 		} else {
 			fail("Invalid state")
@@ -361,7 +361,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
-			expect(content.subTitle).toEventually(equal(L.holderErrorstateServerMessage("i 120 000 500 99780")))
+			expect(content.body).toEventually(equal(L.holderErrorstateServerMessage("i 120 000 500 99780")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
 		} else {
 			fail("Invalid state")
@@ -386,7 +386,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
-			expect(content.subTitle).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 150 xxx 429")))
+			expect(content.body).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 150 xxx 429")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
 		} else {
 			fail("Invalid state")
@@ -587,7 +587,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
-			expect(content.subTitle).toEventually(equal(L.holderErrorstateTestMessage("i 150 xxx 403")))
+			expect(content.body).toEventually(equal(L.holderErrorstateTestMessage("i 150 xxx 403")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
 		} else {
 			fail("Invalid state")
@@ -635,7 +635,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
-			expect(content.subTitle).toEventually(equal(L.holderErrorstateTestMessage("i 150 xxx 400")))
+			expect(content.body).toEventually(equal(L.holderErrorstateTestMessage("i 150 xxx 400")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
 		} else {
 			fail("Invalid state")
@@ -735,7 +735,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
-			expect(content.subTitle).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 120 000 429")))
+			expect(content.body).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 120 000 429")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
 		} else {
 			fail("Invalid state")
@@ -1145,7 +1145,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
-			expect(content.subTitle).toEventually(equal(L.holderErrorstateClientMessage("i 120 000 020")))
+			expect(content.body).toEventually(equal(L.holderErrorstateClientMessage("i 120 000 020")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
 		} else {
 			fail("Invalid state")

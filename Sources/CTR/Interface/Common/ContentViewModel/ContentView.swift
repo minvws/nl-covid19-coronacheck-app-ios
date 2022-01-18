@@ -106,9 +106,9 @@ class ContentView: BaseView {
 		}
 	}
 
-	var message: String? {
+	var body: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(text: message, style: .bodyDark)
+			messageLabel.attributedText = .makeFromHtml(text: body, style: .bodyDark)
 		}
 	}
 

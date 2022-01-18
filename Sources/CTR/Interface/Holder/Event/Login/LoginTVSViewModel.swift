@@ -35,7 +35,7 @@ class LoginTVSViewModel: Logging {
 		self.appAuthState = appAuthState
 
 		self.title = eventMode.fetching
-		content = Content( title: eventMode.title)
+		content = Content(title: eventMode.title)
 	}
 
 	func cancel() {
@@ -49,7 +49,7 @@ class LoginTVSViewModel: Logging {
 		shouldShowProgress = true
 		content = Content(
 			title: title,
-			subTitle: nil,
+			body: nil,
 			primaryActionTitle: L.generalClose(),
 			primaryAction: { [weak self] in
 				self?.cancel()
@@ -144,7 +144,7 @@ extension LoginTVSViewModel {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
+			body: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.loginTVSScreenDidFinish(.stop)
@@ -168,7 +168,7 @@ extension LoginTVSViewModel {
 
 		let content = Content(
 			title: title,
-			subTitle: subTitle,
+			body: subTitle,
 			primaryActionTitle: primaryActionTitle,
 			primaryAction: { [weak self] in
 				self?.coordinator?.loginTVSScreenDidFinish(.stop)

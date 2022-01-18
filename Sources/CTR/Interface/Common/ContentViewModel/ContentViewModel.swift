@@ -15,7 +15,7 @@ class ContentViewModel {
 	// MARK: - Bindable
 
 	@Bindable private(set) var title: String
-	@Bindable private(set) var message: String
+	@Bindable private(set) var body: String
 	@Bindable private(set) var secondaryButtonTitle: String?
 
 	@Bindable private(set) var hideForCapture: Bool = false
@@ -42,7 +42,7 @@ class ContentViewModel {
 		self.content = content
 		self.coordinator = coordinator
 		self.title = content.title
-		self.message = content.subTitle ?? ""
+		self.body = content.body ?? ""
 		self.secondaryButtonTitle = content.secondaryActionTitle
 		self.linkTapHander = linkTapHander
 		self.hideBodyForScreenCapture = hideBodyForScreenCapture
