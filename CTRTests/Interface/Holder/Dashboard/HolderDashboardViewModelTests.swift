@@ -963,20 +963,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard())
 	}
 	
-	func test_checkNewValidityBannerEnabled() {
-		
-		// Arrange
-		environmentSpies.featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = true
-		environmentSpies.userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
-		environmentSpies.userSettingsSpy.shouldCheckRecoveryGreenCardRevisedValidity = true
-
-		// Act
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		// Assert
-		expect(self.environmentSpies.userSettingsSpy.invokedShouldCheckRecoveryGreenCardRevisedValidity) == true
-	}
-	
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_lessthan3years() {
 		
 		// Arrange
