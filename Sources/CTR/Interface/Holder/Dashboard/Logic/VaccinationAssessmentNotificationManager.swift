@@ -29,7 +29,7 @@ final class VaccinationAssessmentNotificationManager: VaccinationAssessmentNotif
 		let validityDays = Current.remoteConfigManager.storedConfiguration.vaccinationAssessmentEventValidityDays ?? 14
 		// Subtract 1 hour to compensate for the rounding effect to the assessmentDate of the origin by the signer
 		let validityHours = (validityDays * 24) - 1
-		let validityDaysTimeInterval = TimeInterval(validityHours * 60 * 60)
+		let validityTimeInterval = TimeInterval(validityHours * 60 * 60)
 		
 		return !Current.walletManager.listEventGroups()
 			// Filter for vaccinationassessment
@@ -39,7 +39,7 @@ final class VaccinationAssessmentNotificationManager: VaccinationAssessmentNotif
 				guard let maxIssuedAt = $0.maxIssuedAt else {
 					return false
 				}
-				return maxIssuedAt.addingTimeInterval(validityDaysTimeInterval) > now
+				return maxIssuedAt.addingTimeInterval(validityTimeInterval) > now
 			}
 			.isEmpty
 	}
