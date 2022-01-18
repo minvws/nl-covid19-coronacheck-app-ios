@@ -33,14 +33,6 @@ protocol UserSettingsProtocol: AnyObject {
 	
 	var deviceAuthenticationWarningShown: Bool { get set }
 
-	// Flags for extension of Recovery validity:
-	var shouldCheckRecoveryGreenCardRevisedValidity: Bool { get set }
-	var shouldShowRecoveryValidityExtensionCard: Bool { get set }
-	var shouldShowRecoveryValidityReinstationCard: Bool { get set }
-
-	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool { get set }
-	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool { get set }
-	
 	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	
@@ -85,23 +77,6 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
 
-	// MARK: - Extension of Recovery validity:
-
-	@UserDefaults(key: "shouldCheckRecoveryGreenCardRevisedValidity", defaultValue: true)
-	var shouldCheckRecoveryGreenCardRevisedValidity: Bool // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "shouldShowRecoveryValidityExtensionCard", defaultValue: false)
-	var shouldShowRecoveryValidityExtensionCard: Bool // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "shouldShowRecoveryValidityReinstationCard", defaultValue: false)
-	var shouldShowRecoveryValidityReinstationCard: Bool // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "hasDismissedRecoveryValidityExtensionCompletionCard", defaultValue: true)
-	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "hasDismissedRecoveryValidityReinstationCompletionCard", defaultValue: true)
-	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool // swiftlint:disable:this let_var_whitespace
-
 	// MARK: - Validity Information Banner for Vaccinations and Recoveries
 	
 	@UserDefaults(key: "hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
@@ -114,6 +89,7 @@ class UserSettings: UserSettingsProtocol {
 extension UserSettings {
 
 	func wipePersistedData() {
+		
 		// Clear user defaults:
 		// We can not simply loop over all the keys, as some are needed for clear on reinstall for the keychain items.
 		let userDefaults = Foundation.UserDefaults.standard
@@ -131,12 +107,16 @@ extension UserSettings {
 			"deviceAuthenticationWarningShown",
 			"deviceAuthenticationWarningShown",
 			"shouldCheckRecoveryGreenCardRevisedValidity",
+			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
+			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
+
+			// Deprecated keys
 			"shouldShowRecoveryValidityExtensionCard",
 			"shouldShowRecoveryValidityReinstationCard",
 			"hasDismissedRecoveryValidityExtensionCompletionCard",
 			"hasDismissedRecoveryValidityReinstationCompletionCard",
-			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
-			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard"
+			"didCompleteEUVaccinationMigration",
+			"didDismissEUVaccinationMigrationSuccessBanner"
 		].forEach(userDefaults.removeObject(forKey:))
 	}
 }

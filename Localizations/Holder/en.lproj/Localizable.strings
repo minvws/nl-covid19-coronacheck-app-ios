@@ -163,10 +163,6 @@
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
 "holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Prevent the spread of coronavirus, use <a href=\"itms-apps://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a> too.</p>";
-"holder.dashboard.recoveryvalidityextension.extensionavailable.banner.title" = "You can extend your Dutch recovery certificate";
-"holder.dashboard.recoveryvalidityextension.extensioncomplete.banner.title" = "Your Dutch recovery certificate has been extended";
-"holder.dashboard.recoveryvalidityextension.reinstationavailable.banner.title" = "You can restore your expired Dutch recovery certificate";
-"holder.dashboard.recoveryvalidityextension.reinstationcomplete.banner.title" = "Your Dutch recovery certificate has been restored";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br /><br />Still not working? Please call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free) and provide the following error code: (i 075).</p>";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR code. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
@@ -426,16 +422,6 @@
 "holder.recovery.vaccinationOnly.message" = "<p>You were tested positive for coronavirus longer too long ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>Because you were tested positive before your first vaccination, one shot means you’re fully vaccinated. Therefore, a full vaccination certificate has been created instead.</p><p>For more information, please check the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.vaccinationOnly.title" = "Vaccination certificate instead of recovery certificate";
 "holder.recovery.wrong.body" = "<p>Please contact your test location. They can help you change these details.</p>";
-"holder.recoveryvalidityextension.extensionavailable.button.submit" = "Extend certificate";
-"holder.recoveryvalidityextension.extensionavailable.description" = "<p>We will extend everyone's recovery certificates soon. As a result, your certificate will be valid for one year after the moment of positive testing.</p><p>You can also extend your certificate right now if you want to.</p>";
-"holder.recoveryvalidityextension.extensionavailable.title" = "Extend recovery certificate";
-"holder.recoveryvalidityextension.extensioncomplete.description" = "The validity of Dutch recovery certificates has been extended. As a result, your certificate is now valid for one year after the moment of positive testing.";
-"holder.recoveryvalidityextension.extensioncomplete.title" = "Extended recovery certificate";
-"holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Restore certificate";
-"holder.recoveryvalidityextension.reinstationavailable.description" = "<p>We will restore your expired recovery certificate soon, because the validity of Dutch recovery certificates will be extended. As a result, your certificate will be valid for one year after the moment of positive testing.</p><p>You can also restore your certificate right now if you want to.</p>";
-"holder.recoveryvalidityextension.reinstationavailable.title" = "Restore recovery certificate";
-"holder.recoveryvalidityextension.reinstationcomplete.description" = "We have restored your expired certificate, because the validity of Dutch recovery certificates has been extended. From now on, a certificate is valid for one year after the moment of positive testing.";
-"holder.recoveryvalidityextension.reinstationcomplete.title" = "Restored recovery certificate";
 "holder.scanner.alert.dcc.message" = "Scan the QR code on your international certificate. You don't have to scan the Dutch QR code.";
 "holder.scanner.alert.dcc.title" = "Scan your international QR code";
 "holder.scanner.alert.unknown.message" = "This QR code is not valid. Scan the QR code on your international certificate.";
