@@ -852,3 +852,25 @@ extension EuCredentialAttributes {
 		fake(dcc: dcc)
 	}
 }
+
+extension EventGroup {
+	
+	static func fakeEventGroup(dataStoreManager: DataStoreManaging, type: EventMode, maxIssuedAt: Date) -> EventGroup? {
+		
+		var eventGroup: EventGroup?
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			if let wallet = WalletModel.createTestWallet(managedContext: context) {
+				eventGroup = EventGroupModel.create(
+					type: type,
+					providerIdentifier: "CoronaCheck",
+					maxIssuedAt: maxIssuedAt,
+					jsonData: Data(),
+					wallet: wallet,
+					managedContext: context
+				)
+			}
+		}
+		return eventGroup
+	}
+}
