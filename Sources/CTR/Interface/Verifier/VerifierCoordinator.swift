@@ -20,12 +20,6 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	func navigateToScanInstruction(allowSkipInstruction: Bool)
 
-	/// Display content
-	/// - Parameters:
-	///   - title: the title
-	///   - content: the content
-	func displayContent(title: String, content: [DisplayContent])
-
 	func userWishesMoreInfoAboutClockDeviation()
 	
 	func navigateToVerifiedInfo()
@@ -41,6 +35,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason)
 	
 	func userWishesToSetRiskLevel(shouldSelectSetting: Bool)
+	
+	func userWishesMoreInfoAboutDeniedQRScan()
 	
 	func navigateToScanNextInstruction(_ scanNext: ScanNext)
 }
@@ -181,22 +177,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
 
-	/// Display content
-	/// - Parameters:
-	///   - title: the title
-	///   - content: the content
-	func displayContent(title: String, content: [DisplayContent]) {
-
-		let viewController = DisplayContentViewController(
-			viewModel: DisplayContentViewModel(
-				coordinator: self,
-				title: title,
-				content: content
-			)
-		)
-		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
-	}
-
 	func navigateToScanInstruction(allowSkipInstruction: Bool) {
 
 		let coordinator = ScanInstructionsCoordinator(
@@ -286,6 +266,13 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesMoreInfoAboutDeniedQRScan() {
+		let viewController = DeniedQRScanMoreInfoViewController(
+			viewModel: DeniedQRScanMoreInfoViewModel(coordinator: self)
+		)
+		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
 	}
 }
 

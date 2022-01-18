@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DisplayContentView: BaseView {
+final class DeniedQRScanMoreInfoView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
