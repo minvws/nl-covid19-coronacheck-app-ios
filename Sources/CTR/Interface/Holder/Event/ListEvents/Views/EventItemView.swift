@@ -130,8 +130,8 @@ class EventItemView: BaseView {
 
 		super.setupAccessibility()
 
-		backgroundButton.isAccessibilityElement = false
-		linkLabel.accessibilityTraits = .button
+		backgroundButton.isAccessibilityElement = true
+		linkLabel.isAccessibilityElement = false
 	}
 
 	/// User tapped on the primary button
@@ -142,7 +142,7 @@ class EventItemView: BaseView {
 
 	func setAccessibilityLabel() {
 		
-		linkLabel.accessibilityLabel = "\(linkLabel.text ?? "")\n \(titleLabel.text ?? "")"
+		backgroundButton.accessibilityLabel = "\(linkLabel.text ?? "")\n \(titleLabel.text ?? "")"
 	}
 
 	// MARK: Public Access
