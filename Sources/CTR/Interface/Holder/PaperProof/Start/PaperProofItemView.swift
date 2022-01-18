@@ -43,7 +43,7 @@ final class PaperProofItemView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(bodySemiBold: nil).multiline()
+		return Label(bodySemiBold: nil).multiline().header()
 	}()
 
 	/// The message label
