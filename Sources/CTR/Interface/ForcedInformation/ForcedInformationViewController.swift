@@ -51,6 +51,7 @@ final class ForcedInformationViewController: BaseViewController {
 			
 			self.pageViewController.pages = $0.compactMap { page in
 				guard let forcedInformationPageViewController = self.viewModel.getForcedInformationStep(page) as? ForcedInformationPageViewController else { return nil }
+				self.sceneView.updateFooterView(mainScrollView: forcedInformationPageViewController.sceneView.scrollView)
 				return forcedInformationPageViewController
 			}
 		}
@@ -77,9 +78,9 @@ final class ForcedInformationViewController: BaseViewController {
 		pageViewController.view.backgroundColor = .clear
 		
 		pageViewController.view.frame = sceneView.containerView.frame
-		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
+		sceneView.containerView.addSubview(pageViewController.view)
 	}
 	
 	/// User tapped on the button

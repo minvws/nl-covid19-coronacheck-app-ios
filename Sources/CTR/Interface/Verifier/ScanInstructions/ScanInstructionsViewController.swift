@@ -72,6 +72,7 @@ class ScanInstructionsViewController: BaseViewController {
 				return viewController
 			}
 			self.sceneView.pageControl.numberOfPages = $0.count
+			self.updateFooterView(for: 0)
 		}
 
 		viewModel.$shouldShowSkipButton.binding = { [weak self] shouldShowSkipButton in
@@ -133,9 +134,9 @@ class ScanInstructionsViewController: BaseViewController {
 		pageViewController.view.backgroundColor = .clear
 		
 		pageViewController.view.frame = sceneView.containerView.frame
-		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
+		sceneView.containerView.addSubview(pageViewController.view)
 		sceneView.pageControl.delegate = self
 	}
 	
@@ -152,6 +153,18 @@ class ScanInstructionsViewController: BaseViewController {
 	}
 }
 
+private extension ScanInstructionsViewController {
+	
+	func updateFooterView(for pageIndex: Int) {
+		guard let pages = pageViewController.pages, !pages.isEmpty else { return }
+		guard let viewController = pages[pageIndex] as? ScanInstructionsPageViewController else {
+			assertionFailure("View controller should be of type ScanInstructionsPageViewController")
+			return
+		}
+		sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)
+	}
+}
+
 // MARK: - PageViewControllerDelegate
 
 extension ScanInstructionsViewController: PageViewControllerDelegate {
@@ -159,6 +172,7 @@ extension ScanInstructionsViewController: PageViewControllerDelegate {
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
 		sceneView.pageControl.update(for: index)
 		viewModel.userDidChangeCurrentPage(toPageIndex: index)
+		updateFooterView(for: index)
 	}
 }
 
