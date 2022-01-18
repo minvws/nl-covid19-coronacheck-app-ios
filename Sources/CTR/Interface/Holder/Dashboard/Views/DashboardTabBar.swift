@@ -126,6 +126,10 @@ final class DashboardTabBar: BaseView {
 		isAccessibilityElement = false // Should have it disabled for this trait
 	}
 	
+	override func accessibilityElementIsFocused() -> Bool {
+		return domesticButton.accessibilityElementIsFocused() || internationalButton.accessibilityElementIsFocused()
+	}
+	
 	private func tapTabButton(_ tab: DashboardTab) {
 		guard !isAnimating else { return }
 		

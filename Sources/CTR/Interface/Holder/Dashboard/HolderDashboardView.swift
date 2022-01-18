@@ -137,8 +137,12 @@ final class HolderDashboardView: BaseView {
 	
 	/// Enables swipe to navigate behaviour for assistive technologies
 	override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+		guard !tabBar.accessibilityElementIsFocused() else {
+			// Scrolling in tab bar is not supported
+			return true
+		}
 		let tab: DashboardTab = direction == .right ? .domestic : .international
-		tabBar.select(tab: tab, animated: false)
+		tabBar.select(tab: tab, animated: true)
 		delegate?.holderDashboardView(self, didDisplay: tab)
 		
 		// Scroll via swipe gesture
