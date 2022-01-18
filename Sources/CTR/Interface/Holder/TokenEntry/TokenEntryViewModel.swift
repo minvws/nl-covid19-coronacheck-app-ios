@@ -624,7 +624,7 @@ extension TokenEntryViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
+			body: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.navigateBackToStart()
@@ -717,7 +717,7 @@ extension TokenEntryViewModel {
 
 		let content = Content(
 			title: getTitleForError(serverError),
-			subTitle: getBodyForError(serverError),
+			body: getBodyForError(serverError),
 			primaryActionTitle: getActionTitleForError(serverError),
 			primaryAction: { [weak self] in
 				self?.coordinator?.navigateBackToStart()

@@ -599,7 +599,7 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateNobsnTitle(),
-			subTitle: L.holderErrorstateNobsnMessage(),
+			body: L.holderErrorstateNobsnMessage(),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -614,7 +614,7 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateNosessionTitle(),
-			subTitle: L.holderErrorstateNosessionMessage(),
+			body: L.holderErrorstateNosessionMessage(),
 			primaryActionTitle: L.holderErrorstateNosessionAction(),
 			primaryAction: { [weak self] in
 				self?.goBack()
@@ -645,7 +645,7 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: L.generalErrorServerUnreachableErrorCode(flattenErrorCodes(errorCodes)),
+			body: L.generalErrorServerUnreachableErrorCode(flattenErrorCodes(errorCodes)),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -666,7 +666,7 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyErrorcode(flattenErrorCodes(errorCodes)),
+			body: L.generalNetworkwasbusyErrorcode(flattenErrorCodes(errorCodes)),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -720,7 +720,7 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: subTitle,
+			body: subTitle,
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)

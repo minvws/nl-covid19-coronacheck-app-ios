@@ -90,7 +90,6 @@ final class DeniedAccessViewModelTests: XCTestCase {
 		sut.showMoreInformation()
 		
 		// Then
-		expect(self.verifierCoordinatorSpy.invokedDisplayContent) == true
-		expect(self.verifierCoordinatorSpy.invokedDisplayContentParameters?.title) == L.verifierDeniedTitle()
+		expect(self.verifierCoordinatorSpy.invokedUserWishesMoreInfoAboutDeniedQRScan) == true
 	}
 }

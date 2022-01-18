@@ -13,7 +13,7 @@ import UIKit
 struct Content: Equatable {
 
 	let title: String
-	let subTitle: String?
+	let body: String?
 	let primaryActionTitle: String?
 	let primaryAction: (() -> Void)?
 	let secondaryActionTitle: String?
@@ -21,21 +21,21 @@ struct Content: Equatable {
 
 	static func == (lhs: Content, rhs: Content) -> Bool {
 		return lhs.title == rhs.title &&
-			lhs.subTitle == rhs.subTitle &&
+			lhs.body == rhs.body &&
 			lhs.primaryActionTitle == rhs.primaryActionTitle &&
 			lhs.secondaryActionTitle == rhs.secondaryActionTitle
 	}
 
 	init(
 		title: String,
-		subTitle: String? = nil,
+		body: String? = nil,
 		primaryActionTitle: String? = nil,
 		primaryAction: (() -> Void)? = nil,
 		secondaryActionTitle: String? = nil,
 		secondaryAction: (() -> Void)? = nil) {
 			
 		self.title = title
-		self.subTitle = subTitle
+		self.body = body
 		self.primaryActionTitle = primaryActionTitle
 		self.primaryAction = primaryAction
 		self.secondaryActionTitle = secondaryActionTitle

@@ -19,7 +19,7 @@ final class VisitorPassCompleteCertificateViewModel: Logging {
 		
 		self.content = Content(
 			title: L.holder_completecertificate_title(),
-			subTitle: L.holder_completecertificate_body(),
+			body: L.holder_completecertificate_body(),
 			primaryActionTitle: L.holder_completecertificate_button_fetchnegativetest(),
 			primaryAction: {
 				coordinatorDelegate?.userWishesToCreateANegativeTestQR()

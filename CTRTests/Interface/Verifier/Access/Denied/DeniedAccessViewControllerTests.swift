@@ -62,7 +62,7 @@ final class DeniedAccessViewControllerTests: XCTestCase {
 		sut.sceneView.readMoreTappedCommand?()
 		
 		// Then
-		expect(self.verifierCoordinatorSpy.invokedDisplayContent) == true
+		expect(self.verifierCoordinatorSpy.invokedUserWishesMoreInfoAboutDeniedQRScan) == true
 	}
 	
 	func test_deniedAccessReason_invalid() {

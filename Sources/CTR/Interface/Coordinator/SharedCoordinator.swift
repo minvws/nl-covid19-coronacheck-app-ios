@@ -71,12 +71,14 @@ class SharedCoordinator: Coordinator, Logging {
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
 
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				coordinator: self,
-				title: title,
-				message: body,
-				linkTapHander: { [weak self] url in
+				content: Content(
+					title: title,
+					body: body
+				),
+ 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: openURLsInApp)
 				},

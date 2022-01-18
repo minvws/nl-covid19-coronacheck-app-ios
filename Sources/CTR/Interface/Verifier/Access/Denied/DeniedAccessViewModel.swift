@@ -84,23 +84,7 @@ final class DeniedAccessViewModel: Logging {
 	
 	func showMoreInformation() {
 
-		// By default, unordered lists have a space above them in HTML
-		let bulletSpacing: CGFloat = -24
-		let spacing: CGFloat = 16
-
-		let textViews = [
-			(TextView(htmlText: Current.featureFlagManager.isVerificationPolicyEnabled() ? L.verifierDeniedMessageOne_2G() : L.verifierDeniedMessageOne()), spacing),
-			(TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
-			(TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
-			(TextView(htmlText: L.verifierDeniedMessageFour()), 0),
-			(TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
-			(TextView(htmlText: Current.featureFlagManager.isVerificationPolicyEnabled() ? L.verifierDeniedMessageSix_2G() : L.verifierDeniedMessageSix()), spacing)
-		]
-
-		coordinator?.displayContent(
-			title: L.verifierDeniedTitle(),
-			content: textViews
-		)
+		coordinator?.userWishesMoreInfoAboutDeniedQRScan()
 	}
 }
 
