@@ -437,6 +437,26 @@ extension RemoteGreenCards.Response {
 			euGreenCards: []
 		)
 	}
+	
+	static var domesticVaccinationAssessmentAndNegativeTest: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days,
+					RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
 
 	static var domesticAndInternationalRecovery: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
