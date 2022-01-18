@@ -97,6 +97,90 @@ class VaccinationAssessmentNotificationManagerTests: XCTestCase {
 		// Then
 		expect(result) == true
 	}
+
+	func test_noAssessmentOrigin_withAlmostExpiredAssessmentEvent_twoHoursBeforeExpiration() throws {
+		
+		// Given
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.vaccinationAssessmentEventValidityDays = 14
+		environmentSpies.walletManagerSpy.stubbedGreencardsWithUnexpiredOriginsResult = []
+		let eventGroup = try XCTUnwrap(
+			EventGroup.fakeEventGroup(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: EventMode.vaccinationassessment,
+				maxIssuedAt: now
+			)
+		)
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		
+		// When
+		let result = sut.hasVaccinationAssessmentEventButNoOrigin(now: now.addingTimeInterval(((14 * 24) - 2) * hours)) // two hours before expiration
+		
+		// Then
+		expect(result) == true
+	}
+	
+	func test_noAssessmentOrigin_withAlmostExpiredAssessmentEvent_oneHourBeforeExpiration() throws {
+		
+		// Given
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.vaccinationAssessmentEventValidityDays = 14
+		environmentSpies.walletManagerSpy.stubbedGreencardsWithUnexpiredOriginsResult = []
+		let eventGroup = try XCTUnwrap(
+			EventGroup.fakeEventGroup(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: EventMode.vaccinationassessment,
+				maxIssuedAt: now
+			)
+		)
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		
+		// When
+		let result = sut.hasVaccinationAssessmentEventButNoOrigin(now: now.addingTimeInterval(((14 * 24) - 1) * hours)) // one hour before expiration
+		
+		// Then
+		expect(result) == false
+	}
+	
+	func test_noAssessmentOrigin_withExpiredAssessmentEvent_atExpiration() throws {
+		
+		// Given
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.vaccinationAssessmentEventValidityDays = 14
+		environmentSpies.walletManagerSpy.stubbedGreencardsWithUnexpiredOriginsResult = []
+		let eventGroup = try XCTUnwrap(
+			EventGroup.fakeEventGroup(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: EventMode.vaccinationassessment,
+				maxIssuedAt: now
+			)
+		)
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		
+		// When
+		let result = sut.hasVaccinationAssessmentEventButNoOrigin(now: now.addingTimeInterval(14 * 24 * hours))
+		
+		// Then
+		expect(result) == false
+	}
+	
+	func test_noAssessmentOrigin_withExpiredAssessmentEvent_oneDayLater() throws {
+		
+		// Given
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.vaccinationAssessmentEventValidityDays = 14
+		environmentSpies.walletManagerSpy.stubbedGreencardsWithUnexpiredOriginsResult = []
+		let eventGroup = try XCTUnwrap(
+			EventGroup.fakeEventGroup(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: EventMode.vaccinationassessment,
+				maxIssuedAt: now
+			)
+		)
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		
+		// When
+		let result = sut.hasVaccinationAssessmentEventButNoOrigin(now: now.addingTimeInterval(15 * days)) // one day after expiration
+		
+		// Then
+		expect(result) == false
+	}
 	
 	func test_withAssessmentOrigin_withValidAssessmentEvent() throws {
 		
