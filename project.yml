@@ -14,13 +14,13 @@ packages:
     revision: 1818e38a9171eb9a883fc4d4a2a6b2fc14fdee0d
   CocoaLumberjack:
     github: CocoaLumberjack/CocoaLumberjack
-    majorVersion: 3.7.2
+    majorVersion: 3.7.4
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
-    majorVersion: 1.9.1
+    majorVersion: 1.9.3
   Lottie:
     github: airbnb/lottie-ios
-    majorVersion: 3.2.3
+    majorVersion: 3.3.0
   Nimble:
     github: Quick/Nimble
     majorVersion: 9.2.0
