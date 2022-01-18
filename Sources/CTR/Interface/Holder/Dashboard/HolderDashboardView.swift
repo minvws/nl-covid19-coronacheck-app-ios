@@ -66,6 +66,8 @@ final class HolderDashboardView: BaseView {
 	private var bottomScrollViewConstraint: NSLayoutConstraint?
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
+	// MARK: - Overrides
+	
 	/// Setup all the views
 	override func setupViews() {
 		super.setupViews()
@@ -132,6 +134,18 @@ final class HolderDashboardView: BaseView {
 			}()
 		])
 	}
+	
+	/// Enables swipe to navigate behaviour for assistive technologies
+	override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+		let tab: DashboardTab = direction == .right ? .domestic : .international
+		tabBar.select(tab: tab, animated: false)
+		delegate?.holderDashboardView(self, didDisplay: tab)
+		
+		// Scroll via swipe gesture
+		return false
+	}
+	
+	// MARK: - Public Access
 	
 	/// Display primary button view
 	var shouldDisplayButtonView = false {
