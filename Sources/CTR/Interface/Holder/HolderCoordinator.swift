@@ -498,7 +498,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			coordinator: self,
 			content: Content(
 				title: L.holder_expiredDomesticVaccinationModal_title(),
-				subTitle: L.holder_expiredDomesticVaccinationModal_body(),
+				body: L.holder_expiredDomesticVaccinationModal_body(),
 				primaryActionTitle: nil,
 				primaryAction: nil,
 				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),

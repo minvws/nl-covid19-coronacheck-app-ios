@@ -30,7 +30,7 @@ final class VisitorPassCompleteCertificateViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.content.title) == L.holder_completecertificate_title()
-		expect(self.sut.content.subTitle) == L.holder_completecertificate_body()
+		expect(self.sut.content.body) == L.holder_completecertificate_body()
 		expect(self.sut.content.primaryActionTitle) == L.holder_completecertificate_button_fetchnegativetest()
 		expect(self.sut.content.secondaryActionTitle).to(beNil())
 	}

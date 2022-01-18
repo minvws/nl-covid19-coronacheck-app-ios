@@ -78,7 +78,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		let viewModel = PaperProofContentViewModel(
 			content: Content(
 				title: L.holderPaperproofSelfprintedTitle(),
-				subTitle: L.holderPaperproofSelfprintedMessage(),
+				body: L.holderPaperproofSelfprintedMessage(),
 				primaryActionTitle: nil,
 				primaryAction: nil,
 				secondaryActionTitle: L.holderPaperproofSelfprintedAction(),
@@ -96,7 +96,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		let viewModel = PaperProofContentViewModel(
 			content: Content(
 				title: L.holderPaperproofNotokenTitle(),
-				subTitle: L.holderPaperproofNotokenMessage(),
+				body: L.holderPaperproofNotokenMessage(),
 				primaryActionTitle: nil,
 				primaryAction: nil,
 				secondaryActionTitle: L.holderPaperproofNotokenAction(),

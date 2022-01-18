@@ -143,7 +143,7 @@ class ListEventsViewController: BaseViewController {
 
 		// Texts
 		sceneView.title = content.title
-		sceneView.message = content.subTitle
+		sceneView.message = content.body
 
 		sceneView.contentTextView.linkTouched { [weak self] url in
 

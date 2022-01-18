@@ -40,7 +40,7 @@ class ContentViewController: BaseViewController {
 		super.viewDidLoad()
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$body.binding = { [weak self] in self?.sceneView.body = $0 }
 		viewModel.$secondaryButtonTitle.binding = { [weak self] in
 			self?.sceneView.secondaryButtonTitle = $0
 		}

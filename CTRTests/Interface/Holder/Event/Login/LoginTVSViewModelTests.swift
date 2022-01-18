@@ -39,7 +39,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holderVaccinationListTitle()
-		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
 		expect(self.sut.content.secondaryAction).to(beNil())
@@ -58,7 +58,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holderRecoveryListTitle()
-		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
 		expect(self.sut.content.secondaryAction).to(beNil())
@@ -77,7 +77,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holderTestresultsResultsTitle()
-		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
 		expect(self.sut.content.secondaryAction).to(beNil())
@@ -96,7 +96,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holderDccListTitle()
-		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
 		expect(self.sut.content.secondaryAction).to(beNil())
@@ -168,7 +168,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holderFetcheventsVaccinationTitle()
-		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).toNot(beNil())
 		expect(self.sut.content.primaryActionTitle) == L.generalClose()
 		expect(self.sut.content.secondaryAction).to(beNil())
@@ -196,7 +196,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
+			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
 			expect(content.primaryAction).toNot(beNil())
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).toNot(beNil())
@@ -224,7 +224,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
-			expect(content.subTitle) == L.generalNetworkwasbusyErrorcode("i 210 000 429")
+			expect(content.body) == L.generalNetworkwasbusyErrorcode("i 210 000 429")
 			expect(content.primaryAction).toNot(beNil())
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).to(beNil())
@@ -305,7 +305,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
@@ -348,7 +348,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
@@ -390,7 +390,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
@@ -419,7 +419,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
+			expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
 			expect(content.primaryAction).toNot(beNil())
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).toNot(beNil())
@@ -457,7 +457,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
