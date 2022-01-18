@@ -195,22 +195,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutOutdatedConfigParametersList.append((validUntil, ()))
 	}
 
-	var invokedUserWishesMoreInfoAboutRecoveryValidityExtension = false
-	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount = 0
-
-	func userWishesMoreInfoAboutRecoveryValidityExtension() {
-		invokedUserWishesMoreInfoAboutRecoveryValidityExtension = true
-		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount += 1
-	}
-
-	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = false
-	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount = 0
-
-	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
-		invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = true
-		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount += 1
-	}
-
 	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = false
 	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount = 0
 
@@ -225,22 +209,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
 		invokedUserWishesMoreInfoAboutExpiredDomesticVaccination = true
 		invokedUserWishesMoreInfoAboutExpiredDomesticVaccinationCount += 1
-	}
-
-	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompleted = false
-	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompletedCount = 0
-
-	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {
-		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompleted = true
-		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompletedCount += 1
-	}
-
-	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompleted = false
-	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompletedCount = 0
-
-	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted() {
-		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompleted = true
-		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompletedCount += 1
 	}
 
 	var invokedOpenUrl = false
@@ -289,22 +257,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		if shouldInvokeDisplayErrorBackAction {
 			backAction()
 		}
-	}
-
-	var invokedMigrateEUVaccinationDidComplete = false
-	var invokedMigrateEUVaccinationDidCompleteCount = 0
-
-	func migrateEUVaccinationDidComplete() {
-		invokedMigrateEUVaccinationDidComplete = true
-		invokedMigrateEUVaccinationDidCompleteCount += 1
-	}
-
-	var invokedExtendRecoveryValidityDidComplete = false
-	var invokedExtendRecoveryValidityDidCompleteCount = 0
-
-	func extendRecoveryValidityDidComplete() {
-		invokedExtendRecoveryValidityDidComplete = true
-		invokedExtendRecoveryValidityDidCompleteCount += 1
 	}
 
 	var invokedUserWishesMoreInfoAboutNoTestToken = false

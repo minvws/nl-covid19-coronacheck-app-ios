@@ -163,10 +163,6 @@
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "wordt automatisch geldig over";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf";
 "holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Voorkom verspreiding van het coronavirus, gebruik ook <a href=\"itms-apps://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a>.</p>";
-"holder.dashboard.recoveryvalidityextension.extensionavailable.banner.title" = "Je kunt je Nederlandse herstelbewijs verlengen";
-"holder.dashboard.recoveryvalidityextension.extensioncomplete.banner.title" = "Je Nederlandse herstelbewijs is verlengd";
-"holder.dashboard.recoveryvalidityextension.reinstationavailable.banner.title" = "Je kunt je verlopen Nederlandse herstelbewijs terugzetten";
-"holder.dashboard.recoveryvalidityextension.reinstationcomplete.banner.title" = "Je Nederlandse herstelbewijs is teruggezet";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "Je hebt internet nodig om je QR-code te kunnen gebruiken.";
 "holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, het is niet gelukt de QR-code te vernieuwen. Open de app opnieuw over 10 minuten.<br /><br />Helpt dat niet? Bel dan de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis) en geef de foutcode (i 075) door.</p>";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "De app heeft af en toe verbinding met de server nodig om je QR-code te vernieuwen. Dat is niet gelukt door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
@@ -426,16 +422,6 @@
 "holder.recovery.vaccinationOnly.message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Omdat je positief getest bent vóór je eerste prik, ben je met één prik volledig gevaccineerd. Daarom is er wel een volledig vaccinatiebewijs gemaakt.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.recovery.vaccinationOnly.title" = "Geen herstelbewijs, wel een vaccinatiebewijs";
 "holder.recovery.wrong.body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
-"holder.recoveryvalidityextension.extensionavailable.button.submit" = "Verleng bewijs";
-"holder.recoveryvalidityextension.extensionavailable.description" = "<p>Binnenkort verlengen we voor iedereen het herstelbewijs. Hierdoor wordt je herstelbewijs een jaar geldig vanaf het moment dat je positief bent getest.</p><p>Je kunt je bewijs ook nu alvast verlengen als je dat wilt.</p>";
-"holder.recoveryvalidityextension.extensionavailable.title" = "Herstelbewijs verlengen";
-"holder.recoveryvalidityextension.extensioncomplete.description" = "De geldigheid van Nederlandse herstelbewijzen is verlengd. Daardoor is je bewijs nu een jaar geldig vanaf het moment dat je positief bent getest.";
-"holder.recoveryvalidityextension.extensioncomplete.title" = "Verlengd herstelbewijs";
-"holder.recoveryvalidityextension.reinstationavailable.button.submit" = "Bewijs terugzetten";
-"holder.recoveryvalidityextension.reinstationavailable.description" = "<p>Binnenkort zetten we jouw verlopen herstelbewijs terug, omdat de geldigheid van Nederlandse herstelbewijzen wordt verlengd. Daardoor wordt je bewijs een jaar geldig vanaf het moment dat je positief bent getest.</p><p>Je kunt je bewijs ook nu alvast terugzetten als je dat wilt.</p>";
-"holder.recoveryvalidityextension.reinstationavailable.title" = "Herstelbewijs terugzetten";
-"holder.recoveryvalidityextension.reinstationcomplete.description" = "We hebben je verlopen bewijs teruggezet, omdat de geldigheid van Nederlandse herstelbewijzen is verlengd. Een bewijs is nu een jaar geldig vanaf het moment dat je positief bent getest.";
-"holder.recoveryvalidityextension.reinstationcomplete.title" = "Teruggezet herstelbewijs";
 "holder.scanner.alert.dcc.message" = "Scan de QR-code op je internationale bewijs. Je hoeft de Nederlandse QR-code niet te scannen.";
 "holder.scanner.alert.dcc.title" = "Scan je internationale QR-code";
 "holder.scanner.alert.unknown.message" = "Deze QR-code is niet geldig. Scan de QR-code op je internationale bewijs.";
@@ -730,7 +716,7 @@
 "visitorpass_code_review_placeholder_screenreader" = "Vul hier je beoordelingscode in";
 "visitorpass_code_title" = "Vaccinatiebeoordeling ophalen";
 "visitorpass_start_action" = "Volgende";
-"visitorpass_start_message" = "<p>Ben je buiten de Europese Unie gevaccineerd en op bezoek in Nederland?  Dan kun je van jouw vaccinatiebeoordeling en een negatieve testuitslag een bezoekersbewijs maken.</p><p>Met je bezoekersbewijs krijg je toegang tot plekken en activiteiten in Nederland die vragen om een coronatoegangsbewijs.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
+"visitorpass_start_message" = "<p>Ben je buiten de Europese Unie gevaccineerd en op bezoek in Nederland? Dan kun je van jouw vaccinatiebeoordeling en een negatieve testuitslag een bezoekersbewijs maken.</p><p>Met je bezoekersbewijs krijg je toegang tot plekken en activiteiten in Nederland die vragen om een coronatoegangsbewijs.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_start_title" = "Een bezoekersbewijs toevoegen";
 "visitorpass_token_error_empty_token" = "Graag je beoordelingscode invullen";
 "visitorpass_token_error_invalid_code" = "Deze code is niet geldig";

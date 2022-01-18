@@ -59,35 +59,6 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 
-	static func makeRecoveryValidityCards(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		guard validityRegion == .domestic else { return [] }
-		
-		if state.shouldShowRecoveryValidityExtensionAvailableBanner {
-			return HolderDashboardViewController.Card.makeRecoveryValidityExtensionAvailableCard(
-				didTapCallToAction: actionHandler.didTapRecoveryValidityExtensionAvailableMoreInfo
-			)
-		} else if state.shouldShowRecoveryValidityReinstationAvailableBanner {
-			return HolderDashboardViewController.Card.makeRecoveryValidityReinstationAvailableCard(
-				didTapCallToAction: actionHandler.didTapRecoveryValidityReinstationAvailableMoreInfo
-			)
-		} else if state.shouldShowRecoveryValidityExtensionCompleteBanner {
-			return HolderDashboardViewController.Card.makeRecoveryValidityExtensionCompleteCard(
-				didTapCallToAction: actionHandler.didTapRecoveryValidityExtensionCompleteMoreInfo,
-				didTapClose: actionHandler.didTapRecoveryValidityExtensionCompleteClose
-			)
-		} else if state.shouldShowRecoveryValidityReinstationCompleteBanner {
-			return HolderDashboardViewController.Card.makeRecoveryValidityReinstationCompleteCard(
-				didTapCallToAction: actionHandler.didTapRecoveryValidityReinstationCompleteMoreInfo,
-				didTapClose: actionHandler.didTapRecoveryValidityReinstationCompleteClose
-			)
-		}
-		return []
-	}
-	
 	static func makeExpiredQRCard(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
@@ -213,40 +184,6 @@ extension HolderDashboardViewController.Card {
 					}
 				)
 			}
-	}
-	
-	static func makeRecoveryValidityExtensionAvailableCard(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionAvailable(
-			title: L.holderDashboardRecoveryvalidityextensionExtensionavailableBannerTitle(),
-			buttonText: L.generalReadmore(),
-			didTapCallToAction: didTapCallToAction
-		)]
-	}
-	
-	static func makeRecoveryValidityReinstationAvailableCard(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionAvailable(
-			title: L.holderDashboardRecoveryvalidityextensionReinstationavailableBannerTitle(),
-			buttonText: L.generalReadmore(),
-			didTapCallToAction: didTapCallToAction
-		)]
-	}
-	
-	static func makeRecoveryValidityExtensionCompleteCard(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionDidComplete(
-			title: L.holderDashboardRecoveryvalidityextensionExtensioncompleteBannerTitle(),
-			buttonText: L.generalReadmore(),
-			didTapCallToAction: didTapCallToAction,
-			didTapClose: didTapClose
-		)]
-	}
-	
-	static func makeRecoveryValidityReinstationCompleteCard(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionDidComplete(
-			title: L.holderDashboardRecoveryvalidityextensionReinstationcompleteBannerTitle(),
-			buttonText: L.generalReadmore(),
-			didTapCallToAction: didTapCallToAction,
-			didTapClose: didTapClose
-		)]
 	}
 	
 	static func makeRecommendedUpdateCard(

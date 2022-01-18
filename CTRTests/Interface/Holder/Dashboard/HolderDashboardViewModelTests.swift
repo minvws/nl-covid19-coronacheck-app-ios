@@ -20,7 +20,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var datasourceSpy: HolderDashboardDatasourceSpy!
 	private var strippenRefresherSpy: DashboardStrippenRefresherSpy!
 	private var sampleGreencardObjectID: NSManagedObjectID!
-	private var recoveryValidityExtensionManagerSpy: RecoveryValidityExtensionManagerProtocol!
 	private var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
 	private var vaccinationAssessmentNotificationManagerSpy: VaccinationAssessmentNotificationManagerSpy!
 	private var environmentSpies: EnvironmentSpies!
@@ -48,7 +47,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
-		recoveryValidityExtensionManagerSpy = RecoveryValidityExtensionManagerSpy()
 		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
 		vaccinationAssessmentNotificationManagerSpy = VaccinationAssessmentNotificationManagerSpy()
 		sampleGreencardObjectID = NSManagedObjectID()
@@ -62,7 +60,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			datasource: datasourceSpy,
 			strippenRefresher: strippenRefresherSpy,
-			recoveryValidityExtensionManager: recoveryValidityExtensionManagerSpy,
 			configurationNotificationManager: configurationNotificationManagerSpy,
 			vaccinationAssessmentNotificationManager: vaccinationAssessmentNotificationManagerSpy,
 			versionSupplier: AppVersionSupplierSpy(version: appVersion)
@@ -2971,79 +2968,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.strippenRefresherSpy.invokedLoadCount) == 2
 	}
 
-	func test_actionhandling_didTapRecoveryValidityExtensionAvailableMoreInfo() {
-
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		// Act
-		sut.didTapRecoveryValidityExtensionAvailableMoreInfo()
-
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount) == 1
-	}
-
-	func test_actionhandling_didTapRecoveryValidityExtensionCompleteMoreInfo() {
-
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		// Act
-		sut.didTapRecoveryValidityExtensionCompleteMoreInfo()
-
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCompletedCount) == 1
-	}
-
-	func test_actionhandling_didTapRecoveryValidityExtensionCompleteClose() {
-
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		// Act
-		sut.didTapRecoveryValidityExtensionCompleteClose()
-
-		// Assert
-		expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedRecoveryValidityExtensionCompletionCardSetter) == true
-	}
-
-	func test_actionhandling_didTapRecoveryValidityReinstationAvailableMoreInfo() {
-
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		// Act
-		sut.didTapRecoveryValidityReinstationAvailableMoreInfo()
-
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount) == 1
-	}
-
-	func test_actionhandling_didTapRecoveryValidityReinstationCompleteMoreInfo() {
-
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		// Act
-		sut.didTapRecoveryValidityReinstationCompleteMoreInfo()
-
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCompletedCount) == 1
-	}
-
-	func test_actionhandling_didTapRecoveryValidityReinstationCompleteClose() {
-
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		// Act
-		sut.didTapRecoveryValidityReinstationCompleteClose()
-
-		// Assert
-		expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter) == true
-	}
-	
-	func test_actionhandling_didTapRecommenedUpdate_noUrl() {
+	func test_actionhandling_didTapRecommendedUpdate_noUrl() {
 		
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
@@ -3055,7 +2980,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
 	}
 	
-	func test_actionhandling_didTapRecommenedUpdate() {
+	func test_actionhandling_didTapRecommendedUpdate() {
 		
 		// Arrange
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = URL(string: "https://apple.com")

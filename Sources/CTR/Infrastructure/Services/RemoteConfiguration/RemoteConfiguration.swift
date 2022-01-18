@@ -72,8 +72,6 @@ struct RemoteConfiguration: Codable, Equatable {
 	/// What is the waiting period before a recovery is valid?
 	var recoveryWaitingPeriodDays: Int?
 
-	var recoveryGreencardRevisedValidityLaunchDate: Date?
-
 	/// Event validity
 
 	var recoveryEventValidityDays: Int?
@@ -160,7 +158,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		case universalLinkPermittedDomains = "universalLinkDomains"
 		case clockDeviationThresholdSeconds = "clockDeviationThresholdSeconds"
 		case isLuhnCheckEnabled = "luhnCheckEnabled"
-		case recoveryGreencardRevisedValidityLaunchDate = "recoveryGreencardRevisedValidityLaunchDate"
 		case scanLockSeconds = "scanLockSeconds"
 		case scanLockWarningSeconds = "scanLockWarningSeconds"
 		case scanLogStorageSeconds = "scanLogStorageSeconds"
@@ -198,7 +195,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.universalLinkPermittedDomains = nil
 		config.clockDeviationThresholdSeconds = 30
 		config.isLuhnCheckEnabled = true
-		config.recoveryGreencardRevisedValidityLaunchDate = .distantFuture
 		config.scanLockSeconds = 300
 		config.scanLockWarningSeconds = 3600
 		config.scanLogStorageSeconds = 3600
