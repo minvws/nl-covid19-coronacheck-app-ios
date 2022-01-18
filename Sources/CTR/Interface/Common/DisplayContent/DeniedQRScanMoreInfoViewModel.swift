@@ -8,7 +8,7 @@
 import UIKit
 typealias DisplayContent = (view: UIView, customSpacing: CGFloat)
 
-class DisplayContentViewModel {
+class DeniedQRScanMoreInfoViewModel {
 
 	/// Coordination Delegate
 	weak var coordinator: (Dismissable)?
@@ -28,14 +28,23 @@ class DisplayContentViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - title: the title of the scene
 	///   - content: an array of content
-	init(
-		coordinator: Dismissable,
-		title: String,
-		content: [DisplayContent]) {
+	init(coordinator: Dismissable) {
 
 		self.coordinator = coordinator
-		self.content = content
-		self.title = title
+		
+		// By default, unordered lists have a space above them in HTML
+		let bulletSpacing: CGFloat = -24
+		let spacing: CGFloat = 16
+
+		self.title = L.verifierDeniedTitle()
+		self.content = [
+			(TextView(htmlText: Current.featureFlagManager.isVerificationPolicyEnabled() ? L.verifierDeniedMessageOne_2G() : L.verifierDeniedMessageOne()), spacing),
+			(TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
+			(TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
+			(TextView(htmlText: L.verifierDeniedMessageFour()), 0),
+			(TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
+			(TextView(htmlText: Current.featureFlagManager.isVerificationPolicyEnabled() ? L.verifierDeniedMessageSix_2G() : L.verifierDeniedMessageSix()), spacing)
+		]
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured

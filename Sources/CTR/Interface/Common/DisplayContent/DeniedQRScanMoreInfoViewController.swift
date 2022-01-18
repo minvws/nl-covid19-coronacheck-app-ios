@@ -7,19 +7,19 @@
 
 import UIKit
 
-class DisplayContentViewController: BaseViewController {
+class DeniedQRScanMoreInfoViewController: BaseViewController {
 
 	/// The model
-	private let viewModel: DisplayContentViewModel
+	private let viewModel: DeniedQRScanMoreInfoViewModel
 
 	/// The view
-	let sceneView = DisplayContentView()
+	let sceneView = DeniedQRScanMoreInfoView()
 
 	// MARK: Initializers
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: DisplayContentViewModel) {
+	init(viewModel: DeniedQRScanMoreInfoViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
