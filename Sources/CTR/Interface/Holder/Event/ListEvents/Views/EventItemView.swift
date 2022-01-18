@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VaccinationEventView: BaseView {
+class EventItemView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -130,7 +130,8 @@ class VaccinationEventView: BaseView {
 
 		super.setupAccessibility()
 
-		accessibilityElements = [backgroundButton]
+		backgroundButton.isAccessibilityElement = false
+		linkLabel.accessibilityTraits = .button
 	}
 
 	/// User tapped on the primary button
@@ -141,7 +142,7 @@ class VaccinationEventView: BaseView {
 
 	func setAccessibilityLabel() {
 		
-		backgroundButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageLabel.text ?? "").\n\(linkLabel.text ?? "")"
+		linkLabel.accessibilityLabel = "\(linkLabel.text ?? "")\n \(titleLabel.text ?? "")"
 	}
 
 	// MARK: Public Access
