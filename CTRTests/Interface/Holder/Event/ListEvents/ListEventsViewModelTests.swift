@@ -2253,7 +2253,13 @@ class ListEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
-		let eventGroup = try XCTUnwrap(createTestEventGroup())
+		let eventGroup = try XCTUnwrap(
+			EventGroup.fakeEventGroup(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: EventMode.test,
+				maxIssuedAt: now
+			)
+		)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 		(.success(RemoteGreenCards.Response.noOrigins), ())
@@ -2800,24 +2806,5 @@ class ListEventsViewModelTests: XCTestCase {
 			),
 			signedResponse: nil
 		)
-	}
-	
-	private func createTestEventGroup() -> EventGroup? {
-		
-		var eventGroup: EventGroup?
-		let context = environmentSpies.dataStoreManager.managedObjectContext()
-		context.performAndWait {
-			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				eventGroup = EventGroupModel.create(
-					type: EventMode.test,
-					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: Date(),
-					jsonData: Data(),
-					wallet: wallet,
-					managedContext: context
-				)
-			}
-		}
-		return eventGroup
 	}
 }
