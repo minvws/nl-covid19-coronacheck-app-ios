@@ -29,7 +29,19 @@ final class ForcedInformationView: BaseView {
 	}()
 	
 	/// the update button
-	let primaryButton = Button()
+	var primaryButton: Button {
+		return footerButtonView.primaryButton
+	}
+	
+	/// Footer view with primary button
+	let footerButtonView: FooterButtonView = {
+		let footerView = FooterButtonView()
+		footerView.translatesAutoresizingMaskIntoConstraints = false
+		footerView.buttonStackView.alignment = .center
+		return footerView
+	}()
+	
+	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
 	/// setup the views
 	override func setupViews() {
@@ -43,7 +55,7 @@ final class ForcedInformationView: BaseView {
 		
 		super.setupViewHierarchy()
 		addSubview(containerView)
-		addSubview(primaryButton)
+		addSubview(footerButtonView)
 	}
 	
 	/// Setup the constraints
@@ -58,21 +70,22 @@ final class ForcedInformationView: BaseView {
 			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			
-			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
-			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.leadingAnchor.constraint(
-				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			primaryButton.trailingAnchor.constraint(
-				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			primaryButton.topAnchor.constraint(equalTo: containerView.bottomAnchor),
-			primaryButton.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			)
+			footerButtonView.topAnchor.constraint(equalTo: containerView.bottomAnchor),
+			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
+	}
+	
+	// MARK: - Public Access
+	
+	/// Updates `FooterButtonView` shadow separator
+	/// - Parameter mainScrollView: Main scroll view to observe content offset
+	func updateFooterView(mainScrollView: UIScrollView) {
+		scrollViewContentOffsetObserver?.invalidate()
+		scrollViewContentOffsetObserver = mainScrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
+			let translatedOffset = scrollView.translatedBottomScrollOffset
+			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
+		}
 	}
 }
