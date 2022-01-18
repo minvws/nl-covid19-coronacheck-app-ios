@@ -111,11 +111,13 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func userWishesMoreInformationOnInternationalQROnly() {
 
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				coordinator: self,
-				title: L.holderPaperproofInternationalQROnlyTitle(),
-				message: L.holderPaperproofInternationalQROnlyMessage(),
+				content: Content(
+					title: L.holderPaperproofInternationalQROnlyTitle(),
+					body: L.holderPaperproofInternationalQROnlyMessage()
+				),
 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: true)
