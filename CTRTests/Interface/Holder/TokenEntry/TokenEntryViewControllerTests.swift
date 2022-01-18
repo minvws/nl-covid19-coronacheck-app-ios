@@ -20,15 +20,17 @@ class TokenEntryViewControllerTests: XCTestCase {
 	private var holderCoordinatorSpy: HolderCoordinatorDelegateSpy!
 	private var tokenValidatorSpy: TokenValidatorSpy!
 	private var networkManagerSpy: NetworkSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 		super.setUp()
-
+		
 		// Ideally we'd be able to use a `TokenEntryViewModelSpy` but
 		// currently not possible due to @Bindable not working in protocols.
 		holderCoordinatorSpy = HolderCoordinatorDelegateSpy()
 		networkManagerSpy = NetworkSpy()
 		tokenValidatorSpy = TokenValidatorSpy()
+		environmentSpies = setupEnvironmentSpies()
 
 		window = UIWindow()
 	}
