@@ -69,6 +69,7 @@ class MessageCardView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.bannerCross(), for: .normal)
 		button.contentHorizontalAlignment = .center
+		button.accessibilityLabel = L.generalClose()
 		return button
 	}()
 
