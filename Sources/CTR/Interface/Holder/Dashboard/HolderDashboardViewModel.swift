@@ -233,20 +233,23 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			guard let self = self else { return }
 			
 			DispatchQueue.main.async {
-				self.state.qrCards = qrCardDataItems
-				self.state.expiredGreenCards += expiredGreenCards
-				self.state.shouldShowDomestic3GTestBanner = qrCardDataItems.contains(where: { qrCard in
+				var state = self.state
+				state.qrCards = qrCardDataItems
+				state.expiredGreenCards += expiredGreenCards
+				state.shouldShowDomestic3GTestBanner = qrCardDataItems.contains(where: { qrCard in
 					// Assume that domestic has just one greencard.
 					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: Current.now())
 			   })
-				self.state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
-				self.state.shouldShowRecommendationToAddYourBooster = {
+				state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
+				state.shouldShowRecommendationToAddYourBooster = {
 					guard Current.userSettings.lastRecommendToAddYourBoosterDismissalDate == nil else { return false }
 					let contains = qrCardDataItems.contains { card in
 						card.isOfRegion(region: .domestic) && card.origins.contains { $0.type == .vaccination }
 					}
 					return contains
 				}()
+				
+				self.state = state
 			}
 		}
 	}
@@ -465,7 +468,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				self.state.shouldShowRecoveryValidityReinstationAvailableBanner = false
 			}
 			
-			self.state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Current.featureFlagManager.isNewValidityInfoBannerEnabled()
+			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Current.featureFlagManager.isNewValidityInfoBannerEnabled()
 		}
 	}
 
