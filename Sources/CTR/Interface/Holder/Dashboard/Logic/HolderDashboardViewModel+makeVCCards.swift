@@ -421,7 +421,10 @@ extension HolderDashboardViewModel.QRCard {
 							}
 						}()
 
-						guard let relativeDateString = formatter.string(from: now, to: mostDistantFutureExpiryDate)
+						guard let relativeDateString = formatter.string(
+							from: now,
+							to: mostDistantFutureExpiryDate.addingTimeInterval(1) // add 1, so that we don't count down to zero
+						)
 						else { return nil }
 
 						return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
