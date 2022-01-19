@@ -11,7 +11,7 @@ import CoreData
 import Reachability
 
 /// All the actions that the user can trigger by interacting with the Dashboard cards
-protocol HolderDashboardCardUserActionHandling {
+protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapConfigAlmostOutOfDateCTA()
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
 	func didTapExpiredDomesticVaccinationQRMoreInfo()
@@ -468,7 +468,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				self.state.shouldShowRecoveryValidityReinstationAvailableBanner = false
 			}
 			
-			state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Current.featureFlagManager.isNewValidityInfoBannerEnabled()
+			self.state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Current.featureFlagManager.isNewValidityInfoBannerEnabled()
 		}
 	}
 
