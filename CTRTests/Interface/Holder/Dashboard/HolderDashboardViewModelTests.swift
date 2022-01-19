@@ -1133,7 +1133,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(24 * hours * ago))).to(beNil())
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22 * hours * ago))) == "Verloopt over 22 uur en 1 minuut"
-			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 1 minuut"
+			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 1 minuut en 1 seconde"
 		}))
 		expect(self.sut.domesticCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
