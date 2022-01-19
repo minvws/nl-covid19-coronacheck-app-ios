@@ -70,10 +70,8 @@ extension TokenEntryViewModel {
 		
 		static func errorInvalidCombination(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
 			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+				case (_, .negativeTest):
 					return L.holderTokenentryRegularflowErrorInvalidCombination()
-				case (.withRequestTokenProvided, .negativeTest):
-					return L.holderTokenentryUniversallinkflowErrorInvalidCombination()
 				case (_, .visitorPass):
 					return L.visitorpass_token_error_invalid_combination()
 			}
