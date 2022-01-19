@@ -10,16 +10,77 @@ import UIKit
 
 class ShowQRViewModel: Logging {
 
+	// MARK: - Private types
+	final private class ScreenBrightnessManager {
+		
+		private let initialBrightness: CGFloat
+		private var latestAnimation: UUID?
+		private let notificationCenter: NotificationCenterProtocol
+		
+		init(initialBrightness: CGFloat = UIScreen.main.brightness, notificationCenter: NotificationCenterProtocol) {
+			self.initialBrightness = initialBrightness
+			self.notificationCenter = notificationCenter
+			
+			notificationCenter.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+				self?.animateToFullBrightness()
+			}
+			notificationCenter.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
+				guard let self = self else { return }
+				
+				// Immediately back to initial brightness as we left the app:
+				UIScreen.main.brightness = self.initialBrightness
+			}
+		}
+		
+		func animateToFullBrightness() {
+
+			let brightnessStep: CGFloat = 0.03
+			var iterationsPermitted = 1 / brightnessStep // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
+			let animationID = UUID()
+			latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
+			Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { timer in
+				guard iterationsPermitted > 0,
+					self.latestAnimation == animationID,
+					UIScreen.main.brightness < 1
+				else { timer.invalidate(); return }
+				
+				iterationsPermitted -= 1
+				UIScreen.main.brightness += brightnessStep
+			}
+		}
+		
+		func animateToInitialBrightness() {
+			guard (0...1).contains(initialBrightness) else {
+				UIScreen.main.brightness = 1
+				return
+			}
+			
+			let brightnessStep: CGFloat = 0.03
+			var iterationsPermitted = 1 / brightnessStep // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
+			let animationID = UUID()
+			latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
+			Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { timer in
+				guard iterationsPermitted > 0,
+					self.latestAnimation == animationID,
+					self.initialBrightness < UIScreen.main.brightness,
+					UIScreen.main.brightness > brightnessStep
+				else { timer.invalidate(); return }
+				
+				iterationsPermitted -= 1
+				UIScreen.main.brightness -= brightnessStep
+			}
+		}
+	}
+
 	// MARK: - private variables
 
 	weak private var coordinator: HolderCoordinatorDelegate?
 
-	weak private var cryptoManager: CryptoManaging? = Services.cryptoManager
-	weak private var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
-	private var mappingManager: MappingManaging? = Services.mappingManager
+	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
+	weak private var remoteConfigManager: RemoteConfigManaging? = Current.remoteConfigManager
+	private var mappingManager: MappingManaging? = Current.mappingManager
 	private let notificationCenter: NotificationCenterProtocol
-
-	private var previousBrightness: CGFloat?
+	private let screenBrightnessManager: ScreenBrightnessManager
 
 	private var dataSource: ShowQRDatasourceProtocol
 
@@ -61,10 +122,8 @@ class ShowQRViewModel: Logging {
 	) {
 
 		self.coordinator = coordinator
-		self.dataSource = ShowQRDatasource(
-			greenCards: greenCards,
-			internationalQRRelevancyDays: TimeInterval(remoteConfigManager?.storedConfiguration.internationalQRRelevancyDays ?? 28)
-		)
+		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
+		self.dataSource = ShowQRDatasource(greenCards: greenCards)
 		self.notificationCenter = notificationCenter
 		self.items = dataSource.items
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
@@ -85,12 +144,12 @@ class ShowQRViewModel: Logging {
 		if let greenCard = greenCards.first {
 			if greenCard.type == GreenCardType.domestic.rawValue {
 				title = L.holderShowqrDomesticTitle()
-				infoButtonAccessibility = L.holderShowqrDomesticAboutTitle()
+				infoButtonAccessibility = L.holder_showqr_domestic_accessibility_button_details()
 				showInternationalAnimation = false
 				thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
 			} else if greenCard.type == GreenCardType.eu.rawValue {
 				title = L.holderShowqrEuTitle()
-				infoButtonAccessibility = L.holderShowqrEuAboutTitle()
+				infoButtonAccessibility = L.holder_showqr_international_accessibility_button_details()
 				showInternationalAnimation = true
 			}
 		}
@@ -100,10 +159,6 @@ class ShowQRViewModel: Logging {
 
 	private func setupListeners() {
 
-		notificationCenter.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.setBrightness()
-		}
-
 		// When the app is backgrounded, the holdercoordinator clears the reference to the third-party ticket app
 		// so we should hide that from the UI on this screen too.
 		notificationCenter.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
@@ -111,18 +166,14 @@ class ShowQRViewModel: Logging {
 		}
 	}
 
-	/// Adjust the brightness
-	/// - Parameter reset: True if we reset to previous value
-	func setBrightness(reset: Bool = false) {
-
-		let currentBrightness = UIScreen.main.brightness
-		if currentBrightness < 1 {
-			previousBrightness = currentBrightness
-		}
-
-		UIScreen.main.brightness = reset ? previousBrightness ?? 1 : 1
+	func viewWillAppear() {
+		screenBrightnessManager.animateToFullBrightness()
 	}
-
+	
+	func viewWillDisappear() {
+		screenBrightnessManager.animateToInitialBrightness()
+	}
+	
 	func userDidChangeCurrentPage(toPageIndex pageIndex: Int) {
 		currentPage = pageIndex
 	}
@@ -141,7 +192,7 @@ class ShowQRViewModel: Logging {
 		}
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
-			showDomesticDetails(data)
+			showDomesticDetails(data, greenCard: greenCard)
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			showInternationalDetails(data)
 		}
@@ -161,9 +212,7 @@ class ShowQRViewModel: Logging {
 			   let doseNumber = euVaccination.doseNumber,
 			   let totalDose = euVaccination.totalDose {
 				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
-				if euVaccination.isOverVaccinated {
-					relevancyInformation = L.holderShowqrOvervaccinated()
-				} else if dataSource.shouldGreenCardBeHidden(greenCard) {
+				if dataSource.shouldGreenCardBeHidden(greenCard) {
 					relevancyInformation = L.holderShowqrNotneeded()
 				} else {
 					relevancyInformation = nil
@@ -172,21 +221,36 @@ class ShowQRViewModel: Logging {
 		}
 	}
 
-	private func showDomesticDetails(_ data: Data) {
-
+	private func showDomesticDetails(_ data: Data, greenCard: GreenCard) {
+		
 		if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {
-			let identity = domesticCredentialAttributes
-				.mapIdentity(months: String.shortMonths)
-				.map({ $0.isEmpty ? "_" : $0 })
-				.joined(separator: " ")
-
 			coordinator?.presentInformationPage(
 				title: L.holderShowqrDomesticAboutTitle(),
-				body: L.holderShowqrDomesticAboutMessage(identity),
+				body: getDomesticDetailsBody(domesticCredentialAttributes, greenCard: greenCard),
 				hideBodyForScreenCapture: true,
 				openURLsInApp: true
 			)
+		} else {
+			logError("Can't read the domestic credentials")
 		}
+	}
+	
+	private func getDomesticDetailsBody(_ domesticCredentialAttributes: DomesticCredentialAttributes, greenCard: GreenCard) -> String {
+		
+		let identity = domesticCredentialAttributes
+			.mapIdentity(months: String.shortMonths)
+			.map({ $0.isEmpty ? "_" : $0 })
+			.joined(separator: " ")
+		
+		// Show different body when you only have a test with category low risk (2G).
+		if let origins = greenCard.castOrigins(),
+		   origins.contains(where: { $0.type == OriginType.test.rawValue }),
+		   domesticCredentialAttributes.riskLevel == .low,
+		   Current.featureFlagManager.isVerificationPolicyEnabled() { // and the verification policy is enabled
+			return L.qr_explanation_description_domestic_2G(identity)
+		}
+		
+		return L.holderShowqrDomesticAboutMessage(identity)
 	}
 
 	private func showInternationalDetails(_ data: Data) {
@@ -256,15 +320,5 @@ extension ShowQRViewModel: ShowQRItemViewModelDelegate {
 
 	func itemIsNotValid() {
 		coordinator?.navigateBackToStart()
-	}
-}
-
-private extension EuCredentialAttributes.Vaccination {
-
-	var isOverVaccinated: Bool {
-		guard let doseNumber = doseNumber, let totalDose = totalDose else {
-			return false
-		}
-		return doseNumber > totalDose
 	}
 }

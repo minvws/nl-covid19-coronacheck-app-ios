@@ -39,9 +39,11 @@ enum EventScreenResult: Equatable {
 
 	case startWithPositiveTest
 	
+	case shouldCompleteVaccinationAssessment
+	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest), (.backSwipe, .backSwipe):
+			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest), (.backSwipe, .backSwipe), (.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
 				return true
 			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
@@ -91,6 +93,9 @@ protocol EventFlowDelegate: AnyObject {
 
 	/// The event flow is finished
 	func eventFlowDidComplete()
+	
+	/// The event flow is finished, but go to the vaccination assessment entry
+	func eventFlowDidCompleteButVisitorPassNeedsCompletion()
 
 	func eventFlowDidCancel()
 	
@@ -124,6 +129,11 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		startWithVaccination()
 	}
 
+	func startWithNegativeTest() {
+		
+		startWith(.test)
+	}
+	
 	func startWithVaccination() {
 
 		startWith(.vaccination)
@@ -142,19 +152,30 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		}
 	}
 
-	func startWithListTestEvents(_ events: [RemoteEvent]) {
+	func startWithListTestEvents(_ events: [RemoteEvent], originalMode: EventMode) {
+		
+		var mode: EventMode = .test
+		
+		if events.first?.wrapper.events?.first?.vaccinationAssessment != nil {
+			mode = .vaccinationassessment
+		} else if events.first?.wrapper.events?.first?.dccEvent != nil {
+			mode = .paperflow
+		} else if events.first?.wrapper.events?.first?.positiveTest != nil {
+			mode = .positiveTest
+		} else if events.first?.wrapper.events?.first?.negativeTest != nil {
+			mode = .test
+		} else if events.first?.wrapper.events?.first?.recovery != nil {
+			mode = .recovery
+		} else if events.first?.wrapper.events?.first?.vaccination != nil {
+			mode = .vaccination
+		}
 
-		navigateToListEvents(events, eventMode: .test, eventsMightBeMissing: false)
+		navigateToListEvents(events, eventMode: mode, originalMode: originalMode, eventsMightBeMissing: false)
 	}
 
 	func startWithScannedEvent(_ event: RemoteEvent) {
 
 		navigateToListEvents([event], eventMode: .paperflow, eventsMightBeMissing: false)
-	}
-
-	func startWithTVS(eventMode: EventMode) {
-		
-		navigateToLogin(eventMode: eventMode)
 	}
 
 	// MARK: - Universal Link handling
@@ -202,14 +223,18 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	private func navigateToListEvents(
 		_ remoteEvents: [RemoteEvent],
 		eventMode: EventMode,
+		originalMode: EventMode? = nil,
 		eventsMightBeMissing: Bool) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				eventMode: eventMode,
+				originalMode: originalMode,
 				remoteEvents: remoteEvents,
-				eventsMightBeMissing: eventsMightBeMissing
+				identityChecker: IdentityChecker(),
+				eventsMightBeMissing: eventsMightBeMissing,
+				greenCardLoader: Current.greenCardLoader
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -217,11 +242,13 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	private func navigateToMoreInformation(_ title: String, body: String, hideBodyForScreenCapture: Bool) {
 
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				coordinator: self,
-				title: title,
-				message: body,
+				content: Content(
+					title: title,
+					body: body
+				),
 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: true)
@@ -251,7 +278,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 
-	private func navigateBackToEventStart() {
+	@discardableResult private func navigateBackToEventStart() -> Bool {
 
 		if let eventStartViewController = navigationController.viewControllers
 			.first(where: { $0 is EventStartViewController }) {
@@ -260,9 +287,11 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 				eventStartViewController,
 				animated: true
 			)
+			return true
 		}
+		return false
 	}
-
+	
 	private func navigateBackToTestStart() {
 		
 		let popBackToViewController = navigationController.viewControllers.first {
@@ -270,7 +299,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 			switch $0 {
 				case is ChooseTestLocationViewController:
 					return true
-				// Fallback when GGD is not available
+					// Fallback when GGD is not available
 				case is ChooseQRCodeTypeViewController:
 					return true
 				default:
@@ -284,6 +313,20 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 				animated: true
 			)
 		}
+	}
+	
+	private func navigateBackToVisitorPassStart() -> Bool {
+		
+		if let eventStartViewController = navigationController.viewControllers
+			.first(where: { $0 is VisitorPassStartViewController }) {
+			
+			navigationController.popToViewController(
+				eventStartViewController,
+				animated: true
+			)
+			return true
+		}
+		return false
 	}
 
 	private func displayError(content: Content, backAction: @escaping () -> Void) {
@@ -312,10 +355,15 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	}
 
 	private func handleBackAction(eventMode: EventMode) {
-
-		if eventMode == .positiveTest, navigationController.viewControllers.filter({ $0 is EventStartViewController }).count > 1 {
-			// Positive Test flow after vaccination flow with only an international QR
-			navigationController.popViewController(animated: true)
+		
+		if eventMode == .positiveTest,
+		   navigationController.viewControllers.filter({ $0 is EventStartViewController }).count > 1,
+		   let listEventViewController = navigationController.viewControllers.first(where: { $0 is ListEventsViewController }) {
+			
+			navigationController.popToViewController(
+				listEventViewController,
+				animated: true
+			)
 		} else {
 			delegate?.eventFlowDidCancel()
 		}
@@ -361,6 +409,10 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
 				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
 
+			case .startWithPositiveTest:
+				// route after international QR only, and backend says token expired, while our check says valid.
+				tvsToken = nil
+				startWithPositiveTest()
 			default:
 				break
 		}
@@ -369,10 +421,16 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	private func goBack(_ eventMode: EventMode) {
 
 		switch eventMode {
-			case .test:
-				navigateBackToTestStart()
+			case .vaccinationassessment:
+				if !navigateBackToVisitorPassStart() {
+					navigateBackToTestStart()
+				}
 			case .recovery, .vaccination, .positiveTest:
 				navigateBackToEventStart()
+			case .test:
+				if !navigateBackToEventStart() {
+					navigateBackToTestStart()
+				}
 			case .paperflow:
 				delegate?.eventFlowDidCancel()
 		}
@@ -381,7 +439,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	func listEventsScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
-			case .stop, .continue:
+			case .stop:
+				delegate?.eventFlowDidComplete()
+			case .continue:
 				delegate?.eventFlowDidComplete()
 			case .back(let eventMode):
 				goBack(eventMode)
@@ -393,6 +453,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToEventDetails(title, details: details, footer: footer)
 			case .startWithPositiveTest:
 				startWithPositiveTest()
+			case .shouldCompleteVaccinationAssessment:
+				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
 			default:
 				break
 		}
@@ -416,6 +478,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				title: L.holderErrorstateLoginTitle(),
 				message: {
 					switch eventMode {
+						case .vaccinationassessment: return "** TODO **"
 						case .recovery:
 							return L.holderErrorstateLoginMessageRecovery()
 						case .paperflow:

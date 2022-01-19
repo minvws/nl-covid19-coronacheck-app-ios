@@ -17,58 +17,27 @@ class LaunchViewControllerTests: XCTestCase {
 	private var sut: LaunchViewController!
 	private var appCoordinatorSpy: AppCoordinatorSpy!
 	private var versionSupplierSpy: AppVersionSupplierSpy!
-	private var remoteConfigSpy: RemoteConfigManagingSpy!
-	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
-	private var deviceAuthenticationSpy: DeviceAuthenticationSpy!
-	private var userSettingsSpy: UserSettingsSpy!
-	private var walletSpy: WalletManagerSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
 	override func setUp() {
 
 		super.setUp()
-
+		environmentSpies = setupEnvironmentSpies()
+		
 		appCoordinatorSpy = AppCoordinatorSpy()
 		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
-		remoteConfigSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
-		remoteConfigSpy.stubbedStoredConfiguration = remoteConfig
-		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
-		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
-
-		jailBreakProtocolSpy = JailBreakProtocolSpy()
-		deviceAuthenticationSpy = DeviceAuthenticationSpy()
-		userSettingsSpy = UserSettingsSpy()
-		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
-
-		Services.use(remoteConfigSpy)
-		Services.use(deviceAuthenticationSpy)
-		Services.use(jailBreakProtocolSpy)
-		Services.use(walletSpy)
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 
 		sut = LaunchViewController(viewModel: viewModel)
 		window = UIWindow()
-	}
-
-	let remoteConfig = RemoteConfiguration.default
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func loadView() {
@@ -99,16 +68,15 @@ class LaunchViewControllerTests: XCTestCase {
 	func test_showJailBreakAlert() {
 
 		// Given
-		userSettingsSpy.stubbedJailbreakWarningShown = false
-		userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
-		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
-		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
+		environmentSpies.userSettingsSpy.stubbedJailbreakWarningShown = false
+		environmentSpies.userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
+		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = true
+		environmentSpies.deviceAuthenticationDetectorSpy.stubbedHasAuthenticationPolicyResult = true
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 
@@ -134,16 +102,15 @@ class LaunchViewControllerTests: XCTestCase {
 	func test_showJailBreakAlertAction() throws {
 
 		// Given
-		userSettingsSpy.stubbedJailbreakWarningShown = false
-		userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
-		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
-		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
+		environmentSpies.userSettingsSpy.stubbedJailbreakWarningShown = false
+		environmentSpies.userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
+		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = true
+		environmentSpies.deviceAuthenticationDetectorSpy.stubbedHasAuthenticationPolicyResult = true
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 
@@ -154,22 +121,21 @@ class LaunchViewControllerTests: XCTestCase {
 		try alertVerifier.executeAction(forButton: L.generalOk())
 
 		// Then
-		expect(self.userSettingsSpy.invokedJailbreakWarningShownSetter) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedJailbreakWarningShownSetter) == true
 	}
 
 	func test_showDeviceAuthenticationAlert() {
 
 		// Given
-		userSettingsSpy.stubbedJailbreakWarningShown = false
-		userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
-		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
-		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = false
+		environmentSpies.userSettingsSpy.stubbedJailbreakWarningShown = false
+		environmentSpies.userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
+		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = false
+		environmentSpies.deviceAuthenticationDetectorSpy.stubbedHasAuthenticationPolicyResult = false
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 
@@ -195,16 +161,15 @@ class LaunchViewControllerTests: XCTestCase {
 	func test_showDeviceAuthenticationAction() throws {
 
 		// Given
-		userSettingsSpy.stubbedJailbreakWarningShown = false
-		userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
-		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
-		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = false
+		environmentSpies.userSettingsSpy.stubbedJailbreakWarningShown = false
+		environmentSpies.userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
+		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = false
+		environmentSpies.deviceAuthenticationDetectorSpy.stubbedHasAuthenticationPolicyResult = false
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 
@@ -215,6 +180,6 @@ class LaunchViewControllerTests: XCTestCase {
 		try alertVerifier.executeAction(forButton: L.generalOk())
 
 		// Then
-		expect(self.userSettingsSpy.invokedDeviceAuthenticationWarningShownSetter) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedDeviceAuthenticationWarningShownSetter) == true
 	}
 }

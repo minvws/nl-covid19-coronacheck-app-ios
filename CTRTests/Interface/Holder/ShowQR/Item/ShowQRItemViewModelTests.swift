@@ -16,37 +16,14 @@ class ShowQRItemViewModelTests: XCTestCase {
 	var sut: ShowQRItemViewModel!
 
 	var delegateSpy: ShowQRItemViewModelDelegateSpy!
-	var cryptoManagerSpy: CryptoManagerSpy!
-	var dataStoreManager: DataStoreManaging!
 	var screenCaptureDetector: ScreenCaptureDetectorSpy!
-	var userSettingsSpy: UserSettingsSpy!
-	var remoteConfigManagingSpy: RemoteConfigManagingSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 		super.setUp()
-		dataStoreManager = DataStoreManager(.inMemory)
 		delegateSpy = ShowQRItemViewModelDelegateSpy()
-		cryptoManagerSpy = CryptoManagerSpy()
+		environmentSpies = setupEnvironmentSpies()
 		screenCaptureDetector = ScreenCaptureDetectorSpy()
-		userSettingsSpy = UserSettingsSpy()
-		remoteConfigManagingSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
-		remoteConfigManagingSpy.stubbedStoredConfiguration = .default
-		remoteConfigManagingSpy.stubbedAppendReloadObserverResult = UUID()
-		remoteConfigManagingSpy.stubbedAppendUpdateObserverResult = UUID()
-		
-		Services.use(cryptoManagerSpy)
-		Services.use(remoteConfigManagingSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	// MARK: - Tests
@@ -56,8 +33,8 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
 			)
@@ -67,8 +44,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// Then
@@ -81,8 +57,8 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)
@@ -92,8 +68,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// Then
@@ -111,8 +86,8 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: false
 			)
@@ -120,8 +95,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// When
@@ -135,8 +109,8 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: false
 			)
@@ -144,8 +118,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// When
@@ -156,12 +129,12 @@ class ShowQRItemViewModelTests: XCTestCase {
 	}
 
 	func test_validity_withDomesticGreenCard_withValidCredential() throws {
-		remoteConfigManagingSpy.stubbedStoredConfiguration = .default
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
 			)
@@ -169,16 +142,15 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			screenCaptureDetector: screenCaptureDetector
 		)
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+		environmentSpies.cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 
 		// When
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.cryptoManagerSpy.invokedGenerateQRmessage).toEventually(beTrue())
+		expect(self.environmentSpies.cryptoManagerSpy.invokedGenerateQRmessage).toEventually(beTrue())
 		expect(self.sut.visibilityState).toEventually(beVisible())
 		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.delegateSpy.invokedItemIsNotValid) == false
@@ -188,8 +160,8 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)
@@ -197,15 +169,14 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// When
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.cryptoManagerSpy.invokedGenerateQRmessage).toEventually(beFalse())
+		expect(self.environmentSpies.cryptoManagerSpy.invokedGenerateQRmessage).toEventually(beFalse())
 		expect(self.sut.visibilityState).toEventually(beVisible())
 		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.delegateSpy.invokedItemIsNotValid) == false
@@ -216,8 +187,8 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: false
 			)
@@ -225,8 +196,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// When
@@ -239,11 +209,11 @@ class ShowQRItemViewModelTests: XCTestCase {
 	func testTakingAScreenshotPersistsDate() throws {
 
 		// Given
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+		environmentSpies.cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: false
 			)
@@ -251,27 +221,25 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy,
-			now: { now }
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// When
 		screenCaptureDetector.invokedScreenshotWasTakenCallback?()
 
 		// Then
-		expect(self.userSettingsSpy.invokedLastScreenshotTime).toEventually(equal(now))
+		expect(self.environmentSpies.userSettingsSpy.invokedLastScreenshotTime).toEventually(equal(now))
 	}
 
 	func testHavingAPriorUnexpiredScreenshotStartsScreenshotBlocker() throws {
 
 		// Given
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
-		userSettingsSpy.stubbedLastScreenshotTime = now.addingTimeInterval(-10)
+		environmentSpies.cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+		environmentSpies.userSettingsSpy.stubbedLastScreenshotTime = now.addingTimeInterval(-10)
 
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: false
 			)
@@ -279,9 +247,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy,
-			now: { now }
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// Then
@@ -294,8 +260,8 @@ class ShowQRItemViewModelTests: XCTestCase {
 	func testHideForCapture() throws {
 		// Given
 		let greenCard = try XCTUnwrap(
-			GreenCardModel.createTestGreenCard(
-				dataStoreManager: dataStoreManager,
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
 			)
@@ -303,10 +269,9 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			screenCaptureDetector: screenCaptureDetector,
-			userSettings: userSettingsSpy
+			screenCaptureDetector: screenCaptureDetector
 		)
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+		environmentSpies.cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 
 		// When
 		sut?.checkQRValidity()
@@ -325,7 +290,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 
 extension GreenCardModel {
 
-	static func createTestGreenCard(dataStoreManager: DataStoreManaging, type: GreenCardType, withValidCredential: Bool) -> GreenCard? {
+	static func createFakeGreenCard(dataStoreManager: DataStoreManaging, type: GreenCardType, withValidCredential: Bool, originType: OriginType? = nil) -> GreenCard? {
 
 		var result: GreenCard?
 		let context = dataStoreManager.managedObjectContext()
@@ -344,6 +309,19 @@ extension GreenCardModel {
 						data: Data(),
 						validFrom: Date(timeIntervalSince1970: now),
 						expirationTime: Date(timeIntervalSince1970: expiration),
+						greenCard: greenCard,
+						managedContext: context
+					)
+				}
+				if let type = originType, let greenCard = result {
+					let now = Date().timeIntervalSince1970 - 200
+					let expiration = now + 3600
+					OriginModel.create(
+						type: type,
+						eventDate: Date(timeIntervalSince1970: now),
+						expirationTime: Date(timeIntervalSince1970: expiration),
+						validFromDate: Date(timeIntervalSince1970: now),
+						doseNumber: nil,
 						greenCard: greenCard,
 						managedContext: context
 					)

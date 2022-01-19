@@ -26,8 +26,8 @@ extension HolderDashboardViewModel {
 
 		/// Represents the region that the Greencard applies to
 		enum Region {
-			case netherlands
-			case europeanUnion(evaluateDCC: (QRCard.GreenCard, Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
+			case netherlands(evaluateCredentialAttributes: (QRCard.GreenCard, Date) -> DomesticCredentialAttributes?)
+			case europeanUnion(evaluateCredentialAttributes: (QRCard.GreenCard, Date) -> EuCredentialAttributes?)
 		}
 
 		struct GreenCard: Equatable {
@@ -36,7 +36,7 @@ extension HolderDashboardViewModel {
 
 			struct Origin: Equatable { // swiftlint:disable:this nesting
 
-				let type: QRCodeOriginType // vaccination | test | recovery
+				let type: QRCodeOriginType // vaccination | test | recovery | vaccinationassessment
 				let eventDate: Date
 				let expirationTime: Date
 				let validFromDate: Date
@@ -63,6 +63,24 @@ extension HolderDashboardViewModel {
 					let threeYearsFromNow: TimeInterval = 60 * 60 * 24 * 365 * 3
 					return expirationTime > now.addingTimeInterval(threeYearsFromNow)
 				}
+			}
+				
+			func hasValid3GTestWithoutAValidVaccineOrAValidRecovery(
+				credentialEvaluator: (HolderDashboardViewModel.QRCard.GreenCard, Date) -> DomesticCredentialAttributes?,
+				now: Date
+			) -> Bool {
+				let currentlyValidOrigins = origins.filter({ $0.isCurrentlyValid(now: now) })
+				
+				// Check contains currently valid test origin:
+				guard origins.contains(where: { $0.type == .test }) else { return false }
+				
+				// Check if the greencard riskLevel is low:
+				let isExplicitly3G = credentialEvaluator(self, now)?.riskLevel == .low
+				
+				let hasValidVaccine = currentlyValidOrigins.contains { $0.type == .vaccination }
+				let hasValidRecovery = currentlyValidOrigins.contains { $0.type == .recovery }
+				
+				return isExplicitly3G && !hasValidVaccine && !hasValidRecovery
 			}
 		}
 
@@ -104,6 +122,20 @@ extension HolderDashboardViewModel {
 				.sorted()
 				.last ?? .distantPast
 		}
+		
+		// Ignores greencards with no category
+		func isa3GTestTheOnlyCurrentlyValidOrigin(now: Date) -> Bool {
+			guard Current.featureFlagManager.isVerificationPolicyEnabled() else { return false }
+
+			guard case let .netherlands(credentialEvaluator) = region else { return false }
+			
+			// Find greencards where there IS a valid 3G test, but no currently-valid recovery or vaccine:
+			let matchingGreenCards = greencards.filter { greencard in
+				greencard.hasValid3GTestWithoutAValidVaccineOrAValidRecovery(credentialEvaluator: credentialEvaluator, now: now)
+			}
+			
+			return matchingGreenCards.count == greencards.count
+		}
 	}
 
 	struct ExpiredQR: Equatable {
@@ -120,7 +152,7 @@ extension QRCard.Region: Equatable {
 		switch (lhs, rhs) {
 			case (.netherlands, .netherlands): return true
 			case (.europeanUnion, .europeanUnion):
-				// No need to compare the evaluateDCC function
+				// No need to compare the associated-value `evaluate` functions
 				return true
 			default:
 				return false

@@ -23,7 +23,9 @@ extension ListEventsViewModel {
 			okAction: { _ in
 				onReplace()
 			},
-			okTitle: L.holderEventIdentityAlertOk()
+			okTitle: L.holderEventIdentityAlertOk(),
+			okActionIsDestructive: true,
+			okActionIsPreferred: true
 		)
 	}
 
@@ -41,7 +43,8 @@ extension ListEventsViewModel {
 					}
 				}
 			},
-			okTitle: L.holderVaccinationErrorAgain()
+			okTitle: L.holderVaccinationErrorAgain(),
+			okActionIsPreferred: true
 		)
 	}
 
@@ -49,8 +52,8 @@ extension ListEventsViewModel {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			body: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(.stop)
 			},
@@ -76,7 +79,8 @@ extension ListEventsViewModel {
 					}
 				}
 			},
-			okTitle: L.generalRetry()
+			okTitle: L.generalRetry(),
+			okActionIsPreferred: true
 		)
 	}
 
@@ -99,8 +103,8 @@ extension ListEventsViewModel {
 
 		let content = Content(
 			title: title,
-			subTitle: message,
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			body: message,
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(.stop)
 			},
@@ -119,6 +123,7 @@ extension ListEventsViewModel {
 	func determineErrorCodeFlow(remoteEvents: [RemoteEvent]) -> ErrorCode.Flow {
 
 		switch eventMode {
+			case .vaccinationassessment: return ErrorCode.Flow.visitorPass
 			case .vaccination: return ErrorCode.Flow.vaccination
 			case .paperflow: return ErrorCode.Flow.hkvi
 			case .positiveTest: return ErrorCode.Flow.positiveTest

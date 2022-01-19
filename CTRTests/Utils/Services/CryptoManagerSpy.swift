@@ -11,8 +11,6 @@ import Clcore
 
 class CryptoManagerSpy: CryptoManaging {
 
-	required init() {}
-
 	var invokedSetNonce = false
 	var invokedSetNonceCount = 0
 	var invokedSetNonceParameters: (nonce: String, Void)?
@@ -135,5 +133,13 @@ class CryptoManagerSpy: CryptoManaging {
 		invokedReadEuCredentialsParameters = (data, ())
 		invokedReadEuCredentialsParametersList.append((data, ()))
 		return stubbedReadEuCredentialsResult
+	}
+
+	var invokedGenerateSecretKey = false
+	var invokedGenerateSecretKeyCount = 0
+
+	func generateSecretKey() {
+		invokedGenerateSecretKey = true
+		invokedGenerateSecretKeyCount += 1
 	}
 }

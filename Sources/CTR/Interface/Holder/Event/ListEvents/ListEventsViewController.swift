@@ -72,7 +72,7 @@ class ListEventsViewController: BaseViewController {
 		}
 
 		viewModel.$alert.binding = { [weak self] in
-			self?.showAlert($0, preferredAction: $0?.okTitle)
+			self?.showAlert($0)
 		}
 
 		viewModel.$shouldPrimaryButtonBeEnabled.binding = { [weak self] in
@@ -120,14 +120,14 @@ class ListEventsViewController: BaseViewController {
 
 		// Add new rows:
 		rows
-			.map { rowModel -> VaccinationEventView in
-				VaccinationEventView.makeView(
+			.map { rowModel -> EventItemView in
+				EventItemView.makeView(
 					title: rowModel.title,
 					subTitle: rowModel.subTitle,
 					command: rowModel.action
 				)
 			}
-			.forEach(self.sceneView.addVaccinationEventView)
+			.forEach(self.sceneView.addEventItemView)
 	}
 
 	private func setForFeedback(_ content: Content) {
@@ -143,7 +143,7 @@ class ListEventsViewController: BaseViewController {
 
 		// Texts
 		sceneView.title = content.title
-		sceneView.message = content.subTitle
+		sceneView.message = content.body
 
 		sceneView.contentTextView.linkTouched { [weak self] url in
 
@@ -169,20 +169,20 @@ class ListEventsViewController: BaseViewController {
 	}
 }
 
-extension VaccinationEventView {
+extension EventItemView {
 
-	/// Create a vaccination event view
+	/// Create a event item view
 	/// - Parameters:
 	///   - title: the title of the view
 	///   - subTitle: the sub title of the view
 	///   - command: the command to execute when tapped
-	/// - Returns: a vaccination event view
+	/// - Returns: an event item view
 	fileprivate static func makeView(
 		title: String,
 		subTitle: String,
-		command: (() -> Void)? ) -> VaccinationEventView {
+		command: (() -> Void)? ) -> EventItemView {
 
-		let view = VaccinationEventView()
+		let view = EventItemView()
 		view.isUserInteractionEnabled = true
 		view.title = title
 		view.subTitle = subTitle

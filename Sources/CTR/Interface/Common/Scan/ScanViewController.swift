@@ -12,16 +12,14 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 	var loggingCategory: String = "ScanViewController"
 
-	var captureSession: AVCaptureSession!
-	var previewLayer: AVCaptureVideoPreviewLayer!
+	private var captureSession: AVCaptureSession!
+	private var previewLayer: AVCaptureVideoPreviewLayer!
 
-	let sceneView = ScanView()
-
-	var previousOrientation: UIInterfaceOrientation?
+	private var previousOrientation: UIInterfaceOrientation?
     
-    var torchButton: UIBarButtonItem?
-    var torchEnableLabel: String?
-    var torchDisableLabel: String?
+    private var torchButton: UIBarButtonItem?
+    private var torchEnableLabel: String?
+    private var torchDisableLabel: String?
 
 	// Actions to perform on the navigationController at the moment that we are removing this screen.
 	// 	Background:
@@ -31,24 +29,21 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	// 		inside this closure, so that we can perform some teardown steps on it as we're dismissed.
 	private var navigationControllerTeardown: (() -> Void)?
 
-	// MARK: View lifecycle
-	override func loadView() {
+	override var preferredStatusBarStyle: UIStatusBarStyle {
 
-		view = sceneView
+		.lightContent
 	}
 
+	// MARK: View lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		navigationControllerTeardown = { [weak navigationController] in
-			// Reset navigation title color
-			let textAttributes = [
-				NSAttributedString.Key.foregroundColor: Theme.colors.dark,
-				NSAttributedString.Key.font: Theme.fonts.bodyMontserrat
-			]
-			navigationController?.navigationBar.titleTextAttributes = textAttributes
-			navigationController?.navigationBar.tintColor = Theme.colors.dark
+		navigationControllerTeardown = { [weak self] in
+			// Reset navigation title color			
+			self?.overrideNavigationBarTitleColor(with: Theme.colors.dark)
 		}
+		
+		setupScan()
 	}
 
 	func setupScan() {
@@ -57,7 +52,6 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			return
 		}
 
-		sceneView.cameraView.backgroundColor = UIColor.black
 		captureSession = AVCaptureSession()
 
 		guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
@@ -91,13 +85,24 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			failed()
 			return
 		}
-
-		previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-		previewLayer.frame = sceneView.cameraView.layer.bounds
-		previewLayer.videoGravity = .resizeAspectFill
-		sceneView.cameraView.layer.addSublayer(previewLayer)
-
-		captureSession.startRunning()
+	}
+	
+	func attachCameraViewAndStartRunning(_ cameraView: UIView) {
+		
+		guard !Platform.isSimulator else {
+			return
+		}
+		
+		if previewLayer?.superlayer == nil {
+			previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+			previewLayer?.videoGravity = .resizeAspectFill
+			previewLayer.frame = cameraView.layer.bounds
+			cameraView.layer.addSublayer(previewLayer)
+		}
+		
+		if captureSession?.isRunning == false {
+			captureSession.startRunning()
+		}
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -105,25 +110,10 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		super.viewWillAppear(animated)
 
 		// Force navigation title color to white
-		let textAttributes = [
-			NSAttributedString.Key.foregroundColor: UIColor.white,
-			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
-		]
-		navigationController?.navigationBar.titleTextAttributes = textAttributes
-		navigationController?.navigationBar.tintColor = .white
+		overrideNavigationBarTitleColor(with: .white)
 
 		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
-	}
-
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-
-		setupScan()
-
-		if !Platform.isSimulator, captureSession?.isRunning == false {
-			captureSession.startRunning()
-		}
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {

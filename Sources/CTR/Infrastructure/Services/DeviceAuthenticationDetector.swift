@@ -10,8 +10,6 @@ import LocalAuthentication
 
 protocol DeviceAuthenticationProtocol: AnyObject {
 
-	init()
-
 	/// Does this device have an authentication policy set? (biometrics, touch, passcode)
 	/// - Returns: True if it does
 	func hasAuthenticationPolicy() -> Bool

@@ -15,25 +15,14 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 
 	var sut: PaperProofCheckViewController!
 	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
-	var couplingManagerSpy: CouplingManagerSpy!
-
+	private var environmentSpies: EnvironmentSpies!
 	var window = UIWindow()
 
 	override func setUp() {
 		super.setUp()
 		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
-		couplingManagerSpy = CouplingManagerSpy(
-			cryptoManager: CryptoManagerSpy(),
-			networkManager: NetworkSpy(configuration: .development)
-		)
-		Services.use(couplingManagerSpy)
+		environmentSpies = setupEnvironmentSpies()
 		window = UIWindow()
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func loadView() {
@@ -47,7 +36,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 	func test_viewStateBlocked() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
 
 		sut = PaperProofCheckViewController(
@@ -64,7 +53,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.title) == L.holderCheckdccBlockedTitle()
 		expect(self.sut.sceneView.message) == L.holderCheckdccBlockedMessage()
-		expect(self.sut.sceneView.primaryTitle) == L.holderCheckdccBlockedActionTitle()
+		expect(self.sut.sceneView.primaryTitle) == L.general_toMyOverview()
 
 		sut.assertImage()
 	}
@@ -72,7 +61,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 	func test_viewStateBlocked_primaryAction() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
 
 		sut = PaperProofCheckViewController(
@@ -94,7 +83,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 	func test_viewStateExpired() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
 
 		sut = PaperProofCheckViewController(
@@ -111,7 +100,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.title) == L.holderCheckdccExpiredTitle()
 		expect(self.sut.sceneView.message) == L.holderCheckdccExpiredMessage()
-		expect(self.sut.sceneView.primaryTitle) == L.holderCheckdccExpiredActionTitle()
+		expect(self.sut.sceneView.primaryTitle) == L.general_toMyOverview()
 
 		sut.assertImage()
 	}
@@ -119,7 +108,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 	func test_viewStateExpired_primaryAction() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
 
 		sut = PaperProofCheckViewController(
@@ -141,7 +130,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 	func test_viewStateRejected() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
 
 		sut = PaperProofCheckViewController(
@@ -166,7 +155,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 	func test_viewStateRejected_primaryAction() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
 
 		sut = PaperProofCheckViewController(
@@ -189,7 +178,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 
 		// Given
 		let alertVerifier = AlertVerifier()
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
 		sut = PaperProofCheckViewController(
@@ -221,7 +210,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 
 		// Given
 		let alertVerifier = AlertVerifier()
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
 		sut = PaperProofCheckViewController(
@@ -244,7 +233,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 
 		// Given
 		let alertVerifier = AlertVerifier()
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
 		sut = PaperProofCheckViewController(
@@ -260,6 +249,6 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 		try alertVerifier.executeAction(forButton: L.holderVaccinationErrorAgain())
 
 		// Then
-		expect(self.couplingManagerSpy.invokedCheckCouplingStatusCount).toEventually(equal(2))
+		expect(self.environmentSpies.couplingManagerSpy.invokedCheckCouplingStatusCount).toEventually(equal(2))
 	}
 }

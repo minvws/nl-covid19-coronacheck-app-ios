@@ -24,21 +24,19 @@ protocol UserSettingsProtocol: AnyObject {
 	var issuerKeysFetchedTimestamp: TimeInterval? { get set }
 
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? { get set }
+	
+	var lastRecommendToAddYourBoosterDismissalDate: Date? { get set }
+	
+	var lastSeenRecommendedUpdate: String? { get set }
 
+	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? { get set }
+	
 	var deviceAuthenticationWarningShown: Bool { get set }
 
-	// Flags for upgrading to Multiple DCCs:
-	var didCompleteEUVaccinationMigration: Bool { get set }
-	var didDismissEUVaccinationMigrationSuccessBanner: Bool { get set }
-
-	// Flags for extension of Recovery validity:
-	var shouldCheckRecoveryGreenCardRevisedValidity: Bool { get set }
-	var shouldShowRecoveryValidityExtensionCard: Bool { get set }
-	var shouldShowRecoveryValidityReinstationCard: Bool { get set }
-	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool { get set }
-	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool { get set }
+	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
+	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	
-	func reset()
+	func wipePersistedData()
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -67,47 +65,58 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "lastRecommendUpdateDismissalTimestamp", defaultValue: nil)
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
 
+	@UserDefaults(key: "lastRecommendToAddYourBoosterDismissalDate", defaultValue: nil)
+	var lastRecommendToAddYourBoosterDismissalDate: Date? // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "lastSeenRecommendedUpdate", defaultValue: nil)
+	var lastSeenRecommendedUpdate: String? // swiftlint:disable:this let_var_whitespace
+	
+	@UserDefaults(key: "lastSuccessfulCompletionOfAddCertificateFlowDate", defaultValue: nil)
+	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? // swiftlint:disable:this let_var_whitespace
+
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
 
-	// MARK: - Multiple DCC migration:
-
-	@UserDefaults(key: "didCompleteEUVaccinationMigration", defaultValue: false)
-	var didCompleteEUVaccinationMigration: Bool // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "didDismissEUVaccinationMigrationSuccessBanner", defaultValue: false)
-	var didDismissEUVaccinationMigrationSuccessBanner: Bool // swiftlint:disable:this let_var_whitespace
-
-	// MARK: - Extension of Recovery validity:
-
-	@UserDefaults(key: "shouldCheckRecoveryGreenCardRevisedValidity", defaultValue: true)
-	var shouldCheckRecoveryGreenCardRevisedValidity: Bool // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "shouldShowRecoveryValidityExtensionCard", defaultValue: false)
-	var shouldShowRecoveryValidityExtensionCard: Bool // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "shouldShowRecoveryValidityReinstationCard", defaultValue: false)
-	var shouldShowRecoveryValidityReinstationCard: Bool // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "hasDismissedRecoveryValidityExtensionCompletionCard", defaultValue: true)
-	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "hasDismissedRecoveryValidityReinstationCompletionCard", defaultValue: true)
-	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool // swiftlint:disable:this let_var_whitespace
+	// MARK: - Validity Information Banner for Vaccinations and Recoveries
+	
+	@UserDefaults(key: "hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
+	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
+	
+	@UserDefaults(key: "shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
+	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
 }
 
 extension UserSettings {
 
-	func reset() {
+	func wipePersistedData() {
+		
 		// Clear user defaults:
 		// We can not simply loop over all the keys, as some are needed for clear on reinstall for the keychain items.
 		let userDefaults = Foundation.UserDefaults.standard
-		["scanInstructionShown", "jailbreakWarningShown", "dashboardRegionToggleValue", "configFetchedTimestamp", "configFetchedHash",
-		"issuerKeysFetchedTimestamp", "lastScreenshotTime", "lastRecommendUpdateDismissalTimestamp", "deviceAuthenticationWarningShown",
-		"didCompleteEUVaccinationMigration", "didDismissEUVaccinationMigrationSuccessBanner",
-		 "shouldCheckRecoveryGreenCardRevisedValidity", "shouldShowRecoveryValidityExtensionCard",
-		 "shouldShowRecoveryValidityReinstationCard", "hasDismissedRecoveryValidityExtensionCompletionCard",
-		 "hasDismissedRecoveryValidityReinstationCompletionCard"]
-			.forEach(userDefaults.removeObject(forKey:))
+		[	"scanInstructionShown",
+			"jailbreakWarningShown",
+			"dashboardRegionToggleValue",
+			"configFetchedTimestamp",
+			"configFetchedHash",
+			"issuerKeysFetchedTimestamp",
+			"lastScreenshotTime",
+			"lastRecommendUpdateDismissalTimestamp",
+			"lastSeenRecommendedUpdate",
+			"lastRecommendToAddYourBoosterDismissalDate",
+			"lastSuccessfulCompletionOfAddCertificateFlowDate",
+			"deviceAuthenticationWarningShown",
+			"deviceAuthenticationWarningShown",
+			"shouldCheckRecoveryGreenCardRevisedValidity",
+			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
+			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
+
+			// Deprecated keys
+			"shouldShowRecoveryValidityExtensionCard",
+			"shouldShowRecoveryValidityReinstationCard",
+			"hasDismissedRecoveryValidityExtensionCompletionCard",
+			"hasDismissedRecoveryValidityReinstationCompletionCard",
+			"didCompleteEUVaccinationMigration",
+			"didDismissEUVaccinationMigrationSuccessBanner"
+		].forEach(userDefaults.removeObject(forKey:))
 	}
 }

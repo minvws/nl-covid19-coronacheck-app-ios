@@ -11,7 +11,7 @@ import AppAuth
 class LoginTVSViewModel: Logging {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var openIdManager: OpenIdManaging? = Services.openIdManager
+	private weak var openIdManager: OpenIdManaging? = Current.openIdManager
 
 	private var eventMode: EventMode
 
@@ -35,7 +35,7 @@ class LoginTVSViewModel: Logging {
 		self.appAuthState = appAuthState
 
 		self.title = eventMode.fetching
-		content = Content( title: eventMode.title)
+		content = Content(title: eventMode.title)
 	}
 
 	func cancel() {
@@ -49,7 +49,7 @@ class LoginTVSViewModel: Logging {
 		shouldShowProgress = true
 		content = Content(
 			title: title,
-			subTitle: nil,
+			body: nil,
 			primaryActionTitle: L.generalClose(),
 			primaryAction: { [weak self] in
 				self?.cancel()
@@ -136,7 +136,7 @@ extension LoginTVSViewModel {
 		displayError(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
-			primaryActionTitle: L.holderErrorstateOverviewAction()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -144,8 +144,8 @@ extension LoginTVSViewModel {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			body: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.loginTVSScreenDidFinish(.stop)
 			},
@@ -160,7 +160,7 @@ extension LoginTVSViewModel {
 		displayError(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton()
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -168,7 +168,7 @@ extension LoginTVSViewModel {
 
 		let content = Content(
 			title: title,
-			subTitle: subTitle,
+			body: subTitle,
 			primaryActionTitle: primaryActionTitle,
 			primaryAction: { [weak self] in
 				self?.coordinator?.loginTVSScreenDidFinish(.stop)
@@ -355,17 +355,6 @@ extension LoginTVSViewModel {
 
 			default:
 				return nil
-		}
-	}
-
-	private var flow: ErrorCode.Flow {
-
-		switch eventMode {
-			case .paperflow: return .hkvi
-			case .positiveTest: return .positiveTest
-			case .recovery: return .recovery
-			case .test: return .ggdTest
-			case .vaccination: return .vaccination
 		}
 	}
 }

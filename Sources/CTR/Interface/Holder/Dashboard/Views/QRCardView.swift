@@ -231,10 +231,7 @@ class QRCardView: BaseView {
 	private func reapplyLabels(now: Date = Date()) {
 
 		// Remove previous labels
-		verticalLabelsStackView.arrangedSubviews.forEach { arrangedView in
-			verticalLabelsStackView.removeArrangedSubview(arrangedView)
-			arrangedView.removeFromSuperview()
-		}
+		verticalLabelsStackView.removeArrangedSubviews()
  
 		guard let validityTexts = validityTexts?(now) else { return }
 
@@ -242,8 +239,7 @@ class QRCardView: BaseView {
 		// Each Row contains an *array* of texts (simply to force newlines when needed)
 		// and they are rendered as grouped together.
 
-		validityTexts.forEach { validityText in
-
+		validityTexts.enumerated().forEach { index, validityText in
 			guard validityText.kind != .past else { return }
 
 			validityText.lines.forEach { text in
@@ -268,10 +264,11 @@ class QRCardView: BaseView {
 					verticalLabelsStackView.setCustomSpacing(22, after: becomesValidLabel)
 				}
 			}
-
-			// Add some padding after the last label
+			
+			// Add some padding after the last label (if it's not the last one)
+			let isLastIndex = (validityTexts.count - 1) == index
 			if let lastLabel = verticalLabelsStackView.arrangedSubviews.last as? Label {
-				verticalLabelsStackView.setCustomSpacing(22, after: lastLabel)
+				verticalLabelsStackView.setCustomSpacing(isLastIndex ? 2 : 22, after: lastLabel)
 			}
 		}
 

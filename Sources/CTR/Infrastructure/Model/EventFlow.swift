@@ -38,6 +38,14 @@ struct EventFlow {
 		case negativeTest = "nt"
 		case recovery = "r"
 		case vaccination = "v"
+		case none = ""
+		
+		/// Custom initializer to default to unknown state
+		/// - Parameter decoder: the decoder
+		/// - Throws: Decoding error
+		init(from decoder: Decoder) throws {
+			self = try ProviderUsage(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .none
+		}
 	}
 
 	// A Vaccination Event Provider (VEP)
@@ -210,6 +218,7 @@ struct EventFlow {
 		let positiveTest: TestEvent?
 		let recovery: RecoveryEvent?
 		let dccEvent: DccEvent?
+		let vaccinationAssessment: VaccinationAssessment?
 
 		enum CodingKeys: String, CodingKey {
 
@@ -221,6 +230,7 @@ struct EventFlow {
 			case positiveTest = "positivetest"
 			case recovery
 			case dccEvent
+			case vaccinationAssessment = "vaccinationassessment"
 		}
 
 		func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
@@ -233,6 +243,9 @@ struct EventFlow {
 			}
 			if recovery != nil {
 				return recovery?.getDate(with: dateformatter)
+			}
+			if vaccinationAssessment != nil {
+				return vaccinationAssessment?.getDate(with: dateformatter)
 			}
 			return positiveTest?.getDate(with: dateformatter)
 		}
@@ -301,7 +314,14 @@ struct EventFlow {
 		enum CompletionReason: String, Codable, Equatable {
 			case none = ""
 			case recovery = "recovery"
-			case priorEvent = "priorevent"
+			case firstVaccinationElsewhere = "first-vaccination-elsewhere"
+			
+			/// Custom initializer to default to none state
+			/// - Parameter decoder: the decoder
+			/// - Throws: Decoding error
+			init(from decoder: Decoder) throws {
+				self = try CompletionReason(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .none
+			}
 		}
 
 		/// Get the date for this event
@@ -348,6 +368,34 @@ struct EventFlow {
 			return nil
 		}
 	}
+	
+	struct VaccinationAssessment: Codable, Equatable {
+		
+		let dateTimeString: String?
+		let country: String?
+		let verified: Bool
+		
+		enum CodingKeys: String, CodingKey {
+			
+			case dateTimeString = "assessmentDate"
+			case country
+			case verified = "digitallyVerified"
+		}
+		
+		/// Get the date for this event
+		/// - Parameter dateformatter: the date formatter
+		/// - Returns: optional date
+		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+			
+			if let dateString = dateTimeString {
+				return  dateformatter.date(from: dateString)
+			}
+			return nil
+		}
+	}
+
+	/// This identifier is used for persiting paper proofs.
+	static let paperproofIdentier = "DCC"
 }
 
 extension EventFlow.VaccinationEvent {

@@ -18,46 +18,18 @@ class VerifierStartViewControllerTests: XCTestCase {
 
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: VerifierStartViewModel!
-	private var cryptoManagerSpy: CryptoManagerSpy!
-	private var cryptoLibUtilitySpy: CryptoLibUtilitySpy!
-	private var clockDeviationManagerSpy: ClockDeviationManagerSpy!
-	private var userSettingsSpy: UserSettingsSpy!
-	
+	private var environmentSpies: EnvironmentSpies!
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
 	override func setUp() {
 
 		super.setUp()
+		environmentSpies = setupEnvironmentSpies()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
-		cryptoManagerSpy = CryptoManagerSpy()
-		cryptoLibUtilitySpy = CryptoLibUtilitySpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			fileStorage: FileStorage(),
-			flavor: AppFlavor.verifier
-		)
-		clockDeviationManagerSpy = ClockDeviationManagerSpy()
-		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
-		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
-		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
-		userSettingsSpy = UserSettingsSpy()
-		Services.use(cryptoLibUtilitySpy)
-		Services.use(cryptoManagerSpy)
-		Services.use(clockDeviationManagerSpy)
 
-		viewModel = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			userSettings: userSettingsSpy
-		)
+		viewModel = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 		sut = VerifierStartViewController(viewModel: viewModel)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func loadView() {
@@ -89,7 +61,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped_noScanInstructionsShown() {
 
 		// Given
-		userSettingsSpy.stubbedScanInstructionShown = false
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
 		loadView()
 
 		// When
@@ -98,15 +70,16 @@ class VerifierStartViewControllerTests: XCTestCase {
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
-			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
-		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == true
+			.to(equal(.userTappedProceedToInstructionsOrRiskSetting), description: "Result should match")
+		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownGetter) == true
 	}
 
 	func test_primaryButtonTapped_scanInstructionsShown_havePublicKeys() {
 
 		// Given
-		userSettingsSpy.stubbedScanInstructionShown = true
-		cryptoManagerSpy.stubbedHasPublicKeysResult = true
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
 		loadView()
 
 		// When
@@ -122,8 +95,9 @@ class VerifierStartViewControllerTests: XCTestCase {
 
 		// Given
 		let alertVerifier = AlertVerifier()
-		userSettingsSpy.stubbedScanInstructionShown = true
-		cryptoManagerSpy.stubbedHasPublicKeysResult = false
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = false
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
 		loadView()
 
 		// When
@@ -139,7 +113,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 			],
 			presentingViewController: sut
 		)
-		expect(self.cryptoLibUtilitySpy.invokedUpdate) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 	}
 
 	func test_howInstructionsButtonTapped() {
@@ -154,6 +128,6 @@ class VerifierStartViewControllerTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
 			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
-		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == false
+		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownGetter) == false
 	}
 }

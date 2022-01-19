@@ -63,7 +63,7 @@ class FetchEventsViewController: BaseViewController {
 		}
 
 		viewModel.$alert.binding = { [weak self] in
-			self?.showAlert($0, preferredAction: $0?.okTitle)
+			self?.showAlert($0)
 		}
 
 		sceneView.contentTextView.linkTouched { [weak self] url in
@@ -95,7 +95,7 @@ class FetchEventsViewController: BaseViewController {
 
 		// Texts
 		sceneView.title = content.title
-		sceneView.message = content.subTitle
+		sceneView.message = content.body
 
 		// Button
 		if let actionTitle = content.primaryActionTitle {

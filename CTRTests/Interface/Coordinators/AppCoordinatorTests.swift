@@ -17,11 +17,12 @@ class AppCoordinatorTests: XCTestCase {
 	var navigationSpy: NavigationControllerSpy!
 
 	var window = UIWindow()
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
-
 		super.setUp()
-
+		
+		environmentSpies = setupEnvironmentSpies()
 		navigationSpy = NavigationControllerSpy()
 		sut = AppCoordinator(
 			navigationController: navigationSpy
@@ -160,7 +161,41 @@ class AppCoordinatorTests: XCTestCase {
 		expect(viewControllerSpy.thePresentedViewController is AppUpdateViewController) == true
 	}
 
-	func test_handleLaunchState_updateRecommended() {
+	func test_handleLaunchState_holder_updateRecommended() {
+
+		// Given
+		var config = RemoteConfiguration.default
+		config.appDeactivated = false
+		config.minimumVersion = "1.0.0"
+		config.recommendedVersion = "2.0.0"
+		config.appStoreURL = URL(string: "https://coronacheck.nl")
+		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		let state = LaunchState.actionRequired(config)
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		let userSettingSpy = UserSettingsSpy()
+		sut.userSettings = userSettingSpy
+		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
+		let alertVerifier = AlertVerifier()
+		sut.flavor = .holder
+
+		// When
+		sut.handleLaunchState(state)
+
+		// Then
+		alertVerifier.verify(
+			title: L.recommendedUpdateAppTitle(),
+			message: L.recommendedUpdateAppSubtitle(),
+			animated: true,
+			actions: [
+				.cancel(L.recommendedUpdateAppActionCancel()),
+				.default(L.recommendedUpdateAppActionOk())
+			]
+		)
+		expect(userSettingSpy.invokedLastSeenRecommendedUpdateSetter) == true
+	}
+
+	func test_handleLaunchState_verifier_updateRecommended() {
 
 		// Given
 		var config = RemoteConfiguration.default
@@ -176,6 +211,66 @@ class AppCoordinatorTests: XCTestCase {
 		sut.userSettings = userSettingSpy
 		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
 		let alertVerifier = AlertVerifier()
+		sut.flavor = .verifier
+
+		// When
+		sut.handleLaunchState(state)
+
+		// Then
+		alertVerifier.verify(
+			title: L.recommendedUpdateAppTitle(),
+			message: L.recommendedUpdateAppSubtitle(),
+			animated: true,
+			actions: [
+				.cancel(L.recommendedUpdateAppActionCancel()),
+				.default(L.recommendedUpdateAppActionOk())
+			]
+		)
+		expect(userSettingSpy.invokedLastRecommendUpdateDismissalTimestampSetter) == true
+	}
+
+	func test_handleLaunchState_holder_updateRecommended_alreadySeen() {
+
+		// Given
+		var config = RemoteConfiguration.default
+		config.appDeactivated = false
+		config.minimumVersion = "1.0.0"
+		config.recommendedVersion = "1.1.0"
+		config.appStoreURL = URL(string: "https://coronacheck.nl")
+		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		let state = LaunchState.actionRequired(config)
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		let userSettingSpy = UserSettingsSpy()
+		sut.userSettings = userSettingSpy
+		userSettingSpy.stubbedLastSeenRecommendedUpdate = "1.1.0"
+		sut.flavor = .holder
+
+		// When
+		sut.handleLaunchState(state)
+
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.first is HolderCoordinator) == true
+	}
+
+	func test_handleLaunchState_holder_updateRecommended_minor_version() {
+
+		// Given
+		var config = RemoteConfiguration.default
+		config.appDeactivated = false
+		config.minimumVersion = "1.0.0"
+		config.recommendedVersion = "1.1.0"
+		config.appStoreURL = URL(string: "https://coronacheck.nl")
+		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		let state = LaunchState.actionRequired(config)
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		let userSettingSpy = UserSettingsSpy()
+		sut.userSettings = userSettingSpy
+		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
+		let alertVerifier = AlertVerifier()
+		sut.flavor = .holder
 
 		// When
 		sut.handleLaunchState(state)
@@ -192,7 +287,7 @@ class AppCoordinatorTests: XCTestCase {
 		)
 	}
 
-	func test_handleLaunchState_updateRecommended_minor_version() {
+	func test_handleLaunchState_verifier_updateRecommended_minor_version() {
 
 		// Given
 		var config = RemoteConfiguration.default
@@ -208,6 +303,7 @@ class AppCoordinatorTests: XCTestCase {
 		sut.userSettings = userSettingSpy
 		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
 		let alertVerifier = AlertVerifier()
+		sut.flavor = .verifier
 
 		// When
 		sut.handleLaunchState(state)
@@ -224,7 +320,40 @@ class AppCoordinatorTests: XCTestCase {
 		)
 	}
 
-	func test_handleLaunchState_updateRecommended_bug_version() {
+	func test_handleLaunchState_holder_updateRecommended_bug_version() {
+
+		// Given
+		var config = RemoteConfiguration.default
+		config.appDeactivated = false
+		config.minimumVersion = "1.0.0"
+		config.recommendedVersion = "1.0.1"
+		config.appStoreURL = URL(string: "https://coronacheck.nl")
+		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		let state = LaunchState.actionRequired(config)
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		let userSettingSpy = UserSettingsSpy()
+		sut.userSettings = userSettingSpy
+		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
+		let alertVerifier = AlertVerifier()
+		sut.flavor = .holder
+
+		// When
+		sut.handleLaunchState(state)
+
+		// Then
+		alertVerifier.verify(
+			title: L.recommendedUpdateAppTitle(),
+			message: L.recommendedUpdateAppSubtitle(),
+			animated: true,
+			actions: [
+				.cancel(L.recommendedUpdateAppActionCancel()),
+				.default(L.recommendedUpdateAppActionOk())
+			]
+		)
+	}
+
+	func test_handleLaunchState_verifier_updateRecommended_bug_version() {
 
 		// Given
 		var config = RemoteConfiguration.default
@@ -240,6 +369,7 @@ class AppCoordinatorTests: XCTestCase {
 		sut.userSettings = userSettingSpy
 		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
 		let alertVerifier = AlertVerifier()
+		sut.flavor = .verifier
 
 		// When
 		sut.handleLaunchState(state)
@@ -256,7 +386,32 @@ class AppCoordinatorTests: XCTestCase {
 		)
 	}
 
-	func test_handleLaunchState_updateRecommended_currentVersionEqualToRecommendedVersion() {
+	func test_handleLaunchState_holder_updateRecommended_currentVersionEqualToRecommendedVersion() {
+
+		// Given
+		var config = RemoteConfiguration.default
+		config.appDeactivated = false
+		config.minimumVersion = "1.0.0"
+		config.recommendedVersion = "1.0.1"
+		config.appStoreURL = URL(string: "https://coronacheck.nl")
+		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
+		let state = LaunchState.actionRequired(config)
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		let userSettingSpy = UserSettingsSpy()
+		sut.userSettings = userSettingSpy
+		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
+		sut.flavor = .holder
+
+		// When
+		sut.handleLaunchState(state)
+
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.first is HolderCoordinator) == true
+	}
+
+	func test_handleLaunchState_verifier_updateRecommended_currentVersionEqualToRecommendedVersion() {
 
 		// Given
 		var config = RemoteConfiguration.default
@@ -271,17 +426,17 @@ class AppCoordinatorTests: XCTestCase {
 		let userSettingSpy = UserSettingsSpy()
 		sut.userSettings = userSettingSpy
 		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
-		sut.flavor = .holder
+		sut.flavor = .verifier
 
 		// When
 		sut.handleLaunchState(state)
 
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(1))
-		expect(self.sut.childCoordinators.first is HolderCoordinator) == true
+		expect(self.sut.childCoordinators.first is VerifierCoordinator) == true
 	}
 
-	func test_handleLaunchState_updateRecommended_currentVersionHigherToRecommendedVersion() {
+	func test_handleLaunchState_holder_updateRecommended_currentVersionHigherToRecommendedVersion() {
 
 		// Given
 		var config = RemoteConfiguration.default
@@ -304,5 +459,30 @@ class AppCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(1))
 		expect(self.sut.childCoordinators.first is HolderCoordinator) == true
+	}
+
+	func test_handleLaunchState_verifier_updateRecommended_currentVersionHigherToRecommendedVersion() {
+
+		// Given
+		var config = RemoteConfiguration.default
+		config.appDeactivated = false
+		config.minimumVersion = "1.0.0"
+		config.recommendedVersion = "1.0.1"
+		config.appStoreURL = URL(string: "https://coronacheck.nl")
+		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.2")
+		let state = LaunchState.actionRequired(config)
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		let userSettingSpy = UserSettingsSpy()
+		sut.userSettings = userSettingSpy
+		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
+		sut.flavor = .verifier
+
+		// When
+		sut.handleLaunchState(state)
+
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.first is VerifierCoordinator) == true
 	}
 }

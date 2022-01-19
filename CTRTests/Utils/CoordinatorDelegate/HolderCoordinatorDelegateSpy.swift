@@ -43,16 +43,16 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
 	}
 
-	var invokedUserWishesToMakeQRFromNegativeTest = false
-	var invokedUserWishesToMakeQRFromNegativeTestCount = 0
-	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteEvent: RemoteEvent, Void)?
-	var invokedUserWishesToMakeQRFromNegativeTestParametersList = [(remoteEvent: RemoteEvent, Void)]()
+	var invokedUserWishesToMakeQRFromRemoteEvent = false
+	var invokedUserWishesToMakeQRFromRemoteEventCount = 0
+	var invokedUserWishesToMakeQRFromRemoteEventParameters: (remoteEvent: RemoteEvent, originalMode: EventMode)?
+	var invokedUserWishesToMakeQRFromRemoteEventParametersList = [(remoteEvent: RemoteEvent, originalMode: EventMode)]()
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
-		invokedUserWishesToMakeQRFromNegativeTest = true
-		invokedUserWishesToMakeQRFromNegativeTestCount += 1
-		invokedUserWishesToMakeQRFromNegativeTestParameters = (remoteEvent, ())
-		invokedUserWishesToMakeQRFromNegativeTestParametersList.append((remoteEvent, ()))
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode) {
+		invokedUserWishesToMakeQRFromRemoteEvent = true
+		invokedUserWishesToMakeQRFromRemoteEventCount += 1
+		invokedUserWishesToMakeQRFromRemoteEventParameters = (remoteEvent, originalMode)
+		invokedUserWishesToMakeQRFromRemoteEventParametersList.append((remoteEvent, originalMode))
 	}
 
 	var invokedUserWishesToCreateAQR = false
@@ -69,6 +69,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesToCreateANegativeTestQR() {
 		invokedUserWishesToCreateANegativeTestQR = true
 		invokedUserWishesToCreateANegativeTestQRCount += 1
+	}
+
+	var invokedUserWishesToCreateAVisitorPass = false
+	var invokedUserWishesToCreateAVisitorPassCount = 0
+
+	func userWishesToCreateAVisitorPass() {
+		invokedUserWishesToCreateAVisitorPass = true
+		invokedUserWishesToCreateAVisitorPassCount += 1
 	}
 
 	var invokedUserWishesToChooseLocation = false
@@ -151,12 +159,28 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
 	}
 
-	var invokedUserWishesMoreInfoAboutUpgradingEUVaccinations = false
-	var invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount = 0
+	var invokedUserWishesMoreInfoAboutCompletingVaccinationAssessment = false
+	var invokedUserWishesMoreInfoAboutCompletingVaccinationAssessmentCount = 0
 
-	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
-		invokedUserWishesMoreInfoAboutUpgradingEUVaccinations = true
-		invokedUserWishesMoreInfoAboutUpgradingEUVaccinationsCount += 1
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
+		invokedUserWishesMoreInfoAboutCompletingVaccinationAssessment = true
+		invokedUserWishesMoreInfoAboutCompletingVaccinationAssessmentCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL = false
+	var invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount = 0
+
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
+		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL = true
+		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = false
+	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount = 0
+
+	func userWishesMoreInfoAboutTestOnlyValidFor3G() {
+		invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = true
+		invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount += 1
 	}
 
 	var invokedUserWishesMoreInfoAboutOutdatedConfig = false
@@ -171,28 +195,20 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutOutdatedConfigParametersList.append((validUntil, ()))
 	}
 
-	var invokedUserWishesMoreInfoAboutRecoveryValidityExtension = false
-	var invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount = 0
-
-	func userWishesMoreInfoAboutRecoveryValidityExtension() {
-		invokedUserWishesMoreInfoAboutRecoveryValidityExtension = true
-		invokedUserWishesMoreInfoAboutRecoveryValidityExtensionCount += 1
-	}
-
-	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = false
-	var invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount = 0
-
-	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
-		invokedUserWishesMoreInfoAboutRecoveryValidityReinstation = true
-		invokedUserWishesMoreInfoAboutRecoveryValidityReinstationCount += 1
-	}
-
 	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = false
 	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount = 0
 
 	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
 		invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = true
 		invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutExpiredDomesticVaccination = false
+	var invokedUserWishesMoreInfoAboutExpiredDomesticVaccinationCount = 0
+
+	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
+		invokedUserWishesMoreInfoAboutExpiredDomesticVaccination = true
+		invokedUserWishesMoreInfoAboutExpiredDomesticVaccinationCount += 1
 	}
 
 	var invokedOpenUrl = false
@@ -243,20 +259,20 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		}
 	}
 
-	var invokedMigrateEUVaccinationDidComplete = false
-	var invokedMigrateEUVaccinationDidCompleteCount = 0
+	var invokedUserWishesMoreInfoAboutNoTestToken = false
+	var invokedUserWishesMoreInfoAboutNoTestTokenCount = 0
 
-	func migrateEUVaccinationDidComplete() {
-		invokedMigrateEUVaccinationDidComplete = true
-		invokedMigrateEUVaccinationDidCompleteCount += 1
+	func userWishesMoreInfoAboutNoTestToken() {
+		invokedUserWishesMoreInfoAboutNoTestToken = true
+		invokedUserWishesMoreInfoAboutNoTestTokenCount += 1
 	}
 
-	var invokedExtendRecoveryValidityDidComplete = false
-	var invokedExtendRecoveryValidityDidCompleteCount = 0
+	var invokedUserWishesMoreInfoAboutNoVisitorPassToken = false
+	var invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount = 0
 
-	func extendRecoveryValidityDidComplete() {
-		invokedExtendRecoveryValidityDidComplete = true
-		invokedExtendRecoveryValidityDidCompleteCount += 1
+	func userWishesMoreInfoAboutNoVisitorPassToken() {
+		invokedUserWishesMoreInfoAboutNoVisitorPassToken = true
+		invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount += 1
 	}
 
 	var invokedDismiss = false

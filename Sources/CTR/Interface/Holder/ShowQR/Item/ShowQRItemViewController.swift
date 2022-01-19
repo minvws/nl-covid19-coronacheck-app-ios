@@ -88,8 +88,6 @@ class ShowQRItemViewController: BaseViewController, Logging {
 
 		super.viewWillAppear(animated)
 		viewModel.updateQRVisibility()
-		previousOrientation = OrientationUtility.currentOrientation()
-		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -102,7 +100,6 @@ class ShowQRItemViewController: BaseViewController, Logging {
 
 		super.viewWillDisappear(animated)
 		viewModel.stopValidityTimer()
-		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
 	}
 
 	override func viewDidDisappear(_ animated: Bool) {

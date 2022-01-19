@@ -38,11 +38,11 @@ class SharedCoordinator: Coordinator, Logging {
 	/// The side panel controller that holds both the menu and the main view
 	var sidePanel: SidePanelController?
 
-	var onboardingManager: OnboardingManaging = Services.onboardingManager
-	var forcedInformationManager: ForcedInformationManaging = Services.forcedInformationManager
-	var cryptoManager: CryptoManaging = Services.cryptoManager
+	var onboardingManager: OnboardingManaging = Current.onboardingManager
+	var forcedInformationManager: ForcedInformationManaging = Current.forcedInformationManager
+	var cryptoManager: CryptoManaging = Current.cryptoManager
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
-	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+	var remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
 	var versionSupplier = AppVersionSupplier()
 	var childCoordinators: [Coordinator] = []
 
@@ -71,12 +71,14 @@ class SharedCoordinator: Coordinator, Logging {
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
 
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				coordinator: self,
-				title: title,
-				message: body,
-				linkTapHander: { [weak self] url in
+				content: Content(
+					title: title,
+					body: body
+				),
+ 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: openURLsInApp)
 				},
@@ -105,16 +107,19 @@ extension SharedCoordinator {
 
 	/// Handle the onboarding
 	/// - Parameters:
-	///   - factory: the onboarding factory for the content
+	///   - onboardingFactory: the onboarding factory for the content
+	///   - forcedInformationFactory: the forced information factory to display updated content
 	///   - onCompletion: the completion handler when onboarding is done
-	func handleOnboarding(factory: OnboardingFactoryProtocol, onCompletion: () -> Void) {
+	func handleOnboarding(onboardingFactory: OnboardingFactoryProtocol, forcedInformationFactory: ForcedInformationFactory, onCompletion: () -> Void) {
+		
+		forcedInformationManager.factory = forcedInformationFactory
 
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: factory
+				factory: onboardingFactory
 			)
 			startChildCoordinator(coordinator)
 			return
@@ -124,12 +129,21 @@ extension SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: factory
+				factory: onboardingFactory
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent(shouldHideBackButton: true)
 			return
 
+		} else if forcedInformationManager.needsUpdating {
+			// Show Forced Information
+			   let coordinator = ForcedInformationCoordinator(
+				   navigationController: navigationController,
+				   forcedInformationManager: forcedInformationManager,
+				   delegate: self
+			   )
+			   startChildCoordinator(coordinator)
+			return
 		}
 		onCompletion()
 	}
@@ -160,8 +174,8 @@ extension SharedCoordinator: OpenUrlProtocol {
 	func openUrl(_ url: URL, inApp: Bool) {
 
 		var shouldOpenInApp = inApp
-		if url.scheme == "tel" {
-			// Do not open phone numbers in app, doesn't work & will crash.
+		if url.scheme == "tel" || url.scheme == "itms-apps" {
+			// Do not open phone numbers or appstore links in app, doesn't work & will crash.
 			shouldOpenInApp = false
 		}
 

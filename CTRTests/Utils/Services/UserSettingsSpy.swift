@@ -186,6 +186,72 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedLastRecommendToAddYourBoosterDismissalDateSetter = false
+	var invokedLastRecommendToAddYourBoosterDismissalDateSetterCount = 0
+	var invokedLastRecommendToAddYourBoosterDismissalDate: Date?
+	var invokedLastRecommendToAddYourBoosterDismissalDateList = [Date?]()
+	var invokedLastRecommendToAddYourBoosterDismissalDateGetter = false
+	var invokedLastRecommendToAddYourBoosterDismissalDateGetterCount = 0
+	var stubbedLastRecommendToAddYourBoosterDismissalDate: Date!
+
+	var lastRecommendToAddYourBoosterDismissalDate: Date? {
+		set {
+			invokedLastRecommendToAddYourBoosterDismissalDateSetter = true
+			invokedLastRecommendToAddYourBoosterDismissalDateSetterCount += 1
+			invokedLastRecommendToAddYourBoosterDismissalDate = newValue
+			invokedLastRecommendToAddYourBoosterDismissalDateList.append(newValue)
+		}
+		get {
+			invokedLastRecommendToAddYourBoosterDismissalDateGetter = true
+			invokedLastRecommendToAddYourBoosterDismissalDateGetterCount += 1
+			return stubbedLastRecommendToAddYourBoosterDismissalDate
+		}
+	}
+
+	var invokedLastSeenRecommendedUpdateSetter = false
+	var invokedLastSeenRecommendedUpdateSetterCount = 0
+	var invokedLastSeenRecommendedUpdate: String?
+	var invokedLastSeenRecommendedUpdateList = [String?]()
+	var invokedLastSeenRecommendedUpdateGetter = false
+	var invokedLastSeenRecommendedUpdateGetterCount = 0
+	var stubbedLastSeenRecommendedUpdate: String!
+
+	var lastSeenRecommendedUpdate: String? {
+		set {
+			invokedLastSeenRecommendedUpdateSetter = true
+			invokedLastSeenRecommendedUpdateSetterCount += 1
+			invokedLastSeenRecommendedUpdate = newValue
+			invokedLastSeenRecommendedUpdateList.append(newValue)
+		}
+		get {
+			invokedLastSeenRecommendedUpdateGetter = true
+			invokedLastSeenRecommendedUpdateGetterCount += 1
+			return stubbedLastSeenRecommendedUpdate
+		}
+	}
+
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetter = false
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetterCount = 0
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDate: Date?
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateList = [Date?]()
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetter = false
+	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetterCount = 0
+	var stubbedLastSuccessfulCompletionOfAddCertificateFlowDate: Date!
+
+	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? {
+		set {
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetter = true
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetterCount += 1
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDate = newValue
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDateList.append(newValue)
+		}
+		get {
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetter = true
+			invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetterCount += 1
+			return stubbedLastSuccessfulCompletionOfAddCertificateFlowDate
+		}
+	}
+
 	var invokedDeviceAuthenticationWarningShownSetter = false
 	var invokedDeviceAuthenticationWarningShownSetterCount = 0
 	var invokedDeviceAuthenticationWarningShown: Bool?
@@ -208,165 +274,55 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedDidCompleteEUVaccinationMigrationSetter = false
-	var invokedDidCompleteEUVaccinationMigrationSetterCount = 0
-	var invokedDidCompleteEUVaccinationMigration: Bool?
-	var invokedDidCompleteEUVaccinationMigrationList = [Bool]()
-	var invokedDidCompleteEUVaccinationMigrationGetter = false
-	var invokedDidCompleteEUVaccinationMigrationGetterCount = 0
-	var stubbedDidCompleteEUVaccinationMigration: Bool! = false
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetter = false
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount = 0
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool?
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardList = [Bool]()
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetter = false
+	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount = 0
+	var stubbedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool! = false
 
-	var didCompleteEUVaccinationMigration: Bool {
+	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool {
 		set {
-			invokedDidCompleteEUVaccinationMigrationSetter = true
-			invokedDidCompleteEUVaccinationMigrationSetterCount += 1
-			invokedDidCompleteEUVaccinationMigration = newValue
-			invokedDidCompleteEUVaccinationMigrationList.append(newValue)
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetter = true
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount += 1
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = newValue
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardList.append(newValue)
 		}
 		get {
-			invokedDidCompleteEUVaccinationMigrationGetter = true
-			invokedDidCompleteEUVaccinationMigrationGetterCount += 1
-			return stubbedDidCompleteEUVaccinationMigration
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetter = true
+			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount += 1
+			return stubbedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard
 		}
 	}
 
-	var invokedDidDismissEUVaccinationMigrationSuccessBannerSetter = false
-	var invokedDidDismissEUVaccinationMigrationSuccessBannerSetterCount = 0
-	var invokedDidDismissEUVaccinationMigrationSuccessBanner: Bool?
-	var invokedDidDismissEUVaccinationMigrationSuccessBannerList = [Bool]()
-	var invokedDidDismissEUVaccinationMigrationSuccessBannerGetter = false
-	var invokedDidDismissEUVaccinationMigrationSuccessBannerGetterCount = 0
-	var stubbedDidDismissEUVaccinationMigrationSuccessBanner: Bool! = false
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetter = false
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount = 0
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool?
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardList = [Bool]()
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetter = false
+	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount = 0
+	var stubbedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool! = false
 
-	var didDismissEUVaccinationMigrationSuccessBanner: Bool {
+	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool {
 		set {
-			invokedDidDismissEUVaccinationMigrationSuccessBannerSetter = true
-			invokedDidDismissEUVaccinationMigrationSuccessBannerSetterCount += 1
-			invokedDidDismissEUVaccinationMigrationSuccessBanner = newValue
-			invokedDidDismissEUVaccinationMigrationSuccessBannerList.append(newValue)
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetter = true
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount += 1
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = newValue
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardList.append(newValue)
 		}
 		get {
-			invokedDidDismissEUVaccinationMigrationSuccessBannerGetter = true
-			invokedDidDismissEUVaccinationMigrationSuccessBannerGetterCount += 1
-			return stubbedDidDismissEUVaccinationMigrationSuccessBanner
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetter = true
+			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount += 1
+			return stubbedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard
 		}
 	}
 
-	var invokedShouldCheckRecoveryGreenCardRevisedValiditySetter = false
-	var invokedShouldCheckRecoveryGreenCardRevisedValiditySetterCount = 0
-	var invokedShouldCheckRecoveryGreenCardRevisedValidity: Bool?
-	var invokedShouldCheckRecoveryGreenCardRevisedValidityList = [Bool]()
-	var invokedShouldCheckRecoveryGreenCardRevisedValidityGetter = false
-	var invokedShouldCheckRecoveryGreenCardRevisedValidityGetterCount = 0
-	var stubbedShouldCheckRecoveryGreenCardRevisedValidity: Bool! = false
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
 
-	var shouldCheckRecoveryGreenCardRevisedValidity: Bool {
-		set {
-			invokedShouldCheckRecoveryGreenCardRevisedValiditySetter = true
-			invokedShouldCheckRecoveryGreenCardRevisedValiditySetterCount += 1
-			invokedShouldCheckRecoveryGreenCardRevisedValidity = newValue
-			invokedShouldCheckRecoveryGreenCardRevisedValidityList.append(newValue)
-		}
-		get {
-			invokedShouldCheckRecoveryGreenCardRevisedValidityGetter = true
-			invokedShouldCheckRecoveryGreenCardRevisedValidityGetterCount += 1
-			return stubbedShouldCheckRecoveryGreenCardRevisedValidity
-		}
-	}
-
-	var invokedShouldShowRecoveryValidityExtensionCardSetter = false
-	var invokedShouldShowRecoveryValidityExtensionCardSetterCount = 0
-	var invokedShouldShowRecoveryValidityExtensionCard: Bool?
-	var invokedShouldShowRecoveryValidityExtensionCardList = [Bool]()
-	var invokedShouldShowRecoveryValidityExtensionCardGetter = false
-	var invokedShouldShowRecoveryValidityExtensionCardGetterCount = 0
-	var stubbedShouldShowRecoveryValidityExtensionCard: Bool! = false
-
-	var shouldShowRecoveryValidityExtensionCard: Bool {
-		set {
-			invokedShouldShowRecoveryValidityExtensionCardSetter = true
-			invokedShouldShowRecoveryValidityExtensionCardSetterCount += 1
-			invokedShouldShowRecoveryValidityExtensionCard = newValue
-			invokedShouldShowRecoveryValidityExtensionCardList.append(newValue)
-		}
-		get {
-			invokedShouldShowRecoveryValidityExtensionCardGetter = true
-			invokedShouldShowRecoveryValidityExtensionCardGetterCount += 1
-			return stubbedShouldShowRecoveryValidityExtensionCard
-		}
-	}
-
-	var invokedShouldShowRecoveryValidityReinstationCardSetter = false
-	var invokedShouldShowRecoveryValidityReinstationCardSetterCount = 0
-	var invokedShouldShowRecoveryValidityReinstationCard: Bool?
-	var invokedShouldShowRecoveryValidityReinstationCardList = [Bool]()
-	var invokedShouldShowRecoveryValidityReinstationCardGetter = false
-	var invokedShouldShowRecoveryValidityReinstationCardGetterCount = 0
-	var stubbedShouldShowRecoveryValidityReinstationCard: Bool! = false
-
-	var shouldShowRecoveryValidityReinstationCard: Bool {
-		set {
-			invokedShouldShowRecoveryValidityReinstationCardSetter = true
-			invokedShouldShowRecoveryValidityReinstationCardSetterCount += 1
-			invokedShouldShowRecoveryValidityReinstationCard = newValue
-			invokedShouldShowRecoveryValidityReinstationCardList.append(newValue)
-		}
-		get {
-			invokedShouldShowRecoveryValidityReinstationCardGetter = true
-			invokedShouldShowRecoveryValidityReinstationCardGetterCount += 1
-			return stubbedShouldShowRecoveryValidityReinstationCard
-		}
-	}
-
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCardSetter = false
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCardSetterCount = 0
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCard: Bool?
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCardList = [Bool]()
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCardGetter = false
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCardGetterCount = 0
-	var stubbedHasDismissedRecoveryValidityExtensionCompletionCard: Bool! = false
-
-	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool {
-		set {
-			invokedHasDismissedRecoveryValidityExtensionCompletionCardSetter = true
-			invokedHasDismissedRecoveryValidityExtensionCompletionCardSetterCount += 1
-			invokedHasDismissedRecoveryValidityExtensionCompletionCard = newValue
-			invokedHasDismissedRecoveryValidityExtensionCompletionCardList.append(newValue)
-		}
-		get {
-			invokedHasDismissedRecoveryValidityExtensionCompletionCardGetter = true
-			invokedHasDismissedRecoveryValidityExtensionCompletionCardGetterCount += 1
-			return stubbedHasDismissedRecoveryValidityExtensionCompletionCard
-		}
-	}
-
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter = false
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCardSetterCount = 0
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCard: Bool?
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCardList = [Bool]()
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCardGetter = false
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCardGetterCount = 0
-	var stubbedHasDismissedRecoveryValidityReinstationCompletionCard: Bool! = false
-
-	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool {
-		set {
-			invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter = true
-			invokedHasDismissedRecoveryValidityReinstationCompletionCardSetterCount += 1
-			invokedHasDismissedRecoveryValidityReinstationCompletionCard = newValue
-			invokedHasDismissedRecoveryValidityReinstationCompletionCardList.append(newValue)
-		}
-		get {
-			invokedHasDismissedRecoveryValidityReinstationCompletionCardGetter = true
-			invokedHasDismissedRecoveryValidityReinstationCompletionCardGetterCount += 1
-			return stubbedHasDismissedRecoveryValidityReinstationCompletionCard
-		}
-	}
-
-	var invokedReset = false
-	var invokedResetCount = 0
-
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

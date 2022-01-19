@@ -13,8 +13,8 @@ final class FetchEventsViewModel: Logging {
 
 	private var tvsToken: TVSAuthorizationToken
 	private var eventMode: EventMode
-	private let networkManager: NetworkManaging = Services.networkManager
-	private let mappingManager: MappingManaging = Services.mappingManager
+	private let networkManager: NetworkManaging = Current.networkManager
+	private let mappingManager: MappingManaging = Current.mappingManager
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -187,7 +187,8 @@ final class FetchEventsViewModel: Logging {
 			},
 			cancelTitle: L.holderVaccinationAlertStop(),
 			okAction: nil,
-			okTitle: L.holderVaccinationAlertContinue()
+			okTitle: L.holderVaccinationAlertContinue(),
+			okActionIsPreferred: true
 		)
 	}
 
@@ -274,8 +275,8 @@ final class FetchEventsViewModel: Logging {
 					$0.usages.contains(EventFlow.ProviderUsage.recovery) ||
 					$0.usages.contains(EventFlow.ProviderUsage.positiveTest)
 				}
-			case .paperflow:
-				return [] // Paperflow is not part of FetchEvents.
+			case .vaccinationassessment, .paperflow:
+				return [] // flow is not part of FetchEvents.
 			case .positiveTest:
 				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
 			case .test:
@@ -290,7 +291,7 @@ final class FetchEventsViewModel: Logging {
 		switch eventMode {
 			case .recovery:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
-			case .paperflow:
+			case .vaccinationassessment, .paperflow:
 				return nil
 			case .test, .positiveTest:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)
@@ -483,8 +484,8 @@ private extension EventMode {
 	/// Translate EventMode into a string that can be passed to the network as a query string
 	var queryFilterValue: String {
 		switch self {
-			case .paperflow: return "" // Not used
-			case .positiveTest: return "positivetest"
+			case .vaccinationassessment, .paperflow: return "" // Not used
+			case .positiveTest: return "positivetest,recovery"
 			case .recovery: return "positivetest,recovery"
 			case .test: return "negativetest"
 			case .vaccination: return "vaccination"
@@ -494,8 +495,9 @@ private extension EventMode {
 
 extension FetchEventsViewModel {
 
+	static let detailedCodeNonceExpired: Int = 99708
+	static let detailedCodeTvsSessionExpired: Int = 99710
 	static let detailedCodeNoBSN: Int = 99782
-	static let detailedCodeSessionExpired: Int = 99708
 }
 
 // MARK: - Error states
@@ -534,48 +536,71 @@ private extension FetchEventsViewModel {
 
 	func handleErrorCodesForAccesTokenAndProviders(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
-		let hasNoBSN = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }.isEmpty
-		let sessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeSessionExpired }.isEmpty
-		let serverUnreachable = !serverErrors.filter { serverError in
+		// No BSN
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }) else {
+			displayNoBSN()
+			return
+		}
+
+		// Expired Nonce
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeNonceExpired }) else {
+			displayNonceOrTVSExpired()
+			return
+		}
+
+		// Expired TVS token
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeTvsSessionExpired }) else {
+			if eventMode == .positiveTest {
+				// This is recoverable, so redirect to login
+				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)
+			} else {
+				displayNonceOrTVSExpired()
+			}
+			return
+		}
+
+		// Unreachable
+		guard serverErrors.filter({ serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .serverUnreachableTimedOut || error == .serverUnreachableInvalidHost || error == .serverUnreachableConnectionLost
 			}
 			return false
-		}.isEmpty
-		let serverBusy = !serverErrors.filter { serverError in
+		}).isEmpty else {
+			displayServerUnreachable(errorCodes)
+			return
+		}
+
+		// Server Busy
+		guard serverErrors.filter({ serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .serverBusy
 			}
 			return false
-		}.isEmpty
-		let noInternet = !serverErrors.filter { serverError in
+		}).isEmpty else {
+			displayServerBusy(errorCodes)
+			return
+		}
+
+		// No Internet
+		guard serverErrors.filter({ serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .noInternetConnection
 			}
 			return false
-		}.isEmpty
-
-		if hasNoBSN {
-			displayNoBSN()
-		} else if sessionExpired {
-			displaySessionExpired()
-		} else if serverUnreachable {
-			displayServerUnreachable(errorCodes)
-		} else if serverBusy {
-			displayServerBusy(errorCodes)
-		} else if noInternet {
+		}).isEmpty else {
 			displayNoInternet()
-		} else {
-			displayErrorCodeForAccessTokenAndProviders(errorCodes)
+			return
 		}
+
+		displayErrorCodeForAccessTokenAndProviders(errorCodes)
 	}
 
 	func displayNoBSN() {
 
 		let content = Content(
 			title: L.holderErrorstateNobsnTitle(),
-			subTitle: L.holderErrorstateNobsnMessage(),
-			primaryActionTitle: L.holderErrorstateNobsnAction(),
+			body: L.holderErrorstateNobsnMessage(),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
@@ -585,11 +610,11 @@ private extension FetchEventsViewModel {
 		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
-	func displaySessionExpired() {
+	func displayNonceOrTVSExpired() {
 
 		let content = Content(
 			title: L.holderErrorstateNosessionTitle(),
-			subTitle: L.holderErrorstateNosessionMessage(),
+			body: L.holderErrorstateNosessionMessage(),
 			primaryActionTitle: L.holderErrorstateNosessionAction(),
 			primaryAction: { [weak self] in
 				self?.goBack()
@@ -611,7 +636,8 @@ private extension FetchEventsViewModel {
 			okAction: { _ in
 				self.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
-			okTitle: L.generalClose()
+			okTitle: L.generalClose(),
+			okActionIsPreferred: true
 		)
 	}
 
@@ -619,8 +645,8 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: L.generalErrorServerUnreachableErrorCode(flattenErrorCodes(errorCodes)),
-			primaryActionTitle: L.holderErrorstateNobsnAction(),
+			body: L.generalErrorServerUnreachableErrorCode(flattenErrorCodes(errorCodes)),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
@@ -640,8 +666,8 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyErrorcode(flattenErrorCodes(errorCodes)),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			body: L.generalNetworkwasbusyErrorcode(flattenErrorCodes(errorCodes)),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
@@ -694,8 +720,8 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: subTitle,
-			primaryActionTitle: L.holderErrorstateOverviewAction(),
+			body: subTitle,
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
@@ -725,7 +751,8 @@ private extension FetchEventsViewModel {
 				guard let self = self else { return }
 				self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
 			},
-			okTitle: L.generalRetry()
+			okTitle: L.generalRetry(),
+			okActionIsPreferred: true
 		)
 	}
 }

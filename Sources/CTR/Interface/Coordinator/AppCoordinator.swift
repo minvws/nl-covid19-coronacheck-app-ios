@@ -33,6 +33,14 @@ class AppCoordinator: Coordinator, Logging {
 
 	private var shouldUsePrivacySnapShot = true
 
+	// Flag to prevent showing the recommended update dialog twice
+	// which can happen with the config being fetched within the TTL.
+	private var isPresentingRecommendedUpdate = false
+
+	// Flag to prevent starting the application more than once
+	// which can happen with the config being fetched within the TTL.
+	private var isApplicationStarted = false
+
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 
 	var userSettings: UserSettingsProtocol = UserSettings()
@@ -40,6 +48,8 @@ class AppCoordinator: Coordinator, Logging {
 	var flavor = AppFlavor.flavor
 
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
+
+	private weak var appInstalledSinceManager: AppInstalledSinceManaging? = Current.appInstalledSinceManager
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -58,7 +68,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	deinit {
 		remoteConfigManagerObserverTokens.forEach {
-			Services.remoteConfigManager.removeObserver(token: $0)
+			Current.remoteConfigManager.removeObserver(token: $0)
 		}
 	}
 
@@ -84,12 +94,12 @@ class AppCoordinator: Coordinator, Logging {
 		// Attach behaviours that we want the RemoteConfigManager to perform
 		// each time it refreshes the config in future:
 
-		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
+		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
 			// Mark remote config loaded
-			Services.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
+			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
 		}]
 
-		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendReloadObserver { _, _, urlResponse in
+		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver {[weak self] _, _, urlResponse in
 
 			/// Fish for the server Date in the network response, and use that to maintain
 			/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
@@ -97,7 +107,13 @@ class AppCoordinator: Coordinator, Logging {
 			guard let httpResponse = urlResponse as? HTTPURLResponse,
 				  let serverDateString = httpResponse.allHeaderFields["Date"] as? String else { return }
 
-			Services.clockDeviationManager.update(
+			Current.clockDeviationManager.update(
+				serverHeaderDate: serverDateString,
+				ageHeader: httpResponse.allHeaderFields["Age"] as? String
+			)
+
+			// If the firstUseDate is nil, and we get a server header, that means a new installation.
+			self?.appInstalledSinceManager?.update(
 				serverHeaderDate: serverDateString,
 				ageHeader: httpResponse.allHeaderFields["Age"] as? String
 			)
@@ -125,6 +141,9 @@ class AppCoordinator: Coordinator, Logging {
 
     /// Start the real application
     private func startApplication() {
+
+		guard !isApplicationStarted else { return }
+		isApplicationStarted = true
 
         switch flavor {
             case .holder:
@@ -202,7 +221,8 @@ class AppCoordinator: Coordinator, Logging {
 
 	/// Show an alert for the recommended update
 	private func showRecommendedUpdate(updateURL: URL) {
-		userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
+
+		isPresentingRecommendedUpdate = true
 
 		let alertController = UIAlertController(
 			title: L.recommendedUpdateAppTitle(),
@@ -214,6 +234,7 @@ class AppCoordinator: Coordinator, Logging {
 				title: L.recommendedUpdateAppActionCancel(),
 				style: .cancel,
 				handler: { [weak self] _ in
+					self?.isPresentingRecommendedUpdate = false
 					self?.startApplication()
 				}
 			)
@@ -224,6 +245,7 @@ class AppCoordinator: Coordinator, Logging {
 				style: .default,
 				handler: { [weak self] _ in
 					self?.openUrl(updateURL) {
+						self?.isPresentingRecommendedUpdate = false
 						self?.startApplication()
 					}
 				}
@@ -260,19 +282,15 @@ class AppCoordinator: Coordinator, Logging {
 
 		switch universalLink {
 			case .redeemHolderToken,
-				 .thirdPartyTicketApp,
-				 .tvsAuth,
-				 .thirdPartyScannerApp:
+				.redeemVaccinationAssessment,
+				.thirdPartyTicketApp,
+				.tvsAuth,
+				.thirdPartyScannerApp:
 				/// If we reach here it means that there was no holder/verifierCoordinator initialized at the time
 				/// the universal link was received. So hold onto it here, for when it is ready.
 				unhandledUniversalLink = universalLink
 				return true
 		}
-	}
-
-	var isLunhCheckEnabled: Bool {
-		
-		return Services.remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
 	}
 }
 
@@ -290,7 +308,13 @@ extension AppCoordinator: AppCoordinatorDelegate {
     func handleLaunchState(_ state: LaunchState) {
 
 		switch state {
-			case .noActionNeeded, .withinTTL:
+			case .withinTTL:
+				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
+				// Use the documents directory creation date.
+				self.appInstalledSinceManager?.update(dateProvider: FileManager.default)
+				startApplication()
+
+			case .noActionNeeded:
 				startApplication()
 				
 			case .internetRequired:
@@ -319,24 +343,69 @@ extension AppCoordinator: AppCoordinatorDelegate {
 						)
 					)
 				} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
-						  let updateURL = remoteConfiguration.appStoreURL {
+						  let appStoreURL = remoteConfiguration.appStoreURL {
+
 					// Recommended update
-
-					let now = Date().timeIntervalSince1970
-					let interval: Int = remoteConfiguration.recommendedNagIntervalHours ?? 24
-					let lastSeen: TimeInterval = userSettings.lastRecommendUpdateDismissalTimestamp ?? now
-
-					if lastSeen == now || lastSeen + (Double(interval) * 3600) < now {
-						showRecommendedUpdate(updateURL: updateURL)
-					} else {
-						startApplication()
-					}
+					handleRecommendedUpdate(
+						recommendedVersion: recommendedVersion,
+						remoteConfiguration: remoteConfiguration,
+						appStoreUrl: appStoreURL
+					)
 				} else {
 					startApplication()
 				}
 			case .cryptoLibNotInitialized:
 				// Crypto library not loaded
 				showCryptoLibNotInitializedError()
+		}
+	}
+
+	// MARK: - Recommended Update
+
+	private func handleRecommendedUpdate(recommendedVersion: String, remoteConfiguration: RemoteConfiguration, appStoreUrl: URL) {
+
+		guard !isPresentingRecommendedUpdate else {
+			// Do not proceed if we are presenting the recommended update dialog.
+			return
+		}
+
+		switch flavor {
+			case .holder: handleRecommendedUpdateForHolder(
+				recommendedVersion: recommendedVersion,
+				appStoreUrl: appStoreUrl
+			)
+			case .verifier: handleRecommendedUpdateForVerifier(
+				remoteConfiguration: remoteConfiguration,
+				appStoreUrl: appStoreUrl
+			)
+		}
+	}
+
+	private func handleRecommendedUpdateForHolder(recommendedVersion: String, appStoreUrl: URL) {
+
+		if let lastSeenRecommendedUpdate = userSettings.lastSeenRecommendedUpdate,
+		   lastSeenRecommendedUpdate == recommendedVersion {
+			logDebug("The recommended version \(recommendedVersion) is the last seen version")
+			startApplication()
+		} else {
+			// User has not seen a dialog for this recommended Version
+			logDebug("The recommended version \(recommendedVersion) is not the last seen version")
+			userSettings.lastSeenRecommendedUpdate = recommendedVersion
+			showRecommendedUpdate(updateURL: appStoreUrl)
+		}
+	}
+
+	private func handleRecommendedUpdateForVerifier(remoteConfiguration: RemoteConfiguration, appStoreUrl: URL) {
+
+		let now = Date().timeIntervalSince1970
+		let interval: Double = Double(remoteConfiguration.recommendedNagIntervalHours ?? 24) * 3600
+		let lastSeen: TimeInterval = userSettings.lastRecommendUpdateDismissalTimestamp ?? now
+
+		if lastSeen == now || lastSeen + interval < now {
+			showRecommendedUpdate(updateURL: appStoreUrl)
+			userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
+		} else {
+			startApplication()
 		}
 	}
 
@@ -353,7 +422,8 @@ extension AppCoordinator: AppCoordinatorDelegate {
     }
 
 	func reset() {
-		
+
+		isApplicationStarted = false
 		childCoordinators = []
 		retry()
 	}

@@ -9,14 +9,14 @@ import Foundation
 
 protocol MappingManaging {
 
-	init(remoteConfigManager: RemoteConfigManaging)
-
 	func setEventProviders(_ providers: [EventFlow.EventProvider])
 
 	func getProviderIdentifierMapping(_ code: String? ) -> String?
 
 	func getDisplayIssuer(_ issuer: String) -> String
 
+	func getBiLingualDisplayCountry(_ country: String) -> String
+	
 	func getDisplayCountry(_ country: String) -> String
 	
 	func getDisplayFacility(_ facility: String) -> String
@@ -35,7 +35,7 @@ protocol MappingManaging {
 
 	func getVaccinationType(_ code: String? ) -> String?
 
-	func getVaccinationManufacturerMapping(_ code: String? ) -> String?
+	func getVaccinationManufacturer(_ code: String? ) -> String?
 
 	func getNlTestType(_ code: String? ) -> String?
 }
@@ -72,11 +72,19 @@ class MappingManager: MappingManaging, Logging {
 		return L.holderVaccinationAboutIssuer()
 	}
 
-	func getDisplayCountry(_ country: String) -> String {
+	func getBiLingualDisplayCountry(_ country: String) -> String {
 		guard ["NL", "NLD"].contains(country) else {
 			return country
 		}
 		return L.holderVaccinationAboutCountry()
+	}
+	
+	func getDisplayCountry(_ country: String) -> String {
+		
+		guard ["NL", "NLD"].contains(country) else {
+			return country
+		}
+		return L.generalNetherlands()
 	}
 
 	func getDisplayFacility(_ facility: String) -> String {
@@ -125,7 +133,7 @@ class MappingManager: MappingManaging, Logging {
 		return remoteConfigManager.storedConfiguration.euVaccinationTypes?.first(where: { $0.code == code })?.name
 	}
 
-	func getVaccinationManufacturerMapping(_ code: String? ) -> String? {
+	func getVaccinationManufacturer(_ code: String? ) -> String? {
 
 		return remoteConfigManager.storedConfiguration.euManufacturers?.first(where: { $0.code == code })?.name
 	}

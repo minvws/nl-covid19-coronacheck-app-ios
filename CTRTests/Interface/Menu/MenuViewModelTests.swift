@@ -7,11 +7,12 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class MenuViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: MenuViewModel?
+	var sut: MenuViewModel!
 
 	/// The coordinator spy
 	var menuDelegateSpy = MenuDelegateSpy()
@@ -34,8 +35,8 @@ class MenuViewModelTests: XCTestCase {
 		sut = MenuViewModel(delegate: menuDelegateSpy)
 
 		// Then
-		XCTAssertTrue(menuDelegateSpy.getTopMenuItemsCalled, "Menu should fetch the top menu items")
-		XCTAssertTrue(menuDelegateSpy.getBottomMenuItemsCalled, "Menu should fetch the bottom menu items")
+		expect(self.menuDelegateSpy.invokedGetTopMenuItems) == true
+		expect(self.menuDelegateSpy.invokedGetBottomMenuItems) == true
 	}
 
 	/// Test the close menu method
@@ -44,10 +45,10 @@ class MenuViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut?.closeButtonTapped()
+		sut.closeButtonTapped()
 
 		// Then
-		XCTAssertTrue(menuDelegateSpy.closeMenuCalled, "Close Menu delegate method should be called")
+		expect(self.menuDelegateSpy.invokedCloseMenu) == true
 	}
 
 	/// Test the close menu method
@@ -57,44 +58,53 @@ class MenuViewModelTests: XCTestCase {
 		let identifier = MenuIdentifier.about
 
 		// When
-		sut?.menuItemTapped(identifier)
+		sut.menuItemTapped(identifier)
 
 		// Then
-		XCTAssertTrue(menuDelegateSpy.openMenuItemCalled, "Open Menu Item delegate method should be called")
-		XCTAssertEqual(menuDelegateSpy.openMenuItemIdentifier, .about, "Menu Item Identifier should match")
+		expect(self.menuDelegateSpy.invokedOpenMenuItem) == true
+		expect(self.menuDelegateSpy.invokedOpenMenuItemParameters?.0) == identifier
 	}
 }
 
 class MenuDelegateSpy: MenuDelegate {
 
-	var closeMenuCalled = false
-	var openMenuItemCalled = false
-	var openMenuItemIdentifier: MenuIdentifier?
-	var getTopMenuItemsCalled = false
-	var topMenuItems = [MenuItem]()
-	var getBottomMenuItemsCalled = false
-	var bottomMenuItems = [MenuItem]()
+	var invokedCloseMenu = false
+	var invokedCloseMenuCount = 0
 
 	func closeMenu() {
-
-		closeMenuCalled = true
+		invokedCloseMenu = true
+		invokedCloseMenuCount += 1
 	}
+
+	var invokedOpenMenuItem = false
+	var invokedOpenMenuItemCount = 0
+	var invokedOpenMenuItemParameters: (identifier: MenuIdentifier, Void)?
+	var invokedOpenMenuItemParametersList = [(identifier: MenuIdentifier, Void)]()
 
 	func openMenuItem(_ identifier: MenuIdentifier) {
-
-		openMenuItemCalled = true
-		openMenuItemIdentifier = identifier
+		invokedOpenMenuItem = true
+		invokedOpenMenuItemCount += 1
+		invokedOpenMenuItemParameters = (identifier, ())
+		invokedOpenMenuItemParametersList.append((identifier, ()))
 	}
+
+	var invokedGetTopMenuItems = false
+	var invokedGetTopMenuItemsCount = 0
+	var stubbedGetTopMenuItemsResult: [MenuItem]! = []
 
 	func getTopMenuItems() -> [MenuItem] {
-
-		getTopMenuItemsCalled = true
-		return topMenuItems
+		invokedGetTopMenuItems = true
+		invokedGetTopMenuItemsCount += 1
+		return stubbedGetTopMenuItemsResult
 	}
 
-	func getBottomMenuItems() -> [MenuItem] {
+	var invokedGetBottomMenuItems = false
+	var invokedGetBottomMenuItemsCount = 0
+	var stubbedGetBottomMenuItemsResult: [MenuItem]! = []
 
-		getBottomMenuItemsCalled = true
-		return bottomMenuItems
+	func getBottomMenuItems() -> [MenuItem] {
+		invokedGetBottomMenuItems = true
+		invokedGetBottomMenuItemsCount += 1
+		return stubbedGetBottomMenuItemsResult
 	}
 }

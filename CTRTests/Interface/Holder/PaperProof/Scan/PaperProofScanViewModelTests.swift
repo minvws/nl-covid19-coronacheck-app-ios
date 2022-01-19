@@ -13,22 +13,14 @@ import SnapshotTesting
 final class PaperProofScanViewModelTests: XCTestCase {
 	
 	var sut: PaperProofScanViewModel!
+	private var environmentSpies: EnvironmentSpies!
 	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
-	var cryptoManagerSpy: CryptoManagerSpy!
 	
 	override func setUp() {
 		super.setUp()
-		
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
-		cryptoManagerSpy = CryptoManagerSpy()
-		Services.use(cryptoManagerSpy)
 		sut = PaperProofScanViewModel(coordinator: coordinatorDelegateSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 	
 	func test_initialState() {
@@ -81,36 +73,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_whenQRIsDCC_shouldInvokeCoordinator() {
 		// Given
 		let message = "HC1:MOCK:MESSAGE"
-		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes(
-			credentialVersion: 1,
-			digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate(
-				dateOfBirth: "2021-06-01",
-				name: EuCredentialAttributes.Name(
-					familyName: "Corona",
-					standardisedFamilyName: "CORONA",
-					givenName: "Check",
-					standardisedGivenName: "CHECK"
-				),
-				schemaVersion: "1.0.0",
-				vaccinations: [
-					EuCredentialAttributes.Vaccination(
-						certificateIdentifier: "test",
-						country: "NLS",
-						diseaseAgentTargeted: "test",
-						doseNumber: 2,
-						dateOfVaccination: "2021-06-01",
-						issuer: "Test",
-						marketingAuthorizationHolder: "Test",
-						medicalProduct: "Test",
-						totalDose: 2,
-						vaccineOrProphylaxis: "test"
-					)
-				]
-			),
-			expirationTime: Date().timeIntervalSince1970,
-			issuedAt: Date().timeIntervalSince1970 + 3600,
-			issuer: "NL"
-		)
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		
 		// When
 		sut.parseQRMessage(message)

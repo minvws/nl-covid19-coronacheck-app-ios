@@ -51,6 +51,7 @@ final class ForcedInformationViewController: BaseViewController {
 			
 			self.pageViewController.pages = $0.compactMap { page in
 				guard let forcedInformationPageViewController = self.viewModel.getForcedInformationStep(page) as? ForcedInformationPageViewController else { return nil }
+				self.sceneView.updateFooterView(mainScrollView: forcedInformationPageViewController.sceneView.scrollView)
 				return forcedInformationPageViewController
 			}
 		}
@@ -59,15 +60,27 @@ final class ForcedInformationViewController: BaseViewController {
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		
+		super.viewWillAppear(animated)
+		navigationController?.setNavigationBarHidden(true, animated: animated)
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		
+		super.viewWillDisappear(animated)
+		navigationController?.setNavigationBarHidden(false, animated: animated)
+	}
+	
 	/// Setup the page controller
 	private func setupPageController() {
 		
 		pageViewController.view.backgroundColor = .clear
 		
 		pageViewController.view.frame = sceneView.containerView.frame
-		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
+		sceneView.containerView.addSubview(pageViewController.view)
 	}
 	
 	/// User tapped on the button

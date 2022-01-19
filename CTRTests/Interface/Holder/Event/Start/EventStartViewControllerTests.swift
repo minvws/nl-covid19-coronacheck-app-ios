@@ -25,7 +25,6 @@ class EventStartViewControllerTests: XCTestCase {
 		super.setUp()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
-		sut = EventStartViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
 
@@ -37,9 +36,10 @@ class EventStartViewControllerTests: XCTestCase {
 
 	// MARK: - Tests
 
-	func test_content() {
+	func test_content_vaccination() {
 
 		// Given
+		sut = EventStartViewController(viewModel: viewModel)
 
 		// When
 		loadView()
@@ -50,10 +50,59 @@ class EventStartViewControllerTests: XCTestCase {
 
 		sut.assertImage(containedInNavigationController: true)
 	}
+	
+	func test_content_negativeTest() {
+		
+		// Given
+		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
+		sut = EventStartViewController(viewModel: viewModel)
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.holder_negativetest_ggd_title()
+		expect(self.sut.sceneView.message) == L.holder_negativetest_ggd_message()
+		
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_content_positiveTest() {
+		
+		// Given
+		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .positiveTest)
+		sut = EventStartViewController(viewModel: viewModel)
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.holderPositiveTestStartTitle()
+		expect(self.sut.sceneView.message) == L.holderPositiveTestStartMessage()
+		
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_content_recovery() {
+		
+		// Given
+		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
+		sut = EventStartViewController(viewModel: viewModel)
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.holderRecoveryStartTitle()
+		expect(self.sut.sceneView.message) == L.holderRecoveryStartMessage()
+		
+		sut.assertImage(containedInNavigationController: true)
+	}
 
 	func test_backButtonTapped() {
 
 		// Given
+		sut = EventStartViewController(viewModel: viewModel)
 		loadView()
 
 		// When
@@ -67,6 +116,7 @@ class EventStartViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped() {
 
 		// Given
+		sut = EventStartViewController(viewModel: viewModel)
 		loadView()
 
 		// When
@@ -80,6 +130,7 @@ class EventStartViewControllerTests: XCTestCase {
 	func test_secondaryButtonTapped() {
 
 		// Given
+		sut = EventStartViewController(viewModel: viewModel)
 		loadView()
 
 		// When

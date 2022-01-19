@@ -39,6 +39,7 @@ final class FooterButtonView: BaseView {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.axis = .vertical
+		stackView.alignment = .fill // Subviews should have equal width
 		stackView.spacing = ViewTraits.Spacing.buttonStack
 		return stackView
 	}()
@@ -77,11 +78,16 @@ final class FooterButtonView: BaseView {
 			gradientView.rightAnchor.constraint(equalTo: rightAnchor),
 			gradientView.heightAnchor.constraint(equalToConstant: ViewTraits.Gradient.height),
 			
-			buttonStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
+			
 			buttonStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
 			buttonStackView.leftAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.leftAnchor, constant: ViewTraits.Margin.edge),
 			buttonStackView.rightAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.rightAnchor, constant: -ViewTraits.Margin.edge),
-			buttonStackView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge),
+			{
+				let constraint = buttonStackView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.edge)
+				topButtonConstraint = constraint
+				return constraint
+			}(),
 			{
 				let constraint = buttonStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -ViewTraits.Margin.edge)
 				bottomButtonConstraint = constraint
@@ -124,9 +130,12 @@ final class FooterButtonView: BaseView {
 	/// The title for the primary button
 	var primaryTitle: String? {
 		didSet {
-			primaryButton.setTitle(primaryTitle, for: .normal)
+			primaryButton.title = primaryTitle
 		}
 	}
+	
+	/// The top constraint for margin changes
+	var topButtonConstraint: NSLayoutConstraint?
 	
 	/// The bottom constraint for keyboard changes
 	var bottomButtonConstraint: NSLayoutConstraint?

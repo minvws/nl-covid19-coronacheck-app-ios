@@ -25,7 +25,12 @@ class ScanInstructionsViewModel {
 		}
 	}
 
-	private let userSettings: UserSettingsProtocol
+	private let userSettings: UserSettingsProtocol = Current.userSettings
+	private let riskLevelManager: RiskLevelManaging = Current.riskLevelManager
+	private let scanLockManager: ScanLockManaging = Current.scanLockManager
+	private var shouldShowRiskSetting = false
+	private var hasScanLock = false
+	private var scanLockObserverToken: ScanLockManager.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:
@@ -34,15 +39,24 @@ class ScanInstructionsViewModel {
 	///   - numberOfPages: the total number of pages
 	init(
 		coordinator: ScanInstructionsCoordinatorDelegate,
-		pages: [ScanInstructionsPage],
-		userSettings: UserSettingsProtocol) {
+		pages: [ScanInstructionsPage]
+	) {
 		
 		self.coordinator = coordinator
 		self.pages = pages
-		self.userSettings = userSettings
 		self.currentPage = 0
 
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+			shouldShowRiskSetting = riskLevelManager.state == nil
+		}
+		
+		hasScanLock = scanLockManager.state != .unlocked
 		updateState()
+		
+		scanLockObserverToken = scanLockManager.appendObserver { [weak self] lockState in
+			self?.hasScanLock = lockState != .unlocked
+			self?.updateState()
+		}
 	}
 	
 	func scanInstructionsViewController(forPage page: ScanInstructionsPage) -> ScanInstructionsPageViewController {
@@ -55,7 +69,18 @@ class ScanInstructionsViewModel {
 	
 	func finishScanInstructions() {
 		
-		coordinator?.userDidCompletePages()
+		userSettings.scanInstructionShown = true
+		
+		if shouldShowRiskSetting {
+			coordinator?.userWishesToSelectRiskSetting()
+		} else {
+			coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
+		}
+	}
+	
+	func finishSelectRiskSetting() {
+		
+		coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
 	}
 
 	/// i.e. exit the Scan Instructions
@@ -68,15 +93,21 @@ class ScanInstructionsViewModel {
 	}
 
 	private func updateState() {
+		let lastPage = pages.count - 1
+		
 		shouldShowSkipButton = {
 			guard !userSettings.scanInstructionShown else { return false }
-			return currentPage < (pages.count - 1)
+			return currentPage < lastPage
 		}()
-
-		nextButtonTitle = {
-			currentPage < (pages.count - 1)
-				? L.generalNext()
-				: L.verifierScaninstructionsButtonStartscanning()
-		}()
+		
+		if currentPage == lastPage, !shouldShowRiskSetting {
+			if hasScanLock {
+				nextButtonTitle = L.verifier_scan_instructions_back_to_start()
+			} else {
+				nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
+			}
+		} else {
+			nextButtonTitle = L.generalNext()
+		}
 	}
 }

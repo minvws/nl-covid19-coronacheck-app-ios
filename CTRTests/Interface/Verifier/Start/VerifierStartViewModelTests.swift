@@ -14,41 +14,14 @@ class VerifierStartViewModelTests: XCTestCase {
 
 	/// Subject under test
 	private var sut: VerifierStartViewModel!
-
-	private var cryptoManagerSpy: CryptoManagerSpy!
-	private var cryptoLibUtilitySpy: CryptoLibUtilitySpy!
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
-	private var clockDeviationManagerSpy: ClockDeviationManagerSpy!
-	private var userSettingsSpy: UserSettingsSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 
 		super.setUp()
+		environmentSpies = setupEnvironmentSpies()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
-		cryptoManagerSpy = CryptoManagerSpy()
-		cryptoLibUtilitySpy = CryptoLibUtilitySpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			fileStorage: FileStorage(),
-			flavor: AppFlavor.verifier
-		)
-		clockDeviationManagerSpy = ClockDeviationManagerSpy()
-		userSettingsSpy = UserSettingsSpy()
-
-		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
-		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
-		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
-
-		Services.use(cryptoLibUtilitySpy)
-		Services.use(cryptoManagerSpy)
-		Services.use(clockDeviationManagerSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	// MARK: - Tests
@@ -56,10 +29,8 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_defaultContent() {
 
 		// Given
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			userSettings: userSettingsSpy
-		)
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
 
@@ -77,11 +48,8 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_noScanInstructionsShown() {
 
 		// Given
-		userSettingsSpy.stubbedScanInstructionShown = false
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			userSettings: userSettingsSpy
-		)
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
 		sut.primaryButtonTapped()
@@ -89,19 +57,17 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
-			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
-		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == true
+			.to(equal(.userTappedProceedToInstructionsOrRiskSetting), description: "Result should match")
+		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownGetter) == true
 	}
 
 	func test_primaryButtonTapped_scanInstructionsShown_havePublicKeys() {
 
 		// Given
-		userSettingsSpy.stubbedScanInstructionShown = true
-		cryptoManagerSpy.stubbedHasPublicKeysResult = true
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			userSettings: userSettingsSpy
-		)
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
 		sut.primaryButtonTapped()
@@ -115,29 +81,54 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_scanInstructionsShown_noPublicKeys() {
 
 		// Given
-		userSettingsSpy.stubbedScanInstructionShown = true
-		cryptoManagerSpy.stubbedHasPublicKeysResult = false
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			userSettings: userSettingsSpy
-		)
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = false
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
 		sut.primaryButtonTapped()
 
 		// Then
-		expect(self.cryptoLibUtilitySpy.invokedUpdate) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.sut.showError) == true
 	}
 
+	func test_primaryButtonTapped_locked_verificationPolicyEnabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
+		
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == false
+	}
+
+	func test_primaryButtonTapped_locked_verificationPolicyDisabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
+		
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
+	}
+	
 	func test_showInstructionsButtonTapped() {
 
 		// Given
-		userSettingsSpy.stubbedScanInstructionShown = false
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			userSettings: userSettingsSpy
-		)
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
 		sut.showInstructionsButtonTapped()
@@ -146,20 +137,17 @@ class VerifierStartViewModelTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
 			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
-		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == false
+		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownGetter) == false
 	}
 
 	func test_clockDeviationWarning_isShown_whenHasClockDeviation() {
 
 		// Arrange
-		clockDeviationManagerSpy.stubbedHasSignificantDeviation = true
-		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (true, ())
+		environmentSpies.clockDeviationManagerSpy.stubbedHasSignificantDeviation = true
+		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (true, ())
 
 		// Act
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			userSettings: userSettingsSpy
-		)
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// Assert
 		expect(self.sut.shouldShowClockDeviationWarning) == true
@@ -168,13 +156,10 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_clockDeviationWarning_isNotShown_whenHasNoClockDeviation() {
 
 		// Arrange
-		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
+		environmentSpies.clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
 
 		// Act
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			userSettings: userSettingsSpy
-		)
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// Assert
 		expect(self.sut.shouldShowClockDeviationWarning) == false
@@ -183,13 +168,10 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_clockDeviationWarning_onUserTap_callsCoordinator() {
 
 		// Arrange
-		clockDeviationManagerSpy.stubbedHasSignificantDeviation = true
+		environmentSpies.clockDeviationManagerSpy.stubbedHasSignificantDeviation = true
 
 		// Act
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			userSettings: userSettingsSpy
-		)
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		expect(self.verifyCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutClockDeviation) == false
 		sut.userDidTapClockDeviationWarningReadMore()
@@ -201,18 +183,15 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_clockDeviationWarning_onManagerUpdate_changesProperty() {
 
 		// Arrange
-		clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
-		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (true, ())
-		clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
+		environmentSpies.clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
+		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (true, ())
+		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
 
 		// Act
-		sut = VerifierStartViewModel(
-			coordinator: verifyCoordinatorDelegateSpy,
-			userSettings: userSettingsSpy
-		)
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// Assert
-		expect(self.clockDeviationManagerSpy.invokedAppendDeviationChangeObserverCount) == 1
+		expect(self.environmentSpies.clockDeviationManagerSpy.invokedAppendDeviationChangeObserverCount) == 1
 		expect(self.sut.shouldShowClockDeviationWarning) == true
 	}
 }

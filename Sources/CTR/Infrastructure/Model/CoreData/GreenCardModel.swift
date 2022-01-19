@@ -23,16 +23,14 @@ class GreenCardModel {
 		wallet: Wallet,
 		managedContext: NSManagedObjectContext) -> GreenCard? {
 
-		if let object = NSEntityDescription.insertNewObject(
-			forEntityName: entityName,
-			into: managedContext) as? GreenCard {
-
-			object.type = type.rawValue
-			object.wallet = wallet
-
-			return object
+		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? GreenCard else {
+			return nil
 		}
-		return nil
+
+		object.type = type.rawValue
+		object.wallet = wallet
+
+		return object
 	}
 
 	class func fetchByIds(objectIDs: [NSManagedObjectID]) -> Result<[GreenCard], Error> {
@@ -40,7 +38,7 @@ class GreenCardModel {
 		var result = [GreenCard]()
 		for objectID in objectIDs {
 			do {
-				if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: objectID) as? GreenCard {
+				if let greenCard = try Current.dataStoreManager.managedObjectContext().existingObject(with: objectID) as? GreenCard {
 					result.append(greenCard)
 				}
 			} catch let error {

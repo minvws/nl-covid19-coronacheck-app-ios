@@ -11,15 +11,16 @@ import Nimble
 
 class VerifierCoordinatorTests: XCTestCase {
 
-	var sut: VerifierCoordinator!
+	private var sut: VerifierCoordinator!
 
-	var navigationSpy: NavigationControllerSpy!
-
-	var window = UIWindow()
+	private var navigationSpy: NavigationControllerSpy!
+	private var environmentSpies: EnvironmentSpies!
+	private var window = UIWindow()
 
 	override func setUp() {
 
 		super.setUp()
+		environmentSpies = setupEnvironmentSpies()
 
 		navigationSpy = NavigationControllerSpy()
 		sut = VerifierCoordinator(
@@ -30,22 +31,37 @@ class VerifierCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 	
+	func testStartForcedInformation() {
+
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+
+		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = true
+		environmentSpies.forcedInformationManagerSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+			image: nil,
+			tagline: "test",
+			title: "test",
+			content: "test"
+		)
+
+		// When
+		sut.start()
+
+		// Then
+		XCTAssertFalse(sut.childCoordinators.isEmpty)
+		XCTAssertTrue(sut.childCoordinators.first is ForcedInformationCoordinator)
+	}
+	
 	func testFinishForcedInformation() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = false
-		sut.onboardingManager = onboardingSpy
-
-		let forcedInformationSpy = ForcedInformationManagerSpy()
-		forcedInformationSpy.stubbedNeedsUpdating = false
-		sut.forcedInformationManager = forcedInformationSpy
+		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = false
 
 		sut.childCoordinators = [
 			ForcedInformationCoordinator(
 				navigationController: navigationSpy,
-				forcedInformationManager: ForcedInformationManagerSpy(),
+				forcedInformationManager: environmentSpies.forcedInformationManagerSpy,
 				delegate: sut
 			)
 		]
@@ -55,5 +71,18 @@ class VerifierCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+
+	func test_shouldCall_scanManagerRemoveOldEntries() {
+
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = false
+		
+		sut.start()
+		
+		// Then
+		expect(self.environmentSpies.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == true
 	}
 }

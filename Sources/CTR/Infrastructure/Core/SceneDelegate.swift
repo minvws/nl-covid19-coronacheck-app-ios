@@ -13,8 +13,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?
 
-	var previousBrightness: CGFloat?
-
     /// If your app is __not__ running, the system delivers
     /// the Universal Link to this delegate method after launch:
 	func scene(
@@ -26,15 +24,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// initialized and attached to the scene. This delegate does not imply the connecting scene or session
 		// are new (see `application:configurationForConnectingSceneSession` instead).
 		guard let windowScene = (scene as? UIWindowScene) else { return }
-
-		previousBrightness = UIScreen.main.brightness
-
+		guard !ProcessInfo().isUnitTesting else { return }
+			
 		appCoordinator = AppCoordinator(scene: windowScene, navigationController: NavigationController())
 		appCoordinator?.start()
 
         // Possibly we launched via a Universal Link. If so, pass it to the AppCoordinator:
         if let userActivity = connectionOptions.userActivities.first,
-           let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: appCoordinator?.isLunhCheckEnabled ?? false) {
+           let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) {
             appCoordinator?.receive(universalLink: activity)
         }
 	}
@@ -42,7 +39,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// If your app was __already running__ (or suspended in memory), this delegate
     /// callback will receive the UserActivity when a universal link is tapped:
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        guard let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: appCoordinator?.isLunhCheckEnabled ?? false) else { return }
+        guard let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) else { return }
         appCoordinator?.receive(universalLink: activity)
     }
 
@@ -72,9 +69,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func sceneWillResignActive(_ scene: UIScene) {
 		// Called when the scene will move from an active state to an inactive state.
 		// This may occur due to temporary interruptions (ex. an incoming phone call).
-		if let brightness = previousBrightness {
-			UIScreen.main.brightness = brightness
-		}
 	}
 
 	func sceneWillEnterForeground(_ scene: UIScene) {
@@ -86,9 +80,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// Called as the scene transitions from the foreground to the background.
 		// Use this method to save data, release shared resources, and store enough scene-specific state information
 		// to restore the scene back to its current state.
-
-		if let brightness = previousBrightness {
-			UIScreen.main.brightness = brightness
-		}
 	}
 }

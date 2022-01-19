@@ -11,18 +11,16 @@ import XCTest
 class OnboardingManagerTests: XCTestCase {
 
 	// MARK: - Setup
-	var sut = OnboardingManager()
-
+	var sut: OnboardingManager!
+	var secureUserSettingsSpy: SecureUserSettingsSpy!
+	
 	override func setUp() {
 
-		sut = OnboardingManager()
+		secureUserSettingsSpy = SecureUserSettingsSpy()
+		secureUserSettingsSpy.stubbedOnboardingData = .empty
+		
+		sut = OnboardingManager(secureUserSettings: secureUserSettingsSpy)
 		super.setUp()
-	}
-
-	override func tearDown() {
-
-		sut.reset()
-		super.tearDown()
 	}
 
 	// MARK: - Tests
@@ -30,7 +28,6 @@ class OnboardingManagerTests: XCTestCase {
 	func testGetNeedsOnboarding() {
 
 		// Given
-		sut.reset()
 
 		// When
 		let value = sut.needsOnboarding
@@ -42,7 +39,6 @@ class OnboardingManagerTests: XCTestCase {
 	func testGetNeedsConsent() {
 
 		// Given
-		sut.reset()
 
 		// When
 		let value = sut.needsConsent
@@ -58,10 +54,8 @@ class OnboardingManagerTests: XCTestCase {
 		// When
 		sut.finishOnboarding()
 
-		let value = sut.needsOnboarding
-
 		// Then
-		XCTAssertFalse(value, "needs onboarding should be false")
+		XCTAssertFalse(secureUserSettingsSpy.invokedOnboardingData?.needsOnboarding ?? true, "needs onboarding should be false")
 	}
 
 	func testConsentGiven() {
@@ -71,9 +65,7 @@ class OnboardingManagerTests: XCTestCase {
 		// When
 		sut.consentGiven()
 
-		let value = sut.needsConsent
-
 		// Then
-		XCTAssertFalse(value, "needs consent should be false")
+		XCTAssertFalse(secureUserSettingsSpy.invokedOnboardingData?.needsConsent ?? true, "needs consent should be false")
 	}
 }

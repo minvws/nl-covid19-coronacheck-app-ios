@@ -1,14 +1,14 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import UIKit
 
 enum ScanInstructionsStep: CaseIterable {
-	case scanQR, checkTheDetails, checkOnlyTheVisibleData, greenScreenIsAccess, redScreenNowWhat
+	case scanQR, checkTheDetails, checkOnlyTheVisibleData, greenScreenIsAccess, verificationPoliciyAccess, redScreenNowWhat
 	
 	var animationName: String {
 		switch self {
@@ -19,6 +19,8 @@ enum ScanInstructionsStep: CaseIterable {
 			case .checkOnlyTheVisibleData:
 				return "Scanner_3"
 			case .greenScreenIsAccess:
+				return "Scanner_4"
+			case .verificationPoliciyAccess:
 				return "Scanner_4"
 			case .redScreenNowWhat:
 				return "Scanner_5"
@@ -38,10 +40,10 @@ protocol ScanInstructionsFactoryProtocol {
 }
 
 struct ScanInstructionsFactory: ScanInstructionsFactoryProtocol {
-
+	
 	func create() -> [ScanInstructionsPage] {
-
-		let pages = [
+		
+		var pages = [
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsScanQRTitle(),
 				message: L.verifierScaninstructionsScanQRContent(),
@@ -73,7 +75,15 @@ struct ScanInstructionsFactory: ScanInstructionsFactoryProtocol {
 				step: .redScreenNowWhat
 			)
 		]
-
+		
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+			pages[3] = ScanInstructionsPage(
+				title: L.scan_instructions_4_title_2G(),
+				message: L.scan_instructions_4_description_2G(),
+				animationName: ScanInstructionsStep.verificationPoliciyAccess.animationName,
+				step: .verificationPoliciyAccess
+			)
+		}
 		return pages
 	}
 }

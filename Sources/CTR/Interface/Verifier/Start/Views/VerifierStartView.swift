@@ -29,7 +29,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
         return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
-	let contentTextView: TextView = {
+	private let contentTextView: TextView = {
 
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -44,17 +44,11 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		return button
 	}()
 
-	private let spacer: UIView = {
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground
-		return view
-	}()
-
 	/// Footer view with primary button
-	let footerButtonView: FooterButtonView = {
+	private let footerButtonView: FooterButtonView = {
 		let footerView = FooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false
+		footerView.buttonStackView.alignment = .center
 		return footerView
 	}()
 
@@ -63,6 +57,25 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isHidden = true
 		return view
+	}()
+
+	private let riskIndicatorStackView: UIStackView = {
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .horizontal
+		view.spacing = 8 // ViewTraits.Spacing.aboveButton
+		return view
+	}()
+
+	private let riskIndicatorIconView: RiskIndicatorIconView = {
+		let view = RiskIndicatorIconView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
+	private let riskIndicatorLabel: Label = {
+		let label = Label(subhead: "")
+		return label
 	}()
 
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
@@ -89,10 +102,14 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(contentTextView)
 		contentView.addSubview(showInstructionsButton)
-		contentView.addSubview(spacer)
 
 		addSubview(clockDeviationWarningView)
 		addSubview(footerButtonView)
+		
+		footerButtonView.buttonStackView.insertArrangedSubview(riskIndicatorStackView, at: 0)
+
+		riskIndicatorStackView.addArrangedSubview(riskIndicatorIconView)
+		riskIndicatorStackView.addArrangedSubview(riskIndicatorLabel)
 	}
 
 	/// Setup the constraints
@@ -161,10 +178,19 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 			// ClockDeviationWarningView
 			clockDeviationWarningView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: ViewTraits.margin),
 			clockDeviationWarningView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: ViewTraits.margin),
-			clockDeviationWarningView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -ViewTraits.margin)
+			clockDeviationWarningView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -ViewTraits.margin),
+			
+			riskIndicatorIconView.heightAnchor.constraint(equalTo: riskIndicatorLabel.heightAnchor),
+			riskIndicatorIconView.heightAnchor.constraint(equalTo: riskIndicatorIconView.widthAnchor)
 		])
 	}
-
+	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		titleLabel.accessibilityTraits.insert(.updatesFrequently)
+	}
+	
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
 
@@ -189,9 +215,12 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		}
 	}
 
-	/// The  message
+	/// The message
 	var message: String? {
 		didSet {
+			// Due to TextView rendering issue, check attributedText directly for old value.
+			// This prevents VoiceOver unable to focus on other subviews.
+			guard contentTextView.attributedText?.string != message else { return }
 			contentTextView.html(message)
 		}
 	}
@@ -199,15 +228,40 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	/// The title of the primary button
 	var primaryTitle: String = "" {
 		didSet {
-			footerButtonView.primaryButton.setTitle(primaryTitle, for: .normal)
+			footerButtonView.primaryButton.title = primaryTitle
 		}
 	}
 
 	/// The title of the showInstructions Button
-	var showInstructionsTitle: String = "" {
+	var showInstructionsTitle: String? {
 		didSet {
-			showInstructionsButton.setTitle(showInstructionsTitle, for: .normal)
+			showInstructionsButton.title = showInstructionsTitle
 		}
+	}
+	
+	var showsPrimaryButton: Bool = true {
+		didSet {
+			footerButtonView.primaryButton.isHidden = !showsPrimaryButton
+		}
+	}
+	
+	var showsInstructionsButton: Bool = true {
+		didSet {
+			showInstructionsButton.isHidden = !showsInstructionsButton
+		}
+	}
+	
+	func setRiskIndicator(params: (UIColor, String)?) {
+		guard let params = params else {
+			riskIndicatorStackView.isHidden = true
+			return
+		}
+		riskIndicatorStackView.isHidden = false
+		riskIndicatorIconView.tintColor = params.0
+		riskIndicatorLabel.attributedText = .makeFromHtml(
+			text: params.1,
+			style: .bodyDark
+		)
 	}
 
 	/// The user tapped on the primary button
@@ -217,9 +271,9 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	var showInstructionsButtonTappedCommand: (() -> Void)?
 
 	/// The header image
-	var headerImage: UIImage? {
+	var largeImage: UIImage? {
 		didSet {
-			headerImageView.image = headerImage
+			headerImageView.image = largeImage
 		}
 	}
 

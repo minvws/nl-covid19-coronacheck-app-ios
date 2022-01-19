@@ -11,23 +11,12 @@ extension ListEventsViewModel {
 
 	struct Strings {
 
-		static func somethingIsWrongBody(forEventMode mode: EventMode, dataSource: [EventDataTuple]) -> String {
+		static func somethingIsWrongBody(forEventMode mode: EventMode) -> String? {
 			switch mode {
+				case .vaccinationassessment:
+					return L.holder_event_vaccination_assessment_wrong_body()
 				case .paperflow:
-
-					if let credentialData = dataSource.first?.event.dccEvent?.credential.data(using: .utf8),
-					   let euCredentialAttributes = Services.cryptoManager.readEuCredentials(credentialData) {
-
-						if euCredentialAttributes.digitalCovidCertificate.vaccinations?.first != nil {
-							return L.holderVaccinationWrongBody()
-						} else if euCredentialAttributes.digitalCovidCertificate.recoveries?.first != nil {
-							return L.holderRecoveryWrongBody()
-						} else if euCredentialAttributes.digitalCovidCertificate.tests?.first != nil {
-							return L.holderTestresultsWrongBody()
-						}
-					}
-					return ""
-
+					return nil
 				case .recovery:
 					return L.holderRecoveryWrongBody()
 				case .test, .positiveTest:

@@ -11,13 +11,6 @@ class ChooseTestLocationViewController: BaseViewController {
 
 	struct ButtonModel {
 		let title: String
-		let subtitle: String?
-		let subtitleIcon: UIImage?
-		let action: () -> Void
-	}
-
-	struct BottomButtonModel {
-		let title: String
 		let action: () -> Void
 	}
 
@@ -81,20 +74,10 @@ class ChooseTestLocationViewController: BaseViewController {
 			// Add new buttons:
 			buttons
 				.map { buttonModel -> UIView in
-					if let subtitle = buttonModel.subtitle {
-
-						return DisclosureSubtitleButton.makeButton(
-							title: buttonModel.title,
-							subtitle: subtitle,
-							subtitleIcon: buttonModel.subtitleIcon,
-							command: buttonModel.action
-						)
-					} else {
-						return DisclosureButton.makeButton(
-							title: buttonModel.title,
-							command: buttonModel.action
-						)
-					}
+					DisclosureButton.makeButton(
+						title: buttonModel.title,
+						command: buttonModel.action
+					)
 				}
 				.forEach(self.sceneView.buttonsStackView.addArrangedSubview)
 		}

@@ -10,8 +10,6 @@ import Foundation
 protocol ClockDeviationManaging: AnyObject {
 	var hasSignificantDeviation: Bool? { get }
 
-	init()
-
 	func update(serverHeaderDate: String, ageHeader: String?)
 	func update(serverResponseDateTime: Date, localResponseDateTime: Date, localResponseSystemUptime: __darwin_time_t)
 
@@ -60,18 +58,10 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 		return dateFormatter
 	}()
 
-	required convenience init() {
-		self.init(
-			remoteConfigManager: Services.remoteConfigManager,
-			currentSystemUptime: { ClockDeviationManager.currentSystemUptime() },
-			now: { Date() }
-		)
-	}
-
 	required init(
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+		remoteConfigManager: RemoteConfigManaging,
 		currentSystemUptime: @escaping () -> __darwin_time_t? = { ClockDeviationManager.currentSystemUptime() },
-		now: @escaping () -> Date = { Date() }
+		now: @escaping () -> Date
 	) {
 		self.remoteConfigManager = remoteConfigManager
 		self.currentSystemUptime = currentSystemUptime
@@ -165,7 +155,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 		return hasDeviation
 	}
 
-	private static func currentSystemUptime() -> __darwin_time_t? {
+	static func currentSystemUptime() -> __darwin_time_t? {
 
 		var uptime = timespec()
 

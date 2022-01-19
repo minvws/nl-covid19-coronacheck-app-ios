@@ -10,8 +10,6 @@ import XCTest
 
 class RemoteConfigManagingSpy: RemoteConfigManaging {
 
-	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, reachability: ReachabilityProtocol?, networkManager: NetworkManaging) {}
-
 	var invokedStoredConfigurationGetter = false
 	var invokedStoredConfigurationGetterCount = 0
 	var stubbedStoredConfiguration: RemoteConfiguration!
@@ -64,19 +62,19 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
-	var invokedUpdateParameters: (isAppFirstLaunch: Bool, Void)?
-	var invokedUpdateParametersList = [(isAppFirstLaunch: Bool, Void)]()
+	var invokedUpdateParameters: (isAppLaunching: Bool, Void)?
+	var invokedUpdateParametersList = [(isAppLaunching: Bool, Void)]()
 	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
 	var stubbedUpdateCompletionResult: (Result<(Bool, RemoteConfiguration), ServerError>, Void)?
 
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: @escaping () -> Void,
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
-		invokedUpdateParameters = (isAppFirstLaunch, ())
-		invokedUpdateParametersList.append((isAppFirstLaunch, ()))
+		invokedUpdateParameters = (isAppLaunching, ())
+		invokedUpdateParametersList.append((isAppLaunching, ()))
 		if shouldInvokeUpdateImmediateCallbackIfWithinTTL {
 			immediateCallbackIfWithinTTL()
 		}
@@ -85,11 +83,11 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 		}
 	}
 
-	var invokedReset = false
-	var invokedResetCount = 0
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
 
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

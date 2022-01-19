@@ -14,8 +14,6 @@ enum StorageType {
 
 protocol DataStoreManaging {
 
-	init(_ storageType: StorageType)
-
 	/// Get a context to perform a query on
 	/// - Returns: the main context
 	func managedObjectContext() -> NSManagedObjectContext
@@ -27,9 +25,13 @@ protocol DataStoreManaging {
 
 class DataStoreManager: DataStoreManaging, Logging {
 
-	private let containerName = "CoronaCheck"
+	private var containerName: String {
+		flavor == .holder ? "CoronaCheck" : "Verifier"
+	}
 
 	private var storageType: StorageType
+
+	private let flavor: AppFlavor
 
 	/// The persistent container holding our data model
 	private lazy var persistentContainer: NSPersistentContainer = {
@@ -76,9 +78,10 @@ class DataStoreManager: DataStoreManaging, Logging {
 
 	/// Initialize the database manager
 	/// - Parameter storageType: store the data in memory or on disk.
-	required init(_ storageType: StorageType) {
+	required init(_ storageType: StorageType, flavor: AppFlavor = AppFlavor.flavor) {
 
 		self.storageType = storageType
+		self.flavor = flavor
 	}
 
 	/// Get a context to perform a query on

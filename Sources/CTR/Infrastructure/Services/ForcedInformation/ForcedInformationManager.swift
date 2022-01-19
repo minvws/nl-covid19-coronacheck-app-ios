@@ -9,8 +9,8 @@ import Foundation
 
 protocol ForcedInformationManaging {
 
-	// Initialize
-	init()
+	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
+	var factory: ForcedInformationFactory? { get set }
 
 	/// Do we need show any updates? True if we do
 	var needsUpdating: Bool { get }
@@ -27,13 +27,13 @@ protocol ForcedInformationManaging {
 	func consentGiven()
 
 	/// Reset the manager
-	func reset()
+	func wipePersistedData()
 }
 
 class ForcedInformationManager: ForcedInformationManaging {
 
 	/// The forced information data to persist
-	private struct ForcedInformationData: Codable {
+	struct ForcedInformationData: Codable {
 
 		/// The last seen / accepted version by the user
 		var lastSeenVersion: Int
@@ -44,65 +44,54 @@ class ForcedInformationManager: ForcedInformationManaging {
 		}
 	}
 
-	private struct Constants {
-
-		/// The key chain service
-		static let keychainService = "ForcedInformationManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+	private var forcedInformationData: ForcedInformationData {
+		get { secureUserSettings.forcedInformationData }
+		set { secureUserSettings.forcedInformationData = newValue }
 	}
 
-	// keychained stored data
-	@Keychain(name: "data", service: Constants.keychainService, clearOnReinstall: true)
-	private var data: ForcedInformationData = .empty
-
-	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
-	private var information: ForcedInformation = ForcedInformation(
-		pages: [ForcedInformationPage(
-			image: isNL ? I.onboarding.tabbarNL() : I.onboarding.tabbarEN(),
-			tagline: L.holderUpdatepageTagline(),
-			title: L.holderUpdatepageTitleTab(),
-			content: L.holderUpdatepageContentTab()
-		)],
-		consent: nil,
-		version: 4
-	)
-
+	// MARK: - Dependencies
+	
+	private let secureUserSettings: SecureUserSettingsProtocol
+	
 	// MARK: - ForcedInformationManaging
 
-	// Initialize
-	required init() {
-		// Required by protocol
+	required init(secureUserSettings: SecureUserSettingsProtocol) {
+		self.secureUserSettings = secureUserSettings
 	}
+		
+	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
+	var factory: ForcedInformationFactory?
 
 	/// Do we need show any updates? True if we do
 	var needsUpdating: Bool {
-		return data.lastSeenVersion < information.version
+		guard let currentVersion = factory?.information.version else {
+			return false
+		}
+		return forcedInformationData.lastSeenVersion < currentVersion
 	}
 	
 	func getUpdatePage() -> ForcedInformationPage? {
-		
-		return information.pages.first
+
+		return factory?.information.pages.first
 	}
 
 	/// Is there any consent that needs to be displayed?
 	/// - Returns: optional consent
 	func getConsent() -> ForcedInformationConsent? {
 
-		return information.consent
+		return factory?.information.consent
 	}
 
 	/// User has given consent, update the version
 	func consentGiven() {
 
-		data.lastSeenVersion = information.version
+		guard let currentVersion = factory?.information.version else { return }
+		forcedInformationData.lastSeenVersion = currentVersion
 	}
 
 	/// Reset the manager, clear all the data
-	func reset() {
+	func wipePersistedData() {
 
-		$data.clearData()
-	}
-	
-	private static var isNL: Bool {
-		return "nl" == Locale.current.languageCode
+		secureUserSettings.forcedInformationData = SecureUserSettings.Defaults.forcedInformationData
 	}
 }

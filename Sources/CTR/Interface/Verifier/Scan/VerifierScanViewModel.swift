@@ -12,7 +12,11 @@ import Clcore
 class VerifierScanViewModel: ScanPermissionViewModel {
 
 	/// The crypto manager
-	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
+	weak var cryptoManager: CryptoManaging? = Current.cryptoManager
+
+	weak var scanLogManager: ScanLogManaging? = Current.scanLogManager
+	
+	weak var riskLevelManager: RiskLevelManaging? = Current.riskLevelManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
@@ -21,9 +25,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 	/// The title of the scene
 	@Bindable private(set) var title: String
-
-	/// The message of the scene
-	@Bindable private(set) var message: String?
 
 	/// "Waar moet ik op letten?"
 	@Bindable private(set) var moreInformationButtonText: String?
@@ -34,19 +35,25 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	@Bindable private(set) var alert: AlertContent?
 
 	@Bindable private(set) var shouldResumeScanning: Bool?
+	
+	@Bindable private(set) var riskLevel: RiskLevel?
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	init(
-		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)) {
+		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)
+	) {
 
 		self.theCoordinator = coordinator
 
 		self.title = L.verifierScanTitle()
-		self.message = nil
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
+
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+			self.riskLevel = riskLevelManager?.state
+		}
 
 		super.init(coordinator: coordinator)
 	}
@@ -55,19 +62,37 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+
+			guard let currentRiskLevel = riskLevelManager?.state else {
+				assertionFailure("Risk level should be set")
+				return
+			}
+			scanLogManager?.addScanEntry(riskLevel: currentRiskLevel, date: Date())
+		}
+
 		if let verificationResult = cryptoManager?.verifyQRMessage(message) {
 			switch Int64(verificationResult.status) {
 				case MobilecoreVERIFICATION_FAILED_IS_NL_DCC:
 
-					displayAlert(title: L.verifierResultAlertDccTitle(), message: L.verifierResultAlertDccMessage())
+					displayAlert(title: L.verifierResultAlertDccTitle(),
+								 message: L.verifierResultAlertDccMessage())
 
 				case MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX:
 
-					displayAlert(title: L.verifierResultAlertUnknownTitle(), message: L.verifierResultAlertUnknownMessage())
+					displayAlert(title: L.verifierResultAlertUnknownTitle(),
+								 message: L.verifierResultAlertUnknownMessage())
+					
+				case MobilecoreVERIFICATION_SUCCESS where verificationResult.details != nil:
+
+					guard let details = verificationResult.details else {
+						fallthrough
+					}
+					theCoordinator?.navigateToCheckIdentity(details)
 
 				default:
 					
-					theCoordinator?.navigateToScanResult(verificationResult)
+					theCoordinator?.navigateToDeniedAccess(.invalid)
 			}
 		}
 	}
@@ -77,8 +102,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		alert = AlertContent(
 			title: title,
 			subTitle: message,
-			cancelAction: nil,
-			cancelTitle: nil,
 			okAction: { [weak self] _ in
 				self?.shouldResumeScanning = true
 			},
@@ -93,6 +116,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 	func didTapMoreInformationButton() {
 
-		theCoordinator?.navigateToScanInstruction()
+		theCoordinator?.navigateToScanInstruction(allowSkipInstruction: false)
 	}
 }
