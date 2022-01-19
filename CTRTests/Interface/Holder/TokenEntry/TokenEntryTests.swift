@@ -913,7 +913,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.holderTokenentryUniversallinkflowErrorInvalidCombination()
+		expect(self.sut.fieldErrorMessage) == L.holderTokenentryRegularflowErrorInvalidCombination()
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryUniversallinkflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
