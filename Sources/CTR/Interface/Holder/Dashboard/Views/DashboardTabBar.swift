@@ -188,7 +188,7 @@ private class TabBarButton: UIControl {
 	}
 	
 	private let titleLabel: Label = {
-		let label = Label(subheadMedium: nil)
+		let label = Label(subheadMedium: nil).multiline()
 		label.textAlignment = .center
 		label.textColor = Theme.colors.secondaryText
 		return label
