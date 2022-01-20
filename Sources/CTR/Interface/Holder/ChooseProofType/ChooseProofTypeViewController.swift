@@ -68,8 +68,7 @@ class ChooseProofTypeViewController: BaseViewController {
 			guard let self = self else { return }
 
 			// Remove previously added buttons:
-			self.sceneView.buttonsStackView.subviews
-				.forEach { $0.removeFromSuperview() }
+			self.sceneView.buttonsStackView.removeArrangedSubviews()
 
 			// Add new buttons:
 			buttons

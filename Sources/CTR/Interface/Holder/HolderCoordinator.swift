@@ -33,7 +33,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesToCreateAVisitorPass()
 
-	func userWishesToChooseLocation()
+	func userWishesToChooseTestLocation()
 
 	func userHasNotBeenTested()
 
@@ -403,7 +403,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 
-	func userWishesToChooseLocation() {
+	func userWishesToChooseTestLocation() {
 		if Current.featureFlagManager.isGGDEnabled() {
 			navigateToChooseTestLocation()
 		} else {

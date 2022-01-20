@@ -12,14 +12,19 @@ class ChooseProofTypeView: ScrolledStackView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
-		static let titleLineHeight: CGFloat = 26
-		static let titleKerning: CGFloat = -0.26
-		static let messageLineHeight: CGFloat = 22
+		enum Title {
+			static let lineHeight: CGFloat = 26
+			static let kerning: CGFloat = -0.26
+		}
 
-		// Margins
-		static let spacing: CGFloat = 24.0
-		static let stackviewVerticalMargin: CGFloat = 32.0
+		enum Message {
+			static let lineHeight: CGFloat = 22
+		}
+		
+		enum StackView {
+			static let spacing: CGFloat = 24.0
+			static let verticalMargin: CGFloat = 32.0
+		}
 	}
 
 	/// The title label
@@ -42,7 +47,7 @@ class ChooseProofTypeView: ScrolledStackView {
 		view.axis = .vertical
 		view.alignment = .fill
 		view.distribution = .fill
-		view.spacing = ViewTraits.spacing
+		view.spacing = ViewTraits.StackView.spacing
 		view.accessibilityIdentifier = "Buttons Stack View"
 		return view
 	}()
@@ -61,7 +66,7 @@ class ChooseProofTypeView: ScrolledStackView {
 		super.setupViewHierarchy()
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
-		stackView.setCustomSpacing(ViewTraits.stackviewVerticalMargin, after: messageLabel)
+		stackView.setCustomSpacing(ViewTraits.StackView.verticalMargin, after: messageLabel)
 		stackView.addArrangedSubview(buttonsStackView)
 	}
 
@@ -82,8 +87,8 @@ class ChooseProofTypeView: ScrolledStackView {
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
-				ViewTraits.titleLineHeight,
-				kerning: ViewTraits.titleKerning
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
 			)
 		}
 	}
@@ -92,7 +97,7 @@ class ChooseProofTypeView: ScrolledStackView {
 	var message: String? {
 		didSet {
 			if let message = message {
-				messageLabel.attributedText = message.setLineHeight(ViewTraits.messageLineHeight)
+				messageLabel.attributedText = message.setLineHeight(ViewTraits.Message.lineHeight)
 				messageLabel.isHidden = false
 			} else {
 				messageLabel.isHidden = true

@@ -43,7 +43,7 @@ class ChooseProofTypeViewModel: Logging {
 				title: L.holderChooseqrcodetypeOptionNegativetestTitle(),
 				subtitle: L.holderChooseqrcodetypeOptionNegativetestSubtitle()) { [weak self] in
 
-				self?.coordinator?.userWishesToChooseLocation()
+				self?.coordinator?.userWishesToChooseTestLocation()
 			}
 		]
 	}

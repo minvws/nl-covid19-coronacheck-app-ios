@@ -71,6 +71,6 @@ class ChooseProofTypeViewControllerTests: XCTestCase {
 		(self.sut.sceneView.buttonsStackView.arrangedSubviews[2] as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToChooseLocation) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToChooseTestLocation) == true
 	}
 }
