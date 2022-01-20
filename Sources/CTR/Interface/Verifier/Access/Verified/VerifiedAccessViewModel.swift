@@ -10,8 +10,8 @@ import UIKit
 /// The access options
 enum VerifiedAccess: Equatable {
 
-	case verified(RiskLevel)
-	case demo(RiskLevel)
+	case verified(VerificationPolicy)
+	case demo(VerificationPolicy)
 }
 
 final class VerifiedAccessViewModel: Logging {
@@ -35,13 +35,14 @@ final class VerifiedAccessViewModel: Logging {
 		self.coordinator = coordinator
 		self.verifiedAccess = verifiedAccess
 
+		// TODO: Add mode
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			switch verifiedAccess {
-				case .verified(let riskLevel) where riskLevel.isHighPlus,
-						.demo(let riskLevel) where riskLevel.isHighPlus:
+				case .verified(let verificationPolicy) where verificationPolicy == .policy2GPlus,
+						.demo(let verificationPolicy) where verificationPolicy == .policy2GPlus:
 					accessTitle = L.verifier_result_access_title_2g_plus()
-				case .verified(let riskLevel) where riskLevel.isHigh,
-						.demo(let riskLevel) where riskLevel.isHigh:
+				case .verified(let verificationPolicy) where verificationPolicy == .policy2G,
+						.demo(let verificationPolicy) where verificationPolicy == .policy2G:
 					accessTitle = L.verifier_result_access_title_highrisk()
 				default:
 					accessTitle = L.verifier_result_access_title_lowrisk()
@@ -49,9 +50,9 @@ final class VerifiedAccessViewModel: Logging {
 		} else {
 			switch verifiedAccess {
 				case .verified:
-					self.verifiedAccess = .verified(.low)
+					self.verifiedAccess = .verified(.policy3G)
 				case .demo:
-					self.verifiedAccess = .demo(.low)
+					self.verifiedAccess = .demo(.policy3G)
 			}
 			accessTitle = L.verifier_result_access_title()
 		}

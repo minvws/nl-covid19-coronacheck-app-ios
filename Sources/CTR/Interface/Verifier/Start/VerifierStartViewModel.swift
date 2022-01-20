@@ -22,9 +22,10 @@ class VerifierStartViewModel: Logging {
 	
 	indirect enum Mode: Equatable {
 		case noLevelSet
-		case lowRisk
-		case highRisk
-		case highPlusRisk
+		case policy3G
+		case policy2G
+		case policy2GPlus
+		case policy1G
 		case locked(mode: Mode, timeRemaining: TimeInterval, totalDuration: TimeInterval)
 
 		var title: String {
@@ -44,11 +45,13 @@ class VerifierStartViewModel: Logging {
 		
 		var largeImage: UIImage? {
 			switch self {
-				case .noLevelSet, .lowRisk:
+				case .noLevelSet, .policy3G:
 					return I.scanner.scanStartLowRisk()
-				case .highRisk:
+				case .policy2G:
 					return I.scanner.scanStartHighRisk()
-				case .highPlusRisk:
+				case .policy2GPlus:
+					return I.scanner.scanStartHighPlusRisk()
+				case .policy1G:
 					return I.scanner.scanStartHighPlusRisk()
 				case .locked:
 					return I.scanner.scanStartLocked()
@@ -60,7 +63,7 @@ class VerifierStartViewModel: Logging {
 				case let .locked(_, _, totalDuration):
 					let minutes = Int((totalDuration / 60).rounded(.up))
 					return L.verifier_home_countdown_subtitle(minutes)
-				case .highRisk, .highPlusRisk:
+				case .policy2G, .policy2GPlus, .policy1G:
 					return L.scan_qr_description_2G()
 				default:
 					return L.verifierStartMessage()
@@ -101,11 +104,13 @@ class VerifierStartViewModel: Logging {
 		
 		var riskIndicator: (UIColor, String)? {
 			switch self {
-				case .highPlusRisk, .locked(.highPlusRisk, _, _):
+				case .policy1G, .locked(.policy1G, _, _):
 					return (Theme.colors.dark, L.verifier_start_scan_qr_policy_indication_2g_plus())
-				case .highRisk, .locked(.highRisk, _, _):
+				case .policy2GPlus, .locked(.policy2GPlus, _, _):
+					return (Theme.colors.dark, L.verifier_start_scan_qr_policy_indication_2g_plus())
+				case .policy2G, .locked(.policy2G, _, _):
 					return (Theme.colors.primary, L.verifier_start_scan_qr_policy_indication_2g())
-				case .lowRisk, .locked(.lowRisk, _, _):
+				case .policy3G, .locked(.policy3G, _, _):
 					return (Theme.colors.access, L.verifier_start_scan_qr_policy_indication_3g())
 				default:
 					return nil
@@ -189,11 +194,11 @@ class VerifierStartViewModel: Logging {
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			// Pass current states in immediately to configure `self.mode`:
 			lockStateDidChange(lockState: Current.scanLockManager.state)
-			riskLevelDidChange(riskLevel: Current.riskLevelManager.state)
+			verificationPolicyDidChange(verificationPolicy: Current.riskLevelManager.state)
 
 			// Then observe for changes:
 			scanLockObserverToken = Current.scanLockManager.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
-			riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] in self?.riskLevelDidChange(riskLevel: $0) }
+			riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
 
 			lockLabelCountdownTimer.fire()
 		}
@@ -244,26 +249,29 @@ class VerifierStartViewModel: Logging {
 		}
 	}
 	
-	private func riskLevelDidChange(riskLevel: RiskLevel?) {
+	private func verificationPolicyDidChange(verificationPolicy: VerificationPolicy?) {
 		// Update mode with the new riskLevel:
 		self.$mode.projectedValue.mutate { (mode: inout Mode) in
-			switch (mode, riskLevel) {
+			switch (mode, verificationPolicy) {
 				
 				// RiskLevel changed, but we're locked. Just update the lock:
-				case let (.locked(_, timeRemaining, totalDuration), .high):
-					mode = .locked(mode: .highRisk, timeRemaining: timeRemaining, totalDuration: totalDuration)
-				case let (.locked(_, timeRemaining, totalDuration), .low):
-					mode = .locked(mode: .lowRisk, timeRemaining: timeRemaining, totalDuration: totalDuration)
+					// TODO: Add modes
+				case let (.locked(_, timeRemaining, totalDuration), .policy2G):
+					mode = .locked(mode: .policy2G, timeRemaining: timeRemaining, totalDuration: totalDuration)
+				case let (.locked(_, timeRemaining, totalDuration), .policy3G):
+					mode = .locked(mode: .policy3G, timeRemaining: timeRemaining, totalDuration: totalDuration)
 				case let (.locked(_, timeRemaining, totalDuration), .none):
 					mode = .locked(mode: .noLevelSet, timeRemaining: timeRemaining, totalDuration: totalDuration)
 				
 				// Risk Level changed: update mode
-				case (_, .highPlus):
-					mode = .highPlusRisk
-				case (_, .high):
-					mode = .highRisk
-				case (_, .low):
-					mode = .lowRisk
+				case (_, .policy1G):
+					mode = .policy1G
+				case (_, .policy2GPlus):
+					mode = .policy2GPlus
+				case (_, .policy2G):
+					mode = .policy2G
+				case (_, .policy3G):
+					mode = .policy3G
 				case (_, .none):
 					mode = .noLevelSet
 			}

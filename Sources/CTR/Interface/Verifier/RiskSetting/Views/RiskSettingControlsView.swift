@@ -38,20 +38,21 @@ final class RiskSettingControlsView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
+		// TODO: Add mode
 		lowRiskControl.onTapCommand = { [weak self] in
-			self?.selectRiskCommand?(.low)
+			self?.selectVerificationPolicyCommand?(.policy3G)
 			self?.highRiskControl.isSelected = false
 			self?.highPlusRiskControl.isSelected = false
 		}
 		
 		highRiskControl.onTapCommand = { [weak self] in
-			self?.selectRiskCommand?(.high)
+			self?.selectVerificationPolicyCommand?(.policy2G)
 			self?.lowRiskControl.isSelected = false
 			self?.highPlusRiskControl.isSelected = false
 		}
 		
 		highPlusRiskControl.onTapCommand = { [weak self] in
-			self?.selectRiskCommand?(.highPlus)
+			self?.selectVerificationPolicyCommand?(.policy2GPlus)
 			self?.lowRiskControl.isSelected = false
 			self?.highRiskControl.isSelected = false
 		}
@@ -141,12 +142,13 @@ final class RiskSettingControlsView: BaseView {
 		}
 	}
 	
-	var riskLevel: RiskLevel? {
+	var verificationPolicy: VerificationPolicy? {
 		didSet {
-			guard let riskLevel = riskLevel else { return }
-			lowRiskControl.isSelected = riskLevel.isLow
-			highRiskControl.isSelected = riskLevel.isHigh
-			highPlusRiskControl.isSelected = riskLevel.isHighPlus
+			guard let verificationPolicy = verificationPolicy else { return }
+			lowRiskControl.isSelected = verificationPolicy == .policy3G
+			highRiskControl.isSelected = verificationPolicy == .policy2G
+			highPlusRiskControl.isSelected = verificationPolicy == .policy2GPlus
+			// TODO: Add mode
 		}
 	}
 
@@ -158,5 +160,5 @@ final class RiskSettingControlsView: BaseView {
 		}
 	}
 	
-	var selectRiskCommand: ((RiskLevel) -> Void)?
+	var selectVerificationPolicyCommand: ((VerificationPolicy) -> Void)?
 }

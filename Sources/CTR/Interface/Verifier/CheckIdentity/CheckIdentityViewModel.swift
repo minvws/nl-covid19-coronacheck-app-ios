@@ -112,20 +112,20 @@ final class CheckIdentityViewModel: Logging {
 	func showVerifiedAccess() {
 		
 		let verifiedAccess: VerifiedAccess
-		var riskSetting: RiskLevel = .low
+		var verificationPolicySetting: VerificationPolicy = .policy3G
 		
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			guard let state = Current.riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
 				return
 			}
-			riskSetting = state
+			verificationPolicySetting = state
 		}
 		
 		if verificationDetails.isSpecimen == "1" {
-			verifiedAccess = .demo(riskSetting)
+			verifiedAccess = .demo(verificationPolicySetting)
 		} else {
-			verifiedAccess = .verified(riskSetting)
+			verifiedAccess = .verified(verificationPolicySetting)
 		}
 		
 		stopAutoCloseTimer()

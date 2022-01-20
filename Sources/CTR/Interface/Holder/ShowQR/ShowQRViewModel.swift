@@ -245,7 +245,7 @@ class ShowQRViewModel: Logging {
 		// Show different body when you only have a test with category low risk (2G).
 		if let origins = greenCard.castOrigins(),
 		   origins.contains(where: { $0.type == OriginType.test.rawValue }),
-		   domesticCredentialAttributes.riskLevel == .low,
+		   domesticCredentialAttributes.verificationPolicy == .policy3G,
 		   Current.featureFlagManager.isVerificationPolicyEnabled() { // and the verification policy is enabled
 			return L.qr_explanation_description_domestic_2G(identity)
 		}

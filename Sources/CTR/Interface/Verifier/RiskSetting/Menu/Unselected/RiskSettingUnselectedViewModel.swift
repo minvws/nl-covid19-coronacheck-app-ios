@@ -29,7 +29,7 @@ final class RiskSettingUnselectedViewModel: Logging {
 	@Bindable private(set) var errorMessage = L.verification_policy_selection_error_message()
 	@Bindable private(set) var shouldDisplayNotSetError = false
 	
-	var selectRisk: RiskLevel? {
+	var selectVerificationPolicy: VerificationPolicy? {
 		didSet {
 			shouldDisplayNotSetError = false
 		}
@@ -46,10 +46,10 @@ final class RiskSettingUnselectedViewModel: Logging {
 	
 	func confirmSetting() {
 		
-		if selectRisk == nil {
+		if selectVerificationPolicy == nil {
 			shouldDisplayNotSetError = true
 		} else {
-			riskLevelManager.update(riskLevel: selectRisk)
+			riskLevelManager.update(verificationPolicy: selectVerificationPolicy)
 			coordinator?.navigateToVerifierWelcome()
 		}
 	}

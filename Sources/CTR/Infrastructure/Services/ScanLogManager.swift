@@ -14,7 +14,7 @@ protocol ScanLogManaging: AnyObject {
 
 	func getScanEntries(withinLastNumberOfSeconds: Int) -> Result<[ScanLogEntry], Error>
 
-	func addScanEntry(riskLevel: RiskLevel, date: Date)
+	func addScanEntry(verificationPolicy: VerificationPolicy, date: Date)
 
 	func deleteExpiredScanLogEntries(seconds: Int)
 
@@ -23,6 +23,7 @@ protocol ScanLogManaging: AnyObject {
 
 class ScanLogManager: ScanLogManaging {
 
+	// TODO: Add modes
 	static let highRisk: String = "2G"
 	static let lowRisk: String = "3G"
 
@@ -53,12 +54,14 @@ class ScanLogManager: ScanLogManaging {
 		return result
 	}
 
-	func addScanEntry(riskLevel: RiskLevel, date: Date) {
+	func addScanEntry(verificationPolicy: VerificationPolicy, date: Date) {
 
+		// TODO: Add modes
+		
 		// Nothing for now
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			let mode: String = riskLevel.isLow ? ScanLogManager.lowRisk : ScanLogManager.highRisk
+			let mode: String = verificationPolicy == .policy3G ? ScanLogManager.lowRisk : ScanLogManager.highRisk
 			let entry = ScanLogEntryModel.create(mode: mode, date: date, managedContext: context)
 			dataStoreManager.save(context)
 

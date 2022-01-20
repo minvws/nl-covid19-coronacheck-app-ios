@@ -28,9 +28,9 @@ final class RiskSettingInstructionViewModel: Logging {
 	@Bindable private(set) var primaryButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 	@Bindable private(set) var errorMessage = L.verification_policy_selection_error_message()
 	@Bindable private(set) var shouldDisplayNotSetError = false
-	@Bindable private(set) var riskLevel: RiskLevel?
+	@Bindable private(set) var verificationPolicy: VerificationPolicy?
 	
-	var selectRisk: RiskLevel? {
+	var selectVerificationPolicy: VerificationPolicy? {
 		didSet {
 			shouldDisplayNotSetError = false
 		}
@@ -40,9 +40,9 @@ final class RiskSettingInstructionViewModel: Logging {
 		
 		self.coordinator = coordinator
 		
-		let selectedRisk = Current.riskLevelManager.state
-		riskLevel = selectedRisk
-		selectRisk = selectedRisk
+		let selectedVerificationPolicy = Current.riskLevelManager.state
+		verificationPolicy = selectedVerificationPolicy
+		selectVerificationPolicy = selectedVerificationPolicy
 	}
 	
 	func showReadMore() {
@@ -53,10 +53,10 @@ final class RiskSettingInstructionViewModel: Logging {
 	
 	func startScanner() {
 		
-		if selectRisk == nil {
+		if selectVerificationPolicy == nil {
 			shouldDisplayNotSetError = true
 		} else {
-			Current.riskLevelManager.update(riskLevel: selectRisk)
+			Current.riskLevelManager.update(verificationPolicy: selectVerificationPolicy)
 			coordinator?.userDidCompletePages(hasScanLock: false)
 		}
 	}

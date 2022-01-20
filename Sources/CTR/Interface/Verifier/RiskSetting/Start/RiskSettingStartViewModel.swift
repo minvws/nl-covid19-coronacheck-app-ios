@@ -33,18 +33,22 @@ final class RiskSettingStartViewModel: Logging {
 		self.riskLevelManager = riskLevelManager
 		
 		hasUnselectedRiskLevel = riskLevelManager.state == nil
-		if let riskSetting = riskLevelManager.state {
-			switch riskSetting {
-				case .low:
+		if let verificationPolicy = riskLevelManager.state {
+			switch verificationPolicy {
+				case .policy3G:
 					changeRiskTitle = L.verifier_risksetting_changeselection_3g()
 					changeRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
-				case .high:
+				case .policy2G:
 					changeRiskTitle = L.verifier_risksetting_changeselection_2g()
 					changeRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
-				case .highPlus:
+				case .policy2GPlus:
+					changeRiskTitle = L.verifier_risksetting_changeselection_2g_plus()
+					changeRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
+				case .policy1G:
 					changeRiskTitle = L.verifier_risksetting_changeselection_2g_plus()
 					changeRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
 			}
+			// TODO: Update mode
 		}
 	}
 	

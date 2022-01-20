@@ -19,7 +19,7 @@ protocol SecureUserSettingsProtocol: AnyObject {
 	var forcedInformationData: ForcedInformationData { get set }
 	var onboardingData: OnboardingData { get set }
 	var storedConfiguration: RemoteConfiguration { get set }
-	var riskLevel: RiskLevel? { get set }
+	var verificationPolicy: VerificationPolicy? { get set }
 	
 	func wipePersistedData()
 }
@@ -32,7 +32,7 @@ class SecureUserSettings: SecureUserSettingsProtocol {
 		static var forcedInformationData: ForcedInformationManager.ForcedInformationData = .empty
 		static var onboardingData: OnboardingManager.OnboardingData = .empty
 		static var storedConfiguration: RemoteConfiguration = .default
-		static var riskLevel: RiskLevel? = .none
+		static var verificationPolicy: VerificationPolicy? = .none
 	}
 	
 	@Keychain(name: "scanLockUntil", service: "ScanLockManager" + Configuration().getEnvironment(), clearOnReinstall: false)
@@ -53,8 +53,8 @@ class SecureUserSettings: SecureUserSettingsProtocol {
 	@Keychain(name: "storedConfiguration", service: "RemoteConfigManager" + Configuration().getEnvironment(), clearOnReinstall: false)
 	var storedConfiguration: RemoteConfiguration = Defaults.storedConfiguration
 
-	@Keychain(name: "riskLevel", service: "RiskLevelManager" + Configuration().getEnvironment(), clearOnReinstall: false)
-	var riskLevel: RiskLevel? = Defaults.riskLevel
+	@Keychain(name: "verificationPolicy", service: "RiskLevelManager" + Configuration().getEnvironment(), clearOnReinstall: false)
+	var verificationPolicy: VerificationPolicy? = Defaults.verificationPolicy
 }
 
 extension SecureUserSettings {
@@ -66,6 +66,6 @@ extension SecureUserSettings {
 		forcedInformationData = Defaults.forcedInformationData
 		onboardingData = Defaults.onboardingData
 		storedConfiguration = Defaults.storedConfiguration
-		riskLevel = Defaults.riskLevel
+		verificationPolicy = Defaults.verificationPolicy
 	}
 }

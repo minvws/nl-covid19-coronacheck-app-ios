@@ -8,33 +8,23 @@
 import Foundation
 import Clcore
 
-enum RiskLevel: Codable {
+enum VerificationPolicy: Codable {
 	/// 3G policy
-	case low
+	case policy3G
 	/// 2G policy
-	case high
+	case policy2G
 	/// 2G+ policy
-	case highPlus
-	
-	var isLow: Bool {
-		return self == .low
-	}
-	
-	var isHigh: Bool {
-		return self == .high
-	}
-	
-	var isHighPlus: Bool {
-		return self == .highPlus
-	}
+	case policy2GPlus
+	/// 1G policy
+	case policy1G
 	
 	var policy: String {
 		switch self {
-			case .low:
+			case .policy3G:
 				return MobilecoreVERIFICATION_POLICY_3G
-			case .high:
+			case .policy2G:
 				return MobilecoreVERIFICATION_POLICY_2G
-			case .highPlus:
+			case .policy2GPlus, .policy1G:
 				// Update when working on ticket #3087
 				return ""
 		}

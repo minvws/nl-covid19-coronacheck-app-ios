@@ -36,7 +36,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 	@Bindable private(set) var shouldResumeScanning: Bool?
 	
-	@Bindable private(set) var riskLevel: RiskLevel?
+	@Bindable private(set) var verificationPolicy: VerificationPolicy?
 
 	/// Initializer
 	/// - Parameters:
@@ -52,7 +52,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
 
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {
-			self.riskLevel = riskLevelManager?.state
+			self.verificationPolicy = riskLevelManager?.state
 		}
 
 		super.init(coordinator: coordinator)
@@ -64,11 +64,11 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 
-			guard let currentRiskLevel = riskLevelManager?.state else {
+			guard let currentVerificationPolicy = riskLevelManager?.state else {
 				assertionFailure("Risk level should be set")
 				return
 			}
-			scanLogManager?.addScanEntry(riskLevel: currentRiskLevel, date: Date())
+			scanLogManager?.addScanEntry(verificationPolicy: currentVerificationPolicy, date: Date())
 		}
 
 		if let verificationResult = cryptoManager?.verifyQRMessage(message) {

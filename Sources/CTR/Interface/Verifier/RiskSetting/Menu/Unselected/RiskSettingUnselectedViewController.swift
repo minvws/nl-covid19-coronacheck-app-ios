@@ -58,9 +58,9 @@ final class RiskSettingUnselectedViewController: BaseViewController {
 			}
 		}
 		
-		sceneView.riskSettingControlsView.selectRiskCommand = { [weak self] riskSetting in
+		sceneView.riskSettingControlsView.selectVerificationPolicyCommand = { [weak self] verificationPolicy in
 			
-			self?.viewModel.selectRisk = riskSetting
+			self?.viewModel.selectVerificationPolicy = verificationPolicy
 		}
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
 			

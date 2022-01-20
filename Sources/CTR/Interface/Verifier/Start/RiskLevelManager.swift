@@ -8,10 +8,10 @@
 import Foundation
 
 protocol RiskLevelManaging: AnyObject {
-	var state: RiskLevel? { get }
+	var state: VerificationPolicy? { get }
 	
-	func update(riskLevel: RiskLevel?)
-	func appendObserver(_ observer: @escaping (RiskLevel?) -> Void) -> RiskLevelManager.ObserverToken
+	func update(verificationPolicy: VerificationPolicy?)
+	func appendObserver(_ observer: @escaping (VerificationPolicy?) -> Void) -> RiskLevelManager.ObserverToken
 	func removeObserver(token: RiskLevelManager.ObserverToken)
 	func wipePersistedData()
 }
@@ -21,22 +21,22 @@ final class RiskLevelManager: RiskLevelManaging {
 	
 	// MARK: - Vars
 	
-	fileprivate(set) var state: RiskLevel? {
+	fileprivate(set) var state: VerificationPolicy? {
 		get {
-			keychainRiskLevel
+			keychainVerificationPolicy
 		}
 		set {
-			keychainRiskLevel = newValue
+			keychainVerificationPolicy = newValue
 			notifyObservers()
 		}
 	}
 	
-	fileprivate var keychainRiskLevel: RiskLevel? {
-		get { secureUserSettings.riskLevel }
-		set { secureUserSettings.riskLevel = newValue }
+	fileprivate var keychainVerificationPolicy: VerificationPolicy? {
+		get { secureUserSettings.verificationPolicy }
+		set { secureUserSettings.verificationPolicy = newValue }
 	}
 
-	private var observers = [ObserverToken: (RiskLevel?) -> Void]()
+	private var observers = [ObserverToken: (VerificationPolicy?) -> Void]()
 	
 	// MARK: - Dependencies
 	
@@ -46,15 +46,15 @@ final class RiskLevelManager: RiskLevelManaging {
 		self.secureUserSettings = secureUserSettings
 	}
 	
-	func update(riskLevel: RiskLevel?) {
-		state = riskLevel
+	func update(verificationPolicy: VerificationPolicy?) {
+		state = verificationPolicy
 	}
 	
 	// MARK: - Observer notifications
 	
 	/// Be careful to use weak references to your observers within the closure, and
 	/// to unregister your observer using the returned `ObserverToken`.
-	func appendObserver(_ observer: @escaping (RiskLevel?) -> Void) -> ObserverToken {
+	func appendObserver(_ observer: @escaping (VerificationPolicy?) -> Void) -> ObserverToken {
 		let newToken = ObserverToken()
 		observers[newToken] = observer
 		return newToken
@@ -74,8 +74,8 @@ final class RiskLevelManager: RiskLevelManaging {
 	func wipePersistedData() {
 
 		observers = [:]
-		keychainRiskLevel = .none
-		state = keychainRiskLevel
+		keychainVerificationPolicy = .none
+		state = keychainVerificationPolicy
 	}
 }
 
@@ -84,10 +84,10 @@ extension RiskLevelManaging {
 	
 	/// LLDB:
 	/// `e import CTR`
-	/// `Current.riskLevelManager.set(riskLevel: .high)`
-	func set(riskLevel: RiskLevel) {
+	/// `Current.riskLevelManager.set(VerificationPolicy: .policy2G)`
+	func set(verificationPolicy: VerificationPolicy) {
 		let casted = self as! RiskLevelManager // swiftlint:disable:this force_cast
-		casted.state = riskLevel
+		casted.state = verificationPolicy
 	}
 }
 #endif
