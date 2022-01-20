@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseQRCodeTypeView: ScrolledStackView {
+class ChooseProofTypeView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {

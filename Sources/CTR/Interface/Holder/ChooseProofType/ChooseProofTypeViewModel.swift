@@ -7,13 +7,13 @@
 
 import UIKit
 
-class ChooseQRCodeTypeViewModel: Logging {
+class ChooseProofTypeViewModel: Logging {
 
 	// MARK: - Bindable Strings
 
 	@Bindable private(set) var title: String = L.holderChooseqrcodetypeTitle()
 	@Bindable private(set) var message: String = L.holderChooseqrcodetypeMessage()
-	@Bindable private(set) var buttonModels: [ChooseQRCodeTypeViewController.ButtonModel] = []
+	@Bindable private(set) var buttonModels: [ChooseProofTypeViewController.ButtonModel] = []
 
 	// MARK: - Private State:
 	private weak var coordinator: HolderCoordinatorDelegate?
@@ -27,19 +27,19 @@ class ChooseQRCodeTypeViewModel: Logging {
 		self.coordinator = coordinator
 
 		buttonModels = [
-			ChooseQRCodeTypeViewController.ButtonModel(
+			ChooseProofTypeViewController.ButtonModel(
 				title: L.holderChooseqrcodetypeOptionVaccineTitle(),
 				subtitle: L.holderChooseqrcodetypeOptionVaccineSubtitle()) { [weak self] in
 
 				self?.coordinator?.userWishesToCreateAVaccinationQR()
 			},
-			ChooseQRCodeTypeViewController.ButtonModel(
+			ChooseProofTypeViewController.ButtonModel(
 				title: L.holderChooseqrcodetypeOptionRecoveryTitle(),
 				subtitle: L.holderChooseqrcodetypeOptionRecoverySubtitle()) { [weak self] in
 
 				self?.coordinator?.userWishesToCreateARecoveryQR()
 			},
-			ChooseQRCodeTypeViewController.ButtonModel(
+			ChooseProofTypeViewController.ButtonModel(
 				title: L.holderChooseqrcodetypeOptionNegativetestTitle(),
 				subtitle: L.holderChooseqrcodetypeOptionNegativetestSubtitle()) { [weak self] in
 
