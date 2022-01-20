@@ -1212,7 +1212,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.subTitle) == L.holderEventOriginmismatchTestBody("i 480 000 058")
+		expect(feedback.subTitle) == L.holderEventOriginmismatchTestBody("i 180 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2537,7 +2537,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.subTitle) == L.holderEventOriginmismatchTestBody("i 480 000 058")
+		expect(feedback.subTitle) == L.holderEventOriginmismatchTestBody("i 180 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2588,7 +2588,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.subTitle) == L.holderEventOriginmismatchTestBody("i 480 000 058")
+		expect(feedback.subTitle) == L.holderEventOriginmismatchTestBody("i 180 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
