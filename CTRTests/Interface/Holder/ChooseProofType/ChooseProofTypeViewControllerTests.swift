@@ -10,17 +10,17 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 
-class ChooseQRCodeTypeViewControllerTests: XCTestCase {
+class ChooseProofTypeViewControllerTests: XCTestCase {
 
-	var sut: ChooseQRCodeTypeViewController!
+	var sut: ChooseProofTypeViewController!
 	var coordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	var window = UIWindow()
 
 	override func setUp() {
 		super.setUp()
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		sut = ChooseQRCodeTypeViewController(
-			viewModel: ChooseQRCodeTypeViewModel(
+		sut = ChooseProofTypeViewController(
+			viewModel: ChooseProofTypeViewModel(
 				coordinator: coordinatorDelegateSpy
 			),
 			isRootViewController: true
@@ -71,6 +71,6 @@ class ChooseQRCodeTypeViewControllerTests: XCTestCase {
 		(self.sut.sceneView.buttonsStackView.arrangedSubviews[2] as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToChooseLocation) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToChooseTestLocation) == true
 	}
 }

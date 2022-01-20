@@ -9,16 +9,16 @@ import XCTest
 import Nimble
 @testable import CTR
 
-class ChooseQRCodeTypeViewModelTests: XCTestCase {
+class ChooseProofTypeViewModelTests: XCTestCase {
 
-	var sut: ChooseQRCodeTypeViewModel!
+	var sut: ChooseProofTypeViewModel!
 	var coordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 
 	override func setUp() {
 		super.setUp()
 
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		sut = ChooseQRCodeTypeViewModel(coordinator: coordinatorDelegateSpy)
+		sut = ChooseProofTypeViewModel(coordinator: coordinatorDelegateSpy)
 	}
 
 	func test_loadedState() {

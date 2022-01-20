@@ -300,7 +300,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 				case is ChooseTestLocationViewController:
 					return true
 					// Fallback when GGD is not available
-				case is ChooseQRCodeTypeViewController:
+				case is ChooseProofTypeViewController:
 					return true
 				default:
 					return false

@@ -33,7 +33,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesToCreateAVisitorPass()
 
-	func userWishesToChooseLocation()
+	func userWishesToChooseTestLocation()
 
 	func userHasNotBeenTested()
 
@@ -276,8 +276,8 @@ class HolderCoordinator: SharedCoordinator {
 
 	// "Waar wil je een QR-code van maken?"
 	func navigateToChooseQRCodeType() {
-		let destination = ChooseQRCodeTypeViewController(
-			viewModel: ChooseQRCodeTypeViewModel(
+		let destination = ChooseProofTypeViewController(
+			viewModel: ChooseProofTypeViewModel(
 				coordinator: self
 			),
 			isRootViewController: false
@@ -403,7 +403,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 
-	func userWishesToChooseLocation() {
+	func userWishesToChooseTestLocation() {
 		if Current.featureFlagManager.isGGDEnabled() {
 			navigateToChooseTestLocation()
 		} else {
@@ -628,8 +628,8 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = aboutNavigationController
 
 			case .addCertificate:
-				let destination = ChooseQRCodeTypeViewController(
-					viewModel: ChooseQRCodeTypeViewModel(
+				let destination = ChooseProofTypeViewController(
+					viewModel: ChooseProofTypeViewModel(
 						coordinator: self
 					),
 					isRootViewController: true

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseQRCodeTypeViewController: BaseViewController {
+class ChooseProofTypeViewController: BaseViewController {
 
 	struct ButtonModel {
 		let title: String
@@ -15,15 +15,15 @@ class ChooseQRCodeTypeViewController: BaseViewController {
 		let action: () -> Void
 	}
 
-	private let viewModel: ChooseQRCodeTypeViewModel
+	private let viewModel: ChooseProofTypeViewModel
 	
 	private let isRootViewController: Bool
 
 	override var enableSwipeBack: Bool { !isRootViewController }
 
-	let sceneView = ChooseQRCodeTypeView()
+	let sceneView = ChooseProofTypeView()
 
-	init(viewModel: ChooseQRCodeTypeViewModel, isRootViewController: Bool) {
+	init(viewModel: ChooseProofTypeViewModel, isRootViewController: Bool) {
 
 		self.viewModel = viewModel
 		self.isRootViewController = isRootViewController
@@ -68,8 +68,7 @@ class ChooseQRCodeTypeViewController: BaseViewController {
 			guard let self = self else { return }
 
 			// Remove previously added buttons:
-			self.sceneView.buttonsStackView.subviews
-				.forEach { $0.removeFromSuperview() }
+			self.sceneView.buttonsStackView.removeArrangedSubviews()
 
 			// Add new buttons:
 			buttons

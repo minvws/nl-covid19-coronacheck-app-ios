@@ -10,13 +10,13 @@ import Nimble
 @testable import CTR
 import SnapshotTesting
 
-class ChooseQRCodeTypeViewTests: XCTestCase {
-	var sut: ChooseQRCodeTypeView!
+class ChooseProofTypeViewTests: XCTestCase {
+	var sut: ChooseProofTypeView!
 
 	override func setUp() {
 		super.setUp()
 
-		sut = ChooseQRCodeTypeView(frame: UIScreen.main.bounds)
+		sut = ChooseProofTypeView(frame: UIScreen.main.bounds)
 	}
 
 	func test_() {
