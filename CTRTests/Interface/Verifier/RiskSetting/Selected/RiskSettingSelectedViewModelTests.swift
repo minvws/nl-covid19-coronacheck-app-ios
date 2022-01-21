@@ -25,7 +25,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 	}
 
 	// MARK: - Tests
@@ -50,7 +50,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		expect(self.sut.highPlusRiskSubtitle) == L.verifier_risksetting_2g_plus_subtitle()
 		expect(self.sut.highPlusRiskAccessibilityLabel) == "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
 
-		expect(self.sut.riskLevel) == .low
+		expect(self.sut.verificationPolicy) == .policy3G
 	}
 
 	func test_header_withWarning() {
@@ -87,7 +87,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy
 		)
 		
-		sut.selectRisk = .high
+		sut.selectVerificationPolicy = .policy2G
 		
 		// When
 		sut.confirmSetting()
@@ -98,7 +98,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 	
 	func test_changingLevelWithinTimeWindow_enablesLock() {
 		// Arrange
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = true
 		
 		sut = RiskSettingSelectedViewModel(
@@ -106,7 +106,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		)
 		
 		// Act
-		sut.selectRisk = .high
+		sut.selectVerificationPolicy = .policy2G
 		sut.confirmSetting()
 		
 		// Fish in Alert for OK action & trigger it:
@@ -119,7 +119,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 	
 	func test_changingLevelOutsideOfTimeWindow_doesNotEnableLock() {
 		// Arrange
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = false
 		
 		sut = RiskSettingSelectedViewModel(
@@ -127,7 +127,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		)
 		
 		// Act
-		sut.selectRisk = .high
+		sut.selectVerificationPolicy = .policy3G
 		sut.confirmSetting()
 		
 		// Fish in Alert for OK action & trigger it:

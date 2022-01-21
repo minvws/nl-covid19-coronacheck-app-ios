@@ -77,7 +77,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenVerified_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
@@ -88,12 +88,12 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut.showVerifiedAccess()
 		
 		// Then
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.high)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.policy2G)
 	}
 	
 	func test_showVerifiedAccess_whenDemo_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		sut = CheckIdentityViewModel(
@@ -106,12 +106,12 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut.showVerifiedAccess()
 		
 		// Then
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.high)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.policy2G)
 	}
 	
 	func test_showVerifiedAccess_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
@@ -123,12 +123,12 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut.showVerifiedAccess()
 		
 		// Then
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.low)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.policy3G)
 	}
 	
 	func test_showVerifiedAccess_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
@@ -142,7 +142,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut.showVerifiedAccess()
 		
 		// Then
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.low)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.policy3G)
 	}
 	
 	func test_showDccInfo_shouldDisplayVerified() {

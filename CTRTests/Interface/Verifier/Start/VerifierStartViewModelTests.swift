@@ -66,7 +66,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
@@ -83,7 +83,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
@@ -98,7 +98,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
 		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 		
@@ -113,7 +113,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
 		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 		

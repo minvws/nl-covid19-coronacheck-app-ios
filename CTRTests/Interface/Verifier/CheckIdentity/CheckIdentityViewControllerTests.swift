@@ -182,7 +182,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	
 	func test_primaryButtonTapped_whenVerified_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
@@ -196,12 +196,12 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.high)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.policy2G)
 	}
 	
 	func test_primaryButtonTapped_whenDemo_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		viewModel = CheckIdentityViewModel(
@@ -217,12 +217,12 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.high)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.policy2G)
 	}
 	
 	func test_primaryButtonTapped_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
@@ -237,12 +237,12 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.low)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.policy3G)
 	}
 	
 	func test_primaryButtonTapped_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
@@ -259,7 +259,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.low)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.policy3G)
 	}
 	
 	func test_readMoreTapped_shouldNavigateToVerifiedInfo() {

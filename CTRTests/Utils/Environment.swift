@@ -118,7 +118,7 @@ final class EnvironmentSpies {
 	var riskLevelManagerSpy: RiskLevelManagerSpy = {
 		let spy = RiskLevelManagerSpy()
 		spy.stubbedAppendObserverResult = UUID()
-		spy.stubbedState = .high
+		spy.stubbedState = .policy2G
 		return spy
 	}()
 	

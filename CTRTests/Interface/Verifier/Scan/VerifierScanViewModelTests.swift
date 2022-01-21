@@ -56,21 +56,21 @@ class VerifierScanViewModelTests: XCTestCase {
 
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
 
 		// Then
 		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntry) == true
-		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntryParameters?.riskLevel) == .low
+		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntryParameters?.verificationPolicy) == .policy3G
 	}
 
 	func test_parseQRMessage_shouldAddScanLogEntry_lowRisk_verification_policyDisabled() {
 
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
@@ -82,21 +82,21 @@ class VerifierScanViewModelTests: XCTestCase {
 
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
 
 		// Then
 		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntry) == true
-		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntryParameters?.riskLevel) == .high
+		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntryParameters?.verificationPolicy) == .policy2G
 	}
 
 	func test_parseQRMessage_shouldAddScanLogEntry_highRisk_verification_policyDisabled() {
 
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")

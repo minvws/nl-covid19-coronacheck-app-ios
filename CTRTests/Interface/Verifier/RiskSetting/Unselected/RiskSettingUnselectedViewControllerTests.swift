@@ -61,7 +61,7 @@ final class RiskSettingUnselectedViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.riskSettingControlsView.highPlusRiskTitle) == L.verifier_risksetting_2g_plus_title()
 		expect(self.sut.sceneView.riskSettingControlsView.highPlusRiskSubtitle) == L.verifier_risksetting_2g_plus_subtitle()
 		expect(self.sut.sceneView.riskSettingControlsView.highPlusRiskAccessibilityLabel) == "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
-		expect(self.sut.sceneView.riskSettingControlsView.riskLevel).to(beNil())
+		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy).to(beNil())
 		
 		expect(self.sut.sceneView.footerButtonView.primaryTitle) == L.verifier_risksetting_confirmation_button()
 		expect(self.sut.sceneView.errorMessage) == L.verification_policy_selection_error_message()
@@ -84,13 +84,13 @@ final class RiskSettingUnselectedViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_low() {
 		// Given
-		sut.sceneView.riskSettingControlsView.riskLevel = .low
+		sut.sceneView.riskSettingControlsView.verificationPolicy = .policy3G
 		
 		// When
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
+		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy3G
 		
 		// Snapshot
 		sut.assertImage()
@@ -98,13 +98,13 @@ final class RiskSettingUnselectedViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_high() {
 		// Given
-		sut.sceneView.riskSettingControlsView.riskLevel = .high
+		sut.sceneView.riskSettingControlsView.verificationPolicy = .policy2G
 		
 		// When
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .high
+		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy2G
 		
 		// Snapshot
 		sut.assertImage()
@@ -112,13 +112,13 @@ final class RiskSettingUnselectedViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_highPlus() {
 		// Given
-		sut.sceneView.riskSettingControlsView.riskLevel = .highPlus
+		sut.sceneView.riskSettingControlsView.verificationPolicy = .policy2GPlus
 		
 		// When
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .highPlus
+		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy2GPlus
 		
 		// Snapshot
 		sut.assertImage()

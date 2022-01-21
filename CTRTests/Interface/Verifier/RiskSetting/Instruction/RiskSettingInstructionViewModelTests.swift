@@ -23,7 +23,7 @@ final class RiskSettingInstructionViewModelTests: XCTestCase {
 		super.setUp()
 		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		
 		sut = RiskSettingInstructionViewModel(coordinator: coordinatorSpy)
 	}
@@ -62,7 +62,7 @@ final class RiskSettingInstructionViewModelTests: XCTestCase {
 		expect(self.sut.primaryButtonTitle) == L.verifierScaninstructionsButtonStartscanning()
 		expect(self.sut.errorMessage) == L.verification_policy_selection_error_message()
 		expect(self.sut.shouldDisplayNotSetError) == false
-		expect(self.sut.riskLevel) == .low
+		expect(self.sut.verificationPolicy) == .policy3G
 	}
 	
 	func test_startScanner_shouldInvokeUserDidCompletePages() {
@@ -73,7 +73,7 @@ final class RiskSettingInstructionViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.shouldDisplayNotSetError) == false
-		expect(self.environmentSpies.riskLevelManagerSpy.invokedUpdateParameters?.riskLevel) == .low
+		expect(self.environmentSpies.riskLevelManagerSpy.invokedUpdateParameters?.verificationPolicy) == .policy3G
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
 	}
 	
