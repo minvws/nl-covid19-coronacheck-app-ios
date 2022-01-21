@@ -43,8 +43,6 @@ class AppCoordinator: Coordinator, Logging {
 
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 
-	var userSettings: UserSettingsProtocol = UserSettings()
-
 	var flavor = AppFlavor.flavor
 
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
@@ -383,14 +381,14 @@ extension AppCoordinator: AppCoordinatorDelegate {
 
 	private func handleRecommendedUpdateForHolder(recommendedVersion: String, appStoreUrl: URL) {
 
-		if let lastSeenRecommendedUpdate = userSettings.lastSeenRecommendedUpdate,
+		if let lastSeenRecommendedUpdate = Current.userSettings.lastSeenRecommendedUpdate,
 		   lastSeenRecommendedUpdate == recommendedVersion {
 			logDebug("The recommended version \(recommendedVersion) is the last seen version")
 			startApplication()
 		} else {
 			// User has not seen a dialog for this recommended Version
 			logDebug("The recommended version \(recommendedVersion) is not the last seen version")
-			userSettings.lastSeenRecommendedUpdate = recommendedVersion
+			Current.userSettings.lastSeenRecommendedUpdate = recommendedVersion
 			showRecommendedUpdate(updateURL: appStoreUrl)
 		}
 	}
@@ -399,11 +397,11 @@ extension AppCoordinator: AppCoordinatorDelegate {
 
 		let now = Date().timeIntervalSince1970
 		let interval: Double = Double(remoteConfiguration.recommendedNagIntervalHours ?? 24) * 3600
-		let lastSeen: TimeInterval = userSettings.lastRecommendUpdateDismissalTimestamp ?? now
+		let lastSeen: TimeInterval = Current.userSettings.lastRecommendUpdateDismissalTimestamp ?? now
 
 		if lastSeen == now || lastSeen + interval < now {
 			showRecommendedUpdate(updateURL: appStoreUrl)
-			userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
+			Current.userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
 		} else {
 			startApplication()
 		}
