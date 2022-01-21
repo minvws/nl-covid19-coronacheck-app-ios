@@ -56,14 +56,6 @@ final class HolderDashboardView: BaseView {
 		return scrollView
 	}()
 	
-	/// Footer view with primary button
-	let footerButtonView: FooterButtonView = {
-		let footerView = FooterButtonView()
-		footerView.translatesAutoresizingMaskIntoConstraints = false
-		return footerView
-	}()
-	
-	private var bottomScrollViewConstraint: NSLayoutConstraint?
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
 	// MARK: - Overrides
@@ -76,7 +68,6 @@ final class HolderDashboardView: BaseView {
 		
 		tabBar.delegate = self
 		scrollView.delegate = self
-		footerButtonView.isHidden = true
 	}
 	
 	/// Setup the view hierarchy
@@ -85,7 +76,6 @@ final class HolderDashboardView: BaseView {
 		
 		addSubview(tabBar)
 		addSubview(scrollView)
-		addSubview(footerButtonView)
 		scrollView.addSubview(domesticScrollView)
 		scrollView.addSubview(internationalScrollView)
 	}
@@ -102,15 +92,7 @@ final class HolderDashboardView: BaseView {
 			scrollView.topAnchor.constraint(equalTo: tabBar.bottomAnchor),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
-			{
-				let constraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
-				bottomScrollViewConstraint = constraint
-				return constraint
-			}(),
-			
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
-			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
 			domesticScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
 			domesticScrollView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
@@ -151,17 +133,6 @@ final class HolderDashboardView: BaseView {
 	
 	// MARK: - Public Access
 	
-	/// Display primary button view
-	var shouldDisplayButtonView = false {
-		didSet {
-			footerButtonView.isHidden = !shouldDisplayButtonView
-			bottomScrollViewConstraint?.isActive = false
-			let anchor: NSLayoutYAxisAnchor = shouldDisplayButtonView ? footerButtonView.topAnchor : self.bottomAnchor
-			bottomScrollViewConstraint = scrollView.bottomAnchor.constraint(equalTo: anchor)
-			bottomScrollViewConstraint?.isActive = true
-		}
-	}
-
 	/// Updates selected tab position
 	func updateScrollPosition() {
 		let selectedTab = tabBar.selectedTab.rawValue
@@ -174,26 +145,10 @@ final class HolderDashboardView: BaseView {
 		tabBar.select(tab: tab, animated: false)
 		
 		updateScrollPosition()
-		updateScrollViewContentOffsetObserver(for: tab)
 	}
 }
 
 private extension HolderDashboardView {
-	
-	func updateScrollViewContentOffsetObserver(for tab: DashboardTab) {
-		let scrollView = tab.isDomestic ? domesticScrollView.scrollView : internationalScrollView.scrollView
-		updateFooterViewAnimation(for: scrollView)
-		
-		scrollViewContentOffsetObserver?.invalidate()
-		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
-			self?.updateFooterViewAnimation(for: scrollView)
-		}
-	}
-	
-	func updateFooterViewAnimation(for scrollView: UIScrollView) {
-		let translatedOffset = scrollView.translatedBottomScrollOffset
-		footerButtonView.updateFadeAnimation(from: translatedOffset)
-	}
 	
 	func selectedTab(for scrollView: UIScrollView) -> DashboardTab {
 		let scrollViewWidth = scrollView.bounds.width
@@ -213,7 +168,6 @@ extension HolderDashboardView: UIScrollViewDelegate {
 		guard hasTabChanged else { return }
 		tabBar.select(tab: selectedTab, animated: true)
 		
-		updateScrollViewContentOffsetObserver(for: selectedTab)
 		delegate?.holderDashboardView(self, didDisplay: selectedTab)
 	}
 }
@@ -225,7 +179,6 @@ extension HolderDashboardView: DashboardTabBarDelegate {
 		scrollView.setContentOffset(scrollOffset, animated: true)
 		UIAccessibility.post(notification: .pageScrolled, argument: nil)
 				
-		updateScrollViewContentOffsetObserver(for: tab)
 		delegate?.holderDashboardView(self, didDisplay: tab)
 	}
 }

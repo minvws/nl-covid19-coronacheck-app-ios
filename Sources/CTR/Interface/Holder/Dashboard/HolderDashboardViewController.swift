@@ -93,10 +93,6 @@ class HolderDashboardViewController: BaseViewController {
 		
 		sceneView.delegate = self
 
-		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.addProofTapped()
-		}
-		
 		// Forces VoiceOver focus on menu button instead of tab bar on start up
 		UIAccessibility.post(notification: .screenChanged, argument: navigationItem.leftBarButtonItem)
 	}
@@ -135,9 +131,6 @@ class HolderDashboardViewController: BaseViewController {
 			}
 		}
 		
-		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
-		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
-
 		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
 			DispatchQueue.main.async {
 				self?.showAlert(alertContent)
