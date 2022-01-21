@@ -90,8 +90,6 @@ class HolderDashboardViewController: BaseViewController {
 		super.viewDidLoad()
 
 		setupBindings()
-
-		setupPlusButton()
 		
 		sceneView.delegate = self
 
@@ -194,17 +192,6 @@ class HolderDashboardViewController: BaseViewController {
 		// Select start tab after layouting is done to be able to update scroll position
 		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
 		sceneView.selectTab(tab: selectedTab)
-	}
-
-	// MARK: Helper methods
-
-	func setupPlusButton() {
-		let config = UIBarButtonItem.Configuration(target: viewModel,
-												   action: #selector(HolderDashboardViewModel.addProofTapped),
-												   content: .image( I.plus()),
-												   accessibilityIdentifier: "PlusButton",
-												   accessibilityLabel: L.holderMenuProof())
-		navigationItem.rightBarButtonItem = .create(config)
 	}
 }
 
