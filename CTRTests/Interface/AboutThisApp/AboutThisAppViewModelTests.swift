@@ -495,16 +495,4 @@ class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, Verifie
 		invokedUserWishesMoreInfoAboutDeniedQRScan = true
 		invokedUserWishesMoreInfoAboutDeniedQRScanCount += 1
 	}
-
-	var invokedNavigateToScanNextInstruction = false
-	var invokedNavigateToScanNextInstructionCount = 0
-	var invokedNavigateToScanNextInstructionParameters: (scanNext: ScanNext, Void)?
-	var invokedNavigateToScanNextInstructionParametersList = [(scanNext: ScanNext, Void)]()
-
-	func navigateToScanNextInstruction(_ scanNext: ScanNext) {
-		invokedNavigateToScanNextInstruction = true
-		invokedNavigateToScanNextInstructionCount += 1
-		invokedNavigateToScanNextInstructionParameters = (scanNext, ())
-		invokedNavigateToScanNextInstructionParametersList.append((scanNext, ()))
-	}
 }

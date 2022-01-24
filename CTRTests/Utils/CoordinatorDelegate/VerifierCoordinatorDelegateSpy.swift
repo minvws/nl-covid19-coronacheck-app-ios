@@ -139,18 +139,6 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedUserWishesMoreInfoAboutDeniedQRScanCount += 1
 	}
 
-	var invokedNavigateToScanNextInstruction = false
-	var invokedNavigateToScanNextInstructionCount = 0
-	var invokedNavigateToScanNextInstructionParameters: (scanNext: ScanNext, Void)?
-	var invokedNavigateToScanNextInstructionParametersList = [(scanNext: ScanNext, Void)]()
-
-	func navigateToScanNextInstruction(_ scanNext: ScanNext) {
-		invokedNavigateToScanNextInstruction = true
-		invokedNavigateToScanNextInstructionCount += 1
-		invokedNavigateToScanNextInstructionParameters = (scanNext, ())
-		invokedNavigateToScanNextInstructionParametersList.append((scanNext, ()))
-	}
-
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
