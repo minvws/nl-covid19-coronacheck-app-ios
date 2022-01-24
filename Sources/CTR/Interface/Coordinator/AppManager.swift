@@ -26,19 +26,22 @@ final class AppManager: AppManaging {
 		}
 	}
 	
+	// MARK: - Remote Config -
+	
 	private func configureRemoteConfigManager() {
 		
 		// Attach behaviours that we want the RemoteConfigManager to perform
 		// each time it refreshes the config in future:
 		
 		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
-//			// Mark remote config loaded
-//			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
+
+			// Update the remote config for the crypto library
+			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
 		}]
 		
 		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver {[weak self] _, _, urlResponse in
 
-			// Update Crypto Lib
+			// Mark remote config loaded
 			Current.cryptoLibUtility.checkFile(.remoteConfiguration)
 			
 			self?.updateFromUrlResponse(urlResponse)

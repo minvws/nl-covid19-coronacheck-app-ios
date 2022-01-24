@@ -263,57 +263,57 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// - Parameter state: the launch state
     func handleLaunchState(_ state: LaunchState) {
 
-		switch state {
-			case .withinTTL:
-				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
-				// Use the documents directory creation date.
-				Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
-				startApplication()
-
-			case .noActionNeeded:
-				startApplication()
-				
-			case .internetRequired:
-				showInternetRequired()
-
-			case let .actionRequired(remoteConfiguration):
-
-				let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
-				let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
-				let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
-
-				if remoteConfiguration.isDeactivated {
-					// Deactivated
-					navigateToAppUpdate(
-						with: EndOfLifeViewModel(
-							coordinator: self,
-							versionInformation: remoteConfiguration
-						)
-					)
-				} else if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-					// Required Update
-					navigateToAppUpdate(
-						with: AppUpdateViewModel(
-							coordinator: self,
-							versionInformation: remoteConfiguration
-						)
-					)
-				} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
-						  let appStoreURL = remoteConfiguration.appStoreURL {
-
-					// Recommended update
-					handleRecommendedUpdate(
-						recommendedVersion: recommendedVersion,
-						remoteConfiguration: remoteConfiguration,
-						appStoreUrl: appStoreURL
-					)
-				} else {
-					startApplication()
-				}
-			case .cryptoLibNotInitialized:
-				// Crypto library not loaded
-				showCryptoLibNotInitializedError()
-		}
+//		switch state {
+//			case .withinTTL:
+//				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
+//				// Use the documents directory creation date.
+//				Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
+//				startApplication()
+//
+//			case .noActionNeeded:
+//				startApplication()
+//
+//			case .internetRequired:
+//				showInternetRequired()
+//
+//			case let .actionRequired(remoteConfiguration):
+//
+//				let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
+//				let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
+//				let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
+//
+//				if remoteConfiguration.isDeactivated {
+//					// Deactivated
+//					navigateToAppUpdate(
+//						with: EndOfLifeViewModel(
+//							coordinator: self,
+//							versionInformation: remoteConfiguration
+//						)
+//					)
+//				} else if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+//					// Required Update
+//					navigateToAppUpdate(
+//						with: AppUpdateViewModel(
+//							coordinator: self,
+//							versionInformation: remoteConfiguration
+//						)
+//					)
+//				} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
+//						  let appStoreURL = remoteConfiguration.appStoreURL {
+//
+//					// Recommended update
+//					handleRecommendedUpdate(
+//						recommendedVersion: recommendedVersion,
+//						remoteConfiguration: remoteConfiguration,
+//						appStoreUrl: appStoreURL
+//					)
+//				} else {
+//					startApplication()
+//				}
+//			case .cryptoLibNotInitialized:
+//				// Crypto library not loaded
+//				showCryptoLibNotInitializedError()
+//		}
 	}
 
 	// MARK: - Recommended Update -

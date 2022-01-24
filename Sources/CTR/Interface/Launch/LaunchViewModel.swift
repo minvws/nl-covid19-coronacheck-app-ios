@@ -97,29 +97,37 @@ class LaunchViewModel: Logging {
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 			switch (configStatus, issuerPublicKeysStatus) {
 				case (.withinTTL, .withinTTL):
-					self.didFinishLaunchState = true
+//					self.didFinishLaunchState = true
 					self.coordinator?.handleLaunchState(.withinTTL)
-
-				case (.actionRequired, _):
-					self.coordinator?.handleLaunchState(configStatus)
-
-				case (LaunchState.internetRequired, _), (_, .internetRequired):
-					if !self.didFinishLaunchState {
-						self.didFinishLaunchState = true
-						self.coordinator?.handleLaunchState(.internetRequired)
-					}
-
-				case (.noActionNeeded, .noActionNeeded), (.noActionNeeded, .withinTTL), (.withinTTL, .noActionNeeded):
-					if !Current.cryptoLibUtility.isInitialized {
-						// Show crypto lib not initialized error
-						self.coordinator?.handleLaunchState(.cryptoLibNotInitialized)
-					} else {
-						// Start application
-						if !self.didFinishLaunchState {
-							self.didFinishLaunchState = true
-							self.coordinator?.handleLaunchState(.noActionNeeded)
-						}
-					}
+								
+				case let (.serverError(error1), .serverError(error2)):
+					self.coordinator?.handleLaunchState(.serverError(error1 + error2))
+				
+				case (.serverError(let error), _), (_, .serverError(let error)):
+					self.coordinator?.handleLaunchState(.serverError(error))
+				
+				case (.finished, .finished), (.finished, .withinTTL), (.withinTTL, .finished):
+					self.coordinator?.handleLaunchState(.finished)
+//				case (.actionRequired, _):
+//					self.coordinator?.handleLaunchState(configStatus)
+//
+//				case (LaunchState.internetRequired, _), (_, .internetRequired):
+//					if !self.didFinishLaunchState {
+//						self.didFinishLaunchState = true
+//						self.coordinator?.handleLaunchState(.internetRequired)
+//					}
+//
+//				case (.noActionNeeded, .noActionNeeded), (.noActionNeeded, .withinTTL), (.withinTTL, .noActionNeeded):
+//					if !Current.cryptoLibUtility.isInitialized {
+//						// Show crypto lib not initialized error
+//						self.coordinator?.handleLaunchState(.cryptoLibNotInitialized)
+//					} else {
+//						// Start application
+//						if !self.didFinishLaunchState {
+//							self.didFinishLaunchState = true
+//							self.coordinator?.handleLaunchState(.noActionNeeded)
+//						}
+//					}
 					
 				default:
 					self.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
@@ -143,56 +151,59 @@ class LaunchViewModel: Logging {
 			completion: { (result: Result<(Bool, RemoteConfiguration), ServerError>) in
 				self.isUpdatingConfiguration = false
 				switch result {
-					case let .success((_, remoteConfiguration)):
+						
+					case .success:
+						completion(.finished)
 
-						// Note: There are also other steps done on completion
-						// by way of the remoteConfigManager's registered update/reload observers
-						// - see RemoteConfigManager `.appendUpdateObserver` and `.appendReloadObserver`.
-
-						self.compare(remoteConfiguration, completion: completion)
-
-					case let .failure(networkError):
-						self.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
-
-						// Fallback to the last known remote configuration
-						let storedConfiguration = Current.remoteConfigManager.storedConfiguration
-						self.logDebug("Using stored Configuration \(storedConfiguration)")
-
-						self.compare(storedConfiguration) { state in
-							switch state {
-								case .actionRequired:
-									// Deactivated or update trumps no internet
-									completion(state)
-								default:
-									completion(.internetRequired)
-							}
-						}
+//						// Note: There are also other steps done on completion
+//						// by way of the remoteConfigManager's registered update/reload observers
+//						// - see RemoteConfigManager `.appendUpdateObserver` and `.appendReloadObserver`.
+//
+//						self.compare(remoteConfiguration, completion: completion)
+//
+					case let .failure(error):
+						self.logError("Error getting the remote config: \(error)")
+						completion(.serverError([error]))
+//
+//						// Fallback to the last known remote configuration
+//						let storedConfiguration = Current.remoteConfigManager.storedConfiguration
+//						self.logDebug("Using stored Configuration \(storedConfiguration)")
+//
+//						self.compare(storedConfiguration) { state in
+//							switch state {
+//								case .actionRequired:
+//									// Deactivated or update trumps no internet
+//									completion(state)
+//								default:
+//									completion(.internetRequired)
+//							}
+//						}
 				}
 			})
 	}
 
-	/// Compare the remote configuration against the app version
-	/// - Parameters:
-	///   - remoteConfiguration: the remote configuration
-	///   - completion: completion handler
-	private func compare(
-		_ remoteConfiguration: RemoteConfiguration,
-		completion: @escaping (LaunchState) -> Void) {
-
-		let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
-		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
-		let currentVersion = versionSupplier?.getCurrentVersion().fullVersionString() ?? "1.0.0"
-
-		if remoteConfiguration.isDeactivated ||
-			requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending ||
-			recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-			// Update or kill the app
-			completion(.actionRequired(remoteConfiguration))
-		} else {
-			// Nothing to do
-			completion(.noActionNeeded)
-		}
-	}
+//	/// Compare the remote configuration against the app version
+//	/// - Parameters:
+//	///   - remoteConfiguration: the remote configuration
+//	///   - completion: completion handler
+//	private func compare(
+//		_ remoteConfiguration: RemoteConfiguration,
+//		completion: @escaping (LaunchState) -> Void) {
+//
+//		let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
+//		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
+//		let currentVersion = versionSupplier?.getCurrentVersion().fullVersionString() ?? "1.0.0"
+//
+//		if remoteConfiguration.isDeactivated ||
+//			requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending ||
+//			recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+//			// Update or kill the app
+//			completion(.actionRequired(remoteConfiguration))
+//		} else {
+//			// Nothing to do
+//			completion(.noActionNeeded)
+//		}
+//	}
 
 	private func updateKeys(_ completion: @escaping (LaunchState) -> Void) {
 
@@ -210,11 +221,11 @@ class LaunchViewModel: Logging {
 				self.isUpdatingIssuerPublicKeys = false
 				switch result {
 					case .success:
-						completion(.noActionNeeded)
+						completion(.finished)
 
 					case let .failure(error):
 						self.logError("Error getting the issuers public keys: \(error)")
-						completion(.internetRequired)
+						completion(.serverError([error]))
 				}
 			}
 		)
