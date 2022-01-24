@@ -86,7 +86,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.noActionNeeded
 		expect(self.sut.alert).to(beNil())
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups).toEventually(beTrue())
 	}
 
 	func test_withinTTL() {
@@ -113,7 +112,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.withinTTL
 		expect(self.sut.alert).to(beNil())
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter).toEventually(beFalse())
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups).toEventually(beTrue())
 	}
 
 	/// Test internet required for the remote config
@@ -141,7 +139,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.alert).to(beNil())
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups).toEventually(beTrue())
 	}
 
 	/// Test internet required for the issuer public keys
@@ -168,7 +165,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.alert).to(beNil())
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups).toEventually(beTrue())
 	}
 
 	/// Test internet required for the issuer public keys and the remote config
@@ -196,7 +192,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.alert).to(beNil())
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups).toEventually(beTrue())
 	}
 
 	/// Test internet required for the remote config
@@ -227,7 +222,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.alert).to(beNil())
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups).toEventually(beTrue())
 	}
 
 	/// Test update required
@@ -258,7 +252,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
 		expect(self.sut.alert).to(beNil())
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups).toEventually(beTrue())
 	}
 
 	/// Test crypto library not initialized
@@ -287,7 +280,6 @@ class LaunchViewModelTests: XCTestCase {
 			.toEventually(equal(LaunchState.cryptoLibNotInitialized))
 		expect(self.sut.alert).to(beNil())
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups).toEventually(beTrue())
 	}
 
 	func test_killswitchEnabled() {
@@ -317,7 +309,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
 		expect(self.sut.alert).to(beNil())
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups).toEventually(beTrue())
 	}
 
 	func test_killswitchEnabled_noInternet() {
@@ -348,7 +339,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
 		expect(self.sut.alert).to(beNil())
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups).toEventually(beTrue())
 	}
 
 	func test_checkForJailBreak_broken_shouldWarn() {

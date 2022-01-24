@@ -22,8 +22,6 @@ class LaunchViewModel: Logging {
 	var issuerPublicKeysStatus: LaunchState?
 	var didFinishLaunchState = false
 
-	private var remoteConfigManagerUpdateToken: RemoteConfigManager.ObserverToken?
-
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var version: String
@@ -54,19 +52,7 @@ class LaunchViewModel: Logging {
 			: L.verifierLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 
 		walletManager = flavor == .holder ? Current.walletManager : nil
-
-		remoteConfigManagerUpdateToken = Current.remoteConfigManager.appendReloadObserver { [weak self] remoteConfig, rawData, urlResponse in
-			Current.cryptoLibUtility.checkFile(.remoteConfiguration)
-			self?.checkWallet()
-		}
-
 		startChecks()
-	}
-
-	deinit {
-		remoteConfigManagerUpdateToken.map {
-			Current.remoteConfigManager.removeObserver(token: $0)
-		}
 	}
 
 	private func startChecks() {
@@ -134,7 +120,7 @@ class LaunchViewModel: Logging {
 							self.coordinator?.handleLaunchState(.noActionNeeded)
 						}
 					}
-
+					
 				default:
 					self.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
 			}
@@ -172,9 +158,6 @@ class LaunchViewModel: Logging {
 						let storedConfiguration = Current.remoteConfigManager.storedConfiguration
 						self.logDebug("Using stored Configuration \(storedConfiguration)")
 
-						// Check the wallet
-						self.checkWallet()
-
 						self.compare(storedConfiguration) { state in
 							switch state {
 								case .actionRequired:
@@ -209,13 +192,6 @@ class LaunchViewModel: Logging {
 			// Nothing to do
 			completion(.noActionNeeded)
 		}
-	}
-
-	private func checkWallet() {
-
-		// Will be removed in the 2285 story.
-		let configuration = Current.remoteConfigManager.storedConfiguration
-		walletManager?.expireEventGroups(configuration: configuration)
 	}
 
 	private func updateKeys(_ completion: @escaping (LaunchState) -> Void) {
@@ -280,7 +256,7 @@ class LaunchViewModel: Logging {
 		startChecks()
 	}
 
-	// MARK: DeviceAuthentication
+	// MARK: DeviceAuthentication (pin code)
 
 	private func shouldShowDeviceAuthenticationAlert() -> Bool {
 
