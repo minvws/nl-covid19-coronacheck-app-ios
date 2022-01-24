@@ -10,7 +10,25 @@ import XCTest
 
 class FeatureFlagManagerSpy: FeatureFlagManaging {
 
-	required init(versionSupplier: AppVersionSupplierProtocol?) {}
+	var invokedIsGGDEnabled = false
+	var invokedIsGGDEnabledCount = 0
+	var stubbedIsGGDEnabledResult: Bool! = false
+
+	func isGGDEnabled() -> Bool {
+		invokedIsGGDEnabled = true
+		invokedIsGGDEnabledCount += 1
+		return stubbedIsGGDEnabledResult
+	}
+
+	var invokedIsLuhnCheckEnabled = false
+	var invokedIsLuhnCheckEnabledCount = 0
+	var stubbedIsLuhnCheckEnabledResult: Bool! = false
+
+	func isLuhnCheckEnabled() -> Bool {
+		invokedIsLuhnCheckEnabled = true
+		invokedIsLuhnCheckEnabledCount += 1
+		return stubbedIsLuhnCheckEnabledResult
+	}
 
 	var invokedIsNewValidityInfoBannerEnabled = false
 	var invokedIsNewValidityInfoBannerEnabledCount = 0
@@ -31,11 +49,14 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		invokedIsVerificationPolicyEnabledCount += 1
 		return stubbedIsVerificationPolicyEnabledResult
 	}
-}
 
-extension FeatureFlagManagerSpy {
-    
-    convenience init() {
-        self.init(versionSupplier: AppVersionSupplier())
-    }
+	var invokedIsVisitorPassEnabled = false
+	var invokedIsVisitorPassEnabledCount = 0
+	var stubbedIsVisitorPassEnabledResult: Bool! = false
+
+	func isVisitorPassEnabled() -> Bool {
+		invokedIsVisitorPassEnabled = true
+		invokedIsVisitorPassEnabledCount += 1
+		return stubbedIsVisitorPassEnabledResult
+	}
 }

@@ -69,13 +69,6 @@ class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 		return button
 	}()
 	
-	private let spacer: UIView = {
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .clear
-		return view
-	}()
-	
 	/// Setup all the views
 	override func setupViews() {
 		
@@ -98,18 +91,7 @@ class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 		stackView.setCustomSpacing(16, after: errorView)
 
 		stackView.addArrangedSubview(userNeedsATokenButton)
-		stackView.setCustomSpacing(0, after: userNeedsATokenButton)
-
-		stackView.addArrangedSubview(spacer)
-	}
-	
-	override func setupViewConstraints() {
-		
-		super.setupViewConstraints()
-		
-		NSLayoutConstraint.activate([
-			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
-		])
+		stackView.setCustomSpacing(ViewTraits.margin, after: userNeedsATokenButton)
 	}
 
 	@objc func userNeedsATokenButtonTapped() {

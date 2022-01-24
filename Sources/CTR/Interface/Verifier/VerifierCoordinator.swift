@@ -20,12 +20,6 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	func navigateToScanInstruction(allowSkipInstruction: Bool)
 
-	/// Display content
-	/// - Parameters:
-	///   - title: the title
-	///   - content: the content
-	func displayContent(title: String, content: [DisplayContent])
-
 	func userWishesMoreInfoAboutClockDeviation()
 	
 	func navigateToVerifiedInfo()
@@ -36,11 +30,15 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails)
 	
-	func navigateToVerifiedAccess(_ verifiedType: VerifiedType)
+	func navigateToVerifiedAccess(_ verifiedAccess: VerifiedAccess)
 	
-	func navigateToDeniedAccess()
+	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason)
 	
 	func userWishesToSetRiskLevel(shouldSelectSetting: Bool)
+	
+	func userWishesMoreInfoAboutDeniedQRScan()
+	
+	func navigateToScanNextInstruction(_ scanNext: ScanNext)
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -61,8 +59,8 @@ class VerifierCoordinator: SharedCoordinator {
 		) {
 			
 			setupMenu()
-			Services.scanLogManager.deleteExpiredScanLogEntries(
-				seconds: Services.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
+			Current.scanLogManager.deleteExpiredScanLogEntries(
+				seconds: Current.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
 			)
 			navigateToVerifierWelcome()
 		}
@@ -92,7 +90,7 @@ class VerifierCoordinator: SharedCoordinator {
 				}
 			
 				// Is the user currently permitted to scan?
-				guard Services.scanLockManager.state == .unlocked && Services.riskLevelManager.state != nil
+				guard Current.scanLockManager.state == .unlocked && Current.riskLevelManager.state != nil
 				else { return true } // handled (but ignored)
 				
 				thirdPartyScannerApp = (name: matchingMetadata.name, returnURL: returnURL)
@@ -122,11 +120,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		} else {
 
 			let dashboardViewController = VerifierStartViewController(
-				viewModel: VerifierStartViewModel(
-					coordinator: self,
-					scanLockProvider: Services.scanLockManager,
-					riskLevelProvider: Services.riskLevelManager
-				)
+				viewModel: VerifierStartViewModel(coordinator: self)
 			)
 
 			dashboardNavigationController?.setViewControllers([dashboardViewController], animated: false)
@@ -160,42 +154,27 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
 	
-	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
+	func navigateToVerifiedAccess(_ verifiedAccess: VerifiedAccess) {
 		
 		let viewController = VerifiedAccessViewController(
 			viewModel: VerifiedAccessViewModel(
 				coordinator: self,
-				verifiedType: verifiedType
+				verifiedAccess: verifiedAccess
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushWithFadeAnimation(with: viewController,
 																							  animationDuration: VerifiedAccessViewTraits.Animation.verifiedDuration)
 	}
 	
-	func navigateToDeniedAccess() {
+	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason) {
 		
 		let viewController = DeniedAccessViewController(
 			viewModel: DeniedAccessViewModel(
-				coordinator: self
+				coordinator: self,
+				deniedAccessReason: deniedAccessReason
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
-	}
-
-	/// Display content
-	/// - Parameters:
-	///   - title: the title
-	///   - content: the content
-	func displayContent(title: String, content: [DisplayContent]) {
-
-		let viewController = DisplayContentViewController(
-			viewModel: DisplayContentViewModel(
-				coordinator: self,
-				title: title,
-				content: content
-			)
-		)
-		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
 	}
 
 	func navigateToScanInstruction(allowSkipInstruction: Bool) {
@@ -234,9 +213,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 		let viewController = ScanLogViewController(
 			viewModel: ScanLogViewModel(
-				coordinator: self,
-				configuration: remoteConfigManager.storedConfiguration,
-				now: { Date() }
+				coordinator: self
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
@@ -273,12 +250,29 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		} else {
 			viewController = RiskSettingSelectedViewController(
 				viewModel: RiskSettingSelectedViewModel(
-					coordinator: self,
-					configuration: remoteConfigManager.storedConfiguration
+					coordinator: self
 				)
 			)
 		}
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
+	func navigateToScanNextInstruction(_ scanNext: ScanNext) {
+		
+		let viewController = ScanNextInstructionViewController(
+			viewModel: ScanNextInstructionViewModel(
+				coordinator: self,
+				scanNext: scanNext
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesMoreInfoAboutDeniedQRScan() {
+		let viewController = DeniedQRScanMoreInfoViewController(
+			viewModel: DeniedQRScanMoreInfoViewModel(coordinator: self)
+		)
+		sidePanel?.selectedViewController?.presentBottomSheet(viewController)
 	}
 }
 
@@ -363,8 +357,7 @@ extension VerifierCoordinator: MenuDelegate {
 					viewModel: AboutThisAppViewModel(
 						coordinator: self,
 						versionSupplier: versionSupplier,
-						flavor: AppFlavor.flavor,
-						userSettings: UserSettings()
+						flavor: AppFlavor.flavor
 					)
 				)
 				aboutNavigationController = NavigationController(rootViewController: destination)
@@ -396,7 +389,7 @@ extension VerifierCoordinator: MenuDelegate {
 			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
 			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions())
 		]
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			list.append(MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting()))
 		}
 		return list

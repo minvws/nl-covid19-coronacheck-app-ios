@@ -72,8 +72,6 @@ struct RemoteConfiguration: Codable, Equatable {
 	/// What is the waiting period before a recovery is valid?
 	var recoveryWaitingPeriodDays: Int?
 
-	var recoveryGreencardRevisedValidityLaunchDate: Date?
-
 	/// Event validity
 
 	var recoveryEventValidityDays: Int?
@@ -112,8 +110,6 @@ struct RemoteConfiguration: Codable, Equatable {
 	/// Enables luhn check for token validation
 	var isLuhnCheckEnabled: Bool?
 
-	var internationalQRRelevancyDays: Int?
-
 	/// The minimum number of seconds between switching risk level
 	var scanLockSeconds: Int?
 
@@ -126,6 +122,10 @@ struct RemoteConfiguration: Codable, Equatable {
 	var showNewValidityInfoCard: Bool?
 	
 	var verificationPolicyVersion: String?
+	
+	var vaccinationAssessmentEventValidityDays: Int?
+	
+	var visitorPassEnabled: Bool?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -158,15 +158,15 @@ struct RemoteConfiguration: Codable, Equatable {
 		case universalLinkPermittedDomains = "universalLinkDomains"
 		case clockDeviationThresholdSeconds = "clockDeviationThresholdSeconds"
 		case isLuhnCheckEnabled = "luhnCheckEnabled"
-		case internationalQRRelevancyDays = "internationalQRRelevancyDays"
-		case recoveryGreencardRevisedValidityLaunchDate = "recoveryGreencardRevisedValidityLaunchDate"
 		case scanLockSeconds = "scanLockSeconds"
 		case scanLockWarningSeconds = "scanLockWarningSeconds"
 		case scanLogStorageSeconds = "scanLogStorageSeconds"
 		case showNewValidityInfoCard = "showNewValidityInfoCard"
 		case verificationPolicyVersion = "iOSEnableVerificationPolicyVersion"
+		case vaccinationAssessmentEventValidityDays = "vaccinationAssessmentEventValidityDays"
+		case visitorPassEnabled = "visitorPassEnabled"
 	}
-
+	
 	init(minVersion: String) {
 
 		self.minimumVersion = minVersion
@@ -195,12 +195,12 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.universalLinkPermittedDomains = nil
 		config.clockDeviationThresholdSeconds = 30
 		config.isLuhnCheckEnabled = true
-		config.internationalQRRelevancyDays = 28
-		config.recoveryGreencardRevisedValidityLaunchDate = .distantFuture
 		config.scanLockSeconds = 300
 		config.scanLockWarningSeconds = 3600
 		config.scanLogStorageSeconds = 3600
 		config.verificationPolicyVersion = "0"
+		config.vaccinationAssessmentEventValidityDays = 14
+		config.visitorPassEnabled = true
 		return config
 	}
 

@@ -9,9 +9,6 @@ import Foundation
 
 protocol OnboardingManaging: AnyObject {
 
-	// Initialize
-	init(secureUserSettings: SecureUserSettingsProtocol)
-
 	/// Do we need onboarding? True if we do
 	var needsOnboarding: Bool { get }
 
@@ -23,6 +20,9 @@ protocol OnboardingManaging: AnyObject {
 
 	/// Give consent
 	func consentGiven()
+
+	/// Reset the manager
+	func wipePersistedData()
 }
 
 /// - Tag: OnboardingManager
@@ -79,5 +79,11 @@ class OnboardingManager: OnboardingManaging, Logging {
 	func consentGiven() {
 
 		onboardingData.needsConsent = false
+	}
+
+	/// Reset the manager
+	func wipePersistedData() {
+
+		secureUserSettings.onboardingData = SecureUserSettings.Defaults.onboardingData
 	}
 }

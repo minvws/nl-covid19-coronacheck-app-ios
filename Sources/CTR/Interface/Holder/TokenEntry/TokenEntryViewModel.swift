@@ -4,26 +4,40 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length file_length
+// swiftlint:disable type_body_length
 
 import UIKit
+
+enum InputRetrievalCodeMode {
+	case negativeTest
+	case visitorPass
+	
+	func getFlow() -> ErrorCode.Flow {
+		switch self {
+			case .negativeTest:
+				return .commercialTest
+			case .visitorPass:
+				return .visitorPass
+		}
+	}
+}
 
 class TokenEntryViewModel {
 
 	/// There are four "modes" for user entry
 	/// that determine which fields (if any) should be shown at one time.
-	fileprivate enum InputMode {
+	internal enum InputMode {
 		case none // hide all fields
 		case inputToken
 		case inputTokenWithVerificationCode
 		case inputVerificationCode
 	}
 
-	fileprivate enum InitializationMode: Equatable {
+	internal enum InitializationMode: Equatable {
 		case regular
 		case withRequestTokenProvided(originalRequestToken: RequestToken)
 	}
-
+	
 	// MARK: - Bindable Strings
 
 	/// The navbar title
@@ -78,7 +92,7 @@ class TokenEntryViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let networkManager: NetworkManaging? = Services.networkManager
+	private let networkManager: NetworkManaging? = Current.networkManager
 	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:
@@ -92,6 +106,7 @@ class TokenEntryViewModel {
 		}
 	}
 	private var initializationMode: InitializationMode
+	private var inputRetrievalCodeMode: InputRetrievalCodeMode
 	private var hasEverMadeFieldsVisible: Bool = false
 
 	/// Instead of updating `shouldEnableNextButton` directly, internal logic
@@ -136,19 +151,21 @@ class TokenEntryViewModel {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		requestToken: RequestToken?,
-		tokenValidator: TokenValidatorProtocol) {
-
+		tokenValidator: TokenValidatorProtocol,
+		inputRetrievalCodeMode: InputRetrievalCodeMode = .negativeTest) {
+		
 		self.coordinator = coordinator
 		self.requestToken = requestToken
 		self.tokenValidator = tokenValidator
 		self.message = nil
-
+		
 		if let unwrappedToken = requestToken {
 			self.initializationMode = .withRequestTokenProvided(originalRequestToken: unwrappedToken)
 		} else {
 			self.initializationMode = .regular
 		}
-
+		self.inputRetrievalCodeMode = inputRetrievalCodeMode
+		
 		if let unwrappedToken = requestToken {
 			self.fetchProviders(unwrappedToken, verificationCode: nil)
 		}
@@ -235,13 +252,13 @@ class TokenEntryViewModel {
 	func userHasNoTokenButtonTapped() {
 
 		guard progressIndicationCounter.isInactive else { return }
-
-		coordinator?.presentInformationPage(
-			title: L.holderTokenentryModalNotokenTitle(),
-			body: L.holderTokenentryModalNotokenDetails(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
+		
+		switch inputRetrievalCodeMode {
+			case .negativeTest:
+				coordinator?.userWishesMoreInfoAboutNoTestToken()
+			case .visitorPass:
+				coordinator?.userWishesMoreInfoAboutNoVisitorPassToken()
+		}
 	}
 
 	// MARK: - Private tap handlers:
@@ -251,7 +268,7 @@ class TokenEntryViewModel {
 
 		if currentInputMode == .inputVerificationCode || currentInputMode == .inputTokenWithVerificationCode {
 			guard let verification = verificationInput, !verification.isEmpty else {
-				fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode)
+				fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
 				return
 			}
 			fieldErrorMessage = nil
@@ -261,7 +278,7 @@ class TokenEntryViewModel {
 		} else {
 
 			guard let tokenInput = tokenInput, !tokenInput.isEmpty else {
-				fieldErrorMessage = Strings.tokenIsEmpty(forMode: initializationMode)
+				fieldErrorMessage = Strings.tokenIsEmpty(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
 				return
 			}
 
@@ -269,7 +286,7 @@ class TokenEntryViewModel {
 				self.requestToken = requestToken
 				fetchProviders(requestToken, verificationCode: nil)
 			} else {
-				fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
+				fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: inputRetrievalCodeMode)
 			}
 		}
 	}
@@ -285,7 +302,7 @@ class TokenEntryViewModel {
 			fieldErrorMessage = nil
 			fetchProviders(requestToken, verificationCode: sanitizedVerification)
 		} else {
-			fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode)
+			fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
 		}
 	}
 
@@ -311,7 +328,7 @@ class TokenEntryViewModel {
 							case .noInternetConnection:
 								self.displayNoInternet(requestToken, verificationCode: verificationCode)
 							case .serverUnreachableInvalidHost, .serverUnreachableTimedOut, .serverUnreachableConnectionLost:
-								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled)
+								let errorCode = ErrorCode(flow: self.inputRetrievalCodeMode.getFlow(), step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled)
 								self.displayServerUnreachable(errorCode)
 							default:
 								self.displayError(serverError)
@@ -329,14 +346,14 @@ class TokenEntryViewModel {
 
 		let provider = providers.filter { $0.identifier.lowercased() == requestToken.providerIdentifier.lowercased() }
 		guard let provider = provider.first else {
-			fieldErrorMessage = Strings.unknownProvider(forMode: initializationMode)
+			fieldErrorMessage = Strings.unknownProvider(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
 		logVerbose("fetching result with \(provider.resultURLString)")
 
 		if provider.resultURL == nil {
-			fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+			fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: inputRetrievalCodeMode)
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
@@ -365,7 +382,7 @@ class TokenEntryViewModel {
 							case .serverUnreachableInvalidHost, .serverUnreachableConnectionLost, .serverUnreachableTimedOut:
 								self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
 							case .invalidRequest:
-								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+								self.fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
 							default:
 								self.displayError(ServerError.provider(
 									provider: provider.identifier,
@@ -386,17 +403,19 @@ class TokenEntryViewModel {
 		switch remoteEvent.0.status {
 			case .complete, .pending:
 				self.screenHasCompleted = true
-				self.coordinator?.userWishesToMakeQRFromNegativeTest(RemoteEvent(wrapper: remoteEvent.0, signedResponse: remoteEvent.1))
+				let originalMode: EventMode = inputRetrievalCodeMode == .negativeTest ? .test : .vaccinationassessment
+				self.coordinator?.userWishesToMakeQRFromRemoteEvent(
+					RemoteEvent(wrapper: remoteEvent.0, signedResponse: remoteEvent.1), originalMode: originalMode)
 			case .verificationRequired:
 				if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
 					// the user has just submitted a wrong verification code & should see an error message
-					self.fieldErrorMessage = Strings.errorInvalidCombination(forMode: self.initializationMode)
+					self.fieldErrorMessage = Strings.errorInvalidCombination(forMode: self.initializationMode, forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
 				}
 				self.allowEnablingOfNextButton = true
 				self.verificationCodeIsKnownToBeRequired = true
 
 			case .invalid:
-				self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+				self.fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
 				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
 			default:
@@ -504,20 +523,20 @@ class TokenEntryViewModel {
 
 	private func updateText(_ newInputMode: InputMode) {
 
-		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
-		title = Strings.title(forMode: initializationMode)
-		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode)
-		tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode)
-		verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode)
-		verificationInfo = Strings.verificationInfo(forMode: initializationMode)
-		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
-		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
-		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
-		userNeedsATokenButtonTitle = L.holderTokenentryButtonNotoken()
-		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
-		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
-		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
-		confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
+		message = Strings.text(forMode: initializationMode, inputMode: newInputMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		title = Strings.title(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		verificationInfo = Strings.verificationInfo(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		primaryTitle = Strings.primaryTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		userNeedsATokenButtonTitle = Strings.notokenButtonTitle(forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
 	}
 
 	// MARK: - Static private functions
@@ -564,187 +583,6 @@ extension TokenEntryViewModel.InitializationMode {
 	}
 }
 
-/// Mechanism for dynamically retrieving Strings depending on the `InitializationMode`:
-extension TokenEntryViewModel {
-
-	struct Strings {
-		fileprivate static func title(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowTitle()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowTitle()
-			}
-		}
-
-		fileprivate static func text(forMode initializationMode: InitializationMode, inputMode: InputMode) -> String? {
-			switch (initializationMode, inputMode) {
-
-				case (_, .none):
-					return nil
-				case (.regular, _):
-					return L.holderTokenentryRegularflowText()
-				case (.withRequestTokenProvided, _):
-					return L.holderTokenentryUniversallinkflowText()
-			}
-		}
-
-		fileprivate static func resendVerificationButtonTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowRetryTitle()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowRetryTitle()
-			}
-		}
-
-		fileprivate static func errorInvalidCode(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowErrorInvalidCode()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
-			}
-		}
-
-		fileprivate static func errorInvalidCombination(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowErrorInvalidCombination()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowErrorInvalidCombination()
-			}
-		}
-
-		fileprivate static func tokenIsEmpty(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowErrorEmptytoken()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowErrorEmptytoken()
-			}
-		}
-
-		fileprivate static func codeIsEmpty(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowErrorEmptycode()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowErrorEmptycode()
-			}
-		}
-
-		fileprivate static func unknownProvider(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowErrorUnknownprovider()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowErrorUnknownprovider()
-			}
-		}
-
-		fileprivate static func tokenEntryHeaderTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowTokenTitle()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowTokenTitle()
-			}
-		}
-
-		fileprivate static func tokenEntryPlaceholder(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					if UIAccessibility.isVoiceOverRunning {
-						return L.holderTokenentryRegularflowTokenPlaceholderScreenreader()
-					} else {
-						return L.holderTokenentryRegularflowTokenPlaceholder()
-					}
-				case .withRequestTokenProvided:
-					if UIAccessibility.isVoiceOverRunning {
-						return L.holderTokenentryUniversallinkflowTokenPlaceholderScreenreader()
-					} else {
-						return L.holderTokenentryUniversallinkflowTokenPlaceholder()
-					}
-			}
-		}
-
-		fileprivate static func verificationEntryHeaderTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowVerificationTitle()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowVerificationTitle()
-			}
-		}
-
-		fileprivate static func verificationInfo(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowVerificationInfo()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowVerificationInfo()
-			}
-		}
-
-		fileprivate static func verificationPlaceholder(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowVerificationPlaceholder()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowVerificationPlaceholder()
-			}
-		}
-
-		fileprivate static func primaryTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowNext()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowNext()
-			}
-		}
-
-		// SMS Resend Verification Alert
-
-		fileprivate static func confirmResendVerificationAlertTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertTitle()
-			}
-		}
-
-		fileprivate static func confirmResendVerificationAlertMessage(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowConfirmresendverificationalertMessage()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertMessage()
-			}
-		}
-
-		fileprivate static func confirmResendVerificationAlertOkayButton(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertOkaybutton()
-			}
-		}
-
-		fileprivate static func confirmResendVerificationAlertCancelButton(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton()
-				case .withRequestTokenProvided:
-					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertCancelbutton()
-			}
-		}
-	}
-}
-
 extension TokenEntryViewModel: Logging {
 
 	var loggingCategory: String {
@@ -786,8 +624,8 @@ extension TokenEntryViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			body: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.navigateBackToStart()
 			},
@@ -824,17 +662,19 @@ extension TokenEntryViewModel {
 	}
 
 	private func getBodyForError(_ serverError: ServerError) -> String {
+		
+		let flow = inputRetrievalCodeMode.getFlow()
 
 		if case let .error(statusCode, serverResponse, error) = serverError {
 			// this is an error fetching the providers
 			switch error {
 				case .serverBusy:
-					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: .commercialTest, step: .providers, errorCode: "429"))")
+					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: flow, step: .providers, errorCode: "429"))")
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: flow, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateServerMessage("\(errorCode)")
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: flow, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateClientMessage("\(errorCode)")
 				default:
 					break
@@ -844,12 +684,12 @@ extension TokenEntryViewModel {
 			// this is an error getting the test result.
 			switch error {
 				case .serverBusy:
-					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "429"))")
+					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: flow, step: .testResult, provider: provider, errorCode: "429"))")
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: flow, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: flow, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				default:
 					break
@@ -863,11 +703,9 @@ extension TokenEntryViewModel {
 		switch serverError {
 			case let .error(_, _, error), let .provider(_, _, _, error):
 				switch error {
-					case .serverBusy:
-						return L.generalNetworkwasbusyButton()
-					case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
+					case .serverBusy, .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
 						 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-						return L.holderErrorstateOverviewAction()
+						return L.general_toMyOverview()
 					default:
 						break
 				}
@@ -879,7 +717,7 @@ extension TokenEntryViewModel {
 
 		let content = Content(
 			title: getTitleForError(serverError),
-			subTitle: getBodyForError(serverError),
+			body: getBodyForError(serverError),
 			primaryActionTitle: getActionTitleForError(serverError),
 			primaryAction: { [weak self] in
 				self?.coordinator?.navigateBackToStart()

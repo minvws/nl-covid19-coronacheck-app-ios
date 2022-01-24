@@ -100,10 +100,15 @@ class TokenEntryViewController: BaseViewController {
 		}
 		
 		viewModel.$fieldErrorMessage.binding = { [weak self] message in
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				UIAccessibility.post(notification: .layoutChanged, argument: self?.sceneView.errorView)
-			}
 			self?.sceneView.fieldErrorMessage = message
+			if message != nil {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+					UIAccessibility.post(notification: .layoutChanged, argument: self?.sceneView.errorView)
+				}
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+					self?.scrollToBottomIfNotCompletelyVisible()
+				}
+			}
 		}
 		
 		viewModel.$networkErrorAlert.binding = { [weak self] in
@@ -192,14 +197,6 @@ class TokenEntryViewController: BaseViewController {
 		)
 	}
 	
-	override func viewDidAppear(_ animated: Bool) {
-		
-		super.viewDidAppear(animated)
-		
-		// fix scrolling size (https://developer.apple.com/forums/thread/126841)
-		sceneView.scrollView.contentSize = sceneView.stackView.frame.size
-	}
-	
 	override func viewWillDisappear(_ animated: Bool) {
 		
 		unSubscribeToKeyboardEvents()
@@ -274,6 +271,21 @@ class TokenEntryViewController: BaseViewController {
 
 		// Start the animation
 		animator.startAnimation()
+	}
+	
+	private func scrollToBottomIfNotCompletelyVisible() {
+
+		let scrollView = sceneView.scrollView
+
+		// Only scroll when content is scrollable
+		guard scrollView.contentSize.height > scrollView.bounds.height else { return }
+		
+		// https://stackoverflow.com/a/952768/443270
+		let bottomOffset = CGPoint(
+			x: 0,
+			y: scrollView.contentSize.height - scrollView.bounds.height + scrollView.contentInset.bottom
+		)
+		scrollView.setContentOffset(bottomOffset, animated: true)
 	}
 	
 	// MARK: Alerts

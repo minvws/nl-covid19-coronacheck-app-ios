@@ -13,45 +13,34 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 
 	/// Subject under test
 	private var sut: ListEventsViewModel!
-	private var coordinatorSpy: EventCoordinatorDelegateSpy!
-	private var networkSpy: NetworkSpy!
-	private var walletSpy: WalletManagerSpy!
-	private var cryptoSpy: CryptoManagerSpy!
+	private var environmentSpies: EnvironmentSpies!
 	private var greenCardLoader: GreenCardLoader!
-	private var remoteConfigSpy: RemoteConfigManagingSpy!
+	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 
 	override func setUp() {
-
 		super.setUp()
-
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
-		networkSpy = NetworkSpy(configuration: .development)
-		cryptoSpy = CryptoManagerSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy()
-		remoteConfigSpy.stubbedStoredConfiguration = .default
-		remoteConfigSpy.stubbedAppendReloadObserverResult = UUID()
-		remoteConfigSpy.stubbedAppendUpdateObserverResult = UUID()
 
-		/// Not using a GreenCardLoader Spy here because all its dependencies are already spies here.
-		greenCardLoader = GreenCardLoader(networkManager: networkSpy, cryptoManager: cryptoSpy, walletManager: walletSpy)
-
-		Services.use(greenCardLoader)
-		Services.use(walletSpy)
-		Services.use(remoteConfigSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
+		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
+		/// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
+		greenCardLoader = GreenCardLoader(
+			now: { now },
+			networkManager: environmentSpies.networkManagerSpy,
+			cryptoManager: environmentSpies.cryptoManagerSpy,
+			walletManager: environmentSpies.walletManagerSpy,
+			remoteConfigManager: environmentSpies.remoteConfigManagerSpy,
+			userSettings: environmentSpies.userSettingsSpy
+		)
+ 
 	}
 
 	func setupSut() {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: []
+			remoteEvents: [],
+			greenCardLoader: greenCardLoader
 		)
 	}
 
@@ -67,7 +56,8 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -105,7 +95,8 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -143,7 +134,8 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -177,7 +169,8 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -211,12 +204,13 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completedByPersonalStatement: nil,
 			completionReason: EventFlow.VaccinationEvent.CompletionReason.none
 		)
-		let completionStatus = L.holderVaccinationStatusComplete()
+		let completionStatus = L.holder_eventdetails_vaccinationStatus_complete()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -250,12 +244,13 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completedByPersonalStatement: nil,
 			completionReason: .recovery
 		)
-		let completionStatus = L.holderVaccinationStatusCompleteRecovery()
+		let completionStatus = L.holder_eventdetails_vaccinationStatus_recovery()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -281,20 +276,21 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		expect(completionReason.value) == completionStatus
 	}
 	
-	func test_vaccinationrow_completionStatus_complete_fromPriorEvent() {
+	func test_vaccinationrow_completionStatus_complete_fromFirstVaccinationElsewhere() {
 
 		// Given
 		let remoteEvent = remoteVaccinationEvent(
 			completedByMedicalStatement: true,
 			completedByPersonalStatement: nil,
-			completionReason: .priorEvent
+			completionReason: .firstVaccinationElsewhere
 		)
-		let completionStatus = L.holderVaccinationStatusCompletePriorevent()
+		let completionStatus = L.holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -328,12 +324,13 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completedByPersonalStatement: false,
 			completionReason: nil
 		)
-		let completionStatus = L.holderVaccinationStatusComplete()
+		let completionStatus = L.holder_eventdetails_vaccinationStatus_complete()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -367,12 +364,13 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completedByPersonalStatement: true,
 			completionReason: nil
 		)
-		let completionStatus = L.holderVaccinationStatusComplete()
+		let completionStatus = L.holder_eventdetails_vaccinationStatus_complete()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [remoteEvent]
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -433,7 +431,8 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 						negativeTest: nil,
 						positiveTest: nil,
 						recovery: nil,
-						dccEvent: nil
+						dccEvent: nil,
+						vaccinationAssessment: nil
 					)
 				]
 			),

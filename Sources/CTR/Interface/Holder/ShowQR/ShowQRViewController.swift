@@ -68,15 +68,20 @@ class ShowQRViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		viewModel.setBrightness()
+		viewModel.viewWillAppear()
 		sceneView.play()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		
+		super.viewWillDisappear(animated)
+		viewModel.viewWillDisappear()
 	}
 	
 	override func viewDidDisappear(_ animated: Bool) {
 		
 		super.viewDidDisappear(animated)
-		viewModel.setBrightness(reset: true)
 		OrientationUtility.unlockOrientation()
 	}
 }

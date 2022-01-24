@@ -36,7 +36,7 @@ extension HolderDashboardViewModel {
 
 			struct Origin: Equatable { // swiftlint:disable:this nesting
 
-				let type: QRCodeOriginType // vaccination | test | recovery
+				let type: QRCodeOriginType // vaccination | test | recovery | vaccinationassessment
 				let eventDate: Date
 				let expirationTime: Date
 				let validFromDate: Date
@@ -125,7 +125,7 @@ extension HolderDashboardViewModel {
 		
 		// Ignores greencards with no category
 		func isa3GTestTheOnlyCurrentlyValidOrigin(now: Date) -> Bool {
-			guard Services.featureFlagManager.isVerificationPolicyEnabled() else { return false }
+			guard Current.featureFlagManager.isVerificationPolicyEnabled() else { return false }
 
 			guard case let .netherlands(credentialEvaluator) = region else { return false }
 			

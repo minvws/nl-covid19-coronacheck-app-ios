@@ -12,19 +12,21 @@ import Nimble
 final class DeniedAccessViewModelTests: XCTestCase {
 	
 	private var sut: DeniedAccessViewModel!
-	
+	private var environmentSpies: EnvironmentSpies!
 	private var verifierCoordinatorSpy: VerifierCoordinatorDelegateSpy!
 	
 	override func setUp() {
 		super.setUp()
-		
+		environmentSpies = setupEnvironmentSpies()
 		verifierCoordinatorSpy = VerifierCoordinatorDelegateSpy()
-		
-		sut = DeniedAccessViewModel(coordinator: verifierCoordinatorSpy)
 	}
 	
-	func test_binding() {
+	func test_deniedAccessReason_invalid() {
 		// Given
+		sut = DeniedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			deniedAccessReason: .invalid
+		)
 		
 		// When
 		
@@ -34,8 +36,27 @@ final class DeniedAccessViewModelTests: XCTestCase {
 		expect(self.sut.secondaryTitle) == L.verifierResultDeniedReadmore()
 	}
 	
+	func test_deniedAccessReason_identityMismatch() {
+		// Given
+		sut = DeniedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			deniedAccessReason: .identityMismatch
+		)
+		
+		// When
+		
+		// Then
+		expect(self.sut.accessTitle) == L.verifier_result_denied_personal_data_mismatch_title()
+		expect(self.sut.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.secondaryTitle).to(beNil())
+	}
+	
 	func test_dismiss_shouldNavigateBackToStart() {
 		// Given
+		sut = DeniedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			deniedAccessReason: .invalid
+		)
 		
 		// When
 		sut.dismiss()
@@ -46,6 +67,10 @@ final class DeniedAccessViewModelTests: XCTestCase {
 	
 	func test_scanAgain_shouldScanAgain() {
 		// Given
+		sut = DeniedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			deniedAccessReason: .invalid
+		)
 		
 		// When
 		sut.scanAgain()
@@ -56,12 +81,15 @@ final class DeniedAccessViewModelTests: XCTestCase {
 	
 	func test_showMoreInformation_shouldDisplayContent() {
 		// Given
+		sut = DeniedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			deniedAccessReason: .invalid
+		)
 		
 		// When
 		sut.showMoreInformation()
 		
 		// Then
-		expect(self.verifierCoordinatorSpy.invokedDisplayContent) == true
-		expect(self.verifierCoordinatorSpy.invokedDisplayContentParameters?.title) == L.verifierDeniedTitle()
+		expect(self.verifierCoordinatorSpy.invokedUserWishesMoreInfoAboutDeniedQRScan) == true
 	}
 }

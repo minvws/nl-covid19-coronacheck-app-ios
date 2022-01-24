@@ -16,6 +16,7 @@ class HolderDashboardViewController: BaseViewController {
 
         // Warnings:
         case expiredQR(message: String, didTapClose: () -> Void)
+        case expiredVaccinationQR(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
         case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
@@ -24,16 +25,12 @@ class HolderDashboardViewController: BaseViewController {
         // Errors:
         case errorMessage(message: String, didTapTryAgain: () -> Void)
         
-        // Multiple DCC:
-        case migrateYourInternationalVaccinationCertificate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
-        case migratingYourInternationalVaccinationCertificateDidComplete(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-
-        // Recovery Validity Extension
-        case recoveryValidityExtensionAvailable(title: String, buttonText: String, didTapCallToAction: () -> Void)
-        case recoveryValidityExtensionDidComplete(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-
 		// Vaccination & Recovery Validity
 		case newValidityInfoForVaccinationAndRecoveries(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		
+		// Vaccination Assessment
+		case completeYourVaccinationAssessment(title: String, buttonText: String, didTapCallToAction: () -> Void)
+		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
 		
         // QR Cards:
         case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
@@ -42,6 +39,7 @@ class HolderDashboardViewController: BaseViewController {
 		// Recommendations
 		case recommendCoronaMelder
 		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case recommendToAddYourBooster(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -228,16 +226,16 @@ private extension HolderDashboardViewController.Card {
 				
 			// Message Cards with only a message + close button
 			case let .expiredQR(message, didTapCloseAction):
-				return MessageCardView(config: .init( title: message, closeButtonCommand: didTapCloseAction, ctaButton: nil))
+				return MessageCardView(config: .init(title: message, closeButtonCommand: didTapCloseAction, ctaButton: nil))
 
 			// Message Cards with a message + CTA button
 			case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
 				let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
-				let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
-				let .recoveryValidityExtensionAvailable(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
 				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction),
-				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction):
+				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction),
+				let .completeYourVaccinationAssessment(message, callToActionButtonText, didTapCallToAction),
+				let .vaccinationAssessmentInvalidOutsideNL(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
@@ -245,9 +243,10 @@ private extension HolderDashboardViewController.Card {
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
 				))
 				
-			case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+			// Message Cards with a message + CTA button + close button
+			case let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .recommendToAddYourBooster(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,

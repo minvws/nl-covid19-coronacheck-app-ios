@@ -15,24 +15,17 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	
 	/// Subject under test
 	private var sut: CheckIdentityViewController!
-	
+	private var environmentSpies: EnvironmentSpies!
 	private var verifierCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: CheckIdentityViewModel!
-	private var riskLevelManagerSpy: RiskLevelManagerSpy!
-	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 	
 	var window = UIWindow()
 	
 	override func setUp() {
 		super.setUp()
+		environmentSpies = setupEnvironmentSpies()
 		
 		verifierCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
-		riskLevelManagerSpy = RiskLevelManagerSpy()
-		riskLevelManagerSpy.stubbedState = .low
-		
-		featureFlagManagerSpy = FeatureFlagManagerSpy()
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		Services.use(featureFlagManagerSpy)
 	}
 	
 	func loadView() {
@@ -189,12 +182,11 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	
 	func test_primaryButtonTapped_whenVerified_shouldNavigateToVerfiedInfo() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		sut = CheckIdentityViewController(viewModel: viewModel)
 		loadView()
@@ -204,19 +196,18 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .verified(.high)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.high)
 	}
 	
 	func test_primaryButtonTapped_whenDemo_shouldNavigateToVerfiedInfo() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		sut = CheckIdentityViewController(viewModel: viewModel)
 		loadView()
@@ -226,18 +217,17 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .demo(.high)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.high)
 	}
 	
 	func test_primaryButtonTapped_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .high
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		sut = CheckIdentityViewController(viewModel: viewModel)
 		loadView()
@@ -247,20 +237,19 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .verified(.low)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.low)
 	}
 	
 	func test_primaryButtonTapped_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
 		// Given
-		riskLevelManagerSpy.stubbedState = .high
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: details,
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		sut = CheckIdentityViewController(viewModel: viewModel)
 		loadView()
@@ -270,7 +259,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedType) == .demo(.low)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.low)
 	}
 	
 	func test_readMoreTapped_shouldNavigateToVerifiedInfo() {
@@ -278,8 +267,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
-			isDeepLinkEnabled: true,
-			riskLevelManager: riskLevelManagerSpy
+			isDeepLinkEnabled: true
 		)
 		sut = CheckIdentityViewController(viewModel: viewModel)
 		loadView()

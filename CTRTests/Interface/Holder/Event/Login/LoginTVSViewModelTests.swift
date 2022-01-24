@@ -16,24 +16,15 @@ class LoginTVSViewModelTests: XCTestCase {
 	private var sut: LoginTVSViewModel!
 
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
-	private var openIDSpy: OpenIdManagerSpy!
 	private var appAuthStateSpy: AppAuthStateSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 
 		super.setUp()
-
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		openIDSpy = OpenIdManagerSpy()
 		appAuthStateSpy = AppAuthStateSpy()
-
-		Services.use(openIDSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func test_loadingState_vaccinationMode() {
@@ -48,7 +39,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holderVaccinationListTitle()
-		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
 		expect(self.sut.content.secondaryAction).to(beNil())
@@ -67,7 +58,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holderRecoveryListTitle()
-		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
 		expect(self.sut.content.secondaryAction).to(beNil())
@@ -86,7 +77,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holderTestresultsResultsTitle()
-		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
 		expect(self.sut.content.secondaryAction).to(beNil())
@@ -105,7 +96,7 @@ class LoginTVSViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holderDccListTitle()
-		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
 		expect(self.sut.content.secondaryAction).to(beNil())
@@ -170,14 +161,14 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnCompletionResult = (.test, ())
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (.test, ())
 
 		// When
 		sut.login()
 
 		// Then
 		expect(self.sut.content.title) == L.holderFetcheventsVaccinationTitle()
-		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).toNot(beNil())
 		expect(self.sut.content.primaryActionTitle) == L.generalClose()
 		expect(self.sut.content.secondaryAction).to(beNil())
@@ -194,7 +185,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut), ())
 
 		// When
@@ -205,9 +196,9 @@ class LoginTVSViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
+			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
 			expect(content.primaryAction).toNot(beNil())
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).toNot(beNil())
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -222,7 +213,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 429, userInfo: [NSLocalizedDescriptionKey: "login_required"]), ())
 
 		// When
@@ -233,9 +224,9 @@ class LoginTVSViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
-			expect(content.subTitle) == L.generalNetworkwasbusyErrorcode("i 210 000 429")
+			expect(content.body) == L.generalNetworkwasbusyErrorcode("i 210 000 429")
 			expect(content.primaryAction).toNot(beNil())
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).to(beNil())
 			expect(content.secondaryActionTitle).to(beNil())
 		} else {
@@ -250,7 +241,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
 
 		// When
@@ -268,7 +259,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.userCanceledAuthorizationFlow.rawValue, userInfo: nil), ())
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.userCanceledAuthorizationFlow.rawValue, userInfo: nil), ())
 
 		// When
 		sut.login()
@@ -305,7 +296,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDGeneralErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
@@ -314,9 +305,9 @@ class LoginTVSViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
-				expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {
@@ -348,7 +339,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDOAuthAuthorizationErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
@@ -357,9 +348,9 @@ class LoginTVSViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
-				expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {
@@ -390,7 +381,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDOAuthTokenErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
@@ -399,9 +390,9 @@ class LoginTVSViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
-				expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {
@@ -419,7 +410,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// When
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: OIDResourceServerAuthorizationErrorDomain, code: 123, userInfo: nil), ())
 		sut.login()
 
@@ -428,9 +419,9 @@ class LoginTVSViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
+			expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
 			expect(content.primaryAction).toNot(beNil())
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).toNot(beNil())
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -457,7 +448,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDOAuthRegistrationErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
@@ -466,9 +457,9 @@ class LoginTVSViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
-				expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {

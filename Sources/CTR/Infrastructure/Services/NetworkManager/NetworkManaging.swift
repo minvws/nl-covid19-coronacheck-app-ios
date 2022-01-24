@@ -103,11 +103,6 @@ protocol NetworkManaging: AnyObject {
 	/// The network configuration
 	var networkConfiguration: NetworkConfiguration { get }
 	
-	/// Initializer
-	/// - Parameters:
-	///   - configuration: the network configuration
-	init(configuration: NetworkConfiguration)
-
 	/// Get the access tokens
 	/// - Parameters:
 	///   - tvsToken: the tvs token

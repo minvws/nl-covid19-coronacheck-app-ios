@@ -13,22 +13,14 @@ import SnapshotTesting
 final class PaperProofScanViewModelTests: XCTestCase {
 	
 	var sut: PaperProofScanViewModel!
+	private var environmentSpies: EnvironmentSpies!
 	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
-	var cryptoManagerSpy: CryptoManagerSpy!
 	
 	override func setUp() {
 		super.setUp()
-		
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
-		cryptoManagerSpy = CryptoManagerSpy()
-		Services.use(cryptoManagerSpy)
 		sut = PaperProofScanViewModel(coordinator: coordinatorDelegateSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 	
 	func test_initialState() {
@@ -81,7 +73,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_whenQRIsDCC_shouldInvokeCoordinator() {
 		// Given
 		let message = "HC1:MOCK:MESSAGE"
-		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		
 		// When
 		sut.parseQRMessage(message)

@@ -15,10 +15,8 @@ class ShowQRViewControllerTests: XCTestCase {
 	var sut: ShowQRViewController!
 
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
-	var cryptoManagerSpy: CryptoManagerSpy!
-	var dataStoreManager: DataStoreManaging!
 	var viewModel: ShowQRViewModel!
-	var remoteConfigManagerSpy: RemoteConfigManagingSpy!
+	private var environmentSpies: EnvironmentSpies!
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
@@ -26,22 +24,12 @@ class ShowQRViewControllerTests: XCTestCase {
 	override func setUpWithError() throws {
 
 		try super.setUpWithError()
-		dataStoreManager = DataStoreManager(.inMemory)
+		environmentSpies = setupEnvironmentSpies()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		cryptoManagerSpy = CryptoManagerSpy()
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
-
-		remoteConfigManagerSpy = RemoteConfigManagingSpy()
-		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
-		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
-		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
- 
-		Services.use(cryptoManagerSpy)
-		Services.use(remoteConfigManagerSpy)
 
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
 			)
@@ -54,12 +42,6 @@ class ShowQRViewControllerTests: XCTestCase {
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 		window = UIWindow()
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func loadView() {
@@ -92,7 +74,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .domestic,
 				withValidCredential: true
 			)
@@ -121,7 +103,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)
@@ -149,7 +131,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)
@@ -174,12 +156,12 @@ class ShowQRViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.pageControl.numberOfPages) == 1
 	}
 
-	func test_content_euGreenCard_multipleGreenCards() throws {
+	func test_content_euGreenCard_multipleGreenCards_noDosageInformation_shouldShowFirstGreenCard() throws {
 
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)
@@ -196,10 +178,10 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.holderShowqrEuTitle()
-		expect(self.sut.sceneView.nextButton.isHidden) == true
-		expect(self.sut.sceneView.previousButton.isHidden) == false
+		expect(self.sut.sceneView.nextButton.isHidden) == false
+		expect(self.sut.sceneView.previousButton.isHidden) == true
 		expect(self.sut.sceneView.pageControl.isHidden) == false
-		expect(self.sut.sceneView.pageControl.currentPageIndex) == 1
+		expect(self.sut.sceneView.pageControl.currentPageIndex) == 0
 		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
 	}
 
@@ -208,7 +190,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: dataStoreManager,
+				dataStoreManager: environmentSpies.dataStoreManager,
 				type: .eu,
 				withValidCredential: true
 			)

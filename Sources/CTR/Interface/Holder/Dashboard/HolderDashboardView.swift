@@ -66,6 +66,8 @@ final class HolderDashboardView: BaseView {
 	private var bottomScrollViewConstraint: NSLayoutConstraint?
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
+	// MARK: - Overrides
+	
 	/// Setup all the views
 	override func setupViews() {
 		super.setupViews()
@@ -133,6 +135,22 @@ final class HolderDashboardView: BaseView {
 		])
 	}
 	
+	/// Enables swipe to navigate behaviour for assistive technologies
+	override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+		guard !tabBar.accessibilityElementIsFocused() else {
+			// Scrolling in tab bar is not supported
+			return true
+		}
+		let tab: DashboardTab = direction == .right ? .domestic : .international
+		tabBar.select(tab: tab, animated: true)
+		delegate?.holderDashboardView(self, didDisplay: tab)
+		
+		// Scroll via swipe gesture
+		return false
+	}
+	
+	// MARK: - Public Access
+	
 	/// Display primary button view
 	var shouldDisplayButtonView = false {
 		didSet {
@@ -176,16 +194,20 @@ private extension HolderDashboardView {
 		let translatedOffset = scrollView.translatedBottomScrollOffset
 		footerButtonView.updateFadeAnimation(from: translatedOffset)
 	}
+	
+	func selectedTab(for scrollView: UIScrollView) -> DashboardTab {
+		let scrollViewWidth = scrollView.bounds.width
+		let pageScroll = 1.5 * scrollViewWidth
+		let internationalPage = scrollView.contentOffset.x + scrollViewWidth > pageScroll
+		return internationalPage ? .international : .domestic
+	}
 }
 
 extension HolderDashboardView: UIScrollViewDelegate {
 	
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		guard scrollView.isDragging else { return }
-		let scrollViewWidth = scrollView.bounds.width
-		let pageScroll = 1.5 * scrollViewWidth
-		let nextPage = scrollView.contentOffset.x + scrollViewWidth > pageScroll
-		let selectedTab: DashboardTab = nextPage ? .international : .domestic
+		let selectedTab = selectedTab(for: scrollView)
 		let hasTabChanged = tabBar.selectedTab != selectedTab
 		
 		guard hasTabChanged else { return }
@@ -205,5 +227,13 @@ extension HolderDashboardView: DashboardTabBarDelegate {
 				
 		updateScrollViewContentOffsetObserver(for: tab)
 		delegate?.holderDashboardView(self, didDisplay: tab)
+	}
+}
+
+extension HolderDashboardView: UIScrollViewAccessibilityDelegate {
+	
+	func accessibilityScrollStatus(for scrollView: UIScrollView) -> String? {
+		let selectedTab = selectedTab(for: scrollView)
+		return selectedTab == .domestic ? L.generalNetherlands() : L.generalEuropeanUnion()
 	}
 }

@@ -13,31 +13,20 @@ class PaperProofCheckModelTests: XCTestCase {
 
 	var sut: PaperProofCheckViewModel!
 	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
-	var couplingManagerSpy: CouplingManagerSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 		super.setUp()
-
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
-		couplingManagerSpy = CouplingManagerSpy(
-			cryptoManager: CryptoManagerSpy(),
-			networkManager: NetworkSpy(configuration: .development)
-		)
-		Services.use(couplingManagerSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	func test_success_accepted_wrongDCC() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .accepted)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -52,8 +41,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 052")
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 052")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -63,9 +52,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_success_accepted_correctDCC() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .accepted)), ())
-		couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
 			identity: nil,
@@ -88,9 +77,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_success_blocked() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -105,7 +94,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccBlockedTitle()
-			expect(content.subTitle) == L.holderCheckdccBlockedMessage()
+			expect(content.body) == L.holderCheckdccBlockedMessage()
 		} else {
 			fail("Invalid state")
 		}
@@ -114,9 +103,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_success_expired() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -131,7 +120,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccExpiredTitle()
-			expect(content.subTitle) == L.holderCheckdccExpiredMessage()
+			expect(content.body) == L.holderCheckdccExpiredMessage()
 		} else {
 			fail("Invalid state")
 		}
@@ -140,9 +129,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_success_rejected() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -157,7 +146,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccRejectedTitle()
-			expect(content.subTitle) == L.holderCheckdccRejectedMessage()
+			expect(content.body) == L.holderCheckdccRejectedMessage()
 		} else {
 			fail("Invalid state")
 		}
@@ -166,9 +155,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_serverBusy() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: 429, response: nil, error: .serverBusy)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -181,8 +170,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
-			expect(content.subTitle) == L.generalNetworkwasbusyErrorcode("i 510 000 429")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.body) == L.generalNetworkwasbusyErrorcode("i 510 000 429")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle).to(beNil())
 		} else {
 			fail("Invalid state")
@@ -192,9 +181,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_noInternet() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -213,9 +202,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_requestTimeOut() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -229,8 +218,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.generalErrorServerUnreachableErrorCode("i 510 000 004")
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 510 000 004")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -240,9 +229,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_responseCached() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: 304, response: nil, error: .responseCached)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -255,8 +244,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 000 304")
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.body) == L.holderErrorstateServerMessage("i 510 000 304")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -266,9 +255,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_resourceNotFound() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: 404, response: ServerResponse(status: "error", code: 99707), error: .resourceNotFound)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -281,8 +270,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 000 404 99707")
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.body) == L.holderErrorstateServerMessage("i 510 000 404 99707")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -292,9 +281,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_serverError() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: 500, response: ServerResponse(status: "error", code: 99707), error: .serverError)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -307,8 +296,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 000 500 99707")
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.body) == L.holderErrorstateServerMessage("i 510 000 500 99707")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -318,9 +307,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_invalidResponse() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -333,8 +322,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 003")
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 003")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -344,9 +333,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_invalidRequest() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -359,8 +348,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 002")
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 002")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -370,9 +359,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_invalidSignature() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .invalidSignature)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -385,8 +374,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 020")
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 020")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -396,9 +385,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_cannotDeserialize() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .cannotDeserialize)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -411,8 +400,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 030")
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 030")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -422,9 +411,9 @@ class PaperProofCheckModelTests: XCTestCase {
 	func test_failure_cannotSerialize() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .cannotSerialize)), ())
-		couplingManagerSpy.stubbedConvertResult = nil
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
 		sut = PaperProofCheckViewModel(
@@ -438,8 +427,8 @@ class PaperProofCheckModelTests: XCTestCase {
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 031")
-			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 031")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -448,8 +437,6 @@ class PaperProofCheckModelTests: XCTestCase {
 }
 
 class CouplingManagerSpy: CouplingManaging {
-
-	required init(cryptoManager: CryptoManaging, networkManager: NetworkManaging) {}
 
 	var invokedConvert = false
 	var invokedConvertCount = 0

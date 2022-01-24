@@ -7,6 +7,13 @@
 
 import UIKit
 
+/// The access reasons
+enum DeniedAccessReason: Equatable {
+
+	case invalid
+	case identityMismatch
+}
+
 final class DeniedAccessViewModel: Logging {
 	
 	/// Coordination Delegate
@@ -19,15 +26,26 @@ final class DeniedAccessViewModel: Logging {
 	private var autoCloseTimer: Timer?
 	
 	/// The title of the scene
-	@Bindable private(set) var accessTitle = L.verifierResultDeniedTitle()
+	@Bindable private(set) var accessTitle: String
 	
 	@Bindable private(set) var primaryTitle = L.verifierResultNext()
 	
-	@Bindable private(set) var secondaryTitle = L.verifierResultDeniedReadmore()
+	@Bindable private(set) var secondaryTitle: String?
 	
-	init(coordinator: (VerifierCoordinatorDelegate & Dismissable)) {
+	init(
+		coordinator: (VerifierCoordinatorDelegate & Dismissable),
+		deniedAccessReason: DeniedAccessReason
+	) {
 		
 		self.coordinator = coordinator
+		
+		switch deniedAccessReason {
+			case .invalid:
+				accessTitle = L.verifierResultDeniedTitle()
+				secondaryTitle = L.verifierResultDeniedReadmore()
+			case .identityMismatch:
+				accessTitle = L.verifier_result_denied_personal_data_mismatch_title()
+		}
 		
 		addObservers()
 	}
@@ -66,23 +84,7 @@ final class DeniedAccessViewModel: Logging {
 	
 	func showMoreInformation() {
 
-		// By default, unordered lists have a space above them in HTML
-		let bulletSpacing: CGFloat = -24
-		let spacing: CGFloat = 16
-
-		let textViews = [
-			(TextView(htmlText: Services.featureFlagManager.isVerificationPolicyEnabled() ? L.verifierDeniedMessageOne_2G() : L.verifierDeniedMessageOne()), spacing),
-			(TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
-			(TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
-			(TextView(htmlText: L.verifierDeniedMessageFour()), 0),
-			(TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
-			(TextView(htmlText: Services.featureFlagManager.isVerificationPolicyEnabled() ? L.verifierDeniedMessageSix_2G() : L.verifierDeniedMessageSix()), spacing)
-		]
-
-		coordinator?.displayContent(
-			title: L.verifierDeniedTitle(),
-			content: textViews
-		)
+		coordinator?.userWishesMoreInfoAboutDeniedQRScan()
 	}
 }
 

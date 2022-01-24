@@ -17,17 +17,17 @@ final class RiskSettingUnselectedViewModelTests: XCTestCase {
 	
 	/// The coordinator spy
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var riskLevelManagingSpy: RiskLevelManagerSpy!
+	private var riskLevelManagerSpy: RiskLevelManagerSpy!
 	
 	override func setUp() {
 		super.setUp()
 		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		riskLevelManagingSpy = RiskLevelManagerSpy()
+		riskLevelManagerSpy = RiskLevelManagerSpy()
 		
 		sut = RiskSettingUnselectedViewModel(
 			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagingSpy
+			riskLevelManager: riskLevelManagerSpy
 		)
 	}
 	
@@ -46,6 +46,9 @@ final class RiskSettingUnselectedViewModelTests: XCTestCase {
 		expect(self.sut.highRiskTitle) == L.verifier_risksetting_highrisk_title()
 		expect(self.sut.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
 		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
+		expect(self.sut.highPlusRiskTitle) == L.verifier_risksetting_2g_plus_title()
+		expect(self.sut.highPlusRiskSubtitle) == L.verifier_risksetting_2g_plus_subtitle()
+		expect(self.sut.highPlusRiskAccessibilityLabel) == "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
 		expect(self.sut.primaryButtonTitle) == L.verifier_risksetting_confirmation_button()
 		expect(self.sut.errorMessage) == L.verification_policy_selection_error_message()
 		expect(self.sut.shouldDisplayNotSetError) == false
@@ -58,7 +61,7 @@ final class RiskSettingUnselectedViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.shouldDisplayNotSetError) == true
-		expect(self.riskLevelManagingSpy.invokedUpdate) == false
+		expect(self.riskLevelManagerSpy.invokedUpdate) == false
 		expect(self.coordinatorSpy.invokedNavigateToVerifierWelcome) == false
 	}
 	
@@ -71,7 +74,7 @@ final class RiskSettingUnselectedViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.shouldDisplayNotSetError) == false
-		expect(self.riskLevelManagingSpy.invokedUpdateParameters?.riskLevel) == .high
+		expect(self.riskLevelManagerSpy.invokedUpdateParameters?.riskLevel) == .high
 		expect(self.coordinatorSpy.invokedNavigateToVerifierWelcome) == true
 	}
 	

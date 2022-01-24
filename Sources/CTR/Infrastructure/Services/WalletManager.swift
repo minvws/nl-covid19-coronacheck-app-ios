@@ -36,8 +36,6 @@ protocol WalletManaging: AnyObject {
 
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool
 
-	init( dataStoreManager: DataStoreManaging)
-
 	/// List all the event groups
 	/// - Returns: all the event groups
 	func listEventGroups() -> [EventGroup]
@@ -49,18 +47,19 @@ protocol WalletManaging: AnyObject {
 	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)]
 
 	/// Expire event groups that are no longer valid
+	/// - Parameter configuration: remote configuration
+	func expireEventGroups(configuration: RemoteConfiguration)
+	
+	/// Expire event groups that are no longer valid
 	/// - Parameters:
-	///   - vaccinationValidity: the max validity for vaccination
-	///   - recoveryValidity: the max validity for recovery
-	///   - testValidity: the max validity for test
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?)
+	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
+	///   - recoveryValidity: the max validity for recovery  (in HOURS)
+	///   - testValidity: the max validity for test  (in HOURS)
+	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
+	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
 	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard]
-
-	func canSkipMultiDCCUpgrade() -> Bool
-	
-	func shouldShowMultiDCCUpgradeBanner(userSettings: UserSettingsProtocol) -> Bool
 
 	func hasDomesticGreenCard(originType: String) -> Bool
 
@@ -73,10 +72,11 @@ class WalletManager: WalletManaging, Logging {
 
 	private var dataStoreManager: DataStoreManaging
 
-	required init( dataStoreManager: DataStoreManaging = Services.dataStoreManager) {
-
+	required init( dataStoreManager: DataStoreManaging) {
+		
 		self.dataStoreManager = dataStoreManager
 
+		guard AppFlavor.flavor == .holder else { return }
 		createMainWalletIfNotExists()
 	}
 
@@ -126,13 +126,27 @@ class WalletManager: WalletManaging, Logging {
 		}
 		return success
 	}
+	
+	/// Expire event groups that are no longer valid
+	/// - Parameter configuration: remote configuration
+	func expireEventGroups(configuration: RemoteConfiguration) {
+
+		expireEventGroups(
+			vaccinationValidity: (configuration.vaccinationEventValidityDays ?? 730) * 24,
+			recoveryValidity: (configuration.recoveryEventValidityDays ?? 365) * 24,
+			testValidity: configuration.testEventValidityHours,
+			vaccinationAssessmentValidity: (configuration.vaccinationAssessmentEventValidityDays ?? 14) * 24
+		)
+		
+	}
 
 	/// Expire event groups that are no longer valid
 	/// - Parameters:
-	///   - vaccinationValidity: the max validity for vaccination (in hours)
-	///   - recoveryValidity: the max validity for recovery (in hours)
-	///   - testValidity: the max validity for test (in hours)
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?) {
+	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
+	///   - recoveryValidity: the max validity for recovery  (in HOURS)
+	///   - testValidity: the max validity for test  (in HOURS)
+	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
+	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?) {
 
 		if let maxValidity = vaccinationValidity {
 			findAndExpireEventGroups(for: .vaccination, maxValidity: maxValidity)
@@ -140,10 +154,15 @@ class WalletManager: WalletManaging, Logging {
 
 		if let maxValidity = recoveryValidity {
 			findAndExpireEventGroups(for: .recovery, maxValidity: maxValidity)
+			findAndExpireEventGroups(for: .positiveTest, maxValidity: maxValidity)
 		}
 
 		if let maxValidity = testValidity {
 			findAndExpireEventGroups(for: .test, maxValidity: maxValidity)
+		}
+		
+		if let maxValidity = vaccinationAssessmentValidity {
+			findAndExpireEventGroups(for: .vaccinationassessment, maxValidity: maxValidity)
 		}
 	}
 
@@ -280,7 +299,7 @@ class WalletManager: WalletManaging, Logging {
 							.contains(where: { ($0.expirationTime ?? .distantPast) > Date() })
 
 						if hasValidOrFutureOrigins {
-							break
+							continue
 						} else {
 							let lastExpiredOrigin = origins.sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) }).last
 
@@ -544,81 +563,6 @@ class WalletManager: WalletManaging, Logging {
 		}
 
 		return result
-	}
-
-	/// Calculates whether the device can skip the MultiDCC migration
-	/// (either because no greencards available yet, or because there's
-	/// only a HKVI event)
-	func canSkipMultiDCCUpgrade() -> Bool {
-
-		guard !listGreenCards().isEmpty else {
-			// no greencards so can skip migration for now:
-			return false
-		}
-
-		// Check if we should show the banner.
-		let vaccinationEventGroups = listEventGroups().filter { $0.type == "vaccination" }
-		let hkviVaccinationEvents = vaccinationEventGroups.filter { $0.providerIdentifier?.uppercased() == EventFlow.paperproofIdentier }
-
-		let regularVaccinationEvents: [EventFlow.Event] = vaccinationEventGroups
-			.filter({ $0.providerIdentifier?.uppercased() != EventFlow.paperproofIdentier })
-			.flatMap({ vaccineEventGroup -> [EventFlow.Event] in
-
-				// convert back to a network response and get the payload:
-				guard let jsonData = vaccineEventGroup.jsonData,
-					let payloadJSON = try? JSONDecoder().decode(SignedResponse.self, from: jsonData).decodedPayload,
-
-					// gives a list of remote vaccination events
-					let eventResultWrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: payloadJSON),
-					let events = eventResultWrapper.events
-				else {
-					return []
-				}
-
-				return events
-			})
-			//	Deduplicate vaccine events based on date:
-			.reduce([EventFlow.Event]()) { pile, next in
-				guard let nextDateString = next.vaccination?.dateString else { return pile }
-
-				if pile
-					.compactMap({ $0.vaccination?.dateString })
-					.contains(where: { $0 == nextDateString }) {
-						// do nothing
-						return pile
-					} else {
-						return pile + [next]
-					}
-			}
-
-		// If we only have a single event (e.g. hkvi) we'll never get more cards so the upgrade can be skipped.
-		return (hkviVaccinationEvents.count + regularVaccinationEvents.count) <= 1
-	}
-
-	func shouldShowMultiDCCUpgradeBanner(userSettings: UserSettingsProtocol) -> Bool {
-		guard !listGreenCards().isEmpty else {
-			// no greencards so user still needs to load them:
-			return false
-		}
-		guard !userSettings.didCompleteEUVaccinationMigration else {
-			// do nothing
-			return false
-		}
-		guard !canSkipMultiDCCUpgrade() else {
-			// do nothing
-			return false
-		}
-
-		let allEUVaccinationGreencards = listGreenCards()
-			.filter { $0.getType() == .eu }
-			.filter { greencard in
-				guard let origins = greencard.castOrigins() else { return false }
-				return !origins.filter({ $0.type == "vaccination" }).isEmpty
-			}
-
-		// if there are more than 1 vaccination events but 1 or less greencards,
-		// show the banner to offer people an upgrade
-		return allEUVaccinationGreencards.count == 1 // show the banner
 	}
 
 	func hasDomesticGreenCard(originType: String) -> Bool {

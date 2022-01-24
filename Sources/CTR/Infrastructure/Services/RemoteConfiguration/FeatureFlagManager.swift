@@ -9,32 +9,57 @@ import Foundation
 
 protocol FeatureFlagManaging {
 	
-	init(versionSupplier: AppVersionSupplierProtocol?)
+	///  Can we use the GGD for negative tests?
+	/// - Returns: True if we can
+	func isGGDEnabled() -> Bool
+	
+	///  Should we use the luhn check for tokens?
+	/// - Returns: True if we can
+	func isLuhnCheckEnabled() -> Bool
 	
 	func isNewValidityInfoBannerEnabled() -> Bool
-	
 	func isVerificationPolicyEnabled() -> Bool
+	func isVisitorPassEnabled() -> Bool
 }
 
 class FeatureFlagManager: FeatureFlagManaging, Logging {
 	
-	weak var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
+	private var remoteConfigManager: RemoteConfigManaging
 	private var versionSupplier: AppVersionSupplierProtocol?
 	
-	required init(versionSupplier: AppVersionSupplierProtocol?) {
+	required init(
+		versionSupplier: AppVersionSupplierProtocol?,
+		remoteConfigManager: RemoteConfigManaging
+	) {
 		
 		self.versionSupplier = versionSupplier
+		self.remoteConfigManager = remoteConfigManager
+	}
+	
+	///  Can we use the GGD for negative tests?
+	/// - Returns: True if we can
+	func isGGDEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.isGGDEnabled ?? false
+	}
+	
+	///  Should we use the luhn check for tokens?
+	/// - Returns: True if we can
+	func isLuhnCheckEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
 	}
 	
 	func isNewValidityInfoBannerEnabled() -> Bool {
 		
-		return remoteConfigManager?.storedConfiguration.showNewValidityInfoCard ?? false
+		return remoteConfigManager.storedConfiguration.showNewValidityInfoCard ?? false
 	}
 	
 	func isVerificationPolicyEnabled() -> Bool {
 		
+		let configuration = remoteConfigManager.storedConfiguration
+		
 		guard let versionSupplier = versionSupplier,
-			  let configuration = remoteConfigManager?.storedConfiguration,
 			  let verificationPolicyVersion = configuration.verificationPolicyVersion else { return false }
 		
 		guard verificationPolicyVersion != "0" else {
@@ -52,5 +77,10 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		
 		// Current version is higher or equal to the required version -> Enabled
 		return true
+	}
+	
+	func isVisitorPassEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.visitorPassEnabled ?? false
 	}
 }

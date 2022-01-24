@@ -43,13 +43,11 @@ class AppCoordinator: Coordinator, Logging {
 
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 
-	var userSettings: UserSettingsProtocol = UserSettings()
-
 	var flavor = AppFlavor.flavor
 
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
 
-	private weak var appInstalledSinceManager: AppInstalledSinceManaging? = Services.appInstalledSinceManager
+	private weak var appInstalledSinceManager: AppInstalledSinceManaging? = Current.appInstalledSinceManager
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -68,7 +66,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	deinit {
 		remoteConfigManagerObserverTokens.forEach {
-			Services.remoteConfigManager.removeObserver(token: $0)
+			Current.remoteConfigManager.removeObserver(token: $0)
 		}
 	}
 
@@ -94,12 +92,12 @@ class AppCoordinator: Coordinator, Logging {
 		// Attach behaviours that we want the RemoteConfigManager to perform
 		// each time it refreshes the config in future:
 
-		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
+		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
 			// Mark remote config loaded
-			Services.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
+			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
 		}]
 
-		remoteConfigManagerObserverTokens += [Services.remoteConfigManager.appendReloadObserver {[weak self] _, _, urlResponse in
+		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver {[weak self] _, _, urlResponse in
 
 			/// Fish for the server Date in the network response, and use that to maintain
 			/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
@@ -107,7 +105,7 @@ class AppCoordinator: Coordinator, Logging {
 			guard let httpResponse = urlResponse as? HTTPURLResponse,
 				  let serverDateString = httpResponse.allHeaderFields["Date"] as? String else { return }
 
-			Services.clockDeviationManager.update(
+			Current.clockDeviationManager.update(
 				serverHeaderDate: serverDateString,
 				ageHeader: httpResponse.allHeaderFields["Age"] as? String
 			)
@@ -282,19 +280,15 @@ class AppCoordinator: Coordinator, Logging {
 
 		switch universalLink {
 			case .redeemHolderToken,
-				 .thirdPartyTicketApp,
-				 .tvsAuth,
-				 .thirdPartyScannerApp:
+				.redeemVaccinationAssessment,
+				.thirdPartyTicketApp,
+				.tvsAuth,
+				.thirdPartyScannerApp:
 				/// If we reach here it means that there was no holder/verifierCoordinator initialized at the time
 				/// the universal link was received. So hold onto it here, for when it is ready.
 				unhandledUniversalLink = universalLink
 				return true
 		}
-	}
-
-	var isLunhCheckEnabled: Bool {
-		
-		return Services.remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
 	}
 }
 
@@ -387,14 +381,14 @@ extension AppCoordinator: AppCoordinatorDelegate {
 
 	private func handleRecommendedUpdateForHolder(recommendedVersion: String, appStoreUrl: URL) {
 
-		if let lastSeenRecommendedUpdate = userSettings.lastSeenRecommendedUpdate,
+		if let lastSeenRecommendedUpdate = Current.userSettings.lastSeenRecommendedUpdate,
 		   lastSeenRecommendedUpdate == recommendedVersion {
 			logDebug("The recommended version \(recommendedVersion) is the last seen version")
 			startApplication()
 		} else {
 			// User has not seen a dialog for this recommended Version
 			logDebug("The recommended version \(recommendedVersion) is not the last seen version")
-			userSettings.lastSeenRecommendedUpdate = recommendedVersion
+			Current.userSettings.lastSeenRecommendedUpdate = recommendedVersion
 			showRecommendedUpdate(updateURL: appStoreUrl)
 		}
 	}
@@ -403,11 +397,11 @@ extension AppCoordinator: AppCoordinatorDelegate {
 
 		let now = Date().timeIntervalSince1970
 		let interval: Double = Double(remoteConfiguration.recommendedNagIntervalHours ?? 24) * 3600
-		let lastSeen: TimeInterval = userSettings.lastRecommendUpdateDismissalTimestamp ?? now
+		let lastSeen: TimeInterval = Current.userSettings.lastRecommendUpdateDismissalTimestamp ?? now
 
 		if lastSeen == now || lastSeen + interval < now {
 			showRecommendedUpdate(updateURL: appStoreUrl)
-			userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
+			Current.userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
 		} else {
 			startApplication()
 		}

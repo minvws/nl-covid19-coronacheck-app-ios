@@ -28,5 +28,14 @@ struct DccCoupling {
 
 		/// The coupling is blocked (number of tries exceeded)
 		case blocked
+		
+		case unknown
+		
+		/// Custom initializer to default to unknown state
+		/// - Parameter decoder: the decoder
+		/// - Throws: Decoding error
+		init(from decoder: Decoder) throws {
+			self = try CouplingState(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
+		}
 	}
 }

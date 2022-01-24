@@ -15,21 +15,13 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	private var sut: VerifiedAccessViewModel!
 	
 	private var verifierCoordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
+	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		super.setUp()
 		
 		verifierCoordinatorSpy = VerifierCoordinatorDelegateSpy()
-		featureFlagManagerSpy = FeatureFlagManagerSpy()
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		Services.use(featureFlagManagerSpy)
-	}
-	
-	override func tearDown() {
-		
-		super.tearDown()
-		Services.revertToDefaults()
+		environmentSpies = setupEnvironmentSpies()
 	}
 	
 	func test_dismiss_shouldNavigateBackToStart() {
@@ -37,7 +29,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// Given
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.low)
+			verifiedAccess: .verified(.low)
 		)
 		
 		// When
@@ -54,7 +46,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .demo(.low)
+			verifiedAccess: .demo(.low)
 		)
 		
 		// Then
@@ -64,12 +56,12 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_demoLowRisk_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .demo(.low)
+			verifiedAccess: .demo(.low)
 		)
 		
 		// Then
@@ -83,7 +75,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .demo(.high)
+			verifiedAccess: .demo(.high)
 		)
 		
 		// Then
@@ -93,12 +85,41 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_demoHighRisk_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .demo(.high)
+			verifiedAccess: .demo(.high)
+		)
+		
+		// Then
+		expect(self.sut.accessTitle) == L.verifier_result_access_title()
+	}
+	
+	func test_accessTitle_demoHighPlusRisk_verificationPolicyEnabled() {
+		
+		// Given
+		
+		// When
+		sut = VerifiedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			verifiedAccess: .demo(.highPlus)
+		)
+		
+		// Then
+		expect(self.sut.accessTitle) == L.verifier_result_access_title_2g_plus()
+	}
+	
+	func test_accessTitle_demoHighPlusRisk_verificationPolicyDisabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		
+		// When
+		sut = VerifiedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			verifiedAccess: .demo(.highPlus)
 		)
 		
 		// Then
@@ -112,7 +133,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.low)
+			verifiedAccess: .verified(.low)
 		)
 		
 		// Then
@@ -122,12 +143,12 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_verifiedLowRisk_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.low)
+			verifiedAccess: .verified(.low)
 		)
 		
 		// Then
@@ -141,7 +162,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.high)
+			verifiedAccess: .verified(.high)
 		)
 		
 		// Then
@@ -151,12 +172,41 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_verifiedHighRisk_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedType: .verified(.high)
+			verifiedAccess: .verified(.high)
+		)
+		
+		// Then
+		expect(self.sut.accessTitle) == L.verifier_result_access_title()
+	}
+	
+	func test_accessTitle_verifiedHighPlusRisk_verificationPolicyEnabled() {
+		
+		// Given
+		
+		// When
+		sut = VerifiedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			verifiedAccess: .verified(.highPlus)
+		)
+		
+		// Then
+		expect(self.sut.accessTitle) == L.verifier_result_access_title_2g_plus()
+	}
+	
+	func test_accessTitle_verifiedHighPlusRisk_verificationPolicyDisabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		
+		// When
+		sut = VerifiedAccessViewModel(
+			coordinator: verifierCoordinatorSpy,
+			verifiedAccess: .verified(.highPlus)
 		)
 		
 		// Then

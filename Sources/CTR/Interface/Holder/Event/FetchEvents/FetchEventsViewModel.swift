@@ -13,8 +13,8 @@ final class FetchEventsViewModel: Logging {
 
 	private var tvsToken: TVSAuthorizationToken
 	private var eventMode: EventMode
-	private let networkManager: NetworkManaging = Services.networkManager
-	private let mappingManager: MappingManaging = Services.mappingManager
+	private let networkManager: NetworkManaging = Current.networkManager
+	private let mappingManager: MappingManaging = Current.mappingManager
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -275,8 +275,8 @@ final class FetchEventsViewModel: Logging {
 					$0.usages.contains(EventFlow.ProviderUsage.recovery) ||
 					$0.usages.contains(EventFlow.ProviderUsage.positiveTest)
 				}
-			case .paperflow:
-				return [] // Paperflow is not part of FetchEvents.
+			case .vaccinationassessment, .paperflow:
+				return [] // flow is not part of FetchEvents.
 			case .positiveTest:
 				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
 			case .test:
@@ -291,7 +291,7 @@ final class FetchEventsViewModel: Logging {
 		switch eventMode {
 			case .recovery:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
-			case .paperflow:
+			case .vaccinationassessment, .paperflow:
 				return nil
 			case .test, .positiveTest:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)
@@ -484,7 +484,7 @@ private extension EventMode {
 	/// Translate EventMode into a string that can be passed to the network as a query string
 	var queryFilterValue: String {
 		switch self {
-			case .paperflow: return "" // Not used
+			case .vaccinationassessment, .paperflow: return "" // Not used
 			case .positiveTest: return "positivetest,recovery"
 			case .recovery: return "positivetest,recovery"
 			case .test: return "negativetest"
@@ -599,8 +599,8 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateNobsnTitle(),
-			subTitle: L.holderErrorstateNobsnMessage(),
-			primaryActionTitle: L.holderErrorstateNobsnAction(),
+			body: L.holderErrorstateNobsnMessage(),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
@@ -614,7 +614,7 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateNosessionTitle(),
-			subTitle: L.holderErrorstateNosessionMessage(),
+			body: L.holderErrorstateNosessionMessage(),
 			primaryActionTitle: L.holderErrorstateNosessionAction(),
 			primaryAction: { [weak self] in
 				self?.goBack()
@@ -645,8 +645,8 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: L.generalErrorServerUnreachableErrorCode(flattenErrorCodes(errorCodes)),
-			primaryActionTitle: L.holderErrorstateNobsnAction(),
+			body: L.generalErrorServerUnreachableErrorCode(flattenErrorCodes(errorCodes)),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
@@ -666,8 +666,8 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyErrorcode(flattenErrorCodes(errorCodes)),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			body: L.generalNetworkwasbusyErrorcode(flattenErrorCodes(errorCodes)),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
@@ -720,8 +720,8 @@ private extension FetchEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: subTitle,
-			primaryActionTitle: L.holderErrorstateOverviewAction(),
+			body: subTitle,
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},

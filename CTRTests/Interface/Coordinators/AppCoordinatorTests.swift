@@ -17,11 +17,12 @@ class AppCoordinatorTests: XCTestCase {
 	var navigationSpy: NavigationControllerSpy!
 
 	var window = UIWindow()
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
-
 		super.setUp()
-
+		
+		environmentSpies = setupEnvironmentSpies()
 		navigationSpy = NavigationControllerSpy()
 		sut = AppCoordinator(
 			navigationController: navigationSpy
@@ -172,9 +173,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
+		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = nil
 		let alertVerifier = AlertVerifier()
 		sut.flavor = .holder
 
@@ -191,7 +190,7 @@ class AppCoordinatorTests: XCTestCase {
 				.default(L.recommendedUpdateAppActionOk())
 			]
 		)
-		expect(userSettingSpy.invokedLastSeenRecommendedUpdateSetter) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSeenRecommendedUpdateSetter) == true
 	}
 
 	func test_handleLaunchState_verifier_updateRecommended() {
@@ -206,9 +205,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
+		environmentSpies.userSettingsSpy.stubbedLastRecommendUpdateDismissalTimestamp = nil
 		let alertVerifier = AlertVerifier()
 		sut.flavor = .verifier
 
@@ -225,7 +222,7 @@ class AppCoordinatorTests: XCTestCase {
 				.default(L.recommendedUpdateAppActionOk())
 			]
 		)
-		expect(userSettingSpy.invokedLastRecommendUpdateDismissalTimestampSetter) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedLastRecommendUpdateDismissalTimestampSetter) == true
 	}
 
 	func test_handleLaunchState_holder_updateRecommended_alreadySeen() {
@@ -240,9 +237,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.stubbedLastSeenRecommendedUpdate = "1.1.0"
+		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = "1.1.0"
 		sut.flavor = .holder
 
 		// When
@@ -265,9 +260,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
+		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = nil
 		let alertVerifier = AlertVerifier()
 		sut.flavor = .holder
 
@@ -298,9 +291,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
+		environmentSpies.userSettingsSpy.lastRecommendUpdateDismissalTimestamp = nil
 		let alertVerifier = AlertVerifier()
 		sut.flavor = .verifier
 
@@ -331,9 +322,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
+		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = nil
 		let alertVerifier = AlertVerifier()
 		sut.flavor = .holder
 
@@ -364,9 +353,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
+		environmentSpies.userSettingsSpy.lastRecommendUpdateDismissalTimestamp = nil
 		let alertVerifier = AlertVerifier()
 		sut.flavor = .verifier
 
@@ -397,9 +384,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.stubbedLastSeenRecommendedUpdate = nil
+		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = nil
 		sut.flavor = .holder
 
 		// When
@@ -422,9 +407,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
+		environmentSpies.userSettingsSpy.lastRecommendUpdateDismissalTimestamp = nil
 		sut.flavor = .verifier
 
 		// When
@@ -447,9 +430,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
+		environmentSpies.userSettingsSpy.lastRecommendUpdateDismissalTimestamp = nil
 		sut.flavor = .holder
 
 		// When
@@ -472,9 +453,7 @@ class AppCoordinatorTests: XCTestCase {
 		let state = LaunchState.actionRequired(config)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
-		let userSettingSpy = UserSettingsSpy()
-		sut.userSettings = userSettingSpy
-		userSettingSpy.lastRecommendUpdateDismissalTimestamp = nil
+		environmentSpies.userSettingsSpy.lastRecommendUpdateDismissalTimestamp = nil
 		sut.flavor = .verifier
 
 		// When

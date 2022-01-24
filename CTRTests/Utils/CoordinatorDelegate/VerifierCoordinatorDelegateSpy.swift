@@ -51,18 +51,6 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedNavigateToScanInstructionParametersList.append((allowSkipInstruction, ()))
 	}
 
-	var invokedDisplayContent = false
-	var invokedDisplayContentCount = 0
-	var invokedDisplayContentParameters: (title: String, content: [DisplayContent])?
-	var invokedDisplayContentParametersList = [(title: String, content: [DisplayContent])]()
-
-	func displayContent(title: String, content: [DisplayContent]) {
-		invokedDisplayContent = true
-		invokedDisplayContentCount += 1
-		invokedDisplayContentParameters = (title, content)
-		invokedDisplayContentParametersList.append((title, content))
-	}
-
 	var invokedUserWishesMoreInfoAboutClockDeviation = false
 	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
 
@@ -109,22 +97,26 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 
 	var invokedNavigateToVerifiedAccess = false
 	var invokedNavigateToVerifiedAccessCount = 0
-	var invokedNavigateToVerifiedAccessParameters: (verifiedType: VerifiedType, Void)?
-	var invokedNavigateToVerifiedAccessParametersList = [(verifiedType: VerifiedType, Void)]()
+	var invokedNavigateToVerifiedAccessParameters: (verifiedAccess: VerifiedAccess, Void)?
+	var invokedNavigateToVerifiedAccessParametersList = [(verifiedAccess: VerifiedAccess, Void)]()
 
-	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
+	func navigateToVerifiedAccess(_ verifiedAccess: VerifiedAccess) {
 		invokedNavigateToVerifiedAccess = true
 		invokedNavigateToVerifiedAccessCount += 1
-		invokedNavigateToVerifiedAccessParameters = (verifiedType, ())
-		invokedNavigateToVerifiedAccessParametersList.append((verifiedType, ()))
+		invokedNavigateToVerifiedAccessParameters = (verifiedAccess, ())
+		invokedNavigateToVerifiedAccessParametersList.append((verifiedAccess, ()))
 	}
 
 	var invokedNavigateToDeniedAccess = false
 	var invokedNavigateToDeniedAccessCount = 0
+	var invokedNavigateToDeniedAccessParameters: (deniedAccessReason: DeniedAccessReason, Void)?
+	var invokedNavigateToDeniedAccessParametersList = [(deniedAccessReason: DeniedAccessReason, Void)]()
 
-	func navigateToDeniedAccess() {
+	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason) {
 		invokedNavigateToDeniedAccess = true
 		invokedNavigateToDeniedAccessCount += 1
+		invokedNavigateToDeniedAccessParameters = (deniedAccessReason, ())
+		invokedNavigateToDeniedAccessParametersList.append((deniedAccessReason, ()))
 	}
 
 	var invokedUserWishesToSetRiskLevel = false
@@ -137,6 +129,26 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedUserWishesToSetRiskLevelCount += 1
 		invokedUserWishesToSetRiskLevelParameters = (shouldSelectSetting, ())
 		invokedUserWishesToSetRiskLevelParametersList.append((shouldSelectSetting, ()))
+	}
+
+	var invokedUserWishesMoreInfoAboutDeniedQRScan = false
+	var invokedUserWishesMoreInfoAboutDeniedQRScanCount = 0
+
+	func userWishesMoreInfoAboutDeniedQRScan() {
+		invokedUserWishesMoreInfoAboutDeniedQRScan = true
+		invokedUserWishesMoreInfoAboutDeniedQRScanCount += 1
+	}
+
+	var invokedNavigateToScanNextInstruction = false
+	var invokedNavigateToScanNextInstructionCount = 0
+	var invokedNavigateToScanNextInstructionParameters: (scanNext: ScanNext, Void)?
+	var invokedNavigateToScanNextInstructionParametersList = [(scanNext: ScanNext, Void)]()
+
+	func navigateToScanNextInstruction(_ scanNext: ScanNext) {
+		invokedNavigateToScanNextInstruction = true
+		invokedNavigateToScanNextInstructionCount += 1
+		invokedNavigateToScanNextInstructionParameters = (scanNext, ())
+		invokedNavigateToScanNextInstructionParametersList.append((scanNext, ()))
 	}
 
 	var invokedOpenUrl = false

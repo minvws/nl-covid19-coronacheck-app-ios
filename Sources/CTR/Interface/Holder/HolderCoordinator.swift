@@ -25,13 +25,15 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent)
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 
 	func userWishesToCreateAQR()
 
 	func userWishesToCreateANegativeTestQR()
+	
+	func userWishesToCreateAVisitorPass()
 
-	func userWishesToChooseLocation()
+	func userWishesToChooseTestLocation()
 
 	func userHasNotBeenTested()
 
@@ -49,23 +51,17 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInfoAboutClockDeviation()
 	
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
+	
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
+	
 	func userWishesMoreInfoAboutTestOnlyValidFor3G()
-
-	func userWishesMoreInfoAboutUpgradingEUVaccinations()
 
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
 	
-    func userWishesMoreInfoAboutRecoveryValidityExtension()
-
-	func userWishesMoreInfoAboutRecoveryValidityReinstation()
-	
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
-	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted()
-
-	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted()
-	
-	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted()
+	func userWishesMoreInfoAboutExpiredDomesticVaccination()
 	
 	func openUrl(_ url: URL, inApp: Bool)
 
@@ -75,46 +71,16 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func displayError(content: Content, backAction: @escaping () -> Void)
 
-	func migrateEUVaccinationDidComplete()
-
-	func extendRecoveryValidityDidComplete()
+	func userWishesMoreInfoAboutNoTestToken()
+	
+	func userWishesMoreInfoAboutNoVisitorPassToken()
 }
 
 // swiftlint:enable class_delegate_protocol
 
 class HolderCoordinator: SharedCoordinator {
 
-	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
-
-	let recoveryValidityExtensionManager: RecoveryValidityExtensionManager = {
-		RecoveryValidityExtensionManager(
-			userHasRecoveryEvents: {
-				let eventGroups = Services.walletManager.listEventGroups()
-				let hasRecoveryEvents = eventGroups.contains { $0.type == OriginType.recovery.rawValue }
-				return hasRecoveryEvents
-			},
-			userHasUnexpiredRecoveryGreencards: {
-				let unexpiredGreencards = Services.walletManager.greencardsWithUnexpiredOrigins(
-					now: Date(),
-					ofOriginType: OriginType.recovery
-				)
-
-				let hasUnexpiredRecoveryGreencards = !unexpiredGreencards.isEmpty
-				return hasUnexpiredRecoveryGreencards
-			},
-			userHasPaperflowRecoveryGreencards: {
-
-				return Services.walletManager.hasEventGroup(
-					type: EventMode.recovery.rawValue,
-					providerIdentifier: EventFlow.paperproofIdentier
-				)
-			},
-			userSettings: UserSettings(),
-			remoteConfigManager: Services.remoteConfigManager,
-			now: { Date() }
-		)
-	}()
 
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
@@ -123,11 +89,6 @@ class HolderCoordinator: SharedCoordinator {
 
 	/// If set, this should be handled at the first opportunity:
 	private var unhandledUniversalLink: UniversalLink?
-
-	/// Restricts access to GGD test provider login
-	private var isGGDEnabled: Bool {
-		return remoteConfigManager.storedConfiguration.isGGDEnabled == true
-	}
 	
 	// MARK: - Setup
 	
@@ -197,6 +158,24 @@ class HolderCoordinator: SharedCoordinator {
 					// Do it on the next runloop, to standardise all the entry points to this function:
 					DispatchQueue.main.async { [self] in
 						navigateToTokenEntry(requestToken)
+					}
+				}
+				return true
+				
+			case .redeemVaccinationAssessment(let requestToken):
+				
+				// Need to handle two situations:
+				// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
+				//   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
+				//      that after the user has completed these screens.
+				// - the user is somewhere in the Holder app, and the nav stack can just be replaced.
+				
+				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
+					self.unhandledUniversalLink = universalLink
+				} else {
+					// Do it on the next runloop, to standardise all the entry points to this function:
+					DispatchQueue.main.async { [self] in
+						navigateToTokenEntry(requestToken, retrievalMode: .visitorPass)
 					}
 				}
 				return true
@@ -281,13 +260,14 @@ class HolderCoordinator: SharedCoordinator {
 	}
 
 	/// Navigate to the token entry scene
-	func navigateToTokenEntry(_ token: RequestToken? = nil) {
+	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
 
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false)
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()),
+				inputRetrievalCodeMode: retrievalMode
 			)
 		)
 
@@ -296,8 +276,8 @@ class HolderCoordinator: SharedCoordinator {
 
 	// "Waar wil je een QR-code van maken?"
 	func navigateToChooseQRCodeType() {
-		let destination = ChooseQRCodeTypeViewController(
-			viewModel: ChooseQRCodeTypeViewModel(
+		let destination = ChooseProofTypeViewController(
+			viewModel: ChooseProofTypeViewModel(
 				coordinator: self
 			),
 			isRootViewController: false
@@ -310,18 +290,14 @@ class HolderCoordinator: SharedCoordinator {
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
-				datasource: HolderDashboardQRCardDatasource(now: { Date() }),
+				datasource: HolderDashboardQRCardDatasource(),
 				strippenRefresher: DashboardStrippenRefresher(
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
-					reachability: try? Reachability(),
-					now: { Date() }
+					reachability: try? Reachability()
 				),
-				userSettings: UserSettings(),
-				dccMigrationNotificationManager: DCCMigrationNotificationManager(userSettings: userSettings),
-				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
-				configurationNotificationManager: ConfigurationNotificationManager(userSettings: userSettings),
-				versionSupplier: versionSupplier,
-				now: { Date() }
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings),
+				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
+				versionSupplier: versionSupplier
 			)
 		)
 		dashboardNavigationController = NavigationController(rootViewController: dashboardViewController)
@@ -406,7 +382,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentAsBottomSheet(viewController)
 	}
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode) {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
@@ -414,16 +390,21 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithListTestEvents([remoteEvent])
+			eventCoordinator.startWithListTestEvents([remoteEvent], originalMode: originalMode)
 		}
 	}
 
 	func userWishesToCreateANegativeTestQR() {
 		navigateToTokenEntry()
 	}
+	
+	func userWishesToCreateAVisitorPass() {
+		
+		navigateToTokenEntry(retrievalMode: .visitorPass)
+	}
 
-	func userWishesToChooseLocation() {
-		if isGGDEnabled {
+	func userWishesToChooseTestLocation() {
+		if Current.featureFlagManager.isGGDEnabled() {
 			navigateToChooseTestLocation()
 		} else {
 			// Fallback when GGD is not available
@@ -474,6 +455,18 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
+	
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
+		
+		let destination = VisitorPassCompleteCertificateViewController(viewModel: VisitorPassCompleteCertificateViewModel(coordinatorDelegate: self))
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+	
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
+		let title: String = L.holder_notvalidinthisregionmodal_visitorpass_international_title()
+		let message: String = L.holder_notvalidinthisregionmodal_visitorpass_international_body()
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
+	}
 
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
@@ -493,92 +486,40 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 
-	func userWishesMoreInfoAboutUpgradingEUVaccinations() {
-		let viewModel = MigrateEUVaccinationViewModel(
-			backAction: { [weak self] in
-				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
-			},
-			greencardLoader: GreenCardLoader(),
-			userSettings: userSettings
-		)
-		viewModel.coordinator = self
-		let viewController = MigrateEUVaccinationViewController(viewModel: viewModel)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
-	}
-
-	func userWishesMoreInfoAboutRecoveryValidityExtension() {
-		let viewModel = ExtendRecoveryValidityViewModel(
-			mode: .extend,
-			backAction: { [weak self] in
-				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
-			},
-			greencardLoader: GreenCardLoader(),
-			userSettings: userSettings
-		)
-		viewModel.coordinator = self
-		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
-	}
-
-	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
-		let viewModel = ExtendRecoveryValidityViewModel(
-			mode: .reinstate,
-			backAction: { [weak self] in
-				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
-			},
-			greencardLoader: GreenCardLoader(),
-			userSettings: userSettings
-		)
-		viewModel.coordinator = self
-		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
-	}
-
 	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
 		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
 		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
 	}
 	
-	func userWishesMoreInfoAboutMultipleDCCUpgradeCompleted() {
-		presentInformationPage(
-			title: L.holderEuvaccinationswereupgradedTitle(),
-			body: L.holderEuvaccinationswereupgradedMessage(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
+	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
+		
+		let viewModel = ContentViewModel(
+			coordinator: self,
+			content: Content(
+				title: L.holder_expiredDomesticVaccinationModal_title(),
+				body: L.holder_expiredDomesticVaccinationModal_body(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
+				secondaryAction: { [weak self] in
+					guard let self = self else { return }
+					self.sidePanel?.selectedViewController?.dismiss(
+						animated: true,
+						completion: self.userWishesToCreateAVaccinationQR
+					)
+				}
+			),
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			},
+			hideBodyForScreenCapture: false
 		)
+		
+		let viewController = ContentViewController(viewModel: viewModel)
+		presentAsBottomSheet(viewController)
 	}
 	
-	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {
-		presentInformationPage(
-			title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
-			body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
-	}
-	
-	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted() {
-		presentInformationPage(
-			title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
-			body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
-	}
-	
-	func migrateEUVaccinationDidComplete() {
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
-	}
-
-	func extendRecoveryValidityDidComplete() {
-
-		recoveryValidityExtensionManager.reload()
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
-	}
-
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
 
 		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
@@ -621,6 +562,27 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
+	
+	func userWishesMoreInfoAboutNoTestToken() {
+		
+		presentInformationPage(
+			title: L.holderTokenentryModalNotokenTitle(),
+			body: L.holderTokenentryModalNotokenDetails(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
+	func userWishesMoreInfoAboutNoVisitorPassToken() {
+		
+		presentInformationPage(
+			title: L.visitorpass_token_modal_notoken_title(),
+			body: L.visitorpass_token_modal_notoken_details(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
 }
 
 // MARK: - MenuDelegate
@@ -659,16 +621,15 @@ extension HolderCoordinator: MenuDelegate {
 					viewModel: AboutThisAppViewModel(
 						coordinator: self,
 						versionSupplier: versionSupplier,
-						flavor: AppFlavor.flavor,
-						userSettings: UserSettings()
+						flavor: AppFlavor.flavor
 					)
 				)
 				aboutNavigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
 
 			case .addCertificate:
-				let destination = ChooseQRCodeTypeViewController(
-					viewModel: ChooseQRCodeTypeViewModel(
+				let destination = ChooseProofTypeViewController(
+					viewModel: ChooseProofTypeViewModel(
 						coordinator: self
 					),
 					isRootViewController: true
@@ -682,6 +643,12 @@ extension HolderCoordinator: MenuDelegate {
 				navigationController = NavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController
 				startChildCoordinator(coordinator)
+				sidePanel?.selectedViewController = navigationController
+				
+			case .visitorPass:
+				
+				let destination = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
+				navigationController = NavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
 
 			default:
@@ -715,11 +682,19 @@ extension HolderCoordinator: MenuDelegate {
 	/// Get the items for the bottom menu
 	/// - Returns: the bottom menu items
 	func getBottomMenuItems() -> [MenuItem] {
-
-		return [
-			MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
-			MenuItem(identifier: .about, title: L.holderMenuAbout())
-		]
+		
+		if Current.featureFlagManager.isVisitorPassEnabled() {
+			return [
+				MenuItem(identifier: .about, title: L.holderMenuAbout()),
+				MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
+				MenuItem(identifier: .visitorPass, title: L.holder_menu_visitorpass())
+			]
+		} else {
+			return [
+				MenuItem(identifier: .addPaperProof, title: L.holderMenuPapercertificate()),
+				MenuItem(identifier: .about, title: L.holderMenuAbout())
+			]
+		}
 	}
 }
 
@@ -728,25 +703,29 @@ extension HolderCoordinator: EventFlowDelegate {
 	func eventFlowDidComplete() {
 
 		/// The user completed the event flow. Go back to the dashboard.
-
 		removeChildCoordinator()
 		navigateToDashboard()
 		navigationController.viewControllers = []
+	}
+	
+	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
+		
+		/// The user completed the event flow, but needs to add a vaccination assessment test (visitor pass flow)
+		removeChildCoordinator()
+		navigationController.popToRootViewController(animated: false)
+		userWishesToCreateAVisitorPass()
 	}
 
 	func eventFlowDidCancel() {
 
 		/// The user cancelled the flow. Go back one page.
-
 		removeChildCoordinator()
-
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 	}
 	
 	func eventFlowDidCancelFromBackSwipe() {
 		
 		/// The user cancelled the flow from back swipe.
-		
 		removeChildCoordinator()
 	}
 }

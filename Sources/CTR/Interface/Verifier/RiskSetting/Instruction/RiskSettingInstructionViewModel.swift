@@ -12,8 +12,6 @@ final class RiskSettingInstructionViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol)?
 	
-	private let riskLevelManager: RiskLevelManaging
-	
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_firsttimeuse_title()
 	@Bindable private(set) var header = L.verifier_risksetting_firsttimeuse_header()
@@ -23,6 +21,9 @@ final class RiskSettingInstructionViewModel: Logging {
 	@Bindable private(set) var highRiskTitle = L.verifier_risksetting_highrisk_title()
 	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
 	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
+	@Bindable private(set) var highPlusRiskTitle = L.verifier_risksetting_2g_plus_title()
+	@Bindable private(set) var highPlusRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
+	@Bindable private(set) var highPlusRiskAccessibilityLabel = "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
 	@Bindable private(set) var moreButtonTitle = L.verifier_risksetting_readmore()
 	@Bindable private(set) var primaryButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 	@Bindable private(set) var errorMessage = L.verification_policy_selection_error_message()
@@ -35,15 +36,11 @@ final class RiskSettingInstructionViewModel: Logging {
 		}
 	}
 	
-	init(
-		coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol),
-		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
-	) {
+	init(coordinator: (ScanInstructionsCoordinatorDelegate & OpenUrlProtocol)) {
 		
 		self.coordinator = coordinator
-		self.riskLevelManager = riskLevelManager
 		
-		let selectedRisk = riskLevelManager.state
+		let selectedRisk = Current.riskLevelManager.state
 		riskLevel = selectedRisk
 		selectRisk = selectedRisk
 	}
@@ -59,7 +56,7 @@ final class RiskSettingInstructionViewModel: Logging {
 		if selectRisk == nil {
 			shouldDisplayNotSetError = true
 		} else {
-			riskLevelManager.update(riskLevel: selectRisk)
+			Current.riskLevelManager.update(riskLevel: selectRisk)
 			coordinator?.userDidCompletePages(hasScanLock: false)
 		}
 	}

@@ -64,6 +64,7 @@ class OnboardingViewController: BaseViewController {
 			}
 			
 			self.sceneView.pageControl.numberOfPages = $0.count
+			self.updateFooterView(for: 0)
 		}
 		
 		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
@@ -101,9 +102,9 @@ class OnboardingViewController: BaseViewController {
 		pageViewController.view.backgroundColor = .clear
 		
 		pageViewController.view.frame = sceneView.containerView.frame
-		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
+		sceneView.containerView.addSubview(pageViewController.view)
 		sceneView.pageControl.delegate = self
 	}
 	
@@ -120,6 +121,18 @@ class OnboardingViewController: BaseViewController {
 	}
 }
 
+private extension OnboardingViewController {
+	
+	func updateFooterView(for pageIndex: Int) {
+		guard let pages = pageViewController.pages, !pages.isEmpty else { return }
+		guard let viewController = pages[pageIndex] as? OnboardingPageViewController else {
+			assertionFailure("View controller should be of type OnboardingPageViewController")
+			return
+		}
+		sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)
+	}
+}
+
 // MARK: - PageViewControllerDelegate
 
 extension OnboardingViewController: PageViewControllerDelegate {
@@ -128,6 +141,7 @@ extension OnboardingViewController: PageViewControllerDelegate {
 		sceneView.pageControl.update(for: index)
         sceneView.ribbonView.isAccessibilityElement = index == 0
 		navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
+		updateFooterView(for: index)
 	}
 }
 

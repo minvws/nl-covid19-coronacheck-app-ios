@@ -11,7 +11,7 @@ class PaperProofCheckViewModel: Logging {
 
 	weak var coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)?
 
-	private let couplingManager: CouplingManaging = Services.couplingManager
+	private let couplingManager: CouplingManaging = Current.couplingManager
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -67,7 +67,7 @@ class PaperProofCheckViewModel: Logging {
 			case .accepted: handleAccepted(scannedDcc: scannedDcc, couplingCode: couplingCode)
 			case .blocked: handleBlocked()
 			case .expired: handleExpired()
-			case .rejected: handleRejected()
+			case .rejected, .unknown: handleRejected()
 		}
 	}
 
@@ -87,8 +87,8 @@ class PaperProofCheckViewModel: Logging {
 		viewState = .feedback(
 			content: Content(
 				title: L.holderCheckdccBlockedTitle(),
-				subTitle: L.holderCheckdccBlockedMessage(),
-				primaryActionTitle: L.holderCheckdccBlockedActionTitle(),
+				body: L.holderCheckdccBlockedMessage(),
+				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.userWantsToGoBackToDashboard()
 				},
@@ -103,8 +103,8 @@ class PaperProofCheckViewModel: Logging {
 		viewState = .feedback(
 			content: Content(
 				title: L.holderCheckdccExpiredTitle(),
-				subTitle: L.holderCheckdccExpiredMessage(),
-				primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
+				body: L.holderCheckdccExpiredMessage(),
+				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.userWantsToGoBackToDashboard()
 				},
@@ -119,7 +119,7 @@ class PaperProofCheckViewModel: Logging {
 		viewState = .feedback(
 			content: Content(
 				title: L.holderCheckdccRejectedTitle(),
-				subTitle: L.holderCheckdccRejectedMessage(),
+				body: L.holderCheckdccRejectedMessage(),
 				primaryActionTitle: L.holderCheckdccRejectedActionTitle(),
 				primaryAction: {[weak self] in
 					self?.coordinator?.userWantsToGoBackToTokenEntry()
@@ -160,8 +160,8 @@ class PaperProofCheckViewModel: Logging {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			body: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: {[weak self] in
 				self?.coordinator?.userWantsToGoBackToDashboard()
 			},
@@ -192,8 +192,8 @@ class PaperProofCheckViewModel: Logging {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: subTitle,
-			primaryActionTitle: L.holderErrorstateOverviewAction(),
+			body: subTitle,
+			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: {[weak self] in
 				self?.coordinator?.userWantsToGoBackToDashboard()
 			},

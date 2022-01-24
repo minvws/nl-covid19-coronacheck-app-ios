@@ -9,8 +9,6 @@
 
 class MappingManagerSpy: MappingManaging {
 
-	required init(remoteConfigManager: RemoteConfigManaging) {}
-
 	var invokedSetEventProviders = false
 	var invokedSetEventProvidersCount = 0
 	var invokedSetEventProvidersParameters: (providers: [EventFlow.EventProvider], Void)?
@@ -49,6 +47,20 @@ class MappingManagerSpy: MappingManaging {
 		invokedGetDisplayIssuerParameters = (issuer, ())
 		invokedGetDisplayIssuerParametersList.append((issuer, ()))
 		return stubbedGetDisplayIssuerResult
+	}
+
+	var invokedGetBiLingualDisplayCountry = false
+	var invokedGetBiLingualDisplayCountryCount = 0
+	var invokedGetBiLingualDisplayCountryParameters: (country: String, Void)?
+	var invokedGetBiLingualDisplayCountryParametersList = [(country: String, Void)]()
+	var stubbedGetBiLingualDisplayCountryResult: String! = ""
+
+	func getBiLingualDisplayCountry(_ country: String) -> String {
+		invokedGetBiLingualDisplayCountry = true
+		invokedGetBiLingualDisplayCountryCount += 1
+		invokedGetBiLingualDisplayCountryParameters = (country, ())
+		invokedGetBiLingualDisplayCountryParametersList.append((country, ()))
+		return stubbedGetBiLingualDisplayCountryResult
 	}
 
 	var invokedGetDisplayCountry = false
@@ -177,18 +189,18 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetVaccinationTypeResult
 	}
 
-	var invokedGetVaccinationManufacturerMapping = false
-	var invokedGetVaccinationManufacturerMappingCount = 0
-	var invokedGetVaccinationManufacturerMappingParameters: (code: String?, Void)?
-	var invokedGetVaccinationManufacturerMappingParametersList = [(code: String?, Void)]()
-	var stubbedGetVaccinationManufacturerMappingResult: String!
+	var invokedGetVaccinationManufacturer = false
+	var invokedGetVaccinationManufacturerCount = 0
+	var invokedGetVaccinationManufacturerParameters: (code: String?, Void)?
+	var invokedGetVaccinationManufacturerParametersList = [(code: String?, Void)]()
+	var stubbedGetVaccinationManufacturerResult: String!
 
 	func getVaccinationManufacturer(_ code: String? ) -> String? {
-		invokedGetVaccinationManufacturerMapping = true
-		invokedGetVaccinationManufacturerMappingCount += 1
-		invokedGetVaccinationManufacturerMappingParameters = (code, ())
-		invokedGetVaccinationManufacturerMappingParametersList.append((code, ()))
-		return stubbedGetVaccinationManufacturerMappingResult
+		invokedGetVaccinationManufacturer = true
+		invokedGetVaccinationManufacturerCount += 1
+		invokedGetVaccinationManufacturerParameters = (code, ())
+		invokedGetVaccinationManufacturerParametersList.append((code, ()))
+		return stubbedGetVaccinationManufacturerResult
 	}
 
 	var invokedGetNlTestType = false

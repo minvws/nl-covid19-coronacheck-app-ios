@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import Foundation
 @testable import CTR
@@ -185,6 +186,15 @@ extension EventFlow.EventResultWrapper {
 		result: nil,
 		events: [EventFlow.Event.negativeTestEvent]
 	)
+	
+	static var fakeVaccinationAssessmentResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.vaccinationAssessmentEvent]
+	)
 }
 
 extension RequestToken {
@@ -286,9 +296,36 @@ extension RemoteGreenCards.Origin {
 			doseNumber: nil
 		)
 	}
+	
+	static var fakeVaccinationAssessmentOriginExpiringIn14Days: RemoteGreenCards.Origin {
+		RemoteGreenCards.Origin(
+			type: "vaccinationassessment",
+			eventTime: Date(),
+			expirationTime: Date().addingTimeInterval(14 * days),
+			validFrom: Date(),
+			doseNumber: nil
+		)
+	}
+	
+	static var fakeTesttOriginExpiringIn1Day: RemoteGreenCards.Origin {
+		RemoteGreenCards.Origin(
+			type: "test",
+			eventTime: Date(),
+			expirationTime: Date().addingTimeInterval(1 * days),
+			validFrom: Date(),
+			doseNumber: nil
+		)
+	}
 }
 
 extension RemoteGreenCards.Response {
+	
+	static var emptyResponse: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: nil,
+			euGreenCards: []
+		)
+	}
 
 	static var domesticAndInternationalVaccination: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
@@ -388,6 +425,38 @@ extension RemoteGreenCards.Response {
 			]
 		)
 	}
+	
+	static var domesticVaccinationAssessment: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: []
+		)
+	}
+	
+	static var domesticVaccinationAssessmentAndNegativeTest: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days,
+					RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
 
 	static var domesticAndInternationalRecovery: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
@@ -401,6 +470,25 @@ extension RemoteGreenCards.Response {
 				RemoteGreenCards.EuGreenCard(
 					origins: [
 						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+	
+	static var domesticAndInternationalTest: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
 					],
 					credential: "test credential"
 				)
@@ -485,6 +573,15 @@ extension RemoteGreenCards.DomesticGreenCard {
 			createCredentialMessages: "test"
 		)
 	}
+	
+	static var fakeVaccinationAssessmentGreenCardExpiresIn14Days: RemoteGreenCards.DomesticGreenCard {
+		RemoteGreenCards.DomesticGreenCard(
+			origins: [
+				RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days
+			],
+			createCredentialMessages: "test"
+		)
+	}
 }
 
 extension EventFlow.Identity {
@@ -518,7 +615,8 @@ extension EventFlow.Event {
 			),
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil
+			dccEvent: nil,
+			vaccinationAssessment: nil
 		)
 	}
 
@@ -539,7 +637,8 @@ extension EventFlow.Event {
 				manufacturer: "1213"
 			),
 			recovery: nil,
-			dccEvent: nil
+			dccEvent: nil,
+			vaccinationAssessment: nil
 		)
 	}
 
@@ -564,7 +663,8 @@ extension EventFlow.Event {
 			negativeTest: nil,
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil
+			dccEvent: nil,
+			vaccinationAssessment: nil
 		)
 	}
 
@@ -581,7 +681,44 @@ extension EventFlow.Event {
 				validFrom: "2021-07-12",
 				validUntil: "2022-12-31"
 			),
-			dccEvent: nil
+			dccEvent: nil,
+			vaccinationAssessment: nil
+		)
+	}
+	
+	static var vaccinationAssessmentEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccinationassessment",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil,
+			vaccinationAssessment: EventFlow.VaccinationAssessment(
+				dateTimeString: "2022-01-05T12:42:42Z",
+				country: "NLD",
+				verified: true
+			)
+		)
+	}
+	
+	static var vaccinationAssessmentEventWithoutCountry: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccinationassessment",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil,
+			vaccinationAssessment: EventFlow.VaccinationAssessment(
+				dateTimeString: "2022-01-05T12:42:42Z",
+				country: nil,
+				verified: true
+			)
 		)
 	}
 }
@@ -713,5 +850,27 @@ extension EuCredentialAttributes {
 	}
 	static func fakeVaccination(dcc: EuCredentialAttributes.DigitalCovidCertificate = .sampleWithVaccine(doseNumber: 1, totalDose: 2)) -> EuCredentialAttributes {
 		fake(dcc: dcc)
+	}
+}
+
+extension EventGroup {
+	
+	static func fakeEventGroup(dataStoreManager: DataStoreManaging, type: EventMode, maxIssuedAt: Date) -> EventGroup? {
+		
+		var eventGroup: EventGroup?
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			if let wallet = WalletModel.createTestWallet(managedContext: context) {
+				eventGroup = EventGroupModel.create(
+					type: type,
+					providerIdentifier: "CoronaCheck",
+					maxIssuedAt: maxIssuedAt,
+					jsonData: Data(),
+					wallet: wallet,
+					managedContext: context
+				)
+			}
+		}
+		return eventGroup
 	}
 }

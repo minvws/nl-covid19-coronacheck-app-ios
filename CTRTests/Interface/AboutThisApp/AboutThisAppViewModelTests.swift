@@ -14,9 +14,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 	
 	private var sut: AboutThisAppViewModel!
 	private var coordinatorSpy: AboutThisAppViewModelCoordinatorSpy!
-	private var userSettingsSpy: UserSettingsSpy!
+	private var environmentSpies: EnvironmentSpies!
 	private static var initialTimeZone: TimeZone?
-	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 	
 	override class func setUp() {
 		super.setUp()
@@ -34,25 +33,13 @@ class AboutThisAppViewModelTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		
-		featureFlagManagerSpy = FeatureFlagManagerSpy()
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		Services.use(featureFlagManagerSpy)
-		
+		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = AboutThisAppViewModelCoordinatorSpy()
-		userSettingsSpy = UserSettingsSpy()
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
-	}
-	
-	override func tearDown() {
-		
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 	
 	// MARK: Tests
@@ -65,8 +52,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		
 		// Then
@@ -91,8 +77,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		
 		// Then
@@ -115,14 +100,13 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_initializationWithVerifier_verificationPolicyDisabled() {
 		
 		// Given
-		featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		
 		// Then
@@ -156,8 +140,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		
 		// When
@@ -174,8 +157,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		// When
 		sut.menuOptionSelected(.accessibility)
@@ -191,8 +173,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		// When
 		sut.menuOptionSelected(.colophon)
@@ -208,8 +189,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		
 		// When
@@ -226,8 +206,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		// When
 		sut.menuOptionSelected(.colophon)
@@ -239,15 +218,14 @@ class AboutThisAppViewModelTests: XCTestCase {
 	
 	func test_configVersionFooter_forVerifier() {
 		
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
-		userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
 		
 		// Given
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "verifier"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		// When
 		
@@ -257,15 +235,14 @@ class AboutThisAppViewModelTests: XCTestCase {
 	
 	func test_configVersionFooter_forHolder() {
 		
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
-		userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
+		environmentSpies.userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
 		
 		// Given
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "holder"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		// When
 		
@@ -279,8 +256,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		// When
 		sut.menuOptionSelected(.reset)
@@ -298,8 +274,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.holder
 		)
 		// When
 		sut.menuOptionSelected(.deeplink)
@@ -312,94 +287,47 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_resetData_holder() {
 		
 		// Given
-		let walletSpy = WalletManagerSpy()
-		Services.use(walletSpy)
-		let remoteConfigSpy = RemoteConfigManagingSpy()
-		remoteConfigSpy.stubbedStoredConfiguration = .default
-		Services.use(remoteConfigSpy)
-		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			fileStorage: FileStorage(),
-			flavor: AppFlavor.flavor
-		)
-		Services.use(cryptoLibUtilitySpy)
-		let onboardingSpy = OnboardingManagerSpy()
-		Services.use(onboardingSpy)
-		let forcedInfoSpy = ForcedInformationManagerSpy()
-		Services.use(forcedInfoSpy)
-		let scanLogManagerSpy = ScanLogManagingSpy()
-		Services.use(scanLogManagerSpy)
-		let scanLockManagerSpy = ScanLockManagerSpy()
-		Services.use(scanLockManagerSpy)
-		let riskLevelManagerSpy = RiskLevelManagerSpy()
-		Services.use(riskLevelManagerSpy)
-		let cryptoManagerSpy = CryptoManagerSpy()
-		Services.use(cryptoManagerSpy)
 		
 		// When
-		sut.resetDataAndRestart()
+		sut.wipePersistedData()
 		
 		// Then
-		expect(walletSpy.invokedRemoveExistingGreenCards) == true
-		expect(walletSpy.invokedRemoveExistingEventGroups) == true
-		expect(remoteConfigSpy.invokedReset) == true
-		expect(cryptoLibUtilitySpy.invokedReset) == true
-		expect(cryptoManagerSpy.invokedGenerateSecretKey) == true
-		expect(scanLogManagerSpy.invokedReset) == false
-		expect(scanLockManagerSpy.invokedReset) == false
-		expect(riskLevelManagerSpy.invokedReset) == false
-		expect(self.userSettingsSpy.invokedReset) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.forcedInformationManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == false
+		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == false
+		expect(self.environmentSpies.riskLevelManagerSpy.invokedWipePersistedData) == false
+		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
 	
 	func test_resetData_verifier() {
-		
+
 		// Given
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
-		
-		let walletSpy = WalletManagerSpy()
-		Services.use(walletSpy)
-		let remoteConfigSpy = RemoteConfigManagingSpy()
-		remoteConfigSpy.stubbedStoredConfiguration = .default
-		Services.use(remoteConfigSpy)
-		let cryptoLibUtilitySpy = CryptoLibUtilitySpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			fileStorage: FileStorage(),
-			flavor: AppFlavor.flavor
-		)
-		Services.use(cryptoLibUtilitySpy)
-		let onboardingSpy = OnboardingManagerSpy()
-		Services.use(onboardingSpy)
-		let forcedInfoSpy = ForcedInformationManagerSpy()
-		Services.use(forcedInfoSpy)
-		let scanLogManagerSpy = ScanLogManagingSpy()
-		Services.use(scanLogManagerSpy)
-		let scanLockManagerSpy = ScanLockManagerSpy()
-		Services.use(scanLockManagerSpy)
-		let riskLevelManagerSpy = RiskLevelManagerSpy()
-		Services.use(riskLevelManagerSpy)
-		
+
 		// When
-		sut.resetDataAndRestart()
-		
+		sut.wipePersistedData()
+
 		// Then
-		expect(walletSpy.invokedRemoveExistingGreenCards) == false
-		expect(walletSpy.invokedRemoveExistingEventGroups) == false
-		expect(remoteConfigSpy.invokedReset) == true
-		expect(cryptoLibUtilitySpy.invokedReset) == true
-		expect(scanLogManagerSpy.invokedReset) == true
-		expect(scanLockManagerSpy.invokedReset) == true
-		expect(riskLevelManagerSpy.invokedReset) == true
-		expect(self.userSettingsSpy.invokedReset) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.forcedInformationManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.riskLevelManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
 	
@@ -408,8 +336,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
-			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy
+			flavor: AppFlavor.verifier
 		)
 		// When
 		sut.menuOptionSelected(.scanlog)
@@ -420,152 +347,164 @@ class AboutThisAppViewModelTests: XCTestCase {
 }
 
 class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, VerifierCoordinatorDelegate {
-	
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
 	var invokedOpenUrlParametersList = [(url: URL, inApp: Bool)]()
-	
+
 	func openUrl(_ url: URL, inApp: Bool) {
 		invokedOpenUrl = true
 		invokedOpenUrlCount += 1
 		invokedOpenUrlParameters = (url, inApp)
 		invokedOpenUrlParametersList.append((url, inApp))
 	}
-	
+
 	var invokedRestart = false
 	var invokedRestartCount = 0
-	
+
 	func restart() {
 		invokedRestart = true
 		invokedRestartCount += 1
 	}
-	
+
 	var invokedDidFinish = false
 	var invokedDidFinishCount = 0
 	var invokedDidFinishParameters: (result: VerifierStartResult, Void)?
 	var invokedDidFinishParametersList = [(result: VerifierStartResult, Void)]()
-	
+
 	func didFinish(_ result: VerifierStartResult) {
 		invokedDidFinish = true
 		invokedDidFinishCount += 1
 		invokedDidFinishParameters = (result, ())
 		invokedDidFinishParametersList.append((result, ()))
 	}
-	
+
 	var invokedNavigateToVerifierWelcome = false
 	var invokedNavigateToVerifierWelcomeCount = 0
-	
+
 	func navigateToVerifierWelcome() {
 		invokedNavigateToVerifierWelcome = true
 		invokedNavigateToVerifierWelcomeCount += 1
 	}
-	
+
 	var invokedNavigateToScan = false
 	var invokedNavigateToScanCount = 0
-	
+
 	func navigateToScan() {
 		invokedNavigateToScan = true
 		invokedNavigateToScanCount += 1
 	}
-	
+
 	var invokedNavigateToScanInstruction = false
 	var invokedNavigateToScanInstructionCount = 0
 	var invokedNavigateToScanInstructionParameters: (allowSkipInstruction: Bool, Void)?
 	var invokedNavigateToScanInstructionParametersList = [(allowSkipInstruction: Bool, Void)]()
-	
+
 	func navigateToScanInstruction(allowSkipInstruction: Bool) {
 		invokedNavigateToScanInstruction = true
 		invokedNavigateToScanInstructionCount += 1
 		invokedNavigateToScanInstructionParameters = (allowSkipInstruction, ())
 		invokedNavigateToScanInstructionParametersList.append((allowSkipInstruction, ()))
 	}
-	
-	var invokedDisplayContent = false
-	var invokedDisplayContentCount = 0
-	var invokedDisplayContentParameters: (title: String, content: [DisplayContent])?
-	var invokedDisplayContentParametersList = [(title: String, content: [DisplayContent])]()
-	
-	func displayContent(title: String, content: [DisplayContent]) {
-		invokedDisplayContent = true
-		invokedDisplayContentCount += 1
-		invokedDisplayContentParameters = (title, content)
-		invokedDisplayContentParametersList.append((title, content))
-	}
-	
+
 	var invokedUserWishesMoreInfoAboutClockDeviation = false
 	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
-	
+
 	func userWishesMoreInfoAboutClockDeviation() {
 		invokedUserWishesMoreInfoAboutClockDeviation = true
 		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
 	}
-	
+
 	var invokedNavigateToVerifiedInfo = false
 	var invokedNavigateToVerifiedInfoCount = 0
-	
+
 	func navigateToVerifiedInfo() {
 		invokedNavigateToVerifiedInfo = true
 		invokedNavigateToVerifiedInfoCount += 1
 	}
-	
+
 	var invokedUserWishesToOpenScanLog = false
 	var invokedUserWishesToOpenScanLogCount = 0
-	
+
 	func userWishesToOpenScanLog() {
 		invokedUserWishesToOpenScanLog = true
 		invokedUserWishesToOpenScanLogCount += 1
 	}
-	
+
 	var invokedUserWishesToLaunchThirdPartyScannerApp = false
 	var invokedUserWishesToLaunchThirdPartyScannerAppCount = 0
-	
+
 	func userWishesToLaunchThirdPartyScannerApp() {
 		invokedUserWishesToLaunchThirdPartyScannerApp = true
 		invokedUserWishesToLaunchThirdPartyScannerAppCount += 1
 	}
-	
+
 	var invokedNavigateToCheckIdentity = false
 	var invokedNavigateToCheckIdentityCount = 0
 	var invokedNavigateToCheckIdentityParameters: (verificationDetails: MobilecoreVerificationDetails, Void)?
 	var invokedNavigateToCheckIdentityParametersList = [(verificationDetails: MobilecoreVerificationDetails, Void)]()
-	
+
 	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails) {
 		invokedNavigateToCheckIdentity = true
 		invokedNavigateToCheckIdentityCount += 1
 		invokedNavigateToCheckIdentityParameters = (verificationDetails, ())
 		invokedNavigateToCheckIdentityParametersList.append((verificationDetails, ()))
 	}
-	
+
 	var invokedNavigateToVerifiedAccess = false
 	var invokedNavigateToVerifiedAccessCount = 0
-	var invokedNavigateToVerifiedAccessParameters: (verifiedType: VerifiedType, Void)?
-	var invokedNavigateToVerifiedAccessParametersList = [(verifiedType: VerifiedType, Void)]()
-	
-	func navigateToVerifiedAccess(_ verifiedType: VerifiedType) {
+	var invokedNavigateToVerifiedAccessParameters: (verifiedAccess: VerifiedAccess, Void)?
+	var invokedNavigateToVerifiedAccessParametersList = [(verifiedAccess: VerifiedAccess, Void)]()
+
+	func navigateToVerifiedAccess(_ verifiedAccess: VerifiedAccess) {
 		invokedNavigateToVerifiedAccess = true
 		invokedNavigateToVerifiedAccessCount += 1
-		invokedNavigateToVerifiedAccessParameters = (verifiedType, ())
-		invokedNavigateToVerifiedAccessParametersList.append((verifiedType, ()))
+		invokedNavigateToVerifiedAccessParameters = (verifiedAccess, ())
+		invokedNavigateToVerifiedAccessParametersList.append((verifiedAccess, ()))
 	}
-	
+
 	var invokedNavigateToDeniedAccess = false
 	var invokedNavigateToDeniedAccessCount = 0
-	
-	func navigateToDeniedAccess() {
+	var invokedNavigateToDeniedAccessParameters: (deniedAccessReason: DeniedAccessReason, Void)?
+	var invokedNavigateToDeniedAccessParametersList = [(deniedAccessReason: DeniedAccessReason, Void)]()
+
+	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason) {
 		invokedNavigateToDeniedAccess = true
 		invokedNavigateToDeniedAccessCount += 1
+		invokedNavigateToDeniedAccessParameters = (deniedAccessReason, ())
+		invokedNavigateToDeniedAccessParametersList.append((deniedAccessReason, ()))
 	}
-	
+
 	var invokedUserWishesToSetRiskLevel = false
 	var invokedUserWishesToSetRiskLevelCount = 0
 	var invokedUserWishesToSetRiskLevelParameters: (shouldSelectSetting: Bool, Void)?
 	var invokedUserWishesToSetRiskLevelParametersList = [(shouldSelectSetting: Bool, Void)]()
-	
+
 	func userWishesToSetRiskLevel(shouldSelectSetting: Bool) {
 		invokedUserWishesToSetRiskLevel = true
 		invokedUserWishesToSetRiskLevelCount += 1
 		invokedUserWishesToSetRiskLevelParameters = (shouldSelectSetting, ())
 		invokedUserWishesToSetRiskLevelParametersList.append((shouldSelectSetting, ()))
+	}
+
+	var invokedUserWishesMoreInfoAboutDeniedQRScan = false
+	var invokedUserWishesMoreInfoAboutDeniedQRScanCount = 0
+
+	func userWishesMoreInfoAboutDeniedQRScan() {
+		invokedUserWishesMoreInfoAboutDeniedQRScan = true
+		invokedUserWishesMoreInfoAboutDeniedQRScanCount += 1
+	}
+
+	var invokedNavigateToScanNextInstruction = false
+	var invokedNavigateToScanNextInstructionCount = 0
+	var invokedNavigateToScanNextInstructionParameters: (scanNext: ScanNext, Void)?
+	var invokedNavigateToScanNextInstructionParametersList = [(scanNext: ScanNext, Void)]()
+
+	func navigateToScanNextInstruction(_ scanNext: ScanNext) {
+		invokedNavigateToScanNextInstruction = true
+		invokedNavigateToScanNextInstructionCount += 1
+		invokedNavigateToScanNextInstructionParameters = (scanNext, ())
+		invokedNavigateToScanNextInstructionParametersList.append((scanNext, ()))
 	}
 }

@@ -12,10 +12,6 @@ final class RiskSettingSelectedViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
-	private let riskLevelManager: RiskLevelManaging
-	private let scanLogManager: ScanLogManaging
-	private let scanLockManager: ScanLockManaging
-	
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_active_title()
 	@Bindable private(set) var header: String?
@@ -25,6 +21,9 @@ final class RiskSettingSelectedViewModel: Logging {
 	@Bindable private(set) var highRiskTitle = L.verifier_risksetting_highrisk_title()
 	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
 	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
+	@Bindable private(set) var highPlusRiskTitle = L.verifier_risksetting_2g_plus_title()
+	@Bindable private(set) var highPlusRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
+	@Bindable private(set) var highPlusRiskAccessibilityLabel = "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
 	@Bindable private(set) var primaryButtonTitle = L.verifier_risksetting_confirmation_button()
 	@Bindable private(set) var riskLevel: RiskLevel?
 	@Bindable private(set) var alert: AlertContent?
@@ -34,27 +33,20 @@ final class RiskSettingSelectedViewModel: Logging {
 	private var didWeRecentlyScanQRs: Bool = false
 
 	init(
-		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
-		riskLevelManager: RiskLevelManaging = Services.riskLevelManager,
-		scanLogManager: ScanLogManaging = Services.scanLogManager,
-		scanLockManager: ScanLockManaging = Services.scanLockManager,
-		configuration: RemoteConfiguration
+		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)
 	) {
 		
 		self.coordinator = coordinator
-		self.riskLevelManager = riskLevelManager
-		self.scanLogManager = scanLogManager
-		self.scanLockManager = scanLockManager
 		
-		let selectedRisk = riskLevelManager.state
+		let selectedRisk = Current.riskLevelManager.state
 		riskLevel = selectedRisk
 		selectRisk = selectedRisk
 
-		let scanLockSeconds = configuration.scanLockSeconds ?? 300
+		let scanLockSeconds = Current.remoteConfigManager.storedConfiguration.scanLockSeconds ?? 300
 		scanLockMinutes = scanLockSeconds / 60
 
-		guard let scanLock = configuration.scanLockWarningSeconds else { return }
-		didWeRecentlyScanQRs = scanLogManager.didWeScanQRs(withinLastNumberOfSeconds: scanLock)
+		guard let scanLock = Current.remoteConfigManager.storedConfiguration.scanLockWarningSeconds else { return }
+		didWeRecentlyScanQRs = Current.scanLogManager.didWeScanQRs(withinLastNumberOfSeconds: scanLock)
 		header = didWeRecentlyScanQRs ? L.verifier_risksetting_active_lock_warning_header(scanLockMinutes) : nil
 	}
 	
@@ -86,9 +78,9 @@ private extension RiskSettingSelectedViewModel {
 	
 	func saveSettingAndGoBackToStart(enablingLock: Bool) {
 		if enablingLock {
-			scanLockManager.lock()
+			Current.scanLockManager.lock()
 		}
-		riskLevelManager.update(riskLevel: selectRisk)
+		Current.riskLevelManager.update(riskLevel: selectRisk)
 		coordinator?.navigateToVerifierWelcome()
 	}
 }

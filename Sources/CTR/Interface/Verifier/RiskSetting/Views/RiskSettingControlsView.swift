@@ -31,17 +31,29 @@ final class RiskSettingControlsView: BaseView {
 		return RiskSettingControl()
 	}()
 	
+	let highPlusRiskControl: RiskSettingControl = {
+		return RiskSettingControl()
+	}()
+	
 	override func setupViews() {
 		super.setupViews()
 		
 		lowRiskControl.onTapCommand = { [weak self] in
 			self?.selectRiskCommand?(.low)
 			self?.highRiskControl.isSelected = false
+			self?.highPlusRiskControl.isSelected = false
 		}
 		
 		highRiskControl.onTapCommand = { [weak self] in
 			self?.selectRiskCommand?(.high)
 			self?.lowRiskControl.isSelected = false
+			self?.highPlusRiskControl.isSelected = false
+		}
+		
+		highPlusRiskControl.onTapCommand = { [weak self] in
+			self?.selectRiskCommand?(.highPlus)
+			self?.lowRiskControl.isSelected = false
+			self?.highRiskControl.isSelected = false
 		}
 	}
 	
@@ -52,6 +64,8 @@ final class RiskSettingControlsView: BaseView {
 		stackView.addArrangedSubview(lowRiskControl)
 		addSeparator()
 		stackView.addArrangedSubview(highRiskControl)
+		addSeparator()
+		stackView.addArrangedSubview(highPlusRiskControl)
 		addSeparator()
 	}
 	
@@ -109,11 +123,30 @@ final class RiskSettingControlsView: BaseView {
 		}
 	}
 	
+	var highPlusRiskTitle: String? {
+		didSet {
+			highPlusRiskControl.title = highPlusRiskTitle
+		}
+	}
+	
+	var highPlusRiskSubtitle: String? {
+		didSet {
+			highPlusRiskControl.subtitle = highPlusRiskSubtitle
+		}
+	}
+	
+	var highPlusRiskAccessibilityLabel: String? {
+		didSet {
+			highPlusRiskControl.accessibilityLabel = highPlusRiskAccessibilityLabel
+		}
+	}
+	
 	var riskLevel: RiskLevel? {
 		didSet {
 			guard let riskLevel = riskLevel else { return }
 			lowRiskControl.isSelected = riskLevel.isLow
 			highRiskControl.isSelected = riskLevel.isHigh
+			highPlusRiskControl.isSelected = riskLevel.isHighPlus
 		}
 	}
 
@@ -121,6 +154,7 @@ final class RiskSettingControlsView: BaseView {
 		didSet {
 			lowRiskControl.hasError = hasError
 			highRiskControl.hasError = hasError
+			highPlusRiskControl.hasError = hasError
 		}
 	}
 	

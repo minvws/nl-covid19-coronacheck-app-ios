@@ -12,14 +12,15 @@ class ListEventsViewModel: Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	private let walletManager: WalletManaging = Services.walletManager
-	let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-	private let greenCardLoader: GreenCardLoading = Services.greenCardLoader
-	let cryptoManager: CryptoManaging? = Services.cryptoManager
-	let mappingManager: MappingManaging = Services.mappingManager
+	private let walletManager: WalletManaging = Current.walletManager
+	let remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
+	private let greenCardLoader: GreenCardLoading
+	let cryptoManager: CryptoManaging? = Current.cryptoManager
+	let mappingManager: MappingManaging = Current.mappingManager
 	private let identityChecker: IdentityCheckerProtocol
 
 	var eventMode: EventMode
+	var originalEventMode: EventMode?
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -49,14 +50,18 @@ class ListEventsViewModel: Logging {
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
+		originalMode: EventMode? = nil,
 		remoteEvents: [RemoteEvent],
 		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
-		eventsMightBeMissing: Bool = false
+		eventsMightBeMissing: Bool = false,
+		greenCardLoader: GreenCardLoading
 	) {
 
 		self.coordinator = coordinator
+		self.greenCardLoader = greenCardLoader
 		self.eventMode = eventMode
 		self.identityChecker = identityChecker
+		self.originalEventMode = originalMode
 		
 		viewState = .loading(content: Content(title: eventMode.title))
 		hasExistingDomesticVaccination = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
@@ -100,8 +105,12 @@ class ListEventsViewModel: Logging {
 	}
 
 	func goBack() {
-
-		coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
+		
+		if let originalEventMode = originalEventMode {
+			coordinator?.listEventsScreenDidFinish(.back(eventMode: originalEventMode))
+		} else {
+			coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
+		}
 	}
 
 	func openUrl(_ url: URL) {
@@ -129,7 +138,7 @@ class ListEventsViewModel: Logging {
 		progressIndicationCounter.increment()
 
 		let eventModeForStorage = getEventModeForStorage(remoteEvents: remoteEvents)
-
+		
 		storeEvent(
 			remoteEvents: remoteEvents,
 			eventModeForStorage: eventModeForStorage,
@@ -146,8 +155,9 @@ class ListEventsViewModel: Logging {
 				// Check if we have any origin for the event mode
 				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
 				// > 0 -> Success
-
-				guard eventModeForStorage != .positiveTest, eventModeForStorage != .recovery  else {
+				
+				guard eventModeForStorage == .vaccination else {
+					// Origin check before storage only for vaccination
 					return true
 				}
 
@@ -190,10 +200,10 @@ class ListEventsViewModel: Logging {
 
 		switch result {
 			case let .success(greencardResponse):
-				self.handleSuccess(greencardResponse, eventModeForStorage: eventModeForStorage)
+				self.handleSuccess(greencardResponse, eventModeForStorage: eventModeForStorage, with: remoteEvents)
 
 			case .failure(GreenCardLoader.Error.didNotEvaluate):
-				self.viewState = self.cannotCreateEventsState()
+				self.viewState = self.originMismatchState(flow: determineErrorCodeFlow(remoteEvents: remoteEvents))
 				self.shouldPrimaryButtonBeEnabled = true
 
 			case .failure(GreenCardLoader.Error.noEvents):
@@ -221,23 +231,28 @@ class ListEventsViewModel: Logging {
 		}
 	}
 
-	private func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
-
+	private func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode, with remoteEvents: [RemoteEvent]) {
+		
 		guard eventMode != .paperflow else {
 			// 2701: No special end states for the paperflow
+			Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 			completeFlow()
 			return
 		}
 
 		switch eventModeForStorage {
-			case .paperflow, .test:
+			case .paperflow:
 				completeFlow()
+			case .test:
+				handleSuccessForNegativeTest(greencardResponse, eventModeForStorage: eventModeForStorage, with: remoteEvents)
 			case .positiveTest:
 				handleSuccessForPositiveTest(greencardResponse, eventModeForStorage: eventModeForStorage)
 			case .recovery:
 				handleSuccessForRecovery(greencardResponse, eventModeForStorage: eventModeForStorage)
 			case .vaccination:
 				handleSuccessForVaccination(greencardResponse, eventModeForStorage: eventModeForStorage)
+			case .vaccinationassessment:
+				handleSuccessForVaccinationAssessment(greencardResponse, eventModeForStorage: eventModeForStorage)
 		}
 	}
 
@@ -245,11 +260,44 @@ class ListEventsViewModel: Logging {
 
 		self.coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
 	}
+	
+	private func handleSuccessForNegativeTest(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode, with remoteEvents: [RemoteEvent]) {
+		
+		guard eventModeForStorage == .test else { return }
+
+		inspectGreencardResponseForNegativeTestAndVaccinationAssessment(
+			greencardResponse,
+			onBothNegativeTestAndVaccinactionAssessmentOrigins: {
+				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+				self.completeFlow()
+			},
+			onNegativeTestOriginOnly: {
+				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+				// if we entered a negative test in the vaccination assessment flow
+				// AND we do not have a vaccination assessment origin
+				// -> Remind the user to add his/her vaccination assessment
+				if self.originalEventMode == .vaccinationassessment {
+					self.shouldPrimaryButtonBeEnabled = true
+					self.viewState = self.negativeTestInVaccinationAssessmentFlow()
+				} else {
+					self.completeFlow()
+				}
+			},
+			onVaccinactionAssessmentOriginOnly: {
+				self.shouldPrimaryButtonBeEnabled = true
+				self.viewState = self.originMismatchState(flow: self.determineErrorCodeFlow(remoteEvents: remoteEvents))
+			},
+			onNoOrigins: {
+				self.shouldPrimaryButtonBeEnabled = true
+				self.viewState = self.originMismatchState(flow: self.determineErrorCodeFlow(remoteEvents: remoteEvents))
+			}
+		)
+	}
 
 	private func handleSuccessForVaccination(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
 
 		guard eventModeForStorage == .vaccination else { return }
-
+		Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 		if !greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue) &&
 			greencardResponse.hasInternationalOrigins(ofType: OriginType.vaccination.rawValue) {
 			shouldPrimaryButtonBeEnabled = true
@@ -267,16 +315,19 @@ class ListEventsViewModel: Logging {
 
 		inspectGreencardResponseForPositiveTestAndRecovery(
 			greencardResponse,
-			onVaccinationAndRecovery: {
+			onBothVaccinationAndRecoveryOrigins: {
+				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
 			},
-			onVaccinationOnly: {
+			onVaccinationOriginOnly: {
+				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				self.completeFlow()
 			},
-			onRecoveryOnly: {
+			onRecoveryOriginOnly: {
+				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
 			},
-			onNothing: {
+			onNoOrigins: {
 				self.viewState = self.positiveTestFlowInapplicable()
 			}
 		)
@@ -289,24 +340,27 @@ class ListEventsViewModel: Logging {
 		shouldPrimaryButtonBeEnabled = true
 		inspectGreencardResponseForPositiveTestAndRecovery(
 			greencardResponse,
-			onVaccinationAndRecovery: {
+			onBothVaccinationAndRecoveryOrigins: {
+				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				if self.hasExistingDomesticVaccination {
 					self.completeFlow()
 				} else {
 					self.viewState = self.recoveryFlowRecoveryAndVaccinationCreated()
 				}
 			},
-			onVaccinationOnly: {
+			onVaccinationOriginOnly: {
 				if self.hasExistingDomesticVaccination {
 					self.viewState = self.recoveryEventsTooOld()
 				} else {
+					Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 					self.viewState = self.recoveryFlowVaccinationOnly()
 				}
 			},
-			onRecoveryOnly: {
+			onRecoveryOriginOnly: {
+				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				self.completeFlow()
 			},
-			onNothing: {
+			onNoOrigins: {
 				self.viewState = self.recoveryEventsTooOld()
 			}
 		)
@@ -316,12 +370,42 @@ class ListEventsViewModel: Logging {
 		_ = walletManager.removeExpiredGreenCards()
 	}
 
+	private func handleSuccessForVaccinationAssessment(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+		
+		inspectGreencardResponseForNegativeTestAndVaccinationAssessment(
+			greencardResponse,
+			onBothNegativeTestAndVaccinactionAssessmentOrigins: {
+				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+				self.completeFlow()
+			},
+			onNegativeTestOriginOnly: {
+				self.shouldPrimaryButtonBeEnabled = true
+				self.viewState = self.originMismatchState(flow: .visitorPass)
+			},
+			onVaccinactionAssessmentOriginOnly: {
+				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+				self.completeFlow()
+			},
+			onNoOrigins: {
+				if Current.walletManager.listEventGroups().filter({ $0.type == OriginType.test.rawValue }).isEmpty {
+					// No negative test event send
+					Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+					self.completeFlow()
+				} else {
+					// Negative test event send, no origin returned
+					self.shouldPrimaryButtonBeEnabled = true
+					self.viewState = self.originMismatchState(flow: .visitorPass)
+				}
+			}
+		)
+	}
+	
 	private func inspectGreencardResponseForPositiveTestAndRecovery(
 		_ greencardResponse: RemoteGreenCards.Response,
-		onVaccinationAndRecovery: (() -> Void)?,
-		onVaccinationOnly: (() -> Void)?,
-		onRecoveryOnly: (() -> Void)?,
-		onNothing: (() -> Void)?) {
+		onBothVaccinationAndRecoveryOrigins: (() -> Void)?,
+		onVaccinationOriginOnly: (() -> Void)?,
+		onRecoveryOriginOnly: (() -> Void)?,
+		onNoOrigins: (() -> Void)?) {
 
 		let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
 		let domesticRecoveryOrigins = greencardResponse.getDomesticOrigins(ofType: OriginType.recovery.rawValue)
@@ -332,10 +416,31 @@ class ListEventsViewModel: Logging {
 
 		switch (hasDomesticVaccinationOrigins, hasValidDomesticRecoveryOrigin ) {
 
-			case (true, true): onVaccinationAndRecovery?()
-			case (true, false): onVaccinationOnly?()
-			case (false, true): onRecoveryOnly?()
-			case (false, false): onNothing?()
+			case (true, true): onBothVaccinationAndRecoveryOrigins?()
+			case (true, false): onVaccinationOriginOnly?()
+			case (false, true): onRecoveryOriginOnly?()
+			case (false, false): onNoOrigins?()
+		}
+	}
+	
+	private func inspectGreencardResponseForNegativeTestAndVaccinationAssessment(
+		_ greencardResponse: RemoteGreenCards.Response,
+		onBothNegativeTestAndVaccinactionAssessmentOrigins: (() -> Void)?,
+		onNegativeTestOriginOnly: (() -> Void)?,
+		onVaccinactionAssessmentOriginOnly: (() -> Void)?,
+		onNoOrigins: (() -> Void)?) {
+			
+		let hasDomesticVaccinationAssessmentOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccinationassessment.rawValue)
+		let hasDomesticNegativeTestOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.test.rawValue)
+		let hasInternationalNegativeTestOrigins = greencardResponse.hasInternationalOrigins(ofType: OriginType.test.rawValue)
+		let hasNegativeTestOrigins = hasDomesticNegativeTestOrigins || hasInternationalNegativeTestOrigins
+		
+		switch (hasDomesticVaccinationAssessmentOrigins, hasNegativeTestOrigins ) {
+				
+			case (true, true): onBothNegativeTestAndVaccinactionAssessmentOrigins?()
+			case (true, false): onVaccinactionAssessmentOriginOnly?()
+			case (false, true): onNegativeTestOriginOnly?()
+			case (false, false): onNoOrigins?()
 		}
 	}
 
@@ -410,6 +515,7 @@ class ListEventsViewModel: Logging {
 		var success = true
 
 		if replaceExistingEventGroups {
+			// Replace when there is a identity mismatch
 			walletManager.removeExistingEventGroups()
 		}
 
@@ -436,7 +542,7 @@ class ListEventsViewModel: Logging {
 				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(eventModeForStorage)]")
 			}
 
-			// Store the new events
+			// Store the new event group
 			if let maxIssuedAt = getMaxIssuedAt(wrapper: response.wrapper),
 			   let jsonData = data {
 				success = success && walletManager.storeEventGroup(
@@ -468,6 +574,8 @@ class ListEventsViewModel: Logging {
 			.compactMap {
 				if $0.vaccination != nil {
 					return $0.vaccination?.dateString
+				} else if $0.vaccinationAssessment != nil {
+					return $0.vaccinationAssessment?.dateTimeString
 				} else if $0.negativeTest != nil {
 					return $0.negativeTest?.sampleDateString
 				} else if $0.recovery != nil {
@@ -504,5 +612,6 @@ extension ErrorCode.ClientCode {
 	static let failedToGenerateCommitmentMessage = ErrorCode.ClientCode(value: "054")
 	static let failedToSaveGreenCards = ErrorCode.ClientCode(value: "055")
 	static let storingEvents = ErrorCode.ClientCode(value: "056")
+	static let originMismatch = ErrorCode.ClientCode(value: "058")
 	static let unhandled = ErrorCode.ClientCode(value: "999")
 }

@@ -22,7 +22,7 @@ class ErrorStateViewModelTests: XCTestCase {
 	func test_init() {
 
 		// Given
-		let content = Content(title: "test", subTitle: "test", primaryActionTitle: "test", primaryAction: nil, secondaryActionTitle: "test", secondaryAction: nil)
+		let content = Content(title: "test", body: "test", primaryActionTitle: "test", primaryAction: nil, secondaryActionTitle: "test", secondaryAction: nil)
 
 		// when
 		sut = ErrorStateViewModel(content: content, backAction: {})

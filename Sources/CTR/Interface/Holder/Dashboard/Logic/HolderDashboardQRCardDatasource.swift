@@ -31,11 +31,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	}
 
 	private var reloadTimer: Timer?
-	private let now: () -> Date
-
-	init(now: @escaping () -> Date) {
-		self.now = now
-	}
+	private let now: () -> Date = Current.now
 
 	// Calls fetch, then updates subscribers.
 
@@ -46,6 +42,8 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 		reloadTimer?.invalidate()
 		reloadTimer = nil
 
+		removeExpiredEvents() // Vaccineassessment expiration can leave some events lingering - when reloading, make sure they are cleaned up also.
+		
 		let expiredGreenCards: [ExpiredQR] = removeExpiredGreenCards()
 		let cards: [HolderDashboardViewModel.QRCard] = fetchMyQRCards()
 
@@ -74,17 +72,23 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	}
 
 	private func removeExpiredGreenCards() -> [ExpiredQR] {
-		return Services.walletManager.removeExpiredGreenCards().compactMap { (greencardType: String, originType: String) -> ExpiredQR? in
+		return Current.walletManager.removeExpiredGreenCards().compactMap { (greencardType: String, originType: String) -> ExpiredQR? in
 			guard let region = QRCodeValidityRegion(rawValue: greencardType) else { return nil }
 			guard let originType = QRCodeOriginType(rawValue: originType) else { return nil }
 			return ExpiredQR(region: region, type: originType)
 		}
 	}
+	
+	private func removeExpiredEvents() {
+
+		let configuration = Current.remoteConfigManager.storedConfiguration
+		Current.walletManager.expireEventGroups(configuration: configuration)
+	}
 
 	/// Fetch the Greencards+Origins from Database
 	/// and convert to UI-appropriate model types.
 	private func fetchMyQRCards() -> [HolderDashboardViewModel.QRCard] {
-		let dbGreencards = Services.walletManager.listGreenCards()
+		let dbGreencards = Current.walletManager.listGreenCards()
 
 		let dbGreencardsWithDBOrigins = dbGreencards
 			.compactMap { (greencard: DBGreenCard) -> (DBGreenCard, [DBOrigin])? in
@@ -170,7 +174,7 @@ extension QRCard {
 			guard dbGreencard.type == GreenCardType.eu.rawValue,
 				  let credential = dbGreencard.currentOrNextActiveCredential(forDate: date),
 				  let data = credential.data,
-				  let euCredentialAttributes = Services.cryptoManager.readEuCredentials(data)
+				  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(data)
 			else {
 				return nil
 			}
@@ -185,7 +189,7 @@ extension QRCard {
 			guard dbGreencard.type == GreenCardType.domestic.rawValue,
 				  let credential = dbGreencard.currentOrNextActiveCredential(forDate: date),
 				  let data = credential.data,
-				  let domesticCredentialAttributes = Services.cryptoManager.readDomesticCredentials(data)
+				  let domesticCredentialAttributes = Current.cryptoManager.readDomesticCredentials(data)
 			else {
 				return nil
 			}

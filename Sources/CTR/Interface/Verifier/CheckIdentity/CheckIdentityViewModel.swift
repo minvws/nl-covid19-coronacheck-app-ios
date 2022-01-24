@@ -23,8 +23,6 @@ final class CheckIdentityViewModel: Logging {
 	
 	private let screenCaptureDetector = ScreenCaptureDetector()
 	
-	private let riskLevelManager: RiskLevelManaging
-	
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
 	
@@ -61,14 +59,12 @@ final class CheckIdentityViewModel: Logging {
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
 		verificationDetails: MobilecoreVerificationDetails,
-		isDeepLinkEnabled: Bool,
-		riskLevelManager: RiskLevelManaging = Services.riskLevelManager
+		isDeepLinkEnabled: Bool
 	) {
 		
 		self.coordinator = coordinator
 		self.verificationDetails = verificationDetails
 		self.isDeepLinkEnabled = isDeepLinkEnabled
-		self.riskLevelManager = riskLevelManager
 		
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -115,11 +111,11 @@ final class CheckIdentityViewModel: Logging {
 	
 	func showVerifiedAccess() {
 		
-		let verifiedType: VerifiedType
+		let verifiedAccess: VerifiedAccess
 		var riskSetting: RiskLevel = .low
 		
-		if Services.featureFlagManager.isVerificationPolicyEnabled() {
-			guard let state = riskLevelManager.state else {
+		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+			guard let state = Current.riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
 				return
 			}
@@ -127,13 +123,13 @@ final class CheckIdentityViewModel: Logging {
 		}
 		
 		if verificationDetails.isSpecimen == "1" {
-			verifiedType = .demo(riskSetting)
+			verifiedAccess = .demo(riskSetting)
 		} else {
-			verifiedType = .verified(riskSetting)
+			verifiedAccess = .verified(riskSetting)
 		}
 		
 		stopAutoCloseTimer()
-		coordinator?.navigateToVerifiedAccess(verifiedType)
+		coordinator?.navigateToVerifiedAccess(verifiedAccess)
 	}
 	
 	func showMoreInformation() {

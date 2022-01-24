@@ -40,7 +40,9 @@ extension HolderDashboardViewController.Card {
 			.deviceHasClockDeviation(
 				message: L.holderDashboardClockDeviationDetectedMessage(),
 				callToActionButtonText: L.generalReadmore(),
-				didTapCallToAction: actionHandler.didTapDeviceHasClockDeviationMoreInfo
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapDeviceHasClockDeviationMoreInfo()
+				}
 			)
 		]
 	}
@@ -54,87 +56,13 @@ extension HolderDashboardViewController.Card {
 			.configAlmostOutOfDate(
 				message: L.holderDashboardConfigIsAlmostOutOfDateCardMessage(),
 				callToActionButtonText: L.holderDashboardConfigIsAlmostOutOfDateCardButton(),
-				didTapCallToAction: actionHandler.didTapConfigAlmostOutOfDateCTA
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapConfigAlmostOutOfDateCTA()
+				}
 			)
 		]
 	}
 
-	static func makeMultipleDCCMigrationCards(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		
-		guard validityRegion == .europeanUnion else { return [] }
-		
-		if state.shouldShowEUVaccinationUpdateBanner {
-			return HolderDashboardViewController.Card.makeMultipleDCCMigrationUpdateCard(
-				didTapCallToAction: actionHandler.didTapMultipleDCCUpgradeMoreInfo
-			)
-		} else if state.shouldShowEUVaccinationUpdateCompletedBanner {
-			return HolderDashboardViewController.Card.makeMultipleDCCMigrationUpdateCompletedCard(
-				didTapCallToAction: actionHandler.didTapMultipleDCCUpgradeCompletedMoreInfo,
-				didTapClose: actionHandler.didTapMultipleDCCUpgradeCompletedClose
-			)
-		}
-		return []
-	}
-	
-	static func makeRecoveryValidityCards(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		guard validityRegion == .domestic else { return [] }
-		
-		if state.shouldShowRecoveryValidityExtensionAvailableBanner {
-			return HolderDashboardViewController.Card.makeRecoveryValidityExtensionAvailableCard(
-				didTapCallToAction: actionHandler.didTapRecoveryValidityExtensionAvailableMoreInfo
-			)
-		} else if state.shouldShowRecoveryValidityReinstationAvailableBanner {
-			return HolderDashboardViewController.Card.makeRecoveryValidityReinstationAvailableCard(
-				didTapCallToAction: actionHandler.didTapRecoveryValidityReinstationAvailableMoreInfo
-			)
-		} else if state.shouldShowRecoveryValidityExtensionCompleteBanner {
-			return HolderDashboardViewController.Card.makeRecoveryValidityExtensionCompleteCard(
-				didTapCallToAction: actionHandler.didTapRecoveryValidityExtensionCompleteMoreInfo,
-				didTapClose: actionHandler.didTapRecoveryValidityExtensionCompleteClose
-			)
-		} else if state.shouldShowRecoveryValidityReinstationCompleteBanner {
-			return HolderDashboardViewController.Card.makeRecoveryValidityReinstationCompleteCard(
-				didTapCallToAction: actionHandler.didTapRecoveryValidityReinstationCompleteMoreInfo,
-				didTapClose: actionHandler.didTapRecoveryValidityReinstationCompleteClose
-			)
-		}
-		return []
-	}
-	
-	static func makeMultipleDCCMigrationUpdateCard(
-		didTapCallToAction: @escaping () -> Void
-	) -> [HolderDashboardViewController.Card] {
-		return [
-			.migrateYourInternationalVaccinationCertificate(
-				message: L.holderDashboardCardUpgradeeuvaccinationMessage(),
-				callToActionButtonText: L.generalReadmore(),
-				didTapCallToAction: didTapCallToAction
-			)
-		]
-	}
-	
-	static func makeMultipleDCCMigrationUpdateCompletedCard(
-		didTapCallToAction: @escaping () -> Void,
-		didTapClose: @escaping () -> Void
-	) -> [HolderDashboardViewController.Card] {
-		return [
-			.migratingYourInternationalVaccinationCertificateDidComplete(
-				message: L.holderDashboardCardEuvaccinationswereupgradedMessage(),
-				callToActionButtonText: L.generalReadmore(),
-				didTapCallToAction: didTapCallToAction,
-				didTapClose: didTapClose
-			)
-		]
-	}
-	
 	static func makeExpiredQRCard(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
@@ -145,15 +73,25 @@ extension HolderDashboardViewController.Card {
 			.compactMap { expiredQR -> HolderDashboardViewController.Card? in
 				
 				let message = String.holderDashboardQRExpired(
-					localizedRegion: expiredQR.region.localizedAdjective,
-					localizedOriginType: expiredQR.type.localizedProof
+					originType: expiredQR.type,
+					region: expiredQR.region
 				)
+				let didTapClose: () -> Void = { [weak actionHandler] in
+					actionHandler?.didTapCloseExpiredQR(expiredQR: expiredQR)
+				}
 				
-				return .expiredQR(
-					message: message,
-					didTapClose: {
-						actionHandler.didTapCloseExpiredQR(expiredQR: expiredQR)
-					})
+				if case .vaccination = expiredQR.type, case .domestic = expiredQR.region {
+					return .expiredVaccinationQR(
+						message: message,
+						callToActionButtonText: L.generalReadmore(),
+						didTapCallToAction: { [weak actionHandler] in
+							actionHandler?.didTapExpiredDomesticVaccinationQRMoreInfo()
+						},
+						didTapClose: didTapClose
+					)
+				} else {
+					return .expiredQR(message: message, didTapClose: didTapClose)
+				}
 			}
 	}
 	
@@ -182,7 +120,9 @@ extension HolderDashboardViewController.Card {
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
 		guard !state.dashboardHasQRCards(for: validityRegion) else { return [] }
-		
+		guard !state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
+		guard !state.shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for: validityRegion) else { return [] }
+	
 		switch validityRegion {
 			case .domestic:
 				guard let domesticImage = I.dashboard.domestic() else { return [] }
@@ -223,7 +163,9 @@ extension HolderDashboardViewController.Card {
 		return [HolderDashboardViewController.Card.testOnlyValidFor3G(
 			message: L.holder_my_overview_3g_test_validity_card(),
 			callToActionButtonText: L.generalReadmore(),
-			didTapCallToAction: actionHandler.didTapTestOnlyValidFor3GMoreInfo)
+			didTapCallToAction: { [weak actionHandler] in
+				actionHandler?.didTapTestOnlyValidFor3GMoreInfo()
+			})
 		]
 	}
 	
@@ -242,48 +184,14 @@ extension HolderDashboardViewController.Card {
 				return .originNotValidInThisRegion(
 					message: message,
 					callToActionButtonText: L.generalReadmore(),
-					didTapCallToAction: {
-						actionHandler.didTapOriginNotValidInThisRegionMoreInfo(
+					didTapCallToAction: { [weak actionHandler] in
+						actionHandler?.didTapOriginNotValidInThisRegionMoreInfo(
 							originType: originType,
 							validityRegion: validityRegion
 						)
 					}
 				)
 			}
-	}
-	
-	static func makeRecoveryValidityExtensionAvailableCard(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionAvailable(
-			title: L.holderDashboardRecoveryvalidityextensionExtensionavailableBannerTitle(),
-			buttonText: L.generalReadmore(),
-			didTapCallToAction: didTapCallToAction
-		)]
-	}
-	
-	static func makeRecoveryValidityReinstationAvailableCard(didTapCallToAction: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionAvailable(
-			title: L.holderDashboardRecoveryvalidityextensionReinstationavailableBannerTitle(),
-			buttonText: L.generalReadmore(),
-			didTapCallToAction: didTapCallToAction
-		)]
-	}
-	
-	static func makeRecoveryValidityExtensionCompleteCard(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionDidComplete(
-			title: L.holderDashboardRecoveryvalidityextensionExtensioncompleteBannerTitle(),
-			buttonText: L.generalReadmore(),
-			didTapCallToAction: didTapCallToAction,
-			didTapClose: didTapClose
-		)]
-	}
-	
-	static func makeRecoveryValidityReinstationCompleteCard(didTapCallToAction: @escaping () -> Void, didTapClose: @escaping () -> Void) -> [HolderDashboardViewController.Card] {
-		return [.recoveryValidityExtensionDidComplete(
-			title: L.holderDashboardRecoveryvalidityextensionReinstationcompleteBannerTitle(),
-			buttonText: L.generalReadmore(),
-			didTapCallToAction: didTapCallToAction,
-			didTapClose: didTapClose
-		)]
 	}
 	
 	static func makeRecommendedUpdateCard(
@@ -295,7 +203,9 @@ extension HolderDashboardViewController.Card {
 			.recommendedUpdate(
 				message: L.recommended_update_card_description(),
 				callToActionButtonText: L.recommended_update_card_action(),
-				didTapCallToAction: actionHandler.didTapRecommendedUpdate
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapRecommendedUpdate()
+				}
 			)
 		]
 	}
@@ -311,8 +221,68 @@ extension HolderDashboardViewController.Card {
 			.newValidityInfoForVaccinationAndRecoveries(
 				title: L.holder_dashboard_newvaliditybanner_title(),
 				buttonText: L.holder_dashboard_newvaliditybanner_action(),
-				didTapCallToAction: actionHandler.didTapNewValidityBannerMoreInfo,
-				didTapClose: actionHandler.didTapNewValidiyBannerClose
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapNewValidityBannerMoreInfo()
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapNewValidiyBannerClose()
+				}
+			)
+		]
+	}
+	
+	static func makeCompleteYourVaccinationAssessmentCard(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+	
+		guard state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
+		return [
+			.completeYourVaccinationAssessment(
+				title: L.holder_dashboard_visitorpassincompletebanner_title(),
+				buttonText: L.holder_dashboard_visitorpassincompletebanner_button_makecomplete(),
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapCompleteYourVaccinationAssessmentMoreInfo()
+				}
+			)
+		]
+	}
+	
+	static func makeRecommendToAddYourBoosterCard(
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+	
+		guard state.shouldShowRecommendationToAddYourBooster else { return [] }
+		return [
+			.recommendToAddYourBooster(
+				title: L.holder_dashboard_addBoosterBanner_title(),
+				buttonText: L.holder_dashboard_addBoosterBanner_button_addBooster(),
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapRecommendToAddYourBooster()
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapRecommendToAddYourBoosterClose()
+				}
+			)
+		]
+	}
+	
+	static func makeVaccinationAssessmentInvalidOutsideNLCard(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		
+		guard state.shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for: validityRegion) else { return [] }
+		return [
+			.vaccinationAssessmentInvalidOutsideNL(
+				title: L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title(),
+				buttonText: L.generalReadmore(),
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
+				}
 			)
 		]
 	}
@@ -352,32 +322,46 @@ extension HolderDashboardViewModel.QRCard {
 					title: L.holderDashboardQrTitle(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
-					didTapViewQR: {
-						actionHandler.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
+					didTapViewQR: { [weak actionHandler] in
+						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
 					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: { now in
-						let mostDistantFutureExpiryDate = origins.reduce(now) { result, nextOrigin in
-							nextOrigin.expirationTime > result ? nextOrigin.expirationTime : result
-						}
 
-						// if all origins will be expired in next six hours:
-						let sixHours: TimeInterval = 6 * 60 * 60
-						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < now.addingTimeInterval(sixHours)
+						// Calculate which is the origin with the furthest future expiration:
+						var expiringMostDistantlyInFutureOrigin: GreenCard.Origin?
+						origins.forEach { origin in
+							if origin.expirationTime > (expiringMostDistantlyInFutureOrigin?.expirationTime ?? Date.distantPast) {
+								expiringMostDistantlyInFutureOrigin = origin
+							}
+						}
+						
+						guard let mostDistantFutureExpiryDate = expiringMostDistantlyInFutureOrigin?.expirationTime,
+							  let mostDistantFutureExpiryType = expiringMostDistantlyInFutureOrigin?.type
+						else { return nil }
+						
+						let countdownTimerVisibleThreshold: TimeInterval = mostDistantFutureExpiryType == .test
+							? 6 * 60 * 60 // tests have a countdown for last 6 hours
+							: 24 * 60 * 60 // everything else has countdown for last 24 hours
+						
+						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < now.addingTimeInterval(countdownTimerVisibleThreshold)
 						else { return nil }
  
-						let fiveMinutes: TimeInterval = 5 * 60
 						let formatter: DateComponentsFormatter = {
+							let fiveMinutes: TimeInterval = 5 * 60
 							if mostDistantFutureExpiryDate < now.addingTimeInterval(fiveMinutes) {
 								// e.g. "4 minuten en 15 seconden"
 								return HolderDashboardViewModel.hmsRelativeFormatter
 							} else {
-								// e.g. "5 uur 59 min"
+								// e.g. "23 uur en 59 minuten"
 								return HolderDashboardViewModel.hmRelativeFormatter
 							}
 						}()
 
-						guard let relativeDateString = formatter.string(from: now, to: mostDistantFutureExpiryDate)
+						guard let relativeDateString = formatter.string(
+							from: now,
+							to: mostDistantFutureExpiryDate.addingTimeInterval(1) // add 1, so that we don't count down to zero
+						)
 						else { return nil }
 
 						return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -394,8 +378,8 @@ extension HolderDashboardViewModel.QRCard {
 					}(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
-					didTapViewQR: {
-						actionHandler.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
+					didTapViewQR: { [weak actionHandler] in
+						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
 					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: nil
@@ -403,7 +387,9 @@ extension HolderDashboardViewModel.QRCard {
 		}
 
 		if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
-			cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: actionHandler.didTapRetryLoadQRCards)]
+			cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: { [weak actionHandler] in
+				actionHandler?.didTapRetryLoadQRCards()
+			})]
 		}
 		
 		return cards
@@ -461,12 +447,18 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], 
 		.subtracting(originTypesForCurrentRegion)
 
 	// Map it to user messages:
-	let userMessages = originTypesOnlyInOtherRegion.map { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String) in
+	let userMessages = originTypesOnlyInOtherRegion.compactMap { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String)? in
 		switch (originType, thisRegion) {
 			case (.vaccination, .domestic):
 				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEUVaccination())
+			case (.test, .domestic):
+				let containsDomesticVaccinationAssessment = qrCards.contains(where: { $0.origins.contains { $0.type == .vaccinationassessment } })
+				guard !containsDomesticVaccinationAssessment else { return nil }
+				fallthrough // continue to next case for regular .domestic behavior:
 			case (_, .domestic):
 				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEU(originType.localizedProof))
+			case (.vaccinationassessment, .europeanUnion):
+				return (originType, L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title())
 			case (_, .europeanUnion):
 				return (originType, L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(originType.localizedProof))
 		}
