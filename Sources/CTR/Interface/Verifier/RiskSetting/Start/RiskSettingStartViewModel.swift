@@ -38,17 +38,11 @@ final class RiskSettingStartViewModel: Logging {
 				case .policy3G:
 					changeRiskTitle = L.verifier_risksetting_changeselection_3g()
 					changeRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
-				case .policy2G:
-					changeRiskTitle = L.verifier_risksetting_changeselection_2g()
-					changeRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
-				case .policy2GPlus:
-					changeRiskTitle = L.verifier_risksetting_changeselection_2g_plus()
-					changeRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
 				case .policy1G:
 					changeRiskTitle = L.verifier_risksetting_changeselection_2g_plus()
 					changeRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
 			}
-			// TODO: Update mode
+			// TODO: Update copy
 		}
 	}
 	

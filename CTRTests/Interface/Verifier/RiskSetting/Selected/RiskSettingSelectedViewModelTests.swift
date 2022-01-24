@@ -46,9 +46,6 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		expect(self.sut.highRiskTitle) == L.verifier_risksetting_highrisk_title()
 		expect(self.sut.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
 		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-		expect(self.sut.highPlusRiskTitle) == L.verifier_risksetting_2g_plus_title()
-		expect(self.sut.highPlusRiskSubtitle) == L.verifier_risksetting_2g_plus_subtitle()
-		expect(self.sut.highPlusRiskAccessibilityLabel) == "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
 
 		expect(self.sut.verificationPolicy) == .policy3G
 	}
@@ -87,7 +84,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy
 		)
 		
-		sut.selectVerificationPolicy = .policy2G
+		sut.selectVerificationPolicy = .policy1G
 		
 		// When
 		sut.confirmSetting()
@@ -106,7 +103,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		)
 		
 		// Act
-		sut.selectVerificationPolicy = .policy2G
+		sut.selectVerificationPolicy = .policy1G
 		sut.confirmSetting()
 		
 		// Fish in Alert for OK action & trigger it:

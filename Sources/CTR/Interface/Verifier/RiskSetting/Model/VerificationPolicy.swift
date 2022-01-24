@@ -11,10 +11,6 @@ import Clcore
 enum VerificationPolicy: Codable {
 	/// 3G policy
 	case policy3G
-	/// 2G policy
-	case policy2G
-	/// 2G+ policy
-	case policy2GPlus
 	/// 1G policy
 	case policy1G
 	
@@ -22,9 +18,7 @@ enum VerificationPolicy: Codable {
 		switch self {
 			case .policy3G:
 				return MobilecoreVERIFICATION_POLICY_3G
-			case .policy2G:
-				return MobilecoreVERIFICATION_POLICY_2G
-			case .policy2GPlus, .policy1G:
+			case .policy1G:
 				// Update when working on ticket #3087
 				return ""
 		}

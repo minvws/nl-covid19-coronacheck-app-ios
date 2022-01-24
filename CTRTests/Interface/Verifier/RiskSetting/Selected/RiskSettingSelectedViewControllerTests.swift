@@ -56,9 +56,6 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifier_risksetting_highrisk_title()
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-		expect(self.sut.sceneView.riskSettingControlsView.highPlusRiskTitle) == L.verifier_risksetting_2g_plus_title()
-		expect(self.sut.sceneView.riskSettingControlsView.highPlusRiskSubtitle) == L.verifier_risksetting_2g_plus_subtitle()
-		expect(self.sut.sceneView.riskSettingControlsView.highPlusRiskAccessibilityLabel) == "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
 		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy3G
 	}
 	
@@ -80,7 +77,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_high() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
@@ -88,23 +85,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy2G
-		
-		// Snapshot
-		sut.assertImage()
-	}
-	
-	func test_riskSetting_highPlus() {
-		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2GPlus
-		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
-		sut = RiskSettingSelectedViewController(viewModel: viewModel)
-		loadView()
-		
-		// When
-		
-		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy2GPlus
+		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy1G
 		
 		// Snapshot
 		sut.assertImage()
@@ -113,7 +94,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	func test_warning() {
 		// Given
 		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()

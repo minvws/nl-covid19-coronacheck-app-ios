@@ -117,10 +117,8 @@ extension VerifiedAccess {
 				switch verificationPolicy {
 					case .policy3G:
 						return C.accessColor()
-					case .policy2G:
+					case .policy1G:
 						return C.primaryColor()
-					case .policy2GPlus, .policy1G:
-						return C.darkColor()
 				}
 			case .demo:
 				return C.grey4()
@@ -128,7 +126,7 @@ extension VerifiedAccess {
 	}
 	
 	var tintColor: UIColor? {
-		if case .verified(let verificationPolicy) = self, verificationPolicy == .policy2G || verificationPolicy == .policy2GPlus {
+		if case .verified(let verificationPolicy) = self, verificationPolicy == .policy1G {
 			return .white
 		} else {
 			return C.darkColor()

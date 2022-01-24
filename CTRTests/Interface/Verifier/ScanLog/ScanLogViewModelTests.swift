@@ -134,7 +134,7 @@ class ScanLogViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(2))
-		expect(self.sut.displayEntries[0]) == ScanLogDisplayEntry.entry(type: "2G", timeInterval: "16:40 - nu", message: "1 tot 10 bewijzen gescand", warning: nil)
+		expect(self.sut.displayEntries[0]) == ScanLogDisplayEntry.entry(type: "1G", timeInterval: "16:40 - nu", message: "1 tot 10 bewijzen gescand", warning: nil)
 		expect(self.sut.displayEntries[1]) == ScanLogDisplayEntry.entry(type: "3G", timeInterval: "16:38 - 16:38", message: "1 tot 10 bewijzen gescand", warning: nil)
 	}
 
@@ -172,8 +172,8 @@ class ScanLogViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(4))
 		expect(self.sut.displayEntries[0]) == ScanLogDisplayEntry.entry(type: "3G", timeInterval: "16:53 - nu", message: "10 tot 20 bewijzen gescand", warning: nil)
-		expect(self.sut.displayEntries[1]) == ScanLogDisplayEntry.entry(type: "2G", timeInterval: "16:48 - 16:51", message: "1 tot 10 bewijzen gescand", warning: L.scan_log_list_clock_skew_detected())
-		expect(self.sut.displayEntries[2]) == ScanLogDisplayEntry.entry(type: "2G", timeInterval: "16:47 - 16:50", message: "1 tot 10 bewijzen gescand", warning: nil)
+		expect(self.sut.displayEntries[1]) == ScanLogDisplayEntry.entry(type: "1G", timeInterval: "16:48 - 16:51", message: "1 tot 10 bewijzen gescand", warning: L.scan_log_list_clock_skew_detected())
+		expect(self.sut.displayEntries[2]) == ScanLogDisplayEntry.entry(type: "1G", timeInterval: "16:47 - 16:50", message: "1 tot 10 bewijzen gescand", warning: nil)
 		expect(self.sut.displayEntries[3]) == ScanLogDisplayEntry.entry(type: "3G", timeInterval: "16:38 - 16:42", message: "1 tot 10 bewijzen gescand", warning: nil)
 	}
 

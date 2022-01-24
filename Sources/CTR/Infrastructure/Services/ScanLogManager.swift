@@ -23,8 +23,7 @@ protocol ScanLogManaging: AnyObject {
 
 class ScanLogManager: ScanLogManaging {
 
-	// TODO: Add modes
-	static let highRisk: String = "2G"
+	static let highRisk: String = "1G"
 	static let lowRisk: String = "3G"
 
 	private var dataStoreManager: DataStoreManaging

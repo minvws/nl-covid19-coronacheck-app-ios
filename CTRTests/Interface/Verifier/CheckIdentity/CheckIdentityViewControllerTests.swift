@@ -182,7 +182,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	
 	func test_primaryButtonTapped_whenVerified_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
@@ -196,12 +196,12 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.policy2G)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.policy1G)
 	}
 	
 	func test_primaryButtonTapped_whenDemo_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		viewModel = CheckIdentityViewModel(
@@ -217,12 +217,12 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccess) == true
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.policy2G)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.policy1G)
 	}
 	
 	func test_primaryButtonTapped_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
@@ -242,7 +242,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	
 	func test_primaryButtonTapped_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"

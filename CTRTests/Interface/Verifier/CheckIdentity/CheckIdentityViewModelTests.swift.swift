@@ -77,7 +77,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenVerified_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
@@ -88,12 +88,12 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut.showVerifiedAccess()
 		
 		// Then
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.policy2G)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .verified(.policy1G)
 	}
 	
 	func test_showVerifiedAccess_whenDemo_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		sut = CheckIdentityViewModel(
@@ -106,12 +106,12 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		sut.showVerifiedAccess()
 		
 		// Then
-		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.policy2G)
+		expect(self.verifierCoordinatorDelegateSpy.invokedNavigateToVerifiedAccessParameters?.verifiedAccess) == .demo(.policy1G)
 	}
 	
 	func test_showVerifiedAccess_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
@@ -128,7 +128,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"

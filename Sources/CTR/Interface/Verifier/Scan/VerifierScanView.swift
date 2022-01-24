@@ -181,21 +181,13 @@ final class RiskLevelIndicator: BaseView {
 	private func updateForVerificationPolicy() {
 		isHidden = false
 		
-		// TODO: Update mode
 		switch verificationPolicy {
 			case .policy3G:
 				titleLabel.text = L.verifier_scanner_policy_indication_3g()
 				accessibilityLabel = L.verifier_scanner_policy_indication_3g()
 				indicatorImageView.tintColor = Theme.colors.access
-			case .policy2G:
-				titleLabel.text = L.verifier_scanner_policy_indication_2g()
-				accessibilityLabel = L.verifier_scanner_policy_indication_2g()
-				indicatorImageView.tintColor = Theme.colors.primary
-			case .policy2GPlus:
-				titleLabel.text = L.verifier_scanner_policy_indication_2g_plus()
-				accessibilityLabel = L.verifier_scanner_policy_indication_2g_plus()
-				indicatorImageView.tintColor = Theme.colors.dark
 			case .policy1G:
+				// TODO: Update copy
 				titleLabel.text = L.verifier_scanner_policy_indication_2g_plus()
 				accessibilityLabel = L.verifier_scanner_policy_indication_2g_plus()
 				indicatorImageView.tintColor = Theme.colors.dark

@@ -82,21 +82,21 @@ class VerifierScanViewModelTests: XCTestCase {
 
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
 
 		// Then
 		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntry) == true
-		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntryParameters?.verificationPolicy) == .policy2G
+		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntryParameters?.verificationPolicy) == .policy1G
 	}
 
 	func test_parseQRMessage_shouldAddScanLogEntry_highRisk_verification_policyDisabled() {
 
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy2G
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")

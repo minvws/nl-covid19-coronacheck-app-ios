@@ -73,7 +73,7 @@ extension VerifiedAccess {
 	
 	var statusBarStyle: UIStatusBarStyle {
 		
-		if case .verified(let verificationPolicy) = self, verificationPolicy == .policy2G || verificationPolicy == .policy2GPlus {
+		if case .verified(let verificationPolicy) = self, verificationPolicy == .policy1G {
 			return .lightContent
 		} else {
 			return .default

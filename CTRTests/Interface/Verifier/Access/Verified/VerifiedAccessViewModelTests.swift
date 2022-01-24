@@ -75,7 +75,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedAccess: .demo(.policy2G)
+			verifiedAccess: .demo(.policy1G)
 		)
 		
 		// Then
@@ -90,36 +90,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedAccess: .demo(.policy2G)
-		)
-		
-		// Then
-		expect(self.sut.accessTitle) == L.verifier_result_access_title()
-	}
-	
-	func test_accessTitle_demoHighPlusRisk_verificationPolicyEnabled() {
-		
-		// Given
-		
-		// When
-		sut = VerifiedAccessViewModel(
-			coordinator: verifierCoordinatorSpy,
-			verifiedAccess: .demo(.policy2GPlus)
-		)
-		
-		// Then
-		expect(self.sut.accessTitle) == L.verifier_result_access_title_2g_plus()
-	}
-	
-	func test_accessTitle_demoHighPlusRisk_verificationPolicyDisabled() {
-		
-		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		
-		// When
-		sut = VerifiedAccessViewModel(
-			coordinator: verifierCoordinatorSpy,
-			verifiedAccess: .demo(.policy2GPlus)
+			verifiedAccess: .demo(.policy1G)
 		)
 		
 		// Then
@@ -162,7 +133,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedAccess: .verified(.policy2G)
+			verifiedAccess: .verified(.policy1G)
 		)
 		
 		// Then
@@ -177,36 +148,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		// When
 		sut = VerifiedAccessViewModel(
 			coordinator: verifierCoordinatorSpy,
-			verifiedAccess: .verified(.policy2G)
-		)
-		
-		// Then
-		expect(self.sut.accessTitle) == L.verifier_result_access_title()
-	}
-	
-	func test_accessTitle_verifiedHighPlusRisk_verificationPolicyEnabled() {
-		
-		// Given
-		
-		// When
-		sut = VerifiedAccessViewModel(
-			coordinator: verifierCoordinatorSpy,
-			verifiedAccess: .verified(.policy2GPlus)
-		)
-		
-		// Then
-		expect(self.sut.accessTitle) == L.verifier_result_access_title_2g_plus()
-	}
-	
-	func test_accessTitle_verifiedHighPlusRisk_verificationPolicyDisabled() {
-		
-		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		
-		// When
-		sut = VerifiedAccessViewModel(
-			coordinator: verifierCoordinatorSpy,
-			verifiedAccess: .verified(.policy2GPlus)
+			verifiedAccess: .verified(.policy1G)
 		)
 		
 		// Then

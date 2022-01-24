@@ -23,8 +23,6 @@ class VerifierStartViewModel: Logging {
 	indirect enum Mode: Equatable {
 		case noLevelSet
 		case policy3G
-		case policy2G
-		case policy2GPlus
 		case policy1G
 		case locked(mode: Mode, timeRemaining: TimeInterval, totalDuration: TimeInterval)
 
@@ -47,12 +45,8 @@ class VerifierStartViewModel: Logging {
 			switch self {
 				case .noLevelSet, .policy3G:
 					return I.scanner.scanStartLowRisk()
-				case .policy2G:
-					return I.scanner.scanStartHighRisk()
-				case .policy2GPlus:
-					return I.scanner.scanStartHighPlusRisk()
 				case .policy1G:
-					return I.scanner.scanStartHighPlusRisk()
+					return I.scanner.scanStartHighRisk()
 				case .locked:
 					return I.scanner.scanStartLocked()
 			}
@@ -63,7 +57,8 @@ class VerifierStartViewModel: Logging {
 				case let .locked(_, _, totalDuration):
 					let minutes = Int((totalDuration / 60).rounded(.up))
 					return L.verifier_home_countdown_subtitle(minutes)
-				case .policy2G, .policy2GPlus, .policy1G:
+				case .policy1G:
+					// TODO: Update copy
 					return L.scan_qr_description_2G()
 				default:
 					return L.verifierStartMessage()
@@ -105,11 +100,8 @@ class VerifierStartViewModel: Logging {
 		var riskIndicator: (UIColor, String)? {
 			switch self {
 				case .policy1G, .locked(.policy1G, _, _):
+					// TODO: Update copy
 					return (Theme.colors.dark, L.verifier_start_scan_qr_policy_indication_2g_plus())
-				case .policy2GPlus, .locked(.policy2GPlus, _, _):
-					return (Theme.colors.dark, L.verifier_start_scan_qr_policy_indication_2g_plus())
-				case .policy2G, .locked(.policy2G, _, _):
-					return (Theme.colors.primary, L.verifier_start_scan_qr_policy_indication_2g())
 				case .policy3G, .locked(.policy3G, _, _):
 					return (Theme.colors.access, L.verifier_start_scan_qr_policy_indication_3g())
 				default:
@@ -255,9 +247,8 @@ class VerifierStartViewModel: Logging {
 			switch (mode, verificationPolicy) {
 				
 				// RiskLevel changed, but we're locked. Just update the lock:
-					// TODO: Add modes
-				case let (.locked(_, timeRemaining, totalDuration), .policy2G):
-					mode = .locked(mode: .policy2G, timeRemaining: timeRemaining, totalDuration: totalDuration)
+				case let (.locked(_, timeRemaining, totalDuration), .policy1G):
+					mode = .locked(mode: .policy1G, timeRemaining: timeRemaining, totalDuration: totalDuration)
 				case let (.locked(_, timeRemaining, totalDuration), .policy3G):
 					mode = .locked(mode: .policy3G, timeRemaining: timeRemaining, totalDuration: totalDuration)
 				case let (.locked(_, timeRemaining, totalDuration), .none):
@@ -266,10 +257,6 @@ class VerifierStartViewModel: Logging {
 				// Risk Level changed: update mode
 				case (_, .policy1G):
 					mode = .policy1G
-				case (_, .policy2GPlus):
-					mode = .policy2GPlus
-				case (_, .policy2G):
-					mode = .policy2G
 				case (_, .policy3G):
 					mode = .policy3G
 				case (_, .none):

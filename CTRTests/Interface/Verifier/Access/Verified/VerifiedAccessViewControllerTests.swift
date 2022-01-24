@@ -82,7 +82,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedAccess: .demo(.policy2G)
+				verifiedAccess: .demo(.policy1G)
 			)
 		)
 		
@@ -104,50 +104,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedAccess: .demo(.policy2G)
-			)
-		)
-		
-		// When
-		loadView()
-		
-		// Then
-		expect(self.sut.sceneView.title) == L.verifier_result_access_title()
-		expect(self.sut.preferredStatusBarStyle) == .default
-		
-		// Snapshot
-		sut.assertImage()
-	}
-	
-	func test_demo_riskLevelHighPlus_verificationPolicyEnabled() {
-		
-		// Given
-		sut = VerifiedAccessViewController(
-			viewModel: .init(
-				coordinator: verifierCoordinatorSpy,
-				verifiedAccess: .demo(.policy2GPlus)
-			)
-		)
-		
-		// When
-		loadView()
-		
-		// Then
-		expect(self.sut.sceneView.title) == L.verifier_result_access_title_2g_plus()
-		expect(self.sut.preferredStatusBarStyle) == .default
-		
-		// Snapshot
-		sut.assertImage()
-	}
-	
-	func test_demo_riskLevelHighPlus_verificationPolicyDisabled() {
-		
-		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		sut = VerifiedAccessViewController(
-			viewModel: .init(
-				coordinator: verifierCoordinatorSpy,
-				verifiedAccess: .demo(.policy2GPlus)
+				verifiedAccess: .demo(.policy1G)
 			)
 		)
 		
@@ -210,7 +167,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedAccess: .verified(.policy2G)
+				verifiedAccess: .verified(.policy1G)
 			)
 		)
 		
@@ -232,50 +189,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
-				verifiedAccess: .verified(.policy2G)
-			)
-		)
-		
-		// When
-		loadView()
-		
-		// Then
-		expect(self.sut.sceneView.title) == L.verifier_result_access_title()
-		expect(self.sut.preferredStatusBarStyle) == .default
-		
-		// Snapshot
-		sut.assertImage()
-	}
-	
-	func test_verified_riskLevelHighPlus_verificationPolicyEnabled() {
-		
-		// Given
-		sut = VerifiedAccessViewController(
-			viewModel: .init(
-				coordinator: verifierCoordinatorSpy,
-				verifiedAccess: .verified(.policy2GPlus)
-			)
-		)
-		
-		// When
-		loadView()
-		
-		// Then
-		expect(self.sut.sceneView.title) == L.verifier_result_access_title_2g_plus()
-		expect(self.sut.preferredStatusBarStyle) == .lightContent
-		
-		// Snapshot
-		sut.assertImage()
-	}
-	
-	func test_verified_riskLevelHighPlus_verificationPolicyDisabled() {
-		
-		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		sut = VerifiedAccessViewController(
-			viewModel: .init(
-				coordinator: verifierCoordinatorSpy,
-				verifiedAccess: .verified(.policy2GPlus)
+				verifiedAccess: .verified(.policy1G)
 			)
 		)
 		

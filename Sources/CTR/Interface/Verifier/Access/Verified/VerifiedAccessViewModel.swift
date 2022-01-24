@@ -35,14 +35,11 @@ final class VerifiedAccessViewModel: Logging {
 		self.coordinator = coordinator
 		self.verifiedAccess = verifiedAccess
 
-		// TODO: Add mode
 		if Current.featureFlagManager.isVerificationPolicyEnabled() {
 			switch verifiedAccess {
-				case .verified(let verificationPolicy) where verificationPolicy == .policy2GPlus,
-						.demo(let verificationPolicy) where verificationPolicy == .policy2GPlus:
-					accessTitle = L.verifier_result_access_title_2g_plus()
-				case .verified(let verificationPolicy) where verificationPolicy == .policy2G,
-						.demo(let verificationPolicy) where verificationPolicy == .policy2G:
+				case .verified(let verificationPolicy) where verificationPolicy == .policy1G,
+						.demo(let verificationPolicy) where verificationPolicy == .policy1G:
+					// TODO: Update title
 					accessTitle = L.verifier_result_access_title_highrisk()
 				default:
 					accessTitle = L.verifier_result_access_title_lowrisk()
