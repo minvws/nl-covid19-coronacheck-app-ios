@@ -214,8 +214,14 @@ targetTemplates:
 
           OUTPUT=`$RSWIFT_PATH generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string,image,color`
 
-          echo $OUTPUT
-          
+          # forbid TestFlight release if there are missing translations:
+          if [[ "$OUTPUT" == *"warning"* ]] && [[ "$TESTFLIGHT_DEPLOY" == "true" ]]; then
+            echo "error: Testflight deploys cannot contain missing translations:"
+            echo $OUTPUT
+            exit 1
+          else 
+            echo $OUTPUT
+          fi
         inputFiles:
           - $TEMP_DIR/rswift-lastrun
         outputFiles:
