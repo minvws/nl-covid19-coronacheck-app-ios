@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class FetchEventsViewModel: Logging {
+final class FetchRemoteEventsViewModel: Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -25,7 +25,7 @@ final class FetchEventsViewModel: Logging {
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	@Bindable internal var viewState: FetchEventsViewController.State
+	@Bindable internal var viewState: FetchRemoteEventsViewController.State
 
 	@Bindable private(set) var alert: AlertContent?
 
@@ -493,7 +493,7 @@ private extension EventMode {
 	}
 }
 
-extension FetchEventsViewModel {
+extension FetchRemoteEventsViewModel {
 
 	static let detailedCodeNonceExpired: Int = 99708
 	static let detailedCodeTvsSessionExpired: Int = 99710
@@ -502,7 +502,7 @@ extension FetchEventsViewModel {
 
 // MARK: - Error states
 
-private extension FetchEventsViewModel {
+private extension FetchRemoteEventsViewModel {
 
 	func mapServerErrors(_ serverErrors: [ServerError], for flowCode: ErrorCode.Flow, step: ErrorCode.Step) -> [ErrorCode] {
 
@@ -537,19 +537,19 @@ private extension FetchEventsViewModel {
 	func handleErrorCodesForAccesTokenAndProviders(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
 		// No BSN
-		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }) else {
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchRemoteEventsViewModel.detailedCodeNoBSN }) else {
 			displayNoBSN()
 			return
 		}
 
 		// Expired Nonce
-		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeNonceExpired }) else {
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchRemoteEventsViewModel.detailedCodeNonceExpired }) else {
 			displayNonceOrTVSExpired()
 			return
 		}
 
 		// Expired TVS token
-		guard !errorCodes.contains(where: { $0.detailedCode == FetchEventsViewModel.detailedCodeTvsSessionExpired }) else {
+		guard !errorCodes.contains(where: { $0.detailedCode == FetchRemoteEventsViewModel.detailedCodeTvsSessionExpired }) else {
 			if eventMode == .positiveTest {
 				// This is recoverable, so redirect to login
 				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)

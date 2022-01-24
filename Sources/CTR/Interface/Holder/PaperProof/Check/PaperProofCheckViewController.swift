@@ -15,7 +15,7 @@ class PaperProofCheckViewController: BaseViewController {
 	}
 
 	private let viewModel: PaperProofCheckViewModel
-	let sceneView = FetchEventsView()
+	let sceneView = FetchRemoteEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
