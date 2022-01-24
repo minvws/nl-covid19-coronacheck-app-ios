@@ -44,10 +44,8 @@ class AppCoordinator: Coordinator, Logging {
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 
 	var flavor = AppFlavor.flavor
-
-	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
-
-	private weak var appInstalledSinceManager: AppInstalledSinceManaging? = Current.appInstalledSinceManager
+	
+	private var appManager: AppManaging
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -55,6 +53,7 @@ class AppCoordinator: Coordinator, Logging {
 
 		window = UIWindow(windowScene: scene)
 		self.navigationController = navigationController
+		self.appManager = AppManager()
 	}
 
 	/// For use with iOS 12.
@@ -62,12 +61,7 @@ class AppCoordinator: Coordinator, Logging {
 
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.navigationController = navigationController
-	}
-
-	deinit {
-		remoteConfigManagerObserverTokens.forEach {
-			Current.remoteConfigManager.removeObserver(token: $0)
-		}
+		self.appManager = AppManager()
 	}
 
 	/// Designated starter method
@@ -77,45 +71,9 @@ class AppCoordinator: Coordinator, Logging {
 			return
 		}
 
-		// Setup Logging
-		LogHandler.setup()
-
-		configureRemoteConfigManager()
-
 		// Start the launcher for update checks
 		startLauncher()
 		addObservers()
-	}
-
-	private func configureRemoteConfigManager() {
-
-		// Attach behaviours that we want the RemoteConfigManager to perform
-		// each time it refreshes the config in future:
-
-		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
-			// Mark remote config loaded
-			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
-		}]
-
-		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver {[weak self] _, _, urlResponse in
-
-			/// Fish for the server Date in the network response, and use that to maintain
-			/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
-			/// beyond a permitted time interval.
-			guard let httpResponse = urlResponse as? HTTPURLResponse,
-				  let serverDateString = httpResponse.allHeaderFields["Date"] as? String else { return }
-
-			Current.clockDeviationManager.update(
-				serverHeaderDate: serverDateString,
-				ageHeader: httpResponse.allHeaderFields["Age"] as? String
-			)
-
-			// If the firstUseDate is nil, and we get a server header, that means a new installation.
-			self?.appInstalledSinceManager?.update(
-				serverHeaderDate: serverDateString,
-				ageHeader: httpResponse.allHeaderFields["Age"] as? String
-			)
-		}]
 	}
 
     // MARK: - Private functions
@@ -309,7 +267,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
 			case .withinTTL:
 				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
 				// Use the documents directory creation date.
-				self.appInstalledSinceManager?.update(dateProvider: FileManager.default)
+				Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
 				startApplication()
 
 			case .noActionNeeded:
@@ -358,7 +316,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
 		}
 	}
 
-	// MARK: - Recommended Update
+	// MARK: - Recommended Update -
 
 	private func handleRecommendedUpdate(recommendedVersion: String, remoteConfiguration: RemoteConfiguration, appStoreUrl: URL) {
 
@@ -407,6 +365,8 @@ extension AppCoordinator: AppCoordinatorDelegate {
 		}
 	}
 
+	// MARK: - Retry -
+	
     /// Retry loading the requirements
     func retry() {
 
