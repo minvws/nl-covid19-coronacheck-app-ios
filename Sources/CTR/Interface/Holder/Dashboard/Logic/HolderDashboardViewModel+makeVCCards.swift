@@ -40,7 +40,9 @@ extension HolderDashboardViewController.Card {
 			.deviceHasClockDeviation(
 				message: L.holderDashboardClockDeviationDetectedMessage(),
 				callToActionButtonText: L.generalReadmore(),
-				didTapCallToAction: actionHandler.didTapDeviceHasClockDeviationMoreInfo
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapDeviceHasClockDeviationMoreInfo()
+				}
 			)
 		]
 	}
@@ -54,7 +56,9 @@ extension HolderDashboardViewController.Card {
 			.configAlmostOutOfDate(
 				message: L.holderDashboardConfigIsAlmostOutOfDateCardMessage(),
 				callToActionButtonText: L.holderDashboardConfigIsAlmostOutOfDateCardButton(),
-				didTapCallToAction: actionHandler.didTapConfigAlmostOutOfDateCTA
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapConfigAlmostOutOfDateCTA()
+				}
 			)
 		]
 	}
@@ -72,15 +76,17 @@ extension HolderDashboardViewController.Card {
 					originType: expiredQR.type,
 					region: expiredQR.region
 				)
-				let didTapClose = {
-					actionHandler.didTapCloseExpiredQR(expiredQR: expiredQR)
+				let didTapClose: () -> Void = { [weak actionHandler] in
+					actionHandler?.didTapCloseExpiredQR(expiredQR: expiredQR)
 				}
 				
 				if case .vaccination = expiredQR.type, case .domestic = expiredQR.region {
 					return .expiredVaccinationQR(
 						message: message,
 						callToActionButtonText: L.generalReadmore(),
-						didTapCallToAction: actionHandler.didTapExpiredDomesticVaccinationQRMoreInfo,
+						didTapCallToAction: { [weak actionHandler] in
+							actionHandler?.didTapExpiredDomesticVaccinationQRMoreInfo()
+						},
 						didTapClose: didTapClose
 					)
 				} else {
@@ -157,7 +163,9 @@ extension HolderDashboardViewController.Card {
 		return [HolderDashboardViewController.Card.testOnlyValidFor3G(
 			message: L.holder_my_overview_3g_test_validity_card(),
 			callToActionButtonText: L.generalReadmore(),
-			didTapCallToAction: actionHandler.didTapTestOnlyValidFor3GMoreInfo)
+			didTapCallToAction: { [weak actionHandler] in
+				actionHandler?.didTapTestOnlyValidFor3GMoreInfo()
+			})
 		]
 	}
 	
@@ -176,8 +184,8 @@ extension HolderDashboardViewController.Card {
 				return .originNotValidInThisRegion(
 					message: message,
 					callToActionButtonText: L.generalReadmore(),
-					didTapCallToAction: {
-						actionHandler.didTapOriginNotValidInThisRegionMoreInfo(
+					didTapCallToAction: { [weak actionHandler] in
+						actionHandler?.didTapOriginNotValidInThisRegionMoreInfo(
 							originType: originType,
 							validityRegion: validityRegion
 						)
@@ -195,7 +203,9 @@ extension HolderDashboardViewController.Card {
 			.recommendedUpdate(
 				message: L.recommended_update_card_description(),
 				callToActionButtonText: L.recommended_update_card_action(),
-				didTapCallToAction: actionHandler.didTapRecommendedUpdate
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapRecommendedUpdate()
+				}
 			)
 		]
 	}
@@ -211,8 +221,12 @@ extension HolderDashboardViewController.Card {
 			.newValidityInfoForVaccinationAndRecoveries(
 				title: L.holder_dashboard_newvaliditybanner_title(),
 				buttonText: L.holder_dashboard_newvaliditybanner_action(),
-				didTapCallToAction: actionHandler.didTapNewValidityBannerMoreInfo,
-				didTapClose: actionHandler.didTapNewValidiyBannerClose
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapNewValidityBannerMoreInfo()
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapNewValidiyBannerClose()
+				}
 			)
 		]
 	}
@@ -228,7 +242,9 @@ extension HolderDashboardViewController.Card {
 			.completeYourVaccinationAssessment(
 				title: L.holder_dashboard_visitorpassincompletebanner_title(),
 				buttonText: L.holder_dashboard_visitorpassincompletebanner_button_makecomplete(),
-				didTapCallToAction: actionHandler.didTapCompleteYourVaccinationAssessmentMoreInfo
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapCompleteYourVaccinationAssessmentMoreInfo()
+				}
 			)
 		]
 	}
@@ -243,8 +259,12 @@ extension HolderDashboardViewController.Card {
 			.recommendToAddYourBooster(
 				title: L.holder_dashboard_addBoosterBanner_title(),
 				buttonText: L.holder_dashboard_addBoosterBanner_button_addBooster(),
-				didTapCallToAction: actionHandler.didTapRecommendToAddYourBooster,
-				didTapClose: actionHandler.didTapRecommendToAddYourBoosterClose
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapRecommendToAddYourBooster()
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapRecommendToAddYourBoosterClose()
+				}
 			)
 		]
 	}
@@ -260,7 +280,9 @@ extension HolderDashboardViewController.Card {
 			.vaccinationAssessmentInvalidOutsideNL(
 				title: L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title(),
 				buttonText: L.generalReadmore(),
-				didTapCallToAction: actionHandler.didTapVaccinationAssessmentInvalidOutsideNLMoreInfo
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
+				}
 			)
 		]
 	}
@@ -300,8 +322,8 @@ extension HolderDashboardViewModel.QRCard {
 					title: L.holderDashboardQrTitle(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
-					didTapViewQR: {
-						actionHandler.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
+					didTapViewQR: { [weak actionHandler] in
+						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
 					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: { now in
@@ -336,7 +358,10 @@ extension HolderDashboardViewModel.QRCard {
 							}
 						}()
 
-						guard let relativeDateString = formatter.string(from: now, to: mostDistantFutureExpiryDate)
+						guard let relativeDateString = formatter.string(
+							from: now,
+							to: mostDistantFutureExpiryDate.addingTimeInterval(1) // add 1, so that we don't count down to zero
+						)
 						else { return nil }
 
 						return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -353,8 +378,8 @@ extension HolderDashboardViewModel.QRCard {
 					}(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
-					didTapViewQR: {
-						actionHandler.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
+					didTapViewQR: { [weak actionHandler] in
+						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
 					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: nil
@@ -362,7 +387,9 @@ extension HolderDashboardViewModel.QRCard {
 		}
 
 		if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
-			cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: actionHandler.didTapRetryLoadQRCards)]
+			cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: { [weak actionHandler] in
+				actionHandler?.didTapRetryLoadQRCards()
+			})]
 		}
 		
 		return cards

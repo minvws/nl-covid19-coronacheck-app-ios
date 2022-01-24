@@ -112,7 +112,7 @@
 "holder.consent.message.underlined" = "privacy statement";
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";
-"holder.dashboard.clockDeviationDetected.message" = "Check your phone's time settings. They might be incorrect";
+"holder.dashboard.clockDeviationDetected.message" = "Check your phone's time settings. They might be incorrect.";
 "holder.dashboard.configIsAlmostOutOfDate.card.button" = "Read more";
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
 "holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until %@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";
@@ -363,9 +363,9 @@
 "holder.notest.button.title" = "Make an appointment";
 "holder.notest.title" = "Were you not tested yet?";
 "holder.onboarding.message.privacy" = "The app creates QR codes for use in the Netherlands and abroad. Are you crossing the border? Then use your international QR code.";
-"holder.onboarding.message.safely" = "Your and other people's health matters. Therefore always show your certificate to safely get access to places. Or if you're going on a trip.";
+"holder.onboarding.message.safely" = "Your health matters, so does the health of others. Therefore always show your certificate to safely get access to places. Or if you're going on a trip.";
 "holder.onboarding.message.validity" = "The QR code on your certificate will be checked at the entrance to locations and activities. Or at the border.";
-"holder.onboarding.message.yourqr" = "<p>You can use this app to create a certificate if you:</p><ul><li>Were vaccinated</li><li>Have recovered from coronavirus</li><li>Were tested and don't have coronavirus</li></ul>";
+"holder.onboarding.message.yourqr" = "<p>You can use this app to create a certificate if you:</p><ul><li>Are vaccinated</li><li>Have recovered from coronavirus</li><li>Were tested and don't have coronavirus</li></ul>";
 "holder.onboarding.title.privacy" = "QR codes for the Netherlands and abroad";
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Get access with your certificate";
@@ -537,8 +537,8 @@
 "holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
 "holder.tokenentry.regularflow.error.emptycode" = "Please fill out a verification code first";
 "holder.tokenentry.regularflow.error.emptytoken" = "Please fill out a retrieval code first";
-"holder.tokenentry.regularflow.error.invalid.code" = "This code is invalid";
-"holder.tokenentry.regularflow.error.invalid.combination" = "No valid combination";
+"holder.tokenentry.regularflow.error.invalid.code" = "This code is invalid. A valid code looks like this: VAC-YYYYYYYYY1-F2.";
+"holder.tokenentry.regularflow.error.invalid.combination" = "Invalid combination. Enter the 6-digit verification code.";
 "holder.tokenentry.regularflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
 "holder.tokenentry.regularflow.next" = "Next";
 "holder.tokenentry.regularflow.retry.title" = "Didn’t receive a verification code?";
@@ -557,7 +557,6 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
 "holder.tokenentry.universallinkflow.error.emptycode" = "Please fill out a verification code first";
 "holder.tokenentry.universallinkflow.error.emptytoken" = "Please fill out a retrieval code first";
-"holder.tokenentry.universallinkflow.error.invalid.combination" = "No valid combination";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
 "holder.tokenentry.universallinkflow.next" = "Next";
 "holder.tokenentry.universallinkflow.retry.title" = "Didn’t receive a verification code?";
@@ -658,9 +657,9 @@
 "holder_event_vaccination_assessment_element_title" = "Vaccination approval";
 "holder_event_vaccination_assessment_list_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_event_vaccination_assessment_list_title" = "Are the details correct?";
-"holder_event_vaccination_assessment_nolist_message" = "<p>There are no details available about your vaccination approval. Please contact the desk that reviewed your vaccination.</p><p>For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
+"holder_event_vaccination_assessment_nolist_message" = "<p>There are no details available about your vaccination approval. Please go back to the desk that reviewed your vaccination.</p><p>For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_event_vaccination_assessment_nolist_title" = "No vaccination approval available";
-"holder_event_vaccination_assessment_wrong_body" = "<p>Please contact the desk that reviewed your vaccination. They can help you change your details. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
+"holder_event_vaccination_assessment_wrong_body" = "<p>Please go back to the desk that reviewed your vaccination. They can help you change your details. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_eventdetails_vaccinationStatus_complete" = "yes";
 "holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere" = "yes (I have been vaccinated elsewhere)";
 "holder_eventdetails_vaccinationStatus_recovery" = "yes (I’ve had coronavirus earlier)";
@@ -716,16 +715,16 @@
 "visitorpass_code_description_deeplink" = "Enter your verification code. You will receive this via text or email.";
 "visitorpass_code_review_button" = "Don't have an approval code?";
 "visitorpass_code_review_input" = "Approval code";
-"visitorpass_code_review_placeholder" = "E.g. VAC-3839287262-F2";
+"visitorpass_code_review_placeholder" = "E.g. VAC-YYYYYYYYY1-F2";
 "visitorpass_code_review_placeholder_screenreader" = "Enter your approval code here";
 "visitorpass_code_title" = "Retrieve vaccination approval";
 "visitorpass_start_action" = "Next";
 "visitorpass_start_message" = "<p>Were you vaccinated outside of the European Union, and are you visiting the Netherlands? Then you can use your vaccination approval and negative test result to create a visitor pass.</p><p>You can use your visitor pass to get access to places and activities in the Netherlands that require a coronavirus pass.</p><p>For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "visitorpass_start_title" = "Adding a visitor pass";
 "visitorpass_token_error_empty_token" = "Please enter your approval code";
-"visitorpass_token_error_invalid_code" = "This code is invalid";
-"visitorpass_token_error_invalid_combination" = "No valid combination";
+"visitorpass_token_error_invalid_code" = "This code is invalid. A valid code looks like this: VAC-YYYYYYYYY1-F2.";
+"visitorpass_token_error_invalid_combination" = "Invalid combination. Enter the 6-digit verification code.";
 "visitorpass_token_error_unknown_provider" = "This test location is not known to us. Please contact the location who tested you.";
-"visitorpass_token_modal_notoken_details" = "<p>You will receive an approval code from the desk that reviewed your vaccination, either by email or on paper. Don't have an approval code? Please contact the desk you stopped by.</p><p>Didn’t stop by a desk yet to have your vaccination reviewed? For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
+"visitorpass_token_modal_notoken_details" = "<p>You will receive an approval code from the desk that reviewed your vaccination, either by email or on paper. Don't have an approval code? Please go back to the desk you stopped by.</p><p>Didn’t stop by a desk yet to have your vaccination reviewed? For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Don't have an approval code?";
 "visitorpass_token_next" = "Next";

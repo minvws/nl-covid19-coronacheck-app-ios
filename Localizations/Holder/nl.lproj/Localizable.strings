@@ -112,7 +112,7 @@
 "holder.consent.message.underlined" = "privacyverklaring";
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app jouw gegevens";
-"holder.dashboard.clockDeviationDetected.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld";
+"holder.dashboard.clockDeviationDetected.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
 "holder.dashboard.configIsAlmostOutOfDate.card.button" = "Lees meer";
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Maak binnenkort verbinding met het internet";
 "holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>De CoronaCheck-app heeft af en toe internet nodig om te blijven werken. Zonder internetverbinding werkt jouw app nog tot %@. Open de app zodra je internet hebt. Dan doet deze het gewoon weer.</p><p>Maak regelmatig verbinding om problemen te voorkomen.</p>";
@@ -537,8 +537,8 @@
 "holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Geen verificatiecode gekregen?";
 "holder.tokenentry.regularflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
 "holder.tokenentry.regularflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
-"holder.tokenentry.regularflow.error.invalid.code" = "Deze code is niet geldig";
-"holder.tokenentry.regularflow.error.invalid.combination" = "Geen geldige combinatie";
+"holder.tokenentry.regularflow.error.invalid.code" = "Deze code is niet geldig. Een code ziet er bijvoorbeeld zo uit: VAC-YYYYYYYYY1-F2.";
+"holder.tokenentry.regularflow.error.invalid.combination" = "Geen geldige combinatie. Vul de 6-cijferige verificatiecode in.";
 "holder.tokenentry.regularflow.error.unknownprovider" = "Deze testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "holder.tokenentry.regularflow.next" = "Volgende";
 "holder.tokenentry.regularflow.retry.title" = "Geen verificatiecode gekregen?";
@@ -557,7 +557,6 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Geen verificatiecode gekregen?";
 "holder.tokenentry.universallinkflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
 "holder.tokenentry.universallinkflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
-"holder.tokenentry.universallinkflow.error.invalid.combination" = "Geen geldige combinatie";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "De testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "holder.tokenentry.universallinkflow.next" = "Volgende";
 "holder.tokenentry.universallinkflow.retry.title" = "Geen verificatiecode gekregen?";
@@ -658,9 +657,9 @@
 "holder_event_vaccination_assessment_element_title" = "Vaccinatiebeoordeling";
 "holder_event_vaccination_assessment_list_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_event_vaccination_assessment_list_title" = "Kloppen de gegevens?";
-"holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatiebeoordeling beschikbaar. Neem contact op met de balie waar jouw vaccinatie is beoordeeld.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
+"holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatiebeoordeling beschikbaar. Ga terug naar de balie waar jouw vaccinatie is beoordeeld.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_event_vaccination_assessment_nolist_title" = "Geen vaccinatiebeoordeling beschikbaar";
-"holder_event_vaccination_assessment_wrong_body" = "<p>Neem contact op met de balie waar jouw vaccinatie is beoordeeld. Zij kunnen je helpen je gegevens aan te passen. Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
+"holder_event_vaccination_assessment_wrong_body" = "<p>Ga terug naar de balie waar jouw vaccinatie is beoordeeld. Zij kunnen je helpen je gegevens aan te passen. Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_eventdetails_vaccinationStatus_complete" = "ja";
 "holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere" = "ja (ergens anders gevaccineerd)";
 "holder_eventdetails_vaccinationStatus_recovery" = "ja (eerder corona gehad)";
@@ -716,16 +715,16 @@
 "visitorpass_code_description_deeplink" = "Vul je verificatiecode in. Deze krijg je via sms of e-mail.";
 "visitorpass_code_review_button" = "Heb je geen beoordelingscode?";
 "visitorpass_code_review_input" = "Beoordelingscode";
-"visitorpass_code_review_placeholder" = "Bijv. VAC-3839287262-F2";
+"visitorpass_code_review_placeholder" = "Bijv. VAC-YYYYYYYYY1-F2";
 "visitorpass_code_review_placeholder_screenreader" = "Vul hier je beoordelingscode in";
 "visitorpass_code_title" = "Vaccinatiebeoordeling ophalen";
 "visitorpass_start_action" = "Volgende";
 "visitorpass_start_message" = "<p>Ben je buiten de Europese Unie gevaccineerd en op bezoek in Nederland? Dan kun je van jouw vaccinatiebeoordeling en een negatieve testuitslag een bezoekersbewijs maken.</p><p>Met je bezoekersbewijs krijg je toegang tot plekken en activiteiten in Nederland die vragen om een coronatoegangsbewijs.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_start_title" = "Een bezoekersbewijs toevoegen";
 "visitorpass_token_error_empty_token" = "Graag je beoordelingscode invullen";
-"visitorpass_token_error_invalid_code" = "Deze code is niet geldig";
-"visitorpass_token_error_invalid_combination" = "Geen geldige combinatie";
+"visitorpass_token_error_invalid_code" = "Deze code is niet geldig. Een code ziet er bijvoorbeeld zo uit: VAC-YYYYYYYYY1-F2.";
+"visitorpass_token_error_invalid_combination" = "Geen geldige combinatie. Vul de 6-cijferige verificatiecode in.";
 "visitorpass_token_error_unknown_provider" = "Deze testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
-"visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je per mail of geprint gekregen. Heb je geen beoordelingscode? Neem dan contact op met de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
+"visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je per mail of geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
 "visitorpass_token_next" = "Volgende";
