@@ -114,7 +114,7 @@ final class CheckIdentityViewModel: Logging {
 		let verifiedAccess: VerifiedAccess
 		var verificationPolicySetting: VerificationPolicy = .policy3G
 		
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			guard let state = Current.riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
 				return

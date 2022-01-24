@@ -376,7 +376,7 @@ extension VerifierCoordinator: MenuDelegate {
 			MenuItem(identifier: .overview, title: L.verifierMenuDashboard()),
 			MenuItem(identifier: .scanInstructions, title: L.verifierMenuScaninstructions())
 		]
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			list.append(MenuItem(identifier: .riskSetting, title: L.verifier_menu_risksetting()))
 		}
 		return list

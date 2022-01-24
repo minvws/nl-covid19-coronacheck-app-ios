@@ -46,7 +46,7 @@ class ScanInstructionsViewModel {
 		self.pages = pages
 		self.currentPage = 0
 
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			shouldShowRiskSetting = riskLevelManager.state == nil
 		}
 		

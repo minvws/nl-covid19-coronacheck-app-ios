@@ -183,7 +183,7 @@ class VerifierStartViewModel: Logging {
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
 
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			// Pass current states in immediately to configure `self.mode`:
 			lockStateDidChange(lockState: Current.scanLockManager.state)
 			verificationPolicyDidChange(verificationPolicy: Current.riskLevelManager.state)
@@ -280,7 +280,7 @@ extension VerifierStartViewModel {
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }
 
-		if Current.userSettings.scanInstructionShown, (Current.riskLevelManager.state != nil || !Current.featureFlagManager.isVerificationPolicyEnabled()) {
+		if Current.userSettings.scanInstructionShown, (Current.riskLevelManager.state != nil || !Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
 			if Current.cryptoManager.hasPublicKeys() {
 				coordinator?.didFinish(.userTappedProceedToScan)
 			} else {
@@ -295,7 +295,7 @@ extension VerifierStartViewModel {
 
 	func showInstructionsButtonTapped() {
 		
-		guard mode.allowsShowScanInstructions || !Current.featureFlagManager.isVerificationPolicyEnabled() else { return }
+		guard mode.allowsShowScanInstructions || !Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() else { return }
 		coordinator?.didFinish(.userTappedProceedToScanInstructions)
 	}
 

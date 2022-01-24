@@ -51,7 +51,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
 
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			self.verificationPolicy = riskLevelManager?.state
 		}
 
@@ -62,7 +62,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 
 			guard let currentVerificationPolicy = riskLevelManager?.state else {
 				assertionFailure("Risk level should be set")

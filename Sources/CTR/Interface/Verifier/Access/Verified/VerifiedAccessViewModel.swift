@@ -35,7 +35,7 @@ final class VerifiedAccessViewModel: Logging {
 		self.coordinator = coordinator
 		self.verifiedAccess = verifiedAccess
 
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.is1GPolicyEnabled() {
 			switch verifiedAccess {
 				case .verified(let verificationPolicy) where verificationPolicy == .policy1G,
 						.demo(let verificationPolicy) where verificationPolicy == .policy1G:
