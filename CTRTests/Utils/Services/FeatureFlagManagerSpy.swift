@@ -59,4 +59,24 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		invokedIsVisitorPassEnabledCount += 1
 		return stubbedIsVisitorPassEnabledResult
 	}
+
+	var invokedAreMultipleVerificationPoliciesEnabled = false
+	var invokedAreMultipleVerificationPoliciesEnabledCount = 0
+	var stubbedAreMultipleVerificationPoliciesEnabledResult: Bool! = false
+
+	func areMultipleVerificationPoliciesEnabled() -> Bool {
+		invokedAreMultipleVerificationPoliciesEnabled = true
+		invokedAreMultipleVerificationPoliciesEnabledCount += 1
+		return stubbedAreMultipleVerificationPoliciesEnabledResult
+	}
+
+	var invokedIs1GPolicyEnabled = false
+	var invokedIs1GPolicyEnabledCount = 0
+	var stubbedIs1GPolicyEnabledResult: Bool! = false
+
+	func is1GPolicyEnabled() -> Bool {
+		invokedIs1GPolicyEnabled = true
+		invokedIs1GPolicyEnabledCount += 1
+		return stubbedIs1GPolicyEnabledResult
+	}
 }

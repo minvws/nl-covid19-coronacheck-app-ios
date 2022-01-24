@@ -23,4 +23,13 @@ enum VerificationPolicy: Codable {
 				return ""
 		}
 	}
+	
+	var featureFlag: String {
+		switch self {
+			case .policy3G:
+				return "3G"
+			case .policy1G:
+				return "1G"
+		}
+	}
 }

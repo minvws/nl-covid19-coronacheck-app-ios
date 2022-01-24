@@ -20,6 +20,8 @@ protocol FeatureFlagManaging {
 	func isNewValidityInfoBannerEnabled() -> Bool
 	func isVerificationPolicyEnabled() -> Bool
 	func isVisitorPassEnabled() -> Bool
+	func areMultipleVerificationPoliciesEnabled() -> Bool
+	func is1GPolicyEnabled() -> Bool
 }
 
 class FeatureFlagManager: FeatureFlagManaging, Logging {
@@ -55,6 +57,11 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		return remoteConfigManager.storedConfiguration.showNewValidityInfoCard ?? false
 	}
 	
+	func isVisitorPassEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.visitorPassEnabled ?? false
+	}
+	
 	func isVerificationPolicyEnabled() -> Bool {
 		
 		let configuration = remoteConfigManager.storedConfiguration
@@ -79,8 +86,20 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		return true
 	}
 	
-	func isVisitorPassEnabled() -> Bool {
+	func areMultipleVerificationPoliciesEnabled() -> Bool {
 		
-		return remoteConfigManager.storedConfiguration.visitorPassEnabled ?? false
+		guard let verificationPolicies = remoteConfigManager.storedConfiguration.verificationPolicies else {
+			return false
+		}
+		return verificationPolicies.contains(VerificationPolicy.policy3G.featureFlag) &&
+		verificationPolicies.contains(VerificationPolicy.policy1G.featureFlag)
+	}
+	
+	func is1GPolicyEnabled() -> Bool {
+		
+		guard let verificationPolicies = remoteConfigManager.storedConfiguration.verificationPolicies else {
+			return false
+		}
+		return verificationPolicies.contains(VerificationPolicy.policy1G.featureFlag)
 	}
 }
