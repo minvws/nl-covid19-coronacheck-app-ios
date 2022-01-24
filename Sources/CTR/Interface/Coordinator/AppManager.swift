@@ -36,13 +36,10 @@ final class AppManager: AppManaging {
 //			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
 		}]
 		
-		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver {[weak self] remoteConfig, _, urlResponse in
+		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver {[weak self] _, _, urlResponse in
 
 			// Update Crypto Lib
 			Current.cryptoLibUtility.checkFile(.remoteConfiguration)
-			
-			// Remove esp
-			Current.walletManager.expireEventGroups(configuration: remoteConfig)
 			
 			self?.updateFromUrlResponse(urlResponse)
 		}]
