@@ -200,10 +200,10 @@ class ListEventsViewModel: Logging {
 
 		switch result {
 			case let .success(greencardResponse):
-				self.handleSuccess(greencardResponse, eventModeForStorage: eventModeForStorage)
+				self.handleSuccess(greencardResponse, eventModeForStorage: eventModeForStorage, with: remoteEvents)
 
 			case .failure(GreenCardLoader.Error.didNotEvaluate):
-				self.viewState = self.originMismatchState()
+				self.viewState = self.originMismatchState(flow: determineErrorCodeFlow(remoteEvents: remoteEvents))
 				self.shouldPrimaryButtonBeEnabled = true
 
 			case .failure(GreenCardLoader.Error.noEvents):
@@ -231,7 +231,7 @@ class ListEventsViewModel: Logging {
 		}
 	}
 
-	private func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+	private func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode, with remoteEvents: [RemoteEvent]) {
 		
 		guard eventMode != .paperflow else {
 			// 2701: No special end states for the paperflow
@@ -244,7 +244,7 @@ class ListEventsViewModel: Logging {
 			case .paperflow:
 				completeFlow()
 			case .test:
-				handleSuccessForNegativeTest(greencardResponse, eventModeForStorage: eventModeForStorage)
+				handleSuccessForNegativeTest(greencardResponse, eventModeForStorage: eventModeForStorage, with: remoteEvents)
 			case .positiveTest:
 				handleSuccessForPositiveTest(greencardResponse, eventModeForStorage: eventModeForStorage)
 			case .recovery:
@@ -261,7 +261,7 @@ class ListEventsViewModel: Logging {
 		self.coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
 	}
 	
-	private func handleSuccessForNegativeTest(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
+	private func handleSuccessForNegativeTest(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode, with remoteEvents: [RemoteEvent]) {
 		
 		guard eventModeForStorage == .test else { return }
 
@@ -285,11 +285,11 @@ class ListEventsViewModel: Logging {
 			},
 			onVaccinactionAssessmentOriginOnly: {
 				self.shouldPrimaryButtonBeEnabled = true
-				self.viewState = self.originMismatchState()
+				self.viewState = self.originMismatchState(flow: self.determineErrorCodeFlow(remoteEvents: remoteEvents))
 			},
 			onNoOrigins: {
 				self.shouldPrimaryButtonBeEnabled = true
-				self.viewState = self.originMismatchState()
+				self.viewState = self.originMismatchState(flow: self.determineErrorCodeFlow(remoteEvents: remoteEvents))
 			}
 		)
 	}
@@ -380,7 +380,7 @@ class ListEventsViewModel: Logging {
 			},
 			onNegativeTestOriginOnly: {
 				self.shouldPrimaryButtonBeEnabled = true
-				self.viewState = self.originMismatchState()
+				self.viewState = self.originMismatchState(flow: .visitorPass)
 			},
 			onVaccinactionAssessmentOriginOnly: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
@@ -394,7 +394,7 @@ class ListEventsViewModel: Logging {
 				} else {
 					// Negative test event send, no origin returned
 					self.shouldPrimaryButtonBeEnabled = true
-					self.viewState = self.originMismatchState()
+					self.viewState = self.originMismatchState(flow: .visitorPass)
 				}
 			}
 		)

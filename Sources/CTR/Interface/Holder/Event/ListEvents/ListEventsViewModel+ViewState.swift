@@ -482,10 +482,14 @@ extension ListEventsViewModel {
 		}
 	}
 
-	internal func originMismatchState() -> ListEventsViewController.State {
+	internal func originMismatchState(flow: ErrorCode.Flow) -> ListEventsViewController.State {
 		
-		let errorCode = ErrorCode(flow: eventMode.flow, step: .signer, clientCode: ErrorCode.ClientCode.originMismatch)
-
+		let errorCode = ErrorCode(
+			flow: flow,
+			step: .signer,
+			clientCode: .originMismatch
+		)
+		
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderEventOriginmismatchTitle(),
 			subTitle: eventMode.originsMismatchBody(errorCode),
