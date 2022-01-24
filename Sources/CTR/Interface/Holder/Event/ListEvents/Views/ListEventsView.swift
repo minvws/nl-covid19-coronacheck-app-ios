@@ -159,7 +159,7 @@ class ListEventsView: ScrolledStackWithButtonView {
 		])
 	}
 
-	func addVaccinationEventView(_ eventView: VaccinationEventView) {
+	func addEventItemView(_ eventView: EventItemView) {
 
 		eventStackView.addArrangedSubview(eventView)
 		addSeparator()

@@ -25,10 +25,6 @@ class HolderDashboardViewController: BaseViewController {
         // Errors:
         case errorMessage(message: String, didTapTryAgain: () -> Void)
         
-        // Recovery Validity Extension
-        case recoveryValidityExtensionAvailable(title: String, buttonText: String, didTapCallToAction: () -> Void)
-        case recoveryValidityExtensionDidComplete(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-
 		// Vaccination & Recovery Validity
 		case newValidityInfoForVaccinationAndRecoveries(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 		
@@ -235,7 +231,6 @@ private extension HolderDashboardViewController.Card {
 			// Message Cards with a message + CTA button
 			case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
 				let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
-				let .recoveryValidityExtensionAvailable(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
 				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction),
 				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction),
@@ -249,8 +244,7 @@ private extension HolderDashboardViewController.Card {
 				))
 				
 			// Message Cards with a message + CTA button + close button
-			case let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+			case let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
 				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
 				let .recommendToAddYourBooster(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				

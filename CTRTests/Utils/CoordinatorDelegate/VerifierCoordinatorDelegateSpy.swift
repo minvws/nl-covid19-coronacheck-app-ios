@@ -51,18 +51,6 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedNavigateToScanInstructionParametersList.append((allowSkipInstruction, ()))
 	}
 
-	var invokedDisplayContent = false
-	var invokedDisplayContentCount = 0
-	var invokedDisplayContentParameters: (title: String, content: [DisplayContent])?
-	var invokedDisplayContentParametersList = [(title: String, content: [DisplayContent])]()
-
-	func displayContent(title: String, content: [DisplayContent]) {
-		invokedDisplayContent = true
-		invokedDisplayContentCount += 1
-		invokedDisplayContentParameters = (title, content)
-		invokedDisplayContentParametersList.append((title, content))
-	}
-
 	var invokedUserWishesMoreInfoAboutClockDeviation = false
 	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
 
@@ -141,6 +129,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedUserWishesToSetRiskLevelCount += 1
 		invokedUserWishesToSetRiskLevelParameters = (shouldSelectSetting, ())
 		invokedUserWishesToSetRiskLevelParametersList.append((shouldSelectSetting, ()))
+	}
+
+	var invokedUserWishesMoreInfoAboutDeniedQRScan = false
+	var invokedUserWishesMoreInfoAboutDeniedQRScanCount = 0
+
+	func userWishesMoreInfoAboutDeniedQRScan() {
+		invokedUserWishesMoreInfoAboutDeniedQRScan = true
+		invokedUserWishesMoreInfoAboutDeniedQRScanCount += 1
 	}
 
 	var invokedNavigateToScanNextInstruction = false

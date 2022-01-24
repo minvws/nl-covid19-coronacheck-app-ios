@@ -87,7 +87,7 @@ class PaperProofCheckViewModel: Logging {
 		viewState = .feedback(
 			content: Content(
 				title: L.holderCheckdccBlockedTitle(),
-				subTitle: L.holderCheckdccBlockedMessage(),
+				body: L.holderCheckdccBlockedMessage(),
 				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.userWantsToGoBackToDashboard()
@@ -103,7 +103,7 @@ class PaperProofCheckViewModel: Logging {
 		viewState = .feedback(
 			content: Content(
 				title: L.holderCheckdccExpiredTitle(),
-				subTitle: L.holderCheckdccExpiredMessage(),
+				body: L.holderCheckdccExpiredMessage(),
 				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.userWantsToGoBackToDashboard()
@@ -119,7 +119,7 @@ class PaperProofCheckViewModel: Logging {
 		viewState = .feedback(
 			content: Content(
 				title: L.holderCheckdccRejectedTitle(),
-				subTitle: L.holderCheckdccRejectedMessage(),
+				body: L.holderCheckdccRejectedMessage(),
 				primaryActionTitle: L.holderCheckdccRejectedActionTitle(),
 				primaryAction: {[weak self] in
 					self?.coordinator?.userWantsToGoBackToTokenEntry()
@@ -160,7 +160,7 @@ class PaperProofCheckViewModel: Logging {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
+			body: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: {[weak self] in
 				self?.coordinator?.userWantsToGoBackToDashboard()
@@ -192,7 +192,7 @@ class PaperProofCheckViewModel: Logging {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			subTitle: subTitle,
+			body: subTitle,
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: {[weak self] in
 				self?.coordinator?.userWantsToGoBackToDashboard()

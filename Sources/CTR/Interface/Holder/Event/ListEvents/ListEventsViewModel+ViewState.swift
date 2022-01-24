@@ -79,7 +79,7 @@ extension ListEventsViewModel {
 		return .feedback(
 			content: Content(
 				title: title,
-				subTitle: subTitle,
+				body: subTitle,
 				primaryActionTitle: primaryActionTitle,
 				primaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(.stop)
@@ -104,7 +104,7 @@ extension ListEventsViewModel {
 		return .listEvents(
 			content: Content(
 				title: eventMode.title,
-				subTitle: eventMode.listMessage,
+				body: eventMode.listMessage,
 				primaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListAction() : L.holderDccListAction(),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
@@ -524,7 +524,7 @@ extension ListEventsViewModel {
 		return .feedback(
 			content: Content(
 				title: L.holder_event_negativeTestEndstate_addVaccinationAssessment_title(),
-				subTitle: L.holder_event_negativeTestEndstate_addVaccinationAssessment_body(),
+				body: L.holder_event_negativeTestEndstate_addVaccinationAssessment_body(),
 				primaryActionTitle: L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
@@ -564,7 +564,7 @@ extension ListEventsViewModel {
 		return .feedback(
 			content: Content(
 				title: L.holderVaccinationInternationlQROnlyTitle(),
-				subTitle: L.holderVaccinationInternationlQROnlyMessage(),
+				body: L.holderVaccinationInternationlQROnlyMessage(),
 				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(.stop)
@@ -678,7 +678,7 @@ private extension ListEventsViewModel {
 		return .listEvents(
 			content: Content(
 				title: L.holderTestresultsResultsTitle(),
-				subTitle: L.holderTestresultsResultsText(),
+				body: L.holderTestresultsResultsText(),
 				primaryActionTitle: L.holderTestresultsResultsButton(),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: [remoteEvent]) { [weak self] success in

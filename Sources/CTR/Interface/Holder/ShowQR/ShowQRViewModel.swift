@@ -144,12 +144,12 @@ class ShowQRViewModel: Logging {
 		if let greenCard = greenCards.first {
 			if greenCard.type == GreenCardType.domestic.rawValue {
 				title = L.holderShowqrDomesticTitle()
-				infoButtonAccessibility = L.holderShowqrDomesticAboutTitle()
+				infoButtonAccessibility = L.holder_showqr_domestic_accessibility_button_details()
 				showInternationalAnimation = false
 				thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
 			} else if greenCard.type == GreenCardType.eu.rawValue {
 				title = L.holderShowqrEuTitle()
-				infoButtonAccessibility = L.holderShowqrEuAboutTitle()
+				infoButtonAccessibility = L.holder_showqr_international_accessibility_button_details()
 				showInternationalAnimation = true
 			}
 		}

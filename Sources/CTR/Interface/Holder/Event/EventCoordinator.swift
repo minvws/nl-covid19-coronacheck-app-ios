@@ -242,11 +242,13 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	private func navigateToMoreInformation(_ title: String, body: String, hideBodyForScreenCapture: Bool) {
 
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				coordinator: self,
-				title: title,
-				message: body,
+				content: Content(
+					title: title,
+					body: body
+				),
 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: true)
@@ -298,7 +300,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 				case is ChooseTestLocationViewController:
 					return true
 					// Fallback when GGD is not available
-				case is ChooseQRCodeTypeViewController:
+				case is ChooseProofTypeViewController:
 					return true
 				default:
 					return false

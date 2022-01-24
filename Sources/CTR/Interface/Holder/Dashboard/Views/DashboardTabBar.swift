@@ -126,6 +126,10 @@ final class DashboardTabBar: BaseView {
 		isAccessibilityElement = false // Should have it disabled for this trait
 	}
 	
+	override func accessibilityElementIsFocused() -> Bool {
+		return domesticButton.accessibilityElementIsFocused() || internationalButton.accessibilityElementIsFocused()
+	}
+	
 	private func tapTabButton(_ tab: DashboardTab) {
 		guard !isAnimating else { return }
 		
@@ -184,7 +188,7 @@ private class TabBarButton: UIControl {
 	}
 	
 	private let titleLabel: Label = {
-		let label = Label(subheadMedium: nil)
+		let label = Label(subheadMedium: nil).multiline()
 		label.textAlignment = .center
 		label.textColor = Theme.colors.secondaryText
 		return label

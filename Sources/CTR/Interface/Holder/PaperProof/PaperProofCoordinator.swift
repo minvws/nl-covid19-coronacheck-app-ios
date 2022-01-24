@@ -78,7 +78,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		let viewModel = PaperProofContentViewModel(
 			content: Content(
 				title: L.holderPaperproofSelfprintedTitle(),
-				subTitle: L.holderPaperproofSelfprintedMessage(),
+				body: L.holderPaperproofSelfprintedMessage(),
 				primaryActionTitle: nil,
 				primaryAction: nil,
 				secondaryActionTitle: L.holderPaperproofSelfprintedAction(),
@@ -96,7 +96,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		let viewModel = PaperProofContentViewModel(
 			content: Content(
 				title: L.holderPaperproofNotokenTitle(),
-				subTitle: L.holderPaperproofNotokenMessage(),
+				body: L.holderPaperproofNotokenMessage(),
 				primaryActionTitle: nil,
 				primaryAction: nil,
 				secondaryActionTitle: L.holderPaperproofNotokenAction(),
@@ -111,11 +111,13 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func userWishesMoreInformationOnInternationalQROnly() {
 
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				coordinator: self,
-				title: L.holderPaperproofInternationalQROnlyTitle(),
-				message: L.holderPaperproofInternationalQROnlyMessage(),
+				content: Content(
+					title: L.holderPaperproofInternationalQROnlyTitle(),
+					body: L.holderPaperproofInternationalQROnlyMessage()
+				),
 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: true)

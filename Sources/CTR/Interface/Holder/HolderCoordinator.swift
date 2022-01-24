@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -34,7 +33,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesToCreateAVisitorPass()
 
-	func userWishesToChooseLocation()
+	func userWishesToChooseTestLocation()
 
 	func userHasNotBeenTested()
 
@@ -60,17 +59,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
 	
-    func userWishesMoreInfoAboutRecoveryValidityExtension()
-
-	func userWishesMoreInfoAboutRecoveryValidityReinstation()
-	
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 
 	func userWishesMoreInfoAboutExpiredDomesticVaccination()
-
-	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted()
-	
-	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted()
 	
 	func openUrl(_ url: URL, inApp: Bool)
 
@@ -80,10 +71,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func displayError(content: Content, backAction: @escaping () -> Void)
 
-	func migrateEUVaccinationDidComplete()
-
-	func extendRecoveryValidityDidComplete()
-	
 	func userWishesMoreInfoAboutNoTestToken()
 	
 	func userWishesMoreInfoAboutNoVisitorPassToken()
@@ -94,35 +81,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 class HolderCoordinator: SharedCoordinator {
 
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
-
-	let recoveryValidityExtensionManager: RecoveryValidityExtensionManager = {
-		RecoveryValidityExtensionManager(
-			userHasRecoveryEvents: {
-				let eventGroups = Current.walletManager.listEventGroups()
-				let hasRecoveryEvents = eventGroups.contains { $0.type == OriginType.recovery.rawValue }
-				return hasRecoveryEvents
-			},
-			userHasUnexpiredRecoveryGreencards: {
-				let unexpiredGreencards = Current.walletManager.greencardsWithUnexpiredOrigins(
-					now: Date(),
-					ofOriginType: OriginType.recovery
-				)
-
-				let hasUnexpiredRecoveryGreencards = !unexpiredGreencards.isEmpty
-				return hasUnexpiredRecoveryGreencards
-			},
-			userHasPaperflowRecoveryGreencards: {
-
-				return Current.walletManager.hasEventGroup(
-					type: EventMode.recovery.rawValue,
-					providerIdentifier: EventFlow.paperproofIdentier
-				)
-			},
-			userSettings: UserSettings(),
-			remoteConfigManager: Current.remoteConfigManager,
-			now: { Date() }
-		)
-	}()
 
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
@@ -318,8 +276,8 @@ class HolderCoordinator: SharedCoordinator {
 
 	// "Waar wil je een QR-code van maken?"
 	func navigateToChooseQRCodeType() {
-		let destination = ChooseQRCodeTypeViewController(
-			viewModel: ChooseQRCodeTypeViewModel(
+		let destination = ChooseProofTypeViewController(
+			viewModel: ChooseProofTypeViewModel(
 				coordinator: self
 			),
 			isRootViewController: false
@@ -337,7 +295,6 @@ class HolderCoordinator: SharedCoordinator {
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
 					reachability: try? Reachability()
 				),
-				recoveryValidityExtensionManager: recoveryValidityExtensionManager,
 				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings),
 				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
 				versionSupplier: versionSupplier
@@ -446,7 +403,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 
-	func userWishesToChooseLocation() {
+	func userWishesToChooseTestLocation() {
 		if Current.featureFlagManager.isGGDEnabled() {
 			navigateToChooseTestLocation()
 		} else {
@@ -529,34 +486,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 
-	func userWishesMoreInfoAboutRecoveryValidityExtension() {
-		let viewModel = ExtendRecoveryValidityViewModel(
-			mode: .extend,
-			backAction: { [weak self] in
-				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
-			},
-			greencardLoader: Current.greenCardLoader,
-			userSettings: Current.userSettings
-		)
-		viewModel.coordinator = self
-		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
-	}
-
-	func userWishesMoreInfoAboutRecoveryValidityReinstation() {
-		let viewModel = ExtendRecoveryValidityViewModel(
-			mode: .reinstate,
-			backAction: { [weak self] in
-				(self?.sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
-			},
-			greencardLoader: Current.greenCardLoader,
-			userSettings: Current.userSettings
-		)
-		viewModel.coordinator = self
-		let viewController = ExtendRecoveryValidityViewController(viewModel: viewModel)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
-	}
-
 	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
 		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
 		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
@@ -569,7 +498,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			coordinator: self,
 			content: Content(
 				title: L.holder_expiredDomesticVaccinationModal_title(),
-				subTitle: L.holder_expiredDomesticVaccinationModal_body(),
+				body: L.holder_expiredDomesticVaccinationModal_body(),
 				primaryActionTitle: nil,
 				primaryAction: nil,
 				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
@@ -591,36 +520,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentAsBottomSheet(viewController)
 	}
 	
-	func userWishesMoreInfoAboutRecoveryValidityExtensionCompleted() {
-		presentInformationPage(
-			title: L.holderRecoveryvalidityextensionExtensioncompleteTitle(),
-			body: L.holderRecoveryvalidityextensionExtensioncompleteDescription(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
-	}
-	
-	func userWishesMoreInfoAboutRecoveryValidityReinstationCompleted() {
-		presentInformationPage(
-			title: L.holderRecoveryvalidityextensionReinstationcompleteTitle(),
-			body: L.holderRecoveryvalidityextensionReinstationcompleteDescription(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
-	}
-	
-	func migrateEUVaccinationDidComplete() {
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
-	}
-
-	func extendRecoveryValidityDidComplete() {
-
-		recoveryValidityExtensionManager.reload()
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true, completion: {})
-	}
-
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
 
 		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
@@ -729,8 +628,8 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = aboutNavigationController
 
 			case .addCertificate:
-				let destination = ChooseQRCodeTypeViewController(
-					viewModel: ChooseQRCodeTypeViewModel(
+				let destination = ChooseProofTypeViewController(
+					viewModel: ChooseProofTypeViewModel(
 						coordinator: self
 					),
 					isRootViewController: true

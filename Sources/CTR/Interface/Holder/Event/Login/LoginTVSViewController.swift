@@ -64,7 +64,7 @@ class LoginTVSViewController: BaseViewController {
 
 		// Texts
 		sceneView.title = content.title
-		sceneView.message = content.subTitle
+		sceneView.message = content.body
 
 		// Button
 		if let actionTitle = content.primaryActionTitle {

@@ -52,7 +52,7 @@ extension ListEventsViewModel {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
+			body: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(.stop)
@@ -103,7 +103,7 @@ extension ListEventsViewModel {
 
 		let content = Content(
 			title: title,
-			subTitle: message,
+			body: message,
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(.stop)

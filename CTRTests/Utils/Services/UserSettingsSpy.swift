@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -272,116 +271,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedDeviceAuthenticationWarningShownGetter = true
 			invokedDeviceAuthenticationWarningShownGetterCount += 1
 			return stubbedDeviceAuthenticationWarningShown
-		}
-	}
-
-	var invokedShouldCheckRecoveryGreenCardRevisedValiditySetter = false
-	var invokedShouldCheckRecoveryGreenCardRevisedValiditySetterCount = 0
-	var invokedShouldCheckRecoveryGreenCardRevisedValidity: Bool?
-	var invokedShouldCheckRecoveryGreenCardRevisedValidityList = [Bool]()
-	var invokedShouldCheckRecoveryGreenCardRevisedValidityGetter = false
-	var invokedShouldCheckRecoveryGreenCardRevisedValidityGetterCount = 0
-	var stubbedShouldCheckRecoveryGreenCardRevisedValidity: Bool! = false
-
-	var shouldCheckRecoveryGreenCardRevisedValidity: Bool {
-		set {
-			invokedShouldCheckRecoveryGreenCardRevisedValiditySetter = true
-			invokedShouldCheckRecoveryGreenCardRevisedValiditySetterCount += 1
-			invokedShouldCheckRecoveryGreenCardRevisedValidity = newValue
-			invokedShouldCheckRecoveryGreenCardRevisedValidityList.append(newValue)
-		}
-		get {
-			invokedShouldCheckRecoveryGreenCardRevisedValidityGetter = true
-			invokedShouldCheckRecoveryGreenCardRevisedValidityGetterCount += 1
-			return stubbedShouldCheckRecoveryGreenCardRevisedValidity
-		}
-	}
-
-	var invokedShouldShowRecoveryValidityExtensionCardSetter = false
-	var invokedShouldShowRecoveryValidityExtensionCardSetterCount = 0
-	var invokedShouldShowRecoveryValidityExtensionCard: Bool?
-	var invokedShouldShowRecoveryValidityExtensionCardList = [Bool]()
-	var invokedShouldShowRecoveryValidityExtensionCardGetter = false
-	var invokedShouldShowRecoveryValidityExtensionCardGetterCount = 0
-	var stubbedShouldShowRecoveryValidityExtensionCard: Bool! = false
-
-	var shouldShowRecoveryValidityExtensionCard: Bool {
-		set {
-			invokedShouldShowRecoveryValidityExtensionCardSetter = true
-			invokedShouldShowRecoveryValidityExtensionCardSetterCount += 1
-			invokedShouldShowRecoveryValidityExtensionCard = newValue
-			invokedShouldShowRecoveryValidityExtensionCardList.append(newValue)
-		}
-		get {
-			invokedShouldShowRecoveryValidityExtensionCardGetter = true
-			invokedShouldShowRecoveryValidityExtensionCardGetterCount += 1
-			return stubbedShouldShowRecoveryValidityExtensionCard
-		}
-	}
-
-	var invokedShouldShowRecoveryValidityReinstationCardSetter = false
-	var invokedShouldShowRecoveryValidityReinstationCardSetterCount = 0
-	var invokedShouldShowRecoveryValidityReinstationCard: Bool?
-	var invokedShouldShowRecoveryValidityReinstationCardList = [Bool]()
-	var invokedShouldShowRecoveryValidityReinstationCardGetter = false
-	var invokedShouldShowRecoveryValidityReinstationCardGetterCount = 0
-	var stubbedShouldShowRecoveryValidityReinstationCard: Bool! = false
-
-	var shouldShowRecoveryValidityReinstationCard: Bool {
-		set {
-			invokedShouldShowRecoveryValidityReinstationCardSetter = true
-			invokedShouldShowRecoveryValidityReinstationCardSetterCount += 1
-			invokedShouldShowRecoveryValidityReinstationCard = newValue
-			invokedShouldShowRecoveryValidityReinstationCardList.append(newValue)
-		}
-		get {
-			invokedShouldShowRecoveryValidityReinstationCardGetter = true
-			invokedShouldShowRecoveryValidityReinstationCardGetterCount += 1
-			return stubbedShouldShowRecoveryValidityReinstationCard
-		}
-	}
-
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCardSetter = false
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCardSetterCount = 0
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCard: Bool?
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCardList = [Bool]()
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCardGetter = false
-	var invokedHasDismissedRecoveryValidityExtensionCompletionCardGetterCount = 0
-	var stubbedHasDismissedRecoveryValidityExtensionCompletionCard: Bool! = false
-
-	var hasDismissedRecoveryValidityExtensionCompletionCard: Bool {
-		set {
-			invokedHasDismissedRecoveryValidityExtensionCompletionCardSetter = true
-			invokedHasDismissedRecoveryValidityExtensionCompletionCardSetterCount += 1
-			invokedHasDismissedRecoveryValidityExtensionCompletionCard = newValue
-			invokedHasDismissedRecoveryValidityExtensionCompletionCardList.append(newValue)
-		}
-		get {
-			invokedHasDismissedRecoveryValidityExtensionCompletionCardGetter = true
-			invokedHasDismissedRecoveryValidityExtensionCompletionCardGetterCount += 1
-			return stubbedHasDismissedRecoveryValidityExtensionCompletionCard
-		}
-	}
-
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter = false
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCardSetterCount = 0
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCard: Bool?
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCardList = [Bool]()
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCardGetter = false
-	var invokedHasDismissedRecoveryValidityReinstationCompletionCardGetterCount = 0
-	var stubbedHasDismissedRecoveryValidityReinstationCompletionCard: Bool! = false
-
-	var hasDismissedRecoveryValidityReinstationCompletionCard: Bool {
-		set {
-			invokedHasDismissedRecoveryValidityReinstationCompletionCardSetter = true
-			invokedHasDismissedRecoveryValidityReinstationCompletionCardSetterCount += 1
-			invokedHasDismissedRecoveryValidityReinstationCompletionCard = newValue
-			invokedHasDismissedRecoveryValidityReinstationCompletionCardList.append(newValue)
-		}
-		get {
-			invokedHasDismissedRecoveryValidityReinstationCompletionCardGetter = true
-			invokedHasDismissedRecoveryValidityReinstationCompletionCardGetterCount += 1
-			return stubbedHasDismissedRecoveryValidityReinstationCompletionCard
 		}
 	}
 

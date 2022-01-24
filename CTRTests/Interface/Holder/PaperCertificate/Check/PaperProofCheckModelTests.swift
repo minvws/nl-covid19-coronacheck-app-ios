@@ -41,7 +41,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 052")
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 052")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -94,7 +94,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccBlockedTitle()
-			expect(content.subTitle) == L.holderCheckdccBlockedMessage()
+			expect(content.body) == L.holderCheckdccBlockedMessage()
 		} else {
 			fail("Invalid state")
 		}
@@ -120,7 +120,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccExpiredTitle()
-			expect(content.subTitle) == L.holderCheckdccExpiredMessage()
+			expect(content.body) == L.holderCheckdccExpiredMessage()
 		} else {
 			fail("Invalid state")
 		}
@@ -146,7 +146,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccRejectedTitle()
-			expect(content.subTitle) == L.holderCheckdccRejectedMessage()
+			expect(content.body) == L.holderCheckdccRejectedMessage()
 		} else {
 			fail("Invalid state")
 		}
@@ -170,7 +170,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
-			expect(content.subTitle) == L.generalNetworkwasbusyErrorcode("i 510 000 429")
+			expect(content.body) == L.generalNetworkwasbusyErrorcode("i 510 000 429")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle).to(beNil())
 		} else {
@@ -218,7 +218,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.generalErrorServerUnreachableErrorCode("i 510 000 004")
+			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 510 000 004")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -244,7 +244,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 000 304")
+			expect(content.body) == L.holderErrorstateServerMessage("i 510 000 304")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -270,7 +270,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 000 404 99707")
+			expect(content.body) == L.holderErrorstateServerMessage("i 510 000 404 99707")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -296,7 +296,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 000 500 99707")
+			expect(content.body) == L.holderErrorstateServerMessage("i 510 000 500 99707")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -322,7 +322,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 003")
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 003")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -348,7 +348,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 002")
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 002")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -374,7 +374,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 020")
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 020")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -400,7 +400,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 030")
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 030")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
@@ -427,7 +427,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
 
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 000 031")
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 031")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
