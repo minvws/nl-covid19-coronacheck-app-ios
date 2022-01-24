@@ -84,7 +84,7 @@ extension RiskLevelManaging {
 	
 	/// LLDB:
 	/// `e import CTR`
-	/// `Current.riskLevelManager.set(VerificationPolicy: .policy2G)`
+	/// `Current.riskLevelManager.set(VerificationPolicy: .policy3G)`
 	func set(verificationPolicy: VerificationPolicy) {
 		let casted = self as! RiskLevelManager // swiftlint:disable:this force_cast
 		casted.state = verificationPolicy
