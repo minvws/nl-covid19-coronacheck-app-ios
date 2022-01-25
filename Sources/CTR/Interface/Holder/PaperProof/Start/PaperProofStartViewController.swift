@@ -94,7 +94,6 @@ extension PaperProofItemView {
 
 			let view = PaperProofItemView()
 			view.translatesAutoresizingMaskIntoConstraints = false
-			view.isAccessibilityElement = true
 			view.title = title
 			view.message = message
 			view.icon = icon
