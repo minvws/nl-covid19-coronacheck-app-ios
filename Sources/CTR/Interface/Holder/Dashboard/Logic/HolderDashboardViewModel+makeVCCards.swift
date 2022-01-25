@@ -31,6 +31,22 @@ extension HolderDashboardViewController.Card {
 		}
 	}
 
+	static func makeAddCertificateCard(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		
+		// logic: state.qrCards.isEmpty && !state.shouldShowCompleteYourVaccinationAssessmentBanner
+		return [
+			.addCertificate(
+				title: L.holder_dashboard_addCard_title(),
+				didTapAdd: { [weak actionHandler] in
+					actionHandler?.didTapAddCertificate()
+				})
+		]
+	}
+	
 	static func makeDeviceHasClockDeviationCard(
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
