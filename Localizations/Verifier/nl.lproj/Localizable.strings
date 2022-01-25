@@ -130,16 +130,12 @@
 "verifier_home_countdown_title" = "Je kunt weer scannen over %@";
 "verifier_menu_risksetting" = "Scan-instelling";
 "verifier_result_access_title" = "Controle klaar";
-"verifier_result_access_title_2g_plus" = "2G+ controle klaar";
-"verifier_result_access_title_highrisk" = "2G-controle klaar";
-"verifier_result_access_title_lowrisk" = "3G-controle klaar";
+"verifier_result_access_title_policy" = "%@-controle klaar";
 "verifier_risksetting_2g_plus_subtitle" = "Je kunt alleen toegang geven aan bezoekers met een vaccinatie- of herstelbewijs én een testbewijs.";
 "verifier_risksetting_2g_plus_title" = "2G+ toegang";
 "verifier_risksetting_active_lock_warning_header" = "<p><b>Let op:</b> Als je tijdens het scannen wisselt van scan-instelling moet je %li minuten wachten voordat je weer kunt scannen.</p>";
 "verifier_risksetting_active_title" = "Scan-instelling aanpassen";
-"verifier_risksetting_changeselection_2g" = "2G-toegang ingesteld";
-"verifier_risksetting_changeselection_2g_plus" = "2G+ toegang ingesteld";
-"verifier_risksetting_changeselection_3g" = "3G-toegang ingesteld";
+"verifier_risksetting_changeselection" = "%@-toegang ingesteld";
 "verifier_risksetting_changeselection_button" = "Aanpassen";
 "verifier_risksetting_confirmation_button" = "Bevestigen";
 "verifier_risksetting_confirmation_dialog_message" = "Als je wisselt van scan-instelling moet je %li minuten wachten voordat je weer kunt scannen.";
@@ -149,9 +145,7 @@
 "verifier_risksetting_firsttimeuse_header" = "Stel voor jouw locatie in of je 2G- of 3G-toegang gaat geven. Controleer voordat je gaat scannen welk soort toegang je mag geven.";
 "verifier_risksetting_firsttimeuse_title" = "Kies je scan-instelling";
 "verifier_risksetting_highrisk_subtitle" = "Je kunt alleen toegang geven aan bezoekers met een vaccinatie- of herstelbewijs.";
-"verifier_risksetting_highrisk_title" = "2G-toegang";
 "verifier_risksetting_lowrisk_subtitle" = "Je kunt toegang geven aan bezoekers met een test-, vaccinatie- of herstelbewijs.";
-"verifier_risksetting_lowrisk_title" = "3G-toegang";
 "verifier_risksetting_readmore" = "Welk soort toegang mag ik geven?";
 "verifier_risksetting_readmore_url" = "https://www.rijksoverheid.nl/welketoegang-cc";
 "verifier_risksetting_setting_button" = "Instellen";
@@ -159,6 +153,7 @@
 "verifier_risksetting_start_readmore" = "Welk soort toegang mag ik geven?";
 "verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier_risksetting_start_title" = "Scan-instelling";
+"verifier_risksetting_title" = "%@-toegang";
 "verifier_scan_instructions_back_to_start" = "Terug naar start";
 "verifier_scanner_policy_indication" = "%@-toegang";
 "verifier_scannextinstruction_button_deny_access_supplemental" = "Geen aanvullend bewijs";

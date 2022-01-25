@@ -37,12 +37,8 @@ final class VerifiedAccessViewModel: Logging {
 
 		if Current.featureFlagManager.is1GPolicyEnabled() {
 			switch verifiedAccess {
-				case .verified(let verificationPolicy) where verificationPolicy == .policy1G,
-						.demo(let verificationPolicy) where verificationPolicy == .policy1G:
-					// TODO: Update title
-					accessTitle = L.verifier_result_access_title_highrisk()
-				default:
-					accessTitle = L.verifier_result_access_title_lowrisk()
+				case .verified(let verificationPolicy), .demo(let verificationPolicy):
+					accessTitle = L.verifier_result_access_title_policy(verificationPolicy.localization)
 			}
 		} else {
 			switch verifiedAccess {
