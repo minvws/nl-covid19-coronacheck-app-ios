@@ -38,8 +38,6 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 		
 		guard !state.shouldShowAddCertificateFooter else { return [] }
-		
-		// logic: state.qrCards.isEmpty && !state.shouldShowCompleteYourVaccinationAssessmentBanner
 		return [
 			.addCertificate(
 				title: L.holder_dashboard_addCard_title(),
