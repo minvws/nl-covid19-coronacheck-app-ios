@@ -36,6 +36,10 @@ class AppCoordinator: Coordinator, Logging {
 	// Flag to prevent showing the recommended update dialog twice
 	// which can happen with the config being fetched within the TTL.
 	private var isPresentingRecommendedUpdate = false
+	
+	// Flag to prevent showing the recommended update dialog twice
+	// which can happen with the config being fetched within the TTL.
+	private var isPresentingCryptoLibError = false
 
 	// Flag to prevent starting the application more than once
 	// which can happen with the config being fetched within the TTL.
@@ -45,7 +49,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	var flavor = AppFlavor.flavor
 	
-	private var appManager: AppManaging
+	private var appManager: LaunchStateManaging
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -53,7 +57,7 @@ class AppCoordinator: Coordinator, Logging {
 
 		window = UIWindow(windowScene: scene)
 		self.navigationController = navigationController
-		self.appManager = AppManager()
+		self.appManager = LaunchStateManager(versionSupplier: versionSupplier)
 	}
 
 	/// For use with iOS 12.
@@ -61,7 +65,7 @@ class AppCoordinator: Coordinator, Logging {
 
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.navigationController = navigationController
-		self.appManager = AppManager()
+		self.appManager = LaunchStateManager(versionSupplier: versionSupplier)
 	}
 
 	/// Designated starter method
@@ -154,6 +158,12 @@ class AppCoordinator: Coordinator, Logging {
 	
 	/// Show the error alert when crypto library is not initialized
 	private func showCryptoLibNotInitializedError() {
+		
+		guard !isPresentingCryptoLibError else {
+			return
+		}
+		
+		isPresentingCryptoLibError = true
 
 		let errorCode = ErrorCode(flow: .onboarding, step: .publicKeys, clientCode: .failedToLoadCryptoLibrary)
 		let message = L.generalErrorCryptolibMessage("\(errorCode)")
@@ -169,6 +179,7 @@ class AppCoordinator: Coordinator, Logging {
 				style: .cancel,
 				handler: { [weak self] _ in
 					self?.retry()
+					self?.isPresentingCryptoLibError = false
 				}
 			)
 		)
@@ -262,63 +273,40 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// Handle the launch state
     /// - Parameter state: the launch state
     func handleLaunchState(_ state: LaunchState) {
-
-//		switch state {
-//			case .withinTTL:
-//				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
-//				// Use the documents directory creation date.
-//				Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
-//				startApplication()
-//
-//			case .noActionNeeded:
-//				startApplication()
-//
-//			case .internetRequired:
-//				showInternetRequired()
-//
-//			case let .actionRequired(remoteConfiguration):
-//
-//				let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
-//				let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
-//				let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
-//
-//				if remoteConfiguration.isDeactivated {
-//					// Deactivated
-//					navigateToAppUpdate(
-//						with: EndOfLifeViewModel(
-//							coordinator: self,
-//							versionInformation: remoteConfiguration
-//						)
-//					)
-//				} else if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-//					// Required Update
-//					navigateToAppUpdate(
-//						with: AppUpdateViewModel(
-//							coordinator: self,
-//							versionInformation: remoteConfiguration
-//						)
-//					)
-//				} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
-//						  let appStoreURL = remoteConfiguration.appStoreURL {
-//
-//					// Recommended update
-//					handleRecommendedUpdate(
-//						recommendedVersion: recommendedVersion,
-//						remoteConfiguration: remoteConfiguration,
-//						appStoreUrl: appStoreURL
-//					)
-//				} else {
-//					startApplication()
-//				}
-//			case .cryptoLibNotInitialized:
-//				// Crypto library not loaded
-//				showCryptoLibNotInitializedError()
-//		}
+		
+		appManager.handleLaunchState(
+			state,
+			onCryptoError: {
+				self.showCryptoLibNotInitializedError()
+			},
+			onDeactivated: {
+				self.navigateToAppUpdate(
+					with: EndOfLifeViewModel(
+						coordinator: self,
+						appStoreUrl: nil
+					)
+				)
+			},
+			onRequiredUpdate: { url in
+				self.navigateToAppUpdate(
+					with: AppUpdateViewModel(
+						coordinator: self,
+						appStoreUrl: url
+					)
+				)
+			},
+			onRecommendedUpdate: { version, url in
+				self.handleRecommendedUpdate(recommendedVersion: version, appStoreUrl: url)
+			},
+			onStartApplication: {
+				self.startApplication()
+			}
+		)
 	}
 
 	// MARK: - Recommended Update -
 
-	private func handleRecommendedUpdate(recommendedVersion: String, remoteConfiguration: RemoteConfiguration, appStoreUrl: URL) {
+	private func handleRecommendedUpdate(recommendedVersion: String, appStoreUrl: URL) {
 
 		guard !isPresentingRecommendedUpdate else {
 			// Do not proceed if we are presenting the recommended update dialog.
@@ -331,7 +319,6 @@ extension AppCoordinator: AppCoordinatorDelegate {
 				appStoreUrl: appStoreUrl
 			)
 			case .verifier: handleRecommendedUpdateForVerifier(
-				remoteConfiguration: remoteConfiguration,
 				appStoreUrl: appStoreUrl
 			)
 		}
@@ -351,10 +338,10 @@ extension AppCoordinator: AppCoordinatorDelegate {
 		}
 	}
 
-	private func handleRecommendedUpdateForVerifier(remoteConfiguration: RemoteConfiguration, appStoreUrl: URL) {
+	private func handleRecommendedUpdateForVerifier(appStoreUrl: URL) {
 
 		let now = Date().timeIntervalSince1970
-		let interval: Double = Double(remoteConfiguration.recommendedNagIntervalHours ?? 24) * 3600
+		let interval: Double = Double(Current.remoteConfigManager.storedConfiguration.recommendedNagIntervalHours ?? 24) * 3600
 		let lastSeen: TimeInterval = Current.userSettings.lastRecommendUpdateDismissalTimestamp ?? now
 
 		if lastSeen == now || lastSeen + interval < now {
