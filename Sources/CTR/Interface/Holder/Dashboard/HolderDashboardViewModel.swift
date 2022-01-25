@@ -29,7 +29,7 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 }
 
-final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHandling {
+final class HolderDashboardViewModel: Logging {
 	typealias Datasource = HolderDashboardQRCardDatasource
 
 	// MARK: - Public properties
@@ -438,7 +438,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 
 	// MARK: Capture User input:
 
-	@objc func addProofTapped() {
+	@objc func addCertificateFooterTapped() {
+		
 		coordinator?.userWishesToCreateAQR()
 	}
 
@@ -447,7 +448,41 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		coordinator?.openUrl(url, inApp: true)
 	}
 	
-	// MARK: - HolderDashboardCardUserActionHandling
+	// MARK: - Static Methods
+	
+	private static func assembleCards(
+		forValidityRegion validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling,
+		remoteConfigManager: RemoteConfigManaging,
+		now: Date
+	) -> [HolderDashboardViewController.Card] {
+		typealias VCCard = HolderDashboardViewController.Card
+		
+		var cards = [VCCard]()
+		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
+		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
+		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
+		return cards
+	}
+}
+
+// MARK: - HolderDashboardCardUserActionHandling
+
+extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapConfigAlmostOutOfDateCTA() {
 		guard let configFetchedTimestamp = Current.userSettings.configFetchedTimestamp,
@@ -542,34 +577,4 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		state.shouldShowRecommendationToAddYourBooster = false
 	}
 	
-	// MARK: - Static Methods
-	
-	private static func assembleCards(
-		forValidityRegion validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
-		now: Date
-	) -> [HolderDashboardViewController.Card] {
-		typealias VCCard = HolderDashboardViewController.Card
-		
-		var cards = [VCCard]()
-		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
-		return cards
-	}
 }
