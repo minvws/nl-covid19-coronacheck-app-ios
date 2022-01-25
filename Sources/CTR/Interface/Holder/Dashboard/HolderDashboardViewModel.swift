@@ -45,7 +45,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	
 	@Bindable private(set) var primaryButtonTitle = L.holderMenuProof()
 	
-	@Bindable private(set) var hasAddCertificateMode: Bool = false
+	@Bindable private(set) var shouldShowAddCertificateFooter: Bool = false
 
 	@Bindable private(set) var currentlyPresentedAlert: AlertContent?
 	
@@ -80,6 +80,10 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		var shouldShowCompleteYourVaccinationAssessmentBanner: Bool = false
 		
 		var shouldShowRecommendationToAddYourBooster: Bool = false
+		
+		var shouldShowAddCertificateFooter: Bool {
+			qrCards.isEmpty && !shouldShowCompleteYourVaccinationAssessmentBanner
+		}
 		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -325,7 +329,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			now: Current.now()
 		)
 
-		hasAddCertificateMode = state.qrCards.isEmpty && !state.shouldShowCompleteYourVaccinationAssessmentBanner
+		shouldShowAddCertificateFooter = state.shouldShowAddCertificateFooter
 	}
 
 	fileprivate func strippenRefresherDidUpdate(oldRefresherState: DashboardStrippenRefresher.State?, refresherState: DashboardStrippenRefresher.State) {

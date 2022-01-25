@@ -37,7 +37,7 @@ extension HolderDashboardViewController.Card {
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
-		guard state.qrCards.isNotEmpty() else { return [] }
+		guard !state.shouldShowAddCertificateFooter else { return [] }
 		
 		// logic: state.qrCards.isEmpty && !state.shouldShowCompleteYourVaccinationAssessmentBanner
 		return [

@@ -137,7 +137,7 @@ class HolderDashboardViewController: BaseViewController {
 		}
 		
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
-		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
+		viewModel.$shouldShowAddCertificateFooter.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
 		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
 			DispatchQueue.main.async {
