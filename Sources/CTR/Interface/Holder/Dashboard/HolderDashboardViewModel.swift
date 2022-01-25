@@ -43,6 +43,10 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	@Bindable private(set) var domesticCards = [HolderDashboardViewController.Card]()
 	@Bindable private(set) var internationalCards = [HolderDashboardViewController.Card]()
 	
+	@Bindable private(set) var primaryButtonTitle = L.holderMenuProof()
+	
+	@Bindable private(set) var hasAddCertificateMode: Bool = false
+
 	@Bindable private(set) var currentlyPresentedAlert: AlertContent?
 	
 	@Bindable private(set) var selectedTab: DashboardTab = .domestic
@@ -320,6 +324,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			remoteConfigManager: Current.remoteConfigManager,
 			now: Current.now()
 		)
+
+		hasAddCertificateMode = state.qrCards.isEmpty && !state.shouldShowCompleteYourVaccinationAssessmentBanner
 	}
 
 	fileprivate func strippenRefresherDidUpdate(oldRefresherState: DashboardStrippenRefresher.State?, refresherState: DashboardStrippenRefresher.State) {
@@ -424,6 +430,12 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		DispatchQueue.main.async {
 			self.state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Current.featureFlagManager.isNewValidityInfoBannerEnabled()
 		}
+	}
+
+	// MARK: Capture User input:
+
+	@objc func addProofTapped() {
+		coordinator?.userWishesToCreateAQR()
 	}
 
 	func openUrl(_ url: URL) {
