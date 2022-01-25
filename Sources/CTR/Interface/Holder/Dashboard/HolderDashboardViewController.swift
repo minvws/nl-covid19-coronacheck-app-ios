@@ -13,6 +13,7 @@ class HolderDashboardViewController: BaseViewController {
         case headerMessage(message: String, buttonTitle: String?)
         case emptyStateDescription(message: String, buttonTitle: String?)
         case emptyStatePlaceholderImage(image: UIImage, title: String)
+		case addCertificate(title: String, didTapAdd: () -> Void)
 
         // Warnings:
         case expiredQR(message: String, didTapClose: () -> Void)
@@ -204,6 +205,12 @@ private extension HolderDashboardViewController.Card {
 			case let .headerMessage(message, buttonTitle):
 				return HeaderMessageCardView.make(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
 				
+			case let .addCertificate(title, didTapAdd):
+				let card = AddCertificateCardView()
+				card.title = title
+				card.tapHandler = didTapAdd
+				return card
+			
 			// Message Cards with only a message + close button
 			case let .expiredQR(message, didTapCloseAction):
 				return MessageCardView(config: .init(title: message, closeButtonCommand: didTapCloseAction, ctaButton: nil))

@@ -112,6 +112,7 @@
 "holder.consent.message.underlined" = "privacyverklaring";
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app jouw gegevens";
+"holder.dashboard.addCard.title" = "Nieuwe vaccinatie of test toevoegen";
 "holder.dashboard.clockDeviationDetected.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
 "holder.dashboard.configIsAlmostOutOfDate.card.button" = "Lees meer";
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Maak binnenkort verbinding met het internet";
