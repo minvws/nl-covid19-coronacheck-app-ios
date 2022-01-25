@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -63,14 +62,13 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.sut.appIcon) == I.verifierAppIcon()
 	}
 
-	func test_noActionRequired() {
+	func test_launchState_finished() {
 
 		// Given
 		environmentSpies.remoteConfigManagerSpy.stubbedUpdateCompletionResult = (.success((false, RemoteConfiguration.default)), ())
 		environmentSpies.cryptoLibUtilitySpy.stubbedUpdateCompletionResult = (.success(true), ())
 		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = false
 		environmentSpies.deviceAuthenticationDetectorSpy.stubbedHasAuthenticationPolicyResult = true
-		environmentSpies.cryptoLibUtilitySpy.stubbedIsInitialized = true
 
 		// When
 		sut = LaunchViewModel(
@@ -83,12 +81,11 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.noActionNeeded
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.finished
 		expect(self.sut.alert).to(beNil())
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter).toEventually(beTrue())
 	}
 
-	func test_withinTTL() {
+	func test_launchState_withinTTL() {
 
 		// Given
 		environmentSpies.remoteConfigManagerSpy.shouldInvokeUpdateImmediateCallbackIfWithinTTL = true
@@ -111,7 +108,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.withinTTL
 		expect(self.sut.alert).to(beNil())
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter).toEventually(beFalse())
 	}
 
 	/// Test internet required for the remote config
@@ -136,9 +132,10 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedConfigFetchedTimestampSetter) == false
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.serverError(
+			[ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)]
+		)
 		expect(self.sut.alert).to(beNil())
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
 	}
 
 	/// Test internet required for the issuer public keys
@@ -162,9 +159,10 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.serverError(
+			[ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)]
+		)
 		expect(self.sut.alert).to(beNil())
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
 	}
 
 	/// Test internet required for the issuer public keys and the remote config
@@ -189,156 +187,11 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedConfigFetchedTimestampSetter) == false
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
-		expect(self.sut.alert).to(beNil())
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-	}
-
-	/// Test internet required for the remote config
-	func test_internetRequired_forBothActions_butWithinTTL() {
-
-		// Given
-		environmentSpies.remoteConfigManagerSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		environmentSpies.cryptoLibUtilitySpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = false
-		environmentSpies.deviceAuthenticationDetectorSpy.stubbedHasAuthenticationPolicyResult = true
-		environmentSpies.cryptoLibUtilitySpy.stubbedIsInitialized = true
-		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = Date().timeIntervalSince1970 - 600
-		environmentSpies.userSettingsSpy.stubbedIssuerKeysFetchedTimestamp = Date().timeIntervalSince1970 - 600
-
-		// When
-		sut = LaunchViewModel(
-			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.serverError(
+			[ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection),
+			 ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)]
 		)
-
-		// Then
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
-		expect(self.environmentSpies.userSettingsSpy.invokedConfigFetchedTimestampSetter) == false
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateCount).toEventually(equal(1))
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.alert).to(beNil())
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-	}
-
-	/// Test update required
-	func test_actionRequired() {
-
-		// Given
-		var remoteConfig = RemoteConfiguration.default
-		remoteConfig.minimumVersion = "2.0"
-
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = remoteConfig
-		environmentSpies.remoteConfigManagerSpy.stubbedUpdateCompletionResult = (.success((false, remoteConfig)), ())
-		environmentSpies.cryptoLibUtilitySpy.stubbedUpdateCompletionResult = (.success(true), ())
-		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = false
-		environmentSpies.deviceAuthenticationDetectorSpy.stubbedHasAuthenticationPolicyResult = true
-		environmentSpies.cryptoLibUtilitySpy.stubbedIsInitialized = true
-
-		// When
-		sut = LaunchViewModel(
-			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder
-		)
-
-		// Then
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
-		expect(self.sut.alert).to(beNil())
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-	}
-
-	/// Test crypto library not initialized
-	func test_cryptoLibNotInitialized() {
-
-		// Given
-		environmentSpies.remoteConfigManagerSpy.stubbedUpdateCompletionResult = (.success((false, RemoteConfiguration.default)), ())
-
-		environmentSpies.cryptoLibUtilitySpy.stubbedUpdateCompletionResult = (.success(true), ())
-		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = false
-		environmentSpies.deviceAuthenticationDetectorSpy.stubbedHasAuthenticationPolicyResult = true
-		environmentSpies.cryptoLibUtilitySpy.stubbedIsInitialized = false
-
-		// When
-		sut = LaunchViewModel(
-			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder
-		)
-
-		// Then
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state)
-			.toEventually(equal(LaunchState.cryptoLibNotInitialized))
-		expect(self.sut.alert).to(beNil())
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter).toEventually(beTrue())
-	}
-
-	func test_killswitchEnabled() {
-
-		// Given
-		var remoteConfig = RemoteConfiguration.default
-		remoteConfig.appDeactivated = true
-
-		environmentSpies.remoteConfigManagerSpy.stubbedUpdateCompletionResult = (.success((false, remoteConfig)), ())
-
-		environmentSpies.cryptoLibUtilitySpy.stubbedUpdateCompletionResult = (.success(true), ())
-		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = false
-		environmentSpies.deviceAuthenticationDetectorSpy.stubbedHasAuthenticationPolicyResult = true
-		environmentSpies.cryptoLibUtilitySpy.stubbedIsInitialized = false
-
-		// When
-		sut = LaunchViewModel(
-			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder
-		)
-
-		// Then
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
-		expect(self.sut.alert).to(beNil())
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
-	}
-
-	func test_killswitchEnabled_noInternet() {
-
-		// Given
-		var remoteConfig = RemoteConfiguration.default
-		remoteConfig.appDeactivated = true
-
-		environmentSpies.remoteConfigManagerSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = remoteConfig
-
-		environmentSpies.cryptoLibUtilitySpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
-		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = false
-		environmentSpies.deviceAuthenticationDetectorSpy.stubbedHasAuthenticationPolicyResult = true
-		environmentSpies.cryptoLibUtilitySpy.stubbedIsInitialized = false
-
-		// When
-		sut = LaunchViewModel(
-			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder
-		)
-
-		// Then
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
-		expect(self.sut.alert).to(beNil())
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
 	}
 
 	func test_checkForJailBreak_broken_shouldWarn() {
