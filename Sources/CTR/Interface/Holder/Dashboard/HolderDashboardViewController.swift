@@ -13,6 +13,7 @@ class HolderDashboardViewController: BaseViewController {
         case headerMessage(message: String, buttonTitle: String?)
         case emptyStateDescription(message: String, buttonTitle: String?)
         case emptyStatePlaceholderImage(image: UIImage, title: String)
+		case addCertificate(title: String, didTapAdd: () -> Void)
 
         // Warnings:
         case expiredQR(message: String, didTapClose: () -> Void)
@@ -90,13 +91,11 @@ class HolderDashboardViewController: BaseViewController {
 		super.viewDidLoad()
 
 		setupBindings()
-
-		setupPlusButton()
 		
 		sceneView.delegate = self
 
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.addProofTapped()
+			self?.viewModel.addCertificateFooterTapped()
 		}
 		
 		// Forces VoiceOver focus on menu button instead of tab bar on start up
@@ -138,7 +137,7 @@ class HolderDashboardViewController: BaseViewController {
 		}
 		
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
-		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
+		viewModel.$shouldShowAddCertificateFooter.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
 		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
 			DispatchQueue.main.async {
@@ -195,17 +194,6 @@ class HolderDashboardViewController: BaseViewController {
 		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
 		sceneView.selectTab(tab: selectedTab)
 	}
-
-	// MARK: Helper methods
-
-	func setupPlusButton() {
-		let config = UIBarButtonItem.Configuration(target: viewModel,
-												   action: #selector(HolderDashboardViewModel.addProofTapped),
-												   content: .image( I.plus()),
-												   accessibilityIdentifier: "PlusButton",
-												   accessibilityLabel: L.holderMenuProof())
-		navigationItem.rightBarButtonItem = .create(config)
-	}
 }
 
 extension HolderDashboardViewController: HolderDashboardViewDelegate {
@@ -224,6 +212,12 @@ private extension HolderDashboardViewController.Card {
 			case let .headerMessage(message, buttonTitle):
 				return HeaderMessageCardView.make(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
 				
+			case let .addCertificate(title, didTapAdd):
+				let card = AddCertificateCardView()
+				card.title = title
+				card.tapHandler = didTapAdd
+				return card
+			
 			// Message Cards with only a message + close button
 			case let .expiredQR(message, didTapCloseAction):
 				return MessageCardView(config: .init(title: message, closeButtonCommand: didTapCloseAction, ctaButton: nil))
