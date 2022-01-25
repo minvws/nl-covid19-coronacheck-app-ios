@@ -148,18 +148,18 @@ class CryptoManager: CryptoManaging, Logging {
 		
 		let proofQREncoded = message.data(using: .utf8)
 
-		let verificationPolicy: String
+		let scanPolicy: String
 		if featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			guard let riskSetting = riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
 				return nil
 			}
-			verificationPolicy = riskSetting.policy
+			scanPolicy = riskSetting.scanPolicy
 		} else {
-			verificationPolicy = MobilecoreVERIFICATION_POLICY_3G
+			scanPolicy = MobilecoreVERIFICATION_POLICY_3G
 		}
 		
-		guard let result = MobilecoreVerify(proofQREncoded, verificationPolicy) else {
+		guard let result = MobilecoreVerify(proofQREncoded, scanPolicy) else {
 			logError("Could not verify QR")
 			return nil
 		}

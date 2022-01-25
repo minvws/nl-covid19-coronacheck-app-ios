@@ -160,9 +160,7 @@
 "verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/en/faq-scanner-in-app";
 "verifier_risksetting_start_title" = "Scan setting";
 "verifier_scan_instructions_back_to_start" = "Back to start";
-"verifier_scanner_policy_indication_2g" = "2G access";
-"verifier_scanner_policy_indication_2g_plus" = "2G+ access";
-"verifier_scanner_policy_indication_3g" = "3G access";
+"verifier_scanner_policy_indication" = "%@ access";
 "verifier_start_scan_qr_policy_indication_2g" = "Set to <b>2G</b> access";
 "verifier_start_scan_qr_policy_indication_2g_plus" = "Set to <b>2G+</b> access";
 "verifier_start_scan_qr_policy_indication_3g" = "Set to <b>3G</b> access";
