@@ -151,13 +151,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.datasourceSpy.invokedReload) == true
 	}
 
-	func test_addProofTapped_callsCoordinator() {
+	func test_addCertificateFooterTapped_callsCoordinator() {
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAQR) == false
 
 		// Act
-		sut.addProofTapped()
+		sut.addCertificateFooterTapped()
 
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAQR) == true

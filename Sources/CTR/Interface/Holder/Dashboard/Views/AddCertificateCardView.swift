@@ -21,13 +21,13 @@ class AddCertificateCardView: BaseView {
 		static let margin: CGFloat = 24
 	}
 	
-	private var addButtonTappedCommand: (() -> Void)?
-	
 	private let addCertificateButton: LargeAddCertificateButton = {
 		let button = LargeAddCertificateButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		return button
 	}()
+	
+	// MARK: - Lifecycle
 	
 	override func setupViews() {
 
@@ -37,18 +37,6 @@ class AddCertificateCardView: BaseView {
 		createShadow()
 
 		addCertificateButton.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
-	}
-
-	func createShadow() {
-
-		// Shadow
-		layer.shadowColor = Theme.colors.shadow.cgColor
-		layer.shadowOpacity = ViewTraits.shadowOpacity
-		layer.shadowOffset = .zero
-		layer.shadowRadius = ViewTraits.shadowRadius
-		// Cache Shadow
-		layer.shouldRasterize = true
-		layer.rasterizationScale = UIScreen.main.scale
 	}
 
 	override func setupViewHierarchy() {
@@ -70,19 +58,33 @@ class AddCertificateCardView: BaseView {
 		NSLayoutConstraint.activate(constraints)
 	}
 
-	var title: String? {
-		didSet {
-			addCertificateButton.title = title
-		}
-	}
+	private func createShadow() {
 
+		// Shadow
+		layer.shadowColor = Theme.colors.shadow.cgColor
+		layer.shadowOpacity = ViewTraits.shadowOpacity
+		layer.shadowOffset = .zero
+		layer.shadowRadius = ViewTraits.shadowRadius
+		// Cache Shadow
+		layer.shouldRasterize = true
+		layer.rasterizationScale = UIScreen.main.scale
+	}
+	
 	// MARK: - Objc Target-Action callbacks:
 	
 	@objc
 	private func touchUp() {
 		tapHandler?()
 	}
+
+	// MARK: - Accessors
 	
+	var title: String? {
+		didSet {
+			addCertificateButton.title = title
+		}
+	}
+ 
 	var tapHandler: (() -> Void)?
 }
 
@@ -184,10 +186,14 @@ private class LargeAddCertificateButton: UIControl {
 		isAccessibilityElement = true
 	}
 	
+	// MARK: - Objc Target-Action callbacks:
+	
 	@objc
 	private func touchUp() {
 		tapHandler?()
 	}
+
+	// MARK: - Accessors
 	
 	var tapHandler: (() -> Void)?
 	

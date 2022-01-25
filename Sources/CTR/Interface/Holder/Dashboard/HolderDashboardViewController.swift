@@ -95,7 +95,7 @@ class HolderDashboardViewController: BaseViewController {
 		sceneView.delegate = self
 
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.addProofTapped()
+			self?.viewModel.addCertificateFooterTapped()
 		}
 		
 		// Forces VoiceOver focus on menu button instead of tab bar on start up
