@@ -50,6 +50,8 @@ class AppCoordinator: Coordinator, Logging {
 	var flavor = AppFlavor.flavor
 	
 	private var appManager: LaunchStateManaging
+	
+	private var launchStateDelegateToken: LaunchStateManager.DelegateToken?
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -58,6 +60,7 @@ class AppCoordinator: Coordinator, Logging {
 		window = UIWindow(windowScene: scene)
 		self.navigationController = navigationController
 		self.appManager = LaunchStateManager(versionSupplier: versionSupplier)
+		self.launchStateDelegateToken = appManager.addDelegate(self)
 	}
 
 	/// For use with iOS 12.
@@ -66,6 +69,13 @@ class AppCoordinator: Coordinator, Logging {
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.navigationController = navigationController
 		self.appManager = LaunchStateManager(versionSupplier: versionSupplier)
+		self.launchStateDelegateToken = appManager.addDelegate(self)
+	}
+	
+	deinit {
+		if let token = launchStateDelegateToken {
+			appManager.removeDelegate(token: token)
+		}
 	}
 
 	/// Designated starter method
@@ -261,6 +271,46 @@ class AppCoordinator: Coordinator, Logging {
 	}
 }
 
+// MARK: - LaunchStateDelegate
+
+extension AppCoordinator: LaunchStateDelegate {
+	
+	func cryptoLibDidNotInitialize() {
+		
+		showCryptoLibNotInitializedError()
+	}
+	
+	func appIsDeactivated() {
+		
+		navigateToAppUpdate(
+			with: EndOfLifeViewModel(
+				coordinator: self,
+				appStoreUrl: nil
+			)
+		)
+	}
+	
+	func updateIsRequired(appStoreUrl: URL) {
+		
+		navigateToAppUpdate(
+			with: AppUpdateViewModel(
+				coordinator: self,
+				appStoreUrl: appStoreUrl
+			)
+		)
+	}
+	
+	func updateIsRecommended(version: String, appStoreUrl: URL) {
+		
+		handleRecommendedUpdate(recommendedVersion: version, appStoreUrl: appStoreUrl)
+	}
+	
+	func onStartApplication() {
+
+		startApplication()
+	}
+}
+
 // MARK: - AppCoordinatorDelegate
 
 extension AppCoordinator: AppCoordinatorDelegate {
@@ -274,34 +324,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// - Parameter state: the launch state
     func handleLaunchState(_ state: LaunchState) {
 		
-		appManager.handleLaunchState(
-			state,
-			onCryptoError: {
-				self.showCryptoLibNotInitializedError()
-			},
-			onDeactivated: {
-				self.navigateToAppUpdate(
-					with: EndOfLifeViewModel(
-						coordinator: self,
-						appStoreUrl: nil
-					)
-				)
-			},
-			onRequiredUpdate: { url in
-				self.navigateToAppUpdate(
-					with: AppUpdateViewModel(
-						coordinator: self,
-						appStoreUrl: url
-					)
-				)
-			},
-			onRecommendedUpdate: { version, url in
-				self.handleRecommendedUpdate(recommendedVersion: version, appStoreUrl: url)
-			},
-			onStartApplication: {
-				self.startApplication()
-			}
-		)
+		appManager.handleLaunchState(state)
 	}
 
 	// MARK: - Recommended Update -

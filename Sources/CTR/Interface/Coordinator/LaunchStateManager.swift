@@ -8,22 +8,41 @@
 import Foundation
 
 protocol LaunchStateManaging {
+	typealias DelegateToken = LaunchStateManager.DelegateToken
 	
-	func handleLaunchState(
-		_ state: LaunchState,
-		onCryptoError: (() -> Void)?,
-		onDeactivated: (() -> Void)?,
-		onRequiredUpdate: ((URL) -> Void)?,
-		onRecommendedUpdate: ((String, URL) -> Void)?,
-		onStartApplication: (() -> Void)?)
+	func handleLaunchState(_ state: LaunchState)
+	
+	func addDelegate(_ delegate: LaunchStateDelegate) -> DelegateToken
+	
+	func removeDelegate(token: DelegateToken)
+}
+
+protocol LaunchStateDelegate: AnyObject {
+	
+	func cryptoLibDidNotInitialize()
+	
+	func appIsDeactivated()
+	
+	func updateIsRequired(appStoreUrl: URL)
+	
+	func updateIsRecommended(version: String, appStoreUrl: URL)
+	
+//	func onServerError(errors: [ServerError])
+	
+	func onStartApplication()
 }
 
 final class LaunchStateManager: LaunchStateManaging {
+	typealias DelegateToken = UUID
 	
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
 	private let versionSupplier: AppVersionSupplierProtocol
 	private var applicationStarted = false
+	private var launchStateDelegates = [DelegateToken: LaunchStateDelegate]()
 	
+	/// Initiializer
+	/// - Parameters:
+	///   - versionSupplier: the version supplier
 	init(versionSupplier: AppVersionSupplierProtocol) {
 		
 		self.versionSupplier = versionSupplier
@@ -36,28 +55,44 @@ final class LaunchStateManager: LaunchStateManaging {
 		}
 	}
 	
+	func addDelegate(_ delegate: LaunchStateDelegate) -> DelegateToken {
+		
+		let newToken = DelegateToken()
+		launchStateDelegates[newToken] = delegate
+		return newToken
+	}
+	
+	func removeDelegate(token: DelegateToken) {
+		
+		launchStateDelegates[token] = nil
+	}
+	
 	// MARK: - Launch State -
 	
-	func handleLaunchState(
-		_ state: LaunchState,
-		onCryptoError: (() -> Void)?,
-		onDeactivated: (() -> Void)?,
-		onRequiredUpdate: ((URL) -> Void)?,
-		onRecommendedUpdate: ((String, URL) -> Void)?,
-		onStartApplication: (() -> Void)?) {
-			
+	func handleLaunchState(_ state: LaunchState) {
+	
+//	func handleLaunchState(
+//		_ state: LaunchState,
+//		onCryptoError: (() -> Void)?,
+//		onDeactivated: (() -> Void)?,
+//		onRequiredUpdate: ((URL) -> Void)?,
+//		onRecommendedUpdate: ((String, URL) -> Void)?,
+//		onStartApplication: (() -> Void)?) {
+//
 		guard Current.cryptoLibUtility.isInitialized else {
-			onCryptoError?()
+			launchStateDelegates.values.forEach { delegate in
+				delegate.cryptoLibDidNotInitialize()
+			}
 			return
 		}
-			
+
 		switch state {
 			case .finished:
 				break
-				
+
 			case .serverError(let serviceErrors):
 				break
-				
+
 			case .withinTTL:
 				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
 				// Use the documents directory creation date.
@@ -66,26 +101,32 @@ final class LaunchStateManager: LaunchStateManaging {
 		
 			checkRemoteConfiguration(
 				Current.remoteConfigManager.storedConfiguration,
-				onDeactivated: onDeactivated,
-				onRequiredUpdate: onRequiredUpdate,
-				onRecommendedUpdate: onRecommendedUpdate,
+				onDeactivated: {
+					self.launchStateDelegates.values.forEach { $0.appIsDeactivated() }
+				},
+				onRequiredUpdate: { url in
+					self.launchStateDelegates.values.forEach { $0.updateIsRequired(appStoreUrl: url) }
+				},
+				onRecommendedUpdate: { version, url in
+					self.launchStateDelegates.values.forEach { $0.updateIsRecommended(version: version, appStoreUrl: url) }
+				},
 				onNoActionNeeded: {
 					if !self.applicationStarted {
 						self.applicationStarted = true
-						onStartApplication?()
+						self.launchStateDelegates.values.forEach { $0.onStartApplication() }
 					}
 				}
 			)
-			
-		//		switch state {
-
-		//
-		//			case .noActionNeeded:
-		//				startApplication()
-		//
-		//			case .internetRequired:
-		//				showInternetRequired()
-		//
+//
+//		//		switch state {
+//
+//		//
+//		//			case .noActionNeeded:
+//		//				startApplication()
+//		//
+//		//			case .internetRequired:
+//		//				showInternetRequired()
+//		//
 		
 	}
 	
@@ -96,7 +137,7 @@ final class LaunchStateManager: LaunchStateManaging {
 		onRecommendedUpdate: ((String, URL) -> Void)?,
 		onNoActionNeeded: (() -> Void)?
 	) {
-		
+	
 		let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
 		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
 		let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
