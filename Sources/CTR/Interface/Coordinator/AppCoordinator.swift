@@ -49,7 +49,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	var flavor = AppFlavor.flavor
 	
-	private var appManager: LaunchStateManaging
+	var appManager: LaunchStateManaging
 	
 	private var launchStateDelegateToken: LaunchStateManager.DelegateToken?
 
@@ -59,7 +59,7 @@ class AppCoordinator: Coordinator, Logging {
 
 		window = UIWindow(windowScene: scene)
 		self.navigationController = navigationController
-		self.appManager = LaunchStateManager(versionSupplier: versionSupplier)
+		self.appManager = LaunchStateManager()
 		self.launchStateDelegateToken = appManager.addDelegate(self)
 	}
 
@@ -68,7 +68,7 @@ class AppCoordinator: Coordinator, Logging {
 
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.navigationController = navigationController
-		self.appManager = LaunchStateManager(versionSupplier: versionSupplier)
+		self.appManager = LaunchStateManager()
 		self.launchStateDelegateToken = appManager.addDelegate(self)
 	}
 	

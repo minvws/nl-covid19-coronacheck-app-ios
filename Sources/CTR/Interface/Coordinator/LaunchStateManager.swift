@@ -15,6 +15,8 @@ protocol LaunchStateManaging {
 	func addDelegate(_ delegate: LaunchStateDelegate) -> DelegateToken
 	
 	func removeDelegate(token: DelegateToken)
+	
+	var versionSupplier: AppVersionSupplierProtocol { get set }
 }
 
 protocol LaunchStateDelegate: AnyObject {
@@ -36,16 +38,12 @@ final class LaunchStateManager: LaunchStateManaging {
 	typealias DelegateToken = UUID
 	
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
-	private let versionSupplier: AppVersionSupplierProtocol
+	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 	private var applicationStarted = false
 	private var launchStateDelegates = [DelegateToken: LaunchStateDelegate]()
 	
 	/// Initiializer
-	/// - Parameters:
-	///   - versionSupplier: the version supplier
-	init(versionSupplier: AppVersionSupplierProtocol) {
-		
-		self.versionSupplier = versionSupplier
+	init() {
 		configureRemoteConfigManager()
 	}
 	
