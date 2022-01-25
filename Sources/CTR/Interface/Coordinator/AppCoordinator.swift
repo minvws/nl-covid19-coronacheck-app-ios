@@ -275,11 +275,6 @@ class AppCoordinator: Coordinator, Logging {
 
 extension AppCoordinator: LaunchStateDelegate {
 	
-	func cryptoLibDidNotInitialize() {
-		
-		showCryptoLibNotInitializedError()
-	}
-	
 	func appIsDeactivated() {
 		
 		navigateToAppUpdate(
@@ -288,6 +283,21 @@ extension AppCoordinator: LaunchStateDelegate {
 				appStoreUrl: nil
 			)
 		)
+	}
+	func cryptoLibDidNotInitialize() {
+		
+		showCryptoLibNotInitializedError()
+	}
+	
+	func errorWhileLoading(errors: [ServerError]) {
+		// For now, show internet required.
+		// Todo: add error state.
+		showInternetRequired()
+	}
+
+	func onStartApplication() {
+		
+		startApplication()
 	}
 	
 	func updateIsRequired(appStoreUrl: URL) {
@@ -303,11 +313,6 @@ extension AppCoordinator: LaunchStateDelegate {
 	func updateIsRecommended(version: String, appStoreUrl: URL) {
 		
 		handleRecommendedUpdate(recommendedVersion: version, appStoreUrl: appStoreUrl)
-	}
-	
-	func onStartApplication() {
-
-		startApplication()
 	}
 }
 

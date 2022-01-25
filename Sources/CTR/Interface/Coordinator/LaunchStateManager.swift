@@ -19,17 +19,17 @@ protocol LaunchStateManaging {
 
 protocol LaunchStateDelegate: AnyObject {
 	
-	func cryptoLibDidNotInitialize()
-	
 	func appIsDeactivated()
+
+	func cryptoLibDidNotInitialize()
+		
+	func errorWhileLoading(errors: [ServerError])
+	
+	func onStartApplication()
 	
 	func updateIsRequired(appStoreUrl: URL)
 	
 	func updateIsRecommended(version: String, appStoreUrl: URL)
-	
-//	func onServerError(errors: [ServerError])
-	
-	func onStartApplication()
 }
 
 final class LaunchStateManager: LaunchStateManaging {
@@ -71,14 +71,6 @@ final class LaunchStateManager: LaunchStateManaging {
 	
 	func handleLaunchState(_ state: LaunchState) {
 	
-//	func handleLaunchState(
-//		_ state: LaunchState,
-//		onCryptoError: (() -> Void)?,
-//		onDeactivated: (() -> Void)?,
-//		onRequiredUpdate: ((URL) -> Void)?,
-//		onRecommendedUpdate: ((String, URL) -> Void)?,
-//		onStartApplication: (() -> Void)?) {
-//
 		guard Current.cryptoLibUtility.isInitialized else {
 			launchStateDelegates.values.forEach { delegate in
 				delegate.cryptoLibDidNotInitialize()
@@ -88,70 +80,56 @@ final class LaunchStateManager: LaunchStateManaging {
 
 		switch state {
 			case .finished:
-				break
+				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+					self.startApplication()
+				}
 
 			case .serverError(let serviceErrors):
-				break
+				// Deactivated or update trumps no internet or error
+				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+					self.launchStateDelegates.values.forEach { delegate in
+						delegate.errorWhileLoading(errors: serviceErrors)
+					}
+				}
 
 			case .withinTTL:
 				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
 				// Use the documents directory creation date.
 				Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
-			}
-		
-			checkRemoteConfiguration(
-				Current.remoteConfigManager.storedConfiguration,
-				onDeactivated: {
-					self.launchStateDelegates.values.forEach { $0.appIsDeactivated() }
-				},
-				onRequiredUpdate: { url in
-					self.launchStateDelegates.values.forEach { $0.updateIsRequired(appStoreUrl: url) }
-				},
-				onRecommendedUpdate: { version, url in
-					self.launchStateDelegates.values.forEach { $0.updateIsRecommended(version: version, appStoreUrl: url) }
-				},
-				onNoActionNeeded: {
-					if !self.applicationStarted {
-						self.applicationStarted = true
-						self.launchStateDelegates.values.forEach { $0.onStartApplication() }
-					}
+				
+				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+					self.startApplication()
 				}
-			)
-//
-//		//		switch state {
-//
-//		//
-//		//			case .noActionNeeded:
-//		//				startApplication()
-//		//
-//		//			case .internetRequired:
-//		//				showInternetRequired()
-//		//
-		
+			}
 	}
 	
-	private func checkRemoteConfiguration(
-		_ remoteConfiguration: RemoteConfiguration,
-		onDeactivated: (() -> Void)?,
-		onRequiredUpdate: ((URL) -> Void)?,
-		onRecommendedUpdate: ((String, URL) -> Void)?,
-		onNoActionNeeded: (() -> Void)?
-	) {
+	private func startApplication() {
+		if !self.applicationStarted {
+			self.applicationStarted = true
+			self.launchStateDelegates.values.forEach { $0.onStartApplication() }
+		}
+	}
+	
+	private func checkRemoteConfiguration(_ remoteConfiguration: RemoteConfiguration, onContinue: (() -> Void)?) {
 	
 		let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
 		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
 		let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
 
 		if remoteConfiguration.isDeactivated {
-			onDeactivated?()
+			
+			self.launchStateDelegates.values.forEach { $0.appIsDeactivated() }
 		} else if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
 			let url = remoteConfiguration.appStoreURL {
-			onRequiredUpdate?(url)
+			
+			self.launchStateDelegates.values.forEach { $0.updateIsRequired(appStoreUrl: url) }
 		} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
 			let url = remoteConfiguration.appStoreURL {
-			onRecommendedUpdate?(recommendedVersion, url)
+			
+			self.launchStateDelegates.values.forEach { $0.updateIsRecommended(version: recommendedVersion, appStoreUrl: url) }
 		} else {
-			onNoActionNeeded?()
+			
+			onContinue?()
 		}
 	}
 	
@@ -173,13 +151,19 @@ final class LaunchStateManager: LaunchStateManaging {
 			// Mark remote config loaded
 			Current.cryptoLibUtility.checkFile(.remoteConfiguration)
 			
-			self?.updateFromUrlResponse(urlResponse)
+			// Update the server Date handlers
+			self?.updateServerDate(urlResponse)
+			
+			// Recheck the config
+			self?.checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+				self?.startApplication()
+			}
 		}]
 	}
 	
 	// Update the  managers with the values from the actual http response
 	/// - Parameter urlResponse: the url response from the config call
-	private func updateFromUrlResponse(_ urlResponse: URLResponse) {
+	private func updateServerDate(_ urlResponse: URLResponse) {
 		
 		/// Fish for the server Date in the network response, and use that to maintain
 		/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
