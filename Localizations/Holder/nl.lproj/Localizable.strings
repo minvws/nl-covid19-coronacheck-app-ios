@@ -625,6 +625,7 @@
 "holder_completecertificate_title" = "Maak je bezoekersbewijs compleet";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Boostervaccinatie toevoegen";
 "holder_dashboard_addBoosterBanner_title" = "Heb je een boostervaccinatie gehad? Haal opnieuw je gegevens op als je deze aan je bewijs wilt toevoegen";
+"holder_dashboard_addCard_title" = "Nieuwe vaccinatie of test toevoegen";
 "holder_dashboard_newvaliditybanner_action" = "Lees meer op Rijksoverheid.nl";
 "holder_dashboard_newvaliditybanner_title" = "De geldigheid van coronabewijzen wordt aangepast";
 "holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
