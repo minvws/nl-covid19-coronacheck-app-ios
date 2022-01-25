@@ -11,21 +11,22 @@ import Reachability
 
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {
-	func didTapConfigAlmostOutOfDateCTA()
+	func didTapAddCertificate()
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
-	func didTapExpiredDomesticVaccinationQRMoreInfo()
-	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion)
-	func didTapDeviceHasClockDeviationMoreInfo()
-	func didTapTestOnlyValidFor3GMoreInfo()
-	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
-	func didTapRetryLoadQRCards()
-	func didTapRecommendedUpdate()
-	func didTapNewValidityBannerMoreInfo()
-	func didTapNewValidiyBannerClose()
 	func didTapCompleteYourVaccinationAssessmentMoreInfo()
-	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
+	func didTapConfigAlmostOutOfDateCTA()
+	func didTapDeviceHasClockDeviationMoreInfo()
+	func didTapExpiredDomesticVaccinationQRMoreInfo()
+	func didTapNewValidityBannerClose()
+	func didTapNewValidityBannerMoreInfo()
+	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion)
+	func didTapRecommendedUpdate()
 	func didTapRecommendToAddYourBooster()
 	func didTapRecommendToAddYourBoosterClose()
+	func didTapRetryLoadQRCards()
+	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
+	func didTapTestOnlyValidFor3GMoreInfo()
+	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 }
 
 final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHandling {
@@ -493,7 +494,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		openUrl(url)
 	}
 	
-	func didTapNewValidiyBannerClose() {
+	func didTapNewValidityBannerClose() {
 		
 		Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = true
 	}
