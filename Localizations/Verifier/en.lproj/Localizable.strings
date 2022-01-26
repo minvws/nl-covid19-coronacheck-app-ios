@@ -1,11 +1,12 @@
 "general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
+"general_navigationbar_menu_button_label" = "Menu ";
 "new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
 "new.terms.highlights" = "<b>Here's what changed</b><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";
 "new_in_app_risksetting_subtitle" = "Only visitors with a vaccination or recovery certificate get 2G access. 3G access is given to visitors carrying a test certificate. Check in advance which kind of access your location can give.";
 "new_in_app_risksetting_title" = "2G or 3G access";
 "new_in_app_subtitle" = "New in the app";
-"scan_instructions_4_description_2G" = "Does your screen show a check mark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";
-"scan_instructions_4_title_2G" = "Check mark = access";
+"scan_instructions_4_description_1G" = "Does your screen show a check mark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";
+"scan_instructions_4_title_1G" = "Check mark = access";
 "scan_log_footer_in_use" = "App in use since %@";
 "scan_log_footer_long_time" = "App in use for longer than one month";
 "scan_log_list_2g_plus" = "2G+";
@@ -18,7 +19,7 @@
 "scan_log_list_now" = "now";
 "scan_log_message" = "<p>The scan setting log keeps track of the type of access used during scanning. A civil enforcement officer may request access to this log.</p><p>For privacy reasons, only scan settings used in the last %li minutes are saved on this phone. No personal information is saved. You can read more about this in the <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">frequently asked questions</a>.</p>";
 "scan_log_title" = "Scan setting log";
-"scan_qr_description_2G" = "Is the QR code valid for your location, and are the details the same as on the proof of identity? Then you can give the visitor access.";
+"scan_qr_description_1G" = "Is the QR code valid for your location, and are the details the same as on the proof of identity? Then you can give the visitor access.";
 "updateApp.content" = "To continue, install the latest version of the app";
 "verification_policy_selection_error_message" = "Choose a setting to continue";
 /* Koptekst in de over de app pagina */

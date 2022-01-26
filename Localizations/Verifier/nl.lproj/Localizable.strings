@@ -1,11 +1,12 @@
 "general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
+"general_navigationbar_menu_button_label" = "Menu ";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";
 "new_in_app_risksetting_subtitle" = "Alleen bezoekers met een vaccinatie- of herstelbewijs krijgen 2G-toegang. 3G-toegang krijgen ook bezoekers met een testbewijs. Check van tevoren welk soort toegang jouw locatie mag geven.";
 "new_in_app_risksetting_title" = "2G- of 3G-toegang";
 "new_in_app_subtitle" = "Nieuw in de app";
-"scan_instructions_4_description_2G" = "Zie je een vinkje op je scherm? Dan is de QR-code geldig en kloppen de gegevens met het identiteitsbewijs. Je mag de bezoeker toegang geven.";
-"scan_instructions_4_title_2G" = "Vinkje = toegang";
+"scan_instructions_4_description_1G" = "Zie je een vinkje op je scherm? Dan is de QR-code geldig en kloppen de gegevens met het identiteitsbewijs. Je mag de bezoeker toegang geven.";
+"scan_instructions_4_title_1G" = "Vinkje = toegang";
 "scan_log_footer_in_use" = "App in gebruik sinds %@";
 "scan_log_footer_long_time" = "App langer dan een maand in gebruik";
 "scan_log_list_2g_plus" = "2G+";
@@ -18,7 +19,7 @@
 "scan_log_list_now" = "nu";
 "scan_log_message" = "<p>De scan-instelling log houdt bij welk soort toegang is gebruikt tijdens het scannen. Een BOA kan vragen om deze log te bekijken.</p><p>Om privacyredenen worden alleen de scan-instellingen van de laatste %li minuten opgeslagen op deze telefoon. Er worden geen persoonsgegevens opgeslagen. Lees meer in de <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">meestgestelde vragen</a>.</p>";
 "scan_log_title" = "Scan-instelling log";
-"scan_qr_description_2G" = "Is de QR-code geldig voor jouw locatie en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
+"scan_qr_description_1G" = "Is de QR-code geldig voor jouw locatie en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
 "updateApp.content" = "Je hebt de laatste versie van de app nodig om verder te gaan.";
 "verification_policy_selection_error_message" = "Maak een keuze om door te gaan";
 /* Koptekst in de over de app pagina */

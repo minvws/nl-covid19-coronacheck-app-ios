@@ -58,8 +58,7 @@ class VerifierStartViewModel: Logging {
 					let minutes = Int((totalDuration / 60).rounded(.up))
 					return L.verifier_home_countdown_subtitle(minutes)
 				case .policy1G:
-					// TODO: Update copy
-					return L.scan_qr_description_2G()
+					return L.scan_qr_description_1G()
 				default:
 					return L.verifierStartMessage()
 			}
