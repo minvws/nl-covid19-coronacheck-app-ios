@@ -8,17 +8,14 @@
 import Foundation
 
 protocol LaunchStateManaging {
-	typealias DelegateToken = LaunchStateManager.DelegateToken
 	
 	func handleLaunchState(_ state: LaunchState)
 	
-	func addDelegate(_ delegate: LaunchStateDelegate) -> DelegateToken
-	
-	func removeDelegate(token: DelegateToken)
+	func enableRestart()
 	
 	var versionSupplier: AppVersionSupplierProtocol { get set }
-	
-	func enableRestart()
+		
+	var launchStateDelegate: LaunchStateDelegate? { get set }
 }
 
 protocol LaunchStateDelegate: AnyObject {
@@ -37,12 +34,11 @@ protocol LaunchStateDelegate: AnyObject {
 }
 
 final class LaunchStateManager: LaunchStateManaging {
-	typealias DelegateToken = UUID
 	
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 	private var applicationHasStarted = false
-	private var launchStateDelegates = [DelegateToken: LaunchStateDelegate]()
+	weak var launchStateDelegate: LaunchStateDelegate?
 	
 	/// Initiializer
 	init() {
@@ -55,26 +51,13 @@ final class LaunchStateManager: LaunchStateManaging {
 		}
 	}
 	
-	func addDelegate(_ delegate: LaunchStateDelegate) -> DelegateToken {
-		
-		let newToken = DelegateToken()
-		launchStateDelegates[newToken] = delegate
-		return newToken
-	}
-	
-	func removeDelegate(token: DelegateToken) {
-		
-		launchStateDelegates[token] = nil
-	}
-	
 	// MARK: - Launch State -
 	
 	func handleLaunchState(_ state: LaunchState) {
 	
 		guard Current.cryptoLibUtility.isInitialized else {
-			launchStateDelegates.values.forEach { delegate in
-				delegate.cryptoLibDidNotInitialize()
-			}
+			launchStateDelegate?.cryptoLibDidNotInitialize()
+	
 			return
 		}
 
@@ -87,9 +70,7 @@ final class LaunchStateManager: LaunchStateManaging {
 			case .serverError(let serviceErrors):
 				// Deactivated or update trumps no internet or error
 				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
-					self.launchStateDelegates.values.forEach { delegate in
-						delegate.errorWhileLoading(errors: serviceErrors)
-					}
+					self.launchStateDelegate?.errorWhileLoading(errors: serviceErrors)
 				}
 
 			case .withinTTL:
@@ -108,7 +89,7 @@ final class LaunchStateManager: LaunchStateManaging {
 		if !self.applicationHasStarted {
 			self.applicationHasStarted = true
 			// Only start once (we will get called multiple times (withinTTL, finished)
-			self.launchStateDelegates.values.forEach { $0.onStartApplication() }
+			self.launchStateDelegate?.onStartApplication()
 		}
 	}
 	
@@ -120,15 +101,15 @@ final class LaunchStateManager: LaunchStateManaging {
 
 		if remoteConfiguration.isDeactivated {
 			
-			self.launchStateDelegates.values.forEach { $0.appIsDeactivated() }
+			self.launchStateDelegate?.appIsDeactivated()
 		} else if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
 			let url = remoteConfiguration.appStoreURL {
 			
-			self.launchStateDelegates.values.forEach { $0.updateIsRequired(appStoreUrl: url) }
+			self.launchStateDelegate?.updateIsRequired(appStoreUrl: url)
 		} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
 			let url = remoteConfiguration.appStoreURL {
 			
-			self.launchStateDelegates.values.forEach { $0.updateIsRecommended(version: recommendedVersion, appStoreUrl: url) }
+			self.launchStateDelegate?.updateIsRecommended(version: recommendedVersion, appStoreUrl: url)
 		} else {
 			
 			onContinue?()

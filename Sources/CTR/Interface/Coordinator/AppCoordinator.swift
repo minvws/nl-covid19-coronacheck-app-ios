@@ -44,8 +44,6 @@ class AppCoordinator: Coordinator, Logging {
 	var flavor = AppFlavor.flavor
 	
 	var appManager: LaunchStateManaging
-	
-	private var launchStateDelegateToken: LaunchStateManager.DelegateToken?
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -54,7 +52,7 @@ class AppCoordinator: Coordinator, Logging {
 		window = UIWindow(windowScene: scene)
 		self.navigationController = navigationController
 		self.appManager = LaunchStateManager()
-		self.launchStateDelegateToken = appManager.addDelegate(self)
+		self.appManager.launchStateDelegate = self
 	}
 
 	/// For use with iOS 12.
@@ -63,15 +61,9 @@ class AppCoordinator: Coordinator, Logging {
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.navigationController = navigationController
 		self.appManager = LaunchStateManager()
-		self.launchStateDelegateToken = appManager.addDelegate(self)
+		self.appManager.launchStateDelegate = self
 	}
 	
-	deinit {
-		if let token = launchStateDelegateToken {
-			appManager.removeDelegate(token: token)
-		}
-	}
-
 	/// Designated starter method
 	func start() {
 
