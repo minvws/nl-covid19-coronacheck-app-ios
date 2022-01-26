@@ -43,7 +43,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	var flavor = AppFlavor.flavor
 	
-	var appManager: LaunchStateManaging
+	var launchStateManager: LaunchStateManaging
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -51,8 +51,8 @@ class AppCoordinator: Coordinator, Logging {
 
 		window = UIWindow(windowScene: scene)
 		self.navigationController = navigationController
-		self.appManager = LaunchStateManager()
-		self.appManager.launchStateDelegate = self
+		self.launchStateManager = LaunchStateManager()
+		self.launchStateManager.delegate = self
 	}
 
 	/// For use with iOS 12.
@@ -60,8 +60,8 @@ class AppCoordinator: Coordinator, Logging {
 
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.navigationController = navigationController
-		self.appManager = LaunchStateManager()
-		self.appManager.launchStateDelegate = self
+		self.launchStateManager = LaunchStateManager()
+		self.launchStateManager.delegate = self
 	}
 	
 	/// Designated starter method
@@ -256,7 +256,7 @@ class AppCoordinator: Coordinator, Logging {
 
 // MARK: - LaunchStateDelegate
 
-extension AppCoordinator: LaunchStateDelegate {
+extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func appIsDeactivated() {
 		
@@ -267,6 +267,12 @@ extension AppCoordinator: LaunchStateDelegate {
 			)
 		)
 	}
+	
+	func applicationShouldStart() {
+		
+		startApplication()
+	}
+	
 	func cryptoLibDidNotInitialize() {
 		
 		showCryptoLibNotInitializedError()
@@ -276,11 +282,6 @@ extension AppCoordinator: LaunchStateDelegate {
 		// For now, show internet required.
 		// Todo: add error state.
 		showInternetRequired()
-	}
-
-	func onStartApplication() {
-		
-		startApplication()
 	}
 	
 	func updateIsRequired(appStoreUrl: URL) {
@@ -312,7 +313,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// - Parameter state: the launch state
     func handleLaunchState(_ state: LaunchState) {
 		
-		appManager.handleLaunchState(state)
+		launchStateManager.handleLaunchState(state)
 	}
 
 	// MARK: - Recommended Update -
@@ -368,7 +369,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// Retry loading the requirements
     func retry() {
 
-		appManager.enableRestart()
+		launchStateManager.enableRestart()
 		if let presentedViewController = navigationController.presentedViewController {
 			presentedViewController.dismiss(animated: true) { [weak self] in
 				self?.startLauncher()
