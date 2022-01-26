@@ -14,9 +14,9 @@ class NewMenuView: ScrolledStackView {
 	override func setupViews() {
 
 		super.setupViews()
-		view?.backgroundColor = C.primaryBlue5_Background()
+		view?.backgroundColor = C.primaryBlue5()
 		
-		stackViewInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+		stackViewInset = .zero
 		stackView.spacing = 0
 	}
 }

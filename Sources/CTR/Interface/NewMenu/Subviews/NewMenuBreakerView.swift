@@ -12,7 +12,7 @@ final class NewMenuBreakerView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = C.primaryBlue5_Background()
+		backgroundColor = C.primaryBlue5()
 	}
 	
 	override func setupViewConstraints() {

@@ -54,7 +54,7 @@ final class NewMenuRowView: UIControl {
 	}
 	
 	func setupViews() {
-		view?.backgroundColor = .white
+		backgroundColor = .white
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 	}
@@ -102,7 +102,7 @@ final class NewMenuRowView: UIControl {
 	private func updateDynamicAttributes() {
 		
 		backgroundColor = isHighlighted || isSelected
-			? C.primaryBlue5_Background()
+			? C.primaryBlue5()
 			: .white
 	}
 	
