@@ -132,7 +132,6 @@
 "verifier_result_access_title" = "Check done";
 "verifier_result_access_title_policy" = "%@ check done";
 "verifier_risksetting_2g_plus_subtitle" = "You can only give access to visitors with a vaccination or recovery certificate and a test certificate.";
-"verifier_risksetting_2g_plus_title" = "2G+ access";
 "verifier_risksetting_active_lock_warning_header" = "<p><b>Please note:</b> if you change scan settings while scanning, you have to wait for %li minutes before you can scan again.</p>";
 "verifier_risksetting_active_title" = "Change scan setting";
 "verifier_risksetting_changeselection" = "Set to %@ access";
@@ -156,6 +155,4 @@
 "verifier_risksetting_title" = "3G access";
 "verifier_scan_instructions_back_to_start" = "Back to start";
 "verifier_scanner_policy_indication" = "%@ access";
-"verifier_start_scan_qr_policy_indication_2g" = "Set to <b>2G</b> access";
-"verifier_start_scan_qr_policy_indication_2g_plus" = "Set to <b>2G+</b> access";
-"verifier_start_scan_qr_policy_indication_3g" = "Set to <b>3G</b> access";
+"verifier_start_scan_qr_policy_indication" = "Set to <b>%@</b> access";

@@ -132,7 +132,6 @@
 "verifier_result_access_title" = "Controle klaar";
 "verifier_result_access_title_policy" = "%@-controle klaar";
 "verifier_risksetting_2g_plus_subtitle" = "Je kunt alleen toegang geven aan bezoekers met een vaccinatie- of herstelbewijs én een testbewijs.";
-"verifier_risksetting_2g_plus_title" = "2G+ toegang";
 "verifier_risksetting_active_lock_warning_header" = "<p><b>Let op:</b> Als je tijdens het scannen wisselt van scan-instelling moet je %li minuten wachten voordat je weer kunt scannen.</p>";
 "verifier_risksetting_active_title" = "Scan-instelling aanpassen";
 "verifier_risksetting_changeselection" = "%@-toegang ingesteld";
@@ -156,6 +155,4 @@
 "verifier_risksetting_title" = "%@-toegang";
 "verifier_scan_instructions_back_to_start" = "Terug naar start";
 "verifier_scanner_policy_indication" = "%@-toegang";
-"verifier_start_scan_qr_policy_indication_2g" = "<b>2G</b>-toegang ingesteld";
-"verifier_start_scan_qr_policy_indication_2g_plus" = "<b>2G+</b> toegang ingesteld";
-"verifier_start_scan_qr_policy_indication_3g" = "<b>3G</b>-toegang ingesteld";
+"verifier_start_scan_qr_policy_indication" = "<b>%@</b>-toegang ingesteld";
