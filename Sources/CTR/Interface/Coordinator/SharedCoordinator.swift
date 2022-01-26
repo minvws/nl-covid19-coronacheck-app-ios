@@ -35,9 +35,6 @@ class SharedCoordinator: Coordinator, Logging {
 
 	var window: UIWindow
 
-	/// The side panel controller that holds both the menu and the main view
-	var sidePanel: SidePanelController?
-
 	var onboardingManager: OnboardingManaging = Current.onboardingManager
 	var forcedInformationManager: ForcedInformationManaging = Current.forcedInformationManager
 	var cryptoManager: CryptoManaging = Current.cryptoManager
