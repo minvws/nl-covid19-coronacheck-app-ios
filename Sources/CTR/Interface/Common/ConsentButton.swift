@@ -163,7 +163,7 @@ final class ConsentButton: UIControl {
 	private func applyState() {
 		iconImageView.isHighlighted = isSelected
 		iconImageView.image = hasError ? Images.Icon.error : Images.Icon.normal
-		backgroundColor = hasError ? C.consentButtonError() : C.consentButtonBackground()
+		backgroundColor = hasError ? C.consentButtonError() : C.primaryBlue5_Background()
 	}
 
 	@objc private func toggle() {
