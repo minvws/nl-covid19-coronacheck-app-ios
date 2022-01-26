@@ -50,12 +50,12 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.title) == L.verifier_risksetting_active_title()
 		expect(self.sut.sceneView.header).to(beNil())
-		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifier_risksetting_lowrisk_title()
+		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskSubtitle) == L.verifier_risksetting_lowrisk_subtitle()
-		expect(self.sut.sceneView.riskSettingControlsView.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
-		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifier_risksetting_highrisk_title()
+		expect(self.sut.sceneView.riskSettingControlsView.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)), \(L.verifier_risksetting_lowrisk_subtitle())"
+		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
-		expect(self.sut.sceneView.riskSettingControlsView.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
+		expect(self.sut.sceneView.riskSettingControlsView.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)), \(L.verifier_risksetting_highrisk_subtitle())"
 		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy3G
 	}
 	

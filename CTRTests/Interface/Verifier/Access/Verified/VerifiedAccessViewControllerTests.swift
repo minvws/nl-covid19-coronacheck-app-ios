@@ -47,7 +47,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.title) == L.verifier_result_access_title_lowrisk()
+		expect(self.sut.sceneView.title) == L.verifier_result_access_title_policy(VerificationPolicy.policy3G.localization)
 		expect(self.sut.preferredStatusBarStyle) == .default
 		
 		// Snapshot
@@ -90,7 +90,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.title) == L.verifier_result_access_title_highrisk()
+		expect(self.sut.sceneView.title) == L.verifier_result_access_title_policy(VerificationPolicy.policy1G.localization)
 		expect(self.sut.preferredStatusBarStyle) == .default
 		
 		// Snapshot
@@ -132,7 +132,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.title) == L.verifier_result_access_title_lowrisk()
+		expect(self.sut.sceneView.title) == L.verifier_result_access_title_policy(VerificationPolicy.policy3G.localization)
 		expect(self.sut.preferredStatusBarStyle) == .default
 		
 		// Snapshot
@@ -175,7 +175,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.title) == L.verifier_result_access_title_highrisk()
+		expect(self.sut.sceneView.title) == L.verifier_result_access_title_policy(VerificationPolicy.policy1G.localization)
 		expect(self.sut.preferredStatusBarStyle) == .lightContent
 		
 		// Snapshot

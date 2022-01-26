@@ -40,12 +40,12 @@ final class RiskSettingUnselectedViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.title) == L.verifier_risksetting_firsttimeuse_title()
-		expect(self.sut.lowRiskTitle) == L.verifier_risksetting_lowrisk_title()
+		expect(self.sut.lowRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)
 		expect(self.sut.lowRiskSubtitle) == L.verifier_risksetting_lowrisk_subtitle()
-		expect(self.sut.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
-		expect(self.sut.highRiskTitle) == L.verifier_risksetting_highrisk_title()
+		expect(self.sut.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)), \(L.verifier_risksetting_lowrisk_subtitle())"
+		expect(self.sut.highRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)
 		expect(self.sut.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
-		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
+		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)), \(L.verifier_risksetting_highrisk_subtitle())"
 		expect(self.sut.primaryButtonTitle) == L.verifier_risksetting_confirmation_button()
 		expect(self.sut.errorMessage) == L.verification_policy_selection_error_message()
 		expect(self.sut.shouldDisplayNotSetError) == false
