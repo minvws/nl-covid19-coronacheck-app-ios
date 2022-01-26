@@ -156,15 +156,6 @@
 "verifier_risksetting_title" = "%@-toegang";
 "verifier_scan_instructions_back_to_start" = "Terug naar start";
 "verifier_scanner_policy_indication" = "%@-toegang";
-"verifier_scannextinstruction_button_deny_access_supplemental" = "Geen aanvullend bewijs";
-"verifier_scannextinstruction_button_deny_access_test" = "Geen testbewijs";
-"verifier_scannextinstruction_button_scan_next_supplemental" = "Scan aanvullend bewijs";
-"verifier_scannextinstruction_button_scan_next_test" = "Scan testbewijs";
-"verifier_scannextinstruction_header_supplemental" = "Het gescande bewijs niet voldoende. Zonder een vaccinatie- of herstelbewijs mag je de bezoeker geen toegang geven.";
-"verifier_scannextinstruction_header_test" = "Het gescande bewijs niet voldoende. Zonder testbewijs mag je de bezoeker geen toegang geven.";
-"verifier_scannextinstruction_subtitle" = "Bewijs 1 uit 2 gescand";
-"verifier_scannextinstruction_title_supplemental" = "Scan nu een vaccinatie- of herstelbewijs";
-"verifier_scannextinstruction_title_test" = "Scan nu het testbewijs";
 "verifier_start_scan_qr_policy_indication_2g" = "<b>2G</b>-toegang ingesteld";
 "verifier_start_scan_qr_policy_indication_2g_plus" = "<b>2G+</b> toegang ingesteld";
 "verifier_start_scan_qr_policy_indication_3g" = "<b>3G</b>-toegang ingesteld";
