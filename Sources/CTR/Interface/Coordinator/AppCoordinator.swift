@@ -21,8 +21,6 @@ protocol AppCoordinatorDelegate: AnyObject {
 
 class AppCoordinator: Coordinator, Logging {
 
-	var loggingCategory: String = "AppCoordinator"
-
 	let window: UIWindow
 
 	var childCoordinators: [Coordinator] = []
@@ -40,10 +38,6 @@ class AppCoordinator: Coordinator, Logging {
 	// Flag to prevent showing the recommended update dialog twice
 	// which can happen with the config being fetched within the TTL.
 	private var isPresentingCryptoLibError = false
-
-	// Flag to prevent starting the application more than once
-	// which can happen with the config being fetched within the TTL.
-	private var isApplicationStarted = false
 
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 
@@ -111,9 +105,6 @@ class AppCoordinator: Coordinator, Logging {
 
     /// Start the real application
     private func startApplication() {
-
-		guard !isApplicationStarted else { return }
-		isApplicationStarted = true
 
         switch flavor {
             case .holder:
@@ -385,6 +376,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// Retry loading the requirements
     func retry() {
 
+		appManager.enableRestart()
 		if let presentedViewController = navigationController.presentedViewController {
 			presentedViewController.dismiss(animated: true) { [weak self] in
 				self?.startLauncher()
@@ -395,8 +387,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
     }
 
 	func reset() {
-
-		isApplicationStarted = false
+		
 		childCoordinators = []
 		retry()
 	}

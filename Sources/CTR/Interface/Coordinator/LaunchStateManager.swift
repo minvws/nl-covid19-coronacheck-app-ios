@@ -17,6 +17,8 @@ protocol LaunchStateManaging {
 	func removeDelegate(token: DelegateToken)
 	
 	var versionSupplier: AppVersionSupplierProtocol { get set }
+	
+	func enableRestart()
 }
 
 protocol LaunchStateDelegate: AnyObject {
@@ -39,7 +41,7 @@ final class LaunchStateManager: LaunchStateManaging {
 	
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
-	private var applicationStarted = false
+	private var applicationHasStarted = false
 	private var launchStateDelegates = [DelegateToken: LaunchStateDelegate]()
 	
 	/// Initiializer
@@ -102,8 +104,10 @@ final class LaunchStateManager: LaunchStateManaging {
 	}
 	
 	private func startApplication() {
-		if !self.applicationStarted {
-			self.applicationStarted = true
+		
+		if !self.applicationHasStarted {
+			self.applicationHasStarted = true
+			// Only start once (we will get called multiple times (withinTTL, finished)
 			self.launchStateDelegates.values.forEach { $0.onStartApplication() }
 		}
 	}
@@ -129,6 +133,11 @@ final class LaunchStateManager: LaunchStateManaging {
 			
 			onContinue?()
 		}
+	}
+	
+	func enableRestart() {
+		
+		applicationHasStarted = false
 	}
 	
 	// MARK: - Remote Config -
