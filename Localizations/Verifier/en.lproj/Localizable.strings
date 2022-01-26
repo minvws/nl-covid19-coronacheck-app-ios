@@ -131,7 +131,6 @@
 "verifier_menu_risksetting" = "Scan setting";
 "verifier_result_access_title" = "Check done";
 "verifier_result_access_title_policy" = "%@ check done";
-"verifier_risksetting_2g_plus_subtitle" = "You can only give access to visitors with a vaccination or recovery certificate and a test certificate.";
 "verifier_risksetting_active_lock_warning_header" = "<p><b>Please note:</b> if you change scan settings while scanning, you have to wait for %li minutes before you can scan again.</p>";
 "verifier_risksetting_active_title" = "Change scan setting";
 "verifier_risksetting_changeselection" = "Set to %@ access";
@@ -143,8 +142,6 @@
 "verifier_risksetting_confirmation_dialog_title" = "Are you sure you want to change the setting?";
 "verifier_risksetting_firsttimeuse_header" = "For your location, please specify if you're going to give 2G or 3G access. Check which kind of access you can give before you start scanning.";
 "verifier_risksetting_firsttimeuse_title" = "Choose your scan setting";
-"verifier_risksetting_highrisk_subtitle" = "You can only give access to visitors with a vaccination or recovery certificate.";
-"verifier_risksetting_lowrisk_subtitle" = "You can give access to visitors with a test, vaccination or recovery certificate.";
 "verifier_risksetting_readmore" = "Which kind of access can I give?";
 "verifier_risksetting_readmore_url" = "https://www.government.nl/whichaccess-cc";
 "verifier_risksetting_setting_button" = "Set setting";
@@ -152,6 +149,8 @@
 "verifier_risksetting_start_readmore" = "Which kind of access can I give?";
 "verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/en/faq-scanner-in-app";
 "verifier_risksetting_start_title" = "Scan setting";
+"verifier_risksetting_subtitle_1G" = "You can only give access to visitors with a vaccination or recovery certificate.";
+"verifier_risksetting_subtitle_3G" = "You can give access to visitors with a test, vaccination or recovery certificate.";
 "verifier_risksetting_title" = "3G access";
 "verifier_scan_instructions_back_to_start" = "Back to start";
 "verifier_scanner_policy_indication" = "%@ access";

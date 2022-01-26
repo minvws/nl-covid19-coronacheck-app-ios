@@ -16,10 +16,10 @@ final class RiskSettingInstructionViewModel: Logging {
 	@Bindable private(set) var title = L.verifier_risksetting_firsttimeuse_title()
 	@Bindable private(set) var header = L.verifier_risksetting_firsttimeuse_header()
 	@Bindable private(set) var lowRiskTitle: String?
-	@Bindable private(set) var lowRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
+	@Bindable private(set) var lowRiskSubtitle = L.verifier_risksetting_subtitle_3G()
 	@Bindable private(set) var lowRiskAccessibilityLabel: String?
 	@Bindable private(set) var highRiskTitle: String?
-	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
+	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_subtitle_1G()
 	@Bindable private(set) var highRiskAccessibilityLabel: String?
 	@Bindable private(set) var moreButtonTitle = L.verifier_risksetting_readmore()
 	@Bindable private(set) var primaryButtonTitle = L.verifierScaninstructionsButtonStartscanning()
@@ -39,10 +39,10 @@ final class RiskSettingInstructionViewModel: Logging {
 		
 		let title3G = L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)
 		lowRiskTitle = title3G
-		lowRiskAccessibilityLabel = "\(title3G), \(L.verifier_risksetting_lowrisk_subtitle())"
+		lowRiskAccessibilityLabel = "\(title3G), \(L.verifier_risksetting_subtitle_3G())"
 		let title1G = L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)
 		highRiskTitle = title1G
-		highRiskAccessibilityLabel = "\(title1G), \(L.verifier_risksetting_highrisk_subtitle())"
+		highRiskAccessibilityLabel = "\(title1G), \(L.verifier_risksetting_subtitle_1G())"
 		
 		let selectedVerificationPolicy = Current.riskLevelManager.state
 		verificationPolicy = selectedVerificationPolicy
