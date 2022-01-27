@@ -10,7 +10,7 @@ import UIKit
 class LoginTVSViewController: BaseViewController {
 
 	private let viewModel: LoginTVSViewModel
-	private let sceneView = FetchEventsView()
+	private let sceneView = FetchRemoteEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model

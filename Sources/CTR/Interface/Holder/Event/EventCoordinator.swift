@@ -209,8 +209,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	}
 
 	private func navigateToFetchEvents(token: TVSAuthorizationToken, eventMode: EventMode) {
-		let viewController = FetchEventsViewController(
-			viewModel: FetchEventsViewModel(
+		let viewController = FetchRemoteEventsViewController(
+			viewModel: FetchRemoteEventsViewModel(
 				coordinator: self,
 				tvsToken: token,
 				eventMode: eventMode

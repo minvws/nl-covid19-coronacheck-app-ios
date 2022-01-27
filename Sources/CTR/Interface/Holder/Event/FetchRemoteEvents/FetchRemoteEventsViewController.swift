@@ -7,19 +7,19 @@
 
 import UIKit
 
-class FetchEventsViewController: BaseViewController {
+class FetchRemoteEventsViewController: BaseViewController {
 
 	enum State {
 		case loading(content: Content)
 		case feedback(content: Content)
 	}
 
-	private let viewModel: FetchEventsViewModel
-	private let sceneView = FetchEventsView()
+	private let viewModel: FetchRemoteEventsViewModel
+	private let sceneView = FetchRemoteEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: FetchEventsViewModel) {
+	init(viewModel: FetchRemoteEventsViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
