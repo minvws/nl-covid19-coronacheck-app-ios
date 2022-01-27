@@ -60,6 +60,7 @@
 "general.vaccination" = "vaccination";
 "general.vaccinationcertificate" = "vaccination certificate";
 "general.vaccinationdate" = "Vaccination date";
+"general_menu" = "Menu";
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
 "general_toMyOverview" = "To my certificates";
 "general_vaccinationAssessment" = "vaccination approval";

@@ -60,6 +60,7 @@
 "general.vaccination" = "vaccinatie";
 "general.vaccinationcertificate" = "vaccinatiebewijs";
 "general.vaccinationdate" = "Vaccinatiedatum";
+"general_menu" = "Menu";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
 "general_toMyOverview" = "Naar mijn bewijzen";
 "general_vaccinationAssessment" = "vaccinatiebeoordeling";
@@ -667,6 +668,7 @@
 "holder_expiredDomesticVaccinationModal_body" = "<p>Om je vaccinatiebewijs te verlengen heb je en boostervaccinatie nodig. Kijk voor meer informatie over boostervaccinaties op <a href=\"https://www.coronavaccinatie.nl/booster-cc\">www.coronavaccinatie.nl/booster</a>.</p><p>Heb je en boostervaccinatie gehad? Haal opnieuw je gegevens op om deze aan je bewijs toe te voegen.</p>";
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Boostervaccinatie toevoegen";
 "holder_expiredDomesticVaccinationModal_title" = "Verlopen vaccinatiebewijs";
+"holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs toevoegen";
 "holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>Een Nederlands testbewijs is alleen geldig op plekken met 3G-toegang. Dit betekent dat je met je testbewijs geen toegang krijgt tot plekken waar 2G geldt.</p><p><b>Wat is het verschil tussen 3G en 2G?</b><br />De ‘G’ staat voor Getest, Gevaccineerd, of Genezen (hersteld van corona).</p><ul><li>3G-toegang krijg je met een test-, vaccinatie- of herstelbewijs.</li><li>2G-toegang krijg je <u>niet</u> met een testbewijs. Hiervoor heb je een vaccinatie- of herstelbewijs nodig.</li></ul><p><a href=\"https://www.rijksoverheid.nl/2g-cc\">Lees hier meer over 3G en 2G</a>.</p>";
