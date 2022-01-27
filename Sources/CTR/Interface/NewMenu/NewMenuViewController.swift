@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewMenuViewController: UIViewController {
+class NewMenuViewController: BaseViewController {
 	
 	enum Item {
 		case row(title: String, icon: UIImage, action: () -> Void )
@@ -40,7 +40,9 @@ class NewMenuViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		title = L.general_menu()
 		setupBindings()
+		addBackButton(customAction: nil)
 	}
 	
 	private func setupBindings() {
