@@ -65,6 +65,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	func test_content_verifier_verificationPolicyEnabled() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		let viewModel = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
@@ -92,7 +93,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	func test_content_verifier_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let viewModel = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),

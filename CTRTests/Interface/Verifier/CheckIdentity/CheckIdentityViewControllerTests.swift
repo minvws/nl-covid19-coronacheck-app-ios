@@ -183,6 +183,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped_whenVerified_shouldNavigateToVerfiedInfo() {
 		// Given
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
@@ -202,6 +203,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped_whenDemo_shouldNavigateToVerfiedInfo() {
 		// Given
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		viewModel = CheckIdentityViewModel(
@@ -223,7 +225,6 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
 		// Given
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
@@ -243,7 +244,6 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
 		// Given
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		viewModel = CheckIdentityViewModel(

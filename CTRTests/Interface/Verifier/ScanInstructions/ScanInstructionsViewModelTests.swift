@@ -47,6 +47,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		sut = ScanInstructionsViewModel(
 			coordinator: coordinatorSpy,
 			pages: []
@@ -64,7 +65,6 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting_verificationPolicyDisabled() {
 
 		// Arrange
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
