@@ -2,6 +2,8 @@
 "general_navigationbar_menu_button_label" = "Menu ";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";
+"new_in_app_1G_subtitle" = "Op plekken waar het coronatoegangsbewijs gebruikt wordt, krijgen alleen bezoekers met een testbewijs toegang (1G-toegang). De CoronaCheck scanner geeft alleen een scherm met vinkje bij het scannen van een testbewijs.";
+"new_in_app_1G_title" = "1G-toegang";
 "new_in_app_risksetting_subtitle" = "Alleen bezoekers met een testbewijs krijgen 1G-toegang. 3G-toegang krijgen bezoekers met een testbewijs, vaccinatiebewijs of herstelbewijs. Check van tevoren welk soort toegang jouw locatie mag geven.";
 "new_in_app_risksetting_title" = "1G- of 3G-toegang";
 "new_in_app_subtitle" = "Nieuw in de app";
@@ -141,12 +143,12 @@
 "verifier_risksetting_confirmation_dialog_negative_button" = "Nee, terug";
 "verifier_risksetting_confirmation_dialog_positive_button" = "Ja, aanpassen";
 "verifier_risksetting_confirmation_dialog_title" = "Weet je zeker dat je de instelling wilt aanpassen?";
-"verifier_risksetting_firsttimeuse_header" = "Stel voor jouw locatie in of je 2G- of 3G-toegang gaat geven. Controleer voordat je gaat scannen welk soort toegang je mag geven.";
+"verifier_risksetting_firsttimeuse_header" = "Stel voor jouw locatie in of je 1G- of 3G-toegang gaat geven. Controleer voordat je gaat scannen welk soort toegang je mag geven.";
 "verifier_risksetting_firsttimeuse_title" = "Kies je scan-instelling";
 "verifier_risksetting_readmore" = "Welk soort toegang mag ik geven?";
 "verifier_risksetting_readmore_url" = "https://www.rijksoverheid.nl/welketoegang-cc";
 "verifier_risksetting_setting_button" = "Instellen";
-"verifier_risksetting_start_header" = "Stel voor jouw locatie in of je 2G- of 3G-toegang gaat geven. Controleer voordat je gaat scannen welk soort toegang je mag geven.";
+"verifier_risksetting_start_header" = "Stel voor jouw locatie in of je 1G- of 3G-toegang gaat geven. Controleer voordat je gaat scannen welk soort toegang je mag geven.";
 "verifier_risksetting_start_readmore" = "Welk soort toegang mag ik geven?";
 "verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier_risksetting_start_title" = "Scan-instelling";
