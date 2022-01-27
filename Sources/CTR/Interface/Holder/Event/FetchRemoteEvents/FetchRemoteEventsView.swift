@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FetchEventsView: ScrolledStackWithButtonView {
+class FetchRemoteEventsView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {
