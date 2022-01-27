@@ -37,14 +37,14 @@ class AppUpdateViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - versionInformation: the version information
-	init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteConfiguration?) {
+	///   - appStoreUrl: the store url
+	init(coordinator: AppCoordinatorDelegate, appStoreUrl: URL?) {
 
 		self.coordinator = coordinator
 		title = L.updateAppTitle()
 		message = L.updateAppContent()
 		actionTitle = L.updateAppButton()
-		updateURL = versionInformation?.appStoreURL
+		updateURL = appStoreUrl
 		showCannotOpenAlert = false
 		errorMessage = L.updateAppErrorMessage()
 		self.image = I.updateRequired()
@@ -67,17 +67,16 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - versionInformation: the version information
-	override init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteConfiguration?) {
+	///   - appStoreUrl: the store url
+	override init(coordinator: AppCoordinatorDelegate, appStoreUrl: URL?) {
 
-		super.init(coordinator: coordinator, versionInformation: nil)
+		super.init(coordinator: coordinator, appStoreUrl: URL(string: "https://coronacheck.nl"))
 
 		self.title = L.endOfLifeTitle()
 		self.message = L.endOfLifeDescription()
 		self.errorMessage = L.endOfLifeErrorMessage()
 		self.actionTitle = L.endOfLifeButton()
 		self.image = I.endOfLife()
-		self.updateURL = URL(string: "https://coronacheck.nl")
 	}
 }
 
@@ -89,7 +88,7 @@ class InternetRequiredViewModel: AppUpdateViewModel {
 	///   - coordinator: the coordinator delegate
 	init(coordinator: AppCoordinatorDelegate) {
 
-		super.init(coordinator: coordinator, versionInformation: nil)
+		super.init(coordinator: coordinator, appStoreUrl: nil)
 
 		self.title = L.internetRequiredTitle()
 		self.message = L.internetRequiredText()

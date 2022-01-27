@@ -12,18 +12,16 @@ class LaunchView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
-		static let ribbonHeight: CGFloat = 101
-		static let ribbonWidth: CGFloat = 153
-		static let iconSize: CGFloat = 64
-
-		// Margins
-		static let titleMargin: CGFloat = 32
-		static let spinnerMargin: CGFloat = 5
-		static let margin: CGFloat = 20.0
-		static let ribbonHeightOffset: CGFloat = 10.0
-		static let ribbonCenterOffset: CGFloat = 53.0
-		
+		enum Icon {
+			static let size: CGFloat = 64
+			static let margin: CGFloat = 32
+		}
+		enum Ribbon {
+			static let height: CGFloat = 101
+			static let width: CGFloat = 153
+			static let heightOffset: CGFloat = 10.0
+			static let centerOffset: CGFloat = 53.0
+		}
 		enum Title {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
@@ -31,10 +29,13 @@ class LaunchView: BaseView {
 		enum Message {
 			static let lineHeight: CGFloat = 22
 			static let kerning: CGFloat = -0.41
+			static let spinnerMargin: CGFloat = 5
 		}
 		enum Version {
 			static let lineHeight: CGFloat = 18
 			static let kerning: CGFloat = -0.24
+			static let bottomMargin: CGFloat = 32
+			static let margin: CGFloat = 20.0
 		}
 	}
 
@@ -132,89 +133,107 @@ class LaunchView: BaseView {
 
 		NSLayoutConstraint.activate([
 
-			ribbonVWSView.topAnchor.constraint(
-				equalTo: topAnchor,
-				constant: -ViewTraits.ribbonHeightOffset
-			),
-			ribbonVWSView.centerXAnchor.constraint(
-				equalTo: centerXAnchor,
-				constant: ViewTraits.ribbonCenterOffset
-			),
-			ribbonVWSView.widthAnchor.constraint(equalToConstant: ViewTraits.ribbonWidth),
-			ribbonVWSView.heightAnchor.constraint(equalToConstant: ViewTraits.ribbonHeight),
-
-			appIconView.widthAnchor.constraint(equalToConstant: ViewTraits.iconSize),
-			appIconView.heightAnchor.constraint(equalToConstant: ViewTraits.iconSize),
+			appIconView.widthAnchor.constraint(equalToConstant: ViewTraits.Icon.size),
+			appIconView.heightAnchor.constraint(equalToConstant: ViewTraits.Icon.size),
 			appIconView.centerXAnchor.constraint(equalTo: centerXAnchor),
 			appIconView.bottomAnchor.constraint(
 				equalTo: titleLabel.topAnchor,
-				constant: -ViewTraits.titleMargin
+				constant: -ViewTraits.Icon.margin
 			),
 
 			// Title
 			titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
 			titleLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
-
-			// stackView
-			stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-			stackView.bottomAnchor.constraint(equalTo: versionLabel.topAnchor),
-
-			// Spinner
-			spinner.leadingAnchor.constraint(equalTo: messageContainer.leadingAnchor),
-			spinner.trailingAnchor.constraint(
-				equalTo: messageLabel.leadingAnchor,
-				constant: -ViewTraits.spinnerMargin
-			),
-			spinner.centerYAnchor.constraint(equalTo: messageContainer.centerYAnchor),
-
-			// Message
-			messageLabel.centerYAnchor.constraint(equalTo: messageContainer.centerYAnchor),
-			messageLabel.trailingAnchor.constraint(equalTo: messageContainer.trailingAnchor),
-			messageLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
-
+			
 			// Version
 			versionLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			versionLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
 			versionLabel.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.titleMargin
+				constant: -ViewTraits.Version.bottomMargin
 			),
-			versionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.margin)
+			versionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Version.margin)
+		])
+		
+		setupRibbonViewContraints()
+		setupStackViewViewConstraints()
+	}
+	
+	private func setupRibbonViewContraints() {
+		
+		NSLayoutConstraint.activate([
+			
+			ribbonVWSView.topAnchor.constraint(
+				equalTo: topAnchor,
+				constant: -ViewTraits.Ribbon.heightOffset
+			),
+			ribbonVWSView.centerXAnchor.constraint(
+				equalTo: centerXAnchor,
+				constant: ViewTraits.Ribbon.centerOffset
+			),
+			ribbonVWSView.widthAnchor.constraint(equalToConstant: ViewTraits.Ribbon.width),
+			ribbonVWSView.heightAnchor.constraint(equalToConstant: ViewTraits.Ribbon.height)
+		])
+	}
+	
+	private func setupStackViewViewConstraints() {
+		
+		NSLayoutConstraint.activate([
+			
+			// stackView
+			stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+			stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+			stackView.bottomAnchor.constraint(equalTo: versionLabel.topAnchor),
+			
+			// Spinner
+			spinner.leadingAnchor.constraint(equalTo: messageContainer.leadingAnchor),
+			spinner.trailingAnchor.constraint(
+				equalTo: messageLabel.leadingAnchor,
+				constant: -ViewTraits.Message.spinnerMargin
+			),
+			spinner.centerYAnchor.constraint(equalTo: messageContainer.centerYAnchor),
+			
+			// Message
+			messageLabel.centerYAnchor.constraint(equalTo: messageContainer.centerYAnchor),
+			messageLabel.trailingAnchor.constraint(equalTo: messageContainer.trailingAnchor),
+			messageLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor)
 		])
 	}
 
 	// MARK: Public Access
-
+	
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
-															 alignment: .center,
-															 kerning: ViewTraits.Title.kerning)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.Title.lineHeight,
+				alignment: .center,
+				kerning: ViewTraits.Title.kerning)
 		}
 	}
-
+	
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.Message.lineHeight,
-																 kerning: ViewTraits.Message.kerning,
-																 textColor: Theme.colors.grey1)
+			messageLabel.attributedText = message?.setLineHeight(
+				ViewTraits.Message.lineHeight,
+				kerning: ViewTraits.Message.kerning,
+				textColor: Theme.colors.grey1)
 		}
 	}
-
+	
 	/// The version
 	var version: String? {
 		didSet {
-			versionLabel.attributedText = version?.setLineHeight(ViewTraits.Version.lineHeight,
-																 alignment: .center,
-																 kerning: ViewTraits.Version.kerning,
-																 textColor: Theme.colors.grey1)
+			versionLabel.attributedText = version?.setLineHeight(
+				ViewTraits.Version.lineHeight,
+				alignment: .center,
+				kerning: ViewTraits.Version.kerning,
+				textColor: Theme.colors.grey1)
 		}
 	}
-
+	
 	var appIcon: UIImage? {
 		didSet {
 			appIconView.image = appIcon

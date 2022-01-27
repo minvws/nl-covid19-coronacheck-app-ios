@@ -20,9 +20,6 @@ class LaunchViewModel: Logging {
 	private var flavor: AppFlavor
 	var configStatus: LaunchState?
 	var issuerPublicKeysStatus: LaunchState?
-	var didFinishLaunchState = false
-
-	private var remoteConfigManagerUpdateToken: RemoteConfigManager.ObserverToken?
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
@@ -54,19 +51,7 @@ class LaunchViewModel: Logging {
 			: L.verifierLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 
 		walletManager = flavor == .holder ? Current.walletManager : nil
-
-		remoteConfigManagerUpdateToken = Current.remoteConfigManager.appendReloadObserver { [weak self] remoteConfig, rawData, urlResponse in
-			Current.cryptoLibUtility.checkFile(.remoteConfiguration)
-			self?.checkWallet()
-		}
-
 		startChecks()
-	}
-
-	deinit {
-		remoteConfigManagerUpdateToken.map {
-			Current.remoteConfigManager.removeObserver(token: $0)
-		}
 	}
 
 	private func startChecks() {
@@ -105,36 +90,21 @@ class LaunchViewModel: Logging {
 			return
 		}
 
-		logVerbose("switch \(configStatus), \(issuerPublicKeysStatus) - didFinishLaunchState: \(didFinishLaunchState)")
-
 		// Small delay, let the viewController load.
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 			switch (configStatus, issuerPublicKeysStatus) {
 				case (.withinTTL, .withinTTL):
-					self.didFinishLaunchState = true
 					self.coordinator?.handleLaunchState(.withinTTL)
-
-				case (.actionRequired, _):
-					self.coordinator?.handleLaunchState(configStatus)
-
-				case (LaunchState.internetRequired, _), (_, .internetRequired):
-					if !self.didFinishLaunchState {
-						self.didFinishLaunchState = true
-						self.coordinator?.handleLaunchState(.internetRequired)
-					}
-
-				case (.noActionNeeded, .noActionNeeded), (.noActionNeeded, .withinTTL), (.withinTTL, .noActionNeeded):
-					if !Current.cryptoLibUtility.isInitialized {
-						// Show crypto lib not initialized error
-						self.coordinator?.handleLaunchState(.cryptoLibNotInitialized)
-					} else {
-						// Start application
-						if !self.didFinishLaunchState {
-							self.didFinishLaunchState = true
-							self.coordinator?.handleLaunchState(.noActionNeeded)
-						}
-					}
-
+								
+				case let (.serverError(error1), .serverError(error2)):
+					self.coordinator?.handleLaunchState(.serverError(error1 + error2))
+				
+				case (.serverError(let error), _), (_, .serverError(let error)):
+					self.coordinator?.handleLaunchState(.serverError(error))
+				
+				case (.finished, .finished), (.finished, .withinTTL), (.withinTTL, .finished):
+					self.coordinator?.handleLaunchState(.finished)
+					
 				default:
 					self.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
 			}
@@ -156,66 +126,17 @@ class LaunchViewModel: Logging {
 			},
 			completion: { (result: Result<(Bool, RemoteConfiguration), ServerError>) in
 				self.isUpdatingConfiguration = false
+				
 				switch result {
-					case let .success((_, remoteConfiguration)):
 
-						// Note: There are also other steps done on completion
-						// by way of the remoteConfigManager's registered update/reload observers
-						// - see RemoteConfigManager `.appendUpdateObserver` and `.appendReloadObserver`.
+					case .success:
+						completion(.finished)
 
-						self.compare(remoteConfiguration, completion: completion)
-
-					case let .failure(networkError):
-						self.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
-
-						// Fallback to the last known remote configuration
-						let storedConfiguration = Current.remoteConfigManager.storedConfiguration
-						self.logDebug("Using stored Configuration \(storedConfiguration)")
-
-						// Check the wallet
-						self.checkWallet()
-
-						self.compare(storedConfiguration) { state in
-							switch state {
-								case .actionRequired:
-									// Deactivated or update trumps no internet
-									completion(state)
-								default:
-									completion(.internetRequired)
-							}
-						}
+					case let .failure(error):
+						self.logError("Error getting the remote config: \(error)")
+						completion(.serverError([error]))
 				}
 			})
-	}
-
-	/// Compare the remote configuration against the app version
-	/// - Parameters:
-	///   - remoteConfiguration: the remote configuration
-	///   - completion: completion handler
-	private func compare(
-		_ remoteConfiguration: RemoteConfiguration,
-		completion: @escaping (LaunchState) -> Void) {
-
-		let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
-		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
-		let currentVersion = versionSupplier?.getCurrentVersion().fullVersionString() ?? "1.0.0"
-
-		if remoteConfiguration.isDeactivated ||
-			requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending ||
-			recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-			// Update or kill the app
-			completion(.actionRequired(remoteConfiguration))
-		} else {
-			// Nothing to do
-			completion(.noActionNeeded)
-		}
-	}
-
-	private func checkWallet() {
-
-		// Will be removed in the 2285 story.
-		let configuration = Current.remoteConfigManager.storedConfiguration
-		walletManager?.expireEventGroups(configuration: configuration)
 	}
 
 	private func updateKeys(_ completion: @escaping (LaunchState) -> Void) {
@@ -234,11 +155,11 @@ class LaunchViewModel: Logging {
 				self.isUpdatingIssuerPublicKeys = false
 				switch result {
 					case .success:
-						completion(.noActionNeeded)
+						completion(.finished)
 
 					case let .failure(error):
 						self.logError("Error getting the issuers public keys: \(error)")
-						completion(.internetRequired)
+						completion(.serverError([error]))
 				}
 			}
 		)
@@ -280,7 +201,7 @@ class LaunchViewModel: Logging {
 		startChecks()
 	}
 
-	// MARK: DeviceAuthentication
+	// MARK: DeviceAuthentication (pin code)
 
 	private func shouldShowDeviceAuthenticationAlert() -> Bool {
 
