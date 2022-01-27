@@ -42,6 +42,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_demoLowRisk_verificationPolicyEnabled() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
 		
 		// When
 		sut = VerifiedAccessViewModel(
@@ -56,7 +57,6 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_demoLowRisk_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(
@@ -71,6 +71,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_demoHighRisk_verificationPolicyEnabled() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
 		
 		// When
 		sut = VerifiedAccessViewModel(
@@ -85,7 +86,6 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_demoHighRisk_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(
@@ -100,6 +100,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_verifiedLowRisk_verificationPolicyEnabled() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
 		
 		// When
 		sut = VerifiedAccessViewModel(
@@ -114,7 +115,6 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_verifiedLowRisk_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(
@@ -129,6 +129,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_verifiedHighRisk_verificationPolicyEnabled() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
 		
 		// When
 		sut = VerifiedAccessViewModel(
@@ -143,7 +144,6 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 	func test_accessTitle_verifiedHighRisk_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = VerifiedAccessViewModel(

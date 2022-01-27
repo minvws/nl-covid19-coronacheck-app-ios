@@ -46,7 +46,7 @@ class ForcedInformationManagerTests: XCTestCase {
 	func testGetNeedsUpdating_verifier_verificationPolicyEnabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		
 		sut.factory = VerifierForcedInformationFactory()
 		sut.wipePersistedData()
@@ -61,7 +61,6 @@ class ForcedInformationManagerTests: XCTestCase {
 	func testGetNeedsUpdating_verifier_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		sut.factory = VerifierForcedInformationFactory()
 		sut.wipePersistedData()
 		

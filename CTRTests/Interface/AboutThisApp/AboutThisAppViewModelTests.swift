@@ -72,6 +72,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_initializationWithVerifier_verificationPolicyEnabled() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		
 		// When
 		sut = AboutThisAppViewModel(
@@ -100,7 +101,6 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_initializationWithVerifier_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = AboutThisAppViewModel(
