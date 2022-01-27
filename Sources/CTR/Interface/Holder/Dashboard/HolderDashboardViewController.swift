@@ -92,6 +92,8 @@ class HolderDashboardViewController: BaseViewController {
 
 		setupBindings()
 		
+		setupMenuButton()
+		
 		sceneView.delegate = self
 
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
@@ -102,6 +104,12 @@ class HolderDashboardViewController: BaseViewController {
 		UIAccessibility.post(notification: .screenChanged, argument: navigationItem.leftBarButtonItem)
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+
+		viewModel.viewWillAppear()
+	}
+	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = false
@@ -112,6 +120,17 @@ class HolderDashboardViewController: BaseViewController {
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = true
 	}
 	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		
+		guard !didSetInitialStartingTabOnSceneView else { return }
+		didSetInitialStartingTabOnSceneView = true
+		
+		// Select start tab after layouting is done to be able to update scroll position
+		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
+		sceneView.selectTab(tab: selectedTab)
+	}
+	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
 		
@@ -120,6 +139,8 @@ class HolderDashboardViewController: BaseViewController {
 		}
 	}
 
+	// MARK: - Setup
+	
 	private func setupBindings() {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
@@ -150,7 +171,7 @@ class HolderDashboardViewController: BaseViewController {
 			sceneView.selectTab(tab: region)
 		}
 	}
-	
+
 	private func setup(cards: [HolderDashboardViewController.Card], with stackView: UIStackView) {
 		let cardViews = cards.compactMap { card in
 			card.makeView(openURLHandler: { [weak viewModel] url in viewModel?.openUrl(url) })
@@ -178,21 +199,15 @@ class HolderDashboardViewController: BaseViewController {
 		}
 	}
 
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-
-		viewModel.viewWillAppear()
-	}
-	
-	override func viewDidLayoutSubviews() {
-		super.viewDidLayoutSubviews()
-
-		guard !didSetInitialStartingTabOnSceneView else { return }
-		didSetInitialStartingTabOnSceneView = true
-
-		// Select start tab after layouting is done to be able to update scroll position
-		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
-		sceneView.selectTab(tab: selectedTab)
+	func setupMenuButton() {
+		let config = UIBarButtonItem.Configuration(
+			target: viewModel,
+			action: #selector(HolderDashboardViewModel.userTappedMenuButton),
+			content: .image( I.icon_menu_hamburger()),
+			accessibilityIdentifier: "MenuButton",
+			accessibilityLabel: L.generalMenuOpen()
+		)
+		navigationItem.rightBarButtonItem = .create(config)
 	}
 }
 

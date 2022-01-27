@@ -448,6 +448,11 @@ final class HolderDashboardViewModel: Logging {
 		coordinator?.openUrl(url, inApp: true)
 	}
 	
+	@objc func userTappedMenuButton() {
+		
+		coordinator?.userWishesToOpenTheMenu()
+	}
+	
 	// MARK: - Static Methods
 	
 	private static func assembleCards(
