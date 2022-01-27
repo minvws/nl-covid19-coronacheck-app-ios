@@ -32,4 +32,11 @@ extension Environment {
 		
 		cryptoManager.generateSecretKey()
 	}
+	
+	/// Reset verifier scan mode, including risk setting, scan lock and scan log
+	func wipeScanMode() {
+		riskLevelManager.wipePersistedData()
+		scanLockManager.wipePersistedData()
+		scanLogManager.wipePersistedData()
+	}
 }

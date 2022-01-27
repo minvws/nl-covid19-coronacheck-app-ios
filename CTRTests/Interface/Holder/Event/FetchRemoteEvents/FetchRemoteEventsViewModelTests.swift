@@ -10,10 +10,10 @@
 import XCTest
 import Nimble
 
-class FetchEventsViewModelTests: XCTestCase {
+class FetchRemoteEventsViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: FetchEventsViewModel!
+	var sut: FetchRemoteEventsViewModel!
 	var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var environmentSpies: EnvironmentSpies!
 
@@ -23,7 +23,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
 
-		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: .test, eventMode: .vaccination)
+		sut = FetchRemoteEventsViewModel(coordinator: coordinatorSpy, tvsToken: .test, eventMode: .vaccination)
 	}
 
 	func test_backButtonTapped_loadingState() {
@@ -80,7 +80,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -104,7 +104,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -129,7 +129,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -153,7 +153,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -175,7 +175,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -198,7 +198,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -220,7 +220,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -245,7 +245,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -269,7 +269,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -293,7 +293,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -317,7 +317,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -341,7 +341,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -365,7 +365,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -383,11 +383,11 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Given
 		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
-			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeNoBSN), error: .serverError)), ())
+			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchRemoteEventsViewModel.detailedCodeNoBSN), error: .serverError)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -407,11 +407,11 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Given
 		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
-			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeTvsSessionExpired), error: .serverError)), ())
+			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchRemoteEventsViewModel.detailedCodeTvsSessionExpired), error: .serverError)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -431,11 +431,11 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Given
 		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
-		(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeTvsSessionExpired), error: .serverError)), ())
+		(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchRemoteEventsViewModel.detailedCodeTvsSessionExpired), error: .serverError)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.positiveTestProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .positiveTest
@@ -450,11 +450,11 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Given
 		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
-		(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeNonceExpired), error: .serverError)), ())
+		(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchRemoteEventsViewModel.detailedCodeNonceExpired), error: .serverError)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -478,7 +478,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -503,7 +503,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99001), error: .serverError)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -529,7 +529,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -554,7 +554,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .positiveTest
@@ -579,7 +579,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .recovery
@@ -604,7 +604,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .test
@@ -630,7 +630,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -658,7 +658,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -678,7 +678,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult = (.success((EventFlow.EventResultWrapper.fakeVaccinationResultWrapper, signedResponse)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -702,7 +702,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 
 		// When
-		sut = FetchEventsViewModel(
+		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
 			eventMode: .vaccination
@@ -714,6 +714,32 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
 		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalClose()))
 		expect(self.sut.alert?.cancelTitle).toEventually(beNil())
+	}
+	
+	func test_unomiOK_eventServerError() {
+		
+		// Given
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult =
+		(.failure(ServerError.error(statusCode: 500, response: nil, error: .serverError)), ())
+		
+		// When
+		sut = FetchRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: .test,
+			eventMode: .vaccination
+		)
+		
+		// Then
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.body) == L.holderErrorstateFetchMessage("i 250 CC 500")
+			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		}))
 	}
 
 	func test_openUrl() throws {

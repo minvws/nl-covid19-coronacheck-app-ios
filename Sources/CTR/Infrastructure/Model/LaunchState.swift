@@ -10,17 +10,11 @@ import Foundation
 /// Should the app be updated?
 enum LaunchState: Equatable {
 
-	/// The app should be updated
-	case actionRequired(RemoteConfiguration)
+	/// The config is loaded
+	case finished
 
-	/// The app is fine.
-	case noActionNeeded
-
-	/// The app needs internet
-	case internetRequired
-	
-	/// The crypto library needs to be initialized
-	case cryptoLibNotInitialized
+	/// We encountered a server error
+	case serverError([ServerError])
 
 	/// the previous fetch is still valid
 	case withinTTL
@@ -34,20 +28,7 @@ enum LaunchState: Equatable {
 	/// - Returns: True if both sides are equal
 	static func == (lhs: LaunchState, rhs: LaunchState) -> Bool {
 		switch (lhs, rhs) {
-			case (noActionNeeded, noActionNeeded):
-				return true
-			case (internetRequired, internetRequired):
-				return true
-			case (let .actionRequired(lhsVersion), let .actionRequired(rhsVersion)):
-				return lhsVersion.minimumVersion == rhsVersion.minimumVersion &&
-					lhsVersion.minimumVersionMessage == rhsVersion.minimumVersionMessage &&
-					lhsVersion.appStoreURL == rhsVersion.appStoreURL &&
-					lhsVersion.informationURL == rhsVersion.informationURL &&
-					lhsVersion.appDeactivated == rhsVersion.appDeactivated &&
-					lhsVersion.configTTL == rhsVersion.configTTL
-			case (.cryptoLibNotInitialized, cryptoLibNotInitialized):
-				return true
-			case (withinTTL, withinTTL):
+			case (withinTTL, withinTTL), (finished, finished), (serverError, serverError):
 				return true
 			default:
 				return false

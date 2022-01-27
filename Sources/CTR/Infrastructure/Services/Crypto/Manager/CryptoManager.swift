@@ -156,7 +156,11 @@ class CryptoManager: CryptoManaging, Logging {
 			}
 			scanPolicy = riskSetting.scanPolicy
 		} else {
-			scanPolicy = MobilecoreVERIFICATION_POLICY_3G
+			guard let storedScanPolicy = Current.userSettings.configVerificationPolicies.first?.scanPolicy else {
+				assertionFailure("Scan policy should be stored")
+				return nil
+			}
+			scanPolicy = storedScanPolicy
 		}
 		
 		guard let result = MobilecoreVerify(proofQREncoded, scanPolicy) else {

@@ -20,18 +20,12 @@ class AppUpdateViewControllerTests: XCTestCase {
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
-	override func setUp() {
-
-		super.setUp()
-
+	override func setUpWithError() throws {
+		
 		appCoordinatorSpy = AppCoordinatorSpy()
-		let viewModel = AppUpdateViewModel(
-			coordinator: appCoordinatorSpy,
-			versionInformation: RemoteConfiguration.default
-		)
-
-		sut = AppUpdateViewController(viewModel: viewModel)
 		window = UIWindow()
+		
+		try super.setUpWithError()
 	}
 
 	override func tearDown() {
@@ -51,6 +45,11 @@ class AppUpdateViewControllerTests: XCTestCase {
 	func test_alert() {
 
 		// Given
+		let viewModel = AppUpdateViewModel(
+			coordinator: appCoordinatorSpy,
+			appStoreUrl: nil
+		)
+		sut = AppUpdateViewController(viewModel: viewModel)
 		let alertVerifier = AlertVerifier()
 		loadView()
 
@@ -74,7 +73,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		// Given
 		let viewModel = AppUpdateViewModel(
 			coordinator: appCoordinatorSpy,
-			versionInformation: RemoteConfiguration.default
+			appStoreUrl: nil
 		)
 		sut = AppUpdateViewController(viewModel: viewModel)
 
@@ -95,7 +94,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		// Given
 		let viewModel = EndOfLifeViewModel(
 			coordinator: appCoordinatorSpy,
-			versionInformation: RemoteConfiguration.default
+			appStoreUrl: nil
 		)
 		sut = AppUpdateViewController(viewModel: viewModel)
 

@@ -8,7 +8,7 @@
 import Foundation
 import Clcore
 
-enum VerificationPolicy: Codable {
+enum VerificationPolicy: Codable, CaseIterable {
 	/// 3G policy
 	case policy3G
 	/// 1G policy
