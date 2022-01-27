@@ -204,6 +204,11 @@ class VerifierStartViewModel: Logging {
 		lockLabelCountdownTimer.invalidate()
 	}
 	
+	@objc func userTappedMenuButton() {
+		
+		coordinator?.userWishesToOpenTheMenu()
+	}
+	
 	private func reloadUI(forMode mode: Mode, hasClockDeviation: Bool) {
 		title = mode.title
 		header = mode.header

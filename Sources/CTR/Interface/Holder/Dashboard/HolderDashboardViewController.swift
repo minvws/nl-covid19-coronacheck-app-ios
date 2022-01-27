@@ -199,7 +199,7 @@ class HolderDashboardViewController: BaseViewController {
 		}
 	}
 
-	func setupMenuButton() {
+	private func setupMenuButton() {
 		let config = UIBarButtonItem.Configuration(
 			target: viewModel,
 			action: #selector(HolderDashboardViewModel.userTappedMenuButton),
