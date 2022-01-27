@@ -44,9 +44,7 @@ class SharedCoordinator: Coordinator, Logging {
 	var childCoordinators: [Coordinator] = []
 
 	// Navigation controllers for each of the flows from the menu
-	var navigationController: UINavigationController
-	var dashboardNavigationController: UINavigationController?
-	var aboutNavigationController: UINavigationController?
+	let navigationController: UINavigationController
 
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
@@ -87,7 +85,7 @@ class SharedCoordinator: Coordinator, Logging {
 
 	func presentAsBottomSheet(_ viewController: UIViewController) {
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.presentBottomSheet(viewController)
+		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 
     // MARK: - Universal Link handling
@@ -152,10 +150,10 @@ extension SharedCoordinator: Dismissable {
 
 	func dismiss() {
 
-		if sidePanel?.selectedViewController?.presentedViewController != nil {
-			sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
+		if navigationController.presentedViewController != nil {
+			navigationController.dismiss(animated: true, completion: nil)
 		} else {
-			(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: false)
+			navigationController.popViewController(animated: false)
 		}
 	}
 }
@@ -183,12 +181,12 @@ extension SharedCoordinator: OpenUrlProtocol {
 		
 		let safariController = SFSafariViewController(url: url)
 
-		if let presentedViewController = sidePanel?.selectedViewController?.presentedViewController {
-			presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
-				self.sidePanel?.selectedViewController?.present(safariController, animated: true)
-			})
+		if let presentedViewController = navigationController.presentedViewController {
+			presentedViewController.presentingViewController?.dismiss(animated: true) {
+				self.navigationController.present(safariController, animated: true)
+			}
 		} else {
-			sidePanel?.selectedViewController?.present(safariController, animated: true)
+			navigationController.present(safariController, animated: true)
 		}
 	}
 }
