@@ -116,6 +116,11 @@ class AppCoordinator: Coordinator, Logging {
 				ageHeader: httpResponse.allHeaderFields["Age"] as? String
 			)
 		}]
+		
+		if flavor == .verifier {
+			remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver(updateVerificationPolicies),
+												  Current.remoteConfigManager.appendUpdateObserver(updateVerificationPolicies)]
+		}
 	}
 
     // MARK: - Private functions
@@ -289,6 +294,13 @@ class AppCoordinator: Coordinator, Logging {
 				unhandledUniversalLink = universalLink
 				return true
 		}
+	}
+	
+	// MARK: - Verifier Verification Policy
+	
+	func updateVerificationPolicies(for remoteConfiguration: RemoteConfiguration, data: Data, urlResponse: URLResponse) {
+		guard let policies = remoteConfiguration.verificationPolicies else { return }
+		VerificationPolicyEnabler().enable(verificationPolicies: policies)
 	}
 }
 

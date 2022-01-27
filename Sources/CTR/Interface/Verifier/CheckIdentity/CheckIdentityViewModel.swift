@@ -111,8 +111,12 @@ final class CheckIdentityViewModel: Logging {
 	
 	func showVerifiedAccess() {
 		
+		guard var verificationPolicySetting = Current.userSettings.configVerificationPolicies.first else {
+			assertionFailure("Verification policy should be stored")
+			return
+		}
+		
 		let verifiedAccess: VerifiedAccess
-		var verificationPolicySetting: VerificationPolicy = .policy3G
 		
 		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			guard let state = Current.riskLevelManager.state else {
