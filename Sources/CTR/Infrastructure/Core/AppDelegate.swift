@@ -24,6 +24,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 		_ application: UIApplication,
 		didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+		if !ProcessInfo.processInfo.isTesting {
+			// Setup Logging
+			LogHandler.setup()
+		}
+			
 		styleUI()
 
 		if #available(iOS 13.0, *) {
