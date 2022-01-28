@@ -218,7 +218,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expired
-		expect(self.sut.state.loadingState) == .failed(error: .serverResponseDidNotChangeExpiredOrExpiringState)
+		expect(self.sut.state.loadingState) == .serverResponseHasNoChanges
 		expect(self.sut.state.isNonsilentlyLoading) == false
 	}
 
