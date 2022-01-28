@@ -19,8 +19,7 @@ enum VerificationPolicy: Codable, CaseIterable {
 			case .policy3G:
 				return MobilecoreVERIFICATION_POLICY_3G
 			case .policy1G:
-				// Update when working on ticket #3087
-				return ""
+				return MobilecoreVERIFICATION_POLICY_1G
 		}
 	}
 	
