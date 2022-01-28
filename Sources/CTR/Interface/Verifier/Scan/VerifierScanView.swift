@@ -187,7 +187,6 @@ final class RiskLevelIndicator: BaseView {
 				accessibilityLabel = L.verifier_scanner_policy_indication_3g()
 				indicatorImageView.tintColor = Theme.colors.access
 			case .policy1G:
-				// TODO: Update copy
 				titleLabel.text = L.verifier_scanner_policy_indication_2g_plus()
 				accessibilityLabel = L.verifier_scanner_policy_indication_2g_plus()
 				indicatorImageView.tintColor = Theme.colors.dark

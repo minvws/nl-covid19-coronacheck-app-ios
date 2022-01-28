@@ -253,7 +253,6 @@ private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsB
 	let titleString = QRCodeOriginType.test.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString: String = {
 		let value = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
-		// TODO: Update copy
 		switch (verificationPolicy, shouldShowRiskLevel) {
 			case (.policy1G, true):
 				return value + (Current.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_2g() : "")

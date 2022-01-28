@@ -39,7 +39,6 @@ final class VerifiedAccessViewModel: Logging {
 			switch verifiedAccess {
 				case .verified(let verificationPolicy) where verificationPolicy == .policy1G,
 						.demo(let verificationPolicy) where verificationPolicy == .policy1G:
-					// TODO: Update title
 					accessTitle = L.verifier_result_access_title_highrisk()
 				default:
 					accessTitle = L.verifier_result_access_title_lowrisk()

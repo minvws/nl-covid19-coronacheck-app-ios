@@ -54,8 +54,6 @@ class ScanLogManager: ScanLogManaging {
 	}
 
 	func addScanEntry(verificationPolicy: VerificationPolicy, date: Date) {
-
-		// TODO: Add modes
 		
 		// Nothing for now
 		let context = dataStoreManager.managedObjectContext()

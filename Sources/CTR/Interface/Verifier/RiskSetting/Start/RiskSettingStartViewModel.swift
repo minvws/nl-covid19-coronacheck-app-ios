@@ -42,7 +42,6 @@ final class RiskSettingStartViewModel: Logging {
 					changeRiskTitle = L.verifier_risksetting_changeselection_2g_plus()
 					changeRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
 			}
-			// TODO: Update copy
 		}
 	}
 	
