@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct EventDetailsGenerator {
+struct RemoteEventDetailsGenerator {
 
 	static let printDateFormatter: DateFormatter = {
 
@@ -42,10 +42,10 @@ class NegativeTestDetailsGenerator {
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 		let formattedTestLongDate: String = event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printTestDateFormatter.string) ?? (event.negativeTest?.sampleDateString ?? "")
+			.map(RemoteEventDetailsGenerator.printTestDateFormatter.string) ?? (event.negativeTest?.sampleDateString ?? "")
 
 		// Type
 		let testType = mappingManager.getTestType(event.negativeTest?.type) ?? (event.negativeTest?.type ?? "")
@@ -84,7 +84,7 @@ class NegativeTestV2DetailsGenerator {
 			return []
 		}
 
-		let printSampleLongDate: String = EventDetailsGenerator.printTestDateFormatter.string(from: sampleDate)
+		let printSampleLongDate: String = RemoteEventDetailsGenerator.printTestDateFormatter.string(from: sampleDate)
 		let holderID = getDisplayIdentity(testResult.holder)
 
 		return [
@@ -123,10 +123,10 @@ class PositiveTestDetailsGenerator {
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 		let formattedTestLongDate: String = event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printTestDateLongFormatter.string) ?? (event.positiveTest?.sampleDateString ?? "")
+			.map(RemoteEventDetailsGenerator.printTestDateLongFormatter.string) ?? (event.positiveTest?.sampleDateString ?? "")
 
 		// Type
 		let testType = mappingManager.getTestType(event.positiveTest?.type) ?? (event.positiveTest?.type ?? "")
@@ -163,10 +163,10 @@ class DCCTestDetailsGenerator {
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(EventDetailsGenerator.printTestDateFormatter.string) ?? test.sampleDate
+			.map(RemoteEventDetailsGenerator.printTestDateFormatter.string) ?? test.sampleDate
 
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? (test.typeOfTest)
 		let manufacturer = mappingManager.getTestManufacturer(test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
@@ -204,10 +204,10 @@ class VaccinationDetailsGenerator {
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 		let formattedShotDate: String = event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (event.vaccination?.dateString ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (event.vaccination?.dateString ?? "")
 		let provider: String = mappingManager.getProviderIdentifierMapping(providerIdentifier) ?? providerIdentifier
 
 		var vaccinName: String?
@@ -264,7 +264,7 @@ class DCCVaccinationDetailsGenerator {
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 
 		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
@@ -278,7 +278,7 @@ class DCCVaccinationDetailsGenerator {
 		let vaccineManufacturer = mappingManager.getVaccinationManufacturer( vaccination.marketingAuthorizationHolder)
 		?? vaccination.marketingAuthorizationHolder
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? vaccination.dateOfVaccination
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? vaccination.dateOfVaccination
 
 		return [
 			EventDetails(field: EventDetailsDCCVaccination.subtitle, value: nil),
@@ -305,10 +305,10 @@ class VaccinationAssessementDetailsGenerator {
 		
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 		let formattedAssessmentDate: String = event.vaccinationAssessment?.dateTimeString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printTestDateFormatter.string) ?? (event.vaccinationAssessment?.dateTimeString ?? "")
+			.map(RemoteEventDetailsGenerator.printTestDateFormatter.string) ?? (event.vaccinationAssessment?.dateTimeString ?? "")
 
 		let country = mappingManager.getDisplayCountry(event.vaccinationAssessment?.country ?? "")
 		
@@ -332,16 +332,16 @@ class RecoveryDetailsGenerator {
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 		let formattedShortTestDate: String = event.recovery?.sampleDate
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (event.recovery?.sampleDate ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (event.recovery?.sampleDate ?? "")
 		let formattedShortValidFromDate: String = event.recovery?.validFrom
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (event.recovery?.validFrom ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (event.recovery?.validFrom ?? "")
 		let formattedShortValidUntilDate: String = event.recovery?.validUntil
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (event.recovery?.validUntil ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (event.recovery?.validUntil ?? "")
 
 		return [
 			EventDetails(field: EventDetailsRecovery.subtitle, value: nil),
@@ -363,13 +363,13 @@ class DCCRecoveryDetailsGenerator {
 
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? (identity.birthDateString ?? "")
 		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? recovery.firstPositiveTestDate
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? recovery.firstPositiveTestDate
 		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? recovery.validFrom
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? recovery.validFrom
 		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
-			.map(EventDetailsGenerator.printDateFormatter.string) ?? recovery.expiresAt
+			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? recovery.expiresAt
 
 		return [
 			EventDetails(field: EventDetailsDCCRecovery.subtitle, value: nil),

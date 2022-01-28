@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class EventDetailsViewModel {
+final class RemoteEventDetailsViewModel {
 	
 	/// Dismissable Delegate
 	weak var coordinator: Dismissable?

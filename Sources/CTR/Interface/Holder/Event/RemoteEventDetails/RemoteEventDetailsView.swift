@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class EventDetailsView: BaseView {
+final class RemoteEventDetailsView: BaseView {
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -38,6 +38,11 @@ final class EventDetailsView: BaseView {
 
 		return TextView()
 	}()
+	
+	override func setupViews() {
+		super.setupViews()
+		view?.backgroundColor = Theme.colors.viewControllerBackground
+	}
 	
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
@@ -101,7 +106,7 @@ final class EventDetailsView: BaseView {
 	}
 }
 
-private extension EventDetailsView {
+private extension RemoteEventDetailsView {
 	
 	func createLabel(for detail: NSAttributedString) -> Label {
 		let label = Label(body: nil)
