@@ -121,7 +121,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -148,7 +148,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -176,7 +176,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [fakeRemoteEventRecovery],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventRecovery],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -204,7 +204,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .positiveTest,
-			remoteEvents: [fakeRemoteEventPositiveTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -232,7 +232,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: [fakeRemoteEventNegativeTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -260,7 +260,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -529,7 +529,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventNegativeTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -550,7 +550,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -588,7 +588,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [fakeRemoteEventRecovery],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventRecovery],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -626,7 +626,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: [fakeRemoteEventNegativeTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -663,7 +663,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -700,7 +700,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -740,7 +740,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -782,7 +782,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -824,7 +824,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -866,7 +866,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -908,7 +908,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -953,7 +953,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -998,7 +998,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1044,7 +1044,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1090,7 +1090,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1136,7 +1136,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -1180,7 +1180,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: [fakeRemoteEventNegativeTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -1223,7 +1223,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1312,7 +1312,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1355,7 +1355,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1465,7 +1465,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: environmentSpies.greenCardLoaderSpy
 		)
 
@@ -1499,7 +1499,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: environmentSpies.greenCardLoaderSpy
 		)
 
@@ -1533,7 +1533,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: environmentSpies.greenCardLoaderSpy
 		)
 
@@ -1582,7 +1582,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1630,7 +1630,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .positiveTest,
-			remoteEvents: [fakeRemoteEventPositiveTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1681,7 +1681,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .positiveTest,
-			remoteEvents: [fakeRemoteEventPositiveTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1730,7 +1730,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .positiveTest,
-			remoteEvents: [fakeRemoteEventPositiveTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1779,7 +1779,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .positiveTest,
-			remoteEvents: [fakeRemoteEventPositiveTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1824,7 +1824,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [fakeRemoteEventRecovery],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventRecovery],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1885,7 +1885,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [fakeRemoteEventRecovery],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventRecovery],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1935,7 +1935,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [fakeRemoteEventRecovery],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventRecovery],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1979,7 +1979,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [fakeRemoteEventRecovery],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventRecovery],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -2028,7 +2028,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [fakeRemoteEventRecovery],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventRecovery],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -2078,7 +2078,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			remoteEvents: [fakeRemoteEventRecovery],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventRecovery],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -2124,7 +2124,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -2168,7 +2168,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -2212,7 +2212,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -2271,7 +2271,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -2323,7 +2323,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventVaccinationAssessment],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -2369,7 +2369,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: [fakeRemoteEventNegativeTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -2414,7 +2414,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .test,
 			originalMode: .vaccinationassessment,
-			remoteEvents: [fakeRemoteEventNegativeTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -2465,7 +2465,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: [fakeRemoteEventNegativeTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -2509,7 +2509,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: [fakeRemoteEventNegativeTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -2560,7 +2560,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			remoteEvents: [fakeRemoteEventNegativeTest],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
 		
@@ -2698,43 +2698,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.body) == L.holder_event_vaccination_assessment_nolist_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
-	}
-	
-	// MARK: Default values
-
-	private var fakeRemoteEventVaccination: RemoteEvent {
-		RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper,
-			signedResponse: SignedResponse.fakeResponse
-		)
-	}
-
-	private var fakeRemoteEventRecovery: RemoteEvent {
-		RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper.fakeRecoveryResultWrapper,
-			signedResponse: SignedResponse.fakeResponse
-		)
-	}
-
-	private var fakeRemoteEventPositiveTest: RemoteEvent {
-		RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper.fakePositiveTestResultWrapper,
-			signedResponse: SignedResponse.fakeResponse
-		)
-	}
-
-	private var fakeRemoteEventNegativeTest: RemoteEvent {
-		RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper,
-			signedResponse: SignedResponse.fakeResponse
-		)
-	}
-	
-	private var fakeRemoteEventVaccinationAssessment: RemoteEvent {
-		RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper.fakeVaccinationAssessmentResultWrapper,
-			signedResponse: SignedResponse.fakeResponse
-		)
 	}
 	
 	// MARK: Helper
