@@ -31,7 +31,6 @@ final class VerificationPolicyEnabler {
 			if storedPolicies.isNotEmpty() {
 				// Policy is changed, reset scan mode
 				Current.wipeScanMode()
-				// TODO: Wipe forced information data?
 			}
 			Current.userSettings.configVerificationPolicies = knownPolicies
 		}

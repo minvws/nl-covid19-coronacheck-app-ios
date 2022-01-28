@@ -79,6 +79,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		// Given
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
+		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy1G]
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
@@ -96,6 +97,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		// Given
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
+		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy1G]
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		sut = CheckIdentityViewModel(
@@ -114,6 +116,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	func test_showVerifiedAccess_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
 		// Given
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy3G]
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
 			verificationDetails: MobilecoreVerificationDetails(),
@@ -130,6 +133,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	func test_showVerifiedAccess_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
 		// Given
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy3G]
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		sut = CheckIdentityViewModel(
