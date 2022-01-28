@@ -7,14 +7,14 @@
 
 import UIKit
 
-class EventStartViewController: BaseViewController {
+class RemoteEventStartViewController: BaseViewController {
 
-	private let viewModel: EventStartViewModel
-	internal let sceneView = EventStartView()
+	private let viewModel: RemoteEventStartViewModel
+	internal let sceneView = RemoteEventStartView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: EventStartViewModel) {
+	init(viewModel: RemoteEventStartViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -79,7 +79,7 @@ class EventStartViewController: BaseViewController {
 	}
 }
 
-extension EventStartViewController: UINavigationControllerDelegate {
+extension RemoteEventStartViewController: UINavigationControllerDelegate {
 	
 	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ListEventsViewController: BaseViewController {
+class ListRemoteEventsViewController: BaseViewController {
 
 	enum State {
 		case loading(content: Content)
@@ -21,12 +21,12 @@ class ListEventsViewController: BaseViewController {
 		let action: (() -> Void)?
 	}
 
-	private let viewModel: ListEventsViewModel
-	private let sceneView = ListEventsView()
+	private let viewModel: ListRemoteEventsViewModel
+	private let sceneView = ListRemoteEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: ListEventsViewModel) {
+	init(viewModel: ListRemoteEventsViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -120,8 +120,8 @@ class ListEventsViewController: BaseViewController {
 
 		// Add new rows:
 		rows
-			.map { rowModel -> EventItemView in
-				EventItemView.makeView(
+			.map { rowModel -> RemoteEventItemView in
+				RemoteEventItemView.makeView(
 					title: rowModel.title,
 					subTitle: rowModel.subTitle,
 					command: rowModel.action
@@ -169,7 +169,7 @@ class ListEventsViewController: BaseViewController {
 	}
 }
 
-extension EventItemView {
+extension RemoteEventItemView {
 
 	/// Create a event item view
 	/// - Parameters:
@@ -180,9 +180,9 @@ extension EventItemView {
 	fileprivate static func makeView(
 		title: String,
 		subTitle: String,
-		command: (() -> Void)? ) -> EventItemView {
+		command: (() -> Void)? ) -> RemoteEventItemView {
 
-		let view = EventItemView()
+		let view = RemoteEventItemView()
 		view.isUserInteractionEnabled = true
 		view.title = title
 		view.subTitle = subTitle

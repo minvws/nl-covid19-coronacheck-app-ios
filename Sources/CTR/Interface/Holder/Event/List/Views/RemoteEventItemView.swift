@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EventItemView: BaseView {
+class RemoteEventItemView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension ListEventsViewModel {
+extension ListRemoteEventsViewModel {
 
 	static let iso8601DateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
