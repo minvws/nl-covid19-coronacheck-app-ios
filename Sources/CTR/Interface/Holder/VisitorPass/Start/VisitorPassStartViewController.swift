@@ -39,6 +39,8 @@ final class VisitorPassStartViewController: BaseViewController {
 
 		super.viewDidLoad()
 
+		addBackButton(customAction: nil)
+		
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }

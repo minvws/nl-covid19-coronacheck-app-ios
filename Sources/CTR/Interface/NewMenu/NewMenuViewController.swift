@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewMenuViewController: UIViewController {
+class NewMenuViewController: BaseViewController {
 	
 	enum Item {
 		case row(title: String, icon: UIImage, action: () -> Void )
@@ -40,7 +40,9 @@ class NewMenuViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		title = L.general_menu()
 		setupBindings()
+		addBackButton(customAction: nil)
 	}
 	
 	private func setupBindings() {
@@ -49,13 +51,21 @@ class NewMenuViewController: UIViewController {
 			guard let self = self else { return }
 			self.sceneView.stackView.removeArrangedSubviews()
 			
-			items.forEach { item in
+			items.enumerated().forEach { index, item in
 				switch item {
 					case let .row(title, icon, action):
+					
 						let row = NewMenuRowView()
 						row.title = title
 						row.icon = icon
 						row.action = action
+						row.shouldShowBottomBorder = {
+							// Check if the next item is `case .row`. If so, show a bottom border on this row.
+							let nextIndex = index + 1
+							guard nextIndex < items.count  else { return false }
+							guard case .row = items[nextIndex] else { return false }
+							return true
+						}()
 						self.sceneView.stackView.addArrangedSubview(row)
 						
 					case .breaker:
