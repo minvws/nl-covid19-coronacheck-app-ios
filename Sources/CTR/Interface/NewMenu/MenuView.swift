@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewMenuView: ScrolledStackView {
+class MenuView: ScrolledStackView {
 
 	private let topBorderView: UIView = {
 		let view = UIView()

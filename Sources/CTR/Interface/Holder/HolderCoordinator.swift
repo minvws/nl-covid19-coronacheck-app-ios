@@ -392,36 +392,36 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToOpenTheMenu() {
 		
-		let itemAddCertificate: NewMenuViewModel.Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), icon: I.icon_menu_add()!, action: { [weak self] in
+		let itemAddCertificate: MenuViewModel.Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), icon: I.icon_menu_add()!, action: { [weak self] in
 			self?.navigateToChooseQRCodeType()
 		})
 		
-		let itemAddPaperCertificate: NewMenuViewModel.Item = .row(title: L.holderMenuPapercertificate(), icon: I.icon_menu_addpapercertificate()!, action: { [weak self] in
+		let itemAddPaperCertificate: MenuViewModel.Item = .row(title: L.holderMenuPapercertificate(), icon: I.icon_menu_addpapercertificate()!, action: { [weak self] in
 			self?.navigateToAddPaperProof()
 		})
 		
-		let itemAddVisitorPass: NewMenuViewModel.Item = .row(title: L.holder_menu_visitorpass(), icon: I.icon_menu_addvisitorpass()!, action: { [weak self] in
+		let itemAddVisitorPass: MenuViewModel.Item = .row(title: L.holder_menu_visitorpass(), icon: I.icon_menu_addvisitorpass()!, action: { [weak self] in
 			self?.navigateToAddVisitorPass()
 		})
 		
-		let itemFAQ: NewMenuViewModel.Item = .row(title: L.holderMenuFaq(), icon: I.icon_menu_faq()!, action: { [weak self] in
+		let itemFAQ: MenuViewModel.Item = .row(title: L.holderMenuFaq(), icon: I.icon_menu_faq()!, action: { [weak self] in
 			guard let faqUrl = URL(string: L.holderUrlFaq()) else { return }
 			self?.openUrl(faqUrl, inApp: true)
 		})
 		
-		let itemAboutThisApp: NewMenuViewModel.Item = .row(title: L.holderMenuAbout(), icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
+		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
 			self?.navigateToAboutThisApp()
 		})
 		
-		let items: [NewMenuViewModel.Item] = {
+		let items: [MenuViewModel.Item] = {
 			
 			if Current.featureFlagManager.isVisitorPassEnabled() {
 				return [
 					itemAddCertificate,
-					.breaker,
+					.sectionBreak,
 					itemAddPaperCertificate,
 					itemAddVisitorPass,
-					.breaker,
+					.sectionBreak,
 					itemFAQ,
 					itemAboutThisApp
 				]
@@ -429,14 +429,14 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				return [
 					itemAddCertificate,
 					itemAddPaperCertificate,
-					.breaker,
+					.sectionBreak,
 					itemFAQ,
 					itemAboutThisApp
 				]
 			}
 		}()
 		
-		let viewController = NewMenuViewController(viewModel: NewMenuViewModel(items: items))
+		let viewController = MenuViewController(viewModel: MenuViewModel(items: items))
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	

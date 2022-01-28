@@ -15,7 +15,7 @@ class NewMenuRowViewTests: XCTestCase {
 	
 	func testStandard() {
 		// Arrange
-		let sut = NewMenuRowView()
+		let sut = MenuRowView()
 		sut.title = "Small title"
 		sut.icon = I.icon_menu_faq()
 		
@@ -28,7 +28,7 @@ class NewMenuRowViewTests: XCTestCase {
 
 	func testLongTitle() {
 		// Arrange
-		let sut = NewMenuRowView()
+		let sut = MenuRowView()
 		sut.title = "Here is a long title with a very very very long length"
 		sut.icon = I.icon_menu_faq()
 		
@@ -41,7 +41,7 @@ class NewMenuRowViewTests: XCTestCase {
 	
 	func testAction() {
 		// Arrange
-		let sut = NewMenuRowView()
+		let sut = MenuRowView()
 		
 		var triggered = false
 		sut.action = {
