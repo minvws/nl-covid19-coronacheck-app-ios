@@ -17,16 +17,13 @@ class ChooseProofTypeViewController: BaseViewController {
 
 	private let viewModel: ChooseProofTypeViewModel
 	
-	private let isRootViewController: Bool
-
-	override var enableSwipeBack: Bool { !isRootViewController }
+	override var enableSwipeBack: Bool { true }
 
 	let sceneView = ChooseProofTypeView()
 
-	init(viewModel: ChooseProofTypeViewModel, isRootViewController: Bool) {
+	init(viewModel: ChooseProofTypeViewModel) {
 
 		self.viewModel = viewModel
-		self.isRootViewController = isRootViewController
 
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -48,10 +45,8 @@ class ChooseProofTypeViewController: BaseViewController {
 
 		setupBinding()
 
-		if !isRootViewController {
-			// Show back button in navigation push
-			addBackButton()
-		}
+		// Show back button in navigation push
+		addBackButton()
 	}
 
 	func setupBinding() {

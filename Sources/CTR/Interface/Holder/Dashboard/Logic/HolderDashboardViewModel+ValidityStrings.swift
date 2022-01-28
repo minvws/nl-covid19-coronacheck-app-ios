@@ -60,13 +60,7 @@ extension QRCard {
 				// -- EU Recoveries --
 					
 				case (.validityHasBegun, .europeanUnion, .recovery):
-					let expiryIsBeyondThreeYearsFromNow = origin.expiryIsBeyondThreeYearsFromNow(now: now)
-					
-					return validityText_hasBegun_eu_recovery(
-						expirationTime: origin.expirationTime,
-						expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
-						isCurrentlyValid: origin.isCurrentlyValid(now: now)
-					)
+					return validityText_hasBegun_eu_recovery(expirationTime: origin.expirationTime)
 					
 				case (.validityHasNotYetBegun, .europeanUnion, .recovery):
 					return validityText_hasNotYetBegun_eu_recovery(
@@ -116,13 +110,7 @@ extension QRCard {
 				// -- Domestic Recoveries --
 					
 				case (.validityHasBegun, .netherlands, .recovery):
-					let expiryIsBeyondThreeYearsFromNow = origin.expiryIsBeyondThreeYearsFromNow(now: now)
-					
-					return validityText_hasBegun_domestic_recovery(
-						expirationTime: origin.expirationTime,
-						expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
-						isCurrentlyValid: origin.isCurrentlyValid(now: now)
-					)
+					return validityText_hasBegun_domestic_recovery(expirationTime: origin.expirationTime)
 					
 				case (.validityHasNotYetBegun, .netherlands, .recovery):
 					return validityText_hasNotYetBegun_domestic_recovery(
@@ -201,7 +189,12 @@ private func validityText_hasBegun_eu_fallback(origin: QRCard.GreenCard.Origin, 
 	)
 }
 
-private func validityText_hasBegun_domestic_vaccination(expiryIsBeyondThreeYearsFromNow: Bool, doseNumber: Int?, validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_domestic_vaccination(
+	expiryIsBeyondThreeYearsFromNow: Bool,
+	doseNumber: Int?,
+	validFrom: Date,
+	expirationTime: Date
+) -> HolderDashboardViewController.ValidityText {
 
 	let titleString: String = {
 		var string = ""
@@ -276,7 +269,7 @@ private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsB
 	)
 }
 
-private func validityText_hasBegun_domestic_recovery(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_domestic_recovery(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 
     let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
     let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
@@ -290,7 +283,7 @@ private func validityText_hasBegun_domestic_recovery(expirationTime: Date, expir
     )
 }
 
-private func validityText_hasBegun_eu_recovery(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_eu_recovery(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 
     let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding().capitalizingFirstLetter()
 	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter

@@ -37,6 +37,42 @@ class VerifierStartViewController: BaseViewController {
 
         super.viewDidLoad()
 
+		setupBindings()
+		
+		setupMenuButton()
+    }
+
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+		layoutForOrientation()
+	}
+
+	// Rotation
+
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
+
+		coordinator.animate { [weak self] _ in
+			self?.layoutForOrientation()
+			self?.sceneView.setNeedsLayout()
+		}
+	}
+
+	/// Layout for different orientations
+	func layoutForOrientation() {
+
+		if traitCollection.verticalSizeClass == .compact {
+			sceneView.hideImage()
+		} else {
+			sceneView.showImage()
+		}
+	}
+	
+	// MARK: - Setup
+	
+	private func setupBindings() {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$header.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
@@ -70,33 +106,16 @@ class VerifierStartViewController: BaseViewController {
 		sceneView.showInstructionsButtonTappedCommand = { [weak self] in
 			self?.viewModel.showInstructionsButtonTapped()
 		}
-    }
-
-	override func viewWillAppear(_ animated: Bool) {
-
-		super.viewWillAppear(animated)
-		layoutForOrientation()
 	}
-
-	// Rotation
-
-	override func willTransition(
-		to newCollection: UITraitCollection,
-		with coordinator: UIViewControllerTransitionCoordinator) {
-
-		coordinator.animate { [weak self] _ in
-			self?.layoutForOrientation()
-			self?.sceneView.setNeedsLayout()
-		}
-	}
-
-	/// Layout for different orientations
-	func layoutForOrientation() {
-
-		if traitCollection.verticalSizeClass == .compact {
-			sceneView.hideImage()
-		} else {
-			sceneView.showImage()
-		}
+	
+	private func setupMenuButton() {
+		let config = UIBarButtonItem.Configuration(
+			target: viewModel,
+			action: #selector(VerifierStartViewModel.userTappedMenuButton),
+			content: .image( I.icon_menu_hamburger()),
+			accessibilityIdentifier: "MenuButton",
+			accessibilityLabel: L.generalMenuOpen()
+		)
+		navigationItem.rightBarButtonItem = .create(config)
 	}
 }

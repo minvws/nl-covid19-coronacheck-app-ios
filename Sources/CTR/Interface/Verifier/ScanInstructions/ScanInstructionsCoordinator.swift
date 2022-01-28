@@ -76,7 +76,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 			viewController = ScanInstructionsViewController(viewModel: viewModel)
 		}
 		
-		navigationController.pushOrReplaceTopViewController(with: viewController, animated: !isOpenedFromMenu)
+		navigationController.pushViewController(viewController, animated: !isOpenedFromMenu)
 	}
 
 	func userDidCompletePages(hasScanLock: Bool) {

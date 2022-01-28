@@ -424,6 +424,14 @@ class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, Verifie
 		invokedNavigateToVerifiedInfoCount += 1
 	}
 
+	var invokedUserWishesToOpenTheMenu = false
+	var invokedUserWishesToOpenTheMenuCount = 0
+
+	func userWishesToOpenTheMenu() {
+		invokedUserWishesToOpenTheMenu = true
+		invokedUserWishesToOpenTheMenuCount += 1
+	}
+
 	var invokedUserWishesToOpenScanLog = false
 	var invokedUserWishesToOpenScanLogCount = 0
 

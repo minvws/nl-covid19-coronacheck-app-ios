@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewMenuBreakerView: BaseView {
+final class MenuSectionBreakView: BaseView {
 	
 	override func setupViews() {
 		super.setupViews()

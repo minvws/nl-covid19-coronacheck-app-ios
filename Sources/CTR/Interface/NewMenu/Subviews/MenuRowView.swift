@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewMenuRowView: UIControl {
+final class MenuRowView: UIControl {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -37,6 +37,14 @@ final class NewMenuRowView: UIControl {
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		return imageView
 	}()
+	
+	private let bottomBorderView: UIView = {
+		let view = UIView()
+		view.backgroundColor = C.grey5()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		return view
+	}()
 
 	// MARK: - Lifecycle
 	
@@ -64,6 +72,7 @@ final class NewMenuRowView: UIControl {
 		addSubview(iconImageView)
 		addSubview(titleLabel)
 		addSubview(chevronImageView)
+		addSubview(bottomBorderView)
 	}
 
 	func setupViewConstraints() {
@@ -80,6 +89,11 @@ final class NewMenuRowView: UIControl {
 		
 		constraints += [chevronImageView.centerYAnchor.constraint(equalTo: centerYAnchor)]
 		constraints += [chevronImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
+		
+		constraints += [bottomBorderView.leadingAnchor.constraint(equalTo: leadingAnchor)]
+		constraints += [bottomBorderView.bottomAnchor.constraint(equalTo: bottomAnchor)]
+		constraints += [bottomBorderView.trailingAnchor.constraint(equalTo: trailingAnchor)]
+		constraints += [bottomBorderView.heightAnchor.constraint(equalToConstant: 1)]
 		
 		NSLayoutConstraint.activate(constraints)
 	}
@@ -136,4 +150,10 @@ final class NewMenuRowView: UIControl {
 	}
 	
 	var action: (() -> Void)?
+	
+	var shouldShowBottomBorder: Bool = false {
+		didSet {
+			bottomBorderView.isHidden = !shouldShowBottomBorder
+		}
+	}
 }

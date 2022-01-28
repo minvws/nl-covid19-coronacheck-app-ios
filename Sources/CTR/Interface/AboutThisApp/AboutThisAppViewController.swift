@@ -15,7 +15,7 @@ class AboutThisAppViewController: BaseViewController {
 	/// The view
 	let sceneView = AboutThisAppView()
 
-	override var enableSwipeBack: Bool { false }
+	override var enableSwipeBack: Bool { true }
 
 	// MARK: Initializers
 
@@ -49,6 +49,7 @@ class AboutThisAppViewController: BaseViewController {
 		viewModel.$configVersion.binding = { [weak self] in self?.sceneView.configVersion = $0 }
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
+		addBackButton(customAction: nil)
 		setupMenuOptions()
 	}
 

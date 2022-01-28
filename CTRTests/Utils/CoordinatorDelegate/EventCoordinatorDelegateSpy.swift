@@ -8,7 +8,7 @@
 import XCTest
 @testable import CTR
 
-class EventCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtocol {
+class EventCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtocol, Dismissable {
 
 	var invokedEventStartScreenDidFinish = false
 	var invokedEventStartScreenDidFinishCount = 0
@@ -68,5 +68,13 @@ class EventCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtocol {
 		invokedOpenUrlCount += 1
 		invokedOpenUrlParameters = (url, inApp)
 		invokedOpenUrlParametersList.append((url, inApp))
+	}
+
+	var invokedDismiss = false
+	var invokedDismissCount = 0
+
+	func dismiss() {
+		invokedDismiss = true
+		invokedDismissCount += 1
 	}
 }

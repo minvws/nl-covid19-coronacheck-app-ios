@@ -13,7 +13,7 @@ final class PaperProofStartViewController: BaseViewController {
 	
 	let sceneView = PaperProofStartView()
 
-	override var enableSwipeBack: Bool { false }
+	override var enableSwipeBack: Bool { true }
 	
 	init(viewModel: PaperProofStartViewModel) {
 		
@@ -36,6 +36,7 @@ final class PaperProofStartViewController: BaseViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		addBackButton(customAction: nil)
 		setupText()
 		setupButtons()
 		setupItems()
