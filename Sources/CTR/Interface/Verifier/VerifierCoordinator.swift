@@ -194,24 +194,24 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	
 	func userWishesToOpenTheMenu() {
 		
-		let itemHowItWorks: NewMenuViewModel.Item = .row(title: L.verifierMenuScaninstructions(), icon: I.icon_menu_howitworks()!, action: { [weak self] in
+		let itemHowItWorks: MenuViewModel.Item = .row(title: L.verifierMenuScaninstructions(), icon: I.icon_menu_howitworks()!, action: { [weak self] in
 			self?.navigateToScanInstruction(allowSkipInstruction: false)
 		})
 		
-		let itemFAQ: NewMenuViewModel.Item = .row(title: L.verifierMenuSupport(), icon: I.icon_menu_faq()!, action: { [weak self] in
+		let itemFAQ: MenuViewModel.Item = .row(title: L.verifierMenuSupport(), icon: I.icon_menu_faq()!, action: { [weak self] in
 			guard let faqUrl = URL(string: L.verifierUrlFaq()) else { return }
 			self?.openUrl(faqUrl, inApp: true)
 		})
 		
-		let itemRiskSetting: NewMenuViewModel.Item = .row(title: L.verifier_menu_risksetting(), icon: I.icon_menu_risklevel()!, action: { [weak self] in
+		let itemRiskSetting: MenuViewModel.Item = .row(title: L.verifier_menu_risksetting(), icon: I.icon_menu_risklevel()!, action: { [weak self] in
 			self?.navigateToOpenRiskLevelSettings()
 		})
 		
-		let itemAboutThisApp: NewMenuViewModel.Item = .row(title: L.verifierMenuAbout(), icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
+		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.verifierMenuAbout(), icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
 			 self?.navigateToAboutThisApp()
 		})
 		
-		let items: [NewMenuViewModel.Item] = {
+		let items: [MenuViewModel.Item] = {
 			if Current.featureFlagManager.isVerificationPolicyEnabled() {
 				return [
 					itemHowItWorks,
@@ -228,7 +228,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			}
 		}()
 		
-		let viewController = NewMenuViewController(viewModel: NewMenuViewModel(items: items))
+		let viewController = MenuViewController(viewModel: MenuViewModel(items: items))
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	

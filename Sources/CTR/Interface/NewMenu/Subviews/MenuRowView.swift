@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewMenuRowView: UIControl {
+final class MenuRowView: UIControl {
 	
 	/// The display constants
 	private struct ViewTraits {

@@ -8,8 +8,8 @@
 import Foundation
 import UIKit
 
-class NewMenuViewModel {
-	typealias Item = NewMenuViewController.Item
+class MenuViewModel {
+	typealias Item = MenuViewController.Item
 	
 	@Bindable var items: [Item]
 	
