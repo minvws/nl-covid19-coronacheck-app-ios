@@ -11,10 +11,10 @@ import ViewControllerPresentationSpy
 import Nimble
 import SnapshotTesting
 
-class AppUpdateViewControllerTests: XCTestCase {
+class AppStatusViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	private var sut: AppUpdateViewController!
+	private var sut: AppStatusViewController!
 	private var appCoordinatorSpy: AppCoordinatorSpy!
 
 	var window = UIWindow()
@@ -45,11 +45,11 @@ class AppUpdateViewControllerTests: XCTestCase {
 	func test_alert() {
 
 		// Given
-		let viewModel = AppUpdateViewModel(
+		let viewModel = AppStatusViewModel(
 			coordinator: appCoordinatorSpy,
 			appStoreUrl: nil
 		)
-		sut = AppUpdateViewController(viewModel: viewModel)
+		sut = AppStatusViewController(viewModel: viewModel)
 		let alertVerifier = AlertVerifier()
 		loadView()
 
@@ -71,11 +71,11 @@ class AppUpdateViewControllerTests: XCTestCase {
 	func test_updateRequired() {
 
 		// Given
-		let viewModel = AppUpdateViewModel(
+		let viewModel = AppStatusViewModel(
 			coordinator: appCoordinatorSpy,
 			appStoreUrl: nil
 		)
-		sut = AppUpdateViewController(viewModel: viewModel)
+		sut = AppStatusViewController(viewModel: viewModel)
 
 		// When
 		loadView()
@@ -96,7 +96,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			appStoreUrl: nil
 		)
-		sut = AppUpdateViewController(viewModel: viewModel)
+		sut = AppStatusViewController(viewModel: viewModel)
 
 		// When
 		loadView()
@@ -114,7 +114,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 
 		// Given
 		let viewModel = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
-		sut = AppUpdateViewController(viewModel: viewModel)
+		sut = AppStatusViewController(viewModel: viewModel)
 
 		// When
 		loadView()

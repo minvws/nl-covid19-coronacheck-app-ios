@@ -103,7 +103,7 @@ class AppCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
-		expect(viewControllerSpy.thePresentedViewController is AppUpdateViewController) == true
+		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
 	}
 
 	func test_handleLaunchState_withinTTL_cryptoLibNotInitialized() {
@@ -165,7 +165,7 @@ class AppCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
-		expect(viewControllerSpy.thePresentedViewController is AppUpdateViewController) == true
+		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
 	}
 	
 	func test_handleLaunchState_finished_endOfLife() {
@@ -181,7 +181,7 @@ class AppCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
-		expect(viewControllerSpy.thePresentedViewController is AppUpdateViewController) == true
+		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
 	}
 	
 	func test_handleLaunchState_withinTTL_updateRequired() throws {
@@ -201,7 +201,7 @@ class AppCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
-		expect(viewControllerSpy.thePresentedViewController is AppUpdateViewController) == true
+		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
 	}
 	
 	func test_handleLaunchState_finished_updateRequired() throws {
@@ -221,7 +221,7 @@ class AppCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
-		expect(viewControllerSpy.thePresentedViewController is AppUpdateViewController) == true
+		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
 	}
 
 	func test_handleLaunchState_finished_holder_updateRecommended() throws {
