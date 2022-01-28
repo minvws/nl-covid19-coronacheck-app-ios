@@ -60,6 +60,7 @@
 "general.vaccination" = "vaccination";
 "general.vaccinationcertificate" = "vaccination certificate";
 "general.vaccinationdate" = "Vaccination date";
+"general_menu" = "Menu";
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
 "general_toMyOverview" = "To my certificates";
 "general_vaccinationAssessment" = "vaccination approval";
@@ -229,8 +230,8 @@
 "holder.dcc.vaccination.type" = "Vaccine medicinal product:";
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
-"holder.dcctokenentry.error.codenotfound" = "This letter combination doesn't exist";
-"holder.dcctokenentry.error.codewrongformat" = "Enter the 6-letter combination.";
+"holder.dcctokenentry.error.codenotfound" = "This letter combination is invalid. A valid combination looks like this: FLBRXQ.";
+"holder.dcctokenentry.error.codewrongformat" = "Please enter a letter combination first";
 "holder.dcctokenentry.header" = "Please enter the letter combination. You’ve received this together with the paper certificate.";
 "holder.dcctokenentry.next" = "Next";
 "holder.dcctokenentry.retry.title" = "I haven't received a code";
@@ -535,8 +536,8 @@
 "holder.tokenentry.regularflow.confirmresendverificationalert.message" = "You receive the verification code via text or email. Didn't get one? Click ‘send again’ below for a new code.";
 "holder.tokenentry.regularflow.confirmresendverificationalert.okaybutton" = "Send again";
 "holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
-"holder.tokenentry.regularflow.error.emptycode" = "Please fill out a verification code first";
-"holder.tokenentry.regularflow.error.emptytoken" = "Please fill out a retrieval code first";
+"holder.tokenentry.regularflow.error.emptycode" = "Please enter a verification code first";
+"holder.tokenentry.regularflow.error.emptytoken" = "Please enter a retrieval code first";
 "holder.tokenentry.regularflow.error.invalid.code" = "This code is invalid. A valid code looks like this: VAC-YYYYYYYYY1-F2.";
 "holder.tokenentry.regularflow.error.invalid.combination" = "Invalid combination. Enter the 6-digit verification code.";
 "holder.tokenentry.regularflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
@@ -555,8 +556,8 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.message" = "You receive the verification code via text or email. Didn't get one? Click ‘send again’ below for a new code.";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton" = "Send again";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
-"holder.tokenentry.universallinkflow.error.emptycode" = "Please fill out a verification code first";
-"holder.tokenentry.universallinkflow.error.emptytoken" = "Please fill out a retrieval code first";
+"holder.tokenentry.universallinkflow.error.emptycode" = "Please enter a verification code first";
+"holder.tokenentry.universallinkflow.error.emptytoken" = "Please enter a retrieval code first";
 "holder.tokenentry.universallinkflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
 "holder.tokenentry.universallinkflow.next" = "Next";
 "holder.tokenentry.universallinkflow.retry.title" = "Didn’t receive a verification code?";
@@ -625,6 +626,7 @@
 "holder_completecertificate_title" = "Complete your visitor pass";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
 "holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";
+"holder_dashboard_addCard_title" = "Add new vaccination or test";
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
 "holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
@@ -721,7 +723,7 @@
 "visitorpass_start_action" = "Next";
 "visitorpass_start_message" = "<p>Were you vaccinated outside of the European Union, and are you visiting the Netherlands? Then you can use your vaccination approval and negative test result to create a visitor pass.</p><p>You can use your visitor pass to get access to places and activities in the Netherlands that require a coronavirus pass.</p><p>For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "visitorpass_start_title" = "Adding a visitor pass";
-"visitorpass_token_error_empty_token" = "Please enter your approval code";
+"visitorpass_token_error_empty_token" = "Please enter an approval code first";
 "visitorpass_token_error_invalid_code" = "This code is invalid. A valid code looks like this: VAC-YYYYYYYYY1-F2.";
 "visitorpass_token_error_invalid_combination" = "Invalid combination. Enter the 6-digit verification code.";
 "visitorpass_token_error_unknown_provider" = "This test location is not known to us. Please contact the location who tested you.";

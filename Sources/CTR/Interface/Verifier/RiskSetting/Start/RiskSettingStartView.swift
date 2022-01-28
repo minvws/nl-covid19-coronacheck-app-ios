@@ -61,6 +61,8 @@ final class RiskSettingStartView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
+		backgroundColor = Theme.colors.viewControllerBackground
+		
 		readMoreButton.touchUpInside(self, action: #selector(readMore))
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in

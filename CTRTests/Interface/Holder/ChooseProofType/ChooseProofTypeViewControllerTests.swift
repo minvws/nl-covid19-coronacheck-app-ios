@@ -22,8 +22,7 @@ class ChooseProofTypeViewControllerTests: XCTestCase {
 		sut = ChooseProofTypeViewController(
 			viewModel: ChooseProofTypeViewModel(
 				coordinator: coordinatorDelegateSpy
-			),
-			isRootViewController: true
+			)
 		)
 		window = UIWindow()
 	}

@@ -261,8 +261,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	
 	private func navigateToEventDetails(_ title: String, details: [EventDetails], footer: String?) {
 		
-		let viewController = EventDetailsViewController(
-			viewModel: EventDetailsViewModel(
+		let viewController = RemoteEventDetailsViewController(
+			viewModel: RemoteEventDetailsViewModel(
 				coordinator: self,
 				title: title,
 				details: details,

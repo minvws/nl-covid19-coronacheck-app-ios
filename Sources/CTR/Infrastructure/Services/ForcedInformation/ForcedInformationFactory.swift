@@ -42,6 +42,7 @@ struct VerifierForcedInformationFactory: ForcedInformationFactory {
 			content: L.new_in_app_risksetting_subtitle()
 		)],
 					 consent: nil,
-					 version: Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() ? 5 : 0)
+					 // Disabled
+					 version: 0)
 	}
 }

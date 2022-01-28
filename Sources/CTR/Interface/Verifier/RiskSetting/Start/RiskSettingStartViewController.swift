@@ -13,6 +13,8 @@ final class RiskSettingStartViewController: BaseViewController {
 
 	let sceneView = RiskSettingStartView()
 	
+	override var enableSwipeBack: Bool { true }
+	
 	init(viewModel: RiskSettingStartViewModel) {
 
 		self.viewModel = viewModel
@@ -25,8 +27,6 @@ final class RiskSettingStartViewController: BaseViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override var enableSwipeBack: Bool { false }
-	
 	// MARK: View lifecycle
 	
 	override func loadView() {
@@ -37,6 +37,8 @@ final class RiskSettingStartViewController: BaseViewController {
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
+		
+		addBackButton(customAction: nil)
 		
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$header.binding = { [weak self] in self?.sceneView.header = $0 }

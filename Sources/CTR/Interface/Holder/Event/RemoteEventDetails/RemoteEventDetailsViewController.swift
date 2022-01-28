@@ -7,17 +7,17 @@
 
 import UIKit
 
-final class EventDetailsViewController: BaseViewController {
+final class RemoteEventDetailsViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: EventDetailsViewModel
+	private let viewModel: RemoteEventDetailsViewModel
 
 	/// The view
-	let sceneView = EventDetailsView()
+	let sceneView = RemoteEventDetailsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: EventDetailsViewModel) {
+	init(viewModel: RemoteEventDetailsViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

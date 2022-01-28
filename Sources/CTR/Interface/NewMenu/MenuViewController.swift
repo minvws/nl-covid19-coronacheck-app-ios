@@ -7,19 +7,19 @@
 
 import UIKit
 
-class NewMenuViewController: UIViewController {
+class MenuViewController: BaseViewController {
 	
 	enum Item {
 		case row(title: String, icon: UIImage, action: () -> Void )
-		case breaker
+		case sectionBreak
 	}
 	
-	private let sceneView = NewMenuView()
-	private let viewModel: NewMenuViewModel
+	private let sceneView = MenuView()
+	private let viewModel: MenuViewModel
 	
 	// MARK: Initializers
 
-	init(viewModel: NewMenuViewModel) {
+	init(viewModel: MenuViewModel) {
 
 		self.viewModel = viewModel
 
@@ -40,7 +40,9 @@ class NewMenuViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		title = L.general_menu()
 		setupBindings()
+		addBackButton(customAction: nil)
 	}
 	
 	private func setupBindings() {
@@ -49,17 +51,25 @@ class NewMenuViewController: UIViewController {
 			guard let self = self else { return }
 			self.sceneView.stackView.removeArrangedSubviews()
 			
-			items.forEach { item in
+			items.enumerated().forEach { index, item in
 				switch item {
 					case let .row(title, icon, action):
-						let row = NewMenuRowView()
+					
+						let row = MenuRowView()
 						row.title = title
 						row.icon = icon
 						row.action = action
+						row.shouldShowBottomBorder = {
+							// Check if the next item is `case .row`. If so, show a bottom border on this row.
+							let nextIndex = index + 1
+							guard nextIndex < items.count  else { return false }
+							guard case .row = items[nextIndex] else { return false }
+							return true
+						}()
 						self.sceneView.stackView.addArrangedSubview(row)
 						
-					case .breaker:
-						let breaker = NewMenuBreakerView()
+					case .sectionBreak:
+						let breaker = MenuSectionBreakView()
 						self.sceneView.stackView.addArrangedSubview(breaker)
 				}
 			}

@@ -372,13 +372,6 @@ final class HolderDashboardViewModel: Logging {
 
 			// ❤️‍🩹 NETWORK ERRORS: Refresher has entered a failed state (i.e. Server Error)
 
-			case (.failed(.serverResponseDidNotChangeExpiredOrExpiringState), _, _):
-				// This is a special case, and is caused by the user putting their system time
-				// so far into the future that it forces a strippen refresh, .. however the server time
-				// remains unchanged, so what it sends back does not resolve the `.expiring` or `.expired`
-				// state which the StrippenRefresher is currently in.
-				logDebug("StrippenRefresh: .serverResponseDidNotChangeExpiredOrExpiringState. Stopping.")
-
 			case (.failed, .expired, _):
 				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
 
@@ -391,6 +384,13 @@ final class HolderDashboardViewModel: Logging {
 				// We do handle "no internet" though - see above.
 				logDebug("StrippenRefresh: Swallowing server error because can refresh later.")
 
+			case (.serverResponseHasNoChanges, _, _) :
+				// This is a special case, and is caused by the user putting their system time
+				// so far into the future that it forces a strippen refresh, .. however the server time
+				// remains unchanged, so what it sends back does not resolve the `.expiring` or `.expired`
+				// state which the StrippenRefresher is currently in.
+				logDebug("StrippenRefresh: .serverResponseHasNoChanges. Stopping.")
+				
 			case (.completed, _, _):
 				// The strippen were successfully renewed.
 				break
@@ -446,6 +446,11 @@ final class HolderDashboardViewModel: Logging {
 	func openUrl(_ url: URL) {
 
 		coordinator?.openUrl(url, inApp: true)
+	}
+	
+	@objc func userTappedMenuButton() {
+		
+		coordinator?.userWishesToOpenTheMenu()
 	}
 	
 	// MARK: - Static Methods

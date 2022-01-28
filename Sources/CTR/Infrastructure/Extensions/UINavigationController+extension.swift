@@ -56,6 +56,18 @@ extension UINavigationController {
 		coordinator.animate(alongsideTransition: nil) { _ in completion() }
 	}
 	
+	func setViewControllers(_ viewControllers: [UIViewController], animated: Bool, completion: @escaping () -> Void) {
+		
+		setViewControllers(viewControllers, animated: animated)
+		
+		guard animated, let coordinator = transitionCoordinator else {
+			DispatchQueue.main.async { completion() }
+			return
+		}
+
+		coordinator.animate(alongsideTransition: nil) { _ in completion() }
+	}
+	
 	/// Pushes view controller if no stack is present. Or replaces top view controller when a stack is present.
 	/// This prevents an endless stack and increasing memory pressure while preserving native push animation.
 	/// - Parameters:
