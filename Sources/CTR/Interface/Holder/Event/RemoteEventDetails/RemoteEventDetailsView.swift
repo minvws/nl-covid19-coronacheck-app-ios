@@ -39,6 +39,11 @@ final class RemoteEventDetailsView: BaseView {
 		return TextView()
 	}()
 	
+	override func setupViews() {
+		super.setupViews()
+		view?.backgroundColor = Theme.colors.viewControllerBackground
+	}
+	
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
