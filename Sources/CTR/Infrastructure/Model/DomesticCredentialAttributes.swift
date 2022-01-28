@@ -45,9 +45,8 @@ struct DomesticCredentialAttributes: Codable {
 	}
 	
 	var verificationPolicy: VerificationPolicy? {
-		// TODO: Check category
 		switch category {
-			case "1": return .policy1G
+			case "2": return .policy1G
 			case "3": return .policy3G
 			default: return nil
 		}
