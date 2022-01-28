@@ -43,22 +43,7 @@ class ForcedInformationManagerTests: XCTestCase {
 	}
 	
 	/// Test needs updating
-	func testGetNeedsUpdating_verifier_verificationPolicyEnabled() {
-		
-		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		
-		sut.factory = VerifierForcedInformationFactory()
-		sut.wipePersistedData()
-		
-		// When
-		
-		// Then
-		expect(self.sut.needsUpdating) == true
-	}
-	
-	/// Test needs updating
-	func testGetNeedsUpdating_verifier_verificationPolicyDisabled() {
+	func testGetNeedsUpdating_verifier_disabled() {
 		
 		// Given
 		sut.factory = VerifierForcedInformationFactory()
