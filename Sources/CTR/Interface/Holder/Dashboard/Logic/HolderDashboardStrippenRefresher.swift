@@ -116,7 +116,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 					if error == .serverResponseDidNotChangeExpiredOrExpiringState {
 						state.loadingState = .serverResponseHasNoChanges
 					} else {
-					state.loadingState = .failed(error: error)
+						state.loadingState = .failed(error: error)
 					}
 
 				default:
