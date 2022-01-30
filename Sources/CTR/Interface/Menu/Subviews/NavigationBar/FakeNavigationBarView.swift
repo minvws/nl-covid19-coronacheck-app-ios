@@ -20,6 +20,7 @@ class FakeNavigationBarView: BaseView {
 		let label = Label(title1: "", textColor: C.darkColor()!, montserrat: true)
 		label.numberOfLines = 0
 		label.setContentCompressionResistancePriority(.required, for: .horizontal)
+		label.setContentCompressionResistancePriority(.required, for: .vertical)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
 	}()
