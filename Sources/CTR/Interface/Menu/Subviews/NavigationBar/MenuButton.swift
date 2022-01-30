@@ -115,8 +115,11 @@ class MenuButton: UIControl {
 	
 	/// Setup all the accessibility traits
 	private func setupAccessibility() {
-
+		
 		isAccessibilityElement = true
+		
+		accessibilityIdentifier = "MenuButton"
+		accessibilityLabel = L.generalMenuOpen()
 	}
 	
 	// MARK: - Objc Target-Action callbacks:
