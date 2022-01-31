@@ -118,6 +118,7 @@ class VerifierStartViewModel: Logging {
 			formatter.collapsesLargestUnit = false
 			formatter.unitsStyle = .positional
 			formatter.zeroFormattingBehavior = .pad
+			formatter.calendar = Calendar(identifier: .gregorian)
 			return formatter
 		}()
 	}
