@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AppUpdateView: ScrolledStackWithButtonView {
+class AppStatusView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {

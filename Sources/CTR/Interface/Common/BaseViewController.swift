@@ -81,11 +81,13 @@ class BaseViewController: UIViewController {
 			action = customAction
 		}
 		
-		let config = UIBarButtonItem.Configuration(target: self,
-												   action: action,
-												   content: .image(I.backArrow()),
-												   accessibilityIdentifier: "BackButton",
-												   accessibilityLabel: L.generalBack())
+		let config = UIBarButtonItem.Configuration(
+			target: self,
+			action: action,
+			content: .image(I.backArrow()),
+			accessibilityIdentifier: "BackButton",
+			accessibilityLabel: L.generalMenuClose()
+		)
 		navigationItem.leftBarButtonItem = .create(config)
 	}
 

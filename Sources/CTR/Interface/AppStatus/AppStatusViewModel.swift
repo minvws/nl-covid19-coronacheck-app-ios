@@ -8,7 +8,7 @@
 import UIKit
 
 /// View Model for updating the application
-class AppUpdateViewModel {
+class AppStatusViewModel {
 
 	/// The url to the app store
 	fileprivate var updateURL: URL?
@@ -62,7 +62,7 @@ class AppUpdateViewModel {
 }
 
 /// View Model when the app is deactivated
-class EndOfLifeViewModel: AppUpdateViewModel {
+class EndOfLifeViewModel: AppStatusViewModel {
 
 	/// Initializer
 	/// - Parameters:
@@ -81,7 +81,7 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 }
 
 /// View Model when there is no internet
-class InternetRequiredViewModel: AppUpdateViewModel {
+class InternetRequiredViewModel: AppStatusViewModel {
 
 	/// Initializer
 	/// - Parameters:
