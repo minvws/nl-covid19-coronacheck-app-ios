@@ -18,12 +18,15 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var greenCardLoader: GreenCardLoader!
 	private var environmentSpies: EnvironmentSpies!
+	private var identityCheckerSpy: IdentityCheckerSpy!
 	
 	override func setUp() {
 
 		super.setUp()
 
 		environmentSpies = setupEnvironmentSpies()
+		identityCheckerSpy = IdentityCheckerSpy()
+		identityCheckerSpy.stubbedCompareResult = true
 		
 		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
 		/// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
@@ -44,7 +47,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [],
-			identityChecker: IdentityChecker(),
+			identityChecker: identityCheckerSpy,
 			greenCardLoader: greenCardLoader
 		)
 	}
@@ -1724,6 +1727,35 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 054")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+	}
+	
+	func test_identityMismatched() {
+		
+		// Given
+		identityCheckerSpy.stubbedCompareResult = false
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
+			identityChecker: identityCheckerSpy,
+			greenCardLoader: environmentSpies.greenCardLoaderSpy
+		)
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title).toEventually(equal(L.holderEventIdentityAlertTitle()))
+		expect(self.sut.alert?.subTitle).toEventually(equal(L.holderEventIdentityAlertMessage()))
+		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.holderEventIdentityAlertCancel()))
+		expect(self.sut.alert?.okTitle).toEventually(equal( L.holderEventIdentityAlertOk()))
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
 	}
 	
