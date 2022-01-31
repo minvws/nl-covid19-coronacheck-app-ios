@@ -9,6 +9,13 @@ import UIKit
 
 class MenuView: ScrolledStackView {
 
+	private let navigationBackgroundView: UIView = {
+		let view = UIView()
+		view.backgroundColor = .white
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
 	private let topBorderView: UIView = {
 		let view = UIView()
 		view.backgroundColor = C.grey5()
@@ -23,7 +30,7 @@ class MenuView: ScrolledStackView {
 		super.setupViews()
 		backgroundColor = C.primaryBlue5()
 		
-		stackViewInset = .init(top: 5, left: 0, bottom: 0, right: 0	)
+		stackViewInset = .zero
 		stackView.spacing = 0
 		stackView.shouldGroupAccessibilityChildren = true
 	}
@@ -31,6 +38,7 @@ class MenuView: ScrolledStackView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
+		addSubview(navigationBackgroundView)
 		addSubview(topBorderView)
 	}
 	
@@ -38,10 +46,17 @@ class MenuView: ScrolledStackView {
 		super.setupViewConstraints()
 		
 		var constraints = [NSLayoutConstraint]()
+		
+		constraints += [navigationBackgroundView.leftAnchor.constraint(equalTo: leftAnchor)]
+		constraints += [navigationBackgroundView.rightAnchor.constraint(equalTo: rightAnchor)]
+		constraints += [navigationBackgroundView.topAnchor.constraint(equalTo: topAnchor)]
+		constraints += [navigationBackgroundView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor)]
+		
 		constraints += [topBorderView.leadingAnchor.constraint(equalTo: leadingAnchor)]
 		constraints += [topBorderView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor)]
 		constraints += [topBorderView.trailingAnchor.constraint(equalTo: trailingAnchor)]
 		constraints += [topBorderView.heightAnchor.constraint(equalToConstant: 1)]
+		
 		NSLayoutConstraint.activate(constraints)
 	}
 }
