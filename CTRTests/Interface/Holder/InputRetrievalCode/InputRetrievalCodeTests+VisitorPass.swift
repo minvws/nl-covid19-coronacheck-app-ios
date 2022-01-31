@@ -12,7 +12,7 @@ import Nimble
 @testable import CTR
 import SnapshotTesting
 
-/// (Experimentally) combines TokenEntryViewModel tests and TokenEntryViewController snapshot tests
+// swiftlint:disable:next type_name
 class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 	private var holderCoordinatorSpy: HolderCoordinatorDelegateSpy!
