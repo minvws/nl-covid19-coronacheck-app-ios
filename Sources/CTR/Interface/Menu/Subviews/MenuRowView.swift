@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewMenuRowView: UIControl {
+final class MenuRowView: UIControl {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -22,6 +22,7 @@ final class NewMenuRowView: UIControl {
 	private let iconImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.translatesAutoresizingMaskIntoConstraints = false
+		imageView.isAccessibilityElement = false
 		return imageView
 	}()
 	
@@ -35,6 +36,7 @@ final class NewMenuRowView: UIControl {
 	private let chevronImageView: UIImageView = {
 		let imageView = UIImageView(image: I.menuChevron())
 		imageView.translatesAutoresizingMaskIntoConstraints = false
+		imageView.isAccessibilityElement = false
 		return imageView
 	}()
 	
@@ -140,6 +142,7 @@ final class NewMenuRowView: UIControl {
 	var title: String? {
 		didSet {
 			titleLabel.text = title
+			accessibilityLabel = title
 		}
 	}
 	

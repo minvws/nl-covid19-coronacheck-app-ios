@@ -7,19 +7,19 @@
 
 import UIKit
 
-class NewMenuViewController: BaseViewController {
+class MenuViewController: BaseViewController {
 	
 	enum Item {
 		case row(title: String, icon: UIImage, action: () -> Void )
-		case breaker
+		case sectionBreak
 	}
 	
-	private let sceneView = NewMenuView()
-	private let viewModel: NewMenuViewModel
+	private let sceneView = MenuView()
+	private let viewModel: MenuViewModel
 	
 	// MARK: Initializers
 
-	init(viewModel: NewMenuViewModel) {
+	init(viewModel: MenuViewModel) {
 
 		self.viewModel = viewModel
 
@@ -41,6 +41,7 @@ class NewMenuViewController: BaseViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		title = L.general_menu()
+		
 		setupBindings()
 		addBackButton(customAction: nil)
 	}
@@ -55,7 +56,7 @@ class NewMenuViewController: BaseViewController {
 				switch item {
 					case let .row(title, icon, action):
 					
-						let row = NewMenuRowView()
+						let row = MenuRowView()
 						row.title = title
 						row.icon = icon
 						row.action = action
@@ -68,8 +69,8 @@ class NewMenuViewController: BaseViewController {
 						}()
 						self.sceneView.stackView.addArrangedSubview(row)
 						
-					case .breaker:
-						let breaker = NewMenuBreakerView()
+					case .sectionBreak:
+						let breaker = MenuSectionBreakView()
 						self.sceneView.stackView.addArrangedSubview(breaker)
 				}
 			}

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewMenuView: ScrolledStackView {
+class MenuView: ScrolledStackView {
 
 	private let topBorderView: UIView = {
 		let view = UIView()
@@ -25,6 +25,7 @@ class NewMenuView: ScrolledStackView {
 		
 		stackViewInset = .init(top: 5, left: 0, bottom: 0, right: 0	)
 		stackView.spacing = 0
+		stackView.shouldGroupAccessibilityChildren = true
 	}
 	
 	override func setupViewHierarchy() {
