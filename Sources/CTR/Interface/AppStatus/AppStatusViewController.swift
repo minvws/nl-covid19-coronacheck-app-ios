@@ -7,20 +7,20 @@
 
 import UIKit
 
-class AppUpdateViewController: BaseViewController {
+class AppStatusViewController: BaseViewController {
 
 	/// The model
-	let viewModel: AppUpdateViewModel
+	let viewModel: AppStatusViewModel
 
 	/// The view
-	let sceneView = AppUpdateView()
+	let sceneView = AppStatusView()
 
 	/// The error Message
 	var errorMessage: String?
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-    init(viewModel: AppUpdateViewModel) {
+    init(viewModel: AppStatusViewModel) {
 
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
