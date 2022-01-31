@@ -9,6 +9,7 @@ import Foundation
 import XCTest
 import Nimble
 @testable import CTR
+import SnapshotTesting
 
 class ScanInstructionsViewModelTests: XCTestCase {
 
