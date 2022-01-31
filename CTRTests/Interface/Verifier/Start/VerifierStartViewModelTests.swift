@@ -29,7 +29,6 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_defaultContent() {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
@@ -66,7 +65,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
@@ -83,7 +82,7 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
@@ -97,9 +96,9 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_locked_verificationPolicyEnabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 		
 		// When
@@ -112,9 +111,9 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_locked_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
 		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
 		
 		// When

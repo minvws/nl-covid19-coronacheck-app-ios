@@ -147,6 +147,8 @@ final class LaunchStateManager: LaunchStateManaging {
 				self?.startApplication()
 			}
 		}]
+		
+		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver(updateVerificationPolicies)]
 	}
 	
 	// Update the  managers with the values from the actual http response
@@ -169,5 +171,12 @@ final class LaunchStateManager: LaunchStateManaging {
 			serverHeaderDate: serverDateString,
 			ageHeader: httpResponse.allHeaderFields["Age"] as? String
 		)
+	}
+	
+	// MARK: - Verifier Verification Policy
+	
+	private func updateVerificationPolicies(for remoteConfiguration: RemoteConfiguration, data: Data, urlResponse: URLResponse) {
+		guard let policies = remoteConfiguration.verificationPolicies else { return }
+		VerificationPolicyEnabler().enable(verificationPolicies: policies)
 	}
 }

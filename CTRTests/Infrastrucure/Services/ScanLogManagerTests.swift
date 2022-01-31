@@ -36,7 +36,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		let result = sut.didWeScanQRs(withinLastNumberOfSeconds: 3600)
@@ -49,7 +49,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 4000 * seconds)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		let result = sut.didWeScanQRs(withinLastNumberOfSeconds: 3600)
@@ -73,7 +73,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
@@ -88,7 +88,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(riskLevel: RiskLevel.low, date: date)
+		sut.addScanEntry(verificationPolicy: .policy3G, date: date)
 
 		// When
 		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
@@ -103,7 +103,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 4000 * seconds)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
@@ -116,7 +116,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 4000 * seconds)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		sut.deleteExpiredScanLogEntries(seconds: 3600)
@@ -130,7 +130,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 3000 * seconds)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		sut.deleteExpiredScanLogEntries(seconds: 3600)
@@ -144,9 +144,9 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		sut.wipePersistedData()

@@ -72,6 +72,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_initializationWithVerifier_verificationPolicyEnabled() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		
 		// When
 		sut = AboutThisAppViewModel(
@@ -100,7 +101,6 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_initializationWithVerifier_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = AboutThisAppViewModel(
@@ -502,17 +502,5 @@ class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, Verifie
 	func userWishesMoreInfoAboutDeniedQRScan() {
 		invokedUserWishesMoreInfoAboutDeniedQRScan = true
 		invokedUserWishesMoreInfoAboutDeniedQRScanCount += 1
-	}
-
-	var invokedNavigateToScanNextInstruction = false
-	var invokedNavigateToScanNextInstructionCount = 0
-	var invokedNavigateToScanNextInstructionParameters: (scanNext: ScanNext, Void)?
-	var invokedNavigateToScanNextInstructionParametersList = [(scanNext: ScanNext, Void)]()
-
-	func navigateToScanNextInstruction(_ scanNext: ScanNext) {
-		invokedNavigateToScanNextInstruction = true
-		invokedNavigateToScanNextInstructionCount += 1
-		invokedNavigateToScanNextInstructionParameters = (scanNext, ())
-		invokedNavigateToScanNextInstructionParametersList.append((scanNext, ()))
 	}
 }

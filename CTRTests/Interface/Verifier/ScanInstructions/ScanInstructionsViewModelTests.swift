@@ -26,7 +26,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	func test_finishScanInstructions_whenRiskSettingIsShown_shouldInvokeUserDidCompletePages() {
 
 		// Arrange
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		sut = ScanInstructionsViewModel(
 			coordinator: coordinatorSpy,
@@ -48,6 +48,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		sut = ScanInstructionsViewModel(
 			coordinator: coordinatorSpy,
 			pages: []
@@ -65,7 +66,6 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting_verificationPolicyDisabled() {
 
 		// Arrange
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
@@ -169,7 +169,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 	func test_nextButtonTitleChangesOnLastPage() {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		let pages = [
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
@@ -194,7 +194,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	
 	func test_nextButtonTitleChangesOnLastPage_whenScanLockIsEnabled() {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date())
 		let pages = [
 			ScanInstructionsPage(

@@ -18,9 +18,9 @@ final class VerifierScanView: BaseView {
 	
 	let scanView = ScanView()
 	
-	var riskLevel: RiskLevel? {
-		get { riskLevelIndicator.riskLevel }
-		set { riskLevelIndicator.riskLevel = newValue }
+	var verificationPolicy: VerificationPolicy? {
+		get { riskLevelIndicator.verificationPolicy }
+		set { riskLevelIndicator.verificationPolicy = newValue }
 	}
 	
 	private let moreInformationButton = Button(style: Button.ButtonType.textLabelBlue)
@@ -128,8 +128,8 @@ final class VerifierScanView: BaseView {
 
 final class RiskLevelIndicator: BaseView {
 	
-	var riskLevel: RiskLevel? {
-		didSet { updateForRiskLevel() }
+	var verificationPolicy: VerificationPolicy? {
+		didSet { updateForVerificationPolicy() }
 	}
 	
 	private let indicatorImageView: UIImageView = {
@@ -143,13 +143,13 @@ final class RiskLevelIndicator: BaseView {
 	
 	private let titleLabel = Label(subhead: nil)
 	
-	init(riskLevel: RiskLevel? = nil) {
+	init(verificationPolicy: VerificationPolicy? = nil) {
 		
-		self.riskLevel = riskLevel
+		self.verificationPolicy = verificationPolicy
 		
 		super.init(frame: .zero)
 		
-		updateForRiskLevel()
+		updateForVerificationPolicy()
 	}
 	
 	required init?(coder: NSCoder) {
@@ -178,19 +178,15 @@ final class RiskLevelIndicator: BaseView {
 			.embed(in: self, insets: .leftRight(16) + .topBottom(8))
 	}
 	
-	private func updateForRiskLevel() {
+	private func updateForVerificationPolicy() {
 		isHidden = false
 		
-		switch riskLevel {
-			case .low:
+		switch verificationPolicy {
+			case .policy3G:
 				titleLabel.text = L.verifier_scanner_policy_indication_3g()
 				accessibilityLabel = L.verifier_scanner_policy_indication_3g()
 				indicatorImageView.tintColor = Theme.colors.access
-			case .high:
-				titleLabel.text = L.verifier_scanner_policy_indication_2g()
-				accessibilityLabel = L.verifier_scanner_policy_indication_2g()
-				indicatorImageView.tintColor = Theme.colors.primary
-			case .highPlus:
+			case .policy1G:
 				titleLabel.text = L.verifier_scanner_policy_indication_2g_plus()
 				accessibilityLabel = L.verifier_scanner_policy_indication_2g_plus()
 				indicatorImageView.tintColor = Theme.colors.dark

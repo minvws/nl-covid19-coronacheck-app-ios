@@ -274,6 +274,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedConfigVerificationPoliciesSetter = false
+	var invokedConfigVerificationPoliciesSetterCount = 0
+	var invokedConfigVerificationPolicies: [VerificationPolicy]?
+	var invokedConfigVerificationPoliciesList = [[VerificationPolicy]]()
+	var invokedConfigVerificationPoliciesGetter = false
+	var invokedConfigVerificationPoliciesGetterCount = 0
+	var stubbedConfigVerificationPolicies: [VerificationPolicy]! = []
+
+	var configVerificationPolicies: [VerificationPolicy] {
+		set {
+			invokedConfigVerificationPoliciesSetter = true
+			invokedConfigVerificationPoliciesSetterCount += 1
+			invokedConfigVerificationPolicies = newValue
+			invokedConfigVerificationPoliciesList.append(newValue)
+		}
+		get {
+			invokedConfigVerificationPoliciesGetter = true
+			invokedConfigVerificationPoliciesGetterCount += 1
+			return stubbedConfigVerificationPolicies
+		}
+	}
+
 	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetter = false
 	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount = 0
 	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool?

@@ -43,11 +43,8 @@ final class RiskSettingInstructionViewController: BaseViewController {
 		viewModel.$highRiskTitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskTitle = $0 }
 		viewModel.$highRiskSubtitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskSubtitle = $0 }
 		viewModel.$highRiskAccessibilityLabel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskAccessibilityLabel = $0 }
-		viewModel.$highPlusRiskTitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highPlusRiskTitle = $0 }
-		viewModel.$highPlusRiskSubtitle.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highPlusRiskSubtitle = $0 }
-		viewModel.$highPlusRiskAccessibilityLabel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highPlusRiskAccessibilityLabel = $0 }
 		viewModel.$moreButtonTitle.binding = { [weak self] in self?.sceneView.moreButtonTitle = $0 }
-		viewModel.$riskLevel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.riskLevel = $0 }
+		viewModel.$verificationPolicy.binding = { [weak self] in self?.sceneView.riskSettingControlsView.verificationPolicy = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		viewModel.$errorMessage.binding = { [weak self] in self?.sceneView.errorMessage = $0 }
 		viewModel.$shouldDisplayNotSetError.binding = { [weak self] in
@@ -61,9 +58,9 @@ final class RiskSettingInstructionViewController: BaseViewController {
 			}
 		}
 		
-		sceneView.riskSettingControlsView.selectRiskCommand = { [weak self] riskSetting in
+		sceneView.riskSettingControlsView.selectVerificationPolicyCommand = { [weak self] verificationPolicy in
 			
-			self?.viewModel.selectRisk = riskSetting
+			self?.viewModel.selectVerificationPolicy = verificationPolicy
 		}
 		sceneView.readMoreCommand = { [weak self] in
 			

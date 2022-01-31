@@ -74,8 +74,8 @@ extension HolderDashboardViewModel {
 				// Check contains currently valid test origin:
 				guard origins.contains(where: { $0.type == .test }) else { return false }
 				
-				// Check if the greencard riskLevel is low:
-				let isExplicitly3G = credentialEvaluator(self, now)?.riskLevel == .low
+				// Check if the greencard verification policy is 3G:
+				let isExplicitly3G = credentialEvaluator(self, now)?.verificationPolicy == .policy3G
 				
 				let hasValidVaccine = currentlyValidOrigins.contains { $0.type == .vaccination }
 				let hasValidRecovery = currentlyValidOrigins.contains { $0.type == .recovery }

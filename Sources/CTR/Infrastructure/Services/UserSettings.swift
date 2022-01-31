@@ -32,6 +32,8 @@ protocol UserSettingsProtocol: AnyObject {
 	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? { get set }
 	
 	var deviceAuthenticationWarningShown: Bool { get set }
+	
+	var configVerificationPolicies: [VerificationPolicy] { get set }
 
 	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
@@ -76,6 +78,9 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
+	
+	@UserDefaults(key: "configVerificationPolicies")
+	var configVerificationPolicies: [VerificationPolicy] = [] // swiftlint:disable:this let_var_whitespace
 
 	// MARK: - Validity Information Banner for Vaccinations and Recoveries
 	
@@ -109,6 +114,7 @@ extension UserSettings {
 			"shouldCheckRecoveryGreenCardRevisedValidity",
 			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
 			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
+			"configVerificationPolicies",
 
 			// Deprecated keys
 			"shouldShowRecoveryValidityExtensionCard",

@@ -31,29 +31,17 @@ final class RiskSettingControlsView: BaseView {
 		return RiskSettingControl()
 	}()
 	
-	let highPlusRiskControl: RiskSettingControl = {
-		return RiskSettingControl()
-	}()
-	
 	override func setupViews() {
 		super.setupViews()
 		
 		lowRiskControl.onTapCommand = { [weak self] in
-			self?.selectRiskCommand?(.low)
+			self?.selectVerificationPolicyCommand?(.policy3G)
 			self?.highRiskControl.isSelected = false
-			self?.highPlusRiskControl.isSelected = false
 		}
 		
 		highRiskControl.onTapCommand = { [weak self] in
-			self?.selectRiskCommand?(.high)
+			self?.selectVerificationPolicyCommand?(.policy1G)
 			self?.lowRiskControl.isSelected = false
-			self?.highPlusRiskControl.isSelected = false
-		}
-		
-		highPlusRiskControl.onTapCommand = { [weak self] in
-			self?.selectRiskCommand?(.highPlus)
-			self?.lowRiskControl.isSelected = false
-			self?.highRiskControl.isSelected = false
 		}
 	}
 	
@@ -64,8 +52,6 @@ final class RiskSettingControlsView: BaseView {
 		stackView.addArrangedSubview(lowRiskControl)
 		addSeparator()
 		stackView.addArrangedSubview(highRiskControl)
-		addSeparator()
-		stackView.addArrangedSubview(highPlusRiskControl)
 		addSeparator()
 	}
 	
@@ -123,30 +109,11 @@ final class RiskSettingControlsView: BaseView {
 		}
 	}
 	
-	var highPlusRiskTitle: String? {
+	var verificationPolicy: VerificationPolicy? {
 		didSet {
-			highPlusRiskControl.title = highPlusRiskTitle
-		}
-	}
-	
-	var highPlusRiskSubtitle: String? {
-		didSet {
-			highPlusRiskControl.subtitle = highPlusRiskSubtitle
-		}
-	}
-	
-	var highPlusRiskAccessibilityLabel: String? {
-		didSet {
-			highPlusRiskControl.accessibilityLabel = highPlusRiskAccessibilityLabel
-		}
-	}
-	
-	var riskLevel: RiskLevel? {
-		didSet {
-			guard let riskLevel = riskLevel else { return }
-			lowRiskControl.isSelected = riskLevel.isLow
-			highRiskControl.isSelected = riskLevel.isHigh
-			highPlusRiskControl.isSelected = riskLevel.isHighPlus
+			guard let verificationPolicy = verificationPolicy else { return }
+			lowRiskControl.isSelected = verificationPolicy == .policy3G
+			highRiskControl.isSelected = verificationPolicy == .policy1G
 		}
 	}
 
@@ -154,9 +121,8 @@ final class RiskSettingControlsView: BaseView {
 		didSet {
 			lowRiskControl.hasError = hasError
 			highRiskControl.hasError = hasError
-			highPlusRiskControl.hasError = hasError
 		}
 	}
 	
-	var selectRiskCommand: ((RiskLevel) -> Void)?
+	var selectVerificationPolicyCommand: ((VerificationPolicy) -> Void)?
 }

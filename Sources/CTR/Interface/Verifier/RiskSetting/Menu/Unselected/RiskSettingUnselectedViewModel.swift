@@ -22,14 +22,11 @@ final class RiskSettingUnselectedViewModel: Logging {
 	@Bindable private(set) var highRiskTitle = L.verifier_risksetting_highrisk_title()
 	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
 	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-	@Bindable private(set) var highPlusRiskTitle = L.verifier_risksetting_2g_plus_title()
-	@Bindable private(set) var highPlusRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
-	@Bindable private(set) var highPlusRiskAccessibilityLabel = "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
 	@Bindable private(set) var primaryButtonTitle = L.verifier_risksetting_confirmation_button()
 	@Bindable private(set) var errorMessage = L.verification_policy_selection_error_message()
 	@Bindable private(set) var shouldDisplayNotSetError = false
 	
-	var selectRisk: RiskLevel? {
+	var selectVerificationPolicy: VerificationPolicy? {
 		didSet {
 			shouldDisplayNotSetError = false
 		}
@@ -46,10 +43,10 @@ final class RiskSettingUnselectedViewModel: Logging {
 	
 	func confirmSetting() {
 		
-		if selectRisk == nil {
+		if selectVerificationPolicy == nil {
 			shouldDisplayNotSetError = true
 		} else {
-			riskLevelManager.update(riskLevel: selectRisk)
+			riskLevelManager.update(verificationPolicy: selectVerificationPolicy)
 			coordinator?.navigateToVerifierWelcome()
 		}
 	}

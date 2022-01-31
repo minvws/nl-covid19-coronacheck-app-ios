@@ -39,8 +39,6 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func userWishesToSetRiskLevel(shouldSelectSetting: Bool)
 	
 	func userWishesMoreInfoAboutDeniedQRScan()
-	
-	func navigateToScanNextInstruction(_ scanNext: ScanNext)
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -303,17 +301,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				)
 			)
 		}
-		navigationController.pushViewController(viewController, animated: true)
-	}
-	
-	func navigateToScanNextInstruction(_ scanNext: ScanNext) {
-		
-		let viewController = ScanNextInstructionViewController(
-			viewModel: ScanNextInstructionViewModel(
-				coordinator: self,
-				scanNext: scanNext
-			)
-		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
