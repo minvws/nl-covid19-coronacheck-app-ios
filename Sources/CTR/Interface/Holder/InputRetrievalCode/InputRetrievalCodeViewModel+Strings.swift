@@ -8,7 +8,7 @@
 import UIKit
 
 /// Mechanism for dynamically retrieving Strings depending on the `InitializationMode`:
-extension TokenEntryViewModel {
+extension InputRetrievalCodeViewModel {
 	
 	struct Strings {
 		

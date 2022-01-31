@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TokenEntryViewController: BaseViewController {
+class InputRetrievalCodeViewController: BaseViewController {
 	
 	/// Used for identifying textFields via the UITextField.tag value
 	private enum TextFieldTag: Int {
@@ -15,12 +15,12 @@ class TokenEntryViewController: BaseViewController {
 		case verificationEntry = 1
 	}
 	
-	private let viewModel: TokenEntryViewModel
+	private let viewModel: InputRetrievalCodeViewModel
 	private var tapGestureRecognizer: UITapGestureRecognizer?
 	
-	let sceneView = TokenEntryView()
+	let sceneView = InputRetrievalCodeView()
 	
-	init(viewModel: TokenEntryViewModel) {
+	init(viewModel: InputRetrievalCodeViewModel) {
 		
 		self.viewModel = viewModel
 
@@ -318,7 +318,7 @@ class TokenEntryViewController: BaseViewController {
 
 // MARK: - UITextFieldDelegate
 
-extension TokenEntryViewController: UITextFieldDelegate {
+extension InputRetrievalCodeViewController: UITextFieldDelegate {
 
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 

@@ -10,14 +10,14 @@ import XCTest
 import SnapshotTesting
 @testable import CTR
 
-class TokenEntryViewTests: XCTestCase {
+class InputRetrievalCodeViewTests: XCTestCase {
 
-    var sut: TokenEntryView!
+    var sut: InputRetrievalCodeView!
 
     override func setUp() {
         super.setUp()
 
-		sut = TokenEntryView()
+		sut = InputRetrievalCodeView()
         sut.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
     }
 

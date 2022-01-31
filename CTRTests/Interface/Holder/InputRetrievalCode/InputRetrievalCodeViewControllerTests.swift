@@ -11,10 +11,10 @@ import ViewControllerPresentationSpy
 import Nimble
 @testable import CTR
 
-class TokenEntryViewControllerTests: XCTestCase {
+class InputRetrievalCodeControllerTests: XCTestCase {
 
-	private var sut: TokenEntryViewController!
-	private var viewModel: TokenEntryViewModel!
+	private var sut: InputRetrievalCodeViewController!
+	private var viewModel: InputRetrievalCodeViewModel!
 	private var window: UIWindow!
 
 	private var holderCoordinatorSpy: HolderCoordinatorDelegateSpy!
@@ -40,7 +40,7 @@ class TokenEntryViewControllerTests: XCTestCase {
 		let alertVerifier = AlertVerifier()
 		// Arrange
 		viewModel = mockedViewModel(withRequestToken: nil)
-		sut = TokenEntryViewController(viewModel: viewModel)
+		sut = InputRetrievalCodeViewController(viewModel: viewModel)
 
 		loadView(viewController: sut)
 
@@ -65,7 +65,7 @@ class TokenEntryViewControllerTests: XCTestCase {
 		let alertVerifier = AlertVerifier()
 		// Arrange
 		viewModel = mockedViewModel(withRequestToken: .fake)
-		sut = TokenEntryViewController(viewModel: viewModel)
+		sut = InputRetrievalCodeViewController(viewModel: viewModel)
 
 		loadView(viewController: sut)
 
@@ -88,8 +88,8 @@ class TokenEntryViewControllerTests: XCTestCase {
 	
 	// MARK: - Sugar
 
-	private func mockedViewModel(withRequestToken requestToken: RequestToken?) -> TokenEntryViewModel {
-		return TokenEntryViewModel(
+	private func mockedViewModel(withRequestToken requestToken: RequestToken?) -> InputRetrievalCodeViewModel {
+		return InputRetrievalCodeViewModel(
 			coordinator: holderCoordinatorSpy,
 			requestToken: requestToken,
 			tokenValidator: tokenValidatorSpy

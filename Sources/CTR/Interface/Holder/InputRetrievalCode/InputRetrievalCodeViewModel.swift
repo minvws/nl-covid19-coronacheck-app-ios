@@ -22,7 +22,7 @@ enum InputRetrievalCodeMode {
 	}
 }
 
-class TokenEntryViewModel {
+class InputRetrievalCodeViewModel {
 
 	/// There are four "modes" for user entry
 	/// that determine which fields (if any) should be shown at one time.
@@ -471,7 +471,7 @@ class TokenEntryViewModel {
 	/// future applications.
 	private var currentInputMode: InputMode? {
 		didSet {
-			if currentInputMode != TokenEntryViewModel.InputMode.none {
+			if currentInputMode != InputRetrievalCodeViewModel.InputMode.none {
 				hasEverMadeFieldsVisible = true
 			}
 		}
@@ -553,14 +553,14 @@ class TokenEntryViewModel {
 	}
 }
 
-extension TokenEntryViewModel.InitializationMode {
+extension InputRetrievalCodeViewModel.InitializationMode {
 	func calculateInputMode(
 		tokenValidityIndicator: Bool?, // IF we've validated the token, then provide the result here.
 		verificationCodeIsKnownToBeRequired: Bool,
 		isInProgress: Bool,
 		hasEverMadeFieldsVisible: Bool,
 		screenHasCompleted: Bool
-	) -> TokenEntryViewModel.InputMode {
+	) -> InputRetrievalCodeViewModel.InputMode {
 
 		switch self {
 			case .regular:
@@ -583,7 +583,7 @@ extension TokenEntryViewModel.InitializationMode {
 	}
 }
 
-extension TokenEntryViewModel: Logging {
+extension InputRetrievalCodeViewModel: Logging {
 
 	var loggingCategory: String {
 		return "TokenEntryViewModel"
@@ -592,7 +592,7 @@ extension TokenEntryViewModel: Logging {
 
 // MARK: - Error States
 
-extension TokenEntryViewModel {
+extension InputRetrievalCodeViewModel {
 
 	private func displayNoInternet(_ requestToken: RequestToken, verificationCode: String?) {
 

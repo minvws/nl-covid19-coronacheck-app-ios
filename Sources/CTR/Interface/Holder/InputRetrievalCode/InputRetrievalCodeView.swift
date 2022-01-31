@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TokenEntryView: ScrolledStackWithButtonView {
+class InputRetrievalCodeView: ScrolledStackWithButtonView {
 	
 	/// The display constants
 	private struct ViewTraits {
