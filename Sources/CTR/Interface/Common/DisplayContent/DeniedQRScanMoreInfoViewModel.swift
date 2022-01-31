@@ -38,12 +38,12 @@ class DeniedQRScanMoreInfoViewModel {
 
 		self.title = L.verifierDeniedTitle()
 		self.content = [
-			(TextView(htmlText: Current.featureFlagManager.is1GPolicyEnabled() ? L.verifierDeniedMessageOne_2G() : L.verifierDeniedMessageOne()), spacing),
+			(TextView(htmlText: Current.featureFlagManager.is1GPolicyEnabled() ? L.verifierDeniedMessageOne_1G() : L.verifierDeniedMessageOne()), spacing),
 			(TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
 			(TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
 			(TextView(htmlText: L.verifierDeniedMessageFour()), 0),
 			(TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
-			(TextView(htmlText: Current.featureFlagManager.is1GPolicyEnabled() ? L.verifierDeniedMessageSix_2G() : L.verifierDeniedMessageSix()), spacing)
+			(TextView(htmlText: Current.featureFlagManager.is1GPolicyEnabled() ? L.verifierDeniedMessageSix_1G() : L.verifierDeniedMessageSix()), spacing)
 		]
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in

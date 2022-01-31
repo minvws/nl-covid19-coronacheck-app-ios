@@ -81,7 +81,7 @@ class ScanLogManagerTests: XCTestCase {
 		// Then
 		expect(result).toNot(beEmpty())
 		expect(result).to(haveCount(1))
-		expect(result.first?.mode) == ScanLogManager.highRisk
+		expect(result.first?.mode) == ScanLogManager.policy1G
 	}
 
 	func test_getScanEntries_oneScan_inTimeWindow_lowRisk() throws {
@@ -96,7 +96,7 @@ class ScanLogManagerTests: XCTestCase {
 		// Then
 		expect(result).toNot(beEmpty())
 		expect(result).to(haveCount(1))
-		expect(result.first?.mode) == ScanLogManager.lowRisk
+		expect(result.first?.mode) == ScanLogManager.policy3G
 	}
 
 	func test_getScanEntries_oneScan_outsideTimeWindow() throws {

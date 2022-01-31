@@ -14,7 +14,7 @@ enum VerificationPolicy: Codable, CaseIterable {
 	/// 1G policy
 	case policy1G
 	
-	var policy: String {
+	var scanPolicy: String {
 		switch self {
 			case .policy3G:
 				return MobilecoreVERIFICATION_POLICY_3G
@@ -24,6 +24,15 @@ enum VerificationPolicy: Codable, CaseIterable {
 	}
 	
 	var featureFlag: String {
+		switch self {
+			case .policy3G:
+				return "3G"
+			case .policy1G:
+				return "1G"
+		}
+	}
+	
+	var localization: String {
 		switch self {
 			case .policy3G:
 				return "3G"

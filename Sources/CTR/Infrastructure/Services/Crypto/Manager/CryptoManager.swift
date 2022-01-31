@@ -154,9 +154,9 @@ class CryptoManager: CryptoManaging, Logging {
 				assertionFailure("Risk level should be set")
 				return nil
 			}
-			scanPolicy = riskSetting.policy
+			scanPolicy = riskSetting.scanPolicy
 		} else {
-			guard let storedScanPolicy = Current.userSettings.configVerificationPolicies.first?.policy else {
+			guard let storedScanPolicy = Current.userSettings.configVerificationPolicies.first?.scanPolicy else {
 				assertionFailure("Scan policy should be stored")
 				return nil
 			}

@@ -51,7 +51,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.accessTitle) == L.verifier_result_access_title_lowrisk()
+		expect(self.sut.accessTitle) == L.verifier_result_access_title_policy(VerificationPolicy.policy3G.localization)
 	}
 	
 	func test_accessTitle_demoLowRisk_verificationPolicyDisabled() {
@@ -80,7 +80,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.accessTitle) == L.verifier_result_access_title_highrisk()
+		expect(self.sut.accessTitle) == L.verifier_result_access_title_policy(VerificationPolicy.policy1G.localization)
 	}
 	
 	func test_accessTitle_demoHighRisk_verificationPolicyDisabled() {
@@ -109,7 +109,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.accessTitle) == L.verifier_result_access_title_lowrisk()
+		expect(self.sut.accessTitle) == L.verifier_result_access_title_policy(VerificationPolicy.policy3G.localization)
 	}
 	
 	func test_accessTitle_verifiedLowRisk_verificationPolicyDisabled() {
@@ -138,7 +138,7 @@ final class VerifiedAccessViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.accessTitle) == L.verifier_result_access_title_highrisk()
+		expect(self.sut.accessTitle) == L.verifier_result_access_title_policy(VerificationPolicy.policy1G.localization)
 	}
 	
 	func test_accessTitle_verifiedHighRisk_verificationPolicyDisabled() {

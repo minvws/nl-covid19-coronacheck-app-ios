@@ -23,8 +23,8 @@ protocol ScanLogManaging: AnyObject {
 
 class ScanLogManager: ScanLogManaging {
 
-	static let highRisk: String = "1G"
-	static let lowRisk: String = "3G"
+	static let policy1G: String = "1G"
+	static let policy3G: String = "3G"
 
 	private var dataStoreManager: DataStoreManaging
 
@@ -58,7 +58,13 @@ class ScanLogManager: ScanLogManaging {
 		// Nothing for now
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			let mode: String = verificationPolicy == .policy3G ? ScanLogManager.lowRisk : ScanLogManager.highRisk
+			var mode: String = ""
+			switch verificationPolicy {
+				case .policy3G:
+					mode = ScanLogManager.policy3G
+				case .policy1G:
+					mode = ScanLogManager.policy1G
+			}
 			let entry = ScanLogEntryModel.create(mode: mode, date: date, managedContext: context)
 			dataStoreManager.save(context)
 

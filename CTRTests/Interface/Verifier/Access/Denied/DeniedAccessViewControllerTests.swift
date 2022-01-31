@@ -23,6 +23,12 @@ final class DeniedAccessViewControllerTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		verifierCoordinatorSpy = VerifierCoordinatorDelegateSpy()
+		
+		sut = DeniedAccessViewController(
+			viewModel: .init(
+				coordinator: verifierCoordinatorSpy
+			)
+		)
 	}
 	
 	func loadView() {
@@ -33,12 +39,6 @@ final class DeniedAccessViewControllerTests: XCTestCase {
 	
 	func test_scanNextTapped_shouldScanAgain() {
 		// Given
-		sut = DeniedAccessViewController(
-			viewModel: .init(
-				coordinator: verifierCoordinatorSpy,
-				deniedAccessReason: .invalid
-			)
-		)
 		loadView()
 		
 		// When
@@ -50,12 +50,6 @@ final class DeniedAccessViewControllerTests: XCTestCase {
 	
 	func test_readMoreTapped_shouldScanAgain() {
 		// Given
-		sut = DeniedAccessViewController(
-			viewModel: .init(
-				coordinator: verifierCoordinatorSpy,
-				deniedAccessReason: .invalid
-			)
-		)
 		loadView()
 		
 		// When
@@ -65,14 +59,8 @@ final class DeniedAccessViewControllerTests: XCTestCase {
 		expect(self.verifierCoordinatorSpy.invokedUserWishesMoreInfoAboutDeniedQRScan) == true
 	}
 	
-	func test_deniedAccessReason_invalid() {
+	func test_default() {
 		// Given
-		sut = DeniedAccessViewController(
-			viewModel: .init(
-				coordinator: verifierCoordinatorSpy,
-				deniedAccessReason: .invalid
-			)
-		)
 		
 		// When
 		loadView()
@@ -81,27 +69,6 @@ final class DeniedAccessViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.title) == L.verifierResultDeniedTitle()
 		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultDeniedReadmore()
-		
-		// Snapshot
-		sut.assertImage()
-	}
-	
-	func test_deniedAccessReason_identityMismatch() {
-		// Given
-		sut = DeniedAccessViewController(
-			viewModel: .init(
-				coordinator: verifierCoordinatorSpy,
-				deniedAccessReason: .identityMismatch
-			)
-		)
-		
-		// When
-		loadView()
-		
-		// Then
-		expect(self.sut.sceneView.title) == L.verifier_result_denied_personal_data_mismatch_title()
-		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
-		expect(self.sut.sceneView.secondaryTitle).to(beNil())
 		
 		// Snapshot
 		sut.assertImage()

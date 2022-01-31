@@ -58,7 +58,7 @@ class VerifierStartViewModel: Logging {
 					let minutes = Int((totalDuration / 60).rounded(.up))
 					return L.verifier_home_countdown_subtitle(minutes)
 				case .policy1G:
-					return L.scan_qr_description_2G()
+					return L.scan_qr_description_1G()
 				default:
 					return L.verifierStartMessage()
 			}
@@ -99,9 +99,9 @@ class VerifierStartViewModel: Logging {
 		var riskIndicator: (UIColor, String)? {
 			switch self {
 				case .policy1G, .locked(.policy1G, _, _):
-					return (Theme.colors.dark, L.verifier_start_scan_qr_policy_indication_2g_plus())
+					return (Theme.colors.dark, L.verifier_start_scan_qr_policy_indication(VerificationPolicy.policy1G.localization))
 				case .policy3G, .locked(.policy3G, _, _):
-					return (Theme.colors.access, L.verifier_start_scan_qr_policy_indication_3g())
+					return (Theme.colors.access, L.verifier_start_scan_qr_policy_indication(VerificationPolicy.policy3G.localization))
 				default:
 					return nil
 			}

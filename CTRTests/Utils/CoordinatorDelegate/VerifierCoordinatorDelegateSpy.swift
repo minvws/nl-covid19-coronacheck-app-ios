@@ -117,14 +117,10 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 
 	var invokedNavigateToDeniedAccess = false
 	var invokedNavigateToDeniedAccessCount = 0
-	var invokedNavigateToDeniedAccessParameters: (deniedAccessReason: DeniedAccessReason, Void)?
-	var invokedNavigateToDeniedAccessParametersList = [(deniedAccessReason: DeniedAccessReason, Void)]()
 
-	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason) {
+	func navigateToDeniedAccess() {
 		invokedNavigateToDeniedAccess = true
 		invokedNavigateToDeniedAccessCount += 1
-		invokedNavigateToDeniedAccessParameters = (deniedAccessReason, ())
-		invokedNavigateToDeniedAccessParametersList.append((deniedAccessReason, ()))
 	}
 
 	var invokedUserWishesToSetRiskLevel = false
