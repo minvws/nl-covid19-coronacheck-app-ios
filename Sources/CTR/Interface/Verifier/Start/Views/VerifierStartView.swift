@@ -61,6 +61,13 @@ class VerifierStartView: BaseView {
 		view.contentMode = .center
 		return view
 	}()
+	
+	private let fakeNavigationBar: FakeNavigationBarView = {
+		let navbar = FakeNavigationBarView()
+		navbar.translatesAutoresizingMaskIntoConstraints = false
+		return navbar
+	}()
+
 	private let titleLabel: Label = {
 
         return Label(title1: nil, montserrat: true).multiline().header()
@@ -139,12 +146,14 @@ class VerifierStartView: BaseView {
 		stackView.addArrangedSubview(headerImageView)
 		stackView.addArrangedSubview(contentView)
 
-		scrollView.addSubview(stackView)
-		addSubview(scrollView)
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(contentTextView)
 		contentView.addSubview(showInstructionsButton)
 
+		scrollView.addSubview(stackView)
+		addSubview(scrollView)
+
+		addSubview(fakeNavigationBar)
 		addSubview(clockDeviationWarningView)
 		addSubview(footerButtonView)
 		
@@ -163,8 +172,12 @@ class VerifierStartView: BaseView {
 		
 		NSLayoutConstraint.activate([
 
+			fakeNavigationBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			fakeNavigationBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			fakeNavigationBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+
 			// Scrollview
-			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			scrollView.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			{
@@ -363,5 +376,26 @@ class VerifierStartView: BaseView {
 	func showImage() {
 
 		headerImageView.isHidden = false
+	}
+	
+	var tapMenuButtonHandler: (() -> Void)? {
+		didSet {
+			fakeNavigationBar.tapMenuButtonHandler = tapMenuButtonHandler
+		}
+	}
+
+	var fakeNavigationTitle: String? {
+		didSet {
+			fakeNavigationBar.title = fakeNavigationTitle
+		}
+	}
+
+	var fakeNavigationBarAlpha: CGFloat {
+		get {
+			fakeNavigationBar.alpha
+		}
+		set {
+			fakeNavigationBar.alpha = newValue
+		}
 	}
 }

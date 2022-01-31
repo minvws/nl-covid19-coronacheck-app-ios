@@ -38,14 +38,28 @@ class VerifierStartViewController: BaseViewController {
         super.viewDidLoad()
 
 		setupBindings()
-		
-		setupMenuButton()
     }
 
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
+		navigationController?.navigationBar.isHidden = true
+		
 		layoutForOrientation()
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		
+		super.viewWillDisappear(animated)
+		navigationController?.navigationBar.isHidden = false
+
+		// As the screen animates out, fade out the (fake) navigation bar,
+		// as an approximation of the animation that occurs with UINavigationBar.
+		transitionCoordinator?.animate(alongsideTransition: { _ in
+			self.sceneView.fakeNavigationBarAlpha = 0
+		}, completion: { _ in
+			self.sceneView.fakeNavigationBarAlpha = 1
+		})
 	}
 
 	// Rotation
@@ -73,7 +87,7 @@ class VerifierStartViewController: BaseViewController {
 	// MARK: - Setup
 	
 	private func setupBindings() {
-		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
 		viewModel.$header.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$showInstructionsTitle.binding = { [weak self] in self?.sceneView.showInstructionsTitle = $0 }
@@ -106,16 +120,9 @@ class VerifierStartViewController: BaseViewController {
 		sceneView.showInstructionsButtonTappedCommand = { [weak self] in
 			self?.viewModel.showInstructionsButtonTapped()
 		}
-	}
-	
-	private func setupMenuButton() {
-		let config = UIBarButtonItem.Configuration(
-			target: viewModel,
-			action: #selector(VerifierStartViewModel.userTappedMenuButton),
-			content: .image( I.icon_menu_hamburger()),
-			accessibilityIdentifier: "MenuButton",
-			accessibilityLabel: L.generalMenuOpen()
-		)
-		navigationItem.rightBarButtonItem = .create(config)
+		
+		sceneView.tapMenuButtonHandler = { [weak self] in
+			self?.viewModel.userTappedMenuButton()
+		}
 	}
 }
