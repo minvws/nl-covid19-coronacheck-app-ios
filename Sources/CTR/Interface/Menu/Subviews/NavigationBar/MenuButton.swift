@@ -128,7 +128,7 @@ class MenuButton: UIControl {
 		}
 	}
 	
-	// MARK: - Objc Target-Action callback s:
+	// MARK: - Objc Target-Action callbacks:
 	
 	@objc
 	private func touchUp() {
