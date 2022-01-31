@@ -216,15 +216,15 @@ class AppCoordinator: Coordinator, Logging {
 
 	/// Show the Action Required View
 	/// - Parameter versionInformation: the version information
-	private func navigateToAppUpdate(with viewModel: AppUpdateViewModel) {
+	private func navigateToAppUpdate(with viewModel: AppStatusViewModel) {
 
 		guard var topController = window.rootViewController else { return }
 
 		while let newTopController = topController.presentedViewController {
 			topController = newTopController
 		}
-		guard !(topController is AppUpdateViewController) else { return }
-		let updateController = AppUpdateViewController(viewModel: viewModel)
+		guard !(topController is AppStatusViewController) else { return }
+		let updateController = AppStatusViewController(viewModel: viewModel)
 
 		if topController is UINavigationController {
 			(topController as? UINavigationController)?.viewControllers.last?.present(updateController, animated: true)
@@ -287,7 +287,7 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func updateIsRequired(appStoreUrl: URL) {
 		
 		navigateToAppUpdate(
-			with: AppUpdateViewModel(
+			with: AppStatusViewModel(
 				coordinator: self,
 				appStoreUrl: appStoreUrl
 			)
