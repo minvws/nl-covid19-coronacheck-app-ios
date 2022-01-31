@@ -41,6 +41,7 @@ class MenuViewController: BaseViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		title = L.general_menu()
+		
 		setupBindings()
 		addBackButton(customAction: nil)
 	}

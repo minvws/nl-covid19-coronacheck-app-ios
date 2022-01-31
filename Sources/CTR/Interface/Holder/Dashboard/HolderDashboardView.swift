@@ -24,6 +24,12 @@ final class HolderDashboardView: BaseView {
 		}
 	}
 	
+	private let fakeNavigationBar: FakeNavigationBarView = {
+		let navbar = FakeNavigationBarView()
+		navbar.translatesAutoresizingMaskIntoConstraints = false
+		return navbar
+	}()
+	
 	private let tabBar: DashboardTabBar = {
 		let tabBar = DashboardTabBar()
 		tabBar.translatesAutoresizingMaskIntoConstraints = false
@@ -83,6 +89,7 @@ final class HolderDashboardView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
+		addSubview(fakeNavigationBar)
 		addSubview(tabBar)
 		addSubview(scrollView)
 		addSubview(footerButtonView)
@@ -95,7 +102,12 @@ final class HolderDashboardView: BaseView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			tabBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			
+			fakeNavigationBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			fakeNavigationBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			fakeNavigationBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			
+			tabBar.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
 			tabBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			tabBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			
@@ -175,6 +187,27 @@ final class HolderDashboardView: BaseView {
 		
 		updateScrollPosition()
 		updateScrollViewContentOffsetObserver(for: tab)
+	}
+	
+	var tapMenuButtonHandler: (() -> Void)? {
+		didSet {
+			fakeNavigationBar.tapMenuButtonHandler = tapMenuButtonHandler
+		}
+	}
+	
+	var title: String? {
+		didSet {
+			fakeNavigationBar.title = title
+		}
+	}
+	
+	var fakeNavigationBarAlpha: CGFloat {
+		get {
+			fakeNavigationBar.alpha
+		}
+		set {
+			fakeNavigationBar.alpha = newValue
+		}
 	}
 }
 

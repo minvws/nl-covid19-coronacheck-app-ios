@@ -89,15 +89,17 @@ class HolderDashboardViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
-
-		setupBindings()
 		
-		setupMenuButton()
+		setupBindings()
 		
 		sceneView.delegate = self
 
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.addCertificateFooterTapped()
+		}
+		
+		sceneView.tapMenuButtonHandler = { [weak self] in
+			self?.viewModel.userTappedMenuButton()
 		}
 		
 		// Forces VoiceOver focus on menu button instead of tab bar on start up
@@ -106,13 +108,26 @@ class HolderDashboardViewController: BaseViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-
+		navigationController?.navigationBar.isHidden = true
 		viewModel.viewWillAppear()
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+	}
+
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		navigationController?.navigationBar.isHidden = false
+		
+		// As the screen animates out, fade out the (fake) navigation bar,
+		// as an approximation of the animation that occurs with UINavigationBar.
+		transitionCoordinator?.animate(alongsideTransition: { _ in
+			self.sceneView.fakeNavigationBarAlpha = 0
+		}, completion: { _ in
+			self.sceneView.fakeNavigationBarAlpha = 1
+		})
 	}
 
 	override func viewDidDisappear(_ animated: Bool) {
@@ -143,7 +158,7 @@ class HolderDashboardViewController: BaseViewController {
 	
 	private func setupBindings() {
 
-		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		
 		viewModel.$domesticCards.binding = { [sceneView, weak self] cards in
 			DispatchQueue.main.async {
@@ -197,17 +212,6 @@ class HolderDashboardViewController: BaseViewController {
 			
 			stackView.setCustomSpacing(22, after: previousCardView)
 		}
-	}
-
-	private func setupMenuButton() {
-		let config = UIBarButtonItem.Configuration(
-			target: viewModel,
-			action: #selector(HolderDashboardViewModel.userTappedMenuButton),
-			content: .image( I.icon_menu_hamburger()),
-			accessibilityIdentifier: "MenuButton",
-			accessibilityLabel: L.generalMenuOpen()
-		)
-		navigationItem.rightBarButtonItem = .create(config)
 	}
 }
 

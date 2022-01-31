@@ -9,10 +9,10 @@ import XCTest
 @testable import CTR
 import Nimble
 
-class AppUpdateViewModelTests: XCTestCase {
+class AppStatusViewModelTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: AppUpdateViewModel!
+	var sut: AppStatusViewModel!
 	var appCoordinatorSpy: AppCoordinatorSpy!
 
 	// MARK: Test lifecycle
@@ -21,7 +21,7 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		appCoordinatorSpy = AppCoordinatorSpy()
 		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL)
+		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL)
 		try super.setUpWithError()
 	}
 
@@ -55,7 +55,7 @@ class AppUpdateViewModelTests: XCTestCase {
 	func testUpdateButtonTappedWithoutUrl() {
 
 		// Given
-		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, appStoreUrl: nil)
+		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: nil)
 
 		// When
 		sut.actionButtonTapped()
