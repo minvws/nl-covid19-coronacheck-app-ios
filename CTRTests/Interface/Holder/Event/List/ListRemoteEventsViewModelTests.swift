@@ -817,6 +817,45 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
+	
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_noInternet() throws {
+		
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
+			greenCardLoader: greenCardLoader
+		)
+		
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+		(.failure(ServerError.error(statusCode: 429, response: nil, error: .noInternetConnection)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil)), ())
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
+		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
+		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.okTitle).toEventually(equal( L.generalRetry()))
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+	}
 
 	func test_makeQR_saveEventGroupNoError_prepareIssueError_invalidSignature() throws {
 
@@ -990,6 +1029,48 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.body) == L.generalErrorServerUnreachableErrorCode("i 280 000 004")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+	}
+	
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_noInternet() throws {
+		
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
+			greenCardLoader: greenCardLoader
+		)
+		
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
+		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
+		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.okTitle).toEventually(equal( L.generalRetry()))
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
 	}
 
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverBusy() throws {
@@ -1272,7 +1353,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteEvents: [fakeRemoteEventVaccination],
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
 
@@ -1391,7 +1472,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
-	func test_makeQR_paperflow() {
+	func test_makeQR_paperflow_vaccination() {
 
 		// Given
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
@@ -1424,6 +1505,94 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == false
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+		expect(self.sut.alert).toEventually(beNil())
+	}
+	
+	func test_makeQR_paperflow_recovery() {
+		
+		// Given
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fake(dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithRecovery())
+		
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .paperflow,
+			remoteEvents: [remotePaperFlowEvent],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
+			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+		expect(self.sut.alert).toEventually(beNil())
+	}
+	
+	func test_makeQR_paperflow_test() {
+		
+		// Given
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fake(dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithTest())
+		
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .paperflow,
+			remoteEvents: [remotePaperFlowEvent],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())

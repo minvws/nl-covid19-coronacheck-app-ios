@@ -350,4 +350,3 @@ class IdentityCheckerTests: XCTestCase {
 		}
 	}
 }
-

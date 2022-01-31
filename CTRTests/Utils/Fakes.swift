@@ -407,6 +407,30 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 			]
 		)
 	}
+	
+	static func sampleWithRecovery() -> EuCredentialAttributes.DigitalCovidCertificate {
+		EuCredentialAttributes.DigitalCovidCertificate(
+			dateOfBirth: "2021-06-01",
+			name: EuCredentialAttributes.Name(
+				familyName: "Corona",
+				standardisedFamilyName: "CORONA",
+				givenName: "Check",
+				standardisedGivenName: "CHECK"
+			),
+			schemaVersion: "1.0.0",
+			recoveries: [
+				EuCredentialAttributes.RecoveryEntry(
+					certificateIdentifier: "URN:UCI:01:NL:WMZBJR3MJRHSPGBCNROM42#M",
+					country: "NL",
+					diseaseAgentTargeted: "840539006",
+					expiresAt: "2022-07-31T09:50:00+00:00",
+					firstPositiveTestDate: "2021-07-31T09:50:00+00:00",
+					issuer: "test",
+					validFrom: "2021-08-11T09:50:00+00:00"
+				)
+			]
+		)
+	}
 }
 
 extension RemoteGreenCards.Origin {
