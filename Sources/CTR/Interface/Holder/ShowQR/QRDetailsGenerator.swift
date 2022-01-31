@@ -14,6 +14,7 @@ struct QRDetailsGenerator {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "dd-MM-yyyy"
+		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 
@@ -22,6 +23,7 @@ struct QRDetailsGenerator {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
+		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 }
