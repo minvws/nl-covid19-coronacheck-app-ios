@@ -195,9 +195,9 @@ final class HolderDashboardView: BaseView {
 		}
 	}
 	
-	var title: String? {
+	var fakeNavigationTitle: String? {
 		didSet {
-			fakeNavigationBar.title = title
+			fakeNavigationBar.title = fakeNavigationTitle
 		}
 	}
 	
