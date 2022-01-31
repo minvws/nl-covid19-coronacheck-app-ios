@@ -209,7 +209,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		})
 		
 		let items: [MenuViewModel.Item] = {
-			if Current.featureFlagManager.isVerificationPolicyEnabled() {
+			if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 				return [
 					itemHowItWorks,
 					itemFAQ,
