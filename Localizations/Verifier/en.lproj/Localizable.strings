@@ -2,10 +2,10 @@
 "general_menu" = "Menu ";
 "new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
 "new.terms.highlights" = "<b>Here's what changed</b><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";
-"new_in_app_risksetting_subtitle" = "Only visitors with a test certificate get 1G access. 3G access is given to visitors carrying a test certificate, vaccination certificate or recovery certificate. Check in advance which kind of access your location can give.";
+"new_in_app_risksetting_subtitle" = "With 1G access, only visitors with a test certificate are allowed to enter. With 3G access, visitors with a test, vaccination or recovery certificate are allowed to enter.";
 "new_in_app_risksetting_title" = "1G or 3G access";
 "new_in_app_subtitle" = "New in the app";
-"new_policy_1G_subtitle" = "Only visitors with a test certificate get 1G access. 3G access is given to visitors carrying a test, vaccination or recovery certificate.";
+"new_policy_1G_subtitle" = "Translation to be added";
 "new_policy_1G_title" = "1G or 3G access";
 "new_policy_subtitle" = "New policy";
 "scan_instructions_4_description_1G" = "Does your screen show a check mark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";

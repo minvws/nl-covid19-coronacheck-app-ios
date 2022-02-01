@@ -2,10 +2,10 @@
 "general_menu" = "Menu ";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";
-"new_in_app_risksetting_subtitle" = "Alleen bezoekers met een testbewijs krijgen 1G-toegang. 3G-toegang krijgen bezoekers met een testbewijs, vaccinatiebewijs of herstelbewijs. Check van tevoren welk soort toegang jouw locatie mag geven.";
+"new_in_app_risksetting_subtitle" = "Bij 1G-toegang mogen alleen bezoekers met een testbewijs naar binnen. Bij 3G-toegang mogen bezoekers met een test-, vaccinatie-, of herstelbewijs naar binnen.";
 "new_in_app_risksetting_title" = "1G- of 3G-toegang";
 "new_in_app_subtitle" = "Nieuw in de app";
-"new_policy_1G_subtitle" = "Alleen bezoekers met een testbewijs krijgen 1G-toegang. 3G-toegang krijgen bezoekers met een testbewijs, vaccinatiebewijs of herstelbewijs.";
+"new_policy_1G_subtitle" = "Op plekken waar het coronatoegangsbewijs gebruikt wordt, krijgen alleen bezoekers met een testbewijs toegang (1G-toegang). De CoronaCheck scanner geeft alleen een scherm met vinkje bij het scannen van een testbewijs.";
 "new_policy_1G_title" = "1G- of 3G-toegang";
 "new_policy_subtitle" = "Nieuwe regels";
 "scan_instructions_4_description_1G" = "Zie je een vinkje op je scherm? Dan is de QR-code geldig en kloppen de gegevens met het identiteitsbewijs. Je mag de bezoeker toegang geven.";
