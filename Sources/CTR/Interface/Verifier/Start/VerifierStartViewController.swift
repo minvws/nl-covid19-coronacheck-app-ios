@@ -78,9 +78,9 @@ class VerifierStartViewController: BaseViewController {
 	func layoutForOrientation() {
 
 		if traitCollection.verticalSizeClass == .compact {
-			sceneView.hideImage()
+			sceneView.hideHeader()
 		} else {
-			sceneView.showImage()
+			sceneView.showHeader()
 		}
 	}
 	
@@ -100,7 +100,7 @@ class VerifierStartViewController: BaseViewController {
 				self?.viewModel.userDidTapClockDeviationWarningReadMore()
 			}
 		}
-		viewModel.$largeImage.binding = { [weak self] in self?.sceneView.largeImage = $0 }
+		viewModel.$headerMode.binding = { [weak self] in self?.sceneView.headerMode = $0 }
 		viewModel.$showError.binding = { [weak self] in
 			if $0 {
 				self?.showError(L.generalErrorTitle(), message: L.verifierStartOntimeinternet())
