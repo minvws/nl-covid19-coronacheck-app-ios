@@ -28,6 +28,7 @@ final class MenuRowView: UIControl {
 	
 	private let titleLabel: Label = {
 		let label = Label(bodyBold: nil).multiline()
+		label.textColor = Theme.colors.dark
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
