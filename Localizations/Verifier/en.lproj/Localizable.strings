@@ -6,7 +6,7 @@
 "new_in_app_risksetting_title" = "1G or 3G access";
 "new_in_app_subtitle" = "New in the app";
 "new_policy_1G_subtitle" = "Translation to be added";
-"new_policy_1G_title" = "1G or 3G access";
+"new_policy_1G_title" = "1G access";
 "new_policy_subtitle" = "New policy";
 "scan_instructions_4_description_1G" = "Does your screen show a check mark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";
 "scan_instructions_4_title_1G" = "Check mark = access";
