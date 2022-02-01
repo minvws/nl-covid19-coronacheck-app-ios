@@ -260,8 +260,8 @@ class HolderCoordinator: SharedCoordinator {
 	/// Navigate to the token entry scene
 	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
 		
-		let destination = TokenEntryViewController(
-			viewModel: TokenEntryViewModel(
+		let destination = InputRetrievalCodeViewController(
+			viewModel: InputRetrievalCodeViewModel(
 				coordinator: self,
 				requestToken: token,
 				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()),
