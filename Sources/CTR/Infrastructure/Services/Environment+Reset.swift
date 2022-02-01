@@ -14,7 +14,7 @@ extension Environment {
 		
 		appInstalledSinceManager.wipePersistedData()
 		cryptoLibUtility.wipePersistedData()
-		forcedInformationManager.wipePersistedData()
+		newFeaturesManager.wipePersistedData()
 		onboardingManager.wipePersistedData()
 		remoteConfigManager.wipePersistedData()
 		userSettings.wipePersistedData()
@@ -31,5 +31,12 @@ extension Environment {
 		}
 		
 		cryptoManager.generateSecretKey()
+	}
+	
+	/// Reset verifier scan mode, including risk setting, scan lock and scan log
+	func wipeScanMode() {
+		riskLevelManager.wipePersistedData()
+		scanLockManager.wipePersistedData()
+		scanLogManager.wipePersistedData()
 	}
 }

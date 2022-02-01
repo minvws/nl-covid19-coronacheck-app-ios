@@ -21,11 +21,11 @@ struct Environment {
 	var dataStoreManager: DataStoreManaging
 	var deviceAuthenticationDetector: DeviceAuthenticationProtocol
 	var featureFlagManager: FeatureFlagManaging
-	var forcedInformationManager: ForcedInformationManaging
 	var greenCardLoader: GreenCardLoading
 	var jailBreakDetector: JailBreakProtocol
 	var mappingManager: MappingManaging
 	var networkManager: NetworkManaging
+	var newFeaturesManager: NewFeaturesManaging
 	var onboardingManager: OnboardingManaging
 	var openIdManager: OpenIdManaging
 	var remoteConfigManager: RemoteConfigManaging
@@ -46,11 +46,11 @@ struct Environment {
 		dataStoreManager: DataStoreManaging,
 		deviceAuthenticationDetector: DeviceAuthenticationProtocol,
 		featureFlagManager: FeatureFlagManaging,
-		forcedInformationManager: ForcedInformationManaging,
 		greenCardLoader: GreenCardLoading,
 		jailBreakDetector: JailBreakProtocol,
 		mappingManager: MappingManaging,
 		networkManager: NetworkManaging,
+		newFeaturesManager: NewFeaturesManaging,
 		onboardingManager: OnboardingManaging,
 		openIdManager: OpenIdManaging,
 		remoteConfigManager: RemoteConfigManaging,
@@ -70,11 +70,11 @@ struct Environment {
 		self.dataStoreManager = dataStoreManager
 		self.deviceAuthenticationDetector = deviceAuthenticationDetector
 		self.featureFlagManager = featureFlagManager
-		self.forcedInformationManager = forcedInformationManager
 		self.greenCardLoader = greenCardLoader
 		self.jailBreakDetector = jailBreakDetector
 		self.mappingManager = mappingManager
 		self.networkManager = networkManager
+		self.newFeaturesManager = newFeaturesManager
 		self.onboardingManager = onboardingManager
 		self.openIdManager = openIdManager
 		self.remoteConfigManager = remoteConfigManager
@@ -123,9 +123,6 @@ private let featureFlagManager = FeatureFlagManager(
 	versionSupplier: AppVersionSupplier(),
 	remoteConfigManager: remoteConfigManager
 )
-private let forcedInformationManager = ForcedInformationManager(
-	secureUserSettings: secureUserSettings
-)
 private let greenCardLoader = GreenCardLoader(
 	now: now,
 	networkManager: networkManager,
@@ -157,6 +154,9 @@ private let networkManager: NetworkManager = {
 	   
 	   return NetworkManager(configuration: networkConfiguration)
 }()
+private let newFeaturesManager = NewFeaturesManager(
+	secureUserSettings: secureUserSettings
+)
 private let now: () -> Date = Date.init
 private let remoteConfigManager = RemoteConfigManager(
 	now: now,
@@ -190,11 +190,11 @@ private let environment: () -> Environment = {
 		dataStoreManager: datastoreManager,
 		deviceAuthenticationDetector: deviceAuthenticationDetector,
 		featureFlagManager: featureFlagManager,
-		forcedInformationManager: forcedInformationManager,
 		greenCardLoader: greenCardLoader,
 		jailBreakDetector: jailBreakDetector,
 		mappingManager: mappingManager,
 		networkManager: networkManager,
+		newFeaturesManager: newFeaturesManager,
 		onboardingManager: onboardingManager,
 		openIdManager: openIdManager,
 		remoteConfigManager: remoteConfigManager,

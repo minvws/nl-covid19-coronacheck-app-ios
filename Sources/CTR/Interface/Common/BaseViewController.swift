@@ -12,6 +12,10 @@ class BaseViewController: UIViewController {
 	/// Enable/disable navigation back swiping. Default is true.
 	var enableSwipeBack: Bool { true }
 
+	// Retain the config used to create the left bar button (either a close or back button)
+	// because it is used by `accessibilityPerformEscape()`.
+	private var cacheLeftButtonConfig: UIBarButtonItem.Configuration?
+	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 
 		if #available(iOS 13.0, *) {
@@ -20,7 +24,7 @@ class BaseViewController: UIViewController {
 			return super.preferredStatusBarStyle
 		}
 	}
-
+	
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
@@ -44,6 +48,8 @@ class BaseViewController: UIViewController {
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = enableSwipeBack
 	}
 
+	// MARK: - Accessibility
+
 	func setupAccessibilityElements() {
 
 		// Fix for Accessibility on older devices.
@@ -51,6 +57,22 @@ class BaseViewController: UIViewController {
 		if let navBar = navigationController?.navigationBar {
 			accessibilityElements = [navBar, view as Any]
 		}
+	}
+	
+	// If the user is has VoiceOver enabled, they can
+	// draw a "Z" shape with two fingers to trigger a navigation pop.
+	// http://ronnqvi.st/adding-accessible-behavior
+	@objc override func accessibilityPerformEscape() -> Bool {
+		if enableSwipeBack {
+			onBack()
+			return true
+		} else if let leftButtonTarget = cacheLeftButtonConfig?.target,
+				let leftButtonAction = cacheLeftButtonConfig?.action {
+			UIApplication.shared.sendAction(leftButtonAction, to: leftButtonTarget, from: nil, for: nil)
+			return true
+		}
+		
+		return false
 	}
 
 	/// Add a close button to the navigation bar.
@@ -67,6 +89,7 @@ class BaseViewController: UIViewController {
 												   tintColor: tintColor,
 												   accessibilityIdentifier: "CloseButton",
 												   accessibilityLabel: L.generalClose())
+		cacheLeftButtonConfig = config
 		navigationItem.leftBarButtonItem = .create(config)
 	}
 
@@ -88,6 +111,7 @@ class BaseViewController: UIViewController {
 			accessibilityIdentifier: "BackButton",
 			accessibilityLabel: L.generalMenuClose()
 		)
+		cacheLeftButtonConfig = config
 		navigationItem.leftBarButtonItem = .create(config)
 	}
 

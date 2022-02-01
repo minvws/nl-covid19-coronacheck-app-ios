@@ -72,6 +72,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_initializationWithVerifier_verificationPolicyEnabled() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		
 		// When
 		sut = AboutThisAppViewModel(
@@ -100,7 +101,6 @@ class AboutThisAppViewModelTests: XCTestCase {
 	func test_initializationWithVerifier_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		
 		// When
 		sut = AboutThisAppViewModel(
@@ -297,7 +297,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
-		expect(self.environmentSpies.forcedInformationManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == false
 		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == false
 		expect(self.environmentSpies.riskLevelManagerSpy.invokedWipePersistedData) == false
@@ -323,7 +323,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
-		expect(self.environmentSpies.forcedInformationManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.riskLevelManagerSpy.invokedWipePersistedData) == true
@@ -474,14 +474,10 @@ class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, Verifie
 
 	var invokedNavigateToDeniedAccess = false
 	var invokedNavigateToDeniedAccessCount = 0
-	var invokedNavigateToDeniedAccessParameters: (deniedAccessReason: DeniedAccessReason, Void)?
-	var invokedNavigateToDeniedAccessParametersList = [(deniedAccessReason: DeniedAccessReason, Void)]()
 
-	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason) {
+	func navigateToDeniedAccess() {
 		invokedNavigateToDeniedAccess = true
 		invokedNavigateToDeniedAccessCount += 1
-		invokedNavigateToDeniedAccessParameters = (deniedAccessReason, ())
-		invokedNavigateToDeniedAccessParametersList.append((deniedAccessReason, ()))
 	}
 
 	var invokedUserWishesToSetRiskLevel = false
@@ -502,17 +498,5 @@ class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, Verifie
 	func userWishesMoreInfoAboutDeniedQRScan() {
 		invokedUserWishesMoreInfoAboutDeniedQRScan = true
 		invokedUserWishesMoreInfoAboutDeniedQRScanCount += 1
-	}
-
-	var invokedNavigateToScanNextInstruction = false
-	var invokedNavigateToScanNextInstructionCount = 0
-	var invokedNavigateToScanNextInstructionParameters: (scanNext: ScanNext, Void)?
-	var invokedNavigateToScanNextInstructionParametersList = [(scanNext: ScanNext, Void)]()
-
-	func navigateToScanNextInstruction(_ scanNext: ScanNext) {
-		invokedNavigateToScanNextInstruction = true
-		invokedNavigateToScanNextInstructionCount += 1
-		invokedNavigateToScanNextInstructionParameters = (scanNext, ())
-		invokedNavigateToScanNextInstructionParametersList.append((scanNext, ()))
 	}
 }

@@ -31,14 +31,14 @@ class VerifierCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 	
-	func testStartForcedInformation() {
+	func testStartNewFeatures() {
 
 		// Given
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
-		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = true
-		environmentSpies.forcedInformationManagerSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
+		environmentSpies.newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(
 			image: nil,
 			tagline: "test",
 			title: "test",
@@ -50,24 +50,24 @@ class VerifierCoordinatorTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(sut.childCoordinators.isEmpty)
-		XCTAssertTrue(sut.childCoordinators.first is ForcedInformationCoordinator)
+		XCTAssertTrue(sut.childCoordinators.first is NewFeaturesCoordinator)
 	}
 	
-	func testFinishForcedInformation() {
+	func testFinishNewFeatures() {
 
 		// Given
-		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
 
 		sut.childCoordinators = [
-			ForcedInformationCoordinator(
+			NewFeaturesCoordinator(
 				navigationController: navigationSpy,
-				forcedInformationManager: environmentSpies.forcedInformationManagerSpy,
+				newFeaturesManager: environmentSpies.newFeaturesManagerSpy,
 				delegate: sut
 			)
 		]
 
 		// When
-		sut.finishForcedInformation()
+		sut.finishNewFeatures()
 
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
@@ -78,7 +78,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		// Given
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
-		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
 		
 		sut.start()
 		

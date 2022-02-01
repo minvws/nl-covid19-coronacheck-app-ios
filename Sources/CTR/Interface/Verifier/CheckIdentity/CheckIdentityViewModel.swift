@@ -111,21 +111,25 @@ final class CheckIdentityViewModel: Logging {
 	
 	func showVerifiedAccess() {
 		
-		let verifiedAccess: VerifiedAccess
-		var riskSetting: RiskLevel = .low
+		guard var verificationPolicySetting = Current.userSettings.configVerificationPolicies.first else {
+			assertionFailure("Verification policy should be stored")
+			return
+		}
 		
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		let verifiedAccess: VerifiedAccess
+		
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			guard let state = Current.riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
 				return
 			}
-			riskSetting = state
+			verificationPolicySetting = state
 		}
 		
 		if verificationDetails.isSpecimen == "1" {
-			verifiedAccess = .demo(riskSetting)
+			verifiedAccess = .demo(verificationPolicySetting)
 		} else {
-			verifiedAccess = .verified(riskSetting)
+			verifiedAccess = .verified(verificationPolicySetting)
 		}
 		
 		stopAutoCloseTimer()

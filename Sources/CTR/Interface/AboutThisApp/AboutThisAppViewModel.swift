@@ -78,6 +78,7 @@ class AboutThisAppViewModel: Logging {
 
 			// 13-10-2021 00:00
 			let dateformatter = DateFormatter()
+			dateformatter.calendar = Calendar(identifier: .gregorian)
 			dateformatter.dateFormat = "dd-MM-yyyy HH:mm"
 			let dateString = dateformatter.string(from: Date(timeIntervalSince1970: timestamp))
 
@@ -111,7 +112,7 @@ class AboutThisAppViewModel: Logging {
 		if Configuration().getEnvironment() != "production" {
 			topList.append(AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle()))
 		}
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			menu = [
 				L.verifierAboutReadmore(): topList,
 				L.verifier_about_this_app_law_enforcement(): [

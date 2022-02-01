@@ -22,9 +22,8 @@ class VerifierStartViewModel: Logging {
 	
 	indirect enum Mode: Equatable {
 		case noLevelSet
-		case lowRisk
-		case highRisk
-		case highPlusRisk
+		case policy3G
+		case policy1G
 		case locked(mode: Mode, timeRemaining: TimeInterval, totalDuration: TimeInterval)
 
 		var title: String {
@@ -44,12 +43,10 @@ class VerifierStartViewModel: Logging {
 		
 		var largeImage: UIImage? {
 			switch self {
-				case .noLevelSet, .lowRisk:
-					return I.scanner.scanStartLowRisk()
-				case .highRisk:
-					return I.scanner.scanStartHighRisk()
-				case .highPlusRisk:
-					return I.scanner.scanStartHighPlusRisk()
+				case .noLevelSet, .policy3G:
+					return I.scanner.scanStart3GPolicy()
+				case .policy1G:
+					return I.scanner.scanStart1GPolicy()
 				case .locked:
 					return I.scanner.scanStartLocked()
 			}
@@ -60,8 +57,8 @@ class VerifierStartViewModel: Logging {
 				case let .locked(_, _, totalDuration):
 					let minutes = Int((totalDuration / 60).rounded(.up))
 					return L.verifier_home_countdown_subtitle(minutes)
-				case .highRisk, .highPlusRisk:
-					return L.scan_qr_description_2G()
+				case .policy1G:
+					return L.scan_qr_description_1G()
 				default:
 					return L.verifierStartMessage()
 			}
@@ -101,12 +98,10 @@ class VerifierStartViewModel: Logging {
 		
 		var riskIndicator: (UIColor, String)? {
 			switch self {
-				case .highPlusRisk, .locked(.highPlusRisk, _, _):
-					return (Theme.colors.dark, L.verifier_start_scan_qr_policy_indication_2g_plus())
-				case .highRisk, .locked(.highRisk, _, _):
-					return (Theme.colors.primary, L.verifier_start_scan_qr_policy_indication_2g())
-				case .lowRisk, .locked(.lowRisk, _, _):
-					return (Theme.colors.access, L.verifier_start_scan_qr_policy_indication_3g())
+				case .policy1G, .locked(.policy1G, _, _):
+					return (Theme.colors.dark, L.verifier_start_scan_qr_policy_indication(VerificationPolicy.policy1G.localization))
+				case .policy3G, .locked(.policy3G, _, _):
+					return (Theme.colors.access, L.verifier_start_scan_qr_policy_indication(VerificationPolicy.policy3G.localization))
 				default:
 					return nil
 			}
@@ -118,6 +113,7 @@ class VerifierStartViewModel: Logging {
 			formatter.collapsesLargestUnit = false
 			formatter.unitsStyle = .positional
 			formatter.zeroFormattingBehavior = .pad
+			formatter.calendar = Calendar(identifier: .gregorian)
 			return formatter
 		}()
 	}
@@ -186,14 +182,14 @@ class VerifierStartViewModel: Logging {
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
 
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			// Pass current states in immediately to configure `self.mode`:
 			lockStateDidChange(lockState: Current.scanLockManager.state)
-			riskLevelDidChange(riskLevel: Current.riskLevelManager.state)
+			verificationPolicyDidChange(verificationPolicy: Current.riskLevelManager.state)
 
 			// Then observe for changes:
 			scanLockObserverToken = Current.scanLockManager.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
-			riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] in self?.riskLevelDidChange(riskLevel: $0) }
+			riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
 
 			lockLabelCountdownTimer.fire()
 		}
@@ -249,26 +245,24 @@ class VerifierStartViewModel: Logging {
 		}
 	}
 	
-	private func riskLevelDidChange(riskLevel: RiskLevel?) {
+	private func verificationPolicyDidChange(verificationPolicy: VerificationPolicy?) {
 		// Update mode with the new riskLevel:
 		self.$mode.projectedValue.mutate { (mode: inout Mode) in
-			switch (mode, riskLevel) {
+			switch (mode, verificationPolicy) {
 				
 				// RiskLevel changed, but we're locked. Just update the lock:
-				case let (.locked(_, timeRemaining, totalDuration), .high):
-					mode = .locked(mode: .highRisk, timeRemaining: timeRemaining, totalDuration: totalDuration)
-				case let (.locked(_, timeRemaining, totalDuration), .low):
-					mode = .locked(mode: .lowRisk, timeRemaining: timeRemaining, totalDuration: totalDuration)
+				case let (.locked(_, timeRemaining, totalDuration), .policy1G):
+					mode = .locked(mode: .policy1G, timeRemaining: timeRemaining, totalDuration: totalDuration)
+				case let (.locked(_, timeRemaining, totalDuration), .policy3G):
+					mode = .locked(mode: .policy3G, timeRemaining: timeRemaining, totalDuration: totalDuration)
 				case let (.locked(_, timeRemaining, totalDuration), .none):
 					mode = .locked(mode: .noLevelSet, timeRemaining: timeRemaining, totalDuration: totalDuration)
 				
 				// Risk Level changed: update mode
-				case (_, .highPlus):
-					mode = .highPlusRisk
-				case (_, .high):
-					mode = .highRisk
-				case (_, .low):
-					mode = .lowRisk
+				case (_, .policy1G):
+					mode = .policy1G
+				case (_, .policy3G):
+					mode = .policy3G
 				case (_, .none):
 					mode = .noLevelSet
 			}
@@ -289,23 +283,25 @@ extension VerifierStartViewModel {
 	
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }
-
-		if Current.userSettings.scanInstructionShown, (Current.riskLevelManager.state != nil || !Current.featureFlagManager.isVerificationPolicyEnabled()) {
+		
+		if !Current.userSettings.scanInstructionShown ||
+			(!Current.userSettings.policyInformationShown && Current.featureFlagManager.is1GPolicyEnabled()) ||
+			(Current.riskLevelManager.state == nil && Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
+			// Show the scan instructions the first time no matter what link was tapped
+			coordinator?.didFinish(.userTappedProceedToInstructionsOrRiskSetting)
+		} else {
 			if Current.cryptoManager.hasPublicKeys() {
 				coordinator?.didFinish(.userTappedProceedToScan)
 			} else {
 				updatePublicKeys()
 				showError = true
 			}
-		} else {
-			// Show the scan instructions the first time no matter what link was tapped
-			coordinator?.didFinish(.userTappedProceedToInstructionsOrRiskSetting)
 		}
 	}
 
 	func showInstructionsButtonTapped() {
 		
-		guard mode.allowsShowScanInstructions || !Current.featureFlagManager.isVerificationPolicyEnabled() else { return }
+		guard mode.allowsShowScanInstructions || !Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() else { return }
 		coordinator?.didFinish(.userTappedProceedToScanInstructions)
 	}
 

@@ -69,6 +69,7 @@ class ScanLogViewModel {
 			let dateFormatter = DateFormatter()
 			dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 			dateFormatter.dateFormat = "d MMMM yyyy HH:mm"
+			dateFormatter.calendar = Calendar(identifier: .gregorian)
 			appInUseSince = L.scan_log_footer_in_use(dateFormatter.string(from: firstUseDate))
 		}
 	}
@@ -110,6 +111,7 @@ private struct ScanLogDataSource: Logging {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "HH:mm"
 		formatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		formatter.calendar = Calendar(identifier: .gregorian)
 		return formatter
 	}()
 
@@ -135,7 +137,7 @@ private struct ScanLogDataSource: Logging {
 
 		// Loop over all of the scan log entries ordered by the auto_increment identifier (`sortedEntries`)
 		// We're trying to add entries into one record (`ScanLogLineItem`), as long as:
-		// - the mode (2G / 3G) does not change
+		// - the mode (1G / 3G) does not change
 		// - the time keeps decreasing (if not -> clock manipulation detected)
 		// If one of the two conditions fail, we append that record to the log (`log: [ScanLogLineItem]`) and
 		// create a new one

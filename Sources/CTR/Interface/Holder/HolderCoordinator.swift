@@ -104,7 +104,7 @@ class HolderCoordinator: SharedCoordinator {
 		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
-			forcedInformationFactory: HolderForcedInformationFactory()
+			newFeaturesFactory: HolderNewFeaturesFactory()
 		) {
 			
 			if let unhandledUniversalLink = unhandledUniversalLink {
@@ -154,7 +154,7 @@ class HolderCoordinator: SharedCoordinator {
 				//      that after the user has completed these screens.
 				// - the user is somewhere in the Holder app, and the nav stack can just be replaced.
 				
-				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
+				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || newFeaturesManager.needsUpdating {
 					self.unhandledUniversalLink = universalLink
 				} else {
 					// Do it on the next runloop, to standardise all the entry points to this function:
@@ -172,7 +172,7 @@ class HolderCoordinator: SharedCoordinator {
 				//      that after the user has completed these screens.
 				// - the user is somewhere in the Holder app, and the nav stack can just be replaced.
 				
-				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
+				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || newFeaturesManager.needsUpdating {
 					self.unhandledUniversalLink = universalLink
 				} else {
 					// Do it on the next runloop, to standardise all the entry points to this function:
@@ -260,8 +260,8 @@ class HolderCoordinator: SharedCoordinator {
 	/// Navigate to the token entry scene
 	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
 		
-		let destination = TokenEntryViewController(
-			viewModel: TokenEntryViewModel(
+		let destination = InputRetrievalCodeViewController(
+			viewModel: InputRetrievalCodeViewModel(
 				coordinator: self,
 				requestToken: token,
 				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()),

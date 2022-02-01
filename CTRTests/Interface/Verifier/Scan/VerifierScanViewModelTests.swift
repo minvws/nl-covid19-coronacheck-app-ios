@@ -55,22 +55,21 @@ class VerifierScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_shouldAddScanLogEntry_lowRisk_verificationPolicyEnabled() {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
 
 		// Then
 		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntry) == true
-		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntryParameters?.riskLevel) == .low
+		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntryParameters?.verificationPolicy) == .policy3G
 	}
 
 	func test_parseQRMessage_shouldAddScanLogEntry_lowRisk_verification_policyDisabled() {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
@@ -81,22 +80,21 @@ class VerifierScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_shouldAddScanLogEntry_highRisk_verificationPolicyEnabled() {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
 
 		// Then
 		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntry) == true
-		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntryParameters?.riskLevel) == .high
+		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntryParameters?.verificationPolicy) == .policy1G
 	}
 
 	func test_parseQRMessage_shouldAddScanLogEntry_highRisk_verification_policyDisabled() {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")

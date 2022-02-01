@@ -97,7 +97,7 @@ extension QRCard {
 						expirationTime: origin.expirationTime,
 						expiryIsBeyondThreeYearsFromNow: origin.expiryIsBeyondThreeYearsFromNow(now: now),
 						isCurrentlyValid: origin.isCurrentlyValid(now: now),
-						riskLevel: credentialsEvaluator(greencard, now)?.riskLevel,
+						verificationPolicy: credentialsEvaluator(greencard, now)?.verificationPolicy,
 						shouldShowRiskLevel: greencard.hasValid3GTestWithoutAValidVaccineOrAValidRecovery(
 							credentialEvaluator: credentialsEvaluator,
 							now: now
@@ -245,7 +245,7 @@ private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondT
 	)
 }
 
-private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool, riskLevel: RiskLevel?, shouldShowRiskLevel: Bool) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool, verificationPolicy: VerificationPolicy?, shouldShowRiskLevel: Bool) -> HolderDashboardViewController.ValidityText {
 	let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
 	let formatter = HolderDashboardViewModel.dateWithDayAndTimeFormatter
 	let dateString = formatter.string(from: expirationTime)
@@ -253,10 +253,10 @@ private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsB
 	let titleString = QRCodeOriginType.test.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString: String = {
 		let value = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
-		switch (riskLevel, shouldShowRiskLevel) {
-			case (.high, true):
+		switch (verificationPolicy, shouldShowRiskLevel) {
+			case (.policy1G, true):
 				return value + (Current.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_2g() : "")
-			case (.low, true):
+			case (.policy3G, true):
 				return value + (Current.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_3g() : "")
 			default:
 				return value

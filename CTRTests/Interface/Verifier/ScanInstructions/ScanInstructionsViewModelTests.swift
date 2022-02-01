@@ -26,7 +26,9 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	func test_finishScanInstructions_whenRiskSettingIsShown_shouldInvokeUserDidCompletePages() {
 
 		// Arrange
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = false
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		sut = ScanInstructionsViewModel(
 			coordinator: coordinatorSpy,
@@ -37,6 +39,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		sut.finishScanInstructions()
 
 		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToReadPolicyInformation) == false
 		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == false
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
 		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownSetter) == true
@@ -45,9 +48,12 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting_verificationPolicyEnabled() {
 
 		// Arrange
+		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = false
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		sut = ScanInstructionsViewModel(
 			coordinator: coordinatorSpy,
 			pages: []
@@ -57,6 +63,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		sut.finishScanInstructions()
 
 		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToReadPolicyInformation) == false
 		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == true
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
 		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownSetter) == true
@@ -65,7 +72,8 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting_verificationPolicyDisabled() {
 
 		// Arrange
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
+		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = false
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
@@ -78,8 +86,32 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		sut.finishScanInstructions()
 
 		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToReadPolicyInformation) == false
 		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == false
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownSetter) == true
+	}
+	
+	func test_finishScanInstructions_whenPolicyInformationIsNotShown_shouldInvokeUserWishesToReadPolicyInformation() {
+
+		// Arrange
+		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
+		sut = ScanInstructionsViewModel(
+			coordinator: coordinatorSpy,
+			pages: []
+		)
+
+		// Act
+		sut.finishScanInstructions()
+
+		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToReadPolicyInformation) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == false
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
 		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownSetter) == true
 	}
 
@@ -169,7 +201,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 	func test_nextButtonTitleChangesOnLastPage() {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		let pages = [
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
@@ -194,7 +226,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	
 	func test_nextButtonTitleChangesOnLastPage_whenScanLockIsEnabled() {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date())
 		let pages = [
 			ScanInstructionsPage(

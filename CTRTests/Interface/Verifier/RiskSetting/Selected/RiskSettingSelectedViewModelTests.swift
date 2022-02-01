@@ -25,7 +25,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 	}
 
 	// MARK: - Tests
@@ -40,17 +40,14 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.verifier_risksetting_active_title()
 		expect(self.sut.header).to(beNil())
-		expect(self.sut.lowRiskTitle) == L.verifier_risksetting_lowrisk_title()
-		expect(self.sut.lowRiskSubtitle) == L.verifier_risksetting_lowrisk_subtitle()
-		expect(self.sut.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
-		expect(self.sut.highRiskTitle) == L.verifier_risksetting_highrisk_title()
-		expect(self.sut.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
-		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-		expect(self.sut.highPlusRiskTitle) == L.verifier_risksetting_2g_plus_title()
-		expect(self.sut.highPlusRiskSubtitle) == L.verifier_risksetting_2g_plus_subtitle()
-		expect(self.sut.highPlusRiskAccessibilityLabel) == "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
+		expect(self.sut.lowRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)
+		expect(self.sut.lowRiskSubtitle) == L.verifier_risksetting_subtitle_3G()
+		expect(self.sut.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)), \(L.verifier_risksetting_subtitle_3G())"
+		expect(self.sut.highRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)
+		expect(self.sut.highRiskSubtitle) == L.verifier_risksetting_subtitle_1G()
+		expect(self.sut.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)), \(L.verifier_risksetting_subtitle_1G())"
 
-		expect(self.sut.riskLevel) == .low
+		expect(self.sut.verificationPolicy) == .policy3G
 	}
 
 	func test_header_withWarning() {
@@ -87,7 +84,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy
 		)
 		
-		sut.selectRisk = .high
+		sut.selectVerificationPolicy = .policy1G
 		
 		// When
 		sut.confirmSetting()
@@ -98,7 +95,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 	
 	func test_changingLevelWithinTimeWindow_enablesLock() {
 		// Arrange
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = true
 		
 		sut = RiskSettingSelectedViewModel(
@@ -106,7 +103,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		)
 		
 		// Act
-		sut.selectRisk = .high
+		sut.selectVerificationPolicy = .policy1G
 		sut.confirmSetting()
 		
 		// Fish in Alert for OK action & trigger it:
@@ -119,7 +116,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 	
 	func test_changingLevelOutsideOfTimeWindow_doesNotEnableLock() {
 		// Arrange
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = false
 		
 		sut = RiskSettingSelectedViewModel(
@@ -127,7 +124,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		)
 		
 		// Act
-		sut.selectRisk = .high
+		sut.selectVerificationPolicy = .policy3G
 		sut.confirmSetting()
 		
 		// Fish in Alert for OK action & trigger it:

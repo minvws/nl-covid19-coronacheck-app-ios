@@ -84,7 +84,7 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_oneEntry() {
 		
 		// Given
-		let entry: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
 		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry])
 		
 		var config: RemoteConfiguration = .default
@@ -102,8 +102,8 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_twoEntries_sameMode() {
 
 		// Given
-		let entry1: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
-		let entry2: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry1: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry2: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
 		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry1, entry2])
 		
 		var config: RemoteConfiguration = .default
@@ -121,8 +121,8 @@ class ScanLogViewModelTests: XCTestCase {
 	func test_twoEntries_differentMode() {
 
 		// Given
-		let entry1: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
-		let entry2: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry1: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry2: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy1G, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
 		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry1, entry2])
 		
 		var config: RemoteConfiguration = .default
@@ -134,7 +134,7 @@ class ScanLogViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(2))
-		expect(self.sut.displayEntries[0]) == ScanLogDisplayEntry.entry(type: "2G", timeInterval: "16:40 - nu", message: "1 tot 10 bewijzen gescand", warning: nil)
+		expect(self.sut.displayEntries[0]) == ScanLogDisplayEntry.entry(type: "1G", timeInterval: "16:40 - nu", message: "1 tot 10 bewijzen gescand", warning: nil)
 		expect(self.sut.displayEntries[1]) == ScanLogDisplayEntry.entry(type: "3G", timeInterval: "16:38 - 16:38", message: "1 tot 10 bewijzen gescand", warning: nil)
 	}
 
@@ -142,24 +142,24 @@ class ScanLogViewModelTests: XCTestCase {
 
 		// Given
 		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(20 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(15 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!, // Mode Switch
-			ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(14 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(12 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(14 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!, // Clock reset
-			ScanLogEntryModel.create(mode: ScanLogManager.highRisk, date: now.addingTimeInterval(11 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(9 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!, // Another mode switch
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(8 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(7 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(6 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(5 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(4 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(3 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(2 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(1 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
-			ScanLogEntryModel.create(mode: ScanLogManager.lowRisk, date: now.addingTimeInterval(0 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(20 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy1G, date: now.addingTimeInterval(15 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!, // Mode Switch
+			ScanLogEntryModel.create(mode: ScanLogManager.policy1G, date: now.addingTimeInterval(14 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy1G, date: now.addingTimeInterval(12 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy1G, date: now.addingTimeInterval(14 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!, // Clock reset
+			ScanLogEntryModel.create(mode: ScanLogManager.policy1G, date: now.addingTimeInterval(11 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(9 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!, // Another mode switch
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(8 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(7 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(6 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(5 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(4 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(3 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(2 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(1 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!,
+			ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(0 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())!
 		])
 
 		var config: RemoteConfiguration = .default
@@ -172,8 +172,8 @@ class ScanLogViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(4))
 		expect(self.sut.displayEntries[0]) == ScanLogDisplayEntry.entry(type: "3G", timeInterval: "16:53 - nu", message: "10 tot 20 bewijzen gescand", warning: nil)
-		expect(self.sut.displayEntries[1]) == ScanLogDisplayEntry.entry(type: "2G", timeInterval: "16:48 - 16:51", message: "1 tot 10 bewijzen gescand", warning: L.scan_log_list_clock_skew_detected())
-		expect(self.sut.displayEntries[2]) == ScanLogDisplayEntry.entry(type: "2G", timeInterval: "16:47 - 16:50", message: "1 tot 10 bewijzen gescand", warning: nil)
+		expect(self.sut.displayEntries[1]) == ScanLogDisplayEntry.entry(type: "1G", timeInterval: "16:48 - 16:51", message: "1 tot 10 bewijzen gescand", warning: L.scan_log_list_clock_skew_detected())
+		expect(self.sut.displayEntries[2]) == ScanLogDisplayEntry.entry(type: "1G", timeInterval: "16:47 - 16:50", message: "1 tot 10 bewijzen gescand", warning: nil)
 		expect(self.sut.displayEntries[3]) == ScanLogDisplayEntry.entry(type: "3G", timeInterval: "16:38 - 16:42", message: "1 tot 10 bewijzen gescand", warning: nil)
 	}
 

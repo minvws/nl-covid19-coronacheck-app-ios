@@ -34,13 +34,11 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	func navigateToVerifiedAccess(_ verifiedAccess: VerifiedAccess)
 	
-	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason)
+	func navigateToDeniedAccess()
 	
 	func userWishesToSetRiskLevel(shouldSelectSetting: Bool)
 	
 	func userWishesMoreInfoAboutDeniedQRScan()
-	
-	func navigateToScanNextInstruction(_ scanNext: ScanNext)
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -57,7 +55,7 @@ class VerifierCoordinator: SharedCoordinator {
 		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
-			forcedInformationFactory: VerifierForcedInformationFactory()
+			newFeaturesFactory: VerifierNewFeaturesFactory()
 		) {
 			
 			Current.scanLogManager.deleteExpiredScanLogEntries(
@@ -155,12 +153,11 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		)
 	}
 	
-	func navigateToDeniedAccess(_ deniedAccessReason: DeniedAccessReason) {
+	func navigateToDeniedAccess() {
 		
 		let viewController = DeniedAccessViewController(
 			viewModel: DeniedAccessViewModel(
-				coordinator: self,
-				deniedAccessReason: deniedAccessReason
+				coordinator: self
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -212,7 +209,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		})
 		
 		let items: [MenuViewModel.Item] = {
-			if Current.featureFlagManager.isVerificationPolicyEnabled() {
+			if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 				return [
 					itemHowItWorks,
 					itemFAQ,
@@ -303,17 +300,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				)
 			)
 		}
-		navigationController.pushViewController(viewController, animated: true)
-	}
-	
-	func navigateToScanNextInstruction(_ scanNext: ScanNext) {
-		
-		let viewController = ScanNextInstructionViewController(
-			viewModel: ScanNextInstructionViewModel(
-				coordinator: self,
-				scanNext: scanNext
-			)
-		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	

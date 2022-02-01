@@ -147,6 +147,16 @@ final class HolderDashboardView: BaseView {
 		])
 	}
 	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+ 
+		isAccessibilityElement = false
+		domesticScrollView.isAccessibilityElement = false
+		domesticScrollView.stackView.isAccessibilityElement = false
+		internationalScrollView.isAccessibilityElement = false
+		internationalScrollView.stackView.isAccessibilityElement = false
+ 	}
+	
 	/// Enables swipe to navigate behaviour for assistive technologies
 	override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
 		guard !tabBar.accessibilityElementIsFocused() else {
@@ -195,9 +205,9 @@ final class HolderDashboardView: BaseView {
 		}
 	}
 	
-	var title: String? {
+	var fakeNavigationTitle: String? {
 		didSet {
-			fakeNavigationBar.title = title
+			fakeNavigationBar.title = fakeNavigationTitle
 		}
 	}
 	

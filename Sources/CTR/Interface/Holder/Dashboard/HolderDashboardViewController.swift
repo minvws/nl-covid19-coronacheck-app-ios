@@ -158,7 +158,7 @@ class HolderDashboardViewController: BaseViewController {
 	
 	private func setupBindings() {
 
-		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
 		
 		viewModel.$domesticCards.binding = { [sceneView, weak self] cards in
 			DispatchQueue.main.async {
@@ -212,6 +212,9 @@ class HolderDashboardViewController: BaseViewController {
 			
 			stackView.setCustomSpacing(22, after: previousCardView)
 		}
+		
+		stackView.accessibilityElements = cardViews
+		UIAccessibility.post(notification: .screenChanged, argument: view)
 	}
 }
 

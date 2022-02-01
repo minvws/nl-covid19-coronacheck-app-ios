@@ -48,7 +48,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.title) == L.verifierStartTitle()
+		expect(self.sut.sceneView.fakeNavigationTitle) == L.verifierStartTitle()
 		expect(self.sut.sceneView.title) == L.verifierStartHeader()
 		expect(self.sut.sceneView.message) == L.verifierStartMessage()
 		expect(self.sut.sceneView.showInstructionsTitle) == L.verifierStartButtonShowinstructions()
@@ -79,7 +79,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		// Given
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		loadView()
 
 		// When
@@ -97,7 +97,7 @@ class VerifierStartViewControllerTests: XCTestCase {
 		let alertVerifier = AlertVerifier()
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		loadView()
 
 		// When

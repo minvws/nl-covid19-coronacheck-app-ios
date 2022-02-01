@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VerifierStartView: ScrolledStackWithHeaderView {
+class VerifierStartView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -19,11 +19,55 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
+		static let topMargin: CGFloat = 16.0
 		static let titleTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 34.0
 		static let messageTopMargin: CGFloat = 24.0
 	}
 
-	/// The title label
+	/// Scroll view bottom constraint
+	private var bottomScrollViewConstraint: NSLayoutConstraint?
+
+	private let scrollView: UIScrollView = {
+
+		let view = UIScrollView(frame: .zero)
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
+	/// The stackView for the content
+	private let stackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .center
+		view.distribution = .fill
+		view.spacing = 0
+		return view
+	}()
+
+	private let contentView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.viewControllerBackground
+		return view
+	}()
+
+	private let headerImageView: UIImageView = {
+
+		let view = UIImageView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.contentMode = .center
+		return view
+	}()
+	
+	private let fakeNavigationBar: FakeNavigationBarView = {
+		let navbar = FakeNavigationBarView()
+		navbar.translatesAutoresizingMaskIntoConstraints = false
+		return navbar
+	}()
+
 	private let titleLabel: Label = {
 
         return Label(title1: nil, montserrat: true).multiline().header()
@@ -99,10 +143,17 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
+		stackView.addArrangedSubview(headerImageView)
+		stackView.addArrangedSubview(contentView)
+
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(contentTextView)
 		contentView.addSubview(showInstructionsButton)
 
+		scrollView.addSubview(stackView)
+		addSubview(scrollView)
+
+		addSubview(fakeNavigationBar)
 		addSubview(clockDeviationWarningView)
 		addSubview(footerButtonView)
 		
@@ -117,6 +168,43 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 
 		super.setupViewConstraints()
 		
+		// Setup ScrollView & StackView:
+		
+		NSLayoutConstraint.activate([
+
+			fakeNavigationBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			fakeNavigationBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			fakeNavigationBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+
+			// Scrollview
+			scrollView.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+			{
+				let constraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+				bottomScrollViewConstraint = constraint
+				return constraint
+			}(),
+
+			// Outer StackView
+			stackView.widthAnchor.constraint(
+				equalTo: scrollView.widthAnchor),
+			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			stackView.topAnchor.constraint(
+				equalTo: scrollView.topAnchor,
+				constant: ViewTraits.topMargin
+			),
+			stackView.bottomAnchor.constraint(
+				equalTo: scrollView.bottomAnchor,
+				constant: -ViewTraits.margin
+			),
+			stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+			stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+
+			contentView.widthAnchor.constraint(equalTo: stackView.widthAnchor)
+		])
+		
+		// Setup content views:
 		bottomScrollViewConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
@@ -288,5 +376,26 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	func showImage() {
 
 		headerImageView.isHidden = false
+	}
+	
+	var tapMenuButtonHandler: (() -> Void)? {
+		didSet {
+			fakeNavigationBar.tapMenuButtonHandler = tapMenuButtonHandler
+		}
+	}
+
+	var fakeNavigationTitle: String? {
+		didSet {
+			fakeNavigationBar.title = fakeNavigationTitle
+		}
+	}
+
+	var fakeNavigationBarAlpha: CGFloat {
+		get {
+			fakeNavigationBar.alpha
+		}
+		set {
+			fakeNavigationBar.alpha = newValue
+		}
 	}
 }

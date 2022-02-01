@@ -65,6 +65,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	func test_content_verifier_verificationPolicyEnabled() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		let viewModel = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
@@ -92,7 +93,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	func test_content_verifier_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let viewModel = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
@@ -152,7 +152,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
-		expect(self.environmentSpies.forcedInformationManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
