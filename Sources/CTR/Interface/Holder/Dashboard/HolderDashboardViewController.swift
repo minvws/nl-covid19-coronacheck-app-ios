@@ -214,6 +214,7 @@ class HolderDashboardViewController: BaseViewController {
 		}
 		
 		stackView.accessibilityElements = cardViews
+		UIAccessibility.post(notification: .screenChanged, argument: view)
 	}
 }
 
