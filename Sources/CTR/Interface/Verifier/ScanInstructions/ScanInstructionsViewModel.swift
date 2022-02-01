@@ -100,7 +100,7 @@ class ScanInstructionsViewModel {
 		if currentPage == lastPage {
 			if hasScanLock {
 				nextButtonTitle = L.verifier_scan_instructions_back_to_start()
-			} else if !userSettings.policyInformationShown || shouldShowRiskSetting {
+			} else if (!userSettings.policyInformationShown && Current.featureFlagManager.is1GPolicyEnabled()) || shouldShowRiskSetting {
 				nextButtonTitle = L.generalNext()
 			} else {
 				nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
