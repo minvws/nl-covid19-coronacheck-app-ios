@@ -16,6 +16,8 @@ protocol ScanInstructionsCoordinatorDelegate: AnyObject {
 	func userDidCancelScanInstructions()
 	
 	func userWishesToSelectRiskSetting()
+	
+	func userWishesToReadPolicyInformation()
 }
 
 protocol ScanInstructionsDelegate: AnyObject {
@@ -88,8 +90,20 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	}
 	
 	func userWishesToSelectRiskSetting() {
-		let viewModel = RiskSettingInstructionViewModel(coordinator: self)
-		let viewController = RiskSettingInstructionViewController(viewModel: viewModel)
+		let viewController = RiskSettingInstructionViewController(
+			viewModel: RiskSettingInstructionViewModel(
+				coordinator: self
+			)
+		)
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesToReadPolicyInformation() {
+		let viewController = PolicyInformationViewController(
+			viewModel: PolicyInformationViewModel(
+				coordinator: self
+			)
+		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 

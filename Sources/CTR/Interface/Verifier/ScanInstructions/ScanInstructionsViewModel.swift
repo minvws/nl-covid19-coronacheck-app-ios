@@ -70,17 +70,14 @@ class ScanInstructionsViewModel {
 	func finishScanInstructions() {
 		
 		userSettings.scanInstructionShown = true
-		
-		if shouldShowRiskSetting {
+
+		if !userSettings.policyInformationShown, Current.featureFlagManager.is1GPolicyEnabled() {
+			coordinator?.userWishesToReadPolicyInformation()
+		} else if shouldShowRiskSetting {
 			coordinator?.userWishesToSelectRiskSetting()
 		} else {
 			coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
 		}
-	}
-	
-	func finishSelectRiskSetting() {
-		
-		coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
 	}
 
 	/// i.e. exit the Scan Instructions
