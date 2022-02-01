@@ -10,10 +10,10 @@ import XCTest
 import Nimble
 import SnapshotTesting
 
-class ConsentViewControllerTests: XCTestCase {
+class PrivacyConsentViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: OnboardingConsentViewController!
+	var sut: PrivacyConsentViewController!
 
 	var coordinatorSpy: OnboardingCoordinatorSpy!
 
@@ -25,8 +25,8 @@ class ConsentViewControllerTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = OnboardingCoordinatorSpy()
-		sut = OnboardingConsentViewController(
-			viewModel: OnboardingConsentViewModel(
+		sut = PrivacyConsentViewController(
+			viewModel: PrivacyConsentViewModel(
 				coordinator: coordinatorSpy,
 				factory: HolderOnboardingFactory(),
 				shouldHideBackButton: true
@@ -47,8 +47,8 @@ class ConsentViewControllerTests: XCTestCase {
 	func testContent_holder() {
 
 		// Given
-		sut = OnboardingConsentViewController(
-			viewModel: OnboardingConsentViewModel(
+		sut = PrivacyConsentViewController(
+			viewModel: PrivacyConsentViewModel(
 				coordinator: coordinatorSpy,
 				factory: HolderOnboardingFactory(),
 				shouldHideBackButton: true
@@ -69,8 +69,8 @@ class ConsentViewControllerTests: XCTestCase {
 	func testContent_verifier() {
 
 		// Given
-		sut = OnboardingConsentViewController(
-			viewModel: OnboardingConsentViewModel(
+		sut = PrivacyConsentViewController(
+			viewModel: PrivacyConsentViewModel(
 				coordinator: coordinatorSpy,
 				factory: VerifierOnboardingFactory(),
 				shouldHideBackButton: true
@@ -92,8 +92,8 @@ class ConsentViewControllerTests: XCTestCase {
 	func testContent_verifier_errorState() {
 
 		// Given
-		sut = OnboardingConsentViewController(
-			viewModel: OnboardingConsentViewModel(
+		sut = PrivacyConsentViewController(
+			viewModel: PrivacyConsentViewModel(
 				coordinator: coordinatorSpy,
 				factory: VerifierOnboardingFactory(),
 				shouldHideBackButton: true
@@ -116,8 +116,8 @@ class ConsentViewControllerTests: XCTestCase {
 	func testContent_verifier_selectedState() {
 
 		// Given
-		sut = OnboardingConsentViewController(
-			viewModel: OnboardingConsentViewModel(
+		sut = PrivacyConsentViewController(
+			viewModel: PrivacyConsentViewModel(
 				coordinator: coordinatorSpy,
 				factory: VerifierOnboardingFactory(),
 				shouldHideBackButton: true
@@ -183,8 +183,8 @@ class ConsentViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped_whenConsentButtonSelectedIsFalse_shouldNotGiveConsent() {
 
 		// Given
-		sut = OnboardingConsentViewController(
-			viewModel: OnboardingConsentViewModel(
+		sut = PrivacyConsentViewController(
+			viewModel: PrivacyConsentViewModel(
 				coordinator: coordinatorSpy,
 				factory: VerifierOnboardingFactory(),
 				shouldHideBackButton: true
