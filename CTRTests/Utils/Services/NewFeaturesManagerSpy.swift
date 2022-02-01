@@ -8,17 +8,17 @@
 import XCTest
 @testable import CTR
 
-class ForcedInformationManagerSpy: ForcedInformationManaging {
+class NewFeaturesManagerSpy: NewFeaturesManaging {
 
 	var invokedFactorySetter = false
 	var invokedFactorySetterCount = 0
-	var invokedFactory: ForcedInformationFactory?
-	var invokedFactoryList = [ForcedInformationFactory?]()
+	var invokedFactory: NewFeaturesFactory?
+	var invokedFactoryList = [NewFeaturesFactory?]()
 	var invokedFactoryGetter = false
 	var invokedFactoryGetterCount = 0
-	var stubbedFactory: ForcedInformationFactory!
+	var stubbedFactory: NewFeaturesFactory!
 
-	var factory: ForcedInformationFactory? {
+	var factory: NewFeaturesFactory? {
 		set {
 			invokedFactorySetter = true
 			invokedFactorySetterCount += 1
@@ -44,9 +44,9 @@ class ForcedInformationManagerSpy: ForcedInformationManaging {
 
 	var invokedGetUpdatePage = false
 	var invokedGetUpdatePageCount = 0
-	var stubbedGetUpdatePageResult: ForcedInformationPage!
+	var stubbedGetUpdatePageResult: NewFeatureItem!
 
-	func getUpdatePage() -> ForcedInformationPage? {
+	func getNewFeatureItem() -> NewFeatureItem? {
 		invokedGetUpdatePage = true
 		invokedGetUpdatePageCount += 1
 		return stubbedGetUpdatePageResult
@@ -54,9 +54,9 @@ class ForcedInformationManagerSpy: ForcedInformationManaging {
 
 	var invokedGetConsent = false
 	var invokedGetConsentCount = 0
-	var stubbedGetConsentResult: ForcedInformationConsent!
+	var stubbedGetConsentResult: NewFeatureConsent!
 
-	func getConsent() -> ForcedInformationConsent? {
+	func getConsent() -> NewFeatureConsent? {
 		invokedGetConsent = true
 		invokedGetConsentCount += 1
 		return stubbedGetConsentResult

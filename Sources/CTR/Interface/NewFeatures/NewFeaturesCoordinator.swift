@@ -9,10 +9,10 @@ import UIKit
 import SafariServices
 
 /// The resulting actions in this scene
-enum ForcedInformationResult {
+enum NewFeaturesScreenResult {
 	
 	/// The user viewed the update page
-	case updatePageViewed
+	case updateItemViewed
 
 	/// The user gave consent
 	case consentAgreed
@@ -21,23 +21,20 @@ enum ForcedInformationResult {
 	case consentViewed
 }
 
-protocol ForcedInformationCoordinatorDelegate: AnyObject {
+protocol NewFeaturesCoordinatorDelegate: AnyObject {
 
 	/// The user did finish the consent scene
 	/// - Parameter result: the result of the scene
-	func didFinish(_ result: ForcedInformationResult)
+	func didFinish(_ result: NewFeaturesScreenResult)
 }
 
-protocol ForcedInformationDelegate: AnyObject {
+protocol NewFeaturesDelegate: AnyObject {
 
-	/// The forced information flow is finished
-	func finishForcedInformation()
+	/// The new feature information flow is finished
+	func finishNewFeatures()
 }
 
-class ForcedInformationCoordinator: Coordinator, Logging {
-
-	/// The category for logging
-	var loggingCategory: String = "ForcedInformationCoordinator"
+class NewFeaturesCoordinator: Coordinator, Logging {
 
 	/// The child coordinators
 	var childCoordinators: [Coordinator] = []
@@ -45,43 +42,43 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 	/// The navigation controller
 	var navigationController: UINavigationController
 
-	/// The forced information manager
-	var forcedInformationManager: ForcedInformationManaging
+	/// The new features manager
+	var newFeaturesManager: NewFeaturesManaging
 
-	/// The forced information delegate
-	weak var delegate: ForcedInformationDelegate?
+	/// The new feature information delegate
+	weak var delegate: NewFeaturesDelegate?
 
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
-	///   - forcedInformationManager: the forced information manager
-	///   - delegate: the forced information delegate
+	///   - newFeaturesManager: the new features manager
+	///   - delegate: the new feature information delegate
 	init(
 		navigationController: UINavigationController,
-		forcedInformationManager: ForcedInformationManaging,
-		delegate: ForcedInformationDelegate) {
+		newFeaturesManager: NewFeaturesManaging,
+		delegate: NewFeaturesDelegate) {
 
 		self.navigationController = navigationController
-		self.forcedInformationManager = forcedInformationManager
+		self.newFeaturesManager = newFeaturesManager
 		self.delegate = delegate
 	}
 
 	/// Start the scene
 	func start() {
 
-		logInfo("Starting Forced Information Flow")
+		logInfo("Starting New Features Information Flow")
 		
-		if let forcedInformationPage = forcedInformationManager.getUpdatePage() {
+		if let newFeatureItem = newFeaturesManager.getNewFeatureItem() {
 			
-			let viewController = ForcedInformationViewController(
-				viewModel: ForcedInformationViewModel(
+			let viewController = NewFeaturesViewController(
+				viewModel: NewFeaturesViewModel(
 					coordinator: self,
-					pages: [forcedInformationPage]))
+					pages: [newFeatureItem]))
 			navigationController.viewControllers = [viewController]
 		} else {
 
 			// no update required
-			delegate?.finishForcedInformation()
+			delegate?.finishNewFeatures()
 		}
 	}
 
@@ -93,27 +90,27 @@ class ForcedInformationCoordinator: Coordinator, Logging {
     }
 }
 
-// MARK: - ForcedInformationCoordinatorDelegate & OpenUrlProtocol
+// MARK: - NewFeaturesCoordinatorDelegate & OpenUrlProtocol
 
-extension ForcedInformationCoordinator: ForcedInformationCoordinatorDelegate, OpenUrlProtocol {
+extension NewFeaturesCoordinator: NewFeaturesCoordinatorDelegate, OpenUrlProtocol {
 
 	/// The user did finish the consent scene
 	/// - Parameter result: the result of the scene
-	func didFinish(_ result: ForcedInformationResult) {
+	func didFinish(_ result: NewFeaturesScreenResult) {
 
 		switch result {
-			case .updatePageViewed:
-				logInfo("ForcedInformationCoordinator: Update page was viewed")
+			case .updateItemViewed:
+				logInfo("NewFeaturesCoordinator: Update page was viewed")
 				
 			case .consentAgreed:
-				logInfo("ForcedInformationCoordinator: Consent was given")
+				logInfo("NewFeaturesCoordinator: Consent was given")
 
 			case .consentViewed:
-				logInfo("ForcedInformationCoordinator: Consent was viewed")
+				logInfo("NewFeaturesCoordinator: Consent was viewed")
 		}
 		
-		forcedInformationManager.consentGiven()
-		delegate?.finishForcedInformation()
+		newFeaturesManager.consentGiven()
+		delegate?.finishNewFeatures()
 	}
 
 	/// Open a url

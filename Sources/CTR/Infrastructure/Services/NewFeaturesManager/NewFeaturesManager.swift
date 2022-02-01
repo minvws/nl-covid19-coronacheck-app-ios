@@ -7,21 +7,21 @@
 
 import Foundation
 
-protocol ForcedInformationManaging {
+protocol NewFeaturesManaging {
 
-	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
-	var factory: ForcedInformationFactory? { get set }
+	/// The source of all the new feature information. This needs to be updated if new consent or pages are required.
+	var factory: NewFeaturesFactory? { get set }
 
 	/// Do we need show any updates? True if we do
 	var needsUpdating: Bool { get }
 	
-	/// Get the update page
-	/// - Returns: optional page
-	func getUpdatePage() -> ForcedInformationPage?
+	/// Get a new feature item
+	/// - Returns: optional item
+	func getNewFeatureItem() -> NewFeatureItem?
 
 	/// Get the consent
 	/// - Returns: optional consent
-	func getConsent() -> ForcedInformationConsent?
+	func getConsent() -> NewFeatureConsent?
 
 	/// Give consent
 	func consentGiven()
@@ -30,9 +30,9 @@ protocol ForcedInformationManaging {
 	func wipePersistedData()
 }
 
-class ForcedInformationManager: ForcedInformationManaging {
+class NewFeaturesManager: NewFeaturesManaging {
 
-	/// The forced information data to persist
+	/// The new feature  information data to persist
 	struct ForcedInformationData: Codable {
 
 		/// The last seen / accepted version by the user
@@ -60,7 +60,7 @@ class ForcedInformationManager: ForcedInformationManaging {
 	}
 		
 	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
-	var factory: ForcedInformationFactory?
+	var factory: NewFeaturesFactory?
 
 	/// Do we need show any updates? True if we do
 	var needsUpdating: Bool {
@@ -70,14 +70,14 @@ class ForcedInformationManager: ForcedInformationManaging {
 		return forcedInformationData.lastSeenVersion < currentVersion
 	}
 	
-	func getUpdatePage() -> ForcedInformationPage? {
+	func getNewFeatureItem() -> NewFeatureItem? {
 
 		return factory?.information.pages.first
 	}
 
 	/// Is there any consent that needs to be displayed?
 	/// - Returns: optional consent
-	func getConsent() -> ForcedInformationConsent? {
+	func getConsent() -> NewFeatureConsent? {
 
 		return factory?.information.consent
 	}

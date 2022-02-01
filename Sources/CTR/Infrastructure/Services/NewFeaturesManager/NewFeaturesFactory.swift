@@ -7,17 +7,17 @@
 
 import Foundation
 
-protocol ForcedInformationFactory {
+protocol NewFeaturesFactory {
 	
-	var information: ForcedInformation { get }
+	var information: NewFeatureInformation { get }
 }
 
-struct HolderForcedInformationFactory: ForcedInformationFactory {
+struct HolderNewFeaturesFactory: NewFeaturesFactory {
 	
-	var information: ForcedInformation {
+	var information: NewFeatureInformation {
 		
-		return .init(pages: [ForcedInformationPage(
-			image: HolderForcedInformationFactory.isNL ? I.onboarding.tabbarNL() : I.onboarding.tabbarEN(),
+		return .init(pages: [NewFeatureItem(
+			image: HolderNewFeaturesFactory.isNL ? I.onboarding.tabbarNL() : I.onboarding.tabbarEN(),
 			tagline: L.holderUpdatepageTagline(),
 			title: L.holderUpdatepageTitleTab(),
 			content: L.holderUpdatepageContentTab()
@@ -31,11 +31,11 @@ struct HolderForcedInformationFactory: ForcedInformationFactory {
 	}
 }
 
-struct VerifierForcedInformationFactory: ForcedInformationFactory {
+struct VerifierNewFeaturesFactory: NewFeaturesFactory {
 	
-	var information: ForcedInformation {
+	var information: NewFeatureInformation {
 		
-		return .init(pages: [ForcedInformationPage(
+		return .init(pages: [NewFeatureItem(
 			image: I.onboarding.tabbarNL(),
 			tagline: L.new_in_app_subtitle(),
 			title: L.new_in_app_risksetting_title(),

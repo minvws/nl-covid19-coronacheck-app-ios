@@ -9,26 +9,26 @@ import XCTest
 @testable import CTR
 import Nimble
 
-class ForcedInformationCoordinatorTests: XCTestCase {
+class NewFeaturesCoordinatorTests: XCTestCase {
 	
-	var sut: ForcedInformationCoordinator!
+	var sut: NewFeaturesCoordinator!
 	
 	var navigationSpy: NavigationControllerSpy!
 	
-	var forcedInformantionManagerSpy: ForcedInformationManagerSpy!
+	var newFeaturesManagerSpy: NewFeaturesManagerSpy!
 	
-	var delegateSpy: ForcedInformationDelegateSpy!
+	var delegateSpy: NewFeaturesDelegateSpy!
 	
 	override func setUp() {
 		
 		super.setUp()
 		
 		navigationSpy = NavigationControllerSpy()
-		forcedInformantionManagerSpy = ForcedInformationManagerSpy()
-		delegateSpy = ForcedInformationDelegateSpy()
-		sut = ForcedInformationCoordinator(
+		newFeaturesManagerSpy = NewFeaturesManagerSpy()
+		delegateSpy = NewFeaturesDelegateSpy()
+		sut = NewFeaturesCoordinator(
 			navigationController: navigationSpy,
-			forcedInformationManager: forcedInformantionManagerSpy,
+			newFeaturesManager: newFeaturesManagerSpy,
 			delegate: delegateSpy
 		)
 	}
@@ -36,10 +36,10 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 	// MARK: - Tests
 	
 	/// Test the start method with update page
-	func test_start_shouldInvokeFinishForcedInformation() {
+	func test_start_shouldInvokeFinishNewFeatures() {
 		
 		// Given
-		forcedInformantionManagerSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+		newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(
 			image: nil,
 			tagline: "test",
 			title: "test",
@@ -51,62 +51,62 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.viewControllers).to(haveCount(1))
-		expect(self.delegateSpy.invokedFinishForcedInformation) == false
+		expect(self.delegateSpy.invokedFinishNewFeatures) == false
 	}
 	
 	/// Test the start methoud without update page
 	func test_start_withoutUpdatePage() {
 		
 		// Given
-		forcedInformantionManagerSpy.stubbedGetUpdatePageResult = nil
+		newFeaturesManagerSpy.stubbedGetUpdatePageResult = nil
 		
 		// When
 		sut.start()
 		
 		// Then
 		expect(self.navigationSpy.viewControllers).to(beEmpty())
-		expect(self.delegateSpy.invokedFinishForcedInformation) == true
+		expect(self.delegateSpy.invokedFinishNewFeatures) == true
 	}
 	
 	/// Test the start method without consent content
 	func testStartWithoutConsent() {
 		
 		// Given
-		forcedInformantionManagerSpy.stubbedGetConsentResult = nil
+		newFeaturesManagerSpy.stubbedGetConsentResult = nil
 		
 		// When
 		sut.start()
 		
 		// Then
 		expect(self.navigationSpy.viewControllers).to(beEmpty())
-		expect(self.delegateSpy.invokedFinishForcedInformation) == true
+		expect(self.delegateSpy.invokedFinishNewFeatures) == true
 	}
 	
 	/// Test the did finish method with consent agreed
 	func testDidFinishConsentAgreed() {
 		
 		// Given
-		let result = ForcedInformationResult.consentAgreed
+		let result = NewFeaturesScreenResult.consentAgreed
 		
 		// When
 		sut.didFinish(result)
 		
 		// Then
-		expect(self.forcedInformantionManagerSpy.invokedConsentGiven) == true
-		expect(self.delegateSpy.invokedFinishForcedInformation) == true
+		expect(self.newFeaturesManagerSpy.invokedConsentGiven) == true
+		expect(self.delegateSpy.invokedFinishNewFeatures) == true
 	}
 	
 	/// Test the did finish method with consent viewed
 	func testDidFinishConsentViewed() {
 		
 		// Given
-		let result = ForcedInformationResult.consentViewed
+		let result = NewFeaturesScreenResult.consentViewed
 		
 		// When
 		sut.didFinish(result)
 		
 		// Then
-		expect(self.forcedInformantionManagerSpy.invokedConsentGiven) == true
-		expect(self.delegateSpy.invokedFinishForcedInformation) == true
+		expect(self.newFeaturesManagerSpy.invokedConsentGiven) == true
+		expect(self.delegateSpy.invokedFinishNewFeatures) == true
 	}
 }

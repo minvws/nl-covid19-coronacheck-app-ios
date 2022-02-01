@@ -297,7 +297,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
-		expect(self.environmentSpies.forcedInformationManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == false
 		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == false
 		expect(self.environmentSpies.riskLevelManagerSpy.invokedWipePersistedData) == false
@@ -323,7 +323,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
-		expect(self.environmentSpies.forcedInformationManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.riskLevelManagerSpy.invokedWipePersistedData) == true

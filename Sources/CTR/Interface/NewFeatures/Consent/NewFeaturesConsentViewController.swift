@@ -7,17 +7,17 @@
 
 import UIKit
 
-class ForcedInformationConsentViewController: BaseViewController {
+class NewFeaturesConsentViewController: BaseViewController {
 
 	/// The model
-	let viewModel: ForcedInformationConsentViewModel
+	let viewModel: NewFeaturesConsentViewModel
 
 	/// The view
-	let sceneView = ForcedInformationConsentView()
+	let sceneView = NewFeaturesConsentView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: ForcedInformationConsentViewModel) {
+	init(viewModel: NewFeaturesConsentViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

@@ -29,14 +29,14 @@ class HolderCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 
-	func testStartForcedInformation() {
+	func testStartNewFeatures() {
 
 		// Given
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
-		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = true
-		environmentSpies.forcedInformationManagerSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
+		environmentSpies.newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(
 			image: nil,
 			tagline: "test",
 			title: "test",
@@ -48,31 +48,31 @@ class HolderCoordinatorTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(sut.childCoordinators.isEmpty)
-		XCTAssertTrue(sut.childCoordinators.first is ForcedInformationCoordinator)
+		XCTAssertTrue(sut.childCoordinators.first is NewFeaturesCoordinator)
 	}
 
-	func testFinishForcedInformation() {
+	func testFinishNewFeatures() {
 
 		// Given
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
-		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
 
 		environmentSpies.remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
 		environmentSpies.remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 
 		sut.childCoordinators = [
-			ForcedInformationCoordinator(
+			NewFeaturesCoordinator(
 				navigationController: navigationSpy,
-				forcedInformationManager: ForcedInformationManagerSpy(),
+				newFeaturesManager: NewFeaturesManagerSpy(),
 				delegate: sut
 			)
 		]
 
 		// When
-		sut.finishForcedInformation()
+		sut.finishNewFeatures()
 
 		// Then
 		XCTAssertTrue(sut.childCoordinators.isEmpty)

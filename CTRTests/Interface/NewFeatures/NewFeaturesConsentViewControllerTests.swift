@@ -9,27 +9,26 @@
 import XCTest
 import ViewControllerPresentationSpy
 
-// swiftlint:disable:next type_name
-class ForcedInformationConsentViewControllerTests: XCTestCase {
+class NewFeaturesConsentViewControllerTests: XCTestCase {
 
-	var sut: ForcedInformationConsentViewController!
+	var sut: NewFeaturesConsentViewController!
 
-	var coordinatorSpy: ForcedInformationCoordinatorDelegateSpy!
+	var coordinatorSpy: NewFeaturesCoordinatorDelegateSpy!
 
-	var viewModel: ForcedInformationConsentViewModel!
+	var viewModel: NewFeaturesConsentViewModel!
 
 	var window = UIWindow()
 
 	override func setUp() {
 		super.setUp()
 
-		coordinatorSpy = ForcedInformationCoordinatorDelegateSpy()
-		viewModel = ForcedInformationConsentViewModel(
+		coordinatorSpy = NewFeaturesCoordinatorDelegateSpy()
+		viewModel = NewFeaturesConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: .consentWithoutMandatoryConsent
+			newFeatureConsent: .consentWithoutMandatoryConsent
 		)
 
-		sut = ForcedInformationConsentViewController(viewModel: viewModel)
+		sut = NewFeaturesConsentViewController(viewModel: viewModel)
 	}
 
 	func loadView() {
@@ -46,7 +45,7 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 	func testContentWithoutMandatoryConsent() {
 
 		// Given
-		let consent = ForcedInformationConsent.consentWithoutMandatoryConsent
+		let consent = NewFeatureConsent.consentWithoutMandatoryConsent
 
 		// When
 		loadView()
@@ -64,13 +63,13 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 	func testContentWithMandatoryConsent() {
 
 		// Given
-		let consent = ForcedInformationConsent.consentWithMandatoryConsent
-		viewModel = ForcedInformationConsentViewModel(
+		let consent = NewFeatureConsent.consentWithMandatoryConsent
+		viewModel = NewFeaturesConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consent
+			newFeatureConsent: consent
 		)
 
-		sut = ForcedInformationConsentViewController(viewModel: viewModel)
+		sut = NewFeaturesConsentViewController(viewModel: viewModel)
 
 		// When
 		loadView()
@@ -95,7 +94,7 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(coordinatorSpy.invokedDidFinish)
-		XCTAssertEqual(coordinatorSpy.invokedDidFinishParameters?.result, ForcedInformationResult.consentViewed)
+		XCTAssertEqual(coordinatorSpy.invokedDidFinishParameters?.result, NewFeaturesScreenResult.consentViewed)
 	}
 
 	/// Test the error dialog that should appear after tapping the secondary button

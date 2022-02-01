@@ -8,21 +8,21 @@
 @testable import CTR
 import XCTest
 
-class ForcedInformationConsentViewModelTests: XCTestCase {
+class NewFeaturesConsentViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: ForcedInformationConsentViewModel!
+	var sut: NewFeaturesConsentViewModel!
 
-	var coordinatorSpy = ForcedInformationCoordinatorDelegateSpy()
+	var coordinatorSpy = NewFeaturesCoordinatorDelegateSpy()
 
 	override func setUp() {
 
 		super.setUp()
 
-		coordinatorSpy = ForcedInformationCoordinatorDelegateSpy()
-		sut = ForcedInformationConsentViewModel(
+		coordinatorSpy = NewFeaturesCoordinatorDelegateSpy()
+		sut = NewFeaturesConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: .consentWithoutMandatoryConsent
+			newFeatureConsent: .consentWithoutMandatoryConsent
 		)
 	}
 
@@ -30,12 +30,12 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testContentWithMandatoryConsent() {
 
 		// Given
-		let consent = ForcedInformationConsent.consentWithMandatoryConsent
+		let consent = NewFeatureConsent.consentWithMandatoryConsent
 
 		// When
-		sut = ForcedInformationConsentViewModel(
+		sut = NewFeaturesConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consent
+			newFeatureConsent: consent
 		)
 
 		// Then
@@ -51,12 +51,12 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testContentWithoutMandatoryConsent() {
 
 		// Given
-		let consent = ForcedInformationConsent.consentWithoutMandatoryConsent
+		let consent = NewFeatureConsent.consentWithoutMandatoryConsent
 
 		// When
-		sut = ForcedInformationConsentViewModel(
+		sut = NewFeaturesConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consent
+			newFeatureConsent: consent
 		)
 
 		// Then
@@ -72,10 +72,10 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testPrimaryButtonWithMandatoryConsent() {
 		
 		// Given
-		let consent = ForcedInformationConsent.consentWithMandatoryConsent
-		sut = ForcedInformationConsentViewModel(
+		let consent = NewFeatureConsent.consentWithMandatoryConsent
+		sut = NewFeaturesConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consent
+			newFeatureConsent: consent
 		)
 
 		// When
@@ -83,17 +83,17 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(coordinatorSpy.invokedDidFinish)
-		XCTAssertEqual(coordinatorSpy.invokedDidFinishParameters?.result, ForcedInformationResult.consentAgreed)
+		XCTAssertEqual(coordinatorSpy.invokedDidFinishParameters?.result, NewFeaturesScreenResult.consentAgreed)
 	}
 
 	/// Test the primary button without mandatory consent
 	func testPrimaryButtonWithoutMandatoryConsent() {
 
 		// Given
-		let consent = ForcedInformationConsent.consentWithoutMandatoryConsent
-		sut = ForcedInformationConsentViewModel(
+		let consent = NewFeatureConsent.consentWithoutMandatoryConsent
+		sut = NewFeaturesConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consent
+			newFeatureConsent: consent
 		)
 
 		// When
@@ -101,7 +101,7 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(coordinatorSpy.invokedDidFinish)
-		XCTAssertEqual(coordinatorSpy.invokedDidFinishParameters?.result, ForcedInformationResult.consentViewed)
+		XCTAssertEqual(coordinatorSpy.invokedDidFinishParameters?.result, NewFeaturesScreenResult.consentViewed)
 	}
 
 	/// Test the secondary button

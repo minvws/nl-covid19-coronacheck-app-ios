@@ -8,13 +8,13 @@
 import XCTest
 @testable import CTR
 
-final class ForcedInformationFactorySpy: ForcedInformationFactory {
+final class NewFeaturesFactorySpy: NewFeaturesFactory {
 
 	var invokedInformationGetter = false
 	var invokedInformationGetterCount = 0
-	var stubbedInformation: ForcedInformation!
+	var stubbedInformation: NewFeatureInformation!
 
-	var information: ForcedInformation {
+	var information: NewFeatureInformation {
 		invokedInformationGetter = true
 		invokedInformationGetterCount += 1
 		return stubbedInformation
