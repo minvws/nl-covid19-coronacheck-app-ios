@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OnboardingPageViewModel: Logging {
+class OnboardingItemViewModel: Logging {
 	
 	var loggingCategory: String = "OnboardingPageViewModel"
 	
