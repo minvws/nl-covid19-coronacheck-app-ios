@@ -27,7 +27,7 @@ final class PolicyInformationViewModel {
 		
 		self.coordinator = coordinator
 		
-		image = I.onboarding.tabbarNL()
+		image = I.scanner.scanStartHighRisk()
 		tagline = L.new_policy_subtitle()
 		
 		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
