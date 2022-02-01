@@ -9,10 +9,10 @@
 import XCTest
 import Nimble
 
-class EventStartViewModelTests: XCTestCase {
+class RemoteEventStartViewModelTests: XCTestCase {
 
 	/// Subject under test
-	private var sut: EventStartViewModel!
+	private var sut: RemoteEventStartViewModel!
 
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var remoteConfigManagingSpy: RemoteConfigManagingSpy!
@@ -23,7 +23,7 @@ class EventStartViewModelTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		sut = EventStartViewModel(
+		sut = RemoteEventStartViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -40,7 +40,7 @@ class EventStartViewModelTests: XCTestCase {
 	func test_content_recoveryMode() {
 
 		// When
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
 
 		// Then
 		expect(self.sut.title) == L.holderRecoveryStartTitle()
@@ -51,7 +51,7 @@ class EventStartViewModelTests: XCTestCase {
 	func test_content_positiveTestMode() {
 
 		// When
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .positiveTest)
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .positiveTest)
 
 		// Then
 		expect(self.sut.title) == L.holderPositiveTestStartTitle()
@@ -62,7 +62,7 @@ class EventStartViewModelTests: XCTestCase {
 	func test_content_paperflowMode() {
 
 		// When
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow)
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow)
 
 		// Then
 		expect(self.sut.title) == ""
@@ -73,7 +73,7 @@ class EventStartViewModelTests: XCTestCase {
 	func test_content_negativeTestMode() {
 
 		// When
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
 
 		// Then
 		expect(self.sut.title) == L.holder_negativetest_ggd_title()
@@ -114,7 +114,7 @@ class EventStartViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_recoveryMode() {
 
 		// Given
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
 
 		// When
 		sut.primaryButtonTapped()

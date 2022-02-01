@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ListEventsViewModel: Logging {
+class ListRemoteEventsViewModel: Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -31,7 +31,7 @@ class ListEventsViewModel: Logging {
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	@Bindable internal var viewState: ListEventsViewController.State
+	@Bindable internal var viewState: ListRemoteEventsViewController.State
 
 	@Bindable internal var alert: AlertContent?
 

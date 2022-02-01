@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension ListEventsViewModel {
+extension ListRemoteEventsViewModel {
 
 	struct Strings {
 

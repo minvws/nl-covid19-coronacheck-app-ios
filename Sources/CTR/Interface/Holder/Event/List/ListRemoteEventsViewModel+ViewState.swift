@@ -9,9 +9,9 @@ import Foundation
 
 typealias EventDataTuple = (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)
 
-extension ListEventsViewModel {
+extension ListRemoteEventsViewModel {
 
-	func getViewState(from remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
+	func getViewState(from remoteEvents: [RemoteEvent]) -> ListRemoteEventsViewController.State {
 
 		var event30DataSource = [EventDataTuple]()
 
@@ -74,7 +74,7 @@ extension ListEventsViewModel {
 		}
 	}
 
-	internal func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListEventsViewController.State {
+	internal func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListRemoteEventsViewController.State {
 
 		return .feedback(
 			content: Content(
@@ -94,7 +94,7 @@ extension ListEventsViewModel {
 
 	private func listEventsState(
 		_ dataSource: [EventDataTuple],
-		remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
+		remoteEvents: [RemoteEvent]) -> ListRemoteEventsViewController.State {
 
 		let rows = getSortedRowsFromEvents(dataSource)
 		guard !rows.isEmpty else {
@@ -164,11 +164,11 @@ extension ListEventsViewModel {
 		return filteredDataSource
 	}
 
-	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListEventsViewController.Row] {
+	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListRemoteEventsViewController.Row] {
 
 		var sortedDataSource = dataSource.sorted { lhs, rhs in
-			if let lhsDate = lhs.event.getSortDate(with: ListEventsViewModel.iso8601DateFormatter),
-			   let rhsDate = rhs.event.getSortDate(with: ListEventsViewModel.iso8601DateFormatter) {
+			if let lhsDate = lhs.event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter),
+			   let rhsDate = rhs.event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) {
 
 				if lhsDate == rhsDate {
 					return lhs.providerIdentifier < rhs.providerIdentifier
@@ -180,7 +180,7 @@ extension ListEventsViewModel {
 
 		sortedDataSource = filterDuplicateVaccinationEvents(sortedDataSource)
 
-		var rows = [ListEventsViewController.Row]()
+		var rows = [ListRemoteEventsViewController.Row]()
 		var counter = 0
 
 		while counter <= sortedDataSource.count - 1 {
@@ -233,16 +233,16 @@ extension ListEventsViewModel {
 		return rows
 	}
 
-	private func getRowFromNegativeTestEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
+	private func getRowFromNegativeTestEvent(dataRow: EventDataTuple) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
+			.map(ListRemoteEventsViewModel.printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 
-		return ListEventsViewController.Row(
+		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
 			subTitle: L.holderEventElementSubtitleTest3(
 				formattedTestDate,
@@ -261,14 +261,14 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func getRowFromVaccinationEvent(dataRow: EventDataTuple, combineWith: EventDataTuple? = nil) -> ListEventsViewController.Row {
+	private func getRowFromVaccinationEvent(dataRow: EventDataTuple, combineWith: EventDataTuple? = nil) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedShotMonth: String = dataRow.event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printMonthFormatter.string) ?? ""
+			.map(ListRemoteEventsViewModel.printMonthFormatter.string) ?? ""
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
 		var details = VaccinationDetailsGenerator.getDetails(
@@ -292,7 +292,7 @@ extension ListEventsViewModel {
 			subTitle += L.holderVaccinationElementSingle(provider)
 		}
 
-		return ListEventsViewController.Row(
+		return ListRemoteEventsViewController.Row(
 			title: title,
 			subTitle: subTitle,
 			action: { [weak self] in
@@ -307,16 +307,16 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func getRowFromAssessementEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
+	private func getRowFromAssessementEvent(dataRow: EventDataTuple) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.vaccinationAssessment?.dateTimeString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printAssessmentDateFormatter.string) ?? (dataRow.event.vaccinationAssessment?.dateTimeString ?? "")
+			.map(ListRemoteEventsViewModel.printAssessmentDateFormatter.string) ?? (dataRow.event.vaccinationAssessment?.dateTimeString ?? "")
 
-		return ListEventsViewController.Row(
+		return ListRemoteEventsViewController.Row(
 			title: L.holder_event_vaccination_assessment_element_title(),
 			subTitle: L.holder_event_vaccination_assessment_element_subtitle(
 				formattedTestDate,
@@ -335,16 +335,16 @@ extension ListEventsViewModel {
 		)
 	}
 	
-	private func getRowFromRecoveryEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
+	private func getRowFromRecoveryEvent(dataRow: EventDataTuple) -> ListRemoteEventsViewController.Row {
 		
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.recovery?.sampleDate
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
+			.map(ListRemoteEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
 		
-		return ListEventsViewController.Row(
+		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
 			subTitle: L.holderEventElementSubtitleTest3(
 				formattedTestDate,
@@ -363,16 +363,16 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func getRowFromPositiveTestEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
+	private func getRowFromPositiveTestEvent(dataRow: EventDataTuple) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
+			.map(ListRemoteEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
 
-		return ListEventsViewController.Row(
+		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
 			subTitle: L.holderEventElementSubtitleTest3(
 				formattedTestDate,
@@ -393,18 +393,18 @@ extension ListEventsViewModel {
 
 	private func getRowFromDCCVaccinationEvent(
 		dataRow: EventDataTuple,
-		vaccination: EuCredentialAttributes.Vaccination) -> ListEventsViewController.Row {
+		vaccination: EuCredentialAttributes.Vaccination) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		var title: String = L.generalVaccinationcertificate().capitalizingFirstLetter()
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
 			title = L.holderDccVaccinationListTitle("\(doseNumber)", "\(totalDose)")
 		}
 
-		return ListEventsViewController.Row(
+		return ListRemoteEventsViewController.Row(
 			title: title,
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
@@ -424,13 +424,13 @@ extension ListEventsViewModel {
 
 	private func getRowFromDCCRecoveryEvent(
 		dataRow: EventDataTuple,
-		recovery: EuCredentialAttributes.RecoveryEntry) -> ListEventsViewController.Row {
+		recovery: EuCredentialAttributes.RecoveryEntry) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
-		return ListEventsViewController.Row(
+		return ListRemoteEventsViewController.Row(
 			title: L.generalRecoverystatement().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
@@ -447,13 +447,13 @@ extension ListEventsViewModel {
 
 	private func getRowFromDCCTestEvent(
 		dataRow: EventDataTuple,
-		test: EuCredentialAttributes.TestEntry) -> ListEventsViewController.Row {
+		test: EuCredentialAttributes.TestEntry) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
-		return ListEventsViewController.Row(
+		return ListRemoteEventsViewController.Row(
 			title: L.generalTestcertificate().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
@@ -470,7 +470,7 @@ extension ListEventsViewModel {
 
 	// MARK: Empty States
 
-	internal func emptyEventsState() -> ListEventsViewController.State {
+	internal func emptyEventsState() -> ListRemoteEventsViewController.State {
 
 		switch eventMode {
 			case .vaccinationassessment: return emptyAssessmentState()
@@ -482,7 +482,7 @@ extension ListEventsViewModel {
 		}
 	}
 
-	internal func originMismatchState(flow: ErrorCode.Flow) -> ListEventsViewController.State {
+	internal func originMismatchState(flow: ErrorCode.Flow) -> ListRemoteEventsViewController.State {
 		
 		let errorCode = ErrorCode(
 			flow: flow,
@@ -499,7 +499,7 @@ extension ListEventsViewModel {
 
 	// MARK: Vaccination End State
 
-	internal func emptyVaccinationState() -> ListEventsViewController.State {
+	internal func emptyVaccinationState() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderVaccinationNolistTitle(),
@@ -510,7 +510,7 @@ extension ListEventsViewModel {
 
 	// MARK: Negative Test End State
 
-	internal func emptyTestState() -> ListEventsViewController.State {
+	internal func emptyTestState() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderTestNolistTitle(),
@@ -519,7 +519,7 @@ extension ListEventsViewModel {
 		)
 	}
 	
-	internal func negativeTestInVaccinationAssessmentFlow() -> ListEventsViewController.State {
+	internal func negativeTestInVaccinationAssessmentFlow() -> ListRemoteEventsViewController.State {
 
 		return .feedback(
 			content: Content(
@@ -537,7 +537,7 @@ extension ListEventsViewModel {
 	
 	// MARK: Assessment End State
 	
-	internal func emptyAssessmentState() -> ListEventsViewController.State {
+	internal func emptyAssessmentState() -> ListRemoteEventsViewController.State {
 		
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holder_event_vaccination_assessment_nolist_title(),
@@ -548,7 +548,7 @@ extension ListEventsViewModel {
 
 	// MARK: Paper Flow End State
 
-	internal func emptyDccState() -> ListEventsViewController.State {
+	internal func emptyDccState() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderCheckdccExpiredTitle(),
@@ -559,7 +559,7 @@ extension ListEventsViewModel {
 
 	// MARK: international QR Only
 
-	internal func internationalQROnly() -> ListEventsViewController.State {
+	internal func internationalQROnly() -> ListRemoteEventsViewController.State {
 
 		return .feedback(
 			content: Content(
@@ -580,7 +580,7 @@ extension ListEventsViewModel {
 
 	// MARK: Positive test end states
 
-	internal func emptyPositiveTestState() -> ListEventsViewController.State {
+	internal func emptyPositiveTestState() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestNolistTitle(),
@@ -589,7 +589,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func positiveTestFlowInapplicable() -> ListEventsViewController.State {
+	internal func positiveTestFlowInapplicable() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestInapplicableTitle(),
@@ -598,7 +598,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func positiveTestFlowRecoveryAndVaccinationCreated() -> ListEventsViewController.State {
+	internal func positiveTestFlowRecoveryAndVaccinationCreated() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestRecoveryAndVaccinationTitle(),
@@ -607,7 +607,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func positiveTestFlowRecoveryOnlyCreated() -> ListEventsViewController.State {
+	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderPositiveTestRecoveryOnlyTitle(),
@@ -618,7 +618,7 @@ extension ListEventsViewModel {
 
 	// MARK: Recovery end states
 
-	internal func emptyRecoveryState() -> ListEventsViewController.State {
+	internal func emptyRecoveryState() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryNolistTitle(),
@@ -627,7 +627,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func recoveryFlowRecoveryAndVaccinationCreated() -> ListEventsViewController.State {
+	internal func recoveryFlowRecoveryAndVaccinationCreated() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryRecoveryAndVaccinationTitle(),
@@ -636,7 +636,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func recoveryFlowVaccinationOnly() -> ListEventsViewController.State {
+	internal func recoveryFlowVaccinationOnly() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryVaccinationOnlyTitle(),
@@ -645,7 +645,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func recoveryEventsTooOld() -> ListEventsViewController.State {
+	internal func recoveryEventsTooOld() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryTooOldTitle(),
@@ -657,9 +657,9 @@ extension ListEventsViewModel {
 
 // MARK: Test 2.0
 
-private extension ListEventsViewModel {
+private extension ListRemoteEventsViewModel {
 
-	func pendingEventsState() -> ListEventsViewController.State {
+	func pendingEventsState() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderTestresultsPendingTitle(),
@@ -668,9 +668,9 @@ private extension ListEventsViewModel {
 		)
 	}
 
-	func listTest20EventsState(_ remoteEvent: RemoteEvent) -> ListEventsViewController.State {
+	func listTest20EventsState(_ remoteEvent: RemoteEvent) -> ListRemoteEventsViewController.State {
 
-		var rows = [ListEventsViewController.Row]()
+		var rows = [ListRemoteEventsViewController.Row]()
 		if let row = getTest20Row(remoteEvent) {
 			rows.append(row)
 		}
@@ -702,17 +702,17 @@ private extension ListEventsViewModel {
 		)
 	}
 
-	func getTest20Row(_ remoteEvent: RemoteEvent) -> ListEventsViewController.Row? {
+	func getTest20Row(_ remoteEvent: RemoteEvent) -> ListRemoteEventsViewController.Row? {
 
 		guard let result = remoteEvent.wrapper.result,
 			  let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) else {
 			return nil
 		}
 
-		let printSampleDate: String = ListEventsViewModel.printTestDateFormatter.string(from: sampleDate)
+		let printSampleDate: String = ListRemoteEventsViewModel.printTestDateFormatter.string(from: sampleDate)
 		let holderID = NegativeTestV2DetailsGenerator.getDisplayIdentity(result.holder)
 		
-		return ListEventsViewController.Row(
+		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
 			subTitle: L.holderEventElementSubtitleTest2(printSampleDate, holderID),
 			action: { [weak self] in

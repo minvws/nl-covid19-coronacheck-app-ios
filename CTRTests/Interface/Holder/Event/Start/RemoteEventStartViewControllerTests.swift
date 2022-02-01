@@ -10,12 +10,12 @@ import XCTest
 import Nimble
 import SnapshotTesting
 
-class EventStartViewControllerTests: XCTestCase {
+class RemoteEventStartViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	private var sut: EventStartViewController!
+	private var sut: RemoteEventStartViewController!
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
-	private var viewModel: EventStartViewModel!
+	private var viewModel: RemoteEventStartViewModel!
 
 	var window = UIWindow()
 
@@ -24,7 +24,7 @@ class EventStartViewControllerTests: XCTestCase {
 
 		super.setUp()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
+		viewModel = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
 		window = UIWindow()
 	}
 
@@ -39,7 +39,7 @@ class EventStartViewControllerTests: XCTestCase {
 	func test_content_vaccination() {
 
 		// Given
-		sut = EventStartViewController(viewModel: viewModel)
+		sut = RemoteEventStartViewController(viewModel: viewModel)
 
 		// When
 		loadView()
@@ -54,8 +54,8 @@ class EventStartViewControllerTests: XCTestCase {
 	func test_content_negativeTest() {
 		
 		// Given
-		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
-		sut = EventStartViewController(viewModel: viewModel)
+		viewModel = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
+		sut = RemoteEventStartViewController(viewModel: viewModel)
 		
 		// When
 		loadView()
@@ -70,8 +70,8 @@ class EventStartViewControllerTests: XCTestCase {
 	func test_content_positiveTest() {
 		
 		// Given
-		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .positiveTest)
-		sut = EventStartViewController(viewModel: viewModel)
+		viewModel = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .positiveTest)
+		sut = RemoteEventStartViewController(viewModel: viewModel)
 		
 		// When
 		loadView()
@@ -86,8 +86,8 @@ class EventStartViewControllerTests: XCTestCase {
 	func test_content_recovery() {
 		
 		// Given
-		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
-		sut = EventStartViewController(viewModel: viewModel)
+		viewModel = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
+		sut = RemoteEventStartViewController(viewModel: viewModel)
 		
 		// When
 		loadView()
@@ -102,7 +102,7 @@ class EventStartViewControllerTests: XCTestCase {
 	func test_backButtonTapped() {
 
 		// Given
-		sut = EventStartViewController(viewModel: viewModel)
+		sut = RemoteEventStartViewController(viewModel: viewModel)
 		loadView()
 
 		// When
@@ -116,7 +116,7 @@ class EventStartViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped() {
 
 		// Given
-		sut = EventStartViewController(viewModel: viewModel)
+		sut = RemoteEventStartViewController(viewModel: viewModel)
 		loadView()
 
 		// When
@@ -130,7 +130,7 @@ class EventStartViewControllerTests: XCTestCase {
 	func test_secondaryButtonTapped() {
 
 		// Given
-		sut = EventStartViewController(viewModel: viewModel)
+		sut = RemoteEventStartViewController(viewModel: viewModel)
 		loadView()
 
 		// When

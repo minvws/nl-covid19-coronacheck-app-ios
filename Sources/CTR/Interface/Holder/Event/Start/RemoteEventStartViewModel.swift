@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EventStartViewModel: Logging {
+class RemoteEventStartViewModel: Logging {
 
 	// MARK: - Private variables
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ListEventsView: ScrolledStackWithButtonView {
+class ListRemoteEventsView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -159,7 +159,7 @@ class ListEventsView: ScrolledStackWithButtonView {
 		])
 	}
 
-	func addEventItemView(_ eventView: EventItemView) {
+	func addEventItemView(_ eventView: RemoteEventItemView) {
 
 		eventStackView.addArrangedSubview(eventView)
 		addSeparator()

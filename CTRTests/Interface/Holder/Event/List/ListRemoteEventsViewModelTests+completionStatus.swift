@@ -9,10 +9,11 @@
 import XCTest
 import Nimble
 
-class ListEventsViewModelCompletionStatusTests: XCTestCase {
+// swiftlint:disable:next type_name
+class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 
 	/// Subject under test
-	private var sut: ListEventsViewModel!
+	private var sut: ListRemoteEventsViewModel!
 	private var environmentSpies: EnvironmentSpies!
 	private var greenCardLoader: GreenCardLoader!
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
@@ -36,7 +37,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 	}
 
 	func setupSut() {
-		sut = ListEventsViewModel(
+		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [],
@@ -53,7 +54,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completionReason: nil
 		)
 		
-		sut = ListEventsViewModel(
+		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
@@ -92,7 +93,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completionReason: .recovery
 		)
 		
-		sut = ListEventsViewModel(
+		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
@@ -131,7 +132,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 			completionReason: nil
 		)
 		
-		sut = ListEventsViewModel(
+		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
@@ -166,7 +167,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		// Given
 		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: nil, completedByPersonalStatement: false, completionReason: nil)
 		
-		sut = ListEventsViewModel(
+		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
@@ -206,7 +207,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		)
 		let completionStatus = L.holder_eventdetails_vaccinationStatus_complete()
 		
-		sut = ListEventsViewModel(
+		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
@@ -246,7 +247,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		)
 		let completionStatus = L.holder_eventdetails_vaccinationStatus_recovery()
 		
-		sut = ListEventsViewModel(
+		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
@@ -286,7 +287,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		)
 		let completionStatus = L.holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere()
 		
-		sut = ListEventsViewModel(
+		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
@@ -326,7 +327,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		)
 		let completionStatus = L.holder_eventdetails_vaccinationStatus_complete()
 		
-		sut = ListEventsViewModel(
+		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
@@ -366,7 +367,7 @@ class ListEventsViewModelCompletionStatusTests: XCTestCase {
 		)
 		let completionStatus = L.holder_eventdetails_vaccinationStatus_complete()
 		
-		sut = ListEventsViewModel(
+		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
