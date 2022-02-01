@@ -136,4 +136,3 @@ final class PolicyInformationView: ScrolledStackView {
 		imageView.isHidden = false
 	}
 }
-

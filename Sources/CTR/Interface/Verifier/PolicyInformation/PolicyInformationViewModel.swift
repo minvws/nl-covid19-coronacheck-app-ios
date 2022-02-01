@@ -10,7 +10,7 @@ import UIKit
 final class PolicyInformationViewModel {
 	
 	/// Coordination Delegate
-	weak var coordinator: ForcedInformationCoordinatorDelegate?
+	weak var coordinator: ScanInstructionsCoordinatorDelegate?
 	
 	@Bindable private(set) var image: UIImage?
 	@Bindable private(set) var tagline: String
@@ -22,13 +22,21 @@ final class PolicyInformationViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - forcedInfo: the container with forced info
 	init(
-		coordinator: ForcedInformationCoordinatorDelegate,
-		forcedInfo: ForcedInformationPage) {
+		coordinator: ScanInstructionsCoordinatorDelegate
+	) {
 		
 		self.coordinator = coordinator
-		image = forcedInfo.image
-		tagline = forcedInfo.tagline
-		title = forcedInfo.title
-		content = forcedInfo.content
+		
+		image = I.onboarding.tabbarNL()
+		tagline = L.new_policy_subtitle()
+		
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
+			title = L.new_in_app_risksetting_title()
+			content = L.new_in_app_risksetting_subtitle()
+		} else {
+			// 1G only enabled
+			title = L.new_policy_1G_title()
+			content = L.new_policy_1G_subtitle()
+		}
 	}
 }
