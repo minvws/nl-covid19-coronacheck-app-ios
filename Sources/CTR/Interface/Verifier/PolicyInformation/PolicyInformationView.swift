@@ -31,7 +31,6 @@ final class PolicyInformationView: ScrolledStackView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
-		view.backgroundColor = C.forcedInformationImage()
 		return view
 	}()
 	

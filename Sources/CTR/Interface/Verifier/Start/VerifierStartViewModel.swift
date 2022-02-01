@@ -44,9 +44,9 @@ class VerifierStartViewModel: Logging {
 		var largeImage: UIImage? {
 			switch self {
 				case .noLevelSet, .policy3G:
-					return I.scanner.scanStartLowRisk()
+					return I.scanner.scanStart3GPolicy()
 				case .policy1G:
-					return I.scanner.scanStartHighRisk()
+					return I.scanner.scanStart1GPolicy()
 				case .locked:
 					return I.scanner.scanStartLocked()
 			}
