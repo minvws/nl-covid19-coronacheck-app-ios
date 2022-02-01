@@ -123,6 +123,24 @@ class VerifierStartViewModelTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
 	}
 	
+	func test_primaryButtonTapped_policyInformationShown() {
+
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
+		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
+		sut = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
+
+		// When
+		sut.primaryButtonTapped()
+
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
+			.to(equal(.userTappedProceedToInstructionsOrRiskSetting), description: "Result should match")
+		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownGetter) == true
+	}
+	
 	func test_showInstructionsButtonTapped() {
 
 		// Given

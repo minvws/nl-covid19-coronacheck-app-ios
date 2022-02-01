@@ -70,17 +70,14 @@ class ScanInstructionsViewModel {
 	func finishScanInstructions() {
 		
 		userSettings.scanInstructionShown = true
-		
-		if shouldShowRiskSetting {
+
+		if !userSettings.policyInformationShown, Current.featureFlagManager.is1GPolicyEnabled() {
+			coordinator?.userWishesToReadPolicyInformation()
+		} else if shouldShowRiskSetting {
 			coordinator?.userWishesToSelectRiskSetting()
 		} else {
 			coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
 		}
-	}
-	
-	func finishSelectRiskSetting() {
-		
-		coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
 	}
 
 	/// i.e. exit the Scan Instructions
@@ -100,9 +97,11 @@ class ScanInstructionsViewModel {
 			return currentPage < lastPage
 		}()
 		
-		if currentPage == lastPage, !shouldShowRiskSetting {
+		if currentPage == lastPage {
 			if hasScanLock {
 				nextButtonTitle = L.verifier_scan_instructions_back_to_start()
+			} else if (!userSettings.policyInformationShown && Current.featureFlagManager.is1GPolicyEnabled()) || shouldShowRiskSetting {
+				nextButtonTitle = L.generalNext()
 			} else {
 				nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 			}
