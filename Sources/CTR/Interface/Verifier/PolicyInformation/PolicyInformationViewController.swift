@@ -43,6 +43,14 @@ final class PolicyInformationViewController: BaseViewController {
 		viewModel.$tagline.binding = { [weak self] in self?.sceneView.tagline = $0 }
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$content.binding = { [weak self] in self?.sceneView.content = $0 }
+		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
+		
+		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
+			
+			self?.viewModel.finish()
+		}
+		
+		addBackButton()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

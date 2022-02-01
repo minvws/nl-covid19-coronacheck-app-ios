@@ -60,6 +60,15 @@ final class PolicyInformationView: ScrolledStackView {
 		return TextView()
 	}()
 	
+	let footerButtonView: FooterButtonView = {
+		
+		let view = FooterButtonView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
+	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
+	
 	/// setup the views
 	override func setupViews() {
 		
@@ -76,12 +85,19 @@ final class PolicyInformationView: ScrolledStackView {
 									 leading: ViewTraits.margin,
 									 bottom: 0,
 									 trailing: ViewTraits.margin))
+		
+		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
+			let translatedOffset = scrollView.translatedBottomScrollOffset
+			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
+		}
 	}
 	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
+		
+		addSubview(footerButtonView)
 
 		bottomStackView.addArrangedSubview(taglineLabel)
 		bottomStackView.setCustomSpacing(ViewTraits.taglineSpacing, after: taglineLabel)
@@ -91,6 +107,20 @@ final class PolicyInformationView: ScrolledStackView {
 
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
+	}
+	
+	override func setupViewConstraints() {
+		
+		super.setupViewConstraints()
+		
+		bottomScrollViewConstraint?.isActive = false
+		
+		NSLayoutConstraint.activate([
+			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
+		])
 	}
 	
 	var image: UIImage? {
