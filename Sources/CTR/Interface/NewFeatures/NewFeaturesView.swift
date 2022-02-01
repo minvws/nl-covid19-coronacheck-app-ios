@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ForcedInformationView: BaseView {
+final class NewFeaturesView: BaseView {
 	
 	/// The display constants
 	private enum ViewTraits {

@@ -14,7 +14,7 @@ extension Environment {
 		
 		appInstalledSinceManager.wipePersistedData()
 		cryptoLibUtility.wipePersistedData()
-		forcedInformationManager.wipePersistedData()
+		newFeaturesManager.wipePersistedData()
 		onboardingManager.wipePersistedData()
 		remoteConfigManager.wipePersistedData()
 		userSettings.wipePersistedData()

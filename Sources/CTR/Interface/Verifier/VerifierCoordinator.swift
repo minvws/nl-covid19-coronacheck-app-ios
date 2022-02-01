@@ -55,7 +55,7 @@ class VerifierCoordinator: SharedCoordinator {
 		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
-			forcedInformationFactory: VerifierForcedInformationFactory()
+			newFeaturesFactory: VerifierNewFeaturesFactory()
 		) {
 			
 			Current.scanLogManager.deleteExpiredScanLogEntries(

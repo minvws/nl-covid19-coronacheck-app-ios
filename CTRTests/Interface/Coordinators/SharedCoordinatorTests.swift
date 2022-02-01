@@ -15,7 +15,7 @@ class SharedCoordinatorTests: XCTestCase {
 	private var navigationSpy: NavigationControllerSpy!
 	private var window = UIWindow()
 	private var onboardingFactorySpy: OnboardingFactorySpy!
-	private var forcedInformationFactorySpy: ForcedInformationFactorySpy!
+	private var newFeaturesFactorySpy: NewFeaturesFactorySpy!
 	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
@@ -25,8 +25,8 @@ class SharedCoordinatorTests: XCTestCase {
 		
 		navigationSpy = NavigationControllerSpy()
 		onboardingFactorySpy = OnboardingFactorySpy()
-		forcedInformationFactorySpy = ForcedInformationFactorySpy()
-		forcedInformationFactorySpy.stubbedInformation = ForcedInformation(pages: [], consent: nil, version: 0)
+		newFeaturesFactorySpy = NewFeaturesFactorySpy()
+		newFeaturesFactorySpy.stubbedInformation = NewFeatureInformation(pages: [], consent: nil, version: 0)
 		sut = SharedCoordinator(
 			navigationController: navigationSpy,
 			window: window
@@ -46,7 +46,7 @@ class SharedCoordinatorTests: XCTestCase {
 		// When
 		sut.handleOnboarding(
 			onboardingFactory: onboardingFactorySpy,
-			forcedInformationFactory: forcedInformationFactorySpy
+			newFeaturesFactory: newFeaturesFactorySpy
 		) {
 			completed = true
 		}
@@ -67,7 +67,7 @@ class SharedCoordinatorTests: XCTestCase {
 		// When
 		sut.handleOnboarding(
 			onboardingFactory: onboardingFactorySpy,
-			forcedInformationFactory: forcedInformationFactorySpy
+			newFeaturesFactory: newFeaturesFactorySpy
 		) {
 			completed = true
 		}
@@ -87,7 +87,7 @@ class SharedCoordinatorTests: XCTestCase {
 		// When
 		sut.handleOnboarding(
 			onboardingFactory: onboardingFactorySpy,
-			forcedInformationFactory: forcedInformationFactorySpy
+			newFeaturesFactory: newFeaturesFactorySpy
 		) {
 			completed = true
 		}
@@ -96,18 +96,18 @@ class SharedCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).toEventually(haveCount(0))
 	}
 	
-	func test_needsForcedInformation() {
+	func test_needsNewFeatures() {
 		
 		// Given
-		environmentSpies.forcedInformationManagerSpy.stubbedNeedsUpdating = true
-		environmentSpies.forcedInformationManagerSpy.stubbedGetUpdatePageResult = ForcedInformationPage(image: nil, tagline: "", title: "", content: "")
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
+		environmentSpies.newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(image: nil, tagline: "", title: "", content: "")
 		
 		var completed = false
 
 		// When
 		sut.handleOnboarding(
 			onboardingFactory: onboardingFactorySpy,
-			forcedInformationFactory: forcedInformationFactorySpy
+			newFeaturesFactory: newFeaturesFactorySpy
 		) {
 			completed = true
 		}

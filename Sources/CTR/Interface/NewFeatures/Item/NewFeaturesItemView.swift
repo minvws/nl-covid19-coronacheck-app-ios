@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ForcedInformationPageView: ScrolledStackView {
+final class NewFeaturesItemView: ScrolledStackView {
 	
 	private enum ViewTraits {
 		

@@ -36,7 +36,7 @@ class SharedCoordinator: Coordinator, Logging {
 	var window: UIWindow
 
 	var onboardingManager: OnboardingManaging = Current.onboardingManager
-	var forcedInformationManager: ForcedInformationManaging = Current.forcedInformationManager
+	var newFeaturesManager: NewFeaturesManaging = Current.newFeaturesManager
 	var cryptoManager: CryptoManaging = Current.cryptoManager
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
 	var remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
@@ -103,11 +103,11 @@ extension SharedCoordinator {
 	/// Handle the onboarding
 	/// - Parameters:
 	///   - onboardingFactory: the onboarding factory for the content
-	///   - forcedInformationFactory: the forced information factory to display updated content
+	///   - newFeaturesFactory: the new features factory to display updated content
 	///   - onCompletion: the completion handler when onboarding is done
-	func handleOnboarding(onboardingFactory: OnboardingFactoryProtocol, forcedInformationFactory: ForcedInformationFactory, onCompletion: () -> Void) {
+	func handleOnboarding(onboardingFactory: OnboardingFactoryProtocol, newFeaturesFactory: NewFeaturesFactory, onCompletion: () -> Void) {
 		
-		forcedInformationManager.factory = forcedInformationFactory
+		newFeaturesManager.factory = newFeaturesFactory
 
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
@@ -130,11 +130,11 @@ extension SharedCoordinator {
 			coordinator.navigateToConsent(shouldHideBackButton: true)
 			return
 
-		} else if forcedInformationManager.needsUpdating {
-			// Show Forced Information
-			   let coordinator = ForcedInformationCoordinator(
+		} else if newFeaturesManager.needsUpdating {
+			// Show new features
+			   let coordinator = NewFeaturesCoordinator(
 				   navigationController: navigationController,
-				   forcedInformationManager: forcedInformationManager,
+				   newFeaturesManager: newFeaturesManager,
 				   delegate: self
 			   )
 			   startChildCoordinator(coordinator)
@@ -206,8 +206,8 @@ extension SharedCoordinator: OnboardingDelegate {
 
 		// Mark as complete
 		onboardingManager.consentGiven()
-		// Also mark as complete for forced information
-		forcedInformationManager.consentGiven()
+		// Also mark as complete for new feature information
+		newFeaturesManager.consentGiven()
 
 		// Remove child coordinator
 		if let onboardingCoorinator = childCoordinators.first {
@@ -219,18 +219,18 @@ extension SharedCoordinator: OnboardingDelegate {
 	}
 }
 
-// MARK: - ForcedInformationDelegate
+// MARK: - NewFeaturesDelegate
 
-extension SharedCoordinator: ForcedInformationDelegate {
+extension SharedCoordinator: NewFeaturesDelegate {
 
-	/// The user finished the forced information
-	func finishForcedInformation() {
+	/// The user finished the new features
+	func finishNewFeatures() {
 
-		logDebug("SharedCoordinator: finishForcedInformation")
+		logDebug("SharedCoordinator: finishNewFeatures")
 
 		// Remove childCoordinator
-		if let forcedInformationCoordinator = childCoordinators.first {
-			removeChildCoordinator(forcedInformationCoordinator)
+		if let newFeaturesCoordinator = childCoordinators.first {
+			removeChildCoordinator(newFeaturesCoordinator)
 		}
 
 		// Navigate to start

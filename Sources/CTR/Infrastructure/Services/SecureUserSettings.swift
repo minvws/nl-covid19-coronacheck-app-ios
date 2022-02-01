@@ -10,7 +10,7 @@ import Foundation
 
 protocol SecureUserSettingsProtocol: AnyObject {
 	typealias CryptoData = CryptoManager.CryptoData
-	typealias ForcedInformationData = ForcedInformationManager.ForcedInformationData
+	typealias ForcedInformationData = NewFeaturesManager.ForcedInformationData
 	typealias OnboardingData = OnboardingManager.OnboardingData
 	
 	var scanLockUntil: Date { get set }
@@ -29,7 +29,7 @@ class SecureUserSettings: SecureUserSettingsProtocol {
 		static var scanLockUntil: Date = .distantPast
 		static var appInstalledDate: Date? = nil
 		static var cryptoData: CryptoManager.CryptoData = .empty
-		static var forcedInformationData: ForcedInformationManager.ForcedInformationData = .empty
+		static var forcedInformationData: NewFeaturesManager.ForcedInformationData = .empty
 		static var onboardingData: OnboardingManager.OnboardingData = .empty
 		static var storedConfiguration: RemoteConfiguration = .default
 		static var verificationPolicy: VerificationPolicy? = .none

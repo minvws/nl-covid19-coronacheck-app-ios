@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ForcedInformationConsentView: BaseView {
+class NewFeaturesConsentView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {

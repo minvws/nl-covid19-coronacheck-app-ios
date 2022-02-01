@@ -9,10 +9,10 @@ import XCTest
 @testable import CTR
 import Nimble
 
-class ForcedInformationManagerTests: XCTestCase {
+class NewFeaturesManagerTests: XCTestCase {
 	
 	// MARK: - Setup
-	var sut: ForcedInformationManager!
+	var sut: NewFeaturesManager!
 	private var secureUserSettingsSpy: SecureUserSettingsSpy!
 	private var environmentSpies: EnvironmentSpies!
 	
@@ -23,9 +23,9 @@ class ForcedInformationManagerTests: XCTestCase {
 		// The direct dependencies of Managers are still injected in the init:
 		secureUserSettingsSpy = SecureUserSettingsSpy()
 		secureUserSettingsSpy.stubbedForcedInformationData = .empty
-		sut = ForcedInformationManager(secureUserSettings: secureUserSettingsSpy)
+		sut = NewFeaturesManager(secureUserSettings: secureUserSettingsSpy)
 		
-		sut.factory = HolderForcedInformationFactory()
+		sut.factory = HolderNewFeaturesFactory()
 	}
 	
 	// MARK: - Tests
@@ -46,7 +46,7 @@ class ForcedInformationManagerTests: XCTestCase {
 	func testGetNeedsUpdating_verifier_disabled() {
 		
 		// Given
-		sut.factory = VerifierForcedInformationFactory()
+		sut.factory = VerifierNewFeaturesFactory()
 		sut.wipePersistedData()
 		
 		// When
@@ -69,7 +69,7 @@ class ForcedInformationManagerTests: XCTestCase {
 	func test_getUpdatePage_holder() {
 		
 		// Given
-		let expectedPage = ForcedInformationPage(
+		let expectedPage = NewFeatureItem(
 			image: I.onboarding.tabbarNL(),
 			tagline: L.holderUpdatepageTagline(),
 			title: L.holderUpdatepageTitleTab(),
@@ -77,7 +77,7 @@ class ForcedInformationManagerTests: XCTestCase {
 		)
 		
 		// When
-		let actualPage = sut.getUpdatePage()
+		let actualPage = sut.getNewFeatureItem()
 		
 		// Then
 		expect(actualPage) == expectedPage
@@ -86,16 +86,16 @@ class ForcedInformationManagerTests: XCTestCase {
 	func test_getUpdatePage_verifier() {
 		
 		// Given
-		let expectedPage = ForcedInformationPage(
+		let expectedPage = NewFeatureItem(
 			image: I.onboarding.tabbarNL(),
 			tagline: L.new_in_app_subtitle(),
 			title: L.new_in_app_risksetting_title(),
 			content: L.new_in_app_risksetting_subtitle()
 		)
-		sut.factory = VerifierForcedInformationFactory()
+		sut.factory = VerifierNewFeaturesFactory()
 		
 		// When
-		let actualPage = sut.getUpdatePage()
+		let actualPage = sut.getNewFeatureItem()
 		
 		// Then
 		expect(actualPage) == expectedPage

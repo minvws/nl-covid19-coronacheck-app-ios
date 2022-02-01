@@ -7,20 +7,20 @@
 
 import UIKit
 
-final class ForcedInformationViewController: BaseViewController {
+final class NewFeaturesViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: ForcedInformationViewModel
+	private let viewModel: NewFeaturesViewModel
 	
 	/// The view
-	let sceneView = ForcedInformationView()
+	let sceneView = NewFeaturesView()
 	
 	/// The page controller
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: ForcedInformationViewModel) {
+	init(viewModel: NewFeaturesViewModel) {
 		
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -50,9 +50,9 @@ final class ForcedInformationViewController: BaseViewController {
 			}
 			
 			self.pageViewController.pages = $0.compactMap { page in
-				guard let forcedInformationPageViewController = self.viewModel.getForcedInformationStep(page) as? ForcedInformationPageViewController else { return nil }
-				self.sceneView.updateFooterView(mainScrollView: forcedInformationPageViewController.sceneView.scrollView)
-				return forcedInformationPageViewController
+				guard let viewController = self.viewModel.getNewFeatureStep(page) as? NewFeaturesItemViewController else { return nil }
+				self.sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)
+				return viewController
 			}
 		}
 		
@@ -88,7 +88,7 @@ final class ForcedInformationViewController: BaseViewController {
 		
 		if pageViewController.isLastPage {
 			// We tapped on the last page
-			viewModel.finish(.updatePageViewed)
+			viewModel.finish(.updateItemViewed)
 		} else {
 			// Move to the next page
 			pageViewController.nextPage()

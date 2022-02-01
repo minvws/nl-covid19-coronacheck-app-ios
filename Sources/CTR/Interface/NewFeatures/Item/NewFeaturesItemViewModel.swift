@@ -7,10 +7,10 @@
 
 import UIKit
 
-final class ForcedInformationPageViewModel {
+final class NewFeaturesItemViewModel {
 	
 	/// Coordination Delegate
-	weak var coordinator: ForcedInformationCoordinatorDelegate?
+	weak var coordinator: NewFeaturesCoordinatorDelegate?
 	
 	@Bindable private(set) var image: UIImage?
 	@Bindable private(set) var tagline: String
@@ -20,15 +20,15 @@ final class ForcedInformationPageViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - forcedInfo: the container with forced info
+	///   - newFeatureItem: the container with new feature info
 	init(
-		coordinator: ForcedInformationCoordinatorDelegate,
-		forcedInfo: ForcedInformationPage) {
+		coordinator: NewFeaturesCoordinatorDelegate,
+		newFeatureItem: NewFeatureItem) {
 		
 		self.coordinator = coordinator
-		image = forcedInfo.image
-		tagline = forcedInfo.tagline
-		title = forcedInfo.title
-		content = forcedInfo.content
+		image = newFeatureItem.image
+		tagline = newFeatureItem.tagline
+		title = newFeatureItem.title
+		content = newFeatureItem.content
 	}
 }

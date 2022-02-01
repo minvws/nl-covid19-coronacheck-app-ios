@@ -7,17 +7,17 @@
 
 import UIKit
 
-final class ForcedInformationPageViewController: BaseViewController {
+final class NewFeaturesItemViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: ForcedInformationPageViewModel
+	private let viewModel: NewFeaturesItemViewModel
 	
 	/// The view
-	let sceneView = ForcedInformationPageView()
+	let sceneView = NewFeaturesItemView()
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: ForcedInformationPageViewModel) {
+	init(viewModel: NewFeaturesItemViewModel) {
 		
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

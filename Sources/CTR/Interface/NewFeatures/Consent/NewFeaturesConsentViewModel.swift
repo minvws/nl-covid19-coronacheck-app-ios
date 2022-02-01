@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ForcedInformationConsentViewModel {
+class NewFeaturesConsentViewModel {
 
 	// MARK: - Bindable variables
 
@@ -40,11 +40,11 @@ class ForcedInformationConsentViewModel {
 
 	// MARK: - Private variables
 
-	/// The forced information consent
-	private var consent: ForcedInformationConsent
+	/// The new feature consent
+	private var consent: NewFeatureConsent
 
 	/// Coordination Delegate
-	weak private var coordinator: (ForcedInformationCoordinatorDelegate & OpenUrlProtocol)?
+	weak private var coordinator: (NewFeaturesCoordinatorDelegate & OpenUrlProtocol)?
 
 	// MARK: - Initializer
 
@@ -53,11 +53,11 @@ class ForcedInformationConsentViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - consent: the consent
 	init(
-		_ coordinator: (ForcedInformationCoordinatorDelegate & OpenUrlProtocol),
-		forcedInformationConsent: ForcedInformationConsent) {
+		_ coordinator: (NewFeaturesCoordinatorDelegate & OpenUrlProtocol),
+		newFeatureConsent: NewFeatureConsent) {
 
 		self.coordinator = coordinator
-		self.consent = forcedInformationConsent
+		self.consent = newFeatureConsent
 
 		// Content
 		self.title = consent.title
