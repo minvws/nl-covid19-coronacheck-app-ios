@@ -212,6 +212,9 @@ class HolderDashboardViewController: BaseViewController {
 			
 			stackView.setCustomSpacing(22, after: previousCardView)
 		}
+		
+		stackView.accessibilityElements = cardViews
+		UIAccessibility.post(notification: .screenChanged, argument: view)
 	}
 }
 
