@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OnboardingPageView: ScrolledStackView {
+class OnboardingItemView: ScrolledStackView {
 	
 	/// The display constants
 	private struct ViewTraits {

@@ -7,19 +7,19 @@
 
 import UIKit
 
-final class OnboardingConsentViewController: BaseViewController {
+final class PrivacyConsentViewController: BaseViewController {
 
 	/// The model
-	let viewModel: OnboardingConsentViewModel
+	let viewModel: PrivacyConsentViewModel
 
 	/// The view
-	let sceneView = OnboardingConsentView()
+	let sceneView = PrivacyConsentView()
 	
 	override var enableSwipeBack: Bool { !viewModel.shouldHideBackButton }
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: OnboardingConsentViewModel) {
+	init(viewModel: PrivacyConsentViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class OnboardingConsentView: BaseView {
+final class PrivacyConsentView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {

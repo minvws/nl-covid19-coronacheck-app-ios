@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class OnboardingConsentViewModel {
+final class PrivacyConsentViewModel {
 
 	/// Coordination Delegate
 	weak var coordinator: OnboardingCoordinatorDelegate?

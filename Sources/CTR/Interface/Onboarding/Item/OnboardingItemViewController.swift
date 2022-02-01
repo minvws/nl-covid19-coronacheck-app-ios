@@ -7,29 +7,29 @@
 
 import UIKit
 
-protocol OnboardingPageViewControllerDelegate: AnyObject {
+protocol OnboardingItemViewControllerDelegate: AnyObject {
     
     /// Delegates the onAccessibilityScroll event
     func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool
 }
 
-class OnboardingPageViewController: BaseViewController {
+class OnboardingItemViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: OnboardingPageViewModel
+	private let viewModel: OnboardingItemViewModel
 	
 	/// The view
-	let sceneView = OnboardingPageView()
+	let sceneView = OnboardingItemView()
     
     /// The delegate
-    weak var delegate: OnboardingPageViewControllerDelegate?
+    weak var delegate: OnboardingItemViewControllerDelegate?
 	
 	/// Disable swiping to launch screen
 	override var enableSwipeBack: Bool { false }
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: OnboardingPageViewModel) {
+	init(viewModel: OnboardingItemViewModel) {
 		
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
