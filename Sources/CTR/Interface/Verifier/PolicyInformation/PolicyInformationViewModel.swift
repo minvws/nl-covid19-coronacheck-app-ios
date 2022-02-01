@@ -16,7 +16,9 @@ final class PolicyInformationViewModel {
 	@Bindable private(set) var tagline: String
 	@Bindable private(set) var title: String
 	@Bindable private(set) var content: String
-	@Bindable private(set) var primaryButtonTitle = L.generalNext()
+	@Bindable private(set) var primaryButtonTitle: String
+	
+	private var shouldShowRiskSetting = false
 	
 	/// Initializer
 	/// - Parameters:
@@ -39,11 +41,24 @@ final class PolicyInformationViewModel {
 			title = L.new_policy_1G_title()
 			content = L.new_policy_1G_subtitle()
 		}
+		
+		shouldShowRiskSetting = Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() && Current.riskLevelManager.state == nil
+		
+		if shouldShowRiskSetting {
+			primaryButtonTitle = L.generalNext()
+		} else {
+			primaryButtonTitle = L.verifierScaninstructionsButtonStartscanning()
+		}
 	}
 	
 	func finish() {
 		
 		Current.userSettings.policyInformationShown = true
-		coordinator?.userDidCompletePages(hasScanLock: false)
+		
+		if shouldShowRiskSetting {
+			coordinator?.userWishesToSelectRiskSetting()
+		} else {
+			coordinator?.userDidCompletePages(hasScanLock: false)
+		}
 	}
 }

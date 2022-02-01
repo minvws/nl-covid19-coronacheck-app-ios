@@ -66,10 +66,14 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		
 		if !isOpenedFromMenu,
 		   allowSkipInstruction,
-		   userSettings.scanInstructionShown,
-		   riskLevelManager.state == nil {
-			let viewModel = RiskSettingInstructionViewModel(coordinator: self)
-			viewController = RiskSettingInstructionViewController(viewModel: viewModel)
+		   userSettings.scanInstructionShown {
+			if !userSettings.policyInformationShown, Current.featureFlagManager.is1GPolicyEnabled() {
+				let viewModel = PolicyInformationViewModel(coordinator: self)
+				viewController = PolicyInformationViewController(viewModel: viewModel)
+			} else {
+				let viewModel = RiskSettingInstructionViewModel(coordinator: self)
+				viewController = RiskSettingInstructionViewController(viewModel: viewModel)
+			}
 		} else {
 			let viewModel = ScanInstructionsViewModel(
 				coordinator: self,

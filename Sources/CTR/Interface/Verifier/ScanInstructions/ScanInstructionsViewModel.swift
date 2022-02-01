@@ -97,9 +97,11 @@ class ScanInstructionsViewModel {
 			return currentPage < lastPage
 		}()
 		
-		if currentPage == lastPage, !shouldShowRiskSetting {
+		if currentPage == lastPage {
 			if hasScanLock {
 				nextButtonTitle = L.verifier_scan_instructions_back_to_start()
+			} else if !userSettings.policyInformationShown || shouldShowRiskSetting {
+				nextButtonTitle = L.generalNext()
 			} else {
 				nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 			}
