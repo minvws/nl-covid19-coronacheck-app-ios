@@ -7,13 +7,13 @@
 
 import UIKit
 
-class ScanInstructionsPageViewModel {
+class ScanInstructionsItemViewModel {
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var animationName: String?
 	
-	init(page: ScanInstructionsPage) {
+	init(page: ScanInstructionsItem) {
 
 		title = page.title
 		message = page.message

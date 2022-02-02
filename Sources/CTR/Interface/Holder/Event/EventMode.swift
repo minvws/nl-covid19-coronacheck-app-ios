@@ -20,7 +20,7 @@ enum EventMode: String {
 		switch self {
 			case .paperflow: return L.generalPaperflow()
 			case .positiveTest: return L.generalPositiveTest()
-			case .recovery: return L.generalRecoverystatement()
+			case .recovery: return L.general_recoverycertificate()
 			case .test: return L.generalTestresult()
 			case .vaccination: return L.generalVaccination()
 			case .vaccinationassessment: return L.general_visitorPass()

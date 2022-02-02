@@ -10,12 +10,12 @@ import Nimble
 @testable import CTR
 import SnapshotTesting
 
-class VerifierStartViewTests: XCTestCase {
-	var sut: VerifierStartView!
+class VerifierStartScanningViewTests: XCTestCase {
+	var sut: VerifierStartScanningView!
 
 	override func setUp() {
 		super.setUp()
-		sut = VerifierStartView()
+		sut = VerifierStartScanningView()
 	}
 
 	func test_headerImage() {

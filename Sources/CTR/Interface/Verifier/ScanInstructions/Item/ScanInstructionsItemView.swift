@@ -8,7 +8,7 @@
 import UIKit
 import Lottie
 
-class ScanInstructionsPageView: ScrolledStackView {
+class ScanInstructionsItemView: ScrolledStackView {
 	
 	/// The display constants
 	private struct ViewTraits {

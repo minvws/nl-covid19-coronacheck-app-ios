@@ -814,13 +814,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(1 * years * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig tot 20 augustus 2024"
 
 			// check didTapViewQR
@@ -880,13 +880,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 			
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(1 * years * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig tot 20 augustus 2024"
 			
 			// check didTapViewQR
@@ -944,13 +944,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(1 * years * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig tot 20 augustus 2024"
 
 			// check didTapViewQR
@@ -1001,13 +1001,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot 9 augustus 2021"
 			
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * days * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig tot 9 augustus 2021"
 			
 			// check didTapViewQR
@@ -1055,13 +1055,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (2 doses)" + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (2 doses)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (2 doses)" + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (2 doses)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 
 			// check didTapViewQR
@@ -1107,7 +1107,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot 15 juli 2021"
 
 			// Exercise the validityText with different sample dates:
@@ -1162,13 +1162,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02 voor 3G-toegang"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02 voor 3G-toegang"
 
 			// check didTapViewQR
@@ -1219,13 +1219,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02"
 
 			// check didTapViewQR
@@ -1269,13 +1269,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_recoverycertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot 11 mei 2022"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_recoverycertificate().capitalized + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig tot 11 mei 2022"
 
 			// check didTapViewQR
@@ -1638,20 +1638,20 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(2))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 			expect(nowValidityTexts[1].lines).to(haveCount(2))
 			expect(nowValidityTexts[1].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(nowValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+			expect(nowValidityTexts[1].lines[0]) == L.general_recoverycertificate().capitalized + ":"
 			expect(nowValidityTexts[1].lines[1]) == "geldig vanaf 17 juli 17:02 tot 11 mei 2022"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
 			expect(futureValidityTexts[1].kind) == .current
-			expect(futureValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+			expect(futureValidityTexts[1].lines[0]) == L.general_recoverycertificate().capitalized + ":"
 			expect(futureValidityTexts[1].lines[1]) == "geldig tot 11 mei 2022"
 
 			// check didTapViewQR
@@ -1703,9 +1703,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 				let nowValidityTexts = validityTextEvaluator(now)
 				expect(nowValidityTexts).to(haveCount(3))
-				expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
-				expect(nowValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-				expect(nowValidityTexts[2].lines[0]) == L.generalTestcertificate().capitalized + ":"
+				expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
+				expect(nowValidityTexts[1].lines[0]) == L.general_recoverycertificate().capitalized + ":"
+				expect(nowValidityTexts[2].lines[0]) == L.general_testcertificate().capitalized + ":"
 
 				expect(expiryCountdownEvaluator?(now)).to(beNil())
 			}
@@ -1747,9 +1747,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(3))
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
-			expect(nowValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-			expect(nowValidityTexts[2].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[1].lines[0]) == L.general_recoverycertificate().capitalized + ":"
+			expect(nowValidityTexts[2].lines[0]) == L.general_testcertificate().capitalized + ":"
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
@@ -1789,9 +1789,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(3))
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
-			expect(nowValidityTexts[1].lines[0]) == L.generalRecoverystatement().capitalized + ":"
-			expect(nowValidityTexts[2].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[1].lines[0]) == L.general_recoverycertificate().capitalized + ":"
+			expect(nowValidityTexts[2].lines[0]) == L.general_testcertificate().capitalized + ":"
 
 			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 2 uur"
 		}))
@@ -1847,7 +1847,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
 			expect(nowValidityTexts[0].lines.count) == 2
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "14 juli 2021"
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
@@ -1872,7 +1872,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
 			expect(nowValidityTexts[0].lines.count) == 2
-			expect(nowValidityTexts[0].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot donderdag 15 juli 16:02"
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
@@ -1909,15 +1909,15 @@ class HolderDashboardViewModelTests: XCTestCase {
 		}))
 		expect(self.sut.internationalCards[1]).toEventually(beRecommendToAddYourBoosterCard())
 		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
-			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.generalVaccinationcertificate())
+			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.general_vaccinationcertificate())
 		}))
 
 		expect(self.sut.internationalCards[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
-			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.generalRecoverystatement())
+			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.general_recoverycertificate())
 		}))
 
 		expect(self.sut.internationalCards[4]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
-			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.generalTestcertificate())
+			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.general_testcertificate())
 		}))
 	}
 
@@ -1969,11 +1969,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 		}))
 
 		expect(self.sut.domesticCards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
-			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.generalRecoverystatement())
+			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.general_recoverycertificate())
 		}))
 
 		expect(self.sut.domesticCards[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
-			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.generalTestcertificate())
+			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.general_testcertificate())
 		}))
 	}
 
@@ -2082,14 +2082,14 @@ class HolderDashboardViewModelTests: XCTestCase {
 		}))
 		expect(self.sut.internationalCards[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator in
 			// check isLoading
-			expect(title) == L.generalTestcertificate().capitalized
+			expect(title) == L.general_testcertificate().capitalized
 			expect(isLoading) == false
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalTestcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot dinsdag 13 juli 05:02"
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
@@ -2129,13 +2129,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02"
 
 			// check didTapViewQR
@@ -2180,13 +2180,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 tot 14 augustus 2021"
 			
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (1 dosis)" + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 tot 14 augustus 2021"
 			
 			// check didTapViewQR
@@ -2231,13 +2231,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (2 doses)" + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (2 doses)" + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 tot 14 augustus 2021"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(futureValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + " (2 doses)" + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (2 doses)" + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 tot 14 augustus 2021"
 
 			// check didTapViewQR
@@ -2280,13 +2280,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(nowValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_recoverycertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 tot 11 mei 2022"
 
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow))
 			expect(futureValidityTexts[0].kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(futureValidityTexts[0].lines[0]) == L.generalRecoverystatement().capitalized + ":"
+			expect(futureValidityTexts[0].lines[0]) == L.general_recoverycertificate().capitalized + ":"
 			expect(futureValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 17:02 tot 11 mei 2022"
 
 			// check didTapViewQR
@@ -2336,7 +2336,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts).to(haveCount(1))
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.generalVaccinationcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 17 juli 2021"
 
 			// check didTapViewQR

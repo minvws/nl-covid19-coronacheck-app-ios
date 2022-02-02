@@ -13,7 +13,7 @@ class ScanInstructionsViewModel {
 	weak var coordinator: ScanInstructionsCoordinatorDelegate?
 	
 	/// The pages for onboarding
-	@Bindable private(set) var pages: [ScanInstructionsPage]
+	@Bindable private(set) var pages: [ScanInstructionsItem]
 
 	@Bindable private(set) var shouldShowSkipButton: Bool = true
 
@@ -39,7 +39,7 @@ class ScanInstructionsViewModel {
 	///   - numberOfPages: the total number of pages
 	init(
 		coordinator: ScanInstructionsCoordinatorDelegate,
-		pages: [ScanInstructionsPage]
+		pages: [ScanInstructionsItem]
 	) {
 		
 		self.coordinator = coordinator
@@ -59,9 +59,9 @@ class ScanInstructionsViewModel {
 		}
 	}
 	
-	func scanInstructionsViewController(forPage page: ScanInstructionsPage) -> ScanInstructionsPageViewController {
-		let viewController = ScanInstructionsPageViewController(
-			viewModel: ScanInstructionsPageViewModel(page: page)
+	func scanInstructionsViewController(forPage page: ScanInstructionsItem) -> ScanInstructionsItemViewController {
+		let viewController = ScanInstructionsItemViewController(
+			viewModel: ScanInstructionsItemViewModel(page: page)
 		)
 		viewController.isAccessibilityElement = true
 		return viewController

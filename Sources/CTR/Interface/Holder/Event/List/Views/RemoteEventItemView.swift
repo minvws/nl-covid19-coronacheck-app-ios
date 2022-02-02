@@ -132,17 +132,14 @@ class RemoteEventItemView: BaseView {
 
 		backgroundButton.isAccessibilityElement = true
 		linkLabel.isAccessibilityElement = false
+		
+		accessibilityElements = [titleLabel, messageLabel, backgroundButton]
 	}
 
 	/// User tapped on the primary button
 	@objc func disclaimerButtonTapped() {
 
 		disclaimerButtonTappedCommand?()
-	}
-
-	func setAccessibilityLabel() {
-		
-		backgroundButton.accessibilityLabel = "\(linkLabel.text ?? "")\n \(titleLabel.text ?? "")"
 	}
 
 	// MARK: Public Access
@@ -154,7 +151,6 @@ class RemoteEventItemView: BaseView {
 				ViewTraits.titleLineHeight,
 				kerning: ViewTraits.titleKerning
 			)
-			setAccessibilityLabel()
 		}
 	}
 
@@ -172,7 +168,6 @@ class RemoteEventItemView: BaseView {
 						paragraphSpacing: ViewTraits.messageParagraphSpacing
 					)
 				)
-			setAccessibilityLabel()
 		}
 	}
 
@@ -183,7 +178,7 @@ class RemoteEventItemView: BaseView {
 				kerning: ViewTraits.titleKerning,
 				textColor: Theme.colors.primary
 			)
-			setAccessibilityLabel()
+			backgroundButton.accessibilityLabel = link
 		}
 	}
 

@@ -17,7 +17,7 @@ enum VerifierStartResult {
 	case userTappedProceedToInstructionsOrRiskSetting
 }
 
-class VerifierStartViewModel: Logging {
+class VerifierStartScanningViewModel: Logging {
 
 	// MARK: - Nested Types
 	
@@ -42,7 +42,7 @@ class VerifierStartViewModel: Logging {
 			}
 		}
 		
-		var headerMode: VerifierStartView.HeaderMode? {
+		var headerMode: VerifierStartScanningView.HeaderMode? {
 			switch self {
 				case .noLevelSet, .policy3G:
 					return I.scanner.scanStart3GPolicy().map { .image($0) }
@@ -131,7 +131,7 @@ class VerifierStartViewModel: Logging {
 
 	@Bindable private(set) var title: String = ""
 	@Bindable private(set) var header: String = ""
-	@Bindable private(set) var headerMode: VerifierStartView.HeaderMode?
+	@Bindable private(set) var headerMode: VerifierStartScanningView.HeaderMode?
 	@Bindable private(set) var message: String = ""
 	@Bindable private(set) var primaryButtonTitle: String = ""
 	@Bindable private(set) var showsPrimaryButton: Bool = true
@@ -284,7 +284,7 @@ class VerifierStartViewModel: Logging {
 
 // MARK: - Handle User Input:
 
-extension VerifierStartViewModel {
+extension VerifierStartScanningViewModel {
 	
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }

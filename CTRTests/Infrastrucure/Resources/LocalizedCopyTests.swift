@@ -33,16 +33,16 @@ final class LocalizedCopyTests: XCTestCase {
 		expect(self.copyValues(key: "general.vaccination"))
 			== [ .nl: "vaccinatie", .en: "vaccination" ]
 
-		expect(self.copyValues(key: "general.vaccinationcertificate"))
+		expect(self.copyValues(key: "general_vaccinationcertificate"))
 			== [ .nl: "vaccinatiebewijs", .en: "vaccination certificate" ]
 
-		expect(self.copyValues(key: "general.testcertificate"))
+		expect(self.copyValues(key: "general_testcertificate"))
 			== [ .nl: "testbewijs", .en: "test certificate" ]
 
 		expect(self.copyValues(key: "general.recoverydate"))
 			== [ .nl: "hersteldatum", .en: "recovery date" ]
 
-		expect(self.copyValues(key: "general.recoverystatement"))
+		expect(self.copyValues(key: "general_recoverycertificate"))
 			== [ .nl: "herstelbewijs", .en: "recovery certificate" ]
 		/* -- (end of lowercased checks) ☝🏻 -- */
 

@@ -8,7 +8,7 @@
 import UIKit
 import Lottie
 
-class VerifierStartView: BaseView {
+class VerifierStartScanningView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
