@@ -2062,8 +2062,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 
-		expect(feedback.title) == L.holderRecoveryTooOldTitle()
-		expect(feedback.body) == L.holderRecoveryTooOldMessage()
+		expect(feedback.title) == L.holderEventOriginmismatchTitle()
+		expect(feedback.body) == L.holderEventOriginmismatchRecoveryBody("i 380 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2255,8 +2255,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 
-		expect(feedback.title) == L.holderRecoveryTooOldTitle()
-		expect(feedback.body) == L.holderRecoveryTooOldMessage()
+		expect(feedback.title) == L.holderEventOriginmismatchTitle()
+		expect(feedback.body) == L.holderEventOriginmismatchRecoveryBody("i 380 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}

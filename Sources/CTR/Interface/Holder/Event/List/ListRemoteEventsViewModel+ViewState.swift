@@ -644,15 +644,6 @@ extension ListRemoteEventsViewModel {
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
-
-	internal func recoveryEventsTooOld() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderRecoveryTooOldTitle(),
-			subTitle: L.holderRecoveryTooOldMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
 }
 
 // MARK: Test 2.0
