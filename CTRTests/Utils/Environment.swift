@@ -155,6 +155,11 @@ final class EnvironmentSpies {
 		spy.stubbedStoreEventGroupResult = true
 		return spy
 	}()
+	
+	var verificationPolicyEnablerSpy: VerificationPolicyEnablerSpy = {
+		let spy = VerificationPolicyEnablerSpy()
+		return spy
+	}()
 }
 
 func setupEnvironmentSpies() -> EnvironmentSpies {
@@ -184,7 +189,8 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		scanLogManager: spies.scanLogManagerSpy,
 		secureUserSettings: spies.secureUserSettingsSpy,
 		userSettings: spies.userSettingsSpy,
-		walletManager: spies.walletManagerSpy
+		walletManager: spies.walletManagerSpy,
+		verificationPolicyEnabler: spies.verificationPolicyEnablerSpy
 	)
 	
 	return spies

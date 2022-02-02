@@ -183,7 +183,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped_whenVerified_shouldNavigateToVerfiedInfo() {
 		// Given
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
-		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy1G]
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
@@ -204,7 +204,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	func test_primaryButtonTapped_whenDemo_shouldNavigateToVerfiedInfo() {
 		// Given
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
-		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy1G]
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"

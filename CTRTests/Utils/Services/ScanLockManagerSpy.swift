@@ -16,8 +16,6 @@ extension ScanLockManagerSpy {
 
 class ScanLockManagerSpy: ScanLockManaging {
 
-	required init() {}
-
 	var invokedStateGetter = false
 	var invokedStateGetterCount = 0
 	var stubbedState: ScanLockManager.State!
@@ -60,6 +58,14 @@ class ScanLockManagerSpy: ScanLockManaging {
 		invokedRemoveObserverCount += 1
 		invokedRemoveObserverParameters = (token, ())
 		invokedRemoveObserverParametersList.append((token, ()))
+	}
+
+	var invokedWipeScanMode = false
+	var invokedWipeScanModeCount = 0
+
+	func wipeScanMode() {
+		invokedWipeScanMode = true
+		invokedWipeScanModeCount += 1
 	}
 
 	var invokedWipePersistedData = false

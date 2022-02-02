@@ -13,6 +13,7 @@ protocol RiskLevelManaging: AnyObject {
 	func update(verificationPolicy: VerificationPolicy?)
 	func appendObserver(_ observer: @escaping (VerificationPolicy?) -> Void) -> RiskLevelManager.ObserverToken
 	func removeObserver(token: RiskLevelManager.ObserverToken)
+	func wipeScanMode()
 	func wipePersistedData()
 }
 
@@ -71,11 +72,16 @@ final class RiskLevelManager: RiskLevelManaging {
 		}
 	}
 
+	func wipeScanMode() {
+		
+		keychainVerificationPolicy = .none
+		state = keychainVerificationPolicy
+	}
+	
 	func wipePersistedData() {
 
 		observers = [:]
-		keychainVerificationPolicy = .none
-		state = keychainVerificationPolicy
+		wipeScanMode()
 	}
 }
 

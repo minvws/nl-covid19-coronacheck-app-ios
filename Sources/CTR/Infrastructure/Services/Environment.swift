@@ -35,6 +35,7 @@ struct Environment {
 	var secureUserSettings: SecureUserSettingsProtocol
 	var userSettings: UserSettingsProtocol
 	var walletManager: WalletManaging
+	var verificationPolicyEnabler: VerificationPolicyEnablable
 	
 	init(
 		now: @escaping () -> Date,
@@ -59,7 +60,8 @@ struct Environment {
 		scanLogManager: ScanLogManaging,
 		secureUserSettings: SecureUserSettingsProtocol,
 		userSettings: UserSettingsProtocol,
-		walletManager: WalletManaging
+		walletManager: WalletManaging,
+		verificationPolicyEnabler: VerificationPolicyEnablable
 	) {
 		self.now = now
 		self.appInstalledSinceManager = appInstalledSinceManager
@@ -84,6 +86,7 @@ struct Environment {
 		self.secureUserSettings = secureUserSettings
 		self.userSettings = userSettings
 		self.walletManager = walletManager
+		self.verificationPolicyEnabler = verificationPolicyEnabler
 	}
 }
 
@@ -171,6 +174,7 @@ private let scanLogManager = ScanLogManager(dataStoreManager: datastoreManager)
 private let secureUserSettings = SecureUserSettings()
 private let userSettings = UserSettings()
 private let walletManager = WalletManager(dataStoreManager: datastoreManager)
+private let verificationPolicyEnabler = VerificationPolicyEnabler()
 
 // MARK: - 3: Instantiate the Environment using private dependencies:
 
@@ -203,7 +207,8 @@ private let environment: () -> Environment = {
 		scanLogManager: scanLogManager,
 		secureUserSettings: secureUserSettings,
 		userSettings: userSettings,
-		walletManager: walletManager
+		walletManager: walletManager,
+		verificationPolicyEnabler: verificationPolicyEnabler
 	)
 }
 

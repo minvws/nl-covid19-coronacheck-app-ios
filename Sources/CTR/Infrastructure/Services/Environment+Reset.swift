@@ -25,6 +25,7 @@ extension Environment {
 				walletManager.removeExistingEventGroups()
 				walletManager.removeExistingGreenCards()
 			case .verifier:
+				verificationPolicyEnabler.configureDefaultPolicy()
 				riskLevelManager.wipePersistedData()
 				scanLockManager.wipePersistedData()
 				scanLogManager.wipePersistedData()
@@ -35,8 +36,10 @@ extension Environment {
 	
 	/// Reset verifier scan mode, including risk setting, scan lock and scan log
 	func wipeScanMode() {
-		riskLevelManager.wipePersistedData()
-		scanLockManager.wipePersistedData()
+		// Scan lock and risk level observers are not wiped
+		// in case this method is called after setting the observers in VerifierStartScanningViewModel
+		riskLevelManager.wipeScanMode()
+		scanLockManager.wipeScanMode()
 		scanLogManager.wipePersistedData()
 	}
 }
