@@ -90,13 +90,13 @@
 "holder.checkdcc.rejected.actionTitle" = "Try again";
 "holder.checkdcc.rejected.message" = "This letter combination and QR code don't belong together.";
 "holder.checkdcc.rejected.title" = "No valid combination";
-"holder.chooseqrcodetype.message" = "Indicate what kind of certificate you would like to add. You can have multiple certificates.";
+"holder.chooseqrcodetype.message" = "Indicate what you would like to add to your certificate.";
 "holder.chooseqrcodetype.option.negativetest.subtitle" = "The test proves I do not have coronavirus";
-"holder.chooseqrcodetype.option.negativetest.title" = "Test certificate";
+"holder.chooseqrcodetype.option.negativetest.title" = "Negative test";
 "holder.chooseqrcodetype.option.recovery.subtitle" = "The test proves I have had coronavirus";
-"holder.chooseqrcodetype.option.recovery.title" = "Recovery certificate";
+"holder.chooseqrcodetype.option.recovery.title" = "Positive test";
 "holder.chooseqrcodetype.option.vaccine.subtitle" = "I received a (booster) vaccination";
-"holder.chooseqrcodetype.option.vaccine.title" = "Vaccination certificate";
+"holder.chooseqrcodetype.option.vaccine.title" = "Vaccination";
 /* MARK: - Choose QR Code Type */
 "holder.chooseqrcodetype.title" = "What would you like to add?";
 "holder.cleardata.alert.remove" = "Clear data";
@@ -538,7 +538,7 @@
 "holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Didn’t receive a verification code?";
 "holder.tokenentry.regularflow.error.emptycode" = "Please enter a verification code first";
 "holder.tokenentry.regularflow.error.emptytoken" = "Please enter a retrieval code first";
-"holder.tokenentry.regularflow.error.invalid.code" = "This code is invalid. A valid code looks like this: VAC-YYYYYYYYY1-F2.";
+"holder.tokenentry.regularflow.error.invalid.code" = "This code is invalid. A valid code looks like this: BRB-YYYYYYYYY1-Z2.";
 "holder.tokenentry.regularflow.error.invalid.combination" = "Invalid combination. Enter the 6-digit verification code.";
 "holder.tokenentry.regularflow.error.unknownprovider" = "This test location is not known to us. Please contact the location who tested you.";
 "holder.tokenentry.regularflow.next" = "Next";
@@ -668,6 +668,7 @@
 "holder_expiredDomesticVaccinationModal_body" = "<p>To renew your vaccination certificate, you need a booster vaccination. For more information about booster vaccinations, please visit <a href=\"https://www.government.nl/boosterjab-cc\">www.government.nl/boosterjab</a>.</p><p>Did you receive a booster vaccination? Then please retrieve your details again to add it to your certificate.</p>";
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Add booster vaccination";
 "holder_expiredDomesticVaccinationModal_title" = "Expired vaccination certificate";
+"holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";
 "holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>A Dutch test certificate is only valid in places with 3G access. This means that you cannot use your test certificate to get access to places with 2G access.</p><p><b>What is the difference between 3G and 2G?</b><br />The Gs determine which people can be given access: only those who were vaccinated and/or have recovered (2G), or people who tested negative as well (3G).</p><ul><li>3G access means you can enter places with a test, vaccination or recovery certificate.</li><li>2G access means you <u>cannot</u> enter places with a test certificate. You'll need a vaccination or recovery certificate.</li></ul><p><a href=\"https://www.government.nl/2g-cc\">You can read more about 3G and 2G here</a>.</p>";

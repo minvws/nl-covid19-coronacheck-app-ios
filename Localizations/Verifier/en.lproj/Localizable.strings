@@ -5,7 +5,7 @@
 "new_in_app_risksetting_subtitle" = "With 1G access, only visitors with a test certificate are allowed to enter. With 3G access, visitors with a test, vaccination or recovery certificate are allowed to enter.";
 "new_in_app_risksetting_title" = "1G or 3G access";
 "new_in_app_subtitle" = "New in the app";
-"new_policy_1G_subtitle" = "Translation to be added";
+"new_policy_1G_subtitle" = "Only visitors with a test certificate get access at places where the coronavirus entry pass is being used (1G access). The CoronaCheck scanner only shows a screen with a check mark when scanning a test certificate.";
 "new_policy_1G_title" = "1G access";
 "new_policy_subtitle" = "New policy";
 "scan_instructions_4_description_1G" = "Does your screen show a check mark? In that case, the QR code is valid and the details are the same as on the proof of identity. You can grant the visitor access.";
