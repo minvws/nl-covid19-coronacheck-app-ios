@@ -230,8 +230,8 @@
 "holder.dcc.vaccination.type" = "Type vaccin:";
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "Geen lettercombinatie?";
-"holder.dcctokenentry.error.codenotfound" = "Deze lettercombinatie is niet geldig. Een combinatie ziet er bijvoorbeeld zo uit: FLBRXQ.";
-"holder.dcctokenentry.error.codewrongformat" = "Graag eerst een lettercombinatie invullen";
+"holder.dcctokenentry.error.emptycode" = "Graag eerst een lettercombinatie invullen";
+"holder.dcctokenentry.error.invalidcode" = "Deze lettercombinatie is niet geldig. Een combinatie ziet er bijvoorbeeld zo uit: FLBRXQ.";
 "holder.dcctokenentry.header" = "Vul de lettercombinatie in. Deze heb je samen met het papieren bewijs gekregen.";
 "holder.dcctokenentry.next" = "Volgende";
 "holder.dcctokenentry.retry.title" = "Ik heb geen code gekregen";

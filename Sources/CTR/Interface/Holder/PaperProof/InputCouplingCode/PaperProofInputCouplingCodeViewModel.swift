@@ -72,36 +72,26 @@ final class PaperProofInputCouplingCodeViewModel {
 	func nextButtonTapped() {
 		fieldErrorMessage = nil
 
-		/*
-		Scherm 016: Er zit helaas geen checksum op de ingevoerde code, maar er geldt wel een beperkte charset. Laat de melding van scherm 016 zien als de code niet valt binnen de charset “ABCDEFGHIJKLMNOPQRSTUVWXYZ234567”.
-		⮑ This letter combination does not exist
-			⮑ L.holderDcctokenentryErrorCodenotfound()
-
-		Scherm 017: De code bevat altijd 6 karakters. Laat de melding in scherm 017 zien als er meer of minder karakters zijn ingevoerd.
-		⮑ Enter the 6-letter letter combination
-			⮑ L	.holderDcctokenentryErrorCodewrongformat()
-		*/
-
 		guard
 			// Strip whitespace
 			let sanitizedInput = userTokenInput
 				.map({ $0.strippingWhitespace() })?
 				.uppercased(),
-
-			// Is the input the right length?
-			sanitizedInput.count == Config.requiredTokenLength
-
+				sanitizedInput.isNotEmpty()
+				
 		else {
-			fieldErrorMessage = L.holderDcctokenentryErrorCodewrongformat()
+			fieldErrorMessage = L.holderDcctokenentryErrorEmptycode()
 			return
 		}
 
 		guard
 			// Does input consist of permitted alphabet?
-			sanitizedInput.unicodeScalars.allSatisfy({ Config.permittedCharacterSet.contains($0) })
+			sanitizedInput.unicodeScalars.allSatisfy({ Config.permittedCharacterSet.contains($0) }),
+			// Required length
+			sanitizedInput.count == Config.requiredTokenLength
 
 		else {
-			fieldErrorMessage = L.holderDcctokenentryErrorCodenotfound()
+			fieldErrorMessage = L.holderDcctokenentryErrorInvalidcode()
 			return
 		}
 
