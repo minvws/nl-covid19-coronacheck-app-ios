@@ -230,8 +230,8 @@
 "holder.dcc.vaccination.type" = "Vaccine medicinal product:";
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
-"holder.dcctokenentry.error.codenotfound" = "This letter combination is invalid. A valid combination looks like this: FLBRXQ.";
-"holder.dcctokenentry.error.codewrongformat" = "Please enter a letter combination first";
+"holder.dcctokenentry.error.emptycode" = "Please enter a letter combination first";
+"holder.dcctokenentry.error.invalidcode" = "This letter combination is invalid. A valid combination looks like this: FLBRXQ.";
 "holder.dcctokenentry.header" = "Please enter the letter combination. You’ve received this together with the paper certificate.";
 "holder.dcctokenentry.next" = "Next";
 "holder.dcctokenentry.retry.title" = "I haven't received a code";
