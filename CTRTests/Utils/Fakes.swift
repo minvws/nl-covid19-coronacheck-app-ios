@@ -785,7 +785,7 @@ extension EventFlow.Event {
 			isSpecimen: true,
 			vaccination: nil,
 			negativeTest: EventFlow.TestEvent(
-				sampleDateString: "2021-07-01",
+				sampleDateString: "2021-07-01T13:42:54Z",
 				negativeResult: true,
 				positiveResult: nil,
 				facility: "GGD XL Factory",
@@ -808,7 +808,7 @@ extension EventFlow.Event {
 			vaccination: nil,
 			negativeTest: nil,
 			positiveTest: EventFlow.TestEvent(
-				sampleDateString: "2021-07-01",
+				sampleDateString: "2021-07-01T15:49Z",
 				negativeResult: nil,
 				positiveResult: true,
 				facility: "GGD XL Factory",
