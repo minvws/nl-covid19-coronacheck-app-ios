@@ -11,13 +11,13 @@ import SnapshotTesting
 import Nimble
 import ViewControllerPresentationSpy
 
-class VerifierStartViewControllerTests: XCTestCase {
+class VerifierStartScanningViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	private var sut: VerifierStartViewController!
+	private var sut: VerifierStartScanningViewController!
 
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
-	private var viewModel: VerifierStartViewModel!
+	private var viewModel: VerifierStartScanningViewModel!
 	private var environmentSpies: EnvironmentSpies!
 	var window = UIWindow()
 
@@ -28,8 +28,8 @@ class VerifierStartViewControllerTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 
-		viewModel = VerifierStartViewModel(coordinator: verifyCoordinatorDelegateSpy)
-		sut = VerifierStartViewController(viewModel: viewModel)
+		viewModel = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
+		sut = VerifierStartScanningViewController(viewModel: viewModel)
 	}
 
 	func loadView() {
