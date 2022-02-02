@@ -20,7 +20,7 @@ class VerifierStartViewTests: XCTestCase {
 
 	func test_headerImage() {
 		// Arrange
-		sut.headerMode = .image(I.scanner.scanStartHighRisk()!)
+		sut.headerMode = .image(I.scanner.scanStart3GPolicy()!)
 		
 		// Act
 
@@ -42,7 +42,7 @@ class VerifierStartViewTests: XCTestCase {
 
 	func test_headerHidden() {
 		// Arrange
-		sut.headerMode = .image(I.scanner.scanStartHighRisk()!)
+		sut.headerMode = .image(I.scanner.scanStart3GPolicy()!)
 		
 		// Act
 		sut.hideHeader()
