@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Lottie
 
 enum VerifierStartResult {
 
@@ -41,14 +42,18 @@ class VerifierStartViewModel: Logging {
 			}
 		}
 		
-		var largeImage: UIImage? {
+		var headerMode: VerifierStartView.HeaderMode? {
 			switch self {
 				case .noLevelSet, .policy3G:
-					return I.scanner.scanStart3GPolicy()
+					return I.scanner.scanStart3GPolicy().map { .image($0) }
 				case .policy1G:
-					return I.scanner.scanStart1GPolicy()
-				case .locked:
-					return I.scanner.scanStartLocked()
+					return I.scanner.scanStart1GPolicy().map { .image($0) }
+				case .locked(.policy1G, _, _):
+					return .animation("switch_to_blue_animation")
+				case .locked(.policy3G, _, _):
+					return .animation("switch_to_green_animation")
+				default:
+					return nil
 			}
 		}
 		
@@ -126,7 +131,7 @@ class VerifierStartViewModel: Logging {
 
 	@Bindable private(set) var title: String = ""
 	@Bindable private(set) var header: String = ""
-	@Bindable private(set) var largeImage: UIImage?
+	@Bindable private(set) var headerMode: VerifierStartView.HeaderMode?
 	@Bindable private(set) var message: String = ""
 	@Bindable private(set) var primaryButtonTitle: String = ""
 	@Bindable private(set) var showsPrimaryButton: Bool = true
@@ -214,7 +219,7 @@ class VerifierStartViewModel: Logging {
 		showInstructionsTitle = mode.showInstructionsTitle
 		showsInstructionsButton = mode.allowsShowScanInstructions
 		shouldShowClockDeviationWarning = mode.allowsClockDeviationWarning && hasClockDeviation
-		largeImage = mode.largeImage
+		headerMode = mode.headerMode
 		riskIndicator = mode.riskIndicator
 	}
 	

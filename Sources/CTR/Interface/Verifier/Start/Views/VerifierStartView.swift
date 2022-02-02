@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Lottie
 
 class VerifierStartView: BaseView {
 
@@ -22,6 +23,25 @@ class VerifierStartView: BaseView {
 		static let topMargin: CGFloat = 16.0
 		static let titleTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 34.0
 		static let messageTopMargin: CGFloat = 24.0
+	}
+	
+	enum HeaderMode: Equatable {
+		case image(_: UIImage)
+		case animation(_: String)
+		
+		var isImage: Bool {
+			switch self {
+				case .image: return true
+				case .animation: return false
+			}
+		}
+		
+		var isAnimation: Bool {
+			switch self {
+				case .image: return false
+				case .animation: return true
+			}
+		}
 	}
 
 	/// Scroll view bottom constraint
@@ -54,11 +74,30 @@ class VerifierStartView: BaseView {
 		return view
 	}()
 
+	private let headerStackView: UIStackView = {
+		let stackView = UIStackView()
+		stackView.translatesAutoresizingMaskIntoConstraints = false
+		return stackView
+	}()
+	
 	private let headerImageView: UIImageView = {
 
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
 		view.contentMode = .center
+		return view
+	}()
+	
+	private let headerAnimationView: AnimationView = {
+		
+		let view = AnimationView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		view.contentMode = .scaleAspectFit
+		view.respectAnimationFrameRate = true
+		view.backgroundBehavior = .pauseAndRestore
+		view.loopMode = .loop
 		return view
 	}()
 	
@@ -143,9 +182,12 @@ class VerifierStartView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		stackView.addArrangedSubview(headerImageView)
+		
+		stackView.addArrangedSubview(headerStackView)
+		headerStackView.addArrangedSubview(headerImageView)
+		headerStackView.addArrangedSubview(headerAnimationView)
+		
 		stackView.addArrangedSubview(contentView)
-
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(contentTextView)
 		contentView.addSubview(showInstructionsButton)
@@ -211,7 +253,7 @@ class VerifierStartView: BaseView {
 
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: headerImageView.bottomAnchor,
+				equalTo: headerStackView.bottomAnchor,
 				constant: ViewTraits.titleTopMargin
 			),
 			titleLabel.leadingAnchor.constraint(
@@ -358,24 +400,50 @@ class VerifierStartView: BaseView {
 	/// The user tapped on the showInstructions button
 	var showInstructionsButtonTappedCommand: (() -> Void)?
 
-	/// The header image
-	var largeImage: UIImage? {
+	var headerMode: HeaderMode? {
 		didSet {
-			headerImageView.image = largeImage
+			updateHeaderModeVisibility()
+
+			guard oldValue != headerMode else { return }
+			switch headerMode {
+				case .animation(let animationName):
+					headerAnimationView.animation = Lottie.Animation.named(animationName)
+					headerAnimationView.play()
+				case .image(let image):
+					headerImageView.image = image
+				case .none:
+					headerImageView.image = nil
+					headerAnimationView.animation = nil
+			}
 		}
 	}
+	
+	/// Will make the correct view visible for current headerMode
+	private func updateHeaderModeVisibility() {
+		guard !shouldKeepHeaderHidden, let headerMode = headerMode else {
+			headerImageView.isHidden = true
+			headerAnimationView.isHidden = true
+			return
+		}
 
+		headerImageView.isHidden = headerMode.isAnimation
+		headerAnimationView.isHidden = headerMode.isImage
+	}
+	
+	private var shouldKeepHeaderHidden: Bool = false {
+		didSet {
+			updateHeaderModeVisibility()
+		}
+	}
+	
 	/// Hide the header image
-	func hideImage() {
-
-		headerImageView.isHidden = true
-
+	func hideHeader() {
+		shouldKeepHeaderHidden = true
 	}
 
 	/// Show the header image
-	func showImage() {
-
-		headerImageView.isHidden = false
+	func showHeader() {
+		shouldKeepHeaderHidden = false
 	}
 	
 	var tapMenuButtonHandler: (() -> Void)? {
