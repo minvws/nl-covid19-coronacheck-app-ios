@@ -104,7 +104,7 @@ class VerifierStartViewModel: Logging {
 		var riskIndicator: (UIColor, String)? {
 			switch self {
 				case .policy1G, .locked(.policy1G, _, _):
-					return (Theme.colors.dark, L.verifier_start_scan_qr_policy_indication(VerificationPolicy.policy1G.localization))
+					return (Theme.colors.primary, L.verifier_start_scan_qr_policy_indication(VerificationPolicy.policy1G.localization))
 				case .policy3G, .locked(.policy3G, _, _):
 					return (Theme.colors.access, L.verifier_start_scan_qr_policy_indication(VerificationPolicy.policy3G.localization))
 				default:
