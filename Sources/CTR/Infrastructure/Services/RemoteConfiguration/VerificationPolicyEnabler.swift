@@ -35,8 +35,9 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 				Current.wipeScanMode()
 				Current.userSettings.policyInformationShown = false
 			}
-			Current.userSettings.configVerificationPolicies = knownPolicies
 		}
+		
+		Current.userSettings.configVerificationPolicies = knownPolicies
 		
 		// Set policies that are not set via the scan settings scenes
 		switch knownPolicies {

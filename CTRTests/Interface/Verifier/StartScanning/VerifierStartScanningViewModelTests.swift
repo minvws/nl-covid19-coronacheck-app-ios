@@ -120,7 +120,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 		
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == false
 	}
 	
 	func test_primaryButtonTapped_policyInformationShown() {

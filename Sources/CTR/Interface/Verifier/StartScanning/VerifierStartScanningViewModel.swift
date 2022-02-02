@@ -186,18 +186,19 @@ class VerifierStartScanningViewModel: Logging {
 			guard let self = self else { return }
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
-
-		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
-			// Pass current states in immediately to configure `self.mode`:
-			lockStateDidChange(lockState: Current.scanLockManager.state)
-			verificationPolicyDidChange(verificationPolicy: Current.riskLevelManager.state)
-			
-			lockLabelCountdownTimer.fire()
-		}
+		
+		// Pass current states in immediately to configure `self.mode`:
+		lockStateDidChange(lockState: Current.scanLockManager.state)
+		verificationPolicyDidChange(verificationPolicy: Current.riskLevelManager.state)
 		
 		// Then observe for changes:
 		scanLockObserverToken = Current.scanLockManager.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
 		riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
+		
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
+			
+			lockLabelCountdownTimer.fire()
+		}
 	}
 	
 	deinit {
