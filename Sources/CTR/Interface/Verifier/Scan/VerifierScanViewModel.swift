@@ -37,6 +37,8 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	@Bindable private(set) var shouldResumeScanning: Bool?
 	
 	@Bindable private(set) var verificationPolicy: VerificationPolicy?
+	
+	private var riskLevelObserverToken: RiskLevelManager.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:
@@ -53,6 +55,12 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.verificationPolicy = riskLevelManager?.state
 
 		super.init(coordinator: coordinator)
+		
+		riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] updatedPolicy in
+			
+			guard self?.verificationPolicy != updatedPolicy else { return }
+			self?.dismiss()
+		}
 	}
 
 	/// Parse the scanned QR-code
