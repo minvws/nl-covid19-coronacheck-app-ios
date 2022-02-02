@@ -7,15 +7,15 @@
 
 import UIKit
 
-class VerifierStartViewController: BaseViewController {
+class VerifierStartScanningViewController: BaseViewController {
 
-	private let viewModel: VerifierStartViewModel
+	private let viewModel: VerifierStartScanningViewModel
 
-	let sceneView = VerifierStartView()
+	let sceneView = VerifierStartScanningView()
 	
 	override var enableSwipeBack: Bool { false }
 	
-	init(viewModel: VerifierStartViewModel) {
+	init(viewModel: VerifierStartScanningViewModel) {
 
 		self.viewModel = viewModel
 
