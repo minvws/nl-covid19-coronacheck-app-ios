@@ -157,8 +157,8 @@ private extension ScanInstructionsViewController {
 	
 	func updateFooterView(for pageIndex: Int) {
 		guard let pages = pageViewController.pages, !pages.isEmpty else { return }
-		guard let viewController = pages[pageIndex] as? ScanInstructionsPageViewController else {
-			assertionFailure("View controller should be of type ScanInstructionsPageViewController")
+		guard let viewController = pages[pageIndex] as? ScanInstructionsItemViewController else {
+			assertionFailure("View controller should be of type ScanInstructionsItemViewController")
 			return
 		}
 		sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)
@@ -176,9 +176,9 @@ extension ScanInstructionsViewController: PageViewControllerDelegate {
 	}
 }
 
-// MARK: - ScanInstructionsPageViewControllerDelegate
+// MARK: - ScanInstructionsItemViewControllerDelegate
 
-extension ScanInstructionsViewController: ScanInstructionsPageViewControllerDelegate {
+extension ScanInstructionsViewController: ScanInstructionsItemViewControllerDelegate {
     
     /// Enables swipe to navigate behaviour for assistive technologies
     func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
