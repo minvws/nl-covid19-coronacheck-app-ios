@@ -10,9 +10,10 @@ import Foundation
 protocol VerificationPolicyEnablable: AnyObject {
 	
 	func enable(verificationPolicies: [String])
+	func configureDefaultPolicy()
 }
 
-final class VerificationPolicyEnabler {
+final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 	
 	func enable(verificationPolicies: [String]) {
 		
@@ -22,8 +23,7 @@ final class VerificationPolicyEnabler {
 		guard knownPolicies.isNotEmpty() else {
 			
 			// Configure default policy
-			Current.userSettings.configVerificationPolicies = [VerificationPolicy.policy3G]
-			Current.riskLevelManager.update(verificationPolicy: nil)
+			configureDefaultPolicy()
 			return
 		}
 		
@@ -47,5 +47,11 @@ final class VerificationPolicyEnabler {
 				Current.riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
 			default: break
 		}
+	}
+	
+	func configureDefaultPolicy() {
+		
+		Current.userSettings.configVerificationPolicies = [VerificationPolicy.policy3G]
+		Current.riskLevelManager.update(verificationPolicy: nil)
 	}
 }
