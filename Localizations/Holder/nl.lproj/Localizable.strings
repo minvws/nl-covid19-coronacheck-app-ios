@@ -90,13 +90,13 @@
 "holder.checkdcc.rejected.actionTitle" = "Probeer opnieuw";
 "holder.checkdcc.rejected.message" = "Deze lettercombinatie en QR-code horen niet bij elkaar.";
 "holder.checkdcc.rejected.title" = "Geen geldige combinatie";
-"holder.chooseqrcodetype.message" = "Geef aan wat voor bewijs je wilt toevoegen. Je kunt meerdere bewijzen tegelijk hebben.";
+"holder.chooseqrcodetype.message" = "Geef aan wat je wilt toevoegen aan je bewijs.";
 "holder.chooseqrcodetype.option.negativetest.subtitle" = "Uit de test blijkt dat ik geen corona heb";
-"holder.chooseqrcodetype.option.negativetest.title" = "Testbewijs";
+"holder.chooseqrcodetype.option.negativetest.title" = "Negatieve test";
 "holder.chooseqrcodetype.option.recovery.subtitle" = "Uit de test blijkt dat ik corona heb gehad";
-"holder.chooseqrcodetype.option.recovery.title" = "Herstelbewijs";
+"holder.chooseqrcodetype.option.recovery.title" = "Positieve test";
 "holder.chooseqrcodetype.option.vaccine.subtitle" = "Ik heb een (booster)vaccinatie gehad";
-"holder.chooseqrcodetype.option.vaccine.title" = "Vaccinatiebewijs";
+"holder.chooseqrcodetype.option.vaccine.title" = "Vaccinatie";
 /* MARK: - Choose QR Code Type */
 "holder.chooseqrcodetype.title" = "Wat wil je toevoegen?";
 "holder.cleardata.alert.remove" = "Wis gegevens";
@@ -538,7 +538,7 @@
 "holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Geen verificatiecode gekregen?";
 "holder.tokenentry.regularflow.error.emptycode" = "Graag eerst een verificatiecode invullen";
 "holder.tokenentry.regularflow.error.emptytoken" = "Graag eerst een ophaalcode invullen";
-"holder.tokenentry.regularflow.error.invalid.code" = "Deze code is niet geldig. Een code ziet er bijvoorbeeld zo uit: VAC-YYYYYYYYY1-F2.";
+"holder.tokenentry.regularflow.error.invalid.code" = "Deze code is niet geldig. Een code ziet er bijvoorbeeld zo uit: BRB-YYYYYYYYY1-Z2.";
 "holder.tokenentry.regularflow.error.invalid.combination" = "Geen geldige combinatie. Vul de 6-cijferige verificatiecode in.";
 "holder.tokenentry.regularflow.error.unknownprovider" = "Deze testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "holder.tokenentry.regularflow.next" = "Volgende";
