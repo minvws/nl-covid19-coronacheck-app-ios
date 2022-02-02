@@ -32,26 +32,14 @@ class ScanInstructionsCoordinatorDelegateSpy: Coordinator, ScanInstructionsCoord
 		}
 	}
 
-	var invokedNavigationControllerSetter = false
-	var invokedNavigationControllerSetterCount = 0
-	var invokedNavigationController: UINavigationController?
-	var invokedNavigationControllerList = [UINavigationController]()
 	var invokedNavigationControllerGetter = false
 	var invokedNavigationControllerGetterCount = 0
 	var stubbedNavigationController: UINavigationController!
 
 	var navigationController: UINavigationController {
-		set {
-			invokedNavigationControllerSetter = true
-			invokedNavigationControllerSetterCount += 1
-			invokedNavigationController = newValue
-			invokedNavigationControllerList.append(newValue)
-		}
-		get {
-			invokedNavigationControllerGetter = true
-			invokedNavigationControllerGetterCount += 1
-			return stubbedNavigationController
-		}
+		invokedNavigationControllerGetter = true
+		invokedNavigationControllerGetterCount += 1
+		return stubbedNavigationController
 	}
 
 	var invokedStart = false
@@ -116,6 +104,14 @@ class ScanInstructionsCoordinatorDelegateSpy: Coordinator, ScanInstructionsCoord
 	func userWishesToSelectRiskSetting() {
 		invokedUserWishesToSelectRiskSetting = true
 		invokedUserWishesToSelectRiskSettingCount += 1
+	}
+
+	var invokedUserWishesToReadPolicyInformation = false
+	var invokedUserWishesToReadPolicyInformationCount = 0
+
+	func userWishesToReadPolicyInformation() {
+		invokedUserWishesToReadPolicyInformation = true
+		invokedUserWishesToReadPolicyInformationCount += 1
 	}
 
 	var invokedOpenUrl = false

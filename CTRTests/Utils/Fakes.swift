@@ -10,16 +10,16 @@ import Foundation
 @testable import CTR
 import UIKit
 
-extension ForcedInformationConsent {
+extension NewFeatureConsent {
 
-    static var consentWithoutMandatoryConsent = ForcedInformationConsent(
+    static var consentWithoutMandatoryConsent = NewFeatureConsent(
         title: "test title without mandatory consent",
         highlight: "test highlight without mandatory consent",
         content: "test content without mandatory consent",
         consentMandatory: false
     )
 
-    static var consentWithMandatoryConsent = ForcedInformationConsent(
+    static var consentWithMandatoryConsent = NewFeatureConsent(
         title: "test title with mandatory consent",
         highlight: "test highlight with mandatory consent",
         content: "test content with mandatory consent",
@@ -121,6 +121,16 @@ extension EventFlow.EventResultWrapper {
 		)
 	}
 	
+	static var fakePendingV2: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "",
+			protocolVersion: "2.0",
+			identity: nil,
+			status: .pending,
+			result: nil
+		)
+	}
+	
 	static var fakeVerificationRequired: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
@@ -195,6 +205,140 @@ extension EventFlow.EventResultWrapper {
 		result: nil,
 		events: [EventFlow.Event.vaccinationAssessmentEvent]
 	)
+	
+	static var fakeWithV3Identity: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "Test", lastName: "de Tester", birthDateString: "1990-12-12"),
+			status: .complete,
+			result: nil
+		)
+	}
+	
+	static var fakeWithV3IdentityAlternative: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "Rool", lastName: "Paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+	
+	static var fakeWithV3IdentityAlternativeLowerCase: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "rool", lastName: "paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+	
+	static var fakeWithV3IdentityAlternative2: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "Henk", lastName: "Paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+	
+	static var fakeWithV3IdentityAlternative2LowerCase: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "henk", lastName: "paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+	
+	static var fakeWithV3IdentityFirstNameWithDiacritic: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "Ådne", lastName: "Paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+	
+	static var fakeWithV3IdentityFirstNameWithDiacriticAlternative: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "Ægir", lastName: "Paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+	
+	static var fakeWithV2Identity: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "2.0",
+			identity: nil,
+			status: .complete,
+			result: TestResult(
+				unique: "test",
+				sampleDate: "2021-01-01T12:00:00",
+				testType: "PCR",
+				negativeResult: true,
+				holder: TestHolderIdentity(
+					firstNameInitial: "T",
+					lastNameInitial: "D",
+					birthDay: "12",
+					birthMonth: "12"
+				)
+			)
+		)
+	}
+	
+	static var fakeWithV2IdentityAlternative: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "2.0",
+			identity: nil,
+			status: .complete,
+			result: TestResult(
+				unique: "test",
+				sampleDate: "2021-01-01T12:00:00",
+				testType: "PCR",
+				negativeResult: true,
+				holder: TestHolderIdentity(
+					firstNameInitial: "H",
+					lastNameInitial: "P",
+					birthDay: "27",
+					birthMonth: "5"
+				)
+			)
+		)
+	}
+	
+	static var fakeWithV2IdentityAlternativeLowerCase: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "2.0",
+			identity: nil,
+			status: .complete,
+			result: TestResult(
+				unique: "test",
+				sampleDate: "2021-01-01T12:00:00",
+				testType: "PCR",
+				negativeResult: true,
+				holder: TestHolderIdentity(
+					firstNameInitial: "h",
+					lastNameInitial: "p",
+					birthDay: "27",
+					birthMonth: "5"
+				)
+			)
+		)
+	}
+	
 }
 
 extension RequestToken {
@@ -259,6 +403,30 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 					testResult: "260415000",
 					testCenter: "Facility approved by the State of The Netherlands",
 					typeOfTest: "LP6464-4"
+				)
+			]
+		)
+	}
+	
+	static func sampleWithRecovery() -> EuCredentialAttributes.DigitalCovidCertificate {
+		EuCredentialAttributes.DigitalCovidCertificate(
+			dateOfBirth: "2021-06-01",
+			name: EuCredentialAttributes.Name(
+				familyName: "Corona",
+				standardisedFamilyName: "CORONA",
+				givenName: "Check",
+				standardisedGivenName: "CHECK"
+			),
+			schemaVersion: "1.0.0",
+			recoveries: [
+				EuCredentialAttributes.RecoveryEntry(
+					certificateIdentifier: "URN:UCI:01:NL:WMZBJR3MJRHSPGBCNROM42#M",
+					country: "NL",
+					diseaseAgentTargeted: "840539006",
+					expiresAt: "2022-07-31T09:50:00+00:00",
+					firstPositiveTestDate: "2021-07-31T09:50:00+00:00",
+					issuer: "test",
+					validFrom: "2021-08-11T09:50:00+00:00"
 				)
 			]
 		)
@@ -493,6 +661,18 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			]
+		)
+	}
+	
+	static var domesticlTestV2: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: []
 		)
 	}
 
@@ -872,5 +1052,58 @@ extension EventGroup {
 			}
 		}
 		return eventGroup
+	}
+}
+
+// Can't extend RemoteEvent, so this struct will have to do.
+struct FakeRemoteEvent {
+	
+	static var fakeRemoteEventNegativeTestV2: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeWithV2Identity,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventPendingV2: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakePendingV2,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventVaccination: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventRecovery: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeRecoveryResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventPositiveTest: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakePositiveTestResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventNegativeTest: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventVaccinationAssessment: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeVaccinationAssessmentResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
 	}
 }

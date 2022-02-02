@@ -8,14 +8,14 @@
 @testable import CTR
 import XCTest
 
-class ForcedInformationCoordinatorDelegateSpy: ForcedInformationCoordinatorDelegate, OpenUrlProtocol {
+class NewFeaturesCoordinatorDelegateSpy: NewFeaturesCoordinatorDelegate, OpenUrlProtocol {
 
 	var invokedDidFinish = false
 	var invokedDidFinishCount = 0
-	var invokedDidFinishParameters: (result: ForcedInformationResult, Void)?
-	var invokedDidFinishParametersList = [(result: ForcedInformationResult, Void)]()
+	var invokedDidFinishParameters: (result: NewFeaturesScreenResult, Void)?
+	var invokedDidFinishParametersList = [(result: NewFeaturesScreenResult, Void)]()
 
-	func didFinish(_ result: ForcedInformationResult) {
+	func didFinish(_ result: NewFeaturesScreenResult) {
 		invokedDidFinish = true
 		invokedDidFinishCount += 1
 		invokedDidFinishParameters = (result, ())

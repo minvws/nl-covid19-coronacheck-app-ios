@@ -34,8 +34,8 @@ class OnboardingViewModel {
 	/// - Parameter info: the info for the onboarding step
 	func getOnboardingStep(_ info: OnboardingPage) -> UIViewController {
 		
-		let viewController = OnboardingPageViewController(
-			viewModel: OnboardingPageViewModel(
+		let viewController = OnboardingItemViewController(
+			viewModel: OnboardingItemViewModel(
 				coordinator: self.coordinator!,
 				onboardingInfo: info
 			)

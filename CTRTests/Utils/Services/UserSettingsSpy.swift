@@ -296,6 +296,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedPolicyInformationShownSetter = false
+	var invokedPolicyInformationShownSetterCount = 0
+	var invokedPolicyInformationShown: Bool?
+	var invokedPolicyInformationShownList = [Bool]()
+	var invokedPolicyInformationShownGetter = false
+	var invokedPolicyInformationShownGetterCount = 0
+	var stubbedPolicyInformationShown: Bool! = false
+
+	var policyInformationShown: Bool {
+		set {
+			invokedPolicyInformationShownSetter = true
+			invokedPolicyInformationShownSetterCount += 1
+			invokedPolicyInformationShown = newValue
+			invokedPolicyInformationShownList.append(newValue)
+		}
+		get {
+			invokedPolicyInformationShownGetter = true
+			invokedPolicyInformationShownGetterCount += 1
+			return stubbedPolicyInformationShown
+		}
+	}
+
 	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetter = false
 	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount = 0
 	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool?

@@ -58,7 +58,7 @@ class OnboardingViewController: BaseViewController {
 			}
 			
 			self.pageViewController.pages = $0.compactMap { page in
-				guard let onboardingPageViewController = self.viewModel.getOnboardingStep(page) as? OnboardingPageViewController else { return nil }
+				guard let onboardingPageViewController = self.viewModel.getOnboardingStep(page) as? OnboardingItemViewController else { return nil }
 				onboardingPageViewController.delegate = self
 				return onboardingPageViewController
 			}
@@ -125,7 +125,7 @@ private extension OnboardingViewController {
 	
 	func updateFooterView(for pageIndex: Int) {
 		guard let pages = pageViewController.pages, !pages.isEmpty else { return }
-		guard let viewController = pages[pageIndex] as? OnboardingPageViewController else {
+		guard let viewController = pages[pageIndex] as? OnboardingItemViewController else {
 			assertionFailure("View controller should be of type OnboardingPageViewController")
 			return
 		}
@@ -147,7 +147,7 @@ extension OnboardingViewController: PageViewControllerDelegate {
 
 // MARK: - OnboardingPageViewControllerDelegate
 
-extension OnboardingViewController: OnboardingPageViewControllerDelegate {
+extension OnboardingViewController: OnboardingItemViewControllerDelegate {
     
     /// Enables swipe to navigate behaviour for assistive technologies
     func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {

@@ -45,9 +45,9 @@ class VerifierStartViewModel: Logging {
 		var headerMode: VerifierStartView.HeaderMode? {
 			switch self {
 				case .noLevelSet, .policy3G:
-					return I.scanner.scanStartLowRisk().map { .image($0) }
+					return I.scanner.scanStart3GPolicy().map { .image($0) }
 				case .policy1G:
-					return I.scanner.scanStartHighRisk().map { .image($0) }
+					return I.scanner.scanStart1GPolicy().map { .image($0) }
 				case .locked(.policy1G, _, _):
 					return .animation("switch_to_blue_animation")
 				case .locked(.policy3G, _, _):
@@ -288,17 +288,19 @@ extension VerifierStartViewModel {
 	
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }
-
-		if Current.userSettings.scanInstructionShown, (Current.riskLevelManager.state != nil || !Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
+		
+		if !Current.userSettings.scanInstructionShown ||
+			(!Current.userSettings.policyInformationShown && Current.featureFlagManager.is1GPolicyEnabled()) ||
+			(Current.riskLevelManager.state == nil && Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
+			// Show the scan instructions the first time no matter what link was tapped
+			coordinator?.didFinish(.userTappedProceedToInstructionsOrRiskSetting)
+		} else {
 			if Current.cryptoManager.hasPublicKeys() {
 				coordinator?.didFinish(.userTappedProceedToScan)
 			} else {
 				updatePublicKeys()
 				showError = true
 			}
-		} else {
-			// Show the scan instructions the first time no matter what link was tapped
-			coordinator?.didFinish(.userTappedProceedToInstructionsOrRiskSetting)
 		}
 	}
 
