@@ -306,7 +306,7 @@ class VerifierStartView: BaseView {
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
 			// ClockDeviationWarningView
-			clockDeviationWarningView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: ViewTraits.margin),
+			clockDeviationWarningView.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
 			clockDeviationWarningView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: ViewTraits.margin),
 			clockDeviationWarningView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -ViewTraits.margin),
 			
