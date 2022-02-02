@@ -28,16 +28,15 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 		}
 		
 		let storedPolicies = Current.userSettings.configVerificationPolicies
-		guard knownPolicies != storedPolicies else {
-			// Equal policies, no update needed
-			return
+		
+		if knownPolicies != storedPolicies {
+			if storedPolicies.isNotEmpty() {
+				// Policy is changed, reset scan mode
+				Current.wipeScanMode()
+				Current.userSettings.policyInformationShown = false
+			}
+			Current.userSettings.configVerificationPolicies = knownPolicies
 		}
-		if storedPolicies.isNotEmpty() {
-			// Policy is changed, reset scan mode
-			Current.wipeScanMode()
-			Current.userSettings.policyInformationShown = false
-		}
-		Current.userSettings.configVerificationPolicies = knownPolicies
 		
 		// Set policies that are not set via the scan settings scenes
 		switch knownPolicies {
