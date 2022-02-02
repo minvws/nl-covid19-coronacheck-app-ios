@@ -50,10 +50,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.title = L.verifierScanTitle()
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
-
-		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
-			self.verificationPolicy = riskLevelManager?.state
-		}
+		self.verificationPolicy = riskLevelManager?.state
 
 		super.init(coordinator: coordinator)
 	}

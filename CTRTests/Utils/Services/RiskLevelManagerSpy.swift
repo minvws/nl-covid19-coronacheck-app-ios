@@ -58,6 +58,14 @@ class RiskLevelManagerSpy: RiskLevelManaging {
 		invokedRemoveObserverParametersList.append((token, ()))
 	}
 
+	var invokedWipeScanMode = false
+	var invokedWipeScanModeCount = 0
+
+	func wipeScanMode() {
+		invokedWipeScanMode = true
+		invokedWipeScanModeCount += 1
+	}
+
 	var invokedWipePersistedData = false
 	var invokedWipePersistedDataCount = 0
 

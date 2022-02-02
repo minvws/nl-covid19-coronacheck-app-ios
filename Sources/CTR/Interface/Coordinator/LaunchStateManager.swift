@@ -176,7 +176,11 @@ final class LaunchStateManager: LaunchStateManaging {
 	// MARK: - Verifier Verification Policy
 	
 	private func updateVerificationPolicies(for remoteConfiguration: RemoteConfiguration, data: Data, urlResponse: URLResponse) {
-		guard let policies = remoteConfiguration.verificationPolicies else { return }
+		guard let policies = remoteConfiguration.verificationPolicies else {
+			// No feature flag available, enable default policy
+			VerificationPolicyEnabler().enable(verificationPolicies: [])
+			return
+		}
 		VerificationPolicyEnabler().enable(verificationPolicies: policies)
 	}
 }
