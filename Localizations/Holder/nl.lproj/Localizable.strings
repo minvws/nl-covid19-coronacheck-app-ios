@@ -49,21 +49,21 @@
 "general.positiveTest" = "positieve test";
 "general.readmore" = "Lees meer";
 "general.recoverydate" = "hersteldatum";
-"general.recoverystatement" = "herstelbewijs";
 "general.retry" = "Probeer opnieuw";
-"general.testcertificate" = "testbewijs";
 "general.testdate" = "Testdatum";
 "general.testresult" = "testuitslag";
 "general.testtype" = "Type test";
 "general.uptoandincluding" = "tot";
 "general.url.link" = "Link";
 "general.vaccination" = "vaccinatie";
-"general.vaccinationcertificate" = "vaccinatiebewijs";
 "general.vaccinationdate" = "Vaccinatiedatum";
 "general_menu" = "Menu";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
+"general_recoverycertificate" = "herstelbewijs";
+"general_testcertificate" = "testbewijs";
 "general_toMyOverview" = "Naar mijn bewijzen";
 "general_vaccinationAssessment" = "vaccinatiebeoordeling";
+"general_vaccinationcertificate" = "vaccinatiebewijs";
 "general_visitorPass" = "bezoekersbewijs";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */

@@ -399,7 +399,7 @@ extension ListRemoteEventsViewModel {
 			.flatMap(Formatter.getDateFrom)
 			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
-		var title: String = L.generalVaccinationcertificate().capitalizingFirstLetter()
+		var title: String = L.general_vaccinationcertificate().capitalizingFirstLetter()
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
 			title = L.holderDccVaccinationListTitle("\(doseNumber)", "\(totalDose)")
 		}
@@ -431,7 +431,7 @@ extension ListRemoteEventsViewModel {
 			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
-			title: L.generalRecoverystatement().capitalizingFirstLetter(),
+			title: L.general_recoverycertificate().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -454,7 +454,7 @@ extension ListRemoteEventsViewModel {
 			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
-			title: L.generalTestcertificate().capitalizingFirstLetter(),
+			title: L.general_testcertificate().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
