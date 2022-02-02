@@ -34,7 +34,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	var navigationController: UINavigationController
 
 	private let pagesFactory: ScanInstructionsFactoryProtocol = ScanInstructionsFactory()
-	private let pages: [ScanInstructionsPage]
+	private let pages: [ScanInstructionsItem]
 	private let isOpenedFromMenu: Bool
 	private let allowSkipInstruction: Bool
 	private let riskLevelManager: RiskLevelManaging

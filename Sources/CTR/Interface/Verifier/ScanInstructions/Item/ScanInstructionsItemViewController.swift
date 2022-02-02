@@ -7,26 +7,26 @@
 
 import UIKit
 
-protocol ScanInstructionsPageViewControllerDelegate: AnyObject {
+protocol ScanInstructionsItemViewControllerDelegate: AnyObject {
     
     /// Delegates the onAccessibilityScroll event
     func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool
 }
 
-class ScanInstructionsPageViewController: BaseViewController {
+class ScanInstructionsItemViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: ScanInstructionsPageViewModel
+	private let viewModel: ScanInstructionsItemViewModel
 	
 	/// The view
-	let sceneView = ScanInstructionsPageView()
+	let sceneView = ScanInstructionsItemView()
     
     /// The delegate
-    weak var delegate: ScanInstructionsPageViewControllerDelegate?
+    weak var delegate: ScanInstructionsItemViewControllerDelegate?
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: ScanInstructionsPageViewModel) {
+	init(viewModel: ScanInstructionsItemViewModel) {
 		
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

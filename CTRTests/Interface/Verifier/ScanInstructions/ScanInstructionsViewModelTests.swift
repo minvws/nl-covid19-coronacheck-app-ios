@@ -132,7 +132,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	func test_creatingViewController() {
 		// Arrange
 		let pages = [
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
@@ -153,13 +153,13 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
 		
 		let pages = [
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			),
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
@@ -178,13 +178,13 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 
 		let pages = [
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			),
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
@@ -203,13 +203,13 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		let pages = [
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			),
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
@@ -229,13 +229,13 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date())
 		let pages = [
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			),
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
