@@ -314,6 +314,7 @@
 "holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Heb je al een testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.event.originmismatch.dcc.body" = "<p>Op dit moment kunnen we geen bewijs maken van je gescande QR-code. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
+"holder.event.originmismatch.recovery.body" = "<p>Op dit moment kunnen we geen bewijs maken van je positieve testuitslag. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
 "holder.event.originmismatch.test.body" = "<p>Op dit moment kunnen we geen bewijs maken van je negatieve testuitslag. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
 "holder.event.originmismatch.title" = "We kunnen geen bewijs maken";
 "holder.event.originmismatch.vaccination.approval.body" = "<p>Op dit moment kunnen we geen bewijs maken van je vaccinatiebeoordeling. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
@@ -334,7 +335,7 @@
 "holder.incompletedutchvaccination.button.addvaccines" = "Haal mijn vaccinaties op";
 "holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Corona gehad voor je eerste prik?</b><br />Haal je positieve testuitslag op. Je krijgt dan een Nederlands bewijs.</p>";
 "holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Meer weten?</b><br />Bekijk de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a> voor andere mogelijke oorzaken.</p>";
-"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Je hebt geen Nederlands vaccinatiebewijs. Hiervoor moet je volledig gevaccineerd zijn, of hersteld van corona vóór je eerste prik.</p><p><b>Nieuwe gehad?</b><br />Haal opnieuw je vaccinaties op. Je krijgt dan een Nederlands bewijs.</p>";
+"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs.</p><p><b>Nieuwe vaccinatie gehad?</b><br />Haal opnieuw je vaccinaties op. Je krijgt dan een Nederlands bewijs.</p>";
 "holder.incompletedutchvaccination.title" = "Geen Nederlands vaccinatiebewijs";
 "holder.launch.text" = "We starten de app voor je op...";
 /* MARK: - Holder Launch */
@@ -418,8 +419,6 @@
 "holder.recovery.recoveryAndVaccination.title" = "Herstelbewijs en vaccinatiebewijs gemaakt";
 "holder.recovery.start.message" = "Heb je corona gehad? Dan kun je van de positieve testuitslag een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.";
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
-"holder.recovery.tooOld.message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daarom is je testuitslag niet meer geldig. Je kunt helaas geen herstelbewijs maken.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
-"holder.recovery.tooOld.title" = "Positieve testuitslag niet meer geldig";
 "holder.recovery.vaccinationOnly.message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Omdat je positief getest bent vóór je eerste prik, ben je met één prik volledig gevaccineerd. Daarom is er wel een volledig vaccinatiebewijs gemaakt.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.recovery.vaccinationOnly.title" = "Geen herstelbewijs, wel een vaccinatiebewijs";
 "holder.recovery.wrong.body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";

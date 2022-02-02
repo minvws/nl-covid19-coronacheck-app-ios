@@ -75,7 +75,8 @@ enum EventMode: String {
 		
 		switch self {
 			case .paperflow: return L.holderEventOriginmismatchDccBody("\(errorCode)")
-			case .positiveTest, .recovery: return "" // No origin check for positive test or recovery
+			case .positiveTest: return "" // Not applicable
+			case .recovery: return L.holderEventOriginmismatchRecoveryBody("\(errorCode)")
 			case .test: return L.holderEventOriginmismatchTestBody("\(errorCode)")
 			case .vaccination: return L.holderEventOriginmismatchVaccinationBody("\(errorCode)")
 			case .vaccinationassessment: return L.holderEventOriginmismatchVaccinationApprovalBody("\(errorCode)")

@@ -314,6 +314,7 @@
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.title" = "No test result available";
 "holder.event.originmismatch.dcc.body" = "<p>At this moment, we can't make a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder.event.originmismatch.recovery.body" = "<p>At this moment, we can't make a certificate from your positive test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder.event.originmismatch.test.body" = "<p>At this moment, we can't make a certificate from your negative test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder.event.originmismatch.title" = "We can't make a certificate";
 "holder.event.originmismatch.vaccination.approval.body" = "<p>At this moment, we can't make a certificate from your vaccination approval. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
@@ -334,7 +335,7 @@
 "holder.incompletedutchvaccination.button.addvaccines" = "Retrieve my vaccinations";
 "holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Had coronavirus before your first vaccination?</b><br />Retrieve your positive test result. You will also receive a Dutch certificate then.</p>";
 "holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Want to know more?</b><br />Read the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for other possible reasons.</p>";
-"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>You don't have a Dutch vaccination certificate. To obtain this, you have to either be fully vaccinated, or have recovered from coronavirus before you received your first vaccination.</p><p><b>Had a new vaccination?</b><br />Please retrieve your vaccination details again. You will receive a Dutch certificate.</p>";
+"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Had a new vaccination?</b><br />Please retrieve your vaccination details again. You will receive a Dutch certificate.</p>";
 "holder.incompletedutchvaccination.title" = "No Dutch vaccination certificate";
 "holder.launch.text" = "We're starting the app...";
 /* MARK: - Holder Launch */
@@ -418,8 +419,6 @@
 "holder.recovery.recoveryAndVaccination.title" = "Recovery and vaccination certificates created";
 "holder.recovery.start.message" = "Have you had coronavirus? Then you can make a recovery certificate of the positive test result. Log in with DigiD to retrieve your test result.";
 "holder.recovery.start.title" = "Retrieve recovery details";
-"holder.recovery.tooOld.message" = "<p>It has been too long ago since you tested positive for coronavirus. Therefore, your test result is no longer valid. Unfortunately, you cannot create a recovery certificate.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
-"holder.recovery.tooOld.title" = "Positive test result no longer valid";
 "holder.recovery.vaccinationOnly.message" = "<p>You were tested positive for coronavirus longer too long ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>Because you were tested positive before your first vaccination, one shot means you’re fully vaccinated. Therefore, a full vaccination certificate has been created instead.</p><p>For more information, please check the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.vaccinationOnly.title" = "Vaccination certificate instead of recovery certificate";
 "holder.recovery.wrong.body" = "<p>Please contact your test location. They can help you change these details.</p>";

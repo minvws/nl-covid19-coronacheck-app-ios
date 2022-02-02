@@ -350,7 +350,7 @@ class ListRemoteEventsViewModel: Logging {
 			},
 			onVaccinationOriginOnly: {
 				if self.hasExistingDomesticVaccination {
-					self.viewState = self.recoveryEventsTooOld()
+					self.viewState = self.originMismatchState(flow: .recovery)
 				} else {
 					Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 					self.viewState = self.recoveryFlowVaccinationOnly()
@@ -361,7 +361,7 @@ class ListRemoteEventsViewModel: Logging {
 				self.completeFlow()
 			},
 			onNoOrigins: {
-				self.viewState = self.recoveryEventsTooOld()
+				self.viewState = self.originMismatchState(flow: .recovery)
 			}
 		)
 
