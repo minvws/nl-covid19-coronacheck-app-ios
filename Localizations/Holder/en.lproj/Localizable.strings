@@ -33,10 +33,10 @@
 /* Voice over voor begin van een lijst */
 "general.list.accessibility.start" = "Start of list";
 "general.loading" = "Loading";
-"general.menu.close" = "Close side menu";
+"general.menu.close" = "Close menu";
 /* Configuratie ABC123, 13-10-2021 00:00 */
 "general.menu.configVersion" = "Configuration %@, %@";
-"general.menu.open" = "Open side menu";
+"general.menu.open" = "Open menu";
 "general.menu.version" = "App version %@ (%@)";
 "general.netherlands" = "The Netherlands";
 "general.networkwasbusy.errorcode" = "<p>Please try again later.</p><p><b>Error code:</b><br />%@</p>";
