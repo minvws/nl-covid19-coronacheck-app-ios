@@ -12,6 +12,8 @@ class DeniedQRScanMoreInfoViewModel {
 
 	/// Coordination Delegate
 	weak var coordinator: (Dismissable)?
+	
+	weak var riskLevelManager: RiskLevelManaging? = Current.riskLevelManager
 
 	/// The title of the scene
 	@Bindable private(set) var title: String
@@ -37,13 +39,18 @@ class DeniedQRScanMoreInfoViewModel {
 		let spacing: CGFloat = 16
 
 		self.title = L.verifierDeniedTitle()
+		
+		// Show the 1G text only when 1G policy is enabled and the current state.
+		// -> do not show it when both policies are enabled, but the current scan mode is 3G
+		let shouldDisplay1GText = Current.featureFlagManager.is1GPolicyEnabled() && riskLevelManager?.state == .policy1G
+		
 		self.content = [
-			(TextView(htmlText: Current.featureFlagManager.is1GPolicyEnabled() ? L.verifierDeniedMessageOne_1G() : L.verifierDeniedMessageOne()), spacing),
+			(TextView(htmlText: shouldDisplay1GText ? L.verifierDeniedMessageOne_1G() : L.verifierDeniedMessageOne()), spacing),
 			(TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
 			(TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
 			(TextView(htmlText: L.verifierDeniedMessageFour()), 0),
 			(TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
-			(TextView(htmlText: Current.featureFlagManager.is1GPolicyEnabled() ? L.verifierDeniedMessageSix_1G() : L.verifierDeniedMessageSix()), spacing)
+			(TextView(htmlText: shouldDisplay1GText ? L.verifierDeniedMessageSix_1G() : L.verifierDeniedMessageSix()), spacing)
 		]
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
