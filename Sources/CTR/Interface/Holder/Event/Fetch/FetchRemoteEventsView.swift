@@ -32,9 +32,10 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 	}()
 
 	/// The spinner
-	let spinner: UIActivityIndicatorView = {
+	private let spinner: UIActivityIndicatorView = {
 
 		let view = UIActivityIndicatorView()
+		view.hidesWhenStopped = true
 		view.translatesAutoresizingMaskIntoConstraints = false
 		if #available(iOS 13.0, *) {
 			view.style = .large
@@ -44,6 +45,22 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 		view.color = Theme.colors.primary
 		return view
 	}()
+	
+	var shouldShowLoadingSpinner: Bool = false {
+		didSet {
+			if shouldShowLoadingSpinner {
+				spinner.startAnimating()
+				
+				// Announce it after a delay, if it's still loading:
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+					guard self.shouldShowLoadingSpinner else { return }
+					UIAccessibility.post(notification: .announcement, argument: L.generalLoading())
+				}
+			} else {
+				spinner.stopAnimating()
+			}
+		}
+	}
 
 	let secondaryButton: Button = {
 
