@@ -119,7 +119,7 @@
 "verifier.start.clockdeviationwarning.button" = "Lees meer";
 "verifier.start.clockdeviationwarning.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
 "verifier.start.header" = "Scan de QR-codes van je bezoekers";
-"verifier.start.message" = "Is de QR-code geldig en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
+"verifier.start.message" = "Scan de QR-codes van je bezoekers. Is de QR-code geldig en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
 "verifier.start.ontimeinternet" = "De app heeft eenmalig internet nodig om de laatste gegevens op te halen.";
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-codes";
@@ -151,7 +151,7 @@
 "verifier_risksetting_setting_button" = "Instellen";
 "verifier_risksetting_start_header" = "Stel voor jouw locatie in of je 1G- of 3G-toegang gaat geven. Controleer voordat je gaat scannen welk soort toegang je mag geven.";
 "verifier_risksetting_start_readmore" = "Welk soort toegang mag ik geven?";
-"verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/nl/faq-scanner-in-app";
+"verifier_risksetting_start_readmore_url" = "https://www.rijksoverheid.nl/welketoegang-cc";
 "verifier_risksetting_start_title" = "Scan-instelling";
 "verifier_risksetting_subtitle_1G" = "Je kunt alleen toegang geven aan bezoekers met een testbewijs.";
 "verifier_risksetting_subtitle_3G" = "Je kunt toegang geven aan bezoekers met een test-, vaccinatie- of herstelbewijs.";
