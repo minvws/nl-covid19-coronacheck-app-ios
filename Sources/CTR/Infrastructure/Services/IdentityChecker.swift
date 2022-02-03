@@ -59,7 +59,9 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 						isInitialEqual(remoteTuple?.lastNameInitial, existingTuple?.lastNameInitial))
 			}
 		}
-		logDebug("Does the identity of the new events match with the existing ones? \(match)")
+		if !match {
+			logDebug("Does the identity of the new events match with the existing ones? \(match)")
+		}
 		return match
 	}
 

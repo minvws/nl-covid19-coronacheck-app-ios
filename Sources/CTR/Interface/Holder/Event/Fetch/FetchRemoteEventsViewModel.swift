@@ -115,7 +115,7 @@ final class FetchRemoteEventsViewModel: Logging {
 			return
 		}
 
-		logDebug("determineActionFromResponse: hasNoResult: \(hasNoResult), someServerUnreachableErrror: \(someServerUnreachableErrror), someNetworkDidError: \(someNetworkDidError), step: \(step)")
+		logVerbose("determineActionFromResponse: hasNoResult: \(hasNoResult), someServerUnreachableErrror: \(someServerUnreachableErrror), someNetworkDidError: \(someNetworkDidError), step: \(step)")
 
 		switch (hasNoResult, someServerUnreachableErrror, someNetworkDidError) {
 
