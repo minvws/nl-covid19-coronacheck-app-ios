@@ -11,10 +11,6 @@ class BaseViewController: UIViewController {
 	
 	/// Enable/disable navigation back swiping. Default is true.
 	var enableSwipeBack: Bool { true }
-
-	// Retain the config used to create the left bar button (either a close or back button)
-	// because it is used by `accessibilityPerformEscape()`.
-	private var cacheLeftButtonConfig: UIBarButtonItem.Configuration?
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 
@@ -66,8 +62,8 @@ class BaseViewController: UIViewController {
 		if enableSwipeBack {
 			onBack()
 			return true
-		} else if let leftButtonTarget = cacheLeftButtonConfig?.target,
-				let leftButtonAction = cacheLeftButtonConfig?.action {
+		} else if let leftButtonTarget = navigationItem.leftBarButtonItem?.target,
+				  let leftButtonAction = navigationItem.leftBarButtonItem?.action {
 			UIApplication.shared.sendAction(leftButtonAction, to: leftButtonTarget, from: nil, for: nil)
 			return true
 		}
@@ -89,7 +85,6 @@ class BaseViewController: UIViewController {
 												   tintColor: tintColor,
 												   accessibilityIdentifier: "CloseButton",
 												   accessibilityLabel: L.generalClose())
-		cacheLeftButtonConfig = config
 		navigationItem.leftBarButtonItem = .create(config)
 	}
 
@@ -111,7 +106,6 @@ class BaseViewController: UIViewController {
 			accessibilityIdentifier: "BackButton",
 			accessibilityLabel: L.generalMenuClose()
 		)
-		cacheLeftButtonConfig = config
 		navigationItem.leftBarButtonItem = .create(config)
 	}
 
