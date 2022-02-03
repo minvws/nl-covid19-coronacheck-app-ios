@@ -31,14 +31,13 @@ class VerifierStartScanningViewModel: Logging {
 			L.verifierStartTitle()
 		}
 		
-		var header: String {
+		var header: String? {
 			switch self {
 				case .locked(_, let timeRemaining, _):
 					let timeRemainingString = Mode.timeFormatter.string(from: timeRemaining) ?? "-"
 					return L.verifier_home_countdown_title(timeRemainingString, preferredLanguages: nil)
-					
 				default:
-					return L.verifierStartHeader()
+					return nil
 			}
 		}
 		
@@ -130,7 +129,7 @@ class VerifierStartScanningViewModel: Logging {
 	// MARK: - Bindable properties
 
 	@Bindable private(set) var title: String = ""
-	@Bindable private(set) var header: String = ""
+	@Bindable private(set) var header: String?
 	@Bindable private(set) var headerMode: VerifierStartScanningView.HeaderMode?
 	@Bindable private(set) var message: String = ""
 	@Bindable private(set) var primaryButtonTitle: String = ""
