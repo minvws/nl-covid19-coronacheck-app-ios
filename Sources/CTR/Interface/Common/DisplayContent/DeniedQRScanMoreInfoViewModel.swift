@@ -42,7 +42,7 @@ class DeniedQRScanMoreInfoViewModel {
 		
 		// Show the 1G text only when 1G policy is enabled and the current state.
 		// -> do not show it when both policies are enabled, but the current scan mode is 3G
-		let shouldDisplay1GText = Current.featureFlagManager.is1GPolicyEnabled() && riskLevelManager?.state == .policy1G
+		let shouldDisplay1GText = riskLevelManager?.state == .policy1G
 		
 		self.content = [
 			(TextView(htmlText: shouldDisplay1GText ? L.verifierDeniedMessageOne_1G() : L.verifierDeniedMessageOne()), spacing),
