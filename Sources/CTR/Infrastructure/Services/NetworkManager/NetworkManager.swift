@@ -255,7 +255,9 @@ class NetworkManager: Logging {
 
 	func logResponse<Object>(_ response: HTTPURLResponse, object: Object?) {
 
-		logDebug("Finished response to URL \(response.url?.absoluteString ?? "") with status \(response.statusCode)")
+		if response.statusCode != 200 {
+			logDebug("Finished response to URL \(response.url?.absoluteString ?? "") with status \(response.statusCode)")
+		}
 		let headers = response.allHeaderFields.map { header, value in
 			return String("\(header): \(value)")
 		}.joined(separator: "\n")

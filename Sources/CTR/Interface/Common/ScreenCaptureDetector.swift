@@ -87,7 +87,7 @@ private extension ScreenCaptureDetector {
 	
 	var isCaptured: Bool {
 		#if DEBUG
-		logInfo("Screen is being captured and allowed for debug mode")
+		logVerbose("Screen is being captured and allowed for debug mode")
 		return false
 		#else
 		return UIScreen.main.isCaptured

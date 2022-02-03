@@ -151,7 +151,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 			logError("Error initializing library: \(result.error)")
 			isInitialized = false
 		} else {
-			logInfo("Initializing library successful")
+			logVerbose("Initializing library successful")
 			isInitialized = true
 		}
 	}
