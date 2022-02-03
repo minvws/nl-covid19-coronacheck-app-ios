@@ -105,6 +105,7 @@ final class MenuRowView: UIControl {
 	private func setupAccessibility() {
 
 		isAccessibilityElement = true
+		accessibilityTraits = .button
 	}
 	
 	// MARK: - Interaction
