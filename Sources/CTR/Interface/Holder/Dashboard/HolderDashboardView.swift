@@ -154,7 +154,7 @@ final class HolderDashboardView: BaseView {
 	
 	override var accessibilityElements: [Any]? {
 		get { return [fakeNavigationBar, tabBar] + [domesticScrollView] + [internationalScrollView 	] }
-		set {} // swiftlint:disable:this unused_setter_value
+		set {}
 	}
 	
 	/// Enables swipe to navigate behaviour for assistive technologies
