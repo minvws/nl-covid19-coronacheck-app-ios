@@ -355,6 +355,32 @@ class PaperProofCheckModelTests: XCTestCase {
 			fail("Invalid state")
 		}
 	}
+	
+	func test_failure_authenticationCancelled() {
+		
+		// Given
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+		(.failure(.error(statusCode: nil, response: nil, error: .authenticationCancelled)), ())
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
+		
+		// When
+		sut = PaperProofCheckViewModel(
+			coordinator: coordinatorDelegateSpy,
+			scannedDcc: "test",
+			couplingCode: "test"
+		)
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 010")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
+	}
 
 	func test_failure_invalidSignature() {
 
