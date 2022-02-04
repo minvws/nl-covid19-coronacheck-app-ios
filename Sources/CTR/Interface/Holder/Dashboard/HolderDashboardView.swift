@@ -149,13 +149,13 @@ final class HolderDashboardView: BaseView {
 	
 	override func setupAccessibility() {
 		super.setupAccessibility()
- 
-		isAccessibilityElement = false
-		domesticScrollView.isAccessibilityElement = false
-		domesticScrollView.stackView.isAccessibilityElement = false
-		internationalScrollView.isAccessibilityElement = false
-		internationalScrollView.stackView.isAccessibilityElement = false
+		
  	}
+	
+	override var accessibilityElements: [Any]? {
+		get { return [fakeNavigationBar, tabBar] + [domesticScrollView] + [internationalScrollView 	] }
+		set {}
+	}
 	
 	/// Enables swipe to navigate behaviour for assistive technologies
 	override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
@@ -163,9 +163,17 @@ final class HolderDashboardView: BaseView {
 			// Scrolling in tab bar is not supported
 			return true
 		}
-		let tab: DashboardTab = direction == .right ? .domestic : .international
-		tabBar.select(tab: tab, animated: true)
-		delegate?.holderDashboardView(self, didDisplay: tab)
+		
+		if let tab: DashboardTab = {
+			switch direction {
+				case .right: return DashboardTab.domestic
+				case .left: return DashboardTab.international
+				default: return Optional.none
+			}
+		}() {
+			selectTab(tab: tab)
+			delegate?.holderDashboardView(self, didDisplay: tab)
+		}
 		
 		// Scroll via swipe gesture
 		return false
