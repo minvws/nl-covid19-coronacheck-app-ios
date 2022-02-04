@@ -5,7 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import UIKit
 import CoreData
 
 protocol ScanLogManaging: AnyObject {
@@ -27,10 +27,31 @@ class ScanLogManager: ScanLogManaging {
 	static let policy3G: String = "3G"
 
 	private var dataStoreManager: DataStoreManaging
+	private let notificationCenter: NotificationCenterProtocol
 
-	required init(dataStoreManager: DataStoreManaging) {
+	required init(dataStoreManager: DataStoreManaging, notificationCenter: NotificationCenterProtocol = NotificationCenter.default) {
 
 		self.dataStoreManager = dataStoreManager
+		self.notificationCenter = notificationCenter
+		setupNotificationObservers()
+	}
+	
+	deinit {
+		notificationCenter.removeObserver(self)
+	}
+	
+	func setupNotificationObservers() {
+		
+		guard AppFlavor.flavor == .verifier else {
+			// There is no scan log database on the holder
+			return
+		}
+		
+		notificationCenter.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.deleteExpiredScanLogEntries(
+				seconds: Current.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
+			)
+		}
 	}
 
 	func didWeScanQRs(withinLastNumberOfSeconds seconds: Int) -> Bool {

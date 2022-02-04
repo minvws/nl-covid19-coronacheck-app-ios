@@ -57,10 +57,6 @@ class VerifierCoordinator: SharedCoordinator {
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: VerifierNewFeaturesFactory()
 		) {
-			
-			Current.scanLogManager.deleteExpiredScanLogEntries(
-				seconds: Current.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
-			)
 			navigateToVerifierWelcome()
 		}
 	}
