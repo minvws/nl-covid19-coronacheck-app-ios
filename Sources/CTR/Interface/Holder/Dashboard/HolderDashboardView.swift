@@ -163,9 +163,17 @@ final class HolderDashboardView: BaseView {
 			// Scrolling in tab bar is not supported
 			return true
 		}
-		let tab: DashboardTab = direction == .left ? .domestic : .international
-		selectTab(tab: tab)
-		delegate?.holderDashboardView(self, didDisplay: tab)
+		
+		if let tab: DashboardTab = {
+			switch direction {
+				case .left: return DashboardTab.domestic
+				case .right: return DashboardTab.international
+				default: return Optional.none
+			}
+		}() {
+			selectTab(tab: tab)
+			delegate?.holderDashboardView(self, didDisplay: tab)
+		}
 		
 		// Scroll via swipe gesture
 		return false
