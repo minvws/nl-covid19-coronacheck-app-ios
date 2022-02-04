@@ -53,9 +53,10 @@ class ListRemoteEventsView: ScrolledStackWithButtonView {
 	}()
 
 	/// The spinner
-	let spinner: UIActivityIndicatorView = {
+	private let spinner: UIActivityIndicatorView = {
 
 		let view = UIActivityIndicatorView()
+		view.hidesWhenStopped = true
 		view.translatesAutoresizingMaskIntoConstraints = false
 		if #available(iOS 13.0, *) {
 			view.style = .large
@@ -65,6 +66,20 @@ class ListRemoteEventsView: ScrolledStackWithButtonView {
 		view.color = Theme.colors.primary
 		return view
 	}()
+	
+	var shouldShowLoadingSpinner: Bool = false {
+		didSet {
+			if shouldShowLoadingSpinner {
+				spinner.startAnimating()
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+					// After a short delay (otherwise it's never announced)
+					UIAccessibility.post(notification: .layoutChanged, argument: self.spinner)
+				}
+			} else {
+				spinner.stopAnimating()
+			}
+		}
+	}
 
 	let somethingIsWrongButton: Button = {
 
