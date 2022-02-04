@@ -1151,6 +1151,32 @@ class InputRetrievalCodeViewModelTests: XCTestCase {
 			fail("Invalid state")
 		}
 	}
+	
+	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_failureTLS_stopsProgressAndShowsTechnicalErrorAlert() {
+		
+		// Arrange
+		let validToken = "xxx-yyyyyyyyyyyy-z2"
+		tokenValidatorSpy.stubbedValidateResult = true
+		environmentSpies.networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .authenticationCancelled)), ())
+		sut = mockedViewModel(withRequestToken: nil)
+		
+		// Act
+		sut.nextButtonTapped(validToken, verificationInput: "")
+		
+		// Assert
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
+		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.shouldShowProgress) == false
+		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
+			expect(content.body).toEventually(equal(L.holderErrorstateClientMessage("i 120 000 010")))
+			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
+		} else {
+			fail("Invalid state")
+		}
+	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withUnidentifiableTestProvider_showsErrorMessage() {
 

@@ -233,6 +233,8 @@ class NetworkManager: Logging {
 					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .serverUnreachableInvalidHost))
 				case .networkConnectionLost:
 					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .serverUnreachableConnectionLost))
+				case .cancelled:
+					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .authenticationCancelled))
 				default:
 					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .invalidResponse))
 			}
