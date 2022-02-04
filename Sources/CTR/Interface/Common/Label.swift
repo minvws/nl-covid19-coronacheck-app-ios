@@ -131,6 +131,18 @@ class Label: UILabel {
         } else {
             accessibilityTraits.remove(.header)
         }
-        return self
+		return self
     }
+	
+	// Can become focused if it contains a link (or is underlined like a link)
+	override var canBecomeFocused: Bool {
+		get {
+			guard let attributedText = attributedText else { return false }
+			return attributedText.attributes { key, value, range in
+				return key == NSAttributedString.Key.underlineStyle
+					|| key == NSAttributedString.Key.link
+			}
+		}
+		set {}
+	}
 }
