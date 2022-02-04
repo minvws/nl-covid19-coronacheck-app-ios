@@ -119,7 +119,7 @@
 "verifier.start.clockdeviationwarning.button" = "Read more";
 "verifier.start.clockdeviationwarning.message" = "Check your phone's time settings. They might be incorrect.";
 "verifier.start.header" = "Scan your visitors' QR codes";
-"verifier.start.message" = "Is the QR code valid and are the details the same as on the proof of identity? Then you can give the visitor access.";
+"verifier.start.message" = "Scan your visitors' QR codes. Is the QR code valid and are the details the same as on the proof of identity? Then you can give the visitor access.";
 "verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR codes";
@@ -151,7 +151,7 @@
 "verifier_risksetting_setting_button" = "Set setting";
 "verifier_risksetting_start_header" = "For your location, please specify if you're going to give 1G or 3G access. Check which kind of access you can give before you start scanning.";
 "verifier_risksetting_start_readmore" = "Which kind of access can I give?";
-"verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/en/faq-scanner-in-app";
+"verifier_risksetting_start_readmore_url" = "https://www.government.nl/whichaccess-cc";
 "verifier_risksetting_start_title" = "Scan setting";
 "verifier_risksetting_subtitle_1G" = "You can only give access to visitors with a test certificate.";
 "verifier_risksetting_subtitle_3G" = "You can give access to visitors with a test, vaccination or recovery certificate.";
