@@ -49,12 +49,11 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 	var shouldShowLoadingSpinner: Bool = false {
 		didSet {
 			if shouldShowLoadingSpinner {
-				spinner.startAnimating()
 				
-				// Announce it after a delay, if it's still loading:
-				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-					guard self.shouldShowLoadingSpinner else { return }
-					UIAccessibility.post(notification: .announcement, argument: L.generalLoading())
+				spinner.startAnimating()
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+					// After a short delay (otherwise it's never announced)
+					UIAccessibility.post(notification: .layoutChanged, argument: self.spinner)
 				}
 			} else {
 				spinner.stopAnimating()
