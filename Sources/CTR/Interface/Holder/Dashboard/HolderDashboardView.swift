@@ -166,8 +166,8 @@ final class HolderDashboardView: BaseView {
 		
 		if let tab: DashboardTab = {
 			switch direction {
-				case .left: return DashboardTab.domestic
-				case .right: return DashboardTab.international
+				case .right: return DashboardTab.domestic
+				case .left: return DashboardTab.international
 				default: return Optional.none
 			}
 		}() {
