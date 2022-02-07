@@ -12,7 +12,6 @@ protocol VerificationPolicyEnablable: AnyObject {
 	typealias ObserverToken = UUID
 	
 	func enable(verificationPolicies: [String])
-	func configureDefaultPolicy()
 	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken
 	func removeObserver(token: ObserverToken)
 	func wipePersistedData()
@@ -24,15 +23,7 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 	
 	func enable(verificationPolicies: [String]) {
 		
-		let knownPolicies = VerificationPolicy.allCases.filter { verificationPolicies.contains($0.featureFlag) }
-		
-		guard knownPolicies.isNotEmpty() else {
-			
-			// Configure default policy
-			configureDefaultPolicy()
-			return
-		}
-		
+		var knownPolicies = VerificationPolicy.allCases.filter { verificationPolicies.contains($0.featureFlag) }
 		let storedPolicies = Current.userSettings.configVerificationPolicies
 		
 		if knownPolicies != storedPolicies, storedPolicies.isNotEmpty() {
@@ -42,28 +33,26 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 			notifyObservers()
 		}
 		
-		Current.userSettings.configVerificationPolicies = knownPolicies
-		
 		// Set policies that are not set via the scan settings scenes
 		switch knownPolicies {
 			case [VerificationPolicy.policy1G]:
 				Current.riskLevelManager.update(verificationPolicy: .policy1G)
 			case [VerificationPolicy.policy3G]:
 				Current.riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
+			case []:
+				knownPolicies = [VerificationPolicy.policy3G]
+				Current.riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
 			default: break
 		}
-	}
-	
-	func configureDefaultPolicy() {
 		
-		Current.userSettings.configVerificationPolicies = [VerificationPolicy.policy3G]
-		Current.riskLevelManager.update(verificationPolicy: nil)
+		Current.userSettings.configVerificationPolicies = knownPolicies
 	}
 	
 	func wipePersistedData() {
 
 		observers = [:]
-		configureDefaultPolicy()
+		Current.userSettings.configVerificationPolicies = [VerificationPolicy.policy3G]
+		Current.riskLevelManager.update(verificationPolicy: nil)
 	}
 
 	// MARK: - Observer notifications
