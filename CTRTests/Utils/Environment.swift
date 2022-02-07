@@ -158,7 +158,7 @@ final class EnvironmentSpies {
 	
 	var verificationPolicyEnablerSpy: VerificationPolicyEnablerSpy = {
 		let spy = VerificationPolicyEnablerSpy()
-		spy.stubbedAppendResetObserverResult = UUID()
+		spy.stubbedAppendPolicyChangedObserverResult = UUID()
 		return spy
 	}()
 }
