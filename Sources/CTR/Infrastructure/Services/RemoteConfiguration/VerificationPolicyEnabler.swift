@@ -24,9 +24,8 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 	
 	func enable(verificationPolicies: [String]) {
 		
-		let knownPolicies = VerificationPolicy.allCases.compactMap {
-			return verificationPolicies.contains($0.featureFlag) ? $0 : nil
-		}
+		let knownPolicies = VerificationPolicy.allCases.filter { verificationPolicies.contains($0.featureFlag) }
+		
 		guard knownPolicies.isNotEmpty() else {
 			
 			// Configure default policy
@@ -36,13 +35,11 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 		
 		let storedPolicies = Current.userSettings.configVerificationPolicies
 		
-		if knownPolicies != storedPolicies {
-			if storedPolicies.isNotEmpty() {
-				// Policy is changed, reset scan mode
-				Current.wipeScanMode()
-				Current.userSettings.policyInformationShown = false
-				notifyObservers()
-			}
+		if knownPolicies != storedPolicies, storedPolicies.isNotEmpty() {
+			// Policy is changed, reset scan mode
+			Current.wipeScanMode()
+			Current.userSettings.policyInformationShown = false
+			notifyObservers()
 		}
 		
 		Current.userSettings.configVerificationPolicies = knownPolicies
