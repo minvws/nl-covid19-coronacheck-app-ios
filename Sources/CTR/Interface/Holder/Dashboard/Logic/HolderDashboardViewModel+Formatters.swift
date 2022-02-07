@@ -15,7 +15,6 @@ extension HolderDashboardViewModel {
 	static let dateWithoutTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "d MMMM yyyy"
-		formatter.calendar = Calendar(identifier: .gregorian)
 		return formatter
 	}()
 
@@ -23,7 +22,6 @@ extension HolderDashboardViewModel {
 	static let dateWithTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "d MMMM HH:mm"
-		formatter.calendar = Calendar(identifier: .gregorian)
 		return formatter
 	}()
 
@@ -31,7 +29,6 @@ extension HolderDashboardViewModel {
 	static let dateWithDayAndTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "EEEE d MMMM HH:mm"
-		formatter.calendar = Calendar(identifier: .gregorian)
 		return formatter
 	}()
 
@@ -39,7 +36,6 @@ extension HolderDashboardViewModel {
 	static let dayAndMonthFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "d MMMM"
-		formatter.calendar = Calendar(identifier: .gregorian)
 		return formatter
 	}()
 
@@ -47,7 +43,6 @@ extension HolderDashboardViewModel {
 	static let dayAndMonthWithTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "d MMMM HH:mm"
-		formatter.calendar = Calendar(identifier: .gregorian)
 		return formatter
 	}()
 
@@ -59,7 +54,6 @@ extension HolderDashboardViewModel {
 		formatter.unitsStyle = .full
 		formatter.maximumUnitCount = 2
 		formatter.allowedUnits = [.hour, .minute, .second]
-		formatter.calendar = Calendar(identifier: .gregorian)
 		return formatter
 	}()
 
@@ -70,7 +64,6 @@ extension HolderDashboardViewModel {
 		formatter.unitsStyle = .full
 		formatter.maximumUnitCount = 2
 		formatter.allowedUnits = [.hour, .minute]
-		formatter.calendar = Calendar(identifier: .gregorian)
 		return formatter
 	}()
 
@@ -80,7 +73,6 @@ extension HolderDashboardViewModel {
 		let formatter = DateComponentsFormatter()
 		formatter.unitsStyle = .full
 		formatter.allowedUnits = [.day]
-		formatter.calendar = Calendar(identifier: .gregorian)
 		return formatter
 	}()
 }

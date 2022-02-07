@@ -78,7 +78,6 @@ class AboutThisAppViewModel: Logging {
 
 			// 13-10-2021 00:00
 			let dateformatter = DateFormatter()
-			dateformatter.calendar = Calendar(identifier: .gregorian)
 			dateformatter.dateFormat = "dd-MM-yyyy HH:mm"
 			let dateString = dateformatter.string(from: Date(timeIntervalSince1970: timestamp))
 
