@@ -194,10 +194,7 @@ class VerifierStartScanningViewModel: Logging {
 		scanLockObserverToken = Current.scanLockManager.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
 		riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
 		
-		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
-			
-			lockLabelCountdownTimer.fire()
-		}
+		lockLabelCountdownTimer.fire()
 	}
 	
 	deinit {
