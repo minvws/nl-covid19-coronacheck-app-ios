@@ -174,7 +174,7 @@
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Are you able to connect to the internet soon?";
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
-"holder.dcc.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
+"holder.dcc.element.subtitle" = "Name: %@\nDate of birth: %@\n";
 "holder.dcc.list.action" = "Add certificate";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
@@ -305,8 +305,8 @@
 "holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.type" = "Vaccine type:";
 "holder.event.details" = "Details";
-"holder.event.element.subtitle.test2" = "<p>Test date: %@</p><p>Your details: %@</p>";
-"holder.event.element.subtitle.test3" = "<p>Test date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
+"holder.event.element.subtitle.test2" = "Test date: %@\nYour details: %@\n";
+"holder.event.element.subtitle.test3" = "Test date: %@\nName: %@\nDate of birth: %@\n";
 "holder.event.identity.alert.cancel" = "Stop";
 "holder.event.identity.alert.message" = "The personal details you just retrieved don't match those in your current certificate. You can either stop and have your details changed by the organisation that registered the details for your certificate, or replace your certificate. Your current certificate will then be removed.";
 "holder.event.identity.alert.ok" = "Replace";
@@ -593,9 +593,9 @@
 "holder.vaccination.alert.continue" = "No";
 "holder.vaccination.alert.stop" = "Yes, go back";
 "holder.vaccination.alert.title" = "Are you sure you want to go back?";
-"holder.vaccination.element.combined" = "<p>Data retrieved from: %@ and %@</p>";
-"holder.vaccination.element.single" = "<p>Data retrieved from: %@</p>";
-"holder.vaccination.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
+"holder.vaccination.element.combined" = "Data retrieved from: %@ and %@";
+"holder.vaccination.element.single" = "Data retrieved from: %@";
+"holder.vaccination.element.subtitle" = "Name: %@\nDate of birth: %@\n";
 "holder.vaccination.element.title" = "Vaccination %@";
 "holder.vaccination.error.again" = "Try again";
 "holder.vaccination.error.close" = "Close";
@@ -654,7 +654,7 @@
 "holder_event_vaccination_assessment_about_subtitle" = "The following details were retrieved:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Unique review identifier:";
 "holder_event_vaccination_assessment_alert_message" = "Doing so will stop the addition of your vaccination approval and you will have to retrieve your details again later.";
-"holder_event_vaccination_assessment_element_subtitle" = "<p>Review date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
+"holder_event_vaccination_assessment_element_subtitle" = "Review date: %@\nName: %@\nDate of birth: %@\n";
 "holder_event_vaccination_assessment_element_title" = "Vaccination approval";
 "holder_event_vaccination_assessment_list_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_event_vaccination_assessment_list_title" = "Are the details correct?";
