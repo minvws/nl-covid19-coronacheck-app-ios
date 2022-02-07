@@ -92,4 +92,12 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}
+
+	var invokedRegisterTriggers = false
+	var invokedRegisterTriggersCount = 0
+
+	func registerTriggers() {
+		invokedRegisterTriggers = true
+		invokedRegisterTriggersCount += 1
+	}
 }

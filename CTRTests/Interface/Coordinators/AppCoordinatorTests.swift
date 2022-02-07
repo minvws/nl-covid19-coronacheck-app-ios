@@ -46,6 +46,8 @@ class AppCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(1))
 		expect(self.sut.childCoordinators.first is HolderCoordinator) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
 	}
 
 	func test_verifier_handleLaunchState_finished() {
@@ -60,6 +62,8 @@ class AppCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(1))
 		expect(self.sut.childCoordinators.first is VerifierCoordinator) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
 	}
 
 	func test_holder_handleLaunchState_withinTTL() {
@@ -74,6 +78,8 @@ class AppCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(1))
 		expect(self.sut.childCoordinators.first is HolderCoordinator) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
 	}
 
 	func test_verifier_handleLaunchState_withinTTL() {
@@ -88,6 +94,8 @@ class AppCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(1))
 		expect(self.sut.childCoordinators.first is VerifierCoordinator) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
 	}
 
 	func test_handleLaunchState_serverError() {
@@ -104,6 +112,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
 	}
 
 	func test_handleLaunchState_withinTTL_cryptoLibNotInitialized() {
@@ -166,6 +176,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
 	}
 	
 	func test_handleLaunchState_finished_endOfLife() {
@@ -182,6 +194,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
 	}
 	
 	func test_handleLaunchState_withinTTL_updateRequired() throws {
@@ -202,6 +216,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
 	}
 	
 	func test_handleLaunchState_finished_updateRequired() throws {
@@ -222,6 +238,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
 	}
 
 	func test_handleLaunchState_finished_holder_updateRecommended() throws {
