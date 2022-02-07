@@ -148,6 +148,7 @@ final class HolderDashboardViewModel: Logging {
 	private var remoteConfigUpdateObserverToken: RemoteConfigManager.ObserverToken?
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
+	private var remoteConfigUpdatesNewValidityToken: RemoteConfigManager.ObserverToken?
 
 	// Dependencies:
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
@@ -282,22 +283,34 @@ final class HolderDashboardViewModel: Logging {
 	}
 	
 	private func setupNewValidityInfoForVaccinationsAndRecoveriesBanner() {
-		let userSettings = Current.userSettings
-		let featureFlagManager = Current.featureFlagManager
-		let walletManager = Current.walletManager
-		
-		if userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard && featureFlagManager.isNewValidityInfoBannerEnabled() {
-			// Set checked = true, do this only once
-			userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = false
+		let performCheck: () -> Void = { [weak self] in
+			guard let self = self else { return }
 			
-			let hasDomesticRecoveryGreenCards = walletManager.hasDomesticGreenCard(originType: OriginType.recovery.rawValue)
-			let hasDomesticVaccinationGreenCards = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
-			if hasDomesticRecoveryGreenCards || hasDomesticVaccinationGreenCards {
-				// if we have a domestic recovery or vaccination, show the banner.
-				userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
+			let userSettings = Current.userSettings
+			let featureFlagManager = Current.featureFlagManager
+			let walletManager = Current.walletManager
+			
+			if userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard && featureFlagManager.isNewValidityInfoBannerEnabled() {
+				// Set checked = true, do this only once
+				userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = false
+				
+				let hasDomesticRecoveryGreenCards = walletManager.hasDomesticGreenCard(originType: OriginType.recovery.rawValue)
+				let hasDomesticVaccinationGreenCards = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
+				if hasDomesticRecoveryGreenCards || hasDomesticVaccinationGreenCards {
+					// if we have a domestic recovery or vaccination, show the banner.
+					userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
+				}
 			}
+			
+			self.state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && featureFlagManager.isNewValidityInfoBannerEnabled()
 		}
-		state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && featureFlagManager.isNewValidityInfoBannerEnabled()
+		
+		performCheck()
+		
+		// Also register an observer to do it again if the config updates:
+		remoteConfigUpdatesNewValidityToken = Current.remoteConfigManager.appendUpdateObserver { config, _, _ in
+			performCheck()
+		}
 	}
 
 	// MARK: - View Lifecycle callbacks:
