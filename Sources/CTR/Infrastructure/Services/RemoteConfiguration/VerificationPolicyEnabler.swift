@@ -26,10 +26,13 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 		var knownPolicies = VerificationPolicy.allCases.filter { verificationPolicies.contains($0.featureFlag) }
 		let storedPolicies = Current.userSettings.configVerificationPolicies
 		
-		if knownPolicies != storedPolicies, storedPolicies.isNotEmpty() {
-			// Policy is changed, reset scan mode
-			Current.wipeScanMode()
-			Current.userSettings.policyInformationShown = false
+		if knownPolicies != storedPolicies {
+			if storedPolicies.isNotEmpty() {
+				// Policy is changed, reset scan mode
+				Current.wipeScanMode()
+				Current.userSettings.policyInformationShown = false
+			}
+			// Reset navigation
 			notifyObservers()
 		}
 		
