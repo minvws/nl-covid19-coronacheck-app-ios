@@ -174,7 +174,7 @@
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Kan je binnenkort verbinding maken met het internet?";
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn bewijzen";
-"holder.dcc.element.subtitle" = "<p>Naam: %@</p><p>Geboortedatum: %@</p>";
+"holder.dcc.element.subtitle" = "Naam: %@\nGeboortedatum: %@";
 "holder.dcc.list.action" = "Bewijs toevoegen";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministerie van VWS";
@@ -305,8 +305,8 @@
 "holder.event.about.vaccination.subtitle" = "Deze gegevens van je vaccinatie zijn opgehaald bij %@:";
 "holder.event.about.vaccination.type" = "Type vaccin:";
 "holder.event.details" = "Details";
-"holder.event.element.subtitle.test2" = "<p>Testdatum: %@</p><p>Jouw gegevens: %@</p>";
-"holder.event.element.subtitle.test3" = "<p>Testdatum: %@</p><p>Naam: %@</p><p>Geboortedatum: %@</p>";
+"holder.event.element.subtitle.test2" = "Testdatum: %@\nJouw gegevens: %@";
+"holder.event.element.subtitle.test3" = "Testdatum: %@\nNaam: %@\nGeboortedatum: %@";
 "holder.event.identity.alert.cancel" = "Stoppen";
 "holder.event.identity.alert.message" = "De persoonsgegevens die je net hebt opgehaald zijn anders dan die in je huidige bewijs staan. Stop en laat eerst de gegevens aanpassen bij de organisatie die de gegevens voor je bewijs heeft geregistreerd, of vervang je bewijs. Je huidige bewijs wordt dan verwijderd.";
 "holder.event.identity.alert.ok" = "Vervang";
@@ -593,9 +593,9 @@
 "holder.vaccination.alert.continue" = "Nee";
 "holder.vaccination.alert.stop" = "Ja, terug";
 "holder.vaccination.alert.title" = "Weet je zeker dat je terug wilt?";
-"holder.vaccination.element.combined" = "<p>Gegevens opgehaald bij: %@ en %@</p>";
-"holder.vaccination.element.single" = "<p>Gegevens opgehaald bij: %@</p>";
-"holder.vaccination.element.subtitle" = "<p>Naam: %@</p><p>Geboortedatum: %@</p>";
+"holder.vaccination.element.combined" = "Gegevens opgehaald bij: %@ en %@";
+"holder.vaccination.element.single" = "Gegevens opgehaald bij: %@";
+"holder.vaccination.element.subtitle" = "Naam: %@\nGeboortedatum: %@\n";
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.error.again" = "Probeer opnieuw";
 "holder.vaccination.error.close" = "Sluiten";
@@ -654,7 +654,7 @@
 "holder_event_vaccination_assessment_about_subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Uniek beoordelingsnummer:";
 "holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het toevoegen van je vaccinatiebeoordeling en moet je later opnieuw je gegevens ophalen.";
-"holder_event_vaccination_assessment_element_subtitle" = "<p>Beoordelingsdatum: %@</p><p>Naam: %@</p><p>Geboortedatum: %@</p>";
+"holder_event_vaccination_assessment_element_subtitle" = "Beoordelingsdatum: %@\nNaam: %@\nGeboortedatum: %@";
 "holder_event_vaccination_assessment_element_title" = "Vaccinatiebeoordeling";
 "holder_event_vaccination_assessment_list_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_event_vaccination_assessment_list_title" = "Kloppen de gegevens?";
