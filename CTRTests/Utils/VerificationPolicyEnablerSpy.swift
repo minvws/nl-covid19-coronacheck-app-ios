@@ -29,4 +29,38 @@ final class VerificationPolicyEnablerSpy: VerificationPolicyEnablable {
 		invokedConfigureDefaultPolicy = true
 		invokedConfigureDefaultPolicyCount += 1
 	}
+
+	var invokedAppendPolicyChangedObserver = false
+	var invokedAppendPolicyChangedObserverCount = 0
+	var shouldInvokeAppendPolicyChangedObserverObserver = false
+	var stubbedAppendPolicyChangedObserverResult: ObserverToken!
+
+	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken {
+		invokedAppendPolicyChangedObserver = true
+		invokedAppendPolicyChangedObserverCount += 1
+		if shouldInvokeAppendPolicyChangedObserverObserver {
+			observer()
+		}
+		return stubbedAppendPolicyChangedObserverResult
+	}
+
+	var invokedRemoveObserver = false
+	var invokedRemoveObserverCount = 0
+	var invokedRemoveObserverParameters: (token: ObserverToken, Void)?
+	var invokedRemoveObserverParametersList = [(token: ObserverToken, Void)]()
+
+	func removeObserver(token: ObserverToken) {
+		invokedRemoveObserver = true
+		invokedRemoveObserverCount += 1
+		invokedRemoveObserverParameters = (token, ())
+		invokedRemoveObserverParametersList.append((token, ()))
+	}
+
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
+
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
+	}
 }

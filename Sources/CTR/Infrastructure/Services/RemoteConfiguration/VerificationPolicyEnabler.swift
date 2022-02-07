@@ -9,11 +9,18 @@ import Foundation
 
 protocol VerificationPolicyEnablable: AnyObject {
 	
+	typealias ObserverToken = UUID
+	
 	func enable(verificationPolicies: [String])
 	func configureDefaultPolicy()
+	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken
+	func removeObserver(token: ObserverToken)
+	func wipePersistedData()
 }
 
 final class VerificationPolicyEnabler: VerificationPolicyEnablable {
+	
+	private var observers = [ObserverToken: () -> Void]()
 	
 	func enable(verificationPolicies: [String]) {
 		
@@ -34,6 +41,7 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 				// Policy is changed, reset scan mode
 				Current.wipeScanMode()
 				Current.userSettings.policyInformationShown = false
+				notifyObservers()
 			}
 		}
 		
@@ -53,5 +61,34 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 		
 		Current.userSettings.configVerificationPolicies = [VerificationPolicy.policy3G]
 		Current.riskLevelManager.update(verificationPolicy: nil)
+	}
+	
+	func wipePersistedData() {
+
+		observers = [:]
+		configureDefaultPolicy()
+	}
+
+	// MARK: - Observer notifications
+	
+	/// Be careful to use weak references to your observers within the closure, and
+	/// to unregister your observer using the returned `ObserverToken`.
+	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken {
+		let newToken = ObserverToken()
+		observers[newToken] = observer
+		return newToken
+	}
+
+	func removeObserver(token: ObserverToken) {
+		observers[token] = nil
+	}
+}
+
+private extension VerificationPolicyEnabler {
+	
+	func notifyObservers() {
+		observers.values.forEach { callback in
+			callback()
+		}
 	}
 }
