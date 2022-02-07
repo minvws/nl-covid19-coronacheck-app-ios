@@ -654,7 +654,7 @@
 "holder_event_vaccination_assessment_about_subtitle" = "The following details were retrieved:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Unique review identifier:";
 "holder_event_vaccination_assessment_alert_message" = "Doing so will stop the addition of your vaccination approval and you will have to retrieve your details again later.";
-"holder_event_vaccination_assessment_element_subtitle" = "Review date: %@\nName: %@\nDate of birth: %@\n";
+"holder_event_vaccination_assessment_element_subtitle" = "Review date: %@\nName: %@\nDate of birth: %@";
 "holder_event_vaccination_assessment_element_title" = "Vaccination approval";
 "holder_event_vaccination_assessment_list_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_event_vaccination_assessment_list_title" = "Are the details correct?";

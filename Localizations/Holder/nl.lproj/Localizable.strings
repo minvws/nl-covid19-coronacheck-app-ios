@@ -654,7 +654,7 @@
 "holder_event_vaccination_assessment_about_subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Uniek beoordelingsnummer:";
 "holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het toevoegen van je vaccinatiebeoordeling en moet je later opnieuw je gegevens ophalen.";
-"holder_event_vaccination_assessment_element_subtitle" = "Beoordelingsdatum: %@\nNaam: %@\nGeboortedatum: %@\n";
+"holder_event_vaccination_assessment_element_subtitle" = "Beoordelingsdatum: %@\nNaam: %@\nGeboortedatum: %@";
 "holder_event_vaccination_assessment_element_title" = "Vaccinatiebeoordeling";
 "holder_event_vaccination_assessment_list_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_event_vaccination_assessment_list_title" = "Kloppen de gegevens?";
