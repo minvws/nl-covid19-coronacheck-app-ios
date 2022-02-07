@@ -174,7 +174,7 @@
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Are you able to connect to the internet soon?";
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
-"holder.dcc.element.subtitle" = "Name: %@\nDate of birth: %@\n";
+"holder.dcc.element.subtitle" = "Name: %@\nDate of birth: %@";
 "holder.dcc.list.action" = "Add certificate";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
@@ -305,8 +305,8 @@
 "holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.type" = "Vaccine type:";
 "holder.event.details" = "Details";
-"holder.event.element.subtitle.test2" = "Test date: %@\nYour details: %@\n";
-"holder.event.element.subtitle.test3" = "Test date: %@\nName: %@\nDate of birth: %@\n";
+"holder.event.element.subtitle.test2" = "Test date: %@\nYour details: %@";
+"holder.event.element.subtitle.test3" = "Test date: %@\nName: %@\nDate of birth: %@";
 "holder.event.identity.alert.cancel" = "Stop";
 "holder.event.identity.alert.message" = "The personal details you just retrieved don't match those in your current certificate. You can either stop and have your details changed by the organisation that registered the details for your certificate, or replace your certificate. Your current certificate will then be removed.";
 "holder.event.identity.alert.ok" = "Replace";

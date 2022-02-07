@@ -174,7 +174,7 @@
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Kan je binnenkort verbinding maken met het internet?";
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn bewijzen";
-"holder.dcc.element.subtitle" = "Naam: %@\nGeboortedatum: %@\n";
+"holder.dcc.element.subtitle" = "Naam: %@\nGeboortedatum: %@";
 "holder.dcc.list.action" = "Bewijs toevoegen";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministerie van VWS";
@@ -305,8 +305,8 @@
 "holder.event.about.vaccination.subtitle" = "Deze gegevens van je vaccinatie zijn opgehaald bij %@:";
 "holder.event.about.vaccination.type" = "Type vaccin:";
 "holder.event.details" = "Details";
-"holder.event.element.subtitle.test2" = "Testdatum: %@\nJouw gegevens: %@\n";
-"holder.event.element.subtitle.test3" = "Testdatum: %@\nNaam: %@\nGeboortedatum: %@\n";
+"holder.event.element.subtitle.test2" = "Testdatum: %@\nJouw gegevens: %@";
+"holder.event.element.subtitle.test3" = "Testdatum: %@\nNaam: %@\nGeboortedatum: %@";
 "holder.event.identity.alert.cancel" = "Stoppen";
 "holder.event.identity.alert.message" = "De persoonsgegevens die je net hebt opgehaald zijn anders dan die in je huidige bewijs staan. Stop en laat eerst de gegevens aanpassen bij de organisatie die de gegevens voor je bewijs heeft geregistreerd, of vervang je bewijs. Je huidige bewijs wordt dan verwijderd.";
 "holder.event.identity.alert.ok" = "Vervang";
