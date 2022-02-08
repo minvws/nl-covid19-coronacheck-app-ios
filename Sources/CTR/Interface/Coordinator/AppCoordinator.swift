@@ -285,6 +285,7 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func errorWhileLoading(errors: [ServerError]) {
 		// For now, show internet required.
 		// Todo: add error state.
+		
 		showInternetRequired()
 	}
 	
