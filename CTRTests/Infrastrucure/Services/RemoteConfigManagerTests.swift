@@ -448,6 +448,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Arrange
 		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 0
+		sut.registerTriggers()
 		
 		// Act
 		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try

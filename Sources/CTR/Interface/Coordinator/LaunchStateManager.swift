@@ -60,28 +60,21 @@ final class LaunchStateManager: LaunchStateManaging {
 	
 			return
 		}
+		
+		if state == .withinTTL {
+			// If within the TTL, and the firstUseDate is nil, that means an existing installation.
+			// Use the documents directory creation date.
+			Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
+		}
 
-		switch state {
-			case .finished:
-				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+		checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+			switch state {
+				case .finished, .withinTTL:
 					self.startApplication()
-				}
-
-			case .serverError(let serviceErrors):
-				// Deactivated or update trumps no internet or error
-				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+				case .serverError(let serviceErrors):
 					self.delegate?.errorWhileLoading(errors: serviceErrors)
-				}
-
-			case .withinTTL:
-				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
-				// Use the documents directory creation date.
-				Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
-				
-				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
-					self.startApplication()
-				}
 			}
+		}
 	}
 	
 	private func startApplication() {

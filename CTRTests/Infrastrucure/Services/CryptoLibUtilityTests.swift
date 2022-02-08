@@ -285,6 +285,7 @@ class CryptoLibUtilityTests: XCTestCase {
 
 		// Arrange
 		expect(self.networkSpy.invokedGetPublicKeysCount) == 0
+		sut.registerTriggers()
 		
 		// Act
 		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try

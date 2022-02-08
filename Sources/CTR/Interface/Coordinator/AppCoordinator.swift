@@ -97,6 +97,10 @@ class AppCoordinator: Coordinator, Logging {
 
     /// Start the real application
     private func startApplication() {
+		
+		// Start listeners after launching is done (willEnterForegroundNotification will mess up launch)
+		Current.remoteConfigManager.registerTriggers()
+		Current.cryptoLibUtility.registerTriggers()
 
         switch flavor {
             case .holder:
