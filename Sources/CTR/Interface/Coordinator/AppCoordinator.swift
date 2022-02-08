@@ -282,11 +282,9 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 		showCryptoLibNotInitializedError()
 	}
 	
-	func errorWhileLoading(errors: [ServerError], appLaunchedWithinTTL: Bool) {
+	func errorWhileLoading(errors: [ServerError]) {
 		// For now, show internet required.
 		// Todo: add error state.
-		
-		guard !appLaunchedWithinTTL else { return }
 		
 		showInternetRequired()
 	}

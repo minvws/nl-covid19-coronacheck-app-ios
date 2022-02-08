@@ -26,7 +26,7 @@ protocol LaunchStateManagerDelegate: AnyObject {
 
 	func cryptoLibDidNotInitialize()
 		
-	func errorWhileLoading(errors: [ServerError], appLaunchedWithinTTL: Bool)
+	func errorWhileLoading(errors: [ServerError])
 		
 	func updateIsRequired(appStoreUrl: URL)
 	
@@ -53,8 +53,6 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 	
 	// MARK: - Launch State -
 	
-	private var appLaunchedWithinTTL = false
-	
 	func handleLaunchState(_ state: LaunchState) {
 	
 		guard Current.cryptoLibUtility.isInitialized else {
@@ -66,7 +64,6 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 			// If within the TTL, and the firstUseDate is nil, that means an existing installation.
 			// Use the documents directory creation date.
 			Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
-			appLaunchedWithinTTL = true
 		}
 
 		checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
@@ -74,7 +71,9 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 				case .finished, .withinTTL:
 					self.startApplication()
 				case .serverError(let serviceErrors):
-					self.delegate?.errorWhileLoading(errors: serviceErrors, appLaunchedWithinTTL: self.appLaunchedWithinTTL)
+					if !self.applicationHasStarted {
+						self.delegate?.errorWhileLoading(errors: serviceErrors)
+					}
 			}
 		}
 	}
@@ -114,7 +113,6 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 	func enableRestart() {
 		
 		applicationHasStarted = false
-		appLaunchedWithinTTL = false
 	}
 	
 	// MARK: - Remote Config -
