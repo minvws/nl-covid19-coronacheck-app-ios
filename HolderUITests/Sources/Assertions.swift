@@ -66,7 +66,7 @@ extension BaseTest {
 		textExists("Je hebt geen Nederlands " + certificateType.rawValue.lowercased())
 	}
 	
-	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffset: Int? = nil, validUntilOffset: Int? = nil) {
+	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffset: Int? = nil, validUntilOffset: Int? = nil, validUntilDate: String? = nil) {
 		tapOnTheNetherlandsTab()
 		assertValidCertificate(ofType: .vaccination)
 		textContains(amountOfDoses(for: doses))
@@ -75,6 +75,9 @@ extension BaseTest {
 		}
 		if let offset = validFromOffset {
 			textContains("geldig vanaf " + formattedOffsetDate(with: offset))
+		}
+		if let date = validUntilDate {
+			textContains("tot " + formattedDate(with: date))
 		}
 	}
 	
