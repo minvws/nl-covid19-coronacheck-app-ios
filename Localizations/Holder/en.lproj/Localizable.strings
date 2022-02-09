@@ -174,7 +174,7 @@
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Are you able to connect to the internet soon?";
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
-"holder.dcc.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
+"holder.dcc.element.subtitle" = "Name: %@\nDate of birth: %@";
 "holder.dcc.list.action" = "Add certificate";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
@@ -305,8 +305,8 @@
 "holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.type" = "Vaccine type:";
 "holder.event.details" = "Details";
-"holder.event.element.subtitle.test2" = "<p>Test date: %@</p><p>Your details: %@</p>";
-"holder.event.element.subtitle.test3" = "<p>Test date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
+"holder.event.element.subtitle.test2" = "Test date: %@\nYour details: %@";
+"holder.event.element.subtitle.test3" = "Test date: %@\nName: %@\nDate of birth: %@";
 "holder.event.identity.alert.cancel" = "Stop";
 "holder.event.identity.alert.message" = "The personal details you just retrieved don't match those in your current certificate. You can either stop and have your details changed by the organisation that registered the details for your certificate, or replace your certificate. Your current certificate will then be removed.";
 "holder.event.identity.alert.ok" = "Replace";
@@ -333,8 +333,8 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
 "holder.incompletedutchvaccination.button.addtestresults" = "Retrieve my test result";
 "holder.incompletedutchvaccination.button.addvaccines" = "Retrieve my vaccinations";
-"holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Had coronavirus before your first vaccination?</b><br />Retrieve your positive test result. You will also receive a Dutch certificate then.</p>";
-"holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Want to know more?</b><br />Read the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for other possible reasons.</p>";
+"holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
+"holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Want to know more?</b><br />Find more information on <a href=\"https://www.government.nl/topics/coronavirus-covid-19/covid-certificate/proof-of-vaccination/requirements-and-validity\">this page about the requirements and validity of the vaccination certificate</a>.</p>";
 "holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Had a new vaccination?</b><br />Please retrieve your vaccination details again. You will receive a Dutch certificate.</p>";
 "holder.incompletedutchvaccination.title" = "No Dutch vaccination certificate";
 "holder.launch.text" = "We're starting the app...";
@@ -593,9 +593,9 @@
 "holder.vaccination.alert.continue" = "No";
 "holder.vaccination.alert.stop" = "Yes, go back";
 "holder.vaccination.alert.title" = "Are you sure you want to go back?";
-"holder.vaccination.element.combined" = "<p>Data retrieved from: %@ and %@</p>";
-"holder.vaccination.element.single" = "<p>Data retrieved from: %@</p>";
-"holder.vaccination.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
+"holder.vaccination.element.combined" = "Data retrieved from: %@ and %@";
+"holder.vaccination.element.single" = "Data retrieved from: %@";
+"holder.vaccination.element.subtitle" = "Name: %@\nDate of birth: %@\n";
 "holder.vaccination.element.title" = "Vaccination %@";
 "holder.vaccination.error.again" = "Try again";
 "holder.vaccination.error.close" = "Close";
@@ -604,7 +604,7 @@
 "holder.vaccination.error.message.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.error.title.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.internationlQROnly.action" = "Retrieve my test result";
-"holder.vaccination.internationlQROnly.message" = "<p>You don't have a Dutch vaccination certificate. To obtain this, you have to either be fully vaccinated, or have recovered from coronavirus before you received your first vaccination.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination certificate again after getting your vaccination. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Retrieve your positive test result. You will also receive a Dutch certificate then.</p>";
+"holder.vaccination.internationlQROnly.message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
 "holder.vaccination.internationlQROnly.title" = "Only an international certificate was created";
 "holder.vaccination.list.action" = "Make certificate";
 "holder.vaccination.list.message" = "If the details about your vaccination are correct, you can create a certificate.";
@@ -654,7 +654,7 @@
 "holder_event_vaccination_assessment_about_subtitle" = "The following details were retrieved:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Unique review identifier:";
 "holder_event_vaccination_assessment_alert_message" = "Doing so will stop the addition of your vaccination approval and you will have to retrieve your details again later.";
-"holder_event_vaccination_assessment_element_subtitle" = "<p>Review date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
+"holder_event_vaccination_assessment_element_subtitle" = "Review date: %@\nName: %@\nDate of birth: %@";
 "holder_event_vaccination_assessment_element_title" = "Vaccination approval";
 "holder_event_vaccination_assessment_list_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_event_vaccination_assessment_list_title" = "Are the details correct?";

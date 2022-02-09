@@ -14,7 +14,6 @@ struct RemoteEventDetailsGenerator {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "d MMMM yyyy"
-		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 
@@ -23,7 +22,6 @@ struct RemoteEventDetailsGenerator {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
-		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 
@@ -32,7 +30,6 @@ struct RemoteEventDetailsGenerator {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM yyyy HH:mm"
-		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 }

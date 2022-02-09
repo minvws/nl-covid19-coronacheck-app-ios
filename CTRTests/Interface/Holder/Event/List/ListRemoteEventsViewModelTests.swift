@@ -1167,6 +1167,52 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
+	
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_authenticationCancelled() throws {
+		
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
+			greenCardLoader: greenCardLoader
+		)
+		
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+		(.failure(ServerError.error(statusCode: 429, response: nil, error: .authenticationCancelled)), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.holderErrorstateTitle()
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 CC 010")
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+	}
 
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverError() throws {
 

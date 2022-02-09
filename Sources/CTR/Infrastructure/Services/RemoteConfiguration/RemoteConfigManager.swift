@@ -24,6 +24,8 @@ protocol RemoteConfigManaging: AnyObject {
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
 
 	func wipePersistedData()
+	
+	func registerTriggers()
 }
 
 /// The remote configuration manager
@@ -64,8 +66,6 @@ class RemoteConfigManager: RemoteConfigManaging {
 		self.reachability = reachability
 		self.networkManager = networkManager
 		self.secureUserSettings = secureUserSettings
-
-		registerTriggers()
 	}
 
 	func registerTriggers() {

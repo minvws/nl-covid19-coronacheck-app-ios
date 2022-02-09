@@ -32,6 +32,7 @@ enum NetworkError: String, Error, Equatable {
 	case invalidSignature
 	case cannotSerialize
 	case cannotDeserialize
+	case authenticationCancelled
 
 	func getClientErrorCode() -> ErrorCode.ClientCode? {
 
@@ -47,6 +48,8 @@ enum NetworkError: String, Error, Equatable {
 				return ErrorCode.ClientCode(value: "005")
 			case .invalidResponse:
 				return ErrorCode.ClientCode(value: "003")
+			case .authenticationCancelled:
+				return ErrorCode.ClientCode(value: "010")
 			case .invalidSignature:
 				return ErrorCode.ClientCode(value: "020")
 			case .cannotDeserialize:

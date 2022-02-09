@@ -132,7 +132,6 @@ class ShowQRItemViewModel: Logging {
 			durationFormatter.unitsStyle = . full
 			durationFormatter.maximumUnitCount = 2
 			durationFormatter.allowedUnits = [.minute, .second]
-			durationFormatter.calendar = Calendar(identifier: .gregorian)
 
 			// e.g. "in ten seconds"
 			let relativeString = durationFormatter.string(from: Date(), to: Date().addingTimeInterval(TimeInterval(screenshotBlockTimeRemaining)))

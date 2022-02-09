@@ -488,7 +488,7 @@ class ListRemoteEventsViewModel: Logging {
 					displayServerErrorCode(errorCode)
 					shouldPrimaryButtonBeEnabled = true
 
-				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
 					// Client side
 					let errorCode = ErrorCode(
 						flow: determineErrorCodeFlow(remoteEvents: remoteEvents),

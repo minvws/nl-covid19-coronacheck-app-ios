@@ -29,7 +29,6 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		let dateFormatter = DateFormatter()
 		dateFormatter.locale = Locale(identifier: "en_GB") // because the server date contains day name
 		dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss zzz"
-		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 	

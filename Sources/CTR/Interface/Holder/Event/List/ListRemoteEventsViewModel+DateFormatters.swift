@@ -20,7 +20,6 @@ extension ListRemoteEventsViewModel {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "d MMMM yyyy"
-		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 
@@ -29,7 +28,6 @@ extension ListRemoteEventsViewModel {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
-		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 	
@@ -38,7 +36,6 @@ extension ListRemoteEventsViewModel {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM"
-		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 
@@ -47,7 +44,6 @@ extension ListRemoteEventsViewModel {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM yyyy HH:mm"
-		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 
@@ -56,7 +52,6 @@ extension ListRemoteEventsViewModel {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "MMMM"
-		dateFormatter.calendar = Calendar(identifier: .gregorian)
 		return dateFormatter
 	}()
 }
