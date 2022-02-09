@@ -25,7 +25,7 @@ extension Environment {
 				walletManager.removeExistingEventGroups()
 				walletManager.removeExistingGreenCards()
 			case .verifier:
-				verificationPolicyEnabler.configureDefaultPolicy()
+				verificationPolicyEnabler.wipePersistedData()
 				riskLevelManager.wipePersistedData()
 				scanLockManager.wipePersistedData()
 				scanLogManager.wipePersistedData()

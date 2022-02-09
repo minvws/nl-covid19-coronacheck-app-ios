@@ -73,7 +73,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 
-	func test_shouldCall_scanManagerRemoveOldEntries() {
+	func test_shouldNoLongerCall_scanManagerRemoveOldEntries() {
 
 		// Given
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
@@ -83,6 +83,6 @@ class VerifierCoordinatorTests: XCTestCase {
 		sut.start()
 		
 		// Then
-		expect(self.environmentSpies.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == true
+		expect(self.environmentSpies.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == false
 	}
 }

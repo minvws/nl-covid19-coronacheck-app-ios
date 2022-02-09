@@ -23,6 +23,7 @@ final class MenuRowView: UIControl {
 		let imageView = UIImageView()
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		imageView.isAccessibilityElement = false
+		imageView.setContentCompressionResistancePriority(UILayoutPriority.defaultHigh, for: .horizontal)
 		return imageView
 	}()
 	
@@ -31,6 +32,7 @@ final class MenuRowView: UIControl {
 		label.textColor = Theme.colors.dark
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
+		label.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
 		return label
 	}()
 	

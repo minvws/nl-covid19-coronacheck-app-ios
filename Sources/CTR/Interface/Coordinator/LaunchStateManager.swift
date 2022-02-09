@@ -33,7 +33,7 @@ protocol LaunchStateManagerDelegate: AnyObject {
 	func updateIsRecommended(version: String, appStoreUrl: URL)
 }
 
-final class LaunchStateManager: LaunchStateManaging {
+final class LaunchStateManager: LaunchStateManaging, Logging {
 	
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
@@ -57,7 +57,6 @@ final class LaunchStateManager: LaunchStateManaging {
 	
 		guard Current.cryptoLibUtility.isInitialized else {
 			delegate?.cryptoLibDidNotInitialize()
-	
 			return
 		}
 		
@@ -72,7 +71,9 @@ final class LaunchStateManager: LaunchStateManaging {
 				case .finished, .withinTTL:
 					self.startApplication()
 				case .serverError(let serviceErrors):
-					self.delegate?.errorWhileLoading(errors: serviceErrors)
+					if !self.applicationHasStarted {
+						self.delegate?.errorWhileLoading(errors: serviceErrors)
+					}
 			}
 		}
 	}
@@ -141,7 +142,7 @@ final class LaunchStateManager: LaunchStateManaging {
 			}
 		}]
 		
-		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver(updateVerificationPolicies)]
+		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver(updateVerificationPolicies)]
 	}
 	
 	// Update the  managers with the values from the actual http response
