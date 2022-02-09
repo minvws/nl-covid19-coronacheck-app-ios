@@ -49,10 +49,6 @@ final class FooterButtonView: BaseView {
 		let button = Button()
 		button.titleLabel?.textAlignment = .center
 		button.titleLabel?.numberOfLines = 2
-		if #available(iOS 15.0, *) {
-			button.titleLabel?.adjustsFontForContentSizeCategory = true
-			button.titleLabel?.maximumContentSizeCategory = .accessibilityExtraExtraLarge
-		}
 		return button
 	}()
 	

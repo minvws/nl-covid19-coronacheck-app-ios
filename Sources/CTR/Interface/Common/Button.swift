@@ -137,6 +137,12 @@ class Button: UIButton {
         self.addTarget(self, action: #selector(self.touchDownAnimation), for: .touchDown)
 
 		self.translatesAutoresizingMaskIntoConstraints = false
+		
+		if #available(iOS 15.0, *) {
+			titleLabel?.maximumContentSizeCategory = .extraExtraExtraLarge
+		}
+		titleLabel?.adjustsFontForContentSizeCategory = true
+		setupLargeContentViewer()
     }
 
     required init?(coder aDecoder: NSCoder) {
