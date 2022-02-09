@@ -116,7 +116,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			return false
 		}
 		return (disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag)
-		&& !disclosurePolicies.contains(VerificationPolicy.policy1G.featureFlag)) ||
+		&& !disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)) ||
 		disclosurePolicies.isEmpty
 	}
 	
@@ -126,7 +126,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			return false
 		}
 		return disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)
-		&& !disclosurePolicies.contains(VerificationPolicy.policy3G.featureFlag)
+		&& !disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag)
 	}
 	
 	func areBothDisclosurePoliciesEnabled() -> Bool {
