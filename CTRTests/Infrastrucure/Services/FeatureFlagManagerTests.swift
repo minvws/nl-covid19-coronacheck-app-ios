@@ -136,7 +136,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isVerificationPolicy_multiple_1Gdisabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfigurationverificationPolicies = ["3G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicies = ["3G"]
 		
 		// When
 		let enabled = sut.areMultipleVerificationPoliciesEnabled()
@@ -258,7 +258,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_is3GExclusiveDisclosurePolicyEnabled_disabled_noPoliciesEnabled() {
 		
 		// Given
-		remoteConfigManagerSpy..disclosurePolicies = []
+		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = []
 		
 		// When
 		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
@@ -306,7 +306,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_areBothDisclosurePoliciesEnabled_enabled_orderIndependent() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfigurationdisclosurePolicies = ["3G", "1G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
 		
 		// When
 		let enabled = sut.areBothDisclosurePoliciesEnabled()
