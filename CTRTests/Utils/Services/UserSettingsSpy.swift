@@ -362,6 +362,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedOverrideDisclosurePoliciesSetter = false
+	var invokedOverrideDisclosurePoliciesSetterCount = 0
+	var invokedOverrideDisclosurePolicies: [String]?
+	var invokedOverrideDisclosurePoliciesList = [[String]]()
+	var invokedOverrideDisclosurePoliciesGetter = false
+	var invokedOverrideDisclosurePoliciesGetterCount = 0
+	var stubbedOverrideDisclosurePolicies: [String]! = []
+
+	var overrideDisclosurePolicies: [String] {
+		set {
+			invokedOverrideDisclosurePoliciesSetter = true
+			invokedOverrideDisclosurePoliciesSetterCount += 1
+			invokedOverrideDisclosurePolicies = newValue
+			invokedOverrideDisclosurePoliciesList.append(newValue)
+		}
+		get {
+			invokedOverrideDisclosurePoliciesGetter = true
+			invokedOverrideDisclosurePoliciesGetterCount += 1
+			return stubbedOverrideDisclosurePolicies
+		}
+	}
+
 	var invokedWipePersistedData = false
 	var invokedWipePersistedDataCount = 0
 

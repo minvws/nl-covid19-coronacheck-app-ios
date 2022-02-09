@@ -112,9 +112,14 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	// Holder
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
 		
-		guard let disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
+		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
 			return false
 		}
+		
+		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty() {
+			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
+		}
+		
 		return (disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag)
 		&& !disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)) ||
 		disclosurePolicies.isEmpty
@@ -122,17 +127,26 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
 		
-		guard let disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
+		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
 			return false
 		}
+		
+		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty() {
+			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
+		}
+		
 		return disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)
 		&& !disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag)
 	}
 	
 	func areBothDisclosurePoliciesEnabled() -> Bool {
 		
-		guard let disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
+		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
 			return false
+		}
+		
+		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty() {
+			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
 		}
 		
 		return disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag) &&
