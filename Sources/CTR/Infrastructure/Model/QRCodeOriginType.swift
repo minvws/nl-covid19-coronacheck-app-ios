@@ -16,9 +16,9 @@ enum QRCodeOriginType: String, Codable, Equatable {
 	// e.g. "Test Certificate", "Vaccination Certificate"
 	var localizedProof: String {
 		switch self {
-			case .recovery: return L.generalRecoverystatement()
-			case .vaccination: return L.generalVaccinationcertificate()
-			case .test: return L.generalTestcertificate()
+			case .recovery: return L.general_recoverycertificate()
+			case .vaccination: return L.general_vaccinationcertificate()
+			case .test: return L.general_testcertificate()
 			case .vaccinationassessment: return L.general_visitorPass()
 		}
 	}

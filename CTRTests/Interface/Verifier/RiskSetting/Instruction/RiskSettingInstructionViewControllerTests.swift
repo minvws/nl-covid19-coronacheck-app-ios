@@ -39,7 +39,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	func test_bindings() {
 		// Given
 		
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		viewModel = RiskSettingInstructionViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingInstructionViewController(viewModel: viewModel)
 		loadView()
@@ -50,17 +50,14 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 		expect(self.sut.title).to(beNil())
 		expect(self.sut.sceneView.title) == L.verifier_risksetting_firsttimeuse_title()
 		expect(self.sut.sceneView.header) == L.verifier_risksetting_firsttimeuse_header()
-		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifier_risksetting_lowrisk_title()
-		expect(self.sut.sceneView.riskSettingControlsView.lowRiskSubtitle) == L.verifier_risksetting_lowrisk_subtitle()
-		expect(self.sut.sceneView.riskSettingControlsView.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
-		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifier_risksetting_highrisk_title()
-		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifier_risksetting_highrisk_subtitle()
-		expect(self.sut.sceneView.riskSettingControlsView.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-		expect(self.sut.sceneView.riskSettingControlsView.highPlusRiskTitle) == L.verifier_risksetting_2g_plus_title()
-		expect(self.sut.sceneView.riskSettingControlsView.highPlusRiskSubtitle) == L.verifier_risksetting_2g_plus_subtitle()
-		expect(self.sut.sceneView.riskSettingControlsView.highPlusRiskAccessibilityLabel) == "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
+		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)
+		expect(self.sut.sceneView.riskSettingControlsView.lowRiskSubtitle) == L.verifier_risksetting_subtitle_3G()
+		expect(self.sut.sceneView.riskSettingControlsView.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)), \(L.verifier_risksetting_subtitle_3G())"
+		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)
+		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifier_risksetting_subtitle_1G()
+		expect(self.sut.sceneView.riskSettingControlsView.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)), \(L.verifier_risksetting_subtitle_1G())"
 		expect(self.sut.sceneView.moreButtonTitle) == L.verifier_risksetting_readmore()
-		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
+		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy3G
 		expect(self.sut.sceneView.footerButtonView.primaryTitle) == L.verifierScaninstructionsButtonStartscanning()
 		expect(self.sut.sceneView.errorMessage) == L.verification_policy_selection_error_message()
 		expect(self.sut.sceneView.hasErrorState) == false
@@ -68,7 +65,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_riskSetting_low() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .low
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		viewModel = RiskSettingInstructionViewModel(coordinator: coordinatorSpy)
 		
 		sut = RiskSettingInstructionViewController(viewModel: viewModel)
@@ -77,7 +74,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 		// When
 		
 		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .low
+		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy3G
 		
 		// Snapshot
 		sut.assertImage()
@@ -85,7 +82,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_riskSetting_high() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .high
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
 		viewModel = RiskSettingInstructionViewModel(
 			coordinator: coordinatorSpy
 		)
@@ -95,25 +92,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 		// When
 		
 		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .high
-		
-		// Snapshot
-		sut.assertImage()
-	}
-	
-	func test_riskSetting_highPlus() {
-		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .highPlus
-		viewModel = RiskSettingInstructionViewModel(
-			coordinator: coordinatorSpy
-		)
-		sut = RiskSettingInstructionViewController(viewModel: viewModel)
-		loadView()
-		
-		// When
-		
-		// Then
-		expect(self.sut.sceneView.riskSettingControlsView.riskLevel) == .highPlus
+		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == .policy1G
 		
 		// Snapshot
 		sut.assertImage()

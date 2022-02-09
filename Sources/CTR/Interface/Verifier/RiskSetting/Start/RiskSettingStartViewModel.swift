@@ -19,8 +19,8 @@ final class RiskSettingStartViewModel: Logging {
 	@Bindable private(set) var header: String = L.verifier_risksetting_start_header()
 	@Bindable private(set) var primaryTitle: String = L.verifier_risksetting_setting_button()
 	@Bindable private(set) var readMoreButtonTitle: String = L.verifier_risksetting_start_readmore()
-	@Bindable private(set) var changeRiskTitle: String = L.verifier_risksetting_changeselection_3g()
-	@Bindable private(set) var changeRiskSubtitle: String = L.verifier_risksetting_lowrisk_subtitle()
+	@Bindable private(set) var changeRiskTitle: String?
+	@Bindable private(set) var changeRiskSubtitle: String = L.verifier_risksetting_subtitle_3G()
 	@Bindable private(set) var changeRiskButton: String = L.verifier_risksetting_changeselection_button()
 	@Bindable private(set) var hasUnselectedRiskLevel: Bool
 	
@@ -33,17 +33,14 @@ final class RiskSettingStartViewModel: Logging {
 		self.riskLevelManager = riskLevelManager
 		
 		hasUnselectedRiskLevel = riskLevelManager.state == nil
-		if let riskSetting = riskLevelManager.state {
-			switch riskSetting {
-				case .low:
-					changeRiskTitle = L.verifier_risksetting_changeselection_3g()
-					changeRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
-				case .high:
-					changeRiskTitle = L.verifier_risksetting_changeselection_2g()
-					changeRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
-				case .highPlus:
-					changeRiskTitle = L.verifier_risksetting_changeselection_2g_plus()
-					changeRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
+		if let verificationPolicy = riskLevelManager.state {
+			changeRiskTitle = L.verifier_risksetting_changeselection(verificationPolicy.localization)
+			
+			switch verificationPolicy {
+				case .policy3G:
+					changeRiskSubtitle = L.verifier_risksetting_subtitle_3G()
+				case .policy1G:
+					changeRiskSubtitle = L.verifier_risksetting_subtitle_1G()
 			}
 		}
 	}

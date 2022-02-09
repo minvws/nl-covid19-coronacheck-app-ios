@@ -68,7 +68,7 @@ class PaperProofInputCouplingCodeViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButtonTapped()
 
 		// Then
-		expect(self.sut.sceneView.fieldErrorMessage) == L.holderDcctokenentryErrorCodewrongformat()
+		expect(self.sut.sceneView.fieldErrorMessage) == L.holderDcctokenentryErrorEmptycode()
 		expect(self.sut.sceneView.primaryButton.isEnabled) == true
 
 		sut.assertImage(containedInNavigationController: true)
@@ -85,7 +85,7 @@ class PaperProofInputCouplingCodeViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButtonTapped()
 
 		// Then
-		expect(self.sut.sceneView.fieldErrorMessage) == L.holderDcctokenentryErrorCodenotfound()
+		expect(self.sut.sceneView.fieldErrorMessage) == L.holderDcctokenentryErrorInvalidcode()
 		expect(self.sut.sceneView.primaryButton.isEnabled) == true
 
 		sut.assertImage(containedInNavigationController: true)

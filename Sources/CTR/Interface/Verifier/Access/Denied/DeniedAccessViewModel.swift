@@ -7,13 +7,6 @@
 
 import UIKit
 
-/// The access reasons
-enum DeniedAccessReason: Equatable {
-
-	case invalid
-	case identityMismatch
-}
-
 final class DeniedAccessViewModel: Logging {
 	
 	/// Coordination Delegate
@@ -26,26 +19,17 @@ final class DeniedAccessViewModel: Logging {
 	private var autoCloseTimer: Timer?
 	
 	/// The title of the scene
-	@Bindable private(set) var accessTitle: String
+	@Bindable private(set) var accessTitle = L.verifierResultDeniedTitle()
 	
 	@Bindable private(set) var primaryTitle = L.verifierResultNext()
 	
-	@Bindable private(set) var secondaryTitle: String?
+	@Bindable private(set) var secondaryTitle = L.verifierResultDeniedReadmore()
 	
 	init(
-		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		deniedAccessReason: DeniedAccessReason
+		coordinator: (VerifierCoordinatorDelegate & Dismissable)
 	) {
 		
 		self.coordinator = coordinator
-		
-		switch deniedAccessReason {
-			case .invalid:
-				accessTitle = L.verifierResultDeniedTitle()
-				secondaryTitle = L.verifierResultDeniedReadmore()
-			case .identityMismatch:
-				accessTitle = L.verifier_result_denied_personal_data_mismatch_title()
-		}
 		
 		addObservers()
 	}

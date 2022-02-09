@@ -5,7 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import UIKit
 import CoreData
 
 protocol ScanLogManaging: AnyObject {
@@ -14,7 +14,7 @@ protocol ScanLogManaging: AnyObject {
 
 	func getScanEntries(withinLastNumberOfSeconds: Int) -> Result<[ScanLogEntry], Error>
 
-	func addScanEntry(riskLevel: RiskLevel, date: Date)
+	func addScanEntry(verificationPolicy: VerificationPolicy, date: Date)
 
 	func deleteExpiredScanLogEntries(seconds: Int)
 
@@ -23,14 +23,35 @@ protocol ScanLogManaging: AnyObject {
 
 class ScanLogManager: ScanLogManaging {
 
-	static let highRisk: String = "2G"
-	static let lowRisk: String = "3G"
+	static let policy1G: String = "1G"
+	static let policy3G: String = "3G"
 
 	private var dataStoreManager: DataStoreManaging
+	private let notificationCenter: NotificationCenterProtocol
 
-	required init(dataStoreManager: DataStoreManaging) {
+	required init(dataStoreManager: DataStoreManaging, notificationCenter: NotificationCenterProtocol = NotificationCenter.default) {
 
 		self.dataStoreManager = dataStoreManager
+		self.notificationCenter = notificationCenter
+		setupNotificationObservers()
+	}
+	
+	deinit {
+		notificationCenter.removeObserver(self)
+	}
+	
+	func setupNotificationObservers() {
+		
+		guard AppFlavor.flavor == .verifier else {
+			// There is no scan log database on the holder
+			return
+		}
+		
+		notificationCenter.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.deleteExpiredScanLogEntries(
+				seconds: Current.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
+			)
+		}
 	}
 
 	func didWeScanQRs(withinLastNumberOfSeconds seconds: Int) -> Bool {
@@ -53,12 +74,18 @@ class ScanLogManager: ScanLogManaging {
 		return result
 	}
 
-	func addScanEntry(riskLevel: RiskLevel, date: Date) {
-
+	func addScanEntry(verificationPolicy: VerificationPolicy, date: Date) {
+		
 		// Nothing for now
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			let mode: String = riskLevel.isLow ? ScanLogManager.lowRisk : ScanLogManager.highRisk
+			var mode: String = ""
+			switch verificationPolicy {
+				case .policy3G:
+					mode = ScanLogManager.policy3G
+				case .policy1G:
+					mode = ScanLogManager.policy1G
+			}
 			let entry = ScanLogEntryModel.create(mode: mode, date: date, managedContext: context)
 			dataStoreManager.save(context)
 

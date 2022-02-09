@@ -19,14 +19,14 @@ final class DeniedAccessViewModelTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		verifierCoordinatorSpy = VerifierCoordinatorDelegateSpy()
+		
+		sut = DeniedAccessViewModel(
+			coordinator: verifierCoordinatorSpy
+		)
 	}
 	
-	func test_deniedAccessReason_invalid() {
+	func test_bindings() {
 		// Given
-		sut = DeniedAccessViewModel(
-			coordinator: verifierCoordinatorSpy,
-			deniedAccessReason: .invalid
-		)
 		
 		// When
 		
@@ -36,27 +36,8 @@ final class DeniedAccessViewModelTests: XCTestCase {
 		expect(self.sut.secondaryTitle) == L.verifierResultDeniedReadmore()
 	}
 	
-	func test_deniedAccessReason_identityMismatch() {
-		// Given
-		sut = DeniedAccessViewModel(
-			coordinator: verifierCoordinatorSpy,
-			deniedAccessReason: .identityMismatch
-		)
-		
-		// When
-		
-		// Then
-		expect(self.sut.accessTitle) == L.verifier_result_denied_personal_data_mismatch_title()
-		expect(self.sut.primaryTitle) == L.verifierResultNext()
-		expect(self.sut.secondaryTitle).to(beNil())
-	}
-	
 	func test_dismiss_shouldNavigateBackToStart() {
 		// Given
-		sut = DeniedAccessViewModel(
-			coordinator: verifierCoordinatorSpy,
-			deniedAccessReason: .invalid
-		)
 		
 		// When
 		sut.dismiss()
@@ -67,10 +48,6 @@ final class DeniedAccessViewModelTests: XCTestCase {
 	
 	func test_scanAgain_shouldScanAgain() {
 		// Given
-		sut = DeniedAccessViewModel(
-			coordinator: verifierCoordinatorSpy,
-			deniedAccessReason: .invalid
-		)
 		
 		// When
 		sut.scanAgain()
@@ -81,10 +58,6 @@ final class DeniedAccessViewModelTests: XCTestCase {
 	
 	func test_showMoreInformation_shouldDisplayContent() {
 		// Given
-		sut = DeniedAccessViewModel(
-			coordinator: verifierCoordinatorSpy,
-			deniedAccessReason: .invalid
-		)
 		
 		// When
 		sut.showMoreInformation()

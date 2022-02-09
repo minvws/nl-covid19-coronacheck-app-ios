@@ -36,7 +36,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		let result = sut.didWeScanQRs(withinLastNumberOfSeconds: 3600)
@@ -49,7 +49,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 4000 * seconds)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		let result = sut.didWeScanQRs(withinLastNumberOfSeconds: 3600)
@@ -73,7 +73,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
@@ -81,14 +81,14 @@ class ScanLogManagerTests: XCTestCase {
 		// Then
 		expect(result).toNot(beEmpty())
 		expect(result).to(haveCount(1))
-		expect(result.first?.mode) == ScanLogManager.highRisk
+		expect(result.first?.mode) == ScanLogManager.policy1G
 	}
 
 	func test_getScanEntries_oneScan_inTimeWindow_lowRisk() throws {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(riskLevel: RiskLevel.low, date: date)
+		sut.addScanEntry(verificationPolicy: .policy3G, date: date)
 
 		// When
 		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
@@ -96,14 +96,14 @@ class ScanLogManagerTests: XCTestCase {
 		// Then
 		expect(result).toNot(beEmpty())
 		expect(result).to(haveCount(1))
-		expect(result.first?.mode) == ScanLogManager.lowRisk
+		expect(result.first?.mode) == ScanLogManager.policy3G
 	}
 
 	func test_getScanEntries_oneScan_outsideTimeWindow() throws {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 4000 * seconds)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
@@ -116,7 +116,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 4000 * seconds)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		sut.deleteExpiredScanLogEntries(seconds: 3600)
@@ -130,7 +130,7 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date().addingTimeInterval(ago * 3000 * seconds)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		sut.deleteExpiredScanLogEntries(seconds: 3600)
@@ -144,9 +144,9 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Given
 		let date = Date()
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
-		sut.addScanEntry(riskLevel: RiskLevel.high, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
 
 		// When
 		sut.wipePersistedData()
@@ -159,5 +159,37 @@ class ScanLogManagerTests: XCTestCase {
 
 		// Then
 		expect(list).toEventually(beEmpty())
+	}
+	
+	func test_notification_outsideTimeWindow() throws {
+		
+		// Given
+		let date = Date().addingTimeInterval(ago * 4000 * seconds)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
+		
+		// When
+		NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+		
+		// Then
+		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
+		
+		// Then
+		expect(result).toEventually(beEmpty())
+	}
+	
+	func test_notification_insideTimeWindow() throws {
+		
+		// Given
+		let date = Date().addingTimeInterval(ago * 3000 * seconds)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
+		
+		// When
+		NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+		
+		// Then
+		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
+		
+		// Then
+		expect(result).toEventuallyNot(beEmpty())
 	}
 }

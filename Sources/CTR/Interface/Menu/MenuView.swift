@@ -4,151 +4,59 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-  
+
 import UIKit
-
-class MenuItemView: BaseView {
-
-	/// The message label
-	let titleLabel: Label = {
-
-		return Label(body: nil).multiline()
-	}()
-
-	let primaryButton: UIButton = {
-
-		let button = UIButton()
-		button.translatesAutoresizingMaskIntoConstraints = false
-		return button
-	}()
-
-	/// Setup the views
-	override func setupViews() {
-
-		super.setupViews()
-		primaryButton.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
-	}
-
-	/// Setup the hierarchy
-	override func setupViewHierarchy() {
-		super.setupViewHierarchy()
-
-		addSubview(titleLabel)
-		addSubview(primaryButton)
-	}
-
-	/// Setup the constraints
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-
-		titleLabel.embed(in: self)
-		primaryButton.embed(in: self)
-	}
-
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-
-		super.setupAccessibility()
-		
-		titleLabel.isAccessibilityElement = false
-
-	}
-
-	/// User tapped on the primary button
-	@objc func primaryButtonTapped() {
-
-		primaryButtonTappedCommand?()
-	}
-
-	// MARK: Public Access
-
-	/// The user tapped on the primary button
-	var primaryButtonTappedCommand: (() -> Void)?
-
-	/// The title
-	var title: String? {
-		didSet {
-			titleLabel.text = title
-			primaryButton.accessibilityLabel = title
-		}
-	}
-}
 
 class MenuView: ScrolledStackView {
 
-	/// The display constants
-	private struct ViewTraits {
-
-		// Margins
-		static let margin: CGFloat = 20.0
-		// MenuItemView has additional margins, so less margins defined here
-		static let verticalMargin: CGFloat = 29.0
-		static let topMenuSpacing: CGFloat = 20.0
-		static let bottomMenuSpacing: CGFloat = 20.0
-		static let separatorHeight: CGFloat = 1.0
-	}
-
-	/// The stackview for the content
-	 let topStackView: UIStackView = {
-
-		let view = UIStackView()
+	private let navigationBackgroundView: UIView = {
+		let view = UIView()
+		view.backgroundColor = C.viewControllerBackgroundColor()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.axis = .vertical
-		view.alignment = .fill
-		view.distribution = .fill
-		view.spacing = ViewTraits.topMenuSpacing
-		return view
-	}()
-
-	/// The stackview for the content
-	 let bottomStackView: UIStackView = {
-
-		let view = UIStackView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.axis = .vertical
-		view.alignment = .fill
-		view.distribution = .fill
-		view.spacing = ViewTraits.bottomMenuSpacing
 		return view
 	}()
 	
-	private let separatorView: UIView = {
+	private let topBorderView: UIView = {
 		let view = UIView()
+		view.backgroundColor = C.grey5()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.secondary.withAlphaComponent(0.5)
 		return view
 	}()
-
+	
+	// MARK: - Lifecycle
+	
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.primary
+		backgroundColor = C.primaryBlue5()
 		
-		stackViewInset = UIEdgeInsets(
-			top: ViewTraits.verticalMargin,
-			left: ViewTraits.margin,
-			bottom: ViewTraits.margin,
-			right: ViewTraits.verticalMargin
-		)
+		stackViewInset = .zero
+		stackView.spacing = 0
+		stackView.shouldGroupAccessibilityChildren = true
 	}
-
-	/// Setup the hierarchy
+	
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
-
-		stackView.addArrangedSubview(topStackView)
-		stackView.addArrangedSubview(separatorView)
-		stackView.addArrangedSubview(bottomStackView)
+		
+		addSubview(navigationBackgroundView)
+		addSubview(topBorderView)
 	}
-
-	/// Setup the constraints
+	
 	override func setupViewConstraints() {
-
 		super.setupViewConstraints()
-
-		NSLayoutConstraint.activate([
-			separatorView.heightAnchor.constraint(equalToConstant: ViewTraits.separatorHeight)
-		])
+		
+		var constraints = [NSLayoutConstraint]()
+		
+		constraints += [navigationBackgroundView.leftAnchor.constraint(equalTo: leftAnchor)]
+		constraints += [navigationBackgroundView.rightAnchor.constraint(equalTo: rightAnchor)]
+		constraints += [navigationBackgroundView.topAnchor.constraint(equalTo: topAnchor)]
+		constraints += [navigationBackgroundView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor)]
+		
+		constraints += [topBorderView.leadingAnchor.constraint(equalTo: leadingAnchor)]
+		constraints += [topBorderView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor)]
+		constraints += [topBorderView.trailingAnchor.constraint(equalTo: trailingAnchor)]
+		constraints += [topBorderView.heightAnchor.constraint(equalToConstant: 1)]
+		
+		NSLayoutConstraint.activate(constraints)
 	}
 }

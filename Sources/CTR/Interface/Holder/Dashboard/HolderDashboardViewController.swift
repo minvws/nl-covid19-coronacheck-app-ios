@@ -13,6 +13,7 @@ class HolderDashboardViewController: BaseViewController {
         case headerMessage(message: String, buttonTitle: String?)
         case emptyStateDescription(message: String, buttonTitle: String?)
         case emptyStatePlaceholderImage(image: UIImage, title: String)
+		case addCertificate(title: String, didTapAdd: () -> Void)
 
         // Warnings:
         case expiredQR(message: String, didTapClose: () -> Void)
@@ -88,29 +89,61 @@ class HolderDashboardViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
-
+		
 		setupBindings()
-
-		setupPlusButton()
 		
 		sceneView.delegate = self
 
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.addProofTapped()
+			self?.viewModel.addCertificateFooterTapped()
+		}
+		
+		sceneView.tapMenuButtonHandler = { [weak self] in
+			self?.viewModel.userTappedMenuButton()
 		}
 		
 		// Forces VoiceOver focus on menu button instead of tab bar on start up
 		UIAccessibility.post(notification: .screenChanged, argument: navigationItem.leftBarButtonItem)
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		navigationController?.navigationBar.isHidden = true
+		viewModel.viewWillAppear()
+	}
+	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = false
 	}
 
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		navigationController?.navigationBar.isHidden = false
+		
+		// As the screen animates out, fade out the (fake) navigation bar,
+		// as an approximation of the animation that occurs with UINavigationBar.
+		transitionCoordinator?.animate(alongsideTransition: { _ in
+			self.sceneView.fakeNavigationBarAlpha = 0
+		}, completion: { _ in
+			self.sceneView.fakeNavigationBarAlpha = 1
+		})
+	}
+
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+	}
+	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		
+		guard !didSetInitialStartingTabOnSceneView else { return }
+		didSetInitialStartingTabOnSceneView = true
+		
+		// Select start tab after layouting is done to be able to update scroll position
+		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
+		sceneView.selectTab(tab: selectedTab)
 	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -121,9 +154,11 @@ class HolderDashboardViewController: BaseViewController {
 		}
 	}
 
+	// MARK: - Setup
+	
 	private func setupBindings() {
 
-		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
 		
 		viewModel.$domesticCards.binding = { [sceneView, weak self] cards in
 			DispatchQueue.main.async {
@@ -138,7 +173,7 @@ class HolderDashboardViewController: BaseViewController {
 		}
 		
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
-		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
+		viewModel.$shouldShowAddCertificateFooter.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
 		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
 			DispatchQueue.main.async {
@@ -151,7 +186,7 @@ class HolderDashboardViewController: BaseViewController {
 			sceneView.selectTab(tab: region)
 		}
 	}
-	
+
 	private func setup(cards: [HolderDashboardViewController.Card], with stackView: UIStackView) {
 		let cardViews = cards.compactMap { card in
 			card.makeView(openURLHandler: { [weak viewModel] url in viewModel?.openUrl(url) })
@@ -177,34 +212,7 @@ class HolderDashboardViewController: BaseViewController {
 			
 			stackView.setCustomSpacing(22, after: previousCardView)
 		}
-	}
-
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-
-		viewModel.viewWillAppear()
-	}
-	
-	override func viewDidLayoutSubviews() {
-		super.viewDidLayoutSubviews()
-
-		guard !didSetInitialStartingTabOnSceneView else { return }
-		didSetInitialStartingTabOnSceneView = true
-
-		// Select start tab after layouting is done to be able to update scroll position
-		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
-		sceneView.selectTab(tab: selectedTab)
-	}
-
-	// MARK: Helper methods
-
-	func setupPlusButton() {
-		let config = UIBarButtonItem.Configuration(target: viewModel,
-												   action: #selector(HolderDashboardViewModel.addProofTapped),
-												   content: .image( I.plus()),
-												   accessibilityIdentifier: "PlusButton",
-												   accessibilityLabel: L.holderMenuProof())
-		navigationItem.rightBarButtonItem = .create(config)
+		UIAccessibility.post(notification: .layoutChanged, argument: view)
 	}
 }
 
@@ -224,6 +232,12 @@ private extension HolderDashboardViewController.Card {
 			case let .headerMessage(message, buttonTitle):
 				return HeaderMessageCardView.make(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
 				
+			case let .addCertificate(title, didTapAdd):
+				let card = AddCertificateCardView()
+				card.title = title
+				card.tapHandler = didTapAdd
+				return card
+			
 			// Message Cards with only a message + close button
 			case let .expiredQR(message, didTapCloseAction):
 				return MessageCardView(config: .init(title: message, closeButtonCommand: didTapCloseAction, ctaButton: nil))

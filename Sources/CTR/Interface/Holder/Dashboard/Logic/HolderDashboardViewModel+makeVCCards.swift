@@ -31,6 +31,22 @@ extension HolderDashboardViewController.Card {
 		}
 	}
 
+	static func makeAddCertificateCard(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		
+		guard !state.shouldShowAddCertificateFooter else { return [] }
+		return [
+			.addCertificate(
+				title: L.holder_dashboard_addCard_title(),
+				didTapAdd: { [weak actionHandler] in
+					actionHandler?.didTapAddCertificate()
+				})
+		]
+	}
+	
 	static func makeDeviceHasClockDeviationCard(
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
@@ -225,7 +241,7 @@ extension HolderDashboardViewController.Card {
 					actionHandler?.didTapNewValidityBannerMoreInfo()
 				},
 				didTapClose: { [weak actionHandler] in
-					actionHandler?.didTapNewValidiyBannerClose()
+					actionHandler?.didTapNewValidityBannerClose()
 				}
 			)
 		]

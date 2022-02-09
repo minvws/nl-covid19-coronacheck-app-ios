@@ -141,25 +141,25 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedRiskLevelSetter = false
-	var invokedRiskLevelSetterCount = 0
-	var invokedRiskLevel: RiskLevel?
-	var invokedRiskLevelList = [RiskLevel?]()
-	var invokedRiskLevelGetter = false
-	var invokedRiskLevelGetterCount = 0
-	var stubbedRiskLevel: RiskLevel!
+	var invokedVerificationPolicySetter = false
+	var invokedVerificationPolicySetterCount = 0
+	var invokedVerificationPolicy: VerificationPolicy?
+	var invokedVerificationPolicyList = [VerificationPolicy?]()
+	var invokedVerificationPolicyGetter = false
+	var invokedVerificationPolicyGetterCount = 0
+	var stubbedVerificationPolicy: VerificationPolicy!
 
-	var riskLevel: RiskLevel? {
+	var verificationPolicy: VerificationPolicy? {
 		set {
-			invokedRiskLevelSetter = true
-			invokedRiskLevelSetterCount += 1
-			invokedRiskLevel = newValue
-			invokedRiskLevelList.append(newValue)
+			invokedVerificationPolicySetter = true
+			invokedVerificationPolicySetterCount += 1
+			invokedVerificationPolicy = newValue
+			invokedVerificationPolicyList.append(newValue)
 		}
 		get {
-			invokedRiskLevelGetter = true
-			invokedRiskLevelGetterCount += 1
-			return stubbedRiskLevel
+			invokedVerificationPolicyGetter = true
+			invokedVerificationPolicyGetterCount += 1
+			return stubbedVerificationPolicy
 		}
 	}
 

@@ -15,20 +15,17 @@ final class RiskSettingSelectedViewModel: Logging {
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_active_title()
 	@Bindable private(set) var header: String?
-	@Bindable private(set) var lowRiskTitle = L.verifier_risksetting_lowrisk_title()
-	@Bindable private(set) var lowRiskSubtitle = L.verifier_risksetting_lowrisk_subtitle()
-	@Bindable private(set) var lowRiskAccessibilityLabel = "\(L.verifier_risksetting_lowrisk_title()), \(L.verifier_risksetting_lowrisk_subtitle())"
-	@Bindable private(set) var highRiskTitle = L.verifier_risksetting_highrisk_title()
-	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_highrisk_subtitle()
-	@Bindable private(set) var highRiskAccessibilityLabel = "\(L.verifier_risksetting_highrisk_title()), \(L.verifier_risksetting_highrisk_subtitle())"
-	@Bindable private(set) var highPlusRiskTitle = L.verifier_risksetting_2g_plus_title()
-	@Bindable private(set) var highPlusRiskSubtitle = L.verifier_risksetting_2g_plus_subtitle()
-	@Bindable private(set) var highPlusRiskAccessibilityLabel = "\(L.verifier_risksetting_2g_plus_title()), \(L.verifier_risksetting_2g_plus_subtitle())"
+	@Bindable private(set) var lowRiskTitle: String?
+	@Bindable private(set) var lowRiskSubtitle = L.verifier_risksetting_subtitle_3G()
+	@Bindable private(set) var lowRiskAccessibilityLabel: String?
+	@Bindable private(set) var highRiskTitle: String?
+	@Bindable private(set) var highRiskSubtitle = L.verifier_risksetting_subtitle_1G()
+	@Bindable private(set) var highRiskAccessibilityLabel: String?
 	@Bindable private(set) var primaryButtonTitle = L.verifier_risksetting_confirmation_button()
-	@Bindable private(set) var riskLevel: RiskLevel?
+	@Bindable private(set) var verificationPolicy: VerificationPolicy?
 	@Bindable private(set) var alert: AlertContent?
 	
-	var selectRisk: RiskLevel?
+	var selectVerificationPolicy: VerificationPolicy?
 	private var scanLockMinutes: Int
 	private var didWeRecentlyScanQRs: Bool = false
 
@@ -38,9 +35,16 @@ final class RiskSettingSelectedViewModel: Logging {
 		
 		self.coordinator = coordinator
 		
-		let selectedRisk = Current.riskLevelManager.state
-		riskLevel = selectedRisk
-		selectRisk = selectedRisk
+		let title3G = L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)
+		lowRiskTitle = title3G
+		lowRiskAccessibilityLabel = "\(title3G), \(L.verifier_risksetting_subtitle_3G())"
+		let title1G = L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)
+		highRiskTitle = title1G
+		highRiskAccessibilityLabel = "\(title1G), \(L.verifier_risksetting_subtitle_1G())"
+		
+		let selectedVerificationPolicy = Current.riskLevelManager.state
+		verificationPolicy = selectedVerificationPolicy
+		selectVerificationPolicy = selectedVerificationPolicy
 
 		let scanLockSeconds = Current.remoteConfigManager.storedConfiguration.scanLockSeconds ?? 300
 		scanLockMinutes = scanLockSeconds / 60
@@ -52,7 +56,7 @@ final class RiskSettingSelectedViewModel: Logging {
 	
 	func confirmSetting() {
 		
-		if didWeRecentlyScanQRs, riskLevel != selectRisk {
+		if didWeRecentlyScanQRs, verificationPolicy != selectVerificationPolicy {
 			displayAlert()
 		} else {
 			saveSettingAndGoBackToStart(enablingLock: false)
@@ -80,7 +84,7 @@ private extension RiskSettingSelectedViewModel {
 		if enablingLock {
 			Current.scanLockManager.lock()
 		}
-		Current.riskLevelManager.update(riskLevel: selectRisk)
+		Current.riskLevelManager.update(verificationPolicy: selectVerificationPolicy)
 		coordinator?.navigateToVerifierWelcome()
 	}
 }

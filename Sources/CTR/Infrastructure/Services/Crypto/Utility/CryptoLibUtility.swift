@@ -38,6 +38,8 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 
 	/// Reset to default
 	func wipePersistedData()
+	
+	func registerTriggers()
 }
 
 final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
@@ -102,7 +104,6 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		self.remoteConfigManager = remoteConfigManager
 		self.shouldInitialize = .empty
 		self.reachability = reachability
-		registerTriggers()
 	}
 
 	func registerTriggers() {
@@ -151,7 +152,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 			logError("Error initializing library: \(result.error)")
 			isInitialized = false
 		} else {
-			logInfo("Initializing library successful")
+			logVerbose("Initializing library successful")
 			isInitialized = true
 		}
 	}

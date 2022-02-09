@@ -36,7 +36,9 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 	@Bindable private(set) var shouldResumeScanning: Bool?
 	
-	@Bindable private(set) var riskLevel: RiskLevel?
+	@Bindable private(set) var verificationPolicy: VerificationPolicy?
+	
+	private var riskLevelObserverToken: RiskLevelManager.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:
@@ -50,25 +52,28 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.title = L.verifierScanTitle()
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
-
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
-			self.riskLevel = riskLevelManager?.state
-		}
+		self.verificationPolicy = riskLevelManager?.state
 
 		super.init(coordinator: coordinator)
+		
+		riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] updatedPolicy in
+			
+			guard self?.verificationPolicy != updatedPolicy else { return }
+			self?.dismiss()
+		}
 	}
 
 	/// Parse the scanned QR-code
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 
-			guard let currentRiskLevel = riskLevelManager?.state else {
+			guard let currentVerificationPolicy = riskLevelManager?.state else {
 				assertionFailure("Risk level should be set")
 				return
 			}
-			scanLogManager?.addScanEntry(riskLevel: currentRiskLevel, date: Date())
+			scanLogManager?.addScanEntry(verificationPolicy: currentVerificationPolicy, date: Date())
 		}
 
 		if let verificationResult = cryptoManager?.verifyQRMessage(message) {
@@ -92,7 +97,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 				default:
 					
-					theCoordinator?.navigateToDeniedAccess(.invalid)
+					theCoordinator?.navigateToDeniedAccess()
 			}
 		}
 	}

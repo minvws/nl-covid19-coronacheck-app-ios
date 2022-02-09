@@ -43,6 +43,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
 	}
 
+	var invokedUserWishesToOpenTheMenu = false
+	var invokedUserWishesToOpenTheMenuCount = 0
+
+	func userWishesToOpenTheMenu() {
+		invokedUserWishesToOpenTheMenu = true
+		invokedUserWishesToOpenTheMenuCount += 1
+	}
+
 	var invokedUserWishesToMakeQRFromRemoteEvent = false
 	var invokedUserWishesToMakeQRFromRemoteEventCount = 0
 	var invokedUserWishesToMakeQRFromRemoteEventParameters: (remoteEvent: RemoteEvent, originalMode: EventMode)?

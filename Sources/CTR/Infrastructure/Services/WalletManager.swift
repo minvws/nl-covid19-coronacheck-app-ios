@@ -180,7 +180,7 @@ class WalletManager: WalletManaging, Logging {
 					if let maxIssuedAt = eventGroup.maxIssuedAt,
 					   let expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: maxIssuedAt) {
 						if expireDate > Date() {
-							logDebug("Shantay, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
+							logVerbose("Shantay, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
 						} else {
 							logDebug("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
 							context.delete(eventGroup)

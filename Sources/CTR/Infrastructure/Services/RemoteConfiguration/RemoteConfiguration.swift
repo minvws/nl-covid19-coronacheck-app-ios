@@ -126,6 +126,8 @@ struct RemoteConfiguration: Codable, Equatable {
 	var vaccinationAssessmentEventValidityDays: Int?
 	
 	var visitorPassEnabled: Bool?
+	
+	var verificationPolicies: [String]?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -165,6 +167,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case verificationPolicyVersion = "iOSEnableVerificationPolicyVersion"
 		case vaccinationAssessmentEventValidityDays = "vaccinationAssessmentEventValidityDays"
 		case visitorPassEnabled = "visitorPassEnabled"
+		case verificationPolicies = "verificationPolicies"
 	}
 	
 	init(minVersion: String) {
@@ -201,6 +204,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.verificationPolicyVersion = "0"
 		config.vaccinationAssessmentEventValidityDays = 14
 		config.visitorPassEnabled = true
+		config.verificationPolicies = ["3G"]
 		return config
 	}
 

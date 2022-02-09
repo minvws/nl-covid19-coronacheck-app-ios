@@ -10,8 +10,8 @@ import UIKit
 /// The access options
 enum VerifiedAccess: Equatable {
 
-	case verified(RiskLevel)
-	case demo(RiskLevel)
+	case verified(VerificationPolicy)
+	case demo(VerificationPolicy)
 }
 
 final class VerifiedAccessViewModel: Logging {
@@ -35,23 +35,17 @@ final class VerifiedAccessViewModel: Logging {
 		self.coordinator = coordinator
 		self.verifiedAccess = verifiedAccess
 
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.is1GPolicyEnabled() {
 			switch verifiedAccess {
-				case .verified(let riskLevel) where riskLevel.isHighPlus,
-						.demo(let riskLevel) where riskLevel.isHighPlus:
-					accessTitle = L.verifier_result_access_title_2g_plus()
-				case .verified(let riskLevel) where riskLevel.isHigh,
-						.demo(let riskLevel) where riskLevel.isHigh:
-					accessTitle = L.verifier_result_access_title_highrisk()
-				default:
-					accessTitle = L.verifier_result_access_title_lowrisk()
+				case .verified(let verificationPolicy), .demo(let verificationPolicy):
+					accessTitle = L.verifier_result_access_title_policy(verificationPolicy.localization)
 			}
 		} else {
 			switch verifiedAccess {
 				case .verified:
-					self.verifiedAccess = .verified(.low)
+					self.verifiedAccess = .verified(.policy3G)
 				case .demo:
-					self.verifiedAccess = .demo(.low)
+					self.verifiedAccess = .demo(.policy3G)
 			}
 			accessTitle = L.verifier_result_access_title()
 		}

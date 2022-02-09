@@ -81,7 +81,7 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "2G", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
+			ScanLogEntryModel.create(mode: "1G", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
 
 			// When
 			if let list = ScanLogEntryModel.listEntriesStartingFrom(date: date, managedContext: context).successValue {
@@ -100,7 +100,7 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "2G", date: date, managedContext: context)
+			ScanLogEntryModel.create(mode: "1G", date: date, managedContext: context)
 
 			// When
 			if let list = ScanLogEntryModel.listEntriesUpTo(date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context).successValue {

@@ -13,7 +13,7 @@ class ScanInstructionsViewModel {
 	weak var coordinator: ScanInstructionsCoordinatorDelegate?
 	
 	/// The pages for onboarding
-	@Bindable private(set) var pages: [ScanInstructionsPage]
+	@Bindable private(set) var pages: [ScanInstructionsItem]
 
 	@Bindable private(set) var shouldShowSkipButton: Bool = true
 
@@ -39,14 +39,14 @@ class ScanInstructionsViewModel {
 	///   - numberOfPages: the total number of pages
 	init(
 		coordinator: ScanInstructionsCoordinatorDelegate,
-		pages: [ScanInstructionsPage]
+		pages: [ScanInstructionsItem]
 	) {
 		
 		self.coordinator = coordinator
 		self.pages = pages
 		self.currentPage = 0
 
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			shouldShowRiskSetting = riskLevelManager.state == nil
 		}
 		
@@ -59,9 +59,9 @@ class ScanInstructionsViewModel {
 		}
 	}
 	
-	func scanInstructionsViewController(forPage page: ScanInstructionsPage) -> ScanInstructionsPageViewController {
-		let viewController = ScanInstructionsPageViewController(
-			viewModel: ScanInstructionsPageViewModel(page: page)
+	func scanInstructionsViewController(forPage page: ScanInstructionsItem) -> ScanInstructionsItemViewController {
+		let viewController = ScanInstructionsItemViewController(
+			viewModel: ScanInstructionsItemViewModel(page: page)
 		)
 		viewController.isAccessibilityElement = true
 		return viewController
@@ -70,17 +70,14 @@ class ScanInstructionsViewModel {
 	func finishScanInstructions() {
 		
 		userSettings.scanInstructionShown = true
-		
-		if shouldShowRiskSetting {
+
+		if !userSettings.policyInformationShown, Current.featureFlagManager.is1GPolicyEnabled() {
+			coordinator?.userWishesToReadPolicyInformation()
+		} else if shouldShowRiskSetting {
 			coordinator?.userWishesToSelectRiskSetting()
 		} else {
 			coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
 		}
-	}
-	
-	func finishSelectRiskSetting() {
-		
-		coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
 	}
 
 	/// i.e. exit the Scan Instructions
@@ -100,9 +97,11 @@ class ScanInstructionsViewModel {
 			return currentPage < lastPage
 		}()
 		
-		if currentPage == lastPage, !shouldShowRiskSetting {
+		if currentPage == lastPage {
 			if hasScanLock {
 				nextButtonTitle = L.verifier_scan_instructions_back_to_start()
+			} else if (!userSettings.policyInformationShown && Current.featureFlagManager.is1GPolicyEnabled()) || shouldShowRiskSetting {
+				nextButtonTitle = L.generalNext()
 			} else {
 				nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
 			}

@@ -11,24 +11,25 @@ import Reachability
 
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {
-	func didTapConfigAlmostOutOfDateCTA()
+	func didTapAddCertificate()
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
-	func didTapExpiredDomesticVaccinationQRMoreInfo()
-	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion)
-	func didTapDeviceHasClockDeviationMoreInfo()
-	func didTapTestOnlyValidFor3GMoreInfo()
-	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
-	func didTapRetryLoadQRCards()
-	func didTapRecommendedUpdate()
-	func didTapNewValidityBannerMoreInfo()
-	func didTapNewValidiyBannerClose()
 	func didTapCompleteYourVaccinationAssessmentMoreInfo()
-	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
+	func didTapConfigAlmostOutOfDateCTA()
+	func didTapDeviceHasClockDeviationMoreInfo()
+	func didTapExpiredDomesticVaccinationQRMoreInfo()
+	func didTapNewValidityBannerClose()
+	func didTapNewValidityBannerMoreInfo()
+	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion)
+	func didTapRecommendedUpdate()
 	func didTapRecommendToAddYourBooster()
 	func didTapRecommendToAddYourBoosterClose()
+	func didTapRetryLoadQRCards()
+	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
+	func didTapTestOnlyValidFor3GMoreInfo()
+	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 }
 
-final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHandling {
+final class HolderDashboardViewModel: Logging {
 	typealias Datasource = HolderDashboardQRCardDatasource
 
 	// MARK: - Public properties
@@ -44,7 +45,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	
 	@Bindable private(set) var primaryButtonTitle = L.holderMenuProof()
 	
-	@Bindable private(set) var hasAddCertificateMode: Bool = false
+	@Bindable private(set) var shouldShowAddCertificateFooter: Bool = false
 
 	@Bindable private(set) var currentlyPresentedAlert: AlertContent?
 	
@@ -79,6 +80,10 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		var shouldShowCompleteYourVaccinationAssessmentBanner: Bool = false
 		
 		var shouldShowRecommendationToAddYourBooster: Bool = false
+		
+		var shouldShowAddCertificateFooter: Bool {
+			qrCards.isEmpty && !shouldShowCompleteYourVaccinationAssessmentBanner
+		}
 		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -143,6 +148,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	private var remoteConfigUpdateObserverToken: RemoteConfigManager.ObserverToken?
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
+	private var remoteConfigUpdatesNewValidityToken: RemoteConfigManager.ObserverToken?
 
 	// Dependencies:
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
@@ -277,22 +283,34 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 	}
 	
 	private func setupNewValidityInfoForVaccinationsAndRecoveriesBanner() {
-		let userSettings = Current.userSettings
-		let featureFlagManager = Current.featureFlagManager
-		let walletManager = Current.walletManager
-		
-		if userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard && featureFlagManager.isNewValidityInfoBannerEnabled() {
-			// Set checked = true, do this only once
-			userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = false
+		let performCheck: () -> Void = { [weak self] in
+			guard let self = self else { return }
 			
-			let hasDomesticRecoveryGreenCards = walletManager.hasDomesticGreenCard(originType: OriginType.recovery.rawValue)
-			let hasDomesticVaccinationGreenCards = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
-			if hasDomesticRecoveryGreenCards || hasDomesticVaccinationGreenCards {
-				// if we have a domestic recovery or vaccination, show the banner.
-				userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
+			let userSettings = Current.userSettings
+			let featureFlagManager = Current.featureFlagManager
+			let walletManager = Current.walletManager
+			
+			if userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard && featureFlagManager.isNewValidityInfoBannerEnabled() {
+				// Set checked = true, do this only once
+				userSettings.shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = false
+				
+				let hasDomesticRecoveryGreenCards = walletManager.hasDomesticGreenCard(originType: OriginType.recovery.rawValue)
+				let hasDomesticVaccinationGreenCards = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
+				if hasDomesticRecoveryGreenCards || hasDomesticVaccinationGreenCards {
+					// if we have a domestic recovery or vaccination, show the banner.
+					userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
+				}
 			}
+			
+			self.state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && featureFlagManager.isNewValidityInfoBannerEnabled()
 		}
-		state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && featureFlagManager.isNewValidityInfoBannerEnabled()
+		
+		performCheck()
+		
+		// Also register an observer to do it again if the config updates:
+		remoteConfigUpdatesNewValidityToken = Current.remoteConfigManager.appendUpdateObserver { config, _, _ in
+			performCheck()
+		}
 	}
 
 	// MARK: - View Lifecycle callbacks:
@@ -324,7 +342,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 			now: Current.now()
 		)
 
-		hasAddCertificateMode = state.qrCards.isEmpty && !state.shouldShowCompleteYourVaccinationAssessmentBanner
+		shouldShowAddCertificateFooter = state.shouldShowAddCertificateFooter
 	}
 
 	fileprivate func strippenRefresherDidUpdate(oldRefresherState: DashboardStrippenRefresher.State?, refresherState: DashboardStrippenRefresher.State) {
@@ -367,13 +385,6 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 
 			// ❤️‍🩹 NETWORK ERRORS: Refresher has entered a failed state (i.e. Server Error)
 
-			case (.failed(.serverResponseDidNotChangeExpiredOrExpiringState), _, _):
-				// This is a special case, and is caused by the user putting their system time
-				// so far into the future that it forces a strippen refresh, .. however the server time
-				// remains unchanged, so what it sends back does not resolve the `.expiring` or `.expired`
-				// state which the StrippenRefresher is currently in.
-				logDebug("StrippenRefresh: .serverResponseDidNotChangeExpiredOrExpiringState. Stopping.")
-
 			case (.failed, .expired, _):
 				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
 
@@ -386,6 +397,13 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 				// We do handle "no internet" though - see above.
 				logDebug("StrippenRefresh: Swallowing server error because can refresh later.")
 
+			case (.serverResponseHasNoChanges, _, _) :
+				// This is a special case, and is caused by the user putting their system time
+				// so far into the future that it forces a strippen refresh, .. however the server time
+				// remains unchanged, so what it sends back does not resolve the `.expiring` or `.expired`
+				// state which the StrippenRefresher is currently in.
+				logDebug("StrippenRefresh: .serverResponseHasNoChanges. Stopping.")
+				
 			case (.completed, _, _):
 				// The strippen were successfully renewed.
 				break
@@ -433,7 +451,8 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 
 	// MARK: Capture User input:
 
-	@objc func addProofTapped() {
+	@objc func addCertificateFooterTapped() {
+		
 		coordinator?.userWishesToCreateAQR()
 	}
 
@@ -442,7 +461,46 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		coordinator?.openUrl(url, inApp: true)
 	}
 	
-	// MARK: - HolderDashboardCardUserActionHandling
+	@objc func userTappedMenuButton() {
+		
+		coordinator?.userWishesToOpenTheMenu()
+	}
+	
+	// MARK: - Static Methods
+	
+	private static func assembleCards(
+		forValidityRegion validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling,
+		remoteConfigManager: RemoteConfigManaging,
+		now: Date
+	) -> [HolderDashboardViewController.Card] {
+		typealias VCCard = HolderDashboardViewController.Card
+		
+		var cards = [VCCard]()
+		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
+		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
+		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
+		return cards
+	}
+}
+
+// MARK: - HolderDashboardCardUserActionHandling
+
+extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapConfigAlmostOutOfDateCTA() {
 		guard let configFetchedTimestamp = Current.userSettings.configFetchedTimestamp,
@@ -451,6 +509,10 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLive))
 		let configValidUntilDateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: configValidUntilDate)
 		coordinator?.userWishesMoreInfoAboutOutdatedConfig(validUntil: configValidUntilDateString)
+	}
+	
+	func didTapAddCertificate() {
+		coordinator?.userWishesToCreateAQR()
 	}
 	
 	func didTapCloseExpiredQR(expiredQR: ExpiredQR) {
@@ -505,7 +567,7 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		openUrl(url)
 	}
 	
-	func didTapNewValidiyBannerClose() {
+	func didTapNewValidityBannerClose() {
 		
 		Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = true
 	}
@@ -533,33 +595,4 @@ final class HolderDashboardViewModel: Logging, HolderDashboardCardUserActionHand
 		state.shouldShowRecommendationToAddYourBooster = false
 	}
 	
-	// MARK: - Static Methods
-	
-	private static func assembleCards(
-		forValidityRegion validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
-		now: Date
-	) -> [HolderDashboardViewController.Card] {
-		typealias VCCard = HolderDashboardViewController.Card
-		
-		var cards = [VCCard]()
-		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
-		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
-		return cards
-	}
 }

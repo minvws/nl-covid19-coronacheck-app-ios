@@ -12,9 +12,9 @@ class RiskLevelManagerSpy: RiskLevelManaging {
 
 	var invokedStateGetter = false
 	var invokedStateGetterCount = 0
-	var stubbedState: RiskLevel!
+	var stubbedState: VerificationPolicy!
 
-	var state: RiskLevel? {
+	var state: VerificationPolicy? {
 		invokedStateGetter = true
 		invokedStateGetterCount += 1
 		return stubbedState
@@ -22,22 +22,22 @@ class RiskLevelManagerSpy: RiskLevelManaging {
 
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
-	var invokedUpdateParameters: (riskLevel: RiskLevel?, Void)?
-	var invokedUpdateParametersList = [(riskLevel: RiskLevel?, Void)]()
+	var invokedUpdateParameters: (verificationPolicy: VerificationPolicy?, Void)?
+	var invokedUpdateParametersList = [(verificationPolicy: VerificationPolicy?, Void)]()
 
-	func update(riskLevel: RiskLevel?) {
+	func update(verificationPolicy: VerificationPolicy?) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
-		invokedUpdateParameters = (riskLevel, ())
-		invokedUpdateParametersList.append((riskLevel, ()))
+		invokedUpdateParameters = (verificationPolicy, ())
+		invokedUpdateParametersList.append((verificationPolicy, ()))
 	}
 
 	var invokedAppendObserver = false
 	var invokedAppendObserverCount = 0
-	var stubbedAppendObserverObserverResult: (RiskLevel?, Void)?
+	var stubbedAppendObserverObserverResult: (VerificationPolicy?, Void)?
 	var stubbedAppendObserverResult: RiskLevelManager.ObserverToken!
 
-	func appendObserver(_ observer: @escaping (RiskLevel?) -> Void) -> RiskLevelManager.ObserverToken {
+	func appendObserver(_ observer: @escaping (VerificationPolicy?) -> Void) -> RiskLevelManager.ObserverToken {
 		invokedAppendObserver = true
 		invokedAppendObserverCount += 1
 		if let result = stubbedAppendObserverObserverResult {
@@ -56,6 +56,14 @@ class RiskLevelManagerSpy: RiskLevelManaging {
 		invokedRemoveObserverCount += 1
 		invokedRemoveObserverParameters = (token, ())
 		invokedRemoveObserverParametersList.append((token, ()))
+	}
+
+	var invokedWipeScanMode = false
+	var invokedWipeScanModeCount = 0
+
+	func wipeScanMode() {
+		invokedWipeScanMode = true
+		invokedWipeScanModeCount += 1
 	}
 
 	var invokedWipePersistedData = false

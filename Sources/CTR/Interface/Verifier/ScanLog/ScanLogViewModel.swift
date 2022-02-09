@@ -135,7 +135,7 @@ private struct ScanLogDataSource: Logging {
 
 		// Loop over all of the scan log entries ordered by the auto_increment identifier (`sortedEntries`)
 		// We're trying to add entries into one record (`ScanLogLineItem`), as long as:
-		// - the mode (2G / 3G) does not change
+		// - the mode (1G / 3G) does not change
 		// - the time keeps decreasing (if not -> clock manipulation detected)
 		// If one of the two conditions fail, we append that record to the log (`log: [ScanLogLineItem]`) and
 		// create a new one
@@ -149,7 +149,10 @@ private struct ScanLogDataSource: Logging {
 
 			if lineItem == nil || scanMode != lineItem?.mode ||
 				(currentTime != nil && currentTime! > scanDate) {
-				if let item = lineItem {
+				if var item = lineItem {
+					if !item.skew {
+						item.updateToDate(scanDate)
+					}
 					// We had a previous line item, put it on the log stack.
 					log.append(item)
 				}

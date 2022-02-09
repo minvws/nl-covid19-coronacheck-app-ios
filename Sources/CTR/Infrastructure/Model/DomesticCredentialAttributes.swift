@@ -44,10 +44,10 @@ struct DomesticCredentialAttributes: Codable {
 		return specimen == "1"
 	}
 	
-	var riskLevel: RiskLevel? {
+	var verificationPolicy: VerificationPolicy? {
 		switch category {
-			case "2": return .high
-			case "3": return .low
+			case "2": return .policy1G
+			case "3": return .policy3G
 			default: return nil
 		}
 	}

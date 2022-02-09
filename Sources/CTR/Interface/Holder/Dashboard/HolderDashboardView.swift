@@ -24,6 +24,12 @@ final class HolderDashboardView: BaseView {
 		}
 	}
 	
+	private let fakeNavigationBar: FakeNavigationBarView = {
+		let navbar = FakeNavigationBarView()
+		navbar.translatesAutoresizingMaskIntoConstraints = false
+		return navbar
+	}()
+	
 	private let tabBar: DashboardTabBar = {
 		let tabBar = DashboardTabBar()
 		tabBar.translatesAutoresizingMaskIntoConstraints = false
@@ -83,6 +89,7 @@ final class HolderDashboardView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
+		addSubview(fakeNavigationBar)
 		addSubview(tabBar)
 		addSubview(scrollView)
 		addSubview(footerButtonView)
@@ -95,7 +102,12 @@ final class HolderDashboardView: BaseView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			tabBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			
+			fakeNavigationBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			fakeNavigationBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			fakeNavigationBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			
+			tabBar.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
 			tabBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			tabBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			
@@ -135,15 +147,33 @@ final class HolderDashboardView: BaseView {
 		])
 	}
 	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+ 	}
+	
+	override var accessibilityElements: [Any]? {
+		get { return [fakeNavigationBar, tabBar] + [domesticScrollView] + [internationalScrollView 	] }
+		set {}
+	}
+	
 	/// Enables swipe to navigate behaviour for assistive technologies
 	override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
 		guard !tabBar.accessibilityElementIsFocused() else {
 			// Scrolling in tab bar is not supported
 			return true
 		}
-		let tab: DashboardTab = direction == .right ? .domestic : .international
-		tabBar.select(tab: tab, animated: true)
-		delegate?.holderDashboardView(self, didDisplay: tab)
+		
+		if let tab: DashboardTab = {
+			switch direction {
+				case .right: return DashboardTab.domestic
+				case .left: return DashboardTab.international
+				default: return Optional.none
+			}
+		}() {
+			selectTab(tab: tab)
+			delegate?.holderDashboardView(self, didDisplay: tab)
+		}
 		
 		// Scroll via swipe gesture
 		return false
@@ -175,6 +205,27 @@ final class HolderDashboardView: BaseView {
 		
 		updateScrollPosition()
 		updateScrollViewContentOffsetObserver(for: tab)
+	}
+	
+	var tapMenuButtonHandler: (() -> Void)? {
+		didSet {
+			fakeNavigationBar.tapMenuButtonHandler = tapMenuButtonHandler
+		}
+	}
+	
+	var fakeNavigationTitle: String? {
+		didSet {
+			fakeNavigationBar.title = fakeNavigationTitle
+		}
+	}
+	
+	var fakeNavigationBarAlpha: CGFloat {
+		get {
+			fakeNavigationBar.alpha
+		}
+		set {
+			fakeNavigationBar.alpha = newValue
+		}
 	}
 }
 

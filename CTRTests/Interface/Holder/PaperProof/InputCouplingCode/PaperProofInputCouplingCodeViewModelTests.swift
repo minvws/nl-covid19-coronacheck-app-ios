@@ -71,7 +71,7 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.nextButtonTapped()
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.holderDcctokenentryErrorCodewrongformat()
+		expect(self.sut.fieldErrorMessage) == L.holderDcctokenentryErrorInvalidcode()
 	}
 
 	func test_tappingSubmit_withLongValue_showsError() {
@@ -82,7 +82,7 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.nextButtonTapped()
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.holderDcctokenentryErrorCodewrongformat()
+		expect(self.sut.fieldErrorMessage) == L.holderDcctokenentryErrorInvalidcode()
 	}
 
 	func test_tappingSubmit_withIllegalCharacters_showsError() {
@@ -93,7 +93,7 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.nextButtonTapped()
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == L.holderDcctokenentryErrorCodenotfound()
+		expect(self.sut.fieldErrorMessage) == L.holderDcctokenentryErrorInvalidcode()
 	}
 
 	func test_changingValueAfterPressingSubmitClearsErrorMessage() {

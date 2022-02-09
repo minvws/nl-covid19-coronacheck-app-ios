@@ -40,14 +40,14 @@ class ScanLogManagingSpy: ScanLogManaging {
 
 	var invokedAddScanEntry = false
 	var invokedAddScanEntryCount = 0
-	var invokedAddScanEntryParameters: (riskLevel: RiskLevel, date: Date)?
-	var invokedAddScanEntryParametersList = [(riskLevel: RiskLevel, date: Date)]()
+	var invokedAddScanEntryParameters: (verificationPolicy: VerificationPolicy, date: Date)?
+	var invokedAddScanEntryParametersList = [(verificationPolicy: VerificationPolicy, date: Date)]()
 
-	func addScanEntry(riskLevel: RiskLevel, date: Date) {
+	func addScanEntry(verificationPolicy: VerificationPolicy, date: Date) {
 		invokedAddScanEntry = true
 		invokedAddScanEntryCount += 1
-		invokedAddScanEntryParameters = (riskLevel, date)
-		invokedAddScanEntryParametersList.append((riskLevel, date))
+		invokedAddScanEntryParameters = (verificationPolicy, date)
+		invokedAddScanEntryParametersList.append((verificationPolicy, date))
 	}
 
 	var invokedDeleteExpiredScanLogEntries = false

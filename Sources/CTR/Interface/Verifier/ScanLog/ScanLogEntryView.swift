@@ -87,7 +87,7 @@ class ScanLogEntryView: BaseView {
 		super.setupViews()
 		view?.backgroundColor = Theme.colors.viewControllerBackground
 
-		// Make the riskLabel hug the "2G" text
+		// Make the riskLabel hug the "3G" text
 		riskLabel.setContentHuggingPriority(.required, for: .horizontal)
 	}
 

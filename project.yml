@@ -258,6 +258,12 @@ targetTemplates:
     settings:
       TEST_HOST: "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR"
 
+  Standard_UITesting:
+    platform: iOS
+    type: bundle.ui-testing
+    dependencies:
+      - target: Holder
+
 # - Targets
 
 targets:
@@ -338,7 +344,7 @@ targets:
       base:
         APP_FLAVOR: verifier
         # keep the comment on the next line, as it shows up in the CI logs & helps distinguish
-        MARKETING_VERSION: 2.7.0 # verifier
+        MARKETING_VERSION: 3.0.0 # verifier
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconVerifier
         INFOPLIST_FILE: Sources/CTR/Configuration/verifier-Info.plist
       configs:
@@ -388,6 +394,20 @@ targets:
         excludes:
           - "**/__Snapshots__"
 
+  HolderUITests:
+    templates:
+      - Standard_UITesting
+    sources:
+      - path: HolderUITests
+
+  HolderUISmoketests:
+    templates:
+      - Standard_UITesting
+    sources:
+      - path: HolderUITests
+        excludes:
+        - Tests/*
+
 # - Scheme Templates
 
 schemeTemplates:
@@ -421,7 +441,7 @@ schemeTemplates:
         "-com.apple.CoreData.ConcurrencyDebug 1": YES # crash with stacktrace on concurrency mistakes
 
   # Template for adding unit tests to a scheme:
-  TestScheme:
+  UnitTestScheme:
     test:
       commandLineArguments:
         "--unittesting": true
@@ -431,8 +451,20 @@ schemeTemplates:
       coverageTargets:
         - ${appTargetName}
       targets:
-        - name: ${testTargetName}
+        - name: ${unitTestTargetName}
           parallelizable: false
+          randomExecutionOrder: true
+
+  # Template for adding UI tests to a scheme:
+  UITestScheme:
+    test:
+      language: nl
+      region: NL
+      environmentVariables:
+        ACCEPTANCE_BASIC_AUTH_PASSWORD: "$(ACCEPTANCE_BASIC_AUTH_PASSWORD)"
+      targets:
+        - name: ${uiTestTargetName}
+          parallelizable: true
           randomExecutionOrder: true
 
 # - Schemes
@@ -441,10 +473,32 @@ schemes:
   Holder Dev:
     templates:
       - DevelopmentConfigScheme
-      - TestScheme # This scheme has unit tests too
+      - UnitTestScheme # This scheme has unit tests
     templateAttributes:
       appTargetName: Holder
-      testTargetName: CTRTests
+      unitTestTargetName: CTRTests
+      configEnvironment: Development
+    run:
+      language: nl
+
+  Holder UI Tests:
+    templates:
+      - DevelopmentConfigScheme
+      - UITestScheme # This scheme has UI tests
+    templateAttributes:
+      appTargetName: Holder
+      uiTestTargetName: HolderUITests
+      configEnvironment: Development
+    run:
+      language: nl
+
+  Holder UI Smoketests:
+    templates:
+      - DevelopmentConfigScheme
+      - UITestScheme # This scheme has UI tests
+    templateAttributes:
+      appTargetName: Holder
+      uiTestTargetName: HolderUISmoketests
       configEnvironment: Development
     run:
       language: nl

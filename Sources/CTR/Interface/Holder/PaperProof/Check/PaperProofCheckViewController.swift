@@ -15,7 +15,7 @@ class PaperProofCheckViewController: BaseViewController {
 	}
 
 	private let viewModel: PaperProofCheckViewModel
-	let sceneView = FetchEventsView()
+	let sceneView = FetchRemoteEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
@@ -42,14 +42,9 @@ class PaperProofCheckViewController: BaseViewController {
 		super.viewDidLoad()
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
-
-			if $0 {
-				self?.sceneView.spinner.startAnimating()
-			} else {
-				self?.sceneView.spinner.stopAnimating()
-			}
+			self?.sceneView.shouldShowLoadingSpinner = $0
 		}
-
+ 
 		viewModel.$viewState.binding = { [weak self] in
 
 			switch $0 {
@@ -70,14 +65,14 @@ class PaperProofCheckViewController: BaseViewController {
 	}
 
 	private func setForLoadingState(_ content: Content) {
-
-		sceneView.spinner.isHidden = false
+		
+		sceneView.shouldShowLoadingSpinner = true
 		displayContent(content)
 	}
 
 	private func setForFeedback(_ content: Content) {
 
-		sceneView.spinner.isHidden = true
+		sceneView.shouldShowLoadingSpinner = false
 		displayContent(content)
 	}
 

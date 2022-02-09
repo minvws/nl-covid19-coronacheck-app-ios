@@ -101,11 +101,9 @@ final class PaperProofItemView: BaseView {
 	override func setupAccessibility() {
 		super.setupAccessibility()
 
-		titleLabel.isAccessibilityElement = false
-		messageLabel.isAccessibilityElement = false
-
-		guard let title = title, let message = message else { return }
-		accessibilityLabel = title + " " + message
+		titleLabel.isAccessibilityElement = true
+		messageLabel.isAccessibilityElement = true
+		iconView.isAccessibilityElement = false
 	}
 
 	// MARK: Public Access
@@ -116,7 +114,6 @@ final class PaperProofItemView: BaseView {
 				ViewTraits.Title.lineHeight,
 				kerning: ViewTraits.Title.kerning
 			)
-			setupAccessibility()
 		}
 	}
 
@@ -127,7 +124,6 @@ final class PaperProofItemView: BaseView {
 				kerning: ViewTraits.Message.kerning,
 				textColor: Theme.colors.secondaryText
 			)
-			setupAccessibility()
 		}
 	}
 

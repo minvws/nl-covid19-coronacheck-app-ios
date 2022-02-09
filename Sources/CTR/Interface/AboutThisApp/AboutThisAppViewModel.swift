@@ -111,7 +111,7 @@ class AboutThisAppViewModel: Logging {
 		if Configuration().getEnvironment() != "production" {
 			topList.append(AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle()))
 		}
-		if Current.featureFlagManager.isVerificationPolicyEnabled() {
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			menu = [
 				L.verifierAboutReadmore(): topList,
 				L.verifier_about_this_app_law_enforcement(): [

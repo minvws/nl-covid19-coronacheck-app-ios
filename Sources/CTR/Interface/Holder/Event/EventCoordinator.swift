@@ -188,8 +188,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	private func startWith(_ eventMode: EventMode) {
 
-		let viewController = EventStartViewController(
-			viewModel: EventStartViewModel(
+		let viewController = RemoteEventStartViewController(
+			viewModel: RemoteEventStartViewModel(
 				coordinator: self,
 				eventMode: eventMode
 			)
@@ -209,8 +209,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	}
 
 	private func navigateToFetchEvents(token: TVSAuthorizationToken, eventMode: EventMode) {
-		let viewController = FetchEventsViewController(
-			viewModel: FetchEventsViewModel(
+		let viewController = FetchRemoteEventsViewController(
+			viewModel: FetchRemoteEventsViewModel(
 				coordinator: self,
 				tvsToken: token,
 				eventMode: eventMode
@@ -226,8 +226,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		originalMode: EventMode? = nil,
 		eventsMightBeMissing: Bool) {
 
-		let viewController = ListEventsViewController(
-			viewModel: ListEventsViewModel(
+		let viewController = ListRemoteEventsViewController(
+			viewModel: ListRemoteEventsViewModel(
 				coordinator: self,
 				eventMode: eventMode,
 				originalMode: originalMode,
@@ -261,8 +261,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	
 	private func navigateToEventDetails(_ title: String, details: [EventDetails], footer: String?) {
 		
-		let viewController = EventDetailsViewController(
-			viewModel: EventDetailsViewModel(
+		let viewController = RemoteEventDetailsViewController(
+			viewModel: RemoteEventDetailsViewModel(
 				coordinator: self,
 				title: title,
 				details: details,
@@ -281,7 +281,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	@discardableResult private func navigateBackToEventStart() -> Bool {
 
 		if let eventStartViewController = navigationController.viewControllers
-			.first(where: { $0 is EventStartViewController }) {
+			.first(where: { $0 is RemoteEventStartViewController }) {
 
 			navigationController.popToViewController(
 				eventStartViewController,
@@ -357,8 +357,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	private func handleBackAction(eventMode: EventMode) {
 		
 		if eventMode == .positiveTest,
-		   navigationController.viewControllers.filter({ $0 is EventStartViewController }).count > 1,
-		   let listEventViewController = navigationController.viewControllers.first(where: { $0 is ListEventsViewController }) {
+		   navigationController.viewControllers.filter({ $0 is RemoteEventStartViewController }).count > 1,
+		   let listEventViewController = navigationController.viewControllers.first(where: { $0 is ListRemoteEventsViewController }) {
 			
 			navigationController.popToViewController(
 				listEventViewController,
@@ -464,7 +464,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		let popback = navigationController.viewControllers.first {
 			// arrange `case`s in the order of matching priority
 			switch $0 {
-				case is EventStartViewController:
+				case is RemoteEventStartViewController:
 					return true
 				case is ChooseTestLocationViewController:
 					return true

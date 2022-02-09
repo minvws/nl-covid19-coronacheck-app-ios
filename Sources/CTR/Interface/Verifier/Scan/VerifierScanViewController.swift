@@ -64,8 +64,8 @@ class VerifierScanViewController: ScanViewController {
 			}
 		}
 		
-		viewModel.$riskLevel.binding = { [weak self] in
-			self?.sceneView.riskLevel = $0
+		viewModel.$verificationPolicy.binding = { [weak self] in
+			self?.sceneView.verificationPolicy = $0
 		}
 
 		sceneView.moreInformationButtonCommand = { [viewModel] in

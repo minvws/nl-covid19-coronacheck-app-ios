@@ -65,8 +65,8 @@ final class EnvironmentSpies {
 		return spy
 	}()
 	
-	var forcedInformationManagerSpy: ForcedInformationManagerSpy = {
-		let spy = ForcedInformationManagerSpy()
+	var newFeaturesManagerSpy: NewFeaturesManagerSpy = {
+		let spy = NewFeaturesManagerSpy()
 		spy.stubbedNeedsUpdating = false
 		return spy
 	}()
@@ -118,7 +118,7 @@ final class EnvironmentSpies {
 	var riskLevelManagerSpy: RiskLevelManagerSpy = {
 		let spy = RiskLevelManagerSpy()
 		spy.stubbedAppendObserverResult = UUID()
-		spy.stubbedState = .high
+		spy.stubbedState = .policy1G
 		return spy
 	}()
 	
@@ -155,6 +155,12 @@ final class EnvironmentSpies {
 		spy.stubbedStoreEventGroupResult = true
 		return spy
 	}()
+	
+	var verificationPolicyEnablerSpy: VerificationPolicyEnablerSpy = {
+		let spy = VerificationPolicyEnablerSpy()
+		spy.stubbedAppendPolicyChangedObserverResult = UUID()
+		return spy
+	}()
 }
 
 func setupEnvironmentSpies() -> EnvironmentSpies {
@@ -171,11 +177,11 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		dataStoreManager: DataStoreManager(.inMemory),
 		deviceAuthenticationDetector: spies.deviceAuthenticationDetectorSpy,
 		featureFlagManager: spies.featureFlagManagerSpy,
-		forcedInformationManager: spies.forcedInformationManagerSpy,
 		greenCardLoader: spies.greenCardLoaderSpy,
 		jailBreakDetector: spies.jailBreakDetectorSpy,
 		mappingManager: spies.mappingManagerSpy,
 		networkManager: spies.networkManagerSpy,
+		newFeaturesManager: spies.newFeaturesManagerSpy,
 		onboardingManager: spies.onboardingManagerSpy,
 		openIdManager: spies.openIdManagerSpy,
 		remoteConfigManager: spies.remoteConfigManagerSpy,
@@ -184,7 +190,8 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		scanLogManager: spies.scanLogManagerSpy,
 		secureUserSettings: spies.secureUserSettingsSpy,
 		userSettings: spies.userSettingsSpy,
-		walletManager: spies.walletManagerSpy
+		walletManager: spies.walletManagerSpy,
+		verificationPolicyEnabler: spies.verificationPolicyEnablerSpy
 	)
 	
 	return spies
