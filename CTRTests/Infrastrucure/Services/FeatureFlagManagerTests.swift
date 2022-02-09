@@ -237,6 +237,20 @@ class FeatureFlagManagerTests: XCTestCase {
 		expect(enabled) == false
 	}
 	
+	func test_is1GExclusiveDisclosurePolicyEnabled_disabled_noPoliciesEnabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = []
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+	
 	func test_is3GExclusiveDisclosurePolicyEnabled_enabled() {
 		
 		// Given
@@ -277,6 +291,20 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		// Then
 		expect(enabled) == false
+	}
+	
+	func test_is3GExclusiveDisclosurePolicyEnabled_disabled_noPoliciesEnabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = []
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(enabled) == true
 	}
 	
 	func test_areBothDisclosurePoliciesEnabled_disabled_only1G() {

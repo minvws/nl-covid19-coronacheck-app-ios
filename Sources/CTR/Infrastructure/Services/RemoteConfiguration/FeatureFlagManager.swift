@@ -115,8 +115,9 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		guard let disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
 			return false
 		}
-		return disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag)
-		&& !disclosurePolicies.contains(VerificationPolicy.policy1G.featureFlag)
+		return (disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag)
+		&& !disclosurePolicies.contains(VerificationPolicy.policy1G.featureFlag)) ||
+		disclosurePolicies.isEmpty
 	}
 	
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
