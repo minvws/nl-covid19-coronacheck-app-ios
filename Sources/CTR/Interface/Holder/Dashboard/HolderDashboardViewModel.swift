@@ -489,24 +489,6 @@ final class HolderDashboardViewModel: Logging {
 	
 	// MARK: - Static Methods
 	
-	private static func assembleInternationalCards(
-		forValidityRegion validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
-		now: Date
-	) -> [HolderDashboardViewController.Card] {
-		
-		// Currently has the same implementation:
-		return assemble3gOnlyCards(
-			forValidityRegion: validityRegion,
-			state: state,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager,
-			now: now
-		)
-	}
-	
 	private static func assemble3gOnlyCards(
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
@@ -593,6 +575,25 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
+	
+	private static func assembleInternationalCards(
+		forValidityRegion validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling,
+		remoteConfigManager: RemoteConfigManaging,
+		now: Date
+	) -> [HolderDashboardViewController.Card] {
+		
+		// Currently has the same implementation:
+		return assemble3gOnlyCards(
+			forValidityRegion: validityRegion,
+			state: state,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager,
+			now: now
+		)
+	}
+	
 }
 
 // MARK: - HolderDashboardCardUserActionHandling
