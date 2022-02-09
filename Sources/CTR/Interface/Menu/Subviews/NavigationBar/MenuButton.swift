@@ -41,6 +41,10 @@ class MenuButton: UIControl {
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.setContentCompressionResistancePriority(.required, for: .vertical)
+		
+		if #available(iOS 15.0, *) {
+			label.maximumContentSizeCategory = .accessibilityLarge
+		}
 		return label
 	}()
 	
