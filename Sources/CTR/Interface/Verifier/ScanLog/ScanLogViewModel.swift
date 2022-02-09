@@ -149,7 +149,10 @@ private struct ScanLogDataSource: Logging {
 
 			if lineItem == nil || scanMode != lineItem?.mode ||
 				(currentTime != nil && currentTime! > scanDate) {
-				if let item = lineItem {
+				if var item = lineItem {
+					if !item.skew {
+						item.updateToDate(scanDate)
+					}
 					// We had a previous line item, put it on the log stack.
 					log.append(item)
 				}

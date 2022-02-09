@@ -9,24 +9,21 @@ import Foundation
 
 protocol VerificationPolicyEnablable: AnyObject {
 	
+	typealias ObserverToken = UUID
+	
 	func enable(verificationPolicies: [String])
-	func configureDefaultPolicy()
+	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken
+	func removeObserver(token: ObserverToken)
+	func wipePersistedData()
 }
 
 final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 	
+	private var observers = [ObserverToken: () -> Void]()
+	
 	func enable(verificationPolicies: [String]) {
 		
-		let knownPolicies = VerificationPolicy.allCases.compactMap {
-			return verificationPolicies.contains($0.featureFlag) ? $0 : nil
-		}
-		guard knownPolicies.isNotEmpty() else {
-			
-			// Configure default policy
-			configureDefaultPolicy()
-			return
-		}
-		
+		var knownPolicies = VerificationPolicy.allCases.filter { verificationPolicies.contains($0.featureFlag) }
 		let storedPolicies = Current.userSettings.configVerificationPolicies
 		
 		if knownPolicies != storedPolicies {
@@ -35,9 +32,9 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 				Current.wipeScanMode()
 				Current.userSettings.policyInformationShown = false
 			}
+			// Reset navigation
+			notifyObservers()
 		}
-		
-		Current.userSettings.configVerificationPolicies = knownPolicies
 		
 		// Set policies that are not set via the scan settings scenes
 		switch knownPolicies {
@@ -45,13 +42,42 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 				Current.riskLevelManager.update(verificationPolicy: .policy1G)
 			case [VerificationPolicy.policy3G]:
 				Current.riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
+			case []:
+				knownPolicies = [VerificationPolicy.policy3G]
+				Current.riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
 			default: break
 		}
+		
+		Current.userSettings.configVerificationPolicies = knownPolicies
 	}
 	
-	func configureDefaultPolicy() {
-		
+	func wipePersistedData() {
+
+		observers = [:]
 		Current.userSettings.configVerificationPolicies = [VerificationPolicy.policy3G]
 		Current.riskLevelManager.update(verificationPolicy: nil)
+	}
+
+	// MARK: - Observer notifications
+	
+	/// Be careful to use weak references to your observers within the closure, and
+	/// to unregister your observer using the returned `ObserverToken`.
+	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken {
+		let newToken = ObserverToken()
+		observers[newToken] = observer
+		return newToken
+	}
+
+	func removeObserver(token: ObserverToken) {
+		observers[token] = nil
+	}
+}
+
+private extension VerificationPolicyEnabler {
+	
+	func notifyObservers() {
+		observers.values.forEach { callback in
+			callback()
+		}
 	}
 }
