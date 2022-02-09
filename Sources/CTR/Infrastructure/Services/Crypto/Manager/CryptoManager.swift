@@ -12,7 +12,7 @@ import Clcore
 class CryptoManager: CryptoManaging, Logging {
 	
 	/// Structure to hold cryptography data
-	private struct CryptoData: Codable {
+	struct CryptoData: Codable {
 		
 		/// The key of the holder
 		var holderSecretKey: Data?
@@ -27,22 +27,35 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 	}
 	
-	/// Array of constants
-	private struct Constants {
-		static let keychainService = "CryptoManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+	private var cryptoData: CryptoData {
+		get { secureUserSettings.cryptoData }
+		set { secureUserSettings.cryptoData = newValue }
 	}
 	
-	/// The crypto data stored in the keychain
-	@Keychain(name: "cryptoData", service: Constants.keychainService, clearOnReinstall: true)
-	private var cryptoData: CryptoData = .empty
-	
-	private let cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility
+	private let cryptoLibUtility: CryptoLibUtilityProtocol
+	private let riskLevelManager: RiskLevelManaging
+	private let secureUserSettings: SecureUserSettingsProtocol
+	private let featureFlagManager: FeatureFlagManaging
 	
 	/// Initializer
-	required init() {
+
+	required init(
+		secureUserSettings: SecureUserSettingsProtocol,
+		cryptoLibUtility: CryptoLibUtilityProtocol,
+		riskLevelManager: RiskLevelManaging,
+		featureFlagManager: FeatureFlagManaging
+	) {
+		self.secureUserSettings = secureUserSettings
+		self.cryptoLibUtility = cryptoLibUtility
+		self.riskLevelManager = riskLevelManager
+		self.featureFlagManager = featureFlagManager
 		
 		// Initialize crypto library
 		cryptoLibUtility.initialize()
+		generateSecretKey()
+	}
+	
+	func generateSecretKey() {
 		
 		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
 			if let result = MobilecoreGenerateHolderSk(),
@@ -134,12 +147,27 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		
 		let proofQREncoded = message.data(using: .utf8)
+
+		let scanPolicy: String
+		if featureFlagManager.areMultipleVerificationPoliciesEnabled() {
+			guard let riskSetting = riskLevelManager.state else {
+				assertionFailure("Risk level should be set")
+				return nil
+			}
+			scanPolicy = riskSetting.scanPolicy
+		} else {
+			guard let storedScanPolicy = Current.userSettings.configVerificationPolicies.first?.scanPolicy else {
+				assertionFailure("Scan policy should be stored")
+				return nil
+			}
+			scanPolicy = storedScanPolicy
+		}
 		
-		guard let result = MobilecoreVerify(proofQREncoded, MobilecoreVERIFICATION_POLICY_3G) else {
+		guard let result = MobilecoreVerify(proofQREncoded, scanPolicy) else {
 			logError("Could not verify QR")
 			return nil
 		}
-		
+
 		return result
 	}
 	

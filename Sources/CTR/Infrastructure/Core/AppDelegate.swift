@@ -17,8 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 	// login flow
 	var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
-	var previousBrightness: CGFloat?
-
     /// set orientations you want to be allowed in this property by default
     var orientationLock = UIInterfaceOrientationMask.all
 
@@ -26,8 +24,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 		_ application: UIApplication,
 		didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+		if !ProcessInfo.processInfo.isTesting {
+			// Setup Logging
+			LogHandler.setup()
+		}
+			
 		styleUI()
-		previousBrightness = UIScreen.main.brightness
 
 		if #available(iOS 13.0, *) {
 			// Use Scene lifecycle
@@ -93,28 +95,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
     func application(_: UIApplication, continue userActivity: NSUserActivity, restorationHandler _: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
 
         // Parse an activity from the userActivity
-		guard let universalLink = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: appCoordinator?.isLunhCheckEnabled ?? false) else { return false }
+		guard let universalLink = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) else { return false }
 
         return appCoordinator?.receive(universalLink: universalLink) ?? false
     }
-
-	func applicationDidEnterBackground(_ application: UIApplication) {
-		if let brightness = previousBrightness {
-			UIScreen.main.brightness = brightness
-		}
-	}
-
-	func applicationWillResignActive(_ application: UIApplication) {
-		if let brightness = previousBrightness {
-			UIScreen.main.brightness = brightness
-		}
-	}
-
-	func applicationWillTerminate(_ application: UIApplication) {
-		if let brightness = previousBrightness {
-			UIScreen.main.brightness = brightness
-		}
-	}
 
 	// MARK: Orientation
 
@@ -138,15 +122,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 	private func styleUI() {
 		
 		// Custom navigation bar appearance
+		let color = Theme.colors.dark
 		UINavigationBar.appearance().titleTextAttributes = [
-			NSAttributedString.Key.foregroundColor: Theme.colors.dark,
+			NSAttributedString.Key.foregroundColor: color,
 			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
 		]
-		UINavigationBar.appearance().tintColor = Theme.colors.dark
+		UINavigationBar.appearance().tintColor = color
 		UINavigationBar.appearance().barTintColor = Theme.colors.viewControllerBackground
+		
+		// Tint default buttons of UIAlertController
+		UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = Theme.colors.primary
 		
 		if #available(iOS 15.0, *) {
 			// By default iOS 15 has no shadow bottom separator
+			UINavigationBar.appearance().standardAppearance.titleTextAttributes = [.foregroundColor: color]
+			UINavigationBar.appearance().scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: color]
 		} else {
 			// White navigation bar without bottom separator
 			UINavigationBar.appearance().isTranslucent = false

@@ -1,5 +1,5 @@
-// A new build phase which will check every line of the Localization.strings 
-// file and if it finds tags it will validate that they are structured correctly, 
+// A new build phase which will check every line of the Localization.strings
+// file and if it finds tags it will validate that they are structured correctly,
 // for some basic checking of the HTML tags
 
 import AppKit
@@ -57,7 +57,7 @@ func checkLine(line: String) throws {
 
 	var stack = [Tag]()
 	var hasProcessedAHyperlink = false
-
+	
 	// Iterate over each character in the line:
 	while let (position, char) = iterator.next() {
 		if char == "\\" {
@@ -86,7 +86,7 @@ func checkLine(line: String) throws {
 				var findClosingIterator = iterator
 				let tagContents = try findClosingIterator.findContentsBeforeSpaceOrClosingTag()
 
-				// Is the tag empty? 
+				// Is the tag empty?
 				guard !tagContents.isEmpty else {
 					throw ParseError(line: line, position: position, message: "Found an empty tag")
 				}
@@ -114,7 +114,12 @@ func checkLine(line: String) throws {
 			}
 		}
 	}
-
+	
+	// If the line doesn't end in ";" or "*/" (for a comment) and isn't empty, then throw.
+	if !(line.suffix(1) == ";" || line.suffix(2) == "*/") && !line.isEmpty {
+		throw "Must be on one line -> '\(line)'"
+	}
+ 
 	// The tag stack should be empty once we've finished processing this line.
 	guard stack.isEmpty else {
 		throw ParseError(line: line, position: line.count, message: "There are unclosed tags: \(stack.map { $0.name })")

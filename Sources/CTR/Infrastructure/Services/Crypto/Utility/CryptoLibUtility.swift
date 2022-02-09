@@ -21,13 +21,6 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	/// Initialize core library
 	func initialize()
 
-	init(
-		now: @escaping () -> Date,
-		userSettings: UserSettingsProtocol,
-		reachability: ReachabilityProtocol?,
-		fileStorage: FileStorage,
-		flavor: AppFlavor)
-	
 	/// Store data in documents directory
 	/// - Parameters:
 	///   - data: Data that needs to be saved
@@ -39,12 +32,14 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	func checkFile(_ file: CryptoLibUtility.File)
 
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: (() -> Void)?,
 		completion: ((Result<Bool, ServerError>) -> Void)?)
 
 	/// Reset to default
-	func reset()
+	func wipePersistedData()
+	
+	func registerTriggers()
 }
 
 final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
@@ -86,35 +81,39 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	private let flavor: AppFlavor
 	private let now: () -> Date
 	private let userSettings: UserSettingsProtocol
-	private let networkManager: NetworkManaging = Services.networkManager
+	private let networkManager: NetworkManaging
 	private let reachability: ReachabilityProtocol?
+	private let remoteConfigManager: RemoteConfigManaging
 
 	// MARK: - Setup
 
 	init(
 		now: @escaping () -> Date,
 		userSettings: UserSettingsProtocol,
+		networkManager: NetworkManaging,
+		remoteConfigManager: RemoteConfigManaging,
 		reachability: ReachabilityProtocol?,
 		fileStorage: FileStorage = FileStorage(),
 		flavor: AppFlavor = AppFlavor.flavor) {
 
 		self.now = now
+		self.networkManager = networkManager
 		self.fileStorage = fileStorage
 		self.flavor = flavor
 		self.userSettings = userSettings
+		self.remoteConfigManager = remoteConfigManager
 		self.shouldInitialize = .empty
 		self.reachability = reachability
-		registerTriggers()
 	}
 
 	func registerTriggers() {
 
 		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 
 		reachability?.whenReachable = { [weak self] _ in
-			self?.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 		try? reachability?.startNotifier()
 	}
@@ -153,7 +152,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 			logError("Error initializing library: \(result.error)")
 			isInitialized = false
 		} else {
-			logInfo("Initializing library successful")
+			logVerbose("Initializing library successful")
 			isInitialized = true
 		}
 	}
@@ -183,7 +182,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	}
 
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: (() -> Void)?,
 		completion: ((Result<Bool, ServerError>) -> Void)?) {
 
@@ -191,9 +190,9 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		isLoading = true
 
 		let newValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
-			configuration: Services.remoteConfigManager.storedConfiguration,
+			configuration: remoteConfigManager.storedConfiguration,
 			lastFetchedTimestamp: userSettings.issuerKeysFetchedTimestamp,
-			isAppFirstLaunch: isAppFirstLaunch,
+			isAppLaunching: isAppLaunching,
 			now: now
 		)
 
@@ -243,7 +242,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	}
 
 	/// Reset to default
-	func reset() {
+	func wipePersistedData() {
 
 		/// Remove existing files
 		if fileStorage.fileExists(CryptoLibUtility.File.publicKeys.name) {

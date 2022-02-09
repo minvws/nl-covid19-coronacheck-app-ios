@@ -29,9 +29,9 @@ class Fonts {
         font(textStyle: .title1, weight: .bold)
     }
 
-	/// Size 28 points
+	/// Size 26 points
 	var title1Montserrat: UIFont {
-		font(textStyle: .title1, weight: .bold, customFont: "Montserrat-Bold")
+		Fonts.customMontserratFont(forTextStyle: .title1)
 	}
 
 	/// Size 22 points
@@ -165,6 +165,20 @@ class Fonts {
 
     // MARK: - Private
 
+	private static let customMontserratTextStyles: [UIFont.TextStyle: UIFont] = [
+		.largeTitle: UIFont(name: "Montserrat-Bold", size: 34)!,
+		.title1: UIFont(name: "Montserrat-Bold", size: 26)!, // this value is changed from default of 28
+		.title2: UIFont(name: "Montserrat-Bold", size: 22)!,
+		.title3: UIFont(name: "Montserrat-Bold", size: 20)!,
+		.headline: UIFont(name: "Montserrat-Bold", size: 17)!,
+		.body: UIFont(name: "Montserrat-Bold", size: 17)!,
+		.callout: UIFont(name: "Montserrat-Bold", size: 16)!,
+		.subheadline: UIFont(name: "Montserrat-Bold", size: 15)!,
+		.footnote: UIFont(name: "Montserrat-Bold", size: 13)!,
+		.caption1: UIFont(name: "Montserrat-Bold", size: 12)!,
+		.caption2: UIFont(name: "Montserrat-Bold", size: 11)!
+	]
+	
 	private func font(
 		textStyle: UIFont.TextStyle,
 		weight: Weight? = nil,
@@ -203,6 +217,13 @@ class Fonts {
 
 		return UIFont(descriptor: fontDescriptor, size: fontDescriptor.pointSize)
     }
+	
+	private class func customMontserratFont(forTextStyle style: UIFont.TextStyle) -> UIFont {
+		let metrics = UIFontMetrics(forTextStyle: style)
+		let scaledFont = metrics.scaledFont(for: customMontserratTextStyles[style]!)
+		
+		return scaledFont
+	}
 }
 
 final class Colors {
@@ -214,8 +235,6 @@ final class Colors {
 	var secondary: UIColor { return color(for: "SecondaryColor") }
 	
 	var secondaryText: UIColor { return color(for: "SecondaryText") }
-
-	var iosBlue: UIColor { return color(for: "IosBlue") }
 
     var tertiary: UIColor { return color(for: "TertiaryColor") }
 

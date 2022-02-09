@@ -14,12 +14,19 @@ class SharedCoordinatorTests: XCTestCase {
 	private var sut: SharedCoordinator!
 	private var navigationSpy: NavigationControllerSpy!
 	private var window = UIWindow()
-
+	private var onboardingFactorySpy: OnboardingFactorySpy!
+	private var newFeaturesFactorySpy: NewFeaturesFactorySpy!
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 
 		super.setUp()
-
+		environmentSpies = setupEnvironmentSpies()
+		
 		navigationSpy = NavigationControllerSpy()
+		onboardingFactorySpy = OnboardingFactorySpy()
+		newFeaturesFactorySpy = NewFeaturesFactorySpy()
+		newFeaturesFactorySpy.stubbedInformation = NewFeatureInformation(pages: [], consent: nil, version: 0)
 		sut = SharedCoordinator(
 			navigationController: navigationSpy,
 			window: window
@@ -31,15 +38,16 @@ class SharedCoordinatorTests: XCTestCase {
 	func test_needsOnboarding() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = true
-		onboardingSpy.stubbedNeedsConsent = true
-		sut.onboardingManager = onboardingSpy
-		let factory = OnboardingFactorySpy()
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
+		
 		var completed = false
 
 		// When
-		sut.handleOnboarding(factory: factory) {
+		sut.handleOnboarding(
+			onboardingFactory: onboardingFactorySpy,
+			newFeaturesFactory: newFeaturesFactorySpy
+		) {
 			completed = true
 		}
 
@@ -51,15 +59,16 @@ class SharedCoordinatorTests: XCTestCase {
 	func test_needsConsent() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = true
-		sut.onboardingManager = onboardingSpy
-		let factory = OnboardingFactorySpy()
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
+		
 		var completed = false
 
 		// When
-		sut.handleOnboarding(factory: factory) {
+		sut.handleOnboarding(
+			onboardingFactory: onboardingFactorySpy,
+			newFeaturesFactory: newFeaturesFactorySpy
+		) {
 			completed = true
 		}
 
@@ -71,19 +80,40 @@ class SharedCoordinatorTests: XCTestCase {
 	func test_doesNotNeedOnboarding() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = false
-		sut.onboardingManager = onboardingSpy
-		let factory = OnboardingFactorySpy()
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		var completed = false
 
 		// When
-		sut.handleOnboarding(factory: factory) {
+		sut.handleOnboarding(
+			onboardingFactory: onboardingFactorySpy,
+			newFeaturesFactory: newFeaturesFactorySpy
+		) {
 			completed = true
 		}
 		// Then
 		expect(completed).toEventually(beTrue())
 		expect(self.sut.childCoordinators).toEventually(haveCount(0))
+	}
+	
+	func test_needsNewFeatures() {
+		
+		// Given
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
+		environmentSpies.newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(image: nil, tagline: "", title: "", content: "")
+		
+		var completed = false
+
+		// When
+		sut.handleOnboarding(
+			onboardingFactory: onboardingFactorySpy,
+			newFeaturesFactory: newFeaturesFactorySpy
+		) {
+			completed = true
+		}
+
+		// Then
+		expect(completed) == false
+		expect(self.sut.childCoordinators).toEventually(haveCount(1))
 	}
 }

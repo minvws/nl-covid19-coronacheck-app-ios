@@ -24,6 +24,12 @@ final class HolderDashboardView: BaseView {
 		}
 	}
 	
+	private let fakeNavigationBar: FakeNavigationBarView = {
+		let navbar = FakeNavigationBarView()
+		navbar.translatesAutoresizingMaskIntoConstraints = false
+		return navbar
+	}()
+	
 	private let tabBar: DashboardTabBar = {
 		let tabBar = DashboardTabBar()
 		tabBar.translatesAutoresizingMaskIntoConstraints = false
@@ -66,6 +72,8 @@ final class HolderDashboardView: BaseView {
 	private var bottomScrollViewConstraint: NSLayoutConstraint?
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
+	// MARK: - Overrides
+	
 	/// Setup all the views
 	override func setupViews() {
 		super.setupViews()
@@ -81,6 +89,7 @@ final class HolderDashboardView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
+		addSubview(fakeNavigationBar)
 		addSubview(tabBar)
 		addSubview(scrollView)
 		addSubview(footerButtonView)
@@ -93,7 +102,12 @@ final class HolderDashboardView: BaseView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			tabBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			
+			fakeNavigationBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			fakeNavigationBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			fakeNavigationBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			
+			tabBar.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
 			tabBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			tabBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			
@@ -133,6 +147,40 @@ final class HolderDashboardView: BaseView {
 		])
 	}
 	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+ 	}
+	
+	override var accessibilityElements: [Any]? {
+		get { return [fakeNavigationBar, tabBar] + [domesticScrollView] + [internationalScrollView 	] }
+		set {}
+	}
+	
+	/// Enables swipe to navigate behaviour for assistive technologies
+	override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+		guard !tabBar.accessibilityElementIsFocused() else {
+			// Scrolling in tab bar is not supported
+			return true
+		}
+		
+		if let tab: DashboardTab = {
+			switch direction {
+				case .right: return DashboardTab.domestic
+				case .left: return DashboardTab.international
+				default: return Optional.none
+			}
+		}() {
+			selectTab(tab: tab)
+			delegate?.holderDashboardView(self, didDisplay: tab)
+		}
+		
+		// Scroll via swipe gesture
+		return false
+	}
+	
+	// MARK: - Public Access
+	
 	/// Display primary button view
 	var shouldDisplayButtonView = false {
 		didSet {
@@ -158,6 +206,27 @@ final class HolderDashboardView: BaseView {
 		updateScrollPosition()
 		updateScrollViewContentOffsetObserver(for: tab)
 	}
+	
+	var tapMenuButtonHandler: (() -> Void)? {
+		didSet {
+			fakeNavigationBar.tapMenuButtonHandler = tapMenuButtonHandler
+		}
+	}
+	
+	var fakeNavigationTitle: String? {
+		didSet {
+			fakeNavigationBar.title = fakeNavigationTitle
+		}
+	}
+	
+	var fakeNavigationBarAlpha: CGFloat {
+		get {
+			fakeNavigationBar.alpha
+		}
+		set {
+			fakeNavigationBar.alpha = newValue
+		}
+	}
 }
 
 private extension HolderDashboardView {
@@ -176,16 +245,20 @@ private extension HolderDashboardView {
 		let translatedOffset = scrollView.translatedBottomScrollOffset
 		footerButtonView.updateFadeAnimation(from: translatedOffset)
 	}
+	
+	func selectedTab(for scrollView: UIScrollView) -> DashboardTab {
+		let scrollViewWidth = scrollView.bounds.width
+		let pageScroll = 1.5 * scrollViewWidth
+		let internationalPage = scrollView.contentOffset.x + scrollViewWidth > pageScroll
+		return internationalPage ? .international : .domestic
+	}
 }
 
 extension HolderDashboardView: UIScrollViewDelegate {
 	
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		guard scrollView.isDragging else { return }
-		let scrollViewWidth = scrollView.bounds.width
-		let pageScroll = 1.5 * scrollViewWidth
-		let nextPage = scrollView.contentOffset.x + scrollViewWidth > pageScroll
-		let selectedTab: DashboardTab = nextPage ? .international : .domestic
+		let selectedTab = selectedTab(for: scrollView)
 		let hasTabChanged = tabBar.selectedTab != selectedTab
 		
 		guard hasTabChanged else { return }
@@ -201,8 +274,17 @@ extension HolderDashboardView: DashboardTabBarDelegate {
 	func dashboardTabBar(_ tabBar: DashboardTabBar, didSelect tab: DashboardTab) {
 		let scrollOffset = CGPoint(x: scrollView.bounds.width * CGFloat(tab.rawValue), y: 0)
 		scrollView.setContentOffset(scrollOffset, animated: true)
+		UIAccessibility.post(notification: .pageScrolled, argument: nil)
 				
 		updateScrollViewContentOffsetObserver(for: tab)
 		delegate?.holderDashboardView(self, didDisplay: tab)
+	}
+}
+
+extension HolderDashboardView: UIScrollViewAccessibilityDelegate {
+	
+	func accessibilityScrollStatus(for scrollView: UIScrollView) -> String? {
+		let selectedTab = selectedTab(for: scrollView)
+		return selectedTab == .domestic ? L.generalNetherlands() : L.generalEuropeanUnion()
 	}
 }

@@ -45,6 +45,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 			case idle
 			case loading(silently: Bool)
 			case failed(error: DashboardStrippenRefresher.Error)
+			case serverResponseHasNoChanges
 			case noInternet // waitingForInternet?
 			case completed // nothing more to do.
 
@@ -93,6 +94,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 			state.hasLoadingEverFailed = true
 
 			switch error {
+					
 				case NetworkError.noInternetConnection:
 					state.loadingState = .noInternet
 
@@ -111,7 +113,11 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 					state.loadingState = .failed(error: .greencardLoaderError(error: error))
 
 				case let error as DashboardStrippenRefresher.Error:
-					state.loadingState = .failed(error: error)
+					if error == .serverResponseDidNotChangeExpiredOrExpiringState {
+						state.loadingState = .serverResponseHasNoChanges
+					} else {
+						state.loadingState = .failed(error: error)
+					}
 
 				default:
 					state.loadingState = .failed(error: .unknownErrorA)
@@ -147,17 +153,16 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		}
 	}
 
-	private let walletManager: WalletManaging = Services.walletManager
-	private let greencardLoader: GreenCardLoading = Services.greenCardLoader
+	private let walletManager: WalletManaging = Current.walletManager
+	private let greencardLoader: GreenCardLoading = Current.greenCardLoader
 	private let reachability: ReachabilityProtocol?
 
-	private let now: () -> Date
+	private let now: () -> Date = Current.now
 	private let minimumThresholdOfValidCredentialsTriggeringRefresh: Int // (values <= this number trigger refresh.)
 	private var retryAfterNetworkFailureTimer: Timer?
 
-	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, reachability: ReachabilityProtocol?, now: @escaping () -> Date) {
+	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, reachability: ReachabilityProtocol?) {
 		self.minimumThresholdOfValidCredentialsTriggeringRefresh = minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh
-		self.now = now
 
 		let expiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh,

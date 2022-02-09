@@ -62,6 +62,7 @@ final class ConsentButton: UIControl {
 		setupViews()
 		setupViewHierarchy()
 		setupViewConstraints()
+		setupAccessibility()
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -146,6 +147,12 @@ final class ConsentButton: UIControl {
 			}()
 		])
 	}
+	
+	/// Setup all the accessibility traits
+	private func setupAccessibility() {
+		
+		isAccessibilityElement = true
+	}
 
 	@discardableResult
 	func valueChanged(_ target: Any?, action: Selector) -> Self {
@@ -156,7 +163,7 @@ final class ConsentButton: UIControl {
 	private func applyState() {
 		iconImageView.isHighlighted = isSelected
 		iconImageView.image = hasError ? Images.Icon.error : Images.Icon.normal
-		backgroundColor = hasError ? C.consentButtonError() : C.consentButtonBackground()
+		backgroundColor = hasError ? C.consentButtonError() : C.primaryBlue5()
 	}
 
 	@objc private func toggle() {
@@ -193,6 +200,7 @@ final class ConsentButton: UIControl {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Dimension.lineHeight,
 															 textColor: Theme.colors.dark)
+			accessibilityLabel = title
 		}
 	}
 }

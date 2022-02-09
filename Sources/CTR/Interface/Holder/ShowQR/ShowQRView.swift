@@ -20,14 +20,14 @@ class ShowQRView: BaseView {
 		enum Margin {
 			static let edge: CGFloat = 10
 			static let infoEdge: CGFloat = 20
-			static let domesticSecurity: CGFloat = 56
-			static let internationalSecurity: CGFloat = 52
-            static let internationalSecurityExtraSafeAreaInset: CGFloat = 20
+			static let domesticSecurity: CGFloat = 57
+			static let internationalSecurity: CGFloat = 90
+            static let internationalSecurityExtraSafeAreaInset: CGFloat = 60
 			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
 		enum Spacing {
 			static let dosageToButton: CGFloat = 10
-			static let buttonToPageControl: CGFloat = 10
+			static let buttonToPageControl: CGFloat = 16
 			static let containerToReturnToThirdPartyAppButton: CGFloat = 24
 		}
 	}
@@ -43,13 +43,10 @@ class ShowQRView: BaseView {
 	}()
 
 	/// The control buttons
-	let pageControl: UIPageControl = {
+	let pageControl: PageControl = {
 
-		let view = UIPageControl()
+		let view = PageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.pageIndicatorTintColor = Theme.colors.grey2
-		view.currentPageIndicatorTintColor = Theme.colors.primary
-		view.hidesForSinglePage = true
 		return view
 	}()
 
@@ -76,6 +73,11 @@ class ShowQRView: BaseView {
 		let button = UIButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.pageIndicatorNext(), for: .normal)
+		if #available(iOS 13.0, *) {
+			button.addInteraction(UILargeContentViewerInteraction())
+			button.showsLargeContentViewer = true
+			button.largeContentTitle = L.holderShowqrNextbutton()
+		}
 		return button
 	}()
 
@@ -85,6 +87,11 @@ class ShowQRView: BaseView {
 		let button = UIButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.pageIndicatorBack(), for: .normal)
+		if #available(iOS 13.0, *) {
+			button.addInteraction(UILargeContentViewerInteraction())
+			button.showsLargeContentViewer = true
+			button.largeContentTitle = L.holderShowqrPreviousbutton()
+		}
 		return button
 	}()
 	

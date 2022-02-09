@@ -56,6 +56,18 @@ extension UINavigationController {
 		coordinator.animate(alongsideTransition: nil) { _ in completion() }
 	}
 	
+	func setViewControllers(_ viewControllers: [UIViewController], animated: Bool, completion: @escaping () -> Void) {
+		
+		setViewControllers(viewControllers, animated: animated)
+		
+		guard animated, let coordinator = transitionCoordinator else {
+			DispatchQueue.main.async { completion() }
+			return
+		}
+
+		coordinator.animate(alongsideTransition: nil) { _ in completion() }
+	}
+	
 	/// Pushes view controller if no stack is present. Or replaces top view controller when a stack is present.
 	/// This prevents an endless stack and increasing memory pressure while preserving native push animation.
 	/// - Parameters:
@@ -69,5 +81,17 @@ extension UINavigationController {
 			updatedViewControllers[updatedViewControllers.count - 1] = viewController
 			setViewControllers(updatedViewControllers, animated: animated)
 		}
+	}
+	
+	/// Pushes view controller with fade animation instead of push animation.
+	/// - Parameters:
+	///   - viewController: The view controller to push onto the stack.
+	///   - animationDuration: The animation duration.
+	func pushWithFadeAnimation(with viewController: UIViewController, animationDuration: CFTimeInterval) {
+		let transition = CATransition()
+		transition.duration = animationDuration
+		transition.type = .fade
+		view.layer.add(transition, forKey: nil)
+		pushViewController(viewController, animated: false)
 	}
 }

@@ -19,13 +19,6 @@ protocol IdentityCheckerProtocol {
 
 class IdentityChecker: IdentityCheckerProtocol, Logging {
 
-	let cryptoManager: CryptoManaging
-
-	required init(cryptoManager: CryptoManaging = Services.cryptoManager) {
-
-		self.cryptoManager = cryptoManager
-	}
-
 	/// Check if the identities in event groups and remote events match
 	/// - Parameters:
 	///   - eventGroups: the event groups
@@ -66,7 +59,9 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 						isInitialEqual(remoteTuple?.lastNameInitial, existingTuple?.lastNameInitial))
 			}
 		}
-		logDebug("Does the identity of the new events match with the existing ones? \(match)")
+		if !match {
+			logDebug("Does the identity of the new events match with the existing ones? \(match)")
+		}
 		return match
 	}
 
@@ -97,7 +92,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 					}
 				} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
 					if let credentialData = object.credential.data(using: .utf8),
-					   let euCredentialAttributes = cryptoManager.readEuCredentials(credentialData) {
+					   let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) {
 						identities.append(euCredentialAttributes.identity)
 					}
 				}
@@ -210,6 +205,6 @@ extension TestHolderIdentity {
 
 	func asIdentityTuple() -> IdentityTuple {
 
-		return (firstNameInitial: firstNameInitial, lastNameInitial: lastNameInitial, day: birthDay, month: birthMonth)
+		return (firstNameInitial: firstNameInitial.uppercased(), lastNameInitial: lastNameInitial.uppercased(), day: birthDay, month: birthMonth)
 	}
 }

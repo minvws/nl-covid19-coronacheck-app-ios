@@ -10,8 +10,6 @@ import XCTest
 
 final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 
-	required init(now: @escaping () -> Date, userSettings: UserSettingsProtocol, reachability: ReachabilityProtocol?, fileStorage: FileStorage, flavor: AppFlavor) {}
-
 	var invokedHasPublicKeysGetter = false
 	var invokedHasPublicKeysGetterCount = 0
 	var stubbedHasPublicKeys: Bool! = false
@@ -66,19 +64,19 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
-	var invokedUpdateParameters: (isAppFirstLaunch: Bool, Void)?
-	var invokedUpdateParametersList = [(isAppFirstLaunch: Bool, Void)]()
+	var invokedUpdateParameters: (isAppLaunching: Bool, Void)?
+	var invokedUpdateParametersList = [(isAppLaunching: Bool, Void)]()
 	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
 	var stubbedUpdateCompletionResult: (Result<Bool, ServerError>, Void)?
 
 	func update(
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: (() -> Void)?,
 		completion: ((Result<Bool, ServerError>) -> Void)?) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
-		invokedUpdateParameters = (isAppFirstLaunch, ())
-		invokedUpdateParametersList.append((isAppFirstLaunch, ()))
+		invokedUpdateParameters = (isAppLaunching, ())
+		invokedUpdateParametersList.append((isAppLaunching, ()))
 		if shouldInvokeUpdateImmediateCallbackIfWithinTTL {
 			immediateCallbackIfWithinTTL?()
 		}
@@ -87,11 +85,19 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		}
 	}
 
-	var invokedReset = false
-	var invokedResetCount = 0
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
 
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
+	}
+
+	var invokedRegisterTriggers = false
+	var invokedRegisterTriggersCount = 0
+
+	func registerTriggers() {
+		invokedRegisterTriggers = true
+		invokedRegisterTriggersCount += 1
 	}
 }

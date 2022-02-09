@@ -19,6 +19,8 @@ enum AboutThisAppMenuIdentifier: String {
 	case reset
 	
 	case deeplink
+
+	case scanlog
 }
 
 ///// Struct for information to display the different test providers
@@ -38,17 +40,14 @@ class AboutThisAppViewModel: Logging {
 
 	private var flavor: AppFlavor
 
-	private let userSettings: UserSettingsProtocol
-
 	// MARK: - Bindable
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var appVersion: String
 	@Bindable private(set) var configVersion: String?
-	@Bindable private(set) var listHeader: String
 	@Bindable private(set) var alert: AlertContent?
-	@Bindable private(set) var menu: [AboutThisAppMenuOption] = []
+	@Bindable private(set) var menu: KeyValuePairs<String, [AboutThisAppMenuOption]> = [:]
 
 	// MARK: - Initializer
 
@@ -60,24 +59,21 @@ class AboutThisAppViewModel: Logging {
 	init(
 		coordinator: (OpenUrlProtocol & Restartable),
 		versionSupplier: AppVersionSupplierProtocol,
-		flavor: AppFlavor,
-		userSettings: UserSettingsProtocol) {
+		flavor: AppFlavor) {
 
 		self.coordinator = coordinator
 		self.flavor = flavor
-		self.userSettings = userSettings
 
 		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
 		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
-		self.listHeader = flavor == .holder ? L.holderAboutReadmore() : L.verifierAboutReadmore()
 
 		appVersion = flavor == .holder
 			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
 			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
 
 		configVersion = {
-			guard let timestamp = userSettings.configFetchedTimestamp,
-				  let hash = userSettings.configFetchedHash
+			guard let timestamp = Current.userSettings.configFetchedTimestamp,
+				  let hash = Current.userSettings.configFetchedHash
 			else { return nil }
 
 			// 13-10-2021 00:00
@@ -90,27 +86,43 @@ class AboutThisAppViewModel: Logging {
 
 		flavor == .holder ? setupMenuHolder() : setupMenuVerifier()
 	}
-
 	private func setupMenuHolder() {
 
-		menu = [
+		var list: [AboutThisAppMenuOption] = [
 			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
 			AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle())
 		]
 		if Configuration().getEnvironment() != "production" {
-			menu.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
+			list.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
+
+		menu = [L.holderAboutReadmore(): list]
 	}
 
 	private func setupMenuVerifier() {
 
-		menu = [
+		var topList: [AboutThisAppMenuOption] = [
 			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.verifierMenuPrivacy()) ,
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]
+		if Configuration().getEnvironment() != "production" {
+			topList.append(AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle()))
+		}
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
+			menu = [
+				L.verifierAboutReadmore(): topList,
+				L.verifier_about_this_app_law_enforcement(): [
+					AboutThisAppMenuOption(identifier: .scanlog, name: L.verifier_about_this_app_scan_log())
+				]
+			]
+		} else {
+			menu = [
+				L.verifierAboutReadmore(): topList
+			]
+		}
 	}
 
 	func menuOptionSelected(_ identifier: AboutThisAppMenuIdentifier) {
@@ -126,6 +138,8 @@ class AboutThisAppViewModel: Logging {
 				showClearDataAlert()
 			case .deeplink:
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
+			case .scanlog:
+				openScanLog()
 		}
 	}
 
@@ -163,17 +177,24 @@ class AboutThisAppViewModel: Logging {
 			subTitle: L.holderCleardataAlertSubtitle(),
 			cancelAction: nil,
 			cancelTitle: L.generalCancel(),
-			okAction: { _ in
-				self.resetDataAndRestart()
+			okAction: { [weak self] _ in
+				self?.wipePersistedData()
 			},
-			okTitle: L.holderCleardataAlertRemove()
+			okTitle: L.holderCleardataAlertRemove(),
+			okActionIsDestructive: true
 		)
 	}
 
-	func resetDataAndRestart() {
+	func wipePersistedData() {
 
-		Services.reset()
-		self.userSettings.reset()
+		Current.wipePersistedData(flavor: flavor)
 		self.coordinator?.restart()
+	}
+
+	func openScanLog() {
+
+		if let coordinator = coordinator as? VerifierCoordinatorDelegate {
+			coordinator.userWishesToOpenScanLog()
+		}
 	}
 }

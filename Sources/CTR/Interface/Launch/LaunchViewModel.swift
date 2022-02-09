@@ -11,14 +11,8 @@ import LocalAuthentication
 class LaunchViewModel: Logging {
 
 	private weak var coordinator: AppCoordinatorDelegate?
-
+	private var walletManager: WalletManaging?
 	private var versionSupplier: AppVersionSupplierProtocol?
-	private weak var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
-	private weak var walletManager: WalletManaging?
-	private weak var jailBreakDetector: JailBreakProtocol? = Services.jailBreakDetector
-	private weak var deviceAuthenticationDetector: DeviceAuthenticationProtocol? = Services.deviceAuthenticationDetector
-	private var userSettings: UserSettingsProtocol?
-	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
@@ -26,9 +20,6 @@ class LaunchViewModel: Logging {
 	private var flavor: AppFlavor
 	var configStatus: LaunchState?
 	var issuerPublicKeysStatus: LaunchState?
-	var didFinishLaunchState = false
-
-	private var remoteConfigManagerUpdateToken: RemoteConfigManager.ObserverToken?
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
@@ -45,13 +36,11 @@ class LaunchViewModel: Logging {
 	init(
 		coordinator: AppCoordinatorDelegate,
 		versionSupplier: AppVersionSupplierProtocol?,
-		flavor: AppFlavor,
-		userSettings: UserSettingsProtocol? = UserSettings()) {
+		flavor: AppFlavor) {
 
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
 		self.flavor = flavor
-		self.userSettings = userSettings
 
 		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
 		message = flavor == .holder ? L.holderLaunchText() : L.verifierLaunchText()
@@ -61,20 +50,8 @@ class LaunchViewModel: Logging {
 			? L.holderLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 			: L.verifierLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 
-		walletManager = flavor == .holder ? Services.walletManager : nil
-
-		remoteConfigManagerUpdateToken = Services.remoteConfigManager.appendReloadObserver { [weak self] remoteConfig, rawData, urlResponse in
-			self?.cryptoLibUtility?.checkFile(.remoteConfiguration)
-			self?.checkWallet()
-		}
-
+		walletManager = flavor == .holder ? Current.walletManager : nil
 		startChecks()
-	}
-
-	deinit {
-		remoteConfigManagerUpdateToken.map {
-			Services.remoteConfigManager.removeObserver(token: $0)
-		}
 	}
 
 	private func startChecks() {
@@ -113,36 +90,21 @@ class LaunchViewModel: Logging {
 			return
 		}
 
-		logVerbose("switch \(configStatus), \(issuerPublicKeysStatus) - didFinishLaunchState: \(didFinishLaunchState)")
-
 		// Small delay, let the viewController load.
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 			switch (configStatus, issuerPublicKeysStatus) {
 				case (.withinTTL, .withinTTL):
-					self.didFinishLaunchState = true
 					self.coordinator?.handleLaunchState(.withinTTL)
-
-				case (.actionRequired, _):
-					self.coordinator?.handleLaunchState(configStatus)
-
-				case (LaunchState.internetRequired, _), (_, .internetRequired):
-					if !self.didFinishLaunchState {
-						self.didFinishLaunchState = true
-						self.coordinator?.handleLaunchState(.internetRequired)
-					}
-
-				case (.noActionNeeded, .noActionNeeded), (.noActionNeeded, .withinTTL), (.withinTTL, .noActionNeeded):
-					if let lib = self.cryptoLibUtility, !lib.isInitialized {
-						// Show crypto lib not initialized error
-						self.coordinator?.handleLaunchState(.cryptoLibNotInitialized)
-					} else {
-						// Start application
-						if !self.didFinishLaunchState {
-							self.didFinishLaunchState = true
-							self.coordinator?.handleLaunchState(.noActionNeeded)
-						}
-					}
-
+								
+				case let (.serverError(error1), .serverError(error2)):
+					self.coordinator?.handleLaunchState(.serverError(error1 + error2))
+				
+				case (.serverError(let error), _), (_, .serverError(let error)):
+					self.coordinator?.handleLaunchState(.serverError(error))
+				
+				case (.finished, .finished), (.finished, .withinTTL), (.withinTTL, .finished):
+					self.coordinator?.handleLaunchState(.finished)
+					
 				default:
 					self.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
 			}
@@ -156,84 +118,25 @@ class LaunchViewModel: Logging {
 		guard !isUpdatingConfiguration else { return }
 		isUpdatingConfiguration = true
 
-		remoteConfigManager?.update(
-			isAppFirstLaunch: true,
+		Current.remoteConfigManager.update(
+			isAppLaunching: true,
 			immediateCallbackIfWithinTTL: {
-				self.cryptoLibUtility?.checkFile(.remoteConfiguration)
+				Current.cryptoLibUtility.checkFile(.remoteConfiguration)
 				completion(.withinTTL)
 			},
 			completion: { (result: Result<(Bool, RemoteConfiguration), ServerError>) in
 				self.isUpdatingConfiguration = false
+				
 				switch result {
-					case let .success((_, remoteConfiguration)):
 
-						// Note: There are also other steps done on completion
-						// by way of the remoteConfigManager's registered update/reload observers
-						// - see RemoteConfigManager `.appendUpdateObserver` and `.appendReloadObserver`.
+					case .success:
+						completion(.finished)
 
-						self.compare(remoteConfiguration, completion: completion)
-
-					case let .failure(networkError):
-						self.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
-
-						// Fallback to the last known remote configuration
-						guard let storedConfiguration = self.remoteConfigManager?.storedConfiguration else {
-							completion(.internetRequired)
-							return
-						}
-
-						self.logDebug("Using stored Configuration \(storedConfiguration)")
-
-						// Check the wallet
-						self.checkWallet()
-
-						self.compare(storedConfiguration) { state in
-							switch state {
-								case .actionRequired:
-									// Deactivated or update trumps no internet
-									completion(state)
-								default:
-									completion(.internetRequired)
-							}
-						}
+					case let .failure(error):
+						self.logError("Error getting the remote config: \(error)")
+						completion(.serverError([error]))
 				}
 			})
-	}
-
-	/// Compare the remote configuration against the app version
-	/// - Parameters:
-	///   - remoteConfiguration: the remote configuration
-	///   - completion: completion handler
-	private func compare(
-		_ remoteConfiguration: RemoteConfiguration,
-		completion: @escaping (LaunchState) -> Void) {
-
-		let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
-		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
-		let currentVersion = versionSupplier?.getCurrentVersion().fullVersionString() ?? "1.0.0"
-
-		if remoteConfiguration.isDeactivated ||
-			requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending ||
-			recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-			// Update or kill the app
-			completion(.actionRequired(remoteConfiguration))
-		} else {
-			// Nothing to do
-			completion(.noActionNeeded)
-		}
-	}
-
-	private func checkWallet() {
-
-		guard let configuration = remoteConfigManager?.storedConfiguration else {
-			return
-		}
-
-		walletManager?.expireEventGroups(
-			vaccinationValidity: (configuration.vaccinationEventValidityDays ?? 730) * 24,
-			recoveryValidity: (configuration.recoveryEventValidityDays ?? 365) * 24,
-			testValidity: configuration.testEventValidityHours
-		)
 	}
 
 	private func updateKeys(_ completion: @escaping (LaunchState) -> Void) {
@@ -242,21 +145,21 @@ class LaunchViewModel: Logging {
 		guard !isUpdatingIssuerPublicKeys else { return }
 		isUpdatingIssuerPublicKeys = true
 
-		cryptoLibUtility?.update(
-			isAppFirstLaunch: true,
+		Current.cryptoLibUtility.update(
+			isAppLaunching: true,
 			immediateCallbackIfWithinTTL: {
-				self.cryptoLibUtility?.checkFile(.publicKeys)
+				Current.cryptoLibUtility.checkFile(.publicKeys)
 				completion(.withinTTL)
 			},
 			completion: { (result: Result<Bool, ServerError>) in
 				self.isUpdatingIssuerPublicKeys = false
 				switch result {
 					case .success:
-						completion(.noActionNeeded)
+						completion(.finished)
 
 					case let .failure(error):
 						self.logError("Error getting the issuers public keys: \(error)")
-						completion(.internetRequired)
+						completion(.serverError([error]))
 				}
 			}
 		)
@@ -270,12 +173,8 @@ class LaunchViewModel: Logging {
 			// Only enable for the holder
 			return false
 		}
-
-		guard let jailBreakDetector = jailBreakDetector, let userSettings = userSettings else {
-			return false
-		}
-
-		return !userSettings.jailbreakWarningShown && jailBreakDetector.isJailBroken()
+		
+		return !Current.userSettings.jailbreakWarningShown && Current.jailBreakDetector.isJailBroken()
 	}
 
 	func showJailBreakAlert() {
@@ -297,12 +196,12 @@ class LaunchViewModel: Logging {
 		// Interruption is over
 		alert = nil
 		// Warning has been shown, do not show twice
-		userSettings?.jailbreakWarningShown = true
+		Current.userSettings.jailbreakWarningShown = true
 		// Continue with flow
 		startChecks()
 	}
 
-	// MARK: DeviceAuthentication
+	// MARK: DeviceAuthentication (pin code)
 
 	private func shouldShowDeviceAuthenticationAlert() -> Bool {
 
@@ -311,12 +210,8 @@ class LaunchViewModel: Logging {
 			return false
 		}
 
-		guard let deviceAuthenticationDetector = deviceAuthenticationDetector, let userSettings = userSettings else {
-			return false
-		}
-
 		// Does the device have a pin/touch/face authentication? (show only once)
-		return !userSettings.deviceAuthenticationWarningShown && !deviceAuthenticationDetector.hasAuthenticationPolicy()
+		return !Current.userSettings.deviceAuthenticationWarningShown && !Current.deviceAuthenticationDetector.hasAuthenticationPolicy()
 	}
 
 	func showDeviceAuthenticationAlert() {
@@ -338,7 +233,7 @@ class LaunchViewModel: Logging {
 		// Interruption is over
 		alert = nil
 		// Warning has been shown, do not show twice
-		userSettings?.deviceAuthenticationWarningShown = true
+		Current.userSettings.deviceAuthenticationWarningShown = true
 		// Continue with flow
 		startChecks()
 	}

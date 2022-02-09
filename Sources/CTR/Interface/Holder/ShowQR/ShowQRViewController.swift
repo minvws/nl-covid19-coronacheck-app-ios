@@ -13,7 +13,6 @@ class ShowQRViewController: BaseViewController {
 
 	private let viewModel: ShowQRViewModel
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-	var previousOrientation: UIInterfaceOrientation?
 
 	/// Initializer
 	/// - Parameter viewModel: view model
@@ -69,17 +68,21 @@ class ShowQRViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		viewModel.setBrightness()
+		viewModel.viewWillAppear()
 		sceneView.play()
-		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 	}
-
+	
 	override func viewWillDisappear(_ animated: Bool) {
-
+		
 		super.viewWillDisappear(animated)
-		viewModel.setBrightness(reset: true)
-		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
+		viewModel.viewWillDisappear()
+	}
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		
+		super.viewDidDisappear(animated)
+		OrientationUtility.unlockOrientation()
 	}
 }
 
@@ -99,7 +102,7 @@ extension ShowQRViewController {
 			target: self,
 			action: action,
 			content: .text(L.holderShowqrDetails()),
-			tintColor: Theme.colors.iosBlue,
+			tintColor: Theme.colors.primary,
 			accessibilityIdentifier: "InformationButton",
 			accessibilityLabel: accessibilityLabel)
 		navigationItem.rightBarButtonItem = .create(config)
@@ -136,7 +139,6 @@ extension ShowQRViewController {
 				return
 			}
 
-			self.sceneView.pageControl.currentPage = $0
 			self.pageViewController.startAtIndex($0)
 			self.updateControlVisibility()
 		}
@@ -152,17 +154,7 @@ extension ShowQRViewController {
 		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
-		sceneView.pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
-	}
-
-	/// User tapped on the page control
-	@objc func pageControlValueChanged(_ pageControl: UIPageControl) {
-
-		if pageControl.currentPage > pageViewController.currentIndex {
-			pageViewController.nextPage()
-		} else {
-			pageViewController.previousPage()
-		}
+		sceneView.pageControl.delegate = self
 	}
 
 	func updateControlVisibility() {
@@ -177,8 +169,21 @@ extension ShowQRViewController {
 extension ShowQRViewController: PageViewControllerDelegate {
 
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
-		sceneView.pageControl.currentPage = index
+		sceneView.pageControl.update(for: index)
 		viewModel.userDidChangeCurrentPage(toPageIndex: index)
 		updateControlVisibility()
+	}
+}
+
+// MARK: - PageControlDelegate
+
+extension ShowQRViewController: PageControlDelegate {
+	
+	func pageControl(_ pageControl: PageControl, didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int) {
+		if currentPageIndex > previousPageIndex {
+			pageViewController.nextPage()
+		} else {
+			pageViewController.previousPage()
+		}
 	}
 }

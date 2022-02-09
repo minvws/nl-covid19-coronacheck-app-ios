@@ -9,8 +9,6 @@ import Foundation
 
 protocol CouplingManaging {
 
-	init(cryptoManager: CryptoManaging, networkManager: NetworkManaging )
-
 	///  Convert a dcc to an event wrapper
 	/// - Parameters:
 	///   - dcc: The string representation of a digital covid certificate
@@ -53,7 +51,7 @@ class CouplingManager: CouplingManaging, Logging {
 			
 			let wrapper =
 				EventFlow.EventResultWrapper(
-					providerIdentifier: "DCC",
+					providerIdentifier: EventFlow.paperproofIdentier,
 					protocolVersion: "3.0",
 					identity: euCredentialAttributes.identity,
 					status: .complete,
@@ -67,7 +65,8 @@ class CouplingManager: CouplingManaging, Logging {
 							negativeTest: nil,
 							positiveTest: nil,
 							recovery: nil,
-							dccEvent: dccEvent
+							dccEvent: dccEvent,
+							vaccinationAssessment: nil
 						)
 					]
 				)

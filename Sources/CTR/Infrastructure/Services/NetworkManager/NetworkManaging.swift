@@ -32,6 +32,7 @@ enum NetworkError: String, Error, Equatable {
 	case invalidSignature
 	case cannotSerialize
 	case cannotDeserialize
+	case authenticationCancelled
 
 	func getClientErrorCode() -> ErrorCode.ClientCode? {
 
@@ -47,6 +48,8 @@ enum NetworkError: String, Error, Equatable {
 				return ErrorCode.ClientCode(value: "005")
 			case .invalidResponse:
 				return ErrorCode.ClientCode(value: "003")
+			case .authenticationCancelled:
+				return ErrorCode.ClientCode(value: "010")
 			case .invalidSignature:
 				return ErrorCode.ClientCode(value: "020")
 			case .cannotDeserialize:
@@ -57,6 +60,30 @@ enum NetworkError: String, Error, Equatable {
 				// For noInternetConnection: not needed
 				// For responseCached, serverError, resourceNotFound, redirection, serverBusy: use the http status code
 				return nil
+		}
+	}
+
+	/// Checks for valid HTTPResponse and status codes
+	static func inspect(response: URLResponse) -> NetworkError? {
+		guard let response = response as? HTTPURLResponse else {
+			return .invalidResponse
+		}
+
+		switch response.statusCode {
+			case 200 ... 299:
+				return nil
+			case 304:
+				return .responseCached
+			case 300 ... 399:
+				return .redirection
+			case 429:
+				return .serverBusy
+			case 400 ... 499:
+				return .resourceNotFound
+			case 500 ... 599:
+				return .serverError
+			default:
+				return .invalidResponse
 		}
 	}
 }
@@ -79,11 +106,6 @@ protocol NetworkManaging: AnyObject {
 	/// The network configuration
 	var networkConfiguration: NetworkConfiguration { get }
 	
-	/// Initializer
-	/// - Parameters:
-	///   - configuration: the network configuration
-	init(configuration: NetworkConfiguration)
-
 	/// Get the access tokens
 	/// - Parameters:
 	///   - tvsToken: the tvs token
@@ -128,7 +150,7 @@ protocol NetworkManaging: AnyObject {
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void)
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse, URLResponse), ServerError>) -> Void)
 
 	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:

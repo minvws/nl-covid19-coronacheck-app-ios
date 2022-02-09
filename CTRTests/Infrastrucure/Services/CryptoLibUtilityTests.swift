@@ -16,22 +16,26 @@ class CryptoLibUtilityTests: XCTestCase {
 	private var networkSpy: NetworkSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	private var reachabilitySpy: ReachabilitySpy!
+	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
 
 	override func setUp() {
 
 		super.setUp()
-		networkSpy = NetworkSpy(configuration: .development)
-		Services.use(networkSpy)
+		networkSpy = NetworkSpy()
 		userSettingsSpy = UserSettingsSpy()
 		reachabilitySpy = ReachabilitySpy()
-
-		sut = CryptoLibUtility(now: { now }, userSettings: userSettingsSpy, reachability: reachabilitySpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
+		remoteConfigManagerSpy = RemoteConfigManagingSpy()
+		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		remoteConfigManagerSpy.stubbedStoredConfiguration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
+		
+		sut = CryptoLibUtility(
+			now: { now },
+			userSettings: userSettingsSpy,
+			networkManager: networkSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			reachability: reachabilitySpy
+		)
 	}
 
 	/// Test the crypto lib utility  update call no result from the api
@@ -42,7 +46,7 @@ class CryptoLibUtilityTests: XCTestCase {
 			self.networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
 
 			// When
-			self.sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
+			self.sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 				//
 			}, completion: { state in
 
@@ -61,7 +65,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		waitUntil(timeout: .seconds(10)) { done in
 			self.networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
 			// When
-			self.sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
+			self.sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 				//
 			}, completion: { state in
 
@@ -76,23 +80,16 @@ class CryptoLibUtilityTests: XCTestCase {
 	func test_update_withinTTL_callsbackImmediately() {
 
 		// Arrange
-		let remoteConfigSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
-		remoteConfigSpy.stubbedStoredConfiguration = .default
-		remoteConfigSpy.stubbedStoredConfiguration.configTTL = 3600
-		remoteConfigSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
-		Services.use(remoteConfigSpy)
+		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		remoteConfigManagerSpy.stubbedStoredConfiguration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
 
 		userSettingsSpy.stubbedIssuerKeysFetchedTimestamp = now.addingTimeInterval(10 * minutes * ago).timeIntervalSince1970
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
 		var hitCallback = false
 
 		// Act
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 			hitCallback = true
 		}, completion: { _ in
 			// should be true by the time this completion is called:
@@ -112,7 +109,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		var didNotHitCallback = true
 
 		// Act
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 			didNotHitCallback = false
 		}, completion: { _ in })
 
@@ -129,7 +126,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		var didNotHitCallback = true
 
 		// Act
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 			didNotHitCallback = false
 		}, completion: { _ in })
 
@@ -151,7 +148,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
 
 		var completedFirstLoad = false
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { result in
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { result in
 			if case .success(true) = result {
 				completedFirstLoad = true
 			}
@@ -170,7 +167,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		var receivedResult: Result<Bool, ServerError>?
 		var didCallTTLCallback: Bool = false
 		sut.update(
-			isAppFirstLaunch: false,
+			isAppLaunching: false,
 			immediateCallbackIfWithinTTL: { didCallTTLCallback = true },
 			completion: { result in
 				receivedResult = result
@@ -199,7 +196,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
 
 		var completedFirstLoad = false
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { result in
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { result in
 			if case .success(true) = result {
 				completedFirstLoad = true
 			}
@@ -218,7 +215,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		var receivedResult: Result<Bool, ServerError>?
 		var didCallTTLCallback: Bool = false
 		sut.update(
-			isAppFirstLaunch: false,
+			isAppLaunching: false,
 			immediateCallbackIfWithinTTL: { didCallTTLCallback = true },
 			completion: { result in
 				receivedResult = result
@@ -239,8 +236,8 @@ class CryptoLibUtilityTests: XCTestCase {
 		// Arrange
 
 		// Act
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 
 		// Assert
 		expect(self.networkSpy.invokedGetPublicKeysCount) == 1
@@ -258,7 +255,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		// Act
 		var receivedResult: Result<Bool, ServerError>?
 
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { result in
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { result in
 			receivedResult = result
 		})
 
@@ -277,7 +274,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
 
 		// Act
-		sut.update(isAppFirstLaunch: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
+		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 
 		// Assert
 		expect(self.userSettingsSpy.invokedIssuerKeysFetchedTimestamp) == now.timeIntervalSince1970
@@ -288,6 +285,7 @@ class CryptoLibUtilityTests: XCTestCase {
 
 		// Arrange
 		expect(self.networkSpy.invokedGetPublicKeysCount) == 0
+		sut.registerTriggers()
 		
 		// Act
 		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try

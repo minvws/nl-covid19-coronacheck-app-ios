@@ -58,16 +58,13 @@ class OnboardingViewController: BaseViewController {
 			}
 			
 			self.pageViewController.pages = $0.compactMap { page in
-				guard let onboardingPageViewController = self.viewModel.getOnboardingStep(page) as? OnboardingPageViewController else { return nil }
+				guard let onboardingPageViewController = self.viewModel.getOnboardingStep(page) as? OnboardingItemViewController else { return nil }
 				onboardingPageViewController.delegate = self
 				return onboardingPageViewController
 			}
 			
-			// Only display page control for multiple pages
-			if $0.count > 1 {
-				self.sceneView.pageControl.numberOfPages = $0.count
-				self.sceneView.pageControl.currentPage = 0
-			}
+			self.sceneView.pageControl.numberOfPages = $0.count
+			self.updateFooterView(for: 0)
 		}
 		
 		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
@@ -105,10 +102,10 @@ class OnboardingViewController: BaseViewController {
 		pageViewController.view.backgroundColor = .clear
 		
 		pageViewController.view.frame = sceneView.containerView.frame
-		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
-		sceneView.pageControl.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
+		sceneView.containerView.addSubview(pageViewController.view)
+		sceneView.pageControl.delegate = self
 	}
 	
 	/// User tapped on the button
@@ -122,15 +119,17 @@ class OnboardingViewController: BaseViewController {
 			pageViewController.nextPage()
 		}
 	}
+}
 
-	/// User tapped on the page control
-	@objc func valueChanged(_ pageControl: UIPageControl) {
-
-		if pageControl.currentPage > pageViewController.currentIndex {
-			pageViewController.nextPage()
-		} else {
-			pageViewController.previousPage()
+private extension OnboardingViewController {
+	
+	func updateFooterView(for pageIndex: Int) {
+		guard let pages = pageViewController.pages, !pages.isEmpty else { return }
+		guard let viewController = pages[pageIndex] as? OnboardingItemViewController else {
+			assertionFailure("View controller should be of type OnboardingPageViewController")
+			return
 		}
+		sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)
 	}
 }
 
@@ -139,15 +138,16 @@ class OnboardingViewController: BaseViewController {
 extension OnboardingViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
-		sceneView.pageControl.currentPage = index
+		sceneView.pageControl.update(for: index)
         sceneView.ribbonView.isAccessibilityElement = index == 0
 		navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
+		updateFooterView(for: index)
 	}
 }
 
 // MARK: - OnboardingPageViewControllerDelegate
 
-extension OnboardingViewController: OnboardingPageViewControllerDelegate {
+extension OnboardingViewController: OnboardingItemViewControllerDelegate {
     
     /// Enables swipe to navigate behaviour for assistive technologies
     func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
@@ -160,4 +160,17 @@ extension OnboardingViewController: OnboardingPageViewControllerDelegate {
         }
         return false
     }
+}
+
+// MARK: - PageControlDelegate
+
+extension OnboardingViewController: PageControlDelegate {
+	
+	func pageControl(_ pageControl: PageControl, didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int) {
+		if currentPageIndex > previousPageIndex {
+			pageViewController.nextPage()
+		} else {
+			pageViewController.previousPage()
+		}
+	}
 }

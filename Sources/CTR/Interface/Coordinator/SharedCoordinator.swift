@@ -35,21 +35,16 @@ class SharedCoordinator: Coordinator, Logging {
 
 	var window: UIWindow
 
-	/// The side panel controller that holds both the menu and the main view
-	var sidePanel: SidePanelController?
-
-	var onboardingManager: OnboardingManaging = Services.onboardingManager
-	var forcedInformationManager: ForcedInformationManaging = Services.forcedInformationManager
-	var cryptoManager: CryptoManaging = Services.cryptoManager
+	var onboardingManager: OnboardingManaging = Current.onboardingManager
+	var newFeaturesManager: NewFeaturesManaging = Current.newFeaturesManager
+	var cryptoManager: CryptoManaging = Current.cryptoManager
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
-	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+	var remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
 	var versionSupplier = AppVersionSupplier()
 	var childCoordinators: [Coordinator] = []
 
 	// Navigation controllers for each of the flows from the menu
-	var navigationController: UINavigationController
-	var dashboardNavigationController: UINavigationController?
-	var aboutNavigationController: UINavigationController?
+	let navigationController: UINavigationController
 
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
@@ -71,12 +66,14 @@ class SharedCoordinator: Coordinator, Logging {
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
 
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				coordinator: self,
-				title: title,
-				message: body,
-				linkTapHander: { [weak self] url in
+				content: Content(
+					title: title,
+					body: body
+				),
+ 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: openURLsInApp)
 				},
@@ -88,7 +85,7 @@ class SharedCoordinator: Coordinator, Logging {
 
 	func presentAsBottomSheet(_ viewController: UIViewController) {
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.presentBottomSheet(viewController)
+		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 
     // MARK: - Universal Link handling
@@ -105,16 +102,19 @@ extension SharedCoordinator {
 
 	/// Handle the onboarding
 	/// - Parameters:
-	///   - factory: the onboarding factory for the content
+	///   - onboardingFactory: the onboarding factory for the content
+	///   - newFeaturesFactory: the new features factory to display updated content
 	///   - onCompletion: the completion handler when onboarding is done
-	func handleOnboarding(factory: OnboardingFactoryProtocol, onCompletion: () -> Void) {
+	func handleOnboarding(onboardingFactory: OnboardingFactoryProtocol, newFeaturesFactory: NewFeaturesFactory, onCompletion: () -> Void) {
+		
+		newFeaturesManager.factory = newFeaturesFactory
 
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: factory
+				factory: onboardingFactory
 			)
 			startChildCoordinator(coordinator)
 			return
@@ -124,12 +124,21 @@ extension SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: factory
+				factory: onboardingFactory
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent(shouldHideBackButton: true)
 			return
 
+		} else if newFeaturesManager.needsUpdating {
+			// Show new features
+			   let coordinator = NewFeaturesCoordinator(
+				   navigationController: navigationController,
+				   newFeaturesManager: newFeaturesManager,
+				   delegate: self
+			   )
+			   startChildCoordinator(coordinator)
+			return
 		}
 		onCompletion()
 	}
@@ -141,10 +150,10 @@ extension SharedCoordinator: Dismissable {
 
 	func dismiss() {
 
-		if sidePanel?.selectedViewController?.presentedViewController != nil {
-			sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
+		if navigationController.presentedViewController != nil {
+			navigationController.dismiss(animated: true, completion: nil)
 		} else {
-			(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: false)
+			navigationController.popViewController(animated: false)
 		}
 	}
 }
@@ -160,8 +169,8 @@ extension SharedCoordinator: OpenUrlProtocol {
 	func openUrl(_ url: URL, inApp: Bool) {
 
 		var shouldOpenInApp = inApp
-		if url.scheme == "tel" {
-			// Do not open phone numbers in app, doesn't work & will crash.
+		if url.scheme == "tel" || url.scheme == "itms-apps" {
+			// Do not open phone numbers or appstore links in app, doesn't work & will crash.
 			shouldOpenInApp = false
 		}
 
@@ -172,12 +181,12 @@ extension SharedCoordinator: OpenUrlProtocol {
 		
 		let safariController = SFSafariViewController(url: url)
 
-		if let presentedViewController = sidePanel?.selectedViewController?.presentedViewController {
-			presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
-				self.sidePanel?.selectedViewController?.present(safariController, animated: true)
-			})
+		if let presentedViewController = navigationController.presentedViewController {
+			presentedViewController.presentingViewController?.dismiss(animated: true) {
+				self.navigationController.present(safariController, animated: true)
+			}
 		} else {
-			sidePanel?.selectedViewController?.present(safariController, animated: true)
+			navigationController.present(safariController, animated: true)
 		}
 	}
 }
@@ -197,8 +206,8 @@ extension SharedCoordinator: OnboardingDelegate {
 
 		// Mark as complete
 		onboardingManager.consentGiven()
-		// Also mark as complete for forced information
-		forcedInformationManager.consentGiven()
+		// Also mark as complete for new feature information
+		newFeaturesManager.consentGiven()
 
 		// Remove child coordinator
 		if let onboardingCoorinator = childCoordinators.first {
@@ -210,18 +219,18 @@ extension SharedCoordinator: OnboardingDelegate {
 	}
 }
 
-// MARK: - ForcedInformationDelegate
+// MARK: - NewFeaturesDelegate
 
-extension SharedCoordinator: ForcedInformationDelegate {
+extension SharedCoordinator: NewFeaturesDelegate {
 
-	/// The user finished the forced information
-	func finishForcedInformation() {
+	/// The user finished the new features
+	func finishNewFeatures() {
 
-		logDebug("SharedCoordinator: finishForcedInformation")
+		logDebug("SharedCoordinator: finishNewFeatures")
 
 		// Remove childCoordinator
-		if let forcedInformationCoordinator = childCoordinators.first {
-			removeChildCoordinator(forcedInformationCoordinator)
+		if let newFeaturesCoordinator = childCoordinators.first {
+			removeChildCoordinator(newFeaturesCoordinator)
 		}
 
 		// Navigate to start

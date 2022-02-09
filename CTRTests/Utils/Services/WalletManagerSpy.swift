@@ -10,8 +10,6 @@ import XCTest
 
 class WalletManagerSpy: WalletManaging {
 
-	required init(dataStoreManager: DataStoreManaging) {}
-
 	var invokedStoreEventGroup = false
 	var invokedStoreEventGroupCount = 0
 	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date)?
@@ -138,14 +136,26 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedExpireEventGroups = false
 	var invokedExpireEventGroupsCount = 0
-	var invokedExpireEventGroupsParameters: (vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?)?
-	var invokedExpireEventGroupsParametersList = [(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?)]()
+	var invokedExpireEventGroupsParameters: (configuration: RemoteConfiguration, Void)?
+	var invokedExpireEventGroupsParametersList = [(configuration: RemoteConfiguration, Void)]()
 
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?) {
+	func expireEventGroups(configuration: RemoteConfiguration) {
 		invokedExpireEventGroups = true
 		invokedExpireEventGroupsCount += 1
-		invokedExpireEventGroupsParameters = (vaccinationValidity, recoveryValidity, testValidity)
-		invokedExpireEventGroupsParametersList.append((vaccinationValidity, recoveryValidity, testValidity))
+		invokedExpireEventGroupsParameters = (configuration, ())
+		invokedExpireEventGroupsParametersList.append((configuration, ()))
+	}
+
+	var invokedExpireEventGroupsVaccinationValidity = false
+	var invokedExpireEventGroupsVaccinationValidityCount = 0
+	var invokedExpireEventGroupsVaccinationValidityParameters: (vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)?
+	var invokedExpireEventGroupsVaccinationValidityParametersList = [(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)]()
+
+	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?) {
+		invokedExpireEventGroupsVaccinationValidity = true
+		invokedExpireEventGroupsVaccinationValidityCount += 1
+		invokedExpireEventGroupsVaccinationValidityParameters = (vaccinationValidity, recoveryValidity, testValidity, vaccinationAssessmentValidity)
+		invokedExpireEventGroupsVaccinationValidityParametersList.append((vaccinationValidity, recoveryValidity, testValidity, vaccinationAssessmentValidity))
 	}
 
 	var invokedGreencardsWithUnexpiredOrigins = false
@@ -162,30 +172,6 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedGreencardsWithUnexpiredOriginsResult
 	}
 
-	var invokedCanSkipMultiDCCUpgrade = false
-	var invokedCanSkipMultiDCCUpgradeCount = 0
-	var stubbedCanSkipMultiDCCUpgradeResult: Bool! = false
-
-	func canSkipMultiDCCUpgrade() -> Bool {
-		invokedCanSkipMultiDCCUpgrade = true
-		invokedCanSkipMultiDCCUpgradeCount += 1
-		return stubbedCanSkipMultiDCCUpgradeResult
-	}
-
-	var invokedShouldShowMultiDCCUpgradeBanner = false
-	var invokedShouldShowMultiDCCUpgradeBannerCount = 0
-	var invokedShouldShowMultiDCCUpgradeBannerParameters: (userSettings: UserSettingsProtocol, Void)?
-	var invokedShouldShowMultiDCCUpgradeBannerParametersList = [(userSettings: UserSettingsProtocol, Void)]()
-	var stubbedShouldShowMultiDCCUpgradeBannerResult: Bool! = false
-
-	func shouldShowMultiDCCUpgradeBanner(userSettings: UserSettingsProtocol) -> Bool {
-		invokedShouldShowMultiDCCUpgradeBanner = true
-		invokedShouldShowMultiDCCUpgradeBannerCount += 1
-		invokedShouldShowMultiDCCUpgradeBannerParameters = (userSettings, ())
-		invokedShouldShowMultiDCCUpgradeBannerParametersList.append((userSettings, ()))
-		return stubbedShouldShowMultiDCCUpgradeBannerResult
-	}
-
 	var invokedHasDomesticGreenCard = false
 	var invokedHasDomesticGreenCardCount = 0
 	var invokedHasDomesticGreenCardParameters: (originType: String, Void)?
@@ -199,10 +185,18 @@ class WalletManagerSpy: WalletManaging {
 		invokedHasDomesticGreenCardParametersList.append((originType, ()))
 		return stubbedHasDomesticGreenCardResult
 	}
-}
 
-extension WalletManagerSpy {
-	convenience init() {
-		self.init(dataStoreManager: DataStoreManager(.inMemory))
+	var invokedHasEventGroup = false
+	var invokedHasEventGroupCount = 0
+	var invokedHasEventGroupParameters: (type: String, providerIdentifier: String)?
+	var invokedHasEventGroupParametersList = [(type: String, providerIdentifier: String)]()
+	var stubbedHasEventGroupResult: Bool! = false
+
+	func hasEventGroup(type: String, providerIdentifier: String) -> Bool {
+		invokedHasEventGroup = true
+		invokedHasEventGroupCount += 1
+		invokedHasEventGroupParameters = (type, providerIdentifier)
+		invokedHasEventGroupParametersList.append((type, providerIdentifier))
+		return stubbedHasEventGroupResult
 	}
 }

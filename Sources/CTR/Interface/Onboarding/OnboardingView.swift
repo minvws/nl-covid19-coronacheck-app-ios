@@ -12,13 +12,11 @@ class OnboardingView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 		
-		// Dimensions
-		static let buttonHeight: CGFloat = 52
-		
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let ribbonOffset: CGFloat = 15.0
-		static let pageControlMargin: CGFloat = 12.0
+		static let pageControlSpacing: CGFloat = 16.0
+		static let pageControlSpacingSmallScreen: CGFloat = 8.0
 	}
 
 	/// The government ribbon
@@ -38,17 +36,29 @@ class OnboardingView: BaseView {
 	}()
 
 	/// The control buttons
-	let pageControl: UIPageControl = {
+	let pageControl: PageControl = {
 		
-		let view = UIPageControl()
+		let view = PageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.pageIndicatorTintColor = Theme.colors.grey2
-		view.currentPageIndicatorTintColor = Theme.colors.primary
 		return view
 	}()
 	
 	/// the update button
-	let primaryButton = Button()
+	var primaryButton: Button {
+		return footerButtonView.primaryButton
+	}
+	
+	/// Footer view with primary button
+	let footerButtonView: FooterButtonView = {
+		let footerView = FooterButtonView()
+		footerView.translatesAutoresizingMaskIntoConstraints = false
+		footerView.buttonStackView.alignment = .center
+		footerView.buttonStackView.spacing = UIDevice.current.isSmallScreen ? ViewTraits.pageControlSpacingSmallScreen : ViewTraits.pageControlSpacing
+		footerView.topButtonConstraint?.constant = 0
+		return footerView
+	}()
+	
+	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
 	/// setup the views
 	override func setupViews() {
@@ -63,8 +73,8 @@ class OnboardingView: BaseView {
 		super.setupViewHierarchy()
 		addSubview(ribbonView)
 		addSubview(containerView)
-		addSubview(pageControl)
-		addSubview(primaryButton)
+		addSubview(footerButtonView)
+		footerButtonView.buttonStackView.insertArrangedSubview(pageControl, at: 0)
 	}
 	
 	/// Setup the constraints
@@ -86,20 +96,10 @@ class OnboardingView: BaseView {
 			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			
-			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
-			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.leadingAnchor.constraint(
-				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			primaryButton.trailingAnchor.constraint(
-				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			primaryButton.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			)
+			footerButtonView.topAnchor.constraint(equalTo: containerView.bottomAnchor),
+			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
 
@@ -111,25 +111,16 @@ class OnboardingView: BaseView {
 		ribbonView.isAccessibilityElement = true
 		ribbonView.accessibilityLabel = L.generalGovernmentLogo()
 	}
-
-	override func layoutSubviews() {
-		
-		super.layoutSubviews()
-
-		// Layout page control when the view has a frame
-		NSLayoutConstraint.activate([
-
-			// Message
-			containerView.bottomAnchor.constraint(
-				equalTo: pageControl.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
-			),
-
-			// Page Control
-			pageControl.bottomAnchor.constraint(
-				equalTo: primaryButton.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.pageControlMargin),
-			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
-		])
+	
+	// MARK: - Public Access
+	
+	/// Updates `FooterButtonView` shadow separator
+	/// - Parameter mainScrollView: Main scroll view to observe content offset
+	func updateFooterView(mainScrollView: UIScrollView) {
+		scrollViewContentOffsetObserver?.invalidate()
+		scrollViewContentOffsetObserver = mainScrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
+			let translatedOffset = scrollView.translatedBottomScrollOffset
+			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
+		}
 	}
 }

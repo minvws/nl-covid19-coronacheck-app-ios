@@ -17,7 +17,7 @@ enum RemoteFileValidity {
 	static func evaluateIfUpdateNeeded(
 		configuration: RemoteConfiguration,
 		lastFetchedTimestamp: TimeInterval?,
-		isAppFirstLaunch: Bool,
+		isAppLaunching: Bool,
 		now: @escaping () -> Date)
 	-> RemoteFileValidity {
 
@@ -36,8 +36,8 @@ enum RemoteFileValidity {
 		let minimumTimeAgoInterval = TimeInterval(minimumRefreshIntervalValue)
 		let isWithinMinimumTimeInterval = lastFetchedTimestamp > (now().timeIntervalSince1970 - minimumTimeAgoInterval)
 
-		// If isAppFirstLaunch, skip minimumTimeInterval:
-		guard !isWithinMinimumTimeInterval || (isWithinMinimumTimeInterval && isAppFirstLaunch) else {
+		// If isAppLaunching, skip minimumTimeInterval:
+		guard !isWithinMinimumTimeInterval || (isWithinMinimumTimeInterval && isAppLaunching) else {
 			// 🛑 device is still within the configMinimumIntervalSeconds, so prevent another refresh:
 			return .withinMinimalInterval
 		}

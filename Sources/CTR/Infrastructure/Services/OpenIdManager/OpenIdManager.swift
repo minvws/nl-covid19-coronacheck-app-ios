@@ -11,8 +11,6 @@ import AppAuthEnterpriseUserAgent
 
 protocol OpenIdManaging: AnyObject {
 
-	init()
-
 	/// Request an access token
 	/// - Parameters:
 	///   - onCompletion: completion handler with optional access token
@@ -91,7 +89,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 					   let idTokenString = lastTokenResponse.idToken,
 					   let idToken = OIDIDToken(idTokenString: idTokenString) {
 
-						self.logDebug("OpenIdManager: We got the idToken")
+						self.logVerbose("OpenIdManager: We got the idToken")
 						
 						onCompletion(TVSAuthorizationToken(
 							idTokenString: idTokenString,

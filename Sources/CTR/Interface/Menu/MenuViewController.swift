@@ -4,14 +4,20 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-  
+
 import UIKit
 
 class MenuViewController: BaseViewController {
-
+	
+	enum Item {
+		case row(title: String, icon: UIImage, action: () -> Void )
+		case sectionBreak
+	}
+	
+	private let sceneView = MenuView()
 	private let viewModel: MenuViewModel
-
-	let sceneView = MenuView()
+	
+	// MARK: Initializers
 
 	init(viewModel: MenuViewModel) {
 
@@ -24,67 +30,50 @@ class MenuViewController: BaseViewController {
 
 		fatalError("init(coder:) has not been implemented")
 	}
-
-	// MARK: View lifecycle
+	
+	// MARK: - View Lifecycle
+	
 	override func loadView() {
 
 		view = sceneView
 	}
-
+	
 	override func viewDidLoad() {
-
 		super.viewDidLoad()
+		title = L.general_menu()
 		
-		setupTranslucentNavigationBar()
+		setupBindings()
+		addBackButton(customAction: nil)
+	}
+	
+	private func setupBindings() {
 
-		viewModel.$topMenu.binding = { [weak self] items in
-
-			for item in items {
-
-				let view = MenuItemView()
-				view.title = item.title
-				view.titleLabel.textColor = Theme.colors.secondary
-				view.titleLabel.font = Theme.fonts.headlineBoldMontserrat
-				view.primaryButtonTappedCommand  = { [weak self] in
-					self?.viewModel.menuItemTapped(item.identifier)
+		viewModel.$items.binding = { [weak self] items in
+			guard let self = self else { return }
+			self.sceneView.stackView.removeArrangedSubviews()
+			
+			items.enumerated().forEach { index, item in
+				switch item {
+					case let .row(title, icon, action):
+					
+						let row = MenuRowView()
+						row.title = title
+						row.icon = icon
+						row.action = action
+						row.shouldShowBottomBorder = {
+							// Check if the next item is `case .row`. If so, show a bottom border on this row.
+							let nextIndex = index + 1
+							guard nextIndex < items.count  else { return false }
+							guard case .row = items[nextIndex] else { return false }
+							return true
+						}()
+						self.sceneView.stackView.addArrangedSubview(row)
+						
+					case .sectionBreak:
+						let breaker = MenuSectionBreakView()
+						self.sceneView.stackView.addArrangedSubview(breaker)
 				}
-				self?.sceneView.topStackView.addArrangedSubview(view)
 			}
 		}
-
-		viewModel.$bottomMenu.binding = { [weak self] items in
-
-			for item in items {
-
-				let view = MenuItemView()
-				view.title = item.title
-				view.titleLabel.textColor = Theme.colors.secondary
-				view.titleLabel.font = Theme.fonts.subheadMontserrat
-				view.primaryButtonTappedCommand  = { [weak self] in
-					self?.viewModel.menuItemTapped(item.identifier)
-				}
-				self?.sceneView.bottomStackView.addArrangedSubview(view)
-			}
-		}
-
-		addMenuCloseButton()
-	}
-
-	/// User tapped on the close button
-	@objc func closeButtonTapped() {
-
-		viewModel.closeButtonTapped()
-	}
-
-	/// Add a close button to the navigation bar.
-	private func addMenuCloseButton() {
-		
-		let config = UIBarButtonItem.Configuration(target: self,
-												   action: #selector(closeButtonTapped),
-												   content: .image(I.cross()?.withRenderingMode(.alwaysTemplate)),
-												   tintColor: Theme.colors.secondary,
-												   accessibilityIdentifier: "CloseButton",
-												   accessibilityLabel: L.generalMenuClose())
-		navigationItem.leftBarButtonItem = .create(config)
 	}
 }

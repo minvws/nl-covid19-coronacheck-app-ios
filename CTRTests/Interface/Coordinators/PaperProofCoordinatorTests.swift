@@ -12,27 +12,19 @@ import Nimble
 class PaperProofCoordinatorTests: XCTestCase {
 
 	var sut: PaperProofCoordinator!
-	var cryptoSpy: CryptoManagerSpy!
+	private var environmentSpies: EnvironmentSpies!
 	var flowSpy: PaperProofFlowDelegateSpy!
 	var navigationSpy: NavigationControllerSpy!
 
 	override func setUp() {
 
 		super.setUp()
-		cryptoSpy = CryptoManagerSpy()
+		environmentSpies = setupEnvironmentSpies()
 		flowSpy = PaperProofFlowDelegateSpy()
 		navigationSpy = NavigationControllerSpy()
 
-		Services.use(cryptoSpy)
-
 		sut = PaperProofCoordinator(delegate: flowSpy)
 		sut.navigationController = navigationSpy
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	// MARK: - Tests
@@ -217,6 +209,23 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// When
 		sut.eventFlowDidComplete()
 
+		// Then
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
+		expect(self.sut.token).to(beNil())
+		expect(self.sut.scannedQR).to(beNil())
+		expect(self.sut.childCoordinators).to((haveCount(0)))
+	}
+	
+	func test_eventFlowDidCompleteButVisitorPassNeedsCompletion() {
+		
+		// Given
+		sut.token = "test"
+		sut.scannedQR = "test"
+		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
+		
+		// When
+		sut.eventFlowDidCompleteButVisitorPassNeedsCompletion()
+		
 		// Then
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
 		expect(self.sut.token).to(beNil())

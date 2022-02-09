@@ -61,7 +61,7 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 		}
 
 		let timeBeforeConfigAlmostOutOfDateWarning = almostOutOfDateTimestamp - now.timeIntervalSince1970
-		logDebug("Starting a timer with \(timeBeforeConfigAlmostOutOfDateWarning) seconds before the config is almost out of date")
+		logVerbose("Starting a timer with \(timeBeforeConfigAlmostOutOfDateWarning) seconds before the config is almost out of date")
 
 		guard timeBeforeConfigAlmostOutOfDateWarning > 0 else {
 			return

@@ -9,38 +9,117 @@ import Foundation
 import XCTest
 import Nimble
 @testable import CTR
+import SnapshotTesting
 
 class ScanInstructionsViewModelTests: XCTestCase {
 
 	var sut: ScanInstructionsViewModel!
 	var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
-	var userSettingsSpy: UserSettingsSpy!
-
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
 		super.setUp()
 		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
-		userSettingsSpy = UserSettingsSpy()
+		environmentSpies = setupEnvironmentSpies()
 	}
 
-	func test_finishScanInstructions_callsCoordinator() {
+	func test_finishScanInstructions_whenRiskSettingIsShown_shouldInvokeUserDidCompletePages() {
 
 		// Arrange
+		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = false
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		sut = ScanInstructionsViewModel(
-			coordinator: coordinatorSpy, pages: [], userSettings: userSettingsSpy
+			coordinator: coordinatorSpy,
+			pages: []
 		)
 
 		// Act
-		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
 		sut.finishScanInstructions()
 
 		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToReadPolicyInformation) == false
+		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == false
 		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownSetter) == true
+	}
+	
+	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting_verificationPolicyEnabled() {
+
+		// Arrange
+		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = false
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
+		sut = ScanInstructionsViewModel(
+			coordinator: coordinatorSpy,
+			pages: []
+		)
+
+		// Act
+		sut.finishScanInstructions()
+
+		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToReadPolicyInformation) == false
+		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == true
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
+		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownSetter) == true
+	}
+
+	func test_finishScanInstructions_whenRiskSettingIsNotShown_shouldInvokeUserWishesToSelectRiskSetting_verificationPolicyDisabled() {
+
+		// Arrange
+		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = false
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
+		sut = ScanInstructionsViewModel(
+			coordinator: coordinatorSpy,
+			pages: []
+		)
+
+		// Act
+		sut.finishScanInstructions()
+
+		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToReadPolicyInformation) == false
+		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == false
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownSetter) == true
+	}
+	
+	func test_finishScanInstructions_whenPolicyInformationIsNotShown_shouldInvokeUserWishesToReadPolicyInformation() {
+
+		// Arrange
+		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
+		sut = ScanInstructionsViewModel(
+			coordinator: coordinatorSpy,
+			pages: []
+		)
+
+		// Act
+		sut.finishScanInstructions()
+
+		// Assert
+		expect(self.coordinatorSpy.invokedUserWishesToReadPolicyInformation) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSelectRiskSetting) == false
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
+		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownSetter) == true
 	}
 
 	func test_userTappedBackOnFirstPage_callsCoordinator() {
 
 		// Arrange
-		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: [], userSettings: userSettingsSpy)
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: [])
 
 		// Act
 		expect(self.coordinatorSpy.invokedUserDidCancelScanInstructions) == false
@@ -53,14 +132,15 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	func test_creatingViewController() {
 		// Arrange
 		let pages = [
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			)
 		]
-		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: pages)
 
 		// Act
 		let viewController = sut.scanInstructionsViewController(forPage: pages[0])
@@ -70,23 +150,24 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	}
 
 	func test_skipButtonShownWhenUserFirstTimeExceptOnLastPage() {
-		userSettingsSpy.stubbedScanInstructionShown = false
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
 		
 		let pages = [
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			),
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			)
 		]
-		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: pages)
 		expect(self.sut.shouldShowSkipButton) == true
 
 		sut.userDidChangeCurrentPage(toPageIndex: 1)
@@ -94,23 +175,24 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	}
 
 	func test_skipButtonNotShownWhenNotFirstViewingOfInstructions() {
-		userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 
 		let pages = [
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			),
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			)
 		]
-		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: pages)
 		expect(self.sut.shouldShowSkipButton) == false
 
 		sut.userDidChangeCurrentPage(toPageIndex: 1)
@@ -118,24 +200,53 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	}
 
 	func test_nextButtonTitleChangesOnLastPage() {
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		let pages = [
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			),
-			ScanInstructionsPage(
+			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
 				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			)
 		]
-		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: pages)
 		expect(self.sut.nextButtonTitle) == L.generalNext()
 
 		sut.userDidChangeCurrentPage(toPageIndex: 1)
 		expect(self.sut.nextButtonTitle) == L.verifierScaninstructionsButtonStartscanning()
+	}
+	
+	func test_nextButtonTitleChangesOnLastPage_whenScanLockIsEnabled() {
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date())
+		let pages = [
+			ScanInstructionsItem(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
+				step: .redScreenNowWhat
+			),
+			ScanInstructionsItem(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
+				step: .redScreenNowWhat
+			)
+		]
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy,
+										pages: pages)
+		expect(self.sut.nextButtonTitle) == L.generalNext()
+
+		sut.userDidChangeCurrentPage(toPageIndex: 1)
+		expect(self.sut.nextButtonTitle) == L.verifier_scan_instructions_back_to_start()
 	}
 }

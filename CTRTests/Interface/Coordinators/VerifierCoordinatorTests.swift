@@ -11,15 +11,16 @@ import Nimble
 
 class VerifierCoordinatorTests: XCTestCase {
 
-	var sut: VerifierCoordinator!
+	private var sut: VerifierCoordinator!
 
-	var navigationSpy: NavigationControllerSpy!
-
-	var window = UIWindow()
+	private var navigationSpy: NavigationControllerSpy!
+	private var environmentSpies: EnvironmentSpies!
+	private var window = UIWindow()
 
 	override func setUp() {
 
 		super.setUp()
+		environmentSpies = setupEnvironmentSpies()
 
 		navigationSpy = NavigationControllerSpy()
 		sut = VerifierCoordinator(
@@ -30,30 +31,58 @@ class VerifierCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 	
-	func testFinishForcedInformation() {
+	func testStartNewFeatures() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = false
-		sut.onboardingManager = onboardingSpy
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
-		let forcedInformationSpy = ForcedInformationManagerSpy()
-		forcedInformationSpy.stubbedNeedsUpdating = false
-		sut.forcedInformationManager = forcedInformationSpy
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
+		environmentSpies.newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(
+			image: nil,
+			tagline: "test",
+			title: "test",
+			content: "test"
+		)
+
+		// When
+		sut.start()
+
+		// Then
+		XCTAssertFalse(sut.childCoordinators.isEmpty)
+		XCTAssertTrue(sut.childCoordinators.first is NewFeaturesCoordinator)
+	}
+	
+	func testFinishNewFeatures() {
+
+		// Given
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
 
 		sut.childCoordinators = [
-			ForcedInformationCoordinator(
+			NewFeaturesCoordinator(
 				navigationController: navigationSpy,
-				forcedInformationManager: ForcedInformationManagerSpy(),
+				newFeaturesManager: environmentSpies.newFeaturesManagerSpy,
 				delegate: sut
 			)
 		]
 
 		// When
-		sut.finishForcedInformation()
+		sut.finishNewFeatures()
 
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+
+	func test_shouldCall_scanManagerRemoveOldEntries() {
+
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
+		
+		sut.start()
+		
+		// Then
+		expect(self.environmentSpies.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == true
 	}
 }

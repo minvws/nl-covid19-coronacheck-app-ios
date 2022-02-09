@@ -16,28 +16,13 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 	/// Subject under test
 	var sut: DashboardStrippenRefresher!
-
-	var walletManagerSpy: WalletManagerSpy!
-	var greencardLoaderSpy: GreenCardLoaderSpy!
-	var dataStoreManager: DataStoreManager!
+	private var environmentSpies: EnvironmentSpies!
 	var reachabilitySpy: ReachabilitySpy!
 
 	override func setUp() {
 		super.setUp()
-
-		walletManagerSpy = WalletManagerSpy()
-		greencardLoaderSpy = GreenCardLoaderSpy()
-		dataStoreManager = DataStoreManager(.inMemory)
+		environmentSpies = setupEnvironmentSpies()
 		reachabilitySpy = ReachabilitySpy()
-
-		Services.use(greencardLoaderSpy)
-		Services.use(walletManagerSpy)
-	}
-
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
 	}
 
 	// MARK: - Test calculations
@@ -45,12 +30,11 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_expiring_calculates_state_expiring_and_loads() {
 
 		// Arrange
-		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act
@@ -64,12 +48,11 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 	func test_expired_calculates_state_expired_and_loads() {
 		// Arrange
-		walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: dataStoreManager)
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act
@@ -83,12 +66,11 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 	func test_expiring_with_expiring_origin_calculates_state_noActionNeeded_and_doesnt_load() {
 		// Arrange
-		walletManagerSpy.loadDomesticCredentialsExpiredWithNoMoreToFetch(dataStoreManager: dataStoreManager)
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiredWithNoMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act
@@ -104,16 +86,15 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_loadingSuccess_setsNewState_becoming_noActionNeeded() {
 
 		// Arrange `expiring` starting state
-		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
-		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 
 		// Act
 		sut.load()
@@ -124,13 +105,12 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_loadingFailure_setsErrorFlags_canBeRecovered() {
 
 		// Arrange `expiring` starting state
-		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(NetworkError.serverBusy), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(NetworkError.serverBusy), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -145,8 +125,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 2
 
 		// Fix network
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut.load()
 
@@ -159,13 +139,12 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_noInternet() {
 
 		// Arrange `expiring` starting state
-		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(NetworkError.noInternetConnection), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(NetworkError.noInternetConnection), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -178,8 +157,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		// simulate reachability restoration
 
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 
 		// Callback is set on `invokedWhenReachable`:
 		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
@@ -192,14 +171,13 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_serverError_serverBusy() {
 
 		// Arrange `expiring` starting state
-		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 			(.failure(GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: 429, response: nil, error: .serverBusy))), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -214,8 +192,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 2
 
 		// Fix network
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut.load()
 
@@ -227,13 +205,12 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 	func test_serverResponseDidNotChangeExpiredOrExpiringState() {
 		// Arrange
-		walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act
@@ -241,28 +218,28 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expired
-		expect(self.sut.state.loadingState) == .failed(error: .serverResponseDidNotChangeExpiredOrExpiringState)
+		expect(self.sut.state.loadingState) == .serverResponseHasNoChanges
 		expect(self.sut.state.isNonsilentlyLoading) == false
 	}
 
 	func test_serverError_shouldRetryIfAppReturnsFromBackgroundAfterTenMinutes() {
 
 		// Arrange `expiring` starting state
-		walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 			(.failure(GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: 429, response: nil, error: .serverBusy))), ())
 
 		var fakeNow: Date = now
+		Current.now = { fakeNow }
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { fakeNow }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
 		sut.load()
-		expect(self.greencardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentialsCount) == 1
+		expect(self.environmentSpies.greenCardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentialsCount) == 1
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expired
 		expect(self.sut.state.loadingState) == .failed(error: .networkError(error: .serverBusy, timestamp: now))
 
@@ -271,25 +248,24 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
 
 		// Should not have retried
-		expect(self.greencardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentialsCount) == 1
+		expect(self.environmentSpies.greenCardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentialsCount) == 1
 
 		// Simulate return from the background after more than ten minutes:
 		fakeNow = now.addingTimeInterval(11 * minutes * fromNow)
 		NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
-		expect(self.greencardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentialsCount) == 2
+		expect(self.environmentSpies.greenCardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentialsCount) == 2
 	}
 
 	func test_serverError_invalidSignature() {
 
 		// Arrange `expiring` starting state
-		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 			(.failure(GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature))), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -304,8 +280,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 2
 
 		// Fix network
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut.load()
 
@@ -318,14 +294,13 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_failedToSave() {
 
 		// Arrange `expiring` starting state
-		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 			(.failure(GreenCardLoader.Error.failedToSaveGreenCards), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -341,8 +316,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.errorOccurenceCount) == 2
 
 		// Fix network
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut.load()
 
@@ -355,14 +330,13 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_serverError_noInternetConnection() {
 
 		// Arrange `expiring` starting state
-		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 			(.failure(GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection))), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -375,8 +349,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		// simulate reachability restoration
 
-		greencardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 
 		// Callback is set on `invokedWhenReachable`:
 		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
@@ -392,12 +366,11 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_greencard_withZeroInitialCredentials_shouldNotBeReloadedWhenOutsideTheThreshold() {
 
 		// Arrange with zero initial credentials
-		walletManagerSpy.loadDomesticEmptyCredentialsWithDistantFutureValidity(dataStoreManager: dataStoreManager)
+		environmentSpies.walletManagerSpy.loadDomesticEmptyCredentialsWithDistantFutureValidity(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
 		// Act & Assert
@@ -407,22 +380,21 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.loadingState) == .idle
 		expect(self.sut.state.hasLoadingEverFailed) == false
 		expect(self.sut.state.errorOccurenceCount) == 0
-		expect(self.greencardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentials) == false
+		expect(self.environmentSpies.greenCardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentials) == false
 	}
 
 	// Test the jansen introduction where the greencard had zero credentials due to a 28 day waiting period.
 	func test_greencard_withZeroInitialCredentials_shouldBeReloadedWhenInsideTheThreshold() {
 
 		// Arrange with zero initial credentials
-		walletManagerSpy.loadDomesticEmptyCredentialsWithImminentFutureValidity(dataStoreManager: dataStoreManager)
+		environmentSpies.walletManagerSpy.loadDomesticEmptyCredentialsWithImminentFutureValidity(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
-			reachability: reachabilitySpy,
-			now: { now }
+			reachability: reachabilitySpy
 		)
 
-		expect(self.greencardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentials) == false
+		expect(self.environmentSpies.greenCardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentials) == false
 
 		// Act & Assert
 		sut.load()
@@ -431,7 +403,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.loadingState) == .loading(silently: false)
 		expect(self.sut.state.hasLoadingEverFailed) == false
 		expect(self.sut.state.errorOccurenceCount) == 0
-		expect(self.greencardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentials) == true
+		expect(self.environmentSpies.greenCardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentials) == true
 	}
 
 	let validGreenCardResponse = RemoteGreenCards.Response(

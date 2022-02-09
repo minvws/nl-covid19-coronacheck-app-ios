@@ -10,8 +10,6 @@ import XCTest
 
 class NetworkSpy: NetworkManaging {
 
-	required init(configuration: NetworkConfiguration) {}
-
 	var invokedNetworkConfigurationGetter = false
 	var invokedNetworkConfigurationGetterCount = 0
 	var stubbedNetworkConfiguration: NetworkConfiguration!
@@ -120,13 +118,13 @@ class NetworkSpy: NetworkManaging {
 	var invokedFetchTestResultCount = 0
 	var invokedFetchTestResultParameters: (provider: TestProvider, token: RequestToken, code: String?)?
 	var invokedFetchTestResultParametersList = [(provider: TestProvider, token: RequestToken, code: String?)]()
-	var stubbedFetchTestResultCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>, Void)?
+	var stubbedFetchTestResultCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse, URLResponse), ServerError>, Void)?
 
 	func fetchTestResult(
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse, URLResponse), ServerError>) -> Void) {
 		invokedFetchTestResult = true
 		invokedFetchTestResultCount += 1
 		invokedFetchTestResultParameters = (provider, token, code)
@@ -190,12 +188,5 @@ class NetworkSpy: NetworkManaging {
 		if let result = stubbedCheckCouplingStatusCompletionResult {
 			completion(result.0)
 		}
-	}
-}
-
-extension NetworkSpy {
-
-	convenience init() {
-		self.init(configuration: .development)
 	}
 }

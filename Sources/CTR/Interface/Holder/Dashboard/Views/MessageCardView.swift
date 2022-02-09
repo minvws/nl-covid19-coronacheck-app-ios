@@ -69,6 +69,7 @@ class MessageCardView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.bannerCross(), for: .normal)
 		button.contentHorizontalAlignment = .center
+		button.accessibilityLabel = L.generalClose()
 		return button
 	}()
 
@@ -144,7 +145,7 @@ class MessageCardView: BaseView {
         
         if nil != config.ctaButton {
             constraints += [callToActionButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
-            constraints += [callToActionButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -ViewTraits.margin)]
+            constraints += [callToActionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
             constraints += [callToActionButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewTraits.verticalPadding)]
             constraints += [callToActionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
             

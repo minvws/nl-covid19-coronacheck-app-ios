@@ -13,13 +13,13 @@ class HolderCoordinatorTests: XCTestCase {
 	var sut: HolderCoordinator!
 
 	var navigationSpy: NavigationControllerSpy!
-
+	private var environmentSpies: EnvironmentSpies!
 	var window = UIWindow()
 
 	override func setUp() {
 
 		super.setUp()
-
+		environmentSpies = setupEnvironmentSpies()
 		navigationSpy = NavigationControllerSpy()
 		sut = HolderCoordinator(
 			navigationController: navigationSpy,
@@ -27,73 +27,52 @@ class HolderCoordinatorTests: XCTestCase {
 		)
 	}
 
-	override func tearDown() {
-
-		super.tearDown()
-		Services.revertToDefaults()
-	}
-
 	// MARK: - Tests
 
-	func testStartForcedInformation() {
+	func testStartNewFeatures() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = false
-		sut.onboardingManager = onboardingSpy
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
-		let forcedInformationSpy = ForcedInformationManagerSpy()
-		forcedInformationSpy.stubbedNeedsUpdating = true
-		forcedInformationSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
+		environmentSpies.newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(
 			image: nil,
 			tagline: "test",
 			title: "test",
 			content: "test"
 		)
-		sut.forcedInformationManager = forcedInformationSpy
 
 		// When
 		sut.start()
 
 		// Then
 		XCTAssertFalse(sut.childCoordinators.isEmpty)
-		XCTAssertTrue(sut.childCoordinators.first is ForcedInformationCoordinator)
+		XCTAssertTrue(sut.childCoordinators.first is NewFeaturesCoordinator)
 	}
 
-	func testFinishForcedInformation() {
+	func testFinishNewFeatures() {
 
 		// Given
-		let onboardingSpy = OnboardingManagerSpy()
-		onboardingSpy.stubbedNeedsOnboarding = false
-		onboardingSpy.stubbedNeedsConsent = false
-		sut.onboardingManager = onboardingSpy
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
-		let forcedInformationSpy = ForcedInformationManagerSpy()
-		forcedInformationSpy.stubbedNeedsUpdating = false
-		sut.forcedInformationManager = forcedInformationSpy
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
 
-		let remoteConfigManagerSpy = RemoteConfigManagingSpy(
-			now: { now },
-			userSettings: UserSettingsSpy(),
-			reachability: ReachabilitySpy(),
-			networkManager: NetworkSpy()
-		)
-		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
-		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
-		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
-		Services.use(remoteConfigManagerSpy)
+		environmentSpies.remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
+		environmentSpies.remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 
 		sut.childCoordinators = [
-			ForcedInformationCoordinator(
+			NewFeaturesCoordinator(
 				navigationController: navigationSpy,
-				forcedInformationManager: ForcedInformationManagerSpy(),
+				newFeaturesManager: NewFeaturesManagerSpy(),
 				delegate: sut
 			)
 		]
 
 		// When
-		sut.finishForcedInformation()
+		sut.finishNewFeatures()
 
 		// Then
 		XCTAssertTrue(sut.childCoordinators.isEmpty)

@@ -41,34 +41,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 
 	var invokedNavigateToScanInstruction = false
 	var invokedNavigateToScanInstructionCount = 0
+	var invokedNavigateToScanInstructionParameters: (allowSkipInstruction: Bool, Void)?
+	var invokedNavigateToScanInstructionParametersList = [(allowSkipInstruction: Bool, Void)]()
 
-	func navigateToScanInstruction() {
+	func navigateToScanInstruction(allowSkipInstruction: Bool) {
 		invokedNavigateToScanInstruction = true
 		invokedNavigateToScanInstructionCount += 1
-	}
-
-	var invokedNavigateToScanResult = false
-	var invokedNavigateToScanResultCount = 0
-	var invokedNavigateToScanResultParameters: (verificationResult: MobilecoreVerificationResult, Void)?
-	var invokedNavigateToScanResultParametersList = [(verificationResult: MobilecoreVerificationResult, Void)]()
-
-	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult) {
-		invokedNavigateToScanResult = true
-		invokedNavigateToScanResultCount += 1
-		invokedNavigateToScanResultParameters = (verificationResult, ())
-		invokedNavigateToScanResultParametersList.append((verificationResult, ()))
-	}
-
-	var invokedDisplayContent = false
-	var invokedDisplayContentCount = 0
-	var invokedDisplayContentParameters: (title: String, content: [DisplayContent])?
-	var invokedDisplayContentParametersList = [(title: String, content: [DisplayContent])]()
-
-	func displayContent(title: String, content: [DisplayContent]) {
-		invokedDisplayContent = true
-		invokedDisplayContentCount += 1
-		invokedDisplayContentParameters = (title, content)
-		invokedDisplayContentParametersList.append((title, content))
+		invokedNavigateToScanInstructionParameters = (allowSkipInstruction, ())
+		invokedNavigateToScanInstructionParametersList.append((allowSkipInstruction, ()))
 	}
 
 	var invokedUserWishesMoreInfoAboutClockDeviation = false
@@ -87,12 +67,80 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedNavigateToVerifiedInfoCount += 1
 	}
 
+	var invokedUserWishesToOpenTheMenu = false
+	var invokedUserWishesToOpenTheMenuCount = 0
+
+	func userWishesToOpenTheMenu() {
+		invokedUserWishesToOpenTheMenu = true
+		invokedUserWishesToOpenTheMenuCount += 1
+	}
+
+	var invokedUserWishesToOpenScanLog = false
+	var invokedUserWishesToOpenScanLogCount = 0
+
+	func userWishesToOpenScanLog() {
+		invokedUserWishesToOpenScanLog = true
+		invokedUserWishesToOpenScanLogCount += 1
+	}
+
 	var invokedUserWishesToLaunchThirdPartyScannerApp = false
 	var invokedUserWishesToLaunchThirdPartyScannerAppCount = 0
 
 	func userWishesToLaunchThirdPartyScannerApp() {
 		invokedUserWishesToLaunchThirdPartyScannerApp = true
 		invokedUserWishesToLaunchThirdPartyScannerAppCount += 1
+	}
+
+	var invokedNavigateToCheckIdentity = false
+	var invokedNavigateToCheckIdentityCount = 0
+	var invokedNavigateToCheckIdentityParameters: (verificationDetails: MobilecoreVerificationDetails, Void)?
+	var invokedNavigateToCheckIdentityParametersList = [(verificationDetails: MobilecoreVerificationDetails, Void)]()
+
+	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails) {
+		invokedNavigateToCheckIdentity = true
+		invokedNavigateToCheckIdentityCount += 1
+		invokedNavigateToCheckIdentityParameters = (verificationDetails, ())
+		invokedNavigateToCheckIdentityParametersList.append((verificationDetails, ()))
+	}
+
+	var invokedNavigateToVerifiedAccess = false
+	var invokedNavigateToVerifiedAccessCount = 0
+	var invokedNavigateToVerifiedAccessParameters: (verifiedAccess: VerifiedAccess, Void)?
+	var invokedNavigateToVerifiedAccessParametersList = [(verifiedAccess: VerifiedAccess, Void)]()
+
+	func navigateToVerifiedAccess(_ verifiedAccess: VerifiedAccess) {
+		invokedNavigateToVerifiedAccess = true
+		invokedNavigateToVerifiedAccessCount += 1
+		invokedNavigateToVerifiedAccessParameters = (verifiedAccess, ())
+		invokedNavigateToVerifiedAccessParametersList.append((verifiedAccess, ()))
+	}
+
+	var invokedNavigateToDeniedAccess = false
+	var invokedNavigateToDeniedAccessCount = 0
+
+	func navigateToDeniedAccess() {
+		invokedNavigateToDeniedAccess = true
+		invokedNavigateToDeniedAccessCount += 1
+	}
+
+	var invokedUserWishesToSetRiskLevel = false
+	var invokedUserWishesToSetRiskLevelCount = 0
+	var invokedUserWishesToSetRiskLevelParameters: (shouldSelectSetting: Bool, Void)?
+	var invokedUserWishesToSetRiskLevelParametersList = [(shouldSelectSetting: Bool, Void)]()
+
+	func userWishesToSetRiskLevel(shouldSelectSetting: Bool) {
+		invokedUserWishesToSetRiskLevel = true
+		invokedUserWishesToSetRiskLevelCount += 1
+		invokedUserWishesToSetRiskLevelParameters = (shouldSelectSetting, ())
+		invokedUserWishesToSetRiskLevelParametersList.append((shouldSelectSetting, ()))
+	}
+
+	var invokedUserWishesMoreInfoAboutDeniedQRScan = false
+	var invokedUserWishesMoreInfoAboutDeniedQRScanCount = 0
+
+	func userWishesMoreInfoAboutDeniedQRScan() {
+		invokedUserWishesMoreInfoAboutDeniedQRScan = true
+		invokedUserWishesMoreInfoAboutDeniedQRScanCount += 1
 	}
 
 	var invokedOpenUrl = false

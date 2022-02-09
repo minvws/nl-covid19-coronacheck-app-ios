@@ -13,30 +13,34 @@ class HolderDashboardViewController: BaseViewController {
         case headerMessage(message: String, buttonTitle: String?)
         case emptyStateDescription(message: String, buttonTitle: String?)
         case emptyStatePlaceholderImage(image: UIImage, title: String)
+		case addCertificate(title: String, didTapAdd: () -> Void)
 
         // Warnings:
         case expiredQR(message: String, didTapClose: () -> Void)
+        case expiredVaccinationQR(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
         case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case testOnlyValidFor3G(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         
         // Errors:
         case errorMessage(message: String, didTapTryAgain: () -> Void)
         
-        // Multiple DCC:
-        case migrateYourInternationalVaccinationCertificate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
-        case migratingYourInternationalVaccinationCertificateDidComplete(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-
-        // Recovery Validity Extension
-        case recoveryValidityExtensionAvailable(title: String, buttonText: String, didTapCallToAction: () -> Void)
-        case recoveryValidityExtensionDidComplete(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-
+		// Vaccination & Recovery Validity
+		case newValidityInfoForVaccinationAndRecoveries(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		
+		// Vaccination Assessment
+		case completeYourVaccinationAssessment(title: String, buttonText: String, didTapCallToAction: () -> Void)
+		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
+		
         // QR Cards:
         case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
         case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 		
 		// Recommendations
 		case recommendCoronaMelder
+		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case recommendToAddYourBooster(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -85,29 +89,61 @@ class HolderDashboardViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
-
+		
 		setupBindings()
-
-		setupPlusButton()
 		
 		sceneView.delegate = self
 
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.addProofTapped()
+			self?.viewModel.addCertificateFooterTapped()
+		}
+		
+		sceneView.tapMenuButtonHandler = { [weak self] in
+			self?.viewModel.userTappedMenuButton()
 		}
 		
 		// Forces VoiceOver focus on menu button instead of tab bar on start up
 		UIAccessibility.post(notification: .screenChanged, argument: navigationItem.leftBarButtonItem)
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		navigationController?.navigationBar.isHidden = true
+		viewModel.viewWillAppear()
+	}
+	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = false
 	}
 
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		navigationController?.navigationBar.isHidden = false
+		
+		// As the screen animates out, fade out the (fake) navigation bar,
+		// as an approximation of the animation that occurs with UINavigationBar.
+		transitionCoordinator?.animate(alongsideTransition: { _ in
+			self.sceneView.fakeNavigationBarAlpha = 0
+		}, completion: { _ in
+			self.sceneView.fakeNavigationBarAlpha = 1
+		})
+	}
+
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+	}
+	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		
+		guard !didSetInitialStartingTabOnSceneView else { return }
+		didSetInitialStartingTabOnSceneView = true
+		
+		// Select start tab after layouting is done to be able to update scroll position
+		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
+		sceneView.selectTab(tab: selectedTab)
 	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -118,9 +154,11 @@ class HolderDashboardViewController: BaseViewController {
 		}
 	}
 
+	// MARK: - Setup
+	
 	private func setupBindings() {
 
-		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
 		
 		viewModel.$domesticCards.binding = { [sceneView, weak self] cards in
 			DispatchQueue.main.async {
@@ -135,7 +173,7 @@ class HolderDashboardViewController: BaseViewController {
 		}
 		
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
-		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
+		viewModel.$shouldShowAddCertificateFooter.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
 		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
 			DispatchQueue.main.async {
@@ -148,133 +186,13 @@ class HolderDashboardViewController: BaseViewController {
 			sceneView.selectTab(tab: region)
 		}
 	}
-	
+
 	private func setup(cards: [HolderDashboardViewController.Card], with stackView: UIStackView) {
-		let cardViews = cards
-			.compactMap { [weak self] card -> UIView? in
-				
-				switch card {
-					case let .headerMessage(message, buttonTitle):
-						
-						let headerMessageView = HeaderMessageCardView()
-						headerMessageView.message = message
-						headerMessageView.buttonTitle = buttonTitle
-						headerMessageView.contentTextView.linkTouched { url in
-							self?.viewModel.openUrl(url)
-						}
-						headerMessageView.buttonTappedCommand = {
-
-							guard let url = URL(string: L.holderDashboardIntroInternationalUrl()) else { return }
-							self?.viewModel.openUrl(url)
-						}
-						return headerMessageView
-						
-					// Message Cards with only a message + close button
-					case let .expiredQR(message, didTapCloseAction):
-                        let messageCard = MessageCardView(config: .init(
-                            title: message,
-                            closeButtonCommand: didTapCloseAction,
-                            ctaButton: nil
-                        ))
-						return messageCard
-
-					// Message Cards with a message + CTA button
-					case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
-						let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
-						let .migrateYourInternationalVaccinationCertificate(message, callToActionButtonText, didTapCallToAction),
-						let .recoveryValidityExtensionAvailable(message, callToActionButtonText, didTapCallToAction),
-						let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction):
-						
-						let messageCard = MessageCardView(config: .init(
-							title: message,
-							closeButtonCommand: nil,
-							ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
-						))
-						return messageCard
-
-					case let .migratingYourInternationalVaccinationCertificateDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-						 let .recoveryValidityExtensionDidComplete(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
-						
-                        let messageCard = MessageCardView(config: .init(
-                            title: message,
-                            closeButtonCommand: didTapCloseAction,
-                            ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
-                        ))
-						return messageCard
-
-					case let .emptyStateDescription(message, buttonTitle):
-						let view = EmptyDashboardDescriptionCardView()
-						view.message = message
-						view.buttonTitle = buttonTitle
-						view.contentTextView.linkTouched { url in
-							self?.viewModel.openUrl(url)
-						}
-						view.buttonTappedCommand = {
-							guard let url = URL(string: L.holderDashboardEmptyInternationalUrl()) else { return }
-							self?.viewModel.openUrl(url)
-						}
-						return view
-
-					case let .emptyStatePlaceholderImage(image, title):
-						let view = EmptyDashboardImagePlaceholderCardView()
-						view.title = title
-						view.image = image
-						return view
-						
-					case let .domesticQR(title, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
-						 let .europeanUnionQR(title, _, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
-
-						let qrCard: QRCardView
-
-						if case let .europeanUnionQR(_, stackSize, _, _, _, _, _) = card {
-							qrCard = QRCardView(stackSize: stackSize)
-							qrCard.shouldStyleForEU = true
-							qrCard.viewQRButtonTitle = stackSize == 1
-								? L.holderDashboardQrButtonViewQR()
-								: L.holderDashboardQrButtonViewQRs()
-						} else {
-							qrCard = QRCardView(stackSize: 1)
-							qrCard.shouldStyleForEU = false
-							qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
-						}
-
-						qrCard.viewQRButtonCommand = didTapViewQR
-						qrCard.title = title
-
-						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
-						qrCard.validityTexts = validityTexts
-						qrCard.expiryEvaluator = expiryCountdownEvaluator
-						qrCard.isLoading = isLoading
-						
-						return qrCard
-						
-					case let .errorMessage(message, didTapTryAgain):
-						
-						let errorView = ErrorDashboardCardView()
-						errorView.message = message
-						errorView.messageTextView.linkTouched { url in
-							if url.absoluteString == AppAction.tryAgain {
-								didTapTryAgain()
-							} else {
-								self?.viewModel.openUrl(url)
-							}
-						}
-						return errorView
-					
-					case .recommendCoronaMelder:
-						let view = RecommendCoronaMelderCardView()
-						view.message = L.holderDashboardRecommendcoronamelderTitle()
-						view.urlTapHandler = { [weak viewModel] url in
-							viewModel?.userTappedCoronaMelderLink(url: url)
-						}
-						return view
-				}
-			}
-		
-		stackView.arrangedSubviews.forEach {
-			stackView.removeArrangedSubview($0)
-			$0.removeFromSuperview()
+		let cardViews = cards.compactMap { card in
+			card.makeView(openURLHandler: { [weak viewModel] url in viewModel?.openUrl(url) })
 		}
+		
+		stackView.removeArrangedSubviews()
 		
 		cardViews.forEach {
 			stackView.addArrangedSubview($0)
@@ -294,34 +212,7 @@ class HolderDashboardViewController: BaseViewController {
 			
 			stackView.setCustomSpacing(22, after: previousCardView)
 		}
-	}
-
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-
-		viewModel.viewWillAppear()
-	}
-	
-	override func viewDidLayoutSubviews() {
-		super.viewDidLayoutSubviews()
-
-		guard !didSetInitialStartingTabOnSceneView else { return }
-		didSetInitialStartingTabOnSceneView = true
-
-		// Select start tab after layouting is done to be able to update scroll position
-		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
-		sceneView.selectTab(tab: selectedTab)
-	}
-
-	// MARK: Helper methods
-
-	func setupPlusButton() {
-		let config = UIBarButtonItem.Configuration(target: viewModel,
-												   action: #selector(HolderDashboardViewModel.addProofTapped),
-												   content: .image( I.plus()),
-												   accessibilityIdentifier: "PlusButton",
-												   accessibilityLabel: L.holderMenuProof())
-		navigationItem.rightBarButtonItem = .create(config)
+		UIAccessibility.post(notification: .layoutChanged, argument: view)
 	}
 }
 
@@ -330,5 +221,156 @@ extension HolderDashboardViewController: HolderDashboardViewDelegate {
 	func holderDashboardView(_ view: HolderDashboardView, didDisplay tab: DashboardTab) {
 		let changedRegion: QRCodeValidityRegion = tab.isDomestic ? .domestic : .europeanUnion
 		viewModel.dashboardRegionToggleValue = changedRegion
+	}
+}
+
+private extension HolderDashboardViewController.Card {
+	
+	func makeView(openURLHandler: @escaping (URL) -> Void) -> UIView {
+		
+		switch self {
+			case let .headerMessage(message, buttonTitle):
+				return HeaderMessageCardView.make(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
+				
+			case let .addCertificate(title, didTapAdd):
+				let card = AddCertificateCardView()
+				card.title = title
+				card.tapHandler = didTapAdd
+				return card
+			
+			// Message Cards with only a message + close button
+			case let .expiredQR(message, didTapCloseAction):
+				return MessageCardView(config: .init(title: message, closeButtonCommand: didTapCloseAction, ctaButton: nil))
+
+			// Message Cards with a message + CTA button
+			case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
+				let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
+				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
+				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction),
+				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction),
+				let .completeYourVaccinationAssessment(message, callToActionButtonText, didTapCallToAction),
+				let .vaccinationAssessmentInvalidOutsideNL(message, callToActionButtonText, didTapCallToAction):
+				
+				return MessageCardView(config: .init(
+					title: message,
+					closeButtonCommand: nil,
+					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
+				))
+				
+			// Message Cards with a message + CTA button + close button
+			case let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .recommendToAddYourBooster(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+				
+				return MessageCardView(config: .init(
+					title: message,
+					closeButtonCommand: didTapCloseAction,
+					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
+				))
+
+			case let .emptyStateDescription(message, buttonTitle):
+				return EmptyDashboardDescriptionCardView.make(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
+
+			case let .emptyStatePlaceholderImage(image, title):
+				let view = EmptyDashboardImagePlaceholderCardView()
+				view.title = title
+				view.image = image
+				return view
+				
+			case let .domesticQR(title, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
+				return QRCardView.make(stackSize: 1, forEu: false, title: title, isLoading: isLoading, validityTexts: validityTexts, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
+			
+			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
+				return QRCardView.make(stackSize: stackSize, forEu: true, title: title, isLoading: isLoading, validityTexts: validityTexts, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
+				
+			case let .errorMessage(message, didTapTryAgain):
+				return ErrorDashboardCardView.make(message: message, didTapTryAgain: didTapTryAgain, openURLHandler: openURLHandler)
+			
+			case .recommendCoronaMelder:
+				let view = RecommendCoronaMelderCardView()
+				view.message = L.holderDashboardRecommendcoronamelderTitle()
+				view.urlTapHandler = openURLHandler
+				return view
+		}
+		
+	}
+}
+
+private extension ErrorDashboardCardView {
+	
+	static func make(message: String, didTapTryAgain: @escaping () -> Void, openURLHandler: @escaping (URL) -> Void) -> ErrorDashboardCardView {
+		let view = ErrorDashboardCardView()
+		view.message = message
+		view.messageTextView.linkTouched { url in
+			if url.absoluteString == AppAction.tryAgain {
+				didTapTryAgain()
+			} else {
+				openURLHandler(url)
+			}
+		}
+		return view
+	}
+}
+
+private extension HeaderMessageCardView {
+	
+	static func make(message: String, buttonTitle: String?, openURLHandler: @escaping (URL) -> Void) -> HeaderMessageCardView {
+		let view = HeaderMessageCardView()
+		view.message = message
+		view.buttonTitle = buttonTitle
+		view.contentTextView.linkTouched { url in
+			openURLHandler(url)
+		}
+		view.buttonTappedCommand = {
+			guard let url = URL(string: L.holderDashboardIntroInternationalUrl()) else { return }
+			openURLHandler(url)
+		}
+		return view
+	}
+}
+
+private extension EmptyDashboardDescriptionCardView {
+	
+	static func make(message: String, buttonTitle: String?, openURLHandler: @escaping (URL) -> Void) -> EmptyDashboardDescriptionCardView {
+		let view = EmptyDashboardDescriptionCardView()
+		view.message = message
+		view.buttonTitle = buttonTitle
+		view.contentTextView.linkTouched { url in
+			openURLHandler(url)
+		}
+		view.buttonTappedCommand = {
+			guard let url = URL(string: L.holderDashboardEmptyInternationalUrl()) else { return }
+			openURLHandler(url)
+		}
+		return view
+	}
+}
+
+private extension QRCardView {
+
+	// swiftlint:disable:next function_parameter_count
+	static func make(
+		stackSize: Int,
+		forEu: Bool,
+		title: String,
+		isLoading: Bool,
+		validityTexts: @escaping (Date) -> [HolderDashboardViewController.ValidityText],
+		didTapViewQR: @escaping () -> Void,
+		buttonEnabledEvaluator: @escaping (Date) -> Bool,
+		expiryCountdownEvaluator: ((Date) -> String?)?
+	) -> QRCardView {
+		let qrCard = QRCardView(stackSize: stackSize)
+		qrCard.shouldStyleForEU = forEu
+		qrCard.viewQRButtonTitle = stackSize == 1
+			? L.holderDashboardQrButtonViewQR()
+			: L.holderDashboardQrButtonViewQRs()
+		qrCard.viewQRButtonCommand = didTapViewQR
+		qrCard.title = title
+		qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
+		qrCard.validityTexts = validityTexts
+		qrCard.expiryEvaluator = expiryCountdownEvaluator
+		qrCard.isLoading = isLoading
+		
+		return qrCard
 	}
 }

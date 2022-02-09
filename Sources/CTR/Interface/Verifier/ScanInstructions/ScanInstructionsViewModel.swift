@@ -13,7 +13,7 @@ class ScanInstructionsViewModel {
 	weak var coordinator: ScanInstructionsCoordinatorDelegate?
 	
 	/// The pages for onboarding
-	@Bindable private(set) var pages: [ScanInstructionsPage]
+	@Bindable private(set) var pages: [ScanInstructionsItem]
 
 	@Bindable private(set) var shouldShowSkipButton: Bool = true
 
@@ -25,7 +25,12 @@ class ScanInstructionsViewModel {
 		}
 	}
 
-	private let userSettings: UserSettingsProtocol
+	private let userSettings: UserSettingsProtocol = Current.userSettings
+	private let riskLevelManager: RiskLevelManaging = Current.riskLevelManager
+	private let scanLockManager: ScanLockManaging = Current.scanLockManager
+	private var shouldShowRiskSetting = false
+	private var hasScanLock = false
+	private var scanLockObserverToken: ScanLockManager.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:
@@ -34,20 +39,29 @@ class ScanInstructionsViewModel {
 	///   - numberOfPages: the total number of pages
 	init(
 		coordinator: ScanInstructionsCoordinatorDelegate,
-		pages: [ScanInstructionsPage],
-		userSettings: UserSettingsProtocol) {
+		pages: [ScanInstructionsItem]
+	) {
 		
 		self.coordinator = coordinator
 		self.pages = pages
-		self.userSettings = userSettings
 		self.currentPage = 0
 
+		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
+			shouldShowRiskSetting = riskLevelManager.state == nil
+		}
+		
+		hasScanLock = scanLockManager.state != .unlocked
 		updateState()
+		
+		scanLockObserverToken = scanLockManager.appendObserver { [weak self] lockState in
+			self?.hasScanLock = lockState != .unlocked
+			self?.updateState()
+		}
 	}
 	
-	func scanInstructionsViewController(forPage page: ScanInstructionsPage) -> ScanInstructionsPageViewController {
-		let viewController = ScanInstructionsPageViewController(
-			viewModel: ScanInstructionsPageViewModel(page: page)
+	func scanInstructionsViewController(forPage page: ScanInstructionsItem) -> ScanInstructionsItemViewController {
+		let viewController = ScanInstructionsItemViewController(
+			viewModel: ScanInstructionsItemViewModel(page: page)
 		)
 		viewController.isAccessibilityElement = true
 		return viewController
@@ -55,7 +69,15 @@ class ScanInstructionsViewModel {
 	
 	func finishScanInstructions() {
 		
-		coordinator?.userDidCompletePages()
+		userSettings.scanInstructionShown = true
+
+		if !userSettings.policyInformationShown, Current.featureFlagManager.is1GPolicyEnabled() {
+			coordinator?.userWishesToReadPolicyInformation()
+		} else if shouldShowRiskSetting {
+			coordinator?.userWishesToSelectRiskSetting()
+		} else {
+			coordinator?.userDidCompletePages(hasScanLock: hasScanLock)
+		}
 	}
 
 	/// i.e. exit the Scan Instructions
@@ -68,15 +90,23 @@ class ScanInstructionsViewModel {
 	}
 
 	private func updateState() {
+		let lastPage = pages.count - 1
+		
 		shouldShowSkipButton = {
 			guard !userSettings.scanInstructionShown else { return false }
-			return currentPage < (pages.count - 1)
+			return currentPage < lastPage
 		}()
-
-		nextButtonTitle = {
-			currentPage < (pages.count - 1)
-				? L.generalNext()
-				: L.verifierScaninstructionsButtonStartscanning()
-		}()
+		
+		if currentPage == lastPage {
+			if hasScanLock {
+				nextButtonTitle = L.verifier_scan_instructions_back_to_start()
+			} else if (!userSettings.policyInformationShown && Current.featureFlagManager.is1GPolicyEnabled()) || shouldShowRiskSetting {
+				nextButtonTitle = L.generalNext()
+			} else {
+				nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()
+			}
+		} else {
+			nextButtonTitle = L.generalNext()
+		}
 	}
 }

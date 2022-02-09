@@ -10,8 +10,6 @@ import XCTest
 
 class OnboardingManagerSpy: OnboardingManaging {
 
-	required init() {}
-
 	var invokedNeedsOnboardingGetter = false
 	var invokedNeedsOnboardingGetterCount = 0
 	var stubbedNeedsOnboarding: Bool! = false
@@ -48,11 +46,11 @@ class OnboardingManagerSpy: OnboardingManaging {
 		invokedConsentGivenCount += 1
 	}
 
-	var invokedReset = false
-	var invokedResetCount = 0
+	var invokedWipePersistedData = false
+	var invokedWipePersistedDataCount = 0
 
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
+	func wipePersistedData() {
+		invokedWipePersistedData = true
+		invokedWipePersistedDataCount += 1
 	}
 }

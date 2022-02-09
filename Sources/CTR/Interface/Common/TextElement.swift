@@ -56,8 +56,8 @@ class TextElement: UITextView, UITextViewDelegate {
         textContainer.lineFragmentPadding = 0
         textContainerInset = .zero
         linkTextAttributes = [
-            .foregroundColor: Theme.colors.iosBlue,
-            .underlineColor: Theme.colors.iosBlue
+            .foregroundColor: Theme.colors.primary,
+            .underlineColor: Theme.colors.primary
         ]
     }
 	
@@ -67,17 +67,8 @@ class TextElement: UITextView, UITextViewDelegate {
 			accessibilityAttributedValue = mutableAttributedText.trim()
 		}
 		
-		if let linkNSRange = attributedText.rangeOfFirstLink,
-		   let linkRange = Range(linkNSRange, in: attributedText.string) {
+		if let linkNSRange = attributedText.rangeOfFirstLink {
 			
-			// Add word "(Link)" after reading the portion of text that is tappable:
-			// e.g. "Tap here (Link) to go to page"
-			accessibilityValue = {
-				var textWithWordLinkAdded = attributedText.string
-				textWithWordLinkAdded.insert(contentsOf: " (\(L.generalUrlLink().lowercased()))", at: linkRange.upperBound)
-				return textWithWordLinkAdded
-			}()
-
 			// Work out the title of the linked text:
 			let linkTitle = attributedText.attributedSubstring(from: linkNSRange).string
 

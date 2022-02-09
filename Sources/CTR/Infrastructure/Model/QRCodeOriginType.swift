@@ -11,22 +11,15 @@ enum QRCodeOriginType: String, Codable, Equatable {
 	case test
 	case vaccination
 	case recovery
+	case vaccinationassessment
 
 	// e.g. "Test Certificate", "Vaccination Certificate"
 	var localizedProof: String {
 		switch self {
-			case .recovery: return L.generalRecoverystatement()
-			case .vaccination: return L.generalVaccinationcertificate()
-			case .test: return L.generalTestcertificate()
-		}
-	}
-
-	// e.g. "Test Date", "Vaccination Date" etc.
-	var localizedEvent: String {
-		switch self {
-			case .recovery: return L.generalRecoverydate()
-			case .vaccination: return L.generalVaccinationdate()
-			case .test: return L.generalTestdate()
+			case .recovery: return L.general_recoverycertificate()
+			case .vaccination: return L.general_vaccinationcertificate()
+			case .test: return L.general_testcertificate()
+			case .vaccinationassessment: return L.general_visitorPass()
 		}
 	}
 
@@ -35,7 +28,8 @@ enum QRCodeOriginType: String, Codable, Equatable {
 		switch self {
 			case .vaccination: return 0
 			case .recovery: return 1
-			case .test: return 2
+			case .vaccinationassessment: return 2
+			case .test: return 3
 		}
 	}
 }

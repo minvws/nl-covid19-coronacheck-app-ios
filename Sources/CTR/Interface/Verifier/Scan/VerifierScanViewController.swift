@@ -9,11 +9,7 @@ import UIKit
 
 class VerifierScanViewController: ScanViewController {
 	
-	struct AlertContent {
-		let title: String
-		let subTitle: String
-		let okTitle: String
-	}
+	let sceneView = VerifierScanView()
 
 	private let viewModel: VerifierScanViewModel
 
@@ -34,11 +30,6 @@ class VerifierScanViewController: ScanViewController {
 
 		view = sceneView
 	}
-	
-	override var preferredStatusBarStyle: UIStatusBarStyle {
-
-		.lightContent
-	}
 
 	override func viewDidLoad() {
 
@@ -47,8 +38,6 @@ class VerifierScanViewController: ScanViewController {
 		setupTranslucentNavigationBar()
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
-
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 
 		viewModel.$moreInformationButtonText.binding = { [weak self] in self?.sceneView.moreInformationButtonText = $0 }
 		
@@ -74,6 +63,10 @@ class VerifierScanViewController: ScanViewController {
 				self?.showPermissionError()
 			}
 		}
+		
+		viewModel.$verificationPolicy.binding = { [weak self] in
+			self?.sceneView.verificationPolicy = $0
+		}
 
 		sceneView.moreInformationButtonCommand = { [viewModel] in
 			viewModel.didTapMoreInformationButton()
@@ -84,17 +77,11 @@ class VerifierScanViewController: ScanViewController {
 			tintColor: .white
 		)
 	}
-    
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
 
-		overrideNavigationBarTitleColor(with: .white)
-	}
-	
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-	 
-		restoreNavigationBarTitleColor()
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		attachCameraViewAndStartRunning(sceneView.scanView.cameraView)
 	}
 
 	override func found(code: String) {

@@ -30,7 +30,7 @@ class NegativeTestQRDetailsGenerator {
 
 	static func getDetails(euCredentialAttributes: EuCredentialAttributes, test: EuCredentialAttributes.TestEntry) -> [DCCQRDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)
@@ -66,7 +66,7 @@ class NegativeTestQRDetailsGenerator {
 			DCCQRDetails(field: DCCQRDetailsTest.result, value: testResult),
 			DCCQRDetails(field: DCCQRDetailsTest.facility, value: mappingManager.getDisplayFacility(test.testCenter)),
 			DCCQRDetails(field: DCCQRDetailsTest.manufacturer, value: manufacturer),
-			DCCQRDetails(field: DCCQRDetailsTest.country, value: mappingManager.getDisplayCountry(test.country)),
+			DCCQRDetails(field: DCCQRDetailsTest.country, value: mappingManager.getBiLingualDisplayCountry(test.country)),
 			DCCQRDetails(field: DCCQRDetailsTest.issuer, value: mappingManager.getDisplayIssuer(test.issuer)),
 			DCCQRDetails(field: DCCQRDetailsTest.uniqueIdentifer, value: test.certificateIdentifier)
 		]
@@ -77,7 +77,7 @@ class VaccinationQRDetailsGenerator {
 
 	static func getDetails(euCredentialAttributes: EuCredentialAttributes, vaccination: EuCredentialAttributes.Vaccination) -> [DCCQRDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
@@ -86,7 +86,7 @@ class VaccinationQRDetailsGenerator {
 
 		let vaccineType = mappingManager.getVaccinationType(vaccination.vaccineOrProphylaxis) ?? vaccination.vaccineOrProphylaxis
 		let vaccineBrand = mappingManager.getVaccinationBrand(vaccination.medicalProduct) ?? vaccination.medicalProduct
-		let vaccineManufacturer = mappingManager.getVaccinationBrand(vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
+		let vaccineManufacturer = mappingManager.getVaccinationManufacturer(vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)
@@ -103,7 +103,7 @@ class VaccinationQRDetailsGenerator {
 			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
 			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: dosage),
 			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: formattedVaccinationDate),
-			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: mappingManager.getDisplayCountry(vaccination.country)),
+			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: mappingManager.getBiLingualDisplayCountry(vaccination.country)),
 			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: mappingManager.getDisplayIssuer(vaccination.issuer)),
 			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: vaccination.certificateIdentifier)
 		]
@@ -114,7 +114,7 @@ class RecoveryQRDetailsGenerator {
 
 	static func getDetails(euCredentialAttributes: EuCredentialAttributes, recovery: EuCredentialAttributes.RecoveryEntry) -> [DCCQRDetails] {
 
-		let mappingManager: MappingManaging = Services.mappingManager
+		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)
@@ -131,7 +131,7 @@ class RecoveryQRDetailsGenerator {
 			DCCQRDetails(field: DCCQRDetailsRecovery.dateOfBirth, value: formattedBirthDate),
 			DCCQRDetails(field: DCCQRDetailsRecovery.pathogen, value: L.holderShowqrEuAboutRecoveryPathogenvalue()),
 			DCCQRDetails(field: DCCQRDetailsRecovery.date, value: formattedFirstPostiveDate),
-			DCCQRDetails(field: DCCQRDetailsRecovery.country, value: mappingManager.getDisplayCountry(recovery.country)),
+			DCCQRDetails(field: DCCQRDetailsRecovery.country, value: mappingManager.getBiLingualDisplayCountry(recovery.country)),
 			DCCQRDetails(field: DCCQRDetailsRecovery.issuer, value: mappingManager.getDisplayIssuer(recovery.issuer)),
 			DCCQRDetails(field: DCCQRDetailsRecovery.validFrom, value: formattedValidFromDate),
 			DCCQRDetails(field: DCCQRDetailsRecovery.validUntil, value: formattedValidUntilDate),
