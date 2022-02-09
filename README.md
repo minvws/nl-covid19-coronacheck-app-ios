@@ -1,12 +1,13 @@
 # COVID-19 CoronaCheck Prototype - iOS
 
 ## Introduction
+
 This repository contains the iOS prototype of the Dutch COVID-19 CoronaCheck project.
 
 * The iOS app is located in the repository you are currently viewing.
-* The Android app can be found here: https://github.com/minvws/nl-covid19-coronacheck-app-android 
+* The Android app can also be [found on GitHub](https://github.com/minvws/nl-covid19-coronacheck-app-android)
 
-The project is currently an experimental prototype to explore technical possibilities.   
+The project is currently an experimental prototype to explore technical possibilities.
 
 ## Development & Contribution process
 
@@ -17,17 +18,17 @@ This increases the chance that we might be able to use your contribution (or it 
 
 Note that all commits should be signed using a gpg key.
 
-## Getting started 
+## Getting started
 
-The Xcode project file (`CTR.xcodeproj`) is not checked-in to git. Instead, we generate it dynamically using [XcodeGen](https://github.com/yonaskolb/XcodeGen) based on a [project.yml](./.project.yml) file. There is a [Makefile](./Makefile) which should make it easy to get started:
+The Xcode project file (`CTR.xcodeproj`) is not checked-in to git. Instead, we generate it dynamically using [XcodeGen](https://github.com/yonaskolb/XcodeGen) based on a [project.yml](./.project.yml) file. There is a [Makefile](./Makefile) which makes it easy to get started:
 
 Simply run `make dev` from the command line.  
 
-It will use [Homebrew](https://brew.sh) to install [these tools](./Brewfile), and will install githooks for: 
+It will use [Homebrew](https://brew.sh) to install [these tools](./Brewfile), and will install githooks for:
 
-- GitLFS (which will download the [snapshot](https://github.com/pointfreeco/swift-snapshot-testing) PNGs used in our unit tests) 
-- XcodeGen (which will update the Xcode project each time you change branches)
+* GitLFS (which will download the [snapshot](https://github.com/pointfreeco/swift-snapshot-testing) PNGs used in our unit tests)
+* XcodeGen (which will update the Xcode project each time you change branches)
 
-and it will run `bundle install` to setup your [Ruby dependencies](./Gemfile) such as fastlane.
+It will run `bundle install` to setup your [Ruby dependencies](./Gemfile) such as [fastlane](https://fastlane.tools).
 
 Lastly, it will generate and open the Xcode Project for you.

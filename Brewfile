@@ -1,4 +1,4 @@
-brew tap lokalise/cli-2
+tap "lokalise/cli-2"
 brew "swiftlint"
 brew "xcodegen"
 brew "git-lfs"

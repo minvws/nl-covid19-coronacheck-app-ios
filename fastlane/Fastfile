@@ -32,6 +32,44 @@ platform :ios do
     )
   end
 
+  # -- SMOKETEST UI -- 
+
+  desc "Run Holder UI Smoketests"
+  lane :smoketest_ui do
+    run_tests(
+      app_name: "CTR",
+      device: "iPhone 12",
+      project: "CTR.xcodeproj",
+      scheme: "Holder UI Smoketests",
+      reinstall_app: true,
+      fail_build: true,
+      reset_simulator: true,
+      disable_slide_to_type: true,
+      app_identifier: "nl.rijksoverheid.ctr.dev",
+      skip_slack: true,
+      result_bundle: true
+    )
+  end
+
+  # -- TEST UI -- 
+
+  desc "Run Holder UI Tests"
+  lane :test_ui do
+    run_tests(
+      app_name: "CTR",
+      device: "iPhone 12",
+      project: "CTR.xcodeproj",
+      scheme: "Holder UI Tests",
+      reinstall_app: true,
+      fail_build: true,
+      reset_simulator: true,
+      disable_slide_to_type: true,
+      app_identifier: "nl.rijksoverheid.ctr.dev",
+      skip_slack: true,
+      result_bundle: true
+    )
+  end
+
   # -- TestFlight --
 
   desc "Build and ship the Holder app to TestFlight"

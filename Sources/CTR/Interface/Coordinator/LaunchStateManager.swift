@@ -54,7 +54,12 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 	// MARK: - Launch State -
 	
 	func handleLaunchState(_ state: LaunchState) {
-	
+		
+		if CommandLine.arguments.contains("-skipOnboarding") {
+			self.startApplication()
+			return
+		}
+		
 		guard Current.cryptoLibUtility.isInitialized else {
 			delegate?.cryptoLibDidNotInitialize()
 			return

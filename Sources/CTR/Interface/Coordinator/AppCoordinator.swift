@@ -70,6 +70,10 @@ class AppCoordinator: Coordinator, Logging {
 		guard !ProcessInfo.processInfo.isTesting else {
 			return
 		}
+		
+		if CommandLine.arguments.contains("-resetOnStart") {
+			Current.wipePersistedData(flavor: AppFlavor.holder)
+		}
 
 		// Start the launcher for update checks
 		startLauncher()
