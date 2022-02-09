@@ -527,7 +527,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 	
 	func userWishesMoreInfoAboutTestOnlyValidFor3G() {

@@ -396,7 +396,7 @@
 "holder.positiveTest.inapplicable.title" = "Positieve testuitslag is niet geschikt";
 "holder.positiveTest.list.message" = "Als de gegevens van je test kloppen kun je een bewijs maken.";
 "holder.positiveTest.list.title" = "Kloppen de gegevens?";
-"holder.positiveTest.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Neem dan contact op met je testlocatie om te controleren of je gegevens goed in het systeem staan.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder.positiveTest.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.positiveTest.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.positiveTest.recoveryAndVaccination.message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
 "holder.positiveTest.recoveryAndVaccination.title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
@@ -413,7 +413,7 @@
 "holder.provider.title" = "QR-code maken";
 "holder.recovery.list.message" = "Als de gegevens van je test kloppen kun je een herstelbewijs maken.";
 "holder.recovery.list.title" = "Kloppen de gegevens?";
-"holder.recovery.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat jouw positieve testuitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Neem dan contact op met je testlocatie om te controleren of je gegevens goed in het systeem staan.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder.recovery.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat jouw positieve testuitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.recovery.recoveryAndVaccination.message" = "<p>Er is een herstelbewijs gemaakt.</p><p>Omdat je positief getest bent vóór je eerste prik, ben je met één prik volledig gevaccineerd. Daarom is er ook een volledig vaccinatiebewijs gemaakt.</p>";
 "holder.recovery.recoveryAndVaccination.title" = "Herstelbewijs en vaccinatiebewijs gemaakt";
