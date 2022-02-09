@@ -322,10 +322,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override1G() {
 		
 		// Given
-		var config = RemoteConfiguration.default
-		config.disclosurePolicies = ["3G", "1G"]
-		remoteConfigManagerSpy.stubbedStoredConfiguration = config
-		
+		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
 		environmentSpies.userSettingsSpy.stubbedOverrideDisclosurePolicies = ["1G"]
 		
 		// When
@@ -342,10 +339,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override3G() {
 		
 		// Given
-		var config = RemoteConfiguration.default
-		config.disclosurePolicies = ["3G", "1G"]
-		remoteConfigManagerSpy.stubbedStoredConfiguration = config
-		
+		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
 		environmentSpies.userSettingsSpy.stubbedOverrideDisclosurePolicies = ["3G"]
 		
 		// When
