@@ -14,6 +14,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	private var sut: FeatureFlagManager!
 	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
 	private var appVersionSupplierSpy: AppVersionSupplierSpy!
+	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		
@@ -21,6 +22,9 @@ class FeatureFlagManagerTests: XCTestCase {
 		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		appVersionSupplierSpy = AppVersionSupplierSpy(version: "2.7.0", build: "1")
+		
+		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.userSettingsSpy.stubbedOverrideDisclosurePolicies = []
 		
 		sut = FeatureFlagManager(versionSupplier: appVersionSupplierSpy, remoteConfigManager: remoteConfigManagerSpy)
 	}
@@ -313,5 +317,39 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		// Then
 		expect(enabled) == true
+	}
+	
+	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override1G() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
+		environmentSpies.userSettingsSpy.stubbedOverrideDisclosurePolicies = ["1G"]
+		
+		// When
+		let bothPoliciesEnabled = sut.areBothDisclosurePoliciesEnabled()
+		let only1GEnabled = sut.is1GExclusiveDisclosurePolicyEnabled()
+		let only3GEnabled = sut.is3GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(bothPoliciesEnabled) == false
+		expect(only1GEnabled) == true
+		expect(only3GEnabled) == false
+	}
+	
+	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override3G() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
+		environmentSpies.userSettingsSpy.stubbedOverrideDisclosurePolicies = ["3G"]
+		
+		// When
+		let bothPoliciesEnabled = sut.areBothDisclosurePoliciesEnabled()
+		let only1GEnabled = sut.is1GExclusiveDisclosurePolicyEnabled()
+		let only3GEnabled = sut.is3GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(bothPoliciesEnabled) == false
+		expect(only1GEnabled) == false
+		expect(only3GEnabled) == true
 	}
 }
