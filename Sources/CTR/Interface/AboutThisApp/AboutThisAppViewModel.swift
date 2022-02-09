@@ -105,16 +105,16 @@ class AboutThisAppViewModel: Logging {
 		}
 		
 		let bottomList: [AboutThisAppMenuOption] = [
-			AboutThisAppMenuOption(identifier: .use1GDisclosurePolicy, name: "Use 1G Disclose policy") ,
-			AboutThisAppMenuOption(identifier: .use3GDisclosurePolicy, name: "Use 3G Disclose policy"),
-			AboutThisAppMenuOption(identifier: .use1GAnd3GDisclosurePolicy, name: "Use 1G and 3G Disclose policy"),
-			AboutThisAppMenuOption(identifier: .useConfigDisclosurePolicy, name: "Use the config Disclose policy")
+			AboutThisAppMenuOption(identifier: .use1GDisclosurePolicy, name: "Use 1G Disclosure policy") ,
+			AboutThisAppMenuOption(identifier: .use3GDisclosurePolicy, name: "Use 3G Disclosure policy"),
+			AboutThisAppMenuOption(identifier: .use1GAnd3GDisclosurePolicy, name: "Use 1G and 3G Disclosure policy"),
+			AboutThisAppMenuOption(identifier: .useConfigDisclosurePolicy, name: "Use the config Disclosure policy")
 		]
 		
 		if Configuration().getEnvironment() != "production" {
 			menu = [
 				L.holderAboutReadmore(): list,
-				"Disclose Policy": bottomList
+				"Disclosure Policy": bottomList
 			]
 		} else {
 			menu = [L.holderAboutReadmore(): list]
