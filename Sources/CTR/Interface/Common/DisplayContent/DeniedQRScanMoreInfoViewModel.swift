@@ -50,7 +50,6 @@ class DeniedQRScanMoreInfoViewModel {
 			(TextView(htmlText: L.verifierDeniedMessageThree()), spacing),
 			(TextView(htmlText: L.verifierDeniedMessageFour()), 0),
 			(TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
-			(TextView(htmlText: Current.featureFlagManager.is1GVerificationPolicyEnabled() ? L.verifierDeniedMessageSix_1G() : L.verifierDeniedMessageSix()), spacing)
 			(TextView(htmlText: shouldDisplay1GText ? L.verifierDeniedMessageSix_1G() : L.verifierDeniedMessageSix()), spacing)
 		]
 
