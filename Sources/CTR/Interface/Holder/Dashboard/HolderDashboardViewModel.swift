@@ -29,6 +29,7 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 }
 
+// swiftlint:disable:next type_body_length
 final class HolderDashboardViewModel: Logging {
 	typealias Datasource = HolderDashboardQRCardDatasource
 
@@ -326,15 +327,36 @@ final class HolderDashboardViewModel: Logging {
 		guard state != oldState // save recomputation effort if `==`
 		else { return }
 		
-		domesticCards = HolderDashboardViewModel.assembleCards(
-			forValidityRegion: .domestic,
-			state: state,
-			actionHandler: self,
-			remoteConfigManager: Current.remoteConfigManager,
-			now: Current.now()
-		)
+		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+			// 1G-only
+			domesticCards = HolderDashboardViewModel.assemble1gOnlyCards(
+				forValidityRegion: .domestic,
+				state: state,
+				actionHandler: self,
+				remoteConfigManager: Current.remoteConfigManager,
+				now: Current.now()
+			)
+		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+			// 3G + 1G
+			domesticCards = HolderDashboardViewModel.assemble3gWith1GCards(
+				forValidityRegion: .domestic,
+				state: state,
+				actionHandler: self,
+				remoteConfigManager: Current.remoteConfigManager,
+				now: Current.now()
+			)
+		} else {
+			// 3G-only fallback
+			domesticCards = HolderDashboardViewModel.assemble3gOnlyCards(
+				forValidityRegion: .domestic,
+				state: state,
+				actionHandler: self,
+				remoteConfigManager: Current.remoteConfigManager,
+				now: Current.now()
+			)
+		}
 
-		internationalCards = HolderDashboardViewModel.assembleCards(
+		internationalCards = HolderDashboardViewModel.assembleInternationalCards(
 			forValidityRegion: .europeanUnion,
 			state: state,
 			actionHandler: self,
@@ -468,7 +490,7 @@ final class HolderDashboardViewModel: Logging {
 	
 	// MARK: - Static Methods
 	
-	private static func assembleCards(
+	private static func assemble3gOnlyCards(
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
@@ -496,6 +518,83 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
+	
+	private static func assemble1gOnlyCards(
+		forValidityRegion validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling,
+		remoteConfigManager: RemoteConfigManaging,
+		now: Date
+	) -> [HolderDashboardViewController.Card] {
+		typealias VCCard = HolderDashboardViewController.Card
+		
+		var cards = [VCCard]()
+		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
+		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
+		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
+		return cards
+	}
+	
+	private static func assemble3gWith1GCards(
+		forValidityRegion validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling,
+		remoteConfigManager: RemoteConfigManaging,
+		now: Date
+	) -> [HolderDashboardViewController.Card] {
+		typealias VCCard = HolderDashboardViewController.Card
+		
+		var cards = [VCCard]()
+		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
+		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
+		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
+		return cards
+	}
+	
+	private static func assembleInternationalCards(
+		forValidityRegion validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling,
+		remoteConfigManager: RemoteConfigManaging,
+		now: Date
+	) -> [HolderDashboardViewController.Card] {
+		
+		// Currently has the same implementation:
+		return assemble3gOnlyCards(
+			forValidityRegion: validityRegion,
+			state: state,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager,
+			now: now
+		)
+	}
+	
 }
 
 // MARK: - HolderDashboardCardUserActionHandling
