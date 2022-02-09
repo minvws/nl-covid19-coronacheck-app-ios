@@ -41,6 +41,9 @@ class HolderDashboardViewController: BaseViewController {
 		case recommendCoronaMelder
 		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case recommendToAddYourBooster(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		
+		// Disclosure Policy
+		case disclosurePolicyInformation(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -260,7 +263,8 @@ private extension HolderDashboardViewController.Card {
 			// Message Cards with a message + CTA button + close button
 			case let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
 				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .recommendToAddYourBooster(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+				let .recommendToAddYourBooster(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .disclosurePolicyInformation(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,

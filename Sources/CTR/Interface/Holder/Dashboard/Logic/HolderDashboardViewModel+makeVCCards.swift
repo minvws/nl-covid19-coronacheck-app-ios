@@ -285,6 +285,38 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
+	static func makeDisclosurePolicyInformationBanner(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		
+		guard validityRegion == .domestic else { return [] }
+		
+		var title = ""
+		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+			title = "1G"
+		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
+			title = "3G"
+		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+			title = "1G + 3G"
+		}
+		guard title.isNotEmpty() else { return [] }
+
+		return [
+			.disclosurePolicyInformation(
+				title: title,
+				buttonText: L.generalReadmore(),
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapDisclosurePolicyInformationBannerMoreInformation()
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapDisclosurePolicyInformationBannerClose()
+				}
+			)
+		]
+	}
+	
 	static func makeVaccinationAssessmentInvalidOutsideNLCard(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
@@ -292,6 +324,7 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 		
 		guard state.shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for: validityRegion) else { return [] }
+		
 		return [
 			.vaccinationAssessmentInvalidOutsideNL(
 				title: L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title(),

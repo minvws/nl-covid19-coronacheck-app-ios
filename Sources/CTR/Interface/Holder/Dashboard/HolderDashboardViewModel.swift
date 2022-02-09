@@ -27,6 +27,8 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
 	func didTapTestOnlyValidFor3GMoreInfo()
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
+	func didTapDisclosurePolicyInformationBannerMoreInformation()
+	func didTapDisclosurePolicyInformationBannerClose()
 }
 
 final class HolderDashboardViewModel: Logging {
@@ -490,6 +492,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformationBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
 		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
@@ -595,4 +598,11 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		state.shouldShowRecommendationToAddYourBooster = false
 	}
 	
+	func didTapDisclosurePolicyInformationBannerMoreInformation() {
+		logInfo("Todo: didTapDisclosurePolicyMoreInformation")
+	}
+	
+	func didTapDisclosurePolicyInformationBannerClose() {
+		logInfo("Todo: didTapDisclosurePolicyClose")
+	}
 }
