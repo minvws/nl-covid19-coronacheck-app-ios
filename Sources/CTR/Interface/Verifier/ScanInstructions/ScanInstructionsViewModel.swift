@@ -71,7 +71,7 @@ class ScanInstructionsViewModel {
 		
 		userSettings.scanInstructionShown = true
 
-		if !userSettings.policyInformationShown, Current.featureFlagManager.is1GPolicyEnabled() {
+		if !userSettings.policyInformationShown, Current.featureFlagManager.is1GVerificationPolicyEnabled() {
 			coordinator?.userWishesToReadPolicyInformation()
 		} else if shouldShowRiskSetting {
 			coordinator?.userWishesToSelectRiskSetting()
@@ -100,7 +100,7 @@ class ScanInstructionsViewModel {
 		if currentPage == lastPage {
 			if hasScanLock {
 				nextButtonTitle = L.verifier_scan_instructions_back_to_start()
-			} else if (!userSettings.policyInformationShown && Current.featureFlagManager.is1GPolicyEnabled()) || shouldShowRiskSetting {
+			} else if (!userSettings.policyInformationShown && Current.featureFlagManager.is1GVerificationPolicyEnabled()) || shouldShowRiskSetting {
 				nextButtonTitle = L.generalNext()
 			} else {
 				nextButtonTitle = L.verifierScaninstructionsButtonStartscanning()

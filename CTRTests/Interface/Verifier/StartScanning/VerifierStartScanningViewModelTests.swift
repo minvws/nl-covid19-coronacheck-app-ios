@@ -126,7 +126,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_policyInformationShown() {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
 		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)

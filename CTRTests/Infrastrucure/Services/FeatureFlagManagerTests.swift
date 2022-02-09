@@ -122,4 +122,216 @@ class FeatureFlagManagerTests: XCTestCase {
 		// Then
 		expect(enabled) == false
 	}
+	
+	func test_isVerificationPolicy_1G_enabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.verificationPolicies = ["1G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.is1GVerificationPolicyEnabled()
+		
+		// Then
+		expect(enabled) == true
+	}
+	
+	func test_isVerificationPolicy_1G_disabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.verificationPolicies = ["3G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.is1GVerificationPolicyEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+
+	func test_isVerificationPolicy_multiple_1Gdisabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.verificationPolicies = ["3G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.areMultipleVerificationPoliciesEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+	
+	func test_isVerificationPolicy_multiple_3Gdisabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.verificationPolicies = ["1G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.areMultipleVerificationPoliciesEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+	
+	func test_isVerificationPolicy_multiple_enabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.verificationPolicies = ["3G", "1G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.areMultipleVerificationPoliciesEnabled()
+		
+		// Then
+		expect(enabled) == true
+	}
+	
+	// MARK: - Disclosure -
+	
+	func test_is1GExclusiveDisclosurePolicyEnabled_enabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = ["1G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(enabled) == true
+	}
+	
+	func test_is1GExclusiveDisclosurePolicyEnabled_disabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = ["3G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+	
+	func test_is1GExclusiveDisclosurePolicyEnabled_disabled_bothPoliciesEnabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = ["3G", "1G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+	
+	func test_is3GExclusiveDisclosurePolicyEnabled_enabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = ["3G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(enabled) == true
+	}
+	
+	func test_is3GExclusiveDisclosurePolicyEnabled_disabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = ["1G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+	
+	func test_is3GExclusiveDisclosurePolicyEnabled_disabled_bothPoliciesEnabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = ["3G", "1G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+	
+	func test_areBothDisclosurePoliciesEnabled_disabled_only1G() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = ["1G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.areBothDisclosurePoliciesEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+	
+	func test_areBothDisclosurePoliciesEnabled_disabled_only3G() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = ["3G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.areBothDisclosurePoliciesEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+	
+	func test_areBothDisclosurePoliciesEnabled_enabled() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = ["1G", "3G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.areBothDisclosurePoliciesEnabled()
+		
+		// Then
+		expect(enabled) == true
+	}
+	
+	func test_areBothDisclosurePoliciesEnabled_enabled_orderIndependent() {
+		
+		// Given
+		var config = RemoteConfiguration.default
+		config.disclosurePolicies = ["3G", "1G"]
+		remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		
+		// When
+		let enabled = sut.areBothDisclosurePoliciesEnabled()
+		
+		// Then
+		expect(enabled) == true
+	}
 }

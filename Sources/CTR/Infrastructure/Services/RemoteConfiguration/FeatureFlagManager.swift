@@ -16,12 +16,18 @@ protocol FeatureFlagManaging {
 	///  Should we use the luhn check for tokens?
 	/// - Returns: True if we can
 	func isLuhnCheckEnabled() -> Bool
-	
 	func isNewValidityInfoBannerEnabled() -> Bool
-	func isVerificationPolicyEnabled() -> Bool
 	func isVisitorPassEnabled() -> Bool
+	
+	// Verifier
+	func isVerificationPolicyEnabled() -> Bool
 	func areMultipleVerificationPoliciesEnabled() -> Bool
-	func is1GPolicyEnabled() -> Bool
+	func is1GVerificationPolicyEnabled() -> Bool
+	
+	// Holder
+	func is1GExclusiveDisclosurePolicyEnabled() -> Bool
+	func is3GExclusiveDisclosurePolicyEnabled() -> Bool
+	func areBothDisclosurePoliciesEnabled() -> Bool
 }
 
 class FeatureFlagManager: FeatureFlagManaging, Logging {
@@ -95,11 +101,40 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		verificationPolicies.contains(VerificationPolicy.policy1G.featureFlag)
 	}
 	
-	func is1GPolicyEnabled() -> Bool {
+	func is1GVerificationPolicyEnabled() -> Bool {
 		
 		guard let verificationPolicies = remoteConfigManager.storedConfiguration.verificationPolicies else {
 			return false
 		}
 		return verificationPolicies.contains(VerificationPolicy.policy1G.featureFlag)
+	}
+	
+	// Holder
+	func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
+		
+		guard let disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
+			return false
+		}
+		return disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag)
+		&& !disclosurePolicies.contains(VerificationPolicy.policy1G.featureFlag)
+	}
+	
+	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
+		
+		guard let disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
+			return false
+		}
+		return disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)
+		&& !disclosurePolicies.contains(VerificationPolicy.policy3G.featureFlag)
+	}
+	
+	func areBothDisclosurePoliciesEnabled() -> Bool {
+		
+		guard let disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
+			return false
+		}
+		
+		return disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag) &&
+		disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)
 	}
 }

@@ -290,7 +290,7 @@ extension VerifierStartScanningViewModel {
 		guard mode.allowsStartScanning else { return }
 		
 		if !Current.userSettings.scanInstructionShown ||
-			(!Current.userSettings.policyInformationShown && Current.featureFlagManager.is1GPolicyEnabled()) ||
+			(!Current.userSettings.policyInformationShown && Current.featureFlagManager.is1GVerificationPolicyEnabled()) ||
 			(Current.riskLevelManager.state == nil && Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
 			// Show the scan instructions the first time no matter what link was tapped
 			coordinator?.didFinish(.userTappedProceedToInstructionsOrRiskSetting)
