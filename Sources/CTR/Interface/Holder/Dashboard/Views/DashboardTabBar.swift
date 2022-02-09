@@ -276,12 +276,7 @@ private class TabBarButton: UIControl {
 		didSet {
 			titleLabel.text = title
 			accessibilityLabel = title
-
-			if #available(iOS 13.0, *) {
-				largeContentTitle = title
-				showsLargeContentViewer = true
-				addInteraction(UILargeContentViewerInteraction())
-			}
+			setupLargeContentViewer(title: title)
 		}
 	}
 }

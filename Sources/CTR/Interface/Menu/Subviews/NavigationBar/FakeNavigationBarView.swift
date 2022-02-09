@@ -84,15 +84,6 @@ class FakeNavigationBarView: BaseView {
 		NSLayoutConstraint.activate(constraints)
 	}
 	
-	override func setupAccessibility() {
-		super.setupAccessibility()
-		
-		if #available(iOS 13.0, *) {
-			addInteraction(UILargeContentViewerInteraction())
-			showsLargeContentViewer = true
-		}
-	}
-	
 	// MARK: - UITraitEnvironment
 	
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -110,10 +101,7 @@ class FakeNavigationBarView: BaseView {
 	var title: String? {
 		didSet {
 			titleLabel.text = title
-			
-			if #available(iOS 13.0, *) {
-				largeContentTitle = title
-			}
+			setupLargeContentViewer(title: title)
 		}
 	}
 }

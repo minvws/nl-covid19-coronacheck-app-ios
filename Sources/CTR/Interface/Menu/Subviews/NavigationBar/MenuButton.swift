@@ -125,11 +125,7 @@ class MenuButton: UIControl {
 		accessibilityIdentifier = "MenuButton"
 		accessibilityLabel = L.generalMenuOpen()
 		
-		if #available(iOS 13.0, *) {
-			addInteraction(UILargeContentViewerInteraction())
-			showsLargeContentViewer = true
-			largeContentTitle = L.general_menu()
-		}
+		setupLargeContentViewer(title: L.general_menu())
 	}
 	
 	// MARK: - Objc Target-Action callbacks:
