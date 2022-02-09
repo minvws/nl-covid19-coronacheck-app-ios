@@ -102,6 +102,11 @@ class HolderCoordinator: SharedCoordinator {
 	// Designated starter method
 	override func start() {
 		
+		if CommandLine.arguments.contains("-skipOnboarding") {
+			navigateToHolderStart()
+			return
+		}
+		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: HolderNewFeaturesFactory()
