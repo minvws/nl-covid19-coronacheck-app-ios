@@ -22,7 +22,7 @@ class TestVaccinationExpired: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
+		assertValidDutchVaccinationCertificate(doses: person.doseNL, validFromOffset: person.validFromNL)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -390)
 	}
 	
@@ -41,7 +41,7 @@ class TestVaccinationExpired: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
+		assertValidDutchVaccinationCertificate(doses: person.doseNL, validFromOffset: person.validFromNL)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -390)
 	}
 	
@@ -50,7 +50,7 @@ class TestVaccinationExpired: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
+		assertValidDutchVaccinationCertificate(doses: person.doseNL, validFromOffset: person.validFromNL)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -390)
 	}
 	
@@ -69,7 +69,7 @@ class TestVaccinationExpired: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
+		assertValidDutchVaccinationCertificate(doses: person.doseNL, validFromOffset: person.validFromNL)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -390)
 	}
 	
@@ -78,7 +78,7 @@ class TestVaccinationExpired: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
+		assertValidDutchVaccinationCertificate(doses: person.doseNL, validFromOffset: person.validFromNL)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -390)
 	}
 }

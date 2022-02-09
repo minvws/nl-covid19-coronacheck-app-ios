@@ -62,15 +62,15 @@ final class TestData {
 	static let vacP2Expired = TestPerson(bsn: "999990792", doseIntl: ["1/2", "2/2"]) // 2 pfizer expired
 	static let vacP1P1Expired = TestPerson(bsn: "999990809", doseIntl: ["1/2", "2/2"]) // 1 pfizer + 1 pfizer expired
 	static let vacJ1Expired = TestPerson(bsn: "999990810", doseIntl: ["1/1"]) // 1 janssen expired
-	static let vacJ1J1Expired = TestPerson(bsn: "999990834", doseNL: 2, doseIntl: ["1/1", "2/1"], validFromNL: -390, validUntilNL: 1071) // 1 janssen + 1 janssen expired
+	static let vacJ1J1Expired = TestPerson(bsn: "999990834", doseNL: 2, doseIntl: ["1/1", "2/1"], validFromNL: -390) // 1 janssen + 1 janssen expired
 	static let vacM1Expired = TestPerson(bsn: "999990858", doseIntl: ["1/2"]) // 1 moderna expired
 	static let vacM2Expired = TestPerson(bsn: "999990871", doseIntl: ["1/2", "2/2"]) // 2 moderna expired
 	static let vacM1M1Expired = TestPerson(bsn: "999990883", doseIntl: ["1/2", "2/2"]) // 1 moderna + 1 moderna expired
-	static let vacP1J1Expired = TestPerson(bsn: "999990895", doseNL: 2, doseIntl: ["1/1", "2/1"], validFromNL: -390, validUntilNL: 1071) // 1 pfizer + 1 janssen expired
-	static let vacP1ExpiredJ2 = TestPerson(bsn: "999990901", doseNL: 3, doseIntl: ["1/1", "2/1", "3/1"], validFromNL: -2, validUntilNL: 1071) // 1 pfizer expired + 2 janssen
+	static let vacP1J1Expired = TestPerson(bsn: "999990895", doseNL: 2, doseIntl: ["1/1", "2/1"], validFromNL: -390) // 1 pfizer + 1 janssen expired
+	static let vacP1ExpiredJ2 = TestPerson(bsn: "999990901", doseNL: 3, doseIntl: ["1/1", "2/1", "3/1"], validFromNL: -390) // 1 pfizer expired + 2 janssen
 	static let vacP1M1Expired = TestPerson(bsn: "999990913", doseIntl: ["1/2", "2/2"]) // 1 pfizer + 1 moderna expired
-	static let vacP1ExpiredM2 = TestPerson(bsn: "999990925", doseNL: 3, doseIntl: ["1/2", "2/2", "3/3"], validFromNL: -16, validUntilNL: 1071) // 1 pfizer expired + 2 moderna
-	static let vacJ1ExpiredM2 = TestPerson(bsn: "999990949", doseNL: 3, doseIntl: ["1/2", "2/2", "3/3"], validFromNL: -16, validUntilNL: 1071) // 1 janssen expired + 2 moderna
+	static let vacP1ExpiredM2 = TestPerson(bsn: "999990925", doseNL: 3, doseIntl: ["1/2", "2/2", "3/3"], validFromNL: -390) // 1 pfizer expired + 2 moderna
+	static let vacJ1ExpiredM2 = TestPerson(bsn: "999990949", doseNL: 3, doseIntl: ["1/2", "2/2", "3/3"], validFromNL: -390) // 1 janssen expired + 2 moderna
 	
 	// Vaccinations - premature (partially)
 	static let vacP1Premature = TestPerson(bsn: "999990950") // 1 pfizer premature
@@ -212,8 +212,8 @@ final class TestData {
 	// Vaccinations - almost 18
 	static let almost18Is17y8mWithP2LastDose1M = TestPerson(bsn: "999993422", doseNL: 2, doseIntl: ["1/2", "2/2"], validFromNL: -16) // Almost 18: 2 pfizer, 4 months before 18, last dose 1 month ago
 	static let almost18Is17y10mWithP2LastDose1M = TestPerson(bsn: "999993434", doseNL: 2, doseIntl: ["1/2", "2/2"], validFromNL: -16, validUntilNL: 240) // Almost 18: 2 pfizer, 2 months before 18, last dose 1 month ago
-	static let almost18Is17y10mWithP2LastDose9M = TestPerson(bsn: "999993446", doseNL: 2, doseIntl: ["1/2", "2/2"], validUntilNL: 52) // Almost 18: 2 pfizer, 2 months before 18, last dose 9 months ago
+	static let almost18Is17y10mWithP2LastDose9M = TestPerson(bsn: "999993446", doseNL: 2, doseIntl: ["1/2", "2/2"], validFromNL: -256, validUntilNL: 51) // Almost 18: 2 pfizer, 2 months before 18, last dose 9 months ago
 	static let almost18Is17y8mWithJ1LastDose1M = TestPerson(bsn: "999993458", doseNL: 1, doseIntl: ["1/1"], validFromNL: -2) // Almost 18: 1 janssen, 4 months before 18, last dose 1 month ago
 	static let almost18Is17y10mWithJ1LastDose1M = TestPerson(bsn: "999993471", doseNL: 1, doseIntl: ["1/1"], validFromNL: -30, validUntilNL: 240) // Almost 18: 1 janssen, 2 months before 18, last dose 1 month ago
-	static let almost18Is17y10mWithJ1LastDose9M = TestPerson(bsn: "999993483", doseNL: 1, doseIntl: ["1/1"], validUntilNL: 52) // Almost 18: 1 janssen, 2 months before 18, last dose 9 months ago
+	static let almost18Is17y10mWithJ1LastDose9M = TestPerson(bsn: "999993483", doseNL: 1, doseIntl: ["1/1"], validFromNL: -242, validUntilNL: 51) // Almost 18: 1 janssen, 2 months before 18, last dose 9 months ago
 }
