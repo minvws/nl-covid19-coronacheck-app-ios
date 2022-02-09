@@ -142,7 +142,9 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 			}
 		}]
 		
-		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver(updateVerificationPolicies)]
+		if AppFlavor.flavor == .verifier {
+			remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver(updateVerificationPolicies)]
+		}
 	}
 	
 	// Update the  managers with the values from the actual http response
