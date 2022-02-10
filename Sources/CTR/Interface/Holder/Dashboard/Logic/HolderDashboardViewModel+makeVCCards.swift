@@ -285,7 +285,7 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
-	static func makeDisclosurePolicyInformationBanner(
+	static func makeDisclosurePolicyInformation1GBanner(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
@@ -293,25 +293,59 @@ extension HolderDashboardViewController.Card {
 		
 		guard validityRegion == .domestic else { return [] }
 		
-		var title = ""
-		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-			title = "1G"
-		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
-			title = "3G"
-		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
-			title = "1G + 3G"
-		}
-		guard title.isNotEmpty() else { return [] }
-
 		return [
 			.disclosurePolicyInformation(
-				title: title,
-				buttonText: L.generalReadmore(),
+				title: L.holder_dashboard_only1GaccessBanner_title(),
+				buttonText: L.holder_dashboard_only1GaccessBanner_button(),
 				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapDisclosurePolicyInformationBannerMoreInformation()
+					actionHandler?.didTapDisclosurePolicyInformation1GBannerMoreInformation()
 				},
 				didTapClose: { [weak actionHandler] in
-					actionHandler?.didTapDisclosurePolicyInformationBannerClose()
+					actionHandler?.didTapDisclosurePolicyInformation1GBannerClose()
+				}
+			)
+		]
+	}
+	
+	static func makeDisclosurePolicyInformation3GBanner(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		
+		guard validityRegion == .domestic else { return [] }
+		
+		return [
+			.disclosurePolicyInformation(
+				title: L.holder_dashboard_only3GaccessBanner_title(),
+				buttonText: L.holder_dashboard_only3GaccessBanner_button(),
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapDisclosurePolicyInformation3GBannerMoreInformation()
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapDisclosurePolicyInformation3GBannerClose()
+				}
+			)
+		]
+	}
+	
+	static func makeDisclosurePolicyInformation1GAnd3GBanner(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		
+		guard validityRegion == .domestic else { return [] }
+		
+		return [
+			.disclosurePolicyInformation(
+				title: L.holder_dashboard_3Gand1GaccessBanner_title(),
+				buttonText: L.holder_dashboard_3Gand1GaccessBanner_button(),
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation()
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapDisclosurePolicyInformation1GAnd3GBannerClose()
 				}
 			)
 		]

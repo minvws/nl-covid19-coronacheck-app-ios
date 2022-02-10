@@ -27,8 +27,12 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
 	func didTapTestOnlyValidFor3GMoreInfo()
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
-	func didTapDisclosurePolicyInformationBannerMoreInformation()
-	func didTapDisclosurePolicyInformationBannerClose()
+	func didTapDisclosurePolicyInformation1GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation3GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation1GBannerClose()
+	func didTapDisclosurePolicyInformation3GBannerClose()
+	func didTapDisclosurePolicyInformation1GAnd3GBannerClose()
 }
 
 // swiftlint:disable:next type_body_length
@@ -514,7 +518,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeDisclosurePolicyInformationBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
 		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
@@ -544,6 +548,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation1GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
 		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
@@ -573,6 +578,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation1GAnd3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
 		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
@@ -697,11 +703,27 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		state.shouldShowRecommendationToAddYourBooster = false
 	}
 	
-	func didTapDisclosurePolicyInformationBannerMoreInformation() {
-		logInfo("Todo: didTapDisclosurePolicyMoreInformation")
+	func didTapDisclosurePolicyInformation1GBannerMoreInformation() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerMoreInformation")
 	}
 	
-	func didTapDisclosurePolicyInformationBannerClose() {
-		logInfo("Todo: didTapDisclosurePolicyClose")
+	func didTapDisclosurePolicyInformation3GBannerMoreInformation() {
+		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerMoreInformation")
+	}
+	
+	func didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation")
+	}
+	
+	func didTapDisclosurePolicyInformation1GBannerClose() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerClose")
+	}
+	
+	func didTapDisclosurePolicyInformation3GBannerClose() {
+		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerClose")
+	}
+	
+	func didTapDisclosurePolicyInformation1GAnd3GBannerClose() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerClose")
 	}
 }
