@@ -193,7 +193,7 @@ private class TabBarButton: UIControl {
 		label.textAlignment = .center
 		label.textColor = Theme.colors.secondaryText
 		if #available(iOS 15.0, *) {
-			label.maximumContentSizeCategory = .accessibilityLarge
+			label.maximumContentSizeCategory = .accessibilityMedium
 		}
 		return label
 	}()

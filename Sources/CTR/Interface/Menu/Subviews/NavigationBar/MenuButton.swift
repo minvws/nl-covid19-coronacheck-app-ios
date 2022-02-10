@@ -43,7 +43,7 @@ class MenuButton: UIControl {
 		label.setContentCompressionResistancePriority(.required, for: .vertical)
 		
 		if #available(iOS 15.0, *) {
-			label.maximumContentSizeCategory = .accessibilityLarge
+			label.maximumContentSizeCategory = .accessibilityMedium
 		}
 		return label
 	}()
