@@ -363,25 +363,25 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedDismissedDisclosurePolicySetter = false
-	var invokedDismissedDisclosurePolicySetterCount = 0
-	var invokedDismissedDisclosurePolicy: [DisclosurePolicy]?
-	var invokedDismissedDisclosurePolicyList = [[DisclosurePolicy]]()
-	var invokedDismissedDisclosurePolicyGetter = false
-	var invokedDismissedDisclosurePolicyGetterCount = 0
-	var stubbedDismissedDisclosurePolicy: [DisclosurePolicy]! = []
+	var invokedLastDismissedDisclosurePolicySetter = false
+	var invokedLastDismissedDisclosurePolicySetterCount = 0
+	var invokedLastDismissedDisclosurePolicy: [DisclosurePolicy]?
+	var invokedLastDismissedDisclosurePolicyList = [[DisclosurePolicy]]()
+	var invokedLastDismissedDisclosurePolicyGetter = false
+	var invokedLastDismissedDisclosurePolicyGetterCount = 0
+	var stubbedLastDismissedDisclosurePolicy: [DisclosurePolicy]! = []
 
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] {
 		set {
-			invokedDismissedDisclosurePolicySetter = true
-			invokedDismissedDisclosurePolicySetterCount += 1
-			invokedDismissedDisclosurePolicy = newValue
-			invokedDismissedDisclosurePolicyList.append(newValue)
+			invokedLastDismissedDisclosurePolicySetter = true
+			invokedLastDismissedDisclosurePolicySetterCount += 1
+			invokedLastDismissedDisclosurePolicy = newValue
+			invokedLastDismissedDisclosurePolicyList.append(newValue)
 		}
 		get {
-			invokedDismissedDisclosurePolicyGetter = true
-			invokedDismissedDisclosurePolicyGetterCount += 1
-			return stubbedDismissedDisclosurePolicy
+			invokedLastDismissedDisclosurePolicyGetter = true
+			invokedLastDismissedDisclosurePolicyGetterCount += 1
+			return stubbedLastDismissedDisclosurePolicy
 		}
 	}
 
