@@ -47,7 +47,6 @@
 "general.ok" = "Oke";
 "general.paperflow" = "papieren bewijs";
 "general.positiveTest" = "positieve test";
-"general.readmore" = "Lees meer";
 "general.recoverydate" = "hersteldatum";
 "general.retry" = "Probeer opnieuw";
 "general.testdate" = "Testdatum";
@@ -59,6 +58,7 @@
 "general.vaccinationdate" = "Vaccinatiedatum";
 "general_menu" = "Menu";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
+"general_readmore" = "Lees meer";
 "general_recoverycertificate" = "herstelbewijs";
 "general_testcertificate" = "testbewijs";
 "general_toMyOverview" = "Naar mijn bewijzen";
