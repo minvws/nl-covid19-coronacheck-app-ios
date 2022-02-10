@@ -291,7 +291,7 @@ extension HolderDashboardViewController.Card {
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
-		guard validityRegion == .domestic else { return [] }
+		guard validityRegion == .domestic, state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner else { return [] }
 		
 		return [
 			.disclosurePolicyInformation(
@@ -313,7 +313,7 @@ extension HolderDashboardViewController.Card {
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
-		guard validityRegion == .domestic else { return [] }
+		guard validityRegion == .domestic, state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner else { return [] }
 		
 		return [
 			.disclosurePolicyInformation(
@@ -335,7 +335,7 @@ extension HolderDashboardViewController.Card {
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
-		guard validityRegion == .domestic else { return [] }
+		guard validityRegion == .domestic, state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner else { return [] }
 		
 		return [
 			.disclosurePolicyInformation(
