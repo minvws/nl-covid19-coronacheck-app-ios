@@ -433,7 +433,11 @@ extension HolderDashboardViewModel.QRCard {
 								return true
 						}
 					}(),
-					validityTexts: validityTextsGenerator(greencards: greencards),
+					validityTexts: validityTextsGenerator(
+						greencards: greencards,
+						localDisclosurePolicy: localDisclosurePolicy,
+						activeDisclosurePolicy: state.activeDisclosurePolicyMode
+					),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { [weak actionHandler] in
 						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
@@ -489,7 +493,11 @@ extension HolderDashboardViewModel.QRCard {
 						let maxStackSize = 3
 						return min(maxStackSize, max(minStackSize, greencards.count))
 					}(),
-					validityTexts: validityTextsGenerator(greencards: greencards),
+					validityTexts: validityTextsGenerator(
+						greencards: greencards,
+						localDisclosurePolicy: localDisclosurePolicy,
+						activeDisclosurePolicy: state.activeDisclosurePolicyMode
+					),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { [weak actionHandler] in
 						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
@@ -509,7 +517,12 @@ extension HolderDashboardViewModel.QRCard {
 	}
 
 	// Returns a closure that, given a Date, will return the groups of text ("ValidityText") that should be shown per-origin on the QR Card.
-	private func validityTextsGenerator(greencards: [HolderDashboardViewModel.QRCard.GreenCard]) -> (Date) -> [HolderDashboardViewController.ValidityText] {
+	private func validityTextsGenerator(
+		greencards: [HolderDashboardViewModel.QRCard.GreenCard],
+		localDisclosurePolicy: DisclosurePolicy, // the mode that the specific card being created is in
+		activeDisclosurePolicy: HolderDashboardViewModel.DisclosurePolicyMode // the global active disclosure policy
+	) -> (Date) -> [HolderDashboardViewController.ValidityText] {
+		
 		return { now in
 			return greencards
 				// Make a list of all origins paired with their greencard
@@ -522,6 +535,25 @@ extension HolderDashboardViewModel.QRCard {
 						return lhs.1.eventDate > rhs.1.eventDate
 					}
 					return lhs.1.customSortIndex < rhs.1.customSortIndex
+				}
+				.filter { (greenCard: HolderDashboardViewModel.QRCard.GreenCard, origin: GreenCard.Origin) in
+					guard case .netherlands = self.region else { return true } // can just skip this logic for DCCs
+					
+					// some local disclosure policies cause origins to be hidden, depending on the active disclosure policy:
+					// print("🎏 Filtering origin: [active: .\(activeDisclosurePolicy), local: .\(localDisclosurePolicy), origin: .\(origin.type)]")
+					switch (activeDisclosurePolicy, localDisclosurePolicy, origin.type) {
+						
+						// only tests should ever be shown on a 1G card:
+						case (_, .policy1G, .test): return true
+						case (_, .policy1G, _): return false
+						
+						// no tests should be shown on 3G card whilst in 1G mode
+						case (.exclusive1G, .policy3G, .test): return false
+						case (.exclusive1G, .policy3G, _): return true
+						
+						// allow everything else by default
+						default: return true
+					}
 				}
 				// Map to the ValidityText
 				.map { greencard, origin -> HolderDashboardViewController.ValidityText in
