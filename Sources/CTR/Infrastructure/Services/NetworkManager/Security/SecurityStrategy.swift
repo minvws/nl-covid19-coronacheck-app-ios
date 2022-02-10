@@ -55,9 +55,10 @@ struct SecurityCheckerFactory {
 
 			trustedNames = [] // No trusted name check.
 			if let sslCertificate = provider.getSSLCertificate() {
-				// Only trust the certificate from the config_providers.
-				trustedCertificates = [sslCertificate]
+				trustedCertificates.append(sslCertificate)
 			}
+			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
+			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
 			trustedSigners.append(TrustConfiguration.sdNRootCAG3Certificate)
 			trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
 			checkForAuthorityKeyIdentifierAndNameAndSuffix = false
