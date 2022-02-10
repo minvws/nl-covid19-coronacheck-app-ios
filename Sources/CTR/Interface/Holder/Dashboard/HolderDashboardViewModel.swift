@@ -474,14 +474,9 @@ final class HolderDashboardViewModel: Logging {
 	fileprivate func recalculateDisclosureBannerState() {
 
 		let lastDismissedDisclosurePolicy = Current.userSettings.lastDismissedDisclosurePolicy
-				
-		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner =
-		lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G] && state.activeDisclosurePolicyMode == .exclusive1G
-		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner =
-		lastDismissedDisclosurePolicy != [DisclosurePolicy.policy3G] && state.activeDisclosurePolicyMode == .exclusive3G
-		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner =
-		!(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G)) &&
-		state.activeDisclosurePolicyMode == .combined1gAnd3g
+		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G]
+		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy3G]
+		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner = !(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G))
 		
 		logInfo("lastDismissedDisclosurePolicies: \(lastDismissedDisclosurePolicy)")
 		logInfo("shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: \(state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner)")
