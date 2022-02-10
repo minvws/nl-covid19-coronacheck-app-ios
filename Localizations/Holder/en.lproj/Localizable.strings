@@ -677,6 +677,7 @@
 "holder_negativetest_ggd_title" = "Retrieve test result";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "About your visitor pass";
+"holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid test certificate, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Dutch QR code";
@@ -700,7 +701,6 @@
 "new.terms.highlights" = "<b>This has changed</b><ul><li>Initials and day and month of birth are included in the QR code</li><li>This data is displayed on the Scanner app for ID verification purposes</li></ul>";
 /* MARK: - New Terms */
 "new.terms.title" = "We've updated our policy";
-"qr_explanation_description_domestic_2G" = "<p>Your Dutch QR code says you have a valid test certificate, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "recommended.updateApp.action.cancel" = "I'll do it later";
 "recommended.updateApp.action.ok" = "Update now";
 "recommended.updateApp.subtitle" = "Want to prevent having to update when you're entering a place, or crossing the border? Then update to a newer version now.";

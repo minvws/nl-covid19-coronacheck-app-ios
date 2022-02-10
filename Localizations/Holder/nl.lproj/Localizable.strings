@@ -693,6 +693,7 @@
 "holder_negativetest_ggd_title" = "Testuitslag ophalen";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Je bezoekersbewijs is alleen in Nederland geldig. Wil je naar een ander land? Check de regels van het land dat je wilt bezoeken.</p>\n<p><b>Meer weten?</b><br />Lees meer op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "Over je bezoekersbewijs";
+"holder_qr_explanation_description_domestic_1G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig testbewijs hebt en minimale gegevens.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Nederlandse QR-code";
@@ -716,7 +717,6 @@
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Initialen en geboortedag en -maand zijn opgenomen in QR-code</li><li>Deze gegevens worden getoond op de Scanner-app voor controle van het identiteitsbewijs</li></ul>";
 /* MARK: - New Terms */
 "new.terms.title" = "Onze voorwaarden zijn vernieuwd";
-"qr_explanation_description_domestic_2G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig testbewijs hebt en minimale gegevens.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "recommended.updateApp.action.cancel" = "Doe ik later";
 "recommended.updateApp.action.ok" = "Nu updaten";
 "recommended.updateApp.subtitle" = "Voorkomen dat je moet updaten als je ergens naar binnen wilt of de grens over gaat? Update nu al naar een nieuwere versie.";

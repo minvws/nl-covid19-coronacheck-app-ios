@@ -146,7 +146,6 @@ class ShowQRViewModelTests: XCTestCase {
 	func test_moreInformation_domesticGreenCard_validCredential_verificationPolicyEnabled_lowRisk_vaccination() throws {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,
@@ -186,7 +185,6 @@ class ShowQRViewModelTests: XCTestCase {
 	func test_moreInformation_domesticGreenCard_validCredential_verificationPolicyEnabled_lowRisk_test() throws {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,
@@ -206,7 +204,7 @@ class ShowQRViewModelTests: XCTestCase {
 			firstNameInitial: "R",
 			lastNameInitial: "P",
 			credentialVersion: "2",
-			category: "3",
+			category: "1",
 			specimen: "0",
 			paperProof: "0",
 			validFrom: "\(Date())",
@@ -219,13 +217,12 @@ class ShowQRViewModelTests: XCTestCase {
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrDomesticAboutTitle()
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.body) == L.qr_explanation_description_domestic_2G("R P 30 MEI")
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.body) == L.holder_qr_explanation_description_domestic_1G("R P 30 MEI")
 	}
 
 	func test_moreInformation_domesticGreenCard_validCredential_verificationPolicyEnabled_higRisk() throws {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = true
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,
@@ -263,7 +260,6 @@ class ShowQRViewModelTests: XCTestCase {
 	func test_moreInformation_domesticGreenCard_validCredential_verificationPolicyDisabled() throws {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,

@@ -92,16 +92,11 @@ extension QRCard {
 				
 				// -- Domestic Tests --
 					
-				case (.validityHasBegun, .netherlands(let credentialsEvaluator), .test):
+				case (.validityHasBegun, .netherlands, .test):
 					return validityText_hasBegun_domestic_test(
 						expirationTime: origin.expirationTime,
 						expiryIsBeyondThreeYearsFromNow: origin.expiryIsBeyondThreeYearsFromNow(now: now),
-						isCurrentlyValid: origin.isCurrentlyValid(now: now),
-						verificationPolicy: credentialsEvaluator(greencard, now)?.verificationPolicy,
-						shouldShowRiskLevel: greencard.hasValid3GTestWithoutAValidVaccineOrAValidRecovery(
-							credentialEvaluator: credentialsEvaluator,
-							now: now
-					   )
+						isCurrentlyValid: origin.isCurrentlyValid(now: now)
 					)
 					
 				case (.validityHasNotYetBegun, .netherlands, .test):

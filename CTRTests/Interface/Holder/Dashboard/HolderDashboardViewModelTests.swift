@@ -1163,63 +1163,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(nowValidityTexts[0].lines).to(haveCount(2))
 			expect(nowValidityTexts[0].kind) == .current
 			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
-			expect(nowValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02 voor 3G-toegang"
-
-			// Exercise the validityText with different sample dates:
-			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
-			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
-			expect(futureValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02 voor 3G-toegang"
-
-			// check didTapViewQR
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
-			didTapViewQR()
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
-
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))).to(beNil())
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(19 * hours * fromNow))) == "Verloopt over 4 uur"
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
-		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
-	}
-
-	func test_datasourceupdate_singleCurrentlyValidDomesticTest_verificationPolicyDisabled() {
-
-		// Arrange
-		environmentSpies.featureFlagManagerSpy.stubbedIsVerificationPolicyEnabledResult = false
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
-
-		let qrCards = [
-			HolderDashboardViewModel.QRCard(
-				region: .netherlands(evaluateCredentialAttributes: { _, _ in
-					DomesticCredentialAttributes.sample(category: "3")
-				}),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneHourAgo_test_expires23HoursFromNow()])],
-				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
-			)
-		]
-
-		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
-
-		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(4))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
-			expect(message) == L.holderDashboardIntroDomestic()
-			expect(buttonTitle).to(beNil())
-		}))
-		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
-			// check isLoading
-			expect(isLoading) == false
-
-			let nowValidityTexts = validityTextEvaluator(now)
-			expect(nowValidityTexts).to(haveCount(1))
-			expect(nowValidityTexts[0].lines).to(haveCount(2))
-			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02"
 
 			// Exercise the validityText with different sample dates:
@@ -1234,10 +1177,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(19 * hours * fromNow))) == "Verloopt over 4 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
 		}))
-		expect(self.sut.domesticCards[3]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 
 	func test_datasourceupdate_singleCurrentlyValidDomesticRecovery() {

@@ -192,7 +192,7 @@ class ShowQRViewModel: Logging {
 		}
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
-			showDomesticDetails(data)
+			showDomesticDetails(data, greenCard: greenCard)
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			showInternationalDetails(data)
 		}
@@ -221,12 +221,12 @@ class ShowQRViewModel: Logging {
 		}
 	}
 
-	private func showDomesticDetails(_ data: Data) {
+	private func showDomesticDetails(_ data: Data, greenCard: GreenCard) {
 		
 		if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {
 			coordinator?.presentInformationPage(
 				title: L.holderShowqrDomesticAboutTitle(),
-				body: getDomesticDetailsBody(domesticCredentialAttributes),
+				body: getDomesticDetailsBody(domesticCredentialAttributes, greenCard: greenCard),
 				hideBodyForScreenCapture: true,
 				openURLsInApp: true
 			)
@@ -235,12 +235,20 @@ class ShowQRViewModel: Logging {
 		}
 	}
 	
-	private func getDomesticDetailsBody(_ domesticCredentialAttributes: DomesticCredentialAttributes) -> String {
+	private func getDomesticDetailsBody(_ domesticCredentialAttributes: DomesticCredentialAttributes, greenCard: GreenCard) -> String {
 		
 		let identity = domesticCredentialAttributes
 			.mapIdentity(months: String.shortMonths)
 			.map({ $0.isEmpty ? "_" : $0 })
 			.joined(separator: " ")
+		
+		// Show different body when you only have a test with category 1G.
+		if let origins = greenCard.castOrigins(),
+		   origins.contains(where: { $0.type == OriginType.test.rawValue }),
+		   domesticCredentialAttributes.disclosurePolicy == .policy1G {
+			return L.holder_qr_explanation_description_domestic_1G(identity)
+		}
+		
 		return L.holderShowqrDomesticAboutMessage(identity)
 	}
 
