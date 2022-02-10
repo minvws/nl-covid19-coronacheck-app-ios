@@ -473,7 +473,7 @@ final class HolderDashboardViewModel: Logging {
 	
 	fileprivate func recalculateDisclosureBannerState() {
 
-		let lastDismissedDisclosurePolicy = Current.userSettings.dismissedDisclosurePolicy
+		let lastDismissedDisclosurePolicy = Current.userSettings.lastDismissedDisclosurePolicy
 				
 		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner =
 		lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G] && state.activeDisclosurePolicyMode == .exclusive1G
@@ -798,19 +798,19 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapDisclosurePolicyInformation1GBannerClose() {
 		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerClose")
-		Current.userSettings.dismissedDisclosurePolicy = [DisclosurePolicy.policy1G]
+		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G]
 		recalculateDisclosureBannerState()
 	}
 	
 	func didTapDisclosurePolicyInformation3GBannerClose() {
 		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerClose")
-		Current.userSettings.dismissedDisclosurePolicy = [DisclosurePolicy.policy3G]
+		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy3G]
 		recalculateDisclosureBannerState()
 	}
 	
 	func didTapDisclosurePolicyInformation1GWith3GBannerClose() {
 		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerClose")
-		Current.userSettings.dismissedDisclosurePolicy = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
+		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
 		recalculateDisclosureBannerState()
 	}
 }

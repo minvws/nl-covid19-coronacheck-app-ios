@@ -371,7 +371,7 @@ class UserSettingsSpy: UserSettingsProtocol {
 	var invokedDismissedDisclosurePolicyGetterCount = 0
 	var stubbedDismissedDisclosurePolicy: [DisclosurePolicy]! = []
 
-	var dismissedDisclosurePolicy: [DisclosurePolicy] {
+	var lastDismissedDisclosurePolicy: [DisclosurePolicy] {
 		set {
 			invokedDismissedDisclosurePolicySetter = true
 			invokedDismissedDisclosurePolicySetterCount += 1

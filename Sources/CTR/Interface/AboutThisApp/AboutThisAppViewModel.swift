@@ -229,7 +229,7 @@ class AboutThisAppViewModel: Logging {
 	private func setDisclosurePolicy(_ newPolicy: [String], message: String) {
 		
 		Current.userSettings.overrideDisclosurePolicies = newPolicy
-		Current.userSettings.dismissedDisclosurePolicy = []
+		Current.userSettings.lastDismissedDisclosurePolicy = []
 		
 		alert = AlertContent(
 			title: "Disclosure policy updated",
