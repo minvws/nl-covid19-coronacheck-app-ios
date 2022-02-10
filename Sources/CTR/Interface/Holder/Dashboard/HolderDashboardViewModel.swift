@@ -29,10 +29,10 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 	func didTapDisclosurePolicyInformation1GBannerMoreInformation()
 	func didTapDisclosurePolicyInformation3GBannerMoreInformation()
-	func didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation()
 	func didTapDisclosurePolicyInformation1GBannerClose()
 	func didTapDisclosurePolicyInformation3GBannerClose()
-	func didTapDisclosurePolicyInformation1GAnd3GBannerClose()
+	func didTapDisclosurePolicyInformation1GWith3GBannerClose()
 }
 
 // swiftlint:disable:next type_body_length
@@ -91,6 +91,10 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowAddCertificateFooter: Bool {
 			qrCards.isEmpty && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
+		
+		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = true
+		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = true
+		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = true
 		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -458,10 +462,10 @@ final class HolderDashboardViewModel: Logging {
 	}
 	
 	fileprivate func recalculateDisclosureBannerState() {
-		// placeholder.
-		// state.shouldShow3gOnlyDisclosurePolicyBecameActiveBanner
-		// state.shouldShow1gOnlyDisclosurePolicyBecameActiveBanner
-		// state.shouldShow3gWith1gDisclosurePolicyBecameActiveBanner
+
+		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner = true
+		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner = true
+		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner = true
 	}
 	
 	// MARK: - NSNotification
@@ -594,7 +598,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeDisclosurePolicyInformation1GAnd3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation1GWith3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
 		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
@@ -721,25 +725,34 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapDisclosurePolicyInformation1GBannerMoreInformation() {
 		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerMoreInformation")
+		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+		openUrl(url)
 	}
 	
 	func didTapDisclosurePolicyInformation3GBannerMoreInformation() {
 		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerMoreInformation")
+		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+		openUrl(url)
 	}
 	
-	func didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation() {
+	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation() {
 		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation")
+		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+		openUrl(url)
 	}
 	
 	func didTapDisclosurePolicyInformation1GBannerClose() {
 		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerClose")
+		Current.userSettings.dismissedDisclosrePolicies = [DisclosurePolicy.policy1G]
 	}
 	
 	func didTapDisclosurePolicyInformation3GBannerClose() {
 		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerClose")
+		Current.userSettings.dismissedDisclosrePolicies = [DisclosurePolicy.policy3G]
 	}
 	
-	func didTapDisclosurePolicyInformation1GAnd3GBannerClose() {
+	func didTapDisclosurePolicyInformation1GWith3GBannerClose() {
 		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerClose")
+		Current.userSettings.dismissedDisclosrePolicies = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
 	}
 }

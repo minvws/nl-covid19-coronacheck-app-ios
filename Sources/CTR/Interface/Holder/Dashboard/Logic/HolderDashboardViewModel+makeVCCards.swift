@@ -329,7 +329,7 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
-	static func makeDisclosurePolicyInformation1GAnd3GBanner(
+	static func makeDisclosurePolicyInformation1GWith3GBanner(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
@@ -342,10 +342,10 @@ extension HolderDashboardViewController.Card {
 				title: L.holder_dashboard_3Gand1GaccessBanner_title(),
 				buttonText: L.holder_dashboard_3Gand1GaccessBanner_button(),
 				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation()
+					actionHandler?.didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation()
 				},
 				didTapClose: { [weak actionHandler] in
-					actionHandler?.didTapDisclosurePolicyInformation1GAnd3GBannerClose()
+					actionHandler?.didTapDisclosurePolicyInformation1GWith3GBannerClose()
 				}
 			)
 		]
