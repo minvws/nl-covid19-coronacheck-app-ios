@@ -55,7 +55,7 @@ extension HolderDashboardViewController.Card {
 		return [
 			.deviceHasClockDeviation(
 				message: L.holderDashboardClockDeviationDetectedMessage(),
-				callToActionButtonText: L.generalReadmore(),
+				callToActionButtonText: L.general_readmore(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapDeviceHasClockDeviationMoreInfo()
 				}
@@ -99,7 +99,7 @@ extension HolderDashboardViewController.Card {
 				if case .vaccination = expiredQR.type, case .domestic = expiredQR.region {
 					return .expiredVaccinationQR(
 						message: message,
-						callToActionButtonText: L.generalReadmore(),
+						callToActionButtonText: L.general_readmore(),
 						didTapCallToAction: { [weak actionHandler] in
 							actionHandler?.didTapExpiredDomesticVaccinationQRMoreInfo()
 						},
@@ -178,7 +178,7 @@ extension HolderDashboardViewController.Card {
 		
 		return [HolderDashboardViewController.Card.testOnlyValidFor3G(
 			message: L.holder_my_overview_3g_test_validity_card(),
-			callToActionButtonText: L.generalReadmore(),
+			callToActionButtonText: L.general_readmore(),
 			didTapCallToAction: { [weak actionHandler] in
 				actionHandler?.didTapTestOnlyValidFor3GMoreInfo()
 			})
@@ -199,7 +199,7 @@ extension HolderDashboardViewController.Card {
 			.map { originType, message in
 				return .originNotValidInThisRegion(
 					message: message,
-					callToActionButtonText: L.generalReadmore(),
+					callToActionButtonText: L.general_readmore(),
 					didTapCallToAction: { [weak actionHandler] in
 						actionHandler?.didTapOriginNotValidInThisRegionMoreInfo(
 							originType: originType,
@@ -296,7 +296,7 @@ extension HolderDashboardViewController.Card {
 		return [
 			.disclosurePolicyInformation(
 				title: L.holder_dashboard_only1GaccessBanner_title(),
-				buttonText: L.holder_dashboard_only1GaccessBanner_button(),
+				buttonText: L.general_readmore(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapDisclosurePolicyInformation1GBannerMoreInformation()
 				},
@@ -318,7 +318,7 @@ extension HolderDashboardViewController.Card {
 		return [
 			.disclosurePolicyInformation(
 				title: L.holder_dashboard_only3GaccessBanner_title(),
-				buttonText: L.holder_dashboard_only3GaccessBanner_button(),
+				buttonText: L.general_readmore(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapDisclosurePolicyInformation3GBannerMoreInformation()
 				},
@@ -340,7 +340,7 @@ extension HolderDashboardViewController.Card {
 		return [
 			.disclosurePolicyInformation(
 				title: L.holder_dashboard_3Gand1GaccessBanner_title(),
-				buttonText: L.holder_dashboard_3Gand1GaccessBanner_button(),
+				buttonText: L.general_readmore(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation()
 				},
@@ -362,7 +362,7 @@ extension HolderDashboardViewController.Card {
 		return [
 			.vaccinationAssessmentInvalidOutsideNL(
 				title: L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title(),
-				buttonText: L.generalReadmore(),
+				buttonText: L.general_readmore(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 				}
