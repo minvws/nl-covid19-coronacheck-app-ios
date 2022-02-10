@@ -1148,13 +1148,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(5))
+		expect(self.sut.domesticCards).toEventually(haveCount(4))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroDomestic()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beTestOnlyValidFor3GCard())
-		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { title, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1182,7 +1181,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
 
 	func test_datasourceupdate_singleCurrentlyValidDomesticRecovery() {
@@ -3123,17 +3122,6 @@ private func beRecommendCoronaMelderCard() -> Predicate<HolderDashboardViewContr
 	return Predicate.define("be .beRecommendCoronaMelderCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case .recommendCoronaMelder = actual {
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
-private func beTestOnlyValidFor3GCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .beTestOnlyValidFor3GCard with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .testOnlyValidFor3G(message2, callToActionButtonText, didTapCallToAction) = actual {
-			test(message2, callToActionButtonText, didTapCallToAction)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)

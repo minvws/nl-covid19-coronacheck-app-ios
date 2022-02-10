@@ -183,14 +183,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount += 1
 	}
 
-	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = false
-	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount = 0
-
-	func userWishesMoreInfoAboutTestOnlyValidFor3G() {
-		invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = true
-		invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount += 1
-	}
-
 	var invokedUserWishesMoreInfoAboutOutdatedConfig = false
 	var invokedUserWishesMoreInfoAboutOutdatedConfigCount = 0
 	var invokedUserWishesMoreInfoAboutOutdatedConfigParameters: (validUntil: String, Void)?
