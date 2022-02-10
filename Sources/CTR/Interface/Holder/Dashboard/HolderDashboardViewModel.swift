@@ -475,12 +475,12 @@ final class HolderDashboardViewModel: Logging {
 		let lastDismissedDisclosurePolicies = Current.userSettings.dismissedDisclosurePolicies
 				
 		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner =
-		lastDismissedDisclosurePolicies != [DisclosurePolicy.policy1G] && Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled()
+		lastDismissedDisclosurePolicies != [DisclosurePolicy.policy1G] && state.activeDisclosurePolicyMode == .exclusive1G
 		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner =
-		lastDismissedDisclosurePolicies != [DisclosurePolicy.policy3G] && Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled()
+		lastDismissedDisclosurePolicies != [DisclosurePolicy.policy3G] && state.activeDisclosurePolicyMode == .exclusive3G
 		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner =
 		!(lastDismissedDisclosurePolicies.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicies.contains(DisclosurePolicy.policy3G)) &&
-		Current.featureFlagManager.areBothDisclosurePoliciesEnabled()
+		state.activeDisclosurePolicyMode == .combined1gAnd3g
 		
 //		logInfo("lastDismissedDisclosurePolicies: \(lastDismissedDisclosurePolicies)")
 //		logInfo("shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: \(state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner)")
