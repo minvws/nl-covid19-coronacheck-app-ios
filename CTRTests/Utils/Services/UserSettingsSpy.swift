@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -359,6 +360,50 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetter = true
 			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount += 1
 			return stubbedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard
+		}
+	}
+
+	var invokedConfigDisclosurePoliciesSetter = false
+	var invokedConfigDisclosurePoliciesSetterCount = 0
+	var invokedConfigDisclosurePolicies: [DisclosurePolicy]?
+	var invokedConfigDisclosurePoliciesList = [[DisclosurePolicy]]()
+	var invokedConfigDisclosurePoliciesGetter = false
+	var invokedConfigDisclosurePoliciesGetterCount = 0
+	var stubbedConfigDisclosurePolicies: [DisclosurePolicy]! = []
+
+	var configDisclosurePolicies: [DisclosurePolicy] {
+		set {
+			invokedConfigDisclosurePoliciesSetter = true
+			invokedConfigDisclosurePoliciesSetterCount += 1
+			invokedConfigDisclosurePolicies = newValue
+			invokedConfigDisclosurePoliciesList.append(newValue)
+		}
+		get {
+			invokedConfigDisclosurePoliciesGetter = true
+			invokedConfigDisclosurePoliciesGetterCount += 1
+			return stubbedConfigDisclosurePolicies
+		}
+	}
+
+	var invokedDismissedDisclosurePoliciesSetter = false
+	var invokedDismissedDisclosurePoliciesSetterCount = 0
+	var invokedDismissedDisclosurePolicies: [DisclosurePolicy]?
+	var invokedDismissedDisclosurePoliciesList = [[DisclosurePolicy]]()
+	var invokedDismissedDisclosurePoliciesGetter = false
+	var invokedDismissedDisclosurePoliciesGetterCount = 0
+	var stubbedDismissedDisclosurePolicies: [DisclosurePolicy]! = []
+
+	var dismissedDisclosurePolicies: [DisclosurePolicy] {
+		set {
+			invokedDismissedDisclosurePoliciesSetter = true
+			invokedDismissedDisclosurePoliciesSetterCount += 1
+			invokedDismissedDisclosurePolicies = newValue
+			invokedDismissedDisclosurePoliciesList.append(newValue)
+		}
+		get {
+			invokedDismissedDisclosurePoliciesGetter = true
+			invokedDismissedDisclosurePoliciesGetterCount += 1
+			return stubbedDismissedDisclosurePolicies
 		}
 	}
 

@@ -736,20 +736,20 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapDisclosurePolicyInformation1GBannerMoreInformation() {
 		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerMoreInformation")
-		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
-		openUrl(url)
+//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+//		openUrl(url)
 	}
 	
 	func didTapDisclosurePolicyInformation3GBannerMoreInformation() {
 		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerMoreInformation")
-		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
-		openUrl(url)
+//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+//		openUrl(url)
 	}
 	
 	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation() {
 		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation")
-		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
-		openUrl(url)
+//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+//		openUrl(url)
 	}
 	
 	func didTapDisclosurePolicyInformation1GBannerClose() {
