@@ -30,11 +30,15 @@ final class TestData {
 	static let vacJ1M1 = TestPerson(bsn: "999990366", doseNL: 2, doseIntl: ["1/1", "2/1"], validFromNL: -30) // 1 janssen + 1 moderna
 	static let vacJ1M2 = TestPerson(bsn: "999990378", doseNL: 3, doseIntl: ["1/1", "2/1", "3/1"], validFromNL: -30) // 1 janssen + 2 moderna
 	static let vacJ2M1 = TestPerson(bsn: "999990408", doseNL: 3, doseIntl: ["1/1", "2/1", "3/1"], validFromNL: -30) // 2 janssen + 1 moderna
-	static let vacP2PersonalStatementVacElsewhere = TestPerson(bsn: "999992934", doseNL: 2, doseIntl: ["1/1", "2/1"], validFromNL: -30) // 2 pfizer + personal statement + vaccination elsewhere
-	static let vacP2MedicalStatementVacElsewhere = TestPerson(bsn: "999992958", doseNL: 2, doseIntl: ["1/1", "2/1"], validFromNL: -30) // 2 pfizer + medical statement + vaccination elsewhere
-	static let vacP2PersonalStatementPriorEvent = TestPerson(bsn: "999993136", doseNL: 2, doseIntl: ["1/2", "2/2"], validUntilNL: 240) // 2 pfizer + personal statement + prior event
-	static let vacP2MedicalStatementPriorEvent = TestPerson(bsn: "999993148", doseNL: 2, doseIntl: ["1/2", "2/2"], validUntilNL: 240) // 2 pfizer + medical statement + prior event
 	
+	// Vaccinations - vaccination elsewhere
+	static let vacP1PersonalStatementVacElsewhere = TestPerson(bsn: "999993501", doseNL: 1, doseIntl: ["1/1"], validUntilNL: 240) // 1 pfizer + personal statement + vaccination elsewhere
+	static let vacP1PersonalStatementPriorEvent = TestPerson(bsn: "999993525", doseNL: 1, doseIntl: ["1/1"], validUntilNL: 240) // 1 pfizer + personal statement + prior event
+	static let vacP2PersonalStatementVacElsewhereBoth = TestPerson(bsn: "999992934", doseNL: 2, doseIntl: ["1/1", "2/1"], validFromNL: -30) // 2 pfizer + personal statement + vaccination elsewhere both
+	static let vacP2PersonalStatementPriorEventBoth = TestPerson(bsn: "999993136", doseNL: 2, doseIntl: ["1/2", "2/2"], validUntilNL: 240) // 2 pfizer + personal statement + prior event both
+	static let vacP2PersonalStatementVacElsewhereFirst = TestPerson(bsn: "999993537", doseNL: 2, doseIntl: ["1/1", "2/1"], validFromNL: -30) // 2 pfizer + personal statement + vaccination elsewhere first
+	static let vacP2PersonalStatementPriorEventFirst = TestPerson(bsn: "999993550", doseNL: 2, doseIntl: ["1/2", "2/2"], validUntilNL: 240) // 2 pfizer + personal statement + prior event first
+
 	// Vaccinations - personal statement
 	static let vacP1PersonalStatement = TestPerson(bsn: "999990457", doseNL: 1, doseIntl: ["1/1"], validFromNL: -16, validUntilNL: 240) // 1 pfizer + personal statement 'recovery'
 	static let vacP2PersonalStatement = TestPerson(bsn: "999990469", doseNL: 2, doseIntl: ["1/1", "2/1"], validFromNL: -30) // 2 pfizer + personal statement 'recovery'
