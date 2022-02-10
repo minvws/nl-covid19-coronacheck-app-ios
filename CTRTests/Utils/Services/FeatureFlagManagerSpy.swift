@@ -50,16 +50,6 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedIsVisitorPassEnabledResult
 	}
 
-	var invokedIsVerificationPolicyEnabled = false
-	var invokedIsVerificationPolicyEnabledCount = 0
-	var stubbedIsVerificationPolicyEnabledResult: Bool! = false
-
-	func isVerificationPolicyEnabled() -> Bool {
-		invokedIsVerificationPolicyEnabled = true
-		invokedIsVerificationPolicyEnabledCount += 1
-		return stubbedIsVerificationPolicyEnabledResult
-	}
-
 	var invokedAreMultipleVerificationPoliciesEnabled = false
 	var invokedAreMultipleVerificationPoliciesEnabledCount = 0
 	var stubbedAreMultipleVerificationPoliciesEnabledResult: Bool! = false
@@ -80,33 +70,33 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedIs1GVerificationPolicyEnabledResult
 	}
 
-	var invokedAreMultipleDisclosurePoliciesEnabled = false
-	var invokedAreMultipleDisclosurePoliciesEnabledCount = 0
-	var stubbedAreMultipleDisclosurePoliciesEnabledResult: Bool! = false
-
-	func areBothDisclosurePoliciesEnabled() -> Bool {
-		invokedAreMultipleDisclosurePoliciesEnabled = true
-		invokedAreMultipleDisclosurePoliciesEnabledCount += 1
-		return stubbedAreMultipleDisclosurePoliciesEnabledResult
-	}
-
-	var invokedIs1GDisclosurePolicyEnabled = false
-	var invokedIs1GDisclosurePolicyEnabledCount = 0
-	var stubbedIs1GDisclosurePolicyEnabledResult: Bool! = false
+	var invokedIs1GExclusiveDisclosurePolicyEnabled = false
+	var invokedIs1GExclusiveDisclosurePolicyEnabledCount = 0
+	var stubbedIs1GExclusiveDisclosurePolicyEnabledResult: Bool! = false
 
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
-		invokedIs1GDisclosurePolicyEnabled = true
-		invokedIs1GDisclosurePolicyEnabledCount += 1
-		return stubbedIs1GDisclosurePolicyEnabledResult
+		invokedIs1GExclusiveDisclosurePolicyEnabled = true
+		invokedIs1GExclusiveDisclosurePolicyEnabledCount += 1
+		return stubbedIs1GExclusiveDisclosurePolicyEnabledResult
 	}
 
-	var invokedIs3GDisclosurePolicyEnabled = false
-	var invokedIs3GDisclosurePolicyEnabledCount = 0
-	var stubbedIs3GDisclosurePolicyEnabledResult: Bool! = false
+	var invokedIs3GExclusiveDisclosurePolicyEnabled = false
+	var invokedIs3GExclusiveDisclosurePolicyEnabledCount = 0
+	var stubbedIs3GExclusiveDisclosurePolicyEnabledResult: Bool! = false
 
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
-		invokedIs3GDisclosurePolicyEnabled = true
-		invokedIs3GDisclosurePolicyEnabledCount += 1
-		return stubbedIs3GDisclosurePolicyEnabledResult
+		invokedIs3GExclusiveDisclosurePolicyEnabled = true
+		invokedIs3GExclusiveDisclosurePolicyEnabledCount += 1
+		return stubbedIs3GExclusiveDisclosurePolicyEnabledResult
+	}
+
+	var invokedAreBothDisclosurePoliciesEnabled = false
+	var invokedAreBothDisclosurePoliciesEnabledCount = 0
+	var stubbedAreBothDisclosurePoliciesEnabledResult: Bool! = false
+
+	func areBothDisclosurePoliciesEnabled() -> Bool {
+		invokedAreBothDisclosurePoliciesEnabled = true
+		invokedAreBothDisclosurePoliciesEnabledCount += 1
+		return stubbedAreBothDisclosurePoliciesEnabledResult
 	}
 }

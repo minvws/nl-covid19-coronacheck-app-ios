@@ -20,7 +20,6 @@ protocol FeatureFlagManaging {
 	func isVisitorPassEnabled() -> Bool
 	
 	// Verifier
-	func isVerificationPolicyEnabled() -> Bool
 	func areMultipleVerificationPoliciesEnabled() -> Bool
 	func is1GVerificationPolicyEnabled() -> Bool
 	
@@ -66,30 +65,6 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	func isVisitorPassEnabled() -> Bool {
 		
 		return remoteConfigManager.storedConfiguration.visitorPassEnabled ?? false
-	}
-	
-	func isVerificationPolicyEnabled() -> Bool {
-		
-		let configuration = remoteConfigManager.storedConfiguration
-		
-		guard let versionSupplier = versionSupplier,
-			  let verificationPolicyVersion = configuration.verificationPolicyVersion else { return false }
-		
-		guard verificationPolicyVersion != "0" else {
-			// "0" means verification Policy is disabled
-			return false
-		}
-		
-		let requiredVersion = verificationPolicyVersion.fullVersionString()
-		let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
-		
-		guard requiredVersion.compare(currentVersion, options: .numeric) != .orderedDescending else {
-			// Current version is lower than the required version -> Disabled
-			return false
-		}
-		
-		// Current version is higher or equal to the required version -> Enabled
-		return true
 	}
 	
 	func areMultipleVerificationPoliciesEnabled() -> Bool {

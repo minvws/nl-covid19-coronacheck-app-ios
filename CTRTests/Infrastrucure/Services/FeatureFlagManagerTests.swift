@@ -28,66 +28,6 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		sut = FeatureFlagManager(versionSupplier: appVersionSupplierSpy, remoteConfigManager: remoteConfigManagerSpy)
 	}
-	
-	func test_isVerificationPolicyEnabled_remoteConfig_nil() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicyVersion = nil
-		
-		// When
-		let enabled = sut.isVerificationPolicyEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
-	func test_isVerificationPolicyEnabled_remoteConfig_disabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicyVersion = "0"
-		
-		// When
-		let enabled = sut.isVerificationPolicyEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
-	func test_isVerificationPolicyEnabled_remoteConfig_lowerThanCurrentVersion() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicyVersion = "2.5.0"
-		
-		// When
-		let enabled = sut.isVerificationPolicyEnabled()
-		
-		// Then
-		expect(enabled) == true
-	}
-	
-	func test_isVerificationPolicyEnabled_remoteConfig_equalToCurrentVersion() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicyVersion = "2.7.0"
-		
-		// When
-		let enabled = sut.isVerificationPolicyEnabled()
-		
-		// Then
-		expect(enabled) == true
-	}
-	
-	func test_isVerificationPolicyEnabled_remoteConfig_higherThanCurrentVersion() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicyVersion = "3.0.0"
-		
-		// When
-		let enabled = sut.isVerificationPolicyEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
 		
 	func test_isNewValidityInfoBannerEnabled_remoteConfig_enabled() {
 		

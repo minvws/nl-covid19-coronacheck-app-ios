@@ -92,16 +92,11 @@ extension QRCard {
 				
 				// -- Domestic Tests --
 					
-				case (.validityHasBegun, .netherlands(let credentialsEvaluator), .test):
+				case (.validityHasBegun, .netherlands, .test):
 					return validityText_hasBegun_domestic_test(
 						expirationTime: origin.expirationTime,
 						expiryIsBeyondThreeYearsFromNow: origin.expiryIsBeyondThreeYearsFromNow(now: now),
-						isCurrentlyValid: origin.isCurrentlyValid(now: now),
-						verificationPolicy: credentialsEvaluator(greencard, now)?.verificationPolicy,
-						shouldShowRiskLevel: greencard.hasValid3GTestWithoutAValidVaccineOrAValidRecovery(
-							credentialEvaluator: credentialsEvaluator,
-							now: now
-					   )
+						isCurrentlyValid: origin.isCurrentlyValid(now: now)
 					)
 					
 				case (.validityHasNotYetBegun, .netherlands, .test):
@@ -245,23 +240,13 @@ private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondT
 	)
 }
 
-private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool, verificationPolicy: VerificationPolicy?, shouldShowRiskLevel: Bool) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool) -> HolderDashboardViewController.ValidityText {
 	let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
 	let formatter = HolderDashboardViewModel.dateWithDayAndTimeFormatter
 	let dateString = formatter.string(from: expirationTime)
 
 	let titleString = QRCodeOriginType.test.localizedProof.capitalizingFirstLetter() + ":"
-	let valueString: String = {
-		let value = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
-		switch (verificationPolicy, shouldShowRiskLevel) {
-			case (.policy1G, true):
-				return value + (Current.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_2g() : "")
-			case (.policy3G, true):
-				return value + (Current.featureFlagManager.isVerificationPolicyEnabled() ? " " + L.holder_dashboard_qr_validity_suffix_3g() : "")
-			default:
-				return value
-		}
-	}()
+	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
 		lines: [titleString, valueString],
 		kind: .current

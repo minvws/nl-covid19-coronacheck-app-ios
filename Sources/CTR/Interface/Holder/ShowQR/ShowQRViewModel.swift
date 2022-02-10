@@ -242,12 +242,11 @@ class ShowQRViewModel: Logging {
 			.map({ $0.isEmpty ? "_" : $0 })
 			.joined(separator: " ")
 		
-		// Show different body when you only have a test with category low risk (2G).
+		// Show different body when you only have a test with category 1G.
 		if let origins = greenCard.castOrigins(),
 		   origins.contains(where: { $0.type == OriginType.test.rawValue }),
-		   domesticCredentialAttributes.verificationPolicy == .policy3G,
-		   Current.featureFlagManager.isVerificationPolicyEnabled() { // and the verification policy is enabled
-			return L.qr_explanation_description_domestic_2G(identity)
+		   domesticCredentialAttributes.disclosurePolicy == .policy1G {
+			return L.holder_qr_explanation_description_domestic_1G(identity)
 		}
 		
 		return L.holderShowqrDomesticAboutMessage(identity)

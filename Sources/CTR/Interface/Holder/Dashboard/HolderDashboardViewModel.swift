@@ -26,7 +26,6 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapRecommendToAddYourBoosterClose()
 	func didTapRetryLoadQRCards()
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
-	func didTapTestOnlyValidFor3GMoreInfo()
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 	func didTapDisclosurePolicyInformation1GBannerMoreInformation()
 	func didTapDisclosurePolicyInformation3GBannerMoreInformation()
@@ -78,8 +77,6 @@ final class HolderDashboardViewModel: Logging {
 		var deviceHasClockDeviation: Bool = false
 
 		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
-
-		var shouldShowDomestic3GTestBanner: Bool = false
 	
 		var shouldShowRecommendedUpdateBanner: Bool = false
 		
@@ -249,10 +246,6 @@ final class HolderDashboardViewModel: Logging {
 				var state = self.state
 				state.qrCards = qrCardDataItems
 				state.expiredGreenCards += expiredGreenCards
-				state.shouldShowDomestic3GTestBanner = qrCardDataItems.contains(where: { qrCard in
-					// Assume that domestic has just one greencard.
-					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: Current.now())
-			   })
 				state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
 				state.shouldShowRecommendationToAddYourBooster = {
 					guard Current.userSettings.lastRecommendToAddYourBoosterDismissalDate == nil else { return false }
@@ -555,7 +548,6 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
@@ -593,7 +585,6 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
@@ -636,7 +627,6 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
@@ -722,10 +712,6 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapDeviceHasClockDeviationMoreInfo() {
 		coordinator?.userWishesMoreInfoAboutClockDeviation()
-	}
-	
-	func didTapTestOnlyValidFor3GMoreInfo() {
-		coordinator?.userWishesMoreInfoAboutTestOnlyValidFor3G()
 	}
 	
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID]) {

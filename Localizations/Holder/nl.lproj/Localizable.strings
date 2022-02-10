@@ -649,8 +649,6 @@
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Je internationale testbewijs is verlopen";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Je internationale vaccinatiebewijs is verlopen";
 "holder_dashboard_originExpiredBanner_visitorPass_title" = "Je bezoekersbewijs is verlopen";
-"holder_dashboard_qr_validity_suffix_2g" = "voor 2G-toegang";
-"holder_dashboard_qr_validity_suffix_3g" = "voor 3G-toegang";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Je bezoekersbewijs is niet geldig buiten Nederland";
 "holder_dashboard_visitorpassexpired_body" = "<p>Een bezoekersbewijs is geldig tot %li dagen na de beoordeling van je vaccinatie. Blijf je langer in Nederland? Dan kun je opnieuw een bezoekersbewijs aanvragen. Ga voor meer informatie naar <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
@@ -683,13 +681,11 @@
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs toevoegen";
-"holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>Een Nederlands testbewijs is alleen geldig op plekken met 3G-toegang. Dit betekent dat je met je testbewijs geen toegang krijgt tot plekken waar 2G geldt.</p><p><b>Wat is het verschil tussen 3G en 2G?</b><br />De ‘G’ staat voor Getest, Gevaccineerd, of Genezen (hersteld van corona).</p><ul><li>3G-toegang krijg je met een test-, vaccinatie- of herstelbewijs.</li><li>2G-toegang krijg je <u>niet</u> met een testbewijs. Hiervoor heb je een vaccinatie- of herstelbewijs nodig.</li></ul><p><a href=\"https://www.rijksoverheid.nl/2g-cc\">Lees hier meer over 3G en 2G</a>.</p>";
-"holder_my_overview_3g_test_validity_bottom_sheet_title" = "Testbewijs alleen geldig voor 3G-toegang";
-"holder_my_overview_3g_test_validity_card" = "Je testbewijs is alleen geldig voor 3G-toegang in Nederland";
 "holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";
 "holder_negativetest_ggd_title" = "Testuitslag ophalen";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Je bezoekersbewijs is alleen in Nederland geldig. Wil je naar een ander land? Check de regels van het land dat je wilt bezoeken.</p>\n<p><b>Meer weten?</b><br />Lees meer op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "Over je bezoekersbewijs";
+"holder_qr_explanation_description_domestic_1G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig testbewijs hebt en minimale gegevens.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Nederlandse QR-code";
@@ -713,7 +709,6 @@
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Initialen en geboortedag en -maand zijn opgenomen in QR-code</li><li>Deze gegevens worden getoond op de Scanner-app voor controle van het identiteitsbewijs</li></ul>";
 /* MARK: - New Terms */
 "new.terms.title" = "Onze voorwaarden zijn vernieuwd";
-"qr_explanation_description_domestic_2G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig testbewijs hebt en minimale gegevens.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "recommended.updateApp.action.cancel" = "Doe ik later";
 "recommended.updateApp.action.ok" = "Nu updaten";
 "recommended.updateApp.subtitle" = "Voorkomen dat je moet updaten als je ergens naar binnen wilt of de grens over gaat? Update nu al naar een nieuwere versie.";
