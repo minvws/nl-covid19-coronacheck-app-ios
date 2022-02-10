@@ -235,7 +235,9 @@ class AboutThisAppViewModel: Logging {
 			subTitle: message,
 			cancelAction: nil,
 			cancelTitle: nil,
-			okAction: nil,
+			okAction: { [weak self] _ in
+				self?.coordinator?.restart()
+			},
 			okTitle: L.generalOk(),
 			okActionIsDestructive: false
 		)
