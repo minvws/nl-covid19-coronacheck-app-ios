@@ -383,8 +383,7 @@ extension HolderDashboardViewController.Card {
 				qrcardDataItem.toViewControllerCards(
 					state: state,
 					localDisclosurePolicy: localDisclosurePolicy,
-					actionHandler: actionHandler,
-					remoteConfigManager: remoteConfigManager
+					actionHandler: actionHandler
 				)
 			}
 	}
@@ -395,8 +394,7 @@ extension HolderDashboardViewModel.QRCard {
 	fileprivate func toViewControllerCards(
 		state: HolderDashboardViewModel.State,
 		localDisclosurePolicy: DisclosurePolicy, // the disclosure policy for this card (vs state.activeDisclosurePolicyMode)
-		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging
+		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 
 		var cards = [HolderDashboardViewController.Card]()
@@ -435,7 +433,7 @@ extension HolderDashboardViewModel.QRCard {
 								return true
 						}
 					}(),
-					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
+					validityTexts: validityTextsGenerator(greencards: greencards),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { [weak actionHandler] in
 						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
@@ -491,7 +489,7 @@ extension HolderDashboardViewModel.QRCard {
 						let maxStackSize = 3
 						return min(maxStackSize, max(minStackSize, greencards.count))
 					}(),
-					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
+					validityTexts: validityTextsGenerator(greencards: greencards),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { [weak actionHandler] in
 						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
@@ -511,7 +509,7 @@ extension HolderDashboardViewModel.QRCard {
 	}
 
 	// Returns a closure that, given a Date, will return the groups of text ("ValidityText") that should be shown per-origin on the QR Card.
-	private func validityTextsGenerator(greencards: [HolderDashboardViewModel.QRCard.GreenCard], remoteConfigManager: RemoteConfigManaging) -> (Date) -> [HolderDashboardViewController.ValidityText] {
+	private func validityTextsGenerator(greencards: [HolderDashboardViewModel.QRCard.GreenCard]) -> (Date) -> [HolderDashboardViewController.ValidityText] {
 		return { now in
 			return greencards
 				// Make a list of all origins paired with their greencard
@@ -528,7 +526,7 @@ extension HolderDashboardViewModel.QRCard {
 				// Map to the ValidityText
 				.map { greencard, origin -> HolderDashboardViewController.ValidityText in
 					let validityType = QRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
-					let first = validityType.text(qrCard: self, greencard: greencard, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
+					let first = validityType.text(qrCard: self, greencard: greencard, origin: origin, now: now)
 					return first
 				}
 		}
