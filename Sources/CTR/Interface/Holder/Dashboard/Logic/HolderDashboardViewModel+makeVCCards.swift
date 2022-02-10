@@ -296,7 +296,7 @@ extension HolderDashboardViewController.Card {
 		return [
 			.disclosurePolicyInformation(
 				title: L.holder_dashboard_only1GaccessBanner_title(),
-				buttonText: L.holder_dashboard_only1GaccessBanner_button(),
+				buttonText: L.general_readmore(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapDisclosurePolicyInformation1GBannerMoreInformation()
 				},
@@ -318,7 +318,7 @@ extension HolderDashboardViewController.Card {
 		return [
 			.disclosurePolicyInformation(
 				title: L.holder_dashboard_only3GaccessBanner_title(),
-				buttonText: L.holder_dashboard_only3GaccessBanner_button(),
+				buttonText: L.general_readmore(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapDisclosurePolicyInformation3GBannerMoreInformation()
 				},
@@ -340,7 +340,7 @@ extension HolderDashboardViewController.Card {
 		return [
 			.disclosurePolicyInformation(
 				title: L.holder_dashboard_3Gand1GaccessBanner_title(),
-				buttonText: L.holder_dashboard_3Gand1GaccessBanner_button(),
+				buttonText: L.general_readmore(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation()
 				},
