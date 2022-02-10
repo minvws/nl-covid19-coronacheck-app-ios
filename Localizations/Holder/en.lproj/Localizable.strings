@@ -636,8 +636,6 @@
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Your international test certificate has expired";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Your international vaccination certificate has expired";
 "holder_dashboard_originExpiredBanner_visitorPass_title" = "Your visitor pass has expired";
-"holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
-"holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Your visitor pass isn’t valid outside of the Netherlands";
 "holder_dashboard_visitorpassexpired_body" = "<p>A visitor pass is valid up until %li days after review of your vaccination. Are you staying in the Netherlands longer? Then you can request a visitor pass again. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Expired visitor pass";
@@ -670,9 +668,6 @@
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";
-"holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>A Dutch test certificate is only valid in places with 3G access. This means that you cannot use your test certificate to get access to places with 2G access.</p><p><b>What is the difference between 3G and 2G?</b><br />The Gs determine which people can be given access: only those who were vaccinated and/or have recovered (2G), or people who tested negative as well (3G).</p><ul><li>3G access means you can enter places with a test, vaccination or recovery certificate.</li><li>2G access means you <u>cannot</u> enter places with a test certificate. You'll need a vaccination or recovery certificate.</li></ul><p><a href=\"https://www.government.nl/2g-cc\">You can read more about 3G and 2G here</a>.</p>";
-"holder_my_overview_3g_test_validity_bottom_sheet_title" = "Test certificate only valid for 3G access";
-"holder_my_overview_3g_test_validity_card" = "Your test certificate is only valid for 3G access within the Netherlands";
 "holder_negativetest_ggd_message" = "Is your result in? Log in with DigiD to retrieve your test result from the GGD.";
 "holder_negativetest_ggd_title" = "Retrieve test result";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
