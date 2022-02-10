@@ -192,7 +192,7 @@ class ShowQRViewModel: Logging {
 		}
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
-			showDomesticDetails(data, greenCard: greenCard)
+			showDomesticDetails(data)
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			showInternationalDetails(data)
 		}
@@ -221,12 +221,12 @@ class ShowQRViewModel: Logging {
 		}
 	}
 
-	private func showDomesticDetails(_ data: Data, greenCard: GreenCard) {
+	private func showDomesticDetails(_ data: Data) {
 		
 		if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {
 			coordinator?.presentInformationPage(
 				title: L.holderShowqrDomesticAboutTitle(),
-				body: getDomesticDetailsBody(domesticCredentialAttributes, greenCard: greenCard),
+				body: getDomesticDetailsBody(domesticCredentialAttributes),
 				hideBodyForScreenCapture: true,
 				openURLsInApp: true
 			)
@@ -235,21 +235,12 @@ class ShowQRViewModel: Logging {
 		}
 	}
 	
-	private func getDomesticDetailsBody(_ domesticCredentialAttributes: DomesticCredentialAttributes, greenCard: GreenCard) -> String {
+	private func getDomesticDetailsBody(_ domesticCredentialAttributes: DomesticCredentialAttributes) -> String {
 		
 		let identity = domesticCredentialAttributes
 			.mapIdentity(months: String.shortMonths)
 			.map({ $0.isEmpty ? "_" : $0 })
 			.joined(separator: " ")
-		
-		// Show different body when you only have a test with category low risk (2G).
-		if let origins = greenCard.castOrigins(),
-		   origins.contains(where: { $0.type == OriginType.test.rawValue }),
-		   domesticCredentialAttributes.verificationPolicy == .policy3G,
-		   Current.featureFlagManager.isVerificationPolicyEnabled() { // and the verification policy is enabled
-			return L.qr_explanation_description_domestic_2G(identity)
-		}
-		
 		return L.holderShowqrDomesticAboutMessage(identity)
 	}
 
