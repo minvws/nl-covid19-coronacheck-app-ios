@@ -540,7 +540,7 @@ extension HolderDashboardViewModel.QRCard {
 					guard case .netherlands = self.region else { return true } // can just skip this logic for DCCs
 					
 					// some local disclosure policies cause origins to be hidden, depending on the active disclosure policy:
-					// print("🎏 Filtering origin: [active: .\(activeDisclosurePolicy), local: .\(localDisclosurePolicy), origin: .\(origin.type)]")
+					// print("🎏 Filtering origin: [active: .\(activeDisclosurePolicy), local: .\(localDisclosurePolicy), origin: .\(origin.type)]") //swiftlint:disable:this disable_print
 					switch (activeDisclosurePolicy, localDisclosurePolicy, origin.type) {
 						
 						// only tests should ever be shown on a 1G card:
