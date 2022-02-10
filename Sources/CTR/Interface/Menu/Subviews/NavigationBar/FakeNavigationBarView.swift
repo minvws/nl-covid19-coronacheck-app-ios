@@ -48,7 +48,7 @@ class FakeNavigationBarView: BaseView {
 	private var axisForStackView: NSLayoutConstraint.Axis {
 		
 		if traitCollection.verticalSizeClass == .regular,
-			traitCollection.preferredContentSizeCategory > .extraExtraExtraLarge {
+			traitCollection.preferredContentSizeCategory >= .extraExtraExtraLarge {
 			return .vertical
 		} else {
 			return .horizontal
@@ -82,9 +82,9 @@ class FakeNavigationBarView: BaseView {
 		
 		// Decrease spacing to dashboard tab bar for larger font sizes
 		var bottomMargin = ViewTraits.margin
-		if traitCollection.preferredContentSizeCategory > .accessibilityMedium {
+		if traitCollection.preferredContentSizeCategory >= .accessibilityMedium {
 			bottomMargin = 0
-		} else if traitCollection.preferredContentSizeCategory > .extraExtraLarge {
+		} else if traitCollection.preferredContentSizeCategory >= .extraExtraExtraLarge {
 			bottomMargin = ViewTraits.margin / 2
 		}
 		
