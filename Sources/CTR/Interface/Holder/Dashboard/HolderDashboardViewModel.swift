@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -27,6 +28,12 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
 	func didTapTestOnlyValidFor3GMoreInfo()
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
+	func didTapDisclosurePolicyInformation1GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation3GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation1GBannerClose()
+	func didTapDisclosurePolicyInformation3GBannerClose()
+	func didTapDisclosurePolicyInformation1GWith3GBannerClose()
 }
 
 // swiftlint:disable:next type_body_length
@@ -85,7 +92,9 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowAddCertificateFooter: Bool {
 			qrCards.isEmpty && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
-		
+		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
+		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
+		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = false
 		var activeDisclosurePolicyMode: DisclosurePolicyMode
 		
 		// Has QR Cards or expired QR Cards
@@ -463,10 +472,21 @@ final class HolderDashboardViewModel: Logging {
 	}
 	
 	fileprivate func recalculateDisclosureBannerState() {
-		// placeholder.
-		// state.shouldShow3gOnlyDisclosurePolicyBecameActiveBanner
-		// state.shouldShow1gOnlyDisclosurePolicyBecameActiveBanner
-		// state.shouldShow3gWith1gDisclosurePolicyBecameActiveBanner
+
+		let lastDismissedDisclosurePolicy = Current.userSettings.lastDismissedDisclosurePolicy
+				
+		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner =
+		lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G] && state.activeDisclosurePolicyMode == .exclusive1G
+		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner =
+		lastDismissedDisclosurePolicy != [DisclosurePolicy.policy3G] && state.activeDisclosurePolicyMode == .exclusive3G
+		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner =
+		!(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G)) &&
+		state.activeDisclosurePolicyMode == .combined1gAnd3g
+		
+		logInfo("lastDismissedDisclosurePolicies: \(lastDismissedDisclosurePolicy)")
+		logInfo("shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: \(state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner)")
+		logInfo("shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: \(state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner)")
+		logInfo("shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: \(state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner)")
 	}
 	
 	// MARK: - NSNotification
@@ -539,6 +559,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		
 		cards += VCCard.makeQRCards(
@@ -576,6 +597,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation1GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
@@ -618,6 +640,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation1GWith3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
@@ -755,4 +778,39 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		state.shouldShowRecommendationToAddYourBooster = false
 	}
 	
+	func didTapDisclosurePolicyInformation1GBannerMoreInformation() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerMoreInformation")
+//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+//		openUrl(url)
+	}
+	
+	func didTapDisclosurePolicyInformation3GBannerMoreInformation() {
+		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerMoreInformation")
+//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+//		openUrl(url)
+	}
+	
+	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation")
+//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+//		openUrl(url)
+	}
+	
+	func didTapDisclosurePolicyInformation1GBannerClose() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerClose")
+		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G]
+		recalculateDisclosureBannerState()
+	}
+	
+	func didTapDisclosurePolicyInformation3GBannerClose() {
+		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerClose")
+		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy3G]
+		recalculateDisclosureBannerState()
+	}
+	
+	func didTapDisclosurePolicyInformation1GWith3GBannerClose() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerClose")
+		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
+		recalculateDisclosureBannerState()
+	}
 }
