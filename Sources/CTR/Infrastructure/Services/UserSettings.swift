@@ -40,8 +40,7 @@ protocol UserSettingsProtocol: AnyObject {
 	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	
-	var configDisclosurePolicies: [DisclosurePolicy] { get set }
-	var dismissedDisclosurePolicies: [DisclosurePolicy] { get set }
+	var dismissedDisclosurePolicy: [DisclosurePolicy] { get set }
 	var overrideDisclosurePolicies: [String] { get set }
 	
 	func wipePersistedData()
@@ -99,11 +98,8 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
 	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
 	
-	@UserDefaults(key: "configDisclosurePolicies")
-	var configDisclosurePolicies: [DisclosurePolicy] = [] // swiftlint:disable:this let_var_whitespace
-	
-	@UserDefaults(key: "dismissedDisclosurePolicies")
-	var dismissedDisclosurePolicies: [DisclosurePolicy] = [] // swiftlint:disable:this let_var_whitespace
+	@UserDefaults(key: "dismissedDisclosurePolicy")
+	var dismissedDisclosurePolicy: [DisclosurePolicy] = [] // swiftlint:disable:this let_var_whitespace
 	
 	@UserDefaults(key: "overrideDisclosurePolicies")
 	var overrideDisclosurePolicies: [String] = [] // swiftlint:disable:this let_var_whitespace
@@ -134,8 +130,7 @@ extension UserSettings {
 			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
 			"configVerificationPolicies",
 			"policyInformationShown",
-			"configDisclosurePolicies",
-			"dismissedDisclosrePolicies",
+			"dismissedDisclosurePolicy",
 			"overrideDisclosurePolicies",
 
 			// Deprecated keys

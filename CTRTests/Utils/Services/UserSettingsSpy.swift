@@ -363,47 +363,25 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedConfigDisclosurePoliciesSetter = false
-	var invokedConfigDisclosurePoliciesSetterCount = 0
-	var invokedConfigDisclosurePolicies: [DisclosurePolicy]?
-	var invokedConfigDisclosurePoliciesList = [[DisclosurePolicy]]()
-	var invokedConfigDisclosurePoliciesGetter = false
-	var invokedConfigDisclosurePoliciesGetterCount = 0
-	var stubbedConfigDisclosurePolicies: [DisclosurePolicy]! = []
+	var invokedDismissedDisclosurePolicySetter = false
+	var invokedDismissedDisclosurePolicySetterCount = 0
+	var invokedDismissedDisclosurePolicy: [DisclosurePolicy]?
+	var invokedDismissedDisclosurePolicyList = [[DisclosurePolicy]]()
+	var invokedDismissedDisclosurePolicyGetter = false
+	var invokedDismissedDisclosurePolicyGetterCount = 0
+	var stubbedDismissedDisclosurePolicy: [DisclosurePolicy]! = []
 
-	var configDisclosurePolicies: [DisclosurePolicy] {
+	var dismissedDisclosurePolicy: [DisclosurePolicy] {
 		set {
-			invokedConfigDisclosurePoliciesSetter = true
-			invokedConfigDisclosurePoliciesSetterCount += 1
-			invokedConfigDisclosurePolicies = newValue
-			invokedConfigDisclosurePoliciesList.append(newValue)
+			invokedDismissedDisclosurePolicySetter = true
+			invokedDismissedDisclosurePolicySetterCount += 1
+			invokedDismissedDisclosurePolicy = newValue
+			invokedDismissedDisclosurePolicyList.append(newValue)
 		}
 		get {
-			invokedConfigDisclosurePoliciesGetter = true
-			invokedConfigDisclosurePoliciesGetterCount += 1
-			return stubbedConfigDisclosurePolicies
-		}
-	}
-
-	var invokedDismissedDisclosurePoliciesSetter = false
-	var invokedDismissedDisclosurePoliciesSetterCount = 0
-	var invokedDismissedDisclosurePolicies: [DisclosurePolicy]?
-	var invokedDismissedDisclosurePoliciesList = [[DisclosurePolicy]]()
-	var invokedDismissedDisclosurePoliciesGetter = false
-	var invokedDismissedDisclosurePoliciesGetterCount = 0
-	var stubbedDismissedDisclosurePolicies: [DisclosurePolicy]! = []
-
-	var dismissedDisclosurePolicies: [DisclosurePolicy] {
-		set {
-			invokedDismissedDisclosurePoliciesSetter = true
-			invokedDismissedDisclosurePoliciesSetterCount += 1
-			invokedDismissedDisclosurePolicies = newValue
-			invokedDismissedDisclosurePoliciesList.append(newValue)
-		}
-		get {
-			invokedDismissedDisclosurePoliciesGetter = true
-			invokedDismissedDisclosurePoliciesGetterCount += 1
-			return stubbedDismissedDisclosurePolicies
+			invokedDismissedDisclosurePolicyGetter = true
+			invokedDismissedDisclosurePolicyGetterCount += 1
+			return stubbedDismissedDisclosurePolicy
 		}
 	}
 

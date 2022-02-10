@@ -92,9 +92,9 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowAddCertificateFooter: Bool {
 			qrCards.isEmpty && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
-		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = true
-		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = true
-		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = true
+		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
+		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
+		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = false
 		var activeDisclosurePolicyMode: DisclosurePolicyMode
 		
 		// Has QR Cards or expired QR Cards
@@ -473,20 +473,20 @@ final class HolderDashboardViewModel: Logging {
 	
 	fileprivate func recalculateDisclosureBannerState() {
 
-		let lastDismissedDisclosurePolicies = Current.userSettings.dismissedDisclosurePolicies
+		let lastDismissedDisclosurePolicy = Current.userSettings.dismissedDisclosurePolicy
 				
 		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner =
-		lastDismissedDisclosurePolicies != [DisclosurePolicy.policy1G] && state.activeDisclosurePolicyMode == .exclusive1G
+		lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G] && state.activeDisclosurePolicyMode == .exclusive1G
 		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner =
-		lastDismissedDisclosurePolicies != [DisclosurePolicy.policy3G] && state.activeDisclosurePolicyMode == .exclusive3G
+		lastDismissedDisclosurePolicy != [DisclosurePolicy.policy3G] && state.activeDisclosurePolicyMode == .exclusive3G
 		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner =
-		!(lastDismissedDisclosurePolicies.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicies.contains(DisclosurePolicy.policy3G)) &&
+		!(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G)) &&
 		state.activeDisclosurePolicyMode == .combined1gAnd3g
 		
-//		logInfo("lastDismissedDisclosurePolicies: \(lastDismissedDisclosurePolicies)")
-//		logInfo("shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: \(state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner)")
-//		logInfo("shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: \(state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner)")
-//		logInfo("shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: \(state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner)")
+		logInfo("lastDismissedDisclosurePolicies: \(lastDismissedDisclosurePolicy)")
+		logInfo("shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: \(state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner)")
+		logInfo("shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: \(state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner)")
+		logInfo("shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: \(state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner)")
 	}
 	
 	// MARK: - NSNotification
@@ -798,19 +798,19 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapDisclosurePolicyInformation1GBannerClose() {
 		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerClose")
-		Current.userSettings.dismissedDisclosurePolicies = [DisclosurePolicy.policy1G]
+		Current.userSettings.dismissedDisclosurePolicy = [DisclosurePolicy.policy1G]
 		recalculateDisclosureBannerState()
 	}
 	
 	func didTapDisclosurePolicyInformation3GBannerClose() {
 		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerClose")
-		Current.userSettings.dismissedDisclosurePolicies = [DisclosurePolicy.policy3G]
+		Current.userSettings.dismissedDisclosurePolicy = [DisclosurePolicy.policy3G]
 		recalculateDisclosureBannerState()
 	}
 	
 	func didTapDisclosurePolicyInformation1GWith3GBannerClose() {
 		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerClose")
-		Current.userSettings.dismissedDisclosurePolicies = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
+		Current.userSettings.dismissedDisclosurePolicy = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
 		recalculateDisclosureBannerState()
 	}
 }
