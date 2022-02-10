@@ -91,10 +91,10 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowAddCertificateFooter: Bool {
 			qrCards.isEmpty && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
-		
 		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = true
 		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = true
 		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = true
+		var activeDisclosurePolicyMode: DisclosurePolicyMode
 		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -197,7 +197,16 @@ final class HolderDashboardViewModel: Logging {
 				now: Current.now(),
 				remoteConfiguration: Current.remoteConfigManager.storedConfiguration
 			),
-			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
+			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now()),
+			activeDisclosurePolicyMode: {
+				if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+					return .combined1gAnd3g
+				} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+					return .exclusive1G
+				} else {
+					return .exclusive3G
+				}
+			}()
 		)
 
 		didUpdate(oldState: nil, newState: state)
@@ -551,7 +560,15 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
+		
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
+			state: state,
+			localDisclosurePolicy: .policy3G,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager
+		)
+		
 		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
@@ -581,7 +598,20 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation1GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
+			state: state,
+			localDisclosurePolicy: .policy1G,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager
+		)
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
+			state: state,
+			localDisclosurePolicy: .policy3G,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager
+		)
 		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
@@ -611,7 +641,20 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation1GWith3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
+			state: state,
+			localDisclosurePolicy: .policy3G,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager
+		)
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
+			state: state,
+			localDisclosurePolicy: .policy1G,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager
+		)
 		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards

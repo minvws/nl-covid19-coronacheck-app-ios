@@ -34,7 +34,7 @@ class HolderDashboardViewController: BaseViewController {
 		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
 		
         // QR Cards:
-        case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case domesticQR(disclosurePolicyLabel: String, title: String, isDisabledByDisclosurePolicy: Bool, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
         case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 		
 		// Recommendations
@@ -281,7 +281,7 @@ private extension HolderDashboardViewController.Card {
 				view.image = image
 				return view
 				
-			case let .domesticQR(title, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
+			case let .domesticQR(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
 				return QRCardView.make(stackSize: 1, forEu: false, title: title, isLoading: isLoading, validityTexts: validityTexts, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
 			
 			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):

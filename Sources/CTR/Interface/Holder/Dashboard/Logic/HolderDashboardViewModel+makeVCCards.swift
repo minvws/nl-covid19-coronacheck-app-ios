@@ -374,6 +374,7 @@ extension HolderDashboardViewController.Card {
 	static func makeQRCards(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
+		localDisclosurePolicy: DisclosurePolicy, // the disclosure policy for this group of cards (vs state.activeDisclosurePolicyMode)
 		actionHandler: HolderDashboardCardUserActionHandling,
 		remoteConfigManager: RemoteConfigManaging
 	) -> [HolderDashboardViewController.Card] {
@@ -381,6 +382,7 @@ extension HolderDashboardViewController.Card {
 			.flatMap { (qrcardDataItem: HolderDashboardViewModel.QRCard) -> [HolderDashboardViewController.Card] in
 				qrcardDataItem.toViewControllerCards(
 					state: state,
+					localDisclosurePolicy: localDisclosurePolicy,
 					actionHandler: actionHandler,
 					remoteConfigManager: remoteConfigManager
 				)
@@ -392,6 +394,7 @@ extension HolderDashboardViewModel.QRCard {
 
 	fileprivate func toViewControllerCards(
 		state: HolderDashboardViewModel.State,
+		localDisclosurePolicy: DisclosurePolicy, // the disclosure policy for this card (vs state.activeDisclosurePolicyMode)
 		actionHandler: HolderDashboardCardUserActionHandling,
 		remoteConfigManager: RemoteConfigManaging
 	) -> [HolderDashboardViewController.Card] {
@@ -400,9 +403,38 @@ extension HolderDashboardViewModel.QRCard {
 		
 		switch self.region {
 			case .netherlands:
-
+				
+				// Certain combinations preclude showing _any_ QR Cards
+				// , in which case just return nothing
+			
+				switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
+					case (.exclusive1G, .policy1G),
+						(.exclusive3G, .policy3G),
+						(.combined1gAnd3g, .policy1G),
+						(.combined1gAnd3g, .policy3G),
+						(.exclusive1G, .policy3G):
+						break
+					case (.exclusive3G, .policy1G):
+						return []
+				}
+			
 				cards += [HolderDashboardViewController.Card.domesticQR(
+					disclosurePolicyLabel: localDisclosurePolicy.localization,
 					title: L.holderDashboardQrTitle(),
+					isDisabledByDisclosurePolicy: { () -> Bool in
+						// Whether we should show "Dit bewijs wordt nu niet gebruikt in Nederland."
+						switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
+							case (.exclusive1G, .policy1G),
+								(.exclusive3G, .policy1G), // this case is not shown in UI
+								(.exclusive3G, .policy3G),
+								(.combined1gAnd3g, .policy1G),
+								(.combined1gAnd3g, .policy3G):
+								return false
+								
+							case (.exclusive1G, .policy3G):
+								return true
+						}
+					}(),
 					validityTexts: validityTextsGenerator(greencards: greencards, remoteConfigManager: remoteConfigManager),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { [weak actionHandler] in
