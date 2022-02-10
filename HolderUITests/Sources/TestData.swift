@@ -216,8 +216,8 @@ final class TestData {
 	// Vaccinations - almost 18
 	static let almost18Is17y8mWithP2LastDose1M = TestPerson(bsn: "999993422", doseNL: 2, doseIntl: ["1/2", "2/2"], validFromNL: -16) // Almost 18: 2 pfizer, 4 months before 18, last dose 1 month ago
 	static let almost18Is17y10mWithP2LastDose1M = TestPerson(bsn: "999993434", doseNL: 2, doseIntl: ["1/2", "2/2"], validFromNL: -16, validUntilNL: 240) // Almost 18: 2 pfizer, 2 months before 18, last dose 1 month ago
-	static let almost18Is17y10mWithP2LastDose9M = TestPerson(bsn: "999993446", doseNL: 2, doseIntl: ["1/2", "2/2"], validFromNL: -256, validUntilNL: 51) // Almost 18: 2 pfizer, 2 months before 18, last dose 9 months ago
+	static let almost18Is17y10mWithP2LastDose9M = TestPerson(bsn: "999993446", doseNL: 2, doseIntl: ["1/2", "2/2"], validFromNL: -256, validUntilNL: 51, birthDate: "2004-04-01") // Almost 18: 2 pfizer, 2 months before 18, last dose 9 months ago
 	static let almost18Is17y8mWithJ1LastDose1M = TestPerson(bsn: "999993458", doseNL: 1, doseIntl: ["1/1"], validFromNL: -2) // Almost 18: 1 janssen, 4 months before 18, last dose 1 month ago
 	static let almost18Is17y10mWithJ1LastDose1M = TestPerson(bsn: "999993471", doseNL: 1, doseIntl: ["1/1"], validFromNL: -30, validUntilNL: 240) // Almost 18: 1 janssen, 2 months before 18, last dose 1 month ago
-	static let almost18Is17y10mWithJ1LastDose9M = TestPerson(bsn: "999993483", doseNL: 1, doseIntl: ["1/1"], validFromNL: -242, validUntilNL: 51) // Almost 18: 1 janssen, 2 months before 18, last dose 9 months ago
+	static let almost18Is17y10mWithJ1LastDose9M = TestPerson(bsn: "999993483", doseNL: 1, doseIntl: ["1/1"], validFromNL: -242, validUntilNL: 51, birthDate: "2004-04-01") // Almost 18: 1 janssen, 2 months before 18, last dose 9 months ago
 }
