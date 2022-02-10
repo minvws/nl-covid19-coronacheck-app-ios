@@ -156,6 +156,7 @@ final class HolderDashboardViewModel: Logging {
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
 	private var remoteConfigUpdatesNewValidityToken: RemoteConfigManager.ObserverToken?
+	private var remoteConfigManagerUpdateObserverToken: RemoteConfigManager.ObserverToken?
 
 	// Dependencies:
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
@@ -199,11 +200,13 @@ final class HolderDashboardViewModel: Logging {
 
 		setupDatasource()
 		setupStrippenRefresher()
+		setupRemoteConfigManagerUpdateObserver()
 		setupNotificationListeners()
 		setupConfigNotificationManager()
 		setupRecommendedVersion()
 		setupNewValidityInfoForVaccinationsAndRecoveriesBanner()
-
+		recalculateDisclosureBannerState()
+		
 		// If the config ever changes, reload dependencies:
 		remoteConfigUpdateObserverToken = Current.remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
             self?.strippenRefresher.load()
@@ -446,6 +449,19 @@ final class HolderDashboardViewModel: Logging {
 		let recommendedVersion = Current.remoteConfigManager.storedConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
 		let currentVersion = versionSupplier?.getCurrentVersion().fullVersionString() ?? "1.0.0"
 		self.state.shouldShowRecommendedUpdateBanner = recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending
+	}
+	
+	fileprivate func setupRemoteConfigManagerUpdateObserver() {
+		remoteConfigManagerUpdateObserverToken = Current.remoteConfigManager.appendUpdateObserver { [weak self] newConfig, _, _ in
+			self?.recalculateDisclosureBannerState()
+		}
+	}
+	
+	fileprivate func recalculateDisclosureBannerState() {
+		// placeholder.
+		// state.shouldShow3gOnlyDisclosurePolicyBecameActiveBanner
+		// state.shouldShow1gOnlyDisclosurePolicyBecameActiveBanner
+		// state.shouldShow3gWith1gDisclosurePolicyBecameActiveBanner
 	}
 	
 	// MARK: - NSNotification
