@@ -95,9 +95,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
 		}
 		
-		return (disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag)
-		&& !disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)) ||
-		disclosurePolicies.isEmpty
+		return disclosurePolicies == [DisclosurePolicy.policy3G.featureFlag] || disclosurePolicies.isEmpty // Defaults to 3G
 	}
 	
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
@@ -110,8 +108,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
 		}
 		
-		return disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)
-		&& !disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag)
+		return disclosurePolicies == [DisclosurePolicy.policy1G.featureFlag]
 	}
 	
 	func areBothDisclosurePoliciesEnabled() -> Bool {

@@ -33,13 +33,16 @@ class HolderDashboardViewController: BaseViewController {
 		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
 		
         // QR Cards:
-        case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case domesticQR(disclosurePolicyLabel: String, title: String, isDisabledByDisclosurePolicy: Bool, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
         case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 		
 		// Recommendations
 		case recommendCoronaMelder
 		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case recommendToAddYourBooster(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		
+		// Disclosure Policy
+		case disclosurePolicyInformation(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -258,7 +261,8 @@ private extension HolderDashboardViewController.Card {
 			// Message Cards with a message + CTA button + close button
 			case let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
 				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .recommendToAddYourBooster(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+				let .recommendToAddYourBooster(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .disclosurePolicyInformation(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
@@ -275,7 +279,7 @@ private extension HolderDashboardViewController.Card {
 				view.image = image
 				return view
 				
-			case let .domesticQR(title, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
+			case let .domesticQR(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
 				return QRCardView.make(stackSize: 1, forEu: false, title: title, isLoading: isLoading, validityTexts: validityTexts, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
 			
 			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):

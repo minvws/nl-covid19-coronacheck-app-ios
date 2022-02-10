@@ -47,7 +47,6 @@
 "general.ok" = "OK";
 "general.paperflow" = "paper certificate";
 "general.positiveTest" = "positive test";
-"general.readmore" = "Read more";
 "general.recoverydate" = "recovery date";
 "general.retry" = "Try again";
 "general.testdate" = "test date";
@@ -59,6 +58,7 @@
 "general.vaccinationdate" = "Vaccination date";
 "general_menu" = "Menu";
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
+"general_readmore" = "Read more";
 "general_recoverycertificate" = "recovery certificate";
 "general_testcertificate" = "test certificate";
 "general_toMyOverview" = "To my certificates";

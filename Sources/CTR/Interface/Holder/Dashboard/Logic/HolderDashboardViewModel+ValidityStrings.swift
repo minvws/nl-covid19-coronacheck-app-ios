@@ -30,7 +30,7 @@ extension QRCard {
 			}
 		}
 
-		func text(qrCard: QRCard, greencard: QRCard.GreenCard, origin: QRCard.GreenCard.Origin, now: Date, remoteConfigManager: RemoteConfigManaging) -> HolderDashboardViewController.ValidityText {
+		func text(qrCard: QRCard, greencard: QRCard.GreenCard, origin: QRCard.GreenCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
 			
 			switch (self, qrCard.region, origin.type) {
 				case (.isExpired, _, _):
@@ -51,7 +51,7 @@ extension QRCard {
 					
 				case (_, .europeanUnion(let dccEvaluator), .test):
 					if let euTest = dccEvaluator(greencard, now)?.digitalCovidCertificate.tests?.first {
-						let testType = remoteConfigManager.storedConfiguration.getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
+						let testType = Current.remoteConfigManager.storedConfiguration.getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
 						return validityText_hasBegun_eu_test(testType: testType, validFrom: origin.eventDate)
 					} else {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
