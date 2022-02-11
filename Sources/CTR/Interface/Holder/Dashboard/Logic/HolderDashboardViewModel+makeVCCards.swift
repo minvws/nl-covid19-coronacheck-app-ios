@@ -413,12 +413,12 @@ extension HolderDashboardViewModel.QRCard {
 				// , in which case just return nothing
 			
 				switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
-					case (.exclusive1G, .policy1G):
+					case (.exclusive1G, .policy1G),
+						(.combined1gAnd3g, .policy1G):
 						guard hasAValidTest(now: Current.now()) else { return [] }
 					case (.exclusive1G, .policy3G):
 						guard hasValidOriginsWhichAreNotOfTypeTest(now: Current.now()) else { return [] }
 					case (.exclusive3G, .policy3G),
-						(.combined1gAnd3g, .policy1G),
 						(.combined1gAnd3g, .policy3G):
 						break
 					case (.exclusive3G, .policy1G):
