@@ -427,7 +427,12 @@ extension HolderDashboardViewModel.QRCard {
 			
 				cards += [HolderDashboardViewController.Card.domesticQR(
 					disclosurePolicyLabel: localDisclosurePolicy.localization,
-					title: L.holderDashboardQrTitle(),
+					title: {
+						switch localDisclosurePolicy {
+							case .policy3G: return L.holder_dashboard_domesticQRCard_3G_title()
+							case .policy1G: return L.holder_dashboard_domesticQRCard_1G_title()
+						}
+					}(),
 					isDisabledByDisclosurePolicy: { () -> Bool in
 						// Whether we should show "Dit bewijs wordt nu niet gebruikt in Nederland."
 						switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
