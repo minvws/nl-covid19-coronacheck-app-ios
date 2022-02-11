@@ -5,55 +5,55 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-class SmokeVaccinationExpired: BaseTest {
+class SmokeVaccinationOlderThanOneYear: BaseTest {
 	
-	func test_vacP1Expired() {
-		let person = TestData.vacP1Expired
+	func test_vacP1Old() {
+		let person = TestData.vacP1Old
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -390)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
-	func test_vacP2Expired() {
-		let person = TestData.vacP2Expired
+	func test_vacP2Old() {
+		let person = TestData.vacP2Old
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -390)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
-	func test_vacJ1Expired() {
-		let person = TestData.vacJ1Expired
+	func test_vacJ1Old() {
+		let person = TestData.vacJ1Old
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -390)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
-	func test_vacM1Expired() {
-		let person = TestData.vacM1Expired
+	func test_vacM1Old() {
+		let person = TestData.vacM1Old
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -390)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
-	func test_vacM2Expired() {
-		let person = TestData.vacM2Expired
+	func test_vacM2Old() {
+		let person = TestData.vacM2Old
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -390)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 }

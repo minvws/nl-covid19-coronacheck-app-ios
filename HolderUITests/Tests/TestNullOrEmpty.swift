@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2person.vacOffset21 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -14,7 +14,7 @@ class TestNullOrEmpty: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_vacP1NullMedicalStatement() {
@@ -24,7 +24,7 @@ class TestNullOrEmpty: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_vacP1NullFirstName() {
@@ -34,7 +34,7 @@ class TestNullOrEmpty: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_vacP1NullLastName() {
@@ -44,7 +44,7 @@ class TestNullOrEmpty: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_vacP1NullBirthdate() {
@@ -54,7 +54,7 @@ class TestNullOrEmpty: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_vacP1EmptyPersonalStatement() {
@@ -64,7 +64,7 @@ class TestNullOrEmpty: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_vacP1EmptyMedicalStatement() {
@@ -74,7 +74,7 @@ class TestNullOrEmpty: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_vacP1EmptyFirstName() {
@@ -84,7 +84,7 @@ class TestNullOrEmpty: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_vacP1EmptyLastName() {
@@ -94,7 +94,7 @@ class TestNullOrEmpty: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_vacP1EmptyBirthdate() {
@@ -104,6 +104,6 @@ class TestNullOrEmpty: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 }

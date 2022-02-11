@@ -12,7 +12,7 @@ class SmokeVaccinationPremature: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .vaccination, doses: person.doseNL, validFromOffset: person.validFromNL)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
+		assertDutchCertificateIsNotYetValid(ofType: .vaccination, doses: person.dose, validFromOffset: person.vacFrom)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 }

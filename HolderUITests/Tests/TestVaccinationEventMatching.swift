@@ -12,8 +12,8 @@ class TestVaccinationEventMatching: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_vacP2DifferentLastName() {
@@ -21,7 +21,7 @@ class TestVaccinationEventMatching: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -30,7 +30,7 @@ class TestVaccinationEventMatching: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -39,7 +39,7 @@ class TestVaccinationEventMatching: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -48,7 +48,7 @@ class TestVaccinationEventMatching: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 }
