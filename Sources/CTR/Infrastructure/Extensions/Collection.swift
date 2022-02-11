@@ -9,7 +9,7 @@ import Foundation
 
 extension Array {
 	
-	func isNotEmpty() -> Bool {
+	var isNotEmpty: Bool {
 		
 		return !isEmpty
 	}
@@ -17,7 +17,7 @@ extension Array {
 
 extension String {
 	
-	func isNotEmpty() -> Bool {
+	var isNotEmpty: Bool {
 		
 		return !isEmpty
 	}

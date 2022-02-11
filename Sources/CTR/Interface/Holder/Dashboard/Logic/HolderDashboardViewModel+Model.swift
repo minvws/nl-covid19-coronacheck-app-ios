@@ -64,6 +64,12 @@ extension HolderDashboardViewModel {
 					return expirationTime > now.addingTimeInterval(threeYearsFromNow)
 				}
 			}
+			
+			func hasValidOrigin(ofType type: QRCodeOriginType, now: Date) -> Bool {
+				return origins
+					.filter { $0.isCurrentlyValid(now: now) }
+					.contains(where: { $0.type == type })
+			}
 		}
 
 		let region: Region // A QR Card only has one region
@@ -103,6 +109,24 @@ extension HolderDashboardViewModel {
 				.compactMap { $0.expirationTime }
 				.sorted()
 				.last ?? .distantPast
+		}
+		
+		func hasAValidTest(now: Date) -> Bool {
+			// Find greencards where there is a valid test
+			let greencardsWithValidTest = greencards.filter { greencard in
+				greencard.hasValidOrigin(ofType: .test, now: now)
+			}
+			return greencardsWithValidTest.isNotEmpty
+		}
+		
+		func hasValidOriginsWhichAreNotOfTypeTest(now: Date) -> Bool {
+			// Find greencards where there is a valid test
+			let greencardsWithValidOriginThatIsNotTest = greencards.filter { greencard in
+				greencard.hasValidOrigin(ofType: .vaccination, now: now)
+					|| greencard.hasValidOrigin(ofType: .recovery, now: now)
+					|| greencard.hasValidOrigin(ofType: .vaccinationassessment, now: now)
+			}
+			return greencardsWithValidOriginThatIsNotTest.isNotEmpty
 		}
 	}
 
