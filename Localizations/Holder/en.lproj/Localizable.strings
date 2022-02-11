@@ -621,6 +621,7 @@
 "holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
+"holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
 "holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";
 "holder_dashboard_addCard_title" = "Add new vaccination or test";
@@ -629,6 +630,8 @@
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
 "holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
+"holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels";
+"holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels";
 "holder_dashboard_originExpiredBanner_domesticRecovery_title" = "Your Dutch recovery certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticTest_title" = "Your Dutch test certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticVaccine_title" = "Your Dutch vaccination certificate has expired";

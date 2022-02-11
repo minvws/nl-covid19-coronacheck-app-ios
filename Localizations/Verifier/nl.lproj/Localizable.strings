@@ -27,7 +27,7 @@
 "verification_policy_selection_error_message" = "Maak een keuze om door te gaan";
 /* Koptekst in de over de app pagina */
 "verifier.about.readmore" = "Lees meer:";
-"verifier.about.text" = "<p>CoronaCheck Scanner is ontwikkeld zodat bepaalde plekken en activiteiten veilig hun deuren kunnen openen. Denk bijvoorbeeld aan voetbalwedstrijden en cafés.</p><p> Bezoekers maken een coronabewijs met een QR-code van hun vaccinatie, negatieve testuitslag, of herstel van corona. Met behulp van deze app krijgen alleen bezoekers met zo’n coronabewijs toegang. Zo kunnen steeds meer plekken veilig bezocht worden.</p>";
+"verifier.about.text" = "<p>CoronaCheck Scanner is ontwikkeld zodat bepaalde plekken en activiteiten veilig hun deuren kunnen openen.</p><p> Bezoekers maken een coronabewijs met een QR-code van hun vaccinatie, negatieve testuitslag, of herstel van corona. Met behulp van deze app krijgen alleen bezoekers met zo’n coronabewijs toegang. Zo kunnen steeds meer plekken veilig bezocht worden.</p>";
 /* MARK: - Verifier About */
 "verifier.about.title" = "Over deze app";
 "verifier.clockDeviationDetected.message" = "<p>Om de CoronaCheck Scanner-app goed te kunnen gebruiken, is het belangrijk dat de tijd op je telefoon goed staat ingesteld. Loopt je telefoon bijvoorbeeld een paar minuten voor? Dan kan er een fout ontstaan tijdens de controle van een coronabewijs.</p><p><a href=\"%@\">Ga naar de instellingen</a> van je telefoon en zet de datum en tijd op 'automatisch instellen'.</p>";
@@ -49,6 +49,7 @@
 "verifier.denied.message.six" = "<p><b>Let op:</b> zonder groen scherm met vinkje mag de bezoeker niet toegelaten worden.</p>";
 "verifier.denied.message.six_1G" = "<p><b>Let op:</b> zonder scherm met vinkje mag de bezoeker niet toegelaten worden.</p>";
 "verifier.denied.message.three" = "<ul><li>Controleer of de tijd goed staat ingesteld op de telefoon van de bezoeker en die van jou. Zorg dat de datum en tijd op ‘automatisch instellen’ staan.</li><li>Controleer of de bezoeker een origineel bewijs laat zien. Een screenshot van een bewijs kan voor problemen zorgen.</li><li>Vraag de bezoeker om de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li></ul>";
+"verifier.denied.message.three_1G" = "<ul><li>Laat de bezoeker weten welk soort toegang jouw locatie mag geven. Let op dat bij 1G-toegang alleen bezoekers met een testbewijs naar binnen mogen.</li><li>Controleer of de tijd goed staat ingesteld op de telefoon van de bezoeker en die van jou. Zorg dat de datum en tijd op ‘automatisch instellen’ staan.</li><li>Controleer of de bezoeker een origineel bewijs laat zien. Een screenshot van een bewijs kan voor problemen zorgen.</li><li>Vraag de bezoeker om de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li></ul>";
 "verifier.denied.message.two" = "<b>Dit kun je doen:</b>";
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Wat kan ik doen?";
@@ -151,7 +152,7 @@
 "verifier_risksetting_setting_button" = "Instellen";
 "verifier_risksetting_start_header" = "Stel voor jouw locatie in of je 1G- of 3G-toegang gaat geven. Controleer voordat je gaat scannen welk soort toegang je mag geven.";
 "verifier_risksetting_start_readmore" = "Welk soort toegang mag ik geven?";
-"verifier_risksetting_start_readmore_url" = "https://www.rijksoverheid.nl/welketoegang-cc";
+"verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/welketoegang-cc";
 "verifier_risksetting_start_title" = "Scan-instelling";
 "verifier_risksetting_subtitle_1G" = "Je kunt alleen toegang geven aan bezoekers met een testbewijs.";
 "verifier_risksetting_subtitle_3G" = "Je kunt toegang geven aan bezoekers met een test-, vaccinatie- of herstelbewijs.";
