@@ -220,4 +220,40 @@ class QRCardViewTests: XCTestCase {
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
 		sut.assertImage(precision: 0.95)
 	}
+
+	func testDisabledByDisclosurePolicy() {
+		let sut = QRCardView(stackSize: 1)
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.shouldStyleForEU = false
+		sut.isDisabledByDisclosurePolicy = true
+		
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage(precision: 0.95)
+	}
+	
+	func test3GPolicy() {
+		let sut = QRCardView(stackSize: 1)
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.shouldStyleForEU = false
+		sut.disclosurePolicyLabel = "3G"
+		
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage(precision: 0.95)
+	}
+	
+	func test1GPolicy() {
+		let sut = QRCardView(stackSize: 1)
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.shouldStyleForEU = false
+		sut.disclosurePolicyLabel = "1G"
+		
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage(precision: 0.95)
+	}
 }
