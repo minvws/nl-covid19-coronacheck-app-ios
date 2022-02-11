@@ -51,13 +51,25 @@ class QRCardView: BaseView {
 		return stackView
 	}()
 
+	/// Shows either `viewQRButton` or "Dit bewijs wordt nu niet gebruikt in Nederland."
+	private let viewQRButtonStackView: UIStackView = {
+		let stackView = UIStackView()
+		stackView.translatesAutoresizingMaskIntoConstraints = false
+		stackView.axis = .horizontal
+		return stackView
+	}()
+	
 	private let viewQRButton: Button = {
 
 		let button = Button(title: "", style: .roundedBlue)
-		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentEdgeInsets = .topBottom(10) + .leftRight(32)
 		return button
 	}()
+
+	// Exerts horizontal compression on viewQRButton in its stackView so that the button isn't full-width.
+	private let viewQRButtonCompressingSpacer = UIView()
+	
+	private let thisCertificateIsNotUsedOverlayView = ThisCertificateIsNotUsedOverlayView()
 
 	private lazy var loadingButtonOverlay: ButtonLoadingOverlayView = {
 		let overlay = ButtonLoadingOverlayView()
@@ -131,8 +143,12 @@ class QRCardView: BaseView {
 		hostView.addSubview(titleLabel)
 		hostView.addSubview(largeIconImageView)
 		hostView.addSubview(verticalLabelsStackView)
-		hostView.addSubview(viewQRButton)
-		hostView.addSubview(loadingButtonOverlay)
+		hostView.addSubview(viewQRButtonStackView)
+		
+		viewQRButtonStackView.addArrangedSubview(viewQRButton)
+		viewQRButtonStackView.addArrangedSubview(viewQRButtonCompressingSpacer)
+		
+		viewQRButton.addSubview(loadingButtonOverlay)
 
 		// This has a edge-case bug if you set it in the `let viewQRButton: Button = {}` declaration, so setting it here instead.
 		// (was only applicable when Settings->Accessibility->Keyboard->Full Keyboard Access was enabled)
@@ -205,10 +221,10 @@ class QRCardView: BaseView {
 			verticalLabelsStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
 			verticalLabelsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 
-			viewQRButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-			viewQRButton.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.trailingAnchor),
-			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 30),
-			viewQRButton.bottomAnchor.constraint(equalTo: hostView.bottomAnchor, constant: -24),
+			viewQRButtonStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+			viewQRButtonStackView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -24),
+			viewQRButtonStackView.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 30),
+			viewQRButtonStackView.bottomAnchor.constraint(equalTo: hostView.bottomAnchor, constant: -24),
 
 			loadingButtonOverlay.leadingAnchor.constraint(equalTo: viewQRButton.leadingAnchor),
 			loadingButtonOverlay.trailingAnchor.constraint(equalTo: viewQRButton.trailingAnchor),
@@ -402,5 +418,66 @@ class QRCardView: BaseView {
 			guard shouldStyleForEU else { return }
 			applyEUStyle()
 		}
+	}
+	
+	var isDisabledByDisclosurePolicy: Bool = false {
+		didSet {
+			
+			if isDisabledByDisclosurePolicy {
+				viewQRButtonStackView.removeArrangedSubview(viewQRButton)
+				viewQRButtonStackView.removeArrangedSubview(viewQRButtonCompressingSpacer)
+				viewQRButtonStackView.addArrangedSubview(thisCertificateIsNotUsedOverlayView)
+			} else {
+				viewQRButtonStackView.removeArrangedSubview(thisCertificateIsNotUsedOverlayView)
+				viewQRButtonStackView.addArrangedSubview(viewQRButton)
+				viewQRButtonStackView.addArrangedSubview(viewQRButtonCompressingSpacer)
+			}
+		}
+	}
+	
+	// nil, 1G or 3G
+	var disclosurePolicyLabel: String? {
+		didSet {
+			// next PR
+		}
+	}
+}
+
+private final class ThisCertificateIsNotUsedOverlayView: BaseView {
+	
+	private struct ViewTraits {
+		static let margin: CGFloat = 16
+		static let cornerRadius: CGFloat = 8
+	}
+	
+	private let label: Label = {
+		let label = Label(body: L.holder_dashboard_domesticQRCard_3G_inactive_label())
+		label.textColor = C.darkColor()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.numberOfLines = 0
+		return label
+	}()
+	
+	override func setupViews() {
+		super.setupViews()
+		
+		backgroundColor = C.primaryBlue5()
+		layer.cornerRadius = ViewTraits.cornerRadius
+	}
+	
+	override func setupViewHierarchy() {
+		super.setupViewHierarchy()
+		addSubview(label)
+	}
+	
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
+		
+		NSLayoutConstraint.activate([
+			label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin),
+			label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin),
+			label.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin),
+			label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)
+		])
 	}
 }
