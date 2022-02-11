@@ -39,7 +39,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 		expect(self.sut.title)
 			.to(equal(L.verifierStartTitle()), description: "Title should match")
 		expect(self.sut.header)
-			.to(equal(L.verifierStartHeader()), description: "Header should match")
+			.to(beNil(), description: "Header should be nil")
 		expect(self.sut.message)
 			.to(equal(L.verifierStartMessage()), description: "Message should match")
 	}
@@ -126,7 +126,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_policyInformationShown() {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
 		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)

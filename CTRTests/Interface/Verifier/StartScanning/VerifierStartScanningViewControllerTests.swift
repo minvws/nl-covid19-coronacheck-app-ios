@@ -49,7 +49,7 @@ class VerifierStartScanningViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.fakeNavigationTitle) == L.verifierStartTitle()
-		expect(self.sut.sceneView.title) == L.verifierStartHeader()
+		expect(self.sut.sceneView.headerTitle).to(beNil())
 		expect(self.sut.sceneView.message) == L.verifierStartMessage()
 		expect(self.sut.sceneView.showInstructionsTitle) == L.verifierStartButtonShowinstructions()
 		expect(self.sut.sceneView.primaryTitle) == L.verifierStartButtonTitle()

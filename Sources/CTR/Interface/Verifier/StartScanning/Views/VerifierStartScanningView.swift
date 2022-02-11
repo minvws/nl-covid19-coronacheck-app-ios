@@ -336,9 +336,9 @@ class VerifierStartScanningView: BaseView {
 	// MARK: Public Access
 
 	/// The title
-	var title: String? {
+	var headerTitle: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(
+			titleLabel.attributedText = headerTitle?.setLineHeight(
 				ViewTraits.titleLineHeight,
 				kerning: ViewTraits.titleKerning
 			)

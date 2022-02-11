@@ -47,7 +47,6 @@
 "general.ok" = "OK";
 "general.paperflow" = "paper certificate";
 "general.positiveTest" = "positive test";
-"general.readmore" = "Read more";
 "general.recoverydate" = "recovery date";
 "general.retry" = "Try again";
 "general.testdate" = "test date";
@@ -59,6 +58,7 @@
 "general.vaccinationdate" = "Vaccination date";
 "general_menu" = "Menu";
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
+"general_readmore" = "Read more";
 "general_recoverycertificate" = "recovery certificate";
 "general_testcertificate" = "test certificate";
 "general_toMyOverview" = "To my certificates";
@@ -118,13 +118,11 @@
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
 "holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until %@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";
 "holder.dashboard.configIsAlmostOutOfDate.page.title" = "Please connect to the internet";
-"holder.dashboard.empty.domestic.message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
 "holder.dashboard.empty.domestic.title" = "Find your Dutch certificate here later";
 "holder.dashboard.empty.international.button" = "Which certificate is needed where I’m heading?";
 "holder.dashboard.empty.international.message" = "<p>Are you abroad, or planning to cross the border? Then always use your international certificate. Please check before leaving which certificate you need.</p>";
 "holder.dashboard.empty.international.title" = "Find your international certificate here later";
 "holder.dashboard.empty.international.url" = "https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands";
-"holder.dashboard.intro.domestic" = "Visiting a location within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance of the location you're visiting.";
 "holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p>";
 "holder.dashboard.intro.international.button" = "Which certificate is needed where I’m heading?";
 "holder.dashboard.intro.international.url" = "https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands";
@@ -626,6 +624,8 @@
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
 "holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";
 "holder_dashboard_addCard_title" = "Add new vaccination or test";
+"holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
+"holder_dashboard_intro_domestic_only3Gaccess" = "Visiting a location within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance of the location you're visiting.";
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
 "holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
@@ -636,8 +636,6 @@
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Your international test certificate has expired";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Your international vaccination certificate has expired";
 "holder_dashboard_originExpiredBanner_visitorPass_title" = "Your visitor pass has expired";
-"holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
-"holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Your visitor pass isn’t valid outside of the Netherlands";
 "holder_dashboard_visitorpassexpired_body" = "<p>A visitor pass is valid up until %li days after review of your vaccination. Are you staying in the Netherlands longer? Then you can request a visitor pass again. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Expired visitor pass";
@@ -670,13 +668,11 @@
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";
-"holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>A Dutch test certificate is only valid in places with 3G access. This means that you cannot use your test certificate to get access to places with 2G access.</p><p><b>What is the difference between 3G and 2G?</b><br />The Gs determine which people can be given access: only those who were vaccinated and/or have recovered (2G), or people who tested negative as well (3G).</p><ul><li>3G access means you can enter places with a test, vaccination or recovery certificate.</li><li>2G access means you <u>cannot</u> enter places with a test certificate. You'll need a vaccination or recovery certificate.</li></ul><p><a href=\"https://www.government.nl/2g-cc\">You can read more about 3G and 2G here</a>.</p>";
-"holder_my_overview_3g_test_validity_bottom_sheet_title" = "Test certificate only valid for 3G access";
-"holder_my_overview_3g_test_validity_card" = "Your test certificate is only valid for 3G access within the Netherlands";
 "holder_negativetest_ggd_message" = "Is your result in? Log in with DigiD to retrieve your test result from the GGD.";
 "holder_negativetest_ggd_title" = "Retrieve test result";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "About your visitor pass";
+"holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid test certificate, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Dutch QR code";
@@ -700,7 +696,6 @@
 "new.terms.highlights" = "<b>This has changed</b><ul><li>Initials and day and month of birth are included in the QR code</li><li>This data is displayed on the Scanner app for ID verification purposes</li></ul>";
 /* MARK: - New Terms */
 "new.terms.title" = "We've updated our policy";
-"qr_explanation_description_domestic_2G" = "<p>Your Dutch QR code says you have a valid test certificate, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "recommended.updateApp.action.cancel" = "I'll do it later";
 "recommended.updateApp.action.ok" = "Update now";
 "recommended.updateApp.subtitle" = "Want to prevent having to update when you're entering a place, or crossing the border? Then update to a newer version now.";

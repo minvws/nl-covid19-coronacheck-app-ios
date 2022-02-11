@@ -35,7 +35,7 @@ final class VerifiedAccessViewModel: Logging {
 		self.coordinator = coordinator
 		self.verifiedAccess = verifiedAccess
 
-		if Current.featureFlagManager.is1GPolicyEnabled() {
+		if Current.featureFlagManager.is1GVerificationPolicyEnabled() {
 			switch verifiedAccess {
 				case .verified(let verificationPolicy), .demo(let verificationPolicy):
 					accessTitle = L.verifier_result_access_title_policy(verificationPolicy.localization)

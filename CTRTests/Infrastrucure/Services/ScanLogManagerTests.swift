@@ -160,4 +160,36 @@ class ScanLogManagerTests: XCTestCase {
 		// Then
 		expect(list).toEventually(beEmpty())
 	}
+	
+	func test_notification_outsideTimeWindow() throws {
+		
+		// Given
+		let date = Date().addingTimeInterval(ago * 4000 * seconds)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
+		
+		// When
+		NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+		
+		// Then
+		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
+		
+		// Then
+		expect(result).toEventually(beEmpty())
+	}
+	
+	func test_notification_insideTimeWindow() throws {
+		
+		// Given
+		let date = Date().addingTimeInterval(ago * 3000 * seconds)
+		sut.addScanEntry(verificationPolicy: .policy1G, date: date)
+		
+		// When
+		NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+		
+		// Then
+		let result = try XCTUnwrap(sut.getScanEntries(withinLastNumberOfSeconds: 3600).successValue)
+		
+		// Then
+		expect(result).toEventuallyNot(beEmpty())
+	}
 }

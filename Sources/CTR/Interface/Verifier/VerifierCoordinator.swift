@@ -50,17 +50,20 @@ class VerifierCoordinator: SharedCoordinator {
 	
 	private var userSettings: UserSettingsProtocol = UserSettings()
 	
+	private var verificationPolicyEnablerObserverToken: VerificationPolicyEnabler.ObserverToken?
+	
 	// Designated starter method
 	override func start() {
+		
+		verificationPolicyEnablerObserverToken = Current.verificationPolicyEnabler.appendPolicyChangedObserver { [weak self] in
+			guard let self = self, self.navigationController.viewControllers.contains(where: { $0 is VerifierStartScanningViewController }) else { return }
+			self.navigateToVerifierWelcome()
+		}
 		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: VerifierNewFeaturesFactory()
 		) {
-			
-			Current.scanLogManager.deleteExpiredScanLogEntries(
-				seconds: Current.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
-			)
 			navigateToVerifierWelcome()
 		}
 	}
@@ -91,6 +94,10 @@ class VerifierCoordinator: SharedCoordinator {
 			default:
 				return false
 		}
+	}
+	
+	deinit {
+		verificationPolicyEnablerObserverToken.map(Current.verificationPolicyEnabler.removeObserver)
 	}
 }
 

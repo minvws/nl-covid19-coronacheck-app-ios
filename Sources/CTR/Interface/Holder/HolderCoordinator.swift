@@ -57,8 +57,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	
-	func userWishesMoreInfoAboutTestOnlyValidFor3G()
-	
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
 	
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
@@ -101,6 +99,11 @@ class HolderCoordinator: SharedCoordinator {
 	
 	// Designated starter method
 	override func start() {
+		
+		if CommandLine.arguments.contains("-skipOnboarding") {
+			navigateToHolderStart()
+			return
+		}
 		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
@@ -528,12 +531,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
-	}
-	
-	func userWishesMoreInfoAboutTestOnlyValidFor3G() {
-		let title: String = L.holder_my_overview_3g_test_validity_bottom_sheet_title()
-		let message: String = L.holder_my_overview_3g_test_validity_bottom_sheet_body()
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 	
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {

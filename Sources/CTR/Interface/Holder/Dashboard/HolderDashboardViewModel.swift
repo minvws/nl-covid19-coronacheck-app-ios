@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -25,10 +26,16 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapRecommendToAddYourBoosterClose()
 	func didTapRetryLoadQRCards()
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
-	func didTapTestOnlyValidFor3GMoreInfo()
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
+	func didTapDisclosurePolicyInformation1GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation3GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation1GBannerClose()
+	func didTapDisclosurePolicyInformation3GBannerClose()
+	func didTapDisclosurePolicyInformation1GWith3GBannerClose()
 }
 
+// swiftlint:disable:next type_body_length
 final class HolderDashboardViewModel: Logging {
 	typealias Datasource = HolderDashboardQRCardDatasource
 
@@ -70,8 +77,6 @@ final class HolderDashboardViewModel: Logging {
 		var deviceHasClockDeviation: Bool = false
 
 		var shouldShowConfigurationIsAlmostOutOfDateBanner: Bool = false
-
-		var shouldShowDomestic3GTestBanner: Bool = false
 	
 		var shouldShowRecommendedUpdateBanner: Bool = false
 		
@@ -84,6 +89,10 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowAddCertificateFooter: Bool {
 			qrCards.isEmpty && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
+		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
+		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
+		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = false
+		var activeDisclosurePolicyMode: DisclosurePolicyMode
 		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -149,6 +158,7 @@ final class HolderDashboardViewModel: Logging {
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
 	private var remoteConfigUpdatesNewValidityToken: RemoteConfigManager.ObserverToken?
+	private var remoteConfigManagerUpdateObserverToken: RemoteConfigManager.ObserverToken?
 
 	// Dependencies:
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
@@ -185,18 +195,30 @@ final class HolderDashboardViewModel: Logging {
 				now: Current.now(),
 				remoteConfiguration: Current.remoteConfigManager.storedConfiguration
 			),
-			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
+			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now()),
+			activeDisclosurePolicyMode: {
+				if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+					return .combined1gAnd3g
+				} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+					return .exclusive1G
+				} else {
+					return .exclusive3G
+				}
+			}()
 		)
 
 		didUpdate(oldState: nil, newState: state)
 
+		handleDisclosurePolicyUpdates()
 		setupDatasource()
 		setupStrippenRefresher()
+		setupRemoteConfigManagerUpdateObserver()
 		setupNotificationListeners()
 		setupConfigNotificationManager()
 		setupRecommendedVersion()
 		setupNewValidityInfoForVaccinationsAndRecoveriesBanner()
-
+		recalculateDisclosureBannerState()
+		
 		// If the config ever changes, reload dependencies:
 		remoteConfigUpdateObserverToken = Current.remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
             self?.strippenRefresher.load()
@@ -225,10 +247,6 @@ final class HolderDashboardViewModel: Logging {
 				var state = self.state
 				state.qrCards = qrCardDataItems
 				state.expiredGreenCards += expiredGreenCards
-				state.shouldShowDomestic3GTestBanner = qrCardDataItems.contains(where: { qrCard in
-					// Assume that domestic has just one greencard.
-					qrCard.isa3GTestTheOnlyCurrentlyValidOrigin(now: Current.now())
-			   })
 				state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
 				state.shouldShowRecommendationToAddYourBooster = {
 					guard Current.userSettings.lastRecommendToAddYourBoosterDismissalDate == nil else { return false }
@@ -326,15 +344,36 @@ final class HolderDashboardViewModel: Logging {
 		guard state != oldState // save recomputation effort if `==`
 		else { return }
 		
-		domesticCards = HolderDashboardViewModel.assembleCards(
-			forValidityRegion: .domestic,
-			state: state,
-			actionHandler: self,
-			remoteConfigManager: Current.remoteConfigManager,
-			now: Current.now()
-		)
+		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+			// 1G-only
+			domesticCards = HolderDashboardViewModel.assemble1gOnlyCards(
+				forValidityRegion: .domestic,
+				state: state,
+				actionHandler: self,
+				remoteConfigManager: Current.remoteConfigManager,
+				now: Current.now()
+			)
+		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+			// 3G + 1G
+			domesticCards = HolderDashboardViewModel.assemble3gWith1GCards(
+				forValidityRegion: .domestic,
+				state: state,
+				actionHandler: self,
+				remoteConfigManager: Current.remoteConfigManager,
+				now: Current.now()
+			)
+		} else {
+			// 3G-only fallback
+			domesticCards = HolderDashboardViewModel.assemble3gOnlyCards(
+				forValidityRegion: .domestic,
+				state: state,
+				actionHandler: self,
+				remoteConfigManager: Current.remoteConfigManager,
+				now: Current.now()
+			)
+		}
 
-		internationalCards = HolderDashboardViewModel.assembleCards(
+		internationalCards = HolderDashboardViewModel.assembleInternationalCards(
 			forValidityRegion: .europeanUnion,
 			state: state,
 			actionHandler: self,
@@ -420,6 +459,45 @@ final class HolderDashboardViewModel: Logging {
 		self.state.shouldShowRecommendedUpdateBanner = recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending
 	}
 	
+	fileprivate func setupRemoteConfigManagerUpdateObserver() {
+		remoteConfigManagerUpdateObserverToken = Current.remoteConfigManager.appendUpdateObserver { [weak self] newConfig, _, _ in
+			self?.recalculateDisclosureBannerState()
+			self?.handleDisclosurePolicyUpdates()
+		}
+	}
+	
+	fileprivate func recalculateDisclosureBannerState() {
+
+		let lastDismissedDisclosurePolicy = Current.userSettings.lastDismissedDisclosurePolicy
+		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G]
+		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy3G]
+		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner = !(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G))
+	}
+	
+	fileprivate func handleDisclosurePolicyUpdates() {
+		
+		if Current.userSettings.lastKnownConfigDisclosurePolicy != Current.remoteConfigManager.storedConfiguration.disclosurePolicies {
+		
+			// Locally stored profile different than the remote ones
+			// - Update the locally stored profile
+			// - Reset any dismissed banners
+			// - Update the state mode (triggers the cards being redrawn)
+			// - Update the disclosure policy 
+			
+			Current.userSettings.lastKnownConfigDisclosurePolicy = Current.remoteConfigManager.storedConfiguration.disclosurePolicies ?? []
+			Current.userSettings.lastDismissedDisclosurePolicy = []
+			
+			if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+				state.activeDisclosurePolicyMode = .combined1gAnd3g
+			} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+				state.activeDisclosurePolicyMode = .exclusive1G
+			} else {
+				state.activeDisclosurePolicyMode = .exclusive3G
+			}
+			recalculateDisclosureBannerState()
+		}
+	}
+	
 	// MARK: - NSNotification
 	
 	fileprivate func setupNotificationListeners() {
@@ -468,7 +546,7 @@ final class HolderDashboardViewModel: Logging {
 	
 	// MARK: - Static Methods
 	
-	private static func assembleCards(
+	private static func assemble3gOnlyCards(
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
@@ -486,16 +564,127 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		cards += VCCard.makeTestOnlyValidFor3GCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeQRCards(validityRegion: validityRegion, state: state, actionHandler: actionHandler, remoteConfigManager: remoteConfigManager)
+		
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
+			state: state,
+			localDisclosurePolicy: .policy3G,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager
+		)
+		
 		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
+	
+	private static func assemble1gOnlyCards(
+		forValidityRegion validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling,
+		remoteConfigManager: RemoteConfigManaging,
+		now: Date
+	) -> [HolderDashboardViewController.Card] {
+		typealias VCCard = HolderDashboardViewController.Card
+		
+		var cards = [VCCard]()
+		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
+		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation1GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
+			state: state,
+			localDisclosurePolicy: .policy1G,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager
+		)
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
+			state: state,
+			localDisclosurePolicy: .policy3G,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager
+		)
+		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
+		return cards
+	}
+	
+	private static func assemble3gWith1GCards(
+		forValidityRegion validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling,
+		remoteConfigManager: RemoteConfigManaging,
+		now: Date
+	) -> [HolderDashboardViewController.Card] {
+		typealias VCCard = HolderDashboardViewController.Card
+		
+		var cards = [VCCard]()
+		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
+		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation1GWith3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
+			state: state,
+			localDisclosurePolicy: .policy3G,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager
+		)
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
+			state: state,
+			localDisclosurePolicy: .policy1G,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager
+		)
+		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
+		return cards
+	}
+	
+	private static func assembleInternationalCards(
+		forValidityRegion validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling,
+		remoteConfigManager: RemoteConfigManaging,
+		now: Date
+	) -> [HolderDashboardViewController.Card] {
+		
+		// Currently has the same implementation:
+		return assemble3gOnlyCards(
+			forValidityRegion: validityRegion,
+			state: state,
+			actionHandler: actionHandler,
+			remoteConfigManager: remoteConfigManager,
+			now: now
+		)
+	}
+	
 }
 
 // MARK: - HolderDashboardCardUserActionHandling
@@ -539,10 +728,6 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapDeviceHasClockDeviationMoreInfo() {
 		coordinator?.userWishesMoreInfoAboutClockDeviation()
-	}
-	
-	func didTapTestOnlyValidFor3GMoreInfo() {
-		coordinator?.userWishesMoreInfoAboutTestOnlyValidFor3G()
 	}
 	
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID]) {
@@ -595,4 +780,39 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		state.shouldShowRecommendationToAddYourBooster = false
 	}
 	
+	func didTapDisclosurePolicyInformation1GBannerMoreInformation() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerMoreInformation")
+//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+//		openUrl(url)
+	}
+	
+	func didTapDisclosurePolicyInformation3GBannerMoreInformation() {
+		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerMoreInformation")
+//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+//		openUrl(url)
+	}
+	
+	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation")
+//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
+//		openUrl(url)
+	}
+	
+	func didTapDisclosurePolicyInformation1GBannerClose() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerClose")
+		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G]
+		recalculateDisclosureBannerState()
+	}
+	
+	func didTapDisclosurePolicyInformation3GBannerClose() {
+		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerClose")
+		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy3G]
+		recalculateDisclosureBannerState()
+	}
+	
+	func didTapDisclosurePolicyInformation1GWith3GBannerClose() {
+		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerClose")
+		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
+		recalculateDisclosureBannerState()
+	}
 }

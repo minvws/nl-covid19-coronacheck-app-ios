@@ -76,7 +76,7 @@ struct ScanInstructionsFactory: ScanInstructionsFactoryProtocol {
 			)
 		]
 		
-		if Current.featureFlagManager.is1GPolicyEnabled() {
+		if Current.featureFlagManager.is1GVerificationPolicyEnabled() {
 			pages[3] = ScanInstructionsItem(
 				title: L.scan_instructions_4_title_1G(),
 				message: L.scan_instructions_4_description_1G(),
