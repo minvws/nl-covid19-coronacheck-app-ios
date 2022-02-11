@@ -209,6 +209,7 @@ final class HolderDashboardViewModel: Logging {
 
 		didUpdate(oldState: nil, newState: state)
 
+		handleDisclosurePolicyUpdates()
 		setupDatasource()
 		setupStrippenRefresher()
 		setupRemoteConfigManagerUpdateObserver()
@@ -461,25 +462,40 @@ final class HolderDashboardViewModel: Logging {
 	fileprivate func setupRemoteConfigManagerUpdateObserver() {
 		remoteConfigManagerUpdateObserverToken = Current.remoteConfigManager.appendUpdateObserver { [weak self] newConfig, _, _ in
 			self?.recalculateDisclosureBannerState()
+			self?.handleDisclosurePolicyUpdates()
 		}
 	}
 	
 	fileprivate func recalculateDisclosureBannerState() {
 
 		let lastDismissedDisclosurePolicy = Current.userSettings.lastDismissedDisclosurePolicy
-				
-		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner =
-		lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G] && state.activeDisclosurePolicyMode == .exclusive1G
-		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner =
-		lastDismissedDisclosurePolicy != [DisclosurePolicy.policy3G] && state.activeDisclosurePolicyMode == .exclusive3G
-		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner =
-		!(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G)) &&
-		state.activeDisclosurePolicyMode == .combined1gAnd3g
+		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G]
+		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy3G]
+		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner = !(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G))
+	}
+	
+	fileprivate func handleDisclosurePolicyUpdates() {
 		
-		logInfo("lastDismissedDisclosurePolicies: \(lastDismissedDisclosurePolicy)")
-		logInfo("shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: \(state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner)")
-		logInfo("shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: \(state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner)")
-		logInfo("shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: \(state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner)")
+		if Current.userSettings.lastKnownConfigDisclosurePolicy != Current.remoteConfigManager.storedConfiguration.disclosurePolicies {
+		
+			// Locally stored profile different than the remote ones
+			// - Update the locally stored profile
+			// - Reset any dismissed banners
+			// - Update the state mode (triggers the cards being redrawn)
+			// - Update the disclosure policy 
+			
+			Current.userSettings.lastKnownConfigDisclosurePolicy = Current.remoteConfigManager.storedConfiguration.disclosurePolicies ?? []
+			Current.userSettings.lastDismissedDisclosurePolicy = []
+			
+			if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+				state.activeDisclosurePolicyMode = .combined1gAnd3g
+			} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+				state.activeDisclosurePolicyMode = .exclusive1G
+			} else {
+				state.activeDisclosurePolicyMode = .exclusive3G
+			}
+			recalculateDisclosureBannerState()
+		}
 	}
 	
 	// MARK: - NSNotification

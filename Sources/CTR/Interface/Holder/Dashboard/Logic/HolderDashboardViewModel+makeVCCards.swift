@@ -274,7 +274,9 @@ extension HolderDashboardViewController.Card {
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
-		guard validityRegion == .domestic, state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner else { return [] }
+		guard validityRegion == .domestic,
+				state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner,
+			  state.activeDisclosurePolicyMode == .exclusive1G else { return [] }
 		
 		return [
 			.disclosurePolicyInformation(
@@ -296,7 +298,9 @@ extension HolderDashboardViewController.Card {
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
-		guard validityRegion == .domestic, state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner else { return [] }
+		guard validityRegion == .domestic,
+			  state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner,
+			  state.activeDisclosurePolicyMode == .exclusive3G else { return [] }
 		
 		return [
 			.disclosurePolicyInformation(
@@ -318,8 +322,10 @@ extension HolderDashboardViewController.Card {
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
-		guard validityRegion == .domestic, state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner else { return [] }
-		
+		guard validityRegion == .domestic,
+				state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner,
+				state.activeDisclosurePolicyMode == .combined1gAnd3g else { return [] }
+
 		return [
 			.disclosurePolicyInformation(
 				title: L.holder_dashboard_3Gand1GaccessBanner_title(),

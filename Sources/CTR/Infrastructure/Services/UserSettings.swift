@@ -41,6 +41,7 @@ protocol UserSettingsProtocol: AnyObject {
 	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] { get set }
+	var lastKnownConfigDisclosurePolicy: [String] { get set }
 	var overrideDisclosurePolicies: [String] { get set }
 	
 	func wipePersistedData()
@@ -100,9 +101,12 @@ class UserSettings: UserSettingsProtocol {
 	
 	@UserDefaults(key: "lastDismissedDisclosurePolicy")
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] = [] // swiftlint:disable:this let_var_whitespace
-	
+
 	@UserDefaults(key: "overrideDisclosurePolicies")
 	var overrideDisclosurePolicies: [String] = [] // swiftlint:disable:this let_var_whitespace
+	
+	@UserDefaults(key: "lastKnownConfigDisclosurePolicy")
+	var lastKnownConfigDisclosurePolicy: [String] = [] // swiftlint:disable:this let_var_whitespace
 }
 
 extension UserSettings {
