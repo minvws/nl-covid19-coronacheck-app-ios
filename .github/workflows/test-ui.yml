@@ -12,7 +12,7 @@ env:
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
   
 jobs:
-  smoketest-ui:
+  test-ui:
     runs-on: macos-11
     timeout-minutes: 180
     steps:
