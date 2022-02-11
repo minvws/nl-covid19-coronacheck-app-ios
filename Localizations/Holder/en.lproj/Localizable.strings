@@ -118,13 +118,11 @@
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
 "holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until %@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";
 "holder.dashboard.configIsAlmostOutOfDate.page.title" = "Please connect to the internet";
-"holder.dashboard.empty.domestic.message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
 "holder.dashboard.empty.domestic.title" = "Find your Dutch certificate here later";
 "holder.dashboard.empty.international.button" = "Which certificate is needed where I’m heading?";
 "holder.dashboard.empty.international.message" = "<p>Are you abroad, or planning to cross the border? Then always use your international certificate. Please check before leaving which certificate you need.</p>";
 "holder.dashboard.empty.international.title" = "Find your international certificate here later";
 "holder.dashboard.empty.international.url" = "https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands";
-"holder.dashboard.intro.domestic" = "Visiting a location within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance of the location you're visiting.";
 "holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p>";
 "holder.dashboard.intro.international.button" = "Which certificate is needed where I’m heading?";
 "holder.dashboard.intro.international.url" = "https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands";
@@ -626,6 +624,8 @@
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
 "holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";
 "holder_dashboard_addCard_title" = "Add new vaccination or test";
+"holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
+"holder_dashboard_intro_domestic_only3Gaccess" = "Visiting a location within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance of the location you're visiting.";
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
 "holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";

@@ -19,8 +19,17 @@ extension HolderDashboardViewController.Card {
 
 		switch validityRegion {
 			case .domestic:
+				let domesticTitle: String
+				switch state.activeDisclosurePolicyMode {
+					case .exclusive1G:
+						domesticTitle = L.holder_dashboard_intro_domestic_only1Gaccess()
+					case .exclusive3G:
+						domesticTitle = L.holder_dashboard_intro_domestic_only3Gaccess()
+					case .combined1gAnd3g:
+						domesticTitle = L.holder_dashboard_intro_domestic_3Gand1Gaccess()
+				}
 				return [.headerMessage(
-					message: L.holderDashboardIntroDomestic(),
+					message: domesticTitle,
 					buttonTitle: nil
 				)]
 			case .europeanUnion:
@@ -119,8 +128,17 @@ extension HolderDashboardViewController.Card {
 		
 		switch validityRegion {
 			case .domestic:
+				let domesticTitle: String
+				switch state.activeDisclosurePolicyMode {
+					case .exclusive1G:
+						domesticTitle = L.holder_dashboard_empty_domestic_only1Gaccess_message()
+					case .exclusive3G:
+						domesticTitle = L.holder_dashboard_empty_domestic_only3Gaccess_message()
+					case .combined1gAnd3g:
+						domesticTitle = L.holder_dashboard_empty_domestic_3Gand1Gaccess_message()
+				}
 				return [HolderDashboardViewController.Card.emptyStateDescription(
-					message: L.holderDashboardEmptyDomesticMessage(),
+					message: domesticTitle,
 					buttonTitle: nil
 				)]
 			case .europeanUnion:
