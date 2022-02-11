@@ -14,7 +14,7 @@ enum VerificationPolicy: Codable, CaseIterable {
 	/// 1G policy
 	case policy1G
 	
-	var scanPolicy: Int {
+	var scanPolicy: String {
 		switch self {
 			case .policy3G:
 				return MobilecoreVERIFICATION_POLICY_3G

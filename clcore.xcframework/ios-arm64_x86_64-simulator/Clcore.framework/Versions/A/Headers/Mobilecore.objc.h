@@ -107,8 +107,8 @@
 
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreCATEGORY_1G;
 FOUNDATION_EXPORT const int64_t MobilecoreCREATE_CREDENTIAL_VERSION;
-FOUNDATION_EXPORT const long MobilecoreDISCLOSURE_POLICY_1G;
-FOUNDATION_EXPORT const long MobilecoreDISCLOSURE_POLICY_3G;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISCLOSURE_POLICY_1G;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISCLOSURE_POLICY_3G;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISEASE_TARGETED_COVID_19;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDOB_EMPTY_VALUE;
 FOUNDATION_EXPORT const int64_t MobilecoreHCERT_SPECIMEN_EXPIRATION_TIME;
@@ -119,8 +119,8 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVACCINE_MEDICINAL_PRODUCT_J
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_ERROR;
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_IS_NL_DCC;
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX;
-FOUNDATION_EXPORT const long MobilecoreVERIFICATION_POLICY_1G;
-FOUNDATION_EXPORT const long MobilecoreVERIFICATION_POLICY_3G;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFICATION_POLICY_1G;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFICATION_POLICY_3G;
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_SUCCESS;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENAME;
@@ -141,9 +141,9 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCommitmentMessage(
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCredentials(NSData* _Nullable ccmsJson);
 
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDisclose(NSData* _Nullable holderSkJson, NSData* _Nullable credJson, long disclosurePolicy);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDisclose(NSData* _Nullable holderSkJson, NSData* _Nullable credJson, NSString* _Nullable disclosurePolicy);
 
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDiscloseWithTime(NSData* _Nullable holderSkJson, NSData* _Nullable credJson, long disclosurePolicy, int64_t unixTimeSeconds);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDiscloseWithTime(NSData* _Nullable holderSkJson, NSData* _Nullable credJson, NSString* _Nullable disclosurePolicy, int64_t unixTimeSeconds);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreErrorResult(NSError* _Nullable err);
 
@@ -168,9 +168,9 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(N
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(NSData* _Nullable proofPrefixed);
 
-FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded, long verificationPolicy);
+FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded, NSString* _Nullable verificationPolicy);
 
-FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerifyWithTime(NSData* _Nullable proofQREncoded, long verificationPolicy, int64_t unixTimeSeconds);
+FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerifyWithTime(NSData* _Nullable proofQREncoded, NSString* _Nullable verificationPolicy, int64_t unixTimeSeconds);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreWrappedErrorResult(NSError* _Nullable err, NSString* _Nullable prefix);
 

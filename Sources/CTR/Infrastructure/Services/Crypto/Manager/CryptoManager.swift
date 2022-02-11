@@ -151,7 +151,7 @@ class CryptoManager: CryptoManaging, Logging {
 		
 		let proofQREncoded = message.data(using: .utf8)
 
-		let scanPolicy: Int
+		let scanPolicy: String
 		if featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			guard let riskSetting = riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
