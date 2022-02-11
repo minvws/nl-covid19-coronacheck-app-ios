@@ -69,7 +69,7 @@ extension BaseTest {
 	
 	func formattedDate(with date: String, withYear: Bool = true, withDay: Bool = false) -> String {
 		let formatter = DateFormatter()
-		formatter.dateFormat = "yyyy-mm-dd"
+		formatter.dateFormat = "yyyy-MM-dd"
 		let calculatedDate = formatter.date(from: date)
 		return formatDate(with: calculatedDate!, withYear: withYear, withDay: withDay)
 	}

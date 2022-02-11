@@ -414,10 +414,12 @@ extension HolderDashboardViewModel.QRCard {
 			
 				switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
 					case (.exclusive1G, .policy1G),
-						(.exclusive3G, .policy3G),
-						(.combined1gAnd3g, .policy1G),
-						(.combined1gAnd3g, .policy3G),
-						(.exclusive1G, .policy3G):
+						(.combined1gAnd3g, .policy1G):
+						guard hasAValidTest(now: Current.now()) else { return [] }
+					case (.exclusive1G, .policy3G):
+						guard hasValidOriginsWhichAreNotOfTypeTest(now: Current.now()) else { return [] }
+					case (.exclusive3G, .policy3G),
+						(.combined1gAnd3g, .policy3G):
 						break
 					case (.exclusive3G, .policy1G):
 						return []
@@ -425,7 +427,12 @@ extension HolderDashboardViewModel.QRCard {
 			
 				cards += [HolderDashboardViewController.Card.domesticQR(
 					disclosurePolicyLabel: localDisclosurePolicy.localization,
-					title: L.holderDashboardQrTitle(),
+					title: {
+						switch localDisclosurePolicy {
+							case .policy3G: return L.holder_dashboard_domesticQRCard_3G_title()
+							case .policy1G: return L.holder_dashboard_domesticQRCard_1G_title()
+						}
+					}(),
 					isDisabledByDisclosurePolicy: { () -> Bool in
 						// Whether we should show "Dit bewijs wordt nu niet gebruikt in Nederland."
 						switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
@@ -447,7 +454,7 @@ extension HolderDashboardViewModel.QRCard {
 					),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { [weak actionHandler] in
-						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
+						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id }, disclosurePolicy: localDisclosurePolicy)
 					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: { now in
@@ -507,7 +514,7 @@ extension HolderDashboardViewModel.QRCard {
 					),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { [weak actionHandler] in
-						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
+						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id }, disclosurePolicy: nil)
 					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: nil

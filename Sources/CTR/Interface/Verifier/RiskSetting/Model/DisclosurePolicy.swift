@@ -14,12 +14,12 @@ enum DisclosurePolicy: Codable, CaseIterable {
 	/// 1G policy
 	case policy1G
 	
-	var scanPolicy: String {
+	var mobileDisclosurePolicy: String {
 		switch self {
 			case .policy3G:
-				return MobilecoreVERIFICATION_POLICY_3G
+				return MobilecoreDISCLOSURE_POLICY_3G
 			case .policy1G:
-				return MobilecoreVERIFICATION_POLICY_1G
+				return MobilecoreDISCLOSURE_POLICY_1G
 		}
 	}
 	

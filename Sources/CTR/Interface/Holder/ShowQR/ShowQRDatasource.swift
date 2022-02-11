@@ -12,7 +12,7 @@ protocol ShowQRDatasourceProtocol {
 
 	var items: [ShowQRItem] { get }
 
-	init(greenCards: [GreenCard])
+	init(greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?)
 
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
 
@@ -30,7 +30,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 	private var fullyVaccinatedGreenCards = [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)]()
 	private var greencardsWithDosage = [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)]()
 
-	required init(greenCards: [GreenCard]) {
+	required init(greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
 
 		self.items = greenCards
 			.compactMap { greenCard in
@@ -47,7 +47,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 				}
 				return false
 			}
-			.map { ShowQRItem(greenCard: $0.greenCard) }
+			.map { ShowQRItem(greenCard: $0.greenCard, policy: disclosurePolicy) }
 
 		self.prepareVaccinatedGreenCards()
 	}

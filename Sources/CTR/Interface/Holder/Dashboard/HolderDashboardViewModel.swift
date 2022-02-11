@@ -25,7 +25,7 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapRecommendToAddYourBooster()
 	func didTapRecommendToAddYourBoosterClose()
 	func didTapRetryLoadQRCards()
-	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
+	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 	func didTapDisclosurePolicyInformation1GBannerMoreInformation()
 	func didTapDisclosurePolicyInformation3GBannerMoreInformation()
@@ -730,8 +730,8 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		coordinator?.userWishesMoreInfoAboutClockDeviation()
 	}
 	
-	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID]) {
-		coordinator?.userWishesToViewQRs(greenCardObjectIDs: greenCardObjectIDs)
+	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
+		coordinator?.userWishesToViewQRs(greenCardObjectIDs: greenCardObjectIDs, disclosurePolicy: disclosurePolicy)
 	}
 	
 	func didTapRetryLoadQRCards() {
@@ -781,37 +781,37 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	}
 	
 	func didTapDisclosurePolicyInformation1GBannerMoreInformation() {
-		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerMoreInformation")
-//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
-//		openUrl(url)
+
+		guard let url = URL(string: L.holder_dashboard_only1GaccessBanner_link()) else { return }
+		openUrl(url)
 	}
 	
 	func didTapDisclosurePolicyInformation3GBannerMoreInformation() {
-		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerMoreInformation")
-//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
-//		openUrl(url)
+
+		guard let url = URL(string: L.holder_dashboard_only3GaccessBanner_link()) else { return }
+		openUrl(url)
 	}
 	
 	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation() {
-		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerMoreInformation")
-//		guard let url = URL(string: L.holder_dashboard_newvaliditybanner_url()) else { return }
-//		openUrl(url)
+
+		guard let url = URL(string: L.holder_dashboard_3Gand1GaccessBanner_link()) else { return }
+		openUrl(url)
 	}
 	
 	func didTapDisclosurePolicyInformation1GBannerClose() {
-		logInfo("Todo: didTapDisclosurePolicyInformation1GBannerClose")
+
 		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G]
 		recalculateDisclosureBannerState()
 	}
 	
 	func didTapDisclosurePolicyInformation3GBannerClose() {
-		logInfo("Todo: didTapDisclosurePolicyInformation3GBannerClose")
+
 		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy3G]
 		recalculateDisclosureBannerState()
 	}
 	
 	func didTapDisclosurePolicyInformation1GWith3GBannerClose() {
-		logInfo("Todo: didTapDisclosurePolicyInformation1GAnd3GBannerClose")
+
 		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
 		recalculateDisclosureBannerState()
 	}

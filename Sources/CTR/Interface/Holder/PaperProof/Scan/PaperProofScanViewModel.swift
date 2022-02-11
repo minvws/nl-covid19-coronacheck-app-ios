@@ -50,17 +50,16 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 		
 		if message.lowercased().hasPrefix("nl") {
 
-			logInfo("Invalid: Domestic QR-code")
+			logWarning("Invalid: Domestic QR-code")
 			displayAlert(title: L.holderScannerAlertDccTitle(), message: L.holderScannerAlertDccMessage())
 
 		} else if cryptoManager?.readEuCredentials(Data(message.utf8)) != nil {
 
-			logInfo("Valid DCC")
 			theCoordinator?.userWishesToCreateACertificate(message: message)
 
 		} else {
 
-			logInfo("Invalid: Unknown QR-code")
+			logWarning("Invalid: Unknown QR-code")
 			displayAlert(title: L.holderScannerAlertUnknownTitle(), message: L.holderScannerAlertUnknownMessage())
 		}
 	}

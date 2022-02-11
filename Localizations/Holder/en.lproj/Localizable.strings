@@ -164,7 +164,7 @@
 "holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Prevent the spread of coronavirus, use <a href=\"itms-apps://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a> too.</p>";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br /><br />Still not working? Please call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free) and provide the following error code: (i 075).</p>";
-"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR code. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
+"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR codes. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Connect to the internet";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Server error";
@@ -621,6 +621,7 @@
 "holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
+"holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
 "holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";
 "holder_dashboard_addCard_title" = "Add new vaccination or test";
@@ -629,6 +630,8 @@
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
 "holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
+"holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels";
+"holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels";
 "holder_dashboard_originExpiredBanner_domesticRecovery_title" = "Your Dutch recovery certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticTest_title" = "Your Dutch test certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticVaccine_title" = "Your Dutch vaccination certificate has expired";

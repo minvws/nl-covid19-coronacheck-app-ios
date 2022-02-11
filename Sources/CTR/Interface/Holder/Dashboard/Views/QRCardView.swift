@@ -24,6 +24,12 @@ class QRCardView: BaseView {
 		
 		// Margins
 		static let imageMargin: CGFloat = 32
+		static let titleLeadingAnchorDCCMargin: CGFloat = 20
+		static let titleLeadingAnchorCTBMargin: CGFloat = 24
+		static let titleTopAnchorDCCMargin: CGFloat = 32
+		static let titleTopAnchorCTBMargin: CGFloat = 24
+		static let titleTrailingToLargeIconMargin: CGFloat = 16
+		static let titleTrailingToDisclosurePolicyIndicatorMargin: CGFloat = 8
 		
 		// Spacing
 		static let topVerticalLabelSpacing: CGFloat = 18
@@ -44,6 +50,14 @@ class QRCardView: BaseView {
         return Label(title3: nil, montserrat: true).multiline().header()
 	}()
 
+	private let disclosurePolicyIndicatorView: DisclosurePolicyIndicatorView = {
+		let view = DisclosurePolicyIndicatorView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.setContentCompressionResistancePriority(.required, for: .vertical)
+		view.isHidden = true
+		return view
+	}()
+	
 	private let verticalLabelsStackView: UIStackView = {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -86,6 +100,11 @@ class QRCardView: BaseView {
 		view.setContentCompressionResistancePriority(.required, for: .horizontal)
 		return view
 	}()
+	
+	private var titleTrailingToLargeIconImageViewConstraint: NSLayoutConstraint?
+	private var titleTrailingToDisclosurePolicyIndicatorViewConstraint: NSLayoutConstraint?
+	private var titleLeadingAnchor: NSLayoutConstraint?
+	private var titleTopAnchor: NSLayoutConstraint?
 
 	private var reloadTimer: Timer?
 
@@ -142,6 +161,7 @@ class QRCardView: BaseView {
 
 		hostView.addSubview(titleLabel)
 		hostView.addSubview(largeIconImageView)
+		hostView.addSubview(disclosurePolicyIndicatorView)
 		hostView.addSubview(verticalLabelsStackView)
 		hostView.addSubview(viewQRButtonStackView)
 		
@@ -213,10 +233,9 @@ class QRCardView: BaseView {
 			largeIconImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageDimension),
 			largeIconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageDimension),
 
-			titleLabel.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: 20),
-			titleLabel.topAnchor.constraint(equalTo: hostView.topAnchor, constant: 32),
-			titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: -16),
-
+			disclosurePolicyIndicatorView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor),
+			disclosurePolicyIndicatorView.topAnchor.constraint(equalTo: hostView.topAnchor, constant: 24),
+			
 			verticalLabelsStackView.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: ViewTraits.topVerticalLabelSpacing),
 			verticalLabelsStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
 			verticalLabelsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
@@ -238,8 +257,26 @@ class QRCardView: BaseView {
 				return constraint
 			}()
 		])
+		
+		titleTrailingToLargeIconImageViewConstraint = titleLabel.trailingAnchor.constraint(
+			lessThanOrEqualTo: largeIconImageView.leadingAnchor,
+			constant: -ViewTraits.titleTrailingToLargeIconMargin
+		)
+		titleTrailingToLargeIconImageViewConstraint?.isActive = true
+		
+		titleTrailingToDisclosurePolicyIndicatorViewConstraint = titleLabel.trailingAnchor.constraint(
+			lessThanOrEqualTo: disclosurePolicyIndicatorView.leadingAnchor,
+			constant: -ViewTraits.titleTrailingToDisclosurePolicyIndicatorMargin
+		)
+		titleTrailingToLargeIconImageViewConstraint?.isActive = false
+		
+		titleLeadingAnchor = titleLabel.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: ViewTraits.titleLeadingAnchorDCCMargin)
+		titleLeadingAnchor?.isActive = true
+		
+		titleTopAnchor = titleLabel.topAnchor.constraint(equalTo: hostView.topAnchor, constant: ViewTraits.titleTopAnchorDCCMargin)
+		titleTopAnchor?.isActive = true
 	}
-
+	
 	// MARK: - Private funcs
 
 	var originDesiresToShowAutomaticallyBecomesValidFooter = false
@@ -438,7 +475,23 @@ class QRCardView: BaseView {
 	// nil, 1G or 3G
 	var disclosurePolicyLabel: String? {
 		didSet {
-			// next PR
+			if let disclosurePolicyLabel = disclosurePolicyLabel {
+				largeIconImageView.isHidden = true
+				disclosurePolicyIndicatorView.isHidden = false
+				disclosurePolicyIndicatorView.title = disclosurePolicyLabel
+				titleTrailingToDisclosurePolicyIndicatorViewConstraint?.isActive = true
+				titleTrailingToLargeIconImageViewConstraint?.isActive = false
+				titleLeadingAnchor?.constant = ViewTraits.titleLeadingAnchorCTBMargin
+				titleTopAnchor?.constant = ViewTraits.titleTopAnchorCTBMargin
+			} else {
+				largeIconImageView.isHidden = false
+				disclosurePolicyIndicatorView.isHidden = true
+				titleTrailingToDisclosurePolicyIndicatorViewConstraint?.isActive = false
+				titleTrailingToLargeIconImageViewConstraint?.isActive = true
+				titleLeadingAnchor?.constant = ViewTraits.titleLeadingAnchorDCCMargin
+				titleTopAnchor?.constant = ViewTraits.titleTopAnchorDCCMargin
+			}
+			setNeedsLayout()
 		}
 	}
 }
@@ -479,5 +532,70 @@ private final class ThisCertificateIsNotUsedOverlayView: BaseView {
 			label.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin),
 			label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)
 		])
+	}
+}
+
+private final class DisclosurePolicyIndicatorView: BaseView {
+	
+	private struct ViewTraits {
+		static let smallMargin: CGFloat = 16
+		static let largeMargin: CGFloat = 20
+		static let cornerRadius: CGFloat = 8
+		static let imageDimension: CGFloat = 24
+	}
+	
+	private let iconImageView: UIImageView = {
+		
+		let view = UIImageView(image: I.dashboard.domestic())
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
+	private let label: Label = {
+		let label = Label(title3: "", textColor: Theme.colors.primary, montserrat: true)
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.lineBreakMode = .byTruncatingTail
+		label.setContentCompressionResistancePriority(.required, for: .vertical)
+		label.setContentCompressionResistancePriority(.required, for: .horizontal)
+		label.adjustsFontForContentSizeCategory = true
+		return label
+	}()
+	
+	override func setupViews() {
+		super.setupViews()
+		
+		backgroundColor = C.primaryBlue5()
+		layer.cornerRadius = ViewTraits.cornerRadius
+		layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+	}
+	
+	override func setupViewHierarchy() {
+		super.setupViewHierarchy()
+		
+		addSubview(label)
+		addSubview(iconImageView)
+	}
+	
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
+		
+		NSLayoutConstraint.activate([
+			iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.largeMargin),
+			iconImageView.centerYAnchor.constraint(equalTo: label.centerYAnchor),
+			iconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageDimension),
+			iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
+			
+			iconImageView.trailingAnchor.constraint(equalTo: label.leadingAnchor, constant: -ViewTraits.smallMargin),
+			
+			label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.largeMargin),
+			label.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.smallMargin),
+			label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.smallMargin)
+		])
+	}
+	
+	var title: String? {
+		didSet {
+			label.text = title
+		}
 	}
 }

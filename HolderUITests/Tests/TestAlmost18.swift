@@ -60,5 +60,4 @@ class TestAlmost18: BaseTest {
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilDate: person.vacUntilDate)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
-	
 }
