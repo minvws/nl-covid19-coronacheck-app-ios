@@ -69,11 +69,7 @@ class QRCardView: BaseView {
 	// Exerts horizontal compression on viewQRButton in its stackView so that the button isn't full-width.
 	private let viewQRButtonCompressingSpacer = UIView()
 	
-	private let thisCertificateIsNotUsedOverlayView: ThisCertificateIsNotUsedOverlayView = {
-		let view = ThisCertificateIsNotUsedOverlayView()
-		view.isHidden = true
-		return view
-	}()
+	private let thisCertificateIsNotUsedOverlayView = ThisCertificateIsNotUsedOverlayView()
 
 	private lazy var loadingButtonOverlay: ButtonLoadingOverlayView = {
 		let overlay = ButtonLoadingOverlayView()
@@ -151,7 +147,6 @@ class QRCardView: BaseView {
 		
 		viewQRButtonStackView.addArrangedSubview(viewQRButton)
 		viewQRButtonStackView.addArrangedSubview(viewQRButtonCompressingSpacer)
-		viewQRButtonStackView.addArrangedSubview(thisCertificateIsNotUsedOverlayView)
 		
 		viewQRButton.addSubview(loadingButtonOverlay)
 
@@ -427,10 +422,16 @@ class QRCardView: BaseView {
 	
 	var isDisabledByDisclosurePolicy: Bool = false {
 		didSet {
-			viewQRButton.isHidden = isDisabledByDisclosurePolicy
-			viewQRButtonCompressingSpacer.isHidden = viewQRButton.isHidden
 			
-			thisCertificateIsNotUsedOverlayView.isHidden = !isDisabledByDisclosurePolicy
+			if isDisabledByDisclosurePolicy {
+				viewQRButtonStackView.removeArrangedSubview(viewQRButton)
+				viewQRButtonStackView.removeArrangedSubview(viewQRButtonCompressingSpacer)
+				viewQRButtonStackView.addArrangedSubview(thisCertificateIsNotUsedOverlayView)
+			} else {
+				viewQRButtonStackView.removeArrangedSubview(thisCertificateIsNotUsedOverlayView)
+				viewQRButtonStackView.addArrangedSubview(viewQRButton)
+				viewQRButtonStackView.addArrangedSubview(viewQRButtonCompressingSpacer)
+			}
 		}
 	}
 	
@@ -442,7 +443,7 @@ class QRCardView: BaseView {
 	}
 }
 
-private class ThisCertificateIsNotUsedOverlayView: BaseView {
+private final class ThisCertificateIsNotUsedOverlayView: BaseView {
 	
 	private struct ViewTraits {
 		static let margin: CGFloat = 16
