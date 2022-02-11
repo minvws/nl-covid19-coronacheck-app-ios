@@ -11,7 +11,7 @@ class BaseTest: XCTestCase {
 	
 	let app = XCUIApplication()
 	let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
-	let timeout = 10.0
+	let timeout = 30.0
 	
 	override func setUpWithError() throws {
 		try super.setUpWithError()

@@ -30,7 +30,7 @@ class TestAlmost18: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilDate: person.birthDate)
+		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilDate: person.validUntilDate)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -270)
 	}
 	
@@ -57,7 +57,7 @@ class TestAlmost18: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilDate: person.birthDate)
+		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilDate: person.validUntilDate)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -270)
 	}
 	
