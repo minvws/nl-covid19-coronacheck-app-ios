@@ -44,6 +44,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 
@@ -69,6 +70,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard, greenCard, greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 
@@ -95,6 +97,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: nil,
 			thirdPartyTicketAppName: nil
 		)
 
@@ -111,6 +114,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 
@@ -133,6 +137,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 
@@ -154,10 +159,11 @@ class ShowQRViewModelTests: XCTestCase {
 				originType: .vaccination
 			)
 		)
-		
+
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		environmentSpies.cryptoManagerSpy.stubbedReadDomesticCredentialsResult = DomesticCredentialAttributes(
@@ -181,9 +187,9 @@ class ShowQRViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrDomesticAboutTitle()
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.body) == L.holderShowqrDomesticAboutMessage("R P 30 MEI")
 	}
-	
+
 	func test_moreInformation_domesticGreenCard_validCredential_disclosurePolicy1GEnabled() throws {
-		
+
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
@@ -196,6 +202,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: .policy1G,
 			thirdPartyTicketAppName: nil
 		)
 		environmentSpies.cryptoManagerSpy.stubbedReadDomesticCredentialsResult = DomesticCredentialAttributes(
@@ -210,10 +217,10 @@ class ShowQRViewModelTests: XCTestCase {
 			validFrom: "\(Date())",
 			validForHours: "24"
 		)
-		
+
 		// When
 		sut?.showMoreInformation()
-		
+
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrDomesticAboutTitle()
@@ -221,7 +228,7 @@ class ShowQRViewModelTests: XCTestCase {
 	}
 
 	func test_moreInformation_domesticGreenCard_validCredential() throws {
-		
+
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
@@ -233,6 +240,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		environmentSpies.cryptoManagerSpy.stubbedReadDomesticCredentialsResult = DomesticCredentialAttributes(
@@ -247,10 +255,10 @@ class ShowQRViewModelTests: XCTestCase {
 			validFrom: "\(Date())",
 			validForHours: "24"
 		)
-		
+
 		// When
 		sut?.showMoreInformation()
-		
+
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrDomesticAboutTitle()
@@ -269,6 +277,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		environmentSpies.cryptoManagerSpy.stubbedReadDomesticCredentialsResult = nil
@@ -294,6 +303,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: nil,
 			thirdPartyTicketAppName: nil
 		)
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 2, totalDose: 2))
@@ -335,6 +345,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: "RollerDiscoParties"
 		)
 
@@ -345,7 +356,7 @@ class ShowQRViewModelTests: XCTestCase {
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyTicketApp) == true
 	}
-	
+
 	func test_minimisingApp_clears_thirdpartyappbutton() throws {
 		// Arrange
 		let greenCard = try XCTUnwrap(
@@ -361,6 +372,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: "RollerDiscoParties",
 			notificationCenter: notificationCenterSpy
 		)

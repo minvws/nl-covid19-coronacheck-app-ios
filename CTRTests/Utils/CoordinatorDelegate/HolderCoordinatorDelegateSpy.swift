@@ -225,14 +225,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesToViewQRs = false
 	var invokedUserWishesToViewQRsCount = 0
-	var invokedUserWishesToViewQRsParameters: (greenCardObjectIDs: [NSManagedObjectID], Void)?
-	var invokedUserWishesToViewQRsParametersList = [(greenCardObjectIDs: [NSManagedObjectID], Void)]()
+	var invokedUserWishesToViewQRsParameters: (greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)?
+	var invokedUserWishesToViewQRsParametersList = [(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)]()
 
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
 		invokedUserWishesToViewQRs = true
 		invokedUserWishesToViewQRsCount += 1
-		invokedUserWishesToViewQRsParameters = (greenCardObjectIDs, ())
-		invokedUserWishesToViewQRsParametersList.append((greenCardObjectIDs, ()))
+		invokedUserWishesToViewQRsParameters = (greenCardObjectIDs, disclosurePolicy)
+		invokedUserWishesToViewQRsParametersList.append((greenCardObjectIDs, disclosurePolicy))
 	}
 
 	var invokedUserWishesToLaunchThirdPartyTicketApp = false
