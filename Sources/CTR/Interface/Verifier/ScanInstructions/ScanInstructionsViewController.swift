@@ -105,10 +105,7 @@ class ScanInstructionsViewController: BaseViewController {
 	private func setupSkipButton() {
 
 		skipButton.addTarget(self, action: #selector(skipButtonTapped), for: .touchUpInside)
-		if #available(iOS 13.0, *) {
-			skipButton.addInteraction(UILargeContentViewerInteraction())
-			skipButton.showsLargeContentViewer = true
-		}
+		skipButton.setupLargeContentViewer()
 		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: skipButton)
 	}
 

@@ -12,13 +12,15 @@ struct TestPerson {
 	let doseIntl: [String]
 	let validFromNL: Int
 	let validUntilNL: Int
+	let birthDate: String?
 	
-	init(bsn: String, name: String? = nil, doseNL: Int = 0, doseIntl: [String] = [], validFromNL: Int = 0, validUntilNL: Int = 0) {
+	init(bsn: String, name: String? = nil, doseNL: Int = 0, doseIntl: [String] = [], validFromNL: Int = 0, validUntilNL: Int = 0, birthDate: String? = nil) {
 		self.bsn = bsn
 		self.name = name
 		self.doseNL = doseNL
 		self.doseIntl = doseIntl
 		self.validFromNL = validFromNL
 		self.validUntilNL = validUntilNL
+		self.birthDate = birthDate
 	}
 }

@@ -79,7 +79,12 @@ final class ConsentButton: UIControl {
 	}()
 	
 	private let titleLabel: Label = {
-		return Label(subhead: nil).multiline()
+		let label = Label(subhead: nil).multiline()
+		label.adjustsFontForContentSizeCategory = true
+		if #available(iOS 15.0, *) {
+			label.maximumContentSizeCategory = .accessibilityLarge
+		}
+		return label
 	}()
 	
 	private let iconImageView: UIImageView = {
@@ -201,6 +206,7 @@ final class ConsentButton: UIControl {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Dimension.lineHeight,
 															 textColor: Theme.colors.dark)
 			accessibilityLabel = title
+			setupLargeContentViewer(title: title)
 		}
 	}
 }

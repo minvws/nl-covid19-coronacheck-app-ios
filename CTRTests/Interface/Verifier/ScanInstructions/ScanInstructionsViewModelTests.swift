@@ -27,7 +27,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = false
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		sut = ScanInstructionsViewModel(
@@ -49,7 +49,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = false
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
@@ -73,7 +73,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = false
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
@@ -96,7 +96,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked

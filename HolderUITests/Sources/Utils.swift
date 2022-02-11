@@ -67,6 +67,13 @@ extension BaseTest {
 		return formatDate(with: calculatedDate, withYear: withYear, withDay: withDay)
 	}
 	
+	func formattedDate(with date: String, withYear: Bool = true, withDay: Bool = false) -> String {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "yyyy-mm-dd"
+		let calculatedDate = formatter.date(from: date)
+		return formatDate(with: calculatedDate!, withYear: withYear, withDay: withDay)
+	}
+	
 	func amountOfDoses(for doses: Int) -> String {
 		let doseText = doses == 1 ? " dosis" : " doses"
 		return "(" + String(doses) + doseText + ")"

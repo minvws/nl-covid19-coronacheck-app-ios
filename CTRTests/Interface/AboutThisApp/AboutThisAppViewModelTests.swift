@@ -58,7 +58,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holderAboutTitle()
 		expect(self.sut.message) == L.holderAboutText()
-		expect(self.sut.menu).to(haveCount(1))
+		expect(self.sut.menu).to(haveCount(2))
 		expect(self.sut.menu[0].key) == L.holderAboutReadmore()
 		expect(self.sut.menu[0].value).to(haveCount(5))
 		expect(self.sut.menu[0].value[0].identifier) == .privacyStatement
@@ -66,6 +66,12 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.sut.menu[0].value[2].identifier) == .colophon
 		expect(self.sut.menu[0].value[3].identifier) == .reset
 		expect(self.sut.menu[0].value[4].identifier) == .deeplink
+		
+		expect(self.sut.menu[1].value[0].identifier) == .use1GDisclosurePolicy
+		expect(self.sut.menu[1].value[1].identifier) == .use3GDisclosurePolicy
+		expect(self.sut.menu[1].value[2].identifier) == .use1GAnd3GDisclosurePolicy
+		expect(self.sut.menu[1].value[3].identifier) == .useConfigDisclosurePolicy
+		
 		expect(self.sut.appVersion.contains("testInitHolder")) == true
 	}
 	
