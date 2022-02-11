@@ -505,7 +505,6 @@ private final class ThisCertificateIsNotUsedOverlayView: BaseView {
 	
 	private let label: Label = {
 		let label = Label(body: L.holder_dashboard_domesticQRCard_3G_inactive_label())
-		label.setContentCompressionResistancePriority(.required, for: .vertical)
 		label.textColor = C.darkColor()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.numberOfLines = 0
