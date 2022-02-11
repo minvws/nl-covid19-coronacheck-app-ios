@@ -65,11 +65,10 @@ extension HolderDashboardViewModel {
 				}
 			}
 			
-			func hasValidTest(now: Date) -> Bool {
-				// Check contains currently valid test origin:
+			func hasValidOrigin(ofType type: QRCodeOriginType, now: Date) -> Bool {
 				return origins
 					.filter { $0.isCurrentlyValid(now: now) }
-					.contains(where: { $0.type == .test })
+					.contains(where: { $0.type == type })
 			}
 		}
 
@@ -115,9 +114,19 @@ extension HolderDashboardViewModel {
 		func hasAValidTest(now: Date) -> Bool {
 			// Find greencards where there is a valid test
 			let greencardsWithValidTest = greencards.filter { greencard in
-				greencard.hasValidTest(now: now)
-			} 
+				greencard.hasValidOrigin(ofType: .test, now: now)
+			}
 			return greencardsWithValidTest.isNotEmpty
+		}
+		
+		func hasValidOriginsWhichAreNotOfTypeTest(now: Date) -> Bool {
+			// Find greencards where there is a valid test
+			let greencardsWithValidOriginThatIsNotTest = greencards.filter { greencard in
+				greencard.hasValidOrigin(ofType: .vaccination, now: now)
+					|| greencard.hasValidOrigin(ofType: .recovery, now: now)
+					|| greencard.hasValidOrigin(ofType: .vaccinationassessment, now: now)
+			}
+			return greencardsWithValidOriginThatIsNotTest.isNotEmpty
 		}
 	}
 
