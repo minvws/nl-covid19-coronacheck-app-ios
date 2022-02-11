@@ -91,7 +91,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			return false
 		}
 		
-		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty() {
+		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
 			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
 		}
 		
@@ -104,7 +104,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			return false
 		}
 		
-		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty() {
+		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
 			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
 		}
 		
@@ -117,7 +117,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			return false
 		}
 		
-		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty() {
+		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
 			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
 		}
 		
