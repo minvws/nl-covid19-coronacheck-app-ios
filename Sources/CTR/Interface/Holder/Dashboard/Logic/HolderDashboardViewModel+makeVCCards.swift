@@ -413,8 +413,9 @@ extension HolderDashboardViewModel.QRCard {
 				// , in which case just return nothing
 			
 				switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
-					case (.exclusive1G, .policy1G),
-						(.exclusive3G, .policy3G),
+					case (.exclusive1G, .policy1G):
+						guard hasAValidTest(now: Current.now()) else { return [] }
+					case (.exclusive3G, .policy3G),
 						(.combined1gAnd3g, .policy1G),
 						(.combined1gAnd3g, .policy3G),
 						(.exclusive1G, .policy3G):

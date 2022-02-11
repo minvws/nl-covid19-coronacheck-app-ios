@@ -64,6 +64,13 @@ extension HolderDashboardViewModel {
 					return expirationTime > now.addingTimeInterval(threeYearsFromNow)
 				}
 			}
+			
+			func hasValidTest(now: Date) -> Bool {
+				// Check contains currently valid test origin:
+				return origins
+					.filter { $0.isCurrentlyValid(now: now) }
+					.contains(where: { $0.type == .test })
+			}
 		}
 
 		let region: Region // A QR Card only has one region
@@ -103,6 +110,14 @@ extension HolderDashboardViewModel {
 				.compactMap { $0.expirationTime }
 				.sorted()
 				.last ?? .distantPast
+		}
+		
+		func hasAValidTest(now: Date) -> Bool {
+			// Find greencards where there is a valid test
+			let greencardsWithValidTest = greencards.filter { greencard in
+				greencard.hasValidTest(now: now)
+			} 
+			return greencardsWithValidTest.isNotEmpty
 		}
 	}
 
