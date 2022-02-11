@@ -42,6 +42,7 @@
 "general.networkwasbusy.errorcode" = "<p>Probeer het op een later moment nog eens.</p><p><b>Foutcode:</b><br />%@</p>";
 "general.networkwasbusy.text" = "Probeer het op een later moment nog eens.";
 "general.networkwasbusy.title" = "Sorry, het is erg druk";
+"general.newintheapp" = "Nieuw in de app";
 "general.next" = "Volgende";
 "general.notification" = "Let op!";
 "general.ok" = "Oke";
@@ -164,7 +165,7 @@
 "holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Voorkom verspreiding van het coronavirus, gebruik ook <a href=\"itms-apps://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a>.</p>";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "Je hebt internet nodig om je QR-code te kunnen gebruiken.";
 "holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, het is niet gelukt de QR-code te vernieuwen. Open de app opnieuw over 10 minuten.<br /><br />Helpt dat niet? Bel dan de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis) en geef de foutcode (i 075) door.</p>";
-"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "De app heeft af en toe verbinding met de server nodig om je QR-code te vernieuwen. Dat is niet gelukt door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
+"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "De app heeft af en toe verbinding met de server nodig om je QR-codes te vernieuwen. Dat is niet gelukt door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "Om toegang tot je QR-codes te houden heb je internet nodig. Maak nu verbinding.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Maak verbinding met het internet";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Fout op de server";
