@@ -125,7 +125,7 @@ class CryptoManager: CryptoManaging, Logging {
 	func discloseCredential(_ credential: Data, disclosurePolicy: DisclosurePolicy) -> Data? {
 
 		if let holderSecretKey = cryptoData.holderSecretKey, hasPublicKeys() {
-			logInfo("Disclosing with policy: \(disclosurePolicy)")
+			logVerbose("Disclosing with policy: \(disclosurePolicy)")
 			let disclosed = MobilecoreDisclose(holderSecretKey, credential, disclosurePolicy.mobileDisclosurePolicy)
 			if let payload = disclosed?.value {
 				let message = String(decoding: payload, as: UTF8.self)
