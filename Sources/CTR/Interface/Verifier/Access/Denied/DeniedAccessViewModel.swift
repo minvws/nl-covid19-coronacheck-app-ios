@@ -57,6 +57,7 @@ final class DeniedAccessViewModel: Logging {
 	
 	func dismiss() {
 
+		stopAutoCloseTimer()
 		coordinator?.navigateToVerifierWelcome()
 	}
 	

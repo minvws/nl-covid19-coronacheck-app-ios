@@ -138,7 +138,6 @@ final class CheckIdentityViewModel: Logging {
 	
 	func showMoreInformation() {
 
-		stopAutoCloseTimer()
 		coordinator?.navigateToVerifiedInfo()
 	}
 }
