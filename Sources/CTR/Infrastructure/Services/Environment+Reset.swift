@@ -36,6 +36,7 @@ extension Environment {
 	
 	/// Reset verifier scan mode, including risk setting, scan lock and scan log
 	func wipeScanMode() {
+		
 		// Scan lock and risk level observers are not wiped
 		// in case this method is called after setting the observers in VerifierStartScanningViewModel
 		riskLevelManager.wipeScanMode()

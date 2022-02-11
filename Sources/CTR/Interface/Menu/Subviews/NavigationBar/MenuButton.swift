@@ -41,6 +41,10 @@ class MenuButton: UIControl {
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.setContentCompressionResistancePriority(.required, for: .vertical)
+		
+		if #available(iOS 15.0, *) {
+			label.maximumContentSizeCategory = .accessibilityMedium
+		}
 		return label
 	}()
 	
@@ -121,11 +125,7 @@ class MenuButton: UIControl {
 		accessibilityIdentifier = "MenuButton"
 		accessibilityLabel = L.generalMenuOpen()
 		
-		if #available(iOS 13.0, *) {
-			addInteraction(UILargeContentViewerInteraction())
-			showsLargeContentViewer = true
-			largeContentTitle = L.general_menu()
-		}
+		setupLargeContentViewer(title: L.general_menu())
 	}
 	
 	// MARK: - Objc Target-Action callbacks:
