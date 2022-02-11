@@ -188,10 +188,13 @@ private class TabBarButton: UIControl {
 	}
 	
 	private let titleLabel: Label = {
-		let label = Label(subheadMedium: nil).multiline()
+		let label = Label(subheadMedium: nil)
 		label.adjustsFontForContentSizeCategory = true
 		label.textAlignment = .center
 		label.textColor = Theme.colors.secondaryText
+		if #available(iOS 15.0, *) {
+			label.maximumContentSizeCategory = .accessibilityMedium
+		}
 		return label
 	}()
 	
@@ -272,6 +275,7 @@ private class TabBarButton: UIControl {
 		didSet {
 			titleLabel.text = title
 			accessibilityLabel = title
+			setupLargeContentViewer(title: title)
 		}
 	}
 }

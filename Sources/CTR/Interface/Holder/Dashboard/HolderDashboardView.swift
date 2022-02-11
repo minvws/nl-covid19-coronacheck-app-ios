@@ -147,13 +147,16 @@ final class HolderDashboardView: BaseView {
 		])
 	}
 	
-	override func setupAccessibility() {
-		super.setupAccessibility()
-		
- 	}
-	
 	override var accessibilityElements: [Any]? {
-		get { return [fakeNavigationBar, tabBar] + [domesticScrollView] + [internationalScrollView 	] }
+		get {
+			let selectedScrollView: [UIView] = {
+				switch tabBar.selectedTab {
+					case .domestic: return [domesticScrollView]
+					case .international: return [internationalScrollView]
+				}
+			}()
+			return [fakeNavigationBar, tabBar] + selectedScrollView + [footerButtonView]
+		}
 		set {}
 	}
 	
