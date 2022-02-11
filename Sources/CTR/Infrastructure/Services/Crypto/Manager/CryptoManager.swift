@@ -123,7 +123,7 @@ class CryptoManager: CryptoManaging, Logging {
 	func generateQRmessage(_ credential: Data) -> Data? {
 
 		if let holderSecretKey = cryptoData.holderSecretKey, hasPublicKeys() {
-			let disclosed = MobilecoreDisclose(holderSecretKey, credential)
+			let disclosed = MobilecoreDisclose(holderSecretKey, credential, MobilecoreDISCLOSURE_POLICY_3G)
 			if let payload = disclosed?.value {
 				let message = String(decoding: payload, as: UTF8.self)
 				logDebug("QR message: \(message)")
@@ -148,7 +148,7 @@ class CryptoManager: CryptoManaging, Logging {
 		
 		let proofQREncoded = message.data(using: .utf8)
 
-		let scanPolicy: String
+		let scanPolicy: Int
 		if featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			guard let riskSetting = riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
