@@ -65,7 +65,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func openUrl(_ url: URL, inApp: Bool)
 	
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 	
 	func userWishesToLaunchThirdPartyTicketApp()
 	
@@ -348,12 +348,13 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	/// Navigate to enlarged QR
-	private func navigateToShowQRs(_ greenCards: [GreenCard]) {
+	private func navigateToShowQRs(_ greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
 		
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCards: greenCards,
+				disclosurePolicy: disclosurePolicy,
 				thirdPartyTicketAppName: thirdpartyTicketApp?.name
 			)
 		)
@@ -573,7 +574,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentAsBottomSheet(viewController)
 	}
 	
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
 		
 		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
 		switch result {
@@ -581,7 +582,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				if greenCards.isEmpty {
 					showAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .noGreenCardsAvailable))
 				} else {
-					navigateToShowQRs(greenCards)
+					navigateToShowQRs(greenCards, disclosurePolicy: disclosurePolicy)
 				}
 			case .failure:
 				showAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .coreDataFetchError))

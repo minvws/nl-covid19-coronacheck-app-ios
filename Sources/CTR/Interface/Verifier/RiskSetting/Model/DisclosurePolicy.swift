@@ -14,7 +14,7 @@ enum DisclosurePolicy: Codable, CaseIterable {
 	/// 1G policy
 	case policy1G
 	
-	var disclosePolicy: Int {
+	var mobileDisclosurePolicy: Int {
 		switch self {
 			case .policy3G:
 				return MobilecoreDISCLOSURE_POLICY_3G

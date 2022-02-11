@@ -117,13 +117,14 @@ class ShowQRViewModel: Logging {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCards: [GreenCard],
+		disclosurePolicy: DisclosurePolicy?,
 		thirdPartyTicketAppName: String?,
 		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	) {
 
 		self.coordinator = coordinator
 		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
-		self.dataSource = ShowQRDatasource(greenCards: greenCards)
+		self.dataSource = ShowQRDatasource(greenCards: greenCards, disclosurePolicy: disclosurePolicy)
 		self.notificationCenter = notificationCenter
 		self.items = dataSource.items
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
@@ -305,6 +306,7 @@ class ShowQRViewModel: Logging {
 			viewModel: ShowQRItemViewModel(
 				delegate: self,
 				greenCard: item.greenCard,
+				disclosurePolicy: item.policy,
 				qrShouldInitiallyBeHidden: dataSource.shouldGreenCardBeHidden(item.greenCard)
 			)
 		)

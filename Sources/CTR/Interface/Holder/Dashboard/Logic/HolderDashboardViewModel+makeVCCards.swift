@@ -447,7 +447,7 @@ extension HolderDashboardViewModel.QRCard {
 					),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { [weak actionHandler] in
-						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
+						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id }, disclosurePolicy: DisclosurePolicy.policy3G)
 					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: { now in
@@ -507,7 +507,7 @@ extension HolderDashboardViewModel.QRCard {
 					),
 					isLoading: state.isRefreshingStrippen,
 					didTapViewQR: { [weak actionHandler] in
-						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
+						actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id }, disclosurePolicy: nil)
 					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: nil

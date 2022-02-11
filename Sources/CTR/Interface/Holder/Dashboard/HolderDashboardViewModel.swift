@@ -25,7 +25,7 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapRecommendToAddYourBooster()
 	func didTapRecommendToAddYourBoosterClose()
 	func didTapRetryLoadQRCards()
-	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
+	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 	func didTapDisclosurePolicyInformation1GBannerMoreInformation()
 	func didTapDisclosurePolicyInformation3GBannerMoreInformation()
@@ -730,8 +730,8 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		coordinator?.userWishesMoreInfoAboutClockDeviation()
 	}
 	
-	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID]) {
-		coordinator?.userWishesToViewQRs(greenCardObjectIDs: greenCardObjectIDs)
+	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
+		coordinator?.userWishesToViewQRs(greenCardObjectIDs: greenCardObjectIDs, disclosurePolicy: disclosurePolicy)
 	}
 	
 	func didTapRetryLoadQRCards() {
