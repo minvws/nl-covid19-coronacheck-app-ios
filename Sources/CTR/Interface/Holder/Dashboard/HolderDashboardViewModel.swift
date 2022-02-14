@@ -234,7 +234,13 @@ final class HolderDashboardViewModel: Logging {
 		}
 
 		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
-			self?.handleDisclosurePolicyUpdates()
+			// Disclosure Policy has been updated
+			// - Reset any dismissed banners
+			Current.userSettings.lastDismissedDisclosurePolicy = []
+			// - Update the active disclosure policy
+			self?.setActiveDisclosurePolicyMode()
+			// - Update the disclosure policy information banners
+			self?.recalculateDisclosureBannerState()
 		}
 	}
 
@@ -474,17 +480,6 @@ final class HolderDashboardViewModel: Logging {
 		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G]
 		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy3G]
 		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner = !(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G))
-	}
-	
-	fileprivate func handleDisclosurePolicyUpdates() {
-		
-		// Disclosure Policy has been updated
-		// - Reset any dismissed banners
-		Current.userSettings.lastDismissedDisclosurePolicy = []
-		// - Update the active disclosure policy
-		setActiveDisclosurePolicyMode()
-		// - Update the disclosure policy information banners
-		recalculateDisclosureBannerState()
 	}
 	
 	fileprivate func setActiveDisclosurePolicyMode() {

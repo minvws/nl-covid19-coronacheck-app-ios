@@ -696,9 +696,7 @@ extension HolderCoordinator {
 	func showNewDisclosurePolicy() {
 	
 		let viewController = NewDisclosurePolicyViewController(viewModel: NewDisclosurePolicyViewModel(coordinator: self))
-		navigationController.present(NavigationController(rootViewController: viewController), animated: true) {
-			// todo
-		}
+		navigationController.present(NavigationController(rootViewController: viewController), animated: true, completion: nil)
 	}
 	
 	func handleDisclosurePolicyUpdates() {
