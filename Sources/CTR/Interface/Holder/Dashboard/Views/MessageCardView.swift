@@ -40,18 +40,18 @@ class MessageCardView: BaseView {
     private let closeButtonTappedCommand: (() -> Void)?
     private let callToActionButtonTappedCommand: (() -> Void)?
     
-    required init(config: Config) {
-        self.config = config
-        titleLabel.attributedText = config.title.setLineHeight(ViewTraits.lineHeight, kerning: ViewTraits.kerning)
+	required init(config: Config) {
+		self.config = config
+		titleLabel.attributedText = config.title.setLineHeight(ViewTraits.lineHeight, kerning: ViewTraits.kerning)
 		titleLabel.accessibilityIdentifier = config.accessibilityIdentifier
-        
-        closeButtonTappedCommand = config.closeButtonCommand
-        
-        callToActionButton.title = config.ctaButton?.title
-        callToActionButtonTappedCommand = config.ctaButton?.command
-        
-        super.init(frame: .zero)
-    }
+		
+		closeButtonTappedCommand = config.closeButtonCommand
+		
+		callToActionButton.title = config.ctaButton?.title
+		callToActionButtonTappedCommand = config.ctaButton?.command
+		
+		super.init(frame: .zero)
+	}
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
