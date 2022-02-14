@@ -82,6 +82,8 @@ class HolderCoordinator: SharedCoordinator {
 	
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	
+	private var disclosurePolicyUpdateObserverToken: DisclosurePolicyManager.ObserverToken?
+	
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
 	/// Docs: https://shrtm.nu/oc45
@@ -103,6 +105,10 @@ class HolderCoordinator: SharedCoordinator {
 		if CommandLine.arguments.contains("-skipOnboarding") {
 			navigateToHolderStart()
 			return
+		}
+		
+		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
+			self?.handleDisclosurePolicyUpdates()
 		}
 		
 		handleOnboarding(
@@ -130,6 +136,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
+		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.removeObserver)
 	}
 	
 	// MARK: - Listeners
@@ -681,6 +688,20 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 		
 		removeChildCoordinator()
 		navigateToChooseQRCodeType()
+	}
+}
+
+extension HolderCoordinator {
+	
+	func showNewDisclosurePolicy() {
+	
+		let viewController = NewDisclosurePolicyViewController(viewModel: NewDisclosurePolicyViewModel(coordinator: self))
+		navigationController.present(NavigationController(rootViewController: viewController), animated: true, completion: nil)
+	}
+	
+	func handleDisclosurePolicyUpdates() {
+	
+		showNewDisclosurePolicy()
 	}
 }
 

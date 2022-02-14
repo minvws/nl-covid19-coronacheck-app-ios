@@ -159,6 +159,7 @@ final class HolderDashboardViewModel: Logging {
 	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
 	private var remoteConfigUpdatesNewValidityToken: RemoteConfigManager.ObserverToken?
 	private var remoteConfigManagerUpdateObserverToken: RemoteConfigManager.ObserverToken?
+	private var disclosurePolicyUpdateObserverToken: DisclosurePolicyManager.ObserverToken?
 
 	// Dependencies:
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
@@ -208,31 +209,45 @@ final class HolderDashboardViewModel: Logging {
 		)
 
 		didUpdate(oldState: nil, newState: state)
-
-		handleDisclosurePolicyUpdates()
+		
 		setupDatasource()
 		setupStrippenRefresher()
-		setupRemoteConfigManagerUpdateObserver()
 		setupNotificationListeners()
 		setupConfigNotificationManager()
 		setupRecommendedVersion()
 		setupNewValidityInfoForVaccinationsAndRecoveriesBanner()
 		recalculateDisclosureBannerState()
-		
-		// If the config ever changes, reload dependencies:
-		remoteConfigUpdateObserverToken = Current.remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
-            self?.strippenRefresher.load()
-		}
-
+		setupObservers()
+	}
+	
+	private func setupObservers() {
+	
+		// Observers
 		clockDeviationObserverToken = Current.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
 			self?.state.deviceHasClockDeviation = hasClockDeviation
 			self?.datasource.reload() // this could cause some QR code states to change, so reload.
+		}
+		
+		// If the config ever changes, reload dependencies:
+		remoteConfigUpdateObserverToken = Current.remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
+			self?.strippenRefresher.load()
+		}
+
+		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
+			// Disclosure Policy has been updated
+			// - Reset any dismissed banners
+			Current.userSettings.lastDismissedDisclosurePolicy = []
+			// - Update the active disclosure policy
+			self?.setActiveDisclosurePolicyMode()
+			// - Update the disclosure policy information banners
+			self?.recalculateDisclosureBannerState()
 		}
 	}
 
 	deinit {
 		notificationCenter.removeObserver(self)
 		clockDeviationObserverToken.map(Current.clockDeviationManager.removeDeviationChangeObserver)
+		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.removeObserver)
 		remoteConfigUpdateObserverToken.map(Current.remoteConfigManager.removeObserver)
 		remoteConfigUpdatesConfigurationWarningToken.map(Current.remoteConfigManager.removeObserver)
 	}
@@ -459,13 +474,6 @@ final class HolderDashboardViewModel: Logging {
 		self.state.shouldShowRecommendedUpdateBanner = recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending
 	}
 	
-	fileprivate func setupRemoteConfigManagerUpdateObserver() {
-		remoteConfigManagerUpdateObserverToken = Current.remoteConfigManager.appendUpdateObserver { [weak self] newConfig, _, _ in
-			self?.recalculateDisclosureBannerState()
-			self?.handleDisclosurePolicyUpdates()
-		}
-	}
-	
 	fileprivate func recalculateDisclosureBannerState() {
 
 		let lastDismissedDisclosurePolicy = Current.userSettings.lastDismissedDisclosurePolicy
@@ -474,27 +482,14 @@ final class HolderDashboardViewModel: Logging {
 		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner = !(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G))
 	}
 	
-	fileprivate func handleDisclosurePolicyUpdates() {
+	fileprivate func setActiveDisclosurePolicyMode() {
 		
-		if Current.userSettings.lastKnownConfigDisclosurePolicy != Current.remoteConfigManager.storedConfiguration.disclosurePolicies {
-		
-			// Locally stored profile different than the remote ones
-			// - Update the locally stored profile
-			// - Reset any dismissed banners
-			// - Update the state mode (triggers the cards being redrawn)
-			// - Update the disclosure policy 
-			
-			Current.userSettings.lastKnownConfigDisclosurePolicy = Current.remoteConfigManager.storedConfiguration.disclosurePolicies ?? []
-			Current.userSettings.lastDismissedDisclosurePolicy = []
-			
-			if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
-				state.activeDisclosurePolicyMode = .combined1gAnd3g
-			} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-				state.activeDisclosurePolicyMode = .exclusive1G
-			} else {
-				state.activeDisclosurePolicyMode = .exclusive3G
-			}
-			recalculateDisclosureBannerState()
+		if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+			state.activeDisclosurePolicyMode = .combined1gAnd3g
+		} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+			state.activeDisclosurePolicyMode = .exclusive1G
+		} else {
+			state.activeDisclosurePolicyMode = .exclusive3G
 		}
 	}
 	
