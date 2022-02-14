@@ -63,6 +63,13 @@ extension HolderDashboardViewModel {
 					let threeYearsFromNow: TimeInterval = 60 * 60 * 24 * 365 * 3
 					return expirationTime > now.addingTimeInterval(threeYearsFromNow)
 				}
+				
+				/// The point at which a countdown timer will be shown for this origin `type`
+				var countdownTimerVisibleThreshold: TimeInterval {
+					return type == .test
+						? 6 * 60 * 60 // tests have a countdown for last 6 hours
+						: 24 * 60 * 60 // everything else has countdown for last 24 hours
+				}
 			}
 			
 			func hasValidOrigin(ofType type: QRCodeOriginType, now: Date) -> Bool {
