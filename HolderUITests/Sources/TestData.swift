@@ -212,8 +212,8 @@ final class TestData {
 	
 	// Miscellaneous
 	static let miscP1Positive = TestPerson(bsn: "999992971", dose: 1, doseIntl: ["1/2"], vacFrom: -16, vacUntil: 240, recUntil: 150) // positive test after 1 pfizer
-	static let miscP2PosPcrNegPcr = TestPerson(bsn: "999991772", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -90, vacUntil: 180, vacOffset: -90) // 2 pfizer + positive/negative PCR (NAAT)
-
+	static let miscP2PosPcrNegPcr = TestPerson(bsn: "999991772", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -90, vacUntil: 180, vacOffset: -90, recUntil: 150) // 2 pfizer + positive/negative PCR (NAAT)
+	
 	// Vaccinations - almost 18
 	static let almost18Is17y8mWithP2LastDose1M = TestPerson(bsn: "999993422", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16) // Almost 18: 2 pfizer, 4 months before 18, last dose 1 month ago
 	static let almost18Is17y10mWithP2LastDose1M = TestPerson(bsn: "999993434", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16, vacUntil: 240) // Almost 18: 2 pfizer, 2 months before 18, last dose 1 month ago

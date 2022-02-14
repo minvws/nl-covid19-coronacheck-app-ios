@@ -22,8 +22,15 @@ class TestMisc: BaseTest {
 		addRetrievedCertificateToApp()
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
+		addTestCertificateFromGGD(for: person)
+		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchTestCertificate()
+		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 }
