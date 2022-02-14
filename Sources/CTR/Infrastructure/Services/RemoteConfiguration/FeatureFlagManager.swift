@@ -87,6 +87,10 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	// Holder
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
 		
+		if CommandLine.arguments.contains("-disclosurePolicyMode3G") {
+			return true
+		}
+		
 		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
 			return false
 		}
@@ -100,6 +104,10 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
 		
+		if CommandLine.arguments.contains("-disclosurePolicyMode1G") {
+			return true
+		}
+		
 		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
 			return false
 		}
@@ -112,6 +120,10 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	}
 	
 	func areBothDisclosurePoliciesEnabled() -> Bool {
+		
+		if CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") {
+			return true
+		}
 		
 		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
 			return false
