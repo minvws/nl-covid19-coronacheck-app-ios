@@ -98,6 +98,12 @@ final class CheckIdentityViewModel: Logging {
 		coordinator?.navigateToVerifierWelcome()
 	}
 	
+	func scanAgain() {
+
+		stopAutoCloseTimer()
+		coordinator?.navigateToScan()
+	}
+	
 	func showVerifiedAccess() {
 		
 		guard var verificationPolicySetting = Current.userSettings.configVerificationPolicies.first else {
@@ -244,6 +250,6 @@ private extension CheckIdentityViewModel {
 
 		logInfo("Auto closing the check identity view")
 		stopAutoCloseTimer()
-		coordinator?.navigateToScan()
+		scanAgain()
 	}
 }
