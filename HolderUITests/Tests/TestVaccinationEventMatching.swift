@@ -38,6 +38,7 @@ class TestVaccinationEventMatching: BaseTest {
 		let person = TestData.vacJ1DifferentFullNameReplaces
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
+		replaceExistingCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)

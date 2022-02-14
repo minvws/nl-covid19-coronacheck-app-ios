@@ -105,7 +105,7 @@ final class TestData {
 	static let vacP2DifferentSetupSituation = TestPerson(bsn: "999993562", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 210, vacOffset: -60) // 2 pfizer setup situation
 	static let vacJ1DifferentFirstNameReplaces = TestPerson(bsn: "999991255", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different first name, replaces setup
 	static let vacJ1DifferentLastNameReplaces = TestPerson(bsn: "999991267", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different last name, replaces setup
-	static let vacJ1DifferentFullNameReplaces = TestPerson(bsn: "999991267", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name, replaces setup
+	static let vacJ1DifferentFullNameReplaces = TestPerson(bsn: "999992156", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name, replaces setup
 	static let vacJ1DifferentBirthDayCanReplace = TestPerson(bsn: "999991279", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth day, can replace setup
 	static let vacJ1DifferentBirthMonthCanReplace = TestPerson(bsn: "999993021", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth month, can replace setup
 	static let vacJ1DifferentBirthYearReplaces = TestPerson(bsn: "999991292", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth year, replaces setup
