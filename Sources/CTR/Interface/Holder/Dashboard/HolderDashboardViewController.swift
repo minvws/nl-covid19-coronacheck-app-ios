@@ -297,6 +297,7 @@ private extension HolderDashboardViewController.Card {
 				qrCard.isLoading = isLoading
 				qrCard.isDisabledByDisclosurePolicy = isDisabledByDisclosurePolicy
 				qrCard.disclosurePolicyLabel = disclosurePolicyLabel
+				qrCard.accessibilityIdentifier = "\(disclosurePolicyLabel)QRCard"
 				return qrCard
 			
 			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
