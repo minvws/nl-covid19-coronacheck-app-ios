@@ -58,6 +58,12 @@ final class EnvironmentSpies {
 		return spy
 	}()
 	
+	var disclosurePolicyManagingSpy: DisclosurePolicyManagingSpy = {
+		let spy = DisclosurePolicyManagingSpy()
+		spy.stubbedAppendPolicyChangedObserverResult = UUID()
+		return spy
+	}()
+	
 	var featureFlagManagerSpy: FeatureFlagManagerSpy = {
 		let spy = FeatureFlagManagerSpy()
 		spy.stubbedIsNewValidityInfoBannerEnabledResult = false
@@ -175,6 +181,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		cryptoManager: spies.cryptoManagerSpy,
 		dataStoreManager: DataStoreManager(.inMemory),
 		deviceAuthenticationDetector: spies.deviceAuthenticationDetectorSpy,
+		disclosurePolicyManager: spies.disclosurePolicyManagingSpy,
 		featureFlagManager: spies.featureFlagManagerSpy,
 		greenCardLoader: spies.greenCardLoaderSpy,
 		jailBreakDetector: spies.jailBreakDetectorSpy,
