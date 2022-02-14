@@ -28,13 +28,13 @@ class MessageCardView: BaseView {
 		static let kerning: CGFloat = -0.41
 	}
     
-    struct Config {
-        
-        var title: String
+	struct Config {
+		
+		var title: String
 		var accessibilityIdentifier: String?
-        var closeButtonCommand: (() -> Void)?
-        var ctaButton: ((title: String, command: () -> Void))?
-    }
+		var closeButtonCommand: (() -> Void)?
+		var ctaButton: ((title: String, command: () -> Void))?
+	}
     
     private let config: Config
     private let closeButtonTappedCommand: (() -> Void)?
