@@ -2904,7 +2904,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Act
 		let values = [NSManagedObjectID()]
-		sut.didTapShowQR(greenCardObjectIDs: values)
+		sut.didTapShowQR(greenCardObjectIDs: values, disclosurePolicy: DisclosurePolicy.policy3G)
 
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs) === values
