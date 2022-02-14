@@ -461,44 +461,7 @@ extension HolderDashboardViewModel.QRCard {
 					},
 					buttonEnabledEvaluator: evaluateEnabledState,
 					expiryCountdownEvaluator: { now in
-
-						// Calculate which is the origin with the furthest future expiration:
-						var expiringMostDistantlyInFutureOrigin: GreenCard.Origin?
-						origins.forEach { origin in
-							if origin.expirationTime > (expiringMostDistantlyInFutureOrigin?.expirationTime ?? Date.distantPast) {
-								expiringMostDistantlyInFutureOrigin = origin
-							}
-						}
-						
-						guard let mostDistantFutureExpiryDate = expiringMostDistantlyInFutureOrigin?.expirationTime,
-							  let mostDistantFutureExpiryType = expiringMostDistantlyInFutureOrigin?.type
-						else { return nil }
-						
-						let countdownTimerVisibleThreshold: TimeInterval = mostDistantFutureExpiryType == .test
-							? 6 * 60 * 60 // tests have a countdown for last 6 hours
-							: 24 * 60 * 60 // everything else has countdown for last 24 hours
-						
-						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < now.addingTimeInterval(countdownTimerVisibleThreshold)
-						else { return nil }
- 
-						let formatter: DateComponentsFormatter = {
-							let fiveMinutes: TimeInterval = 5 * 60
-							if mostDistantFutureExpiryDate < now.addingTimeInterval(fiveMinutes) {
-								// e.g. "4 minuten en 15 seconden"
-								return HolderDashboardViewModel.hmsRelativeFormatter
-							} else {
-								// e.g. "23 uur en 59 minuten"
-								return HolderDashboardViewModel.hmRelativeFormatter
-							}
-						}()
-
-						guard let relativeDateString = formatter.string(
-							from: now,
-							to: mostDistantFutureExpiryDate.addingTimeInterval(1) // add 1, so that we don't count down to zero
-						)
-						else { return nil }
-
-						return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
+						domesticCountdownText(now: now, origins: origins, localDisclosurePolicy: localDisclosurePolicy)
 					}
 				)]
 
@@ -627,4 +590,56 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], 
 	}
 
 	return userMessages
+}
+
+/// For a given `[QRCard.GreenCard.Origin]`, determines which origin expires furthest into future, and
+/// if the date is within the threshold, will return a localized string indicating how long until that origin expires.
+private func domesticCountdownText(now: Date, origins: [QRCard.GreenCard.Origin], localDisclosurePolicy: DisclosurePolicy) -> String? {
+	
+	let expiringMostDistantlyInFutureOrigin: QRCard.GreenCard.Origin? = {
+		if localDisclosurePolicy == .policy1G {
+			return origins.first(where: { $0.type == .test })
+		} else {
+			
+			// Calculate which is the origin with the furthest future expiration:
+			return origins.reduce(QRCard.GreenCard.Origin?.none) { previous, next in
+				guard let previous = previous else { return next }
+				return next.expirationTime > previous.expirationTime ? next : previous
+			}
+		}
+	}()
+	
+	guard let expiringMostDistantlyInFutureOrigin = expiringMostDistantlyInFutureOrigin else { return nil }
+	
+	let expirationTime: Date = expiringMostDistantlyInFutureOrigin.expirationTime
+	let countdownTimerVisibleThreshold: TimeInterval = expiringMostDistantlyInFutureOrigin.countdownTimerVisibleThreshold
+	
+	guard expirationTime > now && expirationTime < now.addingTimeInterval(countdownTimerVisibleThreshold)
+	else { return nil }
+
+	return countdownText(now: now, to: expirationTime)
+}
+
+/// Produces a localized countdown string relative to `now`
+private func countdownText(now: Date, to futureExpiryDate: Date) -> String? {
+	guard futureExpiryDate > now else { return nil }
+	
+	let formatter: DateComponentsFormatter = {
+		let fiveMinutes: TimeInterval = 5 * 60
+		if futureExpiryDate < now.addingTimeInterval(fiveMinutes) {
+			// e.g. "4 minuten en 15 seconden"
+			return HolderDashboardViewModel.hmsRelativeFormatter
+		} else {
+			// e.g. "23 uur en 59 minuten"
+			return HolderDashboardViewModel.hmRelativeFormatter
+		}
+	}()
+
+	guard let relativeDateString = formatter.string(
+		from: now,
+		to: futureExpiryDate.addingTimeInterval(1) // add 1, so that we don't count down to zero
+	)
+	else { return nil }
+
+	return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
 }
