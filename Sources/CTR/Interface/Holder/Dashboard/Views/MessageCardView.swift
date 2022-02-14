@@ -28,28 +28,30 @@ class MessageCardView: BaseView {
 		static let kerning: CGFloat = -0.41
 	}
     
-    struct Config {
-        
-        var title: String
-        var closeButtonCommand: (() -> Void)?
-        var ctaButton: ((title: String, command: () -> Void))?
-    }
+	struct Config {
+		
+		var title: String
+		var accessibilityIdentifier: String?
+		var closeButtonCommand: (() -> Void)?
+		var ctaButton: ((title: String, command: () -> Void))?
+	}
     
     private let config: Config
     private let closeButtonTappedCommand: (() -> Void)?
     private let callToActionButtonTappedCommand: (() -> Void)?
     
-    required init(config: Config) {
-        self.config = config
-        titleLabel.attributedText = config.title.setLineHeight(ViewTraits.lineHeight, kerning: ViewTraits.kerning)
-        
-        closeButtonTappedCommand = config.closeButtonCommand
-        
-        callToActionButton.title = config.ctaButton?.title
-        callToActionButtonTappedCommand = config.ctaButton?.command
-        
-        super.init(frame: .zero)
-    }
+	required init(config: Config) {
+		self.config = config
+		titleLabel.attributedText = config.title.setLineHeight(ViewTraits.lineHeight, kerning: ViewTraits.kerning)
+		titleLabel.accessibilityIdentifier = config.accessibilityIdentifier
+		
+		closeButtonTappedCommand = config.closeButtonCommand
+		
+		callToActionButton.title = config.ctaButton?.title
+		callToActionButtonTappedCommand = config.ctaButton?.command
+		
+		super.init(frame: .zero)
+	}
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

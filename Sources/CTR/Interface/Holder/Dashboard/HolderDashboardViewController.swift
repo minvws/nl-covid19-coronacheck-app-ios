@@ -42,7 +42,7 @@ class HolderDashboardViewController: BaseViewController {
 		case recommendToAddYourBooster(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 		
 		// Disclosure Policy
-		case disclosurePolicyInformation(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		case disclosurePolicyInformation(title: String, buttonText: String, accessibilityIdentifier: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -261,15 +261,21 @@ private extension HolderDashboardViewController.Card {
 			// Message Cards with a message + CTA button + close button
 			case let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
 				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .recommendToAddYourBooster(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .disclosurePolicyInformation(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+				let .recommendToAddYourBooster(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
 					closeButtonCommand: didTapCloseAction,
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
 				))
-
+			case let .disclosurePolicyInformation(message, callToActionButtonText, accessibilityIdentifier, didTapCallToAction, didTapCloseAction):
+				return MessageCardView(config: .init(
+					title: message,
+					accessibilityIdentifier: accessibilityIdentifier,
+					closeButtonCommand: didTapCloseAction,
+					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
+				))
+								
 			case let .emptyStateDescription(message, buttonTitle):
 				return EmptyDashboardDescriptionCardView.make(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
 
@@ -291,6 +297,7 @@ private extension HolderDashboardViewController.Card {
 				qrCard.isLoading = isLoading
 				qrCard.isDisabledByDisclosurePolicy = isDisabledByDisclosurePolicy
 				qrCard.disclosurePolicyLabel = disclosurePolicyLabel
+				qrCard.accessibilityIdentifier = "\(disclosurePolicyLabel)QRCard"
 				return qrCard
 			
 			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
