@@ -137,7 +137,7 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMMDD_FORMAT;
 
 @end
 
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCommitmentMessage(NSData* _Nullable holderSkJson, NSData* _Nullable prepareIssueMessageJson);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCommitmentMessage(NSData* _Nullable holderSkJson, NSData* _Nullable issueSpecificationMessageJson);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCredentials(NSData* _Nullable ccmsJson);
 
