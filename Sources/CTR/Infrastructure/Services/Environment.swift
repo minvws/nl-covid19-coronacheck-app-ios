@@ -20,6 +20,7 @@ struct Environment {
 	var cryptoManager: CryptoManaging
 	var dataStoreManager: DataStoreManaging
 	var deviceAuthenticationDetector: DeviceAuthenticationProtocol
+	var disclosurePolicyManager: DisclosurePolicyManaging
 	var featureFlagManager: FeatureFlagManaging
 	var greenCardLoader: GreenCardLoading
 	var jailBreakDetector: JailBreakProtocol
@@ -46,6 +47,7 @@ struct Environment {
 		cryptoManager: CryptoManaging,
 		dataStoreManager: DataStoreManaging,
 		deviceAuthenticationDetector: DeviceAuthenticationProtocol,
+		disclosurePolicyManager: DisclosurePolicyManaging,
 		featureFlagManager: FeatureFlagManaging,
 		greenCardLoader: GreenCardLoading,
 		jailBreakDetector: JailBreakProtocol,
@@ -71,6 +73,7 @@ struct Environment {
 		self.cryptoManager = cryptoManager
 		self.dataStoreManager = dataStoreManager
 		self.deviceAuthenticationDetector = deviceAuthenticationDetector
+		self.disclosurePolicyManager = disclosurePolicyManager
 		self.featureFlagManager = featureFlagManager
 		self.greenCardLoader = greenCardLoader
 		self.jailBreakDetector = jailBreakDetector
@@ -122,6 +125,9 @@ private let datastoreManager: DataStoreManager = {
 	return manager
 }()
 private let deviceAuthenticationDetector = DeviceAuthenticationDetector()
+private let disclosurePolicyManager = DisclosurePolicyManager(
+	remoteConfigManager: remoteConfigManager
+)
 private let featureFlagManager = FeatureFlagManager(
 	versionSupplier: AppVersionSupplier(),
 	remoteConfigManager: remoteConfigManager
@@ -193,6 +199,7 @@ private let environment: () -> Environment = {
 		cryptoManager: cryptoManager,
 		dataStoreManager: datastoreManager,
 		deviceAuthenticationDetector: deviceAuthenticationDetector,
+		disclosurePolicyManager: disclosurePolicyManager,
 		featureFlagManager: featureFlagManager,
 		greenCardLoader: greenCardLoader,
 		jailBreakDetector: jailBreakDetector,
