@@ -57,6 +57,8 @@
 "general.vaccination" = "vaccination";
 "general.vaccinationdate" = "Vaccination date";
 "general_menu" = "Menu";
+"general_newintheapp" = "New in the app";
+"general_newpolicy" = "New policy";
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
 "general_readmore" = "Read more";
 "general_recoverycertificate" = "recovery certificate";
@@ -621,17 +623,21 @@
 "holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
-"holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels";
+"holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-1g-certificate";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
 "holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";
 "holder_dashboard_addCard_title" = "Add new vaccination or test";
+"holder_dashboard_domesticQRCard_1G_label" = "1G";
+"holder_dashboard_domesticQRCard_1G_title" = "Certificate for 3G-access";
+"holder_dashboard_domesticQRCard_3G_label" = "3G";
+"holder_dashboard_domesticQRCard_3G_title" = "Certificate for 3G access";
 "holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
 "holder_dashboard_intro_domestic_only3Gaccess" = "Visiting a location within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance of the location you're visiting.";
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
 "holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
-"holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels";
-"holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels";
+"holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/1g-certificate";
+"holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-certificate";
 "holder_dashboard_originExpiredBanner_domesticRecovery_title" = "Your Dutch recovery certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticTest_title" = "Your Dutch test certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticVaccine_title" = "Your Dutch vaccination certificate has expired";
@@ -673,9 +679,12 @@
 "holder_menu_visitorpass" = "Add visitor pass";
 "holder_negativetest_ggd_message" = "Is your result in? Log in with DigiD to retrieve your test result from the GGD.";
 "holder_negativetest_ggd_title" = "Retrieve test result";
+"holder_newintheapp_content_3Gand1G_button_next" = "Next";
+"holder_newintheapp_content_only1G_button_next" = "Next";
+"holder_newintheapp_content_only3G_button_next" = "Next";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "About your visitor pass";
-"holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid test certificate, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
+"holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Dutch QR code";
