@@ -123,7 +123,8 @@ class CryptoManager: CryptoManaging, Logging {
 	func generateQRmessage(_ credential: Data) -> Data? {
 
 		if let holderSecretKey = cryptoData.holderSecretKey, hasPublicKeys() {
-			let disclosed = MobilecoreDisclose(holderSecretKey, credential)
+			// Holder has far more elaborate changes for this. Just a placeholder here.
+			let disclosed = MobilecoreDisclose(holderSecretKey, credential, MobilecoreDISCLOSURE_POLICY_3G)
 			if let payload = disclosed?.value {
 				let message = String(decoding: payload, as: UTF8.self)
 				logDebug("QR message: \(message)")
