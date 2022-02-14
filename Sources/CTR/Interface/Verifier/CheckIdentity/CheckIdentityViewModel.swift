@@ -87,19 +87,14 @@ final class CheckIdentityViewModel: Logging {
 		guard autoCloseTimer == nil else {
 			return
 		}
-
-		autoCloseTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getAutoCloseTime()),
-			target: self,
-			selector: (#selector(autoCloseScene)),
-			userInfo: nil,
-			repeats: false
-		)
+		
+		autoCloseTimer = Timer.scheduledTimer(withTimeInterval: configuration.getAutoCloseTime(), repeats: false, block: { [weak self] _ in
+			self?.autoCloseScene()
+		})
 	}
 	
 	func dismiss() {
 
-		stopAutoCloseTimer()
 		coordinator?.navigateToVerifierWelcome()
 	}
 	
@@ -138,7 +133,6 @@ final class CheckIdentityViewModel: Logging {
 	
 	func showMoreInformation() {
 
-		stopAutoCloseTimer()
 		coordinator?.navigateToVerifiedInfo()
 	}
 }
