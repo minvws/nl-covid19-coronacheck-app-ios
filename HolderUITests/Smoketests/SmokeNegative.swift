@@ -33,10 +33,10 @@ class SmokeNegative: BaseTest {
 		assertCertificateIsNotValidInternationally(ofType: .test)
 	}
 	
-	// MARK: Negative tests - expired
+	// MARK: Negative tests - 30 days old
 	
-	func test_negExpiredPcr() {
-		addTestCertificateFromGGD(for: TestData.negExpiredPcr)
+	func test_negOldPcr() {
+		addTestCertificateFromGGD(for: TestData.negOldPcr)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
@@ -45,10 +45,11 @@ class SmokeNegative: BaseTest {
 	// MARK: Negative tests - premature
 	
 	func test_negPrematurePcr() {
+		let person = TestData.negPrematurePcr
 		addTestCertificateFromGGD(for: TestData.negPrematurePcr)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffset: 30)
+		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffset: person.testFrom)
 		assertCertificateIsNotValidInternationally(ofType: .test)
 	}
 }

@@ -5,105 +5,80 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-class TestNullOrEmpty: BaseTest {
+class TestVaccinationOlderThanOneYear: BaseTest {
 	
-	func test_vacP1NullPersonalStatement() {
-		let person = TestData.vacP1NullPersonalStatement
+	func test_vacP1P1Old() {
+		let person = TestData.vacP1P1Old
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
-		
 		assertCertificateIsOnlyValidInternationally()
+		
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
-	func test_vacP1NullMedicalStatement() {
-		let person = TestData.vacP1NullMedicalStatement
+	func test_vacJ1J1Old() {
+		let person = TestData.vacJ1J1Old
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+	}
+	
+	func test_vacM1M1Old() {
+		let person = TestData.vacM1M1Old
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
+		
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
-	func test_vacP1NullFirstName() {
-		let person = TestData.vacP1NullFirstName
+	func test_vacP1J1Old() {
+		let person = TestData.vacP1J1Old
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+	}
+	
+	func test_vacP1OldJ2() {
+		let person = TestData.vacP1OldJ2
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
+		
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+	}
+	
+	func test_vacP1M1Old() {
+		let person = TestData.vacP1M1Old
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
+		
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
-	func test_vacP1NullLastName() {
-		let person = TestData.vacP1NullLastName
+	func test_vacP1OldM2() {
+		let person = TestData.vacP1OldM2
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
-	func test_vacP1NullBirthdate() {
-		let person = TestData.vacP1NullBirthdate
+	func test_vacJ1OldM2() {
+		let person = TestData.vacJ1OldM2
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
-	}
-	
-	func test_vacP1EmptyPersonalStatement() {
-		let person = TestData.vacP1EmptyPersonalStatement
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		
-		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
-	}
-	
-	func test_vacP1EmptyMedicalStatement() {
-		let person = TestData.vacP1EmptyMedicalStatement
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		
-		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
-	}
-	
-	func test_vacP1EmptyFirstName() {
-		let person = TestData.vacP1EmptyFirstName
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		
-		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
-	}
-	
-	func test_vacP1EmptyLastName() {
-		let person = TestData.vacP1EmptyLastName
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		
-		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
-	}
-	
-	func test_vacP1EmptyBirthdate() {
-		let person = TestData.vacP1EmptyBirthdate
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		
-		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 }
