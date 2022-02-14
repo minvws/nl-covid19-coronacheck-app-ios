@@ -31,6 +31,7 @@ class MessageCardView: BaseView {
     struct Config {
         
         var title: String
+		var accessibilityIdentifier: String?
         var closeButtonCommand: (() -> Void)?
         var ctaButton: ((title: String, command: () -> Void))?
     }
@@ -42,6 +43,7 @@ class MessageCardView: BaseView {
     required init(config: Config) {
         self.config = config
         titleLabel.attributedText = config.title.setLineHeight(ViewTraits.lineHeight, kerning: ViewTraits.kerning)
+		titleLabel.accessibilityIdentifier = config.accessibilityIdentifier
         
         closeButtonTappedCommand = config.closeButtonCommand
         
