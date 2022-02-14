@@ -300,6 +300,7 @@ extension HolderDashboardViewController.Card {
 			.disclosurePolicyInformation(
 				title: L.holder_dashboard_only1GaccessBanner_title(),
 				buttonText: L.general_readmore(),
+				accessibilityIdentifier: "disclosurePolicy_informationBanner",
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapDisclosurePolicyInformation1GBannerMoreInformation()
 				},
@@ -324,6 +325,7 @@ extension HolderDashboardViewController.Card {
 			.disclosurePolicyInformation(
 				title: L.holder_dashboard_only3GaccessBanner_title(),
 				buttonText: L.general_readmore(),
+				accessibilityIdentifier: "disclosurePolicy_informationBanner",
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapDisclosurePolicyInformation3GBannerMoreInformation()
 				},
@@ -348,6 +350,7 @@ extension HolderDashboardViewController.Card {
 			.disclosurePolicyInformation(
 				title: L.holder_dashboard_3Gand1GaccessBanner_title(),
 				buttonText: L.general_readmore(),
+				accessibilityIdentifier: "disclosurePolicy_informationBanner",
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation()
 				},
