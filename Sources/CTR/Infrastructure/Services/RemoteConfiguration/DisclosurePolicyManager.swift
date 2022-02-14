@@ -33,12 +33,7 @@ class DisclosurePolicyManager: Logging {
 	
 	private func configureRemoteConfigManager() {
 		
-		// Attach behaviours that we want the RemoteConfigManager to perform
-		// each time it refreshes the config in future:
-//		remoteConfigManagerObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
-//			self?.detectPolicyChange()
-//		}
-		remoteConfigManagerObserverToken = remoteConfigManager.appendReloadObserver { [weak self] _, _, _ in
+		remoteConfigManagerObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
 			self?.detectPolicyChange()
 		}
 	}
@@ -46,12 +41,11 @@ class DisclosurePolicyManager: Logging {
 	func detectPolicyChange() {
 				
 		if Current.userSettings.lastKnownConfigDisclosurePolicy != Current.remoteConfigManager.storedConfiguration.disclosurePolicies {
-
-			logDebug("DisclosurePolicyManager: policy changed detected")
 			// Locally stored profile different than the remote ones
+			logDebug("DisclosurePolicyManager: policy changed detected")
 			// - Update the locally stored profile
-			// - Update the observers
 			Current.userSettings.lastKnownConfigDisclosurePolicy = Current.remoteConfigManager.storedConfiguration.disclosurePolicies ?? []
+			// - Update the observers
 			notifyObservers()
 		}
 	}
