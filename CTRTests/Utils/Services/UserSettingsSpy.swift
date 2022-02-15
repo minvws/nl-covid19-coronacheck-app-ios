@@ -429,50 +429,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedShouldShowDisclosurePolicyUpdateSetter = false
-	var invokedShouldShowDisclosurePolicyUpdateSetterCount = 0
-	var invokedShouldShowDisclosurePolicyUpdate: Bool?
-	var invokedShouldShowDisclosurePolicyUpdateList = [Bool]()
-	var invokedShouldShowDisclosurePolicyUpdateGetter = false
-	var invokedShouldShowDisclosurePolicyUpdateGetterCount = 0
-	var stubbedShouldShowDisclosurePolicyUpdate: Bool! = false
-
-	var shouldShowDisclosurePolicyUpdate: Bool {
-		set {
-			invokedShouldShowDisclosurePolicyUpdateSetter = true
-			invokedShouldShowDisclosurePolicyUpdateSetterCount += 1
-			invokedShouldShowDisclosurePolicyUpdate = newValue
-			invokedShouldShowDisclosurePolicyUpdateList.append(newValue)
-		}
-		get {
-			invokedShouldShowDisclosurePolicyUpdateGetter = true
-			invokedShouldShowDisclosurePolicyUpdateGetterCount += 1
-			return stubbedShouldShowDisclosurePolicyUpdate
-		}
-	}
-
-	var invokedShouldSkipDisclosurePolicyUpdateSetter = false
-	var invokedShouldSkipDisclosurePolicyUpdateSetterCount = 0
-	var invokedShouldSkipDisclosurePolicyUpdate: Bool?
-	var invokedShouldSkipDisclosurePolicyUpdateList = [Bool]()
-	var invokedShouldSkipDisclosurePolicyUpdateGetter = false
-	var invokedShouldSkipDisclosurePolicyUpdateGetterCount = 0
-	var stubbedShouldSkipDisclosurePolicyUpdate: Bool! = false
-
-	var shouldSkipDisclosurePolicyUpdate: Bool {
-		set {
-			invokedShouldSkipDisclosurePolicyUpdateSetter = true
-			invokedShouldSkipDisclosurePolicyUpdateSetterCount += 1
-			invokedShouldSkipDisclosurePolicyUpdate = newValue
-			invokedShouldSkipDisclosurePolicyUpdateList.append(newValue)
-		}
-		get {
-			invokedShouldSkipDisclosurePolicyUpdateGetter = true
-			invokedShouldSkipDisclosurePolicyUpdateGetterCount += 1
-			return stubbedShouldSkipDisclosurePolicyUpdate
-		}
-	}
-
 	var invokedWipePersistedData = false
 	var invokedWipePersistedDataCount = 0
 

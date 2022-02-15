@@ -43,10 +43,7 @@ protocol UserSettingsProtocol: AnyObject {
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] { get set }
 	var lastKnownConfigDisclosurePolicy: [String] { get set }
 	var overrideDisclosurePolicies: [String] { get set }
-	
-	var shouldShowDisclosurePolicyUpdate: Bool { get set }
-	var shouldSkipDisclosurePolicyUpdate: Bool { get set }
-	
+
 	func wipePersistedData()
 }
 
@@ -110,12 +107,6 @@ class UserSettings: UserSettingsProtocol {
 	
 	@UserDefaults(key: "lastKnownConfigDisclosurePolicy")
 	var lastKnownConfigDisclosurePolicy: [String] = ["3G"] // swiftlint:disable:this let_var_whitespace
-	
-	@UserDefaults(key: "shouldShowDisclosurePolicyUpdate", defaultValue: false)
-	var shouldShowDisclosurePolicyUpdate: Bool // swiftlint:disable:this let_var_whitespace
-	
-	@UserDefaults(key: "shouldSkipDisclosurePolicyUpdate", defaultValue: true)
-	var shouldSkipDisclosurePolicyUpdate: Bool // swiftlint:disable:this let_var_whitespace
 }
 
 extension UserSettings {
@@ -145,8 +136,6 @@ extension UserSettings {
 			"policyInformationShown",
 			"lastDismissedDisclosurePolicy",
 			"overrideDisclosurePolicies",
-			"shouldShowDisclosurePolicyUpdate",
-			"shouldSkipDisclosurePolicyUpdate",
 
 			// Deprecated keys
 			"shouldShowRecoveryValidityExtensionCard",
