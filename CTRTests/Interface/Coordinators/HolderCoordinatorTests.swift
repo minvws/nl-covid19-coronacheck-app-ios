@@ -83,7 +83,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
-		environmentSpies.userSettingsSpy.shouldShowDisclosurePolicyUpdate = true
+		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = true
 		
 		// When
 		sut.handleDisclosurePolicyUpdates()
@@ -96,7 +96,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
-		environmentSpies.userSettingsSpy.stubbedShouldShowDisclosurePolicyUpdate = true
+		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = true
 		
 		// When
 		sut.handleDisclosurePolicyUpdates()
@@ -109,7 +109,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
-		environmentSpies.userSettingsSpy.stubbedShouldShowDisclosurePolicyUpdate = false
+		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = false
 		
 		// When
 		sut.handleDisclosurePolicyUpdates()
