@@ -48,7 +48,7 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.tagline) == L.generalNewintheapp()
+		expect(self.sut.sceneView.tagline) == L.general_newintheapp()
 		expect(self.sut.sceneView.title) == L.holder_newintheapp_content_only1G_title()
 		expect(self.sut.sceneView.content) == L.holder_newintheapp_content_only1G_body()
 
@@ -70,7 +70,7 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.tagline) == L.generalNewintheapp()
+		expect(self.sut.sceneView.tagline) == L.general_newpolicy()
 		expect(self.sut.sceneView.title) == L.holder_newintheapp_content_only3G_title()
 		expect(self.sut.sceneView.content) == L.holder_newintheapp_content_only3G_body()
 		
@@ -92,7 +92,7 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.sut.sceneView.tagline) == L.generalNewintheapp()
+		expect(self.sut.sceneView.tagline) == L.general_newintheapp()
 		expect(self.sut.sceneView.title) == L.holder_newintheapp_content_3Gand1G_title()
 		expect(self.sut.sceneView.content) == L.holder_newintheapp_content_3Gand1G_body()
 		

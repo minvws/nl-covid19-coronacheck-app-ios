@@ -10,6 +10,16 @@ import XCTest
 
 class DisclosurePolicyManagingSpy: DisclosurePolicyManaging {
 
+	var invokedHasChangesGetter = false
+	var invokedHasChangesGetterCount = 0
+	var stubbedHasChanges: Bool! = false
+
+	var hasChanges: Bool {
+		invokedHasChangesGetter = true
+		invokedHasChangesGetterCount += 1
+		return stubbedHasChanges
+	}
+
 	var invokedAppendPolicyChangedObserver = false
 	var invokedAppendPolicyChangedObserverCount = 0
 	var shouldInvokeAppendPolicyChangedObserverObserver = false
@@ -34,5 +44,13 @@ class DisclosurePolicyManagingSpy: DisclosurePolicyManaging {
 		invokedRemoveObserverCount += 1
 		invokedRemoveObserverParameters = (token, ())
 		invokedRemoveObserverParametersList.append((token, ()))
+	}
+
+	var invokedSetDisclosurePolicyUpdateHasBeenSeen = false
+	var invokedSetDisclosurePolicyUpdateHasBeenSeenCount = 0
+
+	func setDisclosurePolicyUpdateHasBeenSeen() {
+		invokedSetDisclosurePolicyUpdateHasBeenSeen = true
+		invokedSetDisclosurePolicyUpdateHasBeenSeenCount += 1
 	}
 }

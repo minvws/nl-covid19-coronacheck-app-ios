@@ -13,6 +13,9 @@ protocol DisclosurePolicyManaging {
 	
 	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken
 	func removeObserver(token: ObserverToken)
+	func setDisclosurePolicyUpdateHasBeenSeen()
+	
+	var hasChanges: Bool { get }
 }
 
 class DisclosurePolicyManager: Logging {
@@ -39,15 +42,30 @@ class DisclosurePolicyManager: Logging {
 	}
 		
 	func detectPolicyChange() {
-				
-		if Current.userSettings.lastKnownConfigDisclosurePolicy != Current.remoteConfigManager.storedConfiguration.disclosurePolicies {
-			// Locally stored profile different than the remote ones
-			logDebug("DisclosurePolicyManager: policy changed detected")
-			// - Update the locally stored profile
-			Current.userSettings.lastKnownConfigDisclosurePolicy = Current.remoteConfigManager.storedConfiguration.disclosurePolicies ?? []
-			// - Update the observers
-			notifyObservers()
+		
+		guard hasChanges else {
+			return
 		}
+		
+		// Locally stored profile different than the remote ones
+		logDebug("DisclosurePolicyManager: policy changed detected")
+
+		// - Update the observers
+		notifyObservers()
+	}
+	
+	func setDisclosurePolicyUpdateHasBeenSeen() {
+		
+		guard let policies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
+			return
+		}
+		
+		Current.userSettings.lastKnownConfigDisclosurePolicy = policies
+	}
+	
+	var hasChanges: Bool {
+		
+		return Current.userSettings.lastKnownConfigDisclosurePolicy != remoteConfigManager.storedConfiguration.disclosurePolicies
 	}
 }
 
