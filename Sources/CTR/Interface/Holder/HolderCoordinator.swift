@@ -696,8 +696,9 @@ extension HolderCoordinator {
 	
 	func showNewDisclosurePolicy() {
 	
-		let viewController = NewDisclosurePolicyViewController(viewModel: NewDisclosurePolicyViewModel(coordinator: self))
-		navigationController.present(NavigationController(rootViewController: viewController), animated: true) {
+		let destination = NewDisclosurePolicyViewController(viewModel: NewDisclosurePolicyViewModel(coordinator: self))
+		destination.modalPresentationStyle = .fullScreen
+		navigationController.present(NavigationController(rootViewController: destination), animated: true) {
 			Current.userSettings.shouldShowDisclosurePolicyUpdate = false
 		}
 	}
@@ -707,6 +708,14 @@ extension HolderCoordinator {
 		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
 			// No Disclosre Policy modal if we still need to finish onboarding
 			return
+		}
+		
+		if Current.userSettings.shouldSkipDisclosurePolicyUpdate {
+			// Do not show the disclosure modal if it is the first policy change and we changed to 3G (nothing new
+			Current.userSettings.shouldSkipDisclosurePolicyUpdate = false
+			if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
+				return
+			}
 		}
 		
 		if Current.userSettings.shouldShowDisclosurePolicyUpdate {

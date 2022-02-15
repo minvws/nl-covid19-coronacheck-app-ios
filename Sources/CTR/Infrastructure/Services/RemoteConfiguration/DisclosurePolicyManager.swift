@@ -39,25 +39,19 @@ class DisclosurePolicyManager: Logging {
 	}
 		
 	func detectPolicyChange() {
-				
-		if Current.userSettings.lastKnownConfigDisclosurePolicy != remoteConfigManager.storedConfiguration.disclosurePolicies {
 		
-			// Locally stored profile different than the remote ones
-			logDebug("DisclosurePolicyManager: policy changed detected")
-			// - Update the locally stored profile
-			Current.userSettings.lastKnownConfigDisclosurePolicy = remoteConfigManager.storedConfiguration.disclosurePolicies ?? []
-			
-			if Current.userSettings.firstDisclosurePolicyChange && Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
-				// Don't show the policy update the first time if we are on 3G (nothing changed)
-				Current.userSettings.firstDisclosurePolicyChange = true
-				return
-			}
-			Current.userSettings.firstDisclosurePolicyChange = true
-			// Reset info modal
-			Current.userSettings.shouldShowDisclosurePolicyUpdate = true
-			// - Update the observers
-			notifyObservers()
+		guard Current.userSettings.lastKnownConfigDisclosurePolicy != remoteConfigManager.storedConfiguration.disclosurePolicies else {
+			return
 		}
+		
+		// Locally stored profile different than the remote ones
+		logDebug("DisclosurePolicyManager: policy changed detected")
+		// - Update the locally stored profile
+		Current.userSettings.lastKnownConfigDisclosurePolicy = remoteConfigManager.storedConfiguration.disclosurePolicies ?? []
+		// Reset info modal
+		Current.userSettings.shouldShowDisclosurePolicyUpdate = true
+		// - Update the observers
+		notifyObservers()
 	}
 }
 

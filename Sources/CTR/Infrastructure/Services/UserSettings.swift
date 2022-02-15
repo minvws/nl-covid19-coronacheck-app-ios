@@ -45,7 +45,7 @@ protocol UserSettingsProtocol: AnyObject {
 	var overrideDisclosurePolicies: [String] { get set }
 	
 	var shouldShowDisclosurePolicyUpdate: Bool { get set }
-	var firstDisclosurePolicyChange: Bool { get set }
+	var shouldSkipDisclosurePolicyUpdate: Bool { get set }
 	
 	func wipePersistedData()
 }
@@ -114,8 +114,8 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "shouldShowDisclosurePolicyUpdate", defaultValue: false)
 	var shouldShowDisclosurePolicyUpdate: Bool // swiftlint:disable:this let_var_whitespace
 	
-	@UserDefaults(key: "firstDisclosurePolicyChange", defaultValue: true)
-	var firstDisclosurePolicyChange: Bool // swiftlint:disable:this let_var_whitespace
+	@UserDefaults(key: "shouldSkipDisclosurePolicyUpdate", defaultValue: true)
+	var shouldSkipDisclosurePolicyUpdate: Bool // swiftlint:disable:this let_var_whitespace
 }
 
 extension UserSettings {
@@ -146,7 +146,7 @@ extension UserSettings {
 			"lastDismissedDisclosurePolicy",
 			"overrideDisclosurePolicies",
 			"shouldShowDisclosurePolicyUpdate",
-			"firstDisclosurePolicyChange",
+			"shouldSkipDisclosurePolicyUpdate",
 
 			// Deprecated keys
 			"shouldShowRecoveryValidityExtensionCard",

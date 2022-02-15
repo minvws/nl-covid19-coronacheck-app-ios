@@ -624,6 +624,7 @@
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
 "holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-1g-certificate";
+"holder_dashboard_3Gand1GaccessBanner_title" = "The access rules in the Netherlands have changed. There are now separate certificates for venues that give 3G access and 1G access.";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
 "holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";
 "holder_dashboard_addCard_title" = "Add new vaccination or test";
@@ -631,13 +632,17 @@
 "holder_dashboard_domesticQRCard_1G_title" = "Certificate for 3G-access";
 "holder_dashboard_domesticQRCard_3G_label" = "3G";
 "holder_dashboard_domesticQRCard_3G_title" = "Certificate for 3G access";
+"holder_dashboard_empty_domestic_3Gand1Gaccess_message" = "<p>Visiting a venue in The Netherlands? Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G- or 1G access</a>.</p>";
+"holder_dashboard_empty_domestic_only1Gaccess_message" = "<p>In the Netherlands, you only get access with a test certificate anywhere a coronavirus pass is required <a href=\"https://coronacheck.nl/en/accesspolicy/1g-access\">(1G access)</a>.</p>";
 "holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
-"holder_dashboard_intro_domestic_only3Gaccess" = "Visiting a location within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance of the location you're visiting.";
+"holder_dashboard_intro_domestic_3Gand1Gaccess" = "<p>Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G or 1G access</a>. Also show your proof of identity at the entrance.</p>";
+"holder_dashboard_intro_domestic_only3Gaccess" = "Visiting a venue within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance.";
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
 "holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
 "holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/1g-certificate";
 "holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-certificate";
+"holder_dashboard_only3GaccessBanner_title" = "A Dutch certificate currently gives 3G access. This means a certificate is valid anywhere a coronavirus pass is required.";
 "holder_dashboard_originExpiredBanner_domesticRecovery_title" = "Your Dutch recovery certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticTest_title" = "Your Dutch test certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticVaccine_title" = "Your Dutch vaccination certificate has expired";
