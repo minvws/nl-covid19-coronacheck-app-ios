@@ -12,12 +12,9 @@
 "scan_instructions_4_title_1G" = "Vinkje = toegang";
 "scan_log_footer_in_use" = "App in gebruik sinds %@";
 "scan_log_footer_long_time" = "App langer dan een maand in gebruik";
-"scan_log_list_2g_plus" = "2G+";
 "scan_log_list_clock_skew_detected" = "Datum of tijd aangepast";
 "scan_log_list_entry" = "%1$li tot %2$li bewijzen gescand";
 "scan_log_list_header" = "Laatste %li minuten";
-"scan_log_list_highrisk" = "2G";
-"scan_log_list_lowrisk" = "3G";
 "scan_log_list_no_items" = "Geen bewijzen gescand";
 "scan_log_list_now" = "nu";
 "scan_log_message" = "<p>De scan-instelling log houdt bij welk soort toegang is gebruikt tijdens het scannen. Een BOA kan vragen om deze log te bekijken.</p><p>Om privacyredenen worden alleen de scan-instellingen van de laatste %li minuten opgeslagen op deze telefoon. Er worden geen persoonsgegevens opgeslagen. Lees meer in de <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">meestgestelde vragen</a>.</p>";
