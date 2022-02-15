@@ -43,7 +43,7 @@ class DisclosurePolicyManager: Logging {
 		
 	func detectPolicyChange() {
 		
-		guard let policies = remoteConfigManager.storedConfiguration.disclosurePolicies, Current.userSettings.lastKnownConfigDisclosurePolicy != policies else {
+		guard hasChanges else {
 			return
 		}
 		
