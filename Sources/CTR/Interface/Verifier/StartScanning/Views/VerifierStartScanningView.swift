@@ -13,16 +13,23 @@ class VerifierStartScanningView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
-		static let titleLineHeight: CGFloat = 26
-		static let titleKerning: CGFloat = -0.26
-		static let messageLineHeight: CGFloat = 22
-
-		// Margins
-		static let margin: CGFloat = 20.0
-		static let topMargin: CGFloat = 16.0
-		static let titleTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 34.0
-		static let messageTopMargin: CGFloat = 24.0
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
+			static let topSpacing: CGFloat = 0
+			static let bottomSpacing: CGFloat = 24
+		}
+		enum Content {
+			static let spacing: CGFloat = 20
+			static let topSpacing: CGFloat = 33
+		}
+		enum RiskIndicator {
+			static let spacing: CGFloat = 8
+		}
+		enum Margin {
+			static let edge: CGFloat = 20
+			static let top: CGFloat = 16
+		}
 	}
 	
 	enum HeaderMode: Equatable {
@@ -49,7 +56,7 @@ class VerifierStartScanningView: BaseView {
 
 	private let scrollView: UIScrollView = {
 
-		let view = UIScrollView(frame: .zero)
+		let view = UIScrollView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -60,23 +67,24 @@ class VerifierStartScanningView: BaseView {
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
-		view.alignment = .center
-		view.distribution = .fill
 		view.spacing = 0
+		view.insets(.init(top: ViewTraits.Margin.top,
+						  leading: 0,
+						  bottom: ViewTraits.Margin.edge,
+						  trailing: 0))
 		return view
 	}()
 
-	private let contentView: UIView = {
+	private let contentStackView: UIStackView = {
 
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground
-		return view
-	}()
-
-	private let headerStackView: UIStackView = {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
+		stackView.spacing = ViewTraits.Content.spacing
+		stackView.axis = .vertical
+		stackView.insets(.init(top: ViewTraits.Margin.edge,
+							   leading: ViewTraits.Margin.edge,
+							   bottom: ViewTraits.Margin.edge,
+							   trailing: ViewTraits.Margin.edge))
 		return stackView
 	}()
 	
@@ -85,7 +93,7 @@ class VerifierStartScanningView: BaseView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isHidden = true
-		view.contentMode = .center
+		view.contentMode = .scaleAspectFit
 		return view
 	}()
 	
@@ -146,7 +154,7 @@ class VerifierStartScanningView: BaseView {
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .horizontal
-		view.spacing = 8 // ViewTraits.Spacing.aboveButton
+		view.spacing = ViewTraits.RiskIndicator.spacing
 		return view
 	}()
 
@@ -183,14 +191,12 @@ class VerifierStartScanningView: BaseView {
 
 		super.setupViewHierarchy()
 		
-		stackView.addArrangedSubview(headerStackView)
-		headerStackView.addArrangedSubview(headerImageView)
-		headerStackView.addArrangedSubview(headerAnimationView)
-		
-		stackView.addArrangedSubview(contentView)
-		contentView.addSubview(titleLabel)
-		contentView.addSubview(contentTextView)
-		contentView.addSubview(showInstructionsButton)
+		stackView.addArrangedSubview(headerImageView)
+		stackView.addArrangedSubview(headerAnimationView)
+		stackView.addArrangedSubview(contentStackView)
+		contentStackView.addArrangedSubview(titleLabel)
+		contentStackView.addArrangedSubview(contentTextView)
+		contentStackView.addArrangedSubview(showInstructionsButton)
 
 		scrollView.addSubview(stackView)
 		addSubview(scrollView)
@@ -232,72 +238,14 @@ class VerifierStartScanningView: BaseView {
 			stackView.widthAnchor.constraint(
 				equalTo: scrollView.widthAnchor),
 			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-			stackView.topAnchor.constraint(
-				equalTo: scrollView.topAnchor,
-				constant: ViewTraits.topMargin
-			),
-			stackView.bottomAnchor.constraint(
-				equalTo: scrollView.bottomAnchor,
-				constant: -ViewTraits.margin
-			),
 			stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-			stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-
-			contentView.widthAnchor.constraint(equalTo: stackView.widthAnchor)
+			stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
 		])
 		
 		// Setup content views:
 		bottomScrollViewConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
-
-			// Title
-			titleLabel.topAnchor.constraint(
-				equalTo: headerStackView.bottomAnchor,
-				constant: ViewTraits.titleTopMargin
-			),
-			titleLabel.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: contentTextView.topAnchor,
-				constant: -ViewTraits.messageTopMargin
-			),
-
-			// Content
-			contentTextView.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			contentTextView.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			showInstructionsButton.centerXAnchor.constraint(
-				equalTo: contentView.centerXAnchor
-			),
-			showInstructionsButton.topAnchor.constraint(
-				equalTo: contentTextView.bottomAnchor,
-				constant: ViewTraits.margin
-			),
-			showInstructionsButton.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			showInstructionsButton.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			showInstructionsButton.bottomAnchor.constraint(
-				equalTo: contentView.bottomAnchor,
-				constant: -ViewTraits.margin
-			),
 
 			// Footer view
 			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
@@ -307,8 +255,8 @@ class VerifierStartScanningView: BaseView {
 
 			// ClockDeviationWarningView
 			clockDeviationWarningView.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
-			clockDeviationWarningView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: ViewTraits.margin),
-			clockDeviationWarningView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -ViewTraits.margin),
+			clockDeviationWarningView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: ViewTraits.Margin.edge),
+			clockDeviationWarningView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -ViewTraits.Margin.edge),
 			
 			riskIndicatorIconView.heightAnchor.constraint(equalTo: riskIndicatorLabel.heightAnchor),
 			riskIndicatorIconView.heightAnchor.constraint(equalTo: riskIndicatorIconView.widthAnchor)
@@ -339,9 +287,14 @@ class VerifierStartScanningView: BaseView {
 	var headerTitle: String? {
 		didSet {
 			titleLabel.attributedText = headerTitle?.setLineHeight(
-				ViewTraits.titleLineHeight,
-				kerning: ViewTraits.titleKerning
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
 			)
+			let hasTitle = headerTitle?.isEmpty == false
+			let spacing = hasTitle ? ViewTraits.Title.bottomSpacing : 0
+			contentStackView.setCustomSpacing(spacing, after: titleLabel)
+			let topMargin = hasTitle ? ViewTraits.Title.topSpacing : ViewTraits.Content.topSpacing
+			contentStackView.directionalLayoutMargins.top = topMargin
 		}
 	}
 
@@ -428,6 +381,8 @@ class VerifierStartScanningView: BaseView {
 
 		headerImageView.isHidden = headerMode.isAnimation
 		headerAnimationView.isHidden = headerMode.isImage
+		
+		stackView.directionalLayoutMargins.top = headerMode.isImage ? ViewTraits.Margin.top : 0
 	}
 	
 	private var shouldKeepHeaderHidden: Bool = false {
