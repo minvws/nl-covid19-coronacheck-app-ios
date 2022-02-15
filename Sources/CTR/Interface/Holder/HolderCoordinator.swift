@@ -696,9 +696,15 @@ extension HolderCoordinator {
 	
 	func showNewDisclosurePolicy() {
 	
-		let destination = NewDisclosurePolicyViewController(viewModel: NewDisclosurePolicyViewModel(coordinator: self))
+		let destination = NavigationController(
+			rootViewController: NewDisclosurePolicyViewController(
+				viewModel: NewDisclosurePolicyViewModel(
+					coordinator: self
+				)
+			)
+		)
 		destination.modalPresentationStyle = .fullScreen
-		navigationController.present(NavigationController(rootViewController: destination), animated: true) {
+		navigationController.present(destination, animated: true) {
 			Current.userSettings.shouldShowDisclosurePolicyUpdate = false
 		}
 	}
