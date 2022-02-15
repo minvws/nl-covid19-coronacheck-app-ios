@@ -268,7 +268,7 @@ class QRCardView: BaseView {
 			lessThanOrEqualTo: disclosurePolicyIndicatorView.leadingAnchor,
 			constant: -ViewTraits.titleTrailingToDisclosurePolicyIndicatorMargin
 		)
-		titleTrailingToLargeIconImageViewConstraint?.isActive = false
+		titleTrailingToDisclosurePolicyIndicatorViewConstraint?.isActive = false
 		
 		titleLeadingAnchor = titleLabel.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: ViewTraits.titleLeadingAnchorDCCMargin)
 		titleLeadingAnchor?.isActive = true
