@@ -698,13 +698,18 @@ extension HolderCoordinator {
 	
 		let viewController = NewDisclosurePolicyViewController(viewModel: NewDisclosurePolicyViewModel(coordinator: self))
 		navigationController.present(NavigationController(rootViewController: viewController), animated: true) {
-			Current.userSettings.hasDisclosurePolicyBeenShown = true
+			Current.userSettings.shouldShowDisclosurePolicyUpdate = false
 		}
 	}
 	
 	func handleDisclosurePolicyUpdates() {
 		
-		if !Current.userSettings.hasDisclosurePolicyBeenShown, !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding {
+		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
+			// No Disclosre Policy modal if we still need to finish onboarding
+			return
+		}
+		
+		if Current.userSettings.shouldShowDisclosurePolicyUpdate {
 			showNewDisclosurePolicy()
 		}
 	}
