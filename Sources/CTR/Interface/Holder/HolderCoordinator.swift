@@ -705,7 +705,7 @@ extension HolderCoordinator {
 		)
 		destination.modalPresentationStyle = .fullScreen
 		navigationController.present(destination, animated: true) {
-			Current.userSettings.shouldShowDisclosurePolicyUpdate = false
+			Current.disclosurePolicyManager.updateLastKnownConfigDisclosurePolicy()
 		}
 	}
 	
@@ -716,17 +716,26 @@ extension HolderCoordinator {
 			return
 		}
 		
-		if Current.userSettings.shouldSkipDisclosurePolicyUpdate {
-			// Do not show the disclosure modal if it is the first policy change and we changed to 3G (nothing new
-			Current.userSettings.shouldSkipDisclosurePolicyUpdate = false
-			if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
-				return
-			}
+		guard Current.disclosurePolicyManager.hasChanges else {
+			return
 		}
+//
+//		// Locally stored profile different than the remote ones
+//		logDebug("DisclosurePolicyManager: policy changed detected")
+//		// - Update the locally stored profile
+//		Current.userSettings.lastKnownConfigDisclosurePolicy = policies
 		
-		if Current.userSettings.shouldShowDisclosurePolicyUpdate {
+//		if Current.userSettings.shouldSkipDisclosurePolicyUpdate {
+//			// Do not show the disclosure modal if it is the first policy change and we changed to 3G (nothing new
+//			Current.userSettings.shouldSkipDisclosurePolicyUpdate = false
+//			if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
+//				return
+//			}
+//		}
+//
+//		if Current.userSettings.shouldShowDisclosurePolicyUpdate {
 			showNewDisclosurePolicy()
-		}
+//		}
 	}
 }
 

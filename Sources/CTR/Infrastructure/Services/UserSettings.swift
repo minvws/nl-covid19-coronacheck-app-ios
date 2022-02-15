@@ -109,7 +109,7 @@ class UserSettings: UserSettingsProtocol {
 	var overrideDisclosurePolicies: [String] = [] // swiftlint:disable:this let_var_whitespace
 	
 	@UserDefaults(key: "lastKnownConfigDisclosurePolicy")
-	var lastKnownConfigDisclosurePolicy: [String] = [] // swiftlint:disable:this let_var_whitespace
+	var lastKnownConfigDisclosurePolicy: [String] = ["3G"] // swiftlint:disable:this let_var_whitespace
 	
 	@UserDefaults(key: "shouldShowDisclosurePolicyUpdate", defaultValue: false)
 	var shouldShowDisclosurePolicyUpdate: Bool // swiftlint:disable:this let_var_whitespace
