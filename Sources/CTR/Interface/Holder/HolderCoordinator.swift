@@ -128,6 +128,7 @@ class HolderCoordinator: SharedCoordinator {
 				
 				// Start with the holder app
 				navigateToHolderStart()
+				handleDisclosurePolicyUpdates()
 			}
 		}
 	}
@@ -696,12 +697,16 @@ extension HolderCoordinator {
 	func showNewDisclosurePolicy() {
 	
 		let viewController = NewDisclosurePolicyViewController(viewModel: NewDisclosurePolicyViewModel(coordinator: self))
-		navigationController.present(NavigationController(rootViewController: viewController), animated: true, completion: nil)
+		navigationController.present(NavigationController(rootViewController: viewController), animated: true) {
+			Current.userSettings.hasDisclosurePolicyBeenShown = true
+		}
 	}
 	
 	func handleDisclosurePolicyUpdates() {
-	
-		showNewDisclosurePolicy()
+		
+		if !Current.userSettings.hasDisclosurePolicyBeenShown, !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding {
+			showNewDisclosurePolicy()
+		}
 	}
 }
 

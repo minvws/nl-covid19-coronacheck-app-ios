@@ -45,6 +45,8 @@ class DisclosurePolicyManager: Logging {
 			logDebug("DisclosurePolicyManager: policy changed detected")
 			// - Update the locally stored profile
 			Current.userSettings.lastKnownConfigDisclosurePolicy = Current.remoteConfigManager.storedConfiguration.disclosurePolicies ?? []
+			// Reset info modal
+			Current.userSettings.hasDisclosurePolicyBeenShown = false
 			// - Update the observers
 			notifyObservers()
 		}
