@@ -429,6 +429,50 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedShouldShowDisclosurePolicyUpdateSetter = false
+	var invokedShouldShowDisclosurePolicyUpdateSetterCount = 0
+	var invokedShouldShowDisclosurePolicyUpdate: Bool?
+	var invokedShouldShowDisclosurePolicyUpdateList = [Bool]()
+	var invokedShouldShowDisclosurePolicyUpdateGetter = false
+	var invokedShouldShowDisclosurePolicyUpdateGetterCount = 0
+	var stubbedShouldShowDisclosurePolicyUpdate: Bool! = false
+
+	var shouldShowDisclosurePolicyUpdate: Bool {
+		set {
+			invokedShouldShowDisclosurePolicyUpdateSetter = true
+			invokedShouldShowDisclosurePolicyUpdateSetterCount += 1
+			invokedShouldShowDisclosurePolicyUpdate = newValue
+			invokedShouldShowDisclosurePolicyUpdateList.append(newValue)
+		}
+		get {
+			invokedShouldShowDisclosurePolicyUpdateGetter = true
+			invokedShouldShowDisclosurePolicyUpdateGetterCount += 1
+			return stubbedShouldShowDisclosurePolicyUpdate
+		}
+	}
+
+	var invokedFirstDisclosurePolicyChangeSetter = false
+	var invokedFirstDisclosurePolicyChangeSetterCount = 0
+	var invokedFirstDisclosurePolicyChange: Bool?
+	var invokedFirstDisclosurePolicyChangeList = [Bool]()
+	var invokedFirstDisclosurePolicyChangeGetter = false
+	var invokedFirstDisclosurePolicyChangeGetterCount = 0
+	var stubbedFirstDisclosurePolicyChange: Bool! = false
+
+	var firstDisclosurePolicyChange: Bool {
+		set {
+			invokedFirstDisclosurePolicyChangeSetter = true
+			invokedFirstDisclosurePolicyChangeSetterCount += 1
+			invokedFirstDisclosurePolicyChange = newValue
+			invokedFirstDisclosurePolicyChangeList.append(newValue)
+		}
+		get {
+			invokedFirstDisclosurePolicyChangeGetter = true
+			invokedFirstDisclosurePolicyChangeGetterCount += 1
+			return stubbedFirstDisclosurePolicyChange
+		}
+	}
+
 	var invokedWipePersistedData = false
 	var invokedWipePersistedDataCount = 0
 
