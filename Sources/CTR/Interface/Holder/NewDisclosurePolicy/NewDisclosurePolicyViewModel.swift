@@ -30,7 +30,7 @@ final class NewDisclosurePolicyViewModel {
 		image = I.disclosurePolicy.newInTheApp()
 		
 		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-			tagline = L.general_newintheapp()
+			tagline = L.general_newpolicy()
 			title = L.holder_newintheapp_content_only1G_title()
 			content = L.holder_newintheapp_content_only1G_body()
 		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
