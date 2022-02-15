@@ -21,7 +21,7 @@ extension HolderDashboardViewModelTests {
 		// remove this default value because otherwise this tangentially triggers a reload:
 		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = nil
 		
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		expect(self.datasourceSpy.invokedReload) == false
 
 		// Act
@@ -37,7 +37,7 @@ extension HolderDashboardViewModelTests {
 		// remove this default value because otherwise this tangentially triggers a reload:
 		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = nil
 		
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		expect(self.datasourceSpy.invokedReload) == false
 
 		// Act
@@ -50,7 +50,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_mutliplefailures_shouldShowHelpDeskErrorBeneathCard() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -88,7 +88,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -154,7 +154,7 @@ extension HolderDashboardViewModelTests {
 		// Arrange
 		environmentSpies.featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = false
 		environmentSpies.userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -213,7 +213,7 @@ extension HolderDashboardViewModelTests {
 		// Arrange
 		environmentSpies.featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = true
 		environmentSpies.userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -275,7 +275,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_lessthan3years() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -332,7 +332,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_secondDose() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -381,7 +381,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_expiringSoon() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -433,7 +433,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidDomesticTest() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -489,7 +489,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidDomesticRecovery() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -853,7 +853,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_oneNotYetValid_oneCurrentlyValid_domestic() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -917,7 +917,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_tripleCurrentlyValidDomestic() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -964,7 +964,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_oneExpiringSoon() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -1006,7 +1006,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_allExpiringSoon() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -1174,7 +1174,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let vaccineGreenCardID = NSManagedObjectID()
 		let testGreenCardID = NSManagedObjectID()
@@ -1228,7 +1228,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let vaccineGreenCardID = NSManagedObjectID()
 		
@@ -1260,7 +1260,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_currentlyValidVaccinationAssessment_expiredTest_domesticTab() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -1348,7 +1348,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleNotYetValidDomesticVaccination() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -1399,7 +1399,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleNotYetValidDomesticVaccination_lessThan3Years() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -1450,7 +1450,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleNotYetValidDomesticVaccination_dose2() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
@@ -1501,7 +1501,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleNotYetValidDomesticRecovery() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -1650,7 +1650,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .domestic, type: .recovery),
@@ -1691,7 +1691,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .domestic, type: .recovery)

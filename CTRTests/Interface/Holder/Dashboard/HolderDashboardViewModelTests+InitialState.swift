@@ -15,7 +15,7 @@ extension HolderDashboardViewModelTests {
 	// MARK: - Initial State
 
 	func test_initialState() {
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		expect(self.sut.title) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle) == L.holderMenuProof()
 		expect(self.sut.shouldShowAddCertificateFooter) == true
@@ -33,7 +33,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_initialStateAfterFirstEmptyLoad() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		// Act
 		datasourceSpy.invokedDidUpdate?([], [])

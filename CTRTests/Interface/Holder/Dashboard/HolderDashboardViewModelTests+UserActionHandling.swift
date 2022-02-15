@@ -14,7 +14,7 @@ extension HolderDashboardViewModelTests {
 	
 	func test_openURL_callsCoordinator() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
 
 		// Act
@@ -26,7 +26,7 @@ extension HolderDashboardViewModelTests {
 	
 	func test_addCertificateFooterTapped_callsCoordinator() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAQR) == false
 
 		// Act
@@ -42,7 +42,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
 		sut.didTapConfigAlmostOutOfDateCTA()
@@ -56,7 +56,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let expiredRecovery = HolderDashboardViewModel.ExpiredQR(region: .domestic, type: .recovery)
 		let expiredTest = HolderDashboardViewModel.ExpiredQR(region: .domestic, type: .test)
@@ -89,7 +89,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapOriginNotValidInThisRegionMoreInfo_vaccination_domestic() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
 		sut.didTapOriginNotValidInThisRegionMoreInfo(originType: .vaccination, validityRegion: .domestic)
@@ -118,7 +118,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapDeviceHasClockDeviationMoreInfo() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
 		sut.didTapDeviceHasClockDeviationMoreInfo()
@@ -130,7 +130,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapShowQR() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
 		let values = [NSManagedObjectID()]
@@ -143,7 +143,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapRetryLoadQRCards() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
 		sut.didTapRetryLoadQRCards()
@@ -155,7 +155,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapRecommendedUpdate_noUrl() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
 		sut.didTapRecommendedUpdate()
@@ -168,7 +168,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Arrange
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = URL(string: "https://apple.com")
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
 		sut.didTapRecommendedUpdate()
@@ -180,7 +180,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapCompleteYourVaccinationAssessmentMoreInfo() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
 		sut.didTapCompleteYourVaccinationAssessmentMoreInfo()
@@ -204,7 +204,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapRecommendToAddYourBooster() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
 		sut.didTapRecommendToAddYourBooster()
@@ -216,7 +216,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapRecommendToAddYourBoosterClose() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
