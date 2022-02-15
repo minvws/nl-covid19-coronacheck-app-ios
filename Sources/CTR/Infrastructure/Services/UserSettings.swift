@@ -136,6 +136,7 @@ extension UserSettings {
 			"policyInformationShown",
 			"lastDismissedDisclosurePolicy",
 			"overrideDisclosurePolicies",
+			"lastKnownConfigDisclosurePolicy",
 
 			// Deprecated keys
 			"shouldShowRecoveryValidityExtensionCard",
