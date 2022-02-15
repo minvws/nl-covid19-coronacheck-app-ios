@@ -21,7 +21,7 @@ class TestNegative: BaseTest {
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		
 		assertValidInternationalTestCertificate(testType: .pcr)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -60)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_negRatP1() {
@@ -36,7 +36,7 @@ class TestNegative: BaseTest {
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		
 		assertValidInternationalTestCertificate(testType: .rat)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -60)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
 	func test_negAgobP1() {
@@ -51,20 +51,20 @@ class TestNegative: BaseTest {
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		
 		assertCertificateIsNotValidInternationally(ofType: .test)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -60)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 	}
 	
-	// MARK: Negative tests - expired
+	// MARK: Negative tests - 30 days old
 	
-	func test_negExpiredRat() {
-		addTestCertificateFromGGD(for: TestData.negExpiredRat)
+	func test_negOldRat() {
+		addTestCertificateFromGGD(for: TestData.negOldRat)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_negExpiredAgob() {
-		addTestCertificateFromGGD(for: TestData.negExpiredAgob)
+	func test_negOldAgob() {
+		addTestCertificateFromGGD(for: TestData.negOldAgob)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
@@ -73,18 +73,20 @@ class TestNegative: BaseTest {
 	// MARK: Negative tests - premature
 	
 	func test_negPrematureRat() {
-		addTestCertificateFromGGD(for: TestData.negPrematureRat)
+		let person = TestData.negPrematureRat
+		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffset: 30)
+		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffset: person.testFrom)
 		assertCertificateIsNotValidInternationally(ofType: .test)
 	}
 	
 	func test_negPrematureAgob() {
-		addTestCertificateFromGGD(for: TestData.negPrematureAgob)
+		let person = TestData.negPrematureAgob
+		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffset: 30)
+		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffset: person.testFrom)
 	}
 	
 	// MARK: Negative tests - event matching

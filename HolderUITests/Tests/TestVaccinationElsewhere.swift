@@ -12,8 +12,8 @@ class TestVaccinationElsewhere: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: 2, validUntilOffset: 240)
-		assertValidInternationalVaccinationCertificate(doses: ["2/2"])
+		assertValidDutchVaccinationCertificate(doses: 1, validUntilOffset: person.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: ["1/1"])
 	}
 	
 	func test_vacP1PersonalStatementPriorEvent() {
@@ -23,7 +23,7 @@ class TestVaccinationElsewhere: BaseTest {
 		assertCertificateIsOnlyValidInternationally()
 		
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: ["1/2"])
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
 	func test_vacP2PersonalStatementVacElsewhereBoth() {
@@ -31,8 +31,8 @@ class TestVaccinationElsewhere: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: 2, validUntilOffset: 240)
-		assertValidInternationalVaccinationCertificate(doses: ["2/2", "2/2"])
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: -30)
+		assertValidInternationalVaccinationCertificate(doses: ["1/1", "2/1"])
 	}
 	
 	func test_vacP2PersonalStatementPriorEventBoth() {
@@ -40,8 +40,8 @@ class TestVaccinationElsewhere: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: 2, validUntilOffset: 240)
-		assertValidInternationalVaccinationCertificate(doses: ["1/2", "2/2"])
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
 	func test_vacP2PersonalStatementVacElsewhereFirst() {
@@ -49,8 +49,8 @@ class TestVaccinationElsewhere: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: 3, validFromOffset: -30)
-		assertValidInternationalVaccinationCertificate(doses: ["2/2", "3/3"])
+		assertValidDutchVaccinationCertificate(doses: 2, validFromOffset: person.vacFrom)
+		assertValidInternationalVaccinationCertificate(doses: ["1/1", "2/1"])
 	}
 	
 	func test_vacP2PersonalStatementPriorEventFirst() {
@@ -58,7 +58,7 @@ class TestVaccinationElsewhere: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: 2, validUntilOffset: 240)
-		assertValidInternationalVaccinationCertificate(doses: ["1/2", "2/2"])
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 }

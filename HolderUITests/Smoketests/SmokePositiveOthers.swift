@@ -18,10 +18,11 @@ class SmokePositiveOthers: BaseTest {
 	// MARK: Positive tests - AGOB
 	
 	func test_posAgob() {
-		addRecoveryCertificate(for: TestData.posAgob)
+		let person = TestData.posAgob
+		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffset: 150)
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -35,9 +36,9 @@ class SmokePositiveOthers: BaseTest {
 		assertCertificateIsOnlyValidInternationally()
 		
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidDutchRecoveryCertificate(validUntilOffset: 150)
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -60)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -49,23 +50,23 @@ class SmokePositiveOthers: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
-		assertValidDutchRecoveryCertificate(validUntilOffset: 150)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -60)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
-	// MARK: Positive tests - expired
+	// MARK: Positive tests - older than a year
 	
-	func test_posExpiredPcr() {
-		addRecoveryCertificate(for: TestData.posExpiredPcr)
+	func test_posOldPcr() {
+		addRecoveryCertificate(for: TestData.posOldPcr)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_posExpiredRat() {
-		addRecoveryCertificate(for: TestData.posExpiredRat)
+	func test_posOldRat() {
+		addRecoveryCertificate(for: TestData.posOldRat)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreated()
 	}
