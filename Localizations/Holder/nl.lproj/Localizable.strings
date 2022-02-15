@@ -630,7 +630,7 @@
 "holder_dashboard_addCard_title" = "Nieuwe vaccinatie of test toevoegen";
 "holder_dashboard_domesticQRCard_1G_label" = "1G";
 "holder_dashboard_domesticQRCard_1G_title" = "Bewijs voor 1G-toegang";
-"holder_dashboard_domesticQRCard_3G_inactive_label" = "Dit bewijs wordt nu niet gebruikt in Nederland.";
+"holder_dashboard_domesticQRCard_3G_inactive_label" = "Dit bewijs wordt nu niet gebruikt in Nederland";
 "holder_dashboard_domesticQRCard_3G_label" = "3G";
 "holder_dashboard_domesticQRCard_3G_title" = "Bewijs voor 3G-toegang";
 "holder_dashboard_empty_domestic_3Gand1Gaccess_message" = "<p>Bezoek je een plek in Nederland? Check vooraf of je een bewijs voor <a href=\"https://coronacheck.nl/toegangsregels/3g-1g-toegang\">3G- of 1G toegang</a> nodig hebt.</p>";
@@ -643,7 +643,7 @@
 "holder_dashboard_newvaliditybanner_title" = "De geldigheid van coronabewijzen wordt aangepast";
 "holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
 "holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/toegangsregels/1g-bewijs";
-"holder_dashboard_only1GaccessBanner_title" = "Je krijgt een bewijs voor 1G-toegang wanneer je negatief bent getest";
+"holder_dashboard_only1GaccessBanner_title" = "Je kunt een bewijs voor 1G-toegang toevoegen wanneer je negatief getest bent";
 "holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/toegangsregels/3g-bewijs";
 "holder_dashboard_only3GaccessBanner_title" = "Op dit moment geeft een Nederlands bewijs 3G-toegang. Dit betekent dat een bewijs overal geldig is waar om een coronabewijs wordt gevraagd.";
 "holder_dashboard_originExpiredBanner_domesticRecovery_title" = "Je Nederlandse herstelbewijs is verlopen";
