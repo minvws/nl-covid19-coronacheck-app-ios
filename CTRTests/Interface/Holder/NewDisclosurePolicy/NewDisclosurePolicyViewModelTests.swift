@@ -31,7 +31,7 @@ final class NewDisclosurePolicyViewModelTests: XCTestCase {
 		sut = .init(coordinator: coordinatorSpy)
 
 		// Then
-		expect(self.sut.tagline) == L.general_newintheapp()
+		expect(self.sut.tagline) == L.general_newpolicy()
 		expect(self.sut.title) == L.holder_newintheapp_content_only1G_title()
 		expect(self.sut.content) == L.holder_newintheapp_content_only1G_body()
 		expect(self.sut.image) == I.disclosurePolicy.newInTheApp()
