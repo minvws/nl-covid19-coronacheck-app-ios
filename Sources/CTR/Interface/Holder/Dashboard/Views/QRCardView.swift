@@ -477,6 +477,7 @@ class QRCardView: BaseView {
 				viewQRButtonStackView.removeArrangedSubview(viewQRButton)
 				viewQRButtonStackView.removeArrangedSubview(viewQRButtonCompressingSpacer)
 				viewQRButtonStackView.addArrangedSubview(thisCertificateIsNotUsedOverlayView)
+				viewQRButton.isAccessibilityElement = false
 			} else {
 				viewQRButtonStackView.removeArrangedSubview(thisCertificateIsNotUsedOverlayView)
 				viewQRButtonStackView.addArrangedSubview(viewQRButton)
