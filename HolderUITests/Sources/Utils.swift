@@ -63,7 +63,7 @@ extension BaseTest {
 		return app.descendants(matching: .any)[identifier]
 	}
 	
-	func cardsToCheck(for certificateType: CertificateType) -> [XCUIElement] {
+	func cardsToCheck(for certificateType: CertificateType, _ combinedWithOther: Bool = false) -> [XCUIElement] {
 		switch certificateType {
 			case .test:
 				switch disclosureMode {
@@ -72,7 +72,11 @@ extension BaseTest {
 					case .only3G:
 						return [card3G()]
 					case .bothModes:
-						return [card1G(), card3G()]
+						if combinedWithOther {
+							return [card1G()]
+						} else {
+							return [card1G(), card3G()]
+						}
 				}
 			default:
 				return [card3G()]

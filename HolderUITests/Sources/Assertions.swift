@@ -69,7 +69,7 @@ extension BaseTest {
 	func assertDisclosureMessages() {
 		switch disclosureMode {
 			case .only3G:
-				app.containsText("Op je bewijs staat nu 3G. Dit betekent dat je bewijs geschikt is voor plekken in Nederland die 3G-toegang geven.")
+				app.containsText("Op dit moment geeft een Nederlands bewijs 3G-toegang.")
 			case .only1G:
 				app.linkExists("Wil je naar een plek met 1G-toegang? Dan heb je een testbewijs nodig.")
 				app.textExists("Vanaf nu heb je een testbewijs nodig voor 1G toegang")
@@ -107,9 +107,9 @@ extension BaseTest {
 		card3G().containsText(is3GEnabled() ? "Bekijk QR" : "Dit bewijs wordt nu niet gebruikt in Nederland")
 	}
 	
-	func assertValidDutchTestCertificate(validUntilOffset: Int = 1) {
+	func assertValidDutchTestCertificate(validUntilOffset: Int = 1, combinedWithOther: Bool = false) {
 		tapOnTheNetherlandsTab()
-		for card in cardsToCheck(for: .test) {
+		for card in cardsToCheck(for: .test, combinedWithOther) {
 			card.containsText(CertificateType.test.rawValue)
 			card.containsText("geldig tot " + formattedOffsetDate(with: validUntilOffset, withYear: false, withDay: true))
 			card.containsText("Bekijk QR")
