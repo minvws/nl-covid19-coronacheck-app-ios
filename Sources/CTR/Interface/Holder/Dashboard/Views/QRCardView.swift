@@ -104,6 +104,8 @@ class QRCardView: BaseView {
 	private let largeIconImageView: UIImageView = {
 
 		let view = UIImageView(image: I.dashboard.domestic())
+		view.accessibilityLabel = L.generalNetherlands()
+		view.isAccessibilityElement = true
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.setContentCompressionResistancePriority(.required, for: .horizontal)
 		return view
@@ -410,6 +412,7 @@ class QRCardView: BaseView {
 
 	private func applyEUStyle() {
 		largeIconImageView.image = I.dashboard.international()
+		largeIconImageView.accessibilityLabel = L.generalEuropean()
 	}
 
 	// MARK: - Callbacks
@@ -606,9 +609,18 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 		])
 	}
 	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		label.isAccessibilityElement = false
+		iconImageView.isAccessibilityElement = false
+		isAccessibilityElement = true
+	}
+	
 	var title: String? {
 		didSet {
 			label.text = title
+			accessibilityLabel = "\(L.generalNetherlands()) \(title ?? "")"
 		}
 	}
 }
