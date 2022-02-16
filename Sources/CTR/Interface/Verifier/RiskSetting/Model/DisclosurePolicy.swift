@@ -8,7 +8,7 @@
 import Foundation
 import Clcore
 
-enum DisclosurePolicy: Codable, CaseIterable {
+enum DisclosurePolicy: Codable, CaseIterable, Comparable {
 	/// 3G policy
 	case policy3G
 	/// 1G policy
