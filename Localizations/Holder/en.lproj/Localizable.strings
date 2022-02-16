@@ -625,6 +625,7 @@
 "holder_completecertificate_title" = "Complete your visitor pass";
 "holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-1g-certificate";
 "holder_dashboard_3Gand1GaccessBanner_title" = "The access rules in the Netherlands have changed. There are now separate certificates for venues with 3G access and 1G access.";
+"holder_dashboard_accessibility_access" = "Coronavirus pass";
 "holder_dashboard_accessibility_notification" = "Notification";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
 "holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";

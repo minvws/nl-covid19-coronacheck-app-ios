@@ -45,6 +45,14 @@ class QRCardView: BaseView {
 
 	// Contains the main QRCard (i.e. the top layer of the visual stack)
 	private let hostView = UIView()
+	
+	/// A label for accessibility to announce the role of this message card ("Notification")
+	private let accessibilityRoleLabel: Label = {
+		let label = Label(body: " ")
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.accessibilityLabel = L.holder_dashboard_accessibility_access()
+		return label
+	}()
 
 	private let titleLabel: Label = {
         return Label(title3: nil, montserrat: true).multiline().header()
@@ -148,6 +156,8 @@ class QRCardView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
+		
+		addSubview(accessibilityRoleLabel)
 
 		squashedCards.reversed().forEach { squashedCardView in
 			addSubview(squashedCardView)
@@ -227,6 +237,9 @@ class QRCardView: BaseView {
 		largeIconImageView.setContentHuggingPriority(.required, for: .vertical)
 
 		NSLayoutConstraint.activate([
+			accessibilityRoleLabel.topAnchor.constraint(equalTo: topAnchor),
+			accessibilityRoleLabel.heightAnchor.constraint(equalToConstant: 1),
+			
 			largeIconImageView.topAnchor.constraint(equalTo: hostView.topAnchor, constant: ViewTraits.imageMargin),
 			largeIconImageView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -ViewTraits.imageMargin),
 			largeIconImageView.bottomAnchor.constraint(lessThanOrEqualTo: hostView.bottomAnchor),
