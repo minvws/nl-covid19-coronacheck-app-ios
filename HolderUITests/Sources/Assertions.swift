@@ -50,6 +50,11 @@ extension BaseTest {
 		returnToCertificateOverview()
 	}
 	
+	func replaceExistingCertificate(_ replace: Bool = true) {
+		textExists("Wil je je bewijs vervangen?")
+		tapButton(replace ? "Vervang" : "Stoppen")
+	}
+	
 	// MARK: The Netherlands
 	
 	func tapOnTheNetherlandsTab() {

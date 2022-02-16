@@ -81,6 +81,7 @@ class ShowQRViewModel: Logging {
 	private var mappingManager: MappingManaging? = Current.mappingManager
 	private let notificationCenter: NotificationCenterProtocol
 	private let screenBrightnessManager: ScreenBrightnessManager
+	private let disclosurePolicy: DisclosurePolicy?
 
 	private var dataSource: ShowQRDatasourceProtocol
 
@@ -130,6 +131,7 @@ class ShowQRViewModel: Logging {
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
 		self.startingPage = mostRelevantPage
 		self.currentPage = mostRelevantPage
+		self.disclosurePolicy = disclosurePolicy
 
 		handleVaccinationDosageInformation()
 		setupContent(greenCards: greenCards, thirdPartyTicketAppName: thirdPartyTicketAppName)
@@ -243,13 +245,9 @@ class ShowQRViewModel: Logging {
 			.map({ $0.isEmpty ? "_" : $0 })
 			.joined(separator: " ")
 		
-		// Show different body when you only have a test with category 1G.
-		if let origins = greenCard.castOrigins(),
-		   origins.contains(where: { $0.type == OriginType.test.rawValue }),
-		   domesticCredentialAttributes.disclosurePolicy == .policy1G {
+		if disclosurePolicy == .policy1G {
 			return L.holder_qr_explanation_description_domestic_1G(identity)
 		}
-		
 		return L.holderShowqrDomesticAboutMessage(identity)
 	}
 

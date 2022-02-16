@@ -82,6 +82,8 @@ class HolderCoordinator: SharedCoordinator {
 	
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	
+	private var disclosurePolicyUpdateObserverToken: DisclosurePolicyManager.ObserverToken?
+	
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
 	/// Docs: https://shrtm.nu/oc45
@@ -105,6 +107,10 @@ class HolderCoordinator: SharedCoordinator {
 			return
 		}
 		
+		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
+			self?.handleDisclosurePolicyUpdates()
+		}
+		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: HolderNewFeaturesFactory()
@@ -122,6 +128,7 @@ class HolderCoordinator: SharedCoordinator {
 				
 				// Start with the holder app
 				navigateToHolderStart()
+				handleDisclosurePolicyUpdates()
 			}
 		}
 	}
@@ -130,6 +137,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
+		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.removeObserver)
 	}
 	
 	// MARK: - Listeners
@@ -681,6 +689,37 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 		
 		removeChildCoordinator()
 		navigateToChooseQRCodeType()
+	}
+}
+
+extension HolderCoordinator {
+	
+	func showNewDisclosurePolicy() {
+	
+		let destination = NavigationController(
+			rootViewController: NewDisclosurePolicyViewController(
+				viewModel: NewDisclosurePolicyViewModel(
+					coordinator: self
+				)
+			)
+		)
+		destination.modalPresentationStyle = .fullScreen
+		navigationController.present(destination, animated: true) {
+			Current.disclosurePolicyManager.setDisclosurePolicyUpdateHasBeenSeen()
+		}
+	}
+	
+	func handleDisclosurePolicyUpdates() {
+		
+		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
+			// No Disclosre Policy modal if we still need to finish onboarding
+			return
+		}
+		
+		guard Current.disclosurePolicyManager.hasChanges else {
+			return
+		}
+		showNewDisclosurePolicy()
 	}
 }
 

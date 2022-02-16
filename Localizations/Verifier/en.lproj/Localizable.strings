@@ -12,12 +12,9 @@
 "scan_instructions_4_title_1G" = "Check mark = access";
 "scan_log_footer_in_use" = "App in use since %@";
 "scan_log_footer_long_time" = "App in use for longer than one month";
-"scan_log_list_2g_plus" = "2G+";
 "scan_log_list_clock_skew_detected" = "Date or time changed";
 "scan_log_list_entry" = "Scanned between %1$li and %2$li certificates";
 "scan_log_list_header" = "Last %li minutes";
-"scan_log_list_highrisk" = "2G";
-"scan_log_list_lowrisk" = "3G";
 "scan_log_list_no_items" = "No certificates scanned";
 "scan_log_list_now" = "now";
 "scan_log_message" = "<p>The scan setting log keeps track of the type of access used during scanning. A civil enforcement officer may request access to this log.</p><p>For privacy reasons, only scan settings used in the last %li minutes are saved on this phone. No personal information is saved. You can read more about this in the <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">frequently asked questions</a>.</p>";

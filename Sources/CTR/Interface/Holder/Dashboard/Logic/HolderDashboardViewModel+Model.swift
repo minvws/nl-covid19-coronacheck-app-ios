@@ -77,6 +77,13 @@ extension HolderDashboardViewModel {
 					.filter { $0.isCurrentlyValid(now: now) }
 					.contains(where: { $0.type == type })
 			}
+			
+			/// Note: may _not yet_ be valid!
+			func hasUnexpiredOrigin(ofType type: QRCodeOriginType, now: Date) -> Bool {
+				return origins
+					.filter { $0.isNotYetExpired(now: now) }
+					.contains(where: { $0.type == type })
+			}
 		}
 
 		let region: Region // A QR Card only has one region
@@ -118,22 +125,23 @@ extension HolderDashboardViewModel {
 				.last ?? .distantPast
 		}
 		
-		func hasAValidTest(now: Date) -> Bool {
-			// Find greencards where there is a valid test
-			let greencardsWithValidTest = greencards.filter { greencard in
-				greencard.hasValidOrigin(ofType: .test, now: now)
+		/// Note: may _not yet_ be valid!
+		func hasUnexpiredTest(now: Date) -> Bool {
+			// Find greencards where there is a test not yet expired
+			let greencardsWithUnexpiredTest = greencards.filter { greencard in
+				greencard.hasUnexpiredOrigin(ofType: .test, now: now)
 			}
-			return greencardsWithValidTest.isNotEmpty
+			return greencardsWithUnexpiredTest.isNotEmpty
 		}
 		
-		func hasValidOriginsWhichAreNotOfTypeTest(now: Date) -> Bool {
-			// Find greencards where there is a valid test
-			let greencardsWithValidOriginThatIsNotTest = greencards.filter { greencard in
-				greencard.hasValidOrigin(ofType: .vaccination, now: now)
-					|| greencard.hasValidOrigin(ofType: .recovery, now: now)
-					|| greencard.hasValidOrigin(ofType: .vaccinationassessment, now: now)
-			}
-			return greencardsWithValidOriginThatIsNotTest.isNotEmpty
+		func hasUnexpiredOriginsWhichAreNotOfTypeTest(now: Date) -> Bool {
+			greencards.filter({ QRCard.hasUnexpiredOriginThatIsNotATest(greencard: $0, now: now) }).isNotEmpty
+		}
+		
+		static func hasUnexpiredOriginThatIsNotATest(greencard: HolderDashboardViewModel.QRCard.GreenCard, now: Date) -> Bool {
+			return greencard.hasUnexpiredOrigin(ofType: .vaccination, now: now)
+				|| greencard.hasUnexpiredOrigin(ofType: .recovery, now: now)
+				|| greencard.hasUnexpiredOrigin(ofType: .vaccinationassessment, now: now)
 		}
 	}
 
