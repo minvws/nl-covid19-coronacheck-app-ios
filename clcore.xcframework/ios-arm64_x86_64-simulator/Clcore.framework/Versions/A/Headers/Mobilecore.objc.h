@@ -105,7 +105,7 @@
 @property (nonatomic) NSString* _Nonnull error;
 @end
 
-FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreCATEGORY_1G;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreCATEGORY_ATTRIBUTE_1G;
 FOUNDATION_EXPORT const int64_t MobilecoreCREATE_CREDENTIAL_VERSION;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISCLOSURE_POLICY_1G;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISCLOSURE_POLICY_3G;
