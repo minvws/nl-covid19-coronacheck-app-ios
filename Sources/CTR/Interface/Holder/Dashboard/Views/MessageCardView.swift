@@ -56,7 +56,15 @@ class MessageCardView: BaseView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+	/// A label for accessibility to announce the role of this message card ("Notification")
+	private let accessibilityTitleLabel: Label = {
+		let label = Label(body: " ")
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.accessibilityLabel = L.holder_dashboard_accessibility_notification()
+		return label
+	}()
+	
     /// The title label (- within `messageWithCloseButtonStackView`)
 	private let titleLabel: Label = {
         let titleLabel = Label(body: nil).multiline().header()
@@ -71,7 +79,7 @@ class MessageCardView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.bannerCross(), for: .normal)
 		button.contentHorizontalAlignment = .center
-		button.accessibilityLabel = L.generalClose()
+		button.accessibilityLabel = "\(L.generalClose()) \(L.holder_dashboard_accessibility_notification())"
 		return button
 	}()
 
@@ -114,6 +122,7 @@ class MessageCardView: BaseView {
 
 		super.setupViewHierarchy()
         
+		addSubview(accessibilityTitleLabel)
         addSubview(titleLabel)
         
         if nil != config.closeButtonCommand {
@@ -130,7 +139,9 @@ class MessageCardView: BaseView {
 		super.setupViewConstraints()
 
         var constraints = [NSLayoutConstraint]()
-        
+       
+		constraints += [accessibilityTitleLabel.topAnchor.constraint(equalTo: topAnchor)]
+		constraints += [accessibilityTitleLabel.heightAnchor.constraint(equalToConstant: 1)]
         constraints += [titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
         constraints += [titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
         
@@ -157,7 +168,7 @@ class MessageCardView: BaseView {
         
         NSLayoutConstraint.activate(constraints)
 	}
-
+	
     // MARK: - Objc Target-Action callbacks:
     
 	/// User tapped on the close button

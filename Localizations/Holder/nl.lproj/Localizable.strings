@@ -43,7 +43,6 @@
 "general.networkwasbusy.text" = "Probeer het op een later moment nog eens.";
 "general.networkwasbusy.title" = "Sorry, het is erg druk";
 "general.next" = "Volgende";
-"general.notification" = "Let op!";
 "general.ok" = "Oke";
 "general.paperflow" = "papieren bewijs";
 "general.positiveTest" = "positieve test";
@@ -59,6 +58,7 @@
 "general_menu" = "Menu";
 "general_newintheapp" = "Nieuw in de app";
 "general_newpolicy" = "Nieuwe regels";
+"general_notification" = "Let op!";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
 "general_readmore" = "Lees meer";
 "general_recoverycertificate" = "herstelbewijs";
@@ -625,6 +625,7 @@
 "holder_completecertificate_title" = "Maak je bezoekersbewijs compleet";
 "holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/toegangsregels/3g-1g-bewijs";
 "holder_dashboard_3Gand1GaccessBanner_title" = "De Nederlandse toegangsregels zijn veranderd. Er zijn nu aparte bewijzen voor plekken die 3G-toegang en 1G-toegang geven.";
+"holder_dashboard_accessibility_notification" = "Notificatie";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Boostervaccinatie toevoegen";
 "holder_dashboard_addBoosterBanner_title" = "Heb je een boostervaccinatie gehad? Haal opnieuw je gegevens op als je deze aan je bewijs wilt toevoegen";
 "holder_dashboard_addCard_title" = "Nieuwe vaccinatie of test toevoegen";
