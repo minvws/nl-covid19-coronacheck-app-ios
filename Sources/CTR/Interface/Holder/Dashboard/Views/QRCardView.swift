@@ -46,7 +46,7 @@ class QRCardView: BaseView {
 	// Contains the main QRCard (i.e. the top layer of the visual stack)
 	private let hostView = UIView()
 	
-	/// A label for accessibility to announce the role of this message card ("Notification")
+	/// A label for accessibility to announce the role of this qr card ("Toegangsbewijs")
 	private let accessibilityRoleLabel: Label = {
 		let label = Label(body: " ")
 		label.translatesAutoresizingMaskIntoConstraints = false
