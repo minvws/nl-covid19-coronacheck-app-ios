@@ -104,7 +104,7 @@ class BaseViewController: UIViewController {
 			action: action,
 			content: .image(I.backArrow()),
 			accessibilityIdentifier: "BackButton",
-			accessibilityLabel: L.generalMenuClose()
+			accessibilityLabel: L.generalBack()
 		)
 		navigationItem.leftBarButtonItem = .create(config)
 	}

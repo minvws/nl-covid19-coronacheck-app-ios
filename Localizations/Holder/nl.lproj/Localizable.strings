@@ -33,7 +33,6 @@
 /* Voice over voor begin van een lijst */
 "general.list.accessibility.start" = "Begin van lijst.";
 "general.loading" = "Bezig met laden";
-"general.menu.close" = "Sluit menu";
 /* Configuratie ABC123, 13-10-2021 00:00 */
 "general.menu.configVersion" = "Configuratie %@, %@";
 "general.menu.open" = "Open menu";
