@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class HolderCoordinatorTests: XCTestCase {
 
@@ -47,8 +48,8 @@ class HolderCoordinatorTests: XCTestCase {
 		sut.start()
 
 		// Then
-		XCTAssertFalse(sut.childCoordinators.isEmpty)
-		XCTAssertTrue(sut.childCoordinators.first is NewFeaturesCoordinator)
+		expect(self.sut.childCoordinators).toNot(beEmpty())
+		expect(self.sut.childCoordinators.first is NewFeaturesCoordinator) == true
 	}
 
 	func testFinishNewFeatures() {
@@ -75,6 +76,45 @@ class HolderCoordinatorTests: XCTestCase {
 		sut.finishNewFeatures()
 
 		// Then
-		XCTAssertTrue(sut.childCoordinators.isEmpty)
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
+	func test_handleDisclosurePolicyUpdates_needsOnboarding() {
+		
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
+		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = true
+		
+		// When
+		sut.handleDisclosurePolicyUpdates()
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == false
+	}
+	
+	func test_handleDisclosurePolicyUpdates_shouldShow() {
+		
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = true
+		
+		// When
+		sut.handleDisclosurePolicyUpdates()
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == true
+	}
+	
+	func test_handleDisclosurePolicyUpdates_shouldNotShow() {
+		
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = false
+		
+		// When
+		sut.handleDisclosurePolicyUpdates()
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == false
 	}
 }

@@ -132,7 +132,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		sut.userWantsToGoBackToTokenEntry()
 
 		// Then
-		expect(self.navigationSpy.popToViewControllerCalled) == true
+		expect(self.navigationSpy.invokedPopToViewController) == true
 		expect(self.navigationSpy.viewControllers).to(haveCount(2))
 		expect(self.sut.scannedQR).to(beNil())
 		expect(self.sut.token) == "test"
@@ -149,7 +149,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		sut.userWantsToGoBackToTokenEntry()
 
 		// Then
-		expect(self.navigationSpy.popToViewControllerCalled) == false
+		expect(self.navigationSpy.invokedPopToViewController) == false
 		expect(self.navigationSpy.viewControllers).to(haveCount(1))
 		expect(self.sut.scannedQR).to(beNil())
 	}
@@ -195,7 +195,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.sut.token).to(beNil())
 		expect(self.sut.scannedQR).to(beNil())
 		expect(self.sut.childCoordinators).to((haveCount(0)))
-		expect(self.navigationSpy.popToViewControllerCalled) == true
+		expect(self.navigationSpy.invokedPopToViewController) == true
 		expect(self.navigationSpy.viewControllers).to(haveCount(1))
 	}
 
