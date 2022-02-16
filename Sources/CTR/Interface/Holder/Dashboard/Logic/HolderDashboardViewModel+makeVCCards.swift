@@ -418,9 +418,9 @@ extension HolderDashboardViewModel.QRCard {
 				switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
 					case (.exclusive1G, .policy1G),
 						(.combined1gAnd3g, .policy1G):
-						guard hasAValidTest(now: Current.now()) else { return [] }
+						guard hasUnexpiredTest(now: Current.now()) else { return [] }
 					case (.exclusive1G, .policy3G):
-						guard hasValidOriginsWhichAreNotOfTypeTest(now: Current.now()) else { return [] }
+						guard hasUnexpiredOriginsWhichAreNotOfTypeTest(now: Current.now()) else { return [] }
 					case (.exclusive3G, .policy3G),
 						(.combined1gAnd3g, .policy3G):
 						break
@@ -523,9 +523,10 @@ extension HolderDashboardViewModel.QRCard {
 					// print("🎏 Filtering origin: [active: .\(activeDisclosurePolicy), local: .\(localDisclosurePolicy), origin: .\(origin.type)]") //swiftlint:disable:this disable_print
 					switch (activeDisclosurePolicy, localDisclosurePolicy, origin.type) {
 
-						// Vaccine + test should show test only on the 1G card, not 3G
 						case (.combined1gAnd3g, .policy1G, .test): return true
-						case (.combined1gAnd3g, .policy3G, .test): return false
+						case (.combined1gAnd3g, .policy3G, .test):
+							// If there is a test + (some other origin), should show the test only on the 1G card (see `case` above), not this 3G card:
+							return !QRCard.hasUnexpiredOriginThatIsNotATest(greencard: greenCard, now: now)
 						
 						// only tests should ever be shown on a 1G card:
 						case (_, .policy1G, .test): return true
