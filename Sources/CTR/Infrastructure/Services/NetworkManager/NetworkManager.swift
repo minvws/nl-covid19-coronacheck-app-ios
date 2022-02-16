@@ -129,6 +129,8 @@ class NetworkManager: Logging {
 							}
 					}
 			}
+			
+			self.cleanupSession(session)
 		}
 	}
 
@@ -174,6 +176,8 @@ class NetworkManager: Logging {
 							completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError)))
 					}
 			}
+			
+			self.cleanupSession(session)
 		}
 	}
 
@@ -300,6 +304,12 @@ class NetworkManager: Logging {
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: strategy),
 			delegateQueue: nil
 		)
+	}
+	
+	private func cleanupSession(_ session: URLSession) {
+		
+		(session.delegate as? NetworkManagerURLSessionDelegate)?.cleanup()
+		session.finishTasksAndInvalidate()
 	}
 
 	// MARK: - Helpers
