@@ -522,6 +522,10 @@ extension HolderDashboardViewModel.QRCard {
 					// some local disclosure policies cause origins to be hidden, depending on the active disclosure policy:
 					// print("🎏 Filtering origin: [active: .\(activeDisclosurePolicy), local: .\(localDisclosurePolicy), origin: .\(origin.type)]") //swiftlint:disable:this disable_print
 					switch (activeDisclosurePolicy, localDisclosurePolicy, origin.type) {
+
+						// Vaccine + test should show test only on the 1G card, not 3G
+						case (.combined1gAnd3g, .policy1G, .test): return true
+						case (.combined1gAnd3g, .policy3G, .test): return false
 						
 						// only tests should ever be shown on a 1G card:
 						case (_, .policy1G, .test): return true
