@@ -695,10 +695,8 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 extension HolderCoordinator {
 	
 	func showNewDisclosurePolicy() {
-		guard let viewModel = NewDisclosurePolicyViewModel(coordinator: self) else {
-			Current.disclosurePolicyManager.setDisclosurePolicyUpdateHasBeenSeen()
-			return
-		}
+		guard navigationController.presentedViewController == nil else { return }
+		guard let viewModel = NewDisclosurePolicyViewModel(coordinator: self) else { return }
 		
 		let destination = NavigationController(
 			rootViewController: NewDisclosurePolicyViewController(viewModel: viewModel)
