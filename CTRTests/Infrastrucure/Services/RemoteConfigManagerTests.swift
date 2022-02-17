@@ -18,6 +18,7 @@ class RemoteConfigManagerTests: XCTestCase {
 	private var userSettingsSpy: UserSettingsSpy!
 	private var reachabilitySpy: ReachabilitySpy!
 	private var secureUserSettingsSpy: SecureUserSettingsSpy!
+	private var appVersionSupplierSpy: AppVersionSupplierSpy!
 	
 	override func setUp() {
 
@@ -26,13 +27,15 @@ class RemoteConfigManagerTests: XCTestCase {
 		reachabilitySpy = ReachabilitySpy()
 		secureUserSettingsSpy = SecureUserSettingsSpy()
 		secureUserSettingsSpy.stubbedStoredConfiguration = .default
+		appVersionSupplierSpy = AppVersionSupplierSpy(version: "1", build: "1")
 		
 		sut = RemoteConfigManager(
 			now: { now },
 			userSettings: userSettingsSpy,
 			reachability: reachabilitySpy,
 			networkManager: networkSpy,
-			secureUserSettings: secureUserSettingsSpy
+			secureUserSettings: secureUserSettingsSpy,
+			appVersionSupplier: appVersionSupplierSpy
 		)
 		
 		super.setUp()
@@ -278,7 +281,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Arrange:
 		// Put in place a "previously loaded" config:
 		let existingStoredConfig = RemoteConfiguration.default
-		userSettingsSpy.stubbedConfigFetchedHash = existingStoredConfig.hash
+		userSettingsSpy.stubbedConfigFetchedHash = existingStoredConfig.hash! + appVersionSupplierSpy.getCurrentBuild() + appVersionSupplierSpy.getCurrentVersion()
 		secureUserSettingsSpy.stubbedStoredConfiguration = existingStoredConfig
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((existingStoredConfig, existingStoredConfig.data, URLResponse())), ())
 		
@@ -372,9 +375,10 @@ class RemoteConfigManagerTests: XCTestCase {
 
 	func test_update_unchangedConfig_returnsFalse_updatesObservers() {
 		// Arrange
+		
 		let configuration = RemoteConfiguration.default
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(20 * days * ago).timeIntervalSince1970
-		userSettingsSpy.stubbedConfigFetchedHash = configuration.hash
+		userSettingsSpy.stubbedConfigFetchedHash = configuration.hash!  + appVersionSupplierSpy.getCurrentBuild() + appVersionSupplierSpy.getCurrentVersion()
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((configuration, configuration.data, URLResponse())), ())
 
 		var reloadObserverReceivedConfiguration: RemoteConfiguration?
