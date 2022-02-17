@@ -13,7 +13,7 @@ class BaseTest: XCTestCase {
 	let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
 	let loginTimeout = 30.0
 	
-	var disclosureMode = DisclosureMode.bothModes
+	var disclosureMode = DisclosureMode.only3G
 	
 	override func setUpWithError() throws {
 		try super.setUpWithError()
