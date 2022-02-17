@@ -47,11 +47,14 @@ class QRCardView: BaseView {
 	private let hostView = UIView()
 	
 	/// A label for accessibility to announce the role of this qr card ("Toegangsbewijs")
-	private let accessibilityRoleLabel: Label = {
-		let label = Label(body: " ")
-		label.translatesAutoresizingMaskIntoConstraints = false
-		label.accessibilityLabel = L.holder_dashboard_accessibility_access()
-		return label
+	private let accessibilityRoleView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.accessibilityLabel = L.holder_dashboard_accessibility_access()
+		view.accessibilityTraits = .staticText
+		view.backgroundColor = .clear
+		view.isAccessibilityElement = true
+		return view
 	}()
 
 	private let titleLabel: Label = {
@@ -159,7 +162,7 @@ class QRCardView: BaseView {
 
 		super.setupViewHierarchy()
 		
-		addSubview(accessibilityRoleLabel)
+		addSubview(accessibilityRoleView)
 
 		squashedCards.reversed().forEach { squashedCardView in
 			addSubview(squashedCardView)
@@ -239,8 +242,10 @@ class QRCardView: BaseView {
 		largeIconImageView.setContentHuggingPriority(.required, for: .vertical)
 
 		NSLayoutConstraint.activate([
-			accessibilityRoleLabel.topAnchor.constraint(equalTo: topAnchor),
-			accessibilityRoleLabel.heightAnchor.constraint(equalToConstant: 1),
+			accessibilityRoleView.topAnchor.constraint(equalTo: topAnchor),
+			accessibilityRoleView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			accessibilityRoleView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			accessibilityRoleView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			
 			largeIconImageView.topAnchor.constraint(equalTo: hostView.topAnchor, constant: ViewTraits.imageMargin),
 			largeIconImageView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -ViewTraits.imageMargin),

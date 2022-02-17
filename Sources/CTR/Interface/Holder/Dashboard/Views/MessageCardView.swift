@@ -58,11 +58,14 @@ class MessageCardView: BaseView {
     }
 
 	/// A label for accessibility to announce the role of this message card ("Notification")
-	private let accessibilityRoleLabel: Label = {
-		let label = Label(body: " ")
-		label.translatesAutoresizingMaskIntoConstraints = false
-		label.accessibilityLabel = L.holder_dashboard_accessibility_notification()
-		return label
+	private let accessibilityRoleView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.accessibilityLabel = L.holder_dashboard_accessibility_notification()
+		view.accessibilityTraits = .staticText
+		view.backgroundColor = .clear
+		view.isAccessibilityElement = true
+		return view
 	}()
 	
     /// The title label (- within `messageWithCloseButtonStackView`)
@@ -122,7 +125,7 @@ class MessageCardView: BaseView {
 
 		super.setupViewHierarchy()
         
-		addSubview(accessibilityRoleLabel)
+		addSubview(accessibilityRoleView)
         addSubview(titleLabel)
         
         if nil != config.closeButtonCommand {
@@ -140,8 +143,10 @@ class MessageCardView: BaseView {
 
         var constraints = [NSLayoutConstraint]()
        
-		constraints += [accessibilityRoleLabel.topAnchor.constraint(equalTo: topAnchor)]
-		constraints += [accessibilityRoleLabel.heightAnchor.constraint(equalToConstant: 1)]
+		constraints += [accessibilityRoleView.topAnchor.constraint(equalTo: topAnchor)]
+		constraints += [accessibilityRoleView.bottomAnchor.constraint(equalTo: bottomAnchor)]
+		constraints += [accessibilityRoleView.leadingAnchor.constraint(equalTo: leadingAnchor)]
+		constraints += [accessibilityRoleView.trailingAnchor.constraint(equalTo: trailingAnchor)]
         constraints += [titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
         constraints += [titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
         
