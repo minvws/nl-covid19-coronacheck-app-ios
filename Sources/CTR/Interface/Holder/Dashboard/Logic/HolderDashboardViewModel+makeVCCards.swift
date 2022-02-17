@@ -489,7 +489,7 @@ extension HolderDashboardViewModel.QRCard {
 						.filter { $0.type == .test }
 						.contains(where: { $0.isCurrentlyValid(now: now) })
 					
-					return hasCurrentlyValidTest
+					return hasCurrentlyValidTest && evaluateEnabledState(now)
 				}
 				
 				// Default case:
