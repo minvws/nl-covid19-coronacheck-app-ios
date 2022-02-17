@@ -478,7 +478,23 @@ extension HolderDashboardViewModel.QRCard {
 			didTapViewQR: { [weak actionHandler] in
 				actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id }, disclosurePolicy: localDisclosurePolicy)
 			},
-			buttonEnabledEvaluator: evaluateEnabledState,
+			buttonEnabledEvaluator: { now in
+				
+				// Special case when this is for a 1G card:
+				if localDisclosurePolicy == .policy1G {
+					// If this is the 1G card then the button enabled state should only be determined by tests.
+					// We need to filter the origins on the `QRCard`, as it could have a valid vaccination/recovery (which are not 1G).
+					// (NB: the `QRCard` abstraction is starting to break down now that 1 `QRCard` can be shown split into 1G and 3G cards in the UI..)
+					let hasCurrentlyValidTest = origins
+						.filter { $0.type == .test }
+						.contains(where: { $0.isCurrentlyValid(now: now) })
+					
+					return hasCurrentlyValidTest
+				}
+				
+				// Default case:
+				return evaluateEnabledState(now)
+			},
 			expiryCountdownEvaluator: { now in
 				domesticCountdownText(now: now, origins: origins, localDisclosurePolicy: localDisclosurePolicy)
 			}
