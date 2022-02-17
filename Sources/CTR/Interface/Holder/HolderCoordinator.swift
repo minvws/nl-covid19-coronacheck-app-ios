@@ -695,13 +695,13 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 extension HolderCoordinator {
 	
 	func showNewDisclosurePolicy() {
-	
+		guard let viewModel = NewDisclosurePolicyViewModel(coordinator: self) else {
+			Current.disclosurePolicyManager.setDisclosurePolicyUpdateHasBeenSeen()
+			return
+		}
+		
 		let destination = NavigationController(
-			rootViewController: NewDisclosurePolicyViewController(
-				viewModel: NewDisclosurePolicyViewModel(
-					coordinator: self
-				)
-			)
+			rootViewController: NewDisclosurePolicyViewController(viewModel: viewModel)
 		)
 		destination.modalPresentationStyle = .fullScreen
 		navigationController.present(destination, animated: true) {
