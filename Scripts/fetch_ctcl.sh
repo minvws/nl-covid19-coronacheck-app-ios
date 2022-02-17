@@ -1,3 +1,5 @@
+# Compile with Go version go1.17.2 darwin/arm64
+
 export PATH=$PATH:~/go/bin
 set -eux
 git clone git@github.com:minvws/nl-covid19-coronacheck-mobile-core-private.git tmp-clcore
