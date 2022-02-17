@@ -107,10 +107,6 @@ class HolderCoordinator: SharedCoordinator {
 			return
 		}
 		
-		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
-			self?.handleDisclosurePolicyUpdates()
-		}
-		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: HolderNewFeaturesFactory()
@@ -127,8 +123,13 @@ class HolderCoordinator: SharedCoordinator {
 			} else {
 				
 				// Start with the holder app
-				navigateToHolderStart()
-				handleDisclosurePolicyUpdates()
+				navigateToHolderStart {
+					
+					self.handleDisclosurePolicyUpdates()
+					self.disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
+						self?.handleDisclosurePolicyUpdates()
+					}
+				}
 			}
 		}
 	}
