@@ -50,7 +50,7 @@ class QRCardView: BaseView {
 	private let accessibilityRoleView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.accessibilityLabel = L.holder_dashboard_accessibility_notification()
+		view.accessibilityLabel = L.holder_dashboard_accessibility_access()
 		view.accessibilityTraits = .staticText
 		view.backgroundColor = .clear
 		view.isAccessibilityElement = true
