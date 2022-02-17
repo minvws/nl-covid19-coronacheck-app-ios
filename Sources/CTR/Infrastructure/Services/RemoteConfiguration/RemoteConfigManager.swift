@@ -202,7 +202,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 				// `curl https://verifier-api.acc.coronacheck.nl/v6/verifier/config | jq -r .payload | base64 -d | sha256sum`
 				let newHash: String? = {
 					guard let string = String(data: data, encoding: .utf8) else { return nil }
-					return string.sha256
+					return string.sha256 + AppVersionSupplier().getCurrentBuild() + AppVersionSupplier().getCurrentVersion()
 				}()
 
 				let hashesMatch = userSettings.configFetchedHash == newHash
