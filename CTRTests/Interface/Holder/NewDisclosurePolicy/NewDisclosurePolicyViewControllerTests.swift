@@ -41,7 +41,7 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 		sut = NewDisclosurePolicyViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
-			)
+			)!
 		)
 
 		// When
@@ -63,7 +63,7 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 		sut = NewDisclosurePolicyViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
-			)
+			)!
 		)
 		
 		// When
@@ -85,7 +85,7 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 		sut = NewDisclosurePolicyViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
-			)
+			)!
 		)
 		
 		// When
