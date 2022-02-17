@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class HolderCoordinatorTests: XCTestCase {
 
@@ -74,6 +75,47 @@ class HolderCoordinatorTests: XCTestCase {
 		// When
 		sut.finishNewFeatures()
 
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
+	func test_handleDisclosurePolicyUpdates_needsOnboarding() {
+		
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
+		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = true
+		
+		// When
+		sut.handleDisclosurePolicyUpdates()
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == false
+	}
+	
+	func test_handleDisclosurePolicyUpdates_shouldShow() {
+		
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = true
+		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = true
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G"]
+		
+		// When
+		sut.handleDisclosurePolicyUpdates()
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == true
+	}
+	
+	func test_handleDisclosurePolicyUpdates_shouldNotShow() {
+		
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = false
+		
+		// When
+		sut.handleDisclosurePolicyUpdates()
+		
 		// Then
 		XCTAssertTrue(sut.childCoordinators.isEmpty)
 	}

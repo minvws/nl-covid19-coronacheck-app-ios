@@ -48,6 +48,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	private let networkManager: NetworkManaging
 	private let reachability: ReachabilityProtocol?
 	private let secureUserSettings: SecureUserSettingsProtocol
+	private let appVersionSupplier: AppVersionSupplierProtocol
 	
 	// MARK: - Setup
 
@@ -56,7 +57,8 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		userSettings: UserSettingsProtocol,
 		reachability: ReachabilityProtocol?,
 		networkManager: NetworkManaging,
-		secureUserSettings: SecureUserSettingsProtocol
+		secureUserSettings: SecureUserSettingsProtocol,
+		appVersionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 	) {
 
 		self.now = now
@@ -64,6 +66,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		self.reachability = reachability
 		self.networkManager = networkManager
 		self.secureUserSettings = secureUserSettings
+		self.appVersionSupplier = appVersionSupplier
 
 		checkStoredJson()
 		
@@ -218,7 +221,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 				// `curl https://verifier-api.acc.coronacheck.nl/v6/verifier/config | jq -r .payload | base64 -d | sha256sum`
 				let newHash: String? = {
 					guard let string = String(data: data, encoding: .utf8) else { return nil }
-					return string.sha256
+					return string.sha256 + appVersionSupplier.getCurrentBuild() + appVersionSupplier.getCurrentVersion()
 				}()
 
 				let hashesMatch = userSettings.configFetchedHash == newHash
