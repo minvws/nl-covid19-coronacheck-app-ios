@@ -719,6 +719,11 @@ extension HolderCoordinator {
 		guard Current.disclosurePolicyManager.hasChanges else {
 			return
 		}
+		
+		guard Current.remoteConfigManager.storedConfiguration.disclosurePolicies != nil else {
+			return
+		}
+		
 		showNewDisclosurePolicy()
 	}
 }
