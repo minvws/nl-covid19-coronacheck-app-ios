@@ -27,7 +27,7 @@ class TestMisc: BaseTest {
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
-		assertValidDutchTestCertificate()
+		assertValidDutchTestCertificate(combinedWithOther: true)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)

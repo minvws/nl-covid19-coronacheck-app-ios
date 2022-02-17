@@ -9,43 +9,6 @@ import XCTest
 
 extension BaseTest {
 	
-	func waitFor(element: XCUIElement, type: String = "Element") -> XCUIElement {
-		let elementPresent = element.waitForExistence(timeout: self.timeout)
-		XCTAssertTrue(elementPresent, type + " could not be found: " + element.description)
-		return element
-	}
-	
-	func tapButton(_ label: String) {
-		let buttonElement = waitFor(element: app.buttons[label], type: "Button")
-		buttonElement.tap()
-	}
-	
-	func tapText(_ text: String) {
-		let textElement = waitFor(element: app.staticTexts[text], type: "Text")
-		textElement.tap()
-	}
-	
-	func tapOtherElement(_ text: String) {
-		let textElement = waitFor(element: app.otherElements[text], type: "Other")
-		textElement.tap()
-	}
-	
-	func textExists(_ text: String) {
-		_ = waitFor(element: app.staticTexts[text], type: "Text")
-	}
-	
-	func textContains(_ text: String) {
-		let staticTextsQuery = searchTextInElement(text: text, element: app.staticTexts)
-		let otherElementsQuery = searchTextInElement(text: text, element: app.otherElements)
-		XCTAssertTrue(staticTextsQuery.count + otherElementsQuery.count >= 1, "Text could not be found in elements: " + text)
-	}
-	
-	func searchTextInElement(text: String, element: XCUIElementQuery) -> XCUIElementQuery {
-		let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
-		let elementQuery = element.containing(predicate)
-		return elementQuery
-	}
-	
 	private func offsetDateWithDays(offset: Int) -> Date {
 		let today = Date()
 		let offsetDate = Calendar.current.date(byAdding: .day, value: offset, to: today)!
@@ -86,5 +49,46 @@ extension BaseTest {
 		fullScreenshotAttachment.name = currentTestName + name
 		fullScreenshotAttachment.lifetime = .deleteOnSuccess
 		add(fullScreenshotAttachment)
+	}
+	
+	func card1G() -> XCUIElement {
+		return cardElement("1GQRCard")
+	}
+	
+	func card3G() -> XCUIElement {
+		return cardElement("3GQRCard")
+	}
+	
+	private func cardElement(_ identifier: String) -> XCUIElement {
+		return app.descendants(matching: .any)[identifier]
+	}
+	
+	func cardsToCheck(for certificateType: CertificateType, _ combinedWithOther: Bool = false) -> [XCUIElement] {
+		switch certificateType {
+			case .test:
+				switch disclosureMode {
+					case .only1G:
+						return [card1G()]
+					case .only3G:
+						return [card3G()]
+					case .bothModes:
+						if combinedWithOther {
+							return [card1G()]
+						} else {
+							return [card1G(), card3G()]
+						}
+				}
+			default:
+				return [card3G()]
+		}
+	}
+	
+	func is3GEnabled() -> Bool {
+		switch disclosureMode {
+			case .only1G:
+				return false
+			case .only3G, .bothModes:
+				return true
+		}
 	}
 }
