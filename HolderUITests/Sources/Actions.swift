@@ -10,7 +10,7 @@ import XCTest
 extension BaseTest {
 	
 	func addEvent() {
-		app.tapOther("Open menu")
+		app.tapButton("Open menu")
 		app.tapButton("Vaccinatie of test toevoegen")
 	}
 	
