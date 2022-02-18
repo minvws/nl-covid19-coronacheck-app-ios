@@ -151,7 +151,14 @@ final class LaunchStateManager: LaunchStateManaging {
 		if AppFlavor.flavor == .verifier {
 			// Enable verification policies
 			Current.verificationPolicyEnabler.enable(verificationPolicies: Current.remoteConfigManager.storedConfiguration.verificationPolicies ?? [])
-			remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver(updateVerificationPolicies)]
+			remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver { remoteConfiguration, _, _ in
+				guard let policies = remoteConfiguration.verificationPolicies else {
+					// No feature flag available, enable default policy
+					Current.verificationPolicyEnabler.enable(verificationPolicies: [])
+					return
+				}
+				Current.verificationPolicyEnabler.enable(verificationPolicies: policies)
+			}]
 		}
 	}
 	
@@ -175,16 +182,5 @@ final class LaunchStateManager: LaunchStateManaging {
 			serverHeaderDate: serverDateString,
 			ageHeader: httpResponse.allHeaderFields["Age"] as? String
 		)
-	}
-	
-	// MARK: - Verifier Verification Policy
-	
-	private func updateVerificationPolicies(for remoteConfiguration: RemoteConfiguration, data: Data, urlResponse: URLResponse) {
-		guard let policies = remoteConfiguration.verificationPolicies else {
-			// No feature flag available, enable default policy
-			Current.verificationPolicyEnabler.enable(verificationPolicies: [])
-			return
-		}
-		Current.verificationPolicyEnabler.enable(verificationPolicies: policies)
 	}
 }
