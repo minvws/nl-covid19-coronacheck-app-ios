@@ -29,7 +29,7 @@ protocol RemoteConfigManaging: AnyObject {
 }
 
 /// The remote configuration manager
-class RemoteConfigManager: RemoteConfigManaging {
+class RemoteConfigManager: RemoteConfigManaging, Logging {
 	typealias ObserverToken = UUID
 
 	// MARK: - Vars
@@ -51,6 +51,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 	private let reachability: ReachabilityProtocol?
 	private let secureUserSettings: SecureUserSettingsProtocol
 	private let appVersionSupplier: AppVersionSupplierProtocol
+	private let fileStorage: FileStorageProtocol
 	
 	// MARK: - Setup
 
@@ -60,6 +61,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 		reachability: ReachabilityProtocol?,
 		networkManager: NetworkManaging,
 		secureUserSettings: SecureUserSettingsProtocol,
+		fileStorage: FileStorageProtocol = FileStorage(),
 		appVersionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 	) {
 
@@ -69,6 +71,14 @@ class RemoteConfigManager: RemoteConfigManaging {
 		self.networkManager = networkManager
 		self.secureUserSettings = secureUserSettings
 		self.appVersionSupplier = appVersionSupplier
+		self.fileStorage = fileStorage
+		
+		if let configFromStoredData = fetchConfigFromStoredConfigData(), configFromStoredData != storedConfiguration {
+			logInfo("Updating from stored json")
+			storedConfiguration = configFromStoredData
+		}
+		
+		registerTriggers()
 	}
 
 	func registerTriggers() {
@@ -81,6 +91,12 @@ class RemoteConfigManager: RemoteConfigManaging {
 			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 		try? reachability?.startNotifier()
+	}
+	
+	private func fetchConfigFromStoredConfigData() -> RemoteConfiguration? {
+		
+		guard let data = fileStorage.read(fileName: CryptoLibUtility.File.remoteConfiguration.name) else { return nil }
+		return try? JSONDecoder().decode(RemoteConfiguration.self, from: data)
 	}
 
 	// MARK: - Teardown
