@@ -174,7 +174,7 @@ private let scanLogManager = ScanLogManager(dataStoreManager: datastoreManager)
 private let secureUserSettings = SecureUserSettings()
 private let userSettings = UserSettings()
 private let walletManager = WalletManager(dataStoreManager: datastoreManager)
-private let verificationPolicyEnabler = VerificationPolicyEnabler()
+private let verificationPolicyEnabler = VerificationPolicyEnabler(remoteConfigManager: remoteConfigManager)
 
 // MARK: - 3: Instantiate the Environment using private dependencies:
 

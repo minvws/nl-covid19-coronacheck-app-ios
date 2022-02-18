@@ -147,19 +147,6 @@ final class LaunchStateManager: LaunchStateManaging {
 				self?.startApplication()
 			}
 		}]
-		
-		if AppFlavor.flavor == .verifier {
-			// Enable verification policies
-			Current.verificationPolicyEnabler.enable(verificationPolicies: Current.remoteConfigManager.storedConfiguration.verificationPolicies ?? [])
-			remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver { remoteConfiguration, _, _ in
-				guard let policies = remoteConfiguration.verificationPolicies else {
-					// No feature flag available, enable default policy
-					Current.verificationPolicyEnabler.enable(verificationPolicies: [])
-					return
-				}
-				Current.verificationPolicyEnabler.enable(verificationPolicies: policies)
-			}]
-		}
 	}
 	
 	// Update the  managers with the values from the actual http response

@@ -20,7 +20,35 @@ protocol VerificationPolicyEnablable: AnyObject {
 final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 	
 	private var observers = [ObserverToken: () -> Void]()
+	private let remoteConfigManager: RemoteConfigManaging
+	private var remoteConfigManagerObserverToken: UUID?
 	
+	/// Initiializer
+	init(remoteConfigManager: RemoteConfigManaging) {
+		self.remoteConfigManager = remoteConfigManager
+
+		guard AppFlavor.flavor == .verifier else { return }
+		
+		enable(verificationPolicies: remoteConfigManager.storedConfiguration.verificationPolicies ?? [])
+		configureRemoteConfigManager()
+	}
+	
+	deinit {
+		remoteConfigManagerObserverToken.map(Current.remoteConfigManager.removeObserver)
+	}
+	
+	private func configureRemoteConfigManager() {
+		
+		remoteConfigManagerObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] remoteConfiguration, _, _ in
+			guard let policies = remoteConfiguration.verificationPolicies else {
+				// No feature flag available, enable default policy
+				self?.enable(verificationPolicies: [])
+				return
+			}
+			self?.enable(verificationPolicies: policies)
+		}
+	}
+		
 	func enable(verificationPolicies: [String]) {
 		
 		var knownPolicies = VerificationPolicy.allCases.filter { verificationPolicies.contains($0.featureFlag) }
