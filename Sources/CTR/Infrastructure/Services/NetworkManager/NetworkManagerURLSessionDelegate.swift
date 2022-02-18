@@ -44,4 +44,10 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate {
 		)
 		checker?.checkSSL()
 	}
+	
+	/// Clean up strong reference to the security checker. `URLSession` can then be deinitialized
+	func cleanup() {
+		
+		checker = nil
+	}
 }
