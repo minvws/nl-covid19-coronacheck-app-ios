@@ -36,6 +36,21 @@ final class FileStorage: Logging {
 		try data.write(to: fileUrl)
 	}
 	
+	func read(fileName: String) -> Data? {
+		
+		guard let url = documentsURL else {
+			logError("Failed to load documents directory")
+			return nil
+		}
+		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
+		do {
+			let data = try Data(contentsOf: fileUrl)
+			return data
+		} catch {
+			return nil
+		}
+	}
+
 	/// Log items on disk for debug mode
 	func debugLogItems() {
 		guard let path = documentsURL?.path else { return }

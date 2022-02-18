@@ -27,7 +27,7 @@ protocol RemoteConfigManaging: AnyObject {
 }
 
 /// The remote configuration manager
-class RemoteConfigManager: RemoteConfigManaging {
+class RemoteConfigManager: RemoteConfigManaging, Logging {
 	typealias ObserverToken = UUID
 
 	// MARK: - Vars
@@ -65,6 +65,8 @@ class RemoteConfigManager: RemoteConfigManaging {
 		self.networkManager = networkManager
 		self.secureUserSettings = secureUserSettings
 
+		checkStoredJson()
+		
 		registerTriggers()
 	}
 
@@ -78,6 +80,20 @@ class RemoteConfigManager: RemoteConfigManaging {
 			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 		try? reachability?.startNotifier()
+	}
+	
+	func checkStoredJson() {
+		
+		if let data = FileStorage().read(fileName: CryptoLibUtility.File.remoteConfiguration.name) {
+			do {
+				let configFromStoredJson = try JSONDecoder().decode(RemoteConfiguration.self, from: data)
+				if configFromStoredJson != storedConfiguration {
+					logInfo("Updating from stored json")
+					storedConfiguration = configFromStoredJson
+				}			} catch {
+				logError("Error Deserializing: \(error)")
+			}
+		}
 	}
 
 	// MARK: - Teardown
