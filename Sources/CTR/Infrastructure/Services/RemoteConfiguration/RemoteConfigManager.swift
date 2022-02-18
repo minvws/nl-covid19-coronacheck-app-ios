@@ -27,7 +27,7 @@ protocol RemoteConfigManaging: AnyObject {
 }
 
 /// The remote configuration manager
-class RemoteConfigManager: RemoteConfigManaging {
+class RemoteConfigManager: RemoteConfigManaging, Logging {
 	typealias ObserverToken = UUID
 
 	// MARK: - Vars
@@ -48,6 +48,8 @@ class RemoteConfigManager: RemoteConfigManaging {
 	private let networkManager: NetworkManaging
 	private let reachability: ReachabilityProtocol?
 	private let secureUserSettings: SecureUserSettingsProtocol
+	private let appVersionSupplier: AppVersionSupplierProtocol
+	private let fileStorage: FileStorageProtocol
 	
 	// MARK: - Setup
 
@@ -56,7 +58,9 @@ class RemoteConfigManager: RemoteConfigManaging {
 		userSettings: UserSettingsProtocol,
 		reachability: ReachabilityProtocol?,
 		networkManager: NetworkManaging,
-		secureUserSettings: SecureUserSettingsProtocol
+		secureUserSettings: SecureUserSettingsProtocol,
+		fileStorage: FileStorageProtocol = FileStorage(),
+		appVersionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 	) {
 
 		self.now = now
@@ -64,11 +68,18 @@ class RemoteConfigManager: RemoteConfigManaging {
 		self.reachability = reachability
 		self.networkManager = networkManager
 		self.secureUserSettings = secureUserSettings
-
+		self.appVersionSupplier = appVersionSupplier
+		self.fileStorage = fileStorage
+		
+		if let configFromStoredData = fetchConfigFromStoredConfigData(), configFromStoredData != storedConfiguration {
+			logInfo("Updating from stored json")
+			storedConfiguration = configFromStoredData
+		}
+		
 		registerTriggers()
 	}
 
-	func registerTriggers() {
+	private func registerTriggers() {
 
 		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
@@ -78,6 +89,12 @@ class RemoteConfigManager: RemoteConfigManaging {
 			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		}
 		try? reachability?.startNotifier()
+	}
+	
+	private func fetchConfigFromStoredConfigData() -> RemoteConfiguration? {
+		
+		guard let data = fileStorage.read(fileName: CryptoLibUtility.File.remoteConfiguration.name) else { return nil }
+		return try? JSONDecoder().decode(RemoteConfiguration.self, from: data)
 	}
 
 	// MARK: - Teardown
@@ -202,7 +219,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 				// `curl https://verifier-api.acc.coronacheck.nl/v6/verifier/config | jq -r .payload | base64 -d | sha256sum`
 				let newHash: String? = {
 					guard let string = String(data: data, encoding: .utf8) else { return nil }
-					return string.sha256
+					return string.sha256 + appVersionSupplier.getCurrentBuild() + appVersionSupplier.getCurrentVersion()
 				}()
 
 				let hashesMatch = userSettings.configFetchedHash == newHash
