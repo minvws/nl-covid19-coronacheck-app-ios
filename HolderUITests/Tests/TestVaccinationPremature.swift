@@ -5,73 +5,73 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-class TestVaccinationPremature: BaseTest {
+class TestVaccinationFuture: BaseTest {
 	
-	func test_vacP1Premature() {
-		addVaccinationCertificate(for: TestData.vacP1Premature)
+	func test_vacP1Future() {
+		addVaccinationCertificate(for: TestData.vacP1Future)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_vacP2Premature() {
-		addVaccinationCertificate(for: TestData.vacP2Premature)
+	func test_vacP2Future() {
+		addVaccinationCertificate(for: TestData.vacP2Future)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_vacP1P1Premature() {
-		addVaccinationCertificate(for: TestData.vacP1P1Premature)
+	func test_vacP1P1Future() {
+		addVaccinationCertificate(for: TestData.vacP1P1Future)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_vacJ1Premature() {
-		addVaccinationCertificate(for: TestData.vacJ1Premature)
+	func test_vacJ1Future() {
+		addVaccinationCertificate(for: TestData.vacJ1Future)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_vacM2Premature() {
-		addVaccinationCertificate(for: TestData.vacM2Premature)
+	func test_vacM2Future() {
+		addVaccinationCertificate(for: TestData.vacM2Future)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_vacM1M1Premature() {
-		addVaccinationCertificate(for: TestData.vacM1M1Premature)
+	func test_vacM1M1Future() {
+		addVaccinationCertificate(for: TestData.vacM1M1Future)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_vacP1M1Premature() {
-		addVaccinationCertificate(for: TestData.vacP1M1Premature)
+	func test_vacP1M1Future() {
+		addVaccinationCertificate(for: TestData.vacP1M1Future)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_vacP1PrematureM2() {
-		addVaccinationCertificate(for: TestData.vacP1PrematureM2)
+	func test_vacP1FutureM2() {
+		addVaccinationCertificate(for: TestData.vacP1FutureM2)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_vacJ1M1Premature() {
-		addVaccinationCertificate(for: TestData.vacJ1M1Premature)
+	func test_vacJ1M1Future() {
+		addVaccinationCertificate(for: TestData.vacJ1M1Future)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
-	func test_vacJ1PrematureM2() {
-		addVaccinationCertificate(for: TestData.vacJ1PrematureM2)
+	func test_vacJ1FutureM2() {
+		addVaccinationCertificate(for: TestData.vacJ1FutureM2)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
