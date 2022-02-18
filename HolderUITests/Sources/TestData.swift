@@ -77,9 +77,9 @@ final class TestData {
 	static let vacJ1OldM2 = TestPerson(bsn: "999990949", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacFrom: -390, vacOffset: -390) // 1 janssen old + 2 moderna
 	
 	// Vaccinations - nearly valid
-	static let vacP2DatedToday = TestPerson(bsn: "999993586", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: 14, vacOffset: 0) // 2 pfizer dated today
-	static let vacJ1DatedToday = TestPerson(bsn: "999992983", dose: 1, doseIntl: ["1/1"], vacFrom: 28, vacOffset: 0) // 1 janssen dated today
-	static let vacM2DatedToday = TestPerson(bsn: "999993598", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: 14, vacOffset: 0) // 2 moderna dated today
+	static let vacP2DatedToday = TestPerson(bsn: "999993586", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: 14) // 2 pfizer dated today
+	static let vacJ1DatedToday = TestPerson(bsn: "999992983", dose: 1, doseIntl: ["1/1"], vacFrom: 28) // 1 janssen dated today
+	static let vacM2DatedToday = TestPerson(bsn: "999993598", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: 14) // 2 moderna dated today
 	static let vacP2ValidTomorrow = TestPerson(bsn: "999993604", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: 1) // 2 pfizer valid tomorrow
 	static let vacJ1ValidTomorrow = TestPerson(bsn: "999993616", dose: 1, doseIntl: ["1/1"], vacFrom: 1) // 1 janssen valid tomorrow
 	static let vacM2ValidTomorrow = TestPerson(bsn: "999993628", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: 1) // 2 moderna valid tomorrow
@@ -120,6 +120,30 @@ final class TestData {
 	static let vacJ1DifferentBirthMonthCanReplace = TestPerson(bsn: "999993021", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth month, can replace setup
 	static let vacJ1DifferentBirthYearReplaces = TestPerson(bsn: "999991292", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth year, replaces setup
 	static let vacJ1DifferentEverythingReplaces = TestPerson(bsn: "999991723", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name and birthdate, replaces setup
+	
+	// Vaccinations - around 18
+	static let around18Is17y8mWithP2LastDose1M = TestPerson(bsn: "999993422", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16) // 2 pfizer, 4 months before 18, last dose 1 month ago
+	static let around18Is17y10mWithP2LastDose1M = TestPerson(bsn: "999993434", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16, vacUntil: 240) // 2 pfizer, 2 months before 18, last dose 1 month ago
+	static let around18Is17y10mWithP2LastDose9M = TestPerson(bsn: "999993446", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -256, vacUntilDate: "2022-04-01", vacOffset: -270) // 2 pfizer, 2 months before 18, last dose 9 months ago
+	static let around18Is18y2mWithP2LastDose3M = TestPerson(bsn: "999992417", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -76, vacUntil: 180, vacOffset: -90) // 2 pfizer, 2 months after 18, last dose 3 months ago
+	static let around18Is18y2mWithP2LastDose9M = TestPerson(bsn: "999993173", dose: 2, doseIntl: ["1/2", "2/2"], vacOffset: -270) // 2 pfizer, 2 months after 18, last dose 9 months ago
+	static let around18Is17y8mWithJ1LastDose1M = TestPerson(bsn: "999993458", dose: 1, doseIntl: ["1/1"], vacFrom: -2) // 1 janssen, 4 months before 18, last dose 1 month ago
+	static let around18Is17y10mWithJ1LastDose1M = TestPerson(bsn: "999993471", dose: 1, doseIntl: ["1/1"], vacFrom: -2, vacUntil: 240) // 1 janssen, 2 months before 18, last dose 1 month ago
+	static let around18Is17y10mWithJ1LastDose9M = TestPerson(bsn: "999993483", dose: 1, doseIntl: ["1/1"], vacFrom: -242, vacUntilDate: "2022-04-01", vacOffset: -270) // 1 janssen, 2 months before 18, last dose 9 months ago
+	static let around18Is18y2mWithJ1LastDose3M = TestPerson(bsn: "999993185", dose: 1, doseIntl: ["1/1"], vacFrom: -62, vacUntil: 180, vacOffset: -90) // 1 janssen, 2 months after 18, last dose 3 months ago
+	static let around18Is18y2mWithJ1LastDose9M = TestPerson(bsn: "999993197", dose: 1, doseIntl: ["1/1"], vacOffset: -270) // 1 janssen, 2 months after 18, last dose 9 months ago
+	
+	// Vaccination - Null or empty information
+	static let vacP1NullPersonalStatement = TestPerson(bsn: "999992818", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + personal statement = null
+	static let vacP1NullMedicalStatement = TestPerson(bsn: "999992831", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + medical statement = null
+	static let vacP1NullFirstName = TestPerson(bsn: "999992843", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + first name = null
+	static let vacP1NullLastName = TestPerson(bsn: "999992855", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + last name = null
+	static let vacP1NullBirthdate = TestPerson(bsn: "999992867", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + birthdate = null
+	static let vacP1EmptyPersonalStatement = TestPerson(bsn: "999992879", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + personal statement = empty
+	static let vacP1EmptyMedicalStatement = TestPerson(bsn: "999992880", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + medical statement = empty
+	static let vacP1EmptyFirstName = TestPerson(bsn: "999992892", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + first name = empty
+	static let vacP1EmptyLastName = TestPerson(bsn: "999992909", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + last name = empty
+	static let vacP1EmptyBirthdate = TestPerson(bsn: "999992910", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + birthdate = empty
 	
 	// Positive tests (and combinations)
 	static let posPcr = TestPerson(bsn: "999993033", recUntil: 150) // Positive PCR (NAAT)
@@ -210,27 +234,7 @@ final class TestData {
 	static let encodingLongStrings = TestPerson(bsn: "999992788", name: "rjnmngevcjgsnicomdzzzguszmfcelknwscoirscjhyfauwsffyhwlaiqfnoctcjbsihyzvxehksjoehzrkadocswofathihsbwuhvrxetuswcybwrkkcofkybgjbdyn rjnmngevcjgsnicomdzzzguszmfcelknwscoirscjhyfauwsffyhwlaiqfnoctcjbsihyzvxehksjoehzrkadocswofathihsbwuhvrxetuswcybwrkkcofkybgjbdyn, rjnmngevcjgsnicomdzzzguszmfcelknwscoirscjhyfauwsffyhwlaiqfnoctcjbsihyzvxehksjoehzrkadocswofathihsbwuhvrxetuswcybwrkkcofkybgjbdyn") // More than 128 characters in all fields
 	static let encodingLongNames = TestPerson(bsn: "999992806", name: "qhxosdaetanrazewwepgqghihpxaruqkpwhkctspdtjeky, qhxosdaetanrazewwepgqghihpxaruqkpwhkctspdtjeky") // Long first name and last name (96 chars)
 	
-	// Vaccination - Null or empty information
-	static let vacP1NullPersonalStatement = TestPerson(bsn: "999992818", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + personal statement = null
-	static let vacP1NullMedicalStatement = TestPerson(bsn: "999992831", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + medical statement = null
-	static let vacP1NullFirstName = TestPerson(bsn: "999992843", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + first name = null
-	static let vacP1NullLastName = TestPerson(bsn: "999992855", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + last name = null
-	static let vacP1NullBirthdate = TestPerson(bsn: "999992867", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + birthdate = null
-	static let vacP1EmptyPersonalStatement = TestPerson(bsn: "999992879", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + personal statement = empty
-	static let vacP1EmptyMedicalStatement = TestPerson(bsn: "999992880", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + medical statement = empty
-	static let vacP1EmptyFirstName = TestPerson(bsn: "999992892", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + first name = empty
-	static let vacP1EmptyLastName = TestPerson(bsn: "999992909", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + last name = empty
-	static let vacP1EmptyBirthdate = TestPerson(bsn: "999992910", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + birthdate = empty
-	
 	// Miscellaneous
 	static let miscP1Positive = TestPerson(bsn: "999992971", dose: 1, doseIntl: ["1/2"], vacFrom: -16, vacUntil: 240, recUntil: 150) // positive test after 1 pfizer
 	static let miscP2PosPcrNegPcr = TestPerson(bsn: "999991772", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -90, vacUntil: 180, vacOffset: -90, recUntil: 150) // 2 pfizer + positive/negative PCR (NAAT)
-	
-	// Vaccinations - almost 18
-	static let almost18Is17y8mWithP2LastDose1M = TestPerson(bsn: "999993422", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16) // Almost 18: 2 pfizer, 4 months before 18, last dose 1 month ago
-	static let almost18Is17y10mWithP2LastDose1M = TestPerson(bsn: "999993434", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16, vacUntil: 240) // Almost 18: 2 pfizer, 2 months before 18, last dose 1 month ago
-	static let almost18Is17y10mWithP2LastDose9M = TestPerson(bsn: "999993446", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -256, vacUntilDate: "2022-04-01", vacOffset: -270) // Almost 18: 2 pfizer, 2 months before 18, last dose 9 months ago
-	static let almost18Is17y8mWithJ1LastDose1M = TestPerson(bsn: "999993458", dose: 1, doseIntl: ["1/1"], vacFrom: -2) // Almost 18: 1 janssen, 4 months before 18, last dose 1 month ago
-	static let almost18Is17y10mWithJ1LastDose1M = TestPerson(bsn: "999993471", dose: 1, doseIntl: ["1/1"], vacFrom: -2, vacUntil: 240) // Almost 18: 1 janssen, 2 months before 18, last dose 1 month ago
-	static let almost18Is17y10mWithJ1LastDose9M = TestPerson(bsn: "999993483", dose: 1, doseIntl: ["1/1"], vacFrom: -242, vacUntilDate: "2022-04-01", vacOffset: -270) // Almost 18: 1 janssen, 2 months before 18, last dose 9 months ago
 }

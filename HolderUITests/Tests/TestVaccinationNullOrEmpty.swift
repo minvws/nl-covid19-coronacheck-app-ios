@@ -5,7 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-class TestNullOrEmpty: BaseTest {
+class TestVaccinationNullOrEmpty: BaseTest {
 	
 	func test_vacP1NullPersonalStatement() {
 		let person = TestData.vacP1NullPersonalStatement
