@@ -64,7 +64,7 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 			delegate?.cryptoLibDidNotInitialize()
 			return
 		}
-		
+
 		if state == .withinTTL {
 			// If within the TTL, and the firstUseDate is nil, that means an existing installation.
 			// Use the documents directory creation date.
@@ -146,10 +146,6 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 				self?.startApplication()
 			}
 		}]
-		
-		if AppFlavor.flavor == .verifier {
-			remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver(updateVerificationPolicies)]
-		}
 	}
 	
 	// Update the  managers with the values from the actual http response
@@ -172,16 +168,5 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 			serverHeaderDate: serverDateString,
 			ageHeader: httpResponse.allHeaderFields["Age"] as? String
 		)
-	}
-	
-	// MARK: - Verifier Verification Policy
-	
-	private func updateVerificationPolicies(for remoteConfiguration: RemoteConfiguration, data: Data, urlResponse: URLResponse) {
-		guard let policies = remoteConfiguration.verificationPolicies else {
-			// No feature flag available, enable default policy
-			Current.verificationPolicyEnabler.enable(verificationPolicies: [])
-			return
-		}
-		Current.verificationPolicyEnabler.enable(verificationPolicies: policies)
 	}
 }

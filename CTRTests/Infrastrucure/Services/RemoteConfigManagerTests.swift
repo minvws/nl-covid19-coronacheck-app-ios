@@ -19,6 +19,7 @@ class RemoteConfigManagerTests: XCTestCase {
 	private var reachabilitySpy: ReachabilitySpy!
 	private var secureUserSettingsSpy: SecureUserSettingsSpy!
 	private var appVersionSupplierSpy: AppVersionSupplierSpy!
+	private var fileStorageSpy: FileStorageSpy!
 	
 	override func setUp() {
 
@@ -28,6 +29,9 @@ class RemoteConfigManagerTests: XCTestCase {
 		secureUserSettingsSpy = SecureUserSettingsSpy()
 		secureUserSettingsSpy.stubbedStoredConfiguration = .default
 		appVersionSupplierSpy = AppVersionSupplierSpy(version: "1", build: "1")
+		fileStorageSpy = FileStorageSpy()
+		
+		fileStorageSpy.stubbedReadResult = nil
 		
 		sut = RemoteConfigManager(
 			now: { now },
@@ -35,6 +39,7 @@ class RemoteConfigManagerTests: XCTestCase {
 			reachability: reachabilitySpy,
 			networkManager: networkSpy,
 			secureUserSettings: secureUserSettingsSpy,
+			fileStorage: fileStorageSpy,
 			appVersionSupplier: appVersionSupplierSpy
 		)
 		
