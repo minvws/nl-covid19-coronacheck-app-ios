@@ -43,6 +43,11 @@ final class FileStorage: Logging {
 			return nil
 		}
 		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
+		
+		guard fileManager.fileExists(atPath: fileUrl.path) else {
+			return nil
+		}
+		
 		do {
 			let data = try Data(contentsOf: fileUrl)
 			return data
