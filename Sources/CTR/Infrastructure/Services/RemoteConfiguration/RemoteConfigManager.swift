@@ -49,6 +49,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	private let reachability: ReachabilityProtocol?
 	private let secureUserSettings: SecureUserSettingsProtocol
 	private let appVersionSupplier: AppVersionSupplierProtocol
+	private let fileStorage: FileStorageProtocol
 	
 	// MARK: - Setup
 
@@ -58,6 +59,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		reachability: ReachabilityProtocol?,
 		networkManager: NetworkManaging,
 		secureUserSettings: SecureUserSettingsProtocol,
+		fileStorage: FileStorageProtocol = FileStorage(),
 		appVersionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 	) {
 
@@ -67,7 +69,8 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		self.networkManager = networkManager
 		self.secureUserSettings = secureUserSettings
 		self.appVersionSupplier = appVersionSupplier
-
+		self.fileStorage = fileStorage
+		
 		checkStoredJson()
 		
 		registerTriggers()
@@ -87,15 +90,15 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	
 	func checkStoredJson() {
 		
-		if let data = FileStorage().read(fileName: CryptoLibUtility.File.remoteConfiguration.name) {
-			do {
-				let configFromStoredJson = try JSONDecoder().decode(RemoteConfiguration.self, from: data)
-				if configFromStoredJson != storedConfiguration {
-					logInfo("Updating from stored json")
-					storedConfiguration = configFromStoredJson
-				}			} catch {
-				logError("Error Deserializing: \(error)")
-			}
+		guard let data = fileStorage.read(fileName: CryptoLibUtility.File.remoteConfiguration.name) else { return }
+		
+		do {
+			let configFromStoredJson = try JSONDecoder().decode(RemoteConfiguration.self, from: data)
+			if configFromStoredJson != storedConfiguration {
+				logInfo("Updating from stored json")
+				storedConfiguration = configFromStoredJson
+			}			} catch {
+			logError("Error Deserializing: \(error)")
 		}
 	}
 

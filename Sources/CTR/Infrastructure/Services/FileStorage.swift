@@ -7,7 +7,15 @@
 
 import Foundation
 
-final class FileStorage: Logging {
+protocol FileStorageProtocol: AnyObject {
+	func store(_ data: Data, as fileName: String) throws
+	func read(fileName: String) -> Data?
+	func debugLogItems()
+	func fileExists(_ fileName: String) -> Bool
+	func remove(_ fileName: String)
+}
+
+final class FileStorage: FileStorageProtocol, Logging {
 	
 	private let fileManager: FileManager
 	
