@@ -148,9 +148,11 @@ final class LaunchStateManager: LaunchStateManaging {
 			}
 		}]
 		
-		// Enable verification policies
-		Current.verificationPolicyEnabler.enable(verificationPolicies: Current.remoteConfigManager.storedConfiguration.verificationPolicies ?? [])
-		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver(updateVerificationPolicies)]
+		if AppFlavor.flavor == .verifier {
+			// Enable verification policies
+			Current.verificationPolicyEnabler.enable(verificationPolicies: Current.remoteConfigManager.storedConfiguration.verificationPolicies ?? [])
+			remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver(updateVerificationPolicies)]
+		}
 	}
 	
 	// Update the  managers with the values from the actual http response
