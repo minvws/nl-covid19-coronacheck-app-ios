@@ -71,12 +71,15 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		self.appVersionSupplier = appVersionSupplier
 		self.fileStorage = fileStorage
 		
-		checkStoredJson()
+		if let configFromStoredData = fetchConfigFromStoredConfigData(), configFromStoredData != storedConfiguration {
+			logInfo("Updating from stored json")
+			storedConfiguration = configFromStoredData
+		}
 		
 		registerTriggers()
 	}
 
-	func registerTriggers() {
+	private func registerTriggers() {
 
 		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
@@ -88,18 +91,10 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		try? reachability?.startNotifier()
 	}
 	
-	func checkStoredJson() {
+	private func fetchConfigFromStoredConfigData() -> RemoteConfiguration? {
 		
-		guard let data = fileStorage.read(fileName: CryptoLibUtility.File.remoteConfiguration.name) else { return }
-		
-		do {
-			let configFromStoredJson = try JSONDecoder().decode(RemoteConfiguration.self, from: data)
-			if configFromStoredJson != storedConfiguration {
-				logInfo("Updating from stored json")
-				storedConfiguration = configFromStoredJson
-			}			} catch {
-			logError("Error Deserializing: \(error)")
-		}
+		guard let data = fileStorage.read(fileName: CryptoLibUtility.File.remoteConfiguration.name) else { return nil }
+		return try? JSONDecoder().decode(RemoteConfiguration.self, from: data)
 	}
 
 	// MARK: - Teardown
