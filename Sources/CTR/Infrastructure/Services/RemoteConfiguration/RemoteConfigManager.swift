@@ -24,6 +24,8 @@ protocol RemoteConfigManaging: AnyObject {
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void)
 
 	func wipePersistedData()
+	
+	func registerTriggers()
 }
 
 /// The remote configuration manager
@@ -75,11 +77,9 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 			logInfo("Updating from stored json")
 			storedConfiguration = configFromStoredData
 		}
-		
-		registerTriggers()
 	}
 
-	private func registerTriggers() {
+	func registerTriggers() {
 
 		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })

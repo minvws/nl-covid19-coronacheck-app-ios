@@ -54,34 +54,33 @@ final class LaunchStateManager: LaunchStateManaging {
 	// MARK: - Launch State -
 	
 	func handleLaunchState(_ state: LaunchState) {
-	
-		guard Current.cryptoLibUtility.isInitialized else {
-			delegate?.cryptoLibDidNotInitialize()
-	
+		
+		if CommandLine.arguments.contains("-skipOnboarding") {
+			self.startApplication()
 			return
 		}
-
-		switch state {
-			case .finished:
-				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+		
+		guard Current.cryptoLibUtility.isInitialized else {
+			delegate?.cryptoLibDidNotInitialize()
+			return
+		}
+		
+		if state == .withinTTL {
+			// If within the TTL, and the firstUseDate is nil, that means an existing installation.
+			// Use the documents directory creation date.
+			Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
+		}
+		
+		checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+			switch state {
+				case .finished, .withinTTL:
 					self.startApplication()
-				}
-
-			case .serverError(let serviceErrors):
-				// Deactivated or update trumps no internet or error
-				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
-					self.delegate?.errorWhileLoading(errors: serviceErrors)
-				}
-
-			case .withinTTL:
-				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
-				// Use the documents directory creation date.
-				Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
-				
-				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
-					self.startApplication()
-				}
+				case .serverError(let serviceErrors):
+					if !self.applicationHasStarted {
+						self.delegate?.errorWhileLoading(errors: serviceErrors)
+					}
 			}
+		}
 	}
 	
 	private func startApplication() {
