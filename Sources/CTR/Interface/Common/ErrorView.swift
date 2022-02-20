@@ -101,7 +101,7 @@ class ErrorView: BaseView {
 			
 			if let error = error {
 				accessibilityValue = error
-				accessibilityLabel = L.generalNotification()
+				accessibilityLabel = L.general_notification()
  				isAccessibilityElement = true
 			} else {
 				isAccessibilityElement = false

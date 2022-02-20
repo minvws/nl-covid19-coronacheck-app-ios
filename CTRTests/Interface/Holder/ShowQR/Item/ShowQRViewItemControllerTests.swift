@@ -40,6 +40,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		viewModel = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)
@@ -66,7 +67,8 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		)
 		viewModel = ShowQRItemViewModel(
 			delegate: delegateSpy,
-			greenCard: greenCard
+			greenCard: greenCard,
+			disclosurePolicy: .policy3G
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)
 
@@ -90,7 +92,8 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		)
 		viewModel = ShowQRItemViewModel(
 			delegate: delegateSpy,
-			greenCard: greenCard
+			greenCard: greenCard,
+			disclosurePolicy: nil
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)
 

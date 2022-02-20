@@ -105,7 +105,10 @@
 @property (nonatomic) NSString* _Nonnull error;
 @end
 
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreCATEGORY_ATTRIBUTE_1G;
 FOUNDATION_EXPORT const int64_t MobilecoreCREATE_CREDENTIAL_VERSION;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISCLOSURE_POLICY_1G;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISCLOSURE_POLICY_3G;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISEASE_TARGETED_COVID_19;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDOB_EMPTY_VALUE;
 FOUNDATION_EXPORT const int64_t MobilecoreHCERT_SPECIMEN_EXPIRATION_TIME;
@@ -134,13 +137,13 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMMDD_FORMAT;
 
 @end
 
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCommitmentMessage(NSData* _Nullable holderSkJson, NSData* _Nullable prepareIssueMessageJson);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCommitmentMessage(NSData* _Nullable holderSkJson, NSData* _Nullable issueSpecificationMessageJson);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCredentials(NSData* _Nullable ccmsJson);
 
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDisclose(NSData* _Nullable holderSkJson, NSData* _Nullable credJson);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDisclose(NSData* _Nullable holderSkJson, NSData* _Nullable credJson, NSString* _Nullable disclosurePolicy);
 
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDiscloseWithTime(NSData* _Nullable holderSkJson, NSData* _Nullable credJson, int64_t unixTimeSeconds);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDiscloseWithTime(NSData* _Nullable holderSkJson, NSData* _Nullable credJson, NSString* _Nullable disclosurePolicy, int64_t unixTimeSeconds);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreErrorResult(NSError* _Nullable err);
 

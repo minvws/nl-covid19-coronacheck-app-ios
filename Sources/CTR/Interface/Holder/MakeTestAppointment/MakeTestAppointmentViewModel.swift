@@ -49,7 +49,6 @@ final class MakeTestAppointmentViewModel: Logging {
 	@objc func onTap() {
 
 		// Notify the coordinator
-		logInfo("Create appointment tapped")
 		if let url = URL(string: L.holderUrlAppointment()) {
 			coordinator?.openUrl(url, inApp: true)
 		}

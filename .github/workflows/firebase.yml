@@ -15,7 +15,7 @@ env:
 
 jobs:
   firebase-deploy-holder-acc:
-    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/holder-') || contains(github.event.ref, 'refs/heads/main'))
     runs-on: macos-11
     steps:
     - name: Checkout
@@ -74,7 +74,7 @@ jobs:
 
 
   firebase-deploy-verifier-acc:
-    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/verifier-') || contains(github.event.ref, 'refs/heads/main'))
     runs-on: macos-11
     steps:
     - name: Checkout
@@ -133,7 +133,7 @@ jobs:
 
 
   firebase-deploy-holder-prod:
-    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/holder-') || contains(github.event.ref, 'refs/heads/main'))
     runs-on: macos-11
     steps:
     - name: Checkout
@@ -191,7 +191,7 @@ jobs:
 
         
   firebase-deploy-verifier-prod:
-    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/verifier-') || contains(github.event.ref, 'refs/heads/main'))
     runs-on: macos-11
     steps:
     - name: Checkout

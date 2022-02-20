@@ -7,7 +7,15 @@
 
 import Foundation
 
-final class FileStorage: Logging {
+protocol FileStorageProtocol: AnyObject {
+	func store(_ data: Data, as fileName: String) throws
+	func read(fileName: String) -> Data?
+	func debugLogItems()
+	func fileExists(_ fileName: String) -> Bool
+	func remove(_ fileName: String)
+}
+
+final class FileStorage: FileStorageProtocol, Logging {
 	
 	private let fileManager: FileManager
 	
@@ -36,6 +44,26 @@ final class FileStorage: Logging {
 		try data.write(to: fileUrl)
 	}
 	
+	func read(fileName: String) -> Data? {
+		
+		guard let url = documentsURL else {
+			logError("Failed to load documents directory")
+			return nil
+		}
+		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
+		
+		guard fileManager.fileExists(atPath: fileUrl.path) else {
+			return nil
+		}
+		
+		do {
+			let data = try Data(contentsOf: fileUrl)
+			return data
+		} catch {
+			return nil
+		}
+	}
+
 	/// Log items on disk for debug mode
 	func debugLogItems() {
 		guard let path = documentsURL?.path else { return }

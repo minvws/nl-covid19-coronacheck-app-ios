@@ -7,13 +7,13 @@
 
 class TestMisc: BaseTest {
 	
-	func test_vacP1Positive() {
+	func test_miscP1Positive() {
 		let person = TestData.miscP1Positive
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffset: 150)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: 150)
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
 	}
 	
 	func test_miscP2PosPcrNegPcr() {
@@ -22,8 +22,15 @@ class TestMisc: BaseTest {
 		addRetrievedCertificateToApp()
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
+		addTestCertificateFromGGD(for: person)
+		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validUntilOffset: person.validUntilNL)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -90)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchTestCertificate(combinedWithOther: true)
+		
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 }

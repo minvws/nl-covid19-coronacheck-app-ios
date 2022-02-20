@@ -8,19 +8,29 @@
 struct TestPerson {
 	let bsn: String
 	let name: String?
-	let doseNL: Int
+	let dose: Int
 	let doseIntl: [String]
-	let validFromNL: Int
-	let validUntilNL: Int
-	let birthDate: String?
+	let vacFrom: Int
+	let vacUntil: Int
+	let vacUntilDate: String?
+	let vacOffset: Int
+	let recFrom: Int
+	let recUntil: Int
+	let testFrom: Int
+	let testUntil: Int
 	
-	init(bsn: String, name: String? = nil, doseNL: Int = 0, doseIntl: [String] = [], validFromNL: Int = 0, validUntilNL: Int = 0, birthDate: String? = nil) {
+	init(bsn: String, name: String? = nil, dose: Int = 0, doseIntl: [String] = [], vacFrom: Int = 0, vacUntil: Int = 0, vacUntilDate: String? = nil, vacOffset: Int = 0, recFrom: Int = 0, recUntil: Int = 0, testFrom: Int = 0, testUntil: Int = 0) {
 		self.bsn = bsn
 		self.name = name
-		self.doseNL = doseNL
+		self.dose = dose
 		self.doseIntl = doseIntl
-		self.validFromNL = validFromNL
-		self.validUntilNL = validUntilNL
-		self.birthDate = birthDate
+		self.vacFrom = vacFrom
+		self.vacUntil = vacUntil
+		self.vacUntilDate = vacUntilDate
+		self.vacOffset = vacOffset
+		self.recFrom = recFrom
+		self.recUntil = recUntil
+		self.testFrom = testFrom
+		self.testUntil = testUntil
 	}
 }

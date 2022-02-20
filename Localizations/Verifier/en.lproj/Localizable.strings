@@ -12,12 +12,9 @@
 "scan_instructions_4_title_1G" = "Check mark = access";
 "scan_log_footer_in_use" = "App in use since %@";
 "scan_log_footer_long_time" = "App in use for longer than one month";
-"scan_log_list_2g_plus" = "2G+";
 "scan_log_list_clock_skew_detected" = "Date or time changed";
 "scan_log_list_entry" = "Scanned between %1$li and %2$li certificates";
 "scan_log_list_header" = "Last %li minutes";
-"scan_log_list_highrisk" = "2G";
-"scan_log_list_lowrisk" = "3G";
 "scan_log_list_no_items" = "No certificates scanned";
 "scan_log_list_now" = "now";
 "scan_log_message" = "<p>The scan setting log keeps track of the type of access used during scanning. A civil enforcement officer may request access to this log.</p><p>For privacy reasons, only scan settings used in the last %li minutes are saved on this phone. No personal information is saved. You can read more about this in the <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">frequently asked questions</a>.</p>";
@@ -27,7 +24,7 @@
 "verification_policy_selection_error_message" = "Choose a setting to continue";
 /* Koptekst in de over de app pagina */
 "verifier.about.readmore" = "Read more:";
-"verifier.about.text" = "<p>CoronaCheck Scanner is created to help certain places and activities safely open their doors. Think about football matches and cafes, for example.</p><p>Visitors can create a coronavirus pass with a QR code of their vaccination, negative test result, or recovery from coronavirus. Using this app, only visitors with a coronavirus pass are given access. This way, more and more places can be visited safely.</p>";
+"verifier.about.text" = "<p>CoronaCheck Scanner is created to help certain places and activities safely open their doors.</p><p>Visitors can create a coronavirus pass with a QR code of their vaccination, negative test result, or recovery from coronavirus. Using this app, only visitors with a coronavirus pass are given access. This way, more and more places can be visited safely.</p>";
 /* MARK: - Verifier About */
 "verifier.about.title" = "About this app";
 "verifier.clockDeviationDetected.message" = "<p>In order to properly use the CoronaCheck Scanner app, it is important that the time on your phone is set correctly. For example, if the clock on your phone is a few minutes ahead, an error might occur while verifying a coronavirus pass.</p><p><a href=\"%@\">Go to your phone's settings</a> and set Date & Time to 'set automatically'.</p>";
@@ -49,6 +46,7 @@
 "verifier.denied.message.six" = "<p><b>Please note:</b> without a green screen with check mark, the visitor cannot be given access.</p>";
 "verifier.denied.message.six_1G" = "<p><b>Please note:</b> without a screen with check mark, the visitor cannot be given access.</p>";
 "verifier.denied.message.three" = "<ul><li>Check if the time is set correctly, on the visitor's phone as well as your own. Make sure date and time are set to 'set automatically'.</li><li>Check if the visitor is showing an original certificate. A screenshot of their certificate may cause problems.</li><li>Ask the visitor to completely close the app, and restart it. Please rescan the QR code after.</li></ul>";
+"verifier.denied.message.three_1G" = "<ul><li>Let the visitor know what type of access your location can give. Please note: 1G access only allows visitors with a test certificate to enter.</li><li>Check if the time is set correctly, on the visitor's phone as well as your own. Make sure date and time are set to 'set automatically'.</li><li>Check if the visitor is showing an original certificate. A screenshot of their certificate may cause problems.</li><li>Ask the visitor to completely close the app, and restart it. Please rescan the QR code after.</li></ul>";
 "verifier.denied.message.two" = "<b>Here’s what you can do:</b>";
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "What should I do?";
@@ -151,7 +149,7 @@
 "verifier_risksetting_setting_button" = "Set setting";
 "verifier_risksetting_start_header" = "For your location, please specify if you're going to give 1G or 3G access. Check which kind of access you can give before you start scanning.";
 "verifier_risksetting_start_readmore" = "Which kind of access can I give?";
-"verifier_risksetting_start_readmore_url" = "https://www.government.nl/whichaccess-cc";
+"verifier_risksetting_start_readmore_url" = "https://coronacheck.nl/en/whichaccess-cc";
 "verifier_risksetting_start_title" = "Scan setting";
 "verifier_risksetting_subtitle_1G" = "You can only give access to visitors with a test certificate.";
 "verifier_risksetting_subtitle_3G" = "You can give access to visitors with a test, vaccination or recovery certificate.";

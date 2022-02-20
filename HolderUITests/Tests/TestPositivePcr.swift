@@ -14,11 +14,11 @@ class TestPositivePcr: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validFromOffset: person.validFromNL)
-		assertValidDutchRecoveryCertificate(validUntilOffset: 150)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -60)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: 150)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
 	}
 	
 	func test_posPcrJ3() {
@@ -28,11 +28,11 @@ class TestPositivePcr: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validFromOffset: person.validFromNL)
-		assertValidDutchRecoveryCertificate(validUntilOffset: 150)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -60)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: 150)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
 	}
 	
 	func test_posPcrP1J1() {
@@ -42,11 +42,11 @@ class TestPositivePcr: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validFromOffset: person.validFromNL)
-		assertValidDutchRecoveryCertificate(validUntilOffset: 150)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -60)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: 150)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
 	}
 	
 	func test_posPcrP2J1() {
@@ -56,10 +56,10 @@ class TestPositivePcr: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.doseNL, validFromOffset: person.validFromNL)
-		assertValidDutchRecoveryCertificate(validUntilOffset: 150)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: -60)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: 150)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
 	}
 }

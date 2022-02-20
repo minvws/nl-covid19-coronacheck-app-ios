@@ -38,6 +38,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
@@ -83,6 +84,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: "RollerDiscoParties"
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
@@ -111,6 +113,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: nil,
 			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
@@ -140,6 +143,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
+			disclosurePolicy: nil,
 			thirdPartyTicketAppName: "RollerDiscoParties"
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
@@ -169,6 +173,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard, greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
@@ -198,6 +203,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard, greenCard],
+			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)

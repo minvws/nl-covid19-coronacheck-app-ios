@@ -34,6 +34,7 @@ class FakeNavigationBarView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setContentCompressionResistancePriority(.required, for: .horizontal)
 		button.setContentHuggingPriority(.required, for: .horizontal)
+		button.accessibilityTraits = .button
 		return button
 	}()
 	

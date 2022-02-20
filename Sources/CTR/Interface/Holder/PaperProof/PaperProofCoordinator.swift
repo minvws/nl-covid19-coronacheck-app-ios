@@ -174,7 +174,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func userWishesToEnterToken() {
 
-//		userDidSubmitPaperProofToken(token: "NDREB5")
+//		userDidSubmitPaperProofToken(token: "ZKGBKH")
 
 		let destination = PaperProofInputCouplingCodeViewController(
 			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)

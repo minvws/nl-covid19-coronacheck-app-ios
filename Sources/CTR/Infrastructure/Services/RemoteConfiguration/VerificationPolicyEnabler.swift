@@ -20,17 +20,59 @@ protocol VerificationPolicyEnablable: AnyObject {
 final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 	
 	private var observers = [ObserverToken: () -> Void]()
+	private let remoteConfigManager: RemoteConfigManaging
+	private let userSettings: UserSettingsProtocol
+	private var remoteConfigManagerObserverToken: UUID?
+	private let riskLevelManager: RiskLevelManaging
+	private let scanLockManager: ScanLockManaging
+	private let scanLogManager: ScanLogManaging
 	
+	/// Initiializer
+	init(
+		remoteConfigManager: RemoteConfigManaging,
+		userSettings: UserSettingsProtocol,
+		riskLevelManager: RiskLevelManaging,
+		scanLockManager: ScanLockManaging,
+		scanLogManager: ScanLogManaging
+	) {
+		self.remoteConfigManager = remoteConfigManager
+		self.userSettings = userSettings
+		self.riskLevelManager = riskLevelManager
+		self.scanLockManager = scanLockManager
+		self.scanLogManager = scanLogManager
+		
+		guard AppFlavor.flavor == .verifier else { return }
+		
+		enable(verificationPolicies: remoteConfigManager.storedConfiguration.verificationPolicies ?? [])
+		configureRemoteConfigManager()
+	}
+	
+	deinit {
+		remoteConfigManagerObserverToken.map(remoteConfigManager.removeObserver)
+	}
+	
+	private func configureRemoteConfigManager() {
+		
+		remoteConfigManagerObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] remoteConfiguration, _, _ in
+			guard let policies = remoteConfiguration.verificationPolicies else {
+				// No feature flag available, enable default policy
+				self?.enable(verificationPolicies: [])
+				return
+			}
+			self?.enable(verificationPolicies: policies)
+		}
+	}
+		
 	func enable(verificationPolicies: [String]) {
 		
 		var knownPolicies = VerificationPolicy.allCases.filter { verificationPolicies.contains($0.featureFlag) }
-		let storedPolicies = Current.userSettings.configVerificationPolicies
+		let storedPolicies = userSettings.configVerificationPolicies
 		
 		if knownPolicies != storedPolicies {
 			if storedPolicies.isNotEmpty {
 				// Policy is changed, reset scan mode
-				Current.wipeScanMode()
-				Current.userSettings.policyInformationShown = false
+				wipeScanMode()
+				userSettings.policyInformationShown = false
 			}
 			// Reset navigation
 			notifyObservers()
@@ -39,25 +81,25 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 		// Set policies that are not set via the scan settings scenes
 		switch knownPolicies {
 			case [VerificationPolicy.policy1G]:
-				Current.riskLevelManager.update(verificationPolicy: .policy1G)
+				riskLevelManager.update(verificationPolicy: .policy1G)
 			case [VerificationPolicy.policy3G]:
-				Current.riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
+				riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
 			case []:
 				knownPolicies = [VerificationPolicy.policy3G]
-				Current.riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
+				riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
 			default: break
 		}
 		
-		Current.userSettings.configVerificationPolicies = knownPolicies
+		userSettings.configVerificationPolicies = knownPolicies
 	}
 	
 	func wipePersistedData() {
 
 		observers = [:]
-		Current.userSettings.configVerificationPolicies = [VerificationPolicy.policy3G]
-		Current.riskLevelManager.update(verificationPolicy: nil)
+		userSettings.configVerificationPolicies = [VerificationPolicy.policy3G]
+		riskLevelManager.update(verificationPolicy: nil)
 	}
-
+	
 	// MARK: - Observer notifications
 	
 	/// Be careful to use weak references to your observers within the closure, and
@@ -79,5 +121,14 @@ private extension VerificationPolicyEnabler {
 		observers.values.forEach { callback in
 			callback()
 		}
+	}
+	
+	/// Reset verifier scan mode, including risk setting, scan lock and scan log
+	func wipeScanMode() {
+		// Scan lock and risk level observers are not wiped
+		// in case this method is called after setting the observers in VerifierStartScanningViewModel
+		riskLevelManager.wipeScanMode()
+		scanLockManager.wipeScanMode()
+		scanLogManager.wipePersistedData()
 	}
 }
