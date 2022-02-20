@@ -11,7 +11,7 @@ import Nimble
 
 final class NewDisclosurePolicyViewModelTests: XCTestCase {
 	
-	private var sut: NewDisclosurePolicyViewModel!
+	private var sut: NewDisclosurePolicyViewModel?
 
 	private var coordinatorSpy: HolderCoordinatorDelegateSpy!
 	private var environmentSpies: EnvironmentSpies!
@@ -31,10 +31,10 @@ final class NewDisclosurePolicyViewModelTests: XCTestCase {
 		sut = .init(coordinator: coordinatorSpy)
 
 		// Then
-		expect(self.sut.tagline) == L.general_newintheapp()
-		expect(self.sut.title) == L.holder_newintheapp_content_only1G_title()
-		expect(self.sut.content) == L.holder_newintheapp_content_only1G_body()
-		expect(self.sut.image) == I.disclosurePolicy.newInTheApp()
+		expect(self.sut?.tagline) == L.general_newpolicy()
+		expect(self.sut?.title) == L.holder_newintheapp_content_only1G_title()
+		expect(self.sut?.content) == L.holder_newintheapp_content_only1G_body()
+		expect(self.sut?.image) == I.disclosurePolicy.newInTheApp()
 	}
 	
 	func test_content_3G() {
@@ -46,10 +46,10 @@ final class NewDisclosurePolicyViewModelTests: XCTestCase {
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// Then
-		expect(self.sut.tagline) == L.general_newpolicy()
-		expect(self.sut.title) == L.holder_newintheapp_content_only3G_title()
-		expect(self.sut.content) == L.holder_newintheapp_content_only3G_body()
-		expect(self.sut.image) == I.disclosurePolicy.newInTheApp()
+		expect(self.sut?.tagline) == L.general_newpolicy()
+		expect(self.sut?.title) == L.holder_newintheapp_content_only3G_title()
+		expect(self.sut?.content) == L.holder_newintheapp_content_only3G_body()
+		expect(self.sut?.image) == I.disclosurePolicy.newInTheApp()
 	}
 	
 	func test_content_1GWith3G() {
@@ -60,10 +60,10 @@ final class NewDisclosurePolicyViewModelTests: XCTestCase {
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// Then
-		expect(self.sut.tagline) == L.general_newintheapp()
-		expect(self.sut.title) == L.holder_newintheapp_content_3Gand1G_title()
-		expect(self.sut.content) == L.holder_newintheapp_content_3Gand1G_body()
-		expect(self.sut.image) == I.disclosurePolicy.newInTheApp()
+		expect(self.sut?.tagline) == L.general_newintheapp()
+		expect(self.sut?.title) == L.holder_newintheapp_content_3Gand1G_title()
+		expect(self.sut?.content) == L.holder_newintheapp_content_3Gand1G_body()
+		expect(self.sut?.image) == I.disclosurePolicy.newInTheApp()
 	}
 	
 	func test_content_noPolicy() {
@@ -76,7 +76,7 @@ final class NewDisclosurePolicyViewModelTests: XCTestCase {
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDismiss) == true
+		expect(self.sut).to(beNil())
 	}
 	
 	func test_dismiss() {
@@ -85,7 +85,7 @@ final class NewDisclosurePolicyViewModelTests: XCTestCase {
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// When
-		sut.dismiss()
+		sut?.dismiss()
 		
 		// Then
 		expect(self.coordinatorSpy.invokedDismiss) == true

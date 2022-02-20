@@ -33,7 +33,6 @@
 /* Voice over voor begin van een lijst */
 "general.list.accessibility.start" = "Start of list";
 "general.loading" = "Loading";
-"general.menu.close" = "Close menu";
 /* Configuratie ABC123, 13-10-2021 00:00 */
 "general.menu.configVersion" = "Configuration %@, %@";
 "general.menu.open" = "Open menu";
@@ -43,7 +42,6 @@
 "general.networkwasbusy.text" = "Please try again later.";
 "general.networkwasbusy.title" = "Sorry, it's very busy at the moment";
 "general.next" = "Next";
-"general.notification" = "Watch out!";
 "general.ok" = "OK";
 "general.paperflow" = "paper certificate";
 "general.positiveTest" = "positive test";
@@ -59,6 +57,7 @@
 "general_menu" = "Menu";
 "general_newintheapp" = "New in the app";
 "general_newpolicy" = "New policy";
+"general_notification" = "Watch out!";
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
 "general_readmore" = "Read more";
 "general_recoverycertificate" = "recovery certificate";
@@ -625,11 +624,13 @@
 "holder_completecertificate_title" = "Complete your visitor pass";
 "holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-1g-certificate";
 "holder_dashboard_3Gand1GaccessBanner_title" = "The access rules in the Netherlands have changed. There are now separate certificates for venues with 3G access and 1G access.";
+"holder_dashboard_accessibility_access" = "Coronavirus pass";
+"holder_dashboard_accessibility_notification" = "Notification";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
 "holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";
 "holder_dashboard_addCard_title" = "Add new vaccination or test";
 "holder_dashboard_domesticQRCard_1G_label" = "1G";
-"holder_dashboard_domesticQRCard_1G_title" = "Certificate for 3G-access";
+"holder_dashboard_domesticQRCard_1G_title" = "Certificate for 1G access";
 "holder_dashboard_domesticQRCard_3G_inactive_label" = "This certificate is currently not used in the Netherlands";
 "holder_dashboard_domesticQRCard_3G_label" = "3G";
 "holder_dashboard_domesticQRCard_3G_title" = "Certificate for 3G access";
@@ -645,7 +646,7 @@
 "holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/1g-certificate";
 "holder_dashboard_only1GaccessBanner_title" = "You can add a certificate for 1G access when you have tested negative";
 "holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-certificate";
-"holder_dashboard_only3GaccessBanner_title" = "A Dutch certificate currently gives 3G access. This means a certificate is valid anywhere a coronavirus pass is required.";
+"holder_dashboard_only3GaccessBanner_title" = "A Dutch certificate currently gives you 3G access. This means a certificate is valid anywhere a coronavirus pass is required.";
 "holder_dashboard_originExpiredBanner_domesticRecovery_title" = "Your Dutch recovery certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticTest_title" = "Your Dutch test certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticVaccine_title" = "Your Dutch vaccination certificate has expired";
@@ -690,7 +691,7 @@
 "holder_newintheapp_content_3Gand1G_body" = "The access rules in the Netherlands have changed. You can enter venues with 3G access with a vaccination, recovery, or test certificate. Venues with 1G access you can only enter with a test certificate. The app creates separate certificates for 3G and 1G access.";
 "holder_newintheapp_content_3Gand1G_button_next" = "Next";
 "holder_newintheapp_content_3Gand1G_title" = "Certificates for 3G and 1G access";
-"holder_newintheapp_content_only1G_body" = "The access rules in the Netherlands have changed. 1G access applies anywhere a coronavirus pass is required. This means you can only enter these places with a test certificate. You can still add a vaccination or recovery certificate in the app, but you can only use this certificate abroad.";
+"holder_newintheapp_content_only1G_body" = "The access rules in the Netherlands have changed. 1G access applies anywhere a coronavirus pass is required. This means you can only enter these places with a test certificate. You can still add a vaccination or recovery certificate in the app, but you can only use these certificates abroad.";
 "holder_newintheapp_content_only1G_button_next" = "Next";
 "holder_newintheapp_content_only1G_title" = "1G access only";
 "holder_newintheapp_content_only3G_body" = "The access rules in the Netherlands have changed. 3G access applies anywhere a coronavirus pass is required. This means you can enter with a vaccination, recovery, or test certificate.";

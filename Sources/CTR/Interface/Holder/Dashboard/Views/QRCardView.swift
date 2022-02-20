@@ -45,6 +45,17 @@ class QRCardView: BaseView {
 
 	// Contains the main QRCard (i.e. the top layer of the visual stack)
 	private let hostView = UIView()
+	
+	/// A label for accessibility to announce the role of this qr card ("Toegangsbewijs")
+	private let accessibilityRoleView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.accessibilityLabel = L.holder_dashboard_accessibility_access()
+		view.accessibilityTraits = .staticText
+		view.backgroundColor = .clear
+		view.isAccessibilityElement = true
+		return view
+	}()
 
 	private let titleLabel: Label = {
         return Label(title3: nil, montserrat: true).multiline().header()
@@ -96,6 +107,8 @@ class QRCardView: BaseView {
 	private let largeIconImageView: UIImageView = {
 
 		let view = UIImageView(image: I.dashboard.domestic())
+		view.accessibilityLabel = L.generalNetherlands()
+		view.isAccessibilityElement = true
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.setContentCompressionResistancePriority(.required, for: .horizontal)
 		return view
@@ -148,6 +161,8 @@ class QRCardView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
+		
+		addSubview(accessibilityRoleView)
 
 		squashedCards.reversed().forEach { squashedCardView in
 			addSubview(squashedCardView)
@@ -227,6 +242,11 @@ class QRCardView: BaseView {
 		largeIconImageView.setContentHuggingPriority(.required, for: .vertical)
 
 		NSLayoutConstraint.activate([
+			accessibilityRoleView.topAnchor.constraint(equalTo: topAnchor),
+			accessibilityRoleView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			accessibilityRoleView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			accessibilityRoleView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			
 			largeIconImageView.topAnchor.constraint(equalTo: hostView.topAnchor, constant: ViewTraits.imageMargin),
 			largeIconImageView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -ViewTraits.imageMargin),
 			largeIconImageView.bottomAnchor.constraint(lessThanOrEqualTo: hostView.bottomAnchor),
@@ -268,7 +288,7 @@ class QRCardView: BaseView {
 			lessThanOrEqualTo: disclosurePolicyIndicatorView.leadingAnchor,
 			constant: -ViewTraits.titleTrailingToDisclosurePolicyIndicatorMargin
 		)
-		titleTrailingToLargeIconImageViewConstraint?.isActive = false
+		titleTrailingToDisclosurePolicyIndicatorViewConstraint?.isActive = false
 		
 		titleLeadingAnchor = titleLabel.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: ViewTraits.titleLeadingAnchorDCCMargin)
 		titleLeadingAnchor?.isActive = true
@@ -397,6 +417,7 @@ class QRCardView: BaseView {
 
 	private func applyEUStyle() {
 		largeIconImageView.image = I.dashboard.international()
+		largeIconImageView.accessibilityLabel = L.generalEuropean()
 	}
 
 	// MARK: - Callbacks
@@ -464,6 +485,7 @@ class QRCardView: BaseView {
 				viewQRButtonStackView.removeArrangedSubview(viewQRButton)
 				viewQRButtonStackView.removeArrangedSubview(viewQRButtonCompressingSpacer)
 				viewQRButtonStackView.addArrangedSubview(thisCertificateIsNotUsedOverlayView)
+				viewQRButton.isAccessibilityElement = false
 			} else {
 				viewQRButtonStackView.removeArrangedSubview(thisCertificateIsNotUsedOverlayView)
 				viewQRButtonStackView.addArrangedSubview(viewQRButton)
@@ -593,9 +615,18 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 		])
 	}
 	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		label.isAccessibilityElement = false
+		iconImageView.isAccessibilityElement = false
+		isAccessibilityElement = true
+	}
+	
 	var title: String? {
 		didSet {
 			label.text = title
+			accessibilityLabel = "\(L.generalNetherlands()) \(title ?? "")"
 		}
 	}
 }

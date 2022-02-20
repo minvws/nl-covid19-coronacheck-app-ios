@@ -89,6 +89,8 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		
 		if CommandLine.arguments.contains("-disclosurePolicyMode3G") {
 			return true
+		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") || CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") {
+			return false
 		}
 		
 		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
@@ -106,6 +108,8 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		
 		if CommandLine.arguments.contains("-disclosurePolicyMode1G") {
 			return true
+		} else if CommandLine.arguments.contains("-disclosurePolicyMode3G") || CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") {
+			return false
 		}
 		
 		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
@@ -123,6 +127,8 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		
 		if CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") {
 			return true
+		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") || CommandLine.arguments.contains("-disclosurePolicyMode3G") {
+			return false
 		}
 		
 		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {

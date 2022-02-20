@@ -15,3 +15,9 @@ enum TestCertificateType: String {
 	case pcr = "PCR (NAAT)"
 	case rat = "Sneltest (RAT)"
 }
+
+enum DisclosureMode: String {
+	case only3G = "-disclosurePolicyMode3G"
+	case only1G = "-disclosurePolicyMode1G"
+	case bothModes = "-disclosurePolicyMode1GWith3G"
+}

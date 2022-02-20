@@ -107,10 +107,6 @@ class HolderCoordinator: SharedCoordinator {
 			return
 		}
 		
-		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
-			self?.handleDisclosurePolicyUpdates()
-		}
-		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: HolderNewFeaturesFactory()
@@ -127,8 +123,13 @@ class HolderCoordinator: SharedCoordinator {
 			} else {
 				
 				// Start with the holder app
-				navigateToHolderStart()
-				handleDisclosurePolicyUpdates()
+				navigateToHolderStart {
+					
+					self.handleDisclosurePolicyUpdates()
+					self.disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
+						self?.handleDisclosurePolicyUpdates()
+					}
+				}
 			}
 		}
 	}
@@ -695,13 +696,11 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 extension HolderCoordinator {
 	
 	func showNewDisclosurePolicy() {
-	
+		guard navigationController.presentedViewController == nil else { return }
+		guard let viewModel = NewDisclosurePolicyViewModel(coordinator: self) else { return }
+		
 		let destination = NavigationController(
-			rootViewController: NewDisclosurePolicyViewController(
-				viewModel: NewDisclosurePolicyViewModel(
-					coordinator: self
-				)
-			)
+			rootViewController: NewDisclosurePolicyViewController(viewModel: viewModel)
 		)
 		destination.modalPresentationStyle = .fullScreen
 		navigationController.present(destination, animated: true) {
@@ -719,6 +718,11 @@ extension HolderCoordinator {
 		guard Current.disclosurePolicyManager.hasChanges else {
 			return
 		}
+		
+		guard Current.remoteConfigManager.storedConfiguration.disclosurePolicies != nil else {
+			return
+		}
+		
 		showNewDisclosurePolicy()
 	}
 }

@@ -10,48 +10,48 @@ import XCTest
 extension BaseTest {
 	
 	func addEvent() {
-		tapOtherElement("Open menu")
-		tapButton("Vaccinatie of test toevoegen")
+		app.tapButton("Open menu")
+		app.tapButton("Vaccinatie of test toevoegen")
 	}
 	
 	func addVaccinationCertificate(for person: TestPerson) {
 		addEvent()
-		tapButton("Vaccinatie. Ik heb een (booster)vaccinatie gehad")
-		tapText("Log in met DigiD")
+		app.tapButton("Vaccinatie. Ik heb een (booster)vaccinatie gehad")
+		app.tapText("Log in met DigiD")
 		retrieveCertificateFromServer(for: person)
 	}
 	
 	func addRecoveryCertificate(for person: TestPerson) {
 		addEvent()
-		tapButton("Positieve test. Uit de test blijkt dat ik corona heb gehad")
-		tapText("Log in met DigiD")
+		app.tapButton("Positieve test. Uit de test blijkt dat ik corona heb gehad")
+		app.tapText("Log in met DigiD")
 		retrieveCertificateFromServer(for: person)
 	}
 	
 	func addTestCertificateFromGGD(for person: TestPerson) {
 		addEvent()
-		tapButton("Negatieve test. Uit de test blijkt dat ik geen corona heb")
-		tapButton("GGD")
-		tapText("Log in met DigiD")
+		app.tapButton("Negatieve test. Uit de test blijkt dat ik geen corona heb")
+		app.tapButton("GGD")
+		app.tapText("Log in met DigiD")
 		retrieveCertificateFromServer(for: person)
 	}
 	
 	func retrieveCertificateFromServer(for person: TestPerson) {
 		
-		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: self.timeout))
+		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: self.loginTimeout))
 		makeScreenShot(name: "Safari is ready")
 		
-		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].waitForExistence(timeout: self.timeout)
+		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].waitForExistence(timeout: self.loginTimeout)
 		makeScreenShot(name: "Logged in: " + loggedIn.description)
 		
 		if !loggedIn { loginToServer() }
 		
-		let textField = waitFor(element: safari.webViews.textFields.firstMatch, type: "TextField BSN")
-		textField.clear()
+		let textField = safari.webViews.textFields.firstMatch.assertExistence()
+		textField.clearText()
 		textField.typeText(person.bsn)
 		makeScreenShot(name: "BSN typed")
 		
-		let submit = waitFor(element: safari.webViews.staticTexts["Login / Submit"], type: "Button Login / Submit")
+		let submit = safari.webViews.staticTexts["Login / Submit"].assertExistence()
 		submit.tap()
 		makeScreenShot(name: "BSN submit button")
 	}
@@ -66,33 +66,33 @@ extension BaseTest {
 			return
 		}
 		
-		let username = waitFor(element: safari.webViews.textFields["User Name"], type: "Textfield Username")
+		let username = safari.webViews.textFields["User Name"].assertExistence()
 		username.tap()
 		username.typeText("coronacheck")
 		makeScreenShot(name: "Username typed")
 		
 		let continueButton = safari.buttons["Continue"]
-		if continueButton.waitForExistence(timeout: self.timeout) {
+		if continueButton.waitForExistence(timeout: self.loginTimeout) {
 			continueButton.tap()
 			makeScreenShot(name: "Hide continue button")
 		}
 		
-		let password = waitFor(element: safari.webViews.secureTextFields["Password"], type: "TextField Password")
+		let password = safari.webViews.secureTextFields["Password"].assertExistence()
 		password.tap()
 		password.typeText(authPassword)
 		makeScreenShot(name: "Password typed")
 		
-		let submitAuth = waitFor(element: safari.webViews.buttons["Log In"], type: "Button Log in")
+		let submitAuth = safari.webViews.buttons["Log In"].assertExistence()
 		submitAuth.tap()
 		makeScreenShot(name: "Auth submit button")
 	}
 	
 	func addRetrievedCertificateToApp(for person: TestPerson? = nil) {
 		makeScreenShot(name: "Back in app")
-		textExists("Kloppen de gegevens?")
+		app.textExists("Kloppen de gegevens?")
 		if let person = person {
-			textContains("Naam: " + person.name!)
+			app.containsText("Naam: " + person.name!)
 		}
-		tapText("Maak bewijs")
+		app.tapText("Maak bewijs")
 	}
 }

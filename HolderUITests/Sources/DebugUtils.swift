@@ -5,30 +5,33 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-extension BaseTest {
+import XCTest
+
+extension XCUIElement {
 	
-	func printOnScreenElements() {
+	func printChildElements() {
 		let debug = """
 			----- BEGIN ELEMENTS -----
-			Buttons: \(app.buttons.elementMap())
-			Static Texts: \(app.staticTexts.elementMap())
-			Text Fields: \(app.textFields.elementMap())
-			Text Views: \(app.textViews.elementMap())
-			Links: \(app.links.elementMap())
-			Other Elements: \(app.otherElements.elementMap())
+			Parent: \(self.description)
+			Buttons: \(self.buttons.elementMap())
+			Static Texts: \(self.staticTexts.elementMap())
+			Text Fields: \(self.textFields.elementMap())
+			Text Views: \(self.textViews.elementMap())
+			Links: \(self.links.elementMap())
+			Other Elements: \(self.otherElements.elementMap())
 			------ END ELEMENTS ------
 		"""
 		print(debug)
 	}
 	
-	func printOnScreenWebElements() {
+	func printChildWebElements() {
 		let debug = """
 			----- BEGIN ELEMENTS -----
-			Buttons: \(safari.webViews.buttons.elementMap())
-			Static Texts: \(safari.webViews.staticTexts.elementMap())
-			Text Fields: \(safari.webViews.textFields.elementMap())
-			Text Views: \(safari.webViews.textViews.elementMap())
-			Secure Text Fields: \(safari.webViews.secureTextFields.elementMap())
+			Buttons: \(self.webViews.buttons.elementMap())
+			Static Texts: \(self.webViews.staticTexts.elementMap())
+			Text Fields: \(self.webViews.textFields.elementMap())
+			Text Views: \(self.webViews.textViews.elementMap())
+			Secure Text Fields: \(self.webViews.secureTextFields.elementMap())
 			------ END ELEMENTS ------
 		"""
 		print(debug)

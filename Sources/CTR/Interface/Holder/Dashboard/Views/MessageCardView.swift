@@ -56,7 +56,18 @@ class MessageCardView: BaseView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+	/// A label for accessibility to announce the role of this message card ("Notification")
+	private let accessibilityRoleView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.accessibilityLabel = L.holder_dashboard_accessibility_notification()
+		view.accessibilityTraits = .staticText
+		view.backgroundColor = .clear
+		view.isAccessibilityElement = true
+		return view
+	}()
+	
     /// The title label (- within `messageWithCloseButtonStackView`)
 	private let titleLabel: Label = {
         let titleLabel = Label(body: nil).multiline().header()
@@ -71,7 +82,7 @@ class MessageCardView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.bannerCross(), for: .normal)
 		button.contentHorizontalAlignment = .center
-		button.accessibilityLabel = L.generalClose()
+		button.accessibilityLabel = "\(L.generalClose()) \(L.holder_dashboard_accessibility_notification())"
 		return button
 	}()
 
@@ -114,6 +125,7 @@ class MessageCardView: BaseView {
 
 		super.setupViewHierarchy()
         
+		addSubview(accessibilityRoleView)
         addSubview(titleLabel)
         
         if nil != config.closeButtonCommand {
@@ -130,7 +142,11 @@ class MessageCardView: BaseView {
 		super.setupViewConstraints()
 
         var constraints = [NSLayoutConstraint]()
-        
+       
+		constraints += [accessibilityRoleView.topAnchor.constraint(equalTo: topAnchor)]
+		constraints += [accessibilityRoleView.bottomAnchor.constraint(equalTo: bottomAnchor)]
+		constraints += [accessibilityRoleView.leadingAnchor.constraint(equalTo: leadingAnchor)]
+		constraints += [accessibilityRoleView.trailingAnchor.constraint(equalTo: trailingAnchor)]
         constraints += [titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
         constraints += [titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
         
@@ -157,7 +173,7 @@ class MessageCardView: BaseView {
         
         NSLayoutConstraint.activate(constraints)
 	}
-
+	
     // MARK: - Objc Target-Action callbacks:
     
 	/// User tapped on the close button

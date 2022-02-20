@@ -10,9 +10,10 @@ import UIKit
 class NavigationControllerSpy: UINavigationController {
 	
 	var pushViewControllerCallCount = 0
-	var popToRootViewControllerCalled = false
-	var popViewControllerCalled = false
-	var popToViewControllerCalled = false
+	var invokedPopToRootViewController = false
+	var invokedPopViewController = false
+	var invokedPopToViewController = false
+	var invokedPresent = false
 	
 	override func pushViewController(_ viewController: UIViewController, animated: Bool) {
 		
@@ -21,18 +22,24 @@ class NavigationControllerSpy: UINavigationController {
 	}
 	
 	override func popToRootViewController(animated: Bool) -> [UIViewController]? {
-		popToRootViewControllerCalled = true
+		invokedPopToRootViewController = true
 		return super.popToRootViewController(animated: animated)
 	}
 	
 	override func popToViewController(_ viewController: UIViewController, animated: Bool) -> [UIViewController]? {
-		popToViewControllerCalled = true
+		invokedPopToViewController = true
 		return super.popToViewController(viewController, animated: animated)
 	}
 	
 	override func popViewController(animated: Bool) -> UIViewController? {
 		
-		popViewControllerCalled = true
+		invokedPopViewController = true
 		return super.popViewController(animated: animated)
+	}
+	
+	override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+
+		invokedPresent = true
+		super.present(viewControllerToPresent, animated: flag, completion: completion)
 	}
 }

@@ -21,16 +21,14 @@ final class NewDisclosurePolicyViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - forcedInfo: the container with forced info
-	init(
-		coordinator: Dismissable
-	) {
+	init?(coordinator: Dismissable) {
 		
 		self.coordinator = coordinator
 		
 		image = I.disclosurePolicy.newInTheApp()
 		
 		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-			tagline = L.general_newintheapp()
+			tagline = L.general_newpolicy()
 			title = L.holder_newintheapp_content_only1G_title()
 			content = L.holder_newintheapp_content_only1G_body()
 		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
@@ -42,7 +40,7 @@ final class NewDisclosurePolicyViewModel {
 			title = L.holder_newintheapp_content_3Gand1G_title()
 			content = L.holder_newintheapp_content_3Gand1G_body()
 		} else {
-			coordinator.dismiss()
+			return nil
 		}
 	}
 	
