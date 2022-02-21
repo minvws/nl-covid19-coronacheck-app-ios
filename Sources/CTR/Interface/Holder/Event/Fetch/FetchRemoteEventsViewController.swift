@@ -44,12 +44,7 @@ class FetchRemoteEventsViewController: BaseViewController {
 		addBackButton(customAction: #selector(backButtonTapped))
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
-
-			if $0 {
-				self?.sceneView.spinner.startAnimating()
-			} else {
-				self?.sceneView.spinner.stopAnimating()
-			}
+			self?.sceneView.shouldShowLoadingSpinner = $0
 		}
 
 		viewModel.$viewState.binding = { [weak self] in
@@ -81,13 +76,13 @@ class FetchRemoteEventsViewController: BaseViewController {
 
 	private func setForLoadingState(_ content: Content) {
 
-		sceneView.spinner.isHidden = false
+		sceneView.shouldShowLoadingSpinner = true
 		displayContent(content)
 	}
 
 	private func setForFeedback(_ content: Content) {
 
-		sceneView.spinner.isHidden = true
+		sceneView.shouldShowLoadingSpinner = false
 		displayContent(content)
 	}
 

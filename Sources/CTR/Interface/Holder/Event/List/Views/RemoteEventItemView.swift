@@ -11,13 +11,19 @@ class RemoteEventItemView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
-
-		// Dimensions
-		static let titleLineHeight: CGFloat = 22
-		static let titleKerning: CGFloat = -0.41
-		static let messageLineHeight: CGFloat = 18
-		static let messageKerning: CGFloat = -0.24
-		static let messageParagraphSpacing: CGFloat = 6
+		enum Link {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
+		enum Title {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
+		enum Message {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+			static let paragraphSpacing: CGFloat = 6
+		}
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -148,8 +154,8 @@ class RemoteEventItemView: BaseView {
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
-				ViewTraits.titleLineHeight,
-				kerning: ViewTraits.titleKerning
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
 			)
 		}
 	}
@@ -157,25 +163,24 @@ class RemoteEventItemView: BaseView {
 	/// The message
 	var subTitle: String? {
 		didSet {
-			messageLabel.attributedText =
-				.makeFromHtml(
-					text: subTitle,
-					style: NSAttributedString.HTMLStyle(
-						font: Theme.fonts.subhead,
-						textColor: Theme.colors.grey1,
-						lineHeight: ViewTraits.messageLineHeight,
-						kern: ViewTraits.messageKerning,
-						paragraphSpacing: ViewTraits.messageParagraphSpacing
-					)
+			messageLabel.attributedText = .style(
+				text: subTitle,
+				style: NSAttributedString.HTMLStyle(
+					font: Theme.fonts.subhead,
+					textColor: Theme.colors.grey1,
+					lineHeight: ViewTraits.Message.lineHeight,
+					kern: ViewTraits.Message.kerning,
+					paragraphSpacing: ViewTraits.Message.paragraphSpacing
 				)
+			)
 		}
 	}
 
 	var link: String? {
 		didSet {
 			linkLabel.attributedText = link?.setLineHeight(
-				ViewTraits.titleLineHeight,
-				kerning: ViewTraits.titleKerning,
+				ViewTraits.Link.lineHeight,
+				kerning: ViewTraits.Link.kerning,
 				textColor: Theme.colors.primary
 			)
 			backgroundButton.accessibilityLabel = link

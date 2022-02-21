@@ -21,7 +21,6 @@ class HolderDashboardViewController: BaseViewController {
         case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
-		case testOnlyValidFor3G(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         
         // Errors:
         case errorMessage(message: String, didTapTryAgain: () -> Void)
@@ -34,13 +33,16 @@ class HolderDashboardViewController: BaseViewController {
 		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
 		
         // QR Cards:
-        case domesticQR(title: String, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case domesticQR(disclosurePolicyLabel: String, title: String, isDisabledByDisclosurePolicy: Bool, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
         case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 		
 		// Recommendations
 		case recommendCoronaMelder
 		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case recommendToAddYourBooster(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		
+		// Disclosure Policy
+		case disclosurePolicyInformation(title: String, buttonText: String, accessibilityIdentifier: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 	}
 
 	struct ValidityText: Equatable {
@@ -212,9 +214,7 @@ class HolderDashboardViewController: BaseViewController {
 			
 			stackView.setCustomSpacing(22, after: previousCardView)
 		}
-		
-		stackView.accessibilityElements = cardViews
-		UIAccessibility.post(notification: .screenChanged, argument: view)
+		UIAccessibility.post(notification: .layoutChanged, argument: view)
 	}
 }
 
@@ -248,7 +248,6 @@ private extension HolderDashboardViewController.Card {
 			case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
 				let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
-				let .testOnlyValidFor3G(message, callToActionButtonText, didTapCallToAction),
 				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction),
 				let .completeYourVaccinationAssessment(message, callToActionButtonText, didTapCallToAction),
 				let .vaccinationAssessmentInvalidOutsideNL(message, callToActionButtonText, didTapCallToAction):
@@ -269,7 +268,14 @@ private extension HolderDashboardViewController.Card {
 					closeButtonCommand: didTapCloseAction,
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
 				))
-
+			case let .disclosurePolicyInformation(message, callToActionButtonText, accessibilityIdentifier, didTapCallToAction, didTapCloseAction):
+				return MessageCardView(config: .init(
+					title: message,
+					accessibilityIdentifier: accessibilityIdentifier,
+					closeButtonCommand: didTapCloseAction,
+					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
+				))
+								
 			case let .emptyStateDescription(message, buttonTitle):
 				return EmptyDashboardDescriptionCardView.make(message: message, buttonTitle: buttonTitle, openURLHandler: openURLHandler)
 
@@ -279,11 +285,32 @@ private extension HolderDashboardViewController.Card {
 				view.image = image
 				return view
 				
-			case let .domesticQR(title, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
-				return QRCardView.make(stackSize: 1, forEu: false, title: title, isLoading: isLoading, validityTexts: validityTexts, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
+			case let .domesticQR(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
+				let qrCard = QRCardView(stackSize: 1)
+				qrCard.shouldStyleForEU = false
+				qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
+				qrCard.viewQRButtonCommand = didTapViewQR
+				qrCard.title = title
+				qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
+				qrCard.validityTexts = validityTexts
+				qrCard.expiryEvaluator = expiryCountdownEvaluator
+				qrCard.isLoading = isLoading
+				qrCard.isDisabledByDisclosurePolicy = isDisabledByDisclosurePolicy
+				qrCard.disclosurePolicyLabel = disclosurePolicyLabel
+				qrCard.accessibilityIdentifier = "\(disclosurePolicyLabel)QRCard"
+				return qrCard
 			
 			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
-				return QRCardView.make(stackSize: stackSize, forEu: true, title: title, isLoading: isLoading, validityTexts: validityTexts, didTapViewQR: didTapViewQR, buttonEnabledEvaluator: buttonEnabledEvaluator, expiryCountdownEvaluator: expiryCountdownEvaluator)
+				let qrCard = QRCardView(stackSize: stackSize)
+				qrCard.shouldStyleForEU = true
+				qrCard.viewQRButtonTitle = stackSize == 1 ? L.holderDashboardQrButtonViewQR() : L.holderDashboardQrButtonViewQRs()
+				qrCard.viewQRButtonCommand = didTapViewQR
+				qrCard.title = title
+				qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
+				qrCard.validityTexts = validityTexts
+				qrCard.expiryEvaluator = expiryCountdownEvaluator
+				qrCard.isLoading = isLoading
+				return qrCard
 				
 			case let .errorMessage(message, didTapTryAgain):
 				return ErrorDashboardCardView.make(message: message, didTapTryAgain: didTapTryAgain, openURLHandler: openURLHandler)
@@ -345,34 +372,5 @@ private extension EmptyDashboardDescriptionCardView {
 			openURLHandler(url)
 		}
 		return view
-	}
-}
-
-private extension QRCardView {
-
-	// swiftlint:disable:next function_parameter_count
-	static func make(
-		stackSize: Int,
-		forEu: Bool,
-		title: String,
-		isLoading: Bool,
-		validityTexts: @escaping (Date) -> [HolderDashboardViewController.ValidityText],
-		didTapViewQR: @escaping () -> Void,
-		buttonEnabledEvaluator: @escaping (Date) -> Bool,
-		expiryCountdownEvaluator: ((Date) -> String?)?
-	) -> QRCardView {
-		let qrCard = QRCardView(stackSize: stackSize)
-		qrCard.shouldStyleForEU = forEu
-		qrCard.viewQRButtonTitle = stackSize == 1
-			? L.holderDashboardQrButtonViewQR()
-			: L.holderDashboardQrButtonViewQRs()
-		qrCard.viewQRButtonCommand = didTapViewQR
-		qrCard.title = title
-		qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
-		qrCard.validityTexts = validityTexts
-		qrCard.expiryEvaluator = expiryCountdownEvaluator
-		qrCard.isLoading = isLoading
-		
-		return qrCard
 	}
 }

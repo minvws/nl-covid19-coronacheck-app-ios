@@ -57,8 +57,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	
-	func userWishesMoreInfoAboutTestOnlyValidFor3G()
-	
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
 	
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
@@ -67,7 +65,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func openUrl(_ url: URL, inApp: Bool)
 	
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 	
 	func userWishesToLaunchThirdPartyTicketApp()
 	
@@ -83,6 +81,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 class HolderCoordinator: SharedCoordinator {
 	
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
+	
+	private var disclosurePolicyUpdateObserverToken: DisclosurePolicyManager.ObserverToken?
 	
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
@@ -102,6 +102,11 @@ class HolderCoordinator: SharedCoordinator {
 	// Designated starter method
 	override func start() {
 		
+		if CommandLine.arguments.contains("-skipOnboarding") {
+			navigateToHolderStart()
+			return
+		}
+		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: HolderNewFeaturesFactory()
@@ -118,7 +123,13 @@ class HolderCoordinator: SharedCoordinator {
 			} else {
 				
 				// Start with the holder app
-				navigateToHolderStart()
+				navigateToHolderStart {
+					
+					self.handleDisclosurePolicyUpdates()
+					self.disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
+						self?.handleDisclosurePolicyUpdates()
+					}
+				}
 			}
 		}
 	}
@@ -127,6 +138,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
+		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.removeObserver)
 	}
 	
 	// MARK: - Listeners
@@ -345,12 +357,13 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	/// Navigate to enlarged QR
-	private func navigateToShowQRs(_ greenCards: [GreenCard]) {
+	private func navigateToShowQRs(_ greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
 		
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCards: greenCards,
+				disclosurePolicy: disclosurePolicy,
 				thirdPartyTicketAppName: thirdpartyTicketApp?.name
 			)
 		)
@@ -527,13 +540,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
-	}
-	
-	func userWishesMoreInfoAboutTestOnlyValidFor3G() {
-		let title: String = L.holder_my_overview_3g_test_validity_bottom_sheet_title()
-		let message: String = L.holder_my_overview_3g_test_validity_bottom_sheet_body()
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 	
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
@@ -576,7 +583,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentAsBottomSheet(viewController)
 	}
 	
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
 		
 		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
 		switch result {
@@ -584,7 +591,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				if greenCards.isEmpty {
 					showAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .noGreenCardsAvailable))
 				} else {
-					navigateToShowQRs(greenCards)
+					navigateToShowQRs(greenCards, disclosurePolicy: disclosurePolicy)
 				}
 			case .failure:
 				showAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .coreDataFetchError))
@@ -683,6 +690,40 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 		
 		removeChildCoordinator()
 		navigateToChooseQRCodeType()
+	}
+}
+
+extension HolderCoordinator {
+	
+	func showNewDisclosurePolicy() {
+		guard navigationController.presentedViewController == nil else { return }
+		guard let viewModel = NewDisclosurePolicyViewModel(coordinator: self) else { return }
+		
+		let destination = NavigationController(
+			rootViewController: NewDisclosurePolicyViewController(viewModel: viewModel)
+		)
+		destination.modalPresentationStyle = .fullScreen
+		navigationController.present(destination, animated: true) {
+			Current.disclosurePolicyManager.setDisclosurePolicyUpdateHasBeenSeen()
+		}
+	}
+	
+	func handleDisclosurePolicyUpdates() {
+		
+		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
+			// No Disclosre Policy modal if we still need to finish onboarding
+			return
+		}
+		
+		guard Current.disclosurePolicyManager.hasChanges else {
+			return
+		}
+		
+		guard Current.remoteConfigManager.storedConfiguration.disclosurePolicies != nil else {
+			return
+		}
+		
+		showNewDisclosurePolicy()
 	}
 }
 

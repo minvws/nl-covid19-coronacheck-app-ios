@@ -36,7 +36,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 	func test_demo_riskLevelLow_verificationPolicyEnabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
@@ -79,7 +79,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 	func test_demo_riskLevelHigh_verificationPolicyEnabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
@@ -122,7 +122,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 	func test_verified_riskLevelLow_verificationPolicyEnabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,
@@ -165,7 +165,7 @@ final class VerifiedAccessViewControllerTests: XCTestCase {
 	func test_verified_riskLevelHigh_verificationPolicyEnabled() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GPolicyEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		sut = VerifiedAccessViewController(
 			viewModel: .init(
 				coordinator: verifierCoordinatorSpy,

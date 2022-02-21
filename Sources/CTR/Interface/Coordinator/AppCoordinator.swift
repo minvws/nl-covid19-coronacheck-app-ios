@@ -70,6 +70,10 @@ class AppCoordinator: Coordinator, Logging {
 		guard !ProcessInfo.processInfo.isTesting else {
 			return
 		}
+		
+		if CommandLine.arguments.contains("-resetOnStart") {
+			Current.wipePersistedData(flavor: AppFlavor.holder)
+		}
 
 		// Start the launcher for update checks
 		startLauncher()
@@ -97,6 +101,10 @@ class AppCoordinator: Coordinator, Logging {
 
     /// Start the real application
     private func startApplication() {
+		
+		// Start listeners after launching is done (willEnterForegroundNotification will mess up launch)
+		Current.remoteConfigManager.registerTriggers()
+		Current.cryptoLibUtility.registerTriggers()
 
         switch flavor {
             case .holder:
@@ -281,6 +289,7 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func errorWhileLoading(errors: [ServerError]) {
 		// For now, show internet required.
 		// Todo: add error state.
+		
 		showInternetRequired()
 	}
 	

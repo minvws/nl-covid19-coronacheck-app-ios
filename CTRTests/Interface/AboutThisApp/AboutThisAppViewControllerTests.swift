@@ -55,8 +55,12 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holderAboutTitle()
 		expect(self.sut.sceneView.message) == L.holderAboutText()
+		expect(self.sut.sceneView.menuStackView.arrangedSubviews)
+			.to(haveCount(2))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(6))
+		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
+			.to(haveCount(5))
 		expect(self.sut.sceneView.appVersion).toNot(beNil())
 		
 		sut.assertImage()

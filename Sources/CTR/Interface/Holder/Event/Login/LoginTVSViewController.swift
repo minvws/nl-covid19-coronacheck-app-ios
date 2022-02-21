@@ -38,12 +38,7 @@ class LoginTVSViewController: BaseViewController {
 
 		// Binding
 		viewModel.$shouldShowProgress.binding = { [weak self] in
-
-			if $0 {
-				self?.sceneView.spinner.startAnimating()
-			} else {
-				self?.sceneView.spinner.stopAnimating()
-			}
+			self?.sceneView.shouldShowLoadingSpinner = $0
 		}
 
 		viewModel.$content.binding = { [weak self] in self?.displayContent($0) }

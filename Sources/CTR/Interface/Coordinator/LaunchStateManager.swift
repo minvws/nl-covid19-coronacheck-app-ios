@@ -33,7 +33,7 @@ protocol LaunchStateManagerDelegate: AnyObject {
 	func updateIsRecommended(version: String, appStoreUrl: URL)
 }
 
-final class LaunchStateManager: LaunchStateManaging {
+final class LaunchStateManager: LaunchStateManaging, Logging {
 	
 	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
@@ -54,34 +54,33 @@ final class LaunchStateManager: LaunchStateManaging {
 	// MARK: - Launch State -
 	
 	func handleLaunchState(_ state: LaunchState) {
-	
+		
+		if CommandLine.arguments.contains("-skipOnboarding") {
+			self.startApplication()
+			return
+		}
+		
 		guard Current.cryptoLibUtility.isInitialized else {
 			delegate?.cryptoLibDidNotInitialize()
-	
 			return
 		}
 
-		switch state {
-			case .finished:
-				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
-					self.startApplication()
-				}
+		if state == .withinTTL {
+			// If within the TTL, and the firstUseDate is nil, that means an existing installation.
+			// Use the documents directory creation date.
+			Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
+		}
 
-			case .serverError(let serviceErrors):
-				// Deactivated or update trumps no internet or error
-				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
-					self.delegate?.errorWhileLoading(errors: serviceErrors)
-				}
-
-			case .withinTTL:
-				// If within the TTL, and the firstUseDate is nil, that means an existing installation.
-				// Use the documents directory creation date.
-				Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
-				
-				checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+		checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+			switch state {
+				case .finished, .withinTTL:
 					self.startApplication()
-				}
+				case .serverError(let serviceErrors):
+					if !self.applicationHasStarted {
+						self.delegate?.errorWhileLoading(errors: serviceErrors)
+					}
 			}
+		}
 	}
 	
 	private func startApplication() {

@@ -117,14 +117,16 @@ class CryptoManager: CryptoManaging, Logging {
 	
 	// MARK: - QR
 
-	/// Generate the QR message
-	/// - Parameter credential: the (domestic) credential to generate the QR from
+	///  Disclose the credential
+	/// - Parameters:
+	///   - credential: the (domestic) credential to generate the QR from
+	///   - disclosurePolicy: the disclosure policy (1G / 3G) to genearte the QR with
 	/// - Returns: the QR message
-	func generateQRmessage(_ credential: Data) -> Data? {
+	func discloseCredential(_ credential: Data, disclosurePolicy: DisclosurePolicy) -> Data? {
 
 		if let holderSecretKey = cryptoData.holderSecretKey, hasPublicKeys() {
-			// Holder has far more elaborate changes for this. Just a placeholder here.
-			let disclosed = MobilecoreDisclose(holderSecretKey, credential, MobilecoreDISCLOSURE_POLICY_3G)
+			logVerbose("Disclosing with policy: \(disclosurePolicy)")
+			let disclosed = MobilecoreDisclose(holderSecretKey, credential, disclosurePolicy.mobileDisclosurePolicy)
 			if let payload = disclosed?.value {
 				let message = String(decoding: payload, as: UTF8.self)
 				logDebug("QR message: \(message)")

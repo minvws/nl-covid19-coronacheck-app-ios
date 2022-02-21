@@ -33,7 +33,6 @@
 /* Voice over voor begin van een lijst */
 "general.list.accessibility.start" = "Start of list";
 "general.loading" = "Loading";
-"general.menu.close" = "Close menu";
 /* Configuratie ABC123, 13-10-2021 00:00 */
 "general.menu.configVersion" = "Configuration %@, %@";
 "general.menu.open" = "Open menu";
@@ -43,11 +42,9 @@
 "general.networkwasbusy.text" = "Please try again later.";
 "general.networkwasbusy.title" = "Sorry, it's very busy at the moment";
 "general.next" = "Next";
-"general.notification" = "Watch out!";
 "general.ok" = "OK";
 "general.paperflow" = "paper certificate";
 "general.positiveTest" = "positive test";
-"general.readmore" = "Read more";
 "general.recoverydate" = "recovery date";
 "general.retry" = "Try again";
 "general.testdate" = "test date";
@@ -58,7 +55,11 @@
 "general.vaccination" = "vaccination";
 "general.vaccinationdate" = "Vaccination date";
 "general_menu" = "Menu";
+"general_newintheapp" = "New in the app";
+"general_newpolicy" = "New policy";
+"general_notification" = "Watch out!";
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
+"general_readmore" = "Read more";
 "general_recoverycertificate" = "recovery certificate";
 "general_testcertificate" = "test certificate";
 "general_toMyOverview" = "To my certificates";
@@ -118,13 +119,11 @@
 "holder.dashboard.configIsAlmostOutOfDate.card.message" = "Please connect to the internet soon";
 "holder.dashboard.configIsAlmostOutOfDate.page.message" = "<p>Every now and then, the CoronaCheck app needs an internet connection to keep working. Without internet, your app will keep working until %@. Open the app once you have an internet connection. It will automatically work again.</p><p>Please connect regularly to prevent any problems.</p>";
 "holder.dashboard.configIsAlmostOutOfDate.page.title" = "Please connect to the internet";
-"holder.dashboard.empty.domestic.message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
 "holder.dashboard.empty.domestic.title" = "Find your Dutch certificate here later";
 "holder.dashboard.empty.international.button" = "Which certificate is needed where I’m heading?";
 "holder.dashboard.empty.international.message" = "<p>Are you abroad, or planning to cross the border? Then always use your international certificate. Please check before leaving which certificate you need.</p>";
 "holder.dashboard.empty.international.title" = "Find your international certificate here later";
 "holder.dashboard.empty.international.url" = "https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands";
-"holder.dashboard.intro.domestic" = "Visiting a location within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance of the location you're visiting.";
 "holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p>";
 "holder.dashboard.intro.international.button" = "Which certificate is needed where I’m heading?";
 "holder.dashboard.intro.international.url" = "https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands";
@@ -166,7 +165,7 @@
 "holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Prevent the spread of coronavirus, use <a href=\"itms-apps://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a> too.</p>";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br /><br />Still not working? Please call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free) and provide the following error code: (i 075).</p>";
-"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR code. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
+"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR codes. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Connect to the internet";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Server error";
@@ -174,7 +173,7 @@
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Are you able to connect to the internet soon?";
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
-"holder.dcc.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
+"holder.dcc.element.subtitle" = "Name: %@\nDate of birth: %@";
 "holder.dcc.list.action" = "Add certificate";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
@@ -305,8 +304,8 @@
 "holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.type" = "Vaccine type:";
 "holder.event.details" = "Details";
-"holder.event.element.subtitle.test2" = "<p>Test date: %@</p><p>Your details: %@</p>";
-"holder.event.element.subtitle.test3" = "<p>Test date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
+"holder.event.element.subtitle.test2" = "Test date: %@\nYour details: %@";
+"holder.event.element.subtitle.test3" = "Test date: %@\nName: %@\nDate of birth: %@";
 "holder.event.identity.alert.cancel" = "Stop";
 "holder.event.identity.alert.message" = "The personal details you just retrieved don't match those in your current certificate. You can either stop and have your details changed by the organisation that registered the details for your certificate, or replace your certificate. Your current certificate will then be removed.";
 "holder.event.identity.alert.ok" = "Replace";
@@ -333,8 +332,8 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
 "holder.incompletedutchvaccination.button.addtestresults" = "Retrieve my test result";
 "holder.incompletedutchvaccination.button.addvaccines" = "Retrieve my vaccinations";
-"holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Had coronavirus before your first vaccination?</b><br />Retrieve your positive test result. You will also receive a Dutch certificate then.</p>";
-"holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Want to know more?</b><br />Read the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for other possible reasons.</p>";
+"holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
+"holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Want to know more?</b><br />Find more information on <a href=\"https://www.government.nl/topics/coronavirus-covid-19/covid-certificate/proof-of-vaccination/requirements-and-validity\">this page about the requirements and validity of the vaccination certificate</a>.</p>";
 "holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Had a new vaccination?</b><br />Please retrieve your vaccination details again. You will receive a Dutch certificate.</p>";
 "holder.incompletedutchvaccination.title" = "No Dutch vaccination certificate";
 "holder.launch.text" = "We're starting the app...";
@@ -396,7 +395,7 @@
 "holder.positiveTest.inapplicable.title" = "Positive test result is not suitable";
 "holder.positiveTest.list.message" = "If the details about your test are correct, you can create a certificate.";
 "holder.positiveTest.list.title" = "Are the details correct?";
-"holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Please contact your test location to verify if your details were entered into the system correctly.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
+"holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.positiveTest.nolist.title" = "No positive test result available";
 "holder.positiveTest.recoveryAndVaccination.message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
 "holder.positiveTest.recoveryAndVaccination.title" = "Created vaccination and recovery certificates";
@@ -413,7 +412,7 @@
 "holder.provider.title" = "Make QR code";
 "holder.recovery.list.message" = "If the details about your test are correct, you can create a recovery certificate.";
 "holder.recovery.list.title" = "Are the details correct?";
-"holder.recovery.nolist.message" = "<p>Were you just tested? It can take a few hours before your positive test result is available. Please try again later.</p><p>Were you tested longer ago? Please contact your test location to verify if your details were entered into the system correctly.</p><p>Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
+"holder.recovery.nolist.message" = "<p>Were you just tested? It can take a few hours before your positive test result is available. Please try again later.</p><p>Were you tested longer ago? Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.nolist.title" = "No positive test result available";
 "holder.recovery.recoveryAndVaccination.message" = "<p>A recovery certificate has been created.</p><p>Because you were tested positive before your first vaccination, one shot means you're fully vaccinated. Therefore, a full vaccination certificate has been created as well.</p>";
 "holder.recovery.recoveryAndVaccination.title" = "Recovery and vaccination certificates created";
@@ -593,9 +592,9 @@
 "holder.vaccination.alert.continue" = "No";
 "holder.vaccination.alert.stop" = "Yes, go back";
 "holder.vaccination.alert.title" = "Are you sure you want to go back?";
-"holder.vaccination.element.combined" = "<p>Data retrieved from: %@ and %@</p>";
-"holder.vaccination.element.single" = "<p>Data retrieved from: %@</p>";
-"holder.vaccination.element.subtitle" = "<p>Name: %@</p><p>Date of birth: %@</p>";
+"holder.vaccination.element.combined" = "Data retrieved from: %@ and %@";
+"holder.vaccination.element.single" = "Data retrieved from: %@";
+"holder.vaccination.element.subtitle" = "Name: %@\nDate of birth: %@\n";
 "holder.vaccination.element.title" = "Vaccination %@";
 "holder.vaccination.error.again" = "Try again";
 "holder.vaccination.error.close" = "Close";
@@ -604,7 +603,7 @@
 "holder.vaccination.error.message.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.error.title.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.internationlQROnly.action" = "Retrieve my test result";
-"holder.vaccination.internationlQROnly.message" = "<p>You don't have a Dutch vaccination certificate. To obtain this, you have to either be fully vaccinated, or have recovered from coronavirus before you received your first vaccination.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination certificate again after getting your vaccination. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Retrieve your positive test result. You will also receive a Dutch certificate then.</p>";
+"holder.vaccination.internationlQROnly.message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
 "holder.vaccination.internationlQROnly.title" = "Only an international certificate was created";
 "holder.vaccination.list.action" = "Make certificate";
 "holder.vaccination.list.message" = "If the details about your vaccination are correct, you can create a certificate.";
@@ -623,12 +622,31 @@
 "holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
+"holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-1g-certificate";
+"holder_dashboard_3Gand1GaccessBanner_title" = "The access rules in the Netherlands have changed. There are now separate certificates for venues with 3G access and 1G access.";
+"holder_dashboard_accessibility_access" = "Coronavirus pass";
+"holder_dashboard_accessibility_notification" = "Notification";
 "holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
 "holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";
 "holder_dashboard_addCard_title" = "Add new vaccination or test";
+"holder_dashboard_domesticQRCard_1G_label" = "1G";
+"holder_dashboard_domesticQRCard_1G_title" = "Certificate for 1G access";
+"holder_dashboard_domesticQRCard_3G_inactive_label" = "This certificate is currently not used in the Netherlands";
+"holder_dashboard_domesticQRCard_3G_label" = "3G";
+"holder_dashboard_domesticQRCard_3G_title" = "Certificate for 3G access";
+"holder_dashboard_empty_domestic_3Gand1Gaccess_message" = "<p>Visiting a venue in The Netherlands? Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G or 1G access</a>.</p>";
+"holder_dashboard_empty_domestic_only1Gaccess_message" = "<p>In the Netherlands, you only get access with a test certificate anywhere a coronavirus pass is required <a href=\"https://coronacheck.nl/en/accesspolicy/1g-access\">(1G access)</a>.</p>";
+"holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
+"holder_dashboard_intro_domestic_3Gand1Gaccess" = "<p>Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G or 1G access</a>. Also show your proof of identity at the entrance.</p>";
+"holder_dashboard_intro_domestic_only1Gaccess" = "<p>Show a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/1g-access\">1G access</a> in the Netherlands if a coronavirus pass is required. Also show your proof of identity.</p>";
+"holder_dashboard_intro_domestic_only3Gaccess" = "Visiting a venue within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance.";
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
 "holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
+"holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/1g-certificate";
+"holder_dashboard_only1GaccessBanner_title" = "You can add a certificate for 1G access when you have tested negative";
+"holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-certificate";
+"holder_dashboard_only3GaccessBanner_title" = "A Dutch certificate currently gives you 3G access. This means a certificate is valid anywhere a coronavirus pass is required.";
 "holder_dashboard_originExpiredBanner_domesticRecovery_title" = "Your Dutch recovery certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticTest_title" = "Your Dutch test certificate has expired";
 "holder_dashboard_originExpiredBanner_domesticVaccine_title" = "Your Dutch vaccination certificate has expired";
@@ -636,8 +654,6 @@
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Your international test certificate has expired";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Your international vaccination certificate has expired";
 "holder_dashboard_originExpiredBanner_visitorPass_title" = "Your visitor pass has expired";
-"holder_dashboard_qr_validity_suffix_2g" = "for 2G access";
-"holder_dashboard_qr_validity_suffix_3g" = "for 3G access";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Your visitor pass isn’t valid outside of the Netherlands";
 "holder_dashboard_visitorpassexpired_body" = "<p>A visitor pass is valid up until %li days after review of your vaccination. Are you staying in the Netherlands longer? Then you can request a visitor pass again. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Expired visitor pass";
@@ -654,7 +670,7 @@
 "holder_event_vaccination_assessment_about_subtitle" = "The following details were retrieved:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Unique review identifier:";
 "holder_event_vaccination_assessment_alert_message" = "Doing so will stop the addition of your vaccination approval and you will have to retrieve your details again later.";
-"holder_event_vaccination_assessment_element_subtitle" = "<p>Review date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
+"holder_event_vaccination_assessment_element_subtitle" = "Review date: %@\nName: %@\nDate of birth: %@";
 "holder_event_vaccination_assessment_element_title" = "Vaccination approval";
 "holder_event_vaccination_assessment_list_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_event_vaccination_assessment_list_title" = "Are the details correct?";
@@ -670,13 +686,20 @@
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";
-"holder_my_overview_3g_test_validity_bottom_sheet_body" = "<p>A Dutch test certificate is only valid in places with 3G access. This means that you cannot use your test certificate to get access to places with 2G access.</p><p><b>What is the difference between 3G and 2G?</b><br />The Gs determine which people can be given access: only those who were vaccinated and/or have recovered (2G), or people who tested negative as well (3G).</p><ul><li>3G access means you can enter places with a test, vaccination or recovery certificate.</li><li>2G access means you <u>cannot</u> enter places with a test certificate. You'll need a vaccination or recovery certificate.</li></ul><p><a href=\"https://www.government.nl/2g-cc\">You can read more about 3G and 2G here</a>.</p>";
-"holder_my_overview_3g_test_validity_bottom_sheet_title" = "Test certificate only valid for 3G access";
-"holder_my_overview_3g_test_validity_card" = "Your test certificate is only valid for 3G access within the Netherlands";
 "holder_negativetest_ggd_message" = "Is your result in? Log in with DigiD to retrieve your test result from the GGD.";
 "holder_negativetest_ggd_title" = "Retrieve test result";
+"holder_newintheapp_content_3Gand1G_body" = "The access rules in the Netherlands have changed. You can enter venues with 3G access with a vaccination, recovery, or test certificate. Venues with 1G access you can only enter with a test certificate. The app creates separate certificates for 3G and 1G access.";
+"holder_newintheapp_content_3Gand1G_button_next" = "Next";
+"holder_newintheapp_content_3Gand1G_title" = "Certificates for 3G and 1G access";
+"holder_newintheapp_content_only1G_body" = "The access rules in the Netherlands have changed. 1G access applies anywhere a coronavirus pass is required. This means you can only enter these places with a test certificate. You can still add a vaccination or recovery certificate in the app, but you can only use these certificates abroad.";
+"holder_newintheapp_content_only1G_button_next" = "Next";
+"holder_newintheapp_content_only1G_title" = "1G access only";
+"holder_newintheapp_content_only3G_body" = "The access rules in the Netherlands have changed. 3G access applies anywhere a coronavirus pass is required. This means you can enter with a vaccination, recovery, or test certificate.";
+"holder_newintheapp_content_only3G_button_next" = "Next";
+"holder_newintheapp_content_only3G_title" = "3G access only";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "About your visitor pass";
+"holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Dutch QR code";
@@ -700,7 +723,6 @@
 "new.terms.highlights" = "<b>This has changed</b><ul><li>Initials and day and month of birth are included in the QR code</li><li>This data is displayed on the Scanner app for ID verification purposes</li></ul>";
 /* MARK: - New Terms */
 "new.terms.title" = "We've updated our policy";
-"qr_explanation_description_domestic_2G" = "<p>Your Dutch QR code says you have a valid test certificate, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "recommended.updateApp.action.cancel" = "I'll do it later";
 "recommended.updateApp.action.ok" = "Update now";
 "recommended.updateApp.subtitle" = "Want to prevent having to update when you're entering a place, or crossing the border? Then update to a newer version now.";

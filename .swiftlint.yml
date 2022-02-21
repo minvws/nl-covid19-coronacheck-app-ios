@@ -61,6 +61,7 @@ custom_rules:
     regex: "//\\n/\\*"
   disable_print:
     included: "Sources/.*\\.swift"
+    excluded: "HolderUITests/"
     name: "print usage"
     regex: "((\\bprint)|(Swift\\.print))\\s*\\("
     message: "Prefer logDebug over print"

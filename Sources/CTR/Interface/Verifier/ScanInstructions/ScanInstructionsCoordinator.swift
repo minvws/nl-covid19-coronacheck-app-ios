@@ -67,7 +67,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		if !isOpenedFromMenu,
 		   allowSkipInstruction,
 		   userSettings.scanInstructionShown {
-			if !userSettings.policyInformationShown, Current.featureFlagManager.is1GPolicyEnabled() {
+			if !userSettings.policyInformationShown, Current.featureFlagManager.is1GVerificationPolicyEnabled() {
 				let viewModel = PolicyInformationViewModel(coordinator: self)
 				viewController = PolicyInformationViewController(viewModel: viewModel)
 			} else {

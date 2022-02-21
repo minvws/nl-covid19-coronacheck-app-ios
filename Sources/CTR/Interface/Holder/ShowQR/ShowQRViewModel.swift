@@ -81,6 +81,7 @@ class ShowQRViewModel: Logging {
 	private var mappingManager: MappingManaging? = Current.mappingManager
 	private let notificationCenter: NotificationCenterProtocol
 	private let screenBrightnessManager: ScreenBrightnessManager
+	private let disclosurePolicy: DisclosurePolicy?
 
 	private var dataSource: ShowQRDatasourceProtocol
 
@@ -117,18 +118,20 @@ class ShowQRViewModel: Logging {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCards: [GreenCard],
+		disclosurePolicy: DisclosurePolicy?,
 		thirdPartyTicketAppName: String?,
 		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	) {
 
 		self.coordinator = coordinator
 		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
-		self.dataSource = ShowQRDatasource(greenCards: greenCards)
+		self.dataSource = ShowQRDatasource(greenCards: greenCards, disclosurePolicy: disclosurePolicy)
 		self.notificationCenter = notificationCenter
 		self.items = dataSource.items
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
 		self.startingPage = mostRelevantPage
 		self.currentPage = mostRelevantPage
+		self.disclosurePolicy = disclosurePolicy
 
 		handleVaccinationDosageInformation()
 		setupContent(greenCards: greenCards, thirdPartyTicketAppName: thirdPartyTicketAppName)
@@ -242,14 +245,9 @@ class ShowQRViewModel: Logging {
 			.map({ $0.isEmpty ? "_" : $0 })
 			.joined(separator: " ")
 		
-		// Show different body when you only have a test with category low risk (2G).
-		if let origins = greenCard.castOrigins(),
-		   origins.contains(where: { $0.type == OriginType.test.rawValue }),
-		   domesticCredentialAttributes.verificationPolicy == .policy3G,
-		   Current.featureFlagManager.isVerificationPolicyEnabled() { // and the verification policy is enabled
-			return L.qr_explanation_description_domestic_2G(identity)
+		if disclosurePolicy == .policy1G {
+			return L.holder_qr_explanation_description_domestic_1G(identity)
 		}
-		
 		return L.holderShowqrDomesticAboutMessage(identity)
 	}
 
@@ -306,6 +304,7 @@ class ShowQRViewModel: Logging {
 			viewModel: ShowQRItemViewModel(
 				delegate: self,
 				greenCard: item.greenCard,
+				disclosurePolicy: item.policy,
 				qrShouldInitiallyBeHidden: dataSource.shouldGreenCardBeHidden(item.greenCard)
 			)
 		)

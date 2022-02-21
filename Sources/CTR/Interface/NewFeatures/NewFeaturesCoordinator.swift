@@ -66,7 +66,7 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 	/// Start the scene
 	func start() {
 
-		logInfo("Starting New Features Information Flow")
+		logVerbose("Starting New Features Information Flow")
 		
 		if let newFeatureItem = newFeaturesManager.getNewFeatureItem() {
 			
@@ -100,13 +100,13 @@ extension NewFeaturesCoordinator: NewFeaturesCoordinatorDelegate, OpenUrlProtoco
 
 		switch result {
 			case .updateItemViewed:
-				logInfo("NewFeaturesCoordinator: Update page was viewed")
+				logVerbose("NewFeaturesCoordinator: Update page was viewed")
 				
 			case .consentAgreed:
-				logInfo("NewFeaturesCoordinator: Consent was given")
+				logVerbose("NewFeaturesCoordinator: Consent was given")
 
 			case .consentViewed:
-				logInfo("NewFeaturesCoordinator: Consent was viewed")
+				logVerbose("NewFeaturesCoordinator: Consent was viewed")
 		}
 		
 		newFeaturesManager.consentGiven()

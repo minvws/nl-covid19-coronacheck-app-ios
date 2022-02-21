@@ -73,11 +73,7 @@ class ShowQRView: BaseView {
 		let button = UIButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.pageIndicatorNext(), for: .normal)
-		if #available(iOS 13.0, *) {
-			button.addInteraction(UILargeContentViewerInteraction())
-			button.showsLargeContentViewer = true
-			button.largeContentTitle = L.holderShowqrNextbutton()
-		}
+		button.setupLargeContentViewer(title: L.holderShowqrNextbutton())
 		return button
 	}()
 
@@ -87,11 +83,7 @@ class ShowQRView: BaseView {
 		let button = UIButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.pageIndicatorBack(), for: .normal)
-		if #available(iOS 13.0, *) {
-			button.addInteraction(UILargeContentViewerInteraction())
-			button.showsLargeContentViewer = true
-			button.largeContentTitle = L.holderShowqrPreviousbutton()
-		}
+		button.setupLargeContentViewer(title: L.holderShowqrPreviousbutton())
 		return button
 	}()
 	

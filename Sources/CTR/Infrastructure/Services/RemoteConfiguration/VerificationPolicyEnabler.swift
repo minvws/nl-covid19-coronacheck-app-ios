@@ -69,7 +69,7 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 		let storedPolicies = userSettings.configVerificationPolicies
 		
 		if knownPolicies != storedPolicies {
-			if storedPolicies.isNotEmpty() {
+			if storedPolicies.isNotEmpty {
 				// Policy is changed, reset scan mode
 				wipeScanMode()
 				userSettings.policyInformationShown = false
