@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ConsentButton: UIControl {
+final class LabelWithCheckbox: UIControl {
 
 	private enum Images {
 		enum Icon {
