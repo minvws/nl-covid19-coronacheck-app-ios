@@ -40,7 +40,7 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentHorizontalAlignment = .center
-		button.contentEdgeInsets = Button.ButtonType.roundedBlue.contentEdgeInsets
+		button.contentEdgeInsets = .topBottom(Button.ButtonType.roundedBlue.contentEdgeInsets.top) + .leftRight(ViewTraits.margin)
 		return button
 	}()
 
