@@ -83,6 +83,7 @@ class MessageCardView: BaseView {
 		button.setImage(I.bannerCross(), for: .normal)
 		button.contentHorizontalAlignment = .center
 		button.accessibilityLabel = "\(L.generalClose()) \(L.holder_dashboard_accessibility_notification())"
+		button.setupLargeContentViewer(title: L.generalClose())
 		return button
 	}()
 

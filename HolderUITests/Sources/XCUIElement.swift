@@ -23,9 +23,9 @@ extension XCUIElement {
 	}
 	
 	func assertExistence() -> XCUIElement {
-		let timeout = 10.0
+		let timeout = 30.0
 		let elementPresent = self.waitForExistence(timeout: timeout)
-		XCTAssertTrue(elementPresent, self.elementType.rawValue.description + " could not be found: " + self.description)
+		XCTAssertTrue(elementPresent, self.elementType.rawValue.description + " could not be found: ")
 		return self
 	}
 	
@@ -56,6 +56,6 @@ extension XCUIElement {
 	func containsText(_ text: String, count: Int = 1) {
 		let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
 		let elementQuery = self.children(matching: .any).containing(predicate)
-		XCTAssertTrue(elementQuery.count == count, "text could not be found: " + text)
+		XCTAssertTrue(elementQuery.count == count, "Text could not be found: " + text)
 	}
 }
