@@ -313,9 +313,9 @@ class NetworkManager: Logging {
 	}
 
 	// MARK: - Helpers
-	
+
 	private func httpBodyFromDictionary(_ dictionary: [String: String?]) -> Data? {
-		
+
 		var body: Data?
 		let filtered = dictionary.compactMapValues { $0 }
 		if JSONSerialization.isValidJSONObject(filtered), // <=== first, check it is valid
@@ -495,7 +495,7 @@ extension NetworkManager: NetworkManaging {
 			HTTPHeaderKey.tokenProtocolVersion: token.protocolVersion
 		]
 
-			guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: httpBodyFromDictionary([HTTPBodyKeys.verificationCode.rawValue: code]), headers: headers) else {
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: httpBodyFromDictionary([HTTPBodyKeys.verificationCode.rawValue: code]), headers: headers) else {
 			logError("NetworkManager - fetchTestResult: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
