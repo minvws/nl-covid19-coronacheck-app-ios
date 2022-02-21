@@ -35,13 +35,20 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 		return view
 	}()
 
-	let secondaryButton: Button = {
+	private let secondaryButton: Button = {
 
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentHorizontalAlignment = .center
 		button.contentEdgeInsets = Button.ButtonType.roundedBlue.contentEdgeInsets
 		return button
+	}()
+	
+	private let labelWithCheckbox: LabelWithCheckbox = {
+		let labelWithCheckbox = LabelWithCheckbox()
+		labelWithCheckbox.translatesAutoresizingMaskIntoConstraints = false
+		labelWithCheckbox.title = "This is a kind of test message"
+		return labelWithCheckbox
 	}()
 
 	override func setupViews() {
@@ -52,6 +59,7 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 		primaryButton.style = .roundedBlueImage
 		footerButtonView.buttonStackView.spacing = ViewTraits.margin
+		labelWithCheckbox.addTarget(self, action: #selector(didToggleCheckbox), for: .valueChanged)
 	}
 
 	override func setupViewHierarchy() {
@@ -60,6 +68,7 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(contentTextView)
+		stackView.addArrangedSubview(labelWithCheckbox)
 		footerButtonView.buttonStackView.addArrangedSubview(secondaryButton)
 	}
 
@@ -78,6 +87,11 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 	@objc func secondaryButtonTapped() {
 
 		secondaryButtonTappedCommand?()
+	}
+
+	@objc func didToggleCheckbox(_ labelWithCheckbox: LabelWithCheckbox) {
+
+		didToggleCheckboxCommand?(labelWithCheckbox.isSelected)
 	}
 
 	// MARK: Public Access
@@ -110,4 +124,13 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 			secondaryButton.setTitle(secondaryButtonTitle, for: .normal)
 		}
 	}
+	
+	var checkboxTitle: String? {
+		didSet {
+			labelWithCheckbox.title = checkboxTitle
+			labelWithCheckbox.isHidden = checkboxTitle == nil
+		}
+	}
+	
+	var didToggleCheckboxCommand: ((Bool) -> Void)?
 }
