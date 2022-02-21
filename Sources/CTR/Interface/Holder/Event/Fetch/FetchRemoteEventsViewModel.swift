@@ -61,7 +61,7 @@ final class FetchRemoteEventsViewModel: Logging {
 		// Do the Unomi call
 		self.fetchHasEventInformation(
 			forEventProviders: eventProviders,
-			filter: eventMode.queryFilterValue,
+			queryFilter: eventMode.queryFilter,
 			completion: handleFetchHasEventInformationResponse
 		)
 	}
@@ -77,7 +77,7 @@ final class FetchRemoteEventsViewModel: Logging {
 			nextAction: { informationMightBeMissing in
 				self.fetchRemoteEvents(
 					eventProviders: eventProvidersWithEventInformation,
-					filter: self.eventMode.queryFilterValue,
+					queryFilter: self.eventMode.queryFilter,
 					someInformationMightBeMissing: informationMightBeMissing,
 					unomiServerErrors: serverErrors,
 					completion: self.handleFetchEventsResponse
@@ -322,7 +322,7 @@ final class FetchRemoteEventsViewModel: Logging {
 
 	private func fetchHasEventInformation(
 		forEventProviders eventProviders: [EventFlow.EventProvider],
-		filter: String?,
+		queryFilter: [String: String?],
 		completion: @escaping ([EventFlow.EventProvider], [ServerError]) -> Void) {
 
 		var eventInformationAvailableResults = [Result<EventFlow.EventInformationAvailable, ServerError>]()
@@ -333,7 +333,7 @@ final class FetchRemoteEventsViewModel: Logging {
 			hasEventInformationFetchingGroup.enter()
 			fetchHasEventInformationResponse(
 				from: provider,
-				filter: filter,
+				queryFilter: queryFilter,
 				completion: { (result: Result<EventFlow.EventInformationAvailable, ServerError>) in
 
 					let mappedToProvider = result.mapError { serverError -> ServerError in
@@ -385,13 +385,13 @@ final class FetchRemoteEventsViewModel: Logging {
 
 	private func fetchHasEventInformationResponse(
 		from provider: EventFlow.EventProvider,
-		filter: String?,
+		queryFilter: [String: String?],
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
 		self.logDebug("eventprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
 
 		progressIndicationCounter.increment()
-		networkManager.fetchEventInformation(provider: provider, filter: filter) { [weak self] result in
+		networkManager.fetchEventInformation(provider: provider, queryFilter: queryFilter) { [weak self] result in
 			// Result<EventFlow.EventInformationAvailable, ServerError>
 
 			if case let .success(info) = result {
@@ -406,7 +406,7 @@ final class FetchRemoteEventsViewModel: Logging {
 
 	private func fetchRemoteEvents(
 		eventProviders: [EventFlow.EventProvider],
-		filter: String?,
+		queryFilter: [String: String?],
 		someInformationMightBeMissing: Bool,
 		unomiServerErrors: [ServerError],
 		completion: @escaping ([RemoteEvent], [ServerError], [ServerError], Bool) -> Void) {
@@ -419,7 +419,7 @@ final class FetchRemoteEventsViewModel: Logging {
 			   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
 
 				eventFetchingGroup.enter()
-				fetchRemoteEvent(from: provider, filter: filter) { result in
+				fetchRemoteEvent(from: provider, queryFilter: queryFilter) { result in
 
 					let mapped = result.mapError { serverError -> ServerError in
 						switch serverError {
@@ -465,12 +465,12 @@ final class FetchRemoteEventsViewModel: Logging {
 
 	private func fetchRemoteEvent(
 		from provider: EventFlow.EventProvider,
-		filter: String?,
+		queryFilter: [String: String?],
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 
 		progressIndicationCounter.increment()
 
-		networkManager.fetchEvents(provider: provider, filter: filter) { [weak self] result in
+		networkManager.fetchEvents(provider: provider, queryFilter: queryFilter) { [weak self] result in
 			// (Result<(TestResultWrapper, SignedResponse), ServerError>
 			completion(result)
 
@@ -481,15 +481,40 @@ final class FetchRemoteEventsViewModel: Logging {
 
 private extension EventMode {
 
-	/// Translate EventMode into a string that can be passed to the network as a query string
-	var queryFilterValue: String {
+	/// Translate EventMode into a filter string that can be passed to the network as a query string
+	var queryFilterValue: String? {
 		switch self {
-			case .vaccinationassessment, .paperflow: return "" // Not used
-			case .positiveTest: return "positivetest,recovery"
-			case .recovery: return "positivetest,recovery"
+			case .positiveTest: return "positivetest"
+			case .recovery: return "positivetest"
 			case .test: return "negativetest"
 			case .vaccination: return "vaccination"
+			default: return nil
 		}
+	}
+	
+	/// Translate EventMode into a scope string that can be passed to the network as a query string
+	///
+	/// The 'recovery' scope typically returns the most recent positive test result for a user, to maximise the validity of the recovery certificate. If the test returned is a PCR test,
+	/// the user will receive a CTB and a DCC from the same date. However, if the test returned is an antigen test, the api will also return the second most recent test if that one is a PCR test.
+	/// In that case, the user will get a DCC based on the older PCR test, and a CTB based on the newer Antigen test
+	var queryScopeValue: String? {
+		switch self {
+			case .positiveTest: return "firstepisode"
+			case .recovery: return "recovery"
+			default: return nil
+		}
+	}
+	
+	var queryFilter: [String: String?] {
+		return [
+			Keys.filter.rawValue: queryFilterValue,
+			Keys.scope.rawValue: queryScopeValue
+		]
+	}
+	
+	enum Keys: String {
+		case filter
+		case scope
 	}
 }
 
