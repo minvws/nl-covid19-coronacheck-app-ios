@@ -168,7 +168,7 @@ extension BaseTest {
 		app.textExists("Je \(certificateType.rawValue.lowercased()) is niet internationaal geldig. Je hebt wel een Nederlands bewijs.")
 	}
 	
-	func assertInternationalCertificateIsNotYetValid(ofType certificateType: CertificateType, doses: Int = 0, validFromOffset: Int, validUntilOffset: Int? = nil) {
+	func assertInternationalCertificateIsNotYetValid(ofType certificateType: CertificateType, validFromOffset: Int, validUntilOffset: Int? = nil) {
 		tapOnTheNetherlandsTab()
 		app.containsText(certificateType.rawValue)
 		app.containsText("Geldig vanaf " + formattedOffsetDate(with: validFromOffset, withYear: false))
