@@ -23,7 +23,7 @@ extension XCUIElement {
 	}
 	
 	func assertExistence() -> XCUIElement {
-		let timeout = 10.0
+		let timeout = 30.0
 		let elementPresent = self.waitForExistence(timeout: timeout)
 		XCTAssertTrue(elementPresent, self.elementType.rawValue.description + " could not be found: " + self.description)
 		return self
