@@ -14,13 +14,15 @@ class RemoteEventStartViewModel: Logging {
 	weak private var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
 	private var eventMode: EventMode
-
+	private var didCheckCheckbox: Bool = false
+	
 	// MARK: - Bindable
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var primaryButtonIcon: UIImage?
-
+	@Bindable private(set) var checkboxTitle: String?
+	
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode
@@ -35,27 +37,33 @@ class RemoteEventStartViewModel: Logging {
 				self.title = ""
 				self.message = ""
 				self.primaryButtonIcon = nil
+				self.checkboxTitle = nil
 			case .vaccination:
 				self.title = L.holderVaccinationStartTitle()
 				self.message = L.holderVaccinationStartMessage()
 				self.primaryButtonIcon = I.digid()
+			self.checkboxTitle = L.holder_addVaccine_alsoCollectPositiveTestResults_checkbox()
 			case .recovery:
 				self.title = L.holderRecoveryStartTitle()
 				self.message = L.holderRecoveryStartMessage()
 				self.primaryButtonIcon = I.digid()
+				self.checkboxTitle = nil
 			case .paperflow:
 				// this is not the start scene for the paper flow.
 				self.title = ""
 				self.message = ""
 				self.primaryButtonIcon = nil
+				self.checkboxTitle = nil
 			case .test:
 				self.title = L.holder_negativetest_ggd_title()
 				self.message = L.holder_negativetest_ggd_message()
 				self.primaryButtonIcon = I.digid()
+				self.checkboxTitle = nil
 			case .positiveTest:
 				self.title = L.holderPositiveTestStartTitle()
 				self.message = L.holderPositiveTestStartMessage()
 				self.primaryButtonIcon = I.digid()
+				self.checkboxTitle = nil
 		}
 	}
 
@@ -72,6 +80,11 @@ class RemoteEventStartViewModel: Logging {
 	func primaryButtonTapped() {
 
 		coordinator?.eventStartScreenDidFinish(.continue(eventMode: eventMode))
+	}
+	
+	func checkboxToggled(value: Bool) {
+		
+		didCheckCheckbox = value
 	}
 
 	func openUrl(_ url: URL) {
