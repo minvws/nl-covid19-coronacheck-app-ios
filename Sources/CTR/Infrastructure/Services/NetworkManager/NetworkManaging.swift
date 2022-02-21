@@ -100,6 +100,10 @@ enum HTTPContentType: String {
 	case json = "application/json"
 }
 
+enum HTTPBodyKeys: String {
+	case verificationCode
+}
+
 /// - Tag: NetworkManaging
 protocol NetworkManaging: AnyObject {
 	
@@ -155,21 +159,21 @@ protocol NetworkManaging: AnyObject {
 	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
 	///   - provider: the event provider
-	///   - filter: filter on test or vaccination
+	///   - queryFilter: query filter (positive test, vaccination, negative test etc)
 	///   - completion: the completion handler
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
-		filter: String?,
+		queryFilter: [String: String?],
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void)
-
+	
 	/// Get  events from an event provider
 	/// - Parameters:
 	///   - provider: the event provider
-	///   - filter: filter on test or vaccination
+	///   - queryFilter: query filter (positive test, vaccination, negative test etc)
 	///   - completion: the completion handler
 	func fetchEvents(
 		provider: EventFlow.EventProvider,
-		filter: String?,
+		queryFilter: [String: String?],
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void)
 
 	/// Check the coupling status
