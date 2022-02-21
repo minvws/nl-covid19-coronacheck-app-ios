@@ -77,8 +77,6 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 			logInfo("Updating from stored json")
 			storedConfiguration = configFromStoredData
 		}
-		
-		registerTriggers()
 	}
 
 	func registerTriggers() {
