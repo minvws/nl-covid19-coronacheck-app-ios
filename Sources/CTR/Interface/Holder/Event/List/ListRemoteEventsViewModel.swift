@@ -539,19 +539,24 @@ class ListRemoteEventsViewModel: Logging {
 					  let jsonData = try? JSONEncoder().encode(dccEvent) {
 				data = jsonData
 			}
-			
-			guard var storageEventMode = response.wrapper.events?.first?.storageMode else {
-				// No Storage Mode!
+			var storageEventMode: EventMode?
+			if response.wrapper.result != nil {
+				// V2
+				storageEventMode = .test
+			} else if let storageMode = response.wrapper.events?.first?.storageMode {
+				storageEventMode = storageMode
+				if storageEventMode == .paperflow {
+					guard let paperStorageEventMode = getStorageModeForPaperFlow(remoteEvent: response) else {
+						// No Storage Mode!
+						onCompletion(false)
+						return
+					}
+					storageEventMode = paperStorageEventMode
+				}
+			}
+			guard let storageEventMode = storageEventMode else {
 				onCompletion(false)
 				return
-			}
-			if storageEventMode == .paperflow {
-				guard let paperStorageEventMode = getStorageModeForPaperFlow(remoteEvent: response) else {
-					// No Storage Mode!
-					onCompletion(false)
-					return
-				}
-				storageEventMode = paperStorageEventMode
 			}
 
 			// Remove any existing events for the provider

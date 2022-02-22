@@ -1871,197 +1871,197 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderVaccinationInternationlQROnlyAction()
 	}
 
-	func test_successPositiveTest_domesticVaccination_domesticRecovery() throws {
-
-		// Given
-		sut = ListRemoteEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .positiveTest,
-			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
-			greenCardLoader: greenCardLoader
-		)
-
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
-		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
-		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
-		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
-		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
-			return
-		}
-
-		// When
-		content.primaryAction?()
-
-		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
-		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
-
-		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state")
-			return
-		}
-
-		expect(feedback.title) == L.holderPositiveTestRecoveryAndVaccinationTitle()
-		expect(feedback.body) == L.holderPositiveTestRecoveryAndVaccinationMessage()
-		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
-	}
-
-	// MARK: - Success Paths Positive Tests -
-	
-	func test_successPositiveTest_domesticRecovery() throws {
-
-		// Given
-		sut = ListRemoteEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .positiveTest,
-			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
-			greenCardLoader: greenCardLoader
-		)
-
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
-		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalRecovery), ())
-		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
-		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
-		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
-			return
-		}
-
-		// When
-		content.primaryAction?()
-
-		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
-		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
-
-		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state")
-			return
-		}
-
-		expect(feedback.title) == L.holderPositiveTestRecoveryOnlyTitle()
-		expect(feedback.body) == L.holderPositiveTestRecoveryOnlyMessage()
-		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
-	}
-
-	func test_successPositiveTest_inapplicable() throws {
-
-		// Given
-		sut = ListRemoteEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .positiveTest,
-			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
-			greenCardLoader: greenCardLoader
-		)
-
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
-		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecovery), ())
-		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
-		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
-		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
-			return
-		}
-
-		// When
-		content.primaryAction?()
-
-		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
-		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
-
-		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state")
-			return
-		}
-
-		expect(feedback.title) == L.holderPositiveTestInapplicableTitle()
-		expect(feedback.body) == L.holderPositiveTestInapplicableMessage()
-		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
-	}
-
-	func test_successPositiveTest_domesticVaccination() throws {
-
-		// Given
-		sut = ListRemoteEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .positiveTest,
-			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
-			greenCardLoader: greenCardLoader
-		)
-
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
-		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
-		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
-		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
-		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
-			return
-		}
-
-		// When
-		content.primaryAction?()
-
-		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
-		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
-		expect(self.sut.alert).toEventually(beNil())
-	}
+//	func test_successPositiveTest_domesticVaccination_domesticRecovery() throws {
+//
+//		// Given
+//		sut = ListRemoteEventsViewModel(
+//			coordinator: coordinatorSpy,
+//			eventMode: .positiveTest,
+//			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
+//			greenCardLoader: greenCardLoader
+//		)
+//
+//		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+//		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+//		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+//		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+//		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+//		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
+//		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+//		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+//		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+//		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+//
+//		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+//			fail("wrong state")
+//			return
+//		}
+//
+//		// When
+//		content.primaryAction?()
+//
+//		// Then
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+//		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+//		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
+//
+//		guard case let .feedback(content: feedback) = sut.viewState else {
+//			fail("wrong state")
+//			return
+//		}
+//
+//		expect(feedback.title) == L.holderPositiveTestRecoveryAndVaccinationTitle()
+//		expect(feedback.body) == L.holderPositiveTestRecoveryAndVaccinationMessage()
+//		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
+//		expect(feedback.secondaryActionTitle).to(beNil())
+//	}
+//
+//	// MARK: - Success Paths Positive Tests -
+//	
+//	func test_successPositiveTest_domesticRecovery() throws {
+//
+//		// Given
+//		sut = ListRemoteEventsViewModel(
+//			coordinator: coordinatorSpy,
+//			eventMode: .positiveTest,
+//			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
+//			greenCardLoader: greenCardLoader
+//		)
+//
+//		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+//		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+//		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+//		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+//		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+//		(.success(RemoteGreenCards.Response.domesticAndInternationalRecovery), ())
+//		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+//		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+//		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+//		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+//
+//		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+//			fail("wrong state")
+//			return
+//		}
+//
+//		// When
+//		content.primaryAction?()
+//
+//		// Then
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+//		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+//		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
+//
+//		guard case let .feedback(content: feedback) = sut.viewState else {
+//			fail("wrong state")
+//			return
+//		}
+//
+//		expect(feedback.title) == L.holderPositiveTestRecoveryOnlyTitle()
+//		expect(feedback.body) == L.holderPositiveTestRecoveryOnlyMessage()
+//		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
+//		expect(feedback.secondaryActionTitle).to(beNil())
+//	}
+//
+//	func test_successPositiveTest_inapplicable() throws {
+//
+//		// Given
+//		sut = ListRemoteEventsViewModel(
+//			coordinator: coordinatorSpy,
+//			eventMode: .positiveTest,
+//			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
+//			greenCardLoader: greenCardLoader
+//		)
+//
+//		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+//		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+//		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+//		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+//		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+//		(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecovery), ())
+//		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+//		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+//		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+//		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+//
+//		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+//			fail("wrong state")
+//			return
+//		}
+//
+//		// When
+//		content.primaryAction?()
+//
+//		// Then
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+//		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+//		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+//
+//		guard case let .feedback(content: feedback) = sut.viewState else {
+//			fail("wrong state")
+//			return
+//		}
+//
+//		expect(feedback.title) == L.holderPositiveTestInapplicableTitle()
+//		expect(feedback.body) == L.holderPositiveTestInapplicableMessage()
+//		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
+//		expect(feedback.secondaryActionTitle).to(beNil())
+//	}
+//
+//	func test_successPositiveTest_domesticVaccination() throws {
+//
+//		// Given
+//		sut = ListRemoteEventsViewModel(
+//			coordinator: coordinatorSpy,
+//			eventMode: .positiveTest,
+//			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
+//			greenCardLoader: greenCardLoader
+//		)
+//
+//		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+//		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+//		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+//		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+//		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+//		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+//		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+//		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+//		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+//		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+//
+//		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+//			fail("wrong state")
+//			return
+//		}
+//
+//		// When
+//		content.primaryAction?()
+//
+//		// Then
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+//		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+//		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+//		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
+//		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+//		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
+//			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+//		expect(self.sut.alert).toEventually(beNil())
+//	}
 
 	// MARK: - Success Paths Recovery -
 	
