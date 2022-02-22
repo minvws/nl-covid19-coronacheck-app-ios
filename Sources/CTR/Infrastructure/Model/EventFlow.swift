@@ -92,32 +92,6 @@ struct EventFlow {
 			case tlsCertificate = "tls"
 			case usages = "usage"
 		}
-
-		func getHostNames() -> [String] {
-			
-			[unomiURL?.host, eventURL?.host].compactMap { $0 }
-		}
-
-		func getSSLCertificate() -> Data? {
-
-			tlsCertificate.base64Decoded().map {
-				Data($0.utf8)
-			}
-		}
-
-		func getSigningCertificate() -> SigningCertificate? {
-
-			cmsCertificate.base64Decoded().map {
-				SigningCertificate(
-					name: "EventProvider",
-					certificate: $0,
-					commonName: nil,
-					authorityKeyIdentifier: nil,
-					subjectKeyIdentifier: nil,
-					rootSerial: nil
-				)
-			}
-		}
 	}
 
 	/// The response of a unomi call
@@ -234,42 +208,6 @@ struct EventFlow {
 			case recovery
 			case dccEvent
 			case vaccinationAssessment = "vaccinationassessment"
-		}
-
-		func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
-
-			if hasVaccination {
-				return vaccination?.getDate(with: dateformatter)
-			}
-			if hasNegativeTest {
-				return negativeTest?.getDate(with: dateformatter)
-			}
-			if hasRecovery {
-				return recovery?.getDate(with: dateformatter)
-			}
-			if hasVaccinationAssessment {
-				return vaccinationAssessment?.getDate(with: dateformatter)
-			}
-			return positiveTest?.getDate(with: dateformatter)
-		}
-		
-		var hasVaccination: Bool {
-			return vaccination != nil
-		}
-		var hasNegativeTest: Bool {
-			return negativeTest != nil
-		}
-		var hasPositiveTest: Bool {
-			return positiveTest != nil
-		}
-		var hasRecovery: Bool {
-			return recovery != nil
-		}
-		var hasVaccinationAssessment: Bool {
-			return vaccinationAssessment != nil
-		}
-		var hasPaperCertificate: Bool {
-			return dccEvent != nil
 		}
 	}
 
@@ -427,5 +365,101 @@ extension EventFlow.VaccinationEvent {
 		return dateString == otherEvent.dateString &&
 			((hpkCode != nil && hpkCode == otherEvent.hpkCode) ||
 				(manufacturer != nil && manufacturer == otherEvent.manufacturer))
+	}
+}
+
+extension EventFlow.Event {
+
+	func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+
+		if hasVaccination {
+			return vaccination?.getDate(with: dateformatter)
+		}
+		if hasNegativeTest {
+			return negativeTest?.getDate(with: dateformatter)
+		}
+		if hasRecovery {
+			return recovery?.getDate(with: dateformatter)
+		}
+		if hasVaccinationAssessment {
+			return vaccinationAssessment?.getDate(with: dateformatter)
+		}
+		return positiveTest?.getDate(with: dateformatter)
+	}
+
+	var hasVaccination: Bool {
+		return vaccination != nil
+	}
+
+	var hasNegativeTest: Bool {
+		return negativeTest != nil
+	}
+
+	var hasPositiveTest: Bool {
+		return positiveTest != nil
+	}
+
+	var hasRecovery: Bool {
+		return recovery != nil
+	}
+
+	var hasVaccinationAssessment: Bool {
+		return vaccinationAssessment != nil
+	}
+
+	var hasPaperCertificate: Bool {
+		return dccEvent != nil
+	}
+	
+	var storageMode: EventMode? {
+		
+		if hasVaccination {
+			return .vaccination
+		}
+		if hasRecovery {
+			return .recovery
+		}
+		if hasPositiveTest {
+			return .positiveTest
+		}
+		if hasNegativeTest {
+			return .test
+		}
+		if hasVaccinationAssessment {
+			return .vaccinationassessment
+		}
+		if hasPaperCertificate {
+			return .paperflow
+		}
+		return nil
+	}
+}
+
+extension EventFlow.EventProvider {
+
+	func getHostNames() -> [String] {
+		
+		[unomiURL?.host, eventURL?.host].compactMap { $0 }
+	}
+
+	func getSSLCertificate() -> Data? {
+		
+		tlsCertificate.base64Decoded().map {
+			Data($0.utf8)
+		}
+	}
+
+	func getSigningCertificate() -> SigningCertificate? {
+		
+		cmsCertificate.base64Decoded().map {
+			SigningCertificate(
+				name: "EventProvider",
+				certificate: $0,
+				commonName: nil,
+				authorityKeyIdentifier: nil,
+				subjectKeyIdentifier: nil,
+				rootSerial: nil
+			)
+		}
 	}
 }
