@@ -67,7 +67,7 @@ extension ListRemoteEventsViewModel {
 		switch eventMode {
 			case .vaccinationassessment: return event.vaccinationAssessment != nil
 			case .paperflow: return event.dccEvent != nil
-			case .positiveTest: return event.positiveTest != nil
+			case .positiveTest: return event.positiveTest != nil || event.vaccination != nil
 			case .recovery: return event.positiveTest != nil || event.recovery != nil
 			case .test: return event.negativeTest != nil
 			case .vaccination: return event.vaccination != nil
@@ -164,6 +164,26 @@ extension ListRemoteEventsViewModel {
 		return filteredDataSource
 	}
 
+	private func filterDuplicateTests(_ dataSource: [EventDataTuple]) -> [EventDataTuple] {
+
+		var filteredDataSource = [EventDataTuple]()
+		var uniqueIdentifiers: [String] = []
+		filteredDataSource = dataSource.filter { tuple in
+			guard let uniqueIdentifier = tuple.event.unique else {
+				return true
+			}
+			guard tuple.event.negativeTest != nil || tuple.event.positiveTest != nil else {
+				return true
+			}
+			guard !uniqueIdentifiers.contains(uniqueIdentifier) else {
+				return false
+			}
+			uniqueIdentifiers.append(uniqueIdentifier)
+			return true
+		}
+		return filteredDataSource
+	}
+
 	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListRemoteEventsViewController.Row] {
 
 		var sortedDataSource = dataSource.sorted { lhs, rhs in
@@ -179,6 +199,7 @@ extension ListRemoteEventsViewModel {
 		}
 
 		sortedDataSource = filterDuplicateVaccinationEvents(sortedDataSource)
+		sortedDataSource = filterDuplicateTests(sortedDataSource)
 
 		var rows = [ListRemoteEventsViewController.Row]()
 		var counter = 0
