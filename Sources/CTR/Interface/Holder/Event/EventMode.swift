@@ -65,6 +65,8 @@ enum EventMode: String {
 	}
 }
 
+// MARK: - ErrorCode Flow -
+
 extension EventMode {
 
 	var flow: ErrorCode.Flow {
@@ -77,5 +79,46 @@ extension EventMode {
 			case .vaccination: return .vaccination
 			case .vaccinationassessment: return .visitorPass
 		}
+	}
+}
+
+// MARK: - Query Filter -
+
+extension EventMode {
+	
+	/// Translate EventMode into a filter string that can be passed to the network as a query string
+	var queryFilterValue: String? {
+		switch self {
+			case .positiveTest: return "positivetest"
+			case .recovery: return "positivetest"
+			case .test: return "negativetest"
+			case .vaccination: return "vaccination"
+			default: return nil
+		}
+	}
+	
+	/// Translate EventMode into a scope string that can be passed to the network as a query string
+	///
+	/// The 'recovery' scope typically returns the most recent positive test result for a user, to maximise the validity of the recovery certificate. If the test returned is a PCR test,
+	/// the user will receive a CTB and a DCC from the same date. However, if the test returned is an antigen test, the api will also return the second most recent test if that one is a PCR test.
+	/// In that case, the user will get a DCC based on the older PCR test, and a CTB based on the newer Antigen test
+	var queryScopeValue: String? {
+		switch self {
+			case .positiveTest: return "firstepisode"
+			case .recovery: return "recovery"
+			default: return nil
+		}
+	}
+	
+	var queryFilter: [String: String?] {
+		return [
+			Keys.filter.rawValue: queryFilterValue,
+			Keys.scope.rawValue: queryScopeValue
+		]
+	}
+	
+	enum Keys: String {
+		case filter
+		case scope
 	}
 }
