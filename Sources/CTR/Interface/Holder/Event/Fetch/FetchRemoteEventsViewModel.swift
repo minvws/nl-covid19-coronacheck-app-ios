@@ -282,11 +282,19 @@ final class FetchRemoteEventsViewModel: Logging {
 				return [] // flow is not part of FetchEvents.
 
 			case .positiveTest:
-				var providers = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
-				for index in 0 ..< providers.count {
-					providers[index].queryFilter = EventMode.positiveTest.queryFilter
+				var vaccinationProviders = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.vaccination) }
+				for index in 0 ..< vaccinationProviders.count {
+					vaccinationProviders[index].queryFilter = EventMode.vaccination.queryFilter
 				}
-				return providers
+				var postiveTestProviders = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
+				for index in 0 ..< postiveTestProviders.count {
+					postiveTestProviders[index].queryFilter = EventMode.positiveTest.queryFilter
+				}
+				guard vaccinationProviders.isNotEmpty && postiveTestProviders.isNotEmpty else {
+					// Do not proceed if one of the group of providers is empty.
+					return []
+				}
+				return vaccinationProviders + postiveTestProviders
 
 			case .test:
 				var providers = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.negativeTest) }
