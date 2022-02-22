@@ -453,7 +453,7 @@ final class FetchRemoteEventsViewModel: Logging {
 					} else {
 						eventResponseResults += [mapped.map({ wrapper, signed in
 							var mappedWrapper = wrapper
-							/// ZZZ is used for both Test and Fake GGD. Overwrite the response with the right identifier
+							// ZZZ is used for both Test and Fake GGD. Overwrite the response with the right identifier
 							mappedWrapper.providerIdentifier = provider.identifier
 							return (mappedWrapper, signed)
 						})]

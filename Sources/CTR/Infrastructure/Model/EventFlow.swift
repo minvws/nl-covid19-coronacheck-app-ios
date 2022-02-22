@@ -22,7 +22,7 @@ struct EventFlow {
 
 		/// The event access token (fat ID Hash)
 		let eventAccessToken: String
-		
+
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
 
