@@ -177,8 +177,6 @@
 "holder.dcc.list.action" = "Bewijs toevoegen";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministerie van VWS";
-"holder.dcc.list.message" = "Met deze gegevens kun je een bewijs maken.";
-"holder.dcc.list.title" = "Gescande gegevens";
 "holder.dcc.recovery.country" = "Getest in:";
 "holder.dcc.recovery.date" = "Testdatum:";
 "holder.dcc.recovery.dateofbirth" = "Geboortedatum:";
@@ -322,10 +320,6 @@
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, er gaat iets mis";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "Het is druk of er is een storing bij een aangesloten partij. Daardoor kunnen je gegevens nu niet worden opgehaald. Probeer het later nog eens.";
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, het is erg druk";
-"holder.fetchevents.negativeTest.title" = "Testuitslag ophalen";
-"holder.fetchevents.positiveTest.title" = "Testuitslag ophalen";
-"holder.fetchevents.recovery.title" = "Herstelgegevens ophalen";
-"holder.fetchevents.vaccination.title" = "Vaccinatiegegevens ophalen";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het eventueel later nog een keer.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het later nog een keer.";
@@ -393,8 +387,6 @@
 "holder.paperproof.startscanning.title" = "Scan je internationale QR-code";
 "holder.positiveTest.inapplicable.message" = "<p>Je bent positief getest ná je eerste vaccinatie. Daardoor is je testuitslag niet geschikt om een Nederlands vaccinatiebewijs van te maken.</p><p>Kijk voor meer informatie bij de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a>.</p>";
 "holder.positiveTest.inapplicable.title" = "Positieve testuitslag is niet geschikt";
-"holder.positiveTest.list.message" = "Als de gegevens van je test kloppen kun je een bewijs maken.";
-"holder.positiveTest.list.title" = "Kloppen de gegevens?";
 "holder.positiveTest.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.positiveTest.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.positiveTest.recoveryAndVaccination.message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
@@ -410,8 +402,6 @@
 "holder.provider.message" = "Blijkt uit de test dat je geen corona hebt? Dan kun je van de testuitslag een bewijs maken. Geef aan waar je getest bent.";
 /* MARK: - Holder Choose Provider */
 "holder.provider.title" = "QR-code maken";
-"holder.recovery.list.message" = "Als de gegevens van je test kloppen kun je een herstelbewijs maken.";
-"holder.recovery.list.title" = "Kloppen de gegevens?";
 "holder.recovery.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat jouw positieve testuitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.recovery.recoveryAndVaccination.message" = "<p>Er is een herstelbewijs gemaakt.</p><p>Omdat je positief getest bent vóór je eerste prik, ben je met één prik volledig gevaccineerd. Daarom is er ook een volledig vaccinatiebewijs gemaakt.</p>";
@@ -522,8 +512,6 @@
 "holder.testresults.positive" = "Positieve testuitslag";
 "holder.testresults.results.button" = "Maak bewijs";
 "holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie. Als de gegevens kloppen kun je een bewijs maken.";
-/* MARK: - Holder Test Results */
-"holder.testresults.results.title" = "Kloppen de gegevens?";
 "holder.testresults.september" = "SEP";
 "holder.testresults.wrong.body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 /* MARK: - Holder Token entry - Regular Flow */
@@ -606,8 +594,6 @@
 "holder.vaccination.internationlQROnly.message" = "<p>Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs.</p><p><b>Krijg je nog een nieuwe vaccinatie?</b><br />Voeg opnieuw een vaccinatie toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad vóór je eerste vaccinatie?</b><br />Dan heb je vaak maar één prik nodig om volledig gevaccineerd te zijn. Haal je positieve testuitslag op om deze aan je vaccinatiebewijs toe te voegen.</p>";
 "holder.vaccination.internationlQROnly.title" = "Er is alleen een internationaal bewijs gemaakt";
 "holder.vaccination.list.action" = "Maak bewijs";
-"holder.vaccination.list.message" = "Als de gegevens van je vaccinatie kloppen kun je een bewijs maken.";
-"holder.vaccination.list.title" = "Kloppen de gegevens?";
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
@@ -673,8 +659,6 @@
 "holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het toevoegen van je vaccinatiebeoordeling en moet je later opnieuw je gegevens ophalen.";
 "holder_event_vaccination_assessment_element_subtitle" = "Beoordelingsdatum: %@\nNaam: %@\nGeboortedatum: %@";
 "holder_event_vaccination_assessment_element_title" = "Vaccinatiebeoordeling";
-"holder_event_vaccination_assessment_list_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
-"holder_event_vaccination_assessment_list_title" = "Kloppen de gegevens?";
 "holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatiebeoordeling beschikbaar. Ga terug naar de balie waar jouw vaccinatie is beoordeeld.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_event_vaccination_assessment_nolist_title" = "Geen vaccinatiebeoordeling beschikbaar";
 "holder_event_vaccination_assessment_wrong_body" = "<p>Ga terug naar de balie waar jouw vaccinatie is beoordeeld. Zij kunnen je helpen je gegevens aan te passen. Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
@@ -684,6 +668,11 @@
 "holder_expiredDomesticVaccinationModal_body" = "<p>Om je vaccinatiebewijs te verlengen heb je en boostervaccinatie nodig. Kijk voor meer informatie over boostervaccinaties op <a href=\"https://www.coronavaccinatie.nl/booster-cc\">www.coronavaccinatie.nl/booster</a>.</p><p>Heb je en boostervaccinatie gehad? Haal opnieuw je gegevens op om deze aan je bewijs toe te voegen.</p>";
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Boostervaccinatie toevoegen";
 "holder_expiredDomesticVaccinationModal_title" = "Verlopen vaccinatiebewijs";
+"holder_fetchRemoteEvents_title" = "Gegevens ophalen";
+"holder_listRemoteEvents_message" = "Je bent weer uitgelogd bij DigiD. Als de gegevens kloppen kun je een bewijs maken.";
+"holder_listRemoteEvents_paperflow_message" = "Met deze gegevens kun je een bewijs maken.";
+"holder_listRemoteEvents_paperflow_title" = "Gescande gegevens";
+"holder_listRemoteEvents_title" = "Kloppen de gegevens?";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs toevoegen";
