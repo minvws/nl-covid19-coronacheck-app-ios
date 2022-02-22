@@ -516,11 +516,9 @@ extension NetworkManager: NetworkManaging {
 	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
 	///   - provider: the event provider
-	///   - queryFilter: query filter (positive test, vaccination, negative test etc)
 	///   - completion: the completion handler
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
-		queryFilter: [String: String?],
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
@@ -535,7 +533,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		let body = httpBodyFromDictionary(queryFilter)
+		let body = httpBodyFromDictionary(provider.queryFilter)
 		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headersWithAuthorizationToken(accessToken)) else {
 			logError("NetworkManager - fetchEventInformation: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
@@ -556,11 +554,9 @@ extension NetworkManager: NetworkManaging {
 	/// Get  events from an event provider
 	/// - Parameters:
 	///   - provider: the event provider
-	///   - queryFilter: query filter (positive test, vaccination, negative test etc)
 	///   - completion: the completion handler
 	func fetchEvents(
 		provider: EventFlow.EventProvider,
-		queryFilter: [String: String?],
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 
 		guard let providerUrl = provider.eventURL else {
@@ -575,7 +571,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 		
-		let body = httpBodyFromDictionary(queryFilter)
+		let body = httpBodyFromDictionary(provider.queryFilter)
 		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headersWithAuthorizationToken(accessToken)) else {
 			logError("NetworkManager - fetchEvents: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))

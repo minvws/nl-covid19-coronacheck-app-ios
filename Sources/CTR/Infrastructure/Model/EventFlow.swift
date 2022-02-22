@@ -22,7 +22,7 @@ struct EventFlow {
 
 		/// The event access token (fat ID Hash)
 		let eventAccessToken: String
-
+		
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
 
@@ -77,6 +77,9 @@ struct EventFlow {
 
 		/// Where can we use this provider for?
 		var usages: [ProviderUsage]
+
+		/// The query filter to pass along to the provider
+		var queryFilter: [String: String?] = [:]
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {

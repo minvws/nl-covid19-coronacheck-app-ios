@@ -136,18 +136,17 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedFetchEventInformation = false
 	var invokedFetchEventInformationCount = 0
-	var invokedFetchEventInformationParameters: (provider: EventFlow.EventProvider, queryFilter: [String: String?])?
-	var invokedFetchEventInformationParametersList = [(provider: EventFlow.EventProvider, queryFilter: [String: String?])]()
+	var invokedFetchEventInformationParameters: (provider: EventFlow.EventProvider, Void)?
+	var invokedFetchEventInformationParametersList = [(provider: EventFlow.EventProvider, Void)]()
 	var stubbedFetchEventInformationCompletionResult: (Result<EventFlow.EventInformationAvailable, ServerError>, Void)?
 
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
-		queryFilter: [String: String?],
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 		invokedFetchEventInformation = true
 		invokedFetchEventInformationCount += 1
-		invokedFetchEventInformationParameters = (provider, queryFilter)
-		invokedFetchEventInformationParametersList.append((provider, queryFilter))
+		invokedFetchEventInformationParameters = (provider, ())
+		invokedFetchEventInformationParametersList.append((provider, ()))
 		if let result = stubbedFetchEventInformationCompletionResult {
 			completion(result.0)
 		}
@@ -155,18 +154,17 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedFetchEvents = false
 	var invokedFetchEventsCount = 0
-	var invokedFetchEventsParameters: (provider: EventFlow.EventProvider, queryFilter: [String: String?])?
-	var invokedFetchEventsParametersList = [(provider: EventFlow.EventProvider, queryFilter: [String: String?])]()
+	var invokedFetchEventsParameters: (provider: EventFlow.EventProvider, Void)?
+	var invokedFetchEventsParametersList = [(provider: EventFlow.EventProvider, Void)]()
 	var stubbedFetchEventsCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>, Void)?
 
 	func fetchEvents(
 		provider: EventFlow.EventProvider,
-		queryFilter: [String: String?],
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 		invokedFetchEvents = true
 		invokedFetchEventsCount += 1
-		invokedFetchEventsParameters = (provider, queryFilter)
-		invokedFetchEventsParametersList.append((provider, queryFilter))
+		invokedFetchEventsParameters = (provider, ())
+		invokedFetchEventsParametersList.append((provider, ()))
 		if let result = stubbedFetchEventsCompletionResult {
 			completion(result.0)
 		}
