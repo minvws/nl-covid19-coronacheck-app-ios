@@ -590,9 +590,6 @@
 "holder.vaccination.error.message.code" = "Can't read the vaccination. Contact the location where you were vaccinated and give them the error code (%@).";
 "holder.vaccination.error.message.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.error.title.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
-"holder.vaccination.internationlQROnly.action" = "Retrieve my test result";
-"holder.vaccination.internationlQROnly.message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
-"holder.vaccination.internationlQROnly.title" = "Only an international certificate was created";
 "holder.vaccination.list.action" = "Make certificate";
 "holder.vaccination.list.wrong" = "Is something wrong?";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
@@ -671,6 +668,8 @@
 "holder_listRemoteEvents_paperflow_message" = "You can create a certificate with these details.";
 "holder_listRemoteEvents_paperflow_title" = "Scanned details";
 "holder_listRemoteEvents_title" = "Are the details correct?";
+"holder_listRemoveEvents_endStateInternationalQROnly_message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
+"holder_listRemoveEvents_endStateInternationalQROnly_title" = "Only an international certificate was created";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";
