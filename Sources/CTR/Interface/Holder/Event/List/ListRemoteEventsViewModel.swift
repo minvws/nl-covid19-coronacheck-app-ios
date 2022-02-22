@@ -190,16 +190,28 @@ class ListRemoteEventsViewModel: Logging {
 		}
 		return eventMode
 	}
-	
-	private func getStorageModeForPaperFlow(remoteEvent: RemoteEvent) -> EventMode? {
+
+	private func getStorageMode(remoteEvent: RemoteEvent) -> EventMode? {
 		
-		if let dccEvent = remoteEvent.wrapper.events?.first?.dccEvent,
-		   let credentialData = dccEvent.credential.data(using: .utf8),
-		   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
-		   let dccEventType = euCredentialAttributes.eventMode {
-			return dccEventType
+		var storageEventMode: EventMode?
+		if remoteEvent.wrapper.result != nil {
+			// V2
+			storageEventMode = .test
+		} else if let storageMode = remoteEvent.wrapper.events?.first?.storageMode {
+			// V3
+			storageEventMode = storageMode
+			if storageEventMode == .paperflow {
+				// PaperFlow
+				if let dccEvent = remoteEvent.wrapper.events?.first?.dccEvent,
+				   let credentialData = dccEvent.credential.data(using: .utf8),
+				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
+				   let dccEventType = euCredentialAttributes.eventMode {
+					storageEventMode = dccEventType
+				}
+			}
 		}
-		return nil
+		logDebug("Setting storageEventMode to \(String(describing: storageEventMode))")
+		return storageEventMode
 	}
 
 	private func handleGreenCardResult(
@@ -539,42 +551,26 @@ class ListRemoteEventsViewModel: Logging {
 					  let jsonData = try? JSONEncoder().encode(dccEvent) {
 				data = jsonData
 			}
-			var storageEventMode: EventMode?
-			if response.wrapper.result != nil {
-				// V2
-				storageEventMode = .test
-			} else if let storageMode = response.wrapper.events?.first?.storageMode {
-				storageEventMode = storageMode
-				if storageEventMode == .paperflow {
-					guard let paperStorageEventMode = getStorageModeForPaperFlow(remoteEvent: response) else {
-						// No Storage Mode!
-						onCompletion(false)
-						return
-					}
-					storageEventMode = paperStorageEventMode
-				}
-			}
-			guard let storageEventMode = storageEventMode else {
-				onCompletion(false)
+			guard let storageMode = getStorageMode(remoteEvent: response) else {
 				return
 			}
 
 			// Remove any existing events for the provider
 			// 2463: Allow multiple vaccinations for paperflow. 
-			if eventMode != .paperflow || storageEventMode != .vaccination {
+			if eventMode != .paperflow || storageMode != .vaccination {
 				walletManager.removeExistingEventGroups(
-					type: storageEventMode,
+					type: storageMode,
 					providerIdentifier: response.wrapper.providerIdentifier
 				)
 			} else {
-				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(storageEventMode)]")
+				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(storageMode)]")
 			}
 
 			// Store the new event group
 			if let maxIssuedAt = getMaxIssuedAt(wrapper: response.wrapper),
 			   let jsonData = data {
 				success = success && walletManager.storeEventGroup(
-					storageEventMode,
+					storageMode,
 					providerIdentifier: response.wrapper.providerIdentifier,
 					jsonData: jsonData,
 					issuedAt: maxIssuedAt
