@@ -95,7 +95,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.content.title) == L.holder_listRemoteEvents_paperflow_title()
+		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
 		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
