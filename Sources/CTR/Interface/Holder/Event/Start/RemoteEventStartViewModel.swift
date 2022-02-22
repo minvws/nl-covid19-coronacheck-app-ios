@@ -79,7 +79,7 @@ class RemoteEventStartViewModel: Logging {
 
 	func primaryButtonTapped() {
 
-		coordinator?.eventStartScreenDidFinish(.continue(eventMode: eventMode))
+		coordinator?.eventStartScreenDidFinish(.continue(eventMode: didCheckCheckbox ? .positiveTest : eventMode))
 	}
 	
 	func checkboxToggled(value: Bool) {
