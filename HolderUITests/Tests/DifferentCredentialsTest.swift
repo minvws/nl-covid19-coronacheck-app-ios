@@ -7,7 +7,7 @@
 
 class DifferentPersonTest: BaseTest {
 	
-	func test_ExistingVaccinationAndNegativeTestOfDifferentPerson_IsNotReplaced() {
+	func test_existingVaccinationAndNegativeTestOfDifferentPerson_IsNotReplaced() {
 		let person1 = TestData.vacJ1DifferentFullNameReplaces
 		addVaccinationCertificate(for: person1)
 		addRetrievedCertificateToApp()
@@ -21,7 +21,7 @@ class DifferentPersonTest: BaseTest {
 		assertValidInternationalVaccinationCertificate(doses: person1.doseIntl)
 	}
 	
-	func test_ExistingVaccinationAndNegativeTestOfDifferentPerson_IsReplaced() {
+	func test_existingVaccinationAndNegativeTestOfDifferentPerson_IsReplaced() {
 		let person1 = TestData.vacJ1DifferentFullNameReplaces
 		addVaccinationCertificate(for: person1)
 		addRetrievedCertificateToApp()
@@ -35,7 +35,7 @@ class DifferentPersonTest: BaseTest {
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
-	func test_addRecoveryToVaccinationOfDifferentPerson_IsNotReplaced() {
+	func test_existingVaccinationAndRecoveryOfDifferentPerson_IsNotReplaced() {
 		let person1 = TestData.vacJ1DifferentFullNameReplaces
 		addVaccinationCertificate(for: person1)
 		addRetrievedCertificateToApp()
@@ -49,7 +49,7 @@ class DifferentPersonTest: BaseTest {
 		assertValidInternationalVaccinationCertificate(doses: person1.doseIntl)
 	}
 	
-	func test_addRecoveryToVaccinationOfDifferentPerson_IsReplaced() {
+	func test_existingVaccinationAndRecoveryOfDifferentPerson_IsReplaced() {
 		let person1 = TestData.vacJ1DifferentFullNameReplaces
 		addVaccinationCertificate(for: person1)
 		addRetrievedCertificateToApp()
