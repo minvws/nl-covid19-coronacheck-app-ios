@@ -34,4 +34,32 @@ class DifferentPersonTest: BaseTest {
 		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
+	
+	func test_addRecoveryToVaccinationOfDifferentPerson_IsNotReplaced() {
+		let person1 = TestData.vacJ1DifferentFullNameReplaces
+		addVaccinationCertificate(for: person1)
+		addRetrievedCertificateToApp()
+		
+		let person2 = TestData.posPcr
+		addRecoveryCertificate(for: person2)
+		addRetrievedCertificateToApp()
+		replaceExistingCertificate(false)
+		
+		assertValidDutchVaccinationCertificate(doses: person1.dose, validUntilOffset: person1.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: person1.doseIntl)
+	}
+	
+	func test_addRecoveryToVaccinationOfDifferentPerson_IsReplaced() {
+		let person1 = TestData.vacJ1DifferentFullNameReplaces
+		addVaccinationCertificate(for: person1)
+		addRetrievedCertificateToApp()
+		
+		let person2 = TestData.posPcr
+		addRecoveryCertificate(for: person2)
+		addRetrievedCertificateToApp()
+		replaceExistingCertificate(true)
+		
+		assertValidDutchRecoveryCertificate(validUntilOffset: person2.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person2.recUntil)
+	}
 }
