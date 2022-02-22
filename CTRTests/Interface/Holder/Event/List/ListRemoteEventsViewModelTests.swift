@@ -1865,10 +1865,10 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 
-		expect(feedback.title) == L.holderVaccinationInternationlQROnlyTitle()
-		expect(feedback.body) == L.holderVaccinationInternationlQROnlyMessage()
+		expect(feedback.title) == L.holder_listRemoveEvents_endStateInternationalQROnly_title()
+		expect(feedback.body) == L.holder_listRemoveEvents_endStateInternationalQROnly_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle) == L.holderVaccinationInternationlQROnlyAction()
+		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
 	func test_successPositiveTest_domesticVaccination_domesticRecovery() throws {
