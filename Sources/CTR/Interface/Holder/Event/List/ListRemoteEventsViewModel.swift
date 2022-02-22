@@ -572,15 +572,15 @@ class ListRemoteEventsViewModel: Logging {
 		// 3.0
 		let maxIssuedAt: Date? = wrapper.events?
 			.compactMap {
-				if $0.vaccination != nil {
+				if $0.hasVaccination {
 					return $0.vaccination?.dateString
-				} else if $0.vaccinationAssessment != nil {
+				} else if $0.hasVaccinationAssessment {
 					return $0.vaccinationAssessment?.dateTimeString
-				} else if $0.negativeTest != nil {
+				} else if $0.hasNegativeTest {
 					return $0.negativeTest?.sampleDateString
-				} else if $0.recovery != nil {
+				} else if $0.hasRecovery {
 					return $0.recovery?.sampleDate
-				} else if $0.dccEvent != nil {
+				} else if $0.hasPaperCertificate {
 					if let credentialData = $0.dccEvent?.credential.data(using: .utf8) {
 						return cryptoManager?.readEuCredentials(credentialData)?.maxIssuedAt
 					}

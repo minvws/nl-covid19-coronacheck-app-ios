@@ -238,19 +238,38 @@ struct EventFlow {
 
 		func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 
-			if vaccination != nil {
+			if hasVaccination {
 				return vaccination?.getDate(with: dateformatter)
 			}
-			if negativeTest != nil {
+			if hasNegativeTest {
 				return negativeTest?.getDate(with: dateformatter)
 			}
-			if recovery != nil {
+			if hasRecovery {
 				return recovery?.getDate(with: dateformatter)
 			}
-			if vaccinationAssessment != nil {
+			if hasVaccinationAssessment {
 				return vaccinationAssessment?.getDate(with: dateformatter)
 			}
 			return positiveTest?.getDate(with: dateformatter)
+		}
+		
+		var hasVaccination: Bool {
+			return vaccination != nil
+		}
+		var hasNegativeTest: Bool {
+			return negativeTest != nil
+		}
+		var hasPositiveTest: Bool {
+			return positiveTest != nil
+		}
+		var hasRecovery: Bool {
+			return recovery != nil
+		}
+		var hasVaccinationAssessment: Bool {
+			return vaccinationAssessment != nil
+		}
+		var hasPaperCertificate: Bool {
+			return dccEvent != nil
 		}
 	}
 
