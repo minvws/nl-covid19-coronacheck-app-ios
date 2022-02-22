@@ -126,6 +126,8 @@ private extension DCCQRDetailsView {
 			let labelView = DCCQRLabelView()
 			labelView.field = detail.field
 			labelView.value = detail.value
+			labelView.isAccessibilityElement = true
+			labelView.accessibilityLabel = [detail.field, detail.value].joined(separator: ",")
 			stackView.addArrangedSubview(labelView)
 		}
 		
