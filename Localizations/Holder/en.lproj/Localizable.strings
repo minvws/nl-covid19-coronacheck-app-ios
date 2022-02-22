@@ -177,8 +177,6 @@
 "holder.dcc.list.action" = "Add certificate";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
-"holder.dcc.list.message" = "You can create a certificate with these details.";
-"holder.dcc.list.title" = "Scanned details";
 "holder.dcc.recovery.country" = "Member state of test:";
 "holder.dcc.recovery.date" = "Test date:";
 "holder.dcc.recovery.dateofbirth" = "Date of birth:";
@@ -322,10 +320,6 @@
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website or there is an outage. We can't retrieve your details now. Please try again later.";
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, it is really busy";
-"holder.fetchevents.negativeTest.title" = "Retrieve test result";
-"holder.fetchevents.positiveTest.title" = "Retrieve test result";
-"holder.fetchevents.recovery.title" = "Retrieve recovery details";
-"holder.fetchevents.vaccination.title" = "Retrieve vaccination details";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Details possibly incomplete";
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
@@ -393,8 +387,6 @@
 "holder.paperproof.startscanning.title" = "Scan your international QR code";
 "holder.positiveTest.inapplicable.message" = "<p>You were tested positive after your first vaccination. Your test result is therefore not suitable for creating a Dutch certificate.</p><p>Check the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for more information.</p>";
 "holder.positiveTest.inapplicable.title" = "Positive test result is not suitable";
-"holder.positiveTest.list.message" = "If the details about your test are correct, you can create a certificate.";
-"holder.positiveTest.list.title" = "Are the details correct?";
 "holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.positiveTest.nolist.title" = "No positive test result available";
 "holder.positiveTest.recoveryAndVaccination.message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
@@ -410,8 +402,6 @@
 "holder.provider.message" = "Does the test point out you don't have coronavirus? Then you can use the test result to create a certificate. Please specify where you were tested.";
 /* MARK: - Holder Choose Provider */
 "holder.provider.title" = "Make QR code";
-"holder.recovery.list.message" = "If the details about your test are correct, you can create a recovery certificate.";
-"holder.recovery.list.title" = "Are the details correct?";
 "holder.recovery.nolist.message" = "<p>Were you just tested? It can take a few hours before your positive test result is available. Please try again later.</p><p>Were you tested longer ago? Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.nolist.title" = "No positive test result available";
 "holder.recovery.recoveryAndVaccination.message" = "<p>A recovery certificate has been created.</p><p>Because you were tested positive before your first vaccination, one shot means you're fully vaccinated. Therefore, a full vaccination certificate has been created as well.</p>";
@@ -522,8 +512,6 @@
 "holder.testresults.positive" = "Positive test result";
 "holder.testresults.results.button" = "Make certificate";
 "holder.testresults.results.text" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
-/* MARK: - Holder Test Results */
-"holder.testresults.results.title" = "Are the details correct?";
 "holder.testresults.september" = "SEP";
 "holder.testresults.wrong.body" = "<p>Please contact the test location. They can help you change your details.</p>";
 /* MARK: - Holder Token entry - Regular Flow */
@@ -606,8 +594,6 @@
 "holder.vaccination.internationlQROnly.message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
 "holder.vaccination.internationlQROnly.title" = "Only an international certificate was created";
 "holder.vaccination.list.action" = "Make certificate";
-"holder.vaccination.list.message" = "If the details about your vaccination are correct, you can create a certificate.";
-"holder.vaccination.list.title" = "Are the details correct?";
 "holder.vaccination.list.wrong" = "Is something wrong?";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Got vaccinated recently? It can take a few hours until your details are available. </p>";
@@ -672,8 +658,6 @@
 "holder_event_vaccination_assessment_alert_message" = "Doing so will stop the addition of your vaccination approval and you will have to retrieve your details again later.";
 "holder_event_vaccination_assessment_element_subtitle" = "Review date: %@\nName: %@\nDate of birth: %@";
 "holder_event_vaccination_assessment_element_title" = "Vaccination approval";
-"holder_event_vaccination_assessment_list_message" = "If the details are correct, you can add your vaccination approval to the app.";
-"holder_event_vaccination_assessment_list_title" = "Are the details correct?";
 "holder_event_vaccination_assessment_nolist_message" = "<p>There are no details available about your vaccination approval. Please go back to the desk that reviewed your vaccination.</p><p>For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_event_vaccination_assessment_nolist_title" = "No vaccination approval available";
 "holder_event_vaccination_assessment_wrong_body" = "<p>Please go back to the desk that reviewed your vaccination. They can help you change your details. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
@@ -683,6 +667,10 @@
 "holder_expiredDomesticVaccinationModal_body" = "<p>To renew your vaccination certificate, you need a booster vaccination. For more information about booster vaccinations, please visit <a href=\"https://www.government.nl/boosterjab-cc\">www.government.nl/boosterjab</a>.</p><p>Did you receive a booster vaccination? Then please retrieve your details again to add it to your certificate.</p>";
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Add booster vaccination";
 "holder_expiredDomesticVaccinationModal_title" = "Expired vaccination certificate";
+"holder_fetchRemoteEvents_title" = "Retrieve details";
+"holder_listRemoteEvents_paperflow_message" = "You can create a certificate with these details.";
+"holder_listRemoteEvents_paperflow_title" = "Scanned details";
+"holder_listRemoteEvents_title" = "Are the details correct?";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";
