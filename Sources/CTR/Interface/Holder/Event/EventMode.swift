@@ -27,25 +27,10 @@ enum EventMode: String {
 		}
 	}
 
-	var fetching: String {
-		switch self {
-			case .paperflow: return L.holderDccListTitle()
-			case .positiveTest: return L.holderFetcheventsPositiveTestTitle()
-			case .recovery: return L.holderFetcheventsRecoveryTitle()
-			case .test: return L.holderFetcheventsNegativeTestTitle()
-			case .vaccination: return L.holderFetcheventsVaccinationTitle()
-			case .vaccinationassessment: return L.holderDccListTitle()
-		}
-	}
-
 	var title: String {
 		switch self {
-			case .paperflow: return L.holderDccListTitle()
-			case .positiveTest: return L.holderPositiveTestListTitle()
-			case .recovery: return L.holderRecoveryListTitle()
-			case .test: return L.holderTestresultsResultsTitle()
-			case .vaccination: return L.holderVaccinationListTitle()
-			case .vaccinationassessment: return L.holder_event_vaccination_assessment_list_title()
+			case .paperflow: return L.holder_listRemoteEvents_paperflow_title()
+			default: return L.holder_listRemoteEvents_title()
 		}
 	}
 
@@ -62,12 +47,8 @@ enum EventMode: String {
 
 	var listMessage: String {
 		switch self {
-			case .paperflow: return L.holderDccListMessage()
-			case .positiveTest: return L.holderPositiveTestListMessage()
-			case .recovery: return L.holderRecoveryListMessage()
-			case .test: return L.holderTestresultsResultsText()
-			case .vaccination: return L.holderVaccinationListMessage()
-			case .vaccinationassessment: return L.holder_event_vaccination_assessment_list_message()
+			case .paperflow: return L.holder_listRemoteEvents_paperflow_message()
+			default: return L.holder_listRemoteEvents_message()
 		}
 	}
 

@@ -42,7 +42,7 @@ final class FetchRemoteEventsViewModel: Logging {
 		self.tvsToken = tvsToken
 		self.eventMode = eventMode
 
-		viewState = .loading(content: Content(title: eventMode.fetching))
+		viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
 		fetchEventProvidersWithAccessTokens(completion: handleFetchEventProvidersWithAccessTokensResponse)
 	}
 

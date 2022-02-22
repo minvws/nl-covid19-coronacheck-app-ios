@@ -689,7 +689,7 @@ private extension ListRemoteEventsViewModel {
 
 		return .listEvents(
 			content: Content(
-				title: L.holderTestresultsResultsTitle(),
+				title: L.holder_listRemoteEvents_title(),
 				body: L.holderTestresultsResultsText(),
 				primaryActionTitle: L.holderTestresultsResultsButton(),
 				primaryAction: { [weak self] in
