@@ -389,8 +389,6 @@
 "holder.positiveTest.inapplicable.title" = "Positieve testuitslag is niet geschikt";
 "holder.positiveTest.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.positiveTest.nolist.title" = "Geen positieve testuitslag beschikbaar";
-"holder.positiveTest.recoveryAndVaccination.message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
-"holder.positiveTest.recoveryAndVaccination.title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder.positiveTest.recoveryOnly.message" = "<p>Je bent positief getest ná je eerste vaccinatie. Daardoor is je testuitslag niet geschikt om een Nederlands vaccinatiebewijs van te maken. Er is wel een herstelbewijs gemaakt.</p><p>Kijk voor meer informatie bij de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a>.</p>";
 "holder.positiveTest.recoveryOnly.title" = "Alleen een herstelbewijs gemaakt";
 "holder.positiveTest.start.message" = "Log in met DigiD. De gegevens van je positieve test worden dan automatisch opgehaald.";
@@ -672,6 +670,8 @@
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
 "holder_listRemoveEvents_endStateInternationalQROnly_message" = "<p>Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs.</p><p><b>Krijg je nog een nieuwe vaccinatie?</b><br />Voeg opnieuw een vaccinatie toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad vóór je eerste vaccinatie?</b><br />Dan heb je vaak maar één prik nodig om volledig gevaccineerd te zijn. Haal je positieve testuitslag op om deze aan je vaccinatiebewijs toe te voegen.</p>";
 "holder_listRemoveEvents_endStateInternationalQROnly_title" = "Er is alleen een internationaal bewijs gemaakt";
+"holder_listRemoveEvents_endStateVaccinationsAndRecovery_message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
+"holder_listRemoveEvents_endStateVaccinationsAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs toevoegen";

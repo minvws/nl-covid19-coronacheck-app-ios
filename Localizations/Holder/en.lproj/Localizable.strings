@@ -389,8 +389,6 @@
 "holder.positiveTest.inapplicable.title" = "Positive test result is not suitable";
 "holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.positiveTest.nolist.title" = "No positive test result available";
-"holder.positiveTest.recoveryAndVaccination.message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
-"holder.positiveTest.recoveryAndVaccination.title" = "Created vaccination and recovery certificates";
 "holder.positiveTest.recoveryOnly.message" = "<p>You tested positive after your first vaccination. Your test result is therefore not suitable for creating a Dutch vaccination certificate. However, a recovery certificate has been created.</p><p>Check the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for more information.</p>";
 "holder.positiveTest.recoveryOnly.title" = "Created only a recovery certificate";
 "holder.positiveTest.start.message" = "Log in with DigiD. Details about your positive test will be retrieved automatically.";
@@ -670,6 +668,8 @@
 "holder_listRemoteEvents_title" = "Are the details correct?";
 "holder_listRemoveEvents_endStateInternationalQROnly_message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
 "holder_listRemoveEvents_endStateInternationalQROnly_title" = "Only an international certificate was created";
+"holder_listRemoveEvents_endStateVaccinationsAndRecovery_message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
+"holder_listRemoveEvents_endStateVaccinationsAndRecovery_title" = "Created vaccination and recovery certificates";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";

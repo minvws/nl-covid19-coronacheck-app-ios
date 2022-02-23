@@ -599,33 +599,32 @@ extension ListRemoteEventsViewModel {
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
-	
-	internal func positiveTestFlowInapplicable() -> ListRemoteEventsViewController.State {
 
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderPositiveTestInapplicableTitle(),
-			subTitle: L.holderPositiveTestInapplicableMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
+//	internal func positiveTestFlowInapplicable() -> ListRemoteEventsViewController.State {
+//
+//		return feedbackWithDefaultPrimaryAction(
+//			title: L.holderPositiveTestInapplicableTitle(),
+//			subTitle: L.holderPositiveTestInapplicableMessage(),
+//			primaryActionTitle: L.general_toMyOverview()
+//		)
 
 	internal func positiveTestFlowRecoveryAndVaccinationCreated() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
-			title: L.holderPositiveTestRecoveryAndVaccinationTitle(),
-			subTitle: L.holderPositiveTestRecoveryAndVaccinationMessage(),
+			title: L.holder_listRemoveEvents_endStateVaccinationsAndRecovery_title(),
+			subTitle: L.holder_listRemoveEvents_endStateVaccinationsAndRecovery_message(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
-	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderPositiveTestRecoveryOnlyTitle(),
-			subTitle: L.holderPositiveTestRecoveryOnlyMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
+//	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
+//
+//		return feedbackWithDefaultPrimaryAction(
+//			title: L.holderPositiveTestRecoveryOnlyTitle(),
+//			subTitle: L.holderPositiveTestRecoveryOnlyMessage(),
+//			primaryActionTitle: L.general_toMyOverview()
+//		)
+//	}
 
 	// MARK: Recovery end states
 
