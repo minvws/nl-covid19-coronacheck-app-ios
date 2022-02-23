@@ -271,7 +271,7 @@ class ListRemoteEventsViewModel: Logging {
 			case .positiveTest:
 				handleSuccessForCombinedVaccinationAndPositiveTest(greencardResponse)
 			case .recovery:
-				handleSuccessForRecovery(greencardResponse)
+				handleSuccessForRecovery(greencardResponse, with: remoteEvents)
 			case .vaccination:
 				handleSuccessForVaccination(greencardResponse)
 			case .vaccinationassessment:
@@ -363,7 +363,7 @@ class ListRemoteEventsViewModel: Logging {
 		)
 	}
 
-	private func handleSuccessForRecovery(_ greencardResponse: RemoteGreenCards.Response) {
+	private func handleSuccessForRecovery(_ greencardResponse: RemoteGreenCards.Response, with remoteEvents: [RemoteEvent]) {
 
 		shouldPrimaryButtonBeEnabled = true
 		inspectGreencardResponseForPositiveTestAndRecovery(
