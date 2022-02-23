@@ -590,9 +590,6 @@
 "holder.vaccination.error.message.code" = "De vaccinatie kan niet worden gelezen. Neem contact op met de locatie waar je gevaccineerd bent en geef de foutcode (%@) door.";
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
-"holder.vaccination.internationlQROnly.action" = "Haal mijn testuitslag op";
-"holder.vaccination.internationlQROnly.message" = "<p>Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs.</p><p><b>Krijg je nog een nieuwe vaccinatie?</b><br />Voeg opnieuw een vaccinatie toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad vóór je eerste vaccinatie?</b><br />Dan heb je vaak maar één prik nodig om volledig gevaccineerd te zijn. Haal je positieve testuitslag op om deze aan je vaccinatiebewijs toe te voegen.</p>";
-"holder.vaccination.internationlQROnly.title" = "Er is alleen een internationaal bewijs gemaakt";
 "holder.vaccination.list.action" = "Maak bewijs";
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
@@ -673,6 +670,8 @@
 "holder_listRemoteEvents_paperflow_message" = "Met deze gegevens kun je een bewijs maken.";
 "holder_listRemoteEvents_paperflow_title" = "Gescande gegevens";
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
+"holder_listRemoveEvents_endStateInternationalQROnly_message" = "<p>Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs.</p><p><b>Krijg je nog een nieuwe vaccinatie?</b><br />Voeg opnieuw een vaccinatie toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad vóór je eerste vaccinatie?</b><br />Dan heb je vaak maar één prik nodig om volledig gevaccineerd te zijn. Haal je positieve testuitslag op om deze aan je vaccinatiebewijs toe te voegen.</p>";
+"holder_listRemoveEvents_endStateInternationalQROnly_title" = "Er is alleen een internationaal bewijs gemaakt";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs toevoegen";

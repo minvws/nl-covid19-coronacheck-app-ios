@@ -582,20 +582,10 @@ extension ListRemoteEventsViewModel {
 
 	internal func internationalQROnly() -> ListRemoteEventsViewController.State {
 
-		return .feedback(
-			content: Content(
-				title: L.holderVaccinationInternationlQROnlyTitle(),
-				body: L.holderVaccinationInternationlQROnlyMessage(),
-				primaryActionTitle: L.general_toMyOverview(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: L.holderVaccinationInternationlQROnlyAction(),
-				secondaryAction: { [weak self] in
-					guard let self = self else { return }
-					self.coordinator?.listEventsScreenDidFinish(.startWithPositiveTest)
-				}
-			)
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holder_listRemoveEvents_endStateInternationalQROnly_title(),
+			subTitle: L.holder_listRemoveEvents_endStateInternationalQROnly_message(),
+			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
 
@@ -609,7 +599,7 @@ extension ListRemoteEventsViewModel {
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
-
+	
 	internal func positiveTestFlowInapplicable() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
