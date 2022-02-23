@@ -87,12 +87,8 @@ extension BaseTest {
 		makeScreenShot(name: "Auth submit button")
 	}
 	
-	func addRetrievedCertificateToApp(for person: TestPerson? = nil) {
-		makeScreenShot(name: "Back in app")
+	func addRetrievedCertificateToApp() {
 		app.textExists("Kloppen de gegevens?")
-		if let person = person {
-			app.containsText("Naam: " + person.name!)
-		}
 		app.tapText("Maak bewijs")
 	}
 }

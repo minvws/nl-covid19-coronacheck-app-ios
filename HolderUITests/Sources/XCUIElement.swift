@@ -33,16 +33,27 @@ extension XCUIElement {
 		self.assertExistence().tap()
 	}
 	
-	func tapButton(_ label: String) {
-		self.buttons[label].waitAndTap()
+	func tapElement(type: ElementType, _ label: String, _ index: Int) {
+		let descendantsQuery = self.descendants(matching: type)
+		let elementQuery = descendantsQuery.matching(identifier: label)
+		guard elementQuery.count >= index else {
+			XCTFail("Could not find any elements of type \(type) with label '\(label)'")
+			return
+		}
+		let elementByIndex = elementQuery.element(boundBy: index)
+		elementByIndex.waitAndTap()
 	}
 	
-	func tapText(_ label: String) {
-		self.staticTexts[label].waitAndTap()
+	func tapButton(_ label: String, index: Int = 0) {
+		tapElement(type: .button, label, index)
 	}
 	
-	func tapOther(_ label: String) {
-		self.otherElements[label].waitAndTap()
+	func tapText(_ label: String, index: Int = 0) {
+		tapElement(type: .staticText, label, index)
+	}
+	
+	func tapOther(_ label: String, index: Int = 0) {
+		tapElement(type: .other, label, index)
 	}
 	
 	func textExists(_ label: String) {
