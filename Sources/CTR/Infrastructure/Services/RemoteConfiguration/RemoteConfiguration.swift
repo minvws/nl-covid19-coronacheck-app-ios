@@ -73,9 +73,10 @@ struct RemoteConfiguration: Codable, Equatable {
 	var recoveryWaitingPeriodDays: Int?
 
 	/// Event validity
-
 	var recoveryEventValidityDays: Int?
 
+	var recoveryExpirationDays: Int?
+	
 	var testEventValidityHours: Int?
 
 	var vaccinationEventValidityDays: Int?
@@ -144,6 +145,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case configAlmostOutOfDateWarningSeconds = "configAlmostOutOfDateWarningSeconds"
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case recoveryEventValidityDays = "recoveryEventValidityDays"
+		case recoveryExpirationDays = "recoveryExpirationDays"
 		case testEventValidityHours = "testEventValidityHours"
 		case vaccinationEventValidityDays = "vaccinationEventValidityDays"
 		case hpkCodes = "hpkCodes"
@@ -190,6 +192,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.configAlmostOutOfDateWarningSeconds = 300
 		config.recoveryWaitingPeriodDays = 11
 		config.recoveryEventValidityDays = 365
+		config.recoveryExpirationDays = 180
 		config.testEventValidityHours = 96
 		config.vaccinationEventValidityDays = 730
 		config.isGGDEnabled = true
