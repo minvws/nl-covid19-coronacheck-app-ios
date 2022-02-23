@@ -48,7 +48,10 @@ enum EventMode: String {
 	var listMessage: String {
 		switch self {
 			case .paperflow: return L.holder_listRemoteEvents_paperflow_message()
-			default: return L.holder_listRemoteEvents_message()
+			case .recovery: return L.holder_listRemoteEvents_recovery_message()
+			case .positiveTest, .vaccination: return L.holder_listRemoteEvents_vaccination_message()
+			case .test: return L.holder_listRemoteEvents_negativeTest_message()
+			case .vaccinationassessment: return L.holder_listRemoteEvents_vaccinationAssessment_message()
 		}
 	}
 

@@ -665,11 +665,14 @@
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Add booster vaccination";
 "holder_expiredDomesticVaccinationModal_title" = "Expired vaccination certificate";
 "holder_fetchRemoteEvents_title" = "Retrieve details";
+"holder_listRemoteEvents_negativeTest_message" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
 "holder_listRemoteEvents_paperflow_message" = "You can create a certificate with these details.";
 "holder_listRemoteEvents_paperflow_title" = "Scanned details";
+"holder_listRemoteEvents_recovery_message" = "If the details about your test are correct, you can create a recovery certificate.";
 "holder_listRemoteEvents_title" = "Are the details correct?";
 "holder_listRemoveEvents_endStateInternationalQROnly_message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
 "holder_listRemoveEvents_endStateInternationalQROnly_title" = "Only an international certificate was created";
+"holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";

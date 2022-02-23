@@ -666,12 +666,15 @@
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Boostervaccinatie toevoegen";
 "holder_expiredDomesticVaccinationModal_title" = "Verlopen vaccinatiebewijs";
 "holder_fetchRemoteEvents_title" = "Gegevens ophalen";
-"holder_listRemoteEvents_message" = "Je bent weer uitgelogd bij DigiD. Als de gegevens kloppen kun je een bewijs maken.";
+"holder_listRemoteEvents_negativeTest_message" = "Deze testuitslag is opgehaald bij de testlocatie. Als de gegevens kloppen kun je een bewijs maken.";
 "holder_listRemoteEvents_paperflow_message" = "Met deze gegevens kun je een bewijs maken.";
 "holder_listRemoteEvents_paperflow_title" = "Gescande gegevens";
+"holder_listRemoteEvents_recovery_message" = "Als de gegevens van je test kloppen kun je een herstelbewijs maken.";
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
 "holder_listRemoveEvents_endStateInternationalQROnly_message" = "<p>Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs.</p><p><b>Krijg je nog een nieuwe vaccinatie?</b><br />Voeg opnieuw een vaccinatie toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad vóór je eerste vaccinatie?</b><br />Dan heb je vaak maar één prik nodig om volledig gevaccineerd te zijn. Haal je positieve testuitslag op om deze aan je vaccinatiebewijs toe te voegen.</p>";
 "holder_listRemoveEvents_endStateInternationalQROnly_title" = "Er is alleen een internationaal bewijs gemaakt";
+"holder_listRemoteEvents_vaccinationAssessment_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
+"holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs toevoegen";
