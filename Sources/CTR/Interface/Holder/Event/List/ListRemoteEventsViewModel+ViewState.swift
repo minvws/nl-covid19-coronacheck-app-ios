@@ -626,6 +626,12 @@ extension ListRemoteEventsViewModel {
 		)
 	}
 	
+	internal func positiveTestFlowInternationalVaccinationCreated() -> ListRemoteEventsViewController.State {
+
+		// Identical to InternationalQROnly
+		return internationalQROnly()
+	}
+
 //	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
 //
 //		return feedbackWithDefaultPrimaryAction(

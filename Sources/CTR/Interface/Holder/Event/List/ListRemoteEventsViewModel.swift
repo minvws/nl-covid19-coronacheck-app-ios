@@ -349,7 +349,13 @@ class ListRemoteEventsViewModel: Logging {
 			},
 			onVaccinationOriginOnly: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-				self.completeFlow()
+				
+				let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
+				if hasDomesticVaccinationOrigins {					
+					self.completeFlow()
+				} else {
+					self.viewState = self.positiveTestFlowRecoveryAndInternationalVaccinationCreated()
+				}
 			},
 			onRecoveryOriginOnly: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
