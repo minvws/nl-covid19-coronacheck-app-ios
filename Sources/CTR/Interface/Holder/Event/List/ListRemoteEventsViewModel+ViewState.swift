@@ -583,8 +583,8 @@ extension ListRemoteEventsViewModel {
 	internal func internationalQROnly() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoveEvents_endStateInternationalQROnly_title(),
-			subTitle: L.holder_listRemoveEvents_endStateInternationalQROnly_message(),
+			title: L.holder_listRemoteEvents_endStateInternationalQROnly_title(),
+			subTitle: L.holder_listRemoteEvents_endStateInternationalQROnly_message(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
@@ -600,19 +600,11 @@ extension ListRemoteEventsViewModel {
 		)
 	}
 
-//	internal func positiveTestFlowInapplicable() -> ListRemoteEventsViewController.State {
-//
-//		return feedbackWithDefaultPrimaryAction(
-//			title: L.holderPositiveTestInapplicableTitle(),
-//			subTitle: L.holderPositiveTestInapplicableMessage(),
-//			primaryActionTitle: L.general_toMyOverview()
-//		)
-
 	internal func positiveTestFlowRecoveryAndVaccinationCreated() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoveEvents_endStateVaccinationsAndRecovery_title(),
-			subTitle: L.holder_listRemoveEvents_endStateVaccinationsAndRecovery_message(),
+			title: L.holder_listRemoteEvents_endStateVaccinationsAndRecovery_title(),
+			subTitle: L.holder_listRemoteEvents_endStateVaccinationsAndRecovery_message(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
@@ -620,8 +612,8 @@ extension ListRemoteEventsViewModel {
 	internal func positiveTestFlowRecoveryAndInternationalVaccinationCreated() -> ListRemoteEventsViewController.State {
 		
 		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoveEvents_endStateInternationalVaccinationAndRecovery_title(),
-			subTitle: L.holder_listRemoveEvents_endStateInternationalVaccinationAndRecovery_message(),
+			title: L.holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title(),
+			subTitle: L.holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_message(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
@@ -635,8 +627,8 @@ extension ListRemoteEventsViewModel {
 	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
 
 		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoveEvents_endStateRecoveryOnly_title(),
-			subTitle: L.holder_listRemoveEvents_endStateRecoveryOnly_message(),
+			title: L.holder_listRemoteEvents_endStateRecoveryOnly_title(),
+			subTitle: L.holder_listRemoteEvents_endStateRecoveryOnly_message(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
