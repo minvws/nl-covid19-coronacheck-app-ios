@@ -632,14 +632,14 @@ extension ListRemoteEventsViewModel {
 		return internationalQROnly()
 	}
 
-//	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
-//
-//		return feedbackWithDefaultPrimaryAction(
-//			title: L.holderPositiveTestRecoveryOnlyTitle(),
-//			subTitle: L.holderPositiveTestRecoveryOnlyMessage(),
-//			primaryActionTitle: L.general_toMyOverview()
-//		)
-//	}
+	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holder_listRemoveEvents_endStateRecoveryOnly_title(),
+			subTitle: L.holder_listRemoveEvents_endStateRecoveryOnly_message(),
+			primaryActionTitle: L.general_toMyOverview()
+		)
+	}
 
 	// MARK: Recovery end states
 

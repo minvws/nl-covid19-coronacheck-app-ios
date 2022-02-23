@@ -389,8 +389,6 @@
 "holder.positiveTest.inapplicable.title" = "Positieve testuitslag is niet geschikt";
 "holder.positiveTest.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.positiveTest.nolist.title" = "Geen positieve testuitslag beschikbaar";
-"holder.positiveTest.recoveryOnly.message" = "<p>Je bent positief getest ná je eerste vaccinatie. Daardoor is je testuitslag niet geschikt om een Nederlands vaccinatiebewijs van te maken. Er is wel een herstelbewijs gemaakt.</p><p>Kijk voor meer informatie bij de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a>.</p>";
-"holder.positiveTest.recoveryOnly.title" = "Alleen een herstelbewijs gemaakt";
 "holder.positiveTest.start.message" = "Log in met DigiD. De gegevens van je positieve test worden dan automatisch opgehaald.";
 "holder.positiveTest.start.title" = "Gegevens van je positieve test ophalen";
 "holder.provider.commercial.title" = "Andere testlocatie";
@@ -672,6 +670,8 @@
 "holder_listRemoveEvents_endStateInternationalQROnly_title" = "Er is alleen een internationaal bewijs gemaakt";
 "holder_listRemoveEvents_endStateInternationalVaccinationAndRecovery_message" = "<p><b>Alleen een internationaal vaccinatiebewijs</b><br />Je hebt geen recht op een Nederlands vaccinatiebewijs. Hiervoor moet je volledig gevaccineerd zijn, of hersteld van corona vóór je eerste prik.</p><p><b>Herstelbewijs</b><br />Van je positieve testuitslag kon ook een Nederlands en internationaal herstelbewijs gemaakt worden.</p>";
 "holder_listRemoveEvents_endStateInternationalVaccinationAndRecovery_title" = "De volgende bewijzen zijn gemaakt\n";
+"holder_listRemoveEvents_endStateRecoveryOnly_message" = "<p>Je bent positief getest ná je eerste vaccinatie. Daardoor is je testuitslag niet geschikt om een Nederlands vaccinatiebewijs van te maken. Er is wel een herstelbewijs gemaakt.</p><p>Kijk voor meer informatie bij de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a>.</p>";
+"holder_listRemoveEvents_endStateRecoveryOnly_title" = "Alleen een herstelbewijs gemaakt";
 "holder_listRemoveEvents_endStateVaccinationsAndRecovery_message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
 "holder_listRemoveEvents_endStateVaccinationsAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
