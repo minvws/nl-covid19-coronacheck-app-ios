@@ -670,6 +670,8 @@
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
 "holder_listRemoveEvents_endStateInternationalQROnly_message" = "<p>Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs.</p><p><b>Krijg je nog een nieuwe vaccinatie?</b><br />Voeg opnieuw een vaccinatie toe nadat je prik is gezet. Je krijgt dan ook een Nederlands bewijs.</p><p><b>Corona gehad vóór je eerste vaccinatie?</b><br />Dan heb je vaak maar één prik nodig om volledig gevaccineerd te zijn. Haal je positieve testuitslag op om deze aan je vaccinatiebewijs toe te voegen.</p>";
 "holder_listRemoveEvents_endStateInternationalQROnly_title" = "Er is alleen een internationaal bewijs gemaakt";
+"holder_listRemoveEvents_endStateInternationalVaccinationAndRecovery_message" = "<p><b>Alleen een internationaal vaccinatiebewijs</b><br />Je hebt geen recht op een Nederlands vaccinatiebewijs. Hiervoor moet je volledig gevaccineerd zijn, of hersteld van corona vóór je eerste prik.</p><p><b>Herstelbewijs</b><br />Van je positieve testuitslag kon ook een Nederlands en internationaal herstelbewijs gemaakt worden.</p>";
+"holder_listRemoveEvents_endStateInternationalVaccinationAndRecovery_title" = "De volgende bewijzen zijn gemaakt\n";
 "holder_listRemoveEvents_endStateVaccinationsAndRecovery_message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
 "holder_listRemoveEvents_endStateVaccinationsAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";

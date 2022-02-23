@@ -617,6 +617,15 @@ extension ListRemoteEventsViewModel {
 		)
 	}
 
+	internal func positiveTestFlowRecoveryAndInternationalVaccinationCreated() -> ListRemoteEventsViewController.State {
+		
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holder_listRemoveEvents_endStateInternationalVaccinationAndRecovery_title(),
+			subTitle: L.holder_listRemoveEvents_endStateInternationalVaccinationAndRecovery_message(),
+			primaryActionTitle: L.general_toMyOverview()
+		)
+	}
+	
 //	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
 //
 //		return feedbackWithDefaultPrimaryAction(
