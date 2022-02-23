@@ -156,18 +156,21 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		
 		var mode: EventMode = .test
 		
-		if events.first?.wrapper.events?.first?.vaccinationAssessment != nil {
-			mode = .vaccinationassessment
-		} else if events.first?.wrapper.events?.first?.dccEvent != nil {
-			mode = .paperflow
-		} else if events.first?.wrapper.events?.first?.positiveTest != nil {
-			mode = .positiveTest
-		} else if events.first?.wrapper.events?.first?.negativeTest != nil {
-			mode = .test
-		} else if events.first?.wrapper.events?.first?.recovery != nil {
-			mode = .recovery
-		} else if events.first?.wrapper.events?.first?.vaccination != nil {
-			mode = .vaccination
+		if let event = events.first?.wrapper.events?.first {
+			
+			if event.hasVaccinationAssessment {
+				mode = .vaccinationassessment
+			} else if event.hasPaperCertificate {
+				mode = .paperflow
+			} else if event.hasPositiveTest {
+				mode = .positiveTest
+			} else if event.hasNegativeTest {
+				mode = .test
+			} else if event.hasRecovery {
+				mode = .recovery
+			} else if event.hasVaccination {
+				mode = .vaccination
+			}
 		}
 
 		navigateToListEvents(events, eventMode: mode, originalMode: originalMode, eventsMightBeMissing: false)

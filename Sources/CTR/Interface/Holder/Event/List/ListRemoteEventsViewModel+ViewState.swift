@@ -65,12 +65,12 @@ extension ListRemoteEventsViewModel {
 	private func isEventAllowed(_ event: EventFlow.Event) -> Bool {
 
 		switch eventMode {
-			case .vaccinationassessment: return event.vaccinationAssessment != nil
-			case .paperflow: return event.dccEvent != nil
-			case .positiveTest: return event.positiveTest != nil
-			case .recovery: return event.positiveTest != nil || event.recovery != nil
-			case .test: return event.negativeTest != nil
-			case .vaccination: return event.vaccination != nil
+			case .vaccinationassessment: return event.hasVaccinationAssessment
+			case .paperflow: return event.hasPaperCertificate
+			case .positiveTest: return event.hasPositiveTest || event.hasVaccination
+			case .recovery: return event.hasPositiveTest || event.hasRecovery
+			case .test: return event.hasNegativeTest
+			case .vaccination: return event.hasVaccination
 		}
 	}
 
@@ -164,6 +164,26 @@ extension ListRemoteEventsViewModel {
 		return filteredDataSource
 	}
 
+	private func filterDuplicateTests(_ dataSource: [EventDataTuple]) -> [EventDataTuple] {
+
+		var filteredDataSource = [EventDataTuple]()
+		var uniqueIdentifiers: [String] = []
+		filteredDataSource = dataSource.filter { tuple in
+			guard let uniqueIdentifier = tuple.event.unique else {
+				return true
+			}
+			guard tuple.event.hasNegativeTest || tuple.event.hasPositiveTest else {
+				return true
+			}
+			guard !uniqueIdentifiers.contains(uniqueIdentifier) else {
+				return false
+			}
+			uniqueIdentifiers.append(uniqueIdentifier)
+			return true
+		}
+		return filteredDataSource
+	}
+
 	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListRemoteEventsViewController.Row] {
 
 		var sortedDataSource = dataSource.sorted { lhs, rhs in
@@ -179,6 +199,7 @@ extension ListRemoteEventsViewModel {
 		}
 
 		sortedDataSource = filterDuplicateVaccinationEvents(sortedDataSource)
+		sortedDataSource = filterDuplicateTests(sortedDataSource)
 
 		var rows = [ListRemoteEventsViewController.Row]()
 		var counter = 0
@@ -186,13 +207,13 @@ extension ListRemoteEventsViewModel {
 		while counter <= sortedDataSource.count - 1 {
 			let currentRow = sortedDataSource[counter]
 
-			if currentRow.event.recovery != nil {
+			if currentRow.event.hasRecovery {
 				rows.append(getRowFromRecoveryEvent(dataRow: currentRow))
-			} else if currentRow.event.vaccinationAssessment != nil {
+			} else if currentRow.event.hasVaccinationAssessment {
 				rows.append(getRowFromAssessementEvent(dataRow: currentRow))
-			} else if currentRow.event.positiveTest != nil {
+			} else if currentRow.event.hasPositiveTest {
 				rows.append(getRowFromPositiveTestEvent(dataRow: currentRow))
-			} else if currentRow.event.vaccination != nil {
+			} else if currentRow.event.hasVaccination {
 
 				if counter < sortedDataSource.count - 1,
 				   let currentVaccinationEvent = currentRow.event.vaccination,
@@ -214,9 +235,9 @@ extension ListRemoteEventsViewModel {
 					logVerbose("nextRow is not a vaccination")
 					rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
 				}
-			} else if currentRow.event.negativeTest != nil {
+			} else if currentRow.event.hasNegativeTest {
 				rows.append(getRowFromNegativeTestEvent(dataRow: currentRow))
-			} else if currentRow.event.dccEvent != nil {
+			} else if currentRow.event.hasPaperCertificate {
 				if let credentialData = currentRow.event.dccEvent?.credential.data(using: .utf8),
 				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
 					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {

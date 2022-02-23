@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -282,11 +283,19 @@ final class FetchRemoteEventsViewModel: Logging {
 				return [] // flow is not part of FetchEvents.
 
 			case .positiveTest:
-				var providers = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
-				for index in 0 ..< providers.count {
-					providers[index].queryFilter = EventMode.positiveTest.queryFilter
+				var vaccinationProviders = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.vaccination) }
+				for index in 0 ..< vaccinationProviders.count {
+					vaccinationProviders[index].queryFilter = EventMode.vaccination.queryFilter
 				}
-				return providers
+				var postiveTestProviders = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
+				for index in 0 ..< postiveTestProviders.count {
+					postiveTestProviders[index].queryFilter = EventMode.positiveTest.queryFilter
+				}
+				guard vaccinationProviders.isNotEmpty && postiveTestProviders.isNotEmpty else {
+					// Do not proceed if one of the group of providers is empty.
+					return []
+				}
+				return vaccinationProviders + postiveTestProviders
 
 			case .test:
 				var providers = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.negativeTest) }
@@ -403,7 +412,7 @@ final class FetchRemoteEventsViewModel: Logging {
 		from provider: EventFlow.EventProvider,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
-		self.logDebug("eventprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
+		logDebug("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiURL?.absoluteString))")
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventInformation(provider: provider) { [weak self] result in
