@@ -82,9 +82,9 @@ final class PrivacyConsentView: BaseView {
 		return footerButtonView.primaryButton
 	}
 
-	let consentButton: ConsentButton = {
+	let consentButton: LabelWithCheckbox = {
 
-		let button = ConsentButton()
+		let button = LabelWithCheckbox()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		return button
 	}()

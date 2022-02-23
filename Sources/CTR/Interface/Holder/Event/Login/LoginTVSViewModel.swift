@@ -34,8 +34,8 @@ class LoginTVSViewModel: Logging {
 		self.eventMode = eventMode
 		self.appAuthState = appAuthState
 
-		self.title = eventMode.fetching
-		content = Content(title: eventMode.title)
+		self.title = L.holder_fetchRemoteEvents_title()
+		content = Content(title: L.holder_fetchRemoteEvents_title())
 	}
 
 	func cancel() {

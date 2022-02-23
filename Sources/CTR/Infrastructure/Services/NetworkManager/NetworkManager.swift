@@ -314,16 +314,13 @@ class NetworkManager: Logging {
 
 	// MARK: - Helpers
 
-	private func bodyWithKeyValue(_ key: String, value: String?) -> Data? {
+	private func httpBodyFromDictionary(_ dictionary: [String: String?]) -> Data? {
 
 		var body: Data?
-		if let unwrapped = value {
-			let dictionary: [String: AnyObject] = [key: unwrapped as AnyObject]
-
-			if JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
-			   let jsonBody = try? JSONSerialization.data(withJSONObject: dictionary) {
-				body = jsonBody
-			}
+		let filtered = dictionary.compactMapValues { $0 }
+		if JSONSerialization.isValidJSONObject(filtered), // <=== first, check it is valid
+		   let jsonBody = try? JSONSerialization.data(withJSONObject: filtered) {
+			body = jsonBody
 		}
 		return body
 	}
@@ -498,7 +495,7 @@ extension NetworkManager: NetworkManaging {
 			HTTPHeaderKey.tokenProtocolVersion: token.protocolVersion
 		]
 
-		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: bodyWithKeyValue("verificationCode", value: code), headers: headers) else {
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: httpBodyFromDictionary([HTTPBodyKeys.verificationCode.rawValue: code]), headers: headers) else {
 			logError("NetworkManager - fetchTestResult: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -519,11 +516,9 @@ extension NetworkManager: NetworkManaging {
 	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
 	///   - provider: the event provider
-	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
-		filter: String?,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
@@ -538,7 +533,8 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: bodyWithKeyValue("filter", value: filter), headers: headersWithAuthorizationToken(accessToken)) else {
+		let body = httpBodyFromDictionary(provider.queryFilter)
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headersWithAuthorizationToken(accessToken)) else {
 			logError("NetworkManager - fetchEventInformation: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -558,11 +554,9 @@ extension NetworkManager: NetworkManaging {
 	/// Get  events from an event provider
 	/// - Parameters:
 	///   - provider: the event provider
-	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
 	func fetchEvents(
 		provider: EventFlow.EventProvider,
-		filter: String?,
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 
 		guard let providerUrl = provider.eventURL else {
@@ -576,8 +570,9 @@ extension NetworkManager: NetworkManaging {
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
-
-		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: bodyWithKeyValue("filter", value: filter), headers: headersWithAuthorizationToken(accessToken)) else {
+		
+		let body = httpBodyFromDictionary(provider.queryFilter)
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headersWithAuthorizationToken(accessToken)) else {
 			logError("NetworkManager - fetchEvents: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return

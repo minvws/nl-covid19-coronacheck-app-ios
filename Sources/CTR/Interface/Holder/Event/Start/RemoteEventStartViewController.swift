@@ -47,6 +47,7 @@ class RemoteEventStartViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$primaryButtonIcon.binding = { [weak self] in self?.sceneView.primaryButtonIcon = $0 }
+		viewModel.$checkboxTitle.binding = { [weak self] in self?.sceneView.checkboxTitle = $0 }
 	}
 
 	private func setupInteraction() {
@@ -70,6 +71,11 @@ class RemoteEventStartViewController: BaseViewController {
 			self?.viewModel.openUrl(url)
 		}
 
+		sceneView.didToggleCheckboxCommand = { [weak self] value in
+			
+			self?.viewModel.checkboxToggled(value: value)
+		}
+		
 		addBackButton(customAction: #selector(backButtonTapped))
 	}
 

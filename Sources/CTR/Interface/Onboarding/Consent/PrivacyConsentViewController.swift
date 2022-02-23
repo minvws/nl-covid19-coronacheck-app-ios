@@ -85,7 +85,7 @@ final class PrivacyConsentViewController: BaseViewController {
 	}
 
 	/// User tapped on the consent button
-	@objc func consentValueChanged(_ sender: ConsentButton) {
+	@objc func consentValueChanged(_ sender: LabelWithCheckbox) {
 
 		// Hide error
 		guard sender.isSelected else { return }

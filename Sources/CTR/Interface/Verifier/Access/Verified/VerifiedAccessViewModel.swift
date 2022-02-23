@@ -64,14 +64,11 @@ final class VerifiedAccessViewModel: Logging {
 		
 		let displayTime: TimeInterval = 0.8
 		let animationDuration = VerifiedAccessViewTraits.Animation.verifiedDuration
-
-		scanAgainTimer = Timer.scheduledTimer(
-			timeInterval: displayTime + animationDuration,
-			target: self,
-			selector: (#selector(scanAgainOrLaunchThirdPartyScannerApp)),
-			userInfo: nil,
-			repeats: false
-		)
+		let autoCloseTime = displayTime + animationDuration
+		
+		scanAgainTimer = Timer.scheduledTimer(withTimeInterval: autoCloseTime, repeats: false, block: { [weak self] _ in
+			self?.scanAgainOrLaunchThirdPartyScannerApp()
+		})
 	}
 	
 	func dismiss() {
