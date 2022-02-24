@@ -666,6 +666,8 @@
 "holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title" = "De volgende bewijzen zijn gemaakt";
 "holder_listRemoteEvents_endStateRecoveryOnly_message" = "<p>Je bent positief getest ná je eerste vaccinatie. Daardoor is je testuitslag niet geschikt om een Nederlands vaccinatiebewijs van te maken. Er is wel een herstelbewijs gemaakt.</p><p>Kijk voor meer informatie bij de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryOnly_title" = "Alleen een herstelbewijs gemaakt";
+"holder_listRemoteEvents_endStateRecoveryTooOld_message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daarom is je testuitslag niet meer geldig. Je kunt helaas geen herstelbewijs maken.</p><p>Lees meer op de <a href=\"https://www.coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_listRemoteEvents_endStateRecoveryTooOld_title" = "Positieve testuitslag niet meer geldig";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder_listRemoteEvents_message" = "Je bent weer uitgelogd bij DigiD. Als de gegevens kloppen kun je een bewijs maken.";

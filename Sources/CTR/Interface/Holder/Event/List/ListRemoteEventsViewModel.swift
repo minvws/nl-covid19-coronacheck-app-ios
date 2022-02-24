@@ -271,7 +271,7 @@ class ListRemoteEventsViewModel: Logging {
 			case .positiveTest:
 				handleSuccessForCombinedVaccinationAndPositiveTest(greencardResponse)
 			case .recovery:
-				handleSuccessForRecovery(greencardResponse)
+				handleSuccessForRecovery(greencardResponse, with: remoteEvents)
 			case .vaccination:
 				handleSuccessForVaccination(greencardResponse)
 			case .vaccinationassessment:
@@ -363,7 +363,7 @@ class ListRemoteEventsViewModel: Logging {
 		)
 	}
 
-	private func handleSuccessForRecovery(_ greencardResponse: RemoteGreenCards.Response) {
+	private func handleSuccessForRecovery(_ greencardResponse: RemoteGreenCards.Response, with remoteEvents: [RemoteEvent]) {
 
 		shouldPrimaryButtonBeEnabled = true
 		inspectGreencardResponseForPositiveTestAndRecovery(
@@ -389,7 +389,14 @@ class ListRemoteEventsViewModel: Logging {
 				self.completeFlow()
 			},
 			onNoOrigins: {
-				self.viewState = self.originMismatchState(flow: .recovery)
+				let recoveryExpirationDays = TimeInterval( self.remoteConfigManager.storedConfiguration.recoveryExpirationDays ?? 180)
+				if let positiveTestEvent = remoteEvents.first?.wrapper.events?.first, positiveTestEvent.hasPositiveTest,
+				   let date = positiveTestEvent.positiveTest?.getDate(with: ListRemoteEventsViewModel.iso8601DateFormatter),
+				   date.addingTimeInterval(recoveryExpirationDays) < Current.now() {
+					self.viewState = self.recoveryFlowPositiveTestTooOld()
+				} else {
+					self.viewState = self.originMismatchState(flow: .recovery)
+				}
 			}
 		)
 
