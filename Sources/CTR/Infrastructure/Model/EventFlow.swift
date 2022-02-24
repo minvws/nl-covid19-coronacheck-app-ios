@@ -420,7 +420,7 @@ extension EventFlow.Event {
 			return .recovery
 		}
 		if hasPositiveTest {
-			return .positiveTest
+			return .vaccinationAndPositiveTest
 		}
 		if hasNegativeTest {
 			return .test

@@ -271,7 +271,7 @@ class ListRemoteEventsViewModel: Logging {
 				completeFlow()
 			case .test:
 				handleSuccessForNegativeTest(greencardResponse, eventModeForStorage: eventModeForStorage, with: remoteEvents)
-			case .positiveTest:
+			case .vaccinationAndPositiveTest:
 				handleSuccessForPositiveTest(greencardResponse, eventModeForStorage: eventModeForStorage)
 			case .recovery:
 				handleSuccessForRecovery(greencardResponse, eventModeForStorage: eventModeForStorage)

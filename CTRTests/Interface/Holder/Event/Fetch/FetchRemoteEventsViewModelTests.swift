@@ -427,7 +427,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		}))
 	}
 
-	func test_accessToken_TVSSessionExpired_positiveTest() {
+	func test_accessToken_TVSSessionExpired_vaccinationAndPositiveTest() {
 
 		// Given
 		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult =
@@ -438,7 +438,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
-			eventMode: .positiveTest
+			eventMode: .vaccinationAndPositiveTest
 		)
 
 		// Then
@@ -545,7 +545,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		}))
 	}
 
-	func test_noProviderForEventMode_positiveTest() {
+	func test_noProviderForEventMode_vaccinationAndPositiveTest() {
 
 		// Given
 		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
@@ -557,7 +557,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: .test,
-			eventMode: .positiveTest
+			eventMode: .vaccinationAndPositiveTest
 		)
 
 		// Then

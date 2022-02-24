@@ -70,7 +70,7 @@ extension ErrorCode.Flow {
 	static let hkvi = ErrorCode.Flow(value: "5")
 	static let qr = ErrorCode.Flow(value: "6")
 	static let upgradeEUVaccination = ErrorCode.Flow(value: "7")
-	static let positiveTest = ErrorCode.Flow(value: "8")
+	static let vaccinationAndPositiveTest = ErrorCode.Flow(value: "8")
 	static let visitorPass = ErrorCode.Flow(value: "9")
 }
 

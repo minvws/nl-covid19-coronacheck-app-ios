@@ -67,7 +67,7 @@ extension ListRemoteEventsViewModel {
 		switch eventMode {
 			case .vaccinationassessment: return event.hasVaccinationAssessment
 			case .paperflow: return event.hasPaperCertificate
-			case .positiveTest: return event.hasPositiveTest || event.hasVaccination
+			case .vaccinationAndPositiveTest: return event.hasPositiveTest || event.hasVaccination || event.hasRecovery
 			case .recovery: return event.hasPositiveTest || event.hasRecovery
 			case .test: return event.hasNegativeTest
 			case .vaccination: return event.hasVaccination
@@ -496,7 +496,7 @@ extension ListRemoteEventsViewModel {
 		switch eventMode {
 			case .vaccinationassessment: return emptyAssessmentState()
 			case .paperflow: return emptyDccState()
-			case .positiveTest: return emptyPositiveTestState()
+			case .vaccinationAndPositiveTest: return emptyPositiveTestState()
 			case .recovery: return emptyRecoveryState()
 			case .test: return emptyTestState()
 			case .vaccination: return emptyVaccinationState()

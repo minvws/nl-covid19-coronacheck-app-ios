@@ -48,10 +48,10 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
 
-	func test_content_positiveTestMode() {
+	func test_content_vaccinationAndPositiveTestMode() {
 
 		// When
-		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .positiveTest)
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationAndPositiveTest)
 
 		// Then
 		expect(self.sut.title) == L.holderPositiveTestStartTitle()

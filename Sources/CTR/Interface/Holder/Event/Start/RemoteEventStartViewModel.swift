@@ -59,7 +59,7 @@ class RemoteEventStartViewModel: Logging {
 				self.message = L.holder_negativetest_ggd_message()
 				self.primaryButtonIcon = I.digid()
 				self.checkboxTitle = nil
-			case .positiveTest:
+			case .vaccinationAndPositiveTest:
 				self.title = L.holderPositiveTestStartTitle()
 				self.message = L.holderPositiveTestStartMessage()
 				self.primaryButtonIcon = I.digid()
@@ -79,7 +79,7 @@ class RemoteEventStartViewModel: Logging {
 
 	func primaryButtonTapped() {
 
-		coordinator?.eventStartScreenDidFinish(.continue(eventMode: didCheckCheckbox ? .positiveTest : eventMode))
+		coordinator?.eventStartScreenDidFinish(.continue(eventMode: didCheckCheckbox ? .vaccinationAndPositiveTest : eventMode))
 	}
 	
 	func checkboxToggled(value: Bool) {

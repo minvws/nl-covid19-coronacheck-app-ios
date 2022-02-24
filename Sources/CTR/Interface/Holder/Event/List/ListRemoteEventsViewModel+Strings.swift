@@ -19,9 +19,9 @@ extension ListRemoteEventsViewModel {
 					return nil
 				case .recovery:
 					return L.holderRecoveryWrongBody()
-				case .test, .positiveTest:
+				case .test:
 					return L.holderTestresultsWrongBody()
-				case .vaccination:
+				case .vaccination, .vaccinationAndPositiveTest:
 					return L.holderVaccinationWrongBody()
 			}
 		}
