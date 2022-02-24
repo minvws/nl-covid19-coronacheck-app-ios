@@ -154,7 +154,7 @@ class WalletManager: WalletManaging, Logging {
 
 		if let maxValidity = recoveryValidity {
 			findAndExpireEventGroups(for: .recovery, maxValidity: maxValidity)
-			findAndExpireEventGroups(for: .positiveTest, maxValidity: maxValidity)
+			findAndExpireEventGroups(for: .vaccinationAndPositiveTest, maxValidity: maxValidity)
 		}
 
 		if let maxValidity = testValidity {

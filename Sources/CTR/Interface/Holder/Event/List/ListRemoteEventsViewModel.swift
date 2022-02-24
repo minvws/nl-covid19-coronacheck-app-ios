@@ -210,6 +210,10 @@ class ListRemoteEventsViewModel: Logging {
 					storageEventMode = dccEventType
 				}
 			}
+			if eventMode == .recovery {
+				// When in recovery flow, save as recovery to distinct from positive tests.
+				storageEventMode = .recovery
+			}
 		}
 		logDebug("Setting storageEventMode to \(String(describing: storageEventMode))")
 		return storageEventMode
@@ -268,7 +272,7 @@ class ListRemoteEventsViewModel: Logging {
 				completeFlow()
 			case .test:
 				handleSuccessForNegativeTest(greencardResponse, with: remoteEvents)
-			case .positiveTest:
+			case .vaccinationAndPositiveTest:
 				handleSuccessForCombinedVaccinationAndPositiveTest(greencardResponse)
 			case .recovery:
 				handleSuccessForRecovery(greencardResponse, with: remoteEvents)
@@ -358,7 +362,7 @@ class ListRemoteEventsViewModel: Logging {
 				self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
 			},
 			onNoOrigins: {
-				self.viewState = self.originMismatchState(flow: .positiveTest)
+				self.viewState = self.originMismatchState(flow: .vaccinationAndPositiveTest)
 			}
 		)
 	}

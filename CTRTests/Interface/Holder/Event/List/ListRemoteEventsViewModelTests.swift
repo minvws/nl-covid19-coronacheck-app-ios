@@ -201,12 +201,12 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			)
 	}
 
-	func test_somethingIsWrong_positiveTest_tapped() {
+	func test_somethingIsWrong_vaccinationAndPositiveTest_tapped() {
 
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .positiveTest,
+			eventMode: .vaccinationAndPositiveTest,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
 			greenCardLoader: greenCardLoader
 		)
@@ -224,7 +224,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
 				title: L.holderVaccinationWrongTitle(),
-				body: L.holderTestresultsWrongBody(),
+				body: L.holderVaccinationWrongBody(),
 				hideBodyForScreenCapture: false
 			)
 	}
@@ -2863,12 +2863,12 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	
-	func test_emptyState_positiveTest() throws {
+	func test_emptyState_vaccinationAndPositiveTest() throws {
 		
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .positiveTest,
+			eventMode: .vaccinationAndPositiveTest,
 			remoteEvents: [],
 			greenCardLoader: greenCardLoader
 		)

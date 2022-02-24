@@ -146,9 +146,9 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	func startWithPositiveTest() {
 		if let tvsToken = tvsToken, tvsToken.expiration > Date(timeIntervalSinceNow: 10) {
-			navigateToFetchEvents(token: tvsToken, eventMode: .positiveTest)
+			navigateToFetchEvents(token: tvsToken, eventMode: .vaccinationAndPositiveTest)
 		} else {
-			startWith(.positiveTest)
+			startWith(.vaccinationAndPositiveTest)
 		}
 	}
 
@@ -163,7 +163,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 			} else if event.hasPaperCertificate {
 				mode = .paperflow
 			} else if event.hasPositiveTest {
-				mode = .positiveTest
+				mode = .recovery
 			} else if event.hasNegativeTest {
 				mode = .test
 			} else if event.hasRecovery {
@@ -358,11 +358,11 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	}
 
 	private func handleBackAction(eventMode: EventMode) {
-		
-		if eventMode == .positiveTest,
+
+		if eventMode == .vaccinationAndPositiveTest,
 		   navigationController.viewControllers.filter({ $0 is RemoteEventStartViewController }).count > 1,
 		   let listEventViewController = navigationController.viewControllers.first(where: { $0 is ListRemoteEventsViewController }) {
-			
+
 			navigationController.popToViewController(
 				listEventViewController,
 				animated: true
@@ -428,7 +428,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				if !navigateBackToVisitorPassStart() {
 					navigateBackToTestStart()
 				}
-			case .recovery, .vaccination, .positiveTest:
+			case .recovery, .vaccination, .vaccinationAndPositiveTest:
 				navigateBackToEventStart()
 			case .test:
 				if !navigateBackToEventStart() {
@@ -486,9 +486,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 							return L.holderErrorstateLoginMessageRecovery()
 						case .paperflow:
 							return "" // HKVI is not a part of this flow
-						case .test, .positiveTest:
+						case .test:
 							return L.holderErrorstateLoginMessageTest()
-						case .vaccination:
+						case .vaccination, .vaccinationAndPositiveTest:
 							return L.holderErrorstateLoginMessageVaccination()
 					}
 				}(),
