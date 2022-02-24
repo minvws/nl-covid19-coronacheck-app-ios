@@ -47,31 +47,42 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.holderRecoveryStartMessage()
 		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
-
+	
 	func test_content_vaccinationAndPositiveTestMode() {
-
+		
 		// When
 		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationAndPositiveTest)
-
-		// Then
-		expect(self.sut.title) == L.holderPositiveTestStartTitle()
-		expect(self.sut.message) == L.holderPositiveTestStartMessage()
-		expect(self.sut.primaryButtonIcon) == I.digid()
-	}
-
-	func test_content_paperflowMode() {
-
-		// When
-		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow)
-
+		
 		// Then
 		expect(self.sut.title) == ""
 		expect(self.sut.message) == ""
 		expect(self.sut.primaryButtonIcon).to(beNil())
 	}
-
+	
+	func test_content_paperflowMode() {
+		
+		// When
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow)
+		
+		// Then
+		expect(self.sut.title) == ""
+		expect(self.sut.message) == ""
+		expect(self.sut.primaryButtonIcon).to(beNil())
+	}
+	
+	func test_content_vaccinationAssessment() {
+		
+		// When
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationassessment)
+		
+		// Then
+		expect(self.sut.title) == ""
+		expect(self.sut.message) == ""
+		expect(self.sut.primaryButtonIcon).to(beNil())
+	}
+	
 	func test_content_negativeTestMode() {
-
+		
 		// When
 		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
 

@@ -393,8 +393,6 @@
 "holder.positiveTest.recoveryAndVaccination.title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder.positiveTest.recoveryOnly.message" = "<p>Je bent positief getest ná je eerste vaccinatie. Daardoor is je testuitslag niet geschikt om een Nederlands vaccinatiebewijs van te maken. Er is wel een herstelbewijs gemaakt.</p><p>Kijk voor meer informatie bij de <a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">meestgestelde vragen</a>.</p>";
 "holder.positiveTest.recoveryOnly.title" = "Alleen een herstelbewijs gemaakt";
-"holder.positiveTest.start.message" = "Log in met DigiD. De gegevens van je positieve test worden dan automatisch opgehaald.";
-"holder.positiveTest.start.title" = "Gegevens van je positieve test ophalen";
 "holder.provider.commercial.title" = "Andere testlocatie";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
 "holder.provider.ggd.title" = "GGD";

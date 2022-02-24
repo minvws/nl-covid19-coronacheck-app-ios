@@ -67,22 +67,6 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 		sut.assertImage(containedInNavigationController: true)
 	}
 	
-	func test_content_vaccinationAndPositiveTest() {
-		
-		// Given
-		viewModel = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationAndPositiveTest)
-		sut = RemoteEventStartViewController(viewModel: viewModel)
-		
-		// When
-		loadView()
-		
-		// Then
-		expect(self.sut.sceneView.title) == L.holderPositiveTestStartTitle()
-		expect(self.sut.sceneView.message) == L.holderPositiveTestStartMessage()
-		
-		sut.assertImage(containedInNavigationController: true)
-	}
-	
 	func test_content_recovery() {
 		
 		// Given
