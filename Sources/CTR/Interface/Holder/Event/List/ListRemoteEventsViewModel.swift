@@ -209,6 +209,10 @@ class ListRemoteEventsViewModel: Logging {
 					storageEventMode = dccEventType
 				}
 			}
+			if eventMode == .recovery {
+				// When in recovery flow, save as recovery to distinct from positive tests.
+				storageEventMode = .recovery
+			}
 		}
 		logDebug("Setting storageEventMode to \(String(describing: storageEventMode))")
 		return storageEventMode
