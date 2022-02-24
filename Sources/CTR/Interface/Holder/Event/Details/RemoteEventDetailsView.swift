@@ -116,7 +116,7 @@ final class RemoteEventDetailsView: BaseView {
 
 private extension RemoteEventDetailsView {
 	
-	func createLabel(for detail: NSAttributedString) -> UIView {
+	func createLabel(for detail: NSAttributedString) -> Label {
 		let label = Label(body: nil)
 		label.attributedText = detail
 		label.textColor = Theme.colors.dark
