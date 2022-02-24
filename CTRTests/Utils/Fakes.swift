@@ -513,6 +513,20 @@ extension RemoteGreenCards.Response {
 			]
 		)
 	}
+	
+	static var internationalVaccination: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: nil,
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeVaccinationOrigin
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
 
 	static var internationalOnly: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
@@ -573,6 +587,31 @@ extension RemoteGreenCards.Response {
 			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
 				origins: [
 					RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days,
+					RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days
+					],
+					credential: "test credential"
+				),
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+	
+	static var internationalVaccinationAndRecovery: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
 					RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
 				],
 				createCredentialMessages: "test"
