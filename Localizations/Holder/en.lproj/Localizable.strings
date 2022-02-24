@@ -651,7 +651,7 @@
 "holder_event_vaccination_assessment_element_title" = "Vaccination approval";
 "holder_event_vaccination_assessment_nolist_message" = "<p>There are no details available about your vaccination approval. Please go back to the desk that reviewed your vaccination.</p><p>For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_event_vaccination_assessment_nolist_title" = "No vaccination approval available";
-"holder_event_vaccination_assessment_wrong_body" = "<p>Please go back to the desk that reviewed your vaccination. They can help you change your details. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
+"holder_event_vaccination_assessment_wrong_body" = "<p>Please go back to the desk that reviewed your vaccination. They can re-enter your details. You will also receive a new approval code. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_eventdetails_vaccinationStatus_complete" = "yes";
 "holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere" = "yes (I have been vaccinated elsewhere)";
 "holder_eventdetails_vaccinationStatus_recovery" = "yes (I’ve had coronavirus earlier)";
@@ -667,9 +667,12 @@
 "holder_listRemoteEvents_endStateRecoveryTooOld_title" = "Positive test result no longer valid";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Created vaccination and recovery certificates";
+"holder_listRemoteEvents_negativeTest_message" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
 "holder_listRemoteEvents_paperflow_message" = "You can create a certificate with these details.";
 "holder_listRemoteEvents_paperflow_title" = "Scanned details";
+"holder_listRemoteEvents_recovery_message" = "If the details about your test are correct, you can create a recovery certificate.";
 "holder_listRemoteEvents_title" = "Are the details correct?";
+"holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";

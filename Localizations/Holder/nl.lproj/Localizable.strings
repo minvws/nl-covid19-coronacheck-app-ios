@@ -670,10 +670,13 @@
 "holder_listRemoteEvents_endStateRecoveryTooOld_title" = "Positieve testuitslag niet meer geldig";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
-"holder_listRemoteEvents_message" = "Je bent weer uitgelogd bij DigiD. Als de gegevens kloppen kun je een bewijs maken.";
+"holder_listRemoteEvents_negativeTest_message" = "Deze testuitslag is opgehaald bij de testlocatie. Als de gegevens kloppen kun je een bewijs maken.";
 "holder_listRemoteEvents_paperflow_message" = "Met deze gegevens kun je een bewijs maken.";
 "holder_listRemoteEvents_paperflow_title" = "Gescande gegevens";
+"holder_listRemoteEvents_recovery_message" = "Als de gegevens van je test kloppen kun je een herstelbewijs maken.";
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
+"holder_listRemoteEvents_vaccinationAssessment_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
+"holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs toevoegen";
