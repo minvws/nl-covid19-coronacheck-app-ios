@@ -126,11 +126,6 @@ private extension DCCQRDetailsView {
 			let labelView = DCCQRLabelView()
 			labelView.field = detail.field
 			labelView.value = detail.value
-			labelView.isAccessibilityElement = true
-			// Should update on notification change
-			if UIAccessibility.isVoiceOverRunning {
-				labelView.accessibilityLabel = [detail.field, detail.value].joined(separator: ",")
-			}
 			stackView.addArrangedSubview(labelView)
 		}
 		
