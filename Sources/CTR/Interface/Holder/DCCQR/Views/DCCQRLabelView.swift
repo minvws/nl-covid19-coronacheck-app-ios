@@ -30,20 +30,6 @@ final class DCCQRLabelView: BaseView {
 		return label
 	}()
 	
-	private let accessibleFieldLabel: UIView = {
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isAccessibilityElement = true
-		return view
-	}()
-	
-	private let accessibleValueLabel: UIView = {
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isAccessibilityElement = true
-		return view
-	}()
-	
 	override func setupViews() {
 		super.setupViews()
 		
@@ -53,25 +39,22 @@ final class DCCQRLabelView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		addSubview(accessibleFieldLabel)
-		addSubview(accessibleValueLabel)
-		
-		fieldLabel.embed(in: accessibleFieldLabel)
-		valueLabel.embed(in: accessibleValueLabel)
+		addSubview(fieldLabel)
+		addSubview(valueLabel)
 	}
 	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			accessibleFieldLabel.topAnchor.constraint(equalTo: topAnchor),
-			accessibleFieldLabel.leftAnchor.constraint(equalTo: leftAnchor),
-			accessibleFieldLabel.rightAnchor.constraint(equalTo: rightAnchor),
+			fieldLabel.topAnchor.constraint(equalTo: topAnchor),
+			fieldLabel.leftAnchor.constraint(equalTo: leftAnchor),
+			fieldLabel.rightAnchor.constraint(equalTo: rightAnchor),
 			
-			accessibleValueLabel.topAnchor.constraint(equalTo: accessibleFieldLabel.bottomAnchor, constant: ViewTraits.spacing),
-			accessibleValueLabel.leftAnchor.constraint(equalTo: leftAnchor),
-			accessibleValueLabel.rightAnchor.constraint(equalTo: rightAnchor),
-			accessibleValueLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+			valueLabel.topAnchor.constraint(equalTo: fieldLabel.bottomAnchor, constant: ViewTraits.spacing),
+			valueLabel.leftAnchor.constraint(equalTo: leftAnchor),
+			valueLabel.rightAnchor.constraint(equalTo: rightAnchor),
+			valueLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
 	
@@ -82,9 +65,6 @@ final class DCCQRLabelView: BaseView {
 		didSet {
 			fieldLabel.attributedText = field?.setLineHeight(ViewTraits.lineHeight,
 															 kerning: ViewTraits.kerning)
-			if UIAccessibility.isVoiceOverRunning {
-				accessibleFieldLabel.accessibilityLabel = field
-			}
 		}
 	}
 	
@@ -93,9 +73,6 @@ final class DCCQRLabelView: BaseView {
 		didSet {
 			valueLabel.attributedText = value?.setLineHeight(ViewTraits.lineHeight,
 															 kerning: ViewTraits.kerning)
-			if UIAccessibility.isVoiceOverRunning {
-				accessibleValueLabel.accessibilityLabel = value
-			}
 		}
 	}
 }

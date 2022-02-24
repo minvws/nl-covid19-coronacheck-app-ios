@@ -75,6 +75,18 @@ final class DCCQRDetailsView: BaseView {
 		)
 	}
 	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		NotificationCenter.default.addObserver(forName: UIAccessibility.voiceOverStatusDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.configureLabelsForAccessibility()
+		}
+		
+		NotificationCenter.default.addObserver(forName: UIAccessibility.switchControlStatusDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.configureLabelsForAccessibility()
+		}
+	}
+	
 	// MARK: Public Access
 	
 	/// The title
@@ -130,5 +142,24 @@ private extension DCCQRDetailsView {
 		}
 		
 		stackView.addArrangedSubview(dateInformationLabel)
+		
+		configureLabelsForAccessibility()
+	}
+	
+	func configureLabelsForAccessibility() {
+		stackView.subviews.forEach { view in
+			guard let labelView = view as? DCCQRLabelView,
+				  let field = labelView.field,
+				  let value = labelView.value else { return }
+			
+			if UIAccessibility.isVoiceOverRunning {
+				labelView.accessibilityLabel = [field, value].joined(separator: ",")
+			} else {
+				labelView.accessibilityLabel = nil
+			}
+			
+			// Disabled as interactive element for SwitchControl
+			labelView.isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
+		}
 	}
 }

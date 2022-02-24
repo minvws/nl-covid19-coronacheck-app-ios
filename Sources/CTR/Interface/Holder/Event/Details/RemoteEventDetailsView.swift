@@ -74,6 +74,14 @@ final class RemoteEventDetailsView: BaseView {
 		])
 	}
 	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		NotificationCenter.default.addObserver(forName: UIAccessibility.voiceOverStatusDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.configureLabelsForAccessibility()
+		}
+	}
+	
 	// MARK: Public Access
 
 	/// The title
@@ -109,18 +117,11 @@ final class RemoteEventDetailsView: BaseView {
 private extension RemoteEventDetailsView {
 	
 	func createLabel(for detail: NSAttributedString) -> UIView {
-		let view = UIView()
-		view.isAccessibilityElement = true
-		if UIAccessibility.isVoiceOverRunning {
-			view.accessibilityLabel = detail.string
-		}
-		
 		let label = Label(body: nil)
 		label.attributedText = detail
 		label.textColor = Theme.colors.dark
 		label.numberOfLines = 0
-		label.embed(in: view)
-		return view
+		return label
 	}
 
 	func createLineView() -> UIView {
@@ -151,6 +152,16 @@ private extension RemoteEventDetailsView {
 					stackView.setCustomSpacing(ViewTraits.spacing, after: label)
 				}
 			}
+		}
+		
+		configureLabelsForAccessibility()
+	}
+	
+	/// Hide voice over labels when VoiceControl or SwitchControl are enabled. Setting it to none allows it to scroll for VoiceControl and SwitchControl
+	func configureLabelsForAccessibility() {
+		stackView.subviews.forEach { view in
+			guard view is Label else { return }
+			view.accessibilityTraits = !UIAccessibility.isVoiceOverRunning ? .none : .staticText
 		}
 	}
 }
