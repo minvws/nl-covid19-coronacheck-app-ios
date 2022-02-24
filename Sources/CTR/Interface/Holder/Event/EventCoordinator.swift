@@ -347,17 +347,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 	private func handleBackAction(eventMode: EventMode) {
 
-		if eventMode == .vaccinationAndPositiveTest,
-		   navigationController.viewControllers.filter({ $0 is RemoteEventStartViewController }).count > 1,
-		   let listEventViewController = navigationController.viewControllers.first(where: { $0 is ListRemoteEventsViewController }) {
-
-			navigationController.popToViewController(
-				listEventViewController,
-				animated: true
-			)
-		} else {
-			delegate?.eventFlowDidCancel()
-		}
+		delegate?.eventFlowDidCancel()
 	}
 
 	func loginTVSScreenDidFinish(_ result: EventScreenResult) {
