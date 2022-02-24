@@ -124,4 +124,19 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == URL(string: L.holderVaccinationStartNodigidUrl())
 	}
+	
+	func test_checkBoxTapped() {
+		
+		// Given
+		sut = RemoteEventStartViewController(viewModel: viewModel)
+		loadView()
+		
+		// When
+		sut.sceneView.didToggleCheckboxCommand?(true)
+		sut.sceneView.primaryButtonTapped()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .vaccinationAndPositiveTest)
+	}
 }

@@ -122,6 +122,32 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .vaccination)
 	}
 
+	func test_primaryButtonTapped_vaccinationMode_checkBoxToggled_true() {
+		
+		// Given
+		sut.checkboxToggled(value: true)
+		
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .vaccinationAndPositiveTest)
+	}
+	
+	func test_primaryButtonTapped_vaccinationMode_checkBoxToggled_false() {
+		
+		// Given
+		sut.checkboxToggled(value: false)
+		
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .vaccination)
+	}
+	
 	func test_primaryButtonTapped_recoveryMode() {
 
 		// Given
