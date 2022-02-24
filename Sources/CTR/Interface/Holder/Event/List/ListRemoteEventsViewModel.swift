@@ -362,7 +362,7 @@ class ListRemoteEventsViewModel: Logging {
 				self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
 			},
 			onNoOrigins: {
-				self.viewState = self.originMismatchState(flow: .positiveTest)
+				self.viewState = self.originMismatchState(flow: .vaccinationAndPositiveTest)
 			}
 		)
 	}
