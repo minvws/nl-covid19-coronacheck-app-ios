@@ -387,8 +387,6 @@
 "holder.paperproof.startscanning.title" = "Scan your international QR code";
 "holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.positiveTest.nolist.title" = "No positive test result available";
-"holder.positiveTest.start.message" = "Log in with DigiD. Details about your positive test will be retrieved automatically.";
-"holder.positiveTest.start.title" = "Retrieve details about your positive test";
 "holder.provider.commercial.title" = "Other test location";
 "holder.provider.ggd.subtitle" = "Log in with your DigiD";
 "holder.provider.ggd.title" = "GGD";

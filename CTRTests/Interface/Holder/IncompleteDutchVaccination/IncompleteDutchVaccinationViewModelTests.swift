@@ -27,11 +27,6 @@ class IncompleteDutchVaccinationViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedUserWishesToCreateAVaccinationQR) == true
 	}
 	
-	func testDidTapAddTestResultsCallsCoordinator() {
-		sut.didTapAddTestResults()
-		expect(self.coordinatorSpy.invokedUserWishesToFetchPositiveTests) == true
-	}
-	
 	func testDidTapURLCallsCoordinator() {
 		// Arrange
 		let url = URL(string: "http://example.com")!
