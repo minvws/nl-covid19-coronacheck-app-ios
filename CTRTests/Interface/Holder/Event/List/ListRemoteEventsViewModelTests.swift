@@ -1865,8 +1865,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 
-		expect(feedback.title) == L.holder_listRemoveEvents_endStateInternationalQROnly_title()
-		expect(feedback.body) == L.holder_listRemoveEvents_endStateInternationalQROnly_message()
+		expect(feedback.title) == L.holder_listRemoteEvents_endStateInternationalQROnly_title()
+		expect(feedback.body) == L.holder_listRemoteEvents_endStateInternationalQROnly_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
