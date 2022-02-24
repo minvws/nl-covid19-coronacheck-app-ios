@@ -558,12 +558,7 @@ private extension FetchRemoteEventsViewModel {
 
 		// Expired TVS token
 		guard !errorCodes.contains(where: { $0.detailedCode == FetchRemoteEventsViewModel.detailedCodeTvsSessionExpired }) else {
-			if eventMode == .vaccinationAndPositiveTest {
-				// This is recoverable, so redirect to login
-				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)
-			} else {
-				displayNonceOrTVSExpired()
-			}
+			displayNonceOrTVSExpired()
 			return
 		}
 

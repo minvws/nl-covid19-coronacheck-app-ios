@@ -34,13 +34,6 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 		return view
 	}()
 	
-	private let coronaBeforeFirstVaccineTextView: TextView = {
-		
-		let view = TextView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-	
 	private let learnMoreTextView: TextView = {
 		
 		let view = TextView()
@@ -49,15 +42,6 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 	}()
 	
 	private let addVaccinesButton: Button = {
-		
-		let button = Button(title: "", style: .textLabelBlue)
-		button.translatesAutoresizingMaskIntoConstraints = false
-		button.isHidden = true
-		button.contentHorizontalAlignment = .leading
-		return button
-	}()
-	
-	private let addTestResultsButton: Button = {
 		
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +59,6 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 		
 		// Add touch actions:
 		addVaccinesButton.touchUpInside(self, action: #selector(addVaccinesButtonTapped))
-		addTestResultsButton.touchUpInside(self, action: #selector(addTestResultsButtonTapped))
 	}
 	
 	override func setupViewHierarchy() {
@@ -92,23 +75,12 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 		stackView.setCustomSpacing(ViewTraits.verticalPaddingButtonToNextParagaph, after: addVaccinesButton)
 		
 		// Paragraph B
-		stackView.addArrangedSubview(coronaBeforeFirstVaccineTextView)
-		stackView.setCustomSpacing(ViewTraits.verticalPaddingContentToButton, after: coronaBeforeFirstVaccineTextView)
-		stackView.addArrangedSubview(addTestResultsButton)
-		stackView.setCustomSpacing(ViewTraits.verticalPaddingButtonToNextParagaph, after: addTestResultsButton)
-		
-		// Paragraph C
 		stackView.addArrangedSubview(learnMoreTextView)
 	}
 	
 	@objc func addVaccinesButtonTapped() {
 		
 		addVaccinesButtonTapCommand?()
-	}
-	
-	@objc func addTestResultsButtonTapped() {
-		
-		addTestResultsButtonTapCommand?()
 	}
 	
 	// MARK: Public Access
@@ -129,12 +101,6 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 		}
 	}
 	
-	var coronaBeforeFirstVaccineText: String? {
-		didSet {
-			coronaBeforeFirstVaccineTextView.html(coronaBeforeFirstVaccineText)
-		}
-	}
-	
 	var learnMoreText: String? {
 		didSet {
 			learnMoreTextView.html(learnMoreText)
@@ -147,7 +113,7 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 	
 	var linkTouchedHandler: ((URL) -> Void)? {
 		didSet {
-			[learnMoreTextView, secondVaccineTextView, coronaBeforeFirstVaccineTextView].forEach { textView in
+			[learnMoreTextView, secondVaccineTextView].forEach { textView in
 				textView.linkTouched { [weak self] url in
 					self?.linkTouchedHandler?(url)
 				}
@@ -160,14 +126,6 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 		didSet {
 			addVaccinesButton.setTitle(addVaccinesButtonTitle, for: .normal)
 			addVaccinesButton.isHidden = addVaccinesButtonTitle?.isEmpty ?? true
-		}
-	}
-	
-	/// The title for the secondary white/blue button
-	var addTestResultsButtonTitle: String? {
-		didSet {
-			addTestResultsButton.setTitle(addTestResultsButtonTitle, for: .normal)
-			addTestResultsButton.isHidden = addTestResultsButtonTitle?.isEmpty ?? true
 		}
 	}
 }

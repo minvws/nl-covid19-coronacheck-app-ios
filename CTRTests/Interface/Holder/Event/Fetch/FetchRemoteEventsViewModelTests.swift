@@ -443,7 +443,12 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(equal(.startWithPositiveTest))
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
+			expect(feedback.title) == L.holderErrorstateNosessionTitle()
+			expect(feedback.body) == L.holderErrorstateNosessionMessage()
+			expect(feedback.primaryActionTitle) == L.holderErrorstateNosessionAction()
+			expect(feedback.secondaryActionTitle).to(beNil())
+		}))
 	}
 
 	func test_accessToken_nonceExpired() {

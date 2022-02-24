@@ -36,14 +36,12 @@ enum EventScreenResult: Equatable {
 	
 	/// Show event details
 	case showEventDetails(title: String, details: [EventDetails], footer: String?)
-
-	case startWithPositiveTest
 	
 	case shouldCompleteVaccinationAssessment
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest), (.backSwipe, .backSwipe), (.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
+			case (.back, .back), (.stop, .stop), (.continue, .continue), (.backSwipe, .backSwipe), (.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
 				return true
 			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
@@ -109,8 +107,6 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	var navigationController: UINavigationController
 
 	weak var delegate: EventFlowDelegate?
-
-	private var tvsToken: TVSAuthorizationToken?
 	
 	/// Initializer
 	/// - Parameters:
@@ -142,14 +138,6 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	func startWithRecovery() {
 
 		startWith(.recovery)
-	}
-
-	func startWithPositiveTest() {
-		if let tvsToken = tvsToken, tvsToken.expiration > Date(timeIntervalSinceNow: 10) {
-			navigateToFetchEvents(token: tvsToken, eventMode: .vaccinationAndPositiveTest)
-		} else {
-			startWith(.vaccinationAndPositiveTest)
-		}
 	}
 
 	func startWithListTestEvents(_ events: [RemoteEvent], originalMode: EventMode) {
@@ -377,7 +365,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 
 			case let .didLogin(token, eventMode):
-				self.tvsToken = token
 				navigateToFetchEvents(token: token, eventMode: eventMode)
 
 			case .errorRequiringRestart(let eventMode):
@@ -412,10 +399,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
 				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
 
-			case .startWithPositiveTest:
-				// route after international QR only, and backend says token expired, while our check says valid.
-				tvsToken = nil
-				startWithPositiveTest()
 			default:
 				break
 		}
@@ -454,8 +437,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
 			case let .showEventDetails(title, details, footer):
 				navigateToEventDetails(title, details: details, footer: footer)
-			case .startWithPositiveTest:
-				startWithPositiveTest()
 			case .shouldCompleteVaccinationAssessment:
 				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
 			default:
