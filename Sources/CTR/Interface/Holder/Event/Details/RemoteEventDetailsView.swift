@@ -108,12 +108,19 @@ final class RemoteEventDetailsView: BaseView {
 
 private extension RemoteEventDetailsView {
 	
-	func createLabel(for detail: NSAttributedString) -> Label {
+	func createLabel(for detail: NSAttributedString) -> UIView {
+		let view = UIView()
+		view.isAccessibilityElement = true
+		if UIAccessibility.isVoiceOverRunning {
+			view.accessibilityLabel = detail.string
+		}
+		
 		let label = Label(body: nil)
 		label.attributedText = detail
 		label.textColor = Theme.colors.dark
 		label.numberOfLines = 0
-		return label
+		label.embed(in: view)
+		return view
 	}
 
 	func createLineView() -> UIView {
