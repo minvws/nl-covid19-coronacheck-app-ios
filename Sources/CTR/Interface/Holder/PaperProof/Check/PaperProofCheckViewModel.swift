@@ -36,7 +36,7 @@ class PaperProofCheckViewModel: Logging {
 
 		self.coordinator = coordinator
 
-		viewState = .loading(content: Content(title: L.holderDccListTitle()))
+		viewState = .loading(content: Content(title: L.holder_listRemoteEvents_paperflow_title()))
 		checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode)
 	}
 

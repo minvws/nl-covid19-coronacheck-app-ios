@@ -126,7 +126,7 @@ extension ListRemoteEventsViewModel {
 			case .vaccinationassessment: return ErrorCode.Flow.visitorPass
 			case .vaccination: return ErrorCode.Flow.vaccination
 			case .paperflow: return ErrorCode.Flow.hkvi
-			case .positiveTest: return ErrorCode.Flow.positiveTest
+			case .vaccinationAndPositiveTest: return ErrorCode.Flow.vaccinationAndPositiveTest
 			case .recovery: return ErrorCode.Flow.recovery
 			case .test:
 

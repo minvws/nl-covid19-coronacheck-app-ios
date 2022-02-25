@@ -53,14 +53,18 @@ class OnboardingCoordinator: Coordinator, Logging {
 	/// A presenting view controller
 	weak var presentingViewController: UIViewController?
 	
+	private var appFlavor: AppFlavor
+	
 	/// Initiatilzer
 	init(
 		navigationController: UINavigationController,
 		onboardingDelegate: OnboardingDelegate,
-		factory: OnboardingFactoryProtocol) {
+		factory: OnboardingFactoryProtocol,
+		appFlavor: AppFlavor = .flavor) {
 		
 		self.navigationController = navigationController
 		self.onboardingDelegate = onboardingDelegate
+		self.appFlavor = appFlavor
 		onboardingFactory = factory
 		onboardingPages = onboardingFactory.create()
 	}
@@ -111,7 +115,7 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 
 		let urlString: String
 
-		if AppFlavor.flavor == .holder {
+		if appFlavor == .holder {
 			urlString = L.holderUrlPrivacy()
 		} else {
 			urlString = L.verifierUrlPrivacy()
@@ -133,6 +137,10 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	
 	/// The onboarding is finished
 	func finishOnboarding() {
+		
+		if appFlavor == .holder {
+			Current.disclosurePolicyManager.setDisclosurePolicyUpdateHasBeenSeen()
+		}
 
 		// Notify that we finished the onboarding
 		onboardingDelegate?.finishOnboarding()
