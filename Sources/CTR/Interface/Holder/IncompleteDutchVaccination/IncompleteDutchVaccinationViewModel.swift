@@ -11,9 +11,6 @@ final class IncompleteDutchVaccinationViewModel: Logging {
 	
 	@Bindable private(set) var title: String
 	@Bindable private(set) var secondVaccineText: String
-	@Bindable private(set) var learnMoreText: String
-	
-	@Bindable private(set) var addVaccinesButtonTitle: String
 	
 	private weak var coordinatorDelegate: HolderCoordinatorDelegate?
 	
@@ -22,13 +19,6 @@ final class IncompleteDutchVaccinationViewModel: Logging {
 		
 		title = L.holderIncompletedutchvaccinationTitle()
 		secondVaccineText = L.holderIncompletedutchvaccinationParagraphSecondvaccine()
-		learnMoreText = L.holderIncompletedutchvaccinationParagraphLearnmore()
-		
-		addVaccinesButtonTitle = L.holderIncompletedutchvaccinationButtonAddvaccines()
-	}
-	
-	func didTapAddVaccines() {
-		coordinatorDelegate?.userWishesToCreateAVaccinationQR()
 	}
 	
 	func userTappedLink(url: URL) {
