@@ -103,7 +103,7 @@ extension ListRemoteEventsViewModel {
 
 		return .listEvents(
 			content: Content(
-				title: eventMode.title,
+				title: Strings.title(forEventMode: eventMode),
 				body: Strings.listMessage(forEventMode: eventMode),
 				primaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListAction() : L.holderDccListAction(),
 				primaryAction: { [weak self] in

@@ -27,13 +27,6 @@ enum EventMode: String {
 		}
 	}
 
-	var title: String {
-		switch self {
-			case .paperflow: return L.holder_listRemoteEvents_paperflow_title()
-			default: return L.holder_listRemoteEvents_title()
-		}
-	}
-
 	var alertBody: String {
 
 		switch self {

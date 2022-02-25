@@ -63,7 +63,7 @@ class ListRemoteEventsViewModel: Logging {
 		self.identityChecker = identityChecker
 		self.originalEventMode = originalMode
 		
-		viewState = .loading(content: Content(title: eventMode.title))
+		viewState = .loading(content: Content(title: Strings.title(forEventMode: eventMode)))
 		hasExistingDomesticVaccination = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
