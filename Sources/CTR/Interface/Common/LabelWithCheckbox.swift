@@ -153,7 +153,6 @@ final class LabelWithCheckbox: UIControl {
 		])
 	}
 	
-	
 	override func accessibilityActivate() -> Bool {
 		
 		isSelected.toggle()
