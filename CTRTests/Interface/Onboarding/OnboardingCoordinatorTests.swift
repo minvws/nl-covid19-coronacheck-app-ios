@@ -52,7 +52,8 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut = OnboardingCoordinator(
 			navigationController: navigationSpy,
 			onboardingDelegate: onboardingDelegateSpy,
-			factory: HolderOnboardingFactory()
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
 		)
 		// When
 		
@@ -68,7 +69,8 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut = OnboardingCoordinator(
 			navigationController: navigationSpy,
 			onboardingDelegate: onboardingDelegateSpy,
-			factory: VerifierOnboardingFactory()
+			factory: VerifierOnboardingFactory(),
+			appFlavor: .verifier
 		)
 		// When
 		
@@ -85,7 +87,8 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut = OnboardingCoordinator(
 			navigationController: navigationSpy,
 			onboardingDelegate: onboardingDelegateSpy,
-			factory: HolderOnboardingFactory()
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
 		)
 		
 		// When
@@ -103,7 +106,8 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut = OnboardingCoordinator(
 			navigationController: navigationSpy,
 			onboardingDelegate: onboardingDelegateSpy,
-			factory: HolderOnboardingFactory()
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
 		)
 		
 		// When
@@ -121,7 +125,8 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut = OnboardingCoordinator(
 			navigationController: navigationSpy,
 			onboardingDelegate: onboardingDelegateSpy,
-			factory: HolderOnboardingFactory()
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
 		)
 		
 		// When
@@ -139,7 +144,8 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut = OnboardingCoordinator(
 			navigationController: navigationSpy,
 			onboardingDelegate: onboardingDelegateSpy,
-			factory: HolderOnboardingFactory()
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
 		)
 		
 		// When
@@ -151,13 +157,14 @@ class OnboardingCoordinatorTests: XCTestCase {
 	}
 	
 	/// Test the finish onboarding call
-	func test_finishOnboarding() {
+	func test_holder_finishOnboarding() {
 		
 		// Given
 		sut = OnboardingCoordinator(
 			navigationController: navigationSpy,
 			onboardingDelegate: onboardingDelegateSpy,
-			factory: HolderOnboardingFactory()
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
 		)
 		
 		// When
@@ -167,6 +174,28 @@ class OnboardingCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
 		expect(self.onboardingDelegateSpy.finishOnboardingCalled) == true
+		expect(self.environmentSpies.disclosurePolicyManagingSpy.invokedSetDisclosurePolicyUpdateHasBeenSeen) == true
+	}
+
+	/// Test the finish onboarding call
+	func test_verifier_finishOnboarding() {
+		
+		// Given
+		sut = OnboardingCoordinator(
+			navigationController: navigationSpy,
+			onboardingDelegate: onboardingDelegateSpy,
+			factory: VerifierOnboardingFactory(),
+			appFlavor: .verifier
+		)
+		
+		// When
+		sut?.finishOnboarding()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
+		expect(self.onboardingDelegateSpy.finishOnboardingCalled) == true
+		expect(self.environmentSpies.disclosurePolicyManagingSpy.invokedSetDisclosurePolicyUpdateHasBeenSeen) == false
 	}
 	
 	/// Test the consent given call
@@ -176,7 +205,8 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut = OnboardingCoordinator(
 			navigationController: navigationSpy,
 			onboardingDelegate: onboardingDelegateSpy,
-			factory: HolderOnboardingFactory()
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
 		)
 		
 		// When
