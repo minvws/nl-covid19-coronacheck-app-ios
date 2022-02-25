@@ -620,8 +620,11 @@ extension ListRemoteEventsViewModel {
 	
 	internal func positiveTestFlowInternationalVaccinationCreated() -> ListRemoteEventsViewController.State {
 
-		// Identical to InternationalQROnly
-		return internationalQROnly()
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holder_listRemoteEvents_endStateInternationalQROnly_title(),
+			subTitle: L.holder_listRemoteEvents_endStateCombinedFlowInternationalQROnly_message(),
+			primaryActionTitle: L.general_toMyOverview()
+		)
 	}
 
 	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
