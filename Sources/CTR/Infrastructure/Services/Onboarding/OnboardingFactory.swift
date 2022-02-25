@@ -16,6 +16,7 @@ enum OnboardingStep: Int {
 	case access
 	case privacy
 	case who
+	case disclosurePolicy
 }
 
 struct OnboardingPage {
@@ -70,7 +71,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 	/// - Returns: an array of onboarding steps
 	func create() -> [OnboardingPage] {
 
-		let pages = [
+		var pages = [
 			OnboardingPage(
 				title: L.holderOnboardingTitleSafely(),
 				message: L.holderOnboardingMessageSafely(),
@@ -96,10 +97,39 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				step: .who
 			)
 		]
-
+		if let policyPage = getDisclosurePolicyPage() {
+			pages.append(policyPage)
+		}
 		return pages.sorted { $0.step.rawValue < $1.step.rawValue }
 	}
 
+	private func getDisclosurePolicyPage() -> OnboardingPage? {
+		
+		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+			return OnboardingPage(
+				title: L.holder_newintheapp_content_only1G_title(),
+				message: L.holder_newintheapp_content_only1G_body(),
+				image: I.onboarding.disclosurePolicy(),
+				step: .disclosurePolicy
+			)
+		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
+			return OnboardingPage(
+				title: L.holder_newintheapp_content_only3G_title(),
+				message: L.holder_newintheapp_content_only3G_body(),
+				image: I.onboarding.disclosurePolicy(),
+				step: .disclosurePolicy
+			)
+		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+			return OnboardingPage(
+				title: L.holder_newintheapp_content_3Gand1G_title(),
+				message: L.holder_newintheapp_content_3Gand1G_body(),
+				image: I.onboarding.disclosurePolicy(),
+				step: .disclosurePolicy
+			)
+		}
+		return nil
+	}
+	
 	/// Get the Consent Title
 	func getConsentTitle() -> String {
 

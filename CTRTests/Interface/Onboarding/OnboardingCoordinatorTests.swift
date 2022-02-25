@@ -1,131 +1,220 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class OnboardingCoordinatorTests: XCTestCase {
-
-	var sut: OnboardingCoordinator!
-	var onboardingDelegateSpy: OnboardingDelegateSpy!
-	var navigationSpy: NavigationControllerSpy!
-
+	
+	private var sut: OnboardingCoordinator!
+	
+	private var onboardingDelegateSpy: OnboardingDelegateSpy!
+	private var navigationSpy: NavigationControllerSpy!
+	private var environmentSpies: EnvironmentSpies!
+	
 	override func setUp() {
-
+		
 		super.setUp()
-
+		
+		environmentSpies = setupEnvironmentSpies()
 		onboardingDelegateSpy = OnboardingDelegateSpy()
 		navigationSpy = NavigationControllerSpy()
-		sut = OnboardingCoordinator(
-			navigationController: navigationSpy,
-			onboardingDelegate: onboardingDelegateSpy,
-			factory: HolderOnboardingFactory()
-		)
 	}
-
+	
 	// MARK: Test Doubles
-
+	
 	class OnboardingDelegateSpy: OnboardingDelegate {
-
+		
 		var consentGivenCalled = false
 		var finishOnboardingCalled = false
-
+		
 		func consentGiven() {
-
+			
 			consentGivenCalled = true
 		}
-
+		
 		func finishOnboarding() {
-
+			
 			finishOnboardingCalled = true
 		}
 	}
-
+	
 	// MARK: - Tests
-
-	func testInitializer() {
-
+	
+	func test_initializer_holder() {
+		
 		// Given
-
+		sut = OnboardingCoordinator(
+			navigationController: navigationSpy,
+			onboardingDelegate: onboardingDelegateSpy,
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
+		)
 		// When
-
+		
 		// Then
-		XCTAssertEqual(sut.onboardingPages.count, 4, "There should be 4 pages")
-		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 0, "There should be no pages pushed")
-		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
+		expect(self.sut.onboardingPages).to(haveCount(4))
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
 	}
-
+	
+	func test_initializer_verifier() {
+		
+		// Given
+		sut = OnboardingCoordinator(
+			navigationController: navigationSpy,
+			onboardingDelegate: onboardingDelegateSpy,
+			factory: VerifierOnboardingFactory(),
+			appFlavor: .verifier
+		)
+		// When
+		
+		// Then
+		expect(self.sut.onboardingPages).to(haveCount(1))
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
+	}
+	
+	func test_initializer_holder_disclosurePolicy_1G() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = true
+		sut = OnboardingCoordinator(
+			navigationController: navigationSpy,
+			onboardingDelegate: onboardingDelegateSpy,
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
+		)
+		
+		// When
+		
+		// Then
+		expect(self.sut.onboardingPages).to(haveCount(5))
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
+	}
+	
+	func test_initializer_holder_disclosurePolicy_3G() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = true
+		sut = OnboardingCoordinator(
+			navigationController: navigationSpy,
+			onboardingDelegate: onboardingDelegateSpy,
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
+		)
+		
+		// When
+		
+		// Then
+		expect(self.sut.onboardingPages).to(haveCount(5))
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
+	}
+	
+	func test_initializer_holder_disclosurePolicy_3GAnd1G() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = true
+		sut = OnboardingCoordinator(
+			navigationController: navigationSpy,
+			onboardingDelegate: onboardingDelegateSpy,
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
+		)
+		
+		// When
+		
+		// Then
+		expect(self.sut.onboardingPages).to(haveCount(5))
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
+	}
+	
 	/// Test the start call
-	func testStart() {
-
+	func test_start() {
+		
 		// Given
-
+		sut = OnboardingCoordinator(
+			navigationController: navigationSpy,
+			onboardingDelegate: onboardingDelegateSpy,
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
+		)
+		
 		// When
-		sut?.start()
-
+		sut.start()
+		
 		// Then
-		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 1, "There should be no pages pushed")
-		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
 	}
-
-//	/// Test the show privacy page call
-//	func testShowPrivacyPage() {
-//
-//		// Given
-//		let viewControllerSpy = ViewControllerSpy()
-//
-//		// When
-//		sut?.showPrivacyPage(viewControllerSpy)
-//
-//		// Then
-//		XCTAssertTrue(viewControllerSpy.presentCalled, "The method should be called")
-//		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
-//	}
-
-//	/// Test the dimiss call
-//	func testDismiss() {
-//
-//		// Given
-//		let viewControllerSpy = ViewControllerSpy()
-//		sut?.showPrivacyPage(viewControllerSpy)
-//
-//		// When
-//		sut?.dismiss()
-//
-//		// Then
-//		XCTAssertTrue(viewControllerSpy.dismissCalled, "The method should be called")
-//		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
-//	}
-
+	
 	/// Test the finish onboarding call
-	func testFinishOnboarding() {
-
+	func test_holder_finishOnboarding() {
+		
 		// Given
-
+		sut = OnboardingCoordinator(
+			navigationController: navigationSpy,
+			onboardingDelegate: onboardingDelegateSpy,
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
+		)
+		
 		// When
 		sut?.finishOnboarding()
-
+		
 		// Then
-		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 1, "There should be one page pushed")
-		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
-		XCTAssertTrue(onboardingDelegateSpy.finishOnboardingCalled, "Method should be called")
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
+		expect(self.onboardingDelegateSpy.finishOnboardingCalled) == true
+		expect(self.environmentSpies.disclosurePolicyManagingSpy.invokedSetDisclosurePolicyUpdateHasBeenSeen) == true
 	}
 
-	/// Test the consent given call
-	func testConsentGiven() {
-
+	/// Test the finish onboarding call
+	func test_verifier_finishOnboarding() {
+		
 		// Given
-
+		sut = OnboardingCoordinator(
+			navigationController: navigationSpy,
+			onboardingDelegate: onboardingDelegateSpy,
+			factory: VerifierOnboardingFactory(),
+			appFlavor: .verifier
+		)
+		
+		// When
+		sut?.finishOnboarding()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
+		expect(self.onboardingDelegateSpy.finishOnboardingCalled) == true
+		expect(self.environmentSpies.disclosurePolicyManagingSpy.invokedSetDisclosurePolicyUpdateHasBeenSeen) == false
+	}
+	
+	/// Test the consent given call
+	func test_consentGiven() {
+		
+		// Given
+		sut = OnboardingCoordinator(
+			navigationController: navigationSpy,
+			onboardingDelegate: onboardingDelegateSpy,
+			factory: HolderOnboardingFactory(),
+			appFlavor: .holder
+		)
+		
 		// When
 		sut?.consentGiven()
-
+		
 		// Then
-		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 0, "There should be no pages pushed")
-		XCTAssertTrue(onboardingDelegateSpy.consentGivenCalled, "Method should be called")
-		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should NOT be called")
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(self.onboardingDelegateSpy.consentGivenCalled) == true
+		expect(self.onboardingDelegateSpy.finishOnboardingCalled) == false
 	}
 }
