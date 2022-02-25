@@ -280,7 +280,7 @@
 "holder.event.about.test.facility" = "Test location:";
 "holder.event.about.test.identifier" = "Unique certificate identifier:";
 "holder.event.about.test.manufacturer" = "Test manufacturer:";
-"holder.event.about.test.name" = "Your details:";
+"holder.event.about.test.name" = "Name:";
 "holder.event.about.test.result" = "Test result:";
 /* MARK: - Test Event */
 "holder.event.about.test.subtitle" = "The following details were retrieved at the test location:";
