@@ -402,7 +402,6 @@
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
 "holder.recovery.vaccinationOnly.message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Omdat je positief getest bent vóór je eerste prik, ben je met één prik volledig gevaccineerd. Daarom is er wel een volledig vaccinatiebewijs gemaakt.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder.recovery.vaccinationOnly.title" = "Geen herstelbewijs, wel een vaccinatiebewijs";
-"holder.recovery.wrong.body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.scanner.alert.dcc.message" = "Scan de QR-code op je internationale bewijs. Je hoeft de Nederlandse QR-code niet te scannen.";
 "holder.scanner.alert.dcc.title" = "Scan je internationale QR-code";
 "holder.scanner.alert.unknown.message" = "Deze QR-code is niet geldig. Scan de QR-code op je internationale bewijs.";
@@ -505,7 +504,6 @@
 "holder.testresults.results.button" = "Maak bewijs";
 "holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie. Als de gegevens kloppen kun je een bewijs maken.";
 "holder.testresults.september" = "SEP";
-"holder.testresults.wrong.body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.button.notoken" = "Heb je geen ophaalcode?";
 "holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een ophaalcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met je testlocatie.</p>";
@@ -592,8 +590,6 @@
 "holder.vaccination.start.nodigid" = "Ik heb geen DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/digid-aanvragen-activeren#hoe-vraag-ik-digid-aan";
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
-"holder.vaccination.wrong.body" = "<p>Neem contact op met de zorgverlener waar je bent gevaccineerd. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
-"holder.vaccination.wrong.title" = "Klopt er iets niet?";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Haal ook mijn positieve testuitslag op";
 "holder_completecertificate_body" = "<p>Haal een negatieve testuitslag op om je bezoekersbewijs compleet te maken.</p><p>Heb je nog geen coronatest gedaan? Maak een afspraak op <a href=\"https://www.testenvoortoegang.org\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Testuitslag ophalen";
@@ -650,7 +646,6 @@
 "holder_event_vaccination_assessment_element_title" = "Vaccinatiebeoordeling";
 "holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatiebeoordeling beschikbaar. Ga terug naar de balie waar jouw vaccinatie is beoordeeld.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_event_vaccination_assessment_nolist_title" = "Geen vaccinatiebeoordeling beschikbaar";
-"holder_event_vaccination_assessment_wrong_body" = "<p>Ga terug naar de balie waar jouw vaccinatie is beoordeeld. Zij kunnen opnieuw je gegevens invoeren. Je krijgt dan ook een nieuwe beoordelingscode. Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_eventdetails_vaccinationStatus_complete" = "ja";
 "holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere" = "ja (ergens anders gevaccineerd)";
 "holder_eventdetails_vaccinationStatus_recovery" = "ja (eerder corona gehad)";
@@ -672,6 +667,12 @@
 "holder_listRemoteEvents_paperflow_message" = "Met deze gegevens kun je een bewijs maken.";
 "holder_listRemoteEvents_paperflow_title" = "Gescande gegevens";
 "holder_listRemoteEvents_recovery_message" = "Als de gegevens van je test kloppen kun je een herstelbewijs maken.";
+"holder_listRemoteEvents_somethingWrong_recovery_body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
+"holder_listRemoteEvents_somethingWrong_test_body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
+"holder_listRemoteEvents_somethingWrong_title" = "Klopt er iets niet?";
+"holder_listRemoteEvents_somethingWrong_vaccinationAndPositiveTest_body" = "<p>Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
+"holder_listRemoteEvents_somethingWrong_vaccinationAssessment_body" = "<p>Ga terug naar de balie waar jouw vaccinatie is beoordeeld. Zij kunnen opnieuw je gegevens invoeren. Je krijgt dan ook een nieuwe beoordelingscode. Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
+"holder_listRemoteEvents_somethingWrong_vaccination_body" = "<p>Neem contact op met de zorgverlener waar je bent gevaccineerd. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
 "holder_listRemoteEvents_vaccinationAssessment_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";

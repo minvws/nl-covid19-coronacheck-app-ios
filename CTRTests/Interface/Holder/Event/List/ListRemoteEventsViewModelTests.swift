@@ -167,8 +167,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
-				title: L.holderVaccinationWrongTitle(),
-				body: L.holderVaccinationWrongBody(),
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_vaccination_body(),
 				hideBodyForScreenCapture: false
 			)
 	}
@@ -195,8 +195,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
-				title: L.holderVaccinationWrongTitle(),
-				body: L.holderRecoveryWrongBody(),
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_recovery_body(),
 				hideBodyForScreenCapture: false
 			)
 	}
@@ -223,8 +223,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
-				title: L.holderVaccinationWrongTitle(),
-				body: L.holderVaccinationWrongBody(),
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_vaccinationAndPositiveTest_body(),
 				hideBodyForScreenCapture: false
 			)
 	}
@@ -251,8 +251,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
-				title: L.holderVaccinationWrongTitle(),
-				body: L.holderTestresultsWrongBody(),
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_test_body(),
 				hideBodyForScreenCapture: false
 			)
 	}
@@ -279,8 +279,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
-				title: L.holderVaccinationWrongTitle(),
-				body: L.holder_event_vaccination_assessment_wrong_body(),
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_vaccinationAssessment_body(),
 				hideBodyForScreenCapture: false
 			)
 	}

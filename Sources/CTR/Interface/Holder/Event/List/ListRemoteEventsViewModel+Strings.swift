@@ -14,15 +14,17 @@ extension ListRemoteEventsViewModel {
 		static func somethingIsWrongBody(forEventMode mode: EventMode) -> String? {
 			switch mode {
 				case .vaccinationassessment:
-					return L.holder_event_vaccination_assessment_wrong_body()
+					return L.holder_listRemoteEvents_somethingWrong_vaccinationAssessment_body()
 				case .paperflow:
 					return nil
 				case .recovery:
-					return L.holderRecoveryWrongBody()
+					return L.holder_listRemoteEvents_somethingWrong_recovery_body()
 				case .test:
-					return L.holderTestresultsWrongBody()
-				case .vaccination, .vaccinationAndPositiveTest:
-					return L.holderVaccinationWrongBody()
+					return L.holder_listRemoteEvents_somethingWrong_test_body()
+				case .vaccination:
+					return L.holder_listRemoteEvents_somethingWrong_vaccination_body()
+				case .vaccinationAndPositiveTest:
+					return L.holder_listRemoteEvents_somethingWrong_vaccinationAndPositiveTest_body()
 			}
 		}
 	}

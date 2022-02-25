@@ -120,7 +120,7 @@ extension ListRemoteEventsViewModel {
 					guard let body = Strings.somethingIsWrongBody(forEventMode: self.eventMode) else { return }
 					self.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
-							title: L.holderVaccinationWrongTitle(),
+							title: L.holder_listRemoteEvents_somethingWrong_title(),
 							body: body,
 							hideBodyForScreenCapture: false
 						)
@@ -708,8 +708,8 @@ private extension ListRemoteEventsViewModel {
 				secondaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
-							title: L.holderVaccinationWrongTitle(),
-							body: L.holderTestresultsWrongBody(),
+							title: L.holder_listRemoteEvents_somethingWrong_title(),
+							body: L.holder_listRemoteEvents_somethingWrong_test_body(),
 							hideBodyForScreenCapture: false
 						)
 					)
