@@ -58,13 +58,13 @@ extension BaseTest {
 	func assertRetrievedCertificate(for person: TestPerson) {
 		app.textExists("Kloppen de gegevens?")
 		app.containsText("Naam: " + person.name!)
-		app.containsText(person.birthdate)
+		app.containsText("Geboortedatum: " + person.birthdate)
 	}
 	
 	func assertRetriedCertificateDetails(for person: TestPerson) {
 		app.tapButton("Details")
-		app.containsText("Naam: " + person.name!)
-		app.containsText("Geboortedatum: " + person.birthdate)
+		app.textExists("Naam: " + person.name!)
+		app.textExists("Geboortedatum: " + person.birthdate)
 		app.tapButton("CloseButton")
 	}
 	
