@@ -21,11 +21,6 @@ class IncompleteDutchVaccinationViewModelTests: XCTestCase {
 		coordinatorSpy = HolderCoordinatorDelegateSpy()
 		sut = IncompleteDutchVaccinationViewModel(coordinatorDelegate: coordinatorSpy)
 	}
-
-	func testDidTapAddVaccinesCallsCoordinator() {
-		sut.didTapAddVaccines()
-		expect(self.coordinatorSpy.invokedUserWishesToCreateAVaccinationQR) == true
-	}
 	
 	func testDidTapURLCallsCoordinator() {
 		// Arrange
