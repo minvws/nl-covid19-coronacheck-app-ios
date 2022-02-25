@@ -110,7 +110,7 @@ final class DCCQRDetailsView: BaseView {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details)
-			setupLabelsForAccessibility()
+			updateAccessibilityStatus()
 		}
 	}
 	
