@@ -354,7 +354,7 @@ class ListRemoteEventsViewModel: Logging {
 				if hasDomesticVaccinationOrigins {
 					self.completeFlow()
 				} else {
-					self.viewState = self.positiveTestFlowRecoveryAndInternationalVaccinationCreated()
+					self.viewState = self.positiveTestFlowInternationalVaccinationCreated()
 				}
 			},
 			onRecoveryOriginOnly: {
