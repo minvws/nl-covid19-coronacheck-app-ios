@@ -172,10 +172,11 @@ private class AccessibleBodyLabelView: BaseView {
 		return label
 	}()
 	
-	override func setupViewHierarchy() {
-		super.setupViewHierarchy()
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
 		
 		label.embed(in: self)
+		label.setContentHuggingPriority(.required, for: .vertical)
 	}
 	
 	override func setupAccessibility() {
