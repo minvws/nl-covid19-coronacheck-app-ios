@@ -7,22 +7,22 @@ on:
       - main
       - 'release/*'
   workflow_dispatch:
-
-env:
+  
+env: 
   DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
   FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
 
 jobs:
   firebase-deploy-holder-acc:
-    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/holder-') || contains(github.event.ref, 'refs/heads/main'))
     runs-on: macos-11
     steps:
     - name: Checkout
       uses: actions/checkout@v2.4.0
       with:
-        fetch-depth: 0
-
+        fetch-depth: 0   
+    
     - name: Log Build Number
       run: |
         ./Scripts/log-build-number.sh
@@ -42,7 +42,7 @@ jobs:
     - name: Setup CI environment
       run: |
         make ci
-
+    
     - name: Setup Imagemagick for icon overlays
       run: |
         make homebrew_ci_imagemagick
@@ -80,7 +80,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2.4.0
       with:
-        fetch-depth: 0
+        fetch-depth: 0      
 
     - name: Log Build Number
       run: |
@@ -92,7 +92,7 @@ jobs:
       run: |
         mkdir fastlane/certificates
         echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
-
+    
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -139,7 +139,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2.4.0
       with:
-        fetch-depth: 0
+        fetch-depth: 0   
 
     - name: Log Build Number
       run: |
@@ -151,7 +151,7 @@ jobs:
       run: |
         mkdir fastlane/certificates
         echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
-
+    
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -189,7 +189,7 @@ jobs:
         path: CTR PROD.app.dSYM.zip
         retention-days: 10
 
-
+        
   firebase-deploy-verifier-prod:
     if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/verifier-') || contains(github.event.ref, 'refs/heads/main'))
     runs-on: macos-11
@@ -197,7 +197,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2.4.0
       with:
-        fetch-depth: 0
+        fetch-depth: 0      
 
     - name: Log Build Number
       run: |
@@ -218,11 +218,11 @@ jobs:
     - name: Setup CI environment
       run: |
         make ci
-
+        
     - name: Setup Imagemagick for icon overlays
       run: |
         make homebrew_ci_imagemagick
-
+        
     - name: Build and deploy
       timeout-minutes: 45
       env:
