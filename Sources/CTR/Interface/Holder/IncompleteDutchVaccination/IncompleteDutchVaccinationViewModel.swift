@@ -18,7 +18,7 @@ final class IncompleteDutchVaccinationViewModel: Logging {
 		self.coordinatorDelegate = coordinatorDelegate
 		
 		title = L.holderIncompletedutchvaccinationTitle()
-		secondVaccineText = L.holderIncompletedutchvaccinationParagraphSecondvaccine()
+		secondVaccineText = L.holder_incompletedutchvaccination_paragraph_secondvaccine()
 	}
 	
 	func userTappedLink(url: URL) {
