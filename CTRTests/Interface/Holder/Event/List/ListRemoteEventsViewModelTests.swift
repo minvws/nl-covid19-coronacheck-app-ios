@@ -2163,7 +2163,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchVaccinationBody("i 880 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_vaccinationAndPositiveTest_body("i 880 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
