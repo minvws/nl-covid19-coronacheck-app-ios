@@ -78,7 +78,7 @@ final class RemoteEventDetailsView: BaseView {
 		super.setupAccessibility()
 		
 		NotificationCenter.default.addObserver(forName: UIAccessibility.voiceOverStatusDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.setupLabelsForAccessibility()
+			self?.updateAccessibilityStatus()
 		}
 	}
 	
@@ -99,7 +99,7 @@ final class RemoteEventDetailsView: BaseView {
 			guard let details = details else { return }
 			loadDetails(details)
 			stackView.addArrangedSubview(footerTextView)
-			setupLabelsForAccessibility()
+			updateAccessibilityStatus()
 		}
 	}
 	
@@ -155,7 +155,7 @@ private extension RemoteEventDetailsView {
 	}
 	
 	/// Hide voice over labels when VoiceControl or SwitchControl are enabled. Setting it to none allows it to scroll for VoiceControl and SwitchControl
-	func setupLabelsForAccessibility() {
+	func updateAccessibilityStatus() {
 		stackView.subviews.forEach { view in
 			guard let label = view as? AccessibleBodyLabelView else { return }
 			label.updateAccessibilityStatus()
