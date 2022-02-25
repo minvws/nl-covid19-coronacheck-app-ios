@@ -310,12 +310,7 @@
 "holder.event.identity.alert.title" = "Want to replace your certificate?";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.title" = "No test result available";
-"holder.event.originmismatch.dcc.body" = "<p>At this moment, we can't make a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
-"holder.event.originmismatch.recovery.body" = "<p>At this moment, we can't make a certificate from your positive test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
-"holder.event.originmismatch.test.body" = "<p>At this moment, we can't make a certificate from your negative test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder.event.originmismatch.title" = "We can't make a certificate";
-"holder.event.originmismatch.vaccination.approval.body" = "<p>At this moment, we can't make a certificate from your vaccination approval. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
-"holder.event.originmismatch.vaccination.body" = "<p>At this moment, we can't make a certificate from your vaccination. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website or there is an outage. We can't retrieve your details now. Please try again later.";
@@ -397,7 +392,6 @@
 "holder.recovery.start.title" = "Retrieve recovery details";
 "holder.recovery.vaccinationOnly.message" = "<p>You were tested positive for coronavirus longer too long ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>Because you were tested positive before your first vaccination, one shot means you’re fully vaccinated. Therefore, a full vaccination certificate has been created instead.</p><p>For more information, please check the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.vaccinationOnly.title" = "Vaccination certificate instead of recovery certificate";
-"holder.recovery.wrong.body" = "<p>Please contact your test location. They can help you change these details.</p>";
 "holder.scanner.alert.dcc.message" = "Scan the QR code on your international certificate. You don't have to scan the Dutch QR code.";
 "holder.scanner.alert.dcc.title" = "Scan your international QR code";
 "holder.scanner.alert.unknown.message" = "This QR code is not valid. Scan the QR code on your international certificate.";
@@ -500,7 +494,6 @@
 "holder.testresults.results.button" = "Make certificate";
 "holder.testresults.results.text" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
 "holder.testresults.september" = "SEP";
-"holder.testresults.wrong.body" = "<p>Please contact the test location. They can help you change your details.</p>";
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.button.notoken" = "Don't have a retrieval code?";
 "holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p>";
@@ -587,8 +580,6 @@
 "holder.vaccination.start.nodigid" = "I don't have DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/en/apply-or-activate-digid";
 "holder.vaccination.start.title" = "Retrieve vaccination details";
-"holder.vaccination.wrong.body" = "<p>Please contact the care provider who vaccinated you. This can be the GGD, your general practitioner, or a doctor belonging to a healthcare facility. They can help you change these details.</p>";
-"holder.vaccination.wrong.title" = "Is something wrong?";
 "holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
@@ -644,7 +635,6 @@
 "holder_event_vaccination_assessment_element_title" = "Vaccination approval";
 "holder_event_vaccination_assessment_nolist_message" = "<p>There are no details available about your vaccination approval. Please go back to the desk that reviewed your vaccination.</p><p>For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_event_vaccination_assessment_nolist_title" = "No vaccination approval available";
-"holder_event_vaccination_assessment_wrong_body" = "<p>Please go back to the desk that reviewed your vaccination. They can re-enter your details. You will also receive a new approval code. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_eventdetails_vaccinationStatus_complete" = "yes";
 "holder_eventdetails_vaccinationStatus_firstVaccinationElsewhere" = "yes (I have been vaccinated elsewhere)";
 "holder_eventdetails_vaccinationStatus_recovery" = "yes (I’ve had coronavirus earlier)";
@@ -653,6 +643,7 @@
 "holder_expiredDomesticVaccinationModal_title" = "Expired vaccination certificate";
 "holder_fetchRemoteEvents_title" = "Retrieve details";
 "holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Had a new vaccination?</b><br />Please retrieve your vaccination details again. You will receive a Dutch certificate.</p>";
+"holder_listRemoteEvents_endStateCombinedFlowInternationalQROnly_message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_title" = "Only an international certificate was created";
 "holder_listRemoteEvents_endStateRecoveryOnly_message" = "<p>You tested positive after your first vaccination. Your test result is therefore not suitable for creating a Dutch vaccination certificate. However, a recovery certificate has been created.</p><p>Check the <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">frequently asked questions</a> for more information.</p>";
@@ -662,9 +653,19 @@
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Created vaccination and recovery certificates";
 "holder_listRemoteEvents_negativeTest_message" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
+"holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>At this moment, we can't make a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_recovery_body" = "<p>At this moment, we can't make a certificate from your positive test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_test_body" = "<p>At this moment, we can't make a certificate from your negative test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_vaccinationAssessment_body" = "<p>At this moment, we can't make a certificate from your vaccination approval. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_vaccination_body" = "<p>At this moment, we can't make a certificate from your vaccination. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_paperflow_message" = "You can create a certificate with these details.";
 "holder_listRemoteEvents_paperflow_title" = "Scanned details";
 "holder_listRemoteEvents_recovery_message" = "If the details about your test are correct, you can create a recovery certificate.";
+"holder_listRemoteEvents_somethingWrong_recovery_body" = "<p>Please contact your test location. They can help you change these details.</p>";
+"holder_listRemoteEvents_somethingWrong_test_body" = "<p>Please contact the test location. They can help you change your details.</p>";
+"holder_listRemoteEvents_somethingWrong_title" = "Is something wrong?";
+"holder_listRemoteEvents_somethingWrong_vaccinationAssessment_body" = "<p>Please go back to the desk that reviewed your vaccination. They can re-enter your details. You will also receive a new approval code. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
+"holder_listRemoteEvents_somethingWrong_vaccination_body" = "<p>Please contact the care provider who vaccinated you. This can be the GGD, your general practitioner, or a doctor belonging to a healthcare facility. They can help you change these details.</p>";
 "holder_listRemoteEvents_title" = "Are the details correct?";
 "holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";

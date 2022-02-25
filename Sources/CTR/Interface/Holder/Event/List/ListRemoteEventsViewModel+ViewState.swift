@@ -103,8 +103,8 @@ extension ListRemoteEventsViewModel {
 
 		return .listEvents(
 			content: Content(
-				title: eventMode.title,
-				body: eventMode.listMessage,
+				title: Strings.title(forEventMode: eventMode),
+				body: Strings.listMessage(forEventMode: eventMode),
 				primaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListAction() : L.holderDccListAction(),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
@@ -120,7 +120,7 @@ extension ListRemoteEventsViewModel {
 					guard let body = Strings.somethingIsWrongBody(forEventMode: self.eventMode) else { return }
 					self.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
-							title: L.holderVaccinationWrongTitle(),
+							title: L.holder_listRemoteEvents_somethingWrong_title(),
 							body: body,
 							hideBodyForScreenCapture: false
 						)
@@ -513,7 +513,7 @@ extension ListRemoteEventsViewModel {
 		
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderEventOriginmismatchTitle(),
-			subTitle: eventMode.originsMismatchBody(errorCode),
+			subTitle: Strings.originsMismatchBody(errorCode: errorCode, forEventMode: eventMode),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
@@ -620,8 +620,11 @@ extension ListRemoteEventsViewModel {
 	
 	internal func positiveTestFlowInternationalVaccinationCreated() -> ListRemoteEventsViewController.State {
 
-		// Identical to InternationalQROnly
-		return internationalQROnly()
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holder_listRemoteEvents_endStateInternationalQROnly_title(),
+			subTitle: L.holder_listRemoteEvents_endStateCombinedFlowInternationalQROnly_message(),
+			primaryActionTitle: L.general_toMyOverview()
+		)
 	}
 
 	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
@@ -708,8 +711,8 @@ private extension ListRemoteEventsViewModel {
 				secondaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
-							title: L.holderVaccinationWrongTitle(),
-							body: L.holderTestresultsWrongBody(),
+							title: L.holder_listRemoteEvents_somethingWrong_title(),
+							body: L.holder_listRemoteEvents_somethingWrong_test_body(),
 							hideBodyForScreenCapture: false
 						)
 					)
