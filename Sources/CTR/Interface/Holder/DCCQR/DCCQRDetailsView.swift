@@ -147,6 +147,11 @@ private extension DCCQRDetailsView {
 	}
 	
 	func configureLabelsForAccessibility() {
+		
+		titleLabel.setupForSwitchControl()
+		descriptionLabel.setupForSwitchControl()
+		dateInformationLabel.setupForSwitchControl()
+		
 		stackView.subviews.forEach { view in
 			guard let labelView = view as? DCCQRLabelView,
 				  let field = labelView.field,
@@ -160,6 +165,8 @@ private extension DCCQRDetailsView {
 			
 			// Disabled as interactive element for SwitchControl
 			labelView.isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
+			
+			labelView.configureLabelsForAccessibility()
 		}
 	}
 }

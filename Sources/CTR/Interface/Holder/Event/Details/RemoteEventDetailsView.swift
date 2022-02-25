@@ -160,8 +160,8 @@ private extension RemoteEventDetailsView {
 	/// Hide voice over labels when VoiceControl or SwitchControl are enabled. Setting it to none allows it to scroll for VoiceControl and SwitchControl
 	func configureLabelsForAccessibility() {
 		stackView.subviews.forEach { view in
-			guard view is Label else { return }
-			view.accessibilityTraits = !UIAccessibility.isVoiceOverRunning ? .none : .staticText
+			guard let label = view as? Label else { return }
+			label.setupForSwitchControl()
 		}
 	}
 }
