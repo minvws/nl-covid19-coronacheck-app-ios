@@ -280,7 +280,7 @@
 "holder.event.about.test.facility" = "Testlocatie:";
 "holder.event.about.test.identifier" = "Uniek testnummer:";
 "holder.event.about.test.manufacturer" = "Testproducent:";
-"holder.event.about.test.name" = "Jouw gegevens:";
+"holder.event.about.test.name" = "Naam:";
 "holder.event.about.test.result" = "Testuitslag:";
 /* MARK: - Test Event */
 "holder.event.about.test.subtitle" = "De volgende gegevens zijn opgehaald bij de testlocatie:";
