@@ -280,7 +280,7 @@
 "holder.event.about.test.facility" = "Test location:";
 "holder.event.about.test.identifier" = "Unique certificate identifier:";
 "holder.event.about.test.manufacturer" = "Test manufacturer:";
-"holder.event.about.test.name" = "Your details:";
+"holder.event.about.test.name" = "Name:";
 "holder.event.about.test.result" = "Test result:";
 /* MARK: - Test Event */
 "holder.event.about.test.subtitle" = "The following details were retrieved at the test location:";
@@ -319,11 +319,6 @@
 "holder.fetchevents.warning.someresults.networkerror.title" = "Details possibly incomplete";
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
-"holder.incompletedutchvaccination.button.addtestresults" = "Retrieve my test result";
-"holder.incompletedutchvaccination.button.addvaccines" = "Retrieve my vaccinations";
-"holder.incompletedutchvaccination.paragraph.coronabeforefirstvaccine" = "<p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
-"holder.incompletedutchvaccination.paragraph.learnmore" = "<p><b>Want to know more?</b><br />Find more information on <a href=\"https://www.government.nl/topics/coronavirus-covid-19/covid-certificate/proof-of-vaccination/requirements-and-validity\">this page about the requirements and validity of the vaccination certificate</a>.</p>";
-"holder.incompletedutchvaccination.paragraph.secondvaccine" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Had a new vaccination?</b><br />Please retrieve your vaccination details again. You will receive a Dutch certificate.</p>";
 "holder.incompletedutchvaccination.title" = "No Dutch vaccination certificate";
 "holder.launch.text" = "We're starting the app...";
 /* MARK: - Holder Launch */
@@ -647,6 +642,7 @@
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Add booster vaccination";
 "holder_expiredDomesticVaccinationModal_title" = "Expired vaccination certificate";
 "holder_fetchRemoteEvents_title" = "Retrieve details";
+"holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Had a new vaccination?</b><br />Please retrieve your vaccination details again. You will receive a Dutch certificate.</p>";
 "holder_listRemoteEvents_endStateCombinedFlowInternationalQROnly_message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_message" = "<p>Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.</p><p><b>Still have to get a new vaccination?</b><br />Please add a vaccination again after you’ve had yours. You will also receive a Dutch certificate then.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you're normally considered fully vaccinated with one vaccination. Retrieve your positive test result to add this to your vaccination certificate.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_title" = "Only an international certificate was created";
