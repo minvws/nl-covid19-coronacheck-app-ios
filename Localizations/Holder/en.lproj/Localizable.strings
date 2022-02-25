@@ -310,12 +310,7 @@
 "holder.event.identity.alert.title" = "Want to replace your certificate?";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.title" = "No test result available";
-"holder.event.originmismatch.dcc.body" = "<p>At this moment, we can't make a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
-"holder.event.originmismatch.recovery.body" = "<p>At this moment, we can't make a certificate from your positive test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
-"holder.event.originmismatch.test.body" = "<p>At this moment, we can't make a certificate from your negative test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder.event.originmismatch.title" = "We can't make a certificate";
-"holder.event.originmismatch.vaccination.approval.body" = "<p>At this moment, we can't make a certificate from your vaccination approval. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
-"holder.event.originmismatch.vaccination.body" = "<p>At this moment, we can't make a certificate from your vaccination. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website or there is an outage. We can't retrieve your details now. Please try again later.";
@@ -661,6 +656,11 @@
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Created vaccination and recovery certificates";
 "holder_listRemoteEvents_negativeTest_message" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
+"holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>At this moment, we can't make a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_recovery_body" = "<p>At this moment, we can't make a certificate from your positive test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_test_body" = "<p>At this moment, we can't make a certificate from your negative test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_vaccinationAssessment_body" = "<p>At this moment, we can't make a certificate from your vaccination approval. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_vaccination_body" = "<p>At this moment, we can't make a certificate from your vaccination. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_paperflow_message" = "You can create a certificate with these details.";
 "holder_listRemoteEvents_paperflow_title" = "Scanned details";
 "holder_listRemoteEvents_recovery_message" = "If the details about your test are correct, you can create a recovery certificate.";

@@ -1299,7 +1299,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchVaccinationBody("i 280 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_vaccination_body("i 280 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -1342,7 +1342,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchTestBody("i 180 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_test_body("i 180 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2109,7 +2109,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchRecoveryBody("i 380 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_recovery_body("i 380 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2302,7 +2302,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchRecoveryBody("i 380 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_recovery_body("i 380 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2487,7 +2487,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchVaccinationApprovalBody("i 980 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_vaccinationAssessment_body("i 980 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2546,7 +2546,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchVaccinationApprovalBody("i 980 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_vaccinationAssessment_body("i 980 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2784,7 +2784,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchTestBody("i 180 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_test_body("i 180 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2835,7 +2835,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchTestBody("i 180 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_test_body("i 180 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}

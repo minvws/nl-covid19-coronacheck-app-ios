@@ -104,7 +104,7 @@ extension ListRemoteEventsViewModel {
 		return .listEvents(
 			content: Content(
 				title: eventMode.title,
-				body: eventMode.listMessage,
+				body: Strings.listMessage(forEventMode: eventMode),
 				primaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListAction() : L.holderDccListAction(),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
@@ -513,7 +513,7 @@ extension ListRemoteEventsViewModel {
 		
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderEventOriginmismatchTitle(),
-			subTitle: eventMode.originsMismatchBody(errorCode),
+			subTitle: Strings.originsMismatchBody(errorCode: errorCode, forEventMode: eventMode),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}

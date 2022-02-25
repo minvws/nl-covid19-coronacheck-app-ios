@@ -44,28 +44,6 @@ enum EventMode: String {
 			case .vaccinationassessment: return L.holder_event_vaccination_assessment_alert_message()
 		}
 	}
-
-	var listMessage: String {
-		switch self {
-			case .paperflow: return L.holder_listRemoteEvents_paperflow_message()
-			case .recovery: return L.holder_listRemoteEvents_recovery_message()
-			case .vaccinationAndPositiveTest, .vaccination: return L.holder_listRemoteEvents_vaccination_message()
-			case .test: return L.holder_listRemoteEvents_negativeTest_message()
-			case .vaccinationassessment: return L.holder_listRemoteEvents_vaccinationAssessment_message()
-		}
-	}
-
-	func originsMismatchBody(_ errorCode: ErrorCode) -> String {
-		
-		switch self {
-			case .paperflow: return L.holderEventOriginmismatchDccBody("\(errorCode)")
-			case .vaccinationAndPositiveTest: return "" // Not applicable
-			case .recovery: return L.holderEventOriginmismatchRecoveryBody("\(errorCode)")
-			case .test: return L.holderEventOriginmismatchTestBody("\(errorCode)")
-			case .vaccination: return L.holderEventOriginmismatchVaccinationBody("\(errorCode)")
-			case .vaccinationassessment: return L.holderEventOriginmismatchVaccinationApprovalBody("\(errorCode)")
-		}
-	}
 }
 
 // MARK: - ErrorCode Flow -

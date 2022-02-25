@@ -310,12 +310,7 @@
 "holder.event.identity.alert.title" = "Wil je je bewijs vervangen?";
 "holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Heb je al een testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
-"holder.event.originmismatch.dcc.body" = "<p>Op dit moment kunnen we geen bewijs maken van je gescande QR-code. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
-"holder.event.originmismatch.recovery.body" = "<p>Op dit moment kunnen we geen bewijs maken van je positieve testuitslag. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
-"holder.event.originmismatch.test.body" = "<p>Op dit moment kunnen we geen bewijs maken van je negatieve testuitslag. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
 "holder.event.originmismatch.title" = "We kunnen geen bewijs maken";
-"holder.event.originmismatch.vaccination.approval.body" = "<p>Op dit moment kunnen we geen bewijs maken van je vaccinatiebeoordeling. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
-"holder.event.originmismatch.vaccination.body" = "<p>Op dit moment kunnen we geen bewijs maken van je vaccinatie. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
 "holder.fetchevents.error.noresults.networkerror.message" = "Het is niet gelukt om de %@ op te halen. Probeer het nog eens.";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, er gaat iets mis";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "Het is druk of er is een storing bij een aangesloten partij. Daardoor kunnen je gegevens nu niet worden opgehaald. Probeer het later nog eens.";
@@ -664,6 +659,12 @@
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder_listRemoteEvents_negativeTest_message" = "Deze testuitslag is opgehaald bij de testlocatie. Als de gegevens kloppen kun je een bewijs maken.";
+"holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>Op dit moment kunnen we geen bewijs maken van je gescande QR-code. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_recovery_body" = "<p>Op dit moment kunnen we geen bewijs maken van je positieve testuitslag. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_test_body" = "<p>Op dit moment kunnen we geen bewijs maken van je negatieve testuitslag. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_vaccinationAndPositiveTest_body" = "<p>Op dit moment kunnen we geen bewijs maken van je opgehaalde gegevens. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_vaccinationAssessment_body" = "<p>Op dit moment kunnen we geen bewijs maken van je vaccinatiebeoordeling. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_vaccination_body" = "<p>Op dit moment kunnen we geen bewijs maken van je vaccinatie. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_paperflow_message" = "Met deze gegevens kun je een bewijs maken.";
 "holder_listRemoteEvents_paperflow_title" = "Gescande gegevens";
 "holder_listRemoteEvents_recovery_message" = "Als de gegevens van je test kloppen kun je een herstelbewijs maken.";
