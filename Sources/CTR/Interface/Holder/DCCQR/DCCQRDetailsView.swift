@@ -79,11 +79,11 @@ final class DCCQRDetailsView: BaseView {
 		super.setupAccessibility()
 		
 		NotificationCenter.default.addObserver(forName: UIAccessibility.voiceOverStatusDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.configureLabelsForAccessibility()
+			self?.updateAccessibilityStatus()
 		}
 		
 		NotificationCenter.default.addObserver(forName: UIAccessibility.switchControlStatusDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.configureLabelsForAccessibility()
+			self?.updateAccessibilityStatus()
 		}
 	}
 	
@@ -110,6 +110,7 @@ final class DCCQRDetailsView: BaseView {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details)
+			setupLabelsForAccessibility()
 		}
 	}
 	
@@ -142,15 +143,13 @@ private extension DCCQRDetailsView {
 		}
 		
 		stackView.addArrangedSubview(dateInformationLabel)
-		
-		configureLabelsForAccessibility()
 	}
 	
-	func configureLabelsForAccessibility() {
+	func updateAccessibilityStatus() {
 		
-		titleLabel.setupForSwitchControl()
-		descriptionLabel.setupForSwitchControl()
-		dateInformationLabel.setupForSwitchControl()
+		titleLabel.setupForVoiceAndSwitchControlAccessibility()
+		descriptionLabel.setupForVoiceAndSwitchControlAccessibility()
+		dateInformationLabel.setupForVoiceAndSwitchControlAccessibility()
 		
 		stackView.subviews.forEach { view in
 			guard let labelView = view as? DCCQRLabelView,
@@ -158,15 +157,17 @@ private extension DCCQRDetailsView {
 				  let value = labelView.value else { return }
 			
 			if UIAccessibility.isVoiceOverRunning {
+				// Show labels for VoiceOver
 				labelView.accessibilityLabel = [field, value].joined(separator: ",")
 			} else {
+				// Hide labels for VoiceControl
 				labelView.accessibilityLabel = nil
 			}
 			
 			// Disabled as interactive element for SwitchControl
 			labelView.isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
 			
-			labelView.configureLabelsForAccessibility()
+			labelView.updateAccessibilityStatus()
 		}
 	}
 }

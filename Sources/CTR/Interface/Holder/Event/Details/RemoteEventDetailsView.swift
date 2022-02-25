@@ -78,7 +78,7 @@ final class RemoteEventDetailsView: BaseView {
 		super.setupAccessibility()
 		
 		NotificationCenter.default.addObserver(forName: UIAccessibility.voiceOverStatusDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.configureLabelsForAccessibility()
+			self?.setupLabelsForAccessibility()
 		}
 	}
 	
@@ -99,6 +99,7 @@ final class RemoteEventDetailsView: BaseView {
 			guard let details = details else { return }
 			loadDetails(details)
 			stackView.addArrangedSubview(footerTextView)
+			setupLabelsForAccessibility()
 		}
 	}
 	
@@ -116,12 +117,10 @@ final class RemoteEventDetailsView: BaseView {
 
 private extension RemoteEventDetailsView {
 	
-	func createLabel(for detail: NSAttributedString) -> Label {
-		let label = Label(body: nil)
-		label.attributedText = detail
-		label.textColor = Theme.colors.dark
-		label.numberOfLines = 0
-		return label
+	func createLabel(for detail: NSAttributedString) -> AccessibleBodyLabelView {
+		let view = AccessibleBodyLabelView()
+		view.label.attributedText = detail
+		return view
 	}
 
 	func createLineView() -> UIView {
@@ -153,15 +152,42 @@ private extension RemoteEventDetailsView {
 				}
 			}
 		}
-		
-		configureLabelsForAccessibility()
 	}
 	
 	/// Hide voice over labels when VoiceControl or SwitchControl are enabled. Setting it to none allows it to scroll for VoiceControl and SwitchControl
-	func configureLabelsForAccessibility() {
+	func setupLabelsForAccessibility() {
 		stackView.subviews.forEach { view in
-			guard let label = view as? Label else { return }
-			label.setupForSwitchControl()
+			guard let label = view as? AccessibleBodyLabelView else { return }
+			label.updateAccessibilityStatus()
 		}
+	}
+}
+
+/// Hides VoiceControl labels for Label
+private class AccessibleBodyLabelView: BaseView {
+	
+	let label: Label = {
+		let label = Label(body: nil).multiline()
+		label.textColor = Theme.colors.dark
+		return label
+	}()
+	
+	override func setupViewHierarchy() {
+		super.setupViewHierarchy()
+		
+		label.embed(in: self)
+	}
+	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		updateAccessibilityStatus()
+	}
+	
+	func updateAccessibilityStatus() {
+		label.setupForVoiceAndSwitchControlAccessibility()
+		
+		isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
+		accessibilityLabel = UIAccessibility.isVoiceOverRunning ? label.text : nil
 	}
 }

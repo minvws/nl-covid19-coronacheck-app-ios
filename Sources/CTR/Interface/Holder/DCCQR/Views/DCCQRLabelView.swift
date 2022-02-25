@@ -76,10 +76,10 @@ final class DCCQRLabelView: BaseView {
 		}
 	}
 	
-	/// Configure labels to support SwitchControl accessibility
-	func configureLabelsForAccessibility() {
+	/// Set up labels to support SwitchControl accessibility
+	func updateAccessibilityStatus() {
 		
-		fieldLabel.setupForSwitchControl()
-		valueLabel.setupForSwitchControl()
+		fieldLabel.setupForVoiceAndSwitchControlAccessibility()
+		valueLabel.setupForVoiceAndSwitchControlAccessibility()
 	}
 }
