@@ -153,6 +153,15 @@ final class LabelWithCheckbox: UIControl {
 		])
 	}
 	
+	
+	override func accessibilityActivate() -> Bool {
+		
+		isSelected.toggle()
+		accessibilityValue = isSelected ? "1" : "0"
+		
+		return true // indicates that this control has handled the activation itself
+	}
+	
 	/// Setup all the accessibility traits
 	private func setupAccessibility() {
 		
