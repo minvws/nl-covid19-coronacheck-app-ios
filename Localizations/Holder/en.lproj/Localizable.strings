@@ -173,7 +173,6 @@
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Are you able to connect to the internet soon?";
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
-"holder.dcc.element.subtitle" = "Name: %@\nDate of birth: %@";
 "holder.dcc.list.action" = "Add certificate";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
@@ -302,8 +301,6 @@
 "holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.type" = "Vaccine type:";
 "holder.event.details" = "Details";
-"holder.event.element.subtitle.test2" = "Test date: %@\nYour details: %@";
-"holder.event.element.subtitle.test3" = "Test date: %@\nName: %@\nDate of birth: %@";
 "holder.event.identity.alert.cancel" = "Stop";
 "holder.event.identity.alert.message" = "The personal details you just retrieved don't match those in your current certificate. You can either stop and have your details changed by the organisation that registered the details for your certificate, or replace your certificate. Your current certificate will then be removed.";
 "holder.event.identity.alert.ok" = "Replace";
@@ -560,10 +557,6 @@
 "holder.vaccination.alert.continue" = "No";
 "holder.vaccination.alert.stop" = "Yes, go back";
 "holder.vaccination.alert.title" = "Are you sure you want to go back?";
-"holder.vaccination.element.combined" = "Data retrieved from: %@ and %@";
-"holder.vaccination.element.single" = "Data retrieved from: %@";
-"holder.vaccination.element.subtitle" = "Name: %@\nDate of birth: %@\n";
-"holder.vaccination.element.title" = "Vaccination %@";
 "holder.vaccination.error.again" = "Try again";
 "holder.vaccination.error.close" = "Close";
 "holder.vaccination.error.message" = "Couldn't retrieve the vaccination. Please try again.";
@@ -631,7 +624,6 @@
 "holder_event_vaccination_assessment_about_subtitle" = "The following details were retrieved:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Unique review identifier:";
 "holder_event_vaccination_assessment_alert_message" = "Doing so will stop the addition of your vaccination approval and you will have to retrieve your details again later.";
-"holder_event_vaccination_assessment_element_subtitle" = "Review date: %@\nName: %@\nDate of birth: %@";
 "holder_event_vaccination_assessment_element_title" = "Vaccination approval";
 "holder_event_vaccination_assessment_nolist_message" = "<p>There are no details available about your vaccination approval. Please go back to the desk that reviewed your vaccination.</p><p>For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_event_vaccination_assessment_nolist_title" = "No vaccination approval available";
@@ -652,6 +644,13 @@
 "holder_listRemoteEvents_endStateRecoveryTooOld_title" = "Positive test result no longer valid";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>A Dutch vaccination certificate has been created.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Created vaccination and recovery certificates";
+"holder_listRemoteEvents_listElement_assessmentDate" = "Review date:  %@";
+"holder_listRemoteEvents_listElement_birthDate" = "Date of birth: %@";
+"holder_listRemoteEvents_listElement_name" = "Name: %@";
+"holder_listRemoteEvents_listElement_retrievedFrom_plural" = "Data retrieved from: %@ and %@";
+"holder_listRemoteEvents_listElement_retrievedFrom_single" = "Data retrieved from: %@";
+"holder_listRemoteEvents_listElement_testDate" = "Test date: %@";
+"holder_listRemoteEvents_listElement_yourDetails" = "Your details: %@";
 "holder_listRemoteEvents_negativeTest_message" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
 "holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>At this moment, we can't make a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_originMismatch_recovery_body" = "<p>At this moment, we can't make a certificate from your positive test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";

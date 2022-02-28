@@ -306,7 +306,7 @@ extension ListRemoteEventsViewModel {
 		
 		if let nextRow = combineWith {
 			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(nextRow.providerIdentifier) ?? nextRow.providerIdentifier
-			listDetails.append(L.holder_listRemoteEvents_listElement_retreivedFrom_plural(provider, otherProviderString))
+			listDetails.append(L.holder_listRemoteEvents_listElement_retrievedFrom_plural(provider, otherProviderString))
 			details += [EventDetails(field: EventDetailsVaccination.separator, value: nil)]
 			details += VaccinationDetailsGenerator.getDetails(
 				identity: nextRow.identity,
