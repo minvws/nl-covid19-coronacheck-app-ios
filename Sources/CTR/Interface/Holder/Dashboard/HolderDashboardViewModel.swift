@@ -554,17 +554,16 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
 			state: state,
@@ -572,7 +571,6 @@ final class HolderDashboardViewModel: Logging {
 			actionHandler: actionHandler,
 			remoteConfigManager: remoteConfigManager
 		)
-		
 		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
