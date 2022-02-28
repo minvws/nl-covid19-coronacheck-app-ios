@@ -298,7 +298,7 @@ extension ListRemoteEventsViewModel {
 			providerIdentifier: dataRow.providerIdentifier
 		)
 
-		let title = L.holderVaccinationElementTitle("\(formattedShotMonth)")
+		let title = L.holder_listRemoteEvents_listElement_vaccination_title("\(formattedShotMonth)")
 		var listDetails: [String] = [
 			L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
 			L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
