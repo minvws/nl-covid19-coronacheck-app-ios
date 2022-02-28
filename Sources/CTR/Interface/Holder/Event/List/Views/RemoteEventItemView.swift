@@ -170,6 +170,7 @@ class RemoteEventItemView: BaseView {
 	/// The message
 	var details: [String] = [] {
 		didSet {
+			detailsStackView.removeArrangedSubviews()
 			details.forEach { detail in
 				let label = Label(subhead: nil).multiline()
 				label.attributedText = .makeFromHtml(
