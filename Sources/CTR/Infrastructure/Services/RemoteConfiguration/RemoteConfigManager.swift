@@ -208,12 +208,6 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 			case let .success((remoteConfiguration, data, urlResponse)):
 
-				// Update the last fetch-time
-				userSettings.configFetchedTimestamp = now().timeIntervalSince1970
-
-				// Some observers want to know whenever the config is reloaded (regardless if data changed since last time):
-				self.notifyReloadObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
-
 				// Calculate the new hash
 				// It should match the following command (verifier/holder):
 				// `curl https://verifier-api.acc.coronacheck.nl/v6/verifier/config | jq -r .payload | base64 -d | sha256sum`
@@ -227,8 +221,15 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 				// Save the config & new hash regardless of whether the hashes match,
 				// to guard against the keychain value being out of sync with the UserDefaults hash
 				userSettings.configFetchedHash = newHash
+	
+				// Update the last fetch-time
+				userSettings.configFetchedTimestamp = now().timeIntervalSince1970
+				
 				storedConfiguration = remoteConfiguration
 
+				// Some observers want to know whenever the config is reloaded (regardless if data changed since last time):
+				self.notifyReloadObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
+	
 				// Is the newly fetched config hash the same as the existing one?
 				// Use the hash, as not all of the config values are mapping in the remoteconfig object.
 				if hashesMatch {
