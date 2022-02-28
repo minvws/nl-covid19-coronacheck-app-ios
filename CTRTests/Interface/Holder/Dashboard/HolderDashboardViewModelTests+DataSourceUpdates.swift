@@ -1211,15 +1211,15 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
+		expect(self.sut.domesticCards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
 			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEUVaccination()
 		}))
 		
-		expect(self.sut.domesticCards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
+		expect(self.sut.domesticCards[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
 			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.general_recoverycertificate())
 		}))
 		
-		expect(self.sut.domesticCards[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
+		expect(self.sut.domesticCards[4]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
 			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.general_testcertificate())
 		}))
 	}
@@ -1248,7 +1248,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards).toEventually(haveCount(4))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
 		
-		expect(self.sut.domesticCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { _, _, didTapMoreInfo in
+		expect(self.sut.domesticCards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { _, _, didTapMoreInfo in
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQR) == false
 			didTapMoreInfo()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutIncompleteDutchVaccination) == true
