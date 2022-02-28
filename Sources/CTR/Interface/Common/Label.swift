@@ -11,13 +11,14 @@ import UIKit
 class Label: UILabel {
     
 	init(_ text: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = Theme.colors.dark) {
-        super.init(frame: .zero)
-        
-        self.text = text
-        self.font = font
-        self.textColor = textColor
+		super.init(frame: .zero)
+		
+		self.text = text
+		self.font = font
+		self.textColor = textColor
 		self.translatesAutoresizingMaskIntoConstraints = false
-    }
+		self.adjustsFontForContentSizeCategory = true
+	}
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -30,7 +31,6 @@ class Label: UILabel {
 	convenience init(title1: String?, textColor: UIColor = .darkText, montserrat: Bool = false) {
 		if montserrat {
 			self.init(title1, font: Theme.fonts.title1Montserrat, textColor: textColor)
-			adjustsFontForContentSizeCategory = true
 		} else {
 			self.init(title1, font: Theme.fonts.title1, textColor: textColor)
 		}
@@ -43,7 +43,6 @@ class Label: UILabel {
 	convenience init(title3: String?, textColor: UIColor = .darkText, montserrat: Bool = false) {
 		if montserrat {
 			self.init(title3, font: Theme.fonts.title3Montserrat, textColor: textColor)
-			adjustsFontForContentSizeCategory = true
 		} else {
 			self.init(title3, font: Theme.fonts.title3, textColor: textColor)
 		}
@@ -60,7 +59,6 @@ class Label: UILabel {
 	convenience init(headlineBold: String?, textColor: UIColor = .darkText, montserrat: Bool = false) {
 		if montserrat {
 			self.init(headlineBold, font: Theme.fonts.headlineBoldMontserrat, textColor: textColor)
-			adjustsFontForContentSizeCategory = true
 		} else {
 			self.init(headlineBold, font: Theme.fonts.headlineBold, textColor: textColor)
 		}
