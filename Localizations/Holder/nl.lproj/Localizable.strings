@@ -173,7 +173,6 @@
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Kan je binnenkort verbinding maken met het internet?";
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn bewijzen";
-"holder.dcc.element.subtitle" = "Naam: %@\nGeboortedatum: %@";
 "holder.dcc.list.action" = "Bewijs toevoegen";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministerie van VWS";
@@ -302,8 +301,6 @@
 "holder.event.about.vaccination.subtitle" = "Deze gegevens van je vaccinatie zijn opgehaald bij %@:";
 "holder.event.about.vaccination.type" = "Type vaccin:";
 "holder.event.details" = "Details";
-"holder.event.element.subtitle.test2" = "Testdatum: %@\nJouw gegevens: %@";
-"holder.event.element.subtitle.test3" = "Testdatum: %@\nNaam: %@\nGeboortedatum: %@";
 "holder.event.identity.alert.cancel" = "Stoppen";
 "holder.event.identity.alert.message" = "De persoonsgegevens die je net hebt opgehaald zijn anders dan die in je huidige bewijs staan. Stop en laat eerst de gegevens aanpassen bij de organisatie die de gegevens voor je bewijs heeft geregistreerd, of vervang je bewijs. Je huidige bewijs wordt dan verwijderd.";
 "holder.event.identity.alert.ok" = "Vervang";
@@ -560,10 +557,6 @@
 "holder.vaccination.alert.continue" = "Nee";
 "holder.vaccination.alert.stop" = "Ja, terug";
 "holder.vaccination.alert.title" = "Weet je zeker dat je terug wilt?";
-"holder.vaccination.element.combined" = "Gegevens opgehaald bij: %@ en %@";
-"holder.vaccination.element.single" = "Gegevens opgehaald bij: %@";
-"holder.vaccination.element.subtitle" = "Naam: %@\nGeboortedatum: %@\n";
-"holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.error.again" = "Probeer opnieuw";
 "holder.vaccination.error.close" = "Sluiten";
 "holder.vaccination.error.message" = "Het is niet gelukt om de vaccinatie op te halen. Probeer het nog eens.";
@@ -632,7 +625,6 @@
 "holder_event_vaccination_assessment_about_subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Uniek beoordelingsnummer:";
 "holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het toevoegen van je vaccinatiebeoordeling en moet je later opnieuw je gegevens ophalen.";
-"holder_event_vaccination_assessment_element_subtitle" = "Beoordelingsdatum: %@\nNaam: %@\nGeboortedatum: %@";
 "holder_event_vaccination_assessment_element_title" = "Vaccinatiebeoordeling";
 "holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatiebeoordeling beschikbaar. Ga terug naar de balie waar jouw vaccinatie is beoordeeld.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_event_vaccination_assessment_nolist_title" = "Geen vaccinatiebeoordeling beschikbaar";
@@ -655,6 +647,14 @@
 "holder_listRemoteEvents_endStateRecoveryTooOld_title" = "Positieve testuitslag niet meer geldig";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>Er is een Nederlands vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
+"holder_listRemoteEvents_listElement_assessmentDate" = "Beoordelingsdatum:  %@";
+"holder_listRemoteEvents_listElement_birthDate" = "Geboortedatum: %@";
+"holder_listRemoteEvents_listElement_name" = "Naam: %@";
+"holder_listRemoteEvents_listElement_retrievedFrom_plural" = "Gegevens opgehaald bij: %@ en %@";
+"holder_listRemoteEvents_listElement_retrievedFrom_single" = "Gegevens opgehaald bij: %@";
+"holder_listRemoteEvents_listElement_testDate" = "Testdatum:  %@";
+"holder_listRemoteEvents_listElement_vaccination_title" = "Vaccinatie %@";
+"holder_listRemoteEvents_listElement_yourDetails" = "Jouw gegevens:  %@";
 "holder_listRemoteEvents_negativeTest_message" = "Deze testuitslag is opgehaald bij de testlocatie. Als de gegevens kloppen kun je een bewijs maken.";
 "holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>Op dit moment kunnen we geen bewijs maken van je gescande QR-code. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_originMismatch_recovery_body" = "<p>Op dit moment kunnen we geen bewijs maken van je positieve testuitslag. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a></p><p><b>Foutcode:</b><br />%@</p>";

@@ -265,11 +265,11 @@ extension ListRemoteEventsViewModel {
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
-			subTitle: L.holderEventElementSubtitleTest3(
-				formattedTestDate,
-				dataRow.identity.fullName,
-				formattedBirthDate
-			),
+			details: [
+				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
+				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
@@ -298,11 +298,15 @@ extension ListRemoteEventsViewModel {
 			providerIdentifier: dataRow.providerIdentifier
 		)
 
-		let title = L.holderVaccinationElementTitle("\(formattedShotMonth)")
-		var subTitle = L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate)
+		let title = L.holder_listRemoteEvents_listElement_vaccination_title("\(formattedShotMonth)")
+		var listDetails: [String] = [
+			L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
+			L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+		]
+		
 		if let nextRow = combineWith {
 			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(nextRow.providerIdentifier) ?? nextRow.providerIdentifier
-			subTitle += L.holderVaccinationElementCombined(provider, otherProviderString)
+			listDetails.append(L.holder_listRemoteEvents_listElement_retrievedFrom_plural(provider, otherProviderString))
 			details += [EventDetails(field: EventDetailsVaccination.separator, value: nil)]
 			details += VaccinationDetailsGenerator.getDetails(
 				identity: nextRow.identity,
@@ -310,12 +314,12 @@ extension ListRemoteEventsViewModel {
 				providerIdentifier: nextRow.providerIdentifier
 			)
 		} else {
-			subTitle += L.holderVaccinationElementSingle(provider)
+			listDetails.append(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
 		}
 
 		return ListRemoteEventsViewController.Row(
 			title: title,
-			subTitle: subTitle,
+			details: listDetails,
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
@@ -339,11 +343,11 @@ extension ListRemoteEventsViewModel {
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holder_event_vaccination_assessment_element_title(),
-			subTitle: L.holder_event_vaccination_assessment_element_subtitle(
-				formattedTestDate,
-				dataRow.identity.fullName,
-				formattedBirthDate
-			),
+			details: [
+				L.holder_listRemoteEvents_listElement_assessmentDate(formattedTestDate),
+				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
@@ -367,11 +371,11 @@ extension ListRemoteEventsViewModel {
 		
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
-			subTitle: L.holderEventElementSubtitleTest3(
-				formattedTestDate,
-				dataRow.identity.fullName,
-				formattedBirthDate
-			),
+			details: [
+				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
+				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
@@ -395,11 +399,11 @@ extension ListRemoteEventsViewModel {
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
-			subTitle: L.holderEventElementSubtitleTest3(
-				formattedTestDate,
-				dataRow.identity.fullName,
-				formattedBirthDate
-			),
+			details: [
+				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
+				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
@@ -427,7 +431,10 @@ extension ListRemoteEventsViewModel {
 
 		return ListRemoteEventsViewController.Row(
 			title: title,
-			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
+			details: [
+				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
@@ -453,7 +460,10 @@ extension ListRemoteEventsViewModel {
 
 		return ListRemoteEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
-			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
+			details: [
+				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
@@ -476,7 +486,10 @@ extension ListRemoteEventsViewModel {
 
 		return ListRemoteEventsViewController.Row(
 			title: L.general_testcertificate().capitalizingFirstLetter(),
-			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
+			details: [
+				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
@@ -734,7 +747,10 @@ private extension ListRemoteEventsViewModel {
 		
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
-			subTitle: L.holderEventElementSubtitleTest2(printSampleDate, holderID),
+			details: [
+				L.holder_listRemoteEvents_listElement_testDate(printSampleDate),
+				L.holder_listRemoteEvents_listElement_yourDetails(holderID)
+			],
 			action: { [weak self] in
 				
 				self?.coordinator?.listEventsScreenDidFinish(
