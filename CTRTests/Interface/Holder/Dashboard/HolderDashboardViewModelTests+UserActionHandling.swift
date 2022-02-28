@@ -250,4 +250,88 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
 		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
+	
+	func test_actionhandling_disclosurePolicyInformationCard_3g() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?([], [])
+		
+		// Assert
+		expect(self.sut.domesticCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
+			
+			// Test `didTapCallToAction`
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
+			didTapCallToAction()
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_dashboard_only3GaccessBanner_link()
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.inApp) == true
+			
+			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy).to(beNil())
+			self.environmentSpies.userSettingsSpy.stubbedLastDismissedDisclosurePolicy = [.policy3G]
+			didTapClose()
+			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == [.policy3G]
+		}))
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		
+		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).to(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_actionhandling_disclosurePolicyInformationCard_1g() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy1G])
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?([], [])
+		
+		// Assert
+		expect(self.sut.domesticCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
+			
+			// Test `didTapCallToAction`
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
+			didTapCallToAction()
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_dashboard_only1GaccessBanner_link()
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.inApp) == true
+			
+			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy).to(beNil())
+			self.environmentSpies.userSettingsSpy.stubbedLastDismissedDisclosurePolicy = [.policy1G]
+			didTapClose()
+			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == [.policy1G]
+		}))
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		
+		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).to(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_actionhandling_disclosurePolicyInformationCard_1g3g() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy1G, .policy3G])
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?([], [])
+		
+		// Assert
+		expect(self.sut.domesticCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
+			
+			// Test `didTapCallToAction`
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
+			didTapCallToAction()
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_dashboard_3Gand1GaccessBanner_link()
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.inApp) == true
+			
+			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy).to(beNil())
+			self.environmentSpies.userSettingsSpy.stubbedLastDismissedDisclosurePolicy = [.policy1G, .policy3G]
+			didTapClose()
+			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == [.policy1G, .policy3G]
+		}))
+		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		
+		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).to(beEmptyStatePlaceholderImage())
+	}
 }

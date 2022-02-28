@@ -55,7 +55,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = dashboardRegionToggleValue
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = activeDisclosurePolicies.map { $0.featureFlag }
-		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = activeDisclosurePolicies.sorted() == [.policy1G, .policy3G]
+		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = activeDisclosurePolicies.sorted(by: { $0.featureFlag < $1.featureFlag }) == [.policy1G, .policy3G]
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = activeDisclosurePolicies == [.policy1G]
 		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = activeDisclosurePolicies == [.policy3G]
 		return HolderDashboardViewModel(
