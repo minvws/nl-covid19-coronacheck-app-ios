@@ -18,7 +18,7 @@ extension HolderDashboardViewModelTests {
 		// remove this default value because otherwise this tangentially triggers a reload:
 		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = nil
 		
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		expect(self.datasourceSpy.invokedReload) == false
 
@@ -45,7 +45,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippen_domestic_startLoading_shouldClearError() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -201,7 +201,7 @@ extension HolderDashboardViewModelTests {
 	// MARK: - Strippen Alerts
 
 	func test_strippen_expired_noInternetError_shouldPresentError() {
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -228,7 +228,7 @@ extension HolderDashboardViewModelTests {
 	func test_strippenkaart_noInternet_expired_previouslyDismissed_shouldDisplayError() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -267,7 +267,7 @@ extension HolderDashboardViewModelTests {
 	}
 
 	func test_strippen_noInternet_expiring_shouldPresentErrorAlert() {
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -294,7 +294,7 @@ extension HolderDashboardViewModelTests {
 	func test_strippenkaart_noInternet_expiring_hasPreviouslyDismissed_shouldDoNothing() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -317,7 +317,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippenkaart_serverError_expiring_shouldDoNothing() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 
 		let strippenState = DashboardStrippenRefresher.State(
@@ -344,7 +344,7 @@ extension HolderDashboardViewModelTests {
 	}
 
 	func test_strippen_expired_serverError_firstTime_shouldDisplayErrorWithRetry() {
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let newStrippenState = DashboardStrippenRefresher.State(
@@ -384,7 +384,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippen_expired_serverError_secondTime_shouldDisplayErrorWithHelpdesk() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -424,7 +424,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippen_domesticandinternational_expired_serverError_firstTime_shouldDisplayError() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -480,7 +480,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippen_domestic_expired_serverError_thirdTime_shouldDisplayHelpdeskError() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -560,7 +560,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippenkaart_noActionNeeded_shouldDoNothing() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .idle,

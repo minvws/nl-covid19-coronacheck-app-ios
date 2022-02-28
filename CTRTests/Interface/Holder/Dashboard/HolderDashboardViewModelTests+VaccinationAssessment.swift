@@ -20,7 +20,7 @@ extension HolderDashboardViewModelTests {
 		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = true
 		
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(4))
@@ -37,7 +37,7 @@ extension HolderDashboardViewModelTests {
 		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = false
 		
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(3))
