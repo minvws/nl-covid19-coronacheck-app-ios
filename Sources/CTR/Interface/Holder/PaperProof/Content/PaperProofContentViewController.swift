@@ -9,7 +9,7 @@ import UIKit
 
 class PaperProofContentViewController: BaseViewController {
 
-	private let viewModel: PaperProofContentViewModel
+	internal let viewModel: PaperProofContentViewModel
 	private let sceneView = PaperProofContentView()
 
 	/// Initializer
