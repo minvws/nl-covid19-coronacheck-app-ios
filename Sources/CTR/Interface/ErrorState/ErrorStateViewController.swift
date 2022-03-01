@@ -9,7 +9,7 @@ import UIKit
 
 class ErrorStateViewController: BaseViewController {
 
-	private let viewModel: ErrorStateViewModel
+	internal let viewModel: ErrorStateViewModel
 	private let sceneView = ErrorStateView()
 
 	/// Initializer

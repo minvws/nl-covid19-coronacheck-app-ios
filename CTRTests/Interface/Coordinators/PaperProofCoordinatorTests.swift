@@ -11,10 +11,10 @@ import Nimble
 
 class PaperProofCoordinatorTests: XCTestCase {
 
-	var sut: PaperProofCoordinator!
+	private var sut: PaperProofCoordinator!
 	private var environmentSpies: EnvironmentSpies!
-	var flowSpy: PaperProofFlowDelegateSpy!
-	var navigationSpy: NavigationControllerSpy!
+	private var flowSpy: PaperProofFlowDelegateSpy!
+	private var navigationSpy: NavigationControllerSpy!
 
 	override func setUp() {
 
@@ -28,6 +28,22 @@ class PaperProofCoordinatorTests: XCTestCase {
 	}
 
 	// MARK: - Tests
+	
+	func test_consumeLink() {
+		
+		// Given
+		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let result = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(result) == false
+	}
 
 	func test_userWishesToEnterToken() {
 
@@ -231,6 +247,89 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.sut.token).to(beNil())
 		expect(self.sut.scannedQR).to(beNil())
 		expect(self.sut.childCoordinators).to((haveCount(0)))
+	}
+	
+	func test_userWishesMoreInformationOnSelfPrintedProof() throws {
+		
+		// Given
+		
+		// When
+		sut.userWishesMoreInformationOnSelfPrintedProof()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel)
+		expect(viewModel?.content.title) == L.holderPaperproofSelfprintedTitle()
+		expect(viewModel?.content.body) == L.holderPaperproofSelfprintedMessage()
+	}
+	
+	func test_userWishesMoreInformationOnNoInputToken() throws {
+		
+		// Given
+		
+		// When
+		sut.userWishesMoreInformationOnNoInputToken()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel)
+		expect(viewModel?.content.title) == L.holderPaperproofNotokenTitle()
+		expect(viewModel?.content.body) == L.holderPaperproofNotokenMessage()
+	}
+	
+	func test_userWishesMoreInformationOnInternationalQROnly() {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInformationOnInternationalQROnly()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel: ContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel
+		
+		expect(viewModel?.content.title) == L.holderPaperproofInternationalQROnlyTitle()
+		expect(viewModel?.content.body) == L.holderPaperproofInternationalQROnlyMessage()
+	}
+	
+	func test_displayError() throws {
+		
+		// Given
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle()
+		)
+		
+		// When
+		sut.displayError(content: content, backAction: {})
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+	}
+	
+	func test_userWishesToGoBackToScanCertificate() {
+		
+		// Given
+		navigationSpy.viewControllers = [
+			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
+			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut)),
+			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut))
+		]
+		
+		// When
+		sut.userWishesToGoBackToScanCertificate()
+		
+		// Then
+		expect(self.navigationSpy.invokedPopToViewController) == true
+		expect(self.navigationSpy.viewControllers).to(haveCount(2))
 	}
 }
 
