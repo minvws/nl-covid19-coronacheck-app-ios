@@ -690,6 +690,12 @@
 "holder_newintheapp_content_only3G_title" = "3G access only";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "About your visitor pass";
+"holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message" = "Visiting a place in the Netherlands where a coronavirus pass is required? The app creates seperate certificates for 3G and 1G access. Check beforehand which one you need.";
+"holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_title" = "Check the access rules";
+"holder_onboarding_disclosurePolicyChanged_only1GAccess_message" = "Visiting a place in the Netherlands where a coronavirus pass is required? Currently, only 1G access is given. This means you can enter with a certificate of a negative test.";
+"holder_onboarding_disclosurePolicyChanged_only1GAccess_title" = "Only 1G access in the Netherlands";
+"holder_onboarding_disclosurePolicyChanged_only3GAccess_message" = "Visiting a place in the Netherlands where a coronavirus pass is required? 3G access currently applies everywhere. This means you can enter with a vaccination or recovery certificate, or a negative test.";
+"holder_onboarding_disclosurePolicyChanged_only3GAccess_title" = "3G access in the Netherlands";
 "holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 /* Voice Over Details Button Domestic QR */
