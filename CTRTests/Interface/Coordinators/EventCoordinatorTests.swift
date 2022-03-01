@@ -4,6 +4,7 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
+// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -603,6 +604,134 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// When
 		sut.fetchEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+	}
+	
+	// MARK: - listEventsScreenDidFinish
+
+	func test_listEventsScreenDidFinish_stop() {
+		
+		// Given
+		
+		// When
+		sut.listEventsScreenDidFinish(.stop)
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+	}
+
+	func test_listEventsScreenDidFinish_continue() {
+		
+		// Given
+		
+		// When
+		sut.listEventsScreenDidFinish(.continue(eventMode: .test))
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+	}
+	
+	func test_listEventsScreenDidFinish_back_vaccination() {
+		
+		// Given
+		navigationSpy.viewControllers = [
+			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination)),
+			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: TVSAuthorizationToken.test, eventMode: .vaccination )),
+			ListRemoteEventsViewController(
+				viewModel: ListRemoteEventsViewModel(
+					coordinator: sut,
+					eventMode: .vaccination,
+					remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
+					identityChecker: IdentityCheckerSpy(),
+					greenCardLoader: environmentSpies.greenCardLoaderSpy
+				)
+			)
+		]
+		
+		// When
+		sut.listEventsScreenDidFinish(.back(eventMode: .vaccination))
+		
+		// Then
+		expect(self.navigationSpy.invokedPopToViewController) == true
+		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+	}
+	
+	func test_listEventsScreenDidFinish_error() {
+		// Given
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle()
+		)
+		
+		// When
+		sut.listEventsScreenDidFinish(.error(content: content, backAction: {}))
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
+		let viewModel: ErrorStateViewModel? = (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel
+		expect(viewModel?.content.title) == L.generalNetworkwasbusyTitle()
+	}
+	
+	func test_listEventsScreenDidFinish_moreInformation() {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.listEventsScreenDidFinish(.moreInformation(title: "title", body: "body", hideBodyForScreenCapture: false))
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel: ContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel
+		
+		expect(viewModel?.content.title) == "title"
+		expect(viewModel?.content.body) == "body"
+	}
+	
+	func test_listEventsScreenDidFinish_showEventDetails() {
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		let identity = EventFlow.Identity.fakeIdentity
+		let event = EventFlow.Event.negativeTestEvent
+		let details = NegativeTestDetailsGenerator.getDetails(identity: identity, event: event)
+		
+		// When
+		sut.listEventsScreenDidFinish(.showEventDetails(title: "test title", details: details, footer: "test footer"))
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel: RemoteEventDetailsViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? RemoteEventDetailsViewController)?.viewModel
+
+		expect(viewModel?.title) == "test title"
+		expect(viewModel?.footer) == "test footer"
+	}
+
+	func test_listEventsScreenDidFinish_shouldCompleteVaccinationAssessment() {
+		
+		// Given
+		
+		// When
+		sut.listEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == true
+	}
+	
+	func test_listEventsScreenDidFinish_default() {
+		
+		// Given
+		
+		// When
+		sut.listEventsScreenDidFinish(.backSwipe)
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
