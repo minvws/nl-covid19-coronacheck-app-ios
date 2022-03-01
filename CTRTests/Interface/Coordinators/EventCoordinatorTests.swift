@@ -4,7 +4,6 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
-// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -35,8 +34,6 @@ class EventCoordinatorTests: XCTestCase {
 	func test_consume_univeralLink() {
 		
 		// Given
-		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
-		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-STXT2VF3389TJ2-Z2")
 		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
 			token: "STXT2VF3389TJ2",
 			protocolVersion: "3.0",
@@ -52,7 +49,7 @@ class EventCoordinatorTests: XCTestCase {
 	
 	// MARK: - Start
 	
-	func test_start() {
+	func test_start() throws {
 		
 		// Given
 		
@@ -62,13 +59,12 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		let viewModel: RemoteEventStartViewModel? = (self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.vaccination
-		expect(viewModel?.title) == L.holderVaccinationStartTitle()
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.vaccination
+		expect(viewModel.title) == L.holderVaccinationStartTitle()
 	}
 	
-	func test_startWithVaccination() {
+	func test_startWithVaccination() throws {
 		
 		// Given
 		
@@ -78,13 +74,12 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		let viewModel: RemoteEventStartViewModel? = (self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.vaccination
-		expect(viewModel?.title) == L.holderVaccinationStartTitle()
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.vaccination
+		expect(viewModel.title) == L.holderVaccinationStartTitle()
 	}
 	
-	func test_startWithNegativeTest() {
+	func test_startWithNegativeTest() throws {
 		
 		// Given
 		
@@ -94,13 +89,12 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		let viewModel: RemoteEventStartViewModel? = (self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.test
-		expect(viewModel?.title) == L.holder_negativetest_ggd_title()
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.test
+		expect(viewModel.title) == L.holder_negativetest_ggd_title()
 	}
 	
-	func test_startWithRecovery() {
+	func test_startWithRecovery() throws {
 		
 		// Given
 		
@@ -110,13 +104,12 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		let viewModel: RemoteEventStartViewModel? = (self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.recovery
-		expect(viewModel?.title) == L.holderRecoveryStartTitle()
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.recovery
+		expect(viewModel.title) == L.holderRecoveryStartTitle()
 	}
 	
-	func test_startWithListTestEvents_vaccinationAssessment() {
+	func test_startWithListTestEvents_vaccinationAssessment() throws {
 		
 		// Given
 		let event = FakeRemoteEvent.fakeRemoteEventVaccinationAssessment
@@ -127,12 +120,11 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel: ListRemoteEventsViewModel? = (self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.vaccinationassessment
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.vaccinationassessment
 	}
 	
-	func test_startWithListTestEvents_paperProof() {
+	func test_startWithListTestEvents_paperProof() throws {
 		
 		// Given
 		let event = FakeRemoteEvent.fakeRemoteEventPaperProof
@@ -143,12 +135,11 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel: ListRemoteEventsViewModel? = (self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.paperflow
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.paperflow
 	}
 	
-	func test_startWithListTestEvents_positiveTest() {
+	func test_startWithListTestEvents_positiveTest() throws {
 		
 		// Given
 		let event = FakeRemoteEvent.fakeRemoteEventPositiveTest
@@ -159,12 +150,11 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel: ListRemoteEventsViewModel? = (self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.recovery
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.recovery
 	}
 	
-	func test_startWithListTestEvents_negativeTest() {
+	func test_startWithListTestEvents_negativeTest() throws {
 		
 		// Given
 		let event = FakeRemoteEvent.fakeRemoteEventNegativeTest
@@ -175,12 +165,11 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel: ListRemoteEventsViewModel? = (self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.test
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.test
 	}
 	
-	func test_startWithListTestEvents_recovery() {
+	func test_startWithListTestEvents_recovery() throws {
 		
 		// Given
 		let event = FakeRemoteEvent.fakeRemoteEventRecovery
@@ -191,12 +180,11 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel: ListRemoteEventsViewModel? = (self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.recovery
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.recovery
 	}
 	
-	func test_startWithListTestEvents_vaccination() {
+	func test_startWithListTestEvents_vaccination() throws {
 		
 		// Given
 		let event = FakeRemoteEvent.fakeRemoteEventVaccination
@@ -207,12 +195,11 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel: ListRemoteEventsViewModel? = (self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.vaccination
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.vaccination
 	}
 	
-	func test_startWithScannedEvent() {
+	func test_startWithScannedEvent() throws {
 		
 		// Given
 		let event = FakeRemoteEvent.fakeRemoteEventPaperProof
@@ -223,9 +210,8 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel: ListRemoteEventsViewModel? = (self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel
-		
-		expect(viewModel?.eventMode) == EventMode.paperflow
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.paperflow
 	}
 	
 	// MARK: - eventStartScreenDidFinish
@@ -335,7 +321,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.invokedPresent).toEventually(beTrue())
 	}
 	
-	func test_loginTVSScreenDidFinish_error() {
+	func test_loginTVSScreenDidFinish_error() throws {
 		// Given
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle()
@@ -347,8 +333,8 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
-		let viewModel: ErrorStateViewModel? = (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel
-		expect(viewModel?.content.title) == L.generalNetworkwasbusyTitle()
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
 	}
 	
 	func test_loginTVSScreenDidFinish_back_vaccinationAssessment() {
@@ -539,7 +525,7 @@ class EventCoordinatorTests: XCTestCase {
 	
 	// MARK: - fetchEventsScreenDidFinish
 	
-	func test_fetchEventsScreenDidFinish_showEvents() {
+	func test_fetchEventsScreenDidFinish_showEvents() throws {
 		
 		// Given
 		let event = FakeRemoteEvent.fakeRemoteEventVaccination
@@ -550,11 +536,11 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel: ListRemoteEventsViewModel? = (self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel
-		expect(viewModel?.eventMode) == EventMode.vaccination
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.vaccination
 	}
 	
-	func test_fetchEventsScreenDidFinish_error() {
+	func test_fetchEventsScreenDidFinish_error() throws {
 		// Given
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle()
@@ -566,8 +552,8 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
-		let viewModel: ErrorStateViewModel? = (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel
-		expect(viewModel?.content.title) == L.generalNetworkwasbusyTitle()
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
 	}
 	
 	func test_fetchEventsScreenDidFinish_back_vaccination() {
@@ -659,7 +645,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 	
-	func test_listEventsScreenDidFinish_error() {
+	func test_listEventsScreenDidFinish_error() throws {
 		// Given
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle()
@@ -671,11 +657,11 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
-		let viewModel: ErrorStateViewModel? = (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel
-		expect(viewModel?.content.title) == L.generalNetworkwasbusyTitle()
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
 	}
 	
-	func test_listEventsScreenDidFinish_moreInformation() {
+	func test_listEventsScreenDidFinish_moreInformation() throws {
 		
 		// Given
 		let viewControllerSpy = ViewControllerSpy()
@@ -688,13 +674,12 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel: ContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel
-		
-		expect(viewModel?.content.title) == "title"
-		expect(viewModel?.content.body) == "body"
+		let viewModel: try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "title"
+		expect(viewModel.content.body) == "body"
 	}
 	
-	func test_listEventsScreenDidFinish_showEventDetails() {
+	func test_listEventsScreenDidFinish_showEventDetails() throws {
 		// Given
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -709,10 +694,9 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel: RemoteEventDetailsViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? RemoteEventDetailsViewController)?.viewModel
-
-		expect(viewModel?.title) == "test title"
-		expect(viewModel?.footer) == "test footer"
+		let viewModel: try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		expect(viewModel.title) == "test title"
+		expect(viewModel.footer) == "test footer"
 	}
 
 	func test_listEventsScreenDidFinish_shouldCompleteVaccinationAssessment() {
