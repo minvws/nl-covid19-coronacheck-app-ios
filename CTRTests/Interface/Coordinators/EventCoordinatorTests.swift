@@ -29,6 +29,28 @@ class EventCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 	
+	// MARK: - Universal Link handling
+	
+	func test_consume_univeralLink() {
+		
+		// Given
+		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-STXT2VF3389TJ2-Z2")
+		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let result = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(result) == false
+	}
+	
+	// MARK: - Start
+	
 	func test_start() {
 
 		// Given
@@ -203,5 +225,64 @@ class EventCoordinatorTests: XCTestCase {
 		let viewModel: ListRemoteEventsViewModel? = (self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel
 		
 		expect(viewModel?.eventMode) == EventMode.paperflow
+	}
+	
+	// MARK: - eventStartScreenDidFinish
+
+	func test_eventStartScreenDidFinish_back() {
+		
+		// Given
+		
+		// When
+		sut.eventStartScreenDidFinish(.back(eventMode: .test))
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == true
+	}
+	
+	func test_eventStartScreenDidFinish_stop() {
+		
+		// Given
+		
+		// When
+		sut.eventStartScreenDidFinish(.stop)
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == true
+	}
+	
+	func test_eventStartScreenDidFinish_backswipe() {
+
+		// Given
+		
+		// When
+		sut.eventStartScreenDidFinish(.backSwipe)
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == false
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancelFromBackSwipe) == true
+	}
+	
+	func test_eventStartScreenDidFinish_continue() {
+
+		// Given
+		
+		// When
+		sut.eventStartScreenDidFinish(.continue(eventMode: .vaccination))
+
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is LoginTVSViewController) == true
+	}
+	
+	func test_eventStartScreenDidFinish_default() {
+		
+		// Given
+		
+		// When
+		sut.eventStartScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 	}
 }
