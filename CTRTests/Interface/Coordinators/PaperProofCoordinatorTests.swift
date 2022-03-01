@@ -32,8 +32,6 @@ class PaperProofCoordinatorTests: XCTestCase {
 	func test_consumeLink() {
 		
 		// Given
-		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
-		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-STXT2VF3389TJ2-Z2")
 		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
 			token: "STXT2VF3389TJ2",
 			protocolVersion: "3.0",
@@ -251,7 +249,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 	}
 	
-	func test_userWishesMoreInformationOnSelfPrintedProof() {
+	func test_userWishesMoreInformationOnSelfPrintedProof() throws {
 		
 		// Given
 		
@@ -261,12 +259,12 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
-		let viewModel: PaperProofContentViewModel? = (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel)
 		expect(viewModel?.content.title) == L.holderPaperproofSelfprintedTitle()
 		expect(viewModel?.content.body) == L.holderPaperproofSelfprintedMessage()
 	}
 	
-	func test_userWishesMoreInformationOnNoInputToken() {
+	func test_userWishesMoreInformationOnNoInputToken() throws {
 		
 		// Given
 		
@@ -276,7 +274,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
-		let viewModel: PaperProofContentViewModel? = (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel)
 		expect(viewModel?.content.title) == L.holderPaperproofNotokenTitle()
 		expect(viewModel?.content.body) == L.holderPaperproofNotokenMessage()
 	}
@@ -300,7 +298,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(viewModel?.content.body) == L.holderPaperproofInternationalQROnlyMessage()
 	}
 	
-	func test_displayError() {
+	func test_displayError() throws {
 		
 		// Given
 		let content = Content(
@@ -313,8 +311,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
-		let viewModel: ErrorStateViewModel? = (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel
-		expect(viewModel?.content.title) == L.generalNetworkwasbusyTitle()
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
 	}
 	
 	func test_userWishesToGoBackToScanCertificate() {
