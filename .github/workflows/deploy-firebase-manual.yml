@@ -1,0 +1,49 @@
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: "Deploy: Firebase (manual)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      holder:
+        description: "Build Holder ACC + Prod"
+        type: boolean
+        default: false
+        required: false
+      verifier:
+        description: "Build Verifier ACC + Prod"
+        type: boolean
+        default: false
+        required: false
+
+jobs:
+  firebase-deploy-holder-acc:
+    if: inputs.holder
+    uses: ./.github/workflows/template_firebase-deploy.yml
+    with:
+      fastlane_command: bundle exec fastlane ios deploy_holder_acc_ci
+      app_title: Acc Holder App
+      app_filename: CTR ACC
+    
+  firebase-deploy-verifier-acc:
+    if: inputs.verifier
+    uses: ./.github/workflows/template_firebase-deploy.yml
+    with:
+      fastlane_command: bundle exec fastlane ios deploy_verifier_acc_ci
+      app_title: Acc Verifier App
+      app_filename: Verifier
+
+  firebase-deploy-holder-prod:
+    if: inputs.holder
+    uses: ./.github/workflows/template_firebase-deploy.yml
+    with:
+      fastlane_command: bundle exec fastlane ios deploy_holder_prod_ci
+      app_title: Prod Holder App
+      app_filename: CTR PROD
+        
+  firebase-deploy-verifier-prod:
+    if: inputs.verifier
+    uses: ./.github/workflows/template_firebase-deploy.yml
+    with:
+      fastlane_command: bundle exec fastlane ios deploy_verifier_prod_ci
+      app_title: Prod Verifier App
+      app_filename: Verifier
