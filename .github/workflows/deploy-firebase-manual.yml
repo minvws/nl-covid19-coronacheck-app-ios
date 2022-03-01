@@ -17,7 +17,7 @@ on:
 
 jobs:
   firebase-deploy-holder-acc:
-    if: inputs.holder
+    if: inputs.holder == true
     uses: ./.github/workflows/template_firebase-deploy.yml
     with:
       fastlane_command: bundle exec fastlane ios deploy_holder_acc_ci
@@ -25,7 +25,7 @@ jobs:
       app_filename: CTR ACC
     
   firebase-deploy-verifier-acc:
-    if: inputs.verifier
+    if: inputs.verifier == 'true'
     uses: ./.github/workflows/template_firebase-deploy.yml
     with:
       fastlane_command: bundle exec fastlane ios deploy_verifier_acc_ci
@@ -33,7 +33,7 @@ jobs:
       app_filename: Verifier
 
   firebase-deploy-holder-prod:
-    if: inputs.holder
+    if: ${{ github.event.inputs.holder == 'true' }}
     uses: ./.github/workflows/template_firebase-deploy.yml
     with:
       fastlane_command: bundle exec fastlane ios deploy_holder_prod_ci
@@ -41,7 +41,7 @@ jobs:
       app_filename: CTR PROD
         
   firebase-deploy-verifier-prod:
-    if: inputs.verifier
+    if: ${{ github.event.inputs.verifier }}
     uses: ./.github/workflows/template_firebase-deploy.yml
     with:
       fastlane_command: bundle exec fastlane ios deploy_verifier_prod_ci
