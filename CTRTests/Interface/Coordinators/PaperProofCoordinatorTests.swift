@@ -260,8 +260,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
 		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel)
-		expect(viewModel?.content.title) == L.holderPaperproofSelfprintedTitle()
-		expect(viewModel?.content.body) == L.holderPaperproofSelfprintedMessage()
+		expect(viewModel.content.title) == L.holderPaperproofSelfprintedTitle()
+		expect(viewModel.content.body) == L.holderPaperproofSelfprintedMessage()
 	}
 	
 	func test_userWishesMoreInformationOnNoInputToken() throws {
@@ -275,8 +275,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
 		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel)
-		expect(viewModel?.content.title) == L.holderPaperproofNotokenTitle()
-		expect(viewModel?.content.body) == L.holderPaperproofNotokenMessage()
+		expect(viewModel.content.title) == L.holderPaperproofNotokenTitle()
+		expect(viewModel.content.body) == L.holderPaperproofNotokenMessage()
 	}
 	
 	func test_userWishesMoreInformationOnInternationalQROnly() {
