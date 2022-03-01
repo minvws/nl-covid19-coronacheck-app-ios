@@ -536,4 +536,75 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 	}
 	
+	// MARK: - fetchEventsScreenDidFinish
+	
+	func test_fetchEventsScreenDidFinish_showEvents() {
+		
+		// Given
+		let event = FakeRemoteEvent.fakeRemoteEventVaccination
+		
+		// When
+		sut.fetchEventsScreenDidFinish(.showEvents(events: [event], eventMode: .vaccination, eventsMightBeMissing: false))
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		let viewModel: ListRemoteEventsViewModel? = (self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel
+		expect(viewModel?.eventMode) == EventMode.vaccination
+	}
+	
+	func test_fetchEventsScreenDidFinish_error() {
+		// Given
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle()
+		)
+		
+		// When
+		sut.fetchEventsScreenDidFinish(.error(content: content, backAction: {}))
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
+		let viewModel: ErrorStateViewModel? = (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel
+		expect(viewModel?.content.title) == L.generalNetworkwasbusyTitle()
+	}
+	
+	func test_fetchEventsScreenDidFinish_back_vaccination() {
+		
+		// Given
+		navigationSpy.viewControllers = [
+			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination)),
+			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: TVSAuthorizationToken.test, eventMode: .vaccination ))
+		]
+		
+		// When
+		sut.fetchEventsScreenDidFinish(.back(eventMode: .vaccination))
+		
+		// Then
+		expect(self.navigationSpy.invokedPopToViewController) == true
+		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+	}
+	
+	func test_fetchEventsScreenDidFinish_stop() {
+		
+		// Given
+		
+		// When
+		sut.fetchEventsScreenDidFinish(.stop)
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+	}
+	
+	func test_fetchEventsScreenDidFinish_default() {
+		
+		// Given
+		
+		// When
+		sut.fetchEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+	}
 }
