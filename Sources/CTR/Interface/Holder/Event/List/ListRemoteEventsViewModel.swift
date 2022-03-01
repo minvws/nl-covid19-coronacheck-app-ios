@@ -141,7 +141,6 @@ class ListRemoteEventsViewModel: Logging {
 		
 		storeEvent(
 			remoteEvents: remoteEvents,
-			eventModeForStorage: eventModeForStorage,
 			replaceExistingEventGroups: replaceExistingEventGroups) { saved in
 
 			guard saved else {
@@ -190,6 +189,29 @@ class ListRemoteEventsViewModel: Logging {
 			return dccEventType
 		}
 		return eventMode
+	}
+
+	private func getStorageMode(remoteEvent: RemoteEvent) -> EventMode? {
+		
+		var storageEventMode: EventMode?
+		if remoteEvent.wrapper.result != nil {
+			// V2
+			storageEventMode = .test
+		} else if let storageMode = remoteEvent.wrapper.events?.first?.storageMode {
+			// V3
+			storageEventMode = storageMode
+			if storageEventMode == .paperflow {
+				// PaperFlow
+				if let dccEvent = remoteEvent.wrapper.events?.first?.dccEvent,
+				   let credentialData = dccEvent.credential.data(using: .utf8),
+				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
+				   let dccEventType = euCredentialAttributes.eventMode {
+					storageEventMode = dccEventType
+				}
+			}
+		}
+		logDebug("Setting storageEventMode to \(String(describing: storageEventMode))")
+		return storageEventMode
 	}
 
 	private func handleGreenCardResult(
@@ -309,28 +331,28 @@ class ListRemoteEventsViewModel: Logging {
 
 	private func handleSuccessForPositiveTest(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
 
-		guard eventModeForStorage == .positiveTest else { return }
-
-		shouldPrimaryButtonBeEnabled = true
-
-		inspectGreencardResponseForPositiveTestAndRecovery(
-			greencardResponse,
-			onBothVaccinationAndRecoveryOrigins: {
-				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-				self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
-			},
-			onVaccinationOriginOnly: {
-				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+//		guard eventModeForStorage == .positiveTest else { return }
+//
+//		shouldPrimaryButtonBeEnabled = true
+//
+//		inspectGreencardResponseForPositiveTestAndRecovery(
+//			greencardResponse,
+//			onBothVaccinationAndRecoveryOrigins: {
+//				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+//				self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
+//			},
+//			onVaccinationOriginOnly: {
+//				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				self.completeFlow()
-			},
-			onRecoveryOriginOnly: {
-				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-				self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
-			},
-			onNoOrigins: {
-				self.viewState = self.positiveTestFlowInapplicable()
-			}
-		)
+//			},
+//			onRecoveryOriginOnly: {
+//				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+//				self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
+//			},
+//			onNoOrigins: {
+//				self.viewState = self.positiveTestFlowInapplicable()
+//			}
+//		)
 	}
 
 	private func handleSuccessForRecovery(_ greencardResponse: RemoteGreenCards.Response, eventModeForStorage: EventMode) {
@@ -508,7 +530,6 @@ class ListRemoteEventsViewModel: Logging {
 
 	private func storeEvent(
 		remoteEvents: [RemoteEvent],
-		eventModeForStorage: EventMode,
 		replaceExistingEventGroups: Bool,
 		onCompletion: @escaping (Bool) -> Void) {
 
@@ -530,23 +551,26 @@ class ListRemoteEventsViewModel: Logging {
 					  let jsonData = try? JSONEncoder().encode(dccEvent) {
 				data = jsonData
 			}
+			guard let storageMode = getStorageMode(remoteEvent: response) else {
+				return
+			}
 
 			// Remove any existing events for the provider
 			// 2463: Allow multiple vaccinations for paperflow. 
-			if eventMode != .paperflow || eventModeForStorage != .vaccination {
+			if eventMode != .paperflow || storageMode != .vaccination {
 				walletManager.removeExistingEventGroups(
-					type: eventModeForStorage,
+					type: storageMode,
 					providerIdentifier: response.wrapper.providerIdentifier
 				)
 			} else {
-				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(eventModeForStorage)]")
+				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(storageMode)]")
 			}
 
 			// Store the new event group
 			if let maxIssuedAt = getMaxIssuedAt(wrapper: response.wrapper),
 			   let jsonData = data {
 				success = success && walletManager.storeEventGroup(
-					eventModeForStorage,
+					storageMode,
 					providerIdentifier: response.wrapper.providerIdentifier,
 					jsonData: jsonData,
 					issuedAt: maxIssuedAt
@@ -572,15 +596,15 @@ class ListRemoteEventsViewModel: Logging {
 		// 3.0
 		let maxIssuedAt: Date? = wrapper.events?
 			.compactMap {
-				if $0.vaccination != nil {
+				if $0.hasVaccination {
 					return $0.vaccination?.dateString
-				} else if $0.vaccinationAssessment != nil {
+				} else if $0.hasVaccinationAssessment {
 					return $0.vaccinationAssessment?.dateTimeString
-				} else if $0.negativeTest != nil {
+				} else if $0.hasNegativeTest {
 					return $0.negativeTest?.sampleDateString
-				} else if $0.recovery != nil {
+				} else if $0.hasRecovery {
 					return $0.recovery?.sampleDate
-				} else if $0.dccEvent != nil {
+				} else if $0.hasPaperCertificate {
 					if let credentialData = $0.dccEvent?.credential.data(using: .utf8) {
 						return cryptoManager?.readEuCredentials(credentialData)?.maxIssuedAt
 					}
