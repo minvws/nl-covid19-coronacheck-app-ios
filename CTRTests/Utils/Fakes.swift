@@ -197,6 +197,15 @@ extension EventFlow.EventResultWrapper {
 		events: [EventFlow.Event.negativeTestEvent]
 	)
 	
+	static var fakePaperProofResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.paperProofEvent]
+	)
+	
 	static var fakeVaccinationAssessmentResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
@@ -905,6 +914,23 @@ extension EventFlow.Event {
 		)
 	}
 	
+	static var paperProofEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccination",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: EventFlow.DccEvent(
+				credential: "test",
+				couplingCode: "test"
+			),
+			vaccinationAssessment: nil
+		)
+	}
+	
 	static var vaccinationAssessmentEvent: EventFlow.Event {
 		EventFlow.Event(
 			type: "vaccinationassessment",
@@ -1142,6 +1168,13 @@ struct FakeRemoteEvent {
 	static var fakeRemoteEventVaccinationAssessment: RemoteEvent {
 		RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper.fakeVaccinationAssessmentResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventPaperProof: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakePaperProofResultWrapper,
 			signedResponse: SignedResponse.fakeResponse
 		)
 	}

@@ -10,7 +10,7 @@ import UIKit
 final class RemoteEventDetailsViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: RemoteEventDetailsViewModel
+	internal let viewModel: RemoteEventDetailsViewModel
 
 	/// The view
 	let sceneView = RemoteEventDetailsView()
