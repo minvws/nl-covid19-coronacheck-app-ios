@@ -140,18 +140,24 @@ class ListRemoteEventsView: ScrolledStackWithButtonView {
 
 	/// The title
 	var title: String? {
-		didSet {
-			titleLabel.attributedText = title?.setLineHeight(
+		set {
+			titleLabel.attributedText = newValue?.setLineHeight(
 				ViewTraits.Title.lineHeight,
 				kerning: ViewTraits.Title.kerning
 			)
+		}
+		get {
+			titleLabel.attributedText?.string
 		}
 	}
 
 	/// The message
 	var message: String? {
-		didSet {
-			contentTextView.html(message)
+		set {
+			contentTextView.html(newValue)
+		}
+		get {
+			contentTextView.attributedText?.string
 		}
 	}
 
