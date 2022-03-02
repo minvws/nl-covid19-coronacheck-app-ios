@@ -141,12 +141,12 @@ class CryptoManager: CryptoManaging, Logging {
 	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
-	/// - Returns: Verification result if the QR is valid or nil if not
-	func verifyQRMessage(_ message: String) -> MobilecoreVerificationResult? {
+	/// - Returns: Verification result if the QR is valid or error if not
+	func verifyQRMessage(_ message: String) -> Result<MobilecoreVerificationResult, CryptoError> {
 		
 		guard hasPublicKeys() else {
 			logError("No public keys")
-			return nil
+			return .failure(.keyMissing)
 		}
 		
 		let proofQREncoded = message.data(using: .utf8)
@@ -155,23 +155,23 @@ class CryptoManager: CryptoManaging, Logging {
 		if featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			guard let riskSetting = riskLevelManager.state else {
 				assertionFailure("Risk level should be set")
-				return nil
+				return .failure(.noRiskSetting)
 			}
 			scanPolicy = riskSetting.scanPolicy
 		} else {
 			guard let storedScanPolicy = Current.userSettings.configVerificationPolicies.first?.scanPolicy else {
 				assertionFailure("Scan policy should be stored")
-				return nil
+				return .failure(.noDefaultVerificationPolicy)
 			}
 			scanPolicy = storedScanPolicy
 		}
 		
 		guard let result = MobilecoreVerify(proofQREncoded, scanPolicy) else {
 			logError("Could not verify QR")
-			return nil
+			return .failure(.couldNotVerify)
 		}
 
-		return result
+		return .success(result)
 	}
 	
 	// MARK: - Credential
