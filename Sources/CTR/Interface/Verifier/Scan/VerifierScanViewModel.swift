@@ -71,35 +71,72 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 			guard let currentVerificationPolicy = riskLevelManager?.state else {
 				assertionFailure("Risk level should be set")
+				handleScanError(.noRiskSetting)
 				return
 			}
 			scanLogManager?.addScanEntry(verificationPolicy: currentVerificationPolicy, date: Date())
 		}
 
-		if let verificationResult = cryptoManager?.verifyQRMessage(message) {
-			switch Int64(verificationResult.status) {
-				case MobilecoreVERIFICATION_FAILED_IS_NL_DCC:
-
-					displayAlert(title: L.verifierResultAlertDccTitle(),
-								 message: L.verifierResultAlertDccMessage())
-
-				case MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX:
-
-					displayAlert(title: L.verifierResultAlertUnknownTitle(),
-								 message: L.verifierResultAlertUnknownMessage())
-					
-				case MobilecoreVERIFICATION_SUCCESS where verificationResult.details != nil:
-
-					guard let details = verificationResult.details else {
-						fallthrough
-					}
-					theCoordinator?.navigateToCheckIdentity(details)
-
-				default:
-					
-					theCoordinator?.navigateToDeniedAccess()
-			}
+		guard let cryptoManager = cryptoManager else {
+			handleScanError(.unknown)
+			return
 		}
+
+		let result = cryptoManager.verifyQRMessage(message)
+		switch result {
+			case let .success(verificationResult):
+				handleMobilecoreVerificationResult(verificationResult)
+			case let .failure(error):
+				handleScanError(error)
+		}
+	}
+	
+	private func handleMobilecoreVerificationResult(_ verificationResult: MobilecoreVerificationResult) {
+		
+		switch Int64(verificationResult.status) {
+			case MobilecoreVERIFICATION_FAILED_IS_NL_DCC:
+				displayAlert(
+					title: L.verifierResultAlertDccTitle(),
+					message: L.verifierResultAlertDccMessage()
+				)
+				
+			case MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX:
+				displayAlert(
+					title: L.verifierResultAlertUnknownTitle(),
+					message: L.verifierResultAlertUnknownMessage()
+				)
+				
+			case MobilecoreVERIFICATION_SUCCESS where verificationResult.details != nil:
+				
+				guard let details = verificationResult.details else {
+					fallthrough
+				}
+				theCoordinator?.navigateToCheckIdentity(details)
+				
+			default:
+				
+				theCoordinator?.navigateToDeniedAccess()
+		}
+	}
+	
+	private func handleScanError(_ error: CryptoError) {
+		
+		let clientCode: ErrorCode.ClientCode
+		switch error {
+			case .keyMissing:
+				clientCode = .noPublicKeys
+			case .noRiskSetting:
+				clientCode = .noRiskSetting
+			case .noDefaultVerificationPolicy:
+				clientCode = .noDefaultVerificationPolicy
+			case .couldNotVerify:
+				clientCode = .couldNotVerify
+			default:
+				clientCode = .unhandled
+		}
+		let errorCode = ErrorCode(flow: .scanFlow, step: .parsingQR, clientCode: clientCode)
+		
+		displayAlert(title: L.generalErrorTitle(), message: L.generalErrorCryptolibMessage("\(errorCode)"))
 	}
 
 	private func displayAlert(title: String, message: String) {
@@ -123,4 +160,21 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 		theCoordinator?.navigateToScanInstruction(allowSkipInstruction: false)
 	}
+}
+
+// MARK: ErrorCode.Step
+
+extension ErrorCode.Step {
+	
+	static let parsingQR = ErrorCode.Step(value: "40")
+}
+
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+	
+	static let noPublicKeys = ErrorCode.ClientCode(value: "090")
+	static let noRiskSetting = ErrorCode.ClientCode(value: "091")
+	static let noDefaultVerificationPolicy = ErrorCode.ClientCode(value: "092")
+	static let couldNotVerify = ErrorCode.ClientCode(value: "094")
 }
