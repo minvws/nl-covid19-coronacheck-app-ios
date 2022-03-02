@@ -51,7 +51,7 @@ class IdentityElementView: BaseView {
 	/// The title label
 	private let headerLabel: Label = {
 
-		return Label(caption1SemiBold: nil)
+		return Label(caption1SemiBold: nil).multiline()
 	}()
 
 	/// The bocy label
