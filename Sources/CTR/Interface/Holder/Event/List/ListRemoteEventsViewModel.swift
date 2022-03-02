@@ -75,6 +75,7 @@ class ListRemoteEventsViewModel: Logging {
 				self?.displaySomeResultsMightBeMissing()
 			}
 		}
+
 		viewState = getViewState(from: remoteEvents)
 	}
 
@@ -558,8 +559,14 @@ class ListRemoteEventsViewModel: Logging {
 			// Replace when there is a identity mismatch
 			walletManager.removeExistingEventGroups()
 		}
+			
+		let storableEvents = remoteEvents.filter { (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?) in
+			// We can not store empty remoteEvents without an v2 result or a v3 event.
+			// ZZZ sometimes returns an empty array of events in the combined flow.
+			(wrapper.events ?? []).isNotEmpty || wrapper.result != nil
+		}
 
-		for response in remoteEvents where response.wrapper.status == .complete {
+		for response in storableEvents where response.wrapper.status == .complete {
 
 			var data: Data?
 
@@ -570,6 +577,7 @@ class ListRemoteEventsViewModel: Logging {
 					  let jsonData = try? JSONEncoder().encode(dccEvent) {
 				data = jsonData
 			}
+			
 			guard let storageMode = getStorageMode(remoteEvent: response) else {
 				return
 			}
