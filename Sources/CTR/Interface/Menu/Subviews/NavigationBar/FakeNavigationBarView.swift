@@ -16,7 +16,7 @@ class FakeNavigationBarView: BaseView {
 		static let margin: CGFloat = 20
 	}
 	
-	private let titleLabel: Label = {
+	let titleLabel: Label = {
 		let label = Label(title1: "", textColor: C.darkColor()!, montserrat: true).header()
 		label.numberOfLines = 0
 		label.setContentCompressionResistancePriority(.required, for: .horizontal)
