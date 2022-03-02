@@ -21,6 +21,10 @@ class BaseViewController: UIViewController {
 		}
 	}
 	
+	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+		return .all
+	}
+	
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
