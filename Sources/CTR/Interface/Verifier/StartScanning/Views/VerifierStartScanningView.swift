@@ -51,9 +51,6 @@ class VerifierStartScanningView: BaseView {
 		}
 	}
 
-	/// Scroll view bottom constraint
-	private var bottomScrollViewConstraint: NSLayoutConstraint?
-
 	private let scrollView: UIScrollView = {
 
 		let view = UIScrollView()
@@ -228,22 +225,16 @@ class VerifierStartScanningView: BaseView {
 			scrollView.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-			{
-				let constraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
-				bottomScrollViewConstraint = constraint
-				return constraint
-			}(),
+			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor),
 
 			// Outer StackView
-			stackView.widthAnchor.constraint(
-				equalTo: scrollView.widthAnchor),
-			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+			stackView.heightAnchor.constraint(equalTo: scrollView.contentLayoutGuide.heightAnchor),
 			stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
 			stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
 		])
 		
 		// Setup content views:
-		bottomScrollViewConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
 
