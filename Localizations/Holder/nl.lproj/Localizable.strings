@@ -127,7 +127,7 @@
 "holder.dashboard.intro.international" = "<p>Ben je in het buitenland of ga je de grens over? Gebruik dan altijd de internationale QR-code hieronder. Controleer voor vertrek welk bewijs je nodig hebt.</p>";
 "holder.dashboard.intro.international.button" = "Welk bewijs is nodig op mijn bestemming?";
 "holder.dashboard.intro.international.url" = "https://www.nederlandwereldwijd.nl/reizen/reisadviezen";
-"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "<p>Je herstelbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.</p><p>Dit komt doordat het type test niet voldoet in Nederland.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "<p>Je herstelbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "Over je herstelbewijs";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Jouw testbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.</p><p>Dit kan komen doordat de geldigheidsduur in Nederland korter is dan in andere landen. Laat je opnieuw testen voor een bewijs dat ook in Nederland geldig is.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "Over je testbewijs";
@@ -406,7 +406,7 @@
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
 "holder.showqr.domestic.title" = "Nederlandse QR";
 "holder.showqr.eu.about.recovery.country" = "Getest in / Member state of test:";
-"holder.showqr.eu.about.recovery.date" = "Testdatum / Test date*:";
+"holder.showqr.eu.about.recovery.date" = "Testdatum / Test date:";
 "holder.showqr.eu.about.recovery.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 "holder.showqr.eu.about.recovery.dateofbirth" = "Geboortedatum / Date of birth*:";
 "holder.showqr.eu.about.recovery.description" = "Ben je in het buitenland of ga je de grens over? Dan zijn er meer gegevens nodig dan in Nederland. Daarom staan in jouw internationale QR-code de volgende gegevens:";
@@ -418,7 +418,7 @@
 "holder.showqr.eu.about.recovery.validfrom" = "Geldig vanaf / Valid from*:";
 "holder.showqr.eu.about.recovery.validuntil" = "Geldig tot / Valid to*:";
 "holder.showqr.eu.about.test.country" = "Getest in / Member state of test:";
-"holder.showqr.eu.about.test.date" = "Testdatum / Test date*:";
+"holder.showqr.eu.about.test.date" = "Testdatum / Test date:";
 "holder.showqr.eu.about.test.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 "holder.showqr.eu.about.test.dateofbirth" = "Geboortedatum / Date of birth*:";
 "holder.showqr.eu.about.test.description" = "Ben je in het buitenland of ga je de grens over? Dan zijn er meer gegevens nodig dan in Nederland. Daarom staan in jouw internationale QR-code de volgende gegevens:";
@@ -566,7 +566,7 @@
 "holder.vaccination.list.action" = "Maak bewijs";
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
-"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
+"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie(s) beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
 "holder.vaccination.start.action" = "Log in met DigiD";
 "holder.vaccination.start.message" = "<p>Heb je een (booster)vaccinatie gehad? Log in met DigiD om al je vaccinatiegegevens op te halen.</p><p><b>Corona gehad vóór je eerste vaccinatie?</b><br />Dan heb je vaak een prik minder nodig om volledig gevaccineerd te zijn. Haal ook je positieve testuitslag op om die mee te laten tellen in je vaccinatiebewijs.</p>";

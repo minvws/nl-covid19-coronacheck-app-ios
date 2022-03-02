@@ -127,7 +127,7 @@
 "holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p>";
 "holder.dashboard.intro.international.button" = "Which certificate is needed where I’m heading?";
 "holder.dashboard.intro.international.url" = "https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands";
-"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "<p>Your recovery certificate is not valid in the Netherlands, because the type of test is not accepted.</p><p>You’ve only got an international QR code.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "<p>Your recovery certificate isn't valid in the Netherlands. You’ve only got an international certificate.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "About your recovery certificate";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international certificate was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "About your test certificate";
@@ -307,7 +307,7 @@
 "holder.event.identity.alert.title" = "Want to replace your certificate?";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.title" = "No test result available";
-"holder.event.originmismatch.title" = "We can't make a certificate";
+"holder.event.originmismatch.title" = "We can't create a certificate";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website or there is an outage. We can't retrieve your details now. Please try again later.";
@@ -383,7 +383,7 @@
 "holder.provider.title" = "Make QR code";
 "holder.recovery.nolist.message" = "<p>Were you just tested? It can take a few hours before your positive test result is available. Please try again later.</p><p>Were you tested longer ago? Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.nolist.title" = "No positive test result available";
-"holder.recovery.recoveryAndVaccination.message" = "<p>A recovery certificate has been created.</p><p>Because you tested positive before your first vaccination, your test could also be recorded into your vaccination certificate.</p>";
+"holder.recovery.recoveryAndVaccination.message" = "<p>A recovery certificate has been created from your retrieved details.</p><p>Because you tested positive before your first vaccination, your test could also be recorded into your vaccination certificate.</p>";
 "holder.recovery.recoveryAndVaccination.title" = "Recovery and vaccination certificates created";
 "holder.recovery.start.message" = "Have you had coronavirus? Then you can make a recovery certificate of the positive test result. Log in with DigiD to retrieve your test result.";
 "holder.recovery.start.title" = "Retrieve recovery details";
@@ -406,7 +406,7 @@
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.domestic.title" = "Dutch QR";
 "holder.showqr.eu.about.recovery.country" = "Member state of test:";
-"holder.showqr.eu.about.recovery.date" = "Test date*:";
+"holder.showqr.eu.about.recovery.date" = "Test date:";
 "holder.showqr.eu.about.recovery.dateinformation" = "*Date noted in day-month-year";
 "holder.showqr.eu.about.recovery.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.recovery.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
@@ -418,7 +418,7 @@
 "holder.showqr.eu.about.recovery.validfrom" = "Valid from*:";
 "holder.showqr.eu.about.recovery.validuntil" = "Valid to*:";
 "holder.showqr.eu.about.test.country" = "Member state of test:";
-"holder.showqr.eu.about.test.date" = "Test date*:";
+"holder.showqr.eu.about.test.date" = "Test date:";
 "holder.showqr.eu.about.test.dateinformation" = "*Date noted in day-month-year";
 "holder.showqr.eu.about.test.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.test.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
@@ -566,13 +566,13 @@
 "holder.vaccination.list.action" = "Make certificate";
 "holder.vaccination.list.wrong" = "Is something wrong?";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
-"holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Got vaccinated recently? It can take a few hours until your details are available. </p>";
+"holder.vaccination.nolist.message" = "<p>There are no available vaccination details. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Got vaccinated recently? It can take a few hours until your details are available.</p>";
 "holder.vaccination.nolist.title" = "Vaccinations not available";
 "holder.vaccination.start.action" = "Log in with DigiD";
 "holder.vaccination.start.message" = "<p>Did you receive a (booster) vaccination? Log in using DigiD to retrieve all your vaccination details.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you often need a vaccination less to be considered fully vaccinated. Retrieve your positive test result to record it into your vaccination certificate.</p>";
 "holder.vaccination.start.nodigid" = "I don't have DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/en/apply-or-activate-digid";
-"holder.vaccination.start.title" = "Retrieve vaccination details";
+"holder.vaccination.start.title" = "Retrieve your vaccination details";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Retrieve my positive test result too";
 "holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
@@ -640,13 +640,13 @@
 "holder_listRemoteEvents_endStateInternationalQROnly_message" = "<p>Only an international vaccination certificate could be created from your retrieved details. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_title" = "Only an international certificate was created";
 "holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_message" = "<p>Only an international vaccination certificate could be created from your retrieved vaccinations. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>A recovery certificate has also been created from your positive test result.</p>";
-"holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title" = "Created vaccination and recovery certificates";
+"holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title" = "Vaccination and recovery certificates created";
 "holder_listRemoteEvents_endStateRecoveryOnly_message" = "<p>Only a recovery certificate could be created from your retrieved details. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryOnly_title" = "Only a recovery certificate was created";
 "holder_listRemoteEvents_endStateRecoveryTooOld_message" = "<p>It has been too long ago since you tested positive for coronavirus. Therefore, your test result is no longer valid. Unfortunately, you cannot create a recovery certificate.</p><p>Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryTooOld_title" = "Positive test result no longer valid";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>A Dutch vaccination certificate has been created from your retrieved vaccinations.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
-"holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Created vaccination and recovery certificates";
+"holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Vaccination and recovery certificates created";
 "holder_listRemoteEvents_listElement_assessmentDate" = "Review date: %@";
 "holder_listRemoteEvents_listElement_birthDate" = "Date of birth: %@";
 "holder_listRemoteEvents_listElement_name" = "Name: %@";
