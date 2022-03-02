@@ -109,7 +109,7 @@ class QRCardView: BaseView {
 
 		let view = UIImageView(image: I.dashboard.domestic())
 		view.accessibilityLabel = L.generalNetherlands()
-		view.isAccessibilityElement = true
+		view.isAccessibilityElement = false
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.setContentCompressionResistancePriority(.required, for: .horizontal)
 		return view
