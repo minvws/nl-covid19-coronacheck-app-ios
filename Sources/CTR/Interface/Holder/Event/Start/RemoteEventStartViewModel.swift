@@ -13,7 +13,7 @@ class RemoteEventStartViewModel: Logging {
 
 	weak private var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	private var eventMode: EventMode
+	internal var eventMode: EventMode
 	private var didCheckCheckbox: Bool = false
 	
 	// MARK: - Bindable

@@ -24,7 +24,7 @@ class ContentViewModel {
 	private let hideBodyForScreenCapture: Bool
 	private let linkTapHander: ((URL) -> Void)?
 	private let screenCaptureDetector = ScreenCaptureDetector()
-	private let content: Content
+	internal let content: Content
 	
 	// MARK: - Initializer
 

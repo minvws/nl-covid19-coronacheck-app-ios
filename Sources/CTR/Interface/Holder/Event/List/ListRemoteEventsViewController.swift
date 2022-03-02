@@ -21,7 +21,7 @@ class ListRemoteEventsViewController: BaseViewController {
 		let action: (() -> Void)?
 	}
 
-	private let viewModel: ListRemoteEventsViewModel
+	internal let viewModel: ListRemoteEventsViewModel
 	private let sceneView = ListRemoteEventsView()
 
 	/// Initializer
