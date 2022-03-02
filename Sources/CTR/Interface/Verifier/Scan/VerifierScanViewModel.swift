@@ -176,5 +176,5 @@ extension ErrorCode.ClientCode {
 	static let noPublicKeys = ErrorCode.ClientCode(value: "090")
 	static let noRiskSetting = ErrorCode.ClientCode(value: "091")
 	static let noDefaultVerificationPolicy = ErrorCode.ClientCode(value: "092")
-	static let couldNotVerify = ErrorCode.ClientCode(value: "094")
+	static let couldNotVerify = ErrorCode.ClientCode(value: "093")
 }
