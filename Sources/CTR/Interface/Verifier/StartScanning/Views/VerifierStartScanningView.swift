@@ -295,6 +295,13 @@ class VerifierStartScanningView: BaseView {
 			contentStackView.setCustomSpacing(spacing, after: titleLabel)
 			let topMargin = hasTitle ? ViewTraits.Title.topSpacing : ViewTraits.Content.topSpacing
 			contentStackView.directionalLayoutMargins.top = topMargin
+			
+			UIAccessibility.post(
+				notification: .layoutChanged,
+				argument: headerTitle == nil
+					? fakeNavigationBar.titleLabel
+					: titleLabel
+			)
 		}
 	}
 
