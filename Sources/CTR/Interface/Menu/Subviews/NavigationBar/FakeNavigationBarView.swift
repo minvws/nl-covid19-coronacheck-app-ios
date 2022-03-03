@@ -16,13 +16,16 @@ class FakeNavigationBarView: BaseView {
 		static let margin: CGFloat = 20
 	}
 	
-	private let titleLabel: Label = {
+	let titleLabel: Label = {
 		let label = Label(title1: "", textColor: C.darkColor()!, montserrat: true).header()
 		label.numberOfLines = 0
 		label.setContentCompressionResistancePriority(.required, for: .horizontal)
 		label.setContentCompressionResistancePriority(.required, for: .vertical)
 		label.translatesAutoresizingMaskIntoConstraints = false
-		
+		label.adjustsFontForContentSizeCategory = true
+		if #available(iOS 15.0, *) {
+			label.maximumContentSizeCategory = .accessibilityMedium
+		}
 		return label
 	}()
 	
@@ -31,6 +34,7 @@ class FakeNavigationBarView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setContentCompressionResistancePriority(.required, for: .horizontal)
 		button.setContentHuggingPriority(.required, for: .horizontal)
+		button.accessibilityTraits = .button
 		return button
 	}()
 	
@@ -44,7 +48,8 @@ class FakeNavigationBarView: BaseView {
 	
 	private var axisForStackView: NSLayoutConstraint.Axis {
 		
-		if traitCollection.preferredContentSizeCategory > .extraExtraExtraLarge {
+		if traitCollection.verticalSizeClass == .regular,
+			traitCollection.preferredContentSizeCategory >= .extraExtraExtraLarge {
 			return .vertical
 		} else {
 			return .horizontal
@@ -76,21 +81,20 @@ class FakeNavigationBarView: BaseView {
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
+		// Decrease spacing to dashboard tab bar for larger font sizes
+		var bottomMargin = ViewTraits.margin
+		if traitCollection.preferredContentSizeCategory >= .accessibilityMedium {
+			bottomMargin = 0
+		} else if traitCollection.preferredContentSizeCategory >= .extraExtraExtraLarge {
+			bottomMargin = ViewTraits.margin / 2
+		}
+		
 		var constraints = [NSLayoutConstraint]()
 		constraints += [stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
 		constraints += [stackView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
-		constraints += [stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
+		constraints += [stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomMargin)]
 		constraints += [stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
 		NSLayoutConstraint.activate(constraints)
-	}
-	
-	override func setupAccessibility() {
-		super.setupAccessibility()
-		
-		if #available(iOS 13.0, *) {
-			addInteraction(UILargeContentViewerInteraction())
-			showsLargeContentViewer = true
-		}
 	}
 	
 	// MARK: - UITraitEnvironment
@@ -110,10 +114,7 @@ class FakeNavigationBarView: BaseView {
 	var title: String? {
 		didSet {
 			titleLabel.text = title
-			
-			if #available(iOS 13.0, *) {
-				largeContentTitle = title
-			}
+			setupLargeContentViewer(title: title)
 		}
 	}
 }

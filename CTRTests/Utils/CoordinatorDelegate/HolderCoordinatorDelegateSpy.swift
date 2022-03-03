@@ -127,14 +127,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToCreateARecoveryQRCount += 1
 	}
 
-	var invokedUserWishesToFetchPositiveTests = false
-	var invokedUserWishesToFetchPositiveTestsCount = 0
-
-	func userWishesToFetchPositiveTests() {
-		invokedUserWishesToFetchPositiveTests = true
-		invokedUserWishesToFetchPositiveTestsCount += 1
-	}
-
 	var invokedUserDidScanRequestToken = false
 	var invokedUserDidScanRequestTokenCount = 0
 	var invokedUserDidScanRequestTokenParameters: (requestToken: RequestToken, Void)?
@@ -183,14 +175,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount += 1
 	}
 
-	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = false
-	var invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount = 0
-
-	func userWishesMoreInfoAboutTestOnlyValidFor3G() {
-		invokedUserWishesMoreInfoAboutTestOnlyValidFor3G = true
-		invokedUserWishesMoreInfoAboutTestOnlyValidFor3GCount += 1
-	}
-
 	var invokedUserWishesMoreInfoAboutOutdatedConfig = false
 	var invokedUserWishesMoreInfoAboutOutdatedConfigCount = 0
 	var invokedUserWishesMoreInfoAboutOutdatedConfigParameters: (validUntil: String, Void)?
@@ -233,14 +217,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesToViewQRs = false
 	var invokedUserWishesToViewQRsCount = 0
-	var invokedUserWishesToViewQRsParameters: (greenCardObjectIDs: [NSManagedObjectID], Void)?
-	var invokedUserWishesToViewQRsParametersList = [(greenCardObjectIDs: [NSManagedObjectID], Void)]()
+	var invokedUserWishesToViewQRsParameters: (greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)?
+	var invokedUserWishesToViewQRsParametersList = [(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)]()
 
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
 		invokedUserWishesToViewQRs = true
 		invokedUserWishesToViewQRsCount += 1
-		invokedUserWishesToViewQRsParameters = (greenCardObjectIDs, ())
-		invokedUserWishesToViewQRsParametersList.append((greenCardObjectIDs, ()))
+		invokedUserWishesToViewQRsParameters = (greenCardObjectIDs, disclosurePolicy)
+		invokedUserWishesToViewQRsParametersList.append((greenCardObjectIDs, disclosurePolicy))
 	}
 
 	var invokedUserWishesToLaunchThirdPartyTicketApp = false

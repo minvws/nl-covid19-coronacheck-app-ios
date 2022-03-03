@@ -23,12 +23,7 @@ class IncompleteDutchVaccinationViewTests: XCTestCase {
 
 	func testLabels() {
 		sut.title = "title"
-		sut.addTestResultsButtonTitle = "addTestResultsButtonTitle"
-		sut.addVaccinesButtonTitle = "addVaccinesButtonTitle"
 		sut.secondVaccineText = "secondVaccineText"
-		sut.coronaBeforeFirstVaccineText = "coronaBeforeFirstVaccineText"
-		sut.learnMoreText = "learnMoreText"
-		
 		sut.assertImage()
 	}
 }

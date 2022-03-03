@@ -38,7 +38,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.content.title) == L.holderVaccinationListTitle()
+		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
 		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
@@ -57,7 +57,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.content.title) == L.holderRecoveryListTitle()
+		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
 		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
@@ -76,7 +76,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.content.title) == L.holderTestresultsResultsTitle()
+		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
 		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
@@ -95,7 +95,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.content.title) == L.holderDccListTitle()
+		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
 		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).to(beNil())
 		expect(self.sut.content.primaryActionTitle).to(beNil())
@@ -167,7 +167,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		expect(self.sut.content.title) == L.holderFetcheventsVaccinationTitle()
+		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
 		expect(self.sut.content.body).to(beNil())
 		expect(self.sut.content.primaryAction).toNot(beNil())
 		expect(self.sut.content.primaryActionTitle) == L.generalClose()

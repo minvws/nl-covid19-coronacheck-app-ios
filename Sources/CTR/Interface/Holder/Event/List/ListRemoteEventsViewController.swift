@@ -17,7 +17,7 @@ class ListRemoteEventsViewController: BaseViewController {
 
 	struct Row {
 		let title: String
-		let subTitle: String
+		let details: [String]
 		let action: (() -> Void)?
 	}
 
@@ -51,12 +51,7 @@ class ListRemoteEventsViewController: BaseViewController {
 		addBackButton(customAction: #selector(backButtonTapped))
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
-
-			if $0 {
-				self?.sceneView.spinner.startAnimating()
-			} else {
-				self?.sceneView.spinner.stopAnimating()
-			}
+			self?.sceneView.shouldShowLoadingSpinner = $0
 		}
 
 		viewModel.$viewState.binding = { [weak self] in
@@ -94,7 +89,7 @@ class ListRemoteEventsViewController: BaseViewController {
 
 	private func setForLoadingState(_ content: Content) {
 
-		sceneView.spinner.isHidden = false
+		sceneView.shouldShowLoadingSpinner = true
 		displayContent(content)
 
 		removeExistingRows()
@@ -109,7 +104,7 @@ class ListRemoteEventsViewController: BaseViewController {
 
 	private func setForListEvents(_ content: Content, rows: [Row]) {
 
-		sceneView.spinner.isHidden = true
+		sceneView.shouldShowLoadingSpinner = false
 		displayContent(content)
 		sceneView.setEventStackVisibility(ishidden: false)
 
@@ -123,7 +118,7 @@ class ListRemoteEventsViewController: BaseViewController {
 			.map { rowModel -> RemoteEventItemView in
 				RemoteEventItemView.makeView(
 					title: rowModel.title,
-					subTitle: rowModel.subTitle,
+					details: rowModel.details,
 					command: rowModel.action
 				)
 			}
@@ -132,7 +127,7 @@ class ListRemoteEventsViewController: BaseViewController {
 
 	private func setForFeedback(_ content: Content) {
 
-		sceneView.spinner.isHidden = true
+		sceneView.shouldShowLoadingSpinner = false
 		sceneView.setEventStackVisibility(ishidden: true)
 		displayContent(content)
 		removeExistingRows()
@@ -179,13 +174,13 @@ extension RemoteEventItemView {
 	/// - Returns: an event item view
 	fileprivate static func makeView(
 		title: String,
-		subTitle: String,
+		details: [String],
 		command: (() -> Void)? ) -> RemoteEventItemView {
 
 		let view = RemoteEventItemView()
 		view.isUserInteractionEnabled = true
 		view.title = title
-		view.subTitle = subTitle
+		view.details = details
 		view.link = L.holderEventDetails()
 		view.disclaimerButtonTappedCommand = command
 		return view

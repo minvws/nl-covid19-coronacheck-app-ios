@@ -422,6 +422,16 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 		)
 	}
 
+	static func validInFiveMinutes_test_expires24HoursFromNow() -> HolderDashboardViewModel.QRCard.GreenCard.Origin {
+		.init(
+			type: QRCodeOriginType.test,
+			eventDate: now.addingTimeInterval(5 * minutes * fromNow),
+			expirationTime: now.addingTimeInterval(24 * hours * fromNow),
+			validFromDate: now.addingTimeInterval(5 * minutes * fromNow),
+			doseNumber: nil
+		)
+	}
+
 	static func validOneHourAgo_recovery_expires300DaysFromNow() -> HolderDashboardViewModel.QRCard.GreenCard.Origin {
 		.init(
 			type: QRCodeOriginType.recovery,

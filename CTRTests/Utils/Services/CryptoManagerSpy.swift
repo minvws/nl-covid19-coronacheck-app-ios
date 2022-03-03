@@ -79,27 +79,27 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedCreateCredentialResult
 	}
 
-	var invokedGenerateQRmessage = false
-	var invokedGenerateQRmessageCount = 0
-	var invokedGenerateQRmessageParameters: (credential: Data, Void)?
-	var invokedGenerateQRmessageParametersList = [(credential: Data, Void)]()
-	var stubbedGenerateQRmessageResult: Data!
+	var invokedDiscloseCredential = false
+	var invokedDiscloseCredentialCount = 0
+	var invokedDiscloseCredentialParameters: (credential: Data, disclosurePolicy: DisclosurePolicy)?
+	var invokedDiscloseCredentialParametersList = [(credential: Data, disclosurePolicy: DisclosurePolicy)]()
+	var stubbedDiscloseCredentialResult: Data!
 
-	func generateQRmessage(_ credential: Data) -> Data? {
-		invokedGenerateQRmessage = true
-		invokedGenerateQRmessageCount += 1
-		invokedGenerateQRmessageParameters = (credential, ())
-		invokedGenerateQRmessageParametersList.append((credential, ()))
-		return stubbedGenerateQRmessageResult
+	func discloseCredential(_ credential: Data, disclosurePolicy: DisclosurePolicy) -> Data? {
+		invokedDiscloseCredential = true
+		invokedDiscloseCredentialCount += 1
+		invokedDiscloseCredentialParameters = (credential, disclosurePolicy)
+		invokedDiscloseCredentialParametersList.append((credential, disclosurePolicy))
+		return stubbedDiscloseCredentialResult
 	}
 
 	var invokedVerifyQRMessage = false
 	var invokedVerifyQRMessageCount = 0
 	var invokedVerifyQRMessageParameters: (message: String, Void)?
 	var invokedVerifyQRMessageParametersList = [(message: String, Void)]()
-	var stubbedVerifyQRMessageResult: MobilecoreVerificationResult!
+	var stubbedVerifyQRMessageResult: Result<MobilecoreVerificationResult, CryptoError>!
 
-	func verifyQRMessage(_ message: String) -> MobilecoreVerificationResult? {
+	func verifyQRMessage(_ message: String) -> Result<MobilecoreVerificationResult, CryptoError> {
 		invokedVerifyQRMessage = true
 		invokedVerifyQRMessageCount += 1
 		invokedVerifyQRMessageParameters = (message, ())

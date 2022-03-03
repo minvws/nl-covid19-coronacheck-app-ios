@@ -55,15 +55,17 @@ protocol CryptoManaging: AnyObject {
 	
 	// MARK: QR
 
-	/// Generate the QR message
-	/// - Parameter credential: the (domestic) credential to generate the QR from
+	///  Disclose the credential
+	/// - Parameters:
+	///   - credential: the (domestic) credential to generate the QR from
+	///   - disclosurePolicy: the disclosure policy (1G / 3G) to genearte the QR with
 	/// - Returns: the QR message
-	func generateQRmessage(_ credential: Data) -> Data?
+	func discloseCredential(_ credential: Data, disclosurePolicy: DisclosurePolicy) -> Data?
 	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
-	/// - Returns: Attributes if the QR is valid or error string if not
-	func verifyQRMessage(_ message: String) -> MobilecoreVerificationResult?
+	/// - Returns: Verification result if the QR is valid or error if not
+	func verifyQRMessage(_ message: String) -> Result<MobilecoreVerificationResult, CryptoError>
 
 	// MARK: Migration
 
@@ -80,4 +82,7 @@ enum CryptoError: Error {
 	case keyMissing
 	case credentialCreateFail(reason: String)
 	case unknown
+	case noRiskSetting
+	case noDefaultVerificationPolicy
+	case couldNotVerify
 }

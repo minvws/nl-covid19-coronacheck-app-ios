@@ -36,7 +36,7 @@ class PaperProofCheckViewModel: Logging {
 
 		self.coordinator = coordinator
 
-		viewState = .loading(content: Content(title: L.holderDccListTitle()))
+		viewState = .loading(content: Content(title: L.holder_listRemoteEvents_paperflow_title()))
 		checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode)
 	}
 
@@ -146,7 +146,7 @@ class PaperProofCheckViewModel: Logging {
 					// 304, 3xx, 4xx, 5xx
 					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					displayErrorCode(subTitle: L.holderErrorstateServerMessage("\(errorCode)"))
-				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
 					// Client side
 					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					displayErrorCode(subTitle: L.holderErrorstateClientMessage("\(errorCode)"))

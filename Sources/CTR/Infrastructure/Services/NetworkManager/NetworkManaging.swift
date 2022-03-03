@@ -32,6 +32,7 @@ enum NetworkError: String, Error, Equatable {
 	case invalidSignature
 	case cannotSerialize
 	case cannotDeserialize
+	case authenticationCancelled
 
 	func getClientErrorCode() -> ErrorCode.ClientCode? {
 
@@ -47,6 +48,8 @@ enum NetworkError: String, Error, Equatable {
 				return ErrorCode.ClientCode(value: "005")
 			case .invalidResponse:
 				return ErrorCode.ClientCode(value: "003")
+			case .authenticationCancelled:
+				return ErrorCode.ClientCode(value: "010")
 			case .invalidSignature:
 				return ErrorCode.ClientCode(value: "020")
 			case .cannotDeserialize:
@@ -95,6 +98,10 @@ enum HTTPHeaderKey: String {
 enum HTTPContentType: String {
 	case all = "*/*"
 	case json = "application/json"
+}
+
+enum HTTPBodyKeys: String {
+	case verificationCode
 }
 
 /// - Tag: NetworkManaging
@@ -152,21 +159,17 @@ protocol NetworkManaging: AnyObject {
 	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
 	///   - provider: the event provider
-	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
-		filter: String?,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void)
 
 	/// Get  events from an event provider
 	/// - Parameters:
 	///   - provider: the event provider
-	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
 	func fetchEvents(
 		provider: EventFlow.EventProvider,
-		filter: String?,
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void)
 
 	/// Check the coupling status

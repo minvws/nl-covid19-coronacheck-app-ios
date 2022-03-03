@@ -154,7 +154,7 @@ class PrivacyConsentViewControllerTests: XCTestCase {
 
 		// Given
 		loadView()
-		let button = ConsentButton()
+		let button = LabelWithCheckbox()
 		button.isSelected = true
 
 		// When
@@ -169,7 +169,7 @@ class PrivacyConsentViewControllerTests: XCTestCase {
 
 		// Given
 		loadView()
-		let button = ConsentButton()
+		let button = LabelWithCheckbox()
 		button.isSelected = false
 
 		// When

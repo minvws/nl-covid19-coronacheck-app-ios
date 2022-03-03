@@ -137,6 +137,8 @@ class Button: UIButton {
         self.addTarget(self, action: #selector(self.touchDownAnimation), for: .touchDown)
 
 		self.translatesAutoresizingMaskIntoConstraints = false
+		
+		setupAccessibility()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -216,6 +218,18 @@ class Button: UIButton {
 		setTitleColor(style.textColor(isEnabled: true), for: .normal)
 		setTitleColor(style.textColor(isEnabled: false), for: .disabled)
 		layer.borderColor = style.borderColor(isEnabled: isEnabled).cgColor
+	}
+	
+	private func setupAccessibility() {
+		
+		if #available(iOS 15.0, *) {
+			titleLabel?.maximumContentSizeCategory = .extraExtraExtraLarge
+		}
+		titleLabel?.adjustsFontForContentSizeCategory = true
+		setupLargeContentViewer()
+		if #available(iOS 13.0, *) {
+			largeContentImage = nil
+		}
 	}
 
     @objc private func touchDownAnimation() {

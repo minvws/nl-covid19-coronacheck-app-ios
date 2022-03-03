@@ -67,22 +67,6 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 		sut.assertImage(containedInNavigationController: true)
 	}
 	
-	func test_content_positiveTest() {
-		
-		// Given
-		viewModel = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .positiveTest)
-		sut = RemoteEventStartViewController(viewModel: viewModel)
-		
-		// When
-		loadView()
-		
-		// Then
-		expect(self.sut.sceneView.title) == L.holderPositiveTestStartTitle()
-		expect(self.sut.sceneView.message) == L.holderPositiveTestStartMessage()
-		
-		sut.assertImage(containedInNavigationController: true)
-	}
-	
 	func test_content_recovery() {
 		
 		// Given
@@ -139,5 +123,20 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == URL(string: L.holderVaccinationStartNodigidUrl())
+	}
+	
+	func test_checkBoxTapped() {
+		
+		// Given
+		sut = RemoteEventStartViewController(viewModel: viewModel)
+		loadView()
+		
+		// When
+		sut.sceneView.didToggleCheckboxCommand?(true)
+		sut.sceneView.primaryButtonTapped()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .vaccinationAndPositiveTest)
 	}
 }

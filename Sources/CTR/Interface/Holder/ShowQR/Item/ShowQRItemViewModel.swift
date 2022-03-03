@@ -33,6 +33,7 @@ class ShowQRItemViewModel: Logging {
 	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
 	private var qrShouldBeHidden: Bool
 	private let qrShouldInitiallyBeHidden: Bool
+	private let disclosusePolicy: DisclosurePolicy?
 
 	private var currentQRImage: UIImage? {
 		didSet {
@@ -61,17 +62,20 @@ class ShowQRItemViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - greenCard: a greencard to display
+	///   - disclosurePolicy: the policy to disclose the QR with (1G / 3G)
 	///   - qrShouldInitiallyBeHidden: boolean indicating if the QR should initially be hidden.
 	///   - screenCaptureDetector: the screen capture detector
 	init(
 		delegate: ShowQRItemViewModelDelegate,
 		greenCard: GreenCard,
+		disclosurePolicy: DisclosurePolicy?,
 		qrShouldInitiallyBeHidden: Bool = false,
 		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()
 	) {
 
 		self.delegate = delegate
 		self.greenCard = greenCard
+		self.disclosusePolicy = disclosurePolicy
 		self.screenCaptureDetector = screenCaptureDetector
 		self.qrShouldBeHidden = qrShouldInitiallyBeHidden
 		self.qrShouldInitiallyBeHidden = qrShouldInitiallyBeHidden
@@ -132,7 +136,6 @@ class ShowQRItemViewModel: Logging {
 			durationFormatter.unitsStyle = . full
 			durationFormatter.maximumUnitCount = 2
 			durationFormatter.allowedUnits = [.minute, .second]
-			durationFormatter.calendar = Calendar(identifier: .gregorian)
 
 			// e.g. "in ten seconds"
 			let relativeString = durationFormatter.string(from: Date(), to: Date().addingTimeInterval(TimeInterval(screenshotBlockTimeRemaining)))
@@ -185,7 +188,9 @@ class ShowQRItemViewModel: Logging {
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			DispatchQueue.global(qos: .userInitiated).async {
-				if let message = self.cryptoManager?.generateQRmessage(data),
+				
+				if let policy = self.disclosusePolicy,
+				   let message = self.cryptoManager?.discloseCredential(data, disclosurePolicy: policy),
 				   let image = message.generateQRCode(correctionLevel: ShowQRItemViewModel.domesticCorrectionLevel) {
 					DispatchQueue.main.async {
 						self.setQRValid(image: image)

@@ -63,24 +63,26 @@ extension HolderDashboardViewModel {
 					let threeYearsFromNow: TimeInterval = 60 * 60 * 24 * 365 * 3
 					return expirationTime > now.addingTimeInterval(threeYearsFromNow)
 				}
+				
+				/// The point at which a countdown timer will be shown for this origin `type`
+				var countdownTimerVisibleThreshold: TimeInterval {
+					return type == .test
+						? 6 * 60 * 60 // tests have a countdown for last 6 hours
+						: 24 * 60 * 60 // everything else has countdown for last 24 hours
+				}
 			}
-				
-			func hasValid3GTestWithoutAValidVaccineOrAValidRecovery(
-				credentialEvaluator: (HolderDashboardViewModel.QRCard.GreenCard, Date) -> DomesticCredentialAttributes?,
-				now: Date
-			) -> Bool {
-				let currentlyValidOrigins = origins.filter({ $0.isCurrentlyValid(now: now) })
-				
-				// Check contains currently valid test origin:
-				guard origins.contains(where: { $0.type == .test }) else { return false }
-				
-				// Check if the greencard verification policy is 3G:
-				let isExplicitly3G = credentialEvaluator(self, now)?.verificationPolicy == .policy3G
-				
-				let hasValidVaccine = currentlyValidOrigins.contains { $0.type == .vaccination }
-				let hasValidRecovery = currentlyValidOrigins.contains { $0.type == .recovery }
-				
-				return isExplicitly3G && !hasValidVaccine && !hasValidRecovery
+			
+			func hasValidOrigin(ofType type: QRCodeOriginType, now: Date) -> Bool {
+				return origins
+					.filter { $0.isCurrentlyValid(now: now) }
+					.contains(where: { $0.type == type })
+			}
+			
+			/// Note: may _not yet_ be valid!
+			func hasUnexpiredOrigin(ofType type: QRCodeOriginType, now: Date) -> Bool {
+				return origins
+					.filter { $0.isNotYetExpired(now: now) }
+					.contains(where: { $0.type == type })
 			}
 		}
 
@@ -123,18 +125,23 @@ extension HolderDashboardViewModel {
 				.last ?? .distantPast
 		}
 		
-		// Ignores greencards with no category
-		func isa3GTestTheOnlyCurrentlyValidOrigin(now: Date) -> Bool {
-			guard Current.featureFlagManager.isVerificationPolicyEnabled() else { return false }
-
-			guard case let .netherlands(credentialEvaluator) = region else { return false }
-			
-			// Find greencards where there IS a valid 3G test, but no currently-valid recovery or vaccine:
-			let matchingGreenCards = greencards.filter { greencard in
-				greencard.hasValid3GTestWithoutAValidVaccineOrAValidRecovery(credentialEvaluator: credentialEvaluator, now: now)
+		/// Note: may _not yet_ be valid!
+		func hasUnexpiredTest(now: Date) -> Bool {
+			// Find greencards where there is a test not yet expired
+			let greencardsWithUnexpiredTest = greencards.filter { greencard in
+				greencard.hasUnexpiredOrigin(ofType: .test, now: now)
 			}
-			
-			return matchingGreenCards.count == greencards.count
+			return greencardsWithUnexpiredTest.isNotEmpty
+		}
+		
+		func hasUnexpiredOriginsWhichAreNotOfTypeTest(now: Date) -> Bool {
+			greencards.filter({ QRCard.hasUnexpiredOriginThatIsNotATest(greencard: $0, now: now) }).isNotEmpty
+		}
+		
+		static func hasUnexpiredOriginThatIsNotATest(greencard: HolderDashboardViewModel.QRCard.GreenCard, now: Date) -> Bool {
+			return greencard.hasUnexpiredOrigin(ofType: .vaccination, now: now)
+				|| greencard.hasUnexpiredOrigin(ofType: .recovery, now: now)
+				|| greencard.hasUnexpiredOrigin(ofType: .vaccinationassessment, now: now)
 		}
 	}
 
@@ -142,6 +149,12 @@ extension HolderDashboardViewModel {
 		let id = UUID().uuidString
 		let region: QRCodeValidityRegion
 		let type: QRCodeOriginType
+	}
+	
+	enum DisclosurePolicyMode {
+		case exclusive3G
+		case exclusive1G
+		case combined1gAnd3g
 	}
 }
 

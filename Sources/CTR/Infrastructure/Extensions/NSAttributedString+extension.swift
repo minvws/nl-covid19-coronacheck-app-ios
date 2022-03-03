@@ -45,6 +45,29 @@ extension NSAttributedString {
 		)
 		return attrString
 	}
+	
+	static func style(text: String?, style: HTMLStyle) -> NSAttributedString {
+		
+		let paragraphStyle = NSMutableParagraphStyle()
+		paragraphStyle.lineBreakMode = .byWordWrapping
+		paragraphStyle.paragraphSpacing = style.paragraphSpacing
+		paragraphStyle.minimumLineHeightAdjustedForContentSize(style.lineHeight)
+		
+		let attrString = NSMutableAttributedString(string: text ?? "")
+		attrString.addAttributes(
+			[
+				.paragraphStyle: paragraphStyle,
+				.kern: style.kern
+			],
+			range: _NSRange(
+				location: 0,
+				length: attrString.length
+			)
+		)
+		NSAttributedString.replaceFonts(in: attrString, style: style)
+		return attrString
+		
+	}
 }
 
 public extension NSAttributedString {
@@ -165,7 +188,7 @@ public extension NSAttributedString {
 		return listParagraphStyle
 	}
 
-	private static func replaceFonts(in text: NSMutableAttributedString, style: HTMLStyle) {
+	static func replaceFonts(in text: NSMutableAttributedString, style: HTMLStyle) {
 
 		let fullRange = NSRange(location: 0, length: text.length)
 

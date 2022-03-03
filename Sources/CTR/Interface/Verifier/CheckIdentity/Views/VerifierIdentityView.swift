@@ -71,9 +71,14 @@ class VerifierIdentityView: BaseView {
 
 		stackView.addArrangedSubview(lastNameView)
 		stackView.addArrangedSubview(firstNameView)
-		horizontalStackView.addArrangedSubview(dayOfBirthView)
-		horizontalStackView.addArrangedSubview(monthOfBirthView)
-		stackView.addArrangedSubview(horizontalStackView)
+		if traitCollection.preferredContentSizeCategory >= .extraLarge {
+			stackView.addArrangedSubview(dayOfBirthView)
+			stackView.addArrangedSubview(monthOfBirthView)
+		} else {
+			horizontalStackView.addArrangedSubview(dayOfBirthView)
+			horizontalStackView.addArrangedSubview(monthOfBirthView)
+			stackView.addArrangedSubview(horizontalStackView)
+		}
 		addSubview(stackView)
 	}
 

@@ -21,6 +21,11 @@ enum AboutThisAppMenuIdentifier: String {
 	case deeplink
 
 	case scanlog
+	
+	case use1GDisclosurePolicy
+	case use3GDisclosurePolicy
+	case use1GAnd3GDisclosurePolicy
+	case useConfigDisclosurePolicy
 }
 
 ///// Struct for information to display the different test providers
@@ -78,7 +83,6 @@ class AboutThisAppViewModel: Logging {
 
 			// 13-10-2021 00:00
 			let dateformatter = DateFormatter()
-			dateformatter.calendar = Calendar(identifier: .gregorian)
 			dateformatter.dateFormat = "dd-MM-yyyy HH:mm"
 			let dateString = dateformatter.string(from: Date(timeIntervalSince1970: timestamp))
 
@@ -87,6 +91,7 @@ class AboutThisAppViewModel: Logging {
 
 		flavor == .holder ? setupMenuHolder() : setupMenuVerifier()
 	}
+	
 	private func setupMenuHolder() {
 
 		var list: [AboutThisAppMenuOption] = [
@@ -98,8 +103,22 @@ class AboutThisAppViewModel: Logging {
 		if Configuration().getEnvironment() != "production" {
 			list.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
-
-		menu = [L.holderAboutReadmore(): list]
+		
+		let bottomList: [AboutThisAppMenuOption] = [
+			AboutThisAppMenuOption(identifier: .use1GDisclosurePolicy, name: "Use 1G Disclosure policy") ,
+			AboutThisAppMenuOption(identifier: .use3GDisclosurePolicy, name: "Use 3G Disclosure policy"),
+			AboutThisAppMenuOption(identifier: .use1GAnd3GDisclosurePolicy, name: "Use 1G and 3G Disclosure policy"),
+			AboutThisAppMenuOption(identifier: .useConfigDisclosurePolicy, name: "Use the config Disclosure policy")
+		]
+		
+		if Configuration().getEnvironment() != "production" {
+			menu = [
+				L.holderAboutReadmore(): list,
+				"Disclosure Policy": bottomList
+			]
+		} else {
+			menu = [L.holderAboutReadmore(): list]
+		}
 	}
 
 	private func setupMenuVerifier() {
@@ -141,6 +160,14 @@ class AboutThisAppViewModel: Logging {
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
 			case .scanlog:
 				openScanLog()
+			case .use1GDisclosurePolicy:
+				setDisclosurePolicy([DisclosurePolicy.policy1G.featureFlag], message: "New policy: 1G")
+			case .use3GDisclosurePolicy:
+				setDisclosurePolicy([DisclosurePolicy.policy3G.featureFlag], message: "New policy: 3G")
+			case .use1GAnd3GDisclosurePolicy:
+				setDisclosurePolicy([DisclosurePolicy.policy1G.featureFlag, DisclosurePolicy.policy3G.featureFlag], message: "New policy: 1G + 3G")
+			case .useConfigDisclosurePolicy:
+				setDisclosurePolicy([], message: "New policy: use the config")
 		}
 	}
 
@@ -197,5 +224,23 @@ class AboutThisAppViewModel: Logging {
 		if let coordinator = coordinator as? VerifierCoordinatorDelegate {
 			coordinator.userWishesToOpenScanLog()
 		}
+	}
+	
+	private func setDisclosurePolicy(_ newPolicy: [String], message: String) {
+		
+		Current.userSettings.overrideDisclosurePolicies = newPolicy
+		Current.userSettings.lastDismissedDisclosurePolicy = []
+		
+		alert = AlertContent(
+			title: "Disclosure policy updated",
+			subTitle: message,
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.coordinator?.restart()
+			},
+			okTitle: L.generalOk(),
+			okActionIsDestructive: false
+		)
 	}
 }

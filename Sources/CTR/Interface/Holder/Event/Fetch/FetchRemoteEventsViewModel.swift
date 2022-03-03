@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -41,7 +42,7 @@ final class FetchRemoteEventsViewModel: Logging {
 		self.tvsToken = tvsToken
 		self.eventMode = eventMode
 
-		viewState = .loading(content: Content(title: eventMode.fetching))
+		viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
 		fetchEventProvidersWithAccessTokens(completion: handleFetchEventProvidersWithAccessTokensResponse)
 	}
 
@@ -61,7 +62,6 @@ final class FetchRemoteEventsViewModel: Logging {
 		// Do the Unomi call
 		self.fetchHasEventInformation(
 			forEventProviders: eventProviders,
-			filter: eventMode.queryFilterValue,
 			completion: handleFetchHasEventInformationResponse
 		)
 	}
@@ -77,7 +77,6 @@ final class FetchRemoteEventsViewModel: Logging {
 			nextAction: { informationMightBeMissing in
 				self.fetchRemoteEvents(
 					eventProviders: eventProvidersWithEventInformation,
-					filter: self.eventMode.queryFilterValue,
 					someInformationMightBeMissing: informationMightBeMissing,
 					unomiServerErrors: serverErrors,
 					completion: self.handleFetchEventsResponse
@@ -271,18 +270,46 @@ final class FetchRemoteEventsViewModel: Logging {
 
 		switch eventMode {
 			case .recovery:
-				return eventProviders.filter {
+				var providers = eventProviders.filter {
 					$0.usages.contains(EventFlow.ProviderUsage.recovery) ||
 					$0.usages.contains(EventFlow.ProviderUsage.positiveTest)
 				}
+				for index in 0 ..< providers.count {
+					providers[index].queryFilter = EventMode.recovery.queryFilter
+				}
+				return providers
+
 			case .vaccinationassessment, .paperflow:
 				return [] // flow is not part of FetchEvents.
-			case .positiveTest:
-				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
+
+			case .vaccinationAndPositiveTest:
+				var vaccinationProviders = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.vaccination) }
+				for index in 0 ..< vaccinationProviders.count {
+					vaccinationProviders[index].queryFilter = EventMode.vaccination.queryFilter
+				}
+				var postiveTestProviders = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
+				for index in 0 ..< postiveTestProviders.count {
+					postiveTestProviders[index].queryFilter = EventMode.vaccinationAndPositiveTest.queryFilter
+				}
+				guard vaccinationProviders.isNotEmpty && postiveTestProviders.isNotEmpty else {
+					// Do not proceed if one of the group of providers is empty.
+					return []
+				}
+				return vaccinationProviders + postiveTestProviders
+
 			case .test:
-				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.negativeTest) }
+				var providers = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.negativeTest) }
+				for index in 0 ..< providers.count {
+					providers[index].queryFilter = EventMode.test.queryFilter
+				}
+				return providers
+
 			case .vaccination:
-				return eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.vaccination) }
+				var providers = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.vaccination) }
+				for index in 0 ..< providers.count {
+					providers[index].queryFilter = EventMode.vaccination.queryFilter
+				}
+				return providers
 		}
 	}
 
@@ -293,7 +320,7 @@ final class FetchRemoteEventsViewModel: Logging {
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
 			case .vaccinationassessment, .paperflow:
 				return nil
-			case .test, .positiveTest:
+			case .test, .vaccinationAndPositiveTest:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)
 			case .vaccination:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noVaccinationProviderAvailable)
@@ -322,7 +349,6 @@ final class FetchRemoteEventsViewModel: Logging {
 
 	private func fetchHasEventInformation(
 		forEventProviders eventProviders: [EventFlow.EventProvider],
-		filter: String?,
 		completion: @escaping ([EventFlow.EventProvider], [ServerError]) -> Void) {
 
 		var eventInformationAvailableResults = [Result<EventFlow.EventInformationAvailable, ServerError>]()
@@ -333,7 +359,6 @@ final class FetchRemoteEventsViewModel: Logging {
 			hasEventInformationFetchingGroup.enter()
 			fetchHasEventInformationResponse(
 				from: provider,
-				filter: filter,
 				completion: { (result: Result<EventFlow.EventInformationAvailable, ServerError>) in
 
 					let mappedToProvider = result.mapError { serverError -> ServerError in
@@ -385,13 +410,12 @@ final class FetchRemoteEventsViewModel: Logging {
 
 	private func fetchHasEventInformationResponse(
 		from provider: EventFlow.EventProvider,
-		filter: String?,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
-		self.logDebug("eventprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
+		logDebug("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiURL?.absoluteString))")
 
 		progressIndicationCounter.increment()
-		networkManager.fetchEventInformation(provider: provider, filter: filter) { [weak self] result in
+		networkManager.fetchEventInformation(provider: provider) { [weak self] result in
 			// Result<EventFlow.EventInformationAvailable, ServerError>
 
 			if case let .success(info) = result {
@@ -406,7 +430,6 @@ final class FetchRemoteEventsViewModel: Logging {
 
 	private func fetchRemoteEvents(
 		eventProviders: [EventFlow.EventProvider],
-		filter: String?,
 		someInformationMightBeMissing: Bool,
 		unomiServerErrors: [ServerError],
 		completion: @escaping ([RemoteEvent], [ServerError], [ServerError], Bool) -> Void) {
@@ -419,7 +442,7 @@ final class FetchRemoteEventsViewModel: Logging {
 			   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
 
 				eventFetchingGroup.enter()
-				fetchRemoteEvent(from: provider, filter: filter) { result in
+				fetchRemoteEvent(from: provider) { result in
 
 					let mapped = result.mapError { serverError -> ServerError in
 						switch serverError {
@@ -439,7 +462,7 @@ final class FetchRemoteEventsViewModel: Logging {
 					} else {
 						eventResponseResults += [mapped.map({ wrapper, signed in
 							var mappedWrapper = wrapper
-							/// ZZZ is used for both Test and Fake GGD. Overwrite the response with the right identifier
+							// ZZZ is used for both Test and Fake GGD. Overwrite the response with the right identifier
 							mappedWrapper.providerIdentifier = provider.identifier
 							return (mappedWrapper, signed)
 						})]
@@ -465,30 +488,15 @@ final class FetchRemoteEventsViewModel: Logging {
 
 	private func fetchRemoteEvent(
 		from provider: EventFlow.EventProvider,
-		filter: String?,
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 
 		progressIndicationCounter.increment()
 
-		networkManager.fetchEvents(provider: provider, filter: filter) { [weak self] result in
+		networkManager.fetchEvents(provider: provider) { [weak self] result in
 			// (Result<(TestResultWrapper, SignedResponse), ServerError>
 			completion(result)
 
 			self?.progressIndicationCounter.decrement()
-		}
-	}
-}
-
-private extension EventMode {
-
-	/// Translate EventMode into a string that can be passed to the network as a query string
-	var queryFilterValue: String {
-		switch self {
-			case .vaccinationassessment, .paperflow: return "" // Not used
-			case .positiveTest: return "positivetest,recovery"
-			case .recovery: return "positivetest,recovery"
-			case .test: return "negativetest"
-			case .vaccination: return "vaccination"
 		}
 	}
 }
@@ -550,12 +558,7 @@ private extension FetchRemoteEventsViewModel {
 
 		// Expired TVS token
 		guard !errorCodes.contains(where: { $0.detailedCode == FetchRemoteEventsViewModel.detailedCodeTvsSessionExpired }) else {
-			if eventMode == .positiveTest {
-				// This is recoverable, so redirect to login
-				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)
-			} else {
-				displayNonceOrTVSExpired()
-			}
+			displayNonceOrTVSExpired()
 			return
 		}
 

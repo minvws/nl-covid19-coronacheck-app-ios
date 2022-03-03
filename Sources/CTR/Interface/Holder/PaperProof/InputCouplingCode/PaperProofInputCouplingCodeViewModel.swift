@@ -77,7 +77,7 @@ final class PaperProofInputCouplingCodeViewModel {
 			let sanitizedInput = userTokenInput
 				.map({ $0.strippingWhitespace() })?
 				.uppercased(),
-				sanitizedInput.isNotEmpty()
+				sanitizedInput.isNotEmpty
 				
 		else {
 			fieldErrorMessage = L.holderDcctokenentryErrorEmptycode()

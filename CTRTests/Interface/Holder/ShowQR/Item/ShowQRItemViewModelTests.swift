@@ -29,7 +29,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 	// MARK: - Tests
 
 	/// Test all the default content
-	func test_content_withDomesticGreenCard() throws {
+	func test_content_withDomesticGreenCard_3Gpolicy() throws {
 
 		// Given
 		let greenCard = try XCTUnwrap(
@@ -44,9 +44,35 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
+		// Then
+		expect(self.sut.visibilityState) == .loading
+		expect(self.sut.qrAccessibility) == L.holderShowqrDomesticQrTitle()
+	}
+	
+	/// Test all the default content
+	func test_content_withDomesticGreenCard_1Gpolicy() throws {
+		
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+		
+		// When
+		sut = ShowQRItemViewModel(
+			delegate: delegateSpy,
+			greenCard: greenCard,
+			disclosurePolicy: .policy1G,
+			screenCaptureDetector: screenCaptureDetector
+		)
+		
 		// Then
 		expect(self.sut.visibilityState) == .loading
 		expect(self.sut.qrAccessibility) == L.holderShowqrDomesticQrTitle()
@@ -68,6 +94,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: nil,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -95,6 +122,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -118,6 +146,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: nil,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -128,7 +157,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		expect(self.delegateSpy.invokedItemIsNotValid) == true
 	}
 
-	func test_validity_withDomesticGreenCard_withValidCredential() throws {
+	func test_validity_withDomesticGreenCard_withValidCredential_policy3G() throws {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 
 		// Given
@@ -142,20 +171,76 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
 			screenCaptureDetector: screenCaptureDetector
 		)
-		environmentSpies.cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
 
 		// When
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.environmentSpies.cryptoManagerSpy.invokedGenerateQRmessage).toEventually(beTrue())
+		expect(self.environmentSpies.cryptoManagerSpy.invokedDiscloseCredential).toEventually(beTrue())
 		expect(self.sut.visibilityState).toEventually(beVisible())
 		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.delegateSpy.invokedItemIsNotValid) == false
 	}
 
+	func test_validity_withDomesticGreenCard_withValidCredential_policy1G() throws {
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+		sut = ShowQRItemViewModel(
+			delegate: delegateSpy,
+			greenCard: greenCard,
+			disclosurePolicy: .policy1G,
+			screenCaptureDetector: screenCaptureDetector
+		)
+		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
+		
+		// When
+		sut?.checkQRValidity()
+		
+		// Then
+		expect(self.environmentSpies.cryptoManagerSpy.invokedDiscloseCredential).toEventually(beTrue())
+		expect(self.sut.visibilityState).toEventually(beVisible())
+		expect(self.sut.validityTimer).toEventuallyNot(beNil())
+		expect(self.delegateSpy.invokedItemIsNotValid) == false
+	}
+	
+	func test_validity_withDomesticGreenCard_withValidCredential_noPolicy() throws {
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+		sut = ShowQRItemViewModel(
+			delegate: delegateSpy,
+			greenCard: greenCard,
+			disclosurePolicy: nil,
+			screenCaptureDetector: screenCaptureDetector
+		)
+		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
+		
+		// When
+		sut?.checkQRValidity()
+		
+		// Then
+		expect(self.delegateSpy.invokedItemIsNotValid).toEventually(beTrue())
+	}
+	
 	func test_validity_withEuGreenCard_withValidCredential() throws {
 
 		// Given
@@ -169,6 +254,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: nil,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -176,7 +262,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.environmentSpies.cryptoManagerSpy.invokedGenerateQRmessage).toEventually(beFalse())
+		expect(self.environmentSpies.cryptoManagerSpy.invokedDiscloseCredential).toEventually(beFalse())
 		expect(self.sut.visibilityState).toEventually(beVisible())
 		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.delegateSpy.invokedItemIsNotValid) == false
@@ -196,6 +282,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -209,7 +296,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 	func testTakingAScreenshotPersistsDate() throws {
 
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
 
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
@@ -221,6 +308,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -234,7 +322,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 	func testHavingAPriorUnexpiredScreenshotStartsScreenshotBlocker() throws {
 
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
 		environmentSpies.userSettingsSpy.stubbedLastScreenshotTime = now.addingTimeInterval(-10)
 
 		let greenCard = try XCTUnwrap(
@@ -247,6 +335,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -269,9 +358,10 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
 			screenCaptureDetector: screenCaptureDetector
 		)
-		environmentSpies.cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
 
 		// When
 		sut?.checkQRValidity()

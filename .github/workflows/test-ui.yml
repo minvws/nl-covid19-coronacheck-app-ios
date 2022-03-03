@@ -1,0 +1,55 @@
+# Syntax: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: test-ui
+
+on:
+  schedule:
+    - cron: '0 20 * * 2,4' # Run at 20:00 on Tuesday and Thursday.
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
+  FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
+  FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
+  
+jobs:
+  test-ui:
+    runs-on: macos-11
+    timeout-minutes: 180
+    steps:
+      - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
+        # 🧐 when changing below, don't forget to also change the device name in the Fastfile too:
+        run: | 
+          xcrun simctl boot "iPhone 12" || true
+          xcrun simctl list devices 14.4
+      
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      
+      - name: Setup CI environment
+        run: |
+          make ci
+
+      - name: Checkout LFS resources
+        run: |
+          git lfs pull
+          git checkout .
+
+      - name: Build and test
+        env:
+          ACCEPTANCE_BASIC_AUTH_PASSWORD: ${{ secrets.ACCEPTANCE_BASIC_AUTH_PASSWORD }}
+        run: |
+          bundle exec fastlane ios test_ui
+
+      - name: Archive test artifacts
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-output
+          path: |
+            fastlane/test_output/
+            ~/Library/Developer/Xcode/DerivedData/CTR*/Logs/Test/*.xcresult

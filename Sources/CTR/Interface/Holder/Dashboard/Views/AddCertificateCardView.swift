@@ -185,6 +185,7 @@ private class LargeAddCertificateButton: UIControl {
 	private func setupAccessibility() {
 
 		isAccessibilityElement = true
+		accessibilityTraits = .button
 	}
 	
 	// MARK: - Objc Target-Action callbacks:

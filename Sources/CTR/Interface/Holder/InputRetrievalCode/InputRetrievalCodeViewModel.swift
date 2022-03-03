@@ -652,7 +652,7 @@ extension InputRetrievalCodeViewModel {
 					case .serverBusy:
 						return L.generalNetworkwasbusyTitle()
 					case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
-						 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+							.invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
 						return L.holderErrorstateTitle()
 					default:
 						break
@@ -673,7 +673,7 @@ extension InputRetrievalCodeViewModel {
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					let errorCode = ErrorCode(flow: flow, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateServerMessage("\(errorCode)")
-				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
 					let errorCode = ErrorCode(flow: flow, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateClientMessage("\(errorCode)")
 				default:
@@ -688,7 +688,7 @@ extension InputRetrievalCodeViewModel {
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					let errorCode = ErrorCode(flow: flow, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
-				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
 					let errorCode = ErrorCode(flow: flow, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				default:
@@ -704,7 +704,7 @@ extension InputRetrievalCodeViewModel {
 			case let .error(_, _, error), let .provider(_, _, _, error):
 				switch error {
 					case .serverBusy, .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
-						 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+							.invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
 						return L.general_toMyOverview()
 					default:
 						break

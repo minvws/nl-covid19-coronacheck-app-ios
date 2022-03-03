@@ -16,6 +16,7 @@ class ScanInstructionsViewController: BaseViewController {
 	private let skipButton: UIButton = {
 		let button = UIButton(type: .custom)
 		button.setTitle(L.verifierScaninstructionsNavigationSkipbuttonTitle(), for: .normal)
+		button.setupLargeContentViewer(title: L.verifierScaninstructionsNavigationSkipbuttonTitle())
 		button.setTitleColor(Theme.colors.primary, for: .normal)
 		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -105,10 +106,7 @@ class ScanInstructionsViewController: BaseViewController {
 	private func setupSkipButton() {
 
 		skipButton.addTarget(self, action: #selector(skipButtonTapped), for: .touchUpInside)
-		if #available(iOS 13.0, *) {
-			skipButton.addInteraction(UILargeContentViewerInteraction())
-			skipButton.showsLargeContentViewer = true
-		}
+		skipButton.setupLargeContentViewer()
 		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: skipButton)
 	}
 

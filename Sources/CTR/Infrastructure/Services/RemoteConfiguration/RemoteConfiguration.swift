@@ -73,9 +73,10 @@ struct RemoteConfiguration: Codable, Equatable {
 	var recoveryWaitingPeriodDays: Int?
 
 	/// Event validity
-
 	var recoveryEventValidityDays: Int?
 
+	var recoveryExpirationDays: Int?
+	
 	var testEventValidityHours: Int?
 
 	var vaccinationEventValidityDays: Int?
@@ -121,13 +122,13 @@ struct RemoteConfiguration: Codable, Equatable {
 
 	var showNewValidityInfoCard: Bool?
 	
-	var verificationPolicyVersion: String?
-	
 	var vaccinationAssessmentEventValidityDays: Int?
 	
 	var visitorPassEnabled: Bool?
 	
 	var verificationPolicies: [String]?
+	
+	var disclosurePolicies: [String]?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -144,6 +145,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case configAlmostOutOfDateWarningSeconds = "configAlmostOutOfDateWarningSeconds"
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case recoveryEventValidityDays = "recoveryEventValidityDays"
+		case recoveryExpirationDays = "recoveryExpirationDays"
 		case testEventValidityHours = "testEventValidityHours"
 		case vaccinationEventValidityDays = "vaccinationEventValidityDays"
 		case hpkCodes = "hpkCodes"
@@ -164,10 +166,10 @@ struct RemoteConfiguration: Codable, Equatable {
 		case scanLockWarningSeconds = "scanLockWarningSeconds"
 		case scanLogStorageSeconds = "scanLogStorageSeconds"
 		case showNewValidityInfoCard = "showNewValidityInfoCard"
-		case verificationPolicyVersion = "iOSEnableVerificationPolicyVersion"
 		case vaccinationAssessmentEventValidityDays = "vaccinationAssessmentEventValidityDays"
 		case visitorPassEnabled = "visitorPassEnabled"
 		case verificationPolicies = "verificationPolicies"
+		case disclosurePolicies = "disclosurePolicy"
 	}
 	
 	init(minVersion: String) {
@@ -190,6 +192,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.configAlmostOutOfDateWarningSeconds = 300
 		config.recoveryWaitingPeriodDays = 11
 		config.recoveryEventValidityDays = 365
+		config.recoveryExpirationDays = 180
 		config.testEventValidityHours = 96
 		config.vaccinationEventValidityDays = 730
 		config.isGGDEnabled = true
@@ -201,10 +204,10 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.scanLockSeconds = 300
 		config.scanLockWarningSeconds = 3600
 		config.scanLogStorageSeconds = 3600
-		config.verificationPolicyVersion = "0"
 		config.vaccinationAssessmentEventValidityDays = 14
 		config.visitorPassEnabled = true
 		config.verificationPolicies = ["3G"]
+		config.disclosurePolicies = ["3G"]
 		return config
 	}
 

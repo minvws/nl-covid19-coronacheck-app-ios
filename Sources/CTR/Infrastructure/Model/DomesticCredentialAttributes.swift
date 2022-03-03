@@ -43,14 +43,6 @@ struct DomesticCredentialAttributes: Codable {
 
 		return specimen == "1"
 	}
-	
-	var verificationPolicy: VerificationPolicy? {
-		switch category {
-			case "2": return .policy1G
-			case "3": return .policy3G
-			default: return nil
-		}
-	}
 
 	/// Map the identity of the holder
 	/// - Parameter months: the months

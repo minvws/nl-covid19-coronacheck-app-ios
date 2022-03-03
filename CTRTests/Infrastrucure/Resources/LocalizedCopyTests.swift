@@ -51,10 +51,6 @@ final class LocalizedCopyTests: XCTestCase {
 
 		expect(self.copyValues(key: "general.vaccinationdate"))
 			== [ .nl: "Vaccinatiedatum", .en: "Vaccination date" ]
-
-		// Should be "recovery certificate"
-		expect(self.copyValue(key: "holder.recovery.list.message", forLocaleIdentifier: .en))
-			== "If the details about your test are correct, you can create a recovery certificate."
 	}
 }
 
