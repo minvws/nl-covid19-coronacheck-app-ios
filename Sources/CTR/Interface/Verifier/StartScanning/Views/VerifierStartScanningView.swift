@@ -152,6 +152,9 @@ class VerifierStartScanningView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .horizontal
 		view.spacing = ViewTraits.RiskIndicator.spacing
+		if #available(iOS 15.0, *) {
+			view.maximumContentSizeCategory = .accessibilityMedium
+		}
 		return view
 	}()
 
@@ -343,6 +346,9 @@ class VerifierStartScanningView: BaseView {
 			text: params.1,
 			style: .bodyDark
 		)
+		riskIndicatorStackView.setupLargeContentViewer(title: riskIndicatorLabel.attributedText?.string)
+		riskIndicatorStackView.isAccessibilityElement = true
+		riskIndicatorStackView.accessibilityLabel = riskIndicatorLabel.attributedText?.string
 	}
 
 	/// The user tapped on the primary button
