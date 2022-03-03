@@ -64,13 +64,13 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 			delegate?.cryptoLibDidNotInitialize()
 			return
 		}
-
+		
 		if state == .withinTTL {
 			// If within the TTL, and the firstUseDate is nil, that means an existing installation.
 			// Use the documents directory creation date.
 			Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
 		}
-
+		
 		checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
 			switch state {
 				case .finished, .withinTTL:
