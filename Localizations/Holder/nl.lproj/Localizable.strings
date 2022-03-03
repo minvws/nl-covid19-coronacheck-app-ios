@@ -636,6 +636,7 @@
 "holder_expiredDomesticVaccinationModal_title" = "Verlopen vaccinatiebewijs";
 "holder_fetchRemoteEvents_title" = "Gegevens ophalen";
 "holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs.</p><p>Voeg een nieuwe vaccinatie of test toe om een Nederlands bewijs te krijgen.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_inputRetrievalCode_error_blocked" = "tijdelijk geblokkeerd.";
 "holder_listRemoteEvents_endStateCombinedFlowInternationalQROnly_message" = "<p>Van je opgehaalde gegevens kon alleen een internationaal vaccinatiebewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_message" = "<p>Van je opgehaalde gegevens kon alleen een internationaal vaccinatiebewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_title" = "Er is alleen een internationaal bewijs gemaakt";
@@ -749,5 +750,3 @@
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
 "visitorpass_token_next" = "Volgende";
-
-"holder_inputRetrievalCode_error_blocked" = "** tijdelijk geblokkeerd ** ";
