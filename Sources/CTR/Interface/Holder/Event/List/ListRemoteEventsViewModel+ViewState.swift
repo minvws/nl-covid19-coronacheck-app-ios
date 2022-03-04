@@ -193,7 +193,7 @@ extension ListRemoteEventsViewModel {
 				if lhsDate == rhsDate {
 					return lhs.providerIdentifier < rhs.providerIdentifier
 				}
-				return lhsDate < rhsDate
+				return lhsDate > rhsDate
 			}
 			return false
 		}
