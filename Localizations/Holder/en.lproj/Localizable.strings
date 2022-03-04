@@ -636,6 +636,7 @@
 "holder_expiredDomesticVaccinationModal_title" = "Expired vaccination certificate";
 "holder_fetchRemoteEvents_title" = "Retrieve details";
 "holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>Your vaccination(s) unfortunately don’t entitle you to a Dutch vaccination certificate.</p><p>Add a new vaccination or test to get a Dutch vaccination certificate.</p><p>Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
+"holder_inputRetrievalCode_error_blocked" = "You’ve tried to enter your code too many times. Please try again in 5 minutes.";
 "holder_listRemoteEvents_endStateCombinedFlowInternationalQROnly_message" = "<p>Only an international vaccination certificate could be created from your retrieved vaccinations. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_message" = "<p>Only an international vaccination certificate could be created from your retrieved details. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_title" = "Only an international certificate was created";

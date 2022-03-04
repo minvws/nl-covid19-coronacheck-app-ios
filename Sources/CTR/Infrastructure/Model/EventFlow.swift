@@ -155,6 +155,9 @@ struct EventFlow {
 
 		/// Unknown state
 		case unknown
+		
+		/// Blocked (too many tries)
+		case blocked = "result_blocked"
 
 		/// Custom initializer to default to unknown state
 		/// - Parameter decoder: the decoder

@@ -130,6 +130,16 @@ extension EventFlow.EventResultWrapper {
 			result: nil
 		)
 	}
+
+	static var fakeBlocked: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "",
+			protocolVersion: "",
+			identity: nil,
+			status: .blocked,
+			result: nil
+		)
+	}
 	
 	static var fakeVerificationRequired: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
