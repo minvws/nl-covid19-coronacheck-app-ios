@@ -394,10 +394,11 @@ class ListRemoteEventsViewModel: Logging {
 				self.completeFlow()
 			},
 			onNoOrigins: {
-				let recoveryExpirationDays = TimeInterval( self.remoteConfigManager.storedConfiguration.recoveryExpirationDays ?? 180)
-				if let positiveTestEvent = remoteEvents.first?.wrapper.events?.first, positiveTestEvent.hasPositiveTest,
-				   let date = positiveTestEvent.positiveTest?.getDate(with: ListRemoteEventsViewModel.iso8601DateFormatter),
-				   date.addingTimeInterval(recoveryExpirationDays) < Current.now() {
+				if let recoveryExpirationDays = self.remoteConfigManager.storedConfiguration.recoveryExpirationDays,
+				   let event = remoteEvents.first?.wrapper.events?.first, event.hasPositiveTest,
+				   let sampleDateString = event.positiveTest?.sampleDateString,
+				   let date = Formatter.getDateFrom(dateString8601: sampleDateString),
+				   date.addingTimeInterval(TimeInterval(recoveryExpirationDays * 24 * 60 * 60)) < Current.now() {
 					self.viewState = self.recoveryFlowPositiveTestTooOld()
 				} else {
 					self.viewState = self.originMismatchState(flow: .recovery)

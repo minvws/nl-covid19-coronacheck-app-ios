@@ -187,6 +187,15 @@ extension EventFlow.EventResultWrapper {
 		result: nil,
 		events: [EventFlow.Event.positiveTestEvent]
 	)
+	
+	static var fakeExpiredPositiveTestResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.expiredPositiveTestEvent]
+	)
 
 	static var fakeNegativeTestResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
@@ -731,7 +740,7 @@ extension RemoteGreenCards.Response {
 					RemoteGreenCards.Origin(
 						type: "recovery",
 						eventTime: Date().addingTimeInterval(400 * days * ago),
-						expirationTime: Date().addingTimeInterval(30 * days * ago),
+						expirationTime: Date().addingTimeInterval(300 * days * ago),
 						validFrom: Date().addingTimeInterval(400 * days * ago),
 						doseNumber: nil
 					)
@@ -869,6 +878,28 @@ extension EventFlow.Event {
 			vaccinationAssessment: nil
 		)
 	}
+	
+	static var expiredPositiveTestEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "test",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: nil,
+			negativeTest: nil,
+			positiveTest: EventFlow.TestEvent(
+				sampleDateString: "2020-07-01T15:49Z",
+				negativeResult: nil,
+				positiveResult: true,
+				facility: "GGD XL Factory",
+				type: "LP217198-3",
+				name: "Antigen Test",
+				manufacturer: "1213"
+			),
+			recovery: nil,
+			dccEvent: nil,
+			vaccinationAssessment: nil
+		)
+	}
 
 	static var vaccinationEvent: EventFlow.Event {
 		EventFlow.Event(
@@ -898,7 +929,7 @@ extension EventFlow.Event {
 
 	static var recoveryEvent: EventFlow.Event {
 		EventFlow.Event(
-			type: "vaccination",
+			type: "recovery",
 			unique: "1234",
 			isSpecimen: true,
 			vaccination: nil,
@@ -1154,6 +1185,13 @@ struct FakeRemoteEvent {
 	static var fakeRemoteEventPositiveTest: RemoteEvent {
 		RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper.fakePositiveTestResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventExpiredPositiveTest: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeExpiredPositiveTestResultWrapper,
 			signedResponse: SignedResponse.fakeResponse
 		)
 	}
