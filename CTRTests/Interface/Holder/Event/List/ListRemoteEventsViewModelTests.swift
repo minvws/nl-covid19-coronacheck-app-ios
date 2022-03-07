@@ -3032,8 +3032,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		
-		expect(feedback.title) == L.holderPositiveTestNolistTitle()
-		expect(feedback.body) == L.holderPositiveTestNolistMessage()
+		expect(feedback.title) == L.holderVaccinationNolistTitle()
+		expect(feedback.body) == L.holderVaccinationNolistMessage()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}

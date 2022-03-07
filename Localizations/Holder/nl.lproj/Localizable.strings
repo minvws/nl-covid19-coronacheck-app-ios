@@ -372,8 +372,6 @@
 "holder.paperproof.startscanning.international" = "Waarom alleen internationaal?";
 "holder.paperproof.startscanning.message" = "<p>Scan met de camera van je telefoon alleen de <b>internationale QR-code</b> op je papieren bewijs.</p><p>Heb je meerdere internationale QR-codes? Doorloop deze stappen straks opnieuw voor elke QR-code die je in de app wilt hebben.</p>";
 "holder.paperproof.startscanning.title" = "Scan je internationale QR-code";
-"holder.positiveTest.nolist.message" = "<p>Ben je net getest? Het kan een paar uur duren voordat je uitslag beschikbaar is. Probeer het later nog eens.</p><p>Al even geleden getest? Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
-"holder.positiveTest.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.provider.commercial.title" = "Andere testlocatie";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
 "holder.provider.ggd.title" = "GGD";
