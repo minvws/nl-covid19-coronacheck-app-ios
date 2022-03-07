@@ -360,19 +360,13 @@ class ListRemoteEventsViewModel: Logging {
 					self.completeFlow()
 				} else {
 			
-					var hasPositiveTestRemoteEvent = false
-					remoteEvents.forEach({ (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?) in
-						if let event = wrapper.events?.first, event.hasPositiveTest {
-							hasPositiveTestRemoteEvent = true
-						}
-					})
+					let hasPositiveTestRemoteEvent = remoteEvents.contains { wrapper, _ in wrapper.events?.first?.hasPositiveTest ?? false }
 					if hasPositiveTestRemoteEvent {
 						// End state 9
 						self.viewState = self.positiveTestFlowInternationalVaccinationCreated()
 					} else {
 						// End state 2
 						self.viewState = self.internationalQROnly()
-						
 					}
 				}
 			},
