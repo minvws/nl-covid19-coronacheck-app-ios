@@ -372,8 +372,6 @@
 "holder.paperproof.startscanning.international" = "Why only international?";
 "holder.paperproof.startscanning.message" = "<p>Use your phone's camera to scan the <b>international QR code</b> on your paper certificate.</p><p>Do you have multiple international QR codes? Please retake these steps for every QR code you want to add to the app.</p>";
 "holder.paperproof.startscanning.title" = "Scan your international QR code";
-"holder.positiveTest.nolist.message" = "<p>Have you just been tested? It may take a few hours before your result is available. Please try again later.</p><p>Were you tested longer ago? Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
-"holder.positiveTest.nolist.title" = "No positive test result available";
 "holder.provider.commercial.title" = "Other test location";
 "holder.provider.ggd.subtitle" = "Log in with your DigiD";
 "holder.provider.ggd.title" = "GGD";
