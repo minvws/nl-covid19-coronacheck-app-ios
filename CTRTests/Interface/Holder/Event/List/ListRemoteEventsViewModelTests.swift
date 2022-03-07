@@ -2455,8 +2455,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 
-		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_recovery_body("i 380 000 058")
+		expect(feedback.title) == L.holder_listRemoteEvents_endStateRecoveryTooOld_title()
+		expect(feedback.body) == L.holder_listRemoteEvents_endStateRecoveryTooOld_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}

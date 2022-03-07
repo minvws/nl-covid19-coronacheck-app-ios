@@ -378,13 +378,16 @@ class ListRemoteEventsViewModel: Logging {
 				if self.hasExistingDomesticVaccination {
 					self.completeFlow()
 				} else {
+					// End State 5
 					self.viewState = self.recoveryFlowRecoveryAndVaccinationCreated()
 				}
 			},
 			onVaccinationOriginOnly: {
 				if self.hasExistingDomesticVaccination {
-					self.viewState = self.originMismatchState(flow: .recovery)
+					// End State 7
+					self.viewState = self.recoveryFlowPositiveTestTooOld()
 				} else {
+					// End State 6
 					Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 					self.viewState = self.recoveryFlowVaccinationOnly()
 				}
@@ -399,8 +402,10 @@ class ListRemoteEventsViewModel: Logging {
 				   let sampleDateString = event.positiveTest?.sampleDateString,
 				   let date = Formatter.getDateFrom(dateString8601: sampleDateString),
 				   date.addingTimeInterval(TimeInterval(recoveryExpirationDays * 24 * 60 * 60)) < Current.now() {
+					// End State 7
 					self.viewState = self.recoveryFlowPositiveTestTooOld()
 				} else {
+					// End State 3
 					self.viewState = self.originMismatchState(flow: .recovery)
 				}
 			}
