@@ -644,7 +644,7 @@
 "holder_listRemoteEvents_endStateRecoveryOnly_title" = "Only a recovery certificate was created";
 "holder_listRemoteEvents_endStateRecoveryTooOld_message" = "<p>It has been too long ago since you tested positive for coronavirus. Therefore, your test result is no longer valid. Unfortunately, you cannot create a recovery certificate.</p><p>Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryTooOld_title" = "Positive test result no longer valid";
-"holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>A Dutch vaccination certificate has been created from your retrieved vaccinations.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
+"holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>A vaccination certificate has been created from your retrieved vaccinations.</p><p>Your positive test result was suitable for creating a recovery certificate as well.</p>";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Vaccination and recovery certificates created";
 "holder_listRemoteEvents_listElement_assessmentDate" = "Review date: %@";
 "holder_listRemoteEvents_listElement_birthDate" = "Date of birth: %@";
