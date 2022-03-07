@@ -32,8 +32,8 @@ class RemoteEventStartViewModel: Logging {
 		self.eventMode = eventMode
 
 		switch eventMode {
-			case .vaccinationassessment:
-				// this is not the start scene for the assessment flow
+			case .vaccinationassessment, .paperflow, .vaccinationAndPositiveTest:
+				// this is not the start scene for this flow
 				self.title = ""
 				self.message = ""
 				self.primaryButtonIcon = nil
@@ -48,20 +48,9 @@ class RemoteEventStartViewModel: Logging {
 				self.message = L.holderRecoveryStartMessage()
 				self.primaryButtonIcon = I.digid()
 				self.checkboxTitle = nil
-			case .paperflow:
-				// this is not the start scene for the paper flow.
-				self.title = ""
-				self.message = ""
-				self.primaryButtonIcon = nil
-				self.checkboxTitle = nil
 			case .test:
 				self.title = L.holder_negativetest_ggd_title()
 				self.message = L.holder_negativetest_ggd_message()
-				self.primaryButtonIcon = I.digid()
-				self.checkboxTitle = nil
-			case .positiveTest:
-				self.title = L.holderPositiveTestStartTitle()
-				self.message = L.holderPositiveTestStartMessage()
 				self.primaryButtonIcon = I.digid()
 				self.checkboxTitle = nil
 		}
@@ -79,7 +68,7 @@ class RemoteEventStartViewModel: Logging {
 
 	func primaryButtonTapped() {
 
-		coordinator?.eventStartScreenDidFinish(.continue(eventMode: eventMode))
+		coordinator?.eventStartScreenDidFinish(.continue(eventMode: didCheckCheckbox ? .vaccinationAndPositiveTest : eventMode))
 	}
 	
 	func checkboxToggled(value: Bool) {

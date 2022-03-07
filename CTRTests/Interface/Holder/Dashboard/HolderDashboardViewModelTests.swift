@@ -51,10 +51,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
 
-	func vendSut(dashboardRegionToggleValue: QRCodeValidityRegion, appVersion: String = "1.0.0") -> HolderDashboardViewModel {
+	func vendSut(dashboardRegionToggleValue: QRCodeValidityRegion, appVersion: String = "1.0.0", activeDisclosurePolicies: [DisclosurePolicy] = []) -> HolderDashboardViewModel {
 
 		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = dashboardRegionToggleValue
-
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = activeDisclosurePolicies.map { $0.featureFlag }
+		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = activeDisclosurePolicies.sorted(by: { $0.featureFlag < $1.featureFlag }) == [.policy1G, .policy3G]
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = activeDisclosurePolicies == [.policy1G]
+		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = activeDisclosurePolicies == [.policy3G]
 		return HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			datasource: datasourceSpy,
@@ -64,7 +67,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 			versionSupplier: AppVersionSupplierSpy(version: appVersion)
 		)
 	}
-
 }
 
 // MARK: - Nimble Matchers for `HolderDashboardViewController.Card` enum cases
