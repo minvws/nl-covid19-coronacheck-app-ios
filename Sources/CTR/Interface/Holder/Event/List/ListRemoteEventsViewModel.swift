@@ -231,6 +231,7 @@ class ListRemoteEventsViewModel: Logging {
 				self.handleSuccess(greencardResponse, expandedEventMode: expandedEventMode, with: remoteEvents)
 
 			case .failure(GreenCardLoader.Error.didNotEvaluate):
+				// End state 3
 				self.viewState = self.originMismatchState(flow: determineErrorCodeFlow(remoteEvents: remoteEvents))
 				self.shouldPrimaryButtonBeEnabled = true
 
@@ -274,7 +275,7 @@ class ListRemoteEventsViewModel: Logging {
 			case .test:
 				handleSuccessForNegativeTest(greencardResponse, with: remoteEvents)
 			case .vaccinationAndPositiveTest:
-				handleSuccessForCombinedVaccinationAndPositiveTest(greencardResponse)
+				handleSuccessForCombinedVaccinationAndPositiveTest(greencardResponse, with: remoteEvents)
 			case .recovery:
 				handleSuccessForRecovery(greencardResponse, with: remoteEvents)
 			case .vaccination:
@@ -326,13 +327,14 @@ class ListRemoteEventsViewModel: Logging {
 		if !greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue) &&
 			greencardResponse.hasInternationalOrigins(ofType: OriginType.vaccination.rawValue) {
 			shouldPrimaryButtonBeEnabled = true
+			// End state 2
 			viewState = internationalQROnly()
 		} else {
 			completeFlow()
 		}
 	}
 
-	private func handleSuccessForCombinedVaccinationAndPositiveTest(_ greencardResponse: RemoteGreenCards.Response) {
+	private func handleSuccessForCombinedVaccinationAndPositiveTest(_ greencardResponse: RemoteGreenCards.Response, with remoteEvents: [RemoteEvent]) {
 
 		shouldPrimaryButtonBeEnabled = true
 
@@ -343,26 +345,44 @@ class ListRemoteEventsViewModel: Logging {
 				
 				let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
 				if hasDomesticVaccinationOrigins {
+					// End state 6 / 7
 					self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
 				} else {
+					// End state 8
 					self.viewState = self.positiveTestFlowRecoveryAndInternationalVaccinationCreated()
 				}
 			},
 			onVaccinationOriginOnly: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-				
+
 				let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
 				if hasDomesticVaccinationOrigins {
 					self.completeFlow()
 				} else {
-					self.viewState = self.positiveTestFlowInternationalVaccinationCreated()
+			
+					var hasPositiveTestRemoteEvent = false
+					remoteEvents.forEach({ (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?) in
+						if let event = wrapper.events?.first, event.hasPositiveTest {
+							hasPositiveTestRemoteEvent = true
+						}
+					})
+					if hasPositiveTestRemoteEvent {
+						// End state 9
+						self.viewState = self.positiveTestFlowInternationalVaccinationCreated()
+					} else {
+						// End state 2
+						self.viewState = self.internationalQROnly()
+						
+					}
 				}
 			},
 			onRecoveryOriginOnly: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+				// End state 10
 				self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
 			},
 			onNoOrigins: {
+				// End State 3 / 11
 				self.viewState = self.originMismatchState(flow: .vaccinationAndPositiveTest)
 			}
 		)
