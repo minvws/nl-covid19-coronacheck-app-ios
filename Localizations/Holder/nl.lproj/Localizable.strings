@@ -748,3 +748,8 @@
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
 "visitorpass_token_next" = "Volgende";
+
+"holder_onboarding_content_TravelSafe_0G_title" = "Veilig op reis met je bewijs";
+"holder_onboarding_content_TravelSafe_0G_message" = "Reis je naar een land waar om een coronabewijs wordt gevraagd? Dan kun je met deze app je bewijs maken.";
+"holder_onboarding_content_onlyInternationalQR_0G_title" = "Je bewijs heeft een QR-code";
+"holder_onboarding_content_onlyInternationalQR_0G_message" = "De QR-code op je bewijs kan worden gecheckt bij de ingang van plekken en activiteiten in het buitenland. Of aan de grens.";
