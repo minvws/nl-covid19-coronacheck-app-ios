@@ -193,7 +193,7 @@ extension ListRemoteEventsViewModel {
 				if lhsDate == rhsDate {
 					return lhs.providerIdentifier < rhs.providerIdentifier
 				}
-				return lhsDate < rhsDate
+				return lhsDate > rhsDate
 			}
 			return false
 		}
@@ -509,10 +509,9 @@ extension ListRemoteEventsViewModel {
 		switch eventMode {
 			case .vaccinationassessment: return emptyAssessmentState()
 			case .paperflow: return emptyDccState()
-			case .vaccinationAndPositiveTest: return emptyPositiveTestState()
+			case .vaccinationAndPositiveTest, .vaccination: return emptyVaccinationState()
 			case .recovery: return emptyRecoveryState()
 			case .test: return emptyTestState()
-			case .vaccination: return emptyVaccinationState()
 		}
 	}
 
@@ -603,15 +602,6 @@ extension ListRemoteEventsViewModel {
 	}
 
 	// MARK: Positive test end states
-
-	internal func emptyPositiveTestState() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderPositiveTestNolistTitle(),
-			subTitle: L.holderPositiveTestNolistMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
 
 	internal func positiveTestFlowRecoveryAndVaccinationCreated() -> ListRemoteEventsViewController.State {
 

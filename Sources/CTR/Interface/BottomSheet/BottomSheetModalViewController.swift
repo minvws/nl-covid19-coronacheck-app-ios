@@ -42,7 +42,7 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 	
 	var interactiveTransition: BottomSheetInteractiveTransition?
 	
-	private let childViewController: UIViewController
+	internal let childViewController: UIViewController
 	
 	init(childViewController: UIViewController) {
 		self.childViewController = childViewController

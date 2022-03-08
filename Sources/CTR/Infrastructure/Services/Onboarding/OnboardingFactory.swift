@@ -107,22 +107,22 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 		
 		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
 			return OnboardingPage(
-				title: L.holder_newintheapp_content_only1G_title(),
-				message: L.holder_newintheapp_content_only1G_body(),
+				title: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_title(),
+				message: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
 				step: .disclosurePolicy
 			)
 		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
 			return OnboardingPage(
-				title: L.holder_newintheapp_content_only3G_title(),
-				message: L.holder_newintheapp_content_only3G_body(),
+				title: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_title(),
+				message: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
 				step: .disclosurePolicy
 			)
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
 			return OnboardingPage(
-				title: L.holder_newintheapp_content_3Gand1G_title(),
-				message: L.holder_newintheapp_content_3Gand1G_body(),
+				title: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_title(),
+				message: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
 				step: .disclosurePolicy
 			)

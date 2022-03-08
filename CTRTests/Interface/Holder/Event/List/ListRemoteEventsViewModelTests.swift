@@ -2170,7 +2170,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 	// MARK: - Success Paths Recovery -
 	
-	func test_successRecovery_expired() throws {
+	func test_successRecovery_noOrigins() throws {
 
 		// Given
 		sut = ListRemoteEventsViewModel(
@@ -2185,7 +2185,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecovery), ())
+		(.success(RemoteGreenCards.Response.noOrigins), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -2215,6 +2215,55 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
 		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_recovery_body("i 380 000 058")
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+	
+	func test_successRecovery_expiredEvent() throws {
+		
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventExpiredPositiveTest],
+			greenCardLoader: greenCardLoader
+		)
+		
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.noOrigins), ())
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		expect(feedback.title) == L.holder_listRemoteEvents_endStateRecoveryTooOld_title()
+		expect(feedback.body) == L.holder_listRemoteEvents_endStateRecoveryTooOld_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2406,8 +2455,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 
-		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_recovery_body("i 380 000 058")
+		expect(feedback.title) == L.holder_listRemoteEvents_endStateRecoveryTooOld_title()
+		expect(feedback.body) == L.holder_listRemoteEvents_endStateRecoveryTooOld_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2983,8 +3032,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		
-		expect(feedback.title) == L.holderPositiveTestNolistTitle()
-		expect(feedback.body) == L.holderPositiveTestNolistMessage()
+		expect(feedback.title) == L.holderVaccinationNolistTitle()
+		expect(feedback.body) == L.holderVaccinationNolistMessage()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}

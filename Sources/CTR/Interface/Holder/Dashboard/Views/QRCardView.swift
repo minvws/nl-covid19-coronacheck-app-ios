@@ -66,6 +66,7 @@ class QRCardView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.setContentCompressionResistancePriority(.required, for: .vertical)
 		view.isHidden = true
+		view.isAccessibilityElement = false
 		return view
 	}()
 	
@@ -108,7 +109,7 @@ class QRCardView: BaseView {
 
 		let view = UIImageView(image: I.dashboard.domestic())
 		view.accessibilityLabel = L.generalNetherlands()
-		view.isAccessibilityElement = true
+		view.isAccessibilityElement = false
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.setContentCompressionResistancePriority(.required, for: .horizontal)
 		return view
@@ -418,6 +419,7 @@ class QRCardView: BaseView {
 	private func applyEUStyle() {
 		largeIconImageView.image = I.dashboard.international()
 		largeIconImageView.accessibilityLabel = L.generalEuropean()
+		titleLabel.accessibilityLabel = (title ?? "") + ", " + L.generalEuropean()
 	}
 
 	// MARK: - Callbacks
@@ -452,6 +454,7 @@ class QRCardView: BaseView {
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
+			titleLabel.accessibilityLabel = (title ?? "") + ", " + L.generalNetherlands()
 		}
 	}
 
@@ -620,13 +623,12 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 		
 		label.isAccessibilityElement = false
 		iconImageView.isAccessibilityElement = false
-		isAccessibilityElement = true
+		isAccessibilityElement = false
 	}
-	
+
 	var title: String? {
 		didSet {
 			label.text = title
-			accessibilityLabel = "\(L.generalNetherlands()) \(title ?? "")"
 		}
 	}
 }
