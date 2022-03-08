@@ -71,6 +71,8 @@ final class HolderDashboardView: BaseView {
 	
 	private var bottomScrollViewConstraint: NSLayoutConstraint?
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
+	private lazy var scrollViewTopConstraintWithTabBar: NSLayoutConstraint = scrollView.topAnchor.constraint(equalTo: tabBar.bottomAnchor)
+	private lazy var scrollViewTopConstraintWithoutTabBar: NSLayoutConstraint = scrollView.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor)
 	
 	// MARK: - Overrides
 	
@@ -101,6 +103,9 @@ final class HolderDashboardView: BaseView {
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
+		scrollViewTopConstraintWithTabBar.isActive = shouldShowTabBar
+		scrollViewTopConstraintWithoutTabBar.isActive = !shouldShowTabBar
+
 		NSLayoutConstraint.activate([
 			
 			fakeNavigationBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
@@ -111,7 +116,6 @@ final class HolderDashboardView: BaseView {
 			tabBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			tabBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			
-			scrollView.topAnchor.constraint(equalTo: tabBar.bottomAnchor),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			{
@@ -216,6 +220,22 @@ final class HolderDashboardView: BaseView {
 		}
 	}
 	
+	var shouldShowTabBar: Bool = true {
+		didSet {
+
+			// Ordering is important here to prevent autolayout complaints, so using if/else rather than setting directly:
+			if shouldShowTabBar {
+				scrollViewTopConstraintWithoutTabBar.isActive = false
+				scrollViewTopConstraintWithTabBar.isActive = true
+				tabBar.isHidden = false
+			} else {
+				tabBar.isHidden = true
+				scrollViewTopConstraintWithTabBar.isActive = false
+				scrollViewTopConstraintWithoutTabBar.isActive = true
+			}
+			setNeedsLayout()
+		}
+	}
 	var fakeNavigationTitle: String? {
 		didSet {
 			fakeNavigationBar.title = fakeNavigationTitle
