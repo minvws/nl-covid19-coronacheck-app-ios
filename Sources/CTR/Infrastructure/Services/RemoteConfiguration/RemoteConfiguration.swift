@@ -169,7 +169,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case vaccinationAssessmentEventValidityDays = "vaccinationAssessmentEventValidityDays"
 		case visitorPassEnabled = "visitorPassEnabled"
 		case verificationPolicies = "verificationPolicies"
-		case disclosurePolicies = "disclosurePolicy"
+		case disclosurePolicies = "disclosurePolicies"
 	}
 	
 	init(minVersion: String) {
