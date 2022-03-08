@@ -217,7 +217,7 @@ class FeatureFlagManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = []
 		
 		// When
-		let enabled = sut.areNoDisclosurePoliciesEnabled()
+		let enabled = sut.areZeroDisclosurePoliciesEnabled()
 		
 		// Then
 		expect(enabled) == true
@@ -315,7 +315,7 @@ class FeatureFlagManagerTests: XCTestCase {
 		let bothPoliciesEnabled = sut.areBothDisclosurePoliciesEnabled()
 		let only1GEnabled = sut.is1GExclusiveDisclosurePolicyEnabled()
 		let only3GEnabled = sut.is3GExclusiveDisclosurePolicyEnabled()
-		let noPoliciesEnabled = sut.areNoDisclosurePoliciesEnabled()
+		let noPoliciesEnabled = sut.areZeroDisclosurePoliciesEnabled()
 		
 		// Then
 		expect(bothPoliciesEnabled) == false

@@ -24,7 +24,7 @@ protocol FeatureFlagManaging {
 	func is1GVerificationPolicyEnabled() -> Bool
 	
 	// Holder
-	func areNoDisclosurePoliciesEnabled() -> Bool
+	func areZeroDisclosurePoliciesEnabled() -> Bool
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool
 	func areBothDisclosurePoliciesEnabled() -> Bool
@@ -87,7 +87,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	
 	// Holder
 	
-	func areNoDisclosurePoliciesEnabled() -> Bool {
+	func areZeroDisclosurePoliciesEnabled() -> Bool {
 		
 		if CommandLine.arguments.contains("-disclosurePolicyMode0G") {
 			return true

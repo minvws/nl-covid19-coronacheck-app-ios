@@ -70,14 +70,14 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedIs1GVerificationPolicyEnabledResult
 	}
 
-	var invokedAreNoDisclosurePoliciesEnabled = false
-	var invokedAreNoDisclosurePoliciesEnabledCount = 0
-	var stubbedAreNoDisclosurePoliciesEnabledResult: Bool! = false
+	var invokedAreZeroDisclosurePoliciesEnabled = false
+	var invokedAreZeroDisclosurePoliciesEnabledCount = 0
+	var stubbedAreZeroDisclosurePoliciesEnabledResult: Bool! = false
 
-	func areNoDisclosurePoliciesEnabled() -> Bool {
-		invokedAreNoDisclosurePoliciesEnabled = true
-		invokedAreNoDisclosurePoliciesEnabledCount += 1
-		return stubbedAreNoDisclosurePoliciesEnabledResult
+	func areZeroDisclosurePoliciesEnabled() -> Bool {
+		invokedAreZeroDisclosurePoliciesEnabled = true
+		invokedAreZeroDisclosurePoliciesEnabledCount += 1
+		return stubbedAreZeroDisclosurePoliciesEnabledResult
 	}
 
 	var invokedIs1GExclusiveDisclosurePolicyEnabled = false
