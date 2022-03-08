@@ -64,8 +64,8 @@ protocol CryptoManaging: AnyObject {
 	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
-	/// - Returns: Attributes if the QR is valid or error string if not
-	func verifyQRMessage(_ message: String) -> MobilecoreVerificationResult?
+	/// - Returns: Verification result if the QR is valid or error if not
+	func verifyQRMessage(_ message: String) -> Result<MobilecoreVerificationResult, CryptoError>
 
 	// MARK: Migration
 
@@ -82,4 +82,7 @@ enum CryptoError: Error {
 	case keyMissing
 	case credentialCreateFail(reason: String)
 	case unknown
+	case noRiskSetting
+	case noDefaultVerificationPolicy
+	case couldNotVerify
 }

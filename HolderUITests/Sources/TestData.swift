@@ -223,16 +223,16 @@ final class TestData {
 	static let negPcrDifferentBirthMonth = TestPerson(bsn: "999992685") // Negative PCR (NAAT) different birth month
 	
 	// Encoding
-	static let encodingLatin = TestPerson(bsn: "999992697", name: "Geer, Corrie") // Latin
-	static let encodingLatinDiacritic = TestPerson(bsn: "999992703", name: "T.Śar ŃĆ ĹāÑ ŤÙmön ĊéŴÀŅŇĩ Ļl'ÁÚŘŠĎÉ Pomme-d' Or ĽÒÓĢÛŨ, Ŗî Ãō Øū Ŋÿ Ği ŢžŰŲ ŜŞőĠĪ Ŷŵ Ĉŷ") // Latin diacritic
-	static let encodingArabic = TestPerson(bsn: "999992715", name: "⁨بوير, بوب⁩") // Arabic
-	static let encodingHebrew = TestPerson(bsn: "999992727", name: "⁨בורד, בוב⁩") // Hebrew
-	static let encodingChinese = TestPerson(bsn: "999992739", name: "吹牛, 鲍勃") // Chinese
-	static let encodingGreek = TestPerson(bsn: "999992740", name: "οικοδόμος, Ἄκαστος") // Greek
-	static let encodingCyrillic = TestPerson(bsn: "999992752", name: "строитель, бобов") // Cyrillic
-	static let encodingEmoji = TestPerson(bsn: "999992764", name: "😀😃, ↗↩↩↫↹🔙⇥⇌") // Emoji
-	static let encodingLongStrings = TestPerson(bsn: "999992788", name: "rjnmngevcjgsnicomdzzzguszmfcelknwscoirscjhyfauwsffyhwlaiqfnoctcjbsihyzvxehksjoehzrkadocswofathihsbwuhvrxetuswcybwrkkcofkybgjbdyn rjnmngevcjgsnicomdzzzguszmfcelknwscoirscjhyfauwsffyhwlaiqfnoctcjbsihyzvxehksjoehzrkadocswofathihsbwuhvrxetuswcybwrkkcofkybgjbdyn, rjnmngevcjgsnicomdzzzguszmfcelknwscoirscjhyfauwsffyhwlaiqfnoctcjbsihyzvxehksjoehzrkadocswofathihsbwuhvrxetuswcybwrkkcofkybgjbdyn") // More than 128 characters in all fields
-	static let encodingLongNames = TestPerson(bsn: "999992806", name: "qhxosdaetanrazewwepgqghihpxaruqkpwhkctspdtjeky, qhxosdaetanrazewwepgqghihpxaruqkpwhkctspdtjeky") // Long first name and last name (96 chars)
+	static let encodingLatin = TestPerson(bsn: "999992697", name: "Geer, Corrie", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Latin
+	static let encodingLatinDiacritic = TestPerson(bsn: "999992703", name: "T.Śar ŃĆ ĹāÑ ŤÙmön ĊéŴÀŅŇĩ Ļl'ÁÚŘŠĎÉ Pomme-d' Or ĽÒÓĢÛŨ, Ŗî Ãō Øū Ŋÿ Ği ŢžŰŲ ŜŞőĠĪ Ŷŵ Ĉŷ", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Latin diacritic
+	static let encodingArabic = TestPerson(bsn: "999992715", name: "⁨بوير, بوب⁩", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Arabic
+	static let encodingHebrew = TestPerson(bsn: "999992727", name: "⁨בורד, בוב⁩", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Hebrew
+	static let encodingChinese = TestPerson(bsn: "999992739", name: "吹牛, 鲍勃", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Chinese
+	static let encodingGreek = TestPerson(bsn: "999992740", name: "οικοδόμος, Ἄκαστος", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Greek
+	static let encodingCyrillic = TestPerson(bsn: "999992752", name: "строитель, бобов", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Cyrillic
+	static let encodingEmoji = TestPerson(bsn: "999992764", name: "😀😃, ↗↩↩↫↹🔙⇥⇌", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Emoji
+	static let encodingLongStrings = TestPerson(bsn: "999992788", name: "rjnmngevcjgsnicomdzzzguszmfcelknwscoirscjhyfauwsffyhwlaiqfnoctcjbsihyzvxehksjoehzrkadocswofathihsbwuhvrxetuswcybwrkkcofkybgjbdyn rjnmngevcjgsnicomdzzzguszmfcelknwscoirscjhyfauwsffyhwlaiqfnoctcjbsihyzvxehksjoehzrkadocswofathihsbwuhvrxetuswcybwrkkcofkybgjbdyn, rjnmngevcjgsnicomdzzzguszmfcelknwscoirscjhyfauwsffyhwlaiqfnoctcjbsihyzvxehksjoehzrkadocswofathihsbwuhvrxetuswcybwrkkcofkybgjbdyn", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // More than 128 characters in all fields
+	static let encodingLongNames = TestPerson(bsn: "999992806", name: "qhxosdaetanrazewwepgqghihpxaruqkpwhkctspdtjeky, qhxosdaetanrazewwepgqghihpxaruqkpwhkctspdtjeky", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Long first name and last name (96 chars)
 	
 	// Miscellaneous
 	static let miscP1Positive = TestPerson(bsn: "999992971", dose: 1, doseIntl: ["1/2"], vacFrom: -16, vacUntil: 240, recUntil: 150) // positive test after 1 pfizer
