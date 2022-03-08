@@ -310,6 +310,7 @@ private extension HolderDashboardViewController.Card {
 				qrCard.validityTexts = validityTexts
 				qrCard.expiryEvaluator = expiryCountdownEvaluator
 				qrCard.isLoading = isLoading
+				qrCard.accessibilityIdentifier = "QRCard"
 				return qrCard
 				
 			case let .errorMessage(message, didTapTryAgain):
