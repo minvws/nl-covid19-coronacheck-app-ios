@@ -363,6 +363,7 @@ final class HolderDashboardViewModel: Logging {
 
 	func viewWillAppear() {
 		datasource.reload()
+		recalculateActiveDisclosurePolicyMode()
 	}
 
 	// MARK: - Receive Updates
