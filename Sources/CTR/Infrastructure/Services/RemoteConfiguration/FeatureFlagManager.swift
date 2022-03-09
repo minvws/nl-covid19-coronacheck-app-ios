@@ -97,8 +97,12 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			return false
 		}
 		
-		guard let disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
+		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
 			return true
+		}
+		
+		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
+			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
 		}
 		
 		return disclosurePolicies.isEmpty || Current.userSettings.overrideDisclosurePolicies == ["0G"]

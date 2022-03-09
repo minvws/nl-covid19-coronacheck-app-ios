@@ -231,6 +231,8 @@ final class HolderDashboardViewModel: Logging {
 					return .combined1gAnd3g
 				} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
 					return .exclusive1G
+				} else if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
+					return .zeroG
 				} else {
 					return .exclusive3G
 				}
