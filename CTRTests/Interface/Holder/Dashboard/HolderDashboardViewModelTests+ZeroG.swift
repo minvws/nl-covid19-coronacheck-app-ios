@@ -80,9 +80,13 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
+			expect(title) == L.holder_dashboard_noDomesticCertificatesBanner_0G_title()
+			expect(buttonText) == L.holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid()
+		}))
+		expect(self.sut.internationalCards[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 	
 	func test_datasourceupdate_domesticExpiredButOnInternationalTab_zeroG_shouldShowEmptyState() {
@@ -100,8 +104,12 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
-		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
+			expect(title) == L.holder_dashboard_noDomesticCertificatesBanner_0G_title()
+			expect(buttonText) == L.holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid()
+		}))
+		expect(self.sut.internationalCards[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 }

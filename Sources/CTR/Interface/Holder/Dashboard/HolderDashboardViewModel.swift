@@ -30,9 +30,11 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapDisclosurePolicyInformation1GBannerMoreInformation()
 	func didTapDisclosurePolicyInformation3GBannerMoreInformation()
 	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation()
+	func didTapDisclosurePolicyInformation0GBannerMoreInformation()
 	func didTapDisclosurePolicyInformation1GBannerClose()
 	func didTapDisclosurePolicyInformation3GBannerClose()
 	func didTapDisclosurePolicyInformation1GWith3GBannerClose()
+	func didTapDisclosurePolicyInformation0GBannerClose()
 }
 
 // swiftlint:disable:next type_body_length
@@ -105,6 +107,7 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
 		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
 		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = false
+		var shouldShow0GDisclosurePolicyBecameActiveBanner: Bool = false
 		var activeDisclosurePolicyMode: DisclosurePolicyMode
 		
 		// Has QR Cards or expired QR Cards
@@ -513,6 +516,8 @@ final class HolderDashboardViewModel: Logging {
 		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G]
 		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy3G]
 		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner = !(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G))
+		
+		state.shouldShow0GDisclosurePolicyBecameActiveBanner = !Current.userSettings.hasDismissedZeroGPolicy
 	}
 	
 	fileprivate func recalculateActiveDisclosurePolicyMode() {
@@ -719,7 +724,9 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		
-		if state.activeDisclosurePolicyMode != .zeroG {
+		if state.activeDisclosurePolicyMode == .zeroG {
+			cards += VCCard.makeDisclosurePolicyInformation0GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		} else {
 			cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
 		}
 		
@@ -849,6 +856,12 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		openUrl(url)
 	}
 	
+	func didTapDisclosurePolicyInformation0GBannerMoreInformation() {
+		
+		guard let url = URL(string: L.holder_dashboard_noDomesticCertificatesBanner_url()) else { return }
+		openUrl(url)
+	}
+	
 	func didTapDisclosurePolicyInformation1GBannerClose() {
 
 		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G]
@@ -864,6 +877,12 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	func didTapDisclosurePolicyInformation1GWith3GBannerClose() {
 
 		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
+		recalculateDisclosureBannerState()
+	}
+	
+	func didTapDisclosurePolicyInformation0GBannerClose() {
+		Current.userSettings.hasDismissedZeroGPolicy = true
+		Current.userSettings.lastDismissedDisclosurePolicy = []
 		recalculateDisclosureBannerState()
 	}
 }

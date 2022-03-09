@@ -334,4 +334,35 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription())
 		expect(self.sut.internationalCards[1]).to(beEmptyStatePlaceholderImage())
 	}
+	
+	func test_actionhandling_disclosurePolicyInformationCard_0g() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?([], [])
+		
+		// Assert
+		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
+			
+			expect(title) == L.holder_dashboard_noDomesticCertificatesBanner_0G_title()
+			expect(buttonText) == L.holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid()
+			
+			// Test `didTapCallToAction`
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
+			didTapCallToAction()
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_dashboard_noDomesticCertificatesBanner_url()
+			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.inApp) == true
+			
+			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy).to(beNil())
+			expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedZeroGPolicy).to(beNil())
+			self.environmentSpies.userSettingsSpy.stubbedLastDismissedDisclosurePolicy = []
+			didTapClose()
+			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == []
+			expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedZeroGPolicy) == true
+		}))
+		expect(self.sut.internationalCards[2]).to(beEmptyStatePlaceholderImage())
+	}
 }
