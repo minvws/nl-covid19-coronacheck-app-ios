@@ -327,6 +327,12 @@ class ListRemoteEventsViewModel: Logging {
 		if !greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue) &&
 			greencardResponse.hasInternationalOrigins(ofType: OriginType.vaccination.rawValue) {
 			shouldPrimaryButtonBeEnabled = true
+			
+			guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+				self.completeFlow()
+				return
+			}
+			
 			// End state 2
 			viewState = internationalQROnly()
 		} else {
@@ -348,6 +354,12 @@ class ListRemoteEventsViewModel: Logging {
 					// End state 6 / 7
 					self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
 				} else {
+					
+					guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+						self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
+						return
+					}
+					
 					// End state 8
 					self.viewState = self.positiveTestFlowRecoveryAndInternationalVaccinationCreated()
 				}
@@ -359,6 +371,11 @@ class ListRemoteEventsViewModel: Logging {
 				if hasDomesticVaccinationOrigins {
 					self.completeFlow()
 				} else {
+					
+					guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+						self.completeFlow()
+						return
+					}
 			
 					let hasPositiveTestRemoteEvent = remoteEvents.contains { wrapper, _ in wrapper.events?.first?.hasPositiveTest ?? false }
 					if hasPositiveTestRemoteEvent {
