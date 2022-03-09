@@ -14,8 +14,7 @@ extension HolderDashboardViewController.Card {
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
 
-		guard !state.qrCards.isEmpty || !state.regionFilteredExpiredCards(validityRegion: validityRegion).isEmpty
-		else { return [] }
+		guard !state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 
 		switch validityRegion {
 			case .domestic:
@@ -126,7 +125,7 @@ extension HolderDashboardViewController.Card {
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
-		guard !state.dashboardHasQRCards(for: validityRegion) else { return [] }
+		guard state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 		
 		switch validityRegion {
 			case .domestic:
@@ -157,7 +156,7 @@ extension HolderDashboardViewController.Card {
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
-		guard !state.dashboardHasQRCards(for: validityRegion) else { return [] }
+		guard state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 		guard !state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
 		guard !state.shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for: validityRegion) else { return [] }
 	
@@ -271,10 +270,11 @@ extension HolderDashboardViewController.Card {
 	}
 	
 	static func makeRecommendToAddYourBoosterCard(
+		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
-	
+		guard !state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 		guard state.shouldShowRecommendationToAddYourBooster else { return [] }
 		return [
 			.recommendToAddYourBooster(

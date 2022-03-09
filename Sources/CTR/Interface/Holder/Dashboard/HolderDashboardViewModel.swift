@@ -91,7 +91,7 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowRecommendationToAddYourBooster: Bool = false
 		
 		var shouldShowAddCertificateFooter: Bool {
-			qrCards.isEmpty && !shouldShowCompleteYourVaccinationAssessmentBanner
+			(qrCards.isEmpty || (shouldShowOnlyInternationalPane && !dashboardHasInternationalQRCards())) && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
 		
 		var shouldShowTabBar: Bool {
@@ -110,6 +110,19 @@ final class HolderDashboardViewModel: Logging {
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
 			!qrCards.isEmpty || !regionFilteredExpiredCards(validityRegion: validityRegion).isEmpty
+		}
+		
+		func dashboardHasInternationalQRCards() -> Bool {
+			!qrCards.filter({ $0.isOfRegion(region: .europeanUnion) }).isEmpty || !regionFilteredExpiredCards(validityRegion: .europeanUnion).isEmpty
+		}
+		
+		func dashboardHasEmptyState(for validityRegion: QRCodeValidityRegion) -> Bool {
+			
+			if validityRegion == .europeanUnion && activeDisclosurePolicyMode == .zeroG {
+				return !dashboardHasInternationalQRCards()
+			} else {
+				return !dashboardHasQRCards(for: validityRegion)
+			}
 		}
 		
 		func shouldShowCompleteYourVaccinationAssessmentBanner(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -392,6 +405,9 @@ final class HolderDashboardViewModel: Logging {
 				remoteConfigManager: Current.remoteConfigManager,
 				now: Current.now()
 			)
+		} else if state.shouldShowOnlyInternationalPane {
+			// 0G
+			domesticCards = []
 		} else {
 			// 3G-only fallback
 			domesticCards = HolderDashboardViewModel.assemble3gOnlyCards(
@@ -579,7 +595,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -614,7 +630,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation1GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -656,7 +672,7 @@ final class HolderDashboardViewModel: Logging {
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendToAddYourBoosterCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation1GWith3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -688,14 +704,36 @@ final class HolderDashboardViewModel: Logging {
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		
-		// Currently has the same implementation:
-		return assemble3gOnlyCards(
-			forValidityRegion: validityRegion,
+		typealias VCCard = HolderDashboardViewController.Card
+		
+		var cards = [VCCard]()
+		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendToAddYourBoosterCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeNewValidityInfoForVaccinationAndRecoveriesCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		
+		if state.activeDisclosurePolicyMode != .zeroG {
+			cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
+		}
+		
+		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeQRCards(
+			validityRegion: validityRegion,
 			state: state,
+			localDisclosurePolicy: .policy3G,
 			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager,
-			now: now
+			remoteConfigManager: remoteConfigManager
 		)
+		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
+		return cards
 	}
 	
 }
