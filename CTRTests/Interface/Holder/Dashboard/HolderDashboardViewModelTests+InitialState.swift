@@ -15,7 +15,7 @@ extension HolderDashboardViewModelTests {
 	// MARK: - Initial State
 
 	func test_initialStateBeforeDatasourceReload_International() {
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion, activeDisclosurePolicies: [])
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion, activeDisclosurePolicies: [.policy1G])
 		expect(self.sut.title) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle) == L.holderMenuProof()
 		expect(self.sut.shouldShowAddCertificateFooter) == true
