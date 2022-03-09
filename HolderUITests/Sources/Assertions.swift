@@ -71,11 +71,11 @@ extension BaseTest {
 			case .only3G:
 				app.containsText("Op dit moment geeft een Nederlands bewijs 3G-toegang.")
 			case .only1G:
-				app.linkExists("Wil je naar een plek met 1G-toegang? Dan heb je een testbewijs nodig.")
-				app.textExists("Vanaf nu heb je een testbewijs nodig voor 1G toegang")
+				app.linkExists("In Nederland krijg je alleen toegang met een testbewijs op plekken waar om een coronabewijs wordt gevraagd (1G-toegang).")
+				app.textExists("Je kunt een bewijs voor 1G-toegang toevoegen wanneer je negatief getest bent")
 			case .bothModes:
-				app.linkExists("Bekijk vooraf of de locatie die je bezoekt een bewijs voor 3G- of 1G toegang vraagt.")
-				app.textExists("Vanaf nu zijn er 2 aparte QR-codes voor 3G- en 1G-toegang")
+				app.linkExists("Bezoek je een plek in Nederland? Check vooraf of je een bewijs voor 3G- of 1G toegang nodig hebt.")
+				app.textExists("De Nederlandse toegangsregels zijn veranderd. Er zijn nu aparte bewijzen voor plekken die 3G-toegang en 1G-toegang geven.")
 		}
 	}
 	
