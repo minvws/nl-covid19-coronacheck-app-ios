@@ -27,6 +27,8 @@ extension HolderDashboardViewController.Card {
 						domesticTitle = L.holder_dashboard_intro_domestic_only3Gaccess()
 					case .combined1gAnd3g:
 						domesticTitle = L.holder_dashboard_intro_domestic_3Gand1Gaccess()
+					case .zeroG:
+						domesticTitle = "" // isn't shown in zeroG.
 				}
 				return [.headerMessage(
 					message: domesticTitle,
@@ -136,6 +138,8 @@ extension HolderDashboardViewController.Card {
 						domesticTitle = L.holder_dashboard_empty_domestic_only3Gaccess_message()
 					case .combined1gAnd3g:
 						domesticTitle = L.holder_dashboard_empty_domestic_3Gand1Gaccess_message()
+					case .zeroG:
+						domesticTitle = "" // isn't shown in zeroG.
 				}
 				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: domesticTitle,
@@ -443,7 +447,7 @@ extension HolderDashboardViewModel.QRCard {
 			case (.exclusive3G, .policy3G),
 				(.combined1gAnd3g, .policy3G):
 				break
-			case (.exclusive3G, .policy1G):
+			case (.exclusive3G, .policy1G), (.zeroG, _):
 				return []
 		}
 		
@@ -455,7 +459,8 @@ extension HolderDashboardViewModel.QRCard {
 					(.exclusive3G, .policy1G), // this case is not shown in UI
 					(.exclusive3G, .policy3G),
 					(.combined1gAnd3g, .policy1G),
-					(.combined1gAnd3g, .policy3G):
+					(.combined1gAnd3g, .policy3G),
+					(.zeroG, _):
 					return false
 					
 				case (.exclusive1G, .policy3G):

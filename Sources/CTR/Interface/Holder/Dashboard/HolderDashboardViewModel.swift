@@ -58,6 +58,10 @@ final class HolderDashboardViewModel: Logging {
 	
 	@Bindable private(set) var selectedTab: DashboardTab = .domestic
 
+	@Bindable private(set) var shouldShowTabBar: Bool = false
+	
+	@Bindable private(set) var shouldShowOnlyInternationalPane: Bool = false
+
 	// MARK: - Private types
 
 	/// Wrapper around some state variables
@@ -89,6 +93,15 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowAddCertificateFooter: Bool {
 			qrCards.isEmpty && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
+		
+		var shouldShowTabBar: Bool {
+			return activeDisclosurePolicyMode != .zeroG
+		}
+		
+		var shouldShowOnlyInternationalPane: Bool {
+			return activeDisclosurePolicyMode == .zeroG
+		}
+		
 		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
 		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
 		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = false
@@ -238,7 +251,7 @@ final class HolderDashboardViewModel: Logging {
 			// - Reset any dismissed banners
 			Current.userSettings.lastDismissedDisclosurePolicy = []
 			// - Update the active disclosure policy
-			self?.setActiveDisclosurePolicyMode()
+			self?.recalculateActiveDisclosurePolicyMode()
 			// - Update the disclosure policy information banners
 			self?.recalculateDisclosureBannerState()
 		}
@@ -350,6 +363,7 @@ final class HolderDashboardViewModel: Logging {
 
 	func viewWillAppear() {
 		datasource.reload()
+		recalculateActiveDisclosurePolicyMode()
 	}
 
 	// MARK: - Receive Updates
@@ -397,6 +411,8 @@ final class HolderDashboardViewModel: Logging {
 		)
 
 		shouldShowAddCertificateFooter = state.shouldShowAddCertificateFooter
+		shouldShowTabBar = state.shouldShowTabBar
+		shouldShowOnlyInternationalPane = state.shouldShowOnlyInternationalPane
 	}
 
 	fileprivate func strippenRefresherDidUpdate(oldRefresherState: DashboardStrippenRefresher.State?, refresherState: DashboardStrippenRefresher.State) {
@@ -482,12 +498,14 @@ final class HolderDashboardViewModel: Logging {
 		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner = !(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G))
 	}
 	
-	fileprivate func setActiveDisclosurePolicyMode() {
+	fileprivate func recalculateActiveDisclosurePolicyMode() {
 		
 		if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
 			state.activeDisclosurePolicyMode = .combined1gAnd3g
 		} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
 			state.activeDisclosurePolicyMode = .exclusive1G
+		} else if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
+			state.activeDisclosurePolicyMode = .zeroG
 		} else {
 			state.activeDisclosurePolicyMode = .exclusive3G
 		}
@@ -519,6 +537,7 @@ final class HolderDashboardViewModel: Logging {
 	@objc func userDefaultsDidChange() {
 		DispatchQueue.main.async {
 			self.state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner = !Current.userSettings.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard && Current.featureFlagManager.isNewValidityInfoBannerEnabled()
+			self.recalculateActiveDisclosurePolicyMode()
 		}
 	}
 
