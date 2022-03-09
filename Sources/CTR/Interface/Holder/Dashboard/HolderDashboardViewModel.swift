@@ -175,7 +175,7 @@ final class HolderDashboardViewModel: Logging {
 		
 		// Handle new value:
 		dashboardRegionToggleValue = newTab.isDomestic ? .domestic : .europeanUnion
-		selectedTab = newTab 
+		selectedTab = newTab
 	}
 
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
