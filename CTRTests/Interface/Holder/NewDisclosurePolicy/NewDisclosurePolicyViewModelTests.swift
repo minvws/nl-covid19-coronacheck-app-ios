@@ -21,6 +21,21 @@ final class NewDisclosurePolicyViewModelTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = HolderCoordinatorDelegateSpy()
 	}
+
+	func test_content_0G() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
+		
+		// When
+		sut = .init(coordinator: coordinatorSpy)
+		
+		// Then
+		expect(self.sut?.tagline) == L.general_newintheapp()
+		expect(self.sut?.title) == L.holder_newintheapp_content_onlyInternationalCertificates_0G_title()
+		expect(self.sut?.content) == L.holder_newintheapp_content_onlyInternationalCertificates_0G_body()
+		expect(self.sut?.image) == I.onboarding.validity()
+	}
 	
 	func test_content_1G() {
 		

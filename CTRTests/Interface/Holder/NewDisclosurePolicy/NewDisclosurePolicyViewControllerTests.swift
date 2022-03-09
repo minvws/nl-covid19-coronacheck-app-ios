@@ -34,6 +34,28 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 
 	// MARK: - Tests
 
+	func test_view_0G() {
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
+		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		sut = NewDisclosurePolicyViewController(
+			viewModel: .init(
+				coordinator: coordinatorSpy
+			)!
+		)
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.tagline) == L.general_newintheapp()
+		expect(self.sut.sceneView.title) == L.holder_newintheapp_content_onlyInternationalCertificates_0G_title()
+		expect(self.sut.sceneView.content) == L.holder_newintheapp_content_onlyInternationalCertificates_0G_body()
+		
+		// Snapshot
+		sut.assertImage(containedInNavigationController: true)
+	}
+
 	func test_view_1G() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = true
