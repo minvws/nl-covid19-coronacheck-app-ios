@@ -157,18 +157,31 @@ class ListRemoteEventsViewModel: Logging {
 				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
 				// > 0 -> Success
 				
-				guard expandedEventMode == .vaccination else {
-					// Origin check before storage only for vaccination
+//				guard expandedEventMode == .vaccination || expandedEventMode == .test || expandedEventMode == .vaccinationAndPositiveTest else {
+//					// Origin check before storage only for vaccination
+//					return true
+//				}
+				
+				guard self?.eventMode != .paperflow else {
 					return true
 				}
 
+				guard expandedEventMode == .vaccination || expandedEventMode == .test else {
+					// Origin check before storage only for vaccination
+					return true
+				}
+				
 				let domesticOrigins: Int = remoteResponse.getDomesticOrigins(ofType: expandedEventMode.rawValue).count
 				let internationalOrigins: Int = remoteResponse.getInternationalOrigins(ofType: expandedEventMode.rawValue).count
 
 				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(expandedEventMode.rawValue)")
 				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(expandedEventMode.rawValue)")
-				return internationalOrigins + domesticOrigins > 0
-
+				
+				if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
+					return internationalOrigins > 0
+				} else {
+					return internationalOrigins + domesticOrigins > 0
+				}
 			}, completion: { result in
 				self.progressIndicationCounter.decrement()
 				self.handleGreenCardResult(
@@ -315,8 +328,7 @@ class ListRemoteEventsViewModel: Logging {
 				self.viewState = self.originMismatchState(flow: self.determineErrorCodeFlow(remoteEvents: remoteEvents))
 			},
 			onNoOrigins: {
-				self.shouldPrimaryButtonBeEnabled = true
-				self.viewState = self.originMismatchState(flow: self.determineErrorCodeFlow(remoteEvents: remoteEvents))
+				// Handled by response evaluator
 			}
 		)
 	}
