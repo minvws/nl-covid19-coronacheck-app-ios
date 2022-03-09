@@ -25,7 +25,7 @@ extension XCUIElement {
 	func assertExistence() -> XCUIElement {
 		let timeout = 30.0
 		let elementPresent = self.waitForExistence(timeout: timeout)
-		XCTAssertTrue(elementPresent, self.elementType.rawValue.description + " could not be found: ")
+		XCTAssertTrue(elementPresent, self.description + " could not be found")
 		return self
 	}
 	
@@ -46,11 +46,11 @@ extension XCUIElement {
 	}
 	
 	func textExists(_ label: String) {
-		_ = self.assertExistence()
+		_ = self.staticTexts[label].assertExistence()
 	}
 	
 	func linkExists(_ label: String) {
-		_ = self.assertExistence()
+		_ = self.links[label].assertExistence()
 	}
 	
 	func containsText(_ text: String, count: Int = 1) {
