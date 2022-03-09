@@ -14,8 +14,7 @@ extension HolderDashboardViewController.Card {
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
 
-		guard !state.qrCards.isEmpty || !state.regionFilteredExpiredCards(validityRegion: validityRegion).isEmpty
-		else { return [] }
+		guard !state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 
 		switch validityRegion {
 			case .domestic:
@@ -27,6 +26,8 @@ extension HolderDashboardViewController.Card {
 						domesticTitle = L.holder_dashboard_intro_domestic_only3Gaccess()
 					case .combined1gAnd3g:
 						domesticTitle = L.holder_dashboard_intro_domestic_3Gand1Gaccess()
+					case .zeroG:
+						domesticTitle = "" // isn't shown in zeroG.
 				}
 				return [.headerMessage(
 					message: domesticTitle,
@@ -124,7 +125,7 @@ extension HolderDashboardViewController.Card {
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
-		guard !state.dashboardHasQRCards(for: validityRegion) else { return [] }
+		guard state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 		
 		switch validityRegion {
 			case .domestic:
@@ -136,6 +137,8 @@ extension HolderDashboardViewController.Card {
 						domesticTitle = L.holder_dashboard_empty_domestic_only3Gaccess_message()
 					case .combined1gAnd3g:
 						domesticTitle = L.holder_dashboard_empty_domestic_3Gand1Gaccess_message()
+					case .zeroG:
+						domesticTitle = "" // isn't shown in zeroG.
 				}
 				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: domesticTitle,
@@ -153,7 +156,7 @@ extension HolderDashboardViewController.Card {
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
-		guard !state.dashboardHasQRCards(for: validityRegion) else { return [] }
+		guard state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 		guard !state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
 		guard !state.shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for: validityRegion) else { return [] }
 	
@@ -267,10 +270,11 @@ extension HolderDashboardViewController.Card {
 	}
 	
 	static func makeRecommendToAddYourBoosterCard(
+		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
-	
+		guard !state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 		guard state.shouldShowRecommendationToAddYourBooster else { return [] }
 		return [
 			.recommendToAddYourBooster(
@@ -443,8 +447,43 @@ extension HolderDashboardViewModel.QRCard {
 			case (.exclusive3G, .policy3G),
 				(.combined1gAnd3g, .policy3G):
 				break
-			case (.exclusive3G, .policy1G):
+			case (.exclusive3G, .policy1G), (.zeroG, _):
 				return []
+		}
+		
+		func isDisabledByDisclosurePolicy() -> Bool {
+			
+			// Whether we should show "Dit bewijs wordt nu niet gebruikt in Nederland."
+			switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
+				case (.exclusive1G, .policy1G),
+					(.exclusive3G, .policy1G), // this case is not shown in UI
+					(.exclusive3G, .policy3G),
+					(.combined1gAnd3g, .policy1G),
+					(.combined1gAnd3g, .policy3G),
+					(.zeroG, _):
+					return false
+					
+				case (.exclusive1G, .policy3G):
+					return true
+			}
+		}
+		
+		func buttonIsEnabled(now: Date) -> Bool {
+			
+			// Special case when this is for a 1G card:
+			if localDisclosurePolicy == .policy1G {
+				// If this is the 1G card then the button enabled state should only be determined by tests.
+				// We need to filter the origins on the `QRCard`, as it could have a valid vaccination/recovery (which are not 1G).
+				// (NB: the `QRCard` abstraction is starting to break down now that 1 `QRCard` can be shown split into 1G and 3G cards in the UI..)
+				let hasCurrentlyValidTest = origins
+					.filter { $0.type == .test }
+					.contains(where: { $0.isCurrentlyValid(now: now) })
+				
+				return hasCurrentlyValidTest && evaluateEnabledState(now)
+			}
+			
+			// Default case:
+			return evaluateEnabledState(now)
 		}
 	
 		return [HolderDashboardViewController.Card.domesticQR(
@@ -455,20 +494,7 @@ extension HolderDashboardViewModel.QRCard {
 					case .policy1G: return L.holder_dashboard_domesticQRCard_1G_title()
 				}
 			}(),
-			isDisabledByDisclosurePolicy: { () -> Bool in
-				// Whether we should show "Dit bewijs wordt nu niet gebruikt in Nederland."
-				switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
-					case (.exclusive1G, .policy1G),
-						(.exclusive3G, .policy1G), // this case is not shown in UI
-						(.exclusive3G, .policy3G),
-						(.combined1gAnd3g, .policy1G),
-						(.combined1gAnd3g, .policy3G):
-						return false
-						
-					case (.exclusive1G, .policy3G):
-						return true
-				}
-			}(),
+			isDisabledByDisclosurePolicy: isDisabledByDisclosurePolicy(),
 			validityTexts: validityTextsGenerator(
 				greencards: greencards,
 				localDisclosurePolicy: localDisclosurePolicy,
@@ -476,25 +502,11 @@ extension HolderDashboardViewModel.QRCard {
 			),
 			isLoading: state.isRefreshingStrippen,
 			didTapViewQR: { [weak actionHandler] in
+				guard !isDisabledByDisclosurePolicy() else { return }
+				guard buttonIsEnabled(now: Current.now()) else { return }
 				actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id }, disclosurePolicy: localDisclosurePolicy)
 			},
-			buttonEnabledEvaluator: { now in
-				
-				// Special case when this is for a 1G card:
-				if localDisclosurePolicy == .policy1G {
-					// If this is the 1G card then the button enabled state should only be determined by tests.
-					// We need to filter the origins on the `QRCard`, as it could have a valid vaccination/recovery (which are not 1G).
-					// (NB: the `QRCard` abstraction is starting to break down now that 1 `QRCard` can be shown split into 1G and 3G cards in the UI..)
-					let hasCurrentlyValidTest = origins
-						.filter { $0.type == .test }
-						.contains(where: { $0.isCurrentlyValid(now: now) })
-					
-					return hasCurrentlyValidTest && evaluateEnabledState(now)
-				}
-				
-				// Default case:
-				return evaluateEnabledState(now)
-			},
+			buttonEnabledEvaluator: { buttonIsEnabled(now: $0) },
 			expiryCountdownEvaluator: { now in
 				domesticCountdownText(now: now, origins: origins, localDisclosurePolicy: localDisclosurePolicy)
 			}
@@ -521,6 +533,7 @@ extension HolderDashboardViewModel.QRCard {
 			),
 			isLoading: state.isRefreshingStrippen,
 			didTapViewQR: { [weak actionHandler] in
+				guard evaluateEnabledState(Current.now()) else { return }
 				actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id }, disclosurePolicy: nil)
 			},
 			buttonEnabledEvaluator: evaluateEnabledState,

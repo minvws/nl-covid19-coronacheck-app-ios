@@ -20,7 +20,7 @@ extension HolderDashboardViewModelTests {
 		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = true
 		
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(4))
@@ -29,6 +29,8 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_visitorpassincompletebanner_title()
 			expect(buttonTitle) == L.holder_dashboard_visitorpassincompletebanner_button_makecomplete()
 		}))
+		expect(self.sut.domesticCards[2]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
 	}
 	
 	func test_vaccinationassessment_domestic_shouldNotShow() {
@@ -37,7 +39,7 @@ extension HolderDashboardViewModelTests {
 		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = false
 		
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Assert
 		expect(self.sut.domesticCards).toEventually(haveCount(3))
@@ -60,6 +62,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
 			expect(buttonTitle) == L.general_readmore()
 		}))
+		expect(self.sut.internationalCards[2]).toEventually(beAddCertificateCard())
 	}
 	
 	func test_vaccinationassessment_international_shouldNotShow() {

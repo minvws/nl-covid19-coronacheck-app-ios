@@ -3,9 +3,8 @@
 name: smoketest-ui
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 5 * * *' # Run at 05:00 on every day-of-week from Monday through Friday.
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
@@ -24,7 +23,7 @@ jobs:
           xcrun simctl list devices 14.4
       
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1

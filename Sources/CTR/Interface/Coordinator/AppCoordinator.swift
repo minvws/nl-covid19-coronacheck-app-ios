@@ -99,20 +99,20 @@ class AppCoordinator: Coordinator, Logging {
         navigationController.viewControllers = [destination]
     }
 
-    /// Start the real application
-    private func startApplication() {
+	/// Start the real application
+	private func startApplication() {
 		
 		// Start listeners after launching is done (willEnterForegroundNotification will mess up launch)
 		Current.remoteConfigManager.registerTriggers()
 		Current.cryptoLibUtility.registerTriggers()
-
-        switch flavor {
-            case .holder:
-                startAsHolder()
-            default:
-                startAsVerifier()
-        }
-    }
+		
+		switch flavor {
+			case .holder:
+				startAsHolder()
+			default:
+				startAsVerifier()
+		}
+	}
 
     /// Start the app as a holder
     private func startAsHolder() {

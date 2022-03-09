@@ -60,6 +60,19 @@ extension BaseTest {
 		app.tapButton(replace ? "Vervang" : "Stoppen")
 	}
 	
+	func assertRetrievedCertificate(for person: TestPerson) {
+		app.textExists("Kloppen de gegevens?")
+		app.containsText("Naam: " + person.name)
+		app.containsText("Geboortedatum: " + formattedDate(of: person.birthDate))
+	}
+	
+	func assertRetriedCertificateDetails(for person: TestPerson) {
+		app.tapButton("Details")
+		app.textExists("Naam: " + person.name)
+		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
+		app.tapButton("CloseButton")
+	}
+	
 	// MARK: The Netherlands
 	
 	func tapOnTheNetherlandsTab() {

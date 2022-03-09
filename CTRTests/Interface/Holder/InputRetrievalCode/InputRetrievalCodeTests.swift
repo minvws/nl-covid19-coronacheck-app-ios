@@ -496,6 +496,30 @@ class InputRetrievalCodeViewModelTests: XCTestCase {
 
 		InputRetrievalCodeViewController(viewModel: sut).assertImage()
 	}
+	
+	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_success_blocked_errorMessageShown() {
+		
+		// Arrange
+		tokenValidatorSpy.stubbedValidateResult = true
+		environmentSpies.networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchTestResultCompletionResult =
+		(.success((.fakeBlocked, SignedResponse(payload: "test", signature: "test"), URLResponse())), ())
+		
+		// Act
+		sut = mockedViewModel(withRequestToken: .fake)
+		
+		// Assert
+		expect(self.sut.fieldErrorMessage) == L.holder_inputRetrievalCode_error_blocked()
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldShowVerificationEntryField) == false
+		expect(self.sut.shouldShowUserNeedsATokenButton) == true
+		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
+		expect(self.sut.message) == L.holderTokenentryRegularflowText()
+		expect(self.sut.shouldEnableNextButton) == true
+		expect(self.sut.shouldShowNextButton) == true
+		
+		InputRetrievalCodeViewController(viewModel: sut).assertImage()
+	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_success_verificationRequired_codeIsEmpty_resetsUIForVerification() {
 

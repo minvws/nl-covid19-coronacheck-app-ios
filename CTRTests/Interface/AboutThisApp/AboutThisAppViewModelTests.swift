@@ -67,10 +67,11 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.sut.menu[0].value[3].identifier) == .reset
 		expect(self.sut.menu[0].value[4].identifier) == .deeplink
 		
-		expect(self.sut.menu[1].value[0].identifier) == .use1GDisclosurePolicy
-		expect(self.sut.menu[1].value[1].identifier) == .use3GDisclosurePolicy
-		expect(self.sut.menu[1].value[2].identifier) == .use1GAnd3GDisclosurePolicy
-		expect(self.sut.menu[1].value[3].identifier) == .useConfigDisclosurePolicy
+		expect(self.sut.menu[1].value[0].identifier) == .useNoDisclosurePolicy
+		expect(self.sut.menu[1].value[1].identifier) == .use1GDisclosurePolicy
+		expect(self.sut.menu[1].value[2].identifier) == .use3GDisclosurePolicy
+		expect(self.sut.menu[1].value[3].identifier) == .use1GAnd3GDisclosurePolicy
+		expect(self.sut.menu[1].value[4].identifier) == .useConfigDisclosurePolicy
 		
 		expect(self.sut.appVersion.contains("testInitHolder")) == true
 	}

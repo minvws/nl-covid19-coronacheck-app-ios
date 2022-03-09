@@ -75,4 +75,11 @@ final class DCCQRLabelView: BaseView {
 															 kerning: ViewTraits.kerning)
 		}
 	}
+	
+	/// Set up labels to support SwitchControl accessibility
+	func updateAccessibilityStatus() {
+		
+		fieldLabel.setupForVoiceAndSwitchControlAccessibility()
+		valueLabel.setupForVoiceAndSwitchControlAccessibility()
+	}
 }

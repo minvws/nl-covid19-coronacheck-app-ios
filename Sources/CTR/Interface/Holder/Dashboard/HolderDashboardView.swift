@@ -71,6 +71,8 @@ final class HolderDashboardView: BaseView {
 	
 	private var bottomScrollViewConstraint: NSLayoutConstraint?
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
+	private lazy var scrollViewTopConstraintWithTabBar: NSLayoutConstraint = scrollView.topAnchor.constraint(equalTo: tabBar.bottomAnchor)
+	private lazy var scrollViewTopConstraintWithoutTabBar: NSLayoutConstraint = scrollView.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor)
 	
 	// MARK: - Overrides
 	
@@ -96,10 +98,15 @@ final class HolderDashboardView: BaseView {
 		scrollView.addSubview(domesticScrollView)
 		scrollView.addSubview(internationalScrollView)
 	}
-	
+
 	/// Setup all the constraints
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
+		
+		scrollViewTopConstraintWithTabBar.isActive = shouldShowTabBar
+		scrollViewTopConstraintWithoutTabBar.isActive = !shouldShowTabBar
+		
+		NSLayoutConstraint.activate(domesticTabEnabledConstraints)
 		
 		NSLayoutConstraint.activate([
 			
@@ -111,7 +118,6 @@ final class HolderDashboardView: BaseView {
 			tabBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			tabBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			
-			scrollView.topAnchor.constraint(equalTo: tabBar.bottomAnchor),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			{
@@ -124,20 +130,9 @@ final class HolderDashboardView: BaseView {
 			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
-			domesticScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-			domesticScrollView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-			domesticScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-			domesticScrollView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
-			{
-				let constraint = domesticScrollView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
-				constraint.priority = .defaultLow
-				return constraint
-			}(),
-			
 			internationalScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
 			internationalScrollView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
 			internationalScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-			internationalScrollView.leftAnchor.constraint(equalTo: domesticScrollView.rightAnchor),
 			internationalScrollView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
 			{
 				let constraint = internationalScrollView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
@@ -146,6 +141,24 @@ final class HolderDashboardView: BaseView {
 			}()
 		])
 	}
+	
+	lazy var domesticTabEnabledConstraints: [NSLayoutConstraint] = [
+		internationalScrollView.leftAnchor.constraint(equalTo: domesticScrollView.rightAnchor),
+		
+		domesticScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+		domesticScrollView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+		domesticScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+		domesticScrollView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
+		{
+			let constraint = domesticScrollView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+			constraint.priority = .defaultLow
+			return constraint
+		}()
+	]
+	
+	lazy var domesticTabDisabledConstraints: [NSLayoutConstraint] = [
+		internationalScrollView.leftAnchor.constraint(equalTo: scrollView.leftAnchor)
+	]
 	
 	override var accessibilityElements: [Any]? {
 		get {
@@ -213,6 +226,39 @@ final class HolderDashboardView: BaseView {
 	var tapMenuButtonHandler: (() -> Void)? {
 		didSet {
 			fakeNavigationBar.tapMenuButtonHandler = tapMenuButtonHandler
+		}
+	}
+	
+	var shouldShowTabBar: Bool = true {
+		didSet {
+			
+			// Ordering is important here to prevent autolayout complaints, so using if/else rather than setting directly:
+			if shouldShowTabBar {
+				scrollViewTopConstraintWithoutTabBar.isActive = false
+				scrollViewTopConstraintWithTabBar.isActive = true
+				tabBar.isHidden = false
+			} else {
+				tabBar.isHidden = true
+				scrollViewTopConstraintWithTabBar.isActive = false
+				scrollViewTopConstraintWithoutTabBar.isActive = true
+			}
+			setNeedsLayout()
+		}
+	}
+	
+	var shouldShowOnlyInternationalPane: Bool = false {
+		didSet {
+			guard oldValue != shouldShowOnlyInternationalPane else { return }
+			if shouldShowOnlyInternationalPane {
+				domesticScrollView.removeFromSuperview()
+				NSLayoutConstraint.deactivate(domesticTabEnabledConstraints)
+				NSLayoutConstraint.activate(domesticTabDisabledConstraints)
+			} else {
+				scrollView.addSubview(domesticScrollView)
+				NSLayoutConstraint.deactivate(domesticTabDisabledConstraints)
+				NSLayoutConstraint.activate(domesticTabEnabledConstraints)
+			}
+			setNeedsLayout()
 		}
 	}
 	

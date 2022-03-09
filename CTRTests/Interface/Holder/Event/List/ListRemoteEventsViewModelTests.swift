@@ -167,8 +167,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
-				title: L.holderVaccinationWrongTitle(),
-				body: L.holderVaccinationWrongBody(),
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_vaccination_body(),
 				hideBodyForScreenCapture: false
 			)
 	}
@@ -195,8 +195,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
-				title: L.holderVaccinationWrongTitle(),
-				body: L.holderRecoveryWrongBody(),
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_recovery_body(),
 				hideBodyForScreenCapture: false
 			)
 	}
@@ -223,8 +223,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
-				title: L.holderVaccinationWrongTitle(),
-				body: L.holderVaccinationWrongBody(),
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_vaccinationAndPositiveTest_body(),
 				hideBodyForScreenCapture: false
 			)
 	}
@@ -251,8 +251,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
-				title: L.holderVaccinationWrongTitle(),
-				body: L.holderTestresultsWrongBody(),
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_test_body(),
 				hideBodyForScreenCapture: false
 			)
 	}
@@ -279,8 +279,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
 			.moreInformation(
-				title: L.holderVaccinationWrongTitle(),
-				body: L.holder_event_vaccination_assessment_wrong_body(),
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_vaccinationAssessment_body(),
 				hideBodyForScreenCapture: false
 			)
 	}
@@ -1299,7 +1299,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchVaccinationBody("i 280 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_vaccination_body("i 280 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -1342,7 +1342,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchTestBody("i 180 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_test_body("i 180 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2063,7 +2063,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holder_listRemoteEvents_endStateInternationalQROnly_title()
-		expect(feedback.body) == L.holder_listRemoteEvents_endStateInternationalQROnly_message()
+		expect(feedback.body) == L.holder_listRemoteEvents_endStateCombinedFlowInternationalQROnly_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2163,14 +2163,14 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchVaccinationBody("i 880 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_vaccinationAndPositiveTest_body("i 880 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
 	// MARK: - Success Paths Recovery -
 	
-	func test_successRecovery_expired() throws {
+	func test_successRecovery_noOrigins() throws {
 
 		// Given
 		sut = ListRemoteEventsViewModel(
@@ -2185,7 +2185,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecovery), ())
+		(.success(RemoteGreenCards.Response.noOrigins), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -2214,7 +2214,56 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchRecoveryBody("i 380 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_recovery_body("i 380 000 058")
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+	
+	func test_successRecovery_expiredEvent() throws {
+		
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventExpiredPositiveTest],
+			greenCardLoader: greenCardLoader
+		)
+		
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.noOrigins), ())
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		expect(feedback.title) == L.holder_listRemoteEvents_endStateRecoveryTooOld_title()
+		expect(feedback.body) == L.holder_listRemoteEvents_endStateRecoveryTooOld_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2406,8 +2455,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 
-		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchRecoveryBody("i 380 000 058")
+		expect(feedback.title) == L.holder_listRemoteEvents_endStateRecoveryTooOld_title()
+		expect(feedback.body) == L.holder_listRemoteEvents_endStateRecoveryTooOld_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2592,7 +2641,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchVaccinationApprovalBody("i 980 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_vaccinationAssessment_body("i 980 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2651,7 +2700,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchVaccinationApprovalBody("i 980 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_vaccinationAssessment_body("i 980 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2889,7 +2938,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchTestBody("i 180 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_test_body("i 180 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2940,7 +2989,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		expect(feedback.title) == L.holderEventOriginmismatchTitle()
-		expect(feedback.body) == L.holderEventOriginmismatchTestBody("i 180 000 058")
+		expect(feedback.body) == L.holder_listRemoteEvents_originMismatch_test_body("i 180 000 058")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
@@ -2983,8 +3032,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		
-		expect(feedback.title) == L.holderPositiveTestNolistTitle()
-		expect(feedback.body) == L.holderPositiveTestNolistMessage()
+		expect(feedback.title) == L.holderVaccinationNolistTitle()
+		expect(feedback.body) == L.holderVaccinationNolistMessage()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}

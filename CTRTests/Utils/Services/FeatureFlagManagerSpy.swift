@@ -70,6 +70,16 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedIs1GVerificationPolicyEnabledResult
 	}
 
+	var invokedAreZeroDisclosurePoliciesEnabled = false
+	var invokedAreZeroDisclosurePoliciesEnabledCount = 0
+	var stubbedAreZeroDisclosurePoliciesEnabledResult: Bool! = false
+
+	func areZeroDisclosurePoliciesEnabled() -> Bool {
+		invokedAreZeroDisclosurePoliciesEnabled = true
+		invokedAreZeroDisclosurePoliciesEnabledCount += 1
+		return stubbedAreZeroDisclosurePoliciesEnabledResult
+	}
+
 	var invokedIs1GExclusiveDisclosurePolicyEnabled = false
 	var invokedIs1GExclusiveDisclosurePolicyEnabledCount = 0
 	var stubbedIs1GExclusiveDisclosurePolicyEnabledResult: Bool! = false

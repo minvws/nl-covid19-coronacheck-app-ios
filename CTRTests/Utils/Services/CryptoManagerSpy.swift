@@ -97,9 +97,9 @@ class CryptoManagerSpy: CryptoManaging {
 	var invokedVerifyQRMessageCount = 0
 	var invokedVerifyQRMessageParameters: (message: String, Void)?
 	var invokedVerifyQRMessageParametersList = [(message: String, Void)]()
-	var stubbedVerifyQRMessageResult: MobilecoreVerificationResult!
+	var stubbedVerifyQRMessageResult: Result<MobilecoreVerificationResult, CryptoError>!
 
-	func verifyQRMessage(_ message: String) -> MobilecoreVerificationResult? {
+	func verifyQRMessage(_ message: String) -> Result<MobilecoreVerificationResult, CryptoError> {
 		invokedVerifyQRMessage = true
 		invokedVerifyQRMessageCount += 1
 		invokedVerifyQRMessageParameters = (message, ())
