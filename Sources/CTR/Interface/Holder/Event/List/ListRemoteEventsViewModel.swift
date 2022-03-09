@@ -329,6 +329,7 @@ class ListRemoteEventsViewModel: Logging {
 			shouldPrimaryButtonBeEnabled = true
 			
 			guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+				// In 0G, this is expected behaviour. Go to dashboard
 				self.completeFlow()
 				return
 			}
@@ -356,6 +357,7 @@ class ListRemoteEventsViewModel: Logging {
 				} else {
 					
 					guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+						// In 0G, go to end state 6 / 7
 						self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
 						return
 					}
@@ -373,6 +375,7 @@ class ListRemoteEventsViewModel: Logging {
 				} else {
 					
 					guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+						// In 0G, this is expected behaviour. Go to dashboard
 						self.completeFlow()
 						return
 					}
