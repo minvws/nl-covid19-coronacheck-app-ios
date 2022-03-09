@@ -170,11 +170,12 @@ final class HolderDashboardViewModel: Logging {
 		}
 	}
 	
-	var selectTab: DashboardTab = .domestic {
-		didSet {
-			dashboardRegionToggleValue = selectedTab.isDomestic ? .domestic : .europeanUnion
-			selectedTab = selectTab
-		}
+	func selectTab(newTab: DashboardTab) {
+		guard state.activeDisclosurePolicyMode != .zeroG else { return }
+		
+		// Handle new value:
+		dashboardRegionToggleValue = newTab.isDomestic ? .domestic : .europeanUnion
+		selectedTab = newTab 
 	}
 
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
