@@ -43,6 +43,10 @@ extension BaseTest {
 		return "(" + String(doses) + doseText + ")"
 	}
 	
+	func spreadDose(_ dose: String) -> String {
+		return dose.map { String($0) }.joined(separator: " ")
+	}
+	
 	func makeScreenShot(name: String = "") {
 		let screenshot = XCUIScreen.main.screenshot()
 		let fullScreenshotAttachment = XCTAttachment(screenshot: screenshot)
@@ -62,6 +66,10 @@ extension BaseTest {
 	
 	private func cardElement(_ identifier: String) -> XCUIElement {
 		return app.descendants(matching: .any)[identifier]
+	}
+	
+	func card(of certificateType: CertificateType) -> XCUIElement {
+		return app.descendants(matching: .any).matching(identifier: "QRCard").containing(.any, identifier: certificateType.rawValue).firstMatch
 	}
 	
 	func cardsToCheck(for certificateType: CertificateType, _ combinedWithOther: Bool = false) -> [XCUIElement] {

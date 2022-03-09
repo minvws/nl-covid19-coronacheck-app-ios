@@ -183,4 +183,58 @@ extension BaseTest {
 		}
 		app.containsText("Wordt automatisch geldig")
 	}
+	
+	func assertInternationalVaccinationQRDetails(for person: TestPerson, dateOffset: Int = -30) {
+		card(of: .vaccination).tapButton(person.doseIntl.count > 1 ? "Bekijk QR-codes" : "Bekijk QR")
+		for (index, dose) in person.doseIntl.reversed().enumerated() {
+			app.textExists("Dosis " + dose)
+			
+			openQRDetails(for: person)
+			app.textExists("Over je dosis " + dose)
+			app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: "COVID-19")
+			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: spreadDose(dose))
+			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: formattedOffsetDate(with: dateOffset - (30 * index), short: true))
+			closeQRDetails()
+			
+			if index != person.doseIntl.indices.last {
+				app.tapButton("Vorige QR-code")
+			}
+		}
+		app.tapButton("BackButton")
+	}
+	
+	func assertInternationalRecoveryQRDetails(for person: TestPerson) {
+		card(of: .recovery).tapButton("Bekijk QR")
+		app.textExists("Internationale QR")
+		
+		openQRDetails(for: person)
+		app.textExists("Over mijn internationale QR-code")
+		app.labelValuePairExist(label: "Ziekte waarvan hersteld / Disease recovered from:", value: "COVID-19")
+		app.labelValuePairExist(label: "Geldig vanaf / Valid from*:", value: formattedOffsetDate(with: person.recFrom, short: true))
+		app.labelValuePairExist(label: "Geldig tot / Valid to*:", value: formattedOffsetDate(with: person.recUntil, short: true))
+		closeQRDetails()
+		app.tapButton("BackButton")
+	}
+	
+	func assertInternationalTestQRDetails(for person: TestPerson, testType: TestCertificateType) {
+		card(of: .test).tapButton("Bekijk QR")
+		app.textExists("Internationale QR")
+		
+		openQRDetails(for: person)
+		app.textExists("Over mijn internationale QR-code")
+		app.labelValuePairExist(label: "Testuitslag / Test result:", value: "negatief (geen corona)")
+		app.labelValuePairExist(label: "Type test / Type of test:", value: testType.rawValue)
+		closeQRDetails()
+		app.tapButton("BackButton")
+	}
+	
+	private func openQRDetails(for person: TestPerson) {
+		app.tapButton("InformationButton")
+		app.labelValuePairExist(label: "Naam / Name: ", value: person.name)
+		app.labelValuePairExist(label: "Geboortedatum / Date of birth*:", value: formattedDate(of: person.birthDate, short: true))
+	}
+	
+	private func closeQRDetails() {
+		app.tapButton("Sluiten")
+	}
 }
