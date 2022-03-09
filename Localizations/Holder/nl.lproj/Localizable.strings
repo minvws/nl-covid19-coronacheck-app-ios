@@ -61,10 +61,13 @@
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
 "general_readmore" = "Lees meer";
 "general_recoverycertificate" = "herstelbewijs";
+"general_recoverycertificate_0G" = "Internationaal herstelbewijs";
 "general_testcertificate" = "testbewijs";
+"general_testcertificate_0G" = "Internationaal testbewijs";
 "general_toMyOverview" = "Naar mijn bewijzen";
 "general_vaccinationAssessment" = "vaccinatiebeoordeling";
 "general_vaccinationcertificate" = "vaccinatiebewijs";
+"general_vaccinationcertificate_0G" = "Internationaal vaccinatiebewijs";
 "general_visitorPass" = "bezoekersbewijs";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
@@ -587,15 +590,22 @@
 "holder_dashboard_domesticQRCard_3G_inactive_label" = "Dit bewijs wordt nu niet gebruikt in Nederland";
 "holder_dashboard_domesticQRCard_3G_label" = "3G";
 "holder_dashboard_domesticQRCard_3G_title" = "Bewijs voor 3G-toegang";
+"holder_dashboard_emptyState_international_0G_message" = "Ga je naar het buitenland? Controleer altijd voor vertrek of je een coronabewijs nodig hebt.";
 "holder_dashboard_empty_domestic_3Gand1Gaccess_message" = "<p>Bezoek je een plek in Nederland? Check vooraf of je een bewijs voor <a href=\"https://coronacheck.nl/toegangsregels/3g-1g-toegang\">3G- of 1G toegang</a> nodig hebt.</p>";
 "holder_dashboard_empty_domestic_only1Gaccess_message" = "<p>In Nederland krijg je alleen toegang met een testbewijs op plekken waar om een coronabewijs wordt gevraagd <a href=\"https://coronacheck.nl/toegangsregels/1g-toegang\">(1G-toegang)</a>.</p>";
 "holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>.</p>";
+"holder_dashboard_filledState_international_0G_message" = "Ga je naar een land waar een coronabewijs nodig is? Gebruik dan je internationale bewijs hieronder. Check altijd voor vertrek of je het goede bewijs hebt.";
+"holder_dashboard_international_0G_action_certificateNeeded" = "Is een bewijs nodig op mijn bestemming?";
+"holder_dashboard_international_0G_url" = "https://coronacheck.nl/reisadviezen";
 "holder_dashboard_intro_domestic_3Gand1Gaccess" = "<p>Check vooraf of je een bewijs voor <a href=\"https://coronacheck.nl/toegangsregels/3g-1g-toegang\">3G- of 1G toegang</a> nodig hebt. Laat ook je identiteitsbewijs zien.</p>";
 "holder_dashboard_intro_domestic_only1Gaccess" = "<p>Laat in Nederland een bewijs voor <a href=\"https://coronacheck.nl/toegangsregels/1g-toegang\">1G-toegang</a> zien als om een coronabewijs wordt gevraagd. Laat ook je identiteitsbewijs zien.</p>";
 "holder_dashboard_intro_domestic_only3Gaccess" = "Bezoek je een plek in Nederland? Laat je Nederlandse QR-code en je identiteitsbewijs zien bij de ingang.";
 "holder_dashboard_newvaliditybanner_action" = "Lees meer op Rijksoverheid.nl";
 "holder_dashboard_newvaliditybanner_title" = "De geldigheid van coronabewijzen wordt aangepast";
 "holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
+"holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "Lees meer op Rijksoverheid.nl";
+"holder_dashboard_noDomesticCertificatesBanner_0G_title" = "In Nederland wordt het coronatoegangsbewijs niet meer gebruikt. Daarom zijn er alleen nog bewijzen om internationaal te gebruiken.";
+"holder_dashboard_noDomesticCertificatesBanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
 "holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/toegangsregels/1g-bewijs";
 "holder_dashboard_only1GaccessBanner_title" = "Je kunt een bewijs voor 1G-toegang toevoegen wanneer je negatief getest bent";
 "holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/toegangsregels/3g-bewijs";
@@ -687,8 +697,14 @@
 "holder_newintheapp_content_only3G_body" = "De Nederlandse toegangsregels zijn veranderd. Er wordt 3G-toegang gegeven op alle plekken waar om een coronabewijs wordt gevraagd. Dit betekent dat je naar binnen kunt met een bewijs van vaccinatie, herstel, of een negatieve test.";
 "holder_newintheapp_content_only3G_button_next" = "Volgende";
 "holder_newintheapp_content_only3G_title" = "Alleen 3G-toegang";
+"holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "In Nederland heb je op dit moment geen coronatoegangsbewijs nodig. Daarom zie je alleen je internationale bewijzen.";
+"holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "Alleen internationale bewijzen";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Je bezoekersbewijs is alleen in Nederland geldig. Wil je naar een ander land? Check de regels van het land dat je wilt bezoeken.</p>\n<p><b>Meer weten?</b><br />Lees meer op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "Over je bezoekersbewijs";
+"holder_onboarding_content_TravelSafe_0G_message" = "Reis je naar een land waar om een coronabewijs wordt gevraagd? Dan kun je met deze app je bewijs maken.";
+"holder_onboarding_content_TravelSafe_0G_title" = "Veilig op reis met je bewijs";
+"holder_onboarding_content_onlyInternationalQR_0G_message" = "De QR-code op je bewijs kan worden gecheckt bij de ingang van plekken en activiteiten in het buitenland. Of aan de grens.";
+"holder_onboarding_content_onlyInternationalQR_0G_title" = "Je bewijs heeft een QR-code";
 "holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message" = "Bezoek je een plek in Nederland waar een coronabewijs nodig is? Check vooraf of je een bewijs voor 3G- of 1G-toegang nodig hebt. De app maakt hier aparte bewijzen voor.";
 "holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_title" = "Check vooraf de toegangsregels";
 "holder_onboarding_disclosurePolicyChanged_only1GAccess_message" = "Bezoek je een plek in Nederland waar een coronabewijs nodig is? Op dit moment wordt alleen 1G-toegang gegeven. Je kunt dan naar binnen met een bewijs van een negatieve test.";
@@ -748,8 +764,3 @@
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
 "visitorpass_token_next" = "Volgende";
-
-"holder_onboarding_content_TravelSafe_0G_title" = "Veilig op reis met je bewijs";
-"holder_onboarding_content_TravelSafe_0G_message" = "Reis je naar een land waar om een coronabewijs wordt gevraagd? Dan kun je met deze app je bewijs maken.";
-"holder_onboarding_content_onlyInternationalQR_0G_title" = "Je bewijs heeft een QR-code";
-"holder_onboarding_content_onlyInternationalQR_0G_message" = "De QR-code op je bewijs kan worden gecheckt bij de ingang van plekken en activiteiten in het buitenland. Of aan de grens.";
