@@ -90,6 +90,7 @@ extension BaseTest {
 	}
 	
 	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffset: Int? = nil, validUntilOffset: Int? = nil, validUntilDate: String? = nil) {
+		
 		tapOnTheNetherlandsTab()
 		card3G().containsText(CertificateType.vaccination.rawValue)
 		card3G().containsText(amountOfDoses(for: doses))
@@ -100,7 +101,7 @@ extension BaseTest {
 			card3G().containsText("geldig vanaf " + formattedOffsetDate(with: offset))
 		}
 		if let date = validUntilDate {
-			card3G().containsText("tot " + formattedDate(with: date))
+			card3G().containsText("tot " + formattedDate(of: date))
 		}
 		card3G().containsText(is3GEnabled() ? "Bekijk QR" : "Dit bewijs wordt nu niet gebruikt in Nederland")
 	}
