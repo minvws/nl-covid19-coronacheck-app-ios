@@ -58,6 +58,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = activeDisclosurePolicies.sorted(by: { $0.featureFlag < $1.featureFlag }) == [.policy1G, .policy3G]
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = activeDisclosurePolicies == [.policy1G]
 		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = activeDisclosurePolicies == [.policy3G]
+		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = activeDisclosurePolicies.isEmpty
 		return HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			datasource: datasourceSpy,
