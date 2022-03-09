@@ -12,7 +12,7 @@ class PositiveOthersSmoke: BaseTest {
 	func test_posBreathalyzer() {
 		addRecoveryCertificate(for: TestData.posBreathalyzer)
 		addRetrievedCertificateToApp()
-		assertNoCertificateCouldBeCreated()
+		assertPositiveTestResultNotValidAnymore()
 	}
 	
 	// MARK: Positive tests - AGOB
@@ -62,12 +62,12 @@ class PositiveOthersSmoke: BaseTest {
 	func test_posOldPcr() {
 		addRecoveryCertificate(for: TestData.posOldPcr)
 		addRetrievedCertificateToApp()
-		assertNoCertificateCouldBeCreated()
+		assertPositiveTestResultNotValidAnymore()
 	}
 	
 	func test_posOldRat() {
 		addRecoveryCertificate(for: TestData.posOldRat)
 		addRetrievedCertificateToApp()
-		assertNoCertificateCouldBeCreated()
+		assertPositiveTestResultNotValidAnymore()
 	}
 }

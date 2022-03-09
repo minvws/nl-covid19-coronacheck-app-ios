@@ -35,6 +35,11 @@ extension BaseTest {
 		returnToCertificateOverview()
 	}
 	
+	func assertPositiveTestResultNotValidAnymore() {
+		app.textExists("Positieve testuitslag niet meer geldig")
+		returnToCertificateOverview()
+	}
+	
 	func assertCertificateIsOnlyValidInternationally() {
 		app.textExists("Er is alleen een internationaal bewijs gemaakt")
 		returnToCertificateOverview()
