@@ -59,4 +59,49 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.shouldShowTabBar).toEventually(beFalse())
 		expect(self.sut.shouldShowOnlyInternationalPane).toEventually(beTrue())
 	}
+	
+	func test_datasourceupdate_tripleCurrentlyValidDomesticButViewingInternationalTab_zeroG_shouldShowEmptyState() {
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion, activeDisclosurePolicies: [])
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
+				greencards: [.init(id: sampleGreencardObjectID, origins: [
+					.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1),
+					.validOneHourAgo_test_expires23HoursFromNow(),
+					.validOneHourAgo_recovery_expires300DaysFromNow()
+				])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_datasourceupdate_domesticExpiredButOnInternationalTab_zeroG_shouldShowEmptyState() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion, activeDisclosurePolicies: [])
+		
+		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
+			.init(region: .domestic, type: .recovery),
+			.init(region: .domestic, type: .test),
+			.init(region: .domestic, type: .vaccination)
+		]
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?([], expiredCards)
+		
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
+	}
 }
