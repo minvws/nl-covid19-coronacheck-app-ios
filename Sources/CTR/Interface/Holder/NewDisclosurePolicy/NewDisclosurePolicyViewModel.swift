@@ -25,20 +25,26 @@ final class NewDisclosurePolicyViewModel {
 		
 		self.coordinator = coordinator
 		
-		image = I.disclosurePolicy.newInTheApp()
-		
 		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
 			tagline = L.general_newpolicy()
 			title = L.holder_newintheapp_content_only1G_title()
 			content = L.holder_newintheapp_content_only1G_body()
+			image = I.disclosurePolicy.newInTheApp()
 		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
 			tagline = L.general_newpolicy()
 			title = L.holder_newintheapp_content_only3G_title()
 			content = L.holder_newintheapp_content_only3G_body()
+			image = I.disclosurePolicy.newInTheApp()
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
 			tagline = L.general_newintheapp()
 			title = L.holder_newintheapp_content_3Gand1G_title()
 			content = L.holder_newintheapp_content_3Gand1G_body()
+			image = I.disclosurePolicy.newInTheApp()
+		} else if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
+			tagline = L.general_newintheapp()
+			title = L.holder_newintheapp_content_onlyInternationalCertificates_0G_title()
+			content = L.holder_newintheapp_content_onlyInternationalCertificates_0G_body()
+			image = I.onboarding.validity()
 		} else {
 			return nil
 		}

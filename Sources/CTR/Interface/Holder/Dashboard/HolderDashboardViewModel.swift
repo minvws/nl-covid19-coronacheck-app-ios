@@ -221,16 +221,17 @@ final class HolderDashboardViewModel: Logging {
 			}()
 		)
 
-		didUpdate(oldState: nil, newState: state)
-		
 		setupDatasource()
 		setupStrippenRefresher()
 		setupNotificationListeners()
 		setupConfigNotificationManager()
 		setupRecommendedVersion()
 		setupNewValidityInfoForVaccinationsAndRecoveriesBanner()
+		recalculateActiveDisclosurePolicyMode()
 		recalculateDisclosureBannerState()
 		setupObservers()
+
+		didUpdate(oldState: nil, newState: state)
 	}
 	
 	private func setupObservers() {
@@ -557,7 +558,7 @@ final class HolderDashboardViewModel: Logging {
 		
 		coordinator?.userWishesToOpenTheMenu()
 	}
-	
+	 
 	// MARK: - Static Methods
 	
 	private static func assemble3gOnlyCards(

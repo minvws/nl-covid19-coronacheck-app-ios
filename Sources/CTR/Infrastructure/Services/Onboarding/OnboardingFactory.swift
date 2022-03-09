@@ -10,13 +10,11 @@ import UIKit
 /// The steps of the onboarding
 enum OnboardingStep: Int {
 
-	case safelyOnTheRoad
-	case yourQR
-	case validity
-	case access
-	case privacy
-	case who
-	case disclosurePolicy
+	case step1
+	case step2
+	case step3
+	case step4
+	case step5
 }
 
 struct OnboardingPage {
@@ -70,39 +68,74 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 	/// Generate an array of onboarding steps
 	/// - Returns: an array of onboarding steps
 	func create() -> [OnboardingPage] {
-
-		var pages = [
-			OnboardingPage(
-				title: L.holderOnboardingTitleSafely(),
-				message: L.holderOnboardingMessageSafely(),
-				image: I.onboarding.safely(),
-				step: .safelyOnTheRoad
-			),
-			OnboardingPage(
-				title: L.holderOnboardingTitleYourqr(),
-				message: L.holderOnboardingMessageYourqr(),
-				image: I.onboarding.yourQR(),
-				step: .yourQR
-			),
-			OnboardingPage(
-				title: L.holderOnboardingTitleValidity(),
-				message: L.holderOnboardingMessageValidity(),
-				image: I.onboarding.validity(),
-				step: .validity
-			),
-			OnboardingPage(
-				title: L.holderOnboardingTitlePrivacy(),
-				message: L.holderOnboardingMessagePrivacy(),
-				image: I.onboarding.international(),
-				step: .who
-			)
-		]
+		
+		var pages = [OnboardingPage]()
+		
+		if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
+			pages = getOnboardingPagesForZeroDisclosurePolicies()
+		} else {
+			pages = getOnboardingPages()
+		}
 		if let policyPage = getDisclosurePolicyPage() {
 			pages.append(policyPage)
 		}
 		return pages.sorted { $0.step.rawValue < $1.step.rawValue }
 	}
-
+	
+	private func getOnboardingPagesForZeroDisclosurePolicies() -> [OnboardingPage] {
+		
+		return [
+			OnboardingPage(
+				title: L.holder_onboarding_content_TravelSafe_0G_title(),
+				message: L.holder_onboarding_content_TravelSafe_0G_message(),
+				image: I.onboarding.zeroGInternational(),
+				step: .step1
+			),
+			OnboardingPage(
+				title: L.holderOnboardingTitleYourqr(),
+				message: L.holderOnboardingMessageYourqr(),
+				image: I.onboarding.yourQR(),
+				step: .step2
+			),
+			OnboardingPage(
+				title: L.holder_onboarding_content_onlyInternationalQR_0G_title(),
+				message: L.holder_onboarding_content_onlyInternationalQR_0G_message(),
+				image: I.onboarding.validity(),
+				step: .step3
+			)
+		]
+	}
+	
+	private func getOnboardingPages() -> [OnboardingPage] {
+		
+		return [
+			OnboardingPage(
+				title: L.holderOnboardingTitleSafely(),
+				message: L.holderOnboardingMessageSafely(),
+				image: I.onboarding.safely(),
+				step: .step1
+			),
+			OnboardingPage(
+				title: L.holderOnboardingTitleYourqr(),
+				message: L.holderOnboardingMessageYourqr(),
+				image: I.onboarding.yourQR(),
+				step: .step2
+			),
+			OnboardingPage(
+				title: L.holderOnboardingTitleValidity(),
+				message: L.holderOnboardingMessageValidity(),
+				image: I.onboarding.validity(),
+				step: .step3
+			),
+			OnboardingPage(
+				title: L.holderOnboardingTitlePrivacy(),
+				message: L.holderOnboardingMessagePrivacy(),
+				image: I.onboarding.international(),
+				step: .step4
+			)
+		]
+	}
+	
 	private func getDisclosurePolicyPage() -> OnboardingPage? {
 		
 		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
@@ -110,23 +143,24 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_title(),
 				message: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				step: .disclosurePolicy
+				step: .step5
 			)
 		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
 			return OnboardingPage(
 				title: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_title(),
 				message: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				step: .disclosurePolicy
+				step: .step5
 			)
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
 			return OnboardingPage(
 				title: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_title(),
 				message: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				step: .disclosurePolicy
+				step: .step5
 			)
 		}
+		// No disclosure page for zero G
 		return nil
 	}
 	
@@ -187,7 +221,7 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.verifierOnboardingTitleSafely(),
 				message: L.verifierOnboardingMessageSafely(),
 				image: I.onboarding.safely(),
-				step: .safelyOnTheRoad
+				step: .step1
 			)
 		]
 
