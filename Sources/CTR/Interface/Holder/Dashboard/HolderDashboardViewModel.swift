@@ -91,7 +91,7 @@ final class HolderDashboardViewModel: Logging {
 		var shouldShowRecommendationToAddYourBooster: Bool = false
 		
 		var shouldShowAddCertificateFooter: Bool {
-			qrCards.isEmpty && !shouldShowCompleteYourVaccinationAssessmentBanner
+			(qrCards.isEmpty || (shouldShowOnlyInternationalPane && !dashboardHasInternationalQRCards())) && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
 		
 		var shouldShowTabBar: Bool {

@@ -47,7 +47,6 @@ extension HolderDashboardViewController.Card {
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
-		guard !state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 		guard !state.shouldShowAddCertificateFooter else { return [] }
 		return [
 			.addCertificate(
