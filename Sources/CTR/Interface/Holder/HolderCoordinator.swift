@@ -205,7 +205,7 @@ class HolderCoordinator: SharedCoordinator {
 				
 				// Reset the dashboard back to the domestic tab:
 				if let dashboardViewController = navigationController.viewControllers.last as? HolderDashboardViewController {
-					dashboardViewController.viewModel.selectTab = .domestic
+					dashboardViewController.viewModel.selectTab(newTab: .domestic)
 				}
 				return true
 				
