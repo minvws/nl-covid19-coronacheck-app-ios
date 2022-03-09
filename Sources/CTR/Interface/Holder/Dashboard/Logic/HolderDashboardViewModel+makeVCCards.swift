@@ -365,6 +365,31 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
+	static func makeDisclosurePolicyInformation0GBanner(
+		validityRegion: QRCodeValidityRegion,
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		
+		guard validityRegion == .europeanUnion,
+				state.shouldShow0GDisclosurePolicyBecameActiveBanner,
+				state.activeDisclosurePolicyMode == .zeroG else { return [] }
+
+		return [
+			.disclosurePolicyInformation(
+				title: L.holder_dashboard_noDomesticCertificatesBanner_0G_title(),
+				buttonText: L.holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid(),
+				accessibilityIdentifier: "disclosurePolicy_informationBanner",
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapDisclosurePolicyInformation0GBannerMoreInformation()
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapDisclosurePolicyInformation0GBannerClose()
+				}
+			)
+		]
+	}
+	
 	static func makeVaccinationAssessmentInvalidOutsideNLCard(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
