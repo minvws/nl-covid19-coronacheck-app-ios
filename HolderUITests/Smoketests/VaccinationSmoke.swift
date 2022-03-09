@@ -15,6 +15,7 @@ class VaccinationSmoke: BaseTest {
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
 	}
 	
 	func test_vacP2() {
@@ -24,6 +25,7 @@ class VaccinationSmoke: BaseTest {
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
 	}
 	
 	func test_vacP3() {
@@ -33,6 +35,7 @@ class VaccinationSmoke: BaseTest {
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
 	}
 	
 	func test_vacJ1() {
@@ -42,5 +45,6 @@ class VaccinationSmoke: BaseTest {
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
 	}
 }

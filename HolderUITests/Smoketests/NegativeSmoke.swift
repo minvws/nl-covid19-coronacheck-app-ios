@@ -10,19 +10,23 @@ class NegativeSmoke: BaseTest {
 	// MARK: Negative tests (and combinations)
 	
 	func test_negPcr() {
-		addTestCertificateFromGGD(for: TestData.negPcr)
+		let person = TestData.negPcr
+		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
+		assertInternationalTestQRDetails(for: person, testType: .pcr)
 	}
 	
 	func test_negRat() {
-		addTestCertificateFromGGD(for: TestData.negRat)
+		let person = TestData.negRat
+		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .rat)
+		assertInternationalTestQRDetails(for: person, testType: .rat)
 	}
 	
 	func test_negAgob() {
