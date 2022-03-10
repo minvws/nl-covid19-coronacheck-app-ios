@@ -268,10 +268,12 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func appIsDeactivated() {
 		
+		let urlString: String = flavor == .holder ? "https://coronacheck.nl" : "https://coronacheck.nl"
+
 		navigateToAppUpdate(
 			with: AppDeactivatedViewModel(
 				coordinator: self,
-				appStoreUrl: URL(string: "https://coronacheck.nl")
+				appStoreUrl: URL(string: urlString)
 			)
 		)
 	}
