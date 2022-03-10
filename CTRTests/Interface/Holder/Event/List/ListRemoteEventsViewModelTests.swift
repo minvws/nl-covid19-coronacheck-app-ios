@@ -2219,7 +2219,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	
-	func test_successRecovery_expiredEvent() throws {
+	func test_successRecovery_noOrigins_expiredEvent() throws {
 		
 		// Given
 		sut = ListRemoteEventsViewModel(
@@ -2268,7 +2268,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
-	func test_successRecovery_domesticRecoveryAndVaccination() throws {
+	func test_successRecovery_recoveryAndVaccination_recoveryBeforeVaccination() throws {
 
 		// Given
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
@@ -2277,7 +2277,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecoveryBeforeVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -2312,13 +2312,14 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 
+		// End State 5
 		expect(feedback.title) == L.holderRecoveryRecoveryAndVaccinationTitle()
 		expect(feedback.body) == L.holderRecoveryRecoveryAndVaccinationMessage()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
-	func test_successRecovery_domesticRecoveryAndExistingVaccination() throws {
+	func test_successRecovery_recoveryAndVaccination_recoveryAfterVaccination() throws {
 
 		// Given
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true

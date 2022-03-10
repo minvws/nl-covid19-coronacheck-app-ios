@@ -493,6 +493,16 @@ extension RemoteGreenCards.Origin {
 		)
 	}
 	
+	static var fakeRecoveryOriginExpiringIn30DaysEvent30DaysAgo: RemoteGreenCards.Origin {
+		RemoteGreenCards.Origin(
+			type: "recovery",
+			eventTime: Date().addingTimeInterval(30 * days * ago),
+			expirationTime: Date().addingTimeInterval(30 * days),
+			validFrom: Date(),
+			doseNumber: nil
+		)
+	}
+	
 	static var fakeVaccinationAssessmentOriginExpiringIn14Days: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "vaccinationassessment",
@@ -629,6 +639,32 @@ extension RemoteGreenCards.Response {
 				RemoteGreenCards.EuGreenCard(
 					origins: [
 						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
+					],
+					credential: "test credential"
+				)
+			]
+		)
+	}
+	
+	static var domesticAndInternationalVaccinationAndRecoveryBeforeVaccination: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days,
+					RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30DaysEvent30DaysAgo
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days
+					],
+					credential: "test credential"
+				),
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30DaysEvent30DaysAgo
 					],
 					credential: "test credential"
 				)

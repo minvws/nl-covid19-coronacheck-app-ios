@@ -389,11 +389,26 @@ class ListRemoteEventsViewModel: Logging {
 			greencardResponse,
 			onBothVaccinationAndRecoveryOrigins: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-				if self.hasExistingDomesticVaccination {
+
+				let firstRecoveryOrigin = greencardResponse.getOrigins(ofType: OriginType.recovery.rawValue)
+					.sorted { $0.eventTime < $1.eventTime }
+					.first
+				let firstVaccinationOrigin = greencardResponse.getOrigins(ofType: OriginType.vaccination.rawValue)
+					.sorted { $0.eventTime < $1.eventTime }
+					.first
+				
+				guard let firstRecoveryOrigin = firstRecoveryOrigin, let firstVaccinationOrigin = firstVaccinationOrigin else {
+					// Should not happen, part of the if let flow.
+					self.logWarning("handleSuccessForRecovery - onBothVaccinationAndRecoveryOrigins, some origins are missing")
 					self.completeFlow()
-				} else {
+					return
+				}
+				if firstRecoveryOrigin.eventTime < firstVaccinationOrigin.eventTime {
 					// End State 5
 					self.viewState = self.recoveryFlowRecoveryAndVaccinationCreated()
+				} else {
+					// End State 4
+					self.completeFlow()
 				}
 			},
 			onVaccinationOriginOnly: {
