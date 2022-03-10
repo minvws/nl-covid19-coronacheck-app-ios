@@ -71,6 +71,10 @@ extension Coordinator {
     @discardableResult
     func receive(universalLink: UniversalLink) -> Bool {
 
+		guard !Current.remoteConfigManager.storedConfiguration.isDeactivated else {
+			return true
+		}
+		
         var handled = false
 
         // Find a child which will agree to handle the activity:
