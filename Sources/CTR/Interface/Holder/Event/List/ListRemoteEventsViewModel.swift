@@ -153,22 +153,12 @@ class ListRemoteEventsViewModel: Logging {
 			}
 
 			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: { [weak self] remoteResponse in
-				// Check if we have any origin for the event mode
-				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
-				// > 0 -> Success
 				
-				guard expandedEventMode == .vaccination else {
-					// Origin check before storage only for vaccination
-					return true
-				}
-
-				let domesticOrigins: Int = remoteResponse.getDomesticOrigins(ofType: expandedEventMode.rawValue).count
-				let internationalOrigins: Int = remoteResponse.getInternationalOrigins(ofType: expandedEventMode.rawValue).count
-
-				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(expandedEventMode.rawValue)")
-				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(expandedEventMode.rawValue)")
-				return internationalOrigins + domesticOrigins > 0
-
+				return self?.areTheOriginsAsExpected(
+					remoteEvents: remoteEvents,
+					remoteResponse: remoteResponse,
+					expandedEventMode: expandedEventMode) ?? true
+				
 			}, completion: { result in
 				self.progressIndicationCounter.decrement()
 				self.handleGreenCardResult(
@@ -180,7 +170,57 @@ class ListRemoteEventsViewModel: Logging {
 			})
 		}
 	}
-
+	
+	/// The response evaluator
+	/// - Parameters:
+	///   - remoteEvents: the remote events
+	///   - remoteResponse: the response from the signer
+	///   - expandedEventMode: the event mode
+	/// - Returns: True if we received the expected origins for the event mode.
+	/// If we do not get the expected origins, we show the mismatch state (error 058)
+	private func areTheOriginsAsExpected(remoteEvents: [RemoteEvent], remoteResponse: RemoteGreenCards.Response, expandedEventMode: EventMode ) -> Bool {
+		// Check if we have any origin for the event mode
+		// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
+		// > 0 -> Success
+		
+		guard eventMode != .paperflow else {
+			return true
+		}
+		
+		switch expandedEventMode {
+			case .paperflow:
+				// No special states for the paper flow
+				return true
+			case .vaccinationAndPositiveTest:
+				return areThereOrigins(remoteResponse: remoteResponse, forEventMode: .vaccination) || areThereOrigins(remoteResponse: remoteResponse, forEventMode: .recovery)
+			case .recovery:
+				if let recoveryExpirationDays = self.remoteConfigManager.storedConfiguration.recoveryExpirationDays,
+				   let event = remoteEvents.first?.wrapper.events?.first, event.hasPositiveTest,
+				   let sampleDateString = event.positiveTest?.sampleDateString,
+				   let date = Formatter.getDateFrom(dateString8601: sampleDateString),
+				   date.addingTimeInterval(TimeInterval(recoveryExpirationDays * 24 * 60 * 60)) < Current.now() {
+					// End State 7
+					return true
+				}
+				return areThereOrigins(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
+			case .test, .vaccination:
+				return areThereOrigins(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
+			case .vaccinationassessment:
+				// no origins to check.
+				return true
+		}
+	}
+	
+	private func areThereOrigins(remoteResponse: RemoteGreenCards.Response, forEventMode: EventMode ) -> Bool {
+		
+		if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
+			return remoteResponse.hasInternationalOrigins(ofType: forEventMode.rawValue)
+		} else {
+			return remoteResponse.hasInternationalOrigins(ofType: forEventMode.rawValue) ||
+			remoteResponse.hasDomesticOrigins(ofType: forEventMode.rawValue)
+		}
+	}
+	
 	private func expandEventMode(remoteEvents: [RemoteEvent]) -> EventMode {
 
 		if let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
@@ -315,8 +355,7 @@ class ListRemoteEventsViewModel: Logging {
 				self.viewState = self.originMismatchState(flow: self.determineErrorCodeFlow(remoteEvents: remoteEvents))
 			},
 			onNoOrigins: {
-				self.shouldPrimaryButtonBeEnabled = true
-				self.viewState = self.originMismatchState(flow: self.determineErrorCodeFlow(remoteEvents: remoteEvents))
+				// Handled by response evaluator
 			}
 		)
 	}
@@ -327,6 +366,13 @@ class ListRemoteEventsViewModel: Logging {
 		if !greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue) &&
 			greencardResponse.hasInternationalOrigins(ofType: OriginType.vaccination.rawValue) {
 			shouldPrimaryButtonBeEnabled = true
+			
+			guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+				// In 0G, this is expected behaviour. Go to dashboard
+				self.completeFlow()
+				return
+			}
+			
 			// End state 2
 			viewState = internationalQROnly()
 		} else {
@@ -348,6 +394,13 @@ class ListRemoteEventsViewModel: Logging {
 					// End state 6 / 7
 					self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
 				} else {
+					
+					guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+						// In 0G, go to end state 6 / 7
+						self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
+						return
+					}
+					
 					// End state 8
 					self.viewState = self.positiveTestFlowRecoveryAndInternationalVaccinationCreated()
 				}
@@ -359,6 +412,12 @@ class ListRemoteEventsViewModel: Logging {
 				if hasDomesticVaccinationOrigins {
 					self.completeFlow()
 				} else {
+					
+					guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+						// In 0G, this is expected behaviour. Go to dashboard
+						self.completeFlow()
+						return
+					}
 			
 					let hasPositiveTestRemoteEvent = remoteEvents.contains { wrapper, _ in wrapper.events?.first?.hasPositiveTest ?? false }
 					if hasPositiveTestRemoteEvent {
@@ -377,7 +436,7 @@ class ListRemoteEventsViewModel: Logging {
 			},
 			onNoOrigins: {
 				// End State 3 / 11
-				self.viewState = self.originMismatchState(flow: .vaccinationAndPositiveTest)
+				// Handled by response evaluator
 			}
 		)
 	}
@@ -420,7 +479,7 @@ class ListRemoteEventsViewModel: Logging {
 					self.viewState = self.recoveryFlowPositiveTestTooOld()
 				} else {
 					// End State 3
-					self.viewState = self.originMismatchState(flow: .recovery)
+					// Handled by response evaluator
 				}
 			}
 		)
