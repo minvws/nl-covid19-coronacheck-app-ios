@@ -69,6 +69,10 @@ class VerifierCoordinator: SharedCoordinator {
 	}
 	
 	override func consume(universalLink: UniversalLink) -> Bool {
+		guard !Current.remoteConfigManager.storedConfiguration.isDeactivated else {
+			return true
+		}
+		
 		switch universalLink {
 			case .thirdPartyScannerApp(let returnURL):
 				guard let returnURL = returnURL,

@@ -155,6 +155,9 @@ class HolderCoordinator: SharedCoordinator {
 	/// returns: bool indicating whether it was possible.
 	@discardableResult
 	override func consume(universalLink: UniversalLink) -> Bool {
+		guard !Current.remoteConfigManager.storedConfiguration.isDeactivated else {
+			return true
+		}
 		switch universalLink {
 			case .redeemHolderToken(let requestToken):
 				
