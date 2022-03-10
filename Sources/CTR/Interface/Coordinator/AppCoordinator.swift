@@ -269,9 +269,9 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func appIsDeactivated() {
 		
 		navigateToAppUpdate(
-			with: EndOfLifeViewModel(
+			with: AppDeactivatedViewModel(
 				coordinator: self,
-				appStoreUrl: nil
+				appStoreUrl: URL(string: "https://coronacheck.nl")
 			)
 		)
 	}
