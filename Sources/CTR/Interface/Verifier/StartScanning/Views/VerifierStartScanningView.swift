@@ -103,6 +103,7 @@ class VerifierStartScanningView: BaseView {
 		view.respectAnimationFrameRate = true
 		view.backgroundBehavior = .pauseAndRestore
 		view.loopMode = .loop
+		view.accessibilityTraits = .updatesFrequently
 		return view
 	}()
 	
@@ -290,12 +291,11 @@ class VerifierStartScanningView: BaseView {
 			let topMargin = hasTitle ? ViewTraits.Title.topSpacing : ViewTraits.Content.topSpacing
 			contentStackView.directionalLayoutMargins.top = topMargin
 			
-			UIAccessibility.post(
-				notification: .layoutChanged,
-				argument: headerTitle == nil
-					? fakeNavigationBar.titleLabel
-					: titleLabel
-			)
+			if headerTitle != nil, oldValue == nil {
+				UIAccessibility.post(notification: .layoutChanged, argument: titleLabel)
+			} else if oldValue != nil, headerTitle == nil {
+				UIAccessibility.post(notification: .layoutChanged, argument: riskIndicatorLabel)
+			}
 		}
 	}
 
