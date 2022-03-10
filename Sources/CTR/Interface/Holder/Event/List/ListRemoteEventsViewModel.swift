@@ -153,35 +153,9 @@ class ListRemoteEventsViewModel: Logging {
 			}
 
 			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: { [weak self] remoteResponse in
-				// Check if we have any origin for the event mode
-				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
-				// > 0 -> Success
 				
-//				guard expandedEventMode == .vaccination || expandedEventMode == .test || expandedEventMode == .vaccinationAndPositiveTest else {
-//					// Origin check before storage only for vaccination
-//					return true
-//				}
+				return self?.responseEvaluator(remoteResponse: remoteResponse, expandedEventMode: expandedEventMode) ?? true
 				
-				guard self?.eventMode != .paperflow else {
-					return true
-				}
-
-				guard expandedEventMode == .vaccination || expandedEventMode == .test else {
-					// Origin check before storage only for vaccination
-					return true
-				}
-				
-				let domesticOrigins: Int = remoteResponse.getDomesticOrigins(ofType: expandedEventMode.rawValue).count
-				let internationalOrigins: Int = remoteResponse.getInternationalOrigins(ofType: expandedEventMode.rawValue).count
-
-				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(expandedEventMode.rawValue)")
-				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(expandedEventMode.rawValue)")
-				
-				if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
-					return internationalOrigins > 0
-				} else {
-					return internationalOrigins + domesticOrigins > 0
-				}
 			}, completion: { result in
 				self.progressIndicationCounter.decrement()
 				self.handleGreenCardResult(
@@ -193,7 +167,40 @@ class ListRemoteEventsViewModel: Logging {
 			})
 		}
 	}
-
+	
+	private func responseEvaluator(remoteResponse: RemoteGreenCards.Response, expandedEventMode: EventMode ) -> Bool {
+		// Check if we have any origin for the event mode
+		// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
+		// > 0 -> Success
+		
+		guard eventMode != .paperflow else {
+			return true
+		}
+		
+		switch expandedEventMode {
+			case .paperflow:
+				return true
+			case .vaccinationAndPositiveTest:
+				return inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: .vaccination) || inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: .recovery)
+			case .recovery:
+				return true
+			case .test, .vaccination:
+				return inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
+			case .vaccinationassessment:
+				return true
+		}
+	}
+	
+	private func inspectOriginsForResponseEvaluator(remoteResponse: RemoteGreenCards.Response, forEventMode: EventMode ) -> Bool {
+		
+		if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
+			return remoteResponse.hasInternationalOrigins(ofType: forEventMode.rawValue)
+		} else {
+			return remoteResponse.hasInternationalOrigins(ofType: forEventMode.rawValue) ||
+			remoteResponse.hasDomesticOrigins(ofType: forEventMode.rawValue)
+		}
+	}
+	
 	private func expandEventMode(remoteEvents: [RemoteEvent]) -> EventMode {
 
 		if let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
@@ -409,7 +416,7 @@ class ListRemoteEventsViewModel: Logging {
 			},
 			onNoOrigins: {
 				// End State 3 / 11
-				self.viewState = self.originMismatchState(flow: .vaccinationAndPositiveTest)
+				// Handled by response evaluator
 			}
 		)
 	}
