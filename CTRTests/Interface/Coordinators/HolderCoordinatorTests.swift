@@ -346,5 +346,193 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(consumed) == false
 	}
 	
+	// MARK: - Navigate to -
 	
+	func test_navigateToChooseQRCodeType() {
+		
+		// Given
+		
+		// When
+		sut.navigateToChooseQRCodeType()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_navigateToAddPaperProof() {
+		
+		// Given
+		
+		// When
+		sut.navigateToAddPaperProof()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is PaperProofStartViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(1))
+	}
+	
+	func test_navigateToAddVisitorPass() {
+		
+		// Given
+		
+		// When
+		sut.navigateToAddVisitorPass()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is VisitorPassStartViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_navigateToAboutThisApp() {
+		
+		// Given
+		
+		// When
+		sut.navigateToAboutThisApp()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is AboutThisAppViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_navigateBackToStart() {
+		
+		// Given
+		
+		// When
+		sut.navigateBackToStart()
+		
+		// Then
+		expect(self.navigationSpy.invokedPopToRootViewController) == true
+	}
+
+	func test_presentDCCQRDetails() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.presentDCCQRDetails(
+			title: "test title",
+			description: "test description",
+			details: [],
+			dateInformation: "none"
+		)
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? DCCQRDetailsViewController)?.viewModel)
+		expect(viewModel.title) == "test title"
+		expect(viewModel.description) == "test description"
+		expect(viewModel.dateInformation) == "none"
+	}
+	
+	// MARK: - User wishes to  -
+	
+	func test_userWishesToOpenTheMenu() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToOpenTheMenu()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is MenuViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+
+	func test_userWishesToMakeQRFromRemoteEvent() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToMakeQRFromRemoteEvent(FakeRemoteEvent.fakeRemoteEventVaccination, originalMode: .vaccination)
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(1))
+	}
+
+	func test_userWishesToCreateANegativeTestQR() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToCreateANegativeTestQR()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_userWishesToCreateAVisitorPass() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToCreateAVisitorPass()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_userWishesToChooseTestLocation_GGDenabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDEnabledResult = true
+		
+		// When
+		sut.userWishesToChooseTestLocation()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ChooseTestLocationViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_userWishesToChooseTestLocation_GGDdisabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDEnabledResult = false
+		
+		// When
+		sut.userWishesToChooseTestLocation()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_userHasNotBeenTested() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userHasNotBeenTested()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? MakeTestAppointmentViewController)?.viewModel)
+		expect(viewModel.title) == L.holderNotestTitle()
+		expect(viewModel.message) == L.holderNotestBody()
+		expect(viewModel.buttonTitle) == L.holderNotestButtonTitle()
+	}
 }
