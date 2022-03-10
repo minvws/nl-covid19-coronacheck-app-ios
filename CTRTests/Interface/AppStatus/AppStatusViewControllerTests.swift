@@ -92,7 +92,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	func test_endOfLife() {
 
 		// Given
-		let viewModel = EndOfLifeViewModel(
+		let viewModel = AppDeactivatedViewModel(
 			coordinator: appCoordinatorSpy,
 			appStoreUrl: nil
 		)

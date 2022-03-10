@@ -128,6 +128,7 @@
 "verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
 "verifier_about_this_app_law_enforcement" = "Voor handhaving:";
 "verifier_about_this_app_scan_log" = "Scan-instelling log";
+"verifier_deactivation_url" = "https://coronacheck.nl/scanner/niet-in-gebruik";
 "verifier_home_countdown_subtitle" = "Je moet %li minuten wachten omdat je tijdens het scannen jouw scan-instelling hebt aangepast.";
 "verifier_home_countdown_title" = "Je kunt weer scannen over %@";
 "verifier_menu_risksetting" = "Scan-instelling";

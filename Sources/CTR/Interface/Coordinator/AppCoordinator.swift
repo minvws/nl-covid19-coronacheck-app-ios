@@ -268,10 +268,12 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func appIsDeactivated() {
 		
+		let urlString: String = flavor == .holder ? L.holder_deactivation_url() : L.verifier_deactivation_url()
+
 		navigateToAppUpdate(
-			with: EndOfLifeViewModel(
+			with: AppDeactivatedViewModel(
 				coordinator: self,
-				appStoreUrl: nil
+				appStoreUrl: URL(string: urlString)
 			)
 		)
 	}

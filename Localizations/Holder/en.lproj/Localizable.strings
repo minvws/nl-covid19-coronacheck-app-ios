@@ -590,6 +590,7 @@
 "holder_dashboard_empty_domestic_3Gand1Gaccess_message" = "<p>Visiting a venue in The Netherlands? Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G or 1G access</a>.</p>";
 "holder_dashboard_empty_domestic_only1Gaccess_message" = "<p>In the Netherlands, you only get access with a test certificate anywhere a coronavirus pass is required <a href=\"https://coronacheck.nl/en/accesspolicy/1g-access\">(1G access)</a>.</p>";
 "holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
+"holder_dashboard_international_0G_url" = "https://coronacheck.nl/traveladvices";
 "holder_dashboard_intro_domestic_3Gand1Gaccess" = "<p>Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G or 1G access</a>. Also show your proof of identity at the entrance.</p>";
 "holder_dashboard_intro_domestic_only1Gaccess" = "<p>Show a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/1g-access\">1G access</a> in the Netherlands if a coronavirus pass is required. Also show your proof of identity.</p>";
 "holder_dashboard_intro_domestic_only3Gaccess" = "Visiting a venue within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance.";
@@ -613,6 +614,7 @@
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Complete visitor pass";
 "holder_dashboard_visitorpassincompletebanner_title" = "Your vaccination approval has been added. Complete your visitor pass with your negative test result";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
+"holder_deactivation_url" = "https://coronacheck.nl/app/not-in-use";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Your negative test result was successfully added. Add your vaccination approval to complete your visitor pass.</p><p>To this end, you've received an approval code from the desk that reviewed your vaccination. You’ve received this code on paper.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Complete certificate";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negative test result added";

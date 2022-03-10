@@ -62,7 +62,7 @@ class AppStatusViewModel {
 }
 
 /// View Model when the app is deactivated
-class EndOfLifeViewModel: AppStatusViewModel {
+class AppDeactivatedViewModel: AppStatusViewModel {
 
 	/// Initializer
 	/// - Parameters:
@@ -70,7 +70,7 @@ class EndOfLifeViewModel: AppStatusViewModel {
 	///   - appStoreUrl: the store url
 	override init(coordinator: AppCoordinatorDelegate, appStoreUrl: URL?) {
 
-		super.init(coordinator: coordinator, appStoreUrl: URL(string: "https://coronacheck.nl"))
+		super.init(coordinator: coordinator, appStoreUrl: appStoreUrl)
 
 		self.title = L.endOfLifeTitle()
 		self.message = L.endOfLifeDescription()
