@@ -220,6 +220,28 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
 	}
 	
+	func test_handleLaunchState_withinTTL_updateRequired_endOfLife() throws {
+		
+		// Given
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appDeactivated = true
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "2.0.0"
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
+		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		
+		// When
+		sut.handleLaunchState(.withinTTL)
+		
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(viewControllerSpy.presentCalled) == true
+		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
+	}
+	
 	func test_handleLaunchState_finished_updateRequired() throws {
 
 		// Given
@@ -234,6 +256,28 @@ class AppCoordinatorTests: XCTestCase {
 		// When
 		sut.handleLaunchState(.finished)
 
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(viewControllerSpy.presentCalled) == true
+		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
+	}
+	
+	func test_handleLaunchState_finished_updateRequired_endOfLife() throws {
+		
+		// Given
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appDeactivated = true
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "2.0.0"
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
+		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		
+		// When
+		sut.handleLaunchState(.finished)
+		
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true

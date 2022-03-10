@@ -98,13 +98,13 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
 		let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
 
-		if remoteConfiguration.isDeactivated {
-			
-			self.delegate?.appIsDeactivated()
-		} else if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
-			let url = remoteConfiguration.appStoreURL {
+		if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
+		   let url = remoteConfiguration.appStoreURL {
 			
 			self.delegate?.updateIsRequired(appStoreUrl: url)
+		} else if remoteConfiguration.isDeactivated {
+			
+			self.delegate?.appIsDeactivated()
 		} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
 			let url = remoteConfiguration.appStoreURL {
 			
