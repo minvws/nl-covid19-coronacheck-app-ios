@@ -85,10 +85,10 @@ class HolderCoordinator: SharedCoordinator {
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
 	/// Docs: https://shrtm.nu/oc45
-	private var thirdpartyTicketApp: (name: String, returnURL: URL)?
+	internal var thirdpartyTicketApp: (name: String, returnURL: URL)?
 	
 	/// If set, this should be handled at the first opportunity:
-	private var unhandledUniversalLink: UniversalLink?
+	internal var unhandledUniversalLink: UniversalLink?
 	
 	// MARK: - Setup
 	

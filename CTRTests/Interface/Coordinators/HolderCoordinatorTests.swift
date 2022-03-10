@@ -119,4 +119,232 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.invokedPresent) == false
 	}
+	
+	// MARK: - Universal Links -
+	
+	func test_consume_redeemHolder() {
+		
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
+		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
+		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
+		expect(self.sut.unhandledUniversalLink).to(beNil())
+	}
+	
+	func test_consume_redeemHolder_needsOnboarding() {
+		
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
+		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		
+		expect(consumed) == true
+		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
+	
+	func test_consume_redeemHolder_needsConsent() {
+		
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
+		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
+	
+	func test_consume_redeemHolder_needsUpdating() {
+		
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
+		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
+	
+	func test_consume_redeemVaccinationAssessment() {
+		
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
+		let universalLink = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
+		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
+		expect(self.sut.unhandledUniversalLink).to(beNil())
+	}
+	
+	func test_consume_redeemVaccinationAssessment_needsOnboarding() {
+		
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
+		let universalLink = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
+	
+	func test_consume_redeemVaccinationAssessment_needsConsent() {
+		
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
+		let universalLink = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
+	
+	func test_consume_redeemVaccinationAssessment_needsUpdating() {
+		
+		// Given
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
+		let universalLink = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
+	
+	func test_consume_thirdPartyTicketApp() {
+		
+		// Given
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "coronacheck.nl", name: "CoronaCheck")]
+		let universalLink = UniversalLink.thirdPartyTicketApp(returnURL: URL(string: "https://coronacheck.nl"))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.sut.thirdpartyTicketApp?.name) == "CoronaCheck"
+		expect(self.sut.thirdpartyTicketApp?.returnURL) == URL(string: "https://coronacheck.nl")
+	}
+	
+	func test_consume_thirdPartyTicketApp_domainNotAllowed() {
+		
+		// Given
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "oronacheck.nl", name: "CoronaCheck")]
+		let universalLink = UniversalLink.thirdPartyTicketApp(returnURL: URL(string: "https://apple.com"))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.sut.thirdpartyTicketApp).to(beNil())
+	}
+	
+	func test_consume_tvsAuth() {
+		
+		// Given
+		let universalLink = UniversalLink.tvsAuth(returnURL: URL(string: "https://coronacheck.nl"))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+	}
+	
+	func test_consume_thirdPartyScannerApp() {
+		
+		// Given
+		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://coronacheck.nl"))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == false
+	}
+	
+	
 }

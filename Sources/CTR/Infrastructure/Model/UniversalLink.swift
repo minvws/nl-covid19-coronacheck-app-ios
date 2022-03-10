@@ -9,16 +9,16 @@ import Foundation
 
 enum UniversalLink: Equatable {
 	
-    case redeemHolderToken(requestToken: RequestToken)
+	case redeemHolderToken(requestToken: RequestToken)
 	case redeemVaccinationAssessment(requestToken: RequestToken)
 	case thirdPartyTicketApp(returnURL: URL?)
 	case tvsAuth(returnURL: URL?)
 	case thirdPartyScannerApp(returnURL: URL?)
-
+	
 	init?(userActivity: NSUserActivity, appFlavor: AppFlavor = .flavor, isLunhCheckEnabled: Bool) {
-
-        // Apple's docs specify to only handle universal links "with the activityType set to NSUserActivityTypeBrowsingWeb"
-        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+		
+		// Apple's docs specify to only handle universal links "with the activityType set to NSUserActivityTypeBrowsingWeb"
+		guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
 			  let url = userActivity.webpageURL
 		else { return nil }
 		
