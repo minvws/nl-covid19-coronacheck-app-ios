@@ -154,7 +154,7 @@ class ListRemoteEventsViewModel: Logging {
 
 			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: { [weak self] remoteResponse in
 				
-				return self?.responseEvaluator(
+				return self?.areTheOriginsAsExpected(
 					remoteEvents: remoteEvents,
 					remoteResponse: remoteResponse,
 					expandedEventMode: expandedEventMode) ?? true
@@ -178,7 +178,7 @@ class ListRemoteEventsViewModel: Logging {
 	///   - expandedEventMode: the event mode
 	/// - Returns: True if we received the expected origins for the event mode.
 	/// If we do not get the expected origins, we show the mismatch state (error 058)
-	private func responseEvaluator(remoteEvents: [RemoteEvent], remoteResponse: RemoteGreenCards.Response, expandedEventMode: EventMode ) -> Bool {
+	private func areTheOriginsAsExpected(remoteEvents: [RemoteEvent], remoteResponse: RemoteGreenCards.Response, expandedEventMode: EventMode ) -> Bool {
 		// Check if we have any origin for the event mode
 		// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
 		// > 0 -> Success
@@ -192,7 +192,7 @@ class ListRemoteEventsViewModel: Logging {
 				// No special states for the paper flow
 				return true
 			case .vaccinationAndPositiveTest:
-				return inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: .vaccination) || inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: .recovery)
+				return areThereOrigins(remoteResponse: remoteResponse, forEventMode: .vaccination) || areThereOrigins(remoteResponse: remoteResponse, forEventMode: .recovery)
 			case .recovery:
 				if let recoveryExpirationDays = self.remoteConfigManager.storedConfiguration.recoveryExpirationDays,
 				   let event = remoteEvents.first?.wrapper.events?.first, event.hasPositiveTest,
@@ -202,16 +202,16 @@ class ListRemoteEventsViewModel: Logging {
 					// End State 7
 					return true
 				}
-				return inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
+				return areThereOrigins(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
 			case .test, .vaccination:
-				return inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
+				return areThereOrigins(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
 			case .vaccinationassessment:
 				// no origins to check.
 				return true
 		}
 	}
 	
-	private func inspectOriginsForResponseEvaluator(remoteResponse: RemoteGreenCards.Response, forEventMode: EventMode ) -> Bool {
+	private func areThereOrigins(remoteResponse: RemoteGreenCards.Response, forEventMode: EventMode ) -> Bool {
 		
 		if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
 			return remoteResponse.hasInternationalOrigins(ofType: forEventMode.rawValue)
