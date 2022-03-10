@@ -154,7 +154,10 @@ class ListRemoteEventsViewModel: Logging {
 
 			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: { [weak self] remoteResponse in
 				
-				return self?.responseEvaluator(remoteResponse: remoteResponse, expandedEventMode: expandedEventMode) ?? true
+				return self?.responseEvaluator(
+					remoteEvents: remoteEvents,
+					remoteResponse: remoteResponse,
+					expandedEventMode: expandedEventMode) ?? true
 				
 			}, completion: { result in
 				self.progressIndicationCounter.decrement()
@@ -168,7 +171,14 @@ class ListRemoteEventsViewModel: Logging {
 		}
 	}
 	
-	private func responseEvaluator(remoteResponse: RemoteGreenCards.Response, expandedEventMode: EventMode ) -> Bool {
+	/// The response evaluator
+	/// - Parameters:
+	///   - remoteEvents: the remote events
+	///   - remoteResponse: the response from the signer
+	///   - expandedEventMode: the event mode
+	/// - Returns: True if we received the expected origins for the event mode.
+	/// If we do not get the expected origins, we show the mismatch state (error 058)
+	private func responseEvaluator(remoteEvents: [RemoteEvent], remoteResponse: RemoteGreenCards.Response, expandedEventMode: EventMode ) -> Bool {
 		// Check if we have any origin for the event mode
 		// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
 		// > 0 -> Success
@@ -179,14 +189,24 @@ class ListRemoteEventsViewModel: Logging {
 		
 		switch expandedEventMode {
 			case .paperflow:
+				// No special states for the paper flow
 				return true
 			case .vaccinationAndPositiveTest:
 				return inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: .vaccination) || inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: .recovery)
 			case .recovery:
-				return true
+				if let recoveryExpirationDays = self.remoteConfigManager.storedConfiguration.recoveryExpirationDays,
+				   let event = remoteEvents.first?.wrapper.events?.first, event.hasPositiveTest,
+				   let sampleDateString = event.positiveTest?.sampleDateString,
+				   let date = Formatter.getDateFrom(dateString8601: sampleDateString),
+				   date.addingTimeInterval(TimeInterval(recoveryExpirationDays * 24 * 60 * 60)) < Current.now() {
+					// End State 7
+					return true
+				}
+				return inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
 			case .test, .vaccination:
 				return inspectOriginsForResponseEvaluator(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
 			case .vaccinationassessment:
+				// no origins to check.
 				return true
 		}
 	}
@@ -459,7 +479,7 @@ class ListRemoteEventsViewModel: Logging {
 					self.viewState = self.recoveryFlowPositiveTestTooOld()
 				} else {
 					// End State 3
-					self.viewState = self.originMismatchState(flow: .recovery)
+					// Handled by response evaluator
 				}
 			}
 		)
