@@ -35,6 +35,11 @@ extension BaseTest {
 		returnToCertificateOverview()
 	}
 	
+	func assertPositiveTestResultNotValidAnymore() {
+		app.textExists("Positieve testuitslag niet meer geldig")
+		returnToCertificateOverview()
+	}
+	
 	func assertCertificateIsOnlyValidInternationally() {
 		app.textExists("Er is alleen een internationaal bewijs gemaakt")
 		returnToCertificateOverview()
@@ -57,14 +62,14 @@ extension BaseTest {
 	
 	func assertRetrievedCertificate(for person: TestPerson) {
 		app.textExists("Kloppen de gegevens?")
-		app.containsText("Naam: " + person.name!)
-		app.containsText("Geboortedatum: " + person.birthdate)
+		app.containsText("Naam: " + person.name)
+		app.containsText("Geboortedatum: " + formattedDate(of: person.birthDate))
 	}
 	
 	func assertRetriedCertificateDetails(for person: TestPerson) {
 		app.tapButton("Details")
-		app.textExists("Naam: " + person.name!)
-		app.textExists("Geboortedatum: " + person.birthdate)
+		app.textExists("Naam: " + person.name)
+		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
 		app.tapButton("CloseButton")
 	}
 	
@@ -84,11 +89,11 @@ extension BaseTest {
 			case .only3G:
 				app.containsText("Op dit moment geeft een Nederlands bewijs 3G-toegang.")
 			case .only1G:
-				app.linkExists("Wil je naar een plek met 1G-toegang? Dan heb je een testbewijs nodig.")
-				app.textExists("Vanaf nu heb je een testbewijs nodig voor 1G toegang")
+				app.linkExists("In Nederland krijg je alleen toegang met een testbewijs op plekken waar om een coronabewijs wordt gevraagd (1G-toegang).")
+				app.textExists("Je kunt een bewijs voor 1G-toegang toevoegen wanneer je negatief getest bent")
 			case .bothModes:
-				app.linkExists("Bekijk vooraf of de locatie die je bezoekt een bewijs voor 3G- of 1G toegang vraagt.")
-				app.textExists("Vanaf nu zijn er 2 aparte QR-codes voor 3G- en 1G-toegang")
+				app.linkExists("Bezoek je een plek in Nederland? Check vooraf of je een bewijs voor 3G- of 1G toegang nodig hebt.")
+				app.textExists("De Nederlandse toegangsregels zijn veranderd. Er zijn nu aparte bewijzen voor plekken die 3G-toegang en 1G-toegang geven.")
 		}
 	}
 	
@@ -98,6 +103,7 @@ extension BaseTest {
 	}
 	
 	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffset: Int? = nil, validUntilOffset: Int? = nil, validUntilDate: String? = nil) {
+		
 		tapOnTheNetherlandsTab()
 		card3G().containsText(CertificateType.vaccination.rawValue)
 		card3G().containsText(amountOfDoses(for: doses))
@@ -108,7 +114,7 @@ extension BaseTest {
 			card3G().containsText("geldig vanaf " + formattedOffsetDate(with: offset))
 		}
 		if let date = validUntilDate {
-			card3G().containsText("tot " + formattedDate(with: date))
+			card3G().containsText("tot " + formattedDate(of: date))
 		}
 		card3G().containsText(is3GEnabled() ? "Bekijk QR" : "Dit bewijs wordt nu niet gebruikt in Nederland")
 	}
@@ -189,5 +195,59 @@ extension BaseTest {
 			app.containsText("tot " + formattedOffsetDate(with: offset))
 		}
 		app.containsText("Wordt automatisch geldig")
+	}
+	
+	func assertInternationalVaccinationQRDetails(for person: TestPerson, dateOffset: Int = -30) {
+		card(of: .vaccination).tapButton(person.doseIntl.count > 1 ? "Bekijk QR-codes" : "Bekijk QR")
+		for (index, dose) in person.doseIntl.reversed().enumerated() {
+			app.textExists("Dosis " + dose)
+			
+			openQRDetails(for: person)
+			app.textExists("Over je dosis " + dose)
+			app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: "COVID-19")
+			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: spreadDose(dose))
+			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: formattedOffsetDate(with: dateOffset - (30 * index), short: true))
+			closeQRDetails()
+			
+			if index != person.doseIntl.indices.last {
+				app.tapButton("Vorige QR-code")
+			}
+		}
+		app.tapButton("BackButton")
+	}
+	
+	func assertInternationalRecoveryQRDetails(for person: TestPerson) {
+		card(of: .recovery).tapButton("Bekijk QR")
+		app.textExists("Internationale QR")
+		
+		openQRDetails(for: person)
+		app.textExists("Over mijn internationale QR-code")
+		app.labelValuePairExist(label: "Ziekte waarvan hersteld / Disease recovered from:", value: "COVID-19")
+		app.labelValuePairExist(label: "Geldig vanaf / Valid from*:", value: formattedOffsetDate(with: person.recFrom, short: true))
+		app.labelValuePairExist(label: "Geldig tot / Valid to*:", value: formattedOffsetDate(with: person.recUntil, short: true))
+		closeQRDetails()
+		app.tapButton("BackButton")
+	}
+	
+	func assertInternationalTestQRDetails(for person: TestPerson, testType: TestCertificateType) {
+		card(of: .test).tapButton("Bekijk QR")
+		app.textExists("Internationale QR")
+		
+		openQRDetails(for: person)
+		app.textExists("Over mijn internationale QR-code")
+		app.labelValuePairExist(label: "Testuitslag / Test result:", value: "negatief (geen corona)")
+		app.labelValuePairExist(label: "Type test / Type of test:", value: testType.rawValue)
+		closeQRDetails()
+		app.tapButton("BackButton")
+	}
+	
+	private func openQRDetails(for person: TestPerson) {
+		app.tapButton("InformationButton")
+		app.labelValuePairExist(label: "Naam / Name: ", value: person.name)
+		app.labelValuePairExist(label: "Geboortedatum / Date of birth*:", value: formattedDate(of: person.birthDate, short: true))
+	}
+	
+	private func closeQRDetails() {
+		app.tapButton("Sluiten")
 	}
 }

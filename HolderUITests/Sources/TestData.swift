@@ -106,32 +106,32 @@ final class TestData {
 	static let vacP1M1SameDate = TestPerson(bsn: "999991164", doseIntl: ["1/2"]) // 1 pfizer + 1 moderna same date
 	static let vacP2EmptyFirstName = TestPerson(bsn: "999991176", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16, vacUntil: 240) // 2 pfizer empty first name
 	static let vacP2EmptyLastName = TestPerson(bsn: "999991188", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16, vacUntil: 240) // 2 pfizer empty last name
-	static let vacP2BirthdateXXXX = TestPerson(bsn: "999991206") // 2 pfizer birthdate XX-XX
-	static let vacP2BirthdateXX01 = TestPerson(bsn: "999993008", dose: 2, vacUntil: 240) // 2 pfizer birthdate XX-01
-	static let vacP2BirthdateJAN01 = TestPerson(bsn: "999991231") // 2 pfizer birthdate JAN-01
-	static let vacP2Birthdate0101 = TestPerson(bsn: "999991243") // 2 pfizer birthdate 0101
+	static let vacP2BirthdateXXXX = TestPerson(bsn: "999991206", birthDate: "1960-XX-XX") // 2 pfizer birthdate XX-XX
+	static let vacP2BirthdateXX01 = TestPerson(bsn: "999993008", birthDate: "1960-XX-01", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16, vacUntil: 240) // 2 pfizer birthdate XX-01
+	static let vacP2BirthdateJAN01 = TestPerson(bsn: "999991231", birthDate: "1960-JAN-01") // 2 pfizer birthdate JAN-01
+	static let vacP2Birthdate0101 = TestPerson(bsn: "999991243", birthDate: "19600101") // 2 pfizer birthdate 0101
 	
 	// Vaccinations - event matching
-	static let vacP2DifferentSetupSituation = TestPerson(bsn: "999993562", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 210, vacOffset: -60) // 2 pfizer setup situation
-	static let vacJ1DifferentFirstNameReplaces = TestPerson(bsn: "999991255", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different first name, replaces setup
-	static let vacJ1DifferentLastNameReplaces = TestPerson(bsn: "999991267", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different last name, replaces setup
-	static let vacJ1DifferentFullNameReplaces = TestPerson(bsn: "999992156", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name, replaces setup
-	static let vacJ1DifferentBirthDayCanReplace = TestPerson(bsn: "999991279", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth day, can replace setup
-	static let vacJ1DifferentBirthMonthCanReplace = TestPerson(bsn: "999993021", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth month, can replace setup
-	static let vacJ1DifferentBirthYearReplaces = TestPerson(bsn: "999991292", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth year, replaces setup
-	static let vacJ1DifferentEverythingReplaces = TestPerson(bsn: "999991723", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name and birthdate, replaces setup
+	static let vacP2DifferentSetupSituation = TestPerson(bsn: "999993562", name: "van Geer, Corrie", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 210, vacOffset: -60) // 2 pfizer setup situation
+	static let vacJ1DifferentFirstNameReplaces = TestPerson(bsn: "999991255", name: "van Geer, Pieter", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different first name, replaces setup
+	static let vacJ1DifferentLastNameReplaces = TestPerson(bsn: "999991267", name: "de Heuvel, Corrie", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different last name, replaces setup
+	static let vacJ1DifferentFullNameReplaces = TestPerson(bsn: "999992156", name: "de Heuvel, Pieter", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name, replaces setup
+	static let vacJ1DifferentBirthDayCanReplace = TestPerson(bsn: "999991279", birthDate: "1960-01-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth day, can replace setup
+	static let vacJ1DifferentBirthMonthCanReplace = TestPerson(bsn: "999993021", birthDate: "1960-02-01", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth month, can replace setup
+	static let vacJ1DifferentBirthYearReplaces = TestPerson(bsn: "999991292", birthDate: "1970-01-01", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth year, replaces setup
+	static let vacJ1DifferentEverythingReplaces = TestPerson(bsn: "999991723", name: "de Heuvel, Pieter", birthDate: "1970-02-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name and birthdate, replaces setup
 	
 	// Vaccinations - around 18
-	static let around18Is17y8mWithP2LastDose1M = TestPerson(bsn: "999993422", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16) // 2 pfizer, 4 months before 18, last dose 1 month ago
-	static let around18Is17y10mWithP2LastDose1M = TestPerson(bsn: "999993434", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16, vacUntil: 240) // 2 pfizer, 2 months before 18, last dose 1 month ago
-	static let around18Is17y10mWithP2LastDose9M = TestPerson(bsn: "999993446", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -256, vacUntilDate: "2022-04-01", vacOffset: -270) // 2 pfizer, 2 months before 18, last dose 9 months ago
-	static let around18Is18y2mWithP2LastDose3M = TestPerson(bsn: "999992417", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -76, vacUntil: 180, vacOffset: -90) // 2 pfizer, 2 months after 18, last dose 3 months ago
-	static let around18Is18y2mWithP2LastDose9M = TestPerson(bsn: "999993173", dose: 2, doseIntl: ["1/2", "2/2"], vacOffset: -270) // 2 pfizer, 2 months after 18, last dose 9 months ago
-	static let around18Is17y8mWithJ1LastDose1M = TestPerson(bsn: "999993458", dose: 1, doseIntl: ["1/1"], vacFrom: -2) // 1 janssen, 4 months before 18, last dose 1 month ago
-	static let around18Is17y10mWithJ1LastDose1M = TestPerson(bsn: "999993471", dose: 1, doseIntl: ["1/1"], vacFrom: -2, vacUntil: 240) // 1 janssen, 2 months before 18, last dose 1 month ago
-	static let around18Is17y10mWithJ1LastDose9M = TestPerson(bsn: "999993483", dose: 1, doseIntl: ["1/1"], vacFrom: -242, vacUntilDate: "2022-04-01", vacOffset: -270) // 1 janssen, 2 months before 18, last dose 9 months ago
-	static let around18Is18y2mWithJ1LastDose3M = TestPerson(bsn: "999993185", dose: 1, doseIntl: ["1/1"], vacFrom: -62, vacUntil: 180, vacOffset: -90) // 1 janssen, 2 months after 18, last dose 3 months ago
-	static let around18Is18y2mWithJ1LastDose9M = TestPerson(bsn: "999993197", dose: 1, doseIntl: ["1/1"], vacOffset: -270) // 1 janssen, 2 months after 18, last dose 9 months ago
+	static let around18Is17y8mWithP2LastDose1M = TestPerson(bsn: "999993422", birthDate: "2004-07-01", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16) // 2 pfizer, 4 months before 18, last dose 1 month ago
+	static let around18Is17y10mWithP2LastDose1M = TestPerson(bsn: "999993434", birthDate: "2004-05-01", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16, vacUntil: 240) // 2 pfizer, 2 months before 18, last dose 1 month ago
+	static let around18Is17y10mWithP2LastDose9M = TestPerson(bsn: "999993446", birthDate: "2004-05-01", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -256, vacUntilDate: "2022-05-01", vacOffset: -270) // 2 pfizer, 2 months before 18, last dose 9 months ago
+	static let around18Is18y2mWithP2LastDose3M = TestPerson(bsn: "999992417", birthDate: "2004-01-01", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -76, vacUntil: 180, vacOffset: -90) // 2 pfizer, 2 months after 18, last dose 3 months ago
+	static let around18Is18y2mWithP2LastDose9M = TestPerson(bsn: "999993173", birthDate: "2004-01-01", dose: 2, doseIntl: ["1/2", "2/2"], vacOffset: -270) // 2 pfizer, 2 months after 18, last dose 9 months ago
+	static let around18Is17y8mWithJ1LastDose1M = TestPerson(bsn: "999993458", birthDate: "2004-07-01", dose: 1, doseIntl: ["1/1"], vacFrom: -2) // 1 janssen, 4 months before 18, last dose 1 month ago
+	static let around18Is17y10mWithJ1LastDose1M = TestPerson(bsn: "999993471", birthDate: "2004-05-01", dose: 1, doseIntl: ["1/1"], vacFrom: -2, vacUntil: 240) // 1 janssen, 2 months before 18, last dose 1 month ago
+	static let around18Is17y10mWithJ1LastDose9M = TestPerson(bsn: "999993483", birthDate: "2004-05-01", dose: 1, doseIntl: ["1/1"], vacFrom: -242, vacUntilDate: "2022-05-01", vacOffset: -270) // 1 janssen, 2 months before 18, last dose 9 months ago
+	static let around18Is18y2mWithJ1LastDose3M = TestPerson(bsn: "999993185", birthDate: "2004-01-01", dose: 1, doseIntl: ["1/1"], vacFrom: -62, vacUntil: 180, vacOffset: -90) // 1 janssen, 2 months after 18, last dose 3 months ago
+	static let around18Is18y2mWithJ1LastDose9M = TestPerson(bsn: "999993197", birthDate: "2004-01-01", dose: 1, doseIntl: ["1/1"], vacOffset: -270) // 1 janssen, 2 months after 18, last dose 9 months ago
 	
 	// Vaccination - Null or empty information
 	static let vacP1NullPersonalStatement = TestPerson(bsn: "999992818", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + personal statement = null
@@ -146,7 +146,7 @@ final class TestData {
 	static let vacP1EmptyBirthdate = TestPerson(bsn: "999992910", doseIntl: ["1/2"], vacOffset: 0) // 1 pfizer + birthdate = empty
 	
 	// Positive tests (and combinations)
-	static let posPcr = TestPerson(bsn: "999993033", recUntil: 150) // Positive PCR (NAAT)
+	static let posPcr = TestPerson(bsn: "999993033", recFrom: -19, recUntil: 150) // Positive PCR (NAAT)
 	static let posPcrP1 = TestPerson(bsn: "999991346", doseIntl: ["1/2"], vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 1 pfizer
 	static let posPcrP2 = TestPerson(bsn: "999991358", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -60, vacUntil: 210, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 2 pfizer
 	static let posPcrP3 = TestPerson(bsn: "999991383", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacFrom: -60, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 3 pfizer
@@ -179,6 +179,7 @@ final class TestData {
 	static let posPcrBeforeP2 = TestPerson(bsn: "999993203", dose: 2, doseIntl: ["1/1", "2/1"], vacFrom: -30, recUntil: 90) // Positive PCR (NAAT) before 2 pfizer
 	static let posPcrBeforeJ1 = TestPerson(bsn: "999993215", dose: 1, doseIntl: ["1/1"], vacFrom: -30, vacUntil: 240, recUntil: 120) // Positive PCR (NAAT) before 1 janssen
 	static let posPcrBeforeM2 = TestPerson(bsn: "999993227", dose: 2, doseIntl: ["1/1", "2/1"], vacFrom: -30, recUntil: 90) // Positive PCR (NAAT) before 2 moderna
+	static let posRatBeforeP1 = TestPerson(bsn: "999993045", dose: 1, doseIntl: ["1/1"], vacFrom: -30, vacUntil: 240, recUntil: 120) // Positive Sneltest (RAT) before 1 pfizer
 	
 	// Positive tests - older than a year
 	static let posOldPcr = TestPerson(bsn: "999991851") // Positive PCR (NAAT) old
@@ -204,6 +205,8 @@ final class TestData {
 	static let negRatP1 = TestPerson(bsn: "999992168", doseIntl: ["1/2"], vacOffset: -60) // Negative Sneltest (RAT) + 1 pfizer
 	static let negAgob = TestPerson(bsn: "999992041") // Negative AGOB
 	static let negAgobP1 = TestPerson(bsn: "999992429", doseIntl: ["1/2"], vacOffset: -60) // Negative AGOB + 1 pfizer
+	static let negPcrSupervisedSelftest = TestPerson(bsn: "999993057") // Negative PCR (NAAT) supervised selftest
+	static let negRatSupervisedSelftest = TestPerson(bsn: "999993239") // Negative Sneltest (RAT) supervised selftest
 	
 	// Negative tests - 30 days old
 	static let negOldPcr = TestPerson(bsn: "999992545") // Negative PCR (NAAT) old

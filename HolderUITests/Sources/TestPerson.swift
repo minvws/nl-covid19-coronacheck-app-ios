@@ -7,8 +7,8 @@
 
 struct TestPerson {
 	let bsn: String
-	let name: String?
-	let birthdate: String
+	let name: String
+	let birthDate: String
 	let dose: Int
 	let doseIntl: [String]
 	let vacFrom: Int
@@ -20,12 +20,10 @@ struct TestPerson {
 	let testFrom: Int
 	let testUntil: Int
 	
-	let baseTest = BaseTest()
-	
 	init(
 		bsn: String,
-		name: String? = nil,
-		birthdate: String? = nil,
+		name: String = "van Geer, Corrie",
+		birthDate: String = "1960-01-01",
 		dose: Int = 0,
 		doseIntl: [String] = [],
 		vacFrom: Int = 0,
@@ -38,7 +36,7 @@ struct TestPerson {
 		testUntil: Int = 0) {
 			self.bsn = bsn
 			self.name = name
-			self.birthdate = birthdate ?? baseTest.formattedDate(with: "1960-01-01")
+			self.birthDate = birthDate
 			self.dose = dose
 			self.doseIntl = doseIntl
 			self.vacFrom = vacFrom

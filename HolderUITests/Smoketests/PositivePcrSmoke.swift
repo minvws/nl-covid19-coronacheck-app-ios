@@ -14,6 +14,7 @@ class PositivePcrSmoke: BaseTest {
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertInternationalRecoveryQRDetails(for: person)
 	}
 	
 	func test_posPcrP1() {
@@ -28,7 +29,9 @@ class PositivePcrSmoke: BaseTest {
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertInternationalVaccinationQRDetails(for: person)
 		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertInternationalRecoveryQRDetails(for: person)
 	}
 	
 	func test_posPcrP2() {
@@ -100,5 +103,4 @@ class PositivePcrSmoke: BaseTest {
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
 		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
 	}
-	
 }
