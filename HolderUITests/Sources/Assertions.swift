@@ -70,7 +70,7 @@ extension BaseTest {
 	
 	func assertRetriedCertificateDetails(for person: TestPerson) {
 		app.tapButton("Details")
-		app.textExists("Naam: " + person.name)
+		app.containsText("Naam: " + person.name)
 		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
 		app.tapButton("CloseButton")
 	}
