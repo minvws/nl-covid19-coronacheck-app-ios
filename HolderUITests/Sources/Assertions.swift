@@ -156,7 +156,11 @@ extension BaseTest {
 	
 	// MARK: International
 	
-	func tapOnInternationalTab() {
+	private func tapOnInternationalTab() {
+		guard disclosureMode != .mode0G else {
+			app.textExists("Mijn bewijzen")
+			return
+		}
 		app.tapButton("Internationaal")
 	}
 	
@@ -190,6 +194,7 @@ extension BaseTest {
 	}
 	
 	func assertCertificateIsNotValidInternationally(ofType certificateType: CertificateType) {
+		guard disclosureMode != .mode0G else { return }
 		tapOnInternationalTab()
 		app.textExists("Je \(certificateType.rawValue.lowercased()) is niet internationaal geldig. Je hebt wel een Nederlands bewijs.")
 	}
