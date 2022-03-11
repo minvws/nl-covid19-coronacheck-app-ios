@@ -12,7 +12,7 @@ class PositiveOthersSmoke: BaseTest {
 	func test_posBreathalyzer() {
 		addRecoveryCertificate(for: TestData.posBreathalyzer)
 		addRetrievedCertificateToApp()
-		assertPositiveTestResultNotValidAnymore()
+		assertNoCertificateCouldBeCreated()
 	}
 	
 	// MARK: Positive tests - AGOB

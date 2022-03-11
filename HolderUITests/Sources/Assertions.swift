@@ -200,7 +200,7 @@ extension BaseTest {
 	}
 	
 	func assertInternationalCertificateIsNotYetValid(ofType certificateType: CertificateType, validFromOffset: Int, validUntilOffset: Int? = nil) {
-		tapOnTheNetherlandsTab()
+		tapOnInternationalTab()
 		app.containsText(certificateType.rawValue)
 		app.containsText("Geldig vanaf " + formattedOffsetDate(with: validFromOffset, withYear: false))
 		if let offset = validUntilOffset {
