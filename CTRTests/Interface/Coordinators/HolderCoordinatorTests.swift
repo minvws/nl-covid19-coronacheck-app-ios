@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable type_body_length
+// swiftlint:disable file_length
 
 import XCTest
 @testable import CTR
@@ -359,7 +360,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateToAddPaperProof() {
@@ -385,7 +386,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is VisitorPassStartViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateToAboutThisApp() {
@@ -398,7 +399,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is AboutThisAppViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateBackToStart() {
@@ -448,7 +449,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is MenuViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 
 	func test_userWishesToMakeQRFromRemoteEvent() {
@@ -474,7 +475,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesToCreateAVisitorPass() {
@@ -487,7 +488,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesToChooseTestLocation_GGDenabled() {
@@ -501,7 +502,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ChooseTestLocationViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesToChooseTestLocation_GGDdisabled() {
@@ -515,7 +516,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userHasNotBeenTested() throws {
@@ -586,7 +587,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userDidScanRequestToken() {
@@ -605,7 +606,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesMoreInfoAboutUnavailableQR() throws {
@@ -635,7 +636,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is VisitorPassCompleteCertificateViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() throws {
@@ -699,7 +700,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is IncompleteDutchVaccinationViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesMoreInfoAboutExpiredDomesticVaccination() throws {
@@ -728,5 +729,189 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.invokedPresent) == true
+	}
+	
+	func test_userWishesToViewQRs_differentContext() throws {
+		
+		// Given
+		let dataStoreManager = DataStoreManager(.inMemory)
+		var greenCard: GreenCard?
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			if let wallet = WalletModel.createTestWallet(managedContext: context) {
+				greenCard = GreenCardModel.create(
+					type: .domestic,
+					wallet: wallet,
+					managedContext: context
+				)
+			}
+		}
+		let greenCardObjectID = try XCTUnwrap(greenCard?.objectID)
+		
+		// When
+		sut.userWishesToViewQRs(greenCardObjectIDs: [greenCardObjectID], disclosurePolicy: nil)
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == true
+	}
+	
+	func test_userWishesToViewQRs_sameContext() throws {
+		
+		// Given
+		var greenCard: GreenCard?
+		let context = Current.dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			if let wallet = WalletModel.createTestWallet(managedContext: context) {
+				greenCard = GreenCardModel.create(
+					type: .domestic,
+					wallet: wallet,
+					managedContext: context
+				)
+			}
+		}
+		let greenCardObjectID = try XCTUnwrap(greenCard?.objectID)
+		
+		// When
+		sut.userWishesToViewQRs(greenCardObjectIDs: [greenCardObjectID], disclosurePolicy: nil)
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == false
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ShowQRViewController) == true
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
+	func test_displayError() throws {
+		
+		// Given
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle()
+		)
+		
+		// When
+		sut.displayError(content: content, backAction: {})
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+	}
+	
+	func test_userWishesMoreInfoAboutNoTestToken() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutNoTestToken()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Heb je geen ophaalcode?"
+	}
+
+	func test_userWishesMoreInfoAboutNoVisitorPassToken() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutNoVisitorPassToken()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Heb je geen beoordelingscode?"
+	}
+	
+	// MARK: - EventFlowDelegate -
+	
+	func test_eventFlowDidComplete() throws {
+		
+		// Given
+		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
+		
+		// When
+		sut.eventFlowDidComplete()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
+	}
+	
+	func test_eventFlowDidCompleteButVisitorPassNeedsCompletion() {
+		
+		// Given
+		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
+		
+		// When
+		sut.eventFlowDidCompleteButVisitorPassNeedsCompletion()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+
+	func test_eventFlowDidCancel() {
+		
+		// Given
+		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
+		
+		// When
+		sut.eventFlowDidCancel()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.invokedPopViewController) == true
+	}
+	
+	func test_eventFlowDidCancelFromBackSwipe() {
+		
+		// Given
+		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
+		
+		// When
+		sut.eventFlowDidCancelFromBackSwipe()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
+	// MARK: - PaperProofFlowDelegate -
+	
+	func test_addPaperProofFlowDidFinish() throws {
+		
+		// Given
+		sut.addChildCoordinator(PaperProofCoordinator(delegate: sut))
+		
+		// When
+		sut.addPaperProofFlowDidFinish()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
+	}
+	
+	func test_switchToAddRegularProof() throws {
+		
+		// Given
+		sut.addChildCoordinator(PaperProofCoordinator(delegate: sut))
+		
+		// When
+		sut.switchToAddRegularProof()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
 	}
 }
