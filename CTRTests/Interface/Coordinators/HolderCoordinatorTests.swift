@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -534,5 +535,198 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(viewModel.title) == L.holderNotestTitle()
 		expect(viewModel.message) == L.holderNotestBody()
 		expect(viewModel.buttonTitle) == L.holderNotestButtonTitle()
+	}
+	
+	func test_userWishesToCreateANegativeTestQRFromGGD() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToCreateANegativeTestQRFromGGD()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(1))
+	}
+	
+	func test_userWishesToCreateAVaccinationQR() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToCreateAVaccinationQR()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(1))
+	}
+
+	func test_userWishesToCreateARecoveryQR() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToCreateARecoveryQR()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(1))
+	}
+	
+	func test_userWishesToCreateAQR() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToCreateAQR()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_userDidScanRequestToken() {
+		
+		// Given
+		
+		// When
+		sut.userDidScanRequestToken(
+			requestToken: RequestToken(
+				token: "STXT2VF3389TJ2",
+				protocolVersion: "3.0",
+				providerIdentifier: "XXX"
+			)
+		)
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_userWishesMoreInfoAboutUnavailableQR() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutUnavailableQR(originType: .vaccination, currentRegion: .domestic, availableRegion: .europeanUnion)
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Over je vaccinatiebewijs"
+	}
+	
+	func test_userWishesMoreInfoAboutCompletingVaccinationAssessment() {
+		
+		// Given
+		
+		// When
+		sut.userWishesMoreInfoAboutCompletingVaccinationAssessment()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is VisitorPassCompleteCertificateViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Over je bezoekersbewijs"
+	}
+
+	func test_userWishesMoreInfoAboutClockDeviation() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutClockDeviation()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Controleer de tijd van je telefoon"
+	}
+	
+	func test_userWishesMoreInfoAboutOutdatedConfig() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutOutdatedConfig(validUntil: "test")
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Maak verbinding met het internet"
+	}
+	
+	func test_userWishesMoreInfoAboutIncompleteDutchVaccination() {
+		
+		// Given
+		
+		// When
+		sut.userWishesMoreInfoAboutIncompleteDutchVaccination()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is IncompleteDutchVaccinationViewController) == true
+		expect(self.sut.childCoordinators).to(haveCount(0))
+	}
+	
+	func test_userWishesMoreInfoAboutExpiredDomesticVaccination() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutExpiredDomesticVaccination()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Verlopen vaccinatiebewijs"
+	}
+	
+	func test_userWishesToViewQRs() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToViewQRs(greenCardObjectIDs: [], disclosurePolicy: nil)
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == true
 	}
 }
