@@ -46,7 +46,7 @@ class VerifierCoordinator: SharedCoordinator {
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
 	
-	private var thirdPartyScannerApp: (name: String, returnURL: URL)?
+	internal var thirdPartyScannerApp: (name: String, returnURL: URL)?
 	
 	private var userSettings: UserSettingsProtocol = UserSettings()
 	

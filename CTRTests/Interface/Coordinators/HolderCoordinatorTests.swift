@@ -313,7 +313,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_consume_thirdPartyTicketApp_domainNotAllowed() {
 		
 		// Given
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "oronacheck.nl", name: "CoronaCheck")]
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "coronacheck.nl", name: "CoronaCheck")]
 		let universalLink = UniversalLink.thirdPartyTicketApp(returnURL: URL(string: "https://apple.com"))
 		
 		// When
