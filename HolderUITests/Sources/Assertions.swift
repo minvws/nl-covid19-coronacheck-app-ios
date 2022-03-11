@@ -36,22 +36,19 @@ extension BaseTest {
 	}
 	
 	func assertPositiveTestResultNotValidAnymore() {
+		guard disclosureMode != .mode0G else { return }
 		app.textExists("Positieve testuitslag niet meer geldig")
 		returnToCertificateOverview()
 	}
 	
 	func assertCertificateIsOnlyValidInternationally() {
+		guard disclosureMode != .mode0G else { return }
 		app.textExists("Er is alleen een internationaal bewijs gemaakt")
 		returnToCertificateOverview()
 	}
 	
 	func assertNoTestresultIsAvailable() {
 		app.textExists("Geen testuitslag beschikbaar")
-		returnToCertificateOverview()
-	}
-	
-	func assertPositiveTestResultIsNotValidAnymore() {
-		app.textExists("Positieve testuitslag niet meer geldig")
 		returnToCertificateOverview()
 	}
 	
@@ -73,37 +70,44 @@ extension BaseTest {
 		app.tapButton("CloseButton")
 	}
 	
-	// MARK: The Netherlands
-	
-	func tapOnTheNetherlandsTab() {
-		app.tapButton("Nederland")
-	}
-	
-	func assertNoDutchCertificate() {
-		tapOnTheNetherlandsTab()
-		app.textExists("Hier komt jouw Nederlandse bewijs")
-	}
-	
 	func assertDisclosureMessages() {
 		switch disclosureMode {
-			case .only3G:
+			case .mode0G:
+				app.textExists("In Nederland wordt het coronabewijs niet meer gebruikt. Daarom staan er alleen nog internationale bewijzen in de app.")
+			case .mode3G:
+				tapOnTheNetherlandsTab()
 				app.containsText("Op dit moment geeft een Nederlands bewijs 3G-toegang.")
-			case .only1G:
+			case .mode1G:
+				tapOnTheNetherlandsTab()
 				app.linkExists("In Nederland krijg je alleen toegang met een testbewijs op plekken waar om een coronabewijs wordt gevraagd (1G-toegang).")
 				app.textExists("Je kunt een bewijs voor 1G-toegang toevoegen wanneer je negatief getest bent")
-			case .bothModes:
+			case .mode1GWith3G:
+				tapOnTheNetherlandsTab()
 				app.linkExists("Bezoek je een plek in Nederland? Check vooraf of je een bewijs voor 3G- of 1G toegang nodig hebt.")
 				app.textExists("De Nederlandse toegangsregels zijn veranderd. Er zijn nu aparte bewijzen voor plekken die 3G-toegang en 1G-toegang geven.")
 		}
 	}
 	
+	// MARK: The Netherlands
+	
+	private func tapOnTheNetherlandsTab() {
+		app.tapButton("Nederland")
+	}
+	
+	func assertNoDutchCertificate() {
+		guard disclosureMode != .mode0G else { return }
+		tapOnTheNetherlandsTab()
+		app.textExists("Hier komt jouw Nederlandse bewijs")
+	}
+	
 	func assertNoValidDutchCertificate(ofType certificateType: CertificateType) {
+		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		app.textExists("Je hebt geen Nederlands " + certificateType.rawValue.lowercased())
 	}
 	
 	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffset: Int? = nil, validUntilOffset: Int? = nil, validUntilDate: String? = nil) {
-		
+		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		card3G().containsText(CertificateType.vaccination.rawValue)
 		card3G().containsText(amountOfDoses(for: doses))
@@ -120,6 +124,7 @@ extension BaseTest {
 	}
 	
 	func assertValidDutchRecoveryCertificate(validUntilOffset: Int) {
+		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		card3G().containsText(CertificateType.recovery.rawValue)
 		card3G().containsText("geldig tot " + formattedOffsetDate(with: validUntilOffset))
@@ -127,6 +132,7 @@ extension BaseTest {
 	}
 	
 	func assertValidDutchTestCertificate(validUntilOffset: Int = 1, combinedWithOther: Bool = false) {
+		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		for card in cardsToCheck(for: .test, combinedWithOther) {
 			card.containsText(CertificateType.test.rawValue)
@@ -136,6 +142,7 @@ extension BaseTest {
 	}
 	
 	func assertDutchCertificateIsNotYetValid(ofType certificateType: CertificateType, doses: Int = 0, validFromOffset: Int, validUntilOffset: Int? = nil) {
+		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		for card in cardsToCheck(for: certificateType) {
 			card.containsText(certificateType.rawValue)
