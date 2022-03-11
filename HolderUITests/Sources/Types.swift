@@ -17,7 +17,8 @@ enum TestCertificateType: String {
 }
 
 enum DisclosureMode: String {
-	case only3G = "-disclosurePolicyMode3G"
-	case only1G = "-disclosurePolicyMode1G"
-	case bothModes = "-disclosurePolicyMode1GWith3G"
+	case mode0G = "-disclosurePolicyMode0G"
+	case mode3G = "-disclosurePolicyMode3G"
+	case mode1G = "-disclosurePolicyMode1G"
+	case mode1GWith3G = "-disclosurePolicyMode1GWith3G"
 }
