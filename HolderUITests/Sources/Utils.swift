@@ -69,7 +69,8 @@ extension BaseTest {
 	}
 	
 	func card(of certificateType: CertificateType) -> XCUIElement {
-		return app.descendants(matching: .any).matching(identifier: "QRCard").containing(.any, identifier: certificateType.rawValue).firstMatch
+		let predicate = NSPredicate(format: "label CONTAINS[c] %@", certificateType.rawValue)
+		return app.descendants(matching: .any).matching(identifier: "QRCard").containing(predicate).firstMatch
 	}
 	
 	func cardsToCheck(for certificateType: CertificateType, _ combinedWithOther: Bool = false) -> [XCUIElement] {

@@ -171,26 +171,26 @@ extension BaseTest {
 	
 	func assertValidInternationalVaccinationCertificate(doses: [String], dateOffset: Int = -30) {
 		tapOnInternationalTab()
-		app.containsText(CertificateType.vaccination.rawValue)
+		card(of: .vaccination).containsText(CertificateType.vaccination.rawValue)
 		for (index, dose) in doses.reversed().enumerated() {
-			app.containsText("Dosis \(dose) Vaccinatiedatum: " + formattedOffsetDate(with: dateOffset - (30 * index)))
+			card(of: .vaccination).containsText("Dosis \(dose) Vaccinatiedatum: " + formattedOffsetDate(with: dateOffset - (30 * index)))
 		}
-		app.containsText("Bekijk QR")
+		card(of: .vaccination).textExists(doses.count > 1 ? "Bekijk QR-codes" : "Bekijk QR")
 	}
 	
 	func assertValidInternationalRecoveryCertificate(validUntilOffset: Int) {
 		tapOnInternationalTab()
-		app.containsText(CertificateType.recovery.rawValue)
-		app.containsText("Geldig tot " + formattedOffsetDate(with: validUntilOffset))
-		app.containsText("Bekijk QR")
+		card(of: .recovery).containsText(CertificateType.recovery.rawValue)
+		card(of: .recovery).containsText("Geldig tot " + formattedOffsetDate(with: validUntilOffset))
+		card(of: .recovery).textExists("Bekijk QR")
 	}
 	
 	func assertValidInternationalTestCertificate(testType: TestCertificateType, dateOffset: Int = 0) {
 		tapOnInternationalTab()
-		app.containsText(CertificateType.test.rawValue)
-		app.containsText("Type test: " + testType.rawValue)
-		app.containsText("Testdatum: " + formattedOffsetDate(with: dateOffset, withYear: false, withDay: true))
-		app.containsText("Bekijk QR")
+		card(of: .test).containsText(CertificateType.test.rawValue)
+		card(of: .test).containsText("Type test: " + testType.rawValue)
+		card(of: .test).containsText("Testdatum: " + formattedOffsetDate(with: dateOffset, withYear: false, withDay: true))
+		card(of: .test).textExists("Bekijk QR")
 	}
 	
 	func assertCertificateIsNotValidInternationally(ofType certificateType: CertificateType) {
