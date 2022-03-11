@@ -35,6 +35,11 @@ extension BaseTest {
 		returnToCertificateOverview()
 	}
 	
+	func assertNoCertificateCouldBeCreatedIn0G() {
+		guard disclosureMode == .mode0G else { return }
+		assertNoCertificateCouldBeCreated()
+	}
+	
 	func assertPositiveTestResultNotValidAnymore() {
 		guard disclosureMode != .mode0G else { return }
 		app.textExists("Positieve testuitslag niet meer geldig")

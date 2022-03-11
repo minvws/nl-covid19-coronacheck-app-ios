@@ -21,6 +21,7 @@ class PositiveOthersSmoke: BaseTest {
 		let person = TestData.posAgob
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreatedIn0G()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
@@ -30,6 +31,7 @@ class PositiveOthersSmoke: BaseTest {
 		let person = TestData.posAgobP1
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreatedIn0G()
 		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
@@ -46,6 +48,7 @@ class PositiveOthersSmoke: BaseTest {
 		let person = TestData.posAgobP2
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreatedIn0G()
 		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()

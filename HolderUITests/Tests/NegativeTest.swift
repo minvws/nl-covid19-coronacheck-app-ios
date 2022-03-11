@@ -43,6 +43,8 @@ class NegativeTest: BaseTest {
 		let person = TestData.negAgobP1
 		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreatedIn0G()
+		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
