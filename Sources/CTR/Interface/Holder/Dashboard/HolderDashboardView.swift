@@ -241,6 +241,7 @@ final class HolderDashboardView: BaseView {
 				tabBar.isHidden = true
 				scrollViewTopConstraintWithTabBar.isActive = false
 				scrollViewTopConstraintWithoutTabBar.isActive = true
+				UIAccessibility.post(notification: .layoutChanged, argument: self)
 			}
 			setNeedsLayout()
 		}
@@ -253,6 +254,7 @@ final class HolderDashboardView: BaseView {
 				domesticScrollView.removeFromSuperview()
 				NSLayoutConstraint.deactivate(domesticTabEnabledConstraints)
 				NSLayoutConstraint.activate(domesticTabDisabledConstraints)
+				UIAccessibility.post(notification: .layoutChanged, argument: self)
 			} else {
 				scrollView.addSubview(domesticScrollView)
 				NSLayoutConstraint.deactivate(domesticTabDisabledConstraints)
