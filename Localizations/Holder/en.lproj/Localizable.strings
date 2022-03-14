@@ -750,3 +750,20 @@
 "visitorpass_token_modal_notoken_details" = "<p>You will receive an approval code on paper from the desk that reviewed your vaccination. Don't have an approval code? Please go back to the desk you stopped by.</p><p>Didn’t stop by a desk yet to have your vaccination reviewed? For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Don't have an approval code?";
 "visitorpass_token_next" = "Next";
+
+/*Missing Keys, not used in verifier, but blocking submission*/
+"general_recoverycertificate_0G" = "";
+"general_testcertificate_0G" = "";
+"general_vaccinationcertificate_0G" = "";
+"holder_dashboard_emptyState_international_0G_message" = "";
+"holder_dashboard_filledState_international_0G_message" = "";
+"holder_dashboard_international_0G_action_certificateNeeded" = "";
+"holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "";
+"holder_dashboard_noDomesticCertificatesBanner_0G_title" = "";
+"holder_dashboard_noDomesticCertificatesBanner_url" = "";
+"holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "";
+"holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "";
+"holder_onboarding_content_TravelSafe_0G_message" = "";
+"holder_onboarding_content_TravelSafe_0G_title" = "";
+"holder_onboarding_content_onlyInternationalQR_0G_message" = "";
+"holder_onboarding_content_onlyInternationalQR_0G_title" = "";

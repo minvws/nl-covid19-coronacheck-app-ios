@@ -158,20 +158,3 @@
 "verifier_scan_instructions_back_to_start" = "Back to start";
 "verifier_scanner_policy_indication" = "%@ access";
 "verifier_start_scan_qr_policy_indication" = "Set to <b>%@</b> access";
-
-/*Missing Keys, not used in verifier*/
-"general_recoverycertificate_0G" = "";
-"general_testcertificate_0G" = "";
-"general_vaccinationcertificate_0G" = "";
-"holder_dashboard_emptyState_international_0G_message" = "";
-"holder_dashboard_filledState_international_0G_message" = "";
-"holder_dashboard_international_0G_action_certificateNeeded" = "";
-"holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "";
-"holder_dashboard_noDomesticCertificatesBanner_0G_title" = "";
-"holder_dashboard_noDomesticCertificatesBanner_url" = "";
-"holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "";
-"holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "";
-"holder_onboarding_content_TravelSafe_0G_message" = "";
-"holder_onboarding_content_TravelSafe_0G_title" = "";
-"holder_onboarding_content_onlyInternationalQR_0G_message" = "";
-"holder_onboarding_content_onlyInternationalQR_0G_title" = "";
