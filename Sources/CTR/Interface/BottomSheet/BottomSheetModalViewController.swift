@@ -35,7 +35,7 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.accessibilityIdentifier = "CloseButton"
 		button.accessibilityLabel = L.generalClose()
-		button.tintColor = Theme.colors.dark
+		button.tintColor = C.black()
 		button.setupLargeContentViewer(title: L.generalClose())
 		return button
 	}()

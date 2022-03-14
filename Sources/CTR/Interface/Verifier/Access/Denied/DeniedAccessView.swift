@@ -60,7 +60,7 @@ final class DeniedAccessView: BaseView {
 	private let titleLabel: Label = {
 
 		let label = Label(title1: nil, montserrat: true).multiline().header()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		return label
 	}()
 	

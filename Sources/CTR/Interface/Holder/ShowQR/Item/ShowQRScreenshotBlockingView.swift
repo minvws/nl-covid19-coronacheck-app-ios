@@ -24,7 +24,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 	// MARK: - Private properties
 
 	private let titleLabel: UILabel = {
-		let label = Label(nil, font: Theme.fonts.headlineBoldMontserrat, textColor: Theme.colors.dark)
+		let label = Label(nil, font: Theme.fonts.headlineBoldMontserrat, textColor: C.black()!)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.textAlignment = .center
 		label.numberOfLines = 2
@@ -38,7 +38,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 	}()
 
 	private let subtitleLabel: UILabel = {
-		let label = Label(nil, font: Theme.fonts.body, textColor: Theme.colors.dark)
+		let label = Label(nil, font: Theme.fonts.body, textColor: C.black()!)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.textAlignment = .center
 		label.numberOfLines = 2

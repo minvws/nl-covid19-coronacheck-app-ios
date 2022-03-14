@@ -129,7 +129,7 @@ extension VerifiedAccess {
 		if case .verified(let verificationPolicy) = self, verificationPolicy == .policy1G {
 			return .white
 		} else {
-			return C.darkColor()
+			return C.black()
 		}
 	}
 }

@@ -87,7 +87,7 @@ extension String {
 		_ lineHeight: CGFloat = 22.0,
 		alignment: NSTextAlignment = .left,
 		kerning: CGFloat = 0.0,
-		textColor: UIColor = Theme.colors.dark) -> NSAttributedString {
+		textColor: UIColor = C.black()!) -> NSAttributedString {
 
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byWordWrapping

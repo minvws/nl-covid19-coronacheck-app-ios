@@ -99,7 +99,7 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 				text: message,
 				style: NSAttributedString.HTMLStyle(
 					font: Theme.fonts.body,
-					textColor: Theme.colors.dark,
+					textColor: C.black()!,
 					paragraphSpacing: 0
 				)
 			)

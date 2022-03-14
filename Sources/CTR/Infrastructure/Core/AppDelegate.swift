@@ -122,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 	private func styleUI() {
 		
 		// Custom navigation bar appearance
-		let color = Theme.colors.dark
+		let color = C.black()!
 		UINavigationBar.appearance().titleTextAttributes = [
 			NSAttributedString.Key.foregroundColor: color,
 			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed

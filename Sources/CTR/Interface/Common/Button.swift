@@ -40,9 +40,9 @@ class Button: UIButton {
 				case .roundedBlue, .roundedBlueImage:
 					return isEnabled ? Theme.colors.viewControllerBackground : Theme.colors.gray
 				case .roundedWhite:
-					return Theme.colors.dark
+					return C.black()!
 				case .roundedClear:
-					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+					return isEnabled ? C.black()! : Theme.colors.grey2
 				case .textLabelBlue:
 					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
 				case .roundedBlueBorder:
@@ -70,7 +70,7 @@ class Button: UIButton {
 				case .roundedBlueBorder:
 					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
 				default:
-					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+					return isEnabled ? C.black()! : Theme.colors.grey2
 			}
 		}
 		

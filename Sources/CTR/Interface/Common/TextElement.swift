@@ -20,8 +20,8 @@ class TextElement: UITextView, UITextViewDelegate {
     init(
         attributedText: NSAttributedString,
         font: UIFont = Theme.fonts.body,
-        textColor: UIColor = Theme.colors.dark,
-        boldTextColor: UIColor = Theme.colors.dark
+        textColor: UIColor = C.black()!,
+        boldTextColor: UIColor = C.black()!
     ) {
         super.init(frame: .zero, textContainer: nil)
         setup()

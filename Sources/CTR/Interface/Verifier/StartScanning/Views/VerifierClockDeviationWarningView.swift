@@ -41,7 +41,7 @@ class VerifierClockDeviationWarningView: BaseView {
 		return imageView
 	}()
 	private let messageLabel: Label = {
-		return Label(body: "", textColor: Theme.colors.dark).multiline()
+		return Label(body: "", textColor: C.black()!).multiline()
 	}()
 
 	private let button: Button = {

@@ -162,7 +162,7 @@ final class RiskSettingInstructionView: BaseView {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
 															 kerning: ViewTraits.Title.kerning,
-															 textColor: Theme.colors.dark)
+															 textColor: C.black()!)
 		}
 	}
 	
@@ -170,7 +170,7 @@ final class RiskSettingInstructionView: BaseView {
 		didSet {
 			headerLabel.attributedText = header?.setLineHeight(ViewTraits.Header.lineHeight,
 															   kerning: ViewTraits.Header.kerning,
-															   textColor: Theme.colors.dark)
+															   textColor: C.black()!)
 		}
 	}
 	

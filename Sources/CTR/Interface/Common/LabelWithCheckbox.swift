@@ -212,7 +212,7 @@ final class LabelWithCheckbox: UIControl {
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Dimension.lineHeight,
-															 textColor: Theme.colors.dark)
+															 textColor: C.black()!)
 			accessibilityLabel = title
 			setupLargeContentViewer(title: title)
 		}

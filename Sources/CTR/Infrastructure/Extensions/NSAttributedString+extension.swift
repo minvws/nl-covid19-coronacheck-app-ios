@@ -87,7 +87,7 @@ public extension NSAttributedString {
 			self.paragraphSpacing = paragraphSpacing
 		}
 
-		static var bodyDark: HTMLStyle = HTMLStyle(font: Theme.fonts.body, textColor: Theme.colors.dark)
+		static var bodyDark: HTMLStyle = HTMLStyle(font: Theme.fonts.body, textColor: C.black()!)
 	}
 }
 
@@ -221,7 +221,7 @@ public extension NSAttributedString {
 		let bulletFont = style.font.withSize(5)
 		let bulletAttributes: [NSAttributedString.Key: Any] = [
 			.font: bulletFont,
-			.foregroundColor: Theme.colors.dark,
+			.foregroundColor: C.black()!,
 			.baselineOffset: (style.font.xHeight - bulletFont.xHeight) / 2
 		]
 

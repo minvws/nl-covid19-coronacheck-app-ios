@@ -168,7 +168,7 @@ private class AccessibleBodyLabelView: BaseView {
 	
 	let label: Label = {
 		let label = Label(body: nil).multiline()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		return label
 	}()
 	

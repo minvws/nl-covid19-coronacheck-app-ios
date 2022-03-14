@@ -37,7 +37,7 @@ class MenuButton: UIControl {
 	
 	private let titleLabel: Label = {
 		let label = Label(bodyBold: L.general_menu()).multiline()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.setContentCompressionResistancePriority(.required, for: .vertical)

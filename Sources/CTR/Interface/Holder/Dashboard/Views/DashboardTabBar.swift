@@ -61,7 +61,7 @@ final class DashboardTabBar: BaseView {
 	private let selectionLineView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.dark
+		view.backgroundColor = C.black()
 		return view
 	}()
 	
@@ -215,7 +215,7 @@ private class TabBarButton: UIControl {
 	
 	override var isSelected: Bool {
 		didSet {
-			titleLabel.textColor = isSelected ? Theme.colors.dark : Theme.colors.secondaryText
+			titleLabel.textColor = isSelected ? C.black() : Theme.colors.secondaryText
 			titleLabel.font = isSelected ? Theme.fonts.subheadHeavyBold : Theme.fonts.subheadMedium
 			
 			if isSelected {

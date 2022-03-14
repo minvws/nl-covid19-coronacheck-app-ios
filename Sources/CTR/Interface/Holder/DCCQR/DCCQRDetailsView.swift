@@ -32,21 +32,21 @@ final class DCCQRDetailsView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 		let label = Label(title1: nil, montserrat: true).multiline().header()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		return label
 	}()
 	
 	/// The description label
 	private let descriptionLabel: Label = {
 		let label = Label(subhead: nil).multiline()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		return label
 	}()
 	
 	/// The footer date information label
 	private let dateInformationLabel: Label = {
 		let label = Label(footnote: nil).multiline()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		return label
 	}()
 	

@@ -146,7 +146,7 @@ final class RiskSettingControl: UIControl {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
 															 kerning: ViewTraits.Title.kerning,
-															 textColor: Theme.colors.dark)
+															 textColor: C.black()!)
 		}
 	}
 	

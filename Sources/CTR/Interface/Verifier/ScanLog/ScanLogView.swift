@@ -143,7 +143,7 @@ class ScanLogView: ScrolledStackView {
 		label.attributedText = text?.setLineHeight(
 			ViewTraits.Entry.lineHeight,
 			kerning: ViewTraits.Entry.kerning,
-			textColor: Theme.colors.dark
+			textColor: C.black()!
 		)
 		return label
 	}
