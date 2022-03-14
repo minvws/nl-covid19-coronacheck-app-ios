@@ -11,6 +11,8 @@ class PositiveRatTest: BaseTest {
 		let person = TestData.posRatJ2
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreatedIn0G()
+		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
@@ -25,6 +27,8 @@ class PositiveRatTest: BaseTest {
 		let person = TestData.posRatJ3
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreatedIn0G()
+		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
@@ -39,6 +43,8 @@ class PositiveRatTest: BaseTest {
 		let person = TestData.posRatP1J1
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreatedIn0G()
+		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
@@ -53,6 +59,8 @@ class PositiveRatTest: BaseTest {
 		let person = TestData.posRatP2J1
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreatedIn0G()
+		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
@@ -67,6 +75,8 @@ class PositiveRatTest: BaseTest {
 		let person = TestData.posRatP1M1
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreatedIn0G()
+		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
@@ -81,6 +91,8 @@ class PositiveRatTest: BaseTest {
 		let person = TestData.posRatP2M1
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreatedIn0G()
+		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		

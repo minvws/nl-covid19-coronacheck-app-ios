@@ -72,6 +72,7 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		assertPositiveTestResultNotValidAnymore()
+		assertNoCertificateCouldBeCreatedIn0G()
 		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()

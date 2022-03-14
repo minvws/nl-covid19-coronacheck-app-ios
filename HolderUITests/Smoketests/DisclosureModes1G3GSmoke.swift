@@ -5,19 +5,19 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-class DisclosureMode3GSmoke: BaseTest {
+class DisclosureMode1GWith3GSmoke: BaseTest {
 	
 	override func setUpWithError() throws {
-		self.disclosureMode = DisclosureMode.mode3G
+		self.disclosureMode = DisclosureMode.mode1GWith3G
 		
 		try super.setUpWithError()
 	}
 	
-	func test_mode3G_messages() {
+	func test_mode1GWith3G_messages() {
 		assertDisclosureMessages()
 	}
 	
-	func test_mode3G_negPcr() {
+	func test_mode1GWith3G_negPcr() {
 		let person = TestData.negPcr
 		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
@@ -26,7 +26,7 @@ class DisclosureMode3GSmoke: BaseTest {
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
-	func test_mode3G_vacP3() {
+	func test_mode1GWith3G_vacP3() {
 		let person = TestData.vacP3
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
@@ -35,7 +35,7 @@ class DisclosureMode3GSmoke: BaseTest {
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
-	func test_mode3G_posPcr() {
+	func test_mode1GWith3G_posPcr() {
 		let person = TestData.posPcr
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()

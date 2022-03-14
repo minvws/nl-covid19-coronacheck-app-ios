@@ -69,18 +69,21 @@ extension BaseTest {
 	}
 	
 	func card(of certificateType: CertificateType) -> XCUIElement {
-		return app.descendants(matching: .any).matching(identifier: "QRCard").containing(.any, identifier: certificateType.rawValue).firstMatch
+		let predicate = NSPredicate(format: "label CONTAINS[c] %@", certificateType.rawValue)
+		return app.descendants(matching: .any).matching(identifier: "QRCard").containing(predicate).firstMatch
 	}
 	
 	func cardsToCheck(for certificateType: CertificateType, _ combinedWithOther: Bool = false) -> [XCUIElement] {
 		switch certificateType {
 			case .test:
 				switch disclosureMode {
-					case .only1G:
+					case .mode0G:
+						return []
+					case .mode1G:
 						return [card1G()]
-					case .only3G:
+					case .mode3G:
 						return [card3G()]
-					case .bothModes:
+					case .mode1GWith3G:
 						if combinedWithOther {
 							return [card1G()]
 						} else {
@@ -94,10 +97,10 @@ extension BaseTest {
 	
 	func is3GEnabled() -> Bool {
 		switch disclosureMode {
-			case .only1G:
-				return false
-			case .only3G, .bothModes:
+			case .mode3G, .mode1GWith3G:
 				return true
+			default:
+				return false
 		}
 	}
 }
