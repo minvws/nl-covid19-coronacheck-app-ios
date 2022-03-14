@@ -169,6 +169,10 @@ final class DashboardTabBar: BaseView {
 		}
 	}
 	
+	func makeSelectedTabInternational() {
+		selectedTab = .international
+	}
+	
 	/// Get selected tab
 	private(set) var selectedTab: DashboardTab = .domestic
 }

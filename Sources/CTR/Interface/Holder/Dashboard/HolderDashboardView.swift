@@ -254,6 +254,7 @@ final class HolderDashboardView: BaseView {
 				domesticScrollView.removeFromSuperview()
 				NSLayoutConstraint.deactivate(domesticTabEnabledConstraints)
 				NSLayoutConstraint.activate(domesticTabDisabledConstraints)
+				self.tabBar.makeSelectedTabInternational()
 				UIAccessibility.post(notification: .layoutChanged, argument: self)
 			} else {
 				scrollView.addSubview(domesticScrollView)
