@@ -10,7 +10,7 @@ import UIKit
 final class MakeTestAppointmentViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: MakeTestAppointmentViewModel
+	internal let viewModel: MakeTestAppointmentViewModel
 
 	/// The view
 	let sceneView = MakeTestAppointmentView()
