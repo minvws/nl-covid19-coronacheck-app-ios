@@ -4,7 +4,7 @@ name: test-ui
 
 on:
   schedule:
-    - cron: '0 20 * * 2,4' # Run at 20:00 on Tuesday and Thursday.
+    - cron: '0 20 * * 1' # Run at 20:00 on Monday.
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
@@ -13,6 +13,7 @@ env:
   
 jobs:
   test-ui:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-11
     timeout-minutes: 180
     steps:
