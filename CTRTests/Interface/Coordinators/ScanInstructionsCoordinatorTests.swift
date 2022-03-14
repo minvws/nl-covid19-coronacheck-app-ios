@@ -209,30 +209,3 @@ class ScanInstructionsCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
 	}
 }
-/*
-// Designated starter method
-func start() {
-	
-	let viewController: UIViewController
-	
-	if !isOpenedFromMenu,
-	   allowSkipInstruction,
-	   userSettings.scanInstructionShown {
-		if !userSettings.policyInformationShown, Current.featureFlagManager.is1GVerificationPolicyEnabled() {
-			let viewModel = PolicyInformationViewModel(coordinator: self)
-			viewController = PolicyInformationViewController(viewModel: viewModel)
-		} else {
-			let viewModel = RiskSettingInstructionViewModel(coordinator: self)
-			viewController = RiskSettingInstructionViewController(viewModel: viewModel)
-		}
-	} else {
-		let viewModel = ScanInstructionsViewModel(
-			coordinator: self,
-			pages: pages
-		)
-		viewController = ScanInstructionsViewController(viewModel: viewModel)
-	}
-	
-	navigationController.pushViewController(viewController, animated: !isOpenedFromMenu)
-}
-*/
