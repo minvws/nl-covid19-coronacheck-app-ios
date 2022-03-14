@@ -212,7 +212,7 @@ final class HolderDashboardViewModel: Logging {
 		self.coordinator = coordinator
 		self.datasource = datasource
 		self.strippenRefresher = strippenRefresher
-		self.dashboardRegionToggleValue = Current.userSettings.dashboardRegionToggleValue
+		self.dashboardRegionToggleValue = Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() ? .europeanUnion : Current.userSettings.dashboardRegionToggleValue
 		self.configurationNotificationManager = configurationNotificationManager
 		self.vaccinationAssessmentNotificationManager = vaccinationAssessmentNotificationManager
 		self.versionSupplier = versionSupplier
