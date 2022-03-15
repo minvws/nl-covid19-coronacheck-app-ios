@@ -43,7 +43,7 @@ final class VerifierScanView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		moreInformationButton.touchUpInside(self, action: #selector(moreInformationButtonTapped))
 	}

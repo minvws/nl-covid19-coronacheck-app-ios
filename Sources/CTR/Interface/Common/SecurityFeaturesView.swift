@@ -40,7 +40,7 @@ class SecurityFeaturesView: BaseView {
 
 		super.setupViews()
 
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		primaryButton.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
 	}
 

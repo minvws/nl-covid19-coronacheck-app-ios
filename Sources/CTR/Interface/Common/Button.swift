@@ -27,7 +27,7 @@ class Button: UIButton {
 		func backgroundColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlue, .roundedBlueImage:
-					return isEnabled ? C.primaryBlue()! : Theme.colors.tertiary
+					return isEnabled ? C.primaryBlue()! : C.tertiaryColor()!
 				case .roundedWhite, .roundedBlueBorder:
 					return isEnabled ? C.white()! : C.grey2()!
 				case .roundedClear, .textLabelBlue:
@@ -38,7 +38,7 @@ class Button: UIButton {
 		func textColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlue, .roundedBlueImage:
-					return isEnabled ? Theme.colors.viewControllerBackground : C.grey3()!
+					return isEnabled ? C.white()! : C.grey2()!
 				case .roundedWhite:
 					return C.black()!
 				case .roundedClear:

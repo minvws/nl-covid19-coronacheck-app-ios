@@ -75,7 +75,7 @@ final class DashboardTabBar: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		domesticButton.title = L.generalNetherlands()
 		domesticButton.tapHandler = { [weak self] in
@@ -209,7 +209,7 @@ private class TabBarButton: UIControl {
 	
 	override var isHighlighted: Bool {
 		didSet {
-			backgroundColor = isHighlighted ? ViewTraits.Colors.highlighted : Theme.colors.viewControllerBackground
+			backgroundColor = isHighlighted ? ViewTraits.Colors.highlighted : C.white()
 		}
 	}
 	
@@ -233,7 +233,7 @@ private class TabBarButton: UIControl {
 	/// Setup all the views
 	private func setupViews() {
 
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 	}

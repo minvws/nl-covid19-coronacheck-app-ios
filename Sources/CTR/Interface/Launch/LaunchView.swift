@@ -106,7 +106,7 @@ class LaunchView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 	}
 
 	/// Setup the hierarchy

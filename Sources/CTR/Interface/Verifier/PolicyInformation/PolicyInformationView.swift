@@ -75,7 +75,7 @@ final class PolicyInformationView: ScrolledStackView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		// No margins on the horizontal sides to display image full width
 		stackViewInset = .bottom(ViewTraits.Margin.edge)

@@ -56,7 +56,7 @@ class ChooseProofTypeView: ScrolledStackView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		stackView.distribution = .fill
 	}
 

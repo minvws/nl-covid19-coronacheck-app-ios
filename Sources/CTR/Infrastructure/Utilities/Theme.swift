@@ -226,35 +226,8 @@ class Fonts {
 	}
 }
 
-final class Colors {
-
-    var tertiary: UIColor { return color(for: "TertiaryColor") }
-
-	var viewControllerBackground: UIColor { return color(for: "ViewControllerBackgroundColor") }
-
-	var shadow: UIColor { return color(for: "ShadowColor") }
-
-	var lightBackground: UIColor { return color(for: "LightBackgroundColor") }
-
-	var line: UIColor { return color(for: "LineColor") }
-
-	var highlightBackgroundColor: UIColor { return color(for: "HighlightBackgroundColor") }
-
-    // MARK: - Private
-
-    private func color(for name: String) -> UIColor {
-		
-        let bundle = Bundle(for: Colors.self)
-        if let color = UIColor(named: name, in: bundle, compatibleWith: nil) {
-            return color
-        }
-        return .clear
-    }
-}
-
 /// - Tag: Theme
 struct Theme {
 
     static let fonts = Fonts()
-    static let colors = Colors()
 }

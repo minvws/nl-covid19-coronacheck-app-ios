@@ -65,7 +65,7 @@ class ScanInstructionsItemView: ScrolledStackView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		// Align animation view to top
 		stackViewInset.top = 0

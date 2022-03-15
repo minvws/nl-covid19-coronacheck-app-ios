@@ -176,7 +176,7 @@ class VerifierStartScanningView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		footerButtonView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		showInstructionsButton.touchUpInside(self, action: #selector(showInstructionsButtonTapped))

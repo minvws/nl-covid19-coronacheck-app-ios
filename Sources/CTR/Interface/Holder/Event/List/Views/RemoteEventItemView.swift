@@ -68,7 +68,7 @@ class RemoteEventItemView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		view?.backgroundColor = Theme.colors.viewControllerBackground
+		view?.backgroundColor = C.white()
 		linkLabel.textColor = C.primaryBlue()
 		backgroundButton.addTarget(
 			self,

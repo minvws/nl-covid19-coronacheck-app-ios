@@ -19,7 +19,7 @@ class ShowQRIrrelevantView: BaseView {
 	private var innerView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground
+		view.backgroundColor = C.white()
 		return view
 	}()
 

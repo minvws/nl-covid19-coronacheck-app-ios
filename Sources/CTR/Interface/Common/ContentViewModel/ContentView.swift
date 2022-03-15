@@ -53,7 +53,7 @@ class ContentView: BaseView {
 
 		super.setupViews()
 		titleLabel.textColor = C.black()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 

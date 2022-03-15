@@ -42,7 +42,7 @@ final class HeaderMessageCardView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		button.addTarget(self, action: #selector(onTap), for: .touchUpInside)
 	}

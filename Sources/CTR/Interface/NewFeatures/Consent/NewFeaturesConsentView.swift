@@ -57,7 +57,7 @@ class NewFeaturesConsentView: BaseView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.highlightBackgroundColor
+		view.backgroundColor = C.highlightBackgroundColor()
 		view.layer.cornerRadius = ViewTraits.cornerRadius
 		return view
 	}()
@@ -87,7 +87,7 @@ class NewFeaturesConsentView: BaseView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.line
+		view.backgroundColor = C.grey4()
 		return view
 	}()
 
@@ -98,7 +98,7 @@ class NewFeaturesConsentView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))

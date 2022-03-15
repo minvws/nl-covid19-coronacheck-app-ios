@@ -128,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
 		]
 		UINavigationBar.appearance().tintColor = color
-		UINavigationBar.appearance().barTintColor = Theme.colors.viewControllerBackground
+		UINavigationBar.appearance().barTintColor = C.white()
 		
 		// Tint default buttons of UIAlertController
 		UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = C.primaryBlue()

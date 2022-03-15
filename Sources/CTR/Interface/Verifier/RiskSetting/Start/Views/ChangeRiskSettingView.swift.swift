@@ -58,7 +58,7 @@ final class ChangeRiskSettingView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		changeButton.touchUpInside(self, action: #selector(tapChangeButton))
 	}

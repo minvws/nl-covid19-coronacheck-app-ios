@@ -41,7 +41,7 @@ final class RemoteEventDetailsView: BaseView {
 	
 	override func setupViews() {
 		super.setupViews()
-		view?.backgroundColor = Theme.colors.viewControllerBackground
+		view?.backgroundColor = C.white()
 	}
 	
 	override func setupViewHierarchy() {
@@ -126,7 +126,7 @@ private extension RemoteEventDetailsView {
 	func createLineView() -> UIView {
 
 		let view = UIView()
-		view.backgroundColor = Theme.colors.line
+		view.backgroundColor = C.grey2()
 		return view
 	}
 	

@@ -99,7 +99,7 @@ final class LabelWithCheckbox: UIControl {
 		
 		clipsToBounds = true
 		layer.cornerRadius = ViewTraits.Dimension.cornerRadius
-		tintColor = Theme.colors.viewControllerBackground
+		tintColor = C.white()
 
 		applyState()
 

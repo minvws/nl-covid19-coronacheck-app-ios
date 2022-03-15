@@ -62,7 +62,7 @@ class AboutThisAppView: ScrolledStackView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		stackView.distribution = .fill
 		appVersionLabel.textColor = C.grey1()
 		configVersionLabel.textColor = C.grey1()

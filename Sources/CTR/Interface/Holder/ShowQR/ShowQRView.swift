@@ -111,7 +111,7 @@ class ShowQRView: BaseView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground.withAlphaComponent(0.8)
+		view.backgroundColor = C.white()?.withAlphaComponent(0.8)
 		return view
 	}()
 
@@ -119,7 +119,7 @@ class ShowQRView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)

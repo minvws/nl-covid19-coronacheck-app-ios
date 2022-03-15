@@ -36,7 +36,7 @@ final class CheckIdentityView: BaseView {
 
 		let view = UIScrollView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground
+		view.backgroundColor = C.white()
 		return view
 	}()
 
@@ -44,7 +44,7 @@ final class CheckIdentityView: BaseView {
 		
 		let view = VerifierIdentityView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground
+		view.backgroundColor = C.white()
 		return view
 	}()
 	

@@ -93,7 +93,7 @@ class ListRemoteEventsView: ScrolledStackWithButtonView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		somethingIsWrongButton.touchUpInside(self, action: #selector(somethingIsWrongButtonTapped))
 		stackView.distribution = .fill
 	}
@@ -127,7 +127,7 @@ class ListRemoteEventsView: ScrolledStackWithButtonView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.line
+		view.backgroundColor = C.grey4()
 		return view
 	}
 

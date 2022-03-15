@@ -319,6 +319,7 @@ class QRCardView: BaseView {
 			validityText.lines.forEach { text in
 				let label = Label(body: text)
 				label.numberOfLines = 0
+				label.textColor = C.black()
 				verticalLabelsStackView.addArrangedSubview(label)
 			}
 
@@ -333,6 +334,7 @@ class QRCardView: BaseView {
 				if !enabledState && originDesiresToShowAutomaticallyBecomesValidFooter {
 					let becomesValidLabel = Label(bodyBold: L.holderDashboardQrValidityDateAutomaticallyBecomesValidOn())
 					becomesValidLabel.numberOfLines = 0
+					becomesValidLabel.textColor = C.black()
 
 					verticalLabelsStackView.addArrangedSubview(becomesValidLabel)
 					verticalLabelsStackView.setCustomSpacing(22, after: becomesValidLabel)
@@ -349,6 +351,7 @@ class QRCardView: BaseView {
 		if let expiryEvaluator = expiryEvaluator {
 			let expiryLabel = Label(bodyBold: expiryEvaluator(Date()))
 			expiryLabel.numberOfLines = 0
+			expiryLabel.textColor = C.black()
 
 			if let text = expiryEvaluator(Date()) {
 				expiryLabel.isHidden = false

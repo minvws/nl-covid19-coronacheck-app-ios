@@ -85,7 +85,7 @@ class ScanLogEntryView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		view?.backgroundColor = Theme.colors.viewControllerBackground
+		view?.backgroundColor = C.white()
 
 		// Make the riskLabel hug the "3G" text
 		riskLabel.setContentHuggingPriority(.required, for: .horizontal)

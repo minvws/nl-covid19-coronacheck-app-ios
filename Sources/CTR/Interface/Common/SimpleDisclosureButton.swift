@@ -54,7 +54,7 @@ class SimpleDisclosureButton: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		titleLabel.textColor = C.black()
 		lineView.backgroundColor = C.grey4()
 		disclosureView.tintColor = C.grey4()

@@ -44,7 +44,7 @@ final class DeniedQRScanMoreInfoView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 	}
 
 	override func setupViewHierarchy() {
