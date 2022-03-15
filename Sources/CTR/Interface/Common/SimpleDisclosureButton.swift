@@ -56,8 +56,8 @@ class SimpleDisclosureButton: BaseView {
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 		titleLabel.textColor = C.black()
-		lineView.backgroundColor = Theme.colors.grey4
-		disclosureView.tintColor = Theme.colors.grey4
+		lineView.backgroundColor = C.grey4()
+		disclosureView.tintColor = C.grey4()
 		button.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
 	}
 

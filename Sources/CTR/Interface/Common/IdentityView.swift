@@ -32,11 +32,11 @@ class IdentityElementView: BaseView {
 		static let bodyFont: UIFont = Theme.fonts.title2
 		static let headerColor: UIColor = C.black()!
 
-		static let hasContentBorderColor: UIColor = Theme.colors.grey3
+		static let hasContentBorderColor: UIColor = C.grey3()!
 		static let hasContentBackgroundColor = UIColor.white
 
-		static let noContentBorderColor: UIColor = Theme.colors.grey5
-		static let noContentBackgroundColor = Theme.colors.grey5
+		static let noContentBorderColor: UIColor = C.grey5()!
+		static let noContentBackgroundColor = C.grey5()
 	}
 
 	/// Initialize the identity element view

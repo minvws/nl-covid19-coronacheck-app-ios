@@ -32,14 +32,14 @@ final class ChangeRiskSettingView: BaseView {
 	private let topSeparatorView: UIView = {
 		let separatorView = UIView()
 		separatorView.translatesAutoresizingMaskIntoConstraints = false
-		separatorView.backgroundColor = Theme.colors.grey4
+		separatorView.backgroundColor = C.grey4()
 		return separatorView
 	}()
 	
 	private let bottomSeparatorView: UIView = {
 		let separatorView = UIView()
 		separatorView.translatesAutoresizingMaskIntoConstraints = false
-		separatorView.backgroundColor = Theme.colors.grey4
+		separatorView.backgroundColor = C.grey4()
 		return separatorView
 	}()
 	

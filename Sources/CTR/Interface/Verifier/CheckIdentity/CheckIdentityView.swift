@@ -63,7 +63,7 @@ final class CheckIdentityView: BaseView {
 	private let dccFlagLabel: Label = {
 		
 		let label = Label(title1: nil)
-		label.textColor = Theme.colors.secondaryText
+		label.textColor = C.secondaryText()
 		label.textAlignment = .center
 		return label
 	}()
@@ -92,7 +92,7 @@ final class CheckIdentityView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.grey5
+		backgroundColor = C.grey5()
 		footerButtonView.primaryButton.style = .roundedBlueImage
 		secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 		
@@ -257,7 +257,7 @@ final class CheckIdentityView: BaseView {
 			checkIdentityLabel.attributedText = checkIdentity?.setLineHeight(ViewTraits.Label.lineHeight,
 																			 alignment: .center,
 																			 kerning: ViewTraits.Label.kerning,
-																			 textColor: Theme.colors.secondaryText)
+																			 textColor: C.secondaryText()!)
 		}
 	}
 	
@@ -272,7 +272,7 @@ final class CheckIdentityView: BaseView {
 			dccScannedLabel.attributedText = dccScanned?.setLineHeight(ViewTraits.Label.lineHeight,
 																	   alignment: .center,
 																	   kerning: ViewTraits.Label.kerning,
-																	   textColor: Theme.colors.secondaryText)
+																	   textColor: C.secondaryText()!)
 		}
 	}
 	

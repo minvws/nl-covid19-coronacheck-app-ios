@@ -113,7 +113,7 @@ class ScanLogView: ScrolledStackView {
 			footerLabel.attributedText = footer?.setLineHeight(
 				ViewTraits.Footer.lineHeight,
 				kerning: ViewTraits.Footer.kerning,
-				textColor: Theme.colors.secondaryText
+				textColor: C.secondaryText()!
 			)
 		}
 	}
@@ -124,7 +124,7 @@ class ScanLogView: ScrolledStackView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.grey4
+		view.backgroundColor = C.grey4()
 		return view
 	}
 

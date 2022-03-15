@@ -219,7 +219,7 @@ class LaunchView: BaseView {
 			messageLabel.attributedText = message?.setLineHeight(
 				ViewTraits.Message.lineHeight,
 				kerning: ViewTraits.Message.kerning,
-				textColor: Theme.colors.grey1)
+				textColor: C.grey1()!)
 		}
 	}
 	
@@ -230,7 +230,7 @@ class LaunchView: BaseView {
 				ViewTraits.Version.lineHeight,
 				alignment: .center,
 				kerning: ViewTraits.Version.kerning,
-				textColor: Theme.colors.grey1)
+				textColor: C.grey1()!)
 		}
 	}
 	

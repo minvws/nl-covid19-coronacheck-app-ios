@@ -228,10 +228,6 @@ class Fonts {
 
 final class Colors {
 
-	var secondary: UIColor { return color(for: "SecondaryColor") }
-	
-	var secondaryText: UIColor { return color(for: "SecondaryText") }
-
     var tertiary: UIColor { return color(for: "TertiaryColor") }
 
 	var viewControllerBackground: UIColor { return color(for: "ViewControllerBackgroundColor") }
@@ -241,16 +237,6 @@ final class Colors {
 	var lightBackground: UIColor { return color(for: "LightBackgroundColor") }
 
 	var line: UIColor { return color(for: "LineColor") }
-
-	var grey1: UIColor { return color(for: "Grey1") }
-
-	var grey2: UIColor { return color(for: "Grey2") }
-
-	var grey3: UIColor { return color(for: "Grey3") }
-
-	var grey4: UIColor { return color(for: "Grey4") }
-
-	var grey5: UIColor { return color(for: "Grey5") }
 
 	var highlightBackgroundColor: UIColor { return color(for: "HighlightBackgroundColor") }
 

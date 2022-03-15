@@ -35,7 +35,7 @@ final class PageControl: BaseView {
 		}
 		enum Color {
 			static let selected = C.primaryBlue()!
-			static let deselected = Theme.colors.grey2
+			static let deselected = C.grey2()
 		}
 	}
 	

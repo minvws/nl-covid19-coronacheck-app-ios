@@ -46,7 +46,7 @@ final class DashboardTabBar: BaseView {
 	private let separatorView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.grey4
+		view.backgroundColor = C.grey4()
 		return view
 	}()
 	
@@ -191,7 +191,7 @@ private class TabBarButton: UIControl {
 		let label = Label(subheadMedium: nil)
 		label.adjustsFontForContentSizeCategory = true
 		label.textAlignment = .center
-		label.textColor = Theme.colors.secondaryText
+		label.textColor = C.secondaryText()
 		if #available(iOS 15.0, *) {
 			label.maximumContentSizeCategory = .accessibilityMedium
 		}
@@ -215,7 +215,7 @@ private class TabBarButton: UIControl {
 	
 	override var isSelected: Bool {
 		didSet {
-			titleLabel.textColor = isSelected ? C.black() : Theme.colors.secondaryText
+			titleLabel.textColor = isSelected ? C.black() : C.secondaryText()
 			titleLabel.font = isSelected ? Theme.fonts.subheadHeavyBold : Theme.fonts.subheadMedium
 			
 			if isSelected {

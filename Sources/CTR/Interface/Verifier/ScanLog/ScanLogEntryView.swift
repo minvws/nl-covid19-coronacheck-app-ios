@@ -145,7 +145,7 @@ class ScanLogEntryView: BaseView {
 			timeLabel.attributedText = time?.setLineHeight(
 				ViewTraits.Time.lineHeight,
 				kerning: ViewTraits.Time.kerning,
-				textColor: Theme.colors.secondaryText
+				textColor: C.secondaryText()!
 			)
 			setAccessibilityLabel()
 		}

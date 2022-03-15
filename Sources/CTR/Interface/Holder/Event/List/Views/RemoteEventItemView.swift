@@ -177,7 +177,7 @@ class RemoteEventItemView: BaseView {
 					text: detail,
 					style: NSAttributedString.HTMLStyle(
 						font: Theme.fonts.subhead,
-						textColor: Theme.colors.secondaryText,
+						textColor: C.secondaryText()!,
 						lineHeight: ViewTraits.Message.lineHeight,
 						kern: ViewTraits.Message.kerning
 					)

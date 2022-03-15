@@ -51,7 +51,7 @@ final class RecommendCoronaMelderCardView: BaseView {
 				text: message,
 				style: NSAttributedString.HTMLStyle(
 					font: Theme.fonts.subhead,
-					textColor: Theme.colors.grey1,
+					textColor: C.grey1()!,
 					kern: ViewTraits.Message.kerning,
 					paragraphSpacing: 0
 				)

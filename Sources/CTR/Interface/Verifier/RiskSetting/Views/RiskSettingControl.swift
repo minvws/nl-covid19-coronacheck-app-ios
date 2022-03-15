@@ -154,7 +154,7 @@ final class RiskSettingControl: UIControl {
 		didSet {
 			subtitleLabel.attributedText = subtitle?.setLineHeight(ViewTraits.Subtitle.lineHeight,
 																   kerning: ViewTraits.Subtitle.kerning,
-																   textColor: Theme.colors.secondaryText)
+																   textColor: C.secondaryText()!)
 		}
 	}
 	

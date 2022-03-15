@@ -51,7 +51,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 	}()
 
 	private let countdownLabel: UILabel = {
-		let label = Label(nil, font: Theme.fonts.subhead, textColor: Theme.colors.grey2)
+		let label = Label(nil, font: Theme.fonts.subhead, textColor: C.grey2()!)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.textAlignment = .center
 		label.numberOfLines = 1
@@ -91,7 +91,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 		clipsToBounds = true
 		layer.cornerRadius = ViewTraits.cornerRadius.rawValue
 		layer.borderWidth = 1
-		layer.borderColor = Theme.colors.grey3.cgColor
+		layer.borderColor = C.grey3()?.cgColor
 	}
 
 	/// Setup the hierarchy
