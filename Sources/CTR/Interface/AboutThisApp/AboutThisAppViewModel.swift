@@ -22,6 +22,7 @@ enum AboutThisAppMenuIdentifier: String {
 
 	case scanlog
 	
+	case useNoDisclosurePolicy
 	case use1GDisclosurePolicy
 	case use3GDisclosurePolicy
 	case use1GAnd3GDisclosurePolicy
@@ -105,7 +106,8 @@ class AboutThisAppViewModel: Logging {
 		}
 		
 		let bottomList: [AboutThisAppMenuOption] = [
-			AboutThisAppMenuOption(identifier: .use1GDisclosurePolicy, name: "Use 1G Disclosure policy") ,
+			AboutThisAppMenuOption(identifier: .useNoDisclosurePolicy, name: "Use no Disclosure policy"),
+			AboutThisAppMenuOption(identifier: .use1GDisclosurePolicy, name: "Use 1G Disclosure policy"),
 			AboutThisAppMenuOption(identifier: .use3GDisclosurePolicy, name: "Use 3G Disclosure policy"),
 			AboutThisAppMenuOption(identifier: .use1GAnd3GDisclosurePolicy, name: "Use 1G and 3G Disclosure policy"),
 			AboutThisAppMenuOption(identifier: .useConfigDisclosurePolicy, name: "Use the config Disclosure policy")
@@ -160,6 +162,8 @@ class AboutThisAppViewModel: Logging {
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
 			case .scanlog:
 				openScanLog()
+			case .useNoDisclosurePolicy:
+				setDisclosurePolicy(["0G"], message: "New policy: No policy")
 			case .use1GDisclosurePolicy:
 				setDisclosurePolicy([DisclosurePolicy.policy1G.featureFlag], message: "New policy: 1G")
 			case .use3GDisclosurePolicy:

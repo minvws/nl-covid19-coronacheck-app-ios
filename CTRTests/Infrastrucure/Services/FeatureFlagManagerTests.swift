@@ -199,13 +199,25 @@ class FeatureFlagManagerTests: XCTestCase {
 		expect(enabled) == false
 	}
 	
-	func test_is3GExclusiveDisclosurePolicyEnabled_disabled_noPoliciesEnabled() {
+	func test_is3GExclusiveDisclosurePolicyDisabled_disabled_noPoliciesEnabled() {
 		
 		// Given
 		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = []
 		
 		// When
 		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
+		
+		// Then
+		expect(enabled) == false
+	}
+	
+	func test_isNoDisclosurePoliciesEnabled_noPoliciesEnabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = []
+		
+		// When
+		let enabled = sut.areZeroDisclosurePoliciesEnabled()
 		
 		// Then
 		expect(enabled) == true
@@ -291,5 +303,24 @@ class FeatureFlagManagerTests: XCTestCase {
 		expect(bothPoliciesEnabled) == false
 		expect(only1GEnabled) == false
 		expect(only3GEnabled) == true
+	}
+	
+	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override0G() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
+		environmentSpies.userSettingsSpy.stubbedOverrideDisclosurePolicies = ["0G"]
+		
+		// When
+		let bothPoliciesEnabled = sut.areBothDisclosurePoliciesEnabled()
+		let only1GEnabled = sut.is1GExclusiveDisclosurePolicyEnabled()
+		let only3GEnabled = sut.is3GExclusiveDisclosurePolicyEnabled()
+		let noPoliciesEnabled = sut.areZeroDisclosurePoliciesEnabled()
+		
+		// Then
+		expect(bothPoliciesEnabled) == false
+		expect(only1GEnabled) == false
+		expect(only3GEnabled) == false
+		expect(noPoliciesEnabled) == true
 	}
 }

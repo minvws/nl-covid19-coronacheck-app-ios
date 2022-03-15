@@ -47,31 +47,42 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.holderRecoveryStartMessage()
 		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
-
-	func test_content_positiveTestMode() {
-
+	
+	func test_content_vaccinationAndPositiveTestMode() {
+		
 		// When
-		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .positiveTest)
-
-		// Then
-		expect(self.sut.title) == L.holderPositiveTestStartTitle()
-		expect(self.sut.message) == L.holderPositiveTestStartMessage()
-		expect(self.sut.primaryButtonIcon) == I.digid()
-	}
-
-	func test_content_paperflowMode() {
-
-		// When
-		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow)
-
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationAndPositiveTest)
+		
 		// Then
 		expect(self.sut.title) == ""
 		expect(self.sut.message) == ""
 		expect(self.sut.primaryButtonIcon).to(beNil())
 	}
-
+	
+	func test_content_paperflowMode() {
+		
+		// When
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow)
+		
+		// Then
+		expect(self.sut.title) == ""
+		expect(self.sut.message) == ""
+		expect(self.sut.primaryButtonIcon).to(beNil())
+	}
+	
+	func test_content_vaccinationAssessment() {
+		
+		// When
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationassessment)
+		
+		// Then
+		expect(self.sut.title) == ""
+		expect(self.sut.message) == ""
+		expect(self.sut.primaryButtonIcon).to(beNil())
+	}
+	
 	func test_content_negativeTestMode() {
-
+		
 		// When
 		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
 
@@ -111,6 +122,32 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .vaccination)
 	}
 
+	func test_primaryButtonTapped_vaccinationMode_checkBoxToggled_true() {
+		
+		// Given
+		sut.checkboxToggled(value: true)
+		
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .vaccinationAndPositiveTest)
+	}
+	
+	func test_primaryButtonTapped_vaccinationMode_checkBoxToggled_false() {
+		
+		// Given
+		sut.checkboxToggled(value: false)
+		
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(eventMode: .vaccination)
+	}
+	
 	func test_primaryButtonTapped_recoveryMode() {
 
 		// Given

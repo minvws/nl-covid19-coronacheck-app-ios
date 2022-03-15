@@ -9,7 +9,7 @@ import UIKit
 
 class RemoteEventStartViewController: BaseViewController {
 
-	private let viewModel: RemoteEventStartViewModel
+	internal let viewModel: RemoteEventStartViewModel
 	internal let sceneView = RemoteEventStartView()
 
 	/// Initializer

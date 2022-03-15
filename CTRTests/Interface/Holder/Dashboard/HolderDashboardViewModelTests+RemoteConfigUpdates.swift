@@ -20,7 +20,7 @@ extension HolderDashboardViewModelTests {
 		environmentSpies.remoteConfigManagerSpy.stubbedAppendUpdateObserverObserverResult = (RemoteConfiguration.default, Data(), URLResponse())
 
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		// Assert
 
@@ -35,7 +35,7 @@ extension HolderDashboardViewModelTests {
 		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
 
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		// Assert
 		expect(self.sut.domesticCards[1]).to(beConfigurationAlmostOutOfDateCard())
@@ -50,7 +50,7 @@ extension HolderDashboardViewModelTests {
 		// Arrange
 		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
 		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
-		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		// Act
 		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards[1] {

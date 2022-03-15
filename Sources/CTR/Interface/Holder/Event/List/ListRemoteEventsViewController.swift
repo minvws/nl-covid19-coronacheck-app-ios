@@ -17,11 +17,11 @@ class ListRemoteEventsViewController: BaseViewController {
 
 	struct Row {
 		let title: String
-		let subTitle: String
+		let details: [String]
 		let action: (() -> Void)?
 	}
 
-	private let viewModel: ListRemoteEventsViewModel
+	internal let viewModel: ListRemoteEventsViewModel
 	private let sceneView = ListRemoteEventsView()
 
 	/// Initializer
@@ -118,7 +118,7 @@ class ListRemoteEventsViewController: BaseViewController {
 			.map { rowModel -> RemoteEventItemView in
 				RemoteEventItemView.makeView(
 					title: rowModel.title,
-					subTitle: rowModel.subTitle,
+					details: rowModel.details,
 					command: rowModel.action
 				)
 			}
@@ -174,13 +174,13 @@ extension RemoteEventItemView {
 	/// - Returns: an event item view
 	fileprivate static func makeView(
 		title: String,
-		subTitle: String,
+		details: [String],
 		command: (() -> Void)? ) -> RemoteEventItemView {
 
 		let view = RemoteEventItemView()
 		view.isUserInteractionEnabled = true
 		view.title = title
-		view.subTitle = subTitle
+		view.details = details
 		view.link = L.holderEventDetails()
 		view.disclaimerButtonTappedCommand = command
 		return view

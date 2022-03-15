@@ -41,7 +41,7 @@ protocol PaperProofCoordinatorDelegate: AnyObject {
 	func userWishesToGoBackToScanCertificate()
 }
 
-final class PaperProofCoordinator: Coordinator, Logging, OpenUrlProtocol {
+final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 	

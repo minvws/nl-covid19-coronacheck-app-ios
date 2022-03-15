@@ -11,49 +11,49 @@ import Clcore
 import Nimble
 
 class VerifierScanViewModelTests: XCTestCase {
-
-    /// Subject under test
+	
+	/// Subject under test
 	private var sut: VerifierScanViewModel!
-
-    /// The coordinator spy
+	
+	/// The coordinator spy
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
-
+	
 	private var environmentSpies: EnvironmentSpies!
 	
-    override func setUp() {
-
-        super.setUp()
-        verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
+	override func setUp() {
+		
+		super.setUp()
+		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
 		sut = VerifierScanViewModel(coordinator: verifyCoordinatorDelegateSpy)
-    }
-
+	}
+	
 	// MARK: - Tests
-
-    func test_dismiss() {
-
-        // Given
-
-        // When
-        sut?.dismiss()
-
-        // Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome) == true
-    }
-
-	func test_moreInformation() {
-
+	
+	func test_dismiss() {
+		
 		// Given
-
+		
+		// When
+		sut?.dismiss()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome) == true
+	}
+	
+	func test_moreInformation() {
+		
+		// Given
+		
 		// When
 		sut?.didTapMoreInformationButton()
-
+		
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToScanInstruction) == true
 	}
-
+	
 	func test_parseQRMessage_shouldAddScanLogEntry_lowRisk_verificationPolicyEnabled() {
-
+		
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
@@ -108,7 +108,7 @@ class VerifierScanViewModelTests: XCTestCase {
 		// Given
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_FAILED_IS_NL_DCC)
-		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = result
+		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = .success(result)
 
 		// When
 		sut.parseQRMessage("test_verificationFailed_nlDCC")
@@ -124,7 +124,7 @@ class VerifierScanViewModelTests: XCTestCase {
 		// Given
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX)
-		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = result
+		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = .success(result)
 
 		// When
 		sut.parseQRMessage("test_verificationFailed_unknownDCC")
@@ -141,7 +141,7 @@ class VerifierScanViewModelTests: XCTestCase {
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
 		result.details = nil
-		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = result
+		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = .success(result)
 
 		// When
 		sut.parseQRMessage("test_deniedAccess")
@@ -157,7 +157,7 @@ class VerifierScanViewModelTests: XCTestCase {
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_FAILED_ERROR)
 		result.details = details
-		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = result
+		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = .success(result)
 
 		// When
 		sut.parseQRMessage("test_deniedAccess")
@@ -175,7 +175,7 @@ class VerifierScanViewModelTests: XCTestCase {
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
 		result.details = details
-		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = result
+		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = .success(result)
 
 		// When
 		sut.parseQRMessage("test_verificationOK")
@@ -184,5 +184,65 @@ class VerifierScanViewModelTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToCheckIdentity) == true
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToCheckIdentityParameters?.verificationDetails.firstNameInitial) == "A"
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToCheckIdentityParameters?.verificationDetails.lastNameInitial) == "B"
+	}
+	
+	func test_parseQR_publicKeysMissing() {
+		
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = .failure(.keyMissing)
+		
+		// When
+		sut.parseQRMessage("test_parseQR_publicKeysMissing")
+
+		expect(self.sut.alert?.title) == L.generalErrorTitle()
+		expect(self.sut.alert?.subTitle) == L.generalErrorCryptolibMessage("i 140 000 090")
+	}
+	
+	func test_parseQR_noRiskSetting() {
+		
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = .failure(.noRiskSetting)
+		
+		// When
+		sut.parseQRMessage("test_parseQR_noRiskSetting")
+		
+		expect(self.sut.alert?.title) == L.generalErrorTitle()
+		expect(self.sut.alert?.subTitle) == L.generalErrorCryptolibMessage("i 140 000 091")
+	}
+	
+	func test_parseQR_noDefaultVerificationPolicy() {
+		
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = .failure(.noDefaultVerificationPolicy)
+		
+		// When
+		sut.parseQRMessage("test_parseQR_noDefaultVerificationPolicy")
+		
+		expect(self.sut.alert?.title) == L.generalErrorTitle()
+		expect(self.sut.alert?.subTitle) == L.generalErrorCryptolibMessage("i 140 000 092")
+	}
+	
+	func test_parseQR_couldNotVerify() {
+		
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = .failure(.couldNotVerify)
+		
+		// When
+		sut.parseQRMessage("test_parseQR_couldNotVerify")
+		
+		expect(self.sut.alert?.title) == L.generalErrorTitle()
+		expect(self.sut.alert?.subTitle) == L.generalErrorCryptolibMessage("i 140 000 093")
+	}
+	
+	func test_parseQR_unknown() {
+		
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedVerifyQRMessageResult = .failure(.unknown)
+		
+		// When
+		sut.parseQRMessage("test_parseQR_unknown")
+		
+		expect(self.sut.alert?.title) == L.generalErrorTitle()
+		expect(self.sut.alert?.subTitle) == L.generalErrorCryptolibMessage("i 140 000 999")
 	}
 }

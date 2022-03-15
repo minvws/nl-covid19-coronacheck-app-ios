@@ -282,14 +282,14 @@ final class FetchRemoteEventsViewModel: Logging {
 			case .vaccinationassessment, .paperflow:
 				return [] // flow is not part of FetchEvents.
 
-			case .positiveTest:
+			case .vaccinationAndPositiveTest:
 				var vaccinationProviders = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.vaccination) }
 				for index in 0 ..< vaccinationProviders.count {
 					vaccinationProviders[index].queryFilter = EventMode.vaccination.queryFilter
 				}
 				var postiveTestProviders = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.positiveTest) }
 				for index in 0 ..< postiveTestProviders.count {
-					postiveTestProviders[index].queryFilter = EventMode.positiveTest.queryFilter
+					postiveTestProviders[index].queryFilter = EventMode.vaccinationAndPositiveTest.queryFilter
 				}
 				guard vaccinationProviders.isNotEmpty && postiveTestProviders.isNotEmpty else {
 					// Do not proceed if one of the group of providers is empty.
@@ -320,7 +320,7 @@ final class FetchRemoteEventsViewModel: Logging {
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
 			case .vaccinationassessment, .paperflow:
 				return nil
-			case .test, .positiveTest:
+			case .test, .vaccinationAndPositiveTest:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)
 			case .vaccination:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noVaccinationProviderAvailable)
@@ -558,12 +558,7 @@ private extension FetchRemoteEventsViewModel {
 
 		// Expired TVS token
 		guard !errorCodes.contains(where: { $0.detailedCode == FetchRemoteEventsViewModel.detailedCodeTvsSessionExpired }) else {
-			if eventMode == .positiveTest {
-				// This is recoverable, so redirect to login
-				coordinator?.fetchEventsScreenDidFinish(.startWithPositiveTest)
-			} else {
-				displayNonceOrTVSExpired()
-			}
+			displayNonceOrTVSExpired()
 			return
 		}
 

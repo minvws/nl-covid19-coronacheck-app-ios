@@ -71,7 +71,7 @@ class AppStatusViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = EndOfLifeViewModel(coordinator: appCoordinatorSpy, appStoreUrl: nil)
+		sut = AppDeactivatedViewModel(coordinator: appCoordinatorSpy, appStoreUrl: nil)
 
 		// Then
 		expect(self.sut.showCannotOpenAlert) == false
@@ -85,7 +85,7 @@ class AppStatusViewModelTests: XCTestCase {
 		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
 		
 		// When
-		sut = EndOfLifeViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL)
+		sut = AppDeactivatedViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL)
 
 		// Then
 		expect(self.sut.showCannotOpenAlert) == false

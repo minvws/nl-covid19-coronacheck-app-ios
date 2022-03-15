@@ -46,28 +46,6 @@ class IncompleteDutchVaccinationViewController: BaseViewController {
 			self?.sceneView.secondVaccineText = $0
 		}
 		
-		viewModel.$coronaBeforeFirstVaccineText.binding = { [weak self] in
-			self?.sceneView.coronaBeforeFirstVaccineText = $0
-		}
-		
-		viewModel.$learnMoreText.binding = { [weak self] in
-			self?.sceneView.learnMoreText = $0
-		}
-		
-		viewModel.$addVaccinesButtonTitle.binding = { [weak self] in
-			self?.sceneView.addVaccinesButtonTitle = $0
-		}
-		
-		viewModel.$addTestResultsButtonTitle.binding = { [weak self] in
-			self?.sceneView.addTestResultsButtonTitle = $0
-		}
-		
-		sceneView.addVaccinesButtonTapCommand = { [weak self] in
-			self?.viewModel.didTapAddVaccines()
-		}
-		sceneView.addTestResultsButtonTapCommand = { [weak self] in
-			self?.viewModel.didTapAddTestResults()
-		}
 		sceneView.linkTouchedHandler = { [weak viewModel] url in
 			viewModel?.userTappedLink(url: url)
 		}

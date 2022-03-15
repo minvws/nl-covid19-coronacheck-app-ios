@@ -46,7 +46,7 @@ final class EnvironmentSpies {
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
 		result.details = nil
-		spy.stubbedVerifyQRMessageResult = result
+		spy.stubbedVerifyQRMessageResult = .success(result)
 		spy.stubbedDiscloseCredentialResult = Data()
 		return spy
 	}()

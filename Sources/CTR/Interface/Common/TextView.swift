@@ -53,8 +53,9 @@ class TextView: UIStackView {
                     setCustomSpacing(spacing, after: previousElement)
                 }
                 
-                // 2. Add current TextElement
-                let element = TextElement(attributedText: part)
+				// 2. Add current TextElement
+				let element = TextElement(attributedText: part)
+				element.adjustsFontForContentSizeCategory = true
                 
                 // Mark as header?
                 if part.isHeader {

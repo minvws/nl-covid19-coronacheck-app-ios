@@ -155,6 +155,7 @@ extension HolderDashboardViewModel {
 		case exclusive3G
 		case exclusive1G
 		case combined1gAnd3g
+		case zeroG
 	}
 }
 

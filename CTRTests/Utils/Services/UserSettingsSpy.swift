@@ -385,6 +385,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedHasDismissedZeroGPolicySetter = false
+	var invokedHasDismissedZeroGPolicySetterCount = 0
+	var invokedHasDismissedZeroGPolicy: Bool?
+	var invokedHasDismissedZeroGPolicyList = [Bool]()
+	var invokedHasDismissedZeroGPolicyGetter = false
+	var invokedHasDismissedZeroGPolicyGetterCount = 0
+	var stubbedHasDismissedZeroGPolicy: Bool! = false
+
+	var hasDismissedZeroGPolicy: Bool {
+		set {
+			invokedHasDismissedZeroGPolicySetter = true
+			invokedHasDismissedZeroGPolicySetterCount += 1
+			invokedHasDismissedZeroGPolicy = newValue
+			invokedHasDismissedZeroGPolicyList.append(newValue)
+		}
+		get {
+			invokedHasDismissedZeroGPolicyGetter = true
+			invokedHasDismissedZeroGPolicyGetterCount += 1
+			return stubbedHasDismissedZeroGPolicy
+		}
+	}
+
 	var invokedLastKnownConfigDisclosurePolicySetter = false
 	var invokedLastKnownConfigDisclosurePolicySetterCount = 0
 	var invokedLastKnownConfigDisclosurePolicy: [String]?

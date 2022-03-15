@@ -20,6 +20,11 @@ struct RemoteGreenCards: Codable {
 			case euGreenCards = "euGreencards"
 		}
 
+		func getOrigins(ofType: String) -> [RemoteGreenCards.Origin] {
+		
+			return getDomesticOrigins(ofType: ofType) + getInternationalOrigins(ofType: ofType)
+		}
+		
 		func getDomesticOrigins(ofType: String) -> [RemoteGreenCards.Origin] {
 
 			return domesticGreenCard?.origins

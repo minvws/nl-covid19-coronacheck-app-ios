@@ -24,6 +24,7 @@ protocol FeatureFlagManaging {
 	func is1GVerificationPolicyEnabled() -> Bool
 	
 	// Holder
+	func areZeroDisclosurePoliciesEnabled() -> Bool
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool
 	func areBothDisclosurePoliciesEnabled() -> Bool
@@ -85,11 +86,35 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	}
 	
 	// Holder
+	
+	func areZeroDisclosurePoliciesEnabled() -> Bool {
+		
+		if CommandLine.arguments.contains("-disclosurePolicyMode0G") {
+			return true
+		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") ||
+			CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") ||
+			CommandLine.arguments.contains("-disclosurePolicyMode3G") {
+			return false
+		}
+		
+		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
+			return true
+		}
+		
+		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
+			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
+		}
+		
+		return disclosurePolicies.isEmpty || Current.userSettings.overrideDisclosurePolicies == ["0G"]
+	}
+	
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
 		
 		if CommandLine.arguments.contains("-disclosurePolicyMode3G") {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") || CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") {
+		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") ||
+			CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") ||
+			CommandLine.arguments.contains("-disclosurePolicyMode0G") {
 			return false
 		}
 		
@@ -101,14 +126,16 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
 		}
 		
-		return disclosurePolicies == [DisclosurePolicy.policy3G.featureFlag] || disclosurePolicies.isEmpty // Defaults to 3G
+		return disclosurePolicies == [DisclosurePolicy.policy3G.featureFlag]
 	}
 	
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
 		
 		if CommandLine.arguments.contains("-disclosurePolicyMode1G") {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode3G") || CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") {
+		} else if CommandLine.arguments.contains("-disclosurePolicyMode3G") ||
+			CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") ||
+			CommandLine.arguments.contains("-disclosurePolicyMode0G") {
 			return false
 		}
 		
@@ -127,7 +154,9 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		
 		if CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") || CommandLine.arguments.contains("-disclosurePolicyMode3G") {
+		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") ||
+			CommandLine.arguments.contains("-disclosurePolicyMode3G") ||
+			CommandLine.arguments.contains("-disclosurePolicyMode0G") {
 			return false
 		}
 		

@@ -418,6 +418,9 @@ class InputRetrievalCodeViewModel {
 				self.fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
 				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
+			case .blocked:
+				self.fieldErrorMessage = L.holder_inputRetrievalCode_error_blocked()
+				self.decideWhetherToAbortRequestTokenProvidedMode()
 			default:
 				if let networkError = NetworkError.inspect(response: remoteEvent.2) {
 					self.displayError(ServerError.provider(

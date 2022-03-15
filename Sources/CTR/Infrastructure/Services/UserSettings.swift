@@ -41,6 +41,7 @@ protocol UserSettingsProtocol: AnyObject {
 	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
 	
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] { get set }
+	var hasDismissedZeroGPolicy: Bool { get set }
 	var lastKnownConfigDisclosurePolicy: [String] { get set }
 	var overrideDisclosurePolicies: [String] { get set }
 
@@ -102,6 +103,9 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "lastDismissedDisclosurePolicy")
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] = [] // swiftlint:disable:this let_var_whitespace
 
+	@UserDefaults(key: "hasDismissedZeroGPolicy") // special-case because `lastDismissedDisclosurePolicy` was released with `defaultValue: []`
+	var hasDismissedZeroGPolicy: Bool = false
+	
 	@UserDefaults(key: "overrideDisclosurePolicies")
 	var overrideDisclosurePolicies: [String] = [] // swiftlint:disable:this let_var_whitespace
 	
@@ -137,6 +141,7 @@ extension UserSettings {
 			"lastDismissedDisclosurePolicy",
 			"overrideDisclosurePolicies",
 			"lastKnownConfigDisclosurePolicy",
+			"hasDismissedZeroGPolicy",
 
 			// Deprecated keys
 			"shouldShowRecoveryValidityExtensionCard",

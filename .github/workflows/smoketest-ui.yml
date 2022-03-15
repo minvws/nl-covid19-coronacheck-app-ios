@@ -3,9 +3,8 @@
 name: smoketest-ui
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 5 * * 2,4' # Run at 05:00 on Tuesday and Thursday.
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
@@ -14,6 +13,7 @@ env:
   
 jobs:
   smoketest-ui:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-11
     timeout-minutes: 60
     steps:
@@ -24,7 +24,7 @@ jobs:
           xcrun simctl list devices 14.4
       
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1

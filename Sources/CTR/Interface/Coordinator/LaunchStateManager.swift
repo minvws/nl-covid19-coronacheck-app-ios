@@ -64,13 +64,13 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 			delegate?.cryptoLibDidNotInitialize()
 			return
 		}
-
+		
 		if state == .withinTTL {
 			// If within the TTL, and the firstUseDate is nil, that means an existing installation.
 			// Use the documents directory creation date.
 			Current.appInstalledSinceManager.update(dateProvider: FileManager.default)
 		}
-
+		
 		checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
 			switch state {
 				case .finished, .withinTTL:
@@ -98,13 +98,13 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
 		let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
 
-		if remoteConfiguration.isDeactivated {
-			
-			self.delegate?.appIsDeactivated()
-		} else if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
-			let url = remoteConfiguration.appStoreURL {
+		if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
+		   let url = remoteConfiguration.appStoreURL {
 			
 			self.delegate?.updateIsRequired(appStoreUrl: url)
+		} else if remoteConfiguration.isDeactivated {
+			
+			self.delegate?.appIsDeactivated()
 		} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
 			let url = remoteConfiguration.appStoreURL {
 			

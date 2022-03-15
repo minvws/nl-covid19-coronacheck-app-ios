@@ -36,14 +36,12 @@ enum EventScreenResult: Equatable {
 	
 	/// Show event details
 	case showEventDetails(title: String, details: [EventDetails], footer: String?)
-
-	case startWithPositiveTest
 	
 	case shouldCompleteVaccinationAssessment
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.continue, .continue), (.startWithPositiveTest, .startWithPositiveTest), (.backSwipe, .backSwipe), (.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
+			case (.back, .back), (.stop, .stop), (.continue, .continue), (.backSwipe, .backSwipe), (.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
 				return true
 			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
@@ -109,8 +107,6 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	var navigationController: UINavigationController
 
 	weak var delegate: EventFlowDelegate?
-
-	private var tvsToken: TVSAuthorizationToken?
 	
 	/// Initializer
 	/// - Parameters:
@@ -144,14 +140,6 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		startWith(.recovery)
 	}
 
-	func startWithPositiveTest() {
-		if let tvsToken = tvsToken, tvsToken.expiration > Date(timeIntervalSinceNow: 10) {
-			navigateToFetchEvents(token: tvsToken, eventMode: .positiveTest)
-		} else {
-			startWith(.positiveTest)
-		}
-	}
-
 	func startWithListTestEvents(_ events: [RemoteEvent], originalMode: EventMode) {
 		
 		var mode: EventMode = .test
@@ -163,7 +151,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 			} else if event.hasPaperCertificate {
 				mode = .paperflow
 			} else if event.hasPositiveTest {
-				mode = .positiveTest
+				mode = .recovery
 			} else if event.hasNegativeTest {
 				mode = .test
 			} else if event.hasRecovery {
@@ -358,18 +346,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	}
 
 	private func handleBackAction(eventMode: EventMode) {
-		
-		if eventMode == .positiveTest,
-		   navigationController.viewControllers.filter({ $0 is RemoteEventStartViewController }).count > 1,
-		   let listEventViewController = navigationController.viewControllers.first(where: { $0 is ListRemoteEventsViewController }) {
-			
-			navigationController.popToViewController(
-				listEventViewController,
-				animated: true
-			)
-		} else {
-			delegate?.eventFlowDidCancel()
-		}
+
+		delegate?.eventFlowDidCancel()
 	}
 
 	func loginTVSScreenDidFinish(_ result: EventScreenResult) {
@@ -377,7 +355,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 
 			case let .didLogin(token, eventMode):
-				self.tvsToken = token
 				navigateToFetchEvents(token: token, eventMode: eventMode)
 
 			case .errorRequiringRestart(let eventMode):
@@ -412,10 +389,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
 				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
 
-			case .startWithPositiveTest:
-				// route after international QR only, and backend says token expired, while our check says valid.
-				tvsToken = nil
-				startWithPositiveTest()
 			default:
 				break
 		}
@@ -428,7 +401,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				if !navigateBackToVisitorPassStart() {
 					navigateBackToTestStart()
 				}
-			case .recovery, .vaccination, .positiveTest:
+			case .recovery, .vaccination, .vaccinationAndPositiveTest:
 				navigateBackToEventStart()
 			case .test:
 				if !navigateBackToEventStart() {
@@ -454,8 +427,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
 			case let .showEventDetails(title, details, footer):
 				navigateToEventDetails(title, details: details, footer: footer)
-			case .startWithPositiveTest:
-				startWithPositiveTest()
 			case .shouldCompleteVaccinationAssessment:
 				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
 			default:
@@ -486,9 +457,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 							return L.holderErrorstateLoginMessageRecovery()
 						case .paperflow:
 							return "" // HKVI is not a part of this flow
-						case .test, .positiveTest:
+						case .test:
 							return L.holderErrorstateLoginMessageTest()
-						case .vaccination:
+						case .vaccination, .vaccinationAndPositiveTest:
 							return L.holderErrorstateLoginMessageVaccination()
 					}
 				}(),

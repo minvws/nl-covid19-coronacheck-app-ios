@@ -45,8 +45,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesToCreateARecoveryQR()
 	
-	func userWishesToFetchPositiveTests()
-	
 	func userDidScanRequestToken(requestToken: RequestToken)
 	
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
@@ -87,10 +85,10 @@ class HolderCoordinator: SharedCoordinator {
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
 	/// Docs: https://shrtm.nu/oc45
-	private var thirdpartyTicketApp: (name: String, returnURL: URL)?
+	internal var thirdpartyTicketApp: (name: String, returnURL: URL)?
 	
 	/// If set, this should be handled at the first opportunity:
-	private var unhandledUniversalLink: UniversalLink?
+	internal var unhandledUniversalLink: UniversalLink?
 	
 	// MARK: - Setup
 	
@@ -207,7 +205,7 @@ class HolderCoordinator: SharedCoordinator {
 				
 				// Reset the dashboard back to the domestic tab:
 				if let dashboardViewController = navigationController.viewControllers.last as? HolderDashboardViewController {
-					dashboardViewController.viewModel.selectTab = .domestic
+					dashboardViewController.viewModel.selectTab(newTab: .domestic)
 				}
 				return true
 				
@@ -255,17 +253,6 @@ class HolderCoordinator: SharedCoordinator {
 		)
 		addChildCoordinator(eventCoordinator)
 		eventCoordinator.startWithNegativeTest()
-		
-	}
-	
-	private func startEventFlowForPositiveTests() {
-		
-		let eventCoordinator = EventCoordinator(
-			navigationController: navigationController,
-			delegate: self
-		)
-		addChildCoordinator(eventCoordinator)
-		eventCoordinator.startWithPositiveTest()
 		
 	}
 	
@@ -504,10 +491,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToCreateARecoveryQR() {
 		startEventFlowForRecovery()
-	}
-	
-	func userWishesToFetchPositiveTests() {
-		startEventFlowForPositiveTests()
 	}
 	
 	func userWishesToCreateAQR() {

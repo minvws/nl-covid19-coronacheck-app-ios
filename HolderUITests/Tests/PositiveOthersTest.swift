@@ -71,7 +71,8 @@ class PositiveOthersTest: BaseTest {
 		let person = TestData.posBreathalyzerP1
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
-		assertNoCertificateCouldBeCreated()
+		assertPositiveTestResultNotValidAnymore()
+		assertNoCertificateCouldBeCreatedIn0G()
 		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
@@ -87,7 +88,7 @@ class PositiveOthersTest: BaseTest {
 		let person = TestData.posOldAgob
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
-		assertNoCertificateCouldBeCreated()
+		assertPositiveTestResultNotValidAnymore()
 	}
 	
 	// MARK: Positive tests - premature

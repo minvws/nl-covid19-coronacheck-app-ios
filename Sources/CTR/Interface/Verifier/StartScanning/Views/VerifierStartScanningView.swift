@@ -51,9 +51,6 @@ class VerifierStartScanningView: BaseView {
 		}
 	}
 
-	/// Scroll view bottom constraint
-	private var bottomScrollViewConstraint: NSLayoutConstraint?
-
 	private let scrollView: UIScrollView = {
 
 		let view = UIScrollView()
@@ -106,6 +103,7 @@ class VerifierStartScanningView: BaseView {
 		view.respectAnimationFrameRate = true
 		view.backgroundBehavior = .pauseAndRestore
 		view.loopMode = .loop
+		view.accessibilityTraits = .updatesFrequently
 		return view
 	}()
 	
@@ -155,6 +153,9 @@ class VerifierStartScanningView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .horizontal
 		view.spacing = ViewTraits.RiskIndicator.spacing
+		if #available(iOS 15.0, *) {
+			view.maximumContentSizeCategory = .accessibilityMedium
+		}
 		return view
 	}()
 
@@ -228,22 +229,16 @@ class VerifierStartScanningView: BaseView {
 			scrollView.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-			{
-				let constraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
-				bottomScrollViewConstraint = constraint
-				return constraint
-			}(),
+			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor),
 
 			// Outer StackView
-			stackView.widthAnchor.constraint(
-				equalTo: scrollView.widthAnchor),
-			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+			stackView.heightAnchor.constraint(equalTo: scrollView.contentLayoutGuide.heightAnchor),
 			stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
 			stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
 		])
 		
 		// Setup content views:
-		bottomScrollViewConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
 
@@ -295,6 +290,12 @@ class VerifierStartScanningView: BaseView {
 			contentStackView.setCustomSpacing(spacing, after: titleLabel)
 			let topMargin = hasTitle ? ViewTraits.Title.topSpacing : ViewTraits.Content.topSpacing
 			contentStackView.directionalLayoutMargins.top = topMargin
+			
+			if headerTitle != nil, oldValue == nil {
+				UIAccessibility.post(notification: .layoutChanged, argument: titleLabel)
+			} else if oldValue != nil, headerTitle == nil {
+				UIAccessibility.post(notification: .layoutChanged, argument: riskIndicatorLabel)
+			}
 		}
 	}
 
@@ -345,6 +346,9 @@ class VerifierStartScanningView: BaseView {
 			text: params.1,
 			style: .bodyDark
 		)
+		riskIndicatorStackView.setupLargeContentViewer(title: riskIndicatorLabel.attributedText?.string)
+		riskIndicatorStackView.isAccessibilityElement = true
+		riskIndicatorStackView.accessibilityLabel = riskIndicatorLabel.attributedText?.string
 	}
 
 	/// The user tapped on the primary button

@@ -187,6 +187,14 @@ class HolderDashboardViewController: BaseViewController {
 			guard let self = self, self.didSetInitialStartingTabOnSceneView else { return }
 			sceneView.selectTab(tab: region)
 		}
+		
+		viewModel.$shouldShowTabBar.binding = { [sceneView] in
+			sceneView.shouldShowTabBar = $0
+		}
+		
+		viewModel.$shouldShowOnlyInternationalPane.binding = { [sceneView] in
+			sceneView.shouldShowOnlyInternationalPane = $0
+		}
 	}
 
 	private func setup(cards: [HolderDashboardViewController.Card], with stackView: UIStackView) {
@@ -310,6 +318,7 @@ private extension HolderDashboardViewController.Card {
 				qrCard.validityTexts = validityTexts
 				qrCard.expiryEvaluator = expiryCountdownEvaluator
 				qrCard.isLoading = isLoading
+				qrCard.accessibilityIdentifier = "QRCard"
 				return qrCard
 				
 			case let .errorMessage(message, didTapTryAgain):
