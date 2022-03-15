@@ -58,7 +58,7 @@ class LoginTVSViewModel: Logging {
 			secondaryAction: nil
 		)
 
-		openIdManager?.requestAccessToken() { tvsToken in
+		openIdManager?.requestAccessToken { tvsToken in
 
 			self.shouldShowProgress = false
 
