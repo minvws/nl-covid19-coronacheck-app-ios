@@ -116,9 +116,9 @@ extension VerifiedAccess {
 			case .verified(let verificationPolicy):
 				switch verificationPolicy {
 					case .policy3G:
-						return C.accessColor()
+						return C.secondaryGreen()!
 					case .policy1G:
-						return C.primaryColor()
+						return C.primaryBlue()!
 				}
 			case .demo:
 				return C.grey4()

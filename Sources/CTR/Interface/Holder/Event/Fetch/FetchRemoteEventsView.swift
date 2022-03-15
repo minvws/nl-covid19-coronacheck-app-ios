@@ -42,7 +42,7 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 		} else {
 			view.style = .whiteLarge
 		}
-		view.color = Theme.colors.primary
+		view.color = C.primaryBlue()
 		return view
 	}()
 	

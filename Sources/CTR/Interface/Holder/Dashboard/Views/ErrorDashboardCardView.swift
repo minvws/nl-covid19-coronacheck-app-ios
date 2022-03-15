@@ -13,7 +13,7 @@ final class ErrorDashboardCardView: BaseView {
 	private enum ViewTraits {
 		
 		enum Color {
-			static let tint: UIColor = Theme.colors.utilityError
+			static let tint: UIColor = C.error()!
 		}
 		enum Font {
 			static let font: UIFont = Theme.fonts.subhead

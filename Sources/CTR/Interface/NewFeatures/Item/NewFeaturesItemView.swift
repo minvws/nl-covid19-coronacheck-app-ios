@@ -104,7 +104,7 @@ final class NewFeaturesItemView: ScrolledStackView {
 			taglineLabel.attributedText = tagline?.setLineHeight(
 				ViewTraits.taglineLineHeight,
 				kerning: ViewTraits.taglineKerning,
-				textColor: Theme.colors.primary
+				textColor: C.primaryBlue()!
 			)
 		}
 	}

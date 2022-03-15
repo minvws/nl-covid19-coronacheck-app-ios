@@ -188,9 +188,9 @@ final class RiskLevelIndicator: BaseView {
 		
 		switch verificationPolicy {
 			case .policy3G:
-				indicatorImageView.tintColor = Theme.colors.access
+				indicatorImageView.tintColor = C.secondaryGreen()
 			case .policy1G:
-				indicatorImageView.tintColor = Theme.colors.primary
+				indicatorImageView.tintColor = C.primaryBlue()
 			case .none:
 				isHidden = true
 		}

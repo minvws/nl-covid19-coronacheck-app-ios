@@ -69,7 +69,7 @@ class RemoteEventItemView: BaseView {
 		
 		super.setupViews()
 		view?.backgroundColor = Theme.colors.viewControllerBackground
-		linkLabel.textColor = Theme.colors.primary
+		linkLabel.textColor = C.primaryBlue()
 		backgroundButton.addTarget(
 			self,
 			action: #selector(disclaimerButtonTapped),
@@ -192,7 +192,7 @@ class RemoteEventItemView: BaseView {
 			linkLabel.attributedText = link?.setLineHeight(
 				ViewTraits.Link.lineHeight,
 				kerning: ViewTraits.Link.kerning,
-				textColor: Theme.colors.primary
+				textColor: C.primaryBlue()!
 			)
 			backgroundButton.accessibilityLabel = link
 		}

@@ -170,7 +170,7 @@ class ShowQRIrrelevantView: BaseView {
 			actionLabel.attributedText = action?.setLineHeight(
 				ViewTraits.actionLineHeight,
 				alignment: .center,
-				textColor: Theme.colors.primary
+				textColor: C.primaryBlue()!
 			)
 			setupAccessibility()
 		}

@@ -108,14 +108,14 @@ private class LargeAddCertificateButton: UIControl {
 	private let plusImageView: UIImageView = {
 		let imageView = UIImageView(image: I.plus())
 		imageView.translatesAutoresizingMaskIntoConstraints = false
-		imageView.tintColor = Theme.colors.primary
+		imageView.tintColor = C.primaryBlue()
 		return imageView
 	}()
 	
 	private let titleLabel: Label = {
 		let label = Label(body: nil).multiline()
 		label.textAlignment = .center
-		label.textColor = Theme.colors.primary
+		label.textColor = C.primaryBlue()
 		
 		return label
 	}()

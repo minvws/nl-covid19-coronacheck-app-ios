@@ -228,8 +228,6 @@ class Fonts {
 
 final class Colors {
 
-	var primary: UIColor { return color(for: "PrimaryColor") }
-
 	var secondary: UIColor { return color(for: "SecondaryColor") }
 	
 	var secondaryText: UIColor { return color(for: "SecondaryText") }
@@ -250,11 +248,7 @@ final class Colors {
 
 	var line: UIColor { return color(for: "LineColor") }
 
-	var utilityError: UIColor { return color(for: "UtilityError") }
-
 	var denied: UIColor { return color(for: "DeniedColor") }
-
-	var access: UIColor { return color(for: "AccessColor") }
 
 	var grey1: UIColor { return color(for: "Grey1") }
 

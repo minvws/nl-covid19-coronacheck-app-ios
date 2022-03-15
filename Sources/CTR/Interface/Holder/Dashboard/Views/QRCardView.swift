@@ -577,7 +577,7 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 	}()
 
 	private let label: Label = {
-		let label = Label(title3: "", textColor: Theme.colors.primary, montserrat: true)
+		let label = Label(title3: "", textColor: C.primaryBlue()!, montserrat: true)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.lineBreakMode = .byTruncatingTail
 		label.setContentCompressionResistancePriority(.required, for: .vertical)

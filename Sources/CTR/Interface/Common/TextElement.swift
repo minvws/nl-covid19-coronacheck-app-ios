@@ -56,8 +56,8 @@ class TextElement: UITextView, UITextViewDelegate {
         textContainer.lineFragmentPadding = 0
         textContainerInset = .zero
         linkTextAttributes = [
-            .foregroundColor: Theme.colors.primary,
-            .underlineColor: Theme.colors.primary
+            .foregroundColor: C.primaryBlue()!,
+            .underlineColor: C.primaryBlue()!
         ]
     }
 	

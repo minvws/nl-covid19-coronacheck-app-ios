@@ -105,7 +105,7 @@ final class NewDisclosurePolicyView: ScrolledStackView {
 			taglineLabel.attributedText = tagline?.setLineHeight(
 				ViewTraits.Tagline.lineHeight,
 				kerning: ViewTraits.Tagline.kerning,
-				textColor: Theme.colors.primary
+				textColor: C.primaryBlue()!
 			)
 		}
 	}
