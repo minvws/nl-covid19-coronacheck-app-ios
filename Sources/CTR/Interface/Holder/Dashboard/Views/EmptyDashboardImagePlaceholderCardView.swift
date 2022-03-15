@@ -48,7 +48,7 @@ final class EmptyDashboardImagePlaceholderCardView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.emptyDashboardColor
+		backgroundColor = C.primaryBlue5()
 		layer.cornerRadius = ViewTraits.Radius.corner
 	}
 	

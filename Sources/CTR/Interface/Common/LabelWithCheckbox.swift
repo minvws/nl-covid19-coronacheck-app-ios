@@ -176,7 +176,7 @@ final class LabelWithCheckbox: UIControl {
 	private func applyState() {
 		iconImageView.isHighlighted = isSelected
 		iconImageView.image = hasError ? Images.Icon.error : Images.Icon.normal
-		backgroundColor = hasError ? C.consentButtonError() : C.primaryBlue5()
+		backgroundColor = hasError ? C.error5() : C.primaryBlue5()
 	}
 
 	@objc private func toggle() {

@@ -234,21 +234,13 @@ final class Colors {
 
     var tertiary: UIColor { return color(for: "TertiaryColor") }
 
-	var gray: UIColor { return color(for: "DotGray") }
-
-	var disabledIcon: UIColor { return color(for: "DisabledIcon") }
-
 	var viewControllerBackground: UIColor { return color(for: "ViewControllerBackgroundColor") }
-
-	var appointment: UIColor { return color(for: "AppointmentColor") }
 
 	var shadow: UIColor { return color(for: "ShadowColor") }
 
 	var lightBackground: UIColor { return color(for: "LightBackgroundColor") }
 
 	var line: UIColor { return color(for: "LineColor") }
-
-	var denied: UIColor { return color(for: "DeniedColor") }
 
 	var grey1: UIColor { return color(for: "Grey1") }
 
@@ -261,8 +253,6 @@ final class Colors {
 	var grey5: UIColor { return color(for: "Grey5") }
 
 	var highlightBackgroundColor: UIColor { return color(for: "HighlightBackgroundColor") }
-	
-	var emptyDashboardColor: UIColor { return color(for: "EmptyDashboardColor") }
 
     // MARK: - Private
 

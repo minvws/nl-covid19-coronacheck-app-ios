@@ -35,7 +35,7 @@ class ButtonLoadingOverlayView: UIView {
 
 			activityIndicatorView.color = buttonAppearsEnabled
 				? Theme.colors.viewControllerBackground
-				: Theme.colors.gray
+				: C.grey3()!
 		}
 	}
 
