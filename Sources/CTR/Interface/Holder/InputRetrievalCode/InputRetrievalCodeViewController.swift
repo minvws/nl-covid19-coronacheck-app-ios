@@ -334,7 +334,7 @@ extension InputRetrievalCodeViewController: UITextFieldDelegate {
 
 				// Okay so shift the scrollView up by the correction:
 				UIView.animate(withDuration: 0.2) {
-					sceneView.scrollView.contentOffset.y += correction
+					self.sceneView.scrollView.contentOffset.y += correction
 				}
 			}
 		}

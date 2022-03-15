@@ -210,6 +210,7 @@ final class HolderDashboardView: BaseView {
 
 	/// Updates selected tab position
 	func updateScrollPosition() {
+		guard shouldShowTabBar else { return }
 		let selectedTab = tabBar.selectedTab.rawValue
 		scrollView.contentOffset = CGPoint(x: scrollView.bounds.width * CGFloat(selectedTab), y: 0)
 	}
