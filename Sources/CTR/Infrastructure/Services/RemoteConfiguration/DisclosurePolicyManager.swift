@@ -14,6 +14,7 @@ protocol DisclosurePolicyManaging {
 	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken
 	func removeObserver(token: ObserverToken)
 	func setDisclosurePolicyUpdateHasBeenSeen()
+	func getDisclosurePolicies() -> [String]
 	
 	var hasChanges: Bool { get }
 }
@@ -56,16 +57,26 @@ class DisclosurePolicyManager: Logging {
 	
 	func setDisclosurePolicyUpdateHasBeenSeen() {
 		
-		guard let policies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
-			return
-		}
-		
-		Current.userSettings.lastKnownConfigDisclosurePolicy = policies
+		let disclosurePolicies = getDisclosurePolicies()
+		Current.userSettings.lastKnownConfigDisclosurePolicy = disclosurePolicies
 	}
 	
 	var hasChanges: Bool {
 		
-		return Current.userSettings.lastKnownConfigDisclosurePolicy != remoteConfigManager.storedConfiguration.disclosurePolicies
+		let disclosurePolicies = getDisclosurePolicies()
+		return Current.userSettings.lastKnownConfigDisclosurePolicy != disclosurePolicies
+	}
+	
+	func getDisclosurePolicies() -> [String] {
+		
+		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
+			return []
+		}
+		
+		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
+			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
+		}
+		return disclosurePolicies
 	}
 }
 
