@@ -2,7 +2,7 @@
 "endOfLife.description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
 /* MARK: - EndOfLife */
 "endOfLife.error.message" = "De website kan niet geopend worden.";
-"endOfLife.title" = "App buiten werking";
+"endOfLife.title" = "App niet in gebruik";
 "general.add" = "Toevoegen";
 "general.back" = "Terug";
 /* MARK: - General */
@@ -72,7 +72,7 @@
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Lees meer:";
-"holder.about.text" = "<p>CoronaCheck is ontwikkeld om de samenleving beetje bij beetje te openen. Zo kunnen we steeds meer plekken bezoeken en weer op reis.</p><p>CoronaCheck maakt een coronabewijs van je vaccinatie, negatieve testuitslag of als je corona hebt gehad en bent hersteld. Je coronabewijs heeft een QR-code. Laat deze scannen voor toegang tot plekken of activiteiten in Nederland, of om internationaal mee te reizen (het EU Digitaal Corona Certificaat).</p>";
+"holder.about.text" = "<p>CoronaCheck is ontwikkeld om de samenleving beetje bij beetje veilig te openen in tijden van corona.</p><p>Met de app kun je een coronabewijs maken van je vaccinatie, negatieve testuitslag of als je corona hebt gehad en bent hersteld. Je coronabewijs heeft een QR-code. Laat deze scannen voor toegang tot plekken of activiteiten, of om mee te reizen.</p>";
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
 "holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw bewijs.</p><b>1. Kies het soort bewijs</b><p>Je kan een vaccinatiebewijs, een testbewijs of een herstelbewijs maken.</p><b>2. Automatisch gegevens ophalen</b><p>De app haalt direct de gegevens van je vaccinatie, testuitslag of herstel op.</p><b>3. QR-codes staan klaar</b><p>De app maakt twee QR-codes: een QR-code voor Nederland en een internationale.</p>";
@@ -350,14 +350,14 @@
 "holder.onboarding.message.privacy" = "De app maakt QR-codes voor in Nederland en het buitenland. Ga je de grens over? Gebruik dan je internationale QR-code.";
 "holder.onboarding.message.safely" = "Jouw gezondheid en die van anderen is belangrijk. Laat daarom je coronabewijs zien om veilig toegang te krijgen tot plekken. Of als je op reis gaat.";
 "holder.onboarding.message.validity" = "De QR-code op je bewijs wordt gecheckt bij de ingang van plekken en activiteiten. Of aan de grens.";
-"holder.onboarding.message.yourqr" = "<p>Met deze app kun je een bewijs maken als je bent:</p><ul><li>Gevaccineerd</li><li>Hersteld van corona</li><li>Getest en geen corona hebt</li></ul>";
+"holder.onboarding.message.yourqr" = "<p>Je kunt een bewijs maken als je:</p><ul><li>Gevaccineerd bent</li><li>Positief getest bent en hersteld van corona</li><li>Negatief getest bent en geen corona hebt</li></ul>";
 "holder.onboarding.title.privacy" = "QR-codes voor Nederland en internationaal";
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Krijg toegang met je bewijs";
 "holder.onboarding.title.validity" = "Je bewijs heeft een QR-code";
 "holder.onboarding.title.yourqr" = "Bewijs van vaccinatie, herstel, of test";
-"holder.paperproof.internationalQROnly.message" = "Met de gegevens in internationale QR-codes kan ook direct een Nederlands bewijs gemaakt worden. Zo hoef je ze niet allebei te scannen.";
-"holder.paperproof.internationalQROnly.title" = "Waarom alleen internationaal?";
+"holder.paperproof.internationalQROnly.message" = "In je internationale QR-code staan de gegevens die nodig zijn om jouw bewijs in de app te zetten. Heb je ook een papieren bewijs met een Nederlandse QR-code? Dan hoef je deze niet te scannen.";
+"holder.paperproof.internationalQROnly.title" = "Waarom de internationale QR-code?";
 "holder.paperproof.notoken.action" = "Voeg bewijs toe via DigiD";
 "holder.paperproof.notoken.message" = "<p>Het is dan niet mogelijk om je bewijzen op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie als je jouw papieren bewijzen hebt aangevraagd bij je zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je zelf je bewijs geprint?</b><br />Je kunt dan je bewijzen toevoegen aan de app met behulp van DigiD.</p>";
 "holder.paperproof.notoken.title" = "Geen lettercombinatie?";
@@ -372,8 +372,8 @@
 "holder.paperproof.start.selfprinted" = "Zelf je bewijs uitgeprint?";
 "holder.paperproof.start.title" = "Papieren bewijzen toevoegen";
 "holder.paperproof.startscanning.action" = "Start scannen";
-"holder.paperproof.startscanning.international" = "Waarom alleen internationaal?";
-"holder.paperproof.startscanning.message" = "<p>Scan met de camera van je telefoon alleen de <b>internationale QR-code</b> op je papieren bewijs.</p><p>Heb je meerdere internationale QR-codes? Doorloop deze stappen straks opnieuw voor elke QR-code die je in de app wilt hebben.</p>";
+"holder.paperproof.startscanning.international" = "Waarom de internationale QR-code?";
+"holder.paperproof.startscanning.message" = "<p>Scan met de camera van je telefoon de <b>internationale QR-code</b> op je papieren bewijs.</p><p>Heb je meerdere internationale QR-codes? Doorloop deze stappen straks opnieuw voor elke QR-code die je in de app wilt hebben.</p>";
 "holder.paperproof.startscanning.title" = "Scan je internationale QR-code";
 "holder.provider.commercial.title" = "Andere testlocatie";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
@@ -410,7 +410,7 @@
 "holder.showqr.eu.about.recovery.date" = "Testdatum / Test date:";
 "holder.showqr.eu.about.recovery.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 "holder.showqr.eu.about.recovery.dateofbirth" = "Geboortedatum / Date of birth*:";
-"holder.showqr.eu.about.recovery.description" = "Ben je in het buitenland of ga je de grens over? Dan zijn er meer gegevens nodig dan in Nederland. Daarom staan in jouw internationale QR-code de volgende gegevens:";
+"holder.showqr.eu.about.recovery.description" = "In jouw internationale QR-code staan de volgende gegevens:";
 "holder.showqr.eu.about.recovery.identifier" = "Uniek certificaatnummer / Unique certificate identifier:";
 "holder.showqr.eu.about.recovery.issuer" = "Afgever certificaat / Certificate issuer:";
 "holder.showqr.eu.about.recovery.name" = "Naam / Name:";
@@ -422,7 +422,7 @@
 "holder.showqr.eu.about.test.date" = "Testdatum / Test date:";
 "holder.showqr.eu.about.test.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 "holder.showqr.eu.about.test.dateofbirth" = "Geboortedatum / Date of birth*:";
-"holder.showqr.eu.about.test.description" = "Ben je in het buitenland of ga je de grens over? Dan zijn er meer gegevens nodig dan in Nederland. Daarom staan in jouw internationale QR-code de volgende gegevens:";
+"holder.showqr.eu.about.test.description" = "In jouw internationale QR-code staan de volgende gegevens:";
 "holder.showqr.eu.about.test.facility" = "Testlocatie / Testing centre:";
 "holder.showqr.eu.about.test.identifier" = "Uniek certificaatnummer / Unique certificate identifier:";
 "holder.showqr.eu.about.test.issuer" = "Afgever certificaat / Certificate issuer:";
@@ -441,7 +441,7 @@
 "holder.showqr.eu.about.vaccination.date" = "Vaccinatiedatum / Date of vaccination*:";
 "holder.showqr.eu.about.vaccination.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 "holder.showqr.eu.about.vaccination.dateofbirth" = "Geboortedatum / Date of birth*:";
-"holder.showqr.eu.about.vaccination.description" = "Ben je in het buitenland of ga je de grens over? Dan zijn er meer gegevens nodig dan in Nederland. Daarom staan in jouw internationale QR-code de volgende gegevens:";
+"holder.showqr.eu.about.vaccination.description" = "In jouw internationale QR-code staan de volgende gegevens:";
 "holder.showqr.eu.about.vaccination.dosage" = "Dosis / Number in series of doses:";
 "holder.showqr.eu.about.vaccination.identifier" = "Uniek certificaatnummer / Unique certificate identifier:";
 "holder.showqr.eu.about.vaccination.issuer" = "Afgever certificaat / Certificate issuer:";
@@ -698,7 +698,7 @@
 "holder_newintheapp_content_only3G_body" = "De Nederlandse toegangsregels zijn veranderd. Er wordt 3G-toegang gegeven op alle plekken waar om een coronabewijs wordt gevraagd. Dit betekent dat je naar binnen kunt met een bewijs van vaccinatie, herstel, of een negatieve test.";
 "holder_newintheapp_content_only3G_button_next" = "Volgende";
 "holder_newintheapp_content_only3G_title" = "Alleen 3G-toegang";
-"holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "In Nederland wordt het coronatoegangsbewijs niet meer gebruikt. \nNederlandse bewijzen zijn daarom uit de app gehaald. Voor reizen in het buitenland zijn gewoon nog internationale bewijzen te maken en te gebruiken.";
+"holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "In Nederland wordt het coronatoegangsbewijs niet meer gebruikt. Nederlandse bewijzen zijn daarom uit de app gehaald. Voor reizen in het buitenland zijn gewoon nog internationale bewijzen te maken en te gebruiken.";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "Alleen internationale bewijzen";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Je bezoekersbewijs is alleen in Nederland geldig. Wil je naar een ander land? Check de regels van het land dat je wilt bezoeken.</p>\n<p><b>Meer weten?</b><br />Lees meer op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "Over je bezoekersbewijs";
