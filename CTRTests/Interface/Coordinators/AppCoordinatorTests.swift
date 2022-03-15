@@ -610,4 +610,168 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(1))
 		expect(self.sut.childCoordinators.first is VerifierCoordinator) == true
 	}
+	
+	func test_startAsHolder() {
+		
+		// Given
+		sut.flavor = .holder
+		
+		// When
+		sut.applicationShouldStart()
+		
+		// Then
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.last is HolderCoordinator) == true
+	}
+	
+	func test_startAsHolder_withExistingChildCoordinator() {
+		
+		// Given
+		sut.flavor = .holder
+		sut.childCoordinators = [HolderCoordinator(navigationController: sut.navigationController, window: sut.window)]
+		
+		// When
+		sut.applicationShouldStart()
+		
+		// Then
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.last is HolderCoordinator) == true
+	}
+	
+	func test_startAsVerifier() {
+		
+		// Given
+		sut.flavor = .verifier
+		
+		// When
+		sut.applicationShouldStart()
+		
+		// Then
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.last is VerifierCoordinator) == true
+	}
+	
+	func test_startAsVerifier_withExistingChildCoordinator() {
+		
+		// Given
+		sut.flavor = .verifier
+		sut.childCoordinators = [VerifierCoordinator(navigationController: sut.navigationController, window: sut.window)]
+		
+		// When
+		sut.applicationShouldStart()
+		
+		// Then
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.last is VerifierCoordinator) == true
+	}
+	
+	func test_retry() {
+		
+		// Given
+		let launchStateManagerSpy = LaunchStateManagerSpy()
+		sut.launchStateManager = launchStateManagerSpy
+		
+		// When
+		sut.retry()
+		
+		// Then
+		expect(launchStateManagerSpy.invokedEnableRestart) == true
+		expect(self.navigationSpy.viewControllers.last is LaunchViewController) == true
+	}
+	
+	func test_reset() {
+		
+		// Given
+		let launchStateManagerSpy = LaunchStateManagerSpy()
+		sut.launchStateManager = launchStateManagerSpy
+		
+		// When
+		sut.reset()
+		
+		// Then
+		expect(launchStateManagerSpy.invokedEnableRestart) == true
+		expect(self.navigationSpy.viewControllers.last is LaunchViewController) == true
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
+	func test_consume_redeemHolder() {
+		
+		// Given
+		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
+	
+	func test_consume_redeemVaccinationAssessment() {
+		
+		// Given
+		let universalLink = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
+	
+	func test_consume_thirdPartyTicketApp() {
+		
+		// Given
+		let universalLink = UniversalLink.thirdPartyTicketApp(returnURL: URL(string: "https://coronacheck.nl"))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
+	
+	func test_consume_tvsAuth() {
+		
+		// Given
+		let universalLink = UniversalLink.tvsAuth(returnURL: URL(string: "https://coronacheck.nl"))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
+	
+	func test_consume_thirdPartyScannerApp() {
+		
+		// Given
+		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://coronacheck.nl"))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == true
+		expect(self.sut.unhandledUniversalLink) == universalLink
+	}
 }
