@@ -389,18 +389,28 @@ class ListRemoteEventsViewModel: Logging {
 			onBothVaccinationAndRecoveryOrigins: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				
+				guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+					
+					let hasInternationalRecovery = greencardResponse.hasInternationalOrigins(ofType: OriginType.recovery.rawValue)
+					let hasInternationalVaccination = greencardResponse.hasInternationalOrigins(ofType: OriginType.vaccination.rawValue)
+					
+					switch (hasInternationalRecovery, hasInternationalVaccination) {
+						case (true, true):
+							self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
+						case (true, false):
+							self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
+						case (false, true):
+							self.completeFlow()
+						case (false, false):
+							self.viewState = self.originMismatchState(flow: .vaccinationAndPositiveTest)
+					}
+					return
+				}
 				let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
 				if hasDomesticVaccinationOrigins {
 					// End state 6 / 7
 					self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
 				} else {
-					
-					guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
-						// In 0G, go to end state 6 / 7
-						self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
-						return
-					}
-					
 					// End state 8
 					self.viewState = self.positiveTestFlowRecoveryAndInternationalVaccinationCreated()
 				}
