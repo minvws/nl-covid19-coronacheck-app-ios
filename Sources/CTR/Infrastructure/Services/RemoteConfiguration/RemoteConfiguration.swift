@@ -220,6 +220,17 @@ struct RemoteConfiguration: Codable, Equatable {
 
 		return appDeactivated ?? false
 	}
+	
+	func getTLSCertificates() -> [Data] {
+		
+		var result = [Data]()
+		backendTLSCertificates?.forEach { tlsCertificate in
+			if let decoded = tlsCertificate.base64Decoded() {
+				result.append(Data(decoded.utf8))
+			}
+		}
+		return result
+	}
 }
 
 // MARK: Mapping

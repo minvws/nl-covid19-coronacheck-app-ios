@@ -38,8 +38,10 @@ struct SecurityCheckerFactory {
 		var checkForAuthorityKeyIdentifierAndNameAndSuffix = true
 
 		if case SecurityStrategy.data = strategy {
-			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
-			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
+			trustedCertificates = []
+			for tlsCertificate in Current.remoteConfigManager.storedConfiguration.getTLSCertificates() {
+				trustedCertificates.append(tlsCertificate)
+			}
 		}
 
 		if case let .provider(provider) = strategy {
