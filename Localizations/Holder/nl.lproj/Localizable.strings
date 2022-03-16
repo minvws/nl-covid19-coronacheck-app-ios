@@ -355,7 +355,7 @@
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Krijg toegang met je bewijs";
 "holder.onboarding.title.validity" = "Je bewijs heeft een QR-code";
-"holder.onboarding.title.yourqr" = "Bewijs van vaccinatie, herstel, of test";
+"holder.onboarding.title.yourqr" = "Bewijs van vaccinatie, herstel of test";
 "holder.paperproof.internationalQROnly.message" = "In je internationale QR-code staan de gegevens die nodig zijn om jouw bewijs in de app te zetten. Heb je ook een papieren bewijs met een Nederlandse QR-code? Dan hoef je deze niet te scannen.";
 "holder.paperproof.internationalQROnly.title" = "Waarom de internationale QR-code?";
 "holder.paperproof.notoken.action" = "Voeg bewijs toe via DigiD";
@@ -603,9 +603,9 @@
 "holder_dashboard_newvaliditybanner_action" = "Lees meer op Rijksoverheid.nl";
 "holder_dashboard_newvaliditybanner_title" = "De geldigheid van coronabewijzen wordt aangepast";
 "holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
-"holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "Lees meer op Rijksoverheid.nl";
+"holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "Lees meer";
 "holder_dashboard_noDomesticCertificatesBanner_0G_title" = "In Nederland wordt het coronabewijs niet meer gebruikt. Daarom staan er alleen nog internationale bewijzen in de app.";
-"holder_dashboard_noDomesticCertificatesBanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
+"holder_dashboard_noDomesticCertificatesBanner_url" = "https://coronacheck.nl/alleen-internationaal";
 "holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/toegangsregels/1g-bewijs";
 "holder_dashboard_only1GaccessBanner_title" = "Je kunt een bewijs voor 1G-toegang toevoegen wanneer je negatief getest bent";
 "holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/toegangsregels/3g-bewijs";
