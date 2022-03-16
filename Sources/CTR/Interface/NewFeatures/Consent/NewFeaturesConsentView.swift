@@ -57,7 +57,7 @@ class NewFeaturesConsentView: BaseView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = C.highlightBackgroundColor()
+		view.backgroundColor = C.lightBackground()
 		view.layer.cornerRadius = ViewTraits.cornerRadius
 		return view
 	}()

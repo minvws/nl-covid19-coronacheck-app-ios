@@ -27,7 +27,7 @@ class Button: UIButton {
 		func backgroundColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlue, .roundedBlueImage:
-					return isEnabled ? C.primaryBlue()! : C.tertiaryColor()!
+					return isEnabled ? C.primaryBlue()! : C.grey5()!
 				case .roundedWhite, .roundedBlueBorder:
 					return isEnabled ? C.white()! : C.grey2()!
 				case .roundedClear, .textLabelBlue:
