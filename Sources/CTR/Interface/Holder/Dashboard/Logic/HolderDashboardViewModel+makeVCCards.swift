@@ -34,10 +34,14 @@ extension HolderDashboardViewController.Card {
 					buttonTitle: nil
 				)]
 			case .europeanUnion:
-				return [.headerMessage(
-					message: L.holderDashboardIntroInternational(),
-					buttonTitle: L.holderDashboardEmptyInternationalButton()
-				)]
+				return [
+					.headerMessage(
+						message: state.activeDisclosurePolicyMode == .zeroG
+							? L.holder_dashboard_filledState_international_0G_message()
+							: L.holderDashboardIntroInternational(),
+						buttonTitle: L.holderDashboardEmptyInternationalButton()
+					)
+				]
 		}
 	}
 
@@ -145,10 +149,17 @@ extension HolderDashboardViewController.Card {
 					buttonTitle: nil
 				)]
 			case .europeanUnion:
+			if state.activeDisclosurePolicyMode == .zeroG {
+				return [HolderDashboardViewController.Card.emptyStateDescription(
+					message: L.holder_dashboard_emptyState_international_0G_message(),
+					buttonTitle: L.holder_dashboard_international_0G_action_certificateNeeded()
+				)]
+			} else {
 				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: L.holderDashboardEmptyInternationalMessage(),
 					buttonTitle: L.holderDashboardEmptyInternationalButton()
 				)]
+			}
 		}
 	}
 	
