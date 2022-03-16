@@ -103,7 +103,7 @@ class VerifierClockDeviationWarningView: BaseView {
 	/// Create the shadow around a view
 	private func createShadow() {
 		// Shadow
-		layer.shadowColor = UIColor.black.cgColor
+		layer.shadowColor = C.shadow()?.cgColor
 
 		// If there is a stack of squashed views, then halve the shadow opacity on the main `hostView`:
 		layer.shadowOpacity = ViewTraits.shadowOpacity
@@ -132,8 +132,7 @@ class VerifierClockDeviationWarningView: BaseView {
 	}
 	var buttonTitle: String? {
 		didSet {
-			// button.titleLabel?.font = Fonts.bodySemiBold
-			button.setTitle(buttonTitle, for: .normal)
+			button.title = buttonTitle
 		}
 	}
 

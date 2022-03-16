@@ -390,7 +390,7 @@ class QRCardView: BaseView {
 	/// Create the shadow around a view
 	private func createShadow(view: UIView, hasSquashedViews: Bool) {
 		// Shadow
-		view.layer.shadowColor = UIColor.black.cgColor
+		view.layer.shadowColor = C.shadow()?.cgColor
 
 		// If there is a stack of squashed views, then halve the shadow opacity on the main `hostView`:
 		view.layer.shadowOpacity = hasSquashedViews ? ViewTraits.shadowOpacity / 2 : ViewTraits.shadowOpacity
@@ -404,7 +404,7 @@ class QRCardView: BaseView {
 
 	private func createShadow(view: UIView, forSquashedViewIndex squashedViewIndex: Int, forTotalSquashedViewCount totalSquashedViewCount: Int) {
 		// Shadow
-		view.layer.shadowColor = UIColor.black.cgColor
+		view.layer.shadowColor = C.shadow()?.cgColor
 
 		// Fade the shadow in (in 0.05 increments) across the stacked views (they don't all need the same shadow opacity).
 		let index = (squashedViewIndex - totalSquashedViewCount) * -1

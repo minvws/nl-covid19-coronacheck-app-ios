@@ -33,7 +33,7 @@ class IdentityElementView: BaseView {
 		static let headerColor: UIColor = C.black()!
 
 		static let hasContentBorderColor: UIColor = C.grey3()!
-		static let hasContentBackgroundColor = UIColor.white
+		static let hasContentBackgroundColor: UIColor = C.white()!
 
 		static let noContentBorderColor: UIColor = C.grey5()!
 		static let noContentBackgroundColor = C.grey5()
