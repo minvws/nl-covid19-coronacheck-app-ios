@@ -417,18 +417,17 @@ class ListRemoteEventsViewModel: Logging {
 			},
 			onVaccinationOriginOnly: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+				
+				guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+					// In 0G, this is expected behaviour. Go to dashboard
+					self.completeFlow()
+					return
+				}
 
 				let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
 				if hasDomesticVaccinationOrigins {
 					self.completeFlow()
 				} else {
-					
-					guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
-						// In 0G, this is expected behaviour. Go to dashboard
-						self.completeFlow()
-						return
-					}
-			
 					let hasPositiveTestRemoteEvent = remoteEvents.contains { wrapper, _ in wrapper.events?.first?.hasPositiveTest ?? false }
 					if hasPositiveTestRemoteEvent {
 						// End state 9
