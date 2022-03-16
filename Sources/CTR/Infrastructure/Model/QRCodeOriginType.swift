@@ -22,6 +22,16 @@ enum QRCodeOriginType: String, Codable, Equatable {
 			case .vaccinationassessment: return L.general_visitorPass()
 		}
 	}
+	
+	// e.g. "Internationaal vaccinatiebewijs"
+	var localizedProofInternational0G: String {
+		switch self {
+			case .recovery: return L.general_recoverycertificate_0G()
+			case .vaccination: return L.general_vaccinationcertificate_0G()
+			case .test: return L.general_testcertificate_0G()
+			case .vaccinationassessment: return localizedProof
+		}
+	}
 
 	/// There is a particular order to sort these onscreen
 	var customSortIndex: Int {

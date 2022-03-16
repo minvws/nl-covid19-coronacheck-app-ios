@@ -545,7 +545,12 @@ extension HolderDashboardViewModel.QRCard {
 	) -> [HolderDashboardViewController.Card] {
 		
 		return [HolderDashboardViewController.Card.europeanUnionQR(
-			title: (self.origins.first?.type.localizedProof ?? L.holderDashboardQrTitle()).capitalizingFirstLetter(),
+			title: {
+				let localizedProof: String? = state.activeDisclosurePolicyMode == .zeroG
+					? self.origins.first?.type.localizedProofInternational0G
+					: self.origins.first?.type.localizedProof
+				return (localizedProof ?? L.holderDashboardQrTitle()).capitalizingFirstLetter()
+			}(),
 			stackSize: {
 				let minStackSize = 1
 				let maxStackSize = 3
