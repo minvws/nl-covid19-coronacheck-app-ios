@@ -128,7 +128,7 @@ class VerifierStartScanningView: BaseView {
 	private let showInstructionsButton: Button = {
 
 		let button = Button(title: "Button 2", style: .textLabelBlue)
-		button.titleLabel?.font = Theme.fonts.bodyMedium
+		button.titleLabel?.font = Fonts.bodyMedium
 		button.contentHorizontalAlignment = .leading
 		return button
 	}()

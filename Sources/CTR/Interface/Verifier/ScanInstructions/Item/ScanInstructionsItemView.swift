@@ -47,7 +47,7 @@ class ScanInstructionsItemView: ScrolledStackView {
 
 	/// "Step 2" etc, above the title.
 	private let stepSubheadingLabel: Label = {
-		let label = Label("", font: Theme.fonts.bodySemiBold, textColor: C.primaryBlue()!)
+		let label = Label("", font: Fonts.bodySemiBold, textColor: C.primaryBlue()!)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
 	}()

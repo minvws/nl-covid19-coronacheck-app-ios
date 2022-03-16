@@ -16,7 +16,7 @@ final class ErrorDashboardCardView: BaseView {
 			static let tint: UIColor = C.error()!
 		}
 		enum Font {
-			static let font: UIFont = Theme.fonts.subhead
+			static let font: UIFont = Fonts.subhead
 			static let lineHeight: CGFloat = 20
 			static let kern: CGFloat = 0.25
 			static let paragraphSpacing: CGFloat = -3
@@ -74,7 +74,7 @@ final class ErrorDashboardCardView: BaseView {
 			messageTextView.attributedText = .makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
-					font: Theme.fonts.subhead,
+					font: Fonts.subhead,
 					textColor: ViewTraits.Color.tint,
 					lineHeight: ViewTraits.Font.lineHeight,
 					kern: ViewTraits.Font.kern,

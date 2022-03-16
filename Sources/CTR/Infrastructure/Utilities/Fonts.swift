@@ -20,67 +20,67 @@ class Fonts {
 	}
 
 	/// Size 34 points
-    var largeTitle: UIFont {
+    static var largeTitle: UIFont {
 		font(textStyle: .largeTitle, weight: .bold)
     }
 
 	/// Size 28 points
-    var title1: UIFont {
+    static var title1: UIFont {
         font(textStyle: .title1, weight: .bold)
     }
 
 	/// Size 26 points
-	var title1Montserrat: UIFont {
+	static var title1Montserrat: UIFont {
 		Fonts.customMontserratFont(forTextStyle: .title1)
 	}
 
 	/// Size 22 points
-    var title2: UIFont {
+    static var title2: UIFont {
         font(textStyle: .title2, weight: .bold)
     }
 
 	/// Size 20 points
-    var title3: UIFont {
+    static var title3: UIFont {
         font(textStyle: .title3, weight: .bold)
     }
 
 	/// Size 20 points
-	var title3Montserrat: UIFont {
+	static var title3Montserrat: UIFont {
 		font(textStyle: .title3, weight: .bold, customFont: "Montserrat-Bold")
 	}
 
 	/// Size 20 points
-	var title3Medium: UIFont {
+	static var title3Medium: UIFont {
 		font(textStyle: .title3, weight: .medium)
 	}
 
 	/// Size 17 points
-    var headline: UIFont {
+    static var headline: UIFont {
         font(textStyle: .headline)
     }
 
 	/// Size 17 points
-	var headlineBold: UIFont {
+	static var headlineBold: UIFont {
 		font(textStyle: .headline, weight: .bold)
 	}
 	
 	/// Size 17 points
-	var headlineBoldMontserrat: UIFont {
+	static var headlineBoldMontserrat: UIFont {
 		font(textStyle: .headline, weight: .bold, customFont: "Montserrat-Bold")
 	}
 
 	/// Size 17 points
-    var body: UIFont {
+    static var body: UIFont {
         font(textStyle: .body)
     }
 
 	/// Size 17 points
-	var bodyMontserrat: UIFont {
+	static var bodyMontserrat: UIFont {
 		font(textStyle: .body, customFont: "Montserrat-Bold")
 	}
 
 	/// Size 17 points
-	var bodyMontserratFixed: UIFont {
+	static var bodyMontserratFixed: UIFont {
 
 		if let font = UIFont(name: "Montserrat-Bold", size: 17) {
 			return font
@@ -89,77 +89,77 @@ class Fonts {
 	}
 
 	/// Size 17 points
-    var bodyBold: UIFont {
+    static var bodyBold: UIFont {
         font(textStyle: .body, weight: .bold)
     }
 
 	/// Size 17 points
-	var bodyBoldFixed: UIFont {
+	static var bodyBoldFixed: UIFont {
 		return .boldSystemFont(ofSize: 17)
 	}
 
 	/// Size 17 points
-	var bodySemiBold: UIFont {
+	static var bodySemiBold: UIFont {
 		font(textStyle: .body, weight: .semiBold)
 	}
 
 	/// Size 17 points
-	var bodyMedium: UIFont {
+	static var bodyMedium: UIFont {
 		font(textStyle: .body, weight: .medium)
 	}
 
 	/// Size 16 points
-    var callout: UIFont {
+    static var callout: UIFont {
         font(textStyle: .callout)
     }
 	
 	/// Size 16 points
-	var calloutSemiBold: UIFont {
+	static var calloutSemiBold: UIFont {
 		font(textStyle: .callout, weight: .semiBold)
 	}
 
 	/// Size 15 points
-    var subhead: UIFont {
+    static var subhead: UIFont {
         font(textStyle: .subheadline)
     }
 
 	/// Size 15 points
-	var subheadMontserrat: UIFont {
+	static var subheadMontserrat: UIFont {
 		font(textStyle: .subheadline, customFont: "Montserrat-SemiBold")
 	}
 	
 	/// Size 15 points
-	var subheadHeavyBold: UIFont {
+	static var subheadHeavyBold: UIFont {
 		font(textStyle: .subheadline, weight: .heavyBold)
 	}
 
 	/// Size 15 points
-    var subheadBold: UIFont {
+    static var subheadBold: UIFont {
 		font(textStyle: .subheadline, weight: .bold)
     }
 
 	/// Size 15 points
-	var subheadMedium: UIFont {
+	static var subheadMedium: UIFont {
 		font(textStyle: .subheadline, weight: .medium)
 	}
 
 	/// Size 13 points
-    var footnote: UIFont {
+    static var footnote: UIFont {
         font(textStyle: .footnote)
     }
 
 	/// Size 13 points
-	var footnoteMontserrat: UIFont {
+	static var footnoteMontserrat: UIFont {
 		font(textStyle: .footnote, customFont: "Montserrat-SemiBold")
 	}
 
 	/// size 12 points
-    var caption1: UIFont {
+    static var caption1: UIFont {
 		font(textStyle: .caption1, weight: .bold)
     }
 
 	/// size 12 points
-	var caption1SemiBold: UIFont {
+	static var caption1SemiBold: UIFont {
 		font(textStyle: .caption1, weight: .semiBold)
 	}
 
@@ -179,7 +179,7 @@ class Fonts {
 		.caption2: UIFont(name: "Montserrat-Bold", size: 11)!
 	]
 	
-	private func font(
+	private class func font(
 		textStyle: UIFont.TextStyle,
 		weight: Weight? = nil,
 		customFont: String? = nil) -> UIFont {
@@ -224,10 +224,4 @@ class Fonts {
 		
 		return scaledFont
 	}
-}
-
-/// - Tag: Theme
-struct Theme {
-
-    static let fonts = Fonts()
 }

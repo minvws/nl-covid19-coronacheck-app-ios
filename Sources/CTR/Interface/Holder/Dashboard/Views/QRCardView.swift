@@ -463,7 +463,7 @@ class QRCardView: BaseView {
 
 	var viewQRButtonTitle: String? {
 		didSet {
-			viewQRButton.titleLabel?.font = Theme.fonts.bodySemiBold
+			viewQRButton.titleLabel?.font = Fonts.bodySemiBold
 			viewQRButton.setTitle(viewQRButtonTitle, for: .normal)
 		}
 	}

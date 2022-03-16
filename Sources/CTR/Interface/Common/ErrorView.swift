@@ -21,7 +21,7 @@ class ErrorView: BaseView {
 		static let imageTopMargin: CGFloat = 5.0
 		
 		enum Font {
-			static let font: UIFont = Theme.fonts.subhead
+			static let font: UIFont = Fonts.subhead
 			static let lineHeight: CGFloat = 18
 			static let kerning: CGFloat = -0.24
 		}

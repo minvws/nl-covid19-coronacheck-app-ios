@@ -132,7 +132,7 @@ class VerifierClockDeviationWarningView: BaseView {
 	}
 	var buttonTitle: String? {
 		didSet {
-			// button.titleLabel?.font = Theme.fonts.bodySemiBold
+			// button.titleLabel?.font = Fonts.bodySemiBold
 			button.setTitle(buttonTitle, for: .normal)
 		}
 	}

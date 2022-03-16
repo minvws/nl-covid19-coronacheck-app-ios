@@ -29,7 +29,7 @@ class IdentityElementView: BaseView {
 		static let borderHeight: CGFloat = 62.0
 		static let borderWidth: CGFloat = 1.0
 		static let headerAlignment: NSTextAlignment = .natural
-		static let bodyFont: UIFont = Theme.fonts.title2
+		static let bodyFont: UIFont = Fonts.title2
 		static let headerColor: UIColor = C.black()!
 
 		static let hasContentBorderColor: UIColor = C.grey3()!

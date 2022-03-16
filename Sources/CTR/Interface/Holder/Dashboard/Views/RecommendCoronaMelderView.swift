@@ -50,7 +50,7 @@ final class RecommendCoronaMelderCardView: BaseView {
 			contentTextView.attributedText = .makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
-					font: Theme.fonts.subhead,
+					font: Fonts.subhead,
 					textColor: C.grey1()!,
 					kern: ViewTraits.Message.kerning,
 					paragraphSpacing: 0

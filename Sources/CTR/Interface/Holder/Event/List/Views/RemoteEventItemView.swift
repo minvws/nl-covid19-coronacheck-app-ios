@@ -176,7 +176,7 @@ class RemoteEventItemView: BaseView {
 				label.attributedText = .makeFromHtml(
 					text: detail,
 					style: NSAttributedString.HTMLStyle(
-						font: Theme.fonts.subhead,
+						font: Fonts.subhead,
 						textColor: C.secondaryText()!,
 						lineHeight: ViewTraits.Message.lineHeight,
 						kern: ViewTraits.Message.kerning

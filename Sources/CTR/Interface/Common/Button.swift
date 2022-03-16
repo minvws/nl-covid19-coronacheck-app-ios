@@ -52,8 +52,8 @@ class Button: UIButton {
 		
 		var font: UIFont {
 			switch self {
-				case .textLabelBlue: return Theme.fonts.bodyMedium
-				default: return Theme.fonts.bodySemiBold
+				case .textLabelBlue: return Fonts.bodyMedium
+				default: return Fonts.bodySemiBold
 			}
 		}
 		

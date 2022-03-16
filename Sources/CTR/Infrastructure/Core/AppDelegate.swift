@@ -125,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 		let color = C.black()!
 		UINavigationBar.appearance().titleTextAttributes = [
 			NSAttributedString.Key.foregroundColor: color,
-			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
+			NSAttributedString.Key.font: Fonts.bodyMontserratFixed
 		]
 		UINavigationBar.appearance().tintColor = color
 		UINavigationBar.appearance().barTintColor = C.white()

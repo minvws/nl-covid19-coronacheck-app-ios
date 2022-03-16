@@ -19,7 +19,7 @@ class TextElement: UITextView, UITextViewDelegate {
     ///  Initializes the TextView with the given attributed string
     init(
         attributedText: NSAttributedString,
-        font: UIFont = Theme.fonts.body,
+        font: UIFont = Fonts.body,
         textColor: UIColor = C.black()!,
         boldTextColor: UIColor = C.black()!
     ) {
@@ -47,7 +47,7 @@ class TextElement: UITextView, UITextViewDelegate {
         isAccessibilityElement = true
         delegate = self
         
-        font = Theme.fonts.body
+        font = Fonts.body
         isScrollEnabled = false
         isEditable = false
         isSelectable = false

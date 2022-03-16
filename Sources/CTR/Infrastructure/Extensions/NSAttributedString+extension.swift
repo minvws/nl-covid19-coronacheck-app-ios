@@ -87,7 +87,7 @@ public extension NSAttributedString {
 			self.paragraphSpacing = paragraphSpacing
 		}
 
-		static var bodyDark: HTMLStyle = HTMLStyle(font: Theme.fonts.body, textColor: C.black()!)
+		static var bodyDark: HTMLStyle = HTMLStyle(font: Fonts.body, textColor: C.black()!)
 	}
 }
 
