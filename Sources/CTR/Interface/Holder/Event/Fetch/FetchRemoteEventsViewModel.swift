@@ -354,7 +354,7 @@ final class FetchRemoteEventsViewModel: Logging {
 		var eventInformationAvailableResults = [Result<EventFlow.EventInformationAvailable, ServerError>]()
 
 		for provider in eventProviders {
-			guard let url = provider.unomiURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https") else { continue }
+			guard let url = provider.unomiUrl?.absoluteString, provider.accessToken != nil, url.starts(with: "https") else { continue }
 
 			hasEventInformationFetchingGroup.enter()
 			fetchHasEventInformationResponse(
@@ -412,7 +412,7 @@ final class FetchRemoteEventsViewModel: Logging {
 		from provider: EventFlow.EventProvider,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
-		logDebug("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiURL?.absoluteString))")
+		logDebug("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiUrl?.absoluteString))")
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventInformation(provider: provider) { [weak self] result in
@@ -438,7 +438,7 @@ final class FetchRemoteEventsViewModel: Logging {
 
 		for provider in eventProviders {
 
-			if let url = provider.eventURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https"),
+			if let url = provider.eventUrl?.absoluteString, provider.accessToken != nil, url.starts(with: "https"),
 			   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
 
 				eventFetchingGroup.enter()
