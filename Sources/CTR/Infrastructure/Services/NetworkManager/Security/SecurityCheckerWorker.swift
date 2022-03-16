@@ -9,67 +9,67 @@ import Foundation
 import Security
 
 class SecurityCheckerWorker: Logging {
-    
-    internal func certificateFromPEM(certificateAsPemData: Data) -> SecCertificate? {
-        
-        let length = certificateAsPemData.count - 26
-        let derb64 = certificateAsPemData.subdata(in: 28 ..< length)
-        
-        var str = String(decoding: derb64, as: UTF8.self)
-        str = str.replacingOccurrences(of: "\n", with: "")
-
+	
+	internal func certificateFromPEM(certificateAsPemData: Data) -> SecCertificate? {
+		
+		let length = certificateAsPemData.count - 26
+		let derb64 = certificateAsPemData.subdata(in: 28 ..< length)
+		
+		var str = String(decoding: derb64, as: UTF8.self)
+		str = str.replacingOccurrences(of: "\n", with: "")
+		
 		// Fix if certificate has different line endings.
 		if str.hasSuffix("\r-") {
 			logVerbose("certificateAsPemData: \(String(decoding: certificateAsPemData, as: UTF8.self))")
 			str = String(str.replacingOccurrences(of: "\r", with: "").dropLast())
 		}
-
-        if let data = Data(base64Encoded: str),
+		
+		if let data = Data(base64Encoded: str),
 		   let cert = SecCertificateCreateWithData(nil, data as CFData) {
 			return cert
-        }
-        return nil
-    }
-    
-    // This function has an extra option, when the trustedCertificates are
-    // empty, only used during testing.
-    // if so - then the validation will also rely on anything in the system chain
+		}
+		return nil
+	}
+	
+	// This function has an extra option, when the trustedCertificates are
+	// empty, only used during testing.
+	// if so - then the validation will also rely on anything in the system chain
 	// (including any certs the user was fooled into adding, or added intentionally).
 	//
 	internal func checkATS(
 		serverTrust: SecTrust,
 		policies: [SecPolicy],
 		trustedCertificates: [Data]) -> Bool {
-
-		let trustList = createTrustList(trustedCertificates: trustedCertificates)
-
-        if trustList.isEmpty {
-            // add main chain back in.
-            if errSecSuccess != SecTrustSetAnchorCertificatesOnly(serverTrust, false) {
-                logError("checkATS: SecTrustSetAnchorCertificatesOnly failed)")
-                return false
-            }
-        } else {
-            // rely on just the anchors specified.
-            let erm = SecTrustSetAnchorCertificates(serverTrust, trustList as CFArray)
-            if errSecSuccess != erm {
-                logError("checkATS: SecTrustSetAnchorCertificates failed: \(erm)")
-                return false
-            }
-        }
-
-		if #available(iOS 12.0, *) {
-			return evaluateServerTrust(serverTrust)
-		} else {
-			// Fallback on earlier versions
-			return evaluateServerTrustPreiOS12(serverTrust)
+			
+			let trustList = createTrustList(trustedCertificates: trustedCertificates)
+			
+			if trustList.isEmpty {
+				// add main chain back in.
+				if errSecSuccess != SecTrustSetAnchorCertificatesOnly(serverTrust, false) {
+					logError("checkATS: SecTrustSetAnchorCertificatesOnly failed)")
+					return false
+				}
+			} else {
+				// rely on just the anchors specified.
+				let erm = SecTrustSetAnchorCertificates(serverTrust, trustList as CFArray)
+				if errSecSuccess != erm {
+					logError("checkATS: SecTrustSetAnchorCertificates failed: \(erm)")
+					return false
+				}
+			}
+			
+			if #available(iOS 12.0, *) {
+				return evaluateServerTrust(serverTrust)
+			} else {
+				// Fallback on earlier versions
+				return evaluateServerTrustPreiOS12(serverTrust)
+			}
 		}
-	}
-
+	
 	private func createTrustList(trustedCertificates: [Data]) -> [SecCertificate] {
-
+		
 		var result: [SecCertificate] = []
-
+		
 		for certificateAsPemData in trustedCertificates {
 			if let cert = certificateFromPEM(certificateAsPemData: certificateAsPemData) {
 				result.append(cert)
@@ -80,7 +80,7 @@ class SecurityCheckerWorker: Logging {
 		}
 		return result
 	}
-
+	
 	@available(iOS 12.0, *)
 	private func evaluateServerTrust(_ serverTrust: SecTrust) -> Bool {
 		var error: CFError?
@@ -90,10 +90,10 @@ class SecurityCheckerWorker: Logging {
 		}
 		return result
 	}
-
+	
 	// Handle Server Trust pre iOS 12.
 	private func evaluateServerTrustPreiOS12(_ serverTrust: SecTrust) -> Bool {
-
+		
 		var result = SecTrustResultType.invalid
 		if errSecSuccess != SecTrustEvaluate(serverTrust, &result) {
 			logError("checkATS: SecTrustEvaluate: \(result)")
@@ -126,64 +126,64 @@ class SecurityCheckerWorker: Logging {
 		logError("SecTrustEvaluate: returning false.")
 		return false
 	}
-
+	
 	private let openssl = OpenSSL()
-
+	
 	func checkSSL(
 		serverTrust: SecTrust,
 		policies: [SecPolicy],
 		trustedCertificates: [Data],
 		hostname: String,
 		trustedNames: [String]) -> Bool {
-
+			
 		guard checkATS(
-				serverTrust: serverTrust,
-				policies: policies,
-				trustedCertificates: trustedCertificates) else {
-			logError("Bail on ATS")
-			return false
-		}
-
+			serverTrust: serverTrust,
+			policies: policies,
+			trustedCertificates: trustedCertificates) else {
+				logError("Bail on ATS")
+				return false
+			}
+		
 		let hostnameLC = hostname.lowercased()
-        var foundValidCertificate = false
-        var foundValidCommonNameEndsWithTrustedName = trustedNames.isEmpty ? true : false
-        var foundValidFullyQualifiedDomainName = false
-        
-        for index in 0 ..< SecTrustGetCertificateCount(serverTrust) {
-            
-            if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
-                let serverCert = Certificate(certificate: serverCertificate)
+		var foundValidCertificate = false
+		var foundValidCommonNameEndsWithTrustedName = trustedNames.isEmpty ? true : false
+		var foundValidFullyQualifiedDomainName = false
+		
+		for index in 0 ..< SecTrustGetCertificateCount(serverTrust) {
+			
+			if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
+				let serverCert = Certificate(certificate: serverCertificate)
 				logVerbose("Server set at \(index) is \(serverCert)")
-                
-                if let name = serverCert.commonName {
-                    logVerbose("Hostname CN \(name)")
-                    if name.lowercased() == hostnameLC {
-                        foundValidFullyQualifiedDomainName = true
+				
+				if let name = serverCert.commonName {
+					logVerbose("Hostname CN \(name)")
+					if name.lowercased() == hostnameLC {
+						foundValidFullyQualifiedDomainName = true
 						logVerbose("Host matched CN \(name)")
-                    }
-                    if !foundValidCommonNameEndsWithTrustedName {
-                        for trustedName in trustedNames {
-                            if name.lowercased().hasSuffix(trustedName.lowercased()) {
-                                foundValidCommonNameEndsWithTrustedName = true
-                                logVerbose("Found a valid name \(name)")
-                            }
-                        }
-                    }
-                }
-                if openssl.validateSubjectAlternativeDNSName(hostnameLC, forCertificateData: serverCert.data) {
-                    foundValidFullyQualifiedDomainName = true
+					}
+					if !foundValidCommonNameEndsWithTrustedName {
+						for trustedName in trustedNames {
+							if name.lowercased().hasSuffix(trustedName.lowercased()) {
+								foundValidCommonNameEndsWithTrustedName = true
+								logVerbose("Found a valid name \(name)")
+							}
+						}
+					}
+				}
+				if openssl.validateSubjectAlternativeDNSName(hostnameLC, forCertificateData: serverCert.data) {
+					foundValidFullyQualifiedDomainName = true
 					logVerbose("Host matched SAN \(hostname)")
-                }
-                for trustedCertificate in trustedCertificates {
-                    if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
+				}
+				for trustedCertificate in trustedCertificates {
+					if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
 						logVerbose("Found a match with a trusted Certificate")
-                        foundValidCertificate = true
-                    }
-                }
-            }
-        }
+						foundValidCertificate = true
+					}
+				}
+			}
+		}
 		logVerbose("Server trust for \(hostname): validCert \(foundValidCertificate), CN ending \(foundValidCommonNameEndsWithTrustedName), fqdn \(foundValidFullyQualifiedDomainName)")
 		return foundValidCertificate && foundValidCommonNameEndsWithTrustedName && foundValidFullyQualifiedDomainName
-    } // checkSSL worker
-  
+	} // checkSSL worker
+	
 } // SecurityCheckerWorker

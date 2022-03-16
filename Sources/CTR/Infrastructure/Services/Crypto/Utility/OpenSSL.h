@@ -16,9 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)validateSubjectAlternativeDNSName:(NSString *)host forCertificateData:(NSData *)certificatePemData;
 
 - (BOOL)validatePKCS7Signature:(NSData *)signatureData
-                   contentData:(NSData *)contentData
-               certificateData:(NSData *)certificateData
-        authorityKeyIdentifier:(nullable NSData *)expectedAuthorityKeyIdentifierData
+				   contentData:(NSData *)contentData
+			   certificateData:(NSData *)certificateData
+		authorityKeyIdentifier:(nullable NSData *)expectedAuthorityKeyIdentifierData
 	 requiredCommonNameContent:(NSString *)requiredCommonNameContent;
 
 /// Compare two certificates, return TRUE if they match

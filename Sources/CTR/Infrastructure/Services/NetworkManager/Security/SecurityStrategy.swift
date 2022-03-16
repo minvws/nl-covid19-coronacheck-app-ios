@@ -8,54 +8,6 @@
 import Foundation
 import Security
 
-protocol CertificateProvider {
-	
-	/// The public key of the provider
-	var cmsCertificates: [String] { get }
-	
-	/// The ssl certificate of the provider
-	var tlsCertificates: [String] { get }
-
-	func getHostNames() -> [String]
-	
-	func getTLSCertificates() -> [Data]
-	
-	func getCMSCertificates() -> [SigningCertificate]
-}
-
-extension CertificateProvider {
-	
-	func getTLSCertificates() -> [Data] {
-		
-		var result = [Data]()
-		tlsCertificates.forEach { tlsCertificate in
-			if let decoded = tlsCertificate.base64Decoded() {
-				result.append(Data(decoded.utf8))
-			}
-		}
-		return result
-	}
-	
-	func getCMSCertificates() -> [SigningCertificate] {
-		
-		var result = [SigningCertificate]()
-		cmsCertificates.forEach { tlsCertificate in
-			if let decoded = tlsCertificate.base64Decoded() {
-				result.append(
-					SigningCertificate(
-						name: "TestProvider",
-						certificate: decoded,
-						commonName: nil,
-						authorityKeyIdentifier: nil,
-						subjectKeyIdentifier: nil,
-						rootSerial: nil
-					)
-				)
-			}
-		}
-		return result
-	}
-}
 /// The security strategy
 enum SecurityStrategy {
 
@@ -92,11 +44,15 @@ struct SecurityCheckerFactory {
 
 		if case let .provider(provider) = strategy {
 			trustedNames = [] // No trusted name check.
+			trustedCertificates = [] // Only trust provided certificates
+//			trustedSigners = []
 			for tlsCertificate in provider.getTLSCertificates() {
 				trustedCertificates.append(tlsCertificate)
 			}
-//			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
-//			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
+			for cmsCertificate in provider.getCMSCertificates() {
+				trustedSigners.append(cmsCertificate)
+			}
+
 			trustedSigners.append(TrustConfiguration.sdNRootCAG3Certificate)
 			trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
 			checkForAuthorityKeyIdentifierAndNameAndSuffix = false
