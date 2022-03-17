@@ -17,6 +17,8 @@ class ScanInstructionsItemView: ScrolledStackView {
 		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26
 		static let imageHeightPercentage: CGFloat = 0.5
+		static let stepSubheadingLineHeight: CGFloat = 22
+		static let stepSubheadingKerning: CGFloat = -0.41
 		
 		// Margins
 		static let spacing: CGFloat = 24
@@ -101,7 +103,9 @@ class ScanInstructionsItemView: ScrolledStackView {
 
 	var stepSubheading: String? {
 		didSet {
-			stepSubheadingLabel.text = stepSubheading
+			stepSubheadingLabel.attributedText = stepSubheading?.setLineHeight(ViewTraits.stepSubheadingLineHeight,
+																			   kerning: ViewTraits.stepSubheadingKerning,
+																			   textColor: C.primaryBlue()!)
 		}
 	}
 
