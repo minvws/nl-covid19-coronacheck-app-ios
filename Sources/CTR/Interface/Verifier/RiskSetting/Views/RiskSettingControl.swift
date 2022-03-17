@@ -65,7 +65,7 @@ final class RiskSettingControl: UIControl {
 	/// Setup all the views
 	private func setupViews() {
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		addTarget(self, action: #selector(toggle), for: .touchUpInside)
 	}
@@ -131,7 +131,7 @@ final class RiskSettingControl: UIControl {
 	
 	override var isHighlighted: Bool {
 		didSet {
-			backgroundColor = isHighlighted ? ViewTraits.Colors.highlighted : Theme.colors.viewControllerBackground
+			backgroundColor = isHighlighted ? ViewTraits.Colors.highlighted : C.white()
 		}
 	}
 	
@@ -146,7 +146,7 @@ final class RiskSettingControl: UIControl {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
 															 kerning: ViewTraits.Title.kerning,
-															 textColor: Theme.colors.dark)
+															 textColor: C.black()!)
 		}
 	}
 	
@@ -154,7 +154,7 @@ final class RiskSettingControl: UIControl {
 		didSet {
 			subtitleLabel.attributedText = subtitle?.setLineHeight(ViewTraits.Subtitle.lineHeight,
 																   kerning: ViewTraits.Subtitle.kerning,
-																   textColor: Theme.colors.secondaryText)
+																   textColor: C.secondaryText()!)
 		}
 	}
 	

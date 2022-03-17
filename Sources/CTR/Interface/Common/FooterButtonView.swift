@@ -56,7 +56,7 @@ final class FooterButtonView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -110,11 +110,11 @@ final class FooterButtonView: BaseView {
 		let gradient = CAGradientLayer()
 		gradient.frame = gradientView.bounds
 		gradient.colors = [
-			UIColor.black.withAlphaComponent(0.0).cgColor,
-			UIColor.black.withAlphaComponent(0.01).cgColor,
-			UIColor.black.withAlphaComponent(0.03).cgColor,
-			UIColor.black.withAlphaComponent(0.08).cgColor,
-			UIColor.black.withAlphaComponent(0.1).cgColor
+			C.shadow()!.withAlphaComponent(0.0).cgColor,
+			C.shadow()!.withAlphaComponent(0.01).cgColor,
+			C.shadow()!.withAlphaComponent(0.03).cgColor,
+			C.shadow()!.withAlphaComponent(0.08).cgColor,
+			C.shadow()!.withAlphaComponent(0.1).cgColor
 		]
 		gradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 		gradientView.layer.insertSublayer(gradient, at: 0)

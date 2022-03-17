@@ -355,7 +355,7 @@
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Get access with your certificate";
 "holder.onboarding.title.validity" = "Your certificate contains a QR code";
-"holder.onboarding.title.yourqr" = "Certificate of vaccination, recovery, or test";
+"holder.onboarding.title.yourqr" = "Certificate of vaccination, recovery or test";
 "holder.paperproof.internationalQROnly.message" = "Your international QR code contains the details needed to get your certificate in the app. Do you also have a certificate with a Dutch QR code? Then you don’t have to scan it.";
 "holder.paperproof.internationalQROnly.title" = "Why the international QR code?";
 "holder.paperproof.notoken.action" = "Add certificate via DigiD";
@@ -603,9 +603,9 @@
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
 "holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
-"holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "Read more on Government.nl";
+"holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "Read more";
 "holder_dashboard_noDomesticCertificatesBanner_0G_title" = "The coronavirus pass is no longer used in the Netherlands. That is why there are only international certificates in the app.";
-"holder_dashboard_noDomesticCertificatesBanner_url" = "https://www.government.nl/covid-certificate";
+"holder_dashboard_noDomesticCertificatesBanner_url" = "https://coronacheck.nl/only-international";
 "holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/1g-certificate";
 "holder_dashboard_only1GaccessBanner_title" = "You can add a certificate for 1G access when you have tested negative";
 "holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-certificate";
@@ -702,7 +702,7 @@
 "holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "Only international certificates";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "About your visitor pass";
-"holder_onboarding_content_TravelSafe_0G_message" = "Travelling to a country where a coronavirus pass is required? Then you can create your certificate with this app.";
+"holder_onboarding_content_TravelSafe_0G_message" = "Are you travelling to a country where a coronavirus pass is required? Then you can create your certificate with this app.";
 "holder_onboarding_content_TravelSafe_0G_title" = "Travel safely with your certificate";
 "holder_onboarding_content_onlyInternationalQR_0G_message" = "The QR code on your certificate can be checked at the entrance to places and activities abroad. Or at the border.";
 "holder_onboarding_content_onlyInternationalQR_0G_title" = "Your certificate contains a QR code";

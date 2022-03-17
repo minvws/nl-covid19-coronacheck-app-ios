@@ -136,7 +136,7 @@ class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 			tokenEntryView.inputField.attributedPlaceholder = tokenEntryFieldPlaceholder.map {
 				NSAttributedString(
 					string: $0,
-					attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+					attributes: [NSAttributedString.Key.foregroundColor: C.grey1()!]
 				)
 			}
 		}

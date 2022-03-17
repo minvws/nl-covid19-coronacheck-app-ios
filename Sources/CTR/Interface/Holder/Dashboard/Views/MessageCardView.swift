@@ -112,7 +112,7 @@ class MessageCardView: BaseView {
 	func createShadow() {
 
 		// Shadow
-		layer.shadowColor = Theme.colors.shadow.cgColor
+		layer.shadowColor = C.shadow()?.cgColor
 		layer.shadowOpacity = ViewTraits.shadowOpacity
 		layer.shadowOffset = .zero
 		layer.shadowRadius = ViewTraits.shadowRadius

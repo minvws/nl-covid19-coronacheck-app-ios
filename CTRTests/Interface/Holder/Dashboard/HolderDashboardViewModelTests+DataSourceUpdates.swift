@@ -1626,6 +1626,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
+			expect(title) == L.general_vaccinationcertificate().capitalizingFirstLetter()
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
@@ -1639,6 +1640,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
+			expect(title) == L.general_recoverycertificate().capitalizingFirstLetter()
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
@@ -1651,6 +1653,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
+			expect(title) == L.general_testcertificate().capitalizingFirstLetter()
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
@@ -2655,6 +2658,7 @@ extension HolderDashboardViewModelTests {
 		
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
+			expect(title) == L.general_vaccinationcertificate().capitalizingFirstLetter()
 			expect(isLoading) == false
 			
 			expect(stackSize) == 3 // max value here is 3 - shouldn't be 4.

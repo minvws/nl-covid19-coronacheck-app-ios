@@ -25,7 +25,7 @@ final class RoundedLabel: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.emptyDashboardColor
+		backgroundColor = C.primaryBlue5()
 		
 		clipsToBounds = true
 		layer.cornerRadius = ViewTraits.cornerRadius

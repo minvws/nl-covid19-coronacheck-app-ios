@@ -21,7 +21,7 @@ class ErrorView: BaseView {
 		static let imageTopMargin: CGFloat = 5.0
 		
 		enum Font {
-			static let font: UIFont = Theme.fonts.subhead
+			static let font: UIFont = Fonts.subhead
 			static let lineHeight: CGFloat = 18
 			static let kerning: CGFloat = -0.24
 		}
@@ -32,7 +32,7 @@ class ErrorView: BaseView {
 		
 		let view = UIImageView(image: I.error())
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.tintColor = Theme.colors.utilityError
+		view.tintColor = C.error()
 		return view
 	}()
 	
@@ -96,7 +96,7 @@ class ErrorView: BaseView {
 			errorLabel.attributedText = error?.setLineHeight(
 				ViewTraits.Font.lineHeight,
 				kerning: ViewTraits.Font.kerning,
-				textColor: Theme.colors.utilityError
+				textColor: C.error()!
 			)
 			
 			if let error = error {

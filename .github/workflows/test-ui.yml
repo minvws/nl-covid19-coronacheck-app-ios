@@ -5,6 +5,7 @@ name: test-ui
 on:
   schedule:
     - cron: '0 20 * * 1' # Run at 20:00 on Monday.
+  workflow_dispatch:
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer

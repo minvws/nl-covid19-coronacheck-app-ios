@@ -48,9 +48,9 @@ final class RemoteEventDetailsViewModel {
 				return nil
 			}
 			
-			let field = NSMutableAttributedString(string: $0.field.displayTitle, attributes: [.font: Theme.fonts.body])
+			let field = NSMutableAttributedString(string: $0.field.displayTitle, attributes: [.font: Fonts.body])
 			if let value = $0.value, !value.isEmpty {
-				field.append(NSAttributedString(string: " \(value)", attributes: [.font: Theme.fonts.bodyBold]))
+				field.append(NSAttributedString(string: " \(value)", attributes: [.font: Fonts.bodyBold]))
 			}
 			return (field, $0.field.hasLineBreak, $0.field.isSeparator)
 		}

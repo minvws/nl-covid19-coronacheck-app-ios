@@ -52,8 +52,8 @@ class ContentView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		titleLabel.textColor = Theme.colors.dark
-		backgroundColor = Theme.colors.viewControllerBackground
+		titleLabel.textColor = C.black()
+		backgroundColor = C.white()
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 

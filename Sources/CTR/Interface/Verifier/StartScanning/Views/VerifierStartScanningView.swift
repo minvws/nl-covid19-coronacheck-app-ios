@@ -128,7 +128,7 @@ class VerifierStartScanningView: BaseView {
 	private let showInstructionsButton: Button = {
 
 		let button = Button(title: "Button 2", style: .textLabelBlue)
-		button.titleLabel?.font = Theme.fonts.bodyMedium
+		button.titleLabel?.font = Fonts.bodyMedium
 		button.contentHorizontalAlignment = .leading
 		return button
 	}()
@@ -176,7 +176,7 @@ class VerifierStartScanningView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		footerButtonView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		showInstructionsButton.touchUpInside(self, action: #selector(showInstructionsButtonTapped))
