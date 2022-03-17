@@ -29,7 +29,7 @@ final class MenuRowView: UIControl {
 	
 	private let titleLabel: Label = {
 		let label = Label(bodyBold: nil).multiline()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)

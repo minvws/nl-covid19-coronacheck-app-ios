@@ -40,7 +40,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 		navigationControllerTeardown = { [weak self] in
 			// Reset navigation title color			
-			self?.overrideNavigationBarTitleColor(with: Theme.colors.dark)
+			self?.overrideNavigationBarTitleColor(with: C.black()!)
 		}
 		
 		setupScan()

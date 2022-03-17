@@ -63,7 +63,7 @@ final class RiskSettingControlsView: BaseView {
 	
 	private func addSeparator() {
 		let separatorView = UIView()
-		separatorView.backgroundColor = Theme.colors.grey4
+		separatorView.backgroundColor = C.grey4()
 		stackView.addArrangedSubview(separatorView)
 
 		NSLayoutConstraint.activate([

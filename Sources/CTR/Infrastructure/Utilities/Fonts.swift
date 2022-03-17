@@ -20,67 +20,67 @@ class Fonts {
 	}
 
 	/// Size 34 points
-    var largeTitle: UIFont {
+    static var largeTitle: UIFont {
 		font(textStyle: .largeTitle, weight: .bold)
     }
 
 	/// Size 28 points
-    var title1: UIFont {
+    static var title1: UIFont {
         font(textStyle: .title1, weight: .bold)
     }
 
 	/// Size 26 points
-	var title1Montserrat: UIFont {
+	static var title1Montserrat: UIFont {
 		Fonts.customMontserratFont(forTextStyle: .title1)
 	}
 
 	/// Size 22 points
-    var title2: UIFont {
+    static var title2: UIFont {
         font(textStyle: .title2, weight: .bold)
     }
 
 	/// Size 20 points
-    var title3: UIFont {
+    static var title3: UIFont {
         font(textStyle: .title3, weight: .bold)
     }
 
 	/// Size 20 points
-	var title3Montserrat: UIFont {
+	static var title3Montserrat: UIFont {
 		font(textStyle: .title3, weight: .bold, customFont: "Montserrat-Bold")
 	}
 
 	/// Size 20 points
-	var title3Medium: UIFont {
+	static var title3Medium: UIFont {
 		font(textStyle: .title3, weight: .medium)
 	}
 
 	/// Size 17 points
-    var headline: UIFont {
+    static var headline: UIFont {
         font(textStyle: .headline)
     }
 
 	/// Size 17 points
-	var headlineBold: UIFont {
+	static var headlineBold: UIFont {
 		font(textStyle: .headline, weight: .bold)
 	}
 	
 	/// Size 17 points
-	var headlineBoldMontserrat: UIFont {
+	static var headlineBoldMontserrat: UIFont {
 		font(textStyle: .headline, weight: .bold, customFont: "Montserrat-Bold")
 	}
 
 	/// Size 17 points
-    var body: UIFont {
+    static var body: UIFont {
         font(textStyle: .body)
     }
 
 	/// Size 17 points
-	var bodyMontserrat: UIFont {
+	static var bodyMontserrat: UIFont {
 		font(textStyle: .body, customFont: "Montserrat-Bold")
 	}
 
 	/// Size 17 points
-	var bodyMontserratFixed: UIFont {
+	static var bodyMontserratFixed: UIFont {
 
 		if let font = UIFont(name: "Montserrat-Bold", size: 17) {
 			return font
@@ -89,77 +89,77 @@ class Fonts {
 	}
 
 	/// Size 17 points
-    var bodyBold: UIFont {
+    static var bodyBold: UIFont {
         font(textStyle: .body, weight: .bold)
     }
 
 	/// Size 17 points
-	var bodyBoldFixed: UIFont {
+	static var bodyBoldFixed: UIFont {
 		return .boldSystemFont(ofSize: 17)
 	}
 
 	/// Size 17 points
-	var bodySemiBold: UIFont {
+	static var bodySemiBold: UIFont {
 		font(textStyle: .body, weight: .semiBold)
 	}
 
 	/// Size 17 points
-	var bodyMedium: UIFont {
+	static var bodyMedium: UIFont {
 		font(textStyle: .body, weight: .medium)
 	}
 
 	/// Size 16 points
-    var callout: UIFont {
+    static var callout: UIFont {
         font(textStyle: .callout)
     }
 	
 	/// Size 16 points
-	var calloutSemiBold: UIFont {
+	static var calloutSemiBold: UIFont {
 		font(textStyle: .callout, weight: .semiBold)
 	}
 
 	/// Size 15 points
-    var subhead: UIFont {
+    static var subhead: UIFont {
         font(textStyle: .subheadline)
     }
 
 	/// Size 15 points
-	var subheadMontserrat: UIFont {
+	static var subheadMontserrat: UIFont {
 		font(textStyle: .subheadline, customFont: "Montserrat-SemiBold")
 	}
 	
 	/// Size 15 points
-	var subheadHeavyBold: UIFont {
+	static var subheadHeavyBold: UIFont {
 		font(textStyle: .subheadline, weight: .heavyBold)
 	}
 
 	/// Size 15 points
-    var subheadBold: UIFont {
+    static var subheadBold: UIFont {
 		font(textStyle: .subheadline, weight: .bold)
     }
 
 	/// Size 15 points
-	var subheadMedium: UIFont {
+	static var subheadMedium: UIFont {
 		font(textStyle: .subheadline, weight: .medium)
 	}
 
 	/// Size 13 points
-    var footnote: UIFont {
+    static var footnote: UIFont {
         font(textStyle: .footnote)
     }
 
 	/// Size 13 points
-	var footnoteMontserrat: UIFont {
+	static var footnoteMontserrat: UIFont {
 		font(textStyle: .footnote, customFont: "Montserrat-SemiBold")
 	}
 
 	/// size 12 points
-    var caption1: UIFont {
+    static var caption1: UIFont {
 		font(textStyle: .caption1, weight: .bold)
     }
 
 	/// size 12 points
-	var caption1SemiBold: UIFont {
+	static var caption1SemiBold: UIFont {
 		font(textStyle: .caption1, weight: .semiBold)
 	}
 
@@ -179,7 +179,7 @@ class Fonts {
 		.caption2: UIFont(name: "Montserrat-Bold", size: 11)!
 	]
 	
-	private func font(
+	private class func font(
 		textStyle: UIFont.TextStyle,
 		weight: Weight? = nil,
 		customFont: String? = nil) -> UIFont {
@@ -224,69 +224,4 @@ class Fonts {
 		
 		return scaledFont
 	}
-}
-
-final class Colors {
-
-	var dark: UIColor { return color(for: "DarkColor") }
-
-	var primary: UIColor { return color(for: "PrimaryColor") }
-
-	var secondary: UIColor { return color(for: "SecondaryColor") }
-	
-	var secondaryText: UIColor { return color(for: "SecondaryText") }
-
-    var tertiary: UIColor { return color(for: "TertiaryColor") }
-
-	var gray: UIColor { return color(for: "DotGray") }
-
-	var disabledIcon: UIColor { return color(for: "DisabledIcon") }
-
-	var viewControllerBackground: UIColor { return color(for: "ViewControllerBackgroundColor") }
-
-	var appointment: UIColor { return color(for: "AppointmentColor") }
-
-	var shadow: UIColor { return color(for: "ShadowColor") }
-
-	var lightBackground: UIColor { return color(for: "LightBackgroundColor") }
-
-	var line: UIColor { return color(for: "LineColor") }
-
-	var utilityError: UIColor { return color(for: "UtilityError") }
-
-	var denied: UIColor { return color(for: "DeniedColor") }
-
-	var access: UIColor { return color(for: "AccessColor") }
-
-	var grey1: UIColor { return color(for: "Grey1") }
-
-	var grey2: UIColor { return color(for: "Grey2") }
-
-	var grey3: UIColor { return color(for: "Grey3") }
-
-	var grey4: UIColor { return color(for: "Grey4") }
-
-	var grey5: UIColor { return color(for: "Grey5") }
-
-	var highlightBackgroundColor: UIColor { return color(for: "HighlightBackgroundColor") }
-	
-	var emptyDashboardColor: UIColor { return color(for: "EmptyDashboardColor") }
-
-    // MARK: - Private
-
-    private func color(for name: String) -> UIColor {
-		
-        let bundle = Bundle(for: Colors.self)
-        if let color = UIColor(named: name, in: bundle, compatibleWith: nil) {
-            return color
-        }
-        return .clear
-    }
-}
-
-/// - Tag: Theme
-struct Theme {
-
-    static let fonts = Fonts()
-    static let colors = Colors()
 }

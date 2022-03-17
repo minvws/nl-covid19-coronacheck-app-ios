@@ -60,7 +60,7 @@ final class RiskSettingUnselectedView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
 			let translatedOffset = scrollView.translatedBottomScrollOffset
@@ -123,7 +123,7 @@ final class RiskSettingUnselectedView: BaseView {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
 															 kerning: ViewTraits.Title.kerning,
-															 textColor: Theme.colors.dark)
+															 textColor: C.black()!)
 		}
 	}
 	

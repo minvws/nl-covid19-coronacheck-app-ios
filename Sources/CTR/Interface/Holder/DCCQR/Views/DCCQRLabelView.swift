@@ -19,21 +19,21 @@ final class DCCQRLabelView: BaseView {
 	/// The field label
 	private let fieldLabel: Label = {
 		let label = Label(subhead: "").multiline()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		return label
 	}()
 	
 	/// The value label
 	private let valueLabel: Label = {
 		let label = Label(bodyBold: "").multiline()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		return label
 	}()
 	
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 	}
 	
 	override func setupViewHierarchy() {
