@@ -47,7 +47,7 @@ class ScanInstructionsItemView: ScrolledStackView {
 
 	/// "Step 2" etc, above the title.
 	private let stepSubheadingLabel: Label = {
-		let label = Label("", font: Theme.fonts.bodySemiBold, textColor: Theme.colors.primary)
+		let label = Label("", font: Fonts.bodySemiBold, textColor: C.primaryBlue()!)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
 	}()
@@ -65,7 +65,7 @@ class ScanInstructionsItemView: ScrolledStackView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		// Align animation view to top
 		stackViewInset.top = 0

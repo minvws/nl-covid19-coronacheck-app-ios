@@ -116,9 +116,9 @@ extension VerifiedAccess {
 			case .verified(let verificationPolicy):
 				switch verificationPolicy {
 					case .policy3G:
-						return C.accessColor()
+						return C.secondaryGreen()!
 					case .policy1G:
-						return C.primaryColor()
+						return C.primaryBlue()!
 				}
 			case .demo:
 				return C.grey4()
@@ -129,7 +129,7 @@ extension VerifiedAccess {
 		if case .verified(let verificationPolicy) = self, verificationPolicy == .policy1G {
 			return .white
 		} else {
-			return C.darkColor()
+			return C.black()
 		}
 	}
 }

@@ -11,7 +11,7 @@ class MenuView: ScrolledStackView {
 
 	private let navigationBackgroundView: UIView = {
 		let view = UIView()
-		view.backgroundColor = C.viewControllerBackgroundColor()
+		view.backgroundColor = C.white()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()

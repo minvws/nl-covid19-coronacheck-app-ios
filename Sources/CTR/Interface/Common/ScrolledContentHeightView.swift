@@ -32,7 +32,7 @@ final class ScrolledContentHeightView: UIScrollView {
 	/// Setup the views
 	func setupViews() {
 
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 	}
 
 	/// Setup the hierarchy

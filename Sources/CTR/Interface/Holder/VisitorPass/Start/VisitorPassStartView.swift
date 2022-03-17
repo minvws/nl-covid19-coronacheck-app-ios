@@ -38,7 +38,7 @@ final class VisitorPassStartView: ScrolledStackWithButtonView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 	}
 	
 	override func setupViewHierarchy() {

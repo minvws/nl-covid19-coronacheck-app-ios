@@ -38,7 +38,7 @@ final class EmptyDashboardImagePlaceholderCardView: BaseView {
 	private let titleLabel: Label = {
         let label = Label(headlineBold: nil, montserrat: true).multiline().header()
 		label.translatesAutoresizingMaskIntoConstraints = false
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		return label
 	}()
 	
@@ -48,7 +48,7 @@ final class EmptyDashboardImagePlaceholderCardView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.emptyDashboardColor
+		backgroundColor = C.primaryBlue5()
 		layer.cornerRadius = ViewTraits.Radius.corner
 	}
 	

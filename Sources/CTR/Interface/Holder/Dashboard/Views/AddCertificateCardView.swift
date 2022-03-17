@@ -61,7 +61,7 @@ class AddCertificateCardView: BaseView {
 	private func createShadow() {
 
 		// Shadow
-		layer.shadowColor = Theme.colors.shadow.cgColor
+		layer.shadowColor = C.shadow()?.cgColor
 		layer.shadowOpacity = ViewTraits.shadowOpacity
 		layer.shadowOffset = .zero
 		layer.shadowRadius = ViewTraits.shadowRadius
@@ -108,14 +108,14 @@ private class LargeAddCertificateButton: UIControl {
 	private let plusImageView: UIImageView = {
 		let imageView = UIImageView(image: I.plus())
 		imageView.translatesAutoresizingMaskIntoConstraints = false
-		imageView.tintColor = Theme.colors.primary
+		imageView.tintColor = C.primaryBlue()
 		return imageView
 	}()
 	
 	private let titleLabel: Label = {
 		let label = Label(body: nil).multiline()
 		label.textAlignment = .center
-		label.textColor = Theme.colors.primary
+		label.textColor = C.primaryBlue()
 		
 		return label
 	}()
@@ -136,7 +136,7 @@ private class LargeAddCertificateButton: UIControl {
 	/// Setup all the views
 	private func setupViews() {
 
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 		addTarget(self, action: #selector(touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])

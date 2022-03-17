@@ -25,7 +25,7 @@ class ImageView: UIImageView {
     func asIcon() -> Self {
         contentMode = .center
         setContentHuggingPriority(.required, for: .horizontal)
-        tintColor = Theme.colors.primary
+        tintColor = C.primaryBlue()
         return self
     }
     

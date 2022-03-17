@@ -46,7 +46,7 @@ final class DashboardTabBar: BaseView {
 	private let separatorView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.grey4
+		view.backgroundColor = C.grey4()
 		return view
 	}()
 	
@@ -61,7 +61,7 @@ final class DashboardTabBar: BaseView {
 	private let selectionLineView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.dark
+		view.backgroundColor = C.black()
 		return view
 	}()
 	
@@ -75,7 +75,7 @@ final class DashboardTabBar: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		domesticButton.title = L.generalNetherlands()
 		domesticButton.tapHandler = { [weak self] in
@@ -191,7 +191,7 @@ private class TabBarButton: UIControl {
 		let label = Label(subheadMedium: nil)
 		label.adjustsFontForContentSizeCategory = true
 		label.textAlignment = .center
-		label.textColor = Theme.colors.secondaryText
+		label.textColor = C.secondaryText()
 		if #available(iOS 15.0, *) {
 			label.maximumContentSizeCategory = .accessibilityMedium
 		}
@@ -209,14 +209,14 @@ private class TabBarButton: UIControl {
 	
 	override var isHighlighted: Bool {
 		didSet {
-			backgroundColor = isHighlighted ? ViewTraits.Colors.highlighted : Theme.colors.viewControllerBackground
+			backgroundColor = isHighlighted ? ViewTraits.Colors.highlighted : C.white()
 		}
 	}
 	
 	override var isSelected: Bool {
 		didSet {
-			titleLabel.textColor = isSelected ? Theme.colors.dark : Theme.colors.secondaryText
-			titleLabel.font = isSelected ? Theme.fonts.subheadHeavyBold : Theme.fonts.subheadMedium
+			titleLabel.textColor = isSelected ? C.black() : C.secondaryText()
+			titleLabel.font = isSelected ? Fonts.subheadHeavyBold : Fonts.subheadMedium
 			
 			if isSelected {
 				accessibilityTraits.insert(.selected)
@@ -233,7 +233,7 @@ private class TabBarButton: UIControl {
 	/// Setup all the views
 	private func setupViews() {
 
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 	}

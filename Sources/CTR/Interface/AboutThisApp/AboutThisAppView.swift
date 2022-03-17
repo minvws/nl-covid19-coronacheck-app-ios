@@ -62,10 +62,10 @@ class AboutThisAppView: ScrolledStackView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		stackView.distribution = .fill
-		appVersionLabel.textColor = Theme.colors.grey1
-		configVersionLabel.textColor = Theme.colors.grey1
+		appVersionLabel.textColor = C.grey1()
+		configVersionLabel.textColor = C.grey1()
 	}
 
 	/// Setup the hierarchy
@@ -97,7 +97,7 @@ class AboutThisAppView: ScrolledStackView {
 			appVersionLabel.attributedText = appVersion?.setLineHeight(
 				ViewTraits.Footer.lineHeight,
 				kerning: ViewTraits.Footer.kerning,
-				textColor: Theme.colors.grey1
+				textColor: C.grey1()!
 			)
 		}
 	}
@@ -108,7 +108,7 @@ class AboutThisAppView: ScrolledStackView {
 			configVersionLabel.attributedText = configVersion?.setLineHeight(
 				ViewTraits.Footer.lineHeight,
 				kerning: ViewTraits.Footer.kerning,
-				textColor: Theme.colors.grey1
+				textColor: C.grey1()!
 			)
 		}
 	}
