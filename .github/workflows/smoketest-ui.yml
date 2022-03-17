@@ -5,6 +5,7 @@ name: smoketest-ui
 on:
   schedule:
     - cron: '0 5 * * 2,4' # Run at 05:00 on Tuesday and Thursday.
+  workflow_dispatch:
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
