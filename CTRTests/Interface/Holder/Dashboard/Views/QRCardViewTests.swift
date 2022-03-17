@@ -46,7 +46,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage(precision: 0.98)
+		sut.assertImage()
 	}
 
 	func testOneRowSampleContent() {
@@ -70,7 +70,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage(precision: 0.98)
+		sut.assertImage()
 	}
 
 	func testButtonEnabledWithLoadingStatesContent() {
@@ -140,7 +140,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage(precision: 0.98)
+		sut.assertImage()
 	}
 
 	func testHidesAutomaticallyValidRowFooterIfButtonIsEnabled() {
@@ -163,7 +163,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage(precision: 0.98)
+		sut.assertImage()
 	}
 
 	func testSubtextField() {
@@ -196,7 +196,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage(precision: 0.98)
+		sut.assertImage()
 	}
 
 	func testStackAppearance_level2() {
@@ -207,7 +207,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-        sut.assertImage(precision: 0.95)
+        sut.assertImage()
 	}
 
 	func testStackAppearance_level3() {
@@ -218,7 +218,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage(precision: 0.95)
+		sut.assertImage()
 	}
 
 	func testDisabledByDisclosurePolicy() {
@@ -230,7 +230,7 @@ class QRCardViewTests: XCTestCase {
 		
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage(precision: 0.95)
+		sut.assertImage()
 	}
 	
 	func test3GPolicy() {
@@ -242,7 +242,7 @@ class QRCardViewTests: XCTestCase {
 		
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage(precision: 0.95)
+		sut.assertImage()
 	}
 	
 	func test1GPolicy() {
@@ -254,6 +254,6 @@ class QRCardViewTests: XCTestCase {
 		
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage(precision: 0.95)
+		sut.assertImage()
 	}
 }

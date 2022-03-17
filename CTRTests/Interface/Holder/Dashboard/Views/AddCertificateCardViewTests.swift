@@ -19,6 +19,6 @@ class AddCertificateCardViewTests: XCTestCase {
 		
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-		sut.assertImage(precision: 0.98)
+		sut.assertImage()
 	}
 }

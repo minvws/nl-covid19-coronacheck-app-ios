@@ -10,6 +10,10 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 
+let xxxx: String = {
+	
+	return ""
+}()
 class ChooseTestLocationViewControllerTests: XCTestCase {
 
 	var sut: ChooseTestLocationViewController!
@@ -35,7 +39,7 @@ class ChooseTestLocationViewControllerTests: XCTestCase {
 	}
 
 	func test_snapshot() {
-        sut.assertImage(precision: 0.90)
+        sut.assertImage()
 	}
 
 	func test_notTestedButton_tapped() {

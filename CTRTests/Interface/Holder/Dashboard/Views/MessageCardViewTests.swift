@@ -23,7 +23,7 @@ class MessageCardViewTests: XCTestCase {
 
         // Assert
         sut.frame = CGRect(x: 0, y: 0, width: 335, height: 70)
-        sut.assertImage(precision: 0.99)
+        sut.assertImage()
     }
     
     func test_titleWithClose() {
@@ -37,7 +37,7 @@ class MessageCardViewTests: XCTestCase {
 
         // Assert
         sut.frame = CGRect(x: 0, y: 0, width: 335, height: 70)
-		sut.assertImage(precision: 0.99)
+		sut.assertImage()
     }
     
     func test_titleWithCTA() {
