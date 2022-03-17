@@ -10,10 +10,6 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 
-let xxxx: String = {
-	
-	return ""
-}()
 class ChooseTestLocationViewControllerTests: XCTestCase {
 
 	var sut: ChooseTestLocationViewController!
