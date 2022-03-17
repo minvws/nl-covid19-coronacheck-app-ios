@@ -144,6 +144,11 @@ class SecurityCheckerWorker: Logging {
 				return false
 			}
 		
+		guard trustedCertificates.isNotEmpty else {
+			logVerbose("Skipping trustedCertificates check")
+			return true
+		}
+			
 		let hostnameLC = hostname.lowercased()
 		var foundValidCertificate = false
 		var foundValidCommonNameEndsWithTrustedName = trustedNames.isEmpty ? true : false

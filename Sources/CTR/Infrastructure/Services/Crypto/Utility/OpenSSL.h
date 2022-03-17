@@ -30,6 +30,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param certificateData data of the certificate
 - (NSArray *)getSubjectAlternativeDNSNames:(NSData *)certificateData;
 
+/// Get the common name from a (X509) certificate
+/// @param certificateData the certificate to examine
+- (nullable NSString *)getCommonNameForCertificate:(NSData *)certificateData;
+
+/// Get the authority key identifier from a (X509) certificate
+/// @param certificateData the certificate to examine
+- (nullable NSData *)getAuthorityKeyIdentifierData:(NSData *)certificateData;
+
 @end
 
 NS_ASSUME_NONNULL_END

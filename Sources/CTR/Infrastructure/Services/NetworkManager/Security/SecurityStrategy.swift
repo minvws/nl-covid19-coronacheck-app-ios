@@ -27,18 +27,18 @@ struct SecurityCheckerFactory {
 
 		if case SecurityStrategy.none = strategy {
 			return SecurityCheckerNone(
-				checkForAuthorityKeyIdentifierAndNameAndSuffix: false,
 				challenge: challenge,
 				completionHandler: completionHandler
 			)
 		}
+		// Default for .config
 		var trustedNames = [TrustConfiguration.commonNameContent]
-		var trustedCertificates = [TrustConfiguration.sdNEVRootCA]
-		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate]
-		var checkForAuthorityKeyIdentifierAndNameAndSuffix = true
+		var trustedCertificates = [Data]()
+		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate, TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate]
 
 		if case SecurityStrategy.data = strategy {
 			trustedCertificates = []
+			trustedSigners = []
 			for tlsCertificate in Current.remoteConfigManager.storedConfiguration.getTLSCertificates() {
 				trustedCertificates.append(tlsCertificate)
 			}
@@ -47,24 +47,27 @@ struct SecurityCheckerFactory {
 		if case let .provider(provider) = strategy {
 			trustedNames = [] // No trusted name check.
 			trustedCertificates = [] // Only trust provided certificates
-//			trustedSigners = []
+			trustedSigners = []
 			for tlsCertificate in provider.getTLSCertificates() {
 				trustedCertificates.append(tlsCertificate)
 			}
+			let openSSL = OpenSSL()
 			for cmsCertificate in provider.getCMSCertificates() {
-				trustedSigners.append(cmsCertificate)
+				if let commonName = openSSL.getCommonName(forCertificate: cmsCertificate),
+					let authKey = openSSL.getAuthorityKeyIdentifierData(cmsCertificate) {
+					for trustedCert in [TrustConfiguration.sdNEVRootCACertificate, TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate] {
+						var copy = trustedCert
+						copy.authorityKeyIdentifier = authKey
+						copy.commonName = commonName
+						trustedSigners.append(copy)
+					}
+				}
 			}
-
-			trustedSigners.append(TrustConfiguration.sdNRootCAG3Certificate)
-			trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
-			checkForAuthorityKeyIdentifierAndNameAndSuffix = false
 		}
-
 		return SecurityChecker(
 			trustedCertificates: trustedCertificates,
 			trustedNames: trustedNames,
 			trustedSigners: trustedSigners,
-			checkForAuthorityKeyIdentifierAndNameAndSuffix: checkForAuthorityKeyIdentifierAndNameAndSuffix,
 			challenge: challenge,
 			completionHandler: completionHandler
 		)
@@ -125,21 +128,17 @@ class SecurityCheckerNone: SecurityChecker {
 /// Security check for backend communication
 class SecurityChecker: SecurityCheckerProtocol, Logging {
 
-	var loggingCategory: String = "SecurityCheckerConfig"
-
 	var trustedCertificates: [Data]
 	var challenge: URLAuthenticationChallenge
 	var completionHandler: (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
 	var trustedNames: [String]
 	var trustedSigners: [SigningCertificate]
 	var openssl = OpenSSL()
-	var checkForAuthorityKeyIdentifierAndNameAndSuffix: Bool
 
 	init(
 		trustedCertificates: [Data] = [],
 		trustedNames: [String] = [],
 		trustedSigners: [SigningCertificate] = [],
-		checkForAuthorityKeyIdentifierAndNameAndSuffix: Bool,
 		challenge: URLAuthenticationChallenge,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
@@ -147,7 +146,6 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		self.trustedSigners = trustedSigners
 		self.trustedNames = trustedNames
 		self.challenge = challenge
-		self.checkForAuthorityKeyIdentifierAndNameAndSuffix = checkForAuthorityKeyIdentifierAndNameAndSuffix
 		self.completionHandler = completionHandler
 	}
 
@@ -196,9 +194,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	///   - content: the signed content
 	/// - Returns: True if the signature is a valid PKCS7 Signature
 	func validate(signature: Data, content: Data) -> Bool {
-
-		//		logDebug("Security Strategy: there are \(trustedSigners.count) trusted signers for \(Unmanaged.passUnretained(self).toOpaque())")
-
+  
 		for signer in trustedSigners {
 
 			let certificateData = signer.getCertificateData()
@@ -219,8 +215,8 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 				signature,
 				contentData: content,
 				certificateData: certificateData,
-				authorityKeyIdentifier: !checkForAuthorityKeyIdentifierAndNameAndSuffix ? nil : signer.authorityKeyIdentifier,
-				requiredCommonNameContent: !checkForAuthorityKeyIdentifierAndNameAndSuffix ? "" : signer.commonName ?? "") {
+				authorityKeyIdentifier: signer.authorityKeyIdentifier,
+				requiredCommonNameContent: signer.commonName ?? "") {
 				return true
 			}
 		}

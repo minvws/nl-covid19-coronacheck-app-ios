@@ -21,7 +21,7 @@
 
 #import <Security/Security.h>
 
-#define __DEBUG
+//#define __DEBUG
 
 #ifdef __DEBUG
 #include <openssl/asn1.h>
@@ -219,6 +219,10 @@ errit:
 	isMatch = YES;
 	
 errit:
+#ifdef __DEBUG
+	NSLog(@"validateAuthorityKeyIdentifierData OK.");
+	print_octed_as_hex(expectedAuthorityKeyIdentifier);
+#endif
 	ASN1_OCTET_STRING_free(expectedAuthorityKeyIdentifier);
 	return isMatch;
 }
@@ -241,6 +245,8 @@ errit:
 	BOOL hasCorrectEnding = [cnString hasSuffix:requiredContent];
 	
 	certificateSubjectName = NULL;
+	
+	NSLog(@"validateCommonNameForCertificate: %@ -> %d\n", requiredContent, hasCorrectEnding);
 	
 	return hasCorrectEnding;
 }
@@ -531,4 +537,47 @@ errit:
 	DEBUGOUT("all 3 good");
 	return true;
 }
+
+- (nullable NSString *)getCommonNameForCertificate:(NSData *)certificateData {
+	
+	X509 *certificate = [self getX509: certificateData];
+	if (certificate == NULL) {
+		return nil;
+	}
+	
+	// Get subject from certificate
+	X509_NAME *certificateSubjectName = X509_get_subject_name(certificate);
+	
+	// Get Common Name from certificate subject
+	char certificateCommonName[256];
+	if (-1 == X509_NAME_get_text_by_NID(certificateSubjectName, NID_commonName, certificateCommonName, sizeof(certificateCommonName))) {
+		NSLog(@"X509_NAME_get_text_by_NID failed.");
+		return nil;
+	}
+	NSString *cnString = [NSString stringWithUTF8String:certificateCommonName];
+	return cnString;
+}
+
+- (nullable NSData *)getAuthorityKeyIdentifierData:(NSData *)certificateData {
+	
+	X509 *certificate = [self getX509: certificateData];
+	if (certificate == NULL) {
+		return nil;
+	}
+
+	const ASN1_OCTET_STRING * authorityKeyIdentifier = X509_get0_authority_key_id(certificate);
+	if (authorityKeyIdentifier == NULL)
+		return nil;
+
+	NSData *authorityKey = [[NSData alloc] initWithBytes:authorityKeyIdentifier->data length:authorityKeyIdentifier->length];
+
+	const unsigned char bytes[] = {0x04, 0x14};
+	NSData *prefix = [NSData dataWithBytes:bytes length:2];
+	
+	NSMutableData *result = [prefix mutableCopy];
+	[result appendData: authorityKey];
+
+	return result;
+}
+
 @end

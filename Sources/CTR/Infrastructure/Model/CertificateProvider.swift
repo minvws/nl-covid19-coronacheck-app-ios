@@ -20,37 +20,27 @@ protocol CertificateProvider {
 	
 	func getTLSCertificates() -> [Data]
 	
-	func getCMSCertificates() -> [SigningCertificate]
+	func getCMSCertificates() -> [Data]
 }
 
 extension CertificateProvider {
 	
 	func getTLSCertificates() -> [Data] {
 		
-		var result = [Data]()
-		tlsCertificates.forEach { tlsCertificate in
-			if let decoded = tlsCertificate.base64Decoded() {
-				result.append(Data(decoded.utf8))
-			}
-		}
-		return result
+		return convertCertificates(tlsCertificates)
 	}
 	
-	func getCMSCertificates() -> [SigningCertificate] {
+	func getCMSCertificates() -> [Data] {
 		
-		var result = [SigningCertificate]()
-		cmsCertificates.forEach { tlsCertificate in
-			if let decoded = tlsCertificate.base64Decoded() {
-				result.append(
-					SigningCertificate(
-						name: "TestProvider",
-						certificate: decoded,
-						commonName: nil,
-						authorityKeyIdentifier: nil,
-						subjectKeyIdentifier: nil,
-						rootSerial: nil
-					)
-				)
+		return convertCertificates(cmsCertificates)
+	}
+	
+	fileprivate func convertCertificates(_ certificates: [String]) -> [Data] {
+		
+		var result = [Data]()
+		certificates.forEach { certificate in
+			if let decoded = certificate.base64Decoded() {
+				result.append(Data(decoded.utf8))
 			}
 		}
 		return result
