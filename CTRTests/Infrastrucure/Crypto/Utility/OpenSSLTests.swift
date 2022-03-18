@@ -301,4 +301,45 @@ class OpenSSLTests: XCTestCase {
 		// Then
 		expect(validation) == false
 	}
+	
+	func test_getAuthorityKeyIdentifier_privateRoot_shouldBeNil() throws {
+		
+		// Given
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "PrivateRootCA-G1", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
+		
+		// When
+		let key = sut.getAuthorityKeyIdentifierData(certificateData)
+		
+		// Then
+		expect(key).to(beNil())
+	}
+	
+	func test_getAuthorityKeyIdentifier_certRealLeaf_shouldMatch() throws {
+		
+		// Given
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certRealLeaf", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
+		
+		let expectedAuthorityKeyIdentifier = Data([0x04, 0x14, /* keyID starts here: */ 0x14, 0x2e, 0xb3, 0x17, 0xb7, 0x58, 0x56, 0xcb, 0xae, 0x50, 0x09, 0x40, 0xe6, 0x1f, 0xaf, 0x9d, 0x8b, 0x14, 0xc2, 0xc6])
+
+		// When
+		let key = sut.getAuthorityKeyIdentifierData(certificateData)
+		
+		// Then
+		expect(key) == expectedAuthorityKeyIdentifier
+	}
+	
+	func test_getCommonName() throws {
+		
+		// Given
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "PrivateRootCA-G1", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
+		
+		// When
+		let name = sut.getCommonName(forCertificate: certificateData)
+
+		// Then
+		expect(name) == "Staat der Nederlanden Private Root CA - G1"
+	}
 }
