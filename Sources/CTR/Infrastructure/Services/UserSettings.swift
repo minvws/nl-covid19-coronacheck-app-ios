@@ -25,8 +25,6 @@ protocol UserSettingsProtocol: AnyObject {
 
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? { get set }
 	
-	var lastRecommendToAddYourBoosterDismissalDate: Date? { get set }
-	
 	var lastSeenRecommendedUpdate: String? { get set }
 
 	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? { get set }
@@ -37,9 +35,6 @@ protocol UserSettingsProtocol: AnyObject {
 	
 	var policyInformationShown: Bool { get set }
 
-	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
-	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
-	
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] { get set }
 	var hasDismissedZeroGPolicy: Bool { get set }
 	var lastKnownConfigDisclosurePolicy: [String] { get set }
@@ -74,9 +69,6 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "lastRecommendUpdateDismissalTimestamp", defaultValue: nil)
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
 
-	@UserDefaults(key: "lastRecommendToAddYourBoosterDismissalDate", defaultValue: nil)
-	var lastRecommendToAddYourBoosterDismissalDate: Date? // swiftlint:disable:this let_var_whitespace
-
 	@UserDefaults(key: "lastSeenRecommendedUpdate", defaultValue: nil)
 	var lastSeenRecommendedUpdate: String? // swiftlint:disable:this let_var_whitespace
 	
@@ -92,14 +84,6 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "policyInformationShown", defaultValue: false)
 	var policyInformationShown: Bool // swiftlint:disable:this let_var_whitespace
 
-	// MARK: - Validity Information Banner for Vaccinations and Recoveries
-	
-	@UserDefaults(key: "hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
-	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
-	
-	@UserDefaults(key: "shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
-	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
-	
 	@UserDefaults(key: "lastDismissedDisclosurePolicy")
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] = [] // swiftlint:disable:this let_var_whitespace
 
@@ -129,13 +113,10 @@ extension UserSettings {
 			"lastScreenshotTime",
 			"lastRecommendUpdateDismissalTimestamp",
 			"lastSeenRecommendedUpdate",
-			"lastRecommendToAddYourBoosterDismissalDate",
 			"lastSuccessfulCompletionOfAddCertificateFlowDate",
 			"deviceAuthenticationWarningShown",
 			"deviceAuthenticationWarningShown",
 			"shouldCheckRecoveryGreenCardRevisedValidity",
-			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
-			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
 			"configVerificationPolicies",
 			"policyInformationShown",
 			"lastDismissedDisclosurePolicy",
@@ -144,6 +125,9 @@ extension UserSettings {
 			"hasDismissedZeroGPolicy",
 
 			// Deprecated keys
+			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
+			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
+			"lastRecommendToAddYourBoosterDismissalDate",
 			"shouldShowRecoveryValidityExtensionCard",
 			"shouldShowRecoveryValidityReinstationCard",
 			"hasDismissedRecoveryValidityExtensionCompletionCard",

@@ -240,27 +240,6 @@ extension HolderDashboardViewController.Card {
 			)
 		]
 	}
-
-	static func makeNewValidityInfoForVaccinationAndRecoveriesCard(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-	
-		guard validityRegion == .domestic, state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner else { return [] }
-		return [
-			.newValidityInfoForVaccinationAndRecoveries(
-				title: L.holder_dashboard_newvaliditybanner_title(),
-				buttonText: L.holder_dashboard_newvaliditybanner_action(),
-				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapNewValidityBannerMoreInfo()
-				},
-				didTapClose: { [weak actionHandler] in
-					actionHandler?.didTapNewValidityBannerClose()
-				}
-			)
-		]
-	}
 	
 	static func makeCompleteYourVaccinationAssessmentCard(
 		validityRegion: QRCodeValidityRegion,
@@ -275,27 +254,6 @@ extension HolderDashboardViewController.Card {
 				buttonText: L.holder_dashboard_visitorpassincompletebanner_button_makecomplete(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapCompleteYourVaccinationAssessmentMoreInfo()
-				}
-			)
-		]
-	}
-	
-	static func makeRecommendToAddYourBoosterCard(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		guard !state.dashboardHasEmptyState(for: validityRegion) else { return [] }
-		guard state.shouldShowRecommendationToAddYourBooster else { return [] }
-		return [
-			.recommendToAddYourBooster(
-				title: L.holder_dashboard_addBoosterBanner_title(),
-				buttonText: L.holder_dashboard_addBoosterBanner_button_addBooster(),
-				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapRecommendToAddYourBooster()
-				},
-				didTapClose: { [weak actionHandler] in
-					actionHandler?.didTapRecommendToAddYourBoosterClose()
 				}
 			)
 		]
