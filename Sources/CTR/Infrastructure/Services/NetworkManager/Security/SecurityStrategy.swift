@@ -54,7 +54,7 @@ struct SecurityCheckerFactory {
 			let openSSL = OpenSSL()
 			for cmsCertificate in provider.getCMSCertificates() {
 				if let commonName = openSSL.getCommonName(forCertificate: cmsCertificate),
-					let authKey = openSSL.getAuthorityKeyIdentifierData(cmsCertificate) {
+				   let authKey = openSSL.getAuthorityKeyIdentifier(forCertificate: cmsCertificate) {
 					for trustedCert in [TrustConfiguration.sdNEVRootCACertificate, TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate] {
 						var copy = trustedCert
 						copy.authorityKeyIdentifier = authKey

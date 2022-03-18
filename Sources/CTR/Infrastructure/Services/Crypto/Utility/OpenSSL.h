@@ -11,9 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OpenSSL : NSObject
 
-- (BOOL)validateSerialNumber:(uint64_t)serialNumber forCertificateData:(NSData *)certificatePemData;
-- (BOOL)validateSubjectKeyIdentifier:(NSData *)subjectKeyIdentifier forCertificateData:(NSData *)certificatePemData;
-- (BOOL)validateSubjectAlternativeDNSName:(NSString *)host forCertificateData:(NSData *)certificatePemData;
+- (BOOL) validateSerialNumber: (uint64_t) serialNumber forCertificateData: (NSData *) certificatePemData;
+- (BOOL) validateSubjectKeyIdentifier: (NSData *) subjectKeyIdentifier forCertificateData: (NSData *) certificatePemData;
+- (BOOL) validateSubjectAlternativeDNSName: (NSString *) host forCertificateData: (NSData *) certificatePemData;
 
 - (BOOL)validatePKCS7Signature:(NSData *)signatureData
 				   contentData:(NSData *)contentData
@@ -24,19 +24,19 @@ NS_ASSUME_NONNULL_BEGIN
 /// Compare two certificates, return TRUE if they match
 /// @param certificateData the certificate to examine
 /// @param trustedCertificateData the trusted certificate
-- (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData;
+- (BOOL) compare: (NSData *) certificateData withTrustedCertificate: (NSData *) trustedCertificateData;
 
 /// Get the Subject Alternative DSN entries
 /// @param certificateData data of the certificate
-- (NSArray *)getSubjectAlternativeDNSNames:(NSData *)certificateData;
+- (NSArray *) getSubjectAlternativeDNSNames: (NSData *) certificateData;
 
 /// Get the common name from a (X509) certificate
 /// @param certificateData the certificate to examine
-- (nullable NSString *)getCommonNameForCertificate:(NSData *)certificateData;
+- (nullable NSString *) getCommonNameForCertificate: (NSData *) certificateData;
 
 /// Get the authority key identifier from a (X509) certificate
 /// @param certificateData the certificate to examine
-- (nullable NSData *)getAuthorityKeyIdentifierData:(NSData *)certificateData;
+- (nullable NSData *) getAuthorityKeyIdentifierForCertificate: (NSData *) certificateData;
 
 @end
 
