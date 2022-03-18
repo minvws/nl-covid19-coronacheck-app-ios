@@ -21,7 +21,7 @@
 
 #import <Security/Security.h>
 
-//#define __DEBUG
+#define __DEBUG
 
 #ifdef __DEBUG
 #include <openssl/asn1.h>

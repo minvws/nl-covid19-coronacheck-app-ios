@@ -22,7 +22,7 @@ struct SecurityCheckerFactory {
 	static func getSecurityChecker(
 		_ strategy: SecurityStrategy,
 		networkConfiguration: NetworkConfiguration,
-		challenge: URLAuthenticationChallenge,
+		challenge: URLAuthenticationChallenge?,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> SecurityCheckerProtocol {
 
 		if case SecurityStrategy.none = strategy {
@@ -129,7 +129,7 @@ class SecurityCheckerNone: SecurityChecker {
 class SecurityChecker: SecurityCheckerProtocol, Logging {
 
 	var trustedCertificates: [Data]
-	var challenge: URLAuthenticationChallenge
+	var challenge: URLAuthenticationChallenge?
 	var completionHandler: (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
 	var trustedNames: [String]
 	var trustedSigners: [SigningCertificate]
@@ -139,7 +139,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		trustedCertificates: [Data] = [],
 		trustedNames: [String] = [],
 		trustedSigners: [SigningCertificate] = [],
-		challenge: URLAuthenticationChallenge,
+		challenge: URLAuthenticationChallenge?,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
 		self.trustedCertificates = trustedCertificates
@@ -154,7 +154,12 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	// later (as we need to work with this data; which otherwise would be untrusted).
 	//
 	func checkATS(serverTrust: SecTrust) -> Bool {
-		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
+		
+		guard let host = challenge?.protectionSpace.host else {
+			return false
+		}
+		
+		let policies = [SecPolicyCreateSSL(true, host as CFString)]
 
 		return SecurityCheckerWorker().checkATS(
 			serverTrust: serverTrust,
@@ -165,20 +170,20 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	/// Check the SSL Connection
 	func checkSSL() {
 
-		guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-			  let serverTrust = challenge.protectionSpace.serverTrust else {
+		guard challenge?.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+			  let serverTrust = challenge?.protectionSpace.serverTrust, let host = challenge?.protectionSpace.host else {
 
 			logWarning("SecurityChecker: invalid authenticationMethod")
 			completionHandler(.performDefaultHandling, nil)
 			return
 		}
-		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
+		let policies = [SecPolicyCreateSSL(true, host as CFString)]
 
 		if SecurityCheckerWorker().checkSSL(
 			serverTrust: serverTrust,
 			policies: policies,
 			trustedCertificates: trustedCertificates,
-			hostname: challenge.protectionSpace.host,
+			hostname: host,
 			trustedNames: trustedNames) {
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 			return
