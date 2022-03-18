@@ -57,7 +57,7 @@ extension BaseTest {
 		returnToCertificateOverview()
 	}
 	
-	func replaceExistingCertificate(_ replace: Bool = true) {
+	func replaceExistingCertificate(_ replace: Bool) {
 		app.textExists("Wil je je bewijs vervangen?")
 		app.tapButton(replace ? "Vervang" : "Stoppen")
 	}
@@ -68,7 +68,7 @@ extension BaseTest {
 		app.containsText("Geboortedatum: " + formattedDate(of: person.birthDate))
 	}
 	
-	func assertRetriedCertificateDetails(for person: TestPerson) {
+	func assertRetrievedCertificateDetails(for person: TestPerson) {
 		app.tapButton("Details")
 		app.containsText("Naam: " + person.name)
 		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
