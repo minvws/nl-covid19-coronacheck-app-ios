@@ -570,6 +570,7 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 		static let largeMargin: CGFloat = 20
 		static let cornerRadius: CGFloat = 8
 		static let imageDimension: CGFloat = 24
+		static let titleLineHeight: CGFloat = 28
 	}
 	
 	private let iconImageView: UIImageView = {
@@ -631,7 +632,7 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 
 	var title: String? {
 		didSet {
-			label.text = title
+			label.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight, textColor: C.primaryBlue()!)
 		}
 	}
 }
