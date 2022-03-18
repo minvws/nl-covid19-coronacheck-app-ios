@@ -41,7 +41,7 @@ extension BaseTest {
 		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: self.loginTimeout))
 		makeScreenShot(name: "Safari is ready")
 		
-		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].assertExistence().exists
+		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].waitForExistence(timeout: self.loginTimeout)
 		makeScreenShot(name: "Logged in: " + loggedIn.description)
 		
 		if !loggedIn { loginToServer() }
@@ -71,8 +71,8 @@ extension BaseTest {
 		username.typeText("coronacheck")
 		makeScreenShot(name: "Username typed")
 		
-		let continueButton = safari.buttons["Continue"].assertExistence()
-		if continueButton.exists {
+		let continueButton = safari.buttons["Continue"]
+		if continueButton.waitForExistence(timeout: self.loginTimeout) {
 			continueButton.tap()
 			makeScreenShot(name: "Hide continue button")
 		}
