@@ -11,7 +11,7 @@ class VaccinationEncodingSmoke: BaseTest {
 		let person = TestData.encodingLatinDiacritic
 		addVaccinationCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)

@@ -11,7 +11,7 @@ class PositiveEncodingTest: BaseTest {
 		let person = TestData.encodingLatin
 		addRecoveryCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
@@ -22,7 +22,7 @@ class PositiveEncodingTest: BaseTest {
 		let person = TestData.encodingLatinDiacritic
 		addRecoveryCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
@@ -33,7 +33,7 @@ class PositiveEncodingTest: BaseTest {
 		let person = TestData.encodingArabic
 		addRecoveryCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
@@ -44,7 +44,7 @@ class PositiveEncodingTest: BaseTest {
 		let person = TestData.encodingHebrew
 		addRecoveryCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
@@ -55,7 +55,7 @@ class PositiveEncodingTest: BaseTest {
 		let person = TestData.encodingChinese
 		addRecoveryCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
@@ -66,7 +66,7 @@ class PositiveEncodingTest: BaseTest {
 		let person = TestData.encodingGreek
 		addRecoveryCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
@@ -77,7 +77,7 @@ class PositiveEncodingTest: BaseTest {
 		let person = TestData.encodingCyrillic
 		addRecoveryCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
@@ -88,7 +88,7 @@ class PositiveEncodingTest: BaseTest {
 		let person = TestData.encodingEmoji
 		addRecoveryCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
@@ -99,7 +99,7 @@ class PositiveEncodingTest: BaseTest {
 		let person = TestData.encodingLongStrings
 		addRecoveryCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
@@ -110,7 +110,7 @@ class PositiveEncodingTest: BaseTest {
 		let person = TestData.encodingLongNames
 		addRecoveryCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)

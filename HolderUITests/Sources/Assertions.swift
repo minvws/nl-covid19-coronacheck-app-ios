@@ -68,7 +68,7 @@ extension BaseTest {
 		app.containsText("Geboortedatum: " + formattedDate(of: person.birthDate))
 	}
 	
-	func assertRetriedCertificateDetails(for person: TestPerson) {
+	func assertRetrievedCertificateDetails(for person: TestPerson) {
 		app.tapButton("Details")
 		app.containsText("Naam: " + person.name)
 		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
