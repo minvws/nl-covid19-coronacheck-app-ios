@@ -167,11 +167,9 @@ class SecurityCheckerWorker: Logging {
 						logVerbose("Host matched CN \(name)")
 					}
 					if !foundValidCommonNameEndsWithTrustedName {
-						for trustedName in trustedNames {
-							if name.lowercased().hasSuffix(trustedName.lowercased()) {
-								foundValidCommonNameEndsWithTrustedName = true
-								logVerbose("Found a valid name \(name)")
-							}
+						for trustedName in trustedNames where name.lowercased().hasSuffix(trustedName.lowercased()) {
+							foundValidCommonNameEndsWithTrustedName = true
+							logVerbose("Found a valid name \(name)")
 						}
 					}
 				}

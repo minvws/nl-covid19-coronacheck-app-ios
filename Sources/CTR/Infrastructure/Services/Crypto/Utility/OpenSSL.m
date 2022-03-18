@@ -245,9 +245,9 @@ errit:
 	BOOL hasCorrectEnding = [cnString hasSuffix:requiredContent];
 	
 	certificateSubjectName = NULL;
-	
+#ifdef __DEBUG
 	NSLog(@"validateCommonNameForCertificate: %@ -> %d\n", requiredContent, hasCorrectEnding);
-	
+#endif
 	return hasCorrectEnding;
 }
 
