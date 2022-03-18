@@ -302,11 +302,10 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == false
 	}
 	
-	func test_getAuthorityKeyIdentifier_privateRoot_shouldBeNil() throws {
+	func test_getAuthorityKeyIdentifier_privateRoot_shouldBeNil() {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "PrivateRootCA-G1", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		let certificateData = TrustConfiguration.sdNPrivateRootCertificate.getCertificateData()
 		
 		// When
 		let key = sut.getAuthorityKeyIdentifierData(certificateData)
@@ -330,16 +329,39 @@ class OpenSSLTests: XCTestCase {
 		expect(key) == expectedAuthorityKeyIdentifier
 	}
 	
-	func test_getCommonName() throws {
+	func test_getCommonName_PrivateRootCA_G1() {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "PrivateRootCA-G1", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		let certificateData = TrustConfiguration.sdNPrivateRootCertificate.getCertificateData()
 		
 		// When
 		let name = sut.getCommonName(forCertificate: certificateData)
 
 		// Then
 		expect(name) == "Staat der Nederlanden Private Root CA - G1"
+	}
+	
+	func test_getCommonName_RootCA_G3() {
+		
+		// Given
+		let certificateData = TrustConfiguration.sdNRootCAG3Certificate.getCertificateData()
+		
+		// When
+		let name = sut.getCommonName(forCertificate: certificateData)
+		
+		// Then
+		expect(name) == "Staat der Nederlanden Root CA - G3"
+	}
+	
+	func test_getCommonName_EVRootCA() {
+		
+		// Given
+		let certificateData = TrustConfiguration.sdNEVRootCACertificate.getCertificateData()
+		
+		// When
+		let name = sut.getCommonName(forCertificate: certificateData)
+		
+		// Then
+		expect(name) == "Staat der Nederlanden EV Root CA"
 	}
 }
