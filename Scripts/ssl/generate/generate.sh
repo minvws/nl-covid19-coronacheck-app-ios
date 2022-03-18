@@ -31,7 +31,7 @@ $OPENSSL req -new -keyout sub-ca.key -nodes \
 	-subj '/C=NL/O=Staat der Nederlanden/CN=Staat der Nederlanden Organisatie - Services G3' |\
 $OPENSSL x509 \
 	-extfile  ext.cnf.$$ -extensions subca \
-	-req -CAkey ca.key -CA ca.pem -set_serial 1010 -out sub-ca.pem
+	-req -days 365 -CAkey ca.key -CA ca.pem -set_serial 1010 -out sub-ca.pem
 
 rm ext.cnf.$$
 
