@@ -26,7 +26,7 @@ class VerifierStartScanningViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 400, height: 700)
-		assertSnapshot(matching: sut, as: .image)
+		assertSnapshot(matching: sut, as: .image(precision: 0.98))
 	}
 
 	func test_headerAnimation() {
@@ -55,6 +55,6 @@ class VerifierStartScanningViewTests: XCTestCase {
 		sut.showHeader()
 		
 		// Assert2
-		assertSnapshot(matching: sut, as: .image)
+		assertSnapshot(matching: sut, as: .image(precision: 0.98))
 	}
 }

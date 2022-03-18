@@ -91,7 +91,7 @@ class LaunchViewModel: Logging {
 		}
 
 		// Small delay, let the viewController load.
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
 			switch (configStatus, issuerPublicKeysStatus) {
 				case (.withinTTL, .withinTTL):
 					self.coordinator?.handleLaunchState(.withinTTL)
