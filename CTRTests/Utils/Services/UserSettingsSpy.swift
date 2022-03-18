@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -187,28 +186,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedLastRecommendToAddYourBoosterDismissalDateSetter = false
-	var invokedLastRecommendToAddYourBoosterDismissalDateSetterCount = 0
-	var invokedLastRecommendToAddYourBoosterDismissalDate: Date?
-	var invokedLastRecommendToAddYourBoosterDismissalDateList = [Date?]()
-	var invokedLastRecommendToAddYourBoosterDismissalDateGetter = false
-	var invokedLastRecommendToAddYourBoosterDismissalDateGetterCount = 0
-	var stubbedLastRecommendToAddYourBoosterDismissalDate: Date!
-
-	var lastRecommendToAddYourBoosterDismissalDate: Date? {
-		set {
-			invokedLastRecommendToAddYourBoosterDismissalDateSetter = true
-			invokedLastRecommendToAddYourBoosterDismissalDateSetterCount += 1
-			invokedLastRecommendToAddYourBoosterDismissalDate = newValue
-			invokedLastRecommendToAddYourBoosterDismissalDateList.append(newValue)
-		}
-		get {
-			invokedLastRecommendToAddYourBoosterDismissalDateGetter = true
-			invokedLastRecommendToAddYourBoosterDismissalDateGetterCount += 1
-			return stubbedLastRecommendToAddYourBoosterDismissalDate
-		}
-	}
-
 	var invokedLastSeenRecommendedUpdateSetter = false
 	var invokedLastSeenRecommendedUpdateSetterCount = 0
 	var invokedLastSeenRecommendedUpdate: String?
@@ -316,50 +293,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedPolicyInformationShownGetter = true
 			invokedPolicyInformationShownGetterCount += 1
 			return stubbedPolicyInformationShown
-		}
-	}
-
-	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetter = false
-	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount = 0
-	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool?
-	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardList = [Bool]()
-	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetter = false
-	var invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount = 0
-	var stubbedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool! = false
-
-	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool {
-		set {
-			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetter = true
-			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount += 1
-			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = newValue
-			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardList.append(newValue)
-		}
-		get {
-			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetter = true
-			invokedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount += 1
-			return stubbedHasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard
-		}
-	}
-
-	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetter = false
-	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount = 0
-	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool?
-	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardList = [Bool]()
-	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetter = false
-	var invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount = 0
-	var stubbedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool! = false
-
-	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool {
-		set {
-			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetter = true
-			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardSetterCount += 1
-			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard = newValue
-			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardList.append(newValue)
-		}
-		get {
-			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetter = true
-			invokedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCardGetterCount += 1
-			return stubbedShouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard
 		}
 	}
 

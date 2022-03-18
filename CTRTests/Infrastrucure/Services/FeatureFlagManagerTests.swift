@@ -28,31 +28,7 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		sut = FeatureFlagManager(versionSupplier: appVersionSupplierSpy, remoteConfigManager: remoteConfigManagerSpy)
 	}
-		
-	func test_isNewValidityInfoBannerEnabled_remoteConfig_enabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.showNewValidityInfoCard = true
-		
-		// When
-		let enabled = sut.isNewValidityInfoBannerEnabled()
-		
-		// Then
-		expect(enabled) == true
-	}
-	
-	func test_isNewValidityInfoBannerEnabled_remoteConfig_disabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.showNewValidityInfoCard = false
-		
-		// When
-		let enabled = sut.isNewValidityInfoBannerEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
+
 	func test_isVerificationPolicy_1G_enabled() {
 		
 		// Given
