@@ -35,9 +35,6 @@ protocol UserSettingsProtocol: AnyObject {
 	
 	var policyInformationShown: Bool { get set }
 
-	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
-	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool { get set }
-	
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] { get set }
 	var hasDismissedZeroGPolicy: Bool { get set }
 	var lastKnownConfigDisclosurePolicy: [String] { get set }
@@ -87,14 +84,6 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "policyInformationShown", defaultValue: false)
 	var policyInformationShown: Bool // swiftlint:disable:this let_var_whitespace
 
-	// MARK: - Validity Information Banner for Vaccinations and Recoveries
-	
-	@UserDefaults(key: "hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
-	var hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
-	
-	@UserDefaults(key: "shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard", defaultValue: true)
-	var shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard: Bool // swiftlint:disable:this let_var_whitespace
-	
 	@UserDefaults(key: "lastDismissedDisclosurePolicy")
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] = [] // swiftlint:disable:this let_var_whitespace
 
@@ -128,8 +117,6 @@ extension UserSettings {
 			"deviceAuthenticationWarningShown",
 			"deviceAuthenticationWarningShown",
 			"shouldCheckRecoveryGreenCardRevisedValidity",
-			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
-			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
 			"configVerificationPolicies",
 			"policyInformationShown",
 			"lastDismissedDisclosurePolicy",
@@ -138,6 +125,8 @@ extension UserSettings {
 			"hasDismissedZeroGPolicy",
 
 			// Deprecated keys
+			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
+			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
 			"lastRecommendToAddYourBoosterDismissalDate",
 			"shouldShowRecoveryValidityExtensionCard",
 			"shouldShowRecoveryValidityReinstationCard",

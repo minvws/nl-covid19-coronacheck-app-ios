@@ -66,7 +66,6 @@ final class EnvironmentSpies {
 	
 	var featureFlagManagerSpy: FeatureFlagManagerSpy = {
 		let spy = FeatureFlagManagerSpy()
-		spy.stubbedIsNewValidityInfoBannerEnabledResult = false
 		return spy
 	}()
 	

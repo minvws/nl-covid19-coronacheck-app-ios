@@ -16,7 +16,6 @@ protocol FeatureFlagManaging {
 	///  Should we use the luhn check for tokens?
 	/// - Returns: True if we can
 	func isLuhnCheckEnabled() -> Bool
-	func isNewValidityInfoBannerEnabled() -> Bool
 	func isVisitorPassEnabled() -> Bool
 	
 	// Verifier
@@ -56,11 +55,6 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 	func isLuhnCheckEnabled() -> Bool {
 		
 		return remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
-	}
-	
-	func isNewValidityInfoBannerEnabled() -> Bool {
-		
-		return remoteConfigManager.storedConfiguration.showNewValidityInfoCard ?? false
 	}
 	
 	func isVisitorPassEnabled() -> Bool {
