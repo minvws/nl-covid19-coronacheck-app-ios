@@ -57,7 +57,7 @@ extension BaseTest {
 		returnToCertificateOverview()
 	}
 	
-	func replaceExistingCertificate(_ replace: Bool = true) {
+	func replaceExistingCertificate(_ replace: Bool) {
 		app.textExists("Wil je je bewijs vervangen?")
 		app.tapButton(replace ? "Vervang" : "Stoppen")
 	}
