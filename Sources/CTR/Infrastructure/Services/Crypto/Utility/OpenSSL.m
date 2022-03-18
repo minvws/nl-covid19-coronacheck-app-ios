@@ -538,7 +538,7 @@ errit:
 	return true;
 }
 
-- (nullable NSString *)getCommonNameForCertificate:(NSData *)certificateData {
+- (nullable NSString *) getCommonNameForCertificate: (NSData *) certificateData {
 	
 	X509 *certificate = [self getX509: certificateData];
 	if (certificate == NULL) {
@@ -558,7 +558,7 @@ errit:
 	return cnString;
 }
 
-- (nullable NSData *)getAuthorityKeyIdentifierData:(NSData *)certificateData {
+- (nullable NSData *) getAuthorityKeyIdentifierForCertificate: (NSData *) certificateData {
 	
 	X509 *certificate = [self getX509: certificateData];
 	if (certificate == NULL) {
