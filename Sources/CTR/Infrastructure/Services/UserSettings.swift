@@ -25,8 +25,6 @@ protocol UserSettingsProtocol: AnyObject {
 
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? { get set }
 	
-	var lastRecommendToAddYourBoosterDismissalDate: Date? { get set }
-	
 	var lastSeenRecommendedUpdate: String? { get set }
 
 	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? { get set }
@@ -73,9 +71,6 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "lastRecommendUpdateDismissalTimestamp", defaultValue: nil)
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
-
-	@UserDefaults(key: "lastRecommendToAddYourBoosterDismissalDate", defaultValue: nil)
-	var lastRecommendToAddYourBoosterDismissalDate: Date? // swiftlint:disable:this let_var_whitespace
 
 	@UserDefaults(key: "lastSeenRecommendedUpdate", defaultValue: nil)
 	var lastSeenRecommendedUpdate: String? // swiftlint:disable:this let_var_whitespace
@@ -129,7 +124,6 @@ extension UserSettings {
 			"lastScreenshotTime",
 			"lastRecommendUpdateDismissalTimestamp",
 			"lastSeenRecommendedUpdate",
-			"lastRecommendToAddYourBoosterDismissalDate",
 			"lastSuccessfulCompletionOfAddCertificateFlowDate",
 			"deviceAuthenticationWarningShown",
 			"deviceAuthenticationWarningShown",
@@ -144,6 +138,7 @@ extension UserSettings {
 			"hasDismissedZeroGPolicy",
 
 			// Deprecated keys
+			"lastRecommendToAddYourBoosterDismissalDate",
 			"shouldShowRecoveryValidityExtensionCard",
 			"shouldShowRecoveryValidityReinstationCard",
 			"hasDismissedRecoveryValidityExtensionCompletionCard",
