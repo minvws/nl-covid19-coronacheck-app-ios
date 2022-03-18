@@ -23,7 +23,7 @@ class NewMenuRowViewTests: XCTestCase {
 		sut.frame = CGRect(x: 0, y: 0, width: 380, height: 90)
 
 		// Assert
-		sut.assertImage(precision: 0.98)
+		sut.assertImage()
 	}
 
 	func testLongTitle() {
@@ -36,7 +36,7 @@ class NewMenuRowViewTests: XCTestCase {
 		sut.frame = CGRect(x: 0, y: 0, width: 380, height: 140)
 
 		// Assert
-		sut.assertImage(precision: 0.98)
+		sut.assertImage()
 	}
 	
 	func testAction() {
