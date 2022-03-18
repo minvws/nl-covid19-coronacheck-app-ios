@@ -256,7 +256,7 @@ class ListRemoteEventsViewModel: Logging {
 				storageEventMode = .recovery
 			}
 		}
-		logDebug("Setting storageEventMode to \(String(describing: storageEventMode))")
+		logVerbose("Setting storageEventMode to \(String(describing: storageEventMode))")
 		return storageEventMode
 	}
 

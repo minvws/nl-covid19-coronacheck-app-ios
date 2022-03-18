@@ -389,6 +389,7 @@ extension NetworkManager: NetworkManaging {
 
 		decodeSignedJSONData(
 			request: urlRequest,
+			strategy: .config,
 			completion: { (result: Result<(AnyCodable, SignedResponse, Data, URLResponse), ServerError>) in
 				// Not interested in the object (anycodable), we just want the data.
 				DispatchQueue.main.async {
@@ -407,12 +408,16 @@ extension NetworkManager: NetworkManaging {
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
-
-		decodeSignedJSONData(request: urlRequest) { (result: Result<(RemoteConfiguration, SignedResponse, Data, URLResponse), ServerError>) in
-			DispatchQueue.main.async {
-				completion(result.map { decodable, _, data, urlResponse in (decodable, data, urlResponse) })
+		
+		decodeSignedJSONData(
+			request: urlRequest,
+			strategy: .config,
+			completion: { (result: Result<(RemoteConfiguration, SignedResponse, Data, URLResponse), ServerError>) in
+				DispatchQueue.main.async {
+					completion(result.map { decodable, _, data, urlResponse in (decodable, data, urlResponse) })
+				}
 			}
-		}
+		)
 	}
 
 	func fetchGreencards(
@@ -465,11 +470,15 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(request: urlRequest) {(result: Result<(ArrayEnvelope<T>, SignedResponse, Data, URLResponse), ServerError>) in
-			DispatchQueue.main.async {
-				completion(result.map { decodable, _, _, _ in (decodable.items) })
+		decodeSignedJSONData(
+			request: urlRequest,
+			strategy: .config,
+			completion: {(result: Result<(ArrayEnvelope<T>, SignedResponse, Data, URLResponse), ServerError>) in
+				DispatchQueue.main.async {
+					completion(result.map { decodable, _, _, _ in (decodable.items) })
+				}
 			}
-		}
+		)
 	}
 
 	/// Get a test result
@@ -521,7 +530,7 @@ extension NetworkManager: NetworkManaging {
 		provider: EventFlow.EventProvider,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
-		guard let providerUrl = provider.unomiURL else {
+		guard let providerUrl = provider.unomiUrl else {
 			self.logError("No url provided for \(provider.name)")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -559,7 +568,7 @@ extension NetworkManager: NetworkManaging {
 		provider: EventFlow.EventProvider,
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 
-		guard let providerUrl = provider.eventURL else {
+		guard let providerUrl = provider.eventUrl else {
 			self.logError("No url provided for \(provider.name)")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
