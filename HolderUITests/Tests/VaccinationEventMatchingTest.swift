@@ -13,83 +13,148 @@ class VaccinationEventMatchingTest: BaseTest {
 		try super.setUpWithError()
 		
 		addVaccinationCertificate(for: setup)
+		assertRetrievedCertificate(for: setup)
+		assertRetrievedCertificateDetails(for: setup)
 		addRetrievedCertificateToApp()
 	}
 	
-	func test_vacJ1DifferentFirstNameReplaces() {
+	func test_vacJ1DifferentFirstName_Replaces() {
 		let person = TestData.vacJ1DifferentFirstNameReplaces
 		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
 	}
 	
-	func test_vacJ1DifferentLastNameReplaces() {
+	func test_vacJ1DifferentLastName_Replaces() {
 		let person = TestData.vacJ1DifferentLastNameReplaces
 		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
 	}
 	
-	func test_vacJ1DifferentFullNameReplaces() {
+	func test_vacJ1DifferentFullName_ReplaceSetup() {
 		let person = TestData.vacJ1DifferentFullNameReplaces
 		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		replaceExistingCertificate()
-		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
-	}
-	
-	func test_vacJ1DifferentBirthDayCanReplace() {
-		let person = TestData.vacJ1DifferentBirthDayCanReplace
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		replaceExistingCertificate()
-		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
-	}
-	
-	func test_vacJ1DifferentBirthMonthCanReplace() {
-		let person = TestData.vacJ1DifferentBirthMonthCanReplace
-		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
 	}
 	
-	func test_vacJ1DifferentBirthYearReplaces() {
-		let person = TestData.vacJ1DifferentBirthYearReplaces
+	func test_vacJ1DifferentFullName_KeepSetup() {
+		let person = TestData.vacJ1DifferentFullNameReplaces
 		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
-	}
-	
-	func test_vacJ1DifferentEverythingReplaceSetup() {
-		let person = TestData.vacJ1DifferentEverythingReplaces
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		replaceExistingCertificate(true)
-		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
-	}
-	
-	func test_vacJ1DifferentEverythingKeepSetup() {
-		let person = TestData.vacJ1DifferentEverythingReplaces
-		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
 		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffset: setup.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, dateOffset: setup.vacOffset)
+		assertInternationalVaccinationQRDetails(for: setup)
+	}
+	
+	func test_vacJ1DifferentBirthDay_ReplaceSetup() {
+		let person = TestData.vacJ1DifferentBirthDayCanReplace
+		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
+		addRetrievedCertificateToApp()
+		replaceExistingCertificate(true)
+		
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
+	}
+	
+	func test_vacJ1DifferentBirthDay_KeepSetup() {
+		let person = TestData.vacJ1DifferentBirthDayCanReplace
+		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
+		addRetrievedCertificateToApp()
+		replaceExistingCertificate(false)
+		
+		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffset: setup.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, dateOffset: setup.vacOffset)
+		assertInternationalVaccinationQRDetails(for: setup)
+	}
+	
+	func test_vacJ1DifferentBirthMonth_ReplaceSetup() {
+		let person = TestData.vacJ1DifferentBirthMonthCanReplace
+		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
+		addRetrievedCertificateToApp()
+		replaceExistingCertificate(true)
+		
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
+	}
+	
+	func test_vacJ1DifferentBirthMonth_KeepSetup() {
+		let person = TestData.vacJ1DifferentBirthMonthCanReplace
+		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
+		addRetrievedCertificateToApp()
+		replaceExistingCertificate(false)
+		
+		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffset: setup.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, dateOffset: setup.vacOffset)
+		assertInternationalVaccinationQRDetails(for: setup)
+	}
+	
+	func test_vacJ1DifferentBirthYear_Replaces() {
+		let person = TestData.vacJ1DifferentBirthYearReplaces
+		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
+		addRetrievedCertificateToApp()
+		
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
+	}
+	
+	func test_vacJ1DifferentEverything_ReplaceSetup() {
+		let person = TestData.vacJ1DifferentEverythingReplaces
+		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
+		addRetrievedCertificateToApp()
+		replaceExistingCertificate(true)
+		
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+		assertInternationalVaccinationQRDetails(for: person)
+	}
+	
+	func test_vacJ1DifferentEverything_KeepSetup() {
+		let person = TestData.vacJ1DifferentEverythingReplaces
+		addVaccinationCertificate(for: person)
+		assertRetrievedCertificate(for: person)
+		assertRetrievedCertificateDetails(for: person)
+		addRetrievedCertificateToApp()
+		replaceExistingCertificate(false)
+		
+		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffset: setup.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, dateOffset: setup.vacOffset)
+		assertInternationalVaccinationQRDetails(for: setup)
 	}
 }

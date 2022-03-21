@@ -57,7 +57,7 @@ extension BaseTest {
 		returnToCertificateOverview()
 	}
 	
-	func replaceExistingCertificate(_ replace: Bool = true) {
+	func replaceExistingCertificate(_ replace: Bool) {
 		app.textExists("Wil je je bewijs vervangen?")
 		app.tapButton(replace ? "Vervang" : "Stoppen")
 	}
@@ -68,7 +68,7 @@ extension BaseTest {
 		app.containsText("Geboortedatum: " + formattedDate(of: person.birthDate))
 	}
 	
-	func assertRetriedCertificateDetails(for person: TestPerson) {
+	func assertRetrievedCertificateDetails(for person: TestPerson) {
 		app.tapButton("Details")
 		app.containsText("Naam: " + person.name)
 		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
@@ -215,8 +215,10 @@ extension BaseTest {
 	}
 	
 	func assertInternationalVaccinationQRDetails(for person: TestPerson, dateOffset: Int = -30) {
-		card(of: .vaccination).tapButton(person.doseIntl.count > 1 ? "Bekijk QR-codes" : "Bekijk QR")
-		for (index, dose) in person.doseIntl.reversed().enumerated() {
+		let doses = person.doseIntl
+		
+		card(of: .vaccination).tapButton(doses.count > 1 ? "Bekijk QR-codes" : "Bekijk QR")
+		for (index, dose) in doses.reversed().enumerated() {
 			app.textExists("Dosis " + dose)
 			
 			openQRDetails(for: person)
@@ -226,7 +228,7 @@ extension BaseTest {
 			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: formattedOffsetDate(with: dateOffset - (30 * index), short: true))
 			closeQRDetails()
 			
-			if index != person.doseIntl.indices.last {
+			if index != doses.indices.last {
 				app.tapButton("Vorige QR-code")
 			}
 		}

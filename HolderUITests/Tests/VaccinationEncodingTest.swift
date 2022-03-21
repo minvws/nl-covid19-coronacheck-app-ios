@@ -11,7 +11,7 @@ class VaccinationEncodingTest: BaseTest {
 		let person = TestData.encodingLatin
 		addVaccinationCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
@@ -22,7 +22,7 @@ class VaccinationEncodingTest: BaseTest {
 		let person = TestData.encodingArabic
 		addVaccinationCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
@@ -33,7 +33,7 @@ class VaccinationEncodingTest: BaseTest {
 		let person = TestData.encodingHebrew
 		addVaccinationCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
@@ -44,7 +44,7 @@ class VaccinationEncodingTest: BaseTest {
 		let person = TestData.encodingChinese
 		addVaccinationCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
@@ -55,7 +55,7 @@ class VaccinationEncodingTest: BaseTest {
 		let person = TestData.encodingGreek
 		addVaccinationCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
@@ -66,7 +66,7 @@ class VaccinationEncodingTest: BaseTest {
 		let person = TestData.encodingCyrillic
 		addVaccinationCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
@@ -77,7 +77,7 @@ class VaccinationEncodingTest: BaseTest {
 		let person = TestData.encodingEmoji
 		addVaccinationCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
@@ -88,7 +88,7 @@ class VaccinationEncodingTest: BaseTest {
 		let person = TestData.encodingLongStrings
 		addVaccinationCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
@@ -99,7 +99,7 @@ class VaccinationEncodingTest: BaseTest {
 		let person = TestData.encodingLongNames
 		addVaccinationCertificate(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)

@@ -16,10 +16,10 @@ struct SigningCertificate {
 	let certificate: String
 
 	/// The required common name
-	let commonName: String?
+	var commonName: String?
 
 	/// The required authority Key
-	let authorityKeyIdentifier: Data?
+	var authorityKeyIdentifier: Data?
 
 	/// The required subject key
 	let subjectKeyIdentifier: Data?

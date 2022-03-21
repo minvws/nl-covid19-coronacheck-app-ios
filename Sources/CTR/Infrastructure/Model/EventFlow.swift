@@ -58,16 +58,16 @@ struct EventFlow {
 		let name: String
 
 		/// The url of the provider to fetch the unomi
-		let unomiURL: URL?
+		let unomiUrl: URL?
 
 		/// The url of the provider to fetch the events
-		let eventURL: URL?
+		let eventUrl: URL?
 
+		/// The public key of the provider
+		var cmsCertificates: [String]
+		
 		/// The ssl certificate of the provider
-		let cmsCertificate: String
-
-		/// The ssl certificate of the provider
-		let tlsCertificate: String
+		var tlsCertificates: [String]
 
 		/// The access token for api calls
 		var accessToken: AccessToken?
@@ -84,12 +84,12 @@ struct EventFlow {
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
 
-			case identifier = "provider_identifier"
+			case identifier
 			case name
-			case unomiURL = "unomi_url"
-			case eventURL = "event_url"
-			case cmsCertificate = "cms"
-			case tlsCertificate = "tls"
+			case unomiUrl
+			case eventUrl
+			case cmsCertificates = "cms"
+			case tlsCertificates = "tls"
 			case usages = "usage"
 		}
 	}
@@ -442,27 +442,6 @@ extension EventFlow.EventProvider {
 
 	func getHostNames() -> [String] {
 		
-		[unomiURL?.host, eventURL?.host].compactMap { $0 }
-	}
-
-	func getSSLCertificate() -> Data? {
-		
-		tlsCertificate.base64Decoded().map {
-			Data($0.utf8)
-		}
-	}
-
-	func getSigningCertificate() -> SigningCertificate? {
-		
-		cmsCertificate.base64Decoded().map {
-			SigningCertificate(
-				name: "EventProvider",
-				certificate: $0,
-				commonName: nil,
-				authorityKeyIdentifier: nil,
-				subjectKeyIdentifier: nil,
-				rootSerial: nil
-			)
-		}
+		[unomiUrl?.host, eventUrl?.host].compactMap { $0 }
 	}
 }

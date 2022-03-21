@@ -11,7 +11,7 @@ class NegativeEncodingTest: BaseTest {
 		let person = TestData.encodingLatin
 		addTestCertificateFromGGD(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -22,7 +22,7 @@ class NegativeEncodingTest: BaseTest {
 		let person = TestData.encodingLatinDiacritic
 		addTestCertificateFromGGD(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -33,7 +33,7 @@ class NegativeEncodingTest: BaseTest {
 		let person = TestData.encodingArabic
 		addTestCertificateFromGGD(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -44,7 +44,7 @@ class NegativeEncodingTest: BaseTest {
 		let person = TestData.encodingHebrew
 		addTestCertificateFromGGD(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -55,7 +55,7 @@ class NegativeEncodingTest: BaseTest {
 		let person = TestData.encodingChinese
 		addTestCertificateFromGGD(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -66,7 +66,7 @@ class NegativeEncodingTest: BaseTest {
 		let person = TestData.encodingGreek
 		addTestCertificateFromGGD(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -77,7 +77,7 @@ class NegativeEncodingTest: BaseTest {
 		let person = TestData.encodingCyrillic
 		addTestCertificateFromGGD(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -88,7 +88,7 @@ class NegativeEncodingTest: BaseTest {
 		let person = TestData.encodingEmoji
 		addTestCertificateFromGGD(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -99,7 +99,7 @@ class NegativeEncodingTest: BaseTest {
 		let person = TestData.encodingLongStrings
 		addTestCertificateFromGGD(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -110,7 +110,7 @@ class NegativeEncodingTest: BaseTest {
 		let person = TestData.encodingLongNames
 		addTestCertificateFromGGD(for: person)
 		assertRetrievedCertificate(for: person)
-		assertRetriedCertificateDetails(for: person)
+		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()

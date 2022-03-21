@@ -14,7 +14,7 @@ import OHHTTPStubsSwift
 class NetworkManagerCredentialsTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v7/holder/credentials"
+	private let path = "/v8/holder/credentials"
 	
 	override func setUp() {
 		

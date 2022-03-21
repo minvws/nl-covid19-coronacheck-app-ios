@@ -19,7 +19,7 @@ class ChooseProofTypeViewTests: XCTestCase {
 		sut = ChooseProofTypeView(frame: UIScreen.main.bounds)
 	}
 
-	func test_() {
+	func test_snapshot() {
 		// Arrange
 		sut.title = "Here is the title"
 		sut.message = "Here is a message"
@@ -29,4 +29,5 @@ class ChooseProofTypeViewTests: XCTestCase {
 		// Assert
 		assertSnapshot(matching: sut, as: .image)
 	}
+
 }
