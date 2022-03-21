@@ -226,7 +226,6 @@ class AppCoordinator: Coordinator, Logging {
 		window.rootViewController?.present(alertController, animated: true)
 	}
 
-	
 	/// Pop any existing presented viewControllers (AppUpdate / AppDeactivated)
 	private func popPresentedViewController() {
 		
