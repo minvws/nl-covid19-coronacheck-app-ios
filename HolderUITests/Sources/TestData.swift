@@ -198,6 +198,10 @@ final class TestData {
 	static let posPcrDifferentBirthDay = TestPerson(bsn: "999991978", recUntil: 150) // Positive PCR (NAAT) different birth day
 	static let posPcrDifferentBirthMonth = TestPerson(bsn: "999991991", recUntil: 150) // Positive PCR (NAAT) different birth month
 	
+	// Positive tests - multiples
+	static let posPcr2Recent = TestPerson(bsn: "999993689", recUntil: 120) // Positive PCR (NAAT) both new
+	static let posPcr2Old = TestPerson(bsn: "999993690", recUntil: 150) // Positive PCR (NAAT) new and old
+	
 	// Negative tests (and combinations)
 	static let negPcr = TestPerson(bsn: "999992004") // Negative PCR (NAAT)
 	static let negPcrP1 = TestPerson(bsn: "999992065", doseIntl: ["1/2"], vacOffset: -60) // Negative PCR (NAAT) + 1 pfizer
