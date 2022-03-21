@@ -112,6 +112,7 @@ final class EnvironmentSpies {
 	var remoteConfigManagerSpy: RemoteConfigManagingSpy = {
 		let spy = RemoteConfigManagingSpy()
 		spy.stubbedStoredConfiguration = .default
+		spy.stubbedStoredConfiguration.scanLockSeconds = 300
 		spy.stubbedStoredConfiguration.configTTL = 3600
 		spy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
 		spy.stubbedAppendReloadObserverResult = UUID()

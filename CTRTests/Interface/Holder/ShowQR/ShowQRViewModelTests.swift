@@ -377,7 +377,7 @@ class ShowQRViewModelTests: XCTestCase {
 			notificationCenter: notificationCenterSpy
 		)
 
-		let (name, _, _) = notificationCenterSpy.invokedAddObserverForNameParameters!
+		let (name, _, _, _) = notificationCenterSpy.invokedAddObserverForNameParameters!
 		expect(name) == UIApplication.didEnterBackgroundNotification
 
 		expect(self.sut.thirdPartyTicketAppButtonTitle).to(beNil())

@@ -8,6 +8,8 @@
 import Foundation
 @testable import CTR
 
+// If regenerating, watch out for `addObserver()` as it is customized to retain the `using block` parameter:
+
 class NotificationCenterSpy: NotificationCenterProtocol {
 
 	var invokedAddObserverSelector = false
@@ -29,8 +31,8 @@ class NotificationCenterSpy: NotificationCenterProtocol {
 
 	var invokedAddObserverForName = false
 	var invokedAddObserverForNameCount = 0
-	var invokedAddObserverForNameParameters: (name: NSNotification.Name?, obj: Any?, queue: OperationQueue?)?
-	var invokedAddObserverForNameParametersList = [(name: NSNotification.Name?, obj: Any?, queue: OperationQueue?)]()
+	var invokedAddObserverForNameParameters: (name: NSNotification.Name?, obj: Any?, queue: OperationQueue?, block: (Notification) -> Void)?
+	var invokedAddObserverForNameParametersList = [(name: NSNotification.Name?, obj: Any?, queue: OperationQueue?, block: (Notification) -> Void)]()
 	var stubbedAddObserverForNameBlockResult: (Notification, Void)?
 	var stubbedAddObserverForNameResult: NSObjectProtocol!
 
@@ -41,8 +43,8 @@ class NotificationCenterSpy: NotificationCenterProtocol {
 		using block: @escaping (Notification) -> Void) -> NSObjectProtocol {
 		invokedAddObserverForName = true
 		invokedAddObserverForNameCount += 1
-		invokedAddObserverForNameParameters = (name, obj, queue)
-		invokedAddObserverForNameParametersList.append((name, obj, queue))
+		invokedAddObserverForNameParameters = (name, obj, queue, block)
+		invokedAddObserverForNameParametersList.append((name, obj, queue, block))
 		if let result = stubbedAddObserverForNameBlockResult {
 			block(result.0)
 		}

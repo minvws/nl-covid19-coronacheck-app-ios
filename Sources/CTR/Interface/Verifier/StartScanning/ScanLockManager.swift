@@ -40,7 +40,7 @@ final class ScanLockManager: ScanLockManaging {
 	
 	@Atomic<State> fileprivate(set) var state: State = .unlocked
 	private var observers = [ObserverToken: (State) -> Void]()
-	private var recheckTimer: Timer?
+	private var recheckTimer: Timeable?
 	private var keychainScanLockUntil: Date {
 		get {
 			return secureUserSettings.scanLockUntil
@@ -55,6 +55,7 @@ final class ScanLockManager: ScanLockManaging {
 	private let now: () -> Date
 	private let notificationCenter: NotificationCenterProtocol
 	private let secureUserSettings: SecureUserSettingsProtocol
+	private let vendTimer: (TimeInterval, @escaping () -> Void) -> Timeable
 	
 	// It is important to remember that even if the user puts their system time
 	// forward (defeating the lock timer mechanism), that the scanner functionality
@@ -66,11 +67,15 @@ final class ScanLockManager: ScanLockManaging {
 	required init(
 		now: @escaping () -> Date,
 		notificationCenter: NotificationCenterProtocol = NotificationCenter.default,
-		secureUserSettings: SecureUserSettingsProtocol
+		secureUserSettings: SecureUserSettingsProtocol,
+		vendTimer: @escaping (TimeInterval, @escaping () -> Void) -> Timeable = { interval, action in
+			return Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { _ in action() }
+		}
 	) {
 		self.now = now
 		self.notificationCenter = notificationCenter
 		self.secureUserSettings = secureUserSettings
+		self.vendTimer = vendTimer
 		
 		// Set the correct value of state:
 		if keychainScanLockUntil > now() {
@@ -78,6 +83,8 @@ final class ScanLockManager: ScanLockManaging {
 		} else {
 			state = .unlocked
 		}
+		
+		recheck()
 		
 		// Add a change handler to `state`:
 		$state.projectedValue.didSet = { [weak self] atomic in
@@ -91,7 +98,6 @@ final class ScanLockManager: ScanLockManaging {
 			self.notifyObservers()
 		}
 
-		recheck()
 		setupNotificationObservers()
 	}
 	
@@ -129,6 +135,9 @@ final class ScanLockManager: ScanLockManaging {
 			setupRecheckTimer(timeIntervalFromNow: keychainScanLockUntil.timeIntervalSince(now()))
 		} else {
 			state = .unlocked
+			
+			// Cancel any previous timer:
+			recheckTimer?.invalidate()
 		}
 	}
 	
@@ -139,9 +148,9 @@ final class ScanLockManager: ScanLockManaging {
 		recheckTimer?.invalidate()
 		
 		// Setup new one:
-		recheckTimer = Timer.scheduledTimer(withTimeInterval: timeIntervalFromNow, repeats: false, block: { [weak self] _ in
+		recheckTimer = vendTimer(timeIntervalFromNow) { [weak self] in
 			self?.recheck()
-		})
+		}
 	}
 
 	/// Be careful to use weak references to your observers within the closure, and
