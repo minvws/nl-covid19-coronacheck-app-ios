@@ -101,9 +101,11 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 		if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
 		   let url = remoteConfiguration.appStoreURL {
 			
+			self.enableRestart()
 			self.delegate?.updateIsRequired(appStoreUrl: url)
 		} else if remoteConfiguration.isDeactivated {
 			
+			self.enableRestart()
 			self.delegate?.appIsDeactivated()
 		} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
 			let url = remoteConfiguration.appStoreURL {

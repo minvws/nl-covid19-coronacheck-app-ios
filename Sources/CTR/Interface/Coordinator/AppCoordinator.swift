@@ -98,13 +98,17 @@ class AppCoordinator: Coordinator, Logging {
 
         navigationController.viewControllers = [destination]
     }
+	
+	private func registerTriggers() {
+		Current.remoteConfigManager.registerTriggers()
+		Current.cryptoLibUtility.registerTriggers()
+	}
 
 	/// Start the real application
 	private func startApplication() {
 		
 		// Start listeners after launching is done (willEnterForegroundNotification will mess up launch)
-		Current.remoteConfigManager.registerTriggers()
-		Current.cryptoLibUtility.registerTriggers()
+		registerTriggers()
 		
 		switch flavor {
 			case .holder:
@@ -222,6 +226,19 @@ class AppCoordinator: Coordinator, Logging {
 		window.rootViewController?.present(alertController, animated: true)
 	}
 
+	
+	/// Pop any existing presented viewControllers (AppUpdate / AppDeactivated)
+	private func popPresentedViewController() {
+		
+		guard var topController = window.rootViewController else { return }
+
+		while let newTopController = topController.presentedViewController {
+			topController = newTopController
+		}
+
+		topController.dismiss(animated: true)
+	}
+	
 	/// Show the Action Required View
 	/// - Parameter versionInformation: the version information
 	private func navigateToAppUpdate(with viewModel: AppStatusViewModel) {
@@ -267,7 +284,8 @@ class AppCoordinator: Coordinator, Logging {
 extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func appIsDeactivated() {
-		
+
+		registerTriggers()
 		let urlString: String = flavor == .holder ? L.holder_deactivation_url() : L.verifier_deactivation_url()
 
 		navigateToAppUpdate(
@@ -279,7 +297,8 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	}
 	
 	func applicationShouldStart() {
-		
+
+		popPresentedViewController()
 		startApplication()
 	}
 	
@@ -296,7 +315,8 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	}
 	
 	func updateIsRequired(appStoreUrl: URL) {
-		
+
+		registerTriggers()
 		navigateToAppUpdate(
 			with: AppStatusViewModel(
 				coordinator: self,
