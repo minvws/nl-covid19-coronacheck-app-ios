@@ -21,6 +21,8 @@ class QRCardView: BaseView {
 		static let shadowOpacityBottomSquashedView: Float = 0.1
 		static let imageDimension: CGFloat = 40
 		static let titleLineHeight: CGFloat = 28
+		static let expiryLabelLineHeight: CGFloat = 22
+		static let expiryLabelKerning: CGFloat = -0.41
 		
 		// Margins
 		static let imageMargin: CGFloat = 32
@@ -351,11 +353,10 @@ class QRCardView: BaseView {
 		if let expiryEvaluator = expiryEvaluator {
 			let expiryLabel = Label(bodyBold: expiryEvaluator(Date()))
 			expiryLabel.numberOfLines = 0
-			expiryLabel.textColor = C.black()
 
 			if let text = expiryEvaluator(Date()) {
 				expiryLabel.isHidden = false
-				expiryLabel.text = text
+				expiryLabel.attributedText = text.setLineHeight(ViewTraits.expiryLabelLineHeight, kerning: ViewTraits.expiryLabelKerning)
 			} else {
 				expiryLabel.isHidden = true
 			}
