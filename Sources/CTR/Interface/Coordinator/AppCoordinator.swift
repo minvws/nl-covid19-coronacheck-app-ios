@@ -235,6 +235,10 @@ class AppCoordinator: Coordinator, Logging {
 			topController = newTopController
 		}
 		
+		guard !(topController is UINavigationController) else {
+			return
+		}
+		
 		topController.dismiss(animated: true)
 	}
 	
@@ -247,9 +251,21 @@ class AppCoordinator: Coordinator, Logging {
 		while let newTopController = topController.presentedViewController {
 			topController = newTopController
 		}
-		guard !(topController is AppStatusViewController) else { return }
 		let updateController = AppStatusViewController(viewModel: viewModel)
 		
+		guard !(topController is AppStatusViewController) else {
+			// The presented VC is a AppStatusViewController. Compare the viewModels.
+			guard viewModel != (topController as? AppStatusViewController)?.viewModel else {
+				// incoming viewModel equals presented ViewModel. Do nothing
+				return
+			}
+			// incoming viewModel does not equals presented ViewModel. Dismis modally presented VC, reload.
+			topController.dismiss(animated: false) {
+				self.navigateToAppUpdate(with: viewModel)
+			}
+			return
+		}
+		// Present updateController
 		if topController is UINavigationController {
 			(topController as? UINavigationController)?.viewControllers.last?.present(updateController, animated: true)
 		} else {
@@ -284,7 +300,6 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func appIsDeactivated() {
 		
-		logInfo("AC - appIsDeactivated")
 		registerTriggers()
 		let urlString: String = flavor == .holder ? L.holder_deactivation_url() : L.verifier_deactivation_url()
 		
@@ -298,7 +313,6 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func applicationShouldStart() {
 		
-		logInfo("AC - applicationShouldStart")
 		popPresentedViewController()
 		startApplication()
 	}
@@ -317,7 +331,6 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func updateIsRequired(appStoreUrl: URL) {
 		
-		logInfo("AC - updateIsRequired")
 		registerTriggers()
 		navigateToAppUpdate(
 			with: AppStatusViewModel(
