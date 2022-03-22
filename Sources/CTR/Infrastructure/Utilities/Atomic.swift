@@ -43,10 +43,12 @@ class Atomic<Value> {
 		
 		queue.sync {
 			mutation(&value)
-		}
-		
-		DispatchQueue.main.async {
-			self.didSet?(self)
+			
+			if let didSet = self.didSet {
+				DispatchQueue.main.async(execute: {
+					didSet(self)
+				})
+			}
 		}
 	}
 }
