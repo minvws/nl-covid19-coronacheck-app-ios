@@ -9,6 +9,8 @@ import XCTest
 
 extension XCUIElement {
 	
+	private static let timeout = 30.0
+	
 	func clearText() {
 		guard let stringValue = self.value as? String else {
 			XCTFail("Tried to clear and enter text into a non string value")
@@ -23,8 +25,7 @@ extension XCUIElement {
 	}
 	
 	func assertExistence() -> XCUIElement {
-		let timeout = 30.0
-		let elementPresent = self.waitForExistence(timeout: timeout)
+		let elementPresent = self.waitForExistence(timeout: XCUIElement.timeout)
 		XCTAssertTrue(elementPresent, self.description + " could not be found")
 		return self
 	}
@@ -80,9 +81,10 @@ extension XCUIElement {
 		_ = self.links[label].assertExistence()
 	}
 	
-	func containsText(_ text: String, count: Int = 1) {
+	func containsText(_ text: String) {
 		let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
-		let elementQuery = self.children(matching: .any).containing(predicate)
-		XCTAssertTrue(elementQuery.count == count, "Text could not be found: " + text)
+		let elementQuery = self.descendants(matching: .any)
+		let element = elementQuery.element(matching: predicate)
+		_ = element.assertExistence()
 	}
 }
