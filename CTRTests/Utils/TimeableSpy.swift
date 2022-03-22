@@ -6,7 +6,7 @@
 */
 
 import Foundation
-import CTR
+@testable import CTR
 
 class TimerSpy: Timeable {
 
