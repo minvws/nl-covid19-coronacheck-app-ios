@@ -35,14 +35,9 @@ extension XCUIElement {
 	}
 	
 	func tapElement(type: ElementType, _ label: String, _ index: Int) {
-		let descendantsQuery = self.descendants(matching: type)
-		let elementQuery = descendantsQuery.matching(identifier: label)
-		guard elementQuery.count >= index else {
-			XCTFail("Could not find any elements of type \(type) with label '\(label)'")
-			return
-		}
-		let elementByIndex = elementQuery.element(boundBy: index)
-		elementByIndex.waitAndTap()
+		let elementQuery = self.descendants(matching: type)
+		let element = elementQuery.element(matching: type, identifier: label)
+		element.waitAndTap()
 	}
 	
 	func tapButton(_ label: String, index: Int = 0) {
