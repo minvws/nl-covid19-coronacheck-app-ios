@@ -77,23 +77,9 @@ class DisclosureSubtitleButton: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.lightBackground
+		backgroundColor = C.primaryBlue5()
 		layer.cornerRadius = ViewTraits.cornerRadius
-		createShadow()
 		button.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
-	}
-
-	/// Create the shadow
-	func createShadow() {
-
-		// Shadow
-		layer.shadowColor = Theme.colors.shadow.withAlphaComponent(0.7).cgColor
-		layer.shadowOpacity = ViewTraits.shadowOpacity
-		layer.shadowOffset = .zero
-		layer.shadowRadius = ViewTraits.shadowRadius
-		// Cache Shadow
-		layer.shouldRasterize = true
-		layer.rasterizationScale = UIScreen.main.scale
 	}
 
 	/// Setup the hierarchy

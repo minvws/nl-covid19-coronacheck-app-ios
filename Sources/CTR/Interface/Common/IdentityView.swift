@@ -29,14 +29,14 @@ class IdentityElementView: BaseView {
 		static let borderHeight: CGFloat = 62.0
 		static let borderWidth: CGFloat = 1.0
 		static let headerAlignment: NSTextAlignment = .natural
-		static let bodyFont: UIFont = Theme.fonts.title2
-		static let headerColor: UIColor = Theme.colors.dark
+		static let bodyFont: UIFont = Fonts.title2
+		static let headerColor: UIColor = C.black()!
 
-		static let hasContentBorderColor: UIColor = Theme.colors.grey3
-		static let hasContentBackgroundColor = UIColor.white
+		static let hasContentBorderColor: UIColor = C.grey3()!
+		static let hasContentBackgroundColor: UIColor = C.white()!
 
-		static let noContentBorderColor: UIColor = Theme.colors.grey5
-		static let noContentBackgroundColor = Theme.colors.grey5
+		static let noContentBorderColor: UIColor = C.grey5()!
+		static let noContentBackgroundColor = C.grey5()
 	}
 
 	/// Initialize the identity element view

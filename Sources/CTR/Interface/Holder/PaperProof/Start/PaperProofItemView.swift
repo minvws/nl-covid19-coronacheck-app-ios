@@ -122,7 +122,7 @@ final class PaperProofItemView: BaseView {
 			messageLabel.attributedText = message?.setLineHeight(
 				ViewTraits.Message.lineHeight,
 				kerning: ViewTraits.Message.kerning,
-				textColor: Theme.colors.secondaryText
+				textColor: C.secondaryText()!
 			)
 		}
 	}

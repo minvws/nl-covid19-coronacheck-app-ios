@@ -10,7 +10,7 @@ import UIKit
 class DeniedQRScanMoreInfoViewController: BaseViewController {
 
 	/// The model
-	private let viewModel: DeniedQRScanMoreInfoViewModel
+	internal let viewModel: DeniedQRScanMoreInfoViewModel
 
 	/// The view
 	let sceneView = DeniedQRScanMoreInfoView()

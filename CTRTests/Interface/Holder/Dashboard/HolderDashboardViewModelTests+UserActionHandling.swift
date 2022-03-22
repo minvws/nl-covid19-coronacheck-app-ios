@@ -201,56 +201,6 @@ extension HolderDashboardViewModelTests {
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL) == true
 	}
 	
-	func test_actionhandling_didTapRecommendToAddYourBooster() {
-		
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-		
-		// Act
-		sut.didTapRecommendToAddYourBooster()
-		
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAVaccinationQR) == true
-	}
-	
-	func test_actionhandling_didTapRecommendToAddYourBoosterClose() {
-		
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-		
-		let qrCards = [
-			HolderDashboardViewModel.QRCard(
-				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [
-					.valid30DaysAgo_vaccination_expires60SecondsFromNow()
-				])],
-				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
-			)
-		]
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
-		
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard(test: { message, buttonTitle, _, _ in
-			expect(message) == L.holder_dashboard_addBoosterBanner_title()
-			expect(buttonTitle) == L.holder_dashboard_addBoosterBanner_button_addBooster()
-		}))
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard())
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
-		
-		// Act
-		sut.didTapRecommendToAddYourBoosterClose()
-		
-		// Assert
-		expect(self.environmentSpies.userSettingsSpy.invokedLastRecommendToAddYourBoosterDismissalDate) == now
-		expect(self.sut.domesticCards).toEventually(haveCount(5))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard())
-		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
-	}
-	
 	func test_actionhandling_disclosurePolicyInformationCard_3g() {
 		
 		// Arrange

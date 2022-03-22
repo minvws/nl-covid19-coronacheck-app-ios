@@ -61,7 +61,7 @@ final class PaperProofStartView: ScrolledStackWithButtonView {
 
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		secondaryButton.addTarget(self, action: #selector(secondaryButtonTapped), for: .touchUpInside)
 		
 		stackView.distribution = .fill

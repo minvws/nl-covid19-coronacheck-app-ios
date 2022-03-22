@@ -61,7 +61,7 @@ final class RiskSettingStartView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		readMoreButton.touchUpInside(self, action: #selector(readMore))
 		

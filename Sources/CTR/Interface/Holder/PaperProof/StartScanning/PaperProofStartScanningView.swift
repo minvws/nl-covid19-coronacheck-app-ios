@@ -55,7 +55,7 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		secondaryButton.addTarget(self, action: #selector(secondaryButtonTapped), for: .touchUpInside)
 		
 		stackView.distribution = .fill
@@ -98,8 +98,8 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 			messageTextView.attributedText = .makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
-					font: Theme.fonts.body,
-					textColor: Theme.colors.dark,
+					font: Fonts.body,
+					textColor: C.black()!,
 					paragraphSpacing: 0
 				)
 			)

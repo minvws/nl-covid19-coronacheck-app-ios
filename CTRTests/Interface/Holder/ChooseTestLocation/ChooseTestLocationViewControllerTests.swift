@@ -35,7 +35,7 @@ class ChooseTestLocationViewControllerTests: XCTestCase {
 	}
 
 	func test_snapshot() {
-        sut.assertImage(precision: 0.90)
+        sut.assertImage()
 	}
 
 	func test_notTestedButton_tapped() {

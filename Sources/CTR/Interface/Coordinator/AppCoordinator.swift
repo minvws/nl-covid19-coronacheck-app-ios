@@ -225,7 +225,7 @@ class AppCoordinator: Coordinator, Logging {
 		)
 		window.rootViewController?.present(alertController, animated: true)
 	}
-	
+
 	/// Pop any existing presented viewControllers (AppUpdate / AppDeactivated)
 	private func popPresentedViewController() {
 		
@@ -266,6 +266,7 @@ class AppCoordinator: Coordinator, Logging {
 			return
 		}
 		// Present updateController
+
 		if topController is UINavigationController {
 			(topController as? UINavigationController)?.viewControllers.last?.present(updateController, animated: true)
 		} else {
@@ -276,7 +277,8 @@ class AppCoordinator: Coordinator, Logging {
 	// MARK: - Universal Link handling
 	
 	/// If set, this should be handled at the first opportunity:
-	private var unhandledUniversalLink: UniversalLink?
+
+	internal var unhandledUniversalLink: UniversalLink?
 	
 	func consume(universalLink: UniversalLink) -> Bool {
 		

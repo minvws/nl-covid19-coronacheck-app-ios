@@ -28,31 +28,7 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		sut = FeatureFlagManager(versionSupplier: appVersionSupplierSpy, remoteConfigManager: remoteConfigManagerSpy)
 	}
-		
-	func test_isNewValidityInfoBannerEnabled_remoteConfig_enabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.showNewValidityInfoCard = true
-		
-		// When
-		let enabled = sut.isNewValidityInfoBannerEnabled()
-		
-		// Then
-		expect(enabled) == true
-	}
-	
-	func test_isNewValidityInfoBannerEnabled_remoteConfig_disabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.showNewValidityInfoCard = false
-		
-		// When
-		let enabled = sut.isNewValidityInfoBannerEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
+
 	func test_isVerificationPolicy_1G_enabled() {
 		
 		// Given
@@ -118,7 +94,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_is1GExclusiveDisclosurePolicyEnabled_enabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["1G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["1G"]
 		
 		// When
 		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
@@ -130,7 +106,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_is1GExclusiveDisclosurePolicyEnabled_disabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G"]
 		
 		// When
 		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
@@ -142,7 +118,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_is1GExclusiveDisclosurePolicyEnabled_disabled_bothPoliciesEnabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G", "1G"]
 		
 		// When
 		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
@@ -154,7 +130,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_is1GExclusiveDisclosurePolicyEnabled_disabled_noPoliciesEnabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = []
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = []
 		
 		// When
 		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
@@ -166,7 +142,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_is3GExclusiveDisclosurePolicyEnabled_enabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G"]
 		
 		// When
 		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
@@ -178,7 +154,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_is3GExclusiveDisclosurePolicyEnabled_disabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["1G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["1G"]
 		
 		// When
 		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
@@ -190,7 +166,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_is3GExclusiveDisclosurePolicyEnabled_disabled_bothPoliciesEnabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G", "1G"]
 		
 		// When
 		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
@@ -202,7 +178,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_is3GExclusiveDisclosurePolicyDisabled_disabled_noPoliciesEnabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = []
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = []
 		
 		// When
 		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
@@ -214,7 +190,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isNoDisclosurePoliciesEnabled_noPoliciesEnabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = []
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = []
 		
 		// When
 		let enabled = sut.areZeroDisclosurePoliciesEnabled()
@@ -226,7 +202,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_areBothDisclosurePoliciesEnabled_disabled_only1G() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["1G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["1G"]
 		
 		// When
 		let enabled = sut.areBothDisclosurePoliciesEnabled()
@@ -238,7 +214,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_areBothDisclosurePoliciesEnabled_disabled_only3G() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G"]
 		
 		// When
 		let enabled = sut.areBothDisclosurePoliciesEnabled()
@@ -250,7 +226,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_areBothDisclosurePoliciesEnabled_enabled() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["1G", "3G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["1G", "3G"]
 		
 		// When
 		let enabled = sut.areBothDisclosurePoliciesEnabled()
@@ -262,7 +238,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_areBothDisclosurePoliciesEnabled_enabled_orderIndependent() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G", "1G"]
 		
 		// When
 		let enabled = sut.areBothDisclosurePoliciesEnabled()
@@ -274,8 +250,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override1G() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
-		environmentSpies.userSettingsSpy.stubbedOverrideDisclosurePolicies = ["1G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["1G"]
 		
 		// When
 		let bothPoliciesEnabled = sut.areBothDisclosurePoliciesEnabled()
@@ -291,8 +266,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override3G() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
-		environmentSpies.userSettingsSpy.stubbedOverrideDisclosurePolicies = ["3G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G"]
 		
 		// When
 		let bothPoliciesEnabled = sut.areBothDisclosurePoliciesEnabled()
@@ -308,7 +282,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override0G() {
 		
 		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G", "1G"]
+		environmentSpies.disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = []
 		environmentSpies.userSettingsSpy.stubbedOverrideDisclosurePolicies = ["0G"]
 		
 		// When

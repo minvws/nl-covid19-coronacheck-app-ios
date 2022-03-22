@@ -43,7 +43,7 @@ final class VerifierScanView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		moreInformationButton.touchUpInside(self, action: #selector(moreInformationButtonTapped))
 	}
@@ -128,6 +128,14 @@ final class VerifierScanView: BaseView {
 
 final class RiskLevelIndicator: BaseView {
 	
+	private enum ViewTraits {
+		
+		enum Title {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+		}
+	}
+	
 	var verificationPolicy: VerificationPolicy? {
 		didSet { updateForVerificationPolicy() }
 	}
@@ -182,15 +190,16 @@ final class RiskLevelIndicator: BaseView {
 		isHidden = false
 
 		if let policy = verificationPolicy {
-			titleLabel.text = L.verifier_scanner_policy_indication(policy.localization)
+			titleLabel.attributedText = L.verifier_scanner_policy_indication(policy.localization).setLineHeight(ViewTraits.Title.lineHeight,
+																												kerning: ViewTraits.Title.kerning)
 			accessibilityLabel = L.verifier_scanner_policy_indication(policy.localization)
 		}
 		
 		switch verificationPolicy {
 			case .policy3G:
-				indicatorImageView.tintColor = Theme.colors.access
+				indicatorImageView.tintColor = C.secondaryGreen()
 			case .policy1G:
-				indicatorImageView.tintColor = Theme.colors.primary
+				indicatorImageView.tintColor = C.primaryBlue()
 			case .none:
 				isHidden = true
 		}

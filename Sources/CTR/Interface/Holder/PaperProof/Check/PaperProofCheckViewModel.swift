@@ -168,7 +168,7 @@ class PaperProofCheckViewModel: Logging {
 			secondaryActionTitle: nil,
 			secondaryAction: nil
 		)
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
 			self.coordinator?.displayError(content: content) { [weak self] in
 				self?.coordinator?.userWishesToGoBackToScanCertificate()
 			}
@@ -203,7 +203,7 @@ class PaperProofCheckViewModel: Logging {
 				self?.coordinator?.openUrl(url, inApp: true)
 			}
 		)
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
 			self.coordinator?.displayError(content: content) { [weak self] in
 				self?.coordinator?.userWishesToGoBackToScanCertificate()
 			}

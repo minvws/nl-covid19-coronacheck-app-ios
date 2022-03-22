@@ -14,10 +14,15 @@ class FakeNavigationBarView: BaseView {
 
 		// Dimensions
 		static let margin: CGFloat = 20
+		
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
+		}
 	}
 	
 	let titleLabel: Label = {
-		let label = Label(title1: "", textColor: C.darkColor()!, montserrat: true).header()
+		let label = Label(title1: "", textColor: C.black()!, montserrat: true).header()
 		label.numberOfLines = 0
 		label.setContentCompressionResistancePriority(.required, for: .horizontal)
 		label.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -113,7 +118,8 @@ class FakeNavigationBarView: BaseView {
 	
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 kerning: ViewTraits.Title.kerning)
 			setupLargeContentViewer(title: title)
 		}
 	}

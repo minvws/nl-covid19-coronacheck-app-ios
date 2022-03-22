@@ -43,7 +43,7 @@ class EntryView: BaseView {
 		
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.grey1
+		view.backgroundColor = C.grey1()
 		return view
 	}()
 	

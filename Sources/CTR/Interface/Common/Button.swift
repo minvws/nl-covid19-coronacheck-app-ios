@@ -27,9 +27,9 @@ class Button: UIButton {
 		func backgroundColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlue, .roundedBlueImage:
-					return isEnabled ? Theme.colors.primary : Theme.colors.tertiary
+					return isEnabled ? C.primaryBlue()! : C.grey5()!
 				case .roundedWhite, .roundedBlueBorder:
-					return isEnabled ? Theme.colors.secondary : Theme.colors.grey2
+					return isEnabled ? C.white()! : C.grey2()!
 				case .roundedClear, .textLabelBlue:
 					return .clear
 			}
@@ -38,22 +38,22 @@ class Button: UIButton {
 		func textColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlue, .roundedBlueImage:
-					return isEnabled ? Theme.colors.viewControllerBackground : Theme.colors.gray
+					return isEnabled ? C.white()! : C.grey2()!
 				case .roundedWhite:
-					return Theme.colors.dark
+					return C.black()!
 				case .roundedClear:
-					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+					return isEnabled ? C.black()! : C.grey2()!
 				case .textLabelBlue:
-					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
+					return isEnabled ? C.primaryBlue()! : C.grey2()!
 				case .roundedBlueBorder:
-					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
+					return isEnabled ? C.primaryBlue()! : C.grey2()!
 			}
 		}
 		
 		var font: UIFont {
 			switch self {
-				case .textLabelBlue: return Theme.fonts.bodyMedium
-				default: return Theme.fonts.bodySemiBold
+				case .textLabelBlue: return Fonts.bodyMedium
+				default: return Fonts.bodySemiBold
 			}
 		}
 		
@@ -68,9 +68,9 @@ class Button: UIButton {
 		func borderColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlueBorder:
-					return isEnabled ? Theme.colors.primary : Theme.colors.grey2
+					return isEnabled ? C.primaryBlue()! : C.grey2()!
 				default:
-					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+					return isEnabled ? C.black()! : C.grey2()!
 			}
 		}
 		

@@ -20,9 +20,9 @@ class ShowQRView: BaseView {
 		enum Margin {
 			static let edge: CGFloat = 10
 			static let infoEdge: CGFloat = 20
-			static let domesticSecurity: CGFloat = 57
-			static let internationalSecurity: CGFloat = 90
-            static let internationalSecurityExtraSafeAreaInset: CGFloat = 60
+			static let domesticSecurity: CGFloat = 56
+			static let internationalSecurity: CGFloat = 52
+            static let internationalSecurityExtraSafeAreaInset: CGFloat = 20
 			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
 		enum Spacing {
@@ -111,7 +111,7 @@ class ShowQRView: BaseView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground.withAlphaComponent(0.8)
+		view.backgroundColor = C.white()?.withAlphaComponent(0.8)
 		return view
 	}()
 
@@ -119,7 +119,7 @@ class ShowQRView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)

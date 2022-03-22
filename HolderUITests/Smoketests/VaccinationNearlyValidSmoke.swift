@@ -13,7 +13,7 @@ class VaccinationNearlyValidSmoke: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .vaccination, validFromOffset: person.vacFrom)
-		assertInternationalCertificateIsNotYetValid(ofType: .vaccination, validFromOffset: person.vacFrom)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
 	}
 	
 	func test_vacJ1DatedToday() {
@@ -22,7 +22,7 @@ class VaccinationNearlyValidSmoke: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .vaccination, validFromOffset: person.vacFrom)
-		assertInternationalCertificateIsNotYetValid(ofType: .vaccination, validFromOffset: person.vacFrom)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
 	}
 	
 	func test_vacM2DatedToday() {
@@ -31,6 +31,6 @@ class VaccinationNearlyValidSmoke: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .vaccination, validFromOffset: person.vacFrom)
-		assertInternationalCertificateIsNotYetValid(ofType: .vaccination, validFromOffset: person.vacFrom)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: 0)
 	}
 }

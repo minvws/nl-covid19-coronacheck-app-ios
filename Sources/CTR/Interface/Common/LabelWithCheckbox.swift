@@ -99,7 +99,7 @@ final class LabelWithCheckbox: UIControl {
 		
 		clipsToBounds = true
 		layer.cornerRadius = ViewTraits.Dimension.cornerRadius
-		tintColor = Theme.colors.viewControllerBackground
+		tintColor = C.white()
 
 		applyState()
 
@@ -176,7 +176,7 @@ final class LabelWithCheckbox: UIControl {
 	private func applyState() {
 		iconImageView.isHighlighted = isSelected
 		iconImageView.image = hasError ? Images.Icon.error : Images.Icon.normal
-		backgroundColor = hasError ? C.consentButtonError() : C.primaryBlue5()
+		backgroundColor = hasError ? C.error5() : C.primaryBlue5()
 	}
 
 	@objc private func toggle() {
@@ -212,7 +212,7 @@ final class LabelWithCheckbox: UIControl {
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Dimension.lineHeight,
-															 textColor: Theme.colors.dark)
+															 textColor: C.black()!)
 			accessibilityLabel = title
 			setupLargeContentViewer(title: title)
 		}

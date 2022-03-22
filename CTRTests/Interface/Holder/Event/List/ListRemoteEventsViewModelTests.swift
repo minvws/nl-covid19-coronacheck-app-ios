@@ -2070,6 +2070,52 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
+	
+	func test_successVaccinationAndPositiveTest_internationalVaccinationAndDomesticRecovery_zeroDisclosurePolicies() throws {
+		
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccinationAndPositiveTest,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest, FakeRemoteEvent.fakeRemoteEventVaccination],
+			greenCardLoader: greenCardLoader
+		)
+		
+		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndDomesticRecovery), ()) // DCC V, CTB R
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
+		expect(self.sut.alert).toEventually(beNil())
+		
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
+			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccination)))
+		expect(self.sut.alert).toEventually(beNil())
+	}
 
 	func test_successVaccinationAndPositiveTest_vaccinationOnly() throws {
 		
@@ -2410,7 +2456,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 	
-	func test_successRecovery_expiredEvent() throws {
+	func test_successRecovery_noOrigins_expiredEvent() throws {
 		
 		// Given
 		sut = ListRemoteEventsViewModel(
@@ -2459,7 +2505,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
-	func test_successRecovery_domesticRecoveryAndVaccination() throws {
+	func test_successRecovery_recoveryAndVaccination_recoveryBeforeVaccination() throws {
 
 		// Given
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
@@ -2468,7 +2514,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
+		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecoveryBeforeVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -2503,13 +2549,14 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 
+		// End State 5
 		expect(feedback.title) == L.holderRecoveryRecoveryAndVaccinationTitle()
 		expect(feedback.body) == L.holderRecoveryRecoveryAndVaccinationMessage()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
-	func test_successRecovery_domesticRecoveryAndExistingVaccination() throws {
+	func test_successRecovery_recoveryAndVaccination_recoveryAfterVaccination() throws {
 
 		// Given
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true

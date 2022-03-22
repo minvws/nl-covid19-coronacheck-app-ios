@@ -69,8 +69,8 @@ final class EmptyDashboardDescriptionCardView: BaseView {
 			contentTextView.attributedText = .makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
-					font: Theme.fonts.body,
-					textColor: Theme.colors.dark,
+					font: Fonts.body,
+					textColor: C.black()!,
 					paragraphSpacing: 0
 				)
 			)

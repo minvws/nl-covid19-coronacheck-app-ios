@@ -16,7 +16,6 @@ protocol FeatureFlagManaging {
 	///  Should we use the luhn check for tokens?
 	/// - Returns: True if we can
 	func isLuhnCheckEnabled() -> Bool
-	func isNewValidityInfoBannerEnabled() -> Bool
 	func isVisitorPassEnabled() -> Bool
 	
 	// Verifier
@@ -58,11 +57,6 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 		return remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
 	}
 	
-	func isNewValidityInfoBannerEnabled() -> Bool {
-		
-		return remoteConfigManager.storedConfiguration.showNewValidityInfoCard ?? false
-	}
-	
 	func isVisitorPassEnabled() -> Bool {
 		
 		return remoteConfigManager.storedConfiguration.visitorPassEnabled ?? false
@@ -97,14 +91,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			return false
 		}
 		
-		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
-			return true
-		}
-		
-		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
-			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
-		}
-		
+		let disclosurePolicies = Current.disclosurePolicyManager.getDisclosurePolicies()
 		return disclosurePolicies.isEmpty || Current.userSettings.overrideDisclosurePolicies == ["0G"]
 	}
 	
@@ -118,14 +105,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			return false
 		}
 		
-		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
-			return false
-		}
-		
-		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
-			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
-		}
-		
+		let disclosurePolicies = Current.disclosurePolicyManager.getDisclosurePolicies()
 		return disclosurePolicies == [DisclosurePolicy.policy3G.featureFlag]
 	}
 	
@@ -139,14 +119,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			return false
 		}
 		
-		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
-			return false
-		}
-		
-		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
-			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
-		}
-		
+		let disclosurePolicies = Current.disclosurePolicyManager.getDisclosurePolicies()
 		return disclosurePolicies == [DisclosurePolicy.policy1G.featureFlag]
 	}
 	
@@ -160,14 +133,7 @@ class FeatureFlagManager: FeatureFlagManaging, Logging {
 			return false
 		}
 		
-		guard var disclosurePolicies = remoteConfigManager.storedConfiguration.disclosurePolicies else {
-			return false
-		}
-		
-		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
-			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
-		}
-		
+		let disclosurePolicies = Current.disclosurePolicyManager.getDisclosurePolicies()
 		return disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag) &&
 		disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)
 	}

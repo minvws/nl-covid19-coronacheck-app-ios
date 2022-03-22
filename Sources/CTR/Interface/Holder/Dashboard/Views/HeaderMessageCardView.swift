@@ -42,7 +42,7 @@ final class HeaderMessageCardView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		button.addTarget(self, action: #selector(onTap), for: .touchUpInside)
 	}
@@ -69,8 +69,8 @@ final class HeaderMessageCardView: BaseView {
 			contentTextView.attributedText = .makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
-					font: Theme.fonts.body,
-					textColor: Theme.colors.dark,
+					font: Fonts.body,
+					textColor: C.black()!,
 					paragraphSpacing: 0
 				)
 			)

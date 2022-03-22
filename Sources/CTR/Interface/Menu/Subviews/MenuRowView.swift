@@ -15,6 +15,11 @@ final class MenuRowView: UIControl {
 		// Dimensions
 		static let margin: CGFloat = 26
 		static let iconTitleSpacing: CGFloat = 16
+		
+		enum Title {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
 	}
 	
 	// MARK: - Subviews
@@ -29,7 +34,7 @@ final class MenuRowView: UIControl {
 	
 	private let titleLabel: Label = {
 		let label = Label(bodyBold: nil).multiline()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
@@ -145,7 +150,8 @@ final class MenuRowView: UIControl {
 	
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 kerning: ViewTraits.Title.kerning)
 			accessibilityLabel = title
 		}
 	}

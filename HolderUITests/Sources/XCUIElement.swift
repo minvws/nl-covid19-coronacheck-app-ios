@@ -9,6 +9,8 @@ import XCTest
 
 extension XCUIElement {
 	
+	private static let timeout = 30.0
+	
 	func clearText() {
 		guard let stringValue = self.value as? String else {
 			XCTFail("Tried to clear and enter text into a non string value")
@@ -23,8 +25,7 @@ extension XCUIElement {
 	}
 	
 	func assertExistence() -> XCUIElement {
-		let timeout = 30.0
-		let elementPresent = self.waitForExistence(timeout: timeout)
+		let elementPresent = self.waitForExistence(timeout: XCUIElement.timeout)
 		XCTAssertTrue(elementPresent, self.description + " could not be found")
 		return self
 	}
@@ -33,27 +34,22 @@ extension XCUIElement {
 		self.assertExistence().tap()
 	}
 	
-	func tapElement(type: ElementType, _ label: String, _ index: Int) {
-		let descendantsQuery = self.descendants(matching: type)
-		let elementQuery = descendantsQuery.matching(identifier: label)
-		guard elementQuery.count >= index else {
-			XCTFail("Could not find any elements of type \(type) with label '\(label)'")
-			return
-		}
-		let elementByIndex = elementQuery.element(boundBy: index)
-		elementByIndex.waitAndTap()
+	func tapElement(type: ElementType, _ label: String) {
+		let elementQuery = self.descendants(matching: type)
+		let element = elementQuery.element(matching: type, identifier: label).firstMatch
+		element.waitAndTap()
 	}
 	
-	func tapButton(_ label: String, index: Int = 0) {
-		tapElement(type: .button, label, index)
+	func tapButton(_ label: String) {
+		tapElement(type: .button, label)
 	}
 	
-	func tapText(_ label: String, index: Int = 0) {
-		tapElement(type: .staticText, label, index)
+	func tapText(_ label: String) {
+		tapElement(type: .staticText, label)
 	}
 	
-	func tapOther(_ label: String, index: Int = 0) {
-		tapElement(type: .other, label, index)
+	func tapOther(_ label: String) {
+		tapElement(type: .other, label)
 	}
 	
 	func textExists(_ label: String) {
@@ -65,13 +61,12 @@ extension XCUIElement {
 		
 		var checkNext = false
 		for text in texts {
-			if text.label == label {
-				checkNext = true
-				continue
-			}
 			if checkNext {
 				XCTAssertEqual(text.label, value)
 				break
+			}
+			if text.label == label {
+				checkNext = true
 			}
 		}
 	}
@@ -80,9 +75,10 @@ extension XCUIElement {
 		_ = self.links[label].assertExistence()
 	}
 	
-	func containsText(_ text: String, count: Int = 1) {
+	func containsText(_ text: String) {
 		let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
-		let elementQuery = self.children(matching: .any).containing(predicate)
-		XCTAssertTrue(elementQuery.count == count, "Text could not be found: " + text)
+		let elementQuery = self.descendants(matching: .any)
+		let element = elementQuery.element(matching: predicate)
+		_ = element.assertExistence()
 	}
 }

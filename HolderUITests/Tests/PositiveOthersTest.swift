@@ -72,6 +72,7 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		assertPositiveTestResultNotValidAnymore()
+		assertNoCertificateCouldBeCreatedIn0G()
 		
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
@@ -159,6 +160,26 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrDifferentBirthMonth() {
 		let person = TestData.posPcrDifferentBirthMonth
+		addRecoveryCertificate(for: person)
+		addRetrievedCertificateToApp()
+		
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+	}
+	
+	// MARK: Positive tests - multiples
+	
+	func test_posPcr2Recent() {
+		let person = TestData.posPcr2Recent
+		addRecoveryCertificate(for: person)
+		addRetrievedCertificateToApp()
+		
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+	}
+	
+	func test_posPcr2Old() {
+		let person = TestData.posPcr2Old
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		

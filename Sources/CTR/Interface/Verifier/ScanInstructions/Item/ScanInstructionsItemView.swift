@@ -17,6 +17,8 @@ class ScanInstructionsItemView: ScrolledStackView {
 		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26
 		static let imageHeightPercentage: CGFloat = 0.5
+		static let stepSubheadingLineHeight: CGFloat = 22
+		static let stepSubheadingKerning: CGFloat = -0.41
 		
 		// Margins
 		static let spacing: CGFloat = 24
@@ -47,7 +49,7 @@ class ScanInstructionsItemView: ScrolledStackView {
 
 	/// "Step 2" etc, above the title.
 	private let stepSubheadingLabel: Label = {
-		let label = Label("", font: Theme.fonts.bodySemiBold, textColor: Theme.colors.primary)
+		let label = Label("", font: Fonts.bodySemiBold, textColor: C.primaryBlue()!)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
 	}()
@@ -65,7 +67,7 @@ class ScanInstructionsItemView: ScrolledStackView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		// Align animation view to top
 		stackViewInset.top = 0
@@ -101,7 +103,9 @@ class ScanInstructionsItemView: ScrolledStackView {
 
 	var stepSubheading: String? {
 		didSet {
-			stepSubheadingLabel.text = stepSubheading
+			stepSubheadingLabel.attributedText = stepSubheading?.setLineHeight(ViewTraits.stepSubheadingLineHeight,
+																			   kerning: ViewTraits.stepSubheadingKerning,
+																			   textColor: C.primaryBlue()!)
 		}
 	}
 

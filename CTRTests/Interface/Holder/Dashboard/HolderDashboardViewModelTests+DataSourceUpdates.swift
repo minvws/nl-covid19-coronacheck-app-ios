@@ -75,10 +75,10 @@ extension HolderDashboardViewModelTests {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard())
-		expect(self.sut.domesticCards[4]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard())
+		expect(self.sut.domesticCards[3]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
 			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 		}))
 	}
@@ -102,13 +102,13 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			expect(isDisabledByDisclosurePolicy) == false
@@ -137,19 +137,18 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards[4]).toEventually(beAddCertificateCard { title, didTapAdd in
+		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard { title, didTapAdd in
 			expect(title) == L.holder_dashboard_addCard_title()
 			
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAQR) == false
 			didTapAdd()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAQR) == true
 		})
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 		
-		expect(self.sut.internationalCards).toEventually(haveCount(4))
+		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.internationalCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard())
+		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_1G() {
@@ -169,8 +168,8 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			expect(isDisabledByDisclosurePolicy) == true
@@ -191,13 +190,12 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards[4]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 		
-		expect(self.sut.internationalCards).toEventually(haveCount(4))
+		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.internationalCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard())
+		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_1G3G() {
@@ -217,8 +215,8 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			expect(isDisabledByDisclosurePolicy) == false
@@ -234,136 +232,12 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards[4]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 		
-		expect(self.sut.internationalCards).toEventually(haveCount(4))
+		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.internationalCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard())
-	}
-	
-	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_newValidityBannerDisabled() {
-		
-		// Arrange
-		environmentSpies.featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = false
-		environmentSpies.userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
-		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-		let qrCards = [
-			HolderDashboardViewModel.QRCard(
-				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expiresMoreThan3YearsFromNow(doseNumber: 1)])],
-				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
-			)
-		]
-		
-		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
-		
-		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
-			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
-		}))
-		
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
-			// check isLoading
-			expect(isLoading) == false
-			
-			let nowValidityTexts = validityTextEvaluator(now)
-			expect(nowValidityTexts).to(haveCount(1))
-			expect(nowValidityTexts[0].lines).to(haveCount(2))
-			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
-			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
-			
-			// Exercise the validityText with different sample dates:
-			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(1 * years * fromNow))
-			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
-			expect(futureValidityTexts[0].lines[1]) == "geldig tot 20 augustus 2024"
-			
-			// check didTapViewQR
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
-			didTapViewQR()
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
-			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
-		}))
-		
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
-		
-		expect(self.sut.internationalCards).toEventually(haveCount(4))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.internationalCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard())
-	}
-	
-	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_newValidityBannerEnabled() {
-		
-		// Arrange
-		environmentSpies.featureFlagManagerSpy.stubbedIsNewValidityInfoBannerEnabledResult = true
-		environmentSpies.userSettingsSpy.hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard = false
-		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-		let qrCards = [
-			HolderDashboardViewModel.QRCard(
-				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
-				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneDayAgo_vaccination_expiresMoreThan3YearsFromNow(doseNumber: 1)])],
-				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
-			)
-		]
-		
-		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
-		
-		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(7))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
-			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
-		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[2]).toEventually(beNewValidityInfoForVaccinationAndRecoveriesCard(test: { message, buttonTitle, _, _ in
-			expect(message) == L.holder_dashboard_newvaliditybanner_title()
-			expect(buttonTitle) == L.holder_dashboard_newvaliditybanner_action()
-		}))
-		
-		expect(self.sut.domesticCards[4]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
-			// check isLoading
-			expect(isLoading) == false
-			
-			let nowValidityTexts = validityTextEvaluator(now)
-			expect(nowValidityTexts).to(haveCount(1))
-			expect(nowValidityTexts[0].lines).to(haveCount(2))
-			expect(nowValidityTexts[0].kind) == .current
-			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
-			expect(nowValidityTexts[0].lines[1]) == "geldig vanaf 14 juli 2021"
-			
-			// Exercise the validityText with different sample dates:
-			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(1 * years * fromNow))
-			expect(futureValidityTexts[0].kind) == .current
-			expect(futureValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + " (1 dosis)" + ":"
-			expect(futureValidityTexts[0].lines[1]) == "geldig tot 20 augustus 2024"
-			
-			// check didTapViewQR
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
-			didTapViewQR()
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
-			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
-		}))
-		
-		expect(self.sut.domesticCards[6]).toEventually(beRecommendCoronaMelderCard())
-		
-		expect(self.sut.internationalCards).toEventually(haveCount(4))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.internationalCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard())
+		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_lessthan3years() {
@@ -383,13 +257,12 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -415,12 +288,11 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 		
-		expect(self.sut.internationalCards).toEventually(haveCount(4))
+		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.internationalCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard())
+		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_secondDose() {
@@ -440,10 +312,9 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -469,7 +340,7 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_expiringSoon() {
@@ -489,13 +360,12 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -521,7 +391,7 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22 * hours * ago))) == "Verloopt over 22 uur en 1 minuut"
 			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 1 minuut en 1 seconde"
 		}))
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Single TEST, Currently Valid, Domestic
@@ -1206,13 +1076,12 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -1244,8 +1113,8 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_validVaccine_prematureRecovery_domestic_1G() {
@@ -1268,14 +1137,13 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[2]).toEventually(beDisclosurePolicyInformationCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
@@ -1300,8 +1168,8 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Triple, Currently Valid, Domestic
@@ -1327,14 +1195,13 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[2]).toEventually(beDisclosurePolicyInformationCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(
+		expect(self.sut.domesticCards[1]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(
 			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 				
 				// check isLoading
@@ -1350,7 +1217,7 @@ extension HolderDashboardViewModelTests {
 			}
 		))
 		
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_1G() {
@@ -1374,14 +1241,13 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(7))
+		expect(self.sut.domesticCards).toEventually(haveCount(6))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[2]).toEventually(beDisclosurePolicyInformationCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(
+		expect(self.sut.domesticCards[1]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(
 			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 				
 				expect(isLoading) == false
@@ -1400,7 +1266,7 @@ extension HolderDashboardViewModelTests {
 				expect(expiryCountdownEvaluator?(now)).to(beNil())
 			}
 		))
-		expect(self.sut.domesticCards[4]).toEventually(beDomesticQRCard(
+		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(
 			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 				
 				expect(isLoading) == false
@@ -1421,8 +1287,8 @@ extension HolderDashboardViewModelTests {
 			}
 		))
 		
-		expect(self.sut.domesticCards[5]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[6]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beAddCertificateCard())
+		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_1G3G() {
@@ -1446,14 +1312,13 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(7))
+		expect(self.sut.domesticCards).toEventually(haveCount(6))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_3Gand1Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[2]).toEventually(beDisclosurePolicyInformationCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(
+		expect(self.sut.domesticCards[1]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(
 			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 				
 				expect(isLoading) == false
@@ -1473,7 +1338,7 @@ extension HolderDashboardViewModelTests {
 				expect(expiryCountdownEvaluator?(now)).to(beNil())
 			}
 		))
-		expect(self.sut.domesticCards[4]).toEventually(beDomesticQRCard(
+		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(
 			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 				
 				expect(isLoading) == false
@@ -1493,8 +1358,8 @@ extension HolderDashboardViewModelTests {
 			}
 		))
 		
-		expect(self.sut.domesticCards[5]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[6]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beAddCertificateCard())
+		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_oneExpiringSoon() {
@@ -1518,13 +1383,12 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -1536,7 +1400,7 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_allExpiringSoon() {
@@ -1560,13 +1424,12 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -1578,7 +1441,7 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 2 uur"
 		}))
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Triple, Currently Valid, International
@@ -1626,6 +1489,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
+			expect(title) == L.general_vaccinationcertificate().capitalizingFirstLetter()
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
@@ -1639,6 +1503,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
+			expect(title) == L.general_recoverycertificate().capitalizingFirstLetter()
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
@@ -1651,6 +1516,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
+			expect(title) == L.general_testcertificate().capitalizingFirstLetter()
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts.count) == 1
@@ -1685,21 +1551,20 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards).toEventually(haveCount(6))
+		expect(self.sut.internationalCards).toEventually(haveCount(5))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
-		expect(self.sut.internationalCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
+		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
 			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.general_vaccinationcertificate())
 		}))
 		
-		expect(self.sut.internationalCards[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
+		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
 			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.general_recoverycertificate())
 		}))
 		
-		expect(self.sut.internationalCards[4]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
+		expect(self.sut.internationalCards[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
 			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.general_testcertificate())
 		}))
 	}
@@ -2082,13 +1947,12 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -2113,7 +1977,7 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleNotYetValidDomesticVaccination_lessThan3Years() {
@@ -2133,13 +1997,12 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -2164,7 +2027,7 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleNotYetValidDomesticVaccination_dose2() {
@@ -2184,13 +2047,12 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(6))
+		expect(self.sut.domesticCards).toEventually(haveCount(5))
 		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendToAddYourBoosterCard())
-		expect(self.sut.domesticCards[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -2215,7 +2077,7 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleNotYetValidDomesticRecovery() {
@@ -2655,6 +2517,7 @@ extension HolderDashboardViewModelTests {
 		
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
+			expect(title) == L.general_vaccinationcertificate().capitalizingFirstLetter()
 			expect(isLoading) == false
 			
 			expect(stackSize) == 3 // max value here is 3 - shouldn't be 4.

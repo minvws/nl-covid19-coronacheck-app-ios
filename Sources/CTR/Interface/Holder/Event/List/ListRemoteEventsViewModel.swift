@@ -256,7 +256,7 @@ class ListRemoteEventsViewModel: Logging {
 				storageEventMode = .recovery
 			}
 		}
-		logDebug("Setting storageEventMode to \(String(describing: storageEventMode))")
+		logVerbose("Setting storageEventMode to \(String(describing: storageEventMode))")
 		return storageEventMode
 	}
 
@@ -389,36 +389,45 @@ class ListRemoteEventsViewModel: Logging {
 			onBothVaccinationAndRecoveryOrigins: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				
+				guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+					
+					let hasInternationalRecovery = greencardResponse.hasInternationalOrigins(ofType: OriginType.recovery.rawValue)
+					let hasInternationalVaccination = greencardResponse.hasInternationalOrigins(ofType: OriginType.vaccination.rawValue)
+					
+					switch (hasInternationalRecovery, hasInternationalVaccination) {
+						case (true, true):
+							self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
+						case (true, false):
+							self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
+						case (false, true):
+							self.completeFlow()
+						case (false, false):
+							self.viewState = self.originMismatchState(flow: .vaccinationAndPositiveTest)
+					}
+					return
+				}
 				let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
 				if hasDomesticVaccinationOrigins {
 					// End state 6 / 7
 					self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
 				} else {
-					
-					guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
-						// In 0G, go to end state 6 / 7
-						self.viewState = self.positiveTestFlowRecoveryAndVaccinationCreated()
-						return
-					}
-					
 					// End state 8
 					self.viewState = self.positiveTestFlowRecoveryAndInternationalVaccinationCreated()
 				}
 			},
 			onVaccinationOriginOnly: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
+				
+				guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
+					// In 0G, this is expected behaviour. Go to dashboard
+					self.completeFlow()
+					return
+				}
 
 				let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
 				if hasDomesticVaccinationOrigins {
 					self.completeFlow()
 				} else {
-					
-					guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
-						// In 0G, this is expected behaviour. Go to dashboard
-						self.completeFlow()
-						return
-					}
-			
 					let hasPositiveTestRemoteEvent = remoteEvents.contains { wrapper, _ in wrapper.events?.first?.hasPositiveTest ?? false }
 					if hasPositiveTestRemoteEvent {
 						// End state 9
@@ -448,11 +457,26 @@ class ListRemoteEventsViewModel: Logging {
 			greencardResponse,
 			onBothVaccinationAndRecoveryOrigins: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-				if self.hasExistingDomesticVaccination {
+
+				let firstRecoveryOrigin = greencardResponse.getOrigins(ofType: OriginType.recovery.rawValue)
+					.sorted { $0.eventTime < $1.eventTime }
+					.first
+				let firstVaccinationOrigin = greencardResponse.getOrigins(ofType: OriginType.vaccination.rawValue)
+					.sorted { $0.eventTime < $1.eventTime }
+					.first
+				
+				guard let firstRecoveryOrigin = firstRecoveryOrigin, let firstVaccinationOrigin = firstVaccinationOrigin else {
+					// Should not happen, part of the if let flow.
+					self.logWarning("handleSuccessForRecovery - onBothVaccinationAndRecoveryOrigins, some origins are missing")
 					self.completeFlow()
-				} else {
+					return
+				}
+				if firstRecoveryOrigin.eventTime < firstVaccinationOrigin.eventTime {
 					// End State 5
 					self.viewState = self.recoveryFlowRecoveryAndVaccinationCreated()
+				} else {
+					// End State 4
+					self.completeFlow()
 				}
 			},
 			onVaccinationOriginOnly: {

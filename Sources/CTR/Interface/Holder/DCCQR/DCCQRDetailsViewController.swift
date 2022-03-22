@@ -10,7 +10,7 @@ import UIKit
 final class DCCQRDetailsViewController: BaseViewController {
 
 	/// The model
-	private let viewModel: DCCQRDetailsViewModel
+	internal let viewModel: DCCQRDetailsViewModel
 
 	/// The view
 	let sceneView = DCCQRDetailsView()

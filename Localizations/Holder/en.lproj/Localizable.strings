@@ -61,15 +61,18 @@
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
 "general_readmore" = "Read more";
 "general_recoverycertificate" = "recovery certificate";
+"general_recoverycertificate_0G" = "International recovery certificate";
 "general_testcertificate" = "test certificate";
+"general_testcertificate_0G" = "International test certificate";
 "general_toMyOverview" = "To my certificates";
 "general_vaccinationAssessment" = "vaccination approval";
 "general_vaccinationcertificate" = "vaccination certificate";
+"general_vaccinationcertificate_0G" = "International vaccination certificate";
 "general_visitorPass" = "visitor pass";
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Read more:";
-"holder.about.text" = "<p>CoronaCheck is created to reopen society step by step. This way, we can head out more often and travel abroad.</p><p>CoronaCheck creates a coronavirus pass from your vaccination, negative test result or if you've had coronavirus and are recovered. Your coronavirus pass has a QR code. Have it scanned for access to places or activities in The Netherlands, or to travel internationally (the EU Digital COVID Certificate).</p>";
+"holder.about.text" = "<p>CoronaCheck is created to reopen society step by step during the coronavirus outbreak.</p><p>You can use this app to create a coronavirus pass from your vaccination, negative test result or if you've had coronavirus and are recovered. Your coronavirus pass contains a QR code. Have it scanned for access to places or activities or to travel.</p>";
 /* MARK: - Holder About */
 "holder.about.title" = "About this app";
 "holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate.</p><b>1. Choose your certificate</b><p> You can create a vaccination certificate, a test certificate or a recovery certificate.</p><b>2. Automatically retrieve data</b><p>The app directly retrieves the data of your vaccination, test result or recovery.</p><b>3. QR codes are ready</b><p>The app generates a QR code for the Netherlands and one for other countries.</p>";
@@ -347,14 +350,14 @@
 "holder.onboarding.message.privacy" = "The app creates QR codes for use in the Netherlands and abroad. Are you crossing the border? Then use your international QR code.";
 "holder.onboarding.message.safely" = "Your health matters, so does the health of others. Therefore always show your certificate to safely get access to places. Or if you're going on a trip.";
 "holder.onboarding.message.validity" = "The QR code on your certificate will be checked at the entrance to locations and activities. Or at the border.";
-"holder.onboarding.message.yourqr" = "<p>You can use this app to create a certificate if you:</p><ul><li>Are vaccinated</li><li>Have recovered from coronavirus</li><li>Were tested and don't have coronavirus</li></ul>";
+"holder.onboarding.message.yourqr" = "<p>You can create a certificate if you:</p><ul><li>Are vaccinated</li><li>Have tested positive and have recovered from coronavirus</li><li>Have tested negative and don’t have coronavirus</li></ul>";
 "holder.onboarding.title.privacy" = "QR codes for the Netherlands and abroad";
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Get access with your certificate";
 "holder.onboarding.title.validity" = "Your certificate contains a QR code";
-"holder.onboarding.title.yourqr" = "Certificate of vaccination, recovery, or test";
-"holder.paperproof.internationalQROnly.message" = "You can use the details in international QR codes to immediately create a Dutch certificate as well. This way you won't have to scan them both.";
-"holder.paperproof.internationalQROnly.title" = "Why only international?";
+"holder.onboarding.title.yourqr" = "Certificate of vaccination, recovery or test";
+"holder.paperproof.internationalQROnly.message" = "Your international QR code contains the details needed to get your certificate in the app. Do you also have a certificate with a Dutch QR code? Then you don’t have to scan it.";
+"holder.paperproof.internationalQROnly.title" = "Why the international QR code?";
 "holder.paperproof.notoken.action" = "Add certificate via DigiD";
 "holder.paperproof.notoken.message" = "<p>Then you won't be able to add your certificates to the app this way.</p><p>You only have a letter combination if you requested your paper certificates from your healthcare provider, or had them delivered by mail.</p><p><b>Did you print your certificate yourself?</b><br />Then you can add your certificates to the app using DigiD.</p>";
 "holder.paperproof.notoken.title" = "No letter combination?";
@@ -369,7 +372,7 @@
 "holder.paperproof.start.selfprinted" = "Printed your certificate yourself?";
 "holder.paperproof.start.title" = "Add paper certificates";
 "holder.paperproof.startscanning.action" = "Start scanning";
-"holder.paperproof.startscanning.international" = "Why only international?";
+"holder.paperproof.startscanning.international" = "Why the international QR code?";
 "holder.paperproof.startscanning.message" = "<p>Use your phone's camera to scan the <b>international QR code</b> on your paper certificate.</p><p>Do you have multiple international QR codes? Please retake these steps for every QR code you want to add to the app.</p>";
 "holder.paperproof.startscanning.title" = "Scan your international QR code";
 "holder.provider.commercial.title" = "Other test location";
@@ -407,7 +410,7 @@
 "holder.showqr.eu.about.recovery.date" = "Test date:";
 "holder.showqr.eu.about.recovery.dateinformation" = "*Date noted in day-month-year";
 "holder.showqr.eu.about.recovery.dateofbirth" = "Date of birth*:";
-"holder.showqr.eu.about.recovery.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
+"holder.showqr.eu.about.recovery.description" = "These details are in your international QR code:";
 "holder.showqr.eu.about.recovery.identifier" = "Unique certificate identifier:";
 "holder.showqr.eu.about.recovery.issuer" = "Certificate issuer:";
 "holder.showqr.eu.about.recovery.name" = "Name:";
@@ -419,7 +422,7 @@
 "holder.showqr.eu.about.test.date" = "Test date:";
 "holder.showqr.eu.about.test.dateinformation" = "*Date noted in day-month-year";
 "holder.showqr.eu.about.test.dateofbirth" = "Date of birth*:";
-"holder.showqr.eu.about.test.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
+"holder.showqr.eu.about.test.description" = "These details are in your international QR code:";
 "holder.showqr.eu.about.test.facility" = "Testing centre:";
 "holder.showqr.eu.about.test.identifier" = "Unique certificate identifier:";
 "holder.showqr.eu.about.test.issuer" = "Certificate issuer:";
@@ -438,7 +441,7 @@
 "holder.showqr.eu.about.vaccination.date" = "Date of vaccination*:";
 "holder.showqr.eu.about.vaccination.dateinformation" = "*Date noted in day-month-year";
 "holder.showqr.eu.about.vaccination.dateofbirth" = "Date of birth*:";
-"holder.showqr.eu.about.vaccination.description" = "Are you abroad, or planning to cross the border? This requires more data. That's why the international QR code contains the following details:";
+"holder.showqr.eu.about.vaccination.description" = "These details are in your international QR code:";
 "holder.showqr.eu.about.vaccination.dosage" = "Number in series of doses:";
 "holder.showqr.eu.about.vaccination.identifier" = "Unique certificate identifier:";
 "holder.showqr.eu.about.vaccination.issuer" = "Certificate issuer:";
@@ -587,9 +590,12 @@
 "holder_dashboard_domesticQRCard_3G_inactive_label" = "This certificate is currently not used in the Netherlands";
 "holder_dashboard_domesticQRCard_3G_label" = "3G";
 "holder_dashboard_domesticQRCard_3G_title" = "Certificate for 3G access";
+"holder_dashboard_emptyState_international_0G_message" = "Travelling abroad? Always check before departure whether you need a coronavirus pass.";
 "holder_dashboard_empty_domestic_3Gand1Gaccess_message" = "<p>Visiting a venue in The Netherlands? Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G or 1G access</a>.</p>";
 "holder_dashboard_empty_domestic_only1Gaccess_message" = "<p>In the Netherlands, you only get access with a test certificate anywhere a coronavirus pass is required <a href=\"https://coronacheck.nl/en/accesspolicy/1g-access\">(1G access)</a>.</p>";
 "holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
+"holder_dashboard_filledState_international_0G_message" = "Travelling to a country where a coronavirus pass is required? Always check before departure if you have the right certificate.";
+"holder_dashboard_international_0G_action_certificateNeeded" = "Is a certificate needed where I'm heading?";
 "holder_dashboard_international_0G_url" = "https://coronacheck.nl/traveladvices";
 "holder_dashboard_intro_domestic_3Gand1Gaccess" = "<p>Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G or 1G access</a>. Also show your proof of identity at the entrance.</p>";
 "holder_dashboard_intro_domestic_only1Gaccess" = "<p>Show a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/1g-access\">1G access</a> in the Netherlands if a coronavirus pass is required. Also show your proof of identity.</p>";
@@ -597,6 +603,9 @@
 "holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
 "holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
 "holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
+"holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "Read more";
+"holder_dashboard_noDomesticCertificatesBanner_0G_title" = "The coronavirus pass is no longer used in the Netherlands. That is why there are only international certificates in the app.";
+"holder_dashboard_noDomesticCertificatesBanner_url" = "https://coronacheck.nl/only-international";
 "holder_dashboard_only1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/1g-certificate";
 "holder_dashboard_only1GaccessBanner_title" = "You can add a certificate for 1G access when you have tested negative";
 "holder_dashboard_only3GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-certificate";
@@ -659,10 +668,10 @@
 "holder_listRemoteEvents_negativeTest_message" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
 "holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>At this moment, we can't create a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_originMismatch_recovery_body" = "<p>At this moment, we can't create a certificate from your positive test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
-"holder_listRemoteEvents_originMismatch_test_body" = "<p>At this moment, we can't create a certificate from your negative test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_test_body" = "<p>At this moment, we can't create a certificate from your negative test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_originMismatch_vaccinationAndPositiveTest_body" = "<p>At this moment, we can't create a certificate from your retrieved details. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
-"holder_listRemoteEvents_originMismatch_vaccinationAssessment_body" = "<p>At this moment, we can't create a certificate from your vaccination approval. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
-"holder_listRemoteEvents_originMismatch_vaccination_body" = "<p>At this moment, we can't create a certificate from your vaccination. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost.</a></p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_vaccinationAssessment_body" = "<p>At this moment, we can't create a certificate from your vaccination approval. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_originMismatch_vaccination_body" = "<p>At this moment, we can't create a certificate from your vaccination. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_paperflow_message" = "You can create a certificate with these details.";
 "holder_listRemoteEvents_paperflow_title" = "Scanned details";
 "holder_listRemoteEvents_recovery_message" = "If the details about your test are correct, you can create a recovery certificate.";
@@ -689,8 +698,14 @@
 "holder_newintheapp_content_only3G_body" = "The access rules in the Netherlands have changed. 3G access applies anywhere a coronavirus pass is required. This means you can enter with a vaccination, recovery, or test certificate.";
 "holder_newintheapp_content_only3G_button_next" = "Next";
 "holder_newintheapp_content_only3G_title" = "3G access only";
+"holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "The coronavirus entry pass is no longer used in the Netherlands. Dutch certificates are therefore removed from the app. International certificates can still be made and used for travelling abroad.";
+"holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "Only international certificates";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "About your visitor pass";
+"holder_onboarding_content_TravelSafe_0G_message" = "Are you travelling to a country where a coronavirus pass is required? Then you can create your certificate with this app.";
+"holder_onboarding_content_TravelSafe_0G_title" = "Travel safely with your certificate";
+"holder_onboarding_content_onlyInternationalQR_0G_message" = "The QR code on your certificate can be checked at the entrance to places and activities abroad. Or at the border.";
+"holder_onboarding_content_onlyInternationalQR_0G_title" = "Your certificate contains a QR code";
 "holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message" = "Visiting a place in the Netherlands where a coronavirus pass is required? The app creates seperate certificates for 3G and 1G access. Check beforehand which one you need.";
 "holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_title" = "Check the access rules";
 "holder_onboarding_disclosurePolicyChanged_only1GAccess_message" = "Visiting a place in the Netherlands where a coronavirus pass is required? Currently, only 1G access is given. This means you can enter with a certificate of a negative test.";

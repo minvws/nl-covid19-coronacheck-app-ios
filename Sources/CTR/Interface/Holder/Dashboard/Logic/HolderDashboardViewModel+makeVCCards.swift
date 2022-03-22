@@ -34,10 +34,14 @@ extension HolderDashboardViewController.Card {
 					buttonTitle: nil
 				)]
 			case .europeanUnion:
-				return [.headerMessage(
-					message: L.holderDashboardIntroInternational(),
-					buttonTitle: L.holderDashboardEmptyInternationalButton()
-				)]
+				return [
+					.headerMessage(
+						message: state.activeDisclosurePolicyMode == .zeroG
+							? L.holder_dashboard_filledState_international_0G_message()
+							: L.holderDashboardIntroInternational(),
+						buttonTitle: L.holderDashboardEmptyInternationalButton()
+					)
+				]
 		}
 	}
 
@@ -145,10 +149,17 @@ extension HolderDashboardViewController.Card {
 					buttonTitle: nil
 				)]
 			case .europeanUnion:
+			if state.activeDisclosurePolicyMode == .zeroG {
+				return [HolderDashboardViewController.Card.emptyStateDescription(
+					message: L.holder_dashboard_emptyState_international_0G_message(),
+					buttonTitle: L.holder_dashboard_international_0G_action_certificateNeeded()
+				)]
+			} else {
 				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: L.holderDashboardEmptyInternationalMessage(),
 					buttonTitle: L.holderDashboardEmptyInternationalButton()
 				)]
+			}
 		}
 	}
 	
@@ -229,27 +240,6 @@ extension HolderDashboardViewController.Card {
 			)
 		]
 	}
-
-	static func makeNewValidityInfoForVaccinationAndRecoveriesCard(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-	
-		guard validityRegion == .domestic, state.shouldShowNewValidityInfoForVaccinationsAndRecoveriesBanner else { return [] }
-		return [
-			.newValidityInfoForVaccinationAndRecoveries(
-				title: L.holder_dashboard_newvaliditybanner_title(),
-				buttonText: L.holder_dashboard_newvaliditybanner_action(),
-				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapNewValidityBannerMoreInfo()
-				},
-				didTapClose: { [weak actionHandler] in
-					actionHandler?.didTapNewValidityBannerClose()
-				}
-			)
-		]
-	}
 	
 	static func makeCompleteYourVaccinationAssessmentCard(
 		validityRegion: QRCodeValidityRegion,
@@ -264,27 +254,6 @@ extension HolderDashboardViewController.Card {
 				buttonText: L.holder_dashboard_visitorpassincompletebanner_button_makecomplete(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapCompleteYourVaccinationAssessmentMoreInfo()
-				}
-			)
-		]
-	}
-	
-	static func makeRecommendToAddYourBoosterCard(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		guard !state.dashboardHasEmptyState(for: validityRegion) else { return [] }
-		guard state.shouldShowRecommendationToAddYourBooster else { return [] }
-		return [
-			.recommendToAddYourBooster(
-				title: L.holder_dashboard_addBoosterBanner_title(),
-				buttonText: L.holder_dashboard_addBoosterBanner_button_addBooster(),
-				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapRecommendToAddYourBooster()
-				},
-				didTapClose: { [weak actionHandler] in
-					actionHandler?.didTapRecommendToAddYourBoosterClose()
 				}
 			)
 		]
@@ -545,7 +514,12 @@ extension HolderDashboardViewModel.QRCard {
 	) -> [HolderDashboardViewController.Card] {
 		
 		return [HolderDashboardViewController.Card.europeanUnionQR(
-			title: (self.origins.first?.type.localizedProof ?? L.holderDashboardQrTitle()).capitalizingFirstLetter(),
+			title: {
+				let localizedProof: String? = state.activeDisclosurePolicyMode == .zeroG
+					? self.origins.first?.type.localizedProofInternational0G
+					: self.origins.first?.type.localizedProof
+				return (localizedProof ?? L.holderDashboardQrTitle()).capitalizingFirstLetter()
+			}(),
 			stackSize: {
 				let minStackSize = 1
 				let maxStackSize = 3
