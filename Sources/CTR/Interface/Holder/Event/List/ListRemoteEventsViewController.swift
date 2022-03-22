@@ -22,7 +22,7 @@ class ListRemoteEventsViewController: BaseViewController {
 	}
 
 	internal let viewModel: ListRemoteEventsViewModel
-	private let sceneView = ListRemoteEventsView()
+	internal let sceneView = ListRemoteEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
