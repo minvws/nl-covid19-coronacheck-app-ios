@@ -133,7 +133,7 @@ class ScanLockManagerTests: XCTestCase {
 		expect(self.observerVCR.values.last).toEventually(equal(.unlocked))
 		
 		expect(timer1?.invokedInvalidate) == true
-		expect(timer2?.invokedInvalidate) == false
+		expect(timer2).to(beNil())
 	}
 	
 	func test_foregroundNotification_doesTriggerNewTimerInstatiation() throws {
