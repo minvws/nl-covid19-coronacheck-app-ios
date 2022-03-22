@@ -30,7 +30,7 @@ struct Environment {
 	var onboardingManager: OnboardingManaging
 	var openIdManager: OpenIdManaging
 	var remoteConfigManager: RemoteConfigManaging
-	var riskLevelManager: RiskLevelManaging
+	var riskLevelManager: VerificationPolicyManaging
 	var scanLockManager: ScanLockManaging
 	var scanLogManager: ScanLogManaging
 	var secureUserSettings: SecureUserSettingsProtocol
@@ -57,7 +57,7 @@ struct Environment {
 		onboardingManager: OnboardingManaging,
 		openIdManager: OpenIdManaging,
 		remoteConfigManager: RemoteConfigManaging,
-		riskLevelManager: RiskLevelManaging,
+		riskLevelManager: VerificationPolicyManaging,
 		scanLockManager: ScanLockManaging,
 		scanLogManager: ScanLogManaging,
 		secureUserSettings: SecureUserSettingsProtocol,
@@ -174,7 +174,7 @@ private let remoteConfigManager = RemoteConfigManager(
 	networkManager: networkManager,
 	secureUserSettings: secureUserSettings
 )
-private let riskLevelManager = RiskLevelManager(secureUserSettings: secureUserSettings)
+private let riskLevelManager = VerificationPolicyManager(secureUserSettings: secureUserSettings)
 private let scanLockManager = ScanLockManager(now: now, secureUserSettings: secureUserSettings)
 private let scanLogManager = ScanLogManager(dataStoreManager: datastoreManager)
 private let secureUserSettings = SecureUserSettings()

@@ -156,7 +156,7 @@ class VerifierStartScanningViewModel: Logging {
 	
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private var scanLockObserverToken: ScanLockManager.ObserverToken?
-	private var riskLevelObserverToken: RiskLevelManager.ObserverToken?
+	private var riskLevelObserverToken: VerificationPolicyManager.ObserverToken?
 
 	// MARK: - Dependencies
 	

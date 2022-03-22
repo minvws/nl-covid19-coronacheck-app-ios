@@ -26,7 +26,7 @@ class ScanInstructionsViewModel {
 	}
 
 	private let userSettings: UserSettingsProtocol = Current.userSettings
-	private let riskLevelManager: RiskLevelManaging = Current.riskLevelManager
+	private let riskLevelManager: VerificationPolicyManaging = Current.riskLevelManager
 	private let scanLockManager: ScanLockManaging = Current.scanLockManager
 	private var shouldShowRiskSetting = false
 	private var hasScanLock = false

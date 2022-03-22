@@ -33,7 +33,7 @@ class CryptoManager: CryptoManaging, Logging {
 	}
 	
 	private let cryptoLibUtility: CryptoLibUtilityProtocol
-	private let riskLevelManager: RiskLevelManaging
+	private let riskLevelManager: VerificationPolicyManaging
 	private let secureUserSettings: SecureUserSettingsProtocol
 	private let featureFlagManager: FeatureFlagManaging
 	
@@ -42,7 +42,7 @@ class CryptoManager: CryptoManaging, Logging {
 	required init(
 		secureUserSettings: SecureUserSettingsProtocol,
 		cryptoLibUtility: CryptoLibUtilityProtocol,
-		riskLevelManager: RiskLevelManaging,
+		riskLevelManager: VerificationPolicyManaging,
 		featureFlagManager: FeatureFlagManaging
 	) {
 		self.secureUserSettings = secureUserSettings
