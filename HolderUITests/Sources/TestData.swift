@@ -32,11 +32,11 @@ final class TestData {
 	static let vacJ2M1 = TestPerson(bsn: "999990408", dose: 3, doseIntl: ["1/1", "2/1", "3/1"], vacFrom: -30) // 2 janssen + 1 moderna
 	
 	// Vaccinations - vaccination elsewhere
-	static let vacP1PersonalStatementVacElsewhere = TestPerson(bsn: "999993501", dose: 2, doseIntl: ["2/2"], vacUntil: 240) // 1 pfizer + personal statement + vaccination elsewhere
+	static let vacP1PersonalStatementVacElsewhere = TestPerson(bsn: "999993501", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 pfizer + personal statement + vaccination elsewhere
 	static let vacP1PersonalStatementPriorEvent = TestPerson(bsn: "999993525", doseIntl: ["1/2"]) // 1 pfizer + personal statement + prior event
-	static let vacP2PersonalStatementVacElsewhereBoth = TestPerson(bsn: "999992934", dose: 2, doseIntl: ["2/2", "2/2"], vacUntil: 240) // 2 pfizer + personal statement + vaccination elsewhere both
+	static let vacP2PersonalStatementVacElsewhereBoth = TestPerson(bsn: "999992934", dose: 2, doseIntl: ["1/1", "2/1"], vacFrom: -30, vacUntil: 240) // 2 pfizer + personal statement + vaccination elsewhere both
 	static let vacP2PersonalStatementPriorEventBoth = TestPerson(bsn: "999993136", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240) // 2 pfizer + personal statement + prior event both
-	static let vacP2PersonalStatementVacElsewhereFirst = TestPerson(bsn: "999993537", dose: 3, doseIntl: ["2/2", "3/3"], vacFrom: -30) // 2 pfizer + personal statement + vaccination elsewhere first
+	static let vacP2PersonalStatementVacElsewhereFirst = TestPerson(bsn: "999993537", dose: 2, doseIntl: ["1/1", "2/1"], vacFrom: -30) // 2 pfizer + personal statement + vaccination elsewhere first
 	static let vacP2PersonalStatementPriorEventFirst = TestPerson(bsn: "999993550", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240) // 2 pfizer + personal statement + prior event first
 	
 	// Vaccinations - personal statement
