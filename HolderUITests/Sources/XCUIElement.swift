@@ -34,22 +34,22 @@ extension XCUIElement {
 		self.assertExistence().tap()
 	}
 	
-	func tapElement(type: ElementType, _ label: String, _ index: Int) {
+	func tapElement(type: ElementType, _ label: String) {
 		let elementQuery = self.descendants(matching: type)
 		let element = elementQuery.element(matching: type, identifier: label)
 		element.waitAndTap()
 	}
 	
-	func tapButton(_ label: String, index: Int = 0) {
-		tapElement(type: .button, label, index)
+	func tapButton(_ label: String) {
+		tapElement(type: .button, label)
 	}
 	
-	func tapText(_ label: String, index: Int = 0) {
-		tapElement(type: .staticText, label, index)
+	func tapText(_ label: String) {
+		tapElement(type: .staticText, label)
 	}
 	
-	func tapOther(_ label: String, index: Int = 0) {
-		tapElement(type: .other, label, index)
+	func tapOther(_ label: String) {
+		tapElement(type: .other, label)
 	}
 	
 	func textExists(_ label: String) {
