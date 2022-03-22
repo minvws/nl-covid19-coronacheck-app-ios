@@ -103,6 +103,10 @@ private class LargeAddCertificateButton: UIControl {
 			static let duration: CGFloat = 0.2
 			static let transform: CGFloat = 0.98
 		}
+		enum Title {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
 	}
 	
 	private let plusImageView: UIImageView = {
@@ -201,7 +205,10 @@ private class LargeAddCertificateButton: UIControl {
 	
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 alignment: .center,
+															 kerning: ViewTraits.Title.kerning,
+															 textColor: C.primaryBlue()!)
 			accessibilityLabel = title
 		}
 	}
