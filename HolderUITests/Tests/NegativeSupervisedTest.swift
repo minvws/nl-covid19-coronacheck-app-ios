@@ -18,7 +18,7 @@ class NegativeSupervisedTest: BaseTest {
 		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate(validUntilOffsetInDays: 0)
+		assertValidDutchTestCertificate(validUntilOffsetInHours: 12)
 		assertCertificateIsNotValidInternationally(ofType: .test)
 	}
 	
@@ -27,7 +27,7 @@ class NegativeSupervisedTest: BaseTest {
 		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate(validUntilOffsetInDays: 0)
+		assertValidDutchTestCertificate(validUntilOffsetInHours: 12)
 		assertCertificateIsNotValidInternationally(ofType: .test)
 	}
 }

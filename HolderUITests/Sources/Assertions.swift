@@ -136,12 +136,12 @@ extension BaseTest {
 		card3G().containsText(is3GEnabled() ? "Bekijk QR" : "Dit bewijs wordt nu niet gebruikt in Nederland")
 	}
 	
-	func assertValidDutchTestCertificate(validUntilOffsetInDays: Int = 1, combinedWithOther: Bool = false) {
+	func assertValidDutchTestCertificate(validUntilOffsetInHours: Int = 24, combinedWithOther: Bool = false) {
 		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		for card in cardsToCheck(for: .test, combinedWithOther) {
 			card.containsText(CertificateType.test.rawValue)
-			card.containsText("geldig tot " + formattedOffsetDate(with: validUntilOffsetInDays, withYear: false, withDay: true))
+			card.containsText("geldig tot " + formattedOffsetDate(with: validUntilOffsetInHours, component: .hour, withYear: false, withDay: true))
 			card.containsText("Bekijk QR")
 		}
 	}
