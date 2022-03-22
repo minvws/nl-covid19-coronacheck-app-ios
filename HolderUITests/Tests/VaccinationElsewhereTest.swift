@@ -12,7 +12,7 @@ class VaccinationElsewhereTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: 1, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: 1, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: ["1/1"])
 	}
 	
@@ -31,7 +31,7 @@ class VaccinationElsewhereTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: -30)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: -30)
 		assertValidInternationalVaccinationCertificate(doses: ["1/1", "2/1"])
 	}
 	
@@ -40,7 +40,7 @@ class VaccinationElsewhereTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -49,7 +49,7 @@ class VaccinationElsewhereTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: 2, validFromOffset: person.vacFrom)
+		assertValidDutchVaccinationCertificate(doses: 2, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: ["1/1", "2/1"])
 	}
 	
@@ -58,7 +58,7 @@ class VaccinationElsewhereTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 }

@@ -14,7 +14,7 @@ class VaccinationOlderThanOneYearSmoke: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_vacP2Old() {
@@ -24,7 +24,7 @@ class VaccinationOlderThanOneYearSmoke: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_vacJ1Old() {
@@ -34,7 +34,7 @@ class VaccinationOlderThanOneYearSmoke: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_vacM1Old() {
@@ -44,7 +44,7 @@ class VaccinationOlderThanOneYearSmoke: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_vacM2Old() {
@@ -54,6 +54,6 @@ class VaccinationOlderThanOneYearSmoke: BaseTest {
 		
 		assertCertificateIsOnlyValidInternationally()
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 }
