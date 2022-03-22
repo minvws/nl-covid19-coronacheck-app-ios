@@ -144,20 +144,23 @@ class VerifierStartScanningViewModel: Logging {
 	@Atomic<Mode>
 	private var mode = .noLevelSet // swiftlint:disable:this let_var_whitespace
 	
-	private lazy var lockLabelCountdownTimer: Timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-		guard let self = self,
-			  case let .locked(mode, timeRemaining, totalDuration) = self.mode,
-			  timeRemaining > 0
-		else { return }
-		self.mode = .locked(mode: mode, timeRemaining: timeRemaining - 1, totalDuration: totalDuration)
-	}
+	private lazy var lockLabelCountdownTimer: Timeable = {
+		return vendTimer(TimeInterval(1), true) { [weak self] in
+			guard let self = self,
+				  case let .locked(mode, timeRemaining, totalDuration) = self.mode,
+				  timeRemaining > 0
+			else { return }
+			self.mode = .locked(mode: mode, timeRemaining: timeRemaining - 1, totalDuration: totalDuration)
+		}
+	}()
 
 	// MARK: - Observer tokens
 	
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private var scanLockObserverToken: Observatory.ObserverToken?
 	private var riskLevelObserverToken: VerificationPolicyManager.ObserverToken?
-
+	private let vendTimer: (TimeInterval, Bool, @escaping () -> Void) -> Timeable
+	
 	// MARK: - Dependencies
 	
 	private weak var coordinator: VerifierCoordinatorDelegate?
@@ -165,10 +168,15 @@ class VerifierStartScanningViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: VerifierCoordinatorDelegate) {
+	init(coordinator: VerifierCoordinatorDelegate,
+		 vendTimer: @escaping (TimeInterval, Bool, @escaping () -> Void) -> Timeable = { interval, repeats, action in
+			 return Timer.scheduledTimer(withTimeInterval: interval, repeats: repeats) { _ in action() }
+		 }
+	) {
 
 		self.coordinator = coordinator
-
+		self.vendTimer = vendTimer
+		
 		// Add a `didSet` callback to the Atomic<Mode>:
 		$mode.projectedValue.didSet = { [weak self] atomic in
 			guard let self = self else { return }
