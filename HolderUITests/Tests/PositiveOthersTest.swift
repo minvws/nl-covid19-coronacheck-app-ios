@@ -166,4 +166,24 @@ class PositiveOthersTest: BaseTest {
 		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
 	}
+	
+	// MARK: Positive tests - multiples
+	
+	func test_posPcr2Recent() {
+		let person = TestData.posPcr2Recent
+		addRecoveryCertificate(for: person)
+		addRetrievedCertificateToApp()
+		
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+	}
+	
+	func test_posPcr2Old() {
+		let person = TestData.posPcr2Old
+		addRecoveryCertificate(for: person)
+		addRetrievedCertificateToApp()
+		
+		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+	}
 }

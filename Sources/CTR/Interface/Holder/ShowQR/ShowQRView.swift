@@ -20,9 +20,9 @@ class ShowQRView: BaseView {
 		enum Margin {
 			static let edge: CGFloat = 10
 			static let infoEdge: CGFloat = 20
-			static let domesticSecurity: CGFloat = 57
-			static let internationalSecurity: CGFloat = 90
-            static let internationalSecurityExtraSafeAreaInset: CGFloat = 60
+			static let domesticSecurity: CGFloat = 56
+			static let internationalSecurity: CGFloat = 52
+            static let internationalSecurityExtraSafeAreaInset: CGFloat = 20
 			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
 		enum Spacing {
