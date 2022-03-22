@@ -25,7 +25,7 @@ class VaccinationEventMatchingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}
@@ -37,7 +37,7 @@ class VaccinationEventMatchingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}
@@ -50,7 +50,7 @@ class VaccinationEventMatchingTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}
@@ -63,8 +63,8 @@ class VaccinationEventMatchingTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
-		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffset: setup.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, dateOffset: setup.vacOffset)
+		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffsetInDays: setup.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, vaccinationDateOffsetInDays: setup.vacOffset)
 		assertInternationalVaccinationQRDetails(for: setup)
 	}
 	
@@ -76,7 +76,7 @@ class VaccinationEventMatchingTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}
@@ -89,8 +89,8 @@ class VaccinationEventMatchingTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
-		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffset: setup.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, dateOffset: setup.vacOffset)
+		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffsetInDays: setup.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, vaccinationDateOffsetInDays: setup.vacOffset)
 		assertInternationalVaccinationQRDetails(for: setup)
 	}
 	
@@ -102,7 +102,7 @@ class VaccinationEventMatchingTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}
@@ -115,8 +115,8 @@ class VaccinationEventMatchingTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
-		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffset: setup.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, dateOffset: setup.vacOffset)
+		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffsetInDays: setup.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, vaccinationDateOffsetInDays: setup.vacOffset)
 		assertInternationalVaccinationQRDetails(for: setup)
 	}
 	
@@ -127,7 +127,7 @@ class VaccinationEventMatchingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}
@@ -140,7 +140,7 @@ class VaccinationEventMatchingTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}
@@ -153,8 +153,8 @@ class VaccinationEventMatchingTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
-		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffset: setup.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, dateOffset: setup.vacOffset)
+		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffsetInDays: setup.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, vaccinationDateOffsetInDays: setup.vacOffset)
 		assertInternationalVaccinationQRDetails(for: setup)
 	}
 }

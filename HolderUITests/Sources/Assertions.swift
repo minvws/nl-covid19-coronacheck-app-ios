@@ -14,7 +14,7 @@ extension BaseTest {
 		assertNoInternationalCertificate()
 	}
 	
-	// MARK: Certificate retrieval
+	// MARK: - Certificate retrieval
 	
 	private func returnToCertificateOverview() {
 		app.tapText("Naar mijn bewijzen")
@@ -93,7 +93,7 @@ extension BaseTest {
 		}
 	}
 	
-	// MARK: The Netherlands
+	// MARK: - The Netherlands
 	
 	private func tapOnTheNetherlandsTab() {
 		app.tapButton("Nederland")
@@ -111,15 +111,15 @@ extension BaseTest {
 		app.textExists("Je hebt geen Nederlands " + certificateType.rawValue.lowercased())
 	}
 	
-	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffset: Int? = nil, validUntilOffset: Int? = nil, validUntilDate: String? = nil) {
+	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffsetInDays: Int? = nil, validUntilOffsetInDays: Int? = nil, validUntilDate: String? = nil) {
 		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		card3G().containsText(CertificateType.vaccination.rawValue)
 		card3G().containsText(amountOfDoses(for: doses))
-		if let offset = validUntilOffset {
+		if let offset = validUntilOffsetInDays {
 			card3G().containsText("geldig tot " + formattedOffsetDate(with: offset))
 		}
-		if let offset = validFromOffset {
+		if let offset = validFromOffsetInDays {
 			card3G().containsText("geldig vanaf " + formattedOffsetDate(with: offset))
 		}
 		if let date = validUntilDate {
@@ -128,38 +128,38 @@ extension BaseTest {
 		card3G().containsText(is3GEnabled() ? "Bekijk QR" : "Dit bewijs wordt nu niet gebruikt in Nederland")
 	}
 	
-	func assertValidDutchRecoveryCertificate(validUntilOffset: Int) {
+	func assertValidDutchRecoveryCertificate(validUntilOffsetInDays: Int) {
 		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		card3G().containsText(CertificateType.recovery.rawValue)
-		card3G().containsText("geldig tot " + formattedOffsetDate(with: validUntilOffset))
+		card3G().containsText("geldig tot " + formattedOffsetDate(with: validUntilOffsetInDays))
 		card3G().containsText(is3GEnabled() ? "Bekijk QR" : "Dit bewijs wordt nu niet gebruikt in Nederland")
 	}
 	
-	func assertValidDutchTestCertificate(validUntilOffset: Int = 1, combinedWithOther: Bool = false) {
+	func assertValidDutchTestCertificate(validUntilOffsetInDays: Int = 1, combinedWithOther: Bool = false) {
 		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		for card in cardsToCheck(for: .test, combinedWithOther) {
 			card.containsText(CertificateType.test.rawValue)
-			card.containsText("geldig tot " + formattedOffsetDate(with: validUntilOffset, withYear: false, withDay: true))
+			card.containsText("geldig tot " + formattedOffsetDate(with: validUntilOffsetInDays, withYear: false, withDay: true))
 			card.containsText("Bekijk QR")
 		}
 	}
 	
-	func assertDutchCertificateIsNotYetValid(ofType certificateType: CertificateType, doses: Int = 0, validFromOffset: Int, validUntilOffset: Int? = nil) {
+	func assertDutchCertificateIsNotYetValid(ofType certificateType: CertificateType, doses: Int = 0, validFromOffsetInDays: Int, validUntilOffsetInDays: Int? = nil) {
 		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		for card in cardsToCheck(for: certificateType) {
 			card.containsText(certificateType.rawValue)
-			card.containsText("geldig vanaf " + formattedOffsetDate(with: validFromOffset, withYear: false))
-			if let offset = validUntilOffset {
+			card.containsText("geldig vanaf " + formattedOffsetDate(with: validFromOffsetInDays, withYear: false))
+			if let offset = validUntilOffsetInDays {
 				card.containsText("tot " + formattedOffsetDate(with: offset))
 			}
 			card.containsText("Wordt automatisch geldig")
 		}
 	}
 	
-	// MARK: International
+	// MARK: - International
 	
 	private func tapOnInternationalTab() {
 		guard disclosureMode != .mode0G else {
@@ -174,27 +174,27 @@ extension BaseTest {
 		app.textExists("Hier komt jouw internationale bewijs")
 	}
 	
-	func assertValidInternationalVaccinationCertificate(doses: [String], dateOffset: Int = -30) {
+	func assertValidInternationalVaccinationCertificate(doses: [String], vaccinationDateOffsetInDays: Int = -30) {
 		tapOnInternationalTab()
 		card(of: .vaccination).containsText(CertificateType.vaccination.rawValue)
 		for (index, dose) in doses.reversed().enumerated() {
-			card(of: .vaccination).containsText("Dosis \(dose) Vaccinatiedatum: " + formattedOffsetDate(with: dateOffset - (30 * index)))
+			card(of: .vaccination).containsText("Dosis \(dose) Vaccinatiedatum: " + formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index)))
 		}
 		card(of: .vaccination).textExists(doses.count > 1 ? "Bekijk QR-codes" : "Bekijk QR")
 	}
 	
-	func assertValidInternationalRecoveryCertificate(validUntilOffset: Int) {
+	func assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: Int) {
 		tapOnInternationalTab()
 		card(of: .recovery).containsText(CertificateType.recovery.rawValue)
-		card(of: .recovery).containsText("Geldig tot " + formattedOffsetDate(with: validUntilOffset))
+		card(of: .recovery).containsText("Geldig tot " + formattedOffsetDate(with: validUntilOffsetInDays))
 		card(of: .recovery).textExists("Bekijk QR")
 	}
 	
-	func assertValidInternationalTestCertificate(testType: TestCertificateType, dateOffset: Int = 0) {
+	func assertValidInternationalTestCertificate(testType: TestCertificateType, testDateOffsetInDays: Int = 0) {
 		tapOnInternationalTab()
 		card(of: .test).containsText(CertificateType.test.rawValue)
 		card(of: .test).containsText("Type test: " + testType.rawValue)
-		card(of: .test).containsText("Testdatum: " + formattedOffsetDate(with: dateOffset, withYear: false, withDay: true))
+		card(of: .test).containsText("Testdatum: " + formattedOffsetDate(with: testDateOffsetInDays, withYear: false, withDay: true))
 		card(of: .test).textExists("Bekijk QR")
 	}
 	
@@ -204,17 +204,17 @@ extension BaseTest {
 		app.textExists("Je \(certificateType.rawValue.lowercased()) is niet internationaal geldig. Je hebt wel een Nederlands bewijs.")
 	}
 	
-	func assertInternationalCertificateIsNotYetValid(ofType certificateType: CertificateType, validFromOffset: Int, validUntilOffset: Int? = nil) {
+	func assertInternationalCertificateIsNotYetValid(ofType certificateType: CertificateType, validFromOffsetInDays: Int, validUntilOffsetInDays: Int) {
 		tapOnInternationalTab()
 		app.containsText(certificateType.rawValue)
-		app.containsText("Geldig vanaf " + formattedOffsetDate(with: validFromOffset, withYear: false))
-		if let offset = validUntilOffset {
-			app.containsText("tot " + formattedOffsetDate(with: offset))
-		}
+		app.containsText("Geldig vanaf " + formattedOffsetDate(with: validFromOffsetInDays, withYear: false))
+		app.containsText("tot " + formattedOffsetDate(with: validUntilOffsetInDays))
 		app.containsText("Wordt automatisch geldig")
 	}
 	
-	func assertInternationalVaccinationQRDetails(for person: TestPerson, dateOffset: Int = -30) {
+	// MARK: - International QR Details
+	
+	func assertInternationalVaccinationQRDetails(for person: TestPerson, vaccinationDateOffsetInDays: Int = -30) {
 		let doses = person.doseIntl
 		
 		card(of: .vaccination).tapButton(doses.count > 1 ? "Bekijk QR-codes" : "Bekijk QR")
@@ -225,7 +225,7 @@ extension BaseTest {
 			app.textExists("Over je dosis " + dose)
 			app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: "COVID-19")
 			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: spreadDose(dose))
-			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: formattedOffsetDate(with: dateOffset - (30 * index), short: true))
+			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index), short: true))
 			closeQRDetails()
 			
 			if index != doses.indices.last {
