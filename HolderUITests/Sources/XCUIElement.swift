@@ -61,13 +61,12 @@ extension XCUIElement {
 		
 		var checkNext = false
 		for text in texts {
-			if text.label == label {
-				checkNext = true
-				continue
-			}
 			if checkNext {
 				XCTAssertEqual(text.label, value)
 				break
+			}
+			if text.label == label {
+				checkNext = true
 			}
 		}
 	}
