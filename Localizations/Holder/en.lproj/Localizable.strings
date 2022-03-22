@@ -596,7 +596,6 @@
 "holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
 "holder_dashboard_filledState_international_0G_message" = "Travelling to a country where a coronavirus pass is required? Always check before departure if you have the right certificate.";
 "holder_dashboard_international_0G_action_certificateNeeded" = "Is a certificate needed where I'm heading?";
-"holder_dashboard_international_0G_url" = "https://coronacheck.nl/traveladvices";
 "holder_dashboard_intro_domestic_3Gand1Gaccess" = "<p>Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G or 1G access</a>. Also show your proof of identity at the entrance.</p>";
 "holder_dashboard_intro_domestic_only1Gaccess" = "<p>Show a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/1g-access\">1G access</a> in the Netherlands if a coronavirus pass is required. Also show your proof of identity.</p>";
 "holder_dashboard_intro_domestic_only3Gaccess" = "Visiting a venue within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance.";
@@ -765,20 +764,3 @@
 "visitorpass_token_modal_notoken_details" = "<p>You will receive an approval code on paper from the desk that reviewed your vaccination. Don't have an approval code? Please go back to the desk you stopped by.</p><p>Didn’t stop by a desk yet to have your vaccination reviewed? For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Don't have an approval code?";
 "visitorpass_token_next" = "Next";
-
-/*Missing Keys, not used in verifier, but blocking submission*/
-"general_recoverycertificate_0G" = "";
-"general_testcertificate_0G" = "";
-"general_vaccinationcertificate_0G" = "";
-"holder_dashboard_emptyState_international_0G_message" = "";
-"holder_dashboard_filledState_international_0G_message" = "";
-"holder_dashboard_international_0G_action_certificateNeeded" = "";
-"holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "";
-"holder_dashboard_noDomesticCertificatesBanner_0G_title" = "";
-"holder_dashboard_noDomesticCertificatesBanner_url" = "";
-"holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "";
-"holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "";
-"holder_onboarding_content_TravelSafe_0G_message" = "";
-"holder_onboarding_content_TravelSafe_0G_title" = "";
-"holder_onboarding_content_onlyInternationalQR_0G_message" = "";
-"holder_onboarding_content_onlyInternationalQR_0G_title" = "";
