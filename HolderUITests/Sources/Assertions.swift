@@ -14,7 +14,7 @@ extension BaseTest {
 		assertNoInternationalCertificate()
 	}
 	
-	// MARK: Certificate retrieval
+	// MARK: - Certificate retrieval
 	
 	private func returnToCertificateOverview() {
 		app.tapText("Naar mijn bewijzen")
@@ -93,7 +93,7 @@ extension BaseTest {
 		}
 	}
 	
-	// MARK: The Netherlands
+	// MARK: - The Netherlands
 	
 	private func tapOnTheNetherlandsTab() {
 		app.tapButton("Nederland")
@@ -159,7 +159,7 @@ extension BaseTest {
 		}
 	}
 	
-	// MARK: International
+	// MARK: - International
 	
 	private func tapOnInternationalTab() {
 		guard disclosureMode != .mode0G else {
@@ -211,6 +211,8 @@ extension BaseTest {
 		app.containsText("tot " + formattedOffsetDate(with: validUntilOffsetInDays))
 		app.containsText("Wordt automatisch geldig")
 	}
+	
+	// MARK: - International QR Details
 	
 	func assertInternationalVaccinationQRDetails(for person: TestPerson, vaccinationDateOffsetInDays: Int = -30) {
 		let doses = person.doseIntl
