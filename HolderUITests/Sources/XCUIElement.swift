@@ -36,7 +36,7 @@ extension XCUIElement {
 	
 	func tapElement(type: ElementType, _ label: String) {
 		let elementQuery = self.descendants(matching: type)
-		let element = elementQuery.element(matching: type, identifier: label)
+		let element = elementQuery.element(matching: type, identifier: label).firstMatch
 		element.waitAndTap()
 	}
 	
