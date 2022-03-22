@@ -17,6 +17,8 @@ protocol RiskLevelManaging: AnyObject {
 	func wipePersistedData()
 }
 
+/// Distributes changes to the current "risk level" to observers
+/// RiskLevel == VerificationPolicy
 final class RiskLevelManager: RiskLevelManaging {
 	typealias ObserverToken = UUID
 	
@@ -32,7 +34,7 @@ final class RiskLevelManager: RiskLevelManaging {
 		}
 	}
 	
-	fileprivate var keychainVerificationPolicy: VerificationPolicy? {
+	private var keychainVerificationPolicy: VerificationPolicy? {
 		get { secureUserSettings.verificationPolicy }
 		set { secureUserSettings.verificationPolicy = newValue }
 	}
