@@ -185,13 +185,15 @@ private class TabBarButton: UIControl {
 		enum Colors {
 			static let highlighted = UIColor(white: 0.98, alpha: 1)
 		}
+		enum Title {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+		}
 	}
 	
 	private let titleLabel: Label = {
 		let label = Label(subheadMedium: nil)
 		label.adjustsFontForContentSizeCategory = true
-		label.textAlignment = .center
-		label.textColor = C.secondaryText()
 		if #available(iOS 15.0, *) {
 			label.maximumContentSizeCategory = .accessibilityMedium
 		}
@@ -273,7 +275,9 @@ private class TabBarButton: UIControl {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 alignment: .center,
+															 kerning: ViewTraits.Title.kerning)
 			accessibilityLabel = title
 			setupLargeContentViewer(title: title)
 		}
