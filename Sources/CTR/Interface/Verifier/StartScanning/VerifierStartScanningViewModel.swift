@@ -191,7 +191,7 @@ class VerifierStartScanningViewModel: Logging {
 		
 		// Then observe for changes:
 		scanLockObserverToken = Current.scanLockManager.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
-		riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
+		riskLevelObserverToken = Current.verificationPolicyManager.appendObserver { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
 		
 		lockLabelCountdownTimer.fire()
 	}
@@ -287,7 +287,7 @@ extension VerifierStartScanningViewModel {
 		
 		if !Current.userSettings.scanInstructionShown ||
 			(!Current.userSettings.policyInformationShown && Current.featureFlagManager.is1GVerificationPolicyEnabled()) ||
-			(Current.riskLevelManager.state == nil && Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
+			(Current.verificationPolicyManager.state == nil && Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
 			// Show the scan instructions the first time no matter what link was tapped
 			coordinator?.didFinish(.userTappedProceedToInstructionsOrRiskSetting)
 		} else {

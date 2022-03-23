@@ -114,7 +114,7 @@ final class CheckIdentityViewModel: Logging {
 		let verifiedAccess: VerifiedAccess
 		
 		if Current.featureFlagManager.is1GVerificationPolicyEnabled() {
-			guard let state = Current.riskLevelManager.state else {
+			guard let state = Current.verificationPolicyManager.state else {
 				assertionFailure("Risk level should be set")
 				return
 			}

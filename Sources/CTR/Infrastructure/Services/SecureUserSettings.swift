@@ -53,7 +53,7 @@ class SecureUserSettings: SecureUserSettingsProtocol {
 	@Keychain(name: "storedConfiguration", service: "RemoteConfigManager" + Configuration().getEnvironment(), clearOnReinstall: false)
 	var storedConfiguration: RemoteConfiguration = Defaults.storedConfiguration
 
-	@Keychain(name: "verificationPolicy", service: "RiskLevelManager" + Configuration().getEnvironment(), clearOnReinstall: false)
+	@Keychain(name: "verificationPolicy", service: "verificationPolicyManager" + Configuration().getEnvironment(), clearOnReinstall: false)
 	var verificationPolicy: VerificationPolicy? = Defaults.verificationPolicy
 }
 

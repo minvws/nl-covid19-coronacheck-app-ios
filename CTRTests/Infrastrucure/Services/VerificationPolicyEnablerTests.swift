@@ -31,7 +31,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		sut = VerificationPolicyEnabler(
 			remoteConfigManager: remoteConfigSpy,
 			userSettings: userSettingsSpy,
-			riskLevelManager: riskLevelManagerSpy,
+			verificationPolicyManager: riskLevelManagerSpy,
 			scanLockManager: scanLockManagerSpy,
 			scanLogManager: scanLogManagerSpy
 		)

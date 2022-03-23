@@ -92,7 +92,7 @@ extension VerificationPolicyManaging {
 	
 	/// LLDB:
 	/// `e import CTR`
-	/// `Current.riskLevelManager.set(VerificationPolicy: .policy3G)`
+	/// `Current.verificationPolicyManager.set(VerificationPolicy: .policy3G)`
 	func set(verificationPolicy: VerificationPolicy) {
 		let casted = self as! VerificationPolicyManager // swiftlint:disable:this force_cast
 		casted.state = verificationPolicy

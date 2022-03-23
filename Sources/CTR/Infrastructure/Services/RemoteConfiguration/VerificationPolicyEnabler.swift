@@ -23,7 +23,7 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 	private let remoteConfigManager: RemoteConfigManaging
 	private let userSettings: UserSettingsProtocol
 	private var remoteConfigManagerObserverToken: UUID?
-	private let riskLevelManager: VerificationPolicyManaging
+	private let verificationPolicyManager: VerificationPolicyManaging
 	private let scanLockManager: ScanLockManaging
 	private let scanLogManager: ScanLogManaging
 	
@@ -31,13 +31,13 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 	init(
 		remoteConfigManager: RemoteConfigManaging,
 		userSettings: UserSettingsProtocol,
-		riskLevelManager: VerificationPolicyManaging,
+		verificationPolicyManager: VerificationPolicyManaging,
 		scanLockManager: ScanLockManaging,
 		scanLogManager: ScanLogManaging
 	) {
 		self.remoteConfigManager = remoteConfigManager
 		self.userSettings = userSettings
-		self.riskLevelManager = riskLevelManager
+		self.verificationPolicyManager = verificationPolicyManager
 		self.scanLockManager = scanLockManager
 		self.scanLogManager = scanLogManager
 		
@@ -81,12 +81,12 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 		// Set policies that are not set via the scan settings scenes
 		switch knownPolicies {
 			case [VerificationPolicy.policy1G]:
-				riskLevelManager.update(verificationPolicy: .policy1G)
+				verificationPolicyManager.update(verificationPolicy: .policy1G)
 			case [VerificationPolicy.policy3G]:
-				riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
+				verificationPolicyManager.update(verificationPolicy: nil) // No UI indicator shown
 			case []:
 				knownPolicies = [VerificationPolicy.policy3G]
-				riskLevelManager.update(verificationPolicy: nil) // No UI indicator shown
+				verificationPolicyManager.update(verificationPolicy: nil) // No UI indicator shown
 			default: break
 		}
 		
@@ -97,7 +97,7 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 
 		observers = [:]
 		userSettings.configVerificationPolicies = [VerificationPolicy.policy3G]
-		riskLevelManager.update(verificationPolicy: nil)
+		verificationPolicyManager.update(verificationPolicy: nil)
 	}
 	
 	// MARK: - Observer notifications
@@ -127,7 +127,7 @@ private extension VerificationPolicyEnabler {
 	func wipeScanMode() {
 		// Scan lock and risk level observers are not wiped
 		// in case this method is called after setting the observers in VerifierStartScanningViewModel
-		riskLevelManager.wipeScanMode()
+		verificationPolicyManager.wipeScanMode()
 		scanLockManager.wipeScanMode()
 		scanLogManager.wipePersistedData()
 	}

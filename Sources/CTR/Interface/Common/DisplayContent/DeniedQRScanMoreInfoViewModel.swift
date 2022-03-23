@@ -13,7 +13,7 @@ class DeniedQRScanMoreInfoViewModel {
 	/// Coordination Delegate
 	weak var coordinator: (Dismissable)?
 	
-	weak var riskLevelManager: VerificationPolicyManaging? = Current.riskLevelManager
+	weak var verificationPolicyManager: VerificationPolicyManaging? = Current.verificationPolicyManager
 
 	/// The title of the scene
 	@Bindable private(set) var title: String
@@ -42,7 +42,7 @@ class DeniedQRScanMoreInfoViewModel {
 		
 		// Show the 1G text only when 1G policy is enabled and the current state.
 		// -> do not show it when both policies are enabled, but the current scan mode is 3G
-		let shouldDisplay1GText = riskLevelManager?.state == .policy1G
+		let shouldDisplay1GText = verificationPolicyManager?.state == .policy1G
 		
 		self.content = [
 			(TextView(htmlText: shouldDisplay1GText ? L.verifierDeniedMessageOne_1G() : L.verifierDeniedMessageOne()), spacing),

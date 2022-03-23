@@ -31,7 +31,7 @@ final class RiskSettingUnselectedViewControllerTests: XCTestCase {
 		
 		viewModel = RiskSettingUnselectedViewModel(
 			coordinator: coordinatorSpy,
-			riskLevelManager: riskLevelManagerSpy
+			verificationPolicyManager: riskLevelManagerSpy
 		)
 		sut = RiskSettingUnselectedViewController(viewModel: viewModel)
 	}

@@ -12,7 +12,7 @@ final class RiskSettingStartViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
-	private let riskLevelManager: VerificationPolicyManaging
+	private let verificationPolicyManager: VerificationPolicyManaging
 	
 	/// The title of the scene
 	@Bindable private(set) var title: String = L.verifier_risksetting_start_title()
@@ -26,14 +26,14 @@ final class RiskSettingStartViewModel: Logging {
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
-		riskLevelManager: VerificationPolicyManaging = Current.riskLevelManager
+		verificationPolicyManager: VerificationPolicyManaging = Current.verificationPolicyManager
 	) {
 		
 		self.coordinator = coordinator
-		self.riskLevelManager = riskLevelManager
+		self.verificationPolicyManager = verificationPolicyManager
 		
-		hasUnselectedRiskLevel = riskLevelManager.state == nil
-		if let verificationPolicy = riskLevelManager.state {
+		hasUnselectedRiskLevel = verificationPolicyManager.state == nil
+		if let verificationPolicy = verificationPolicyManager.state {
 			changeRiskTitle = L.verifier_risksetting_changeselection(verificationPolicy.localization)
 			
 			switch verificationPolicy {

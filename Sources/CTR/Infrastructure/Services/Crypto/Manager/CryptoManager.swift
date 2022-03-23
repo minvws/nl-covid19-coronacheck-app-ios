@@ -33,7 +33,7 @@ class CryptoManager: CryptoManaging, Logging {
 	}
 	
 	private let cryptoLibUtility: CryptoLibUtilityProtocol
-	private let riskLevelManager: VerificationPolicyManaging
+	private let verificationPolicyManager: VerificationPolicyManaging
 	private let secureUserSettings: SecureUserSettingsProtocol
 	private let featureFlagManager: FeatureFlagManaging
 	
@@ -42,12 +42,12 @@ class CryptoManager: CryptoManaging, Logging {
 	required init(
 		secureUserSettings: SecureUserSettingsProtocol,
 		cryptoLibUtility: CryptoLibUtilityProtocol,
-		riskLevelManager: VerificationPolicyManaging,
+		verificationPolicyManager: VerificationPolicyManaging,
 		featureFlagManager: FeatureFlagManaging
 	) {
 		self.secureUserSettings = secureUserSettings
 		self.cryptoLibUtility = cryptoLibUtility
-		self.riskLevelManager = riskLevelManager
+		self.verificationPolicyManager = verificationPolicyManager
 		self.featureFlagManager = featureFlagManager
 		
 		// Initialize crypto library
@@ -153,7 +153,7 @@ class CryptoManager: CryptoManaging, Logging {
 
 		let scanPolicy: String
 		if featureFlagManager.areMultipleVerificationPoliciesEnabled() {
-			guard let riskSetting = riskLevelManager.state else {
+			guard let riskSetting = verificationPolicyManager.state else {
 				assertionFailure("Risk level should be set")
 				return .failure(.noRiskSetting)
 			}

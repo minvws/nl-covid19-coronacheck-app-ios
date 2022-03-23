@@ -42,7 +42,7 @@ final class PolicyInformationViewModel {
 			content = L.new_policy_1G_subtitle()
 		}
 		
-		shouldShowRiskSetting = Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() && Current.riskLevelManager.state == nil
+		shouldShowRiskSetting = Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() && Current.verificationPolicyManager.state == nil
 		
 		if shouldShowRiskSetting {
 			primaryButtonTitle = L.generalNext()
