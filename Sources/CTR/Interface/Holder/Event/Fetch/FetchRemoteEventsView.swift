@@ -42,7 +42,7 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 		} else {
 			view.style = .whiteLarge
 		}
-		view.color = Theme.colors.primary
+		view.color = C.primaryBlue()
 		return view
 	}()
 	
@@ -73,7 +73,7 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 

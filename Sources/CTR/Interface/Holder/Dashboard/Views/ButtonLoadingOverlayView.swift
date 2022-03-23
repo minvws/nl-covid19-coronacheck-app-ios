@@ -30,12 +30,12 @@ class ButtonLoadingOverlayView: UIView {
 	var buttonAppearsEnabled: Bool = false {
 		didSet {
 			backgroundColor = buttonAppearsEnabled
-				? Theme.colors.primary
-				: Theme.colors.tertiary
+				? C.primaryBlue()
+				: C.grey5()
 
 			activityIndicatorView.color = buttonAppearsEnabled
-				? Theme.colors.viewControllerBackground
-				: Theme.colors.gray
+				? C.white()
+				: C.grey3()!
 		}
 	}
 

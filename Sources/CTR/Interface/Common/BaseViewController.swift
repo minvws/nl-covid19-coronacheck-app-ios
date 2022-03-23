@@ -81,7 +81,7 @@ class BaseViewController: UIViewController {
 	///   - tintColor: The button tint color
 	func addCloseButton(
 		action: Selector,
-		tintColor: UIColor = Theme.colors.dark) {
+		tintColor: UIColor = C.black()!) {
 		
 		let config = UIBarButtonItem.Configuration(target: self,
 												   action: action,

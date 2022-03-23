@@ -36,7 +36,7 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		stackView.distribution = .fill
 		footerButtonView.isHidden = true
 	}

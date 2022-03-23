@@ -60,7 +60,7 @@ final class DeniedAccessView: BaseView {
 	private let titleLabel: Label = {
 
 		let label = Label(title1: nil, montserrat: true).multiline().header()
-		label.textColor = Theme.colors.dark
+		label.textColor = C.black()
 		return label
 	}()
 	
@@ -83,10 +83,10 @@ final class DeniedAccessView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.denied
-		scrollView.backgroundColor = Theme.colors.denied
+		backgroundColor = C.scannerRed()
+		scrollView.backgroundColor = C.scannerRed()
 		footerButtonView.primaryButton.style = .roundedWhite
-		footerButtonView.backgroundColor = Theme.colors.denied
+		footerButtonView.backgroundColor = C.scannerRed()
 		secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in

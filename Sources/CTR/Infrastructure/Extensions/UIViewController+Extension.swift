@@ -30,7 +30,7 @@ extension UIViewController {
 		
 		let textAttributes = [
 			NSAttributedString.Key.foregroundColor: color,
-			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
+			NSAttributedString.Key.font: Fonts.bodyMontserratFixed
 		]
 		navigationController?.navigationBar.titleTextAttributes = textAttributes
 		navigationController?.navigationBar.tintColor = color

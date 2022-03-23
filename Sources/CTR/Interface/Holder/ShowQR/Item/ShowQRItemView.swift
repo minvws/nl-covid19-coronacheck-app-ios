@@ -38,7 +38,7 @@ class ShowQRItemView: BaseView {
 		} else {
 			view.style = .whiteLarge
 		}
-		view.color = Theme.colors.primary
+		view.color = C.primaryBlue()
 		view.hidesWhenStopped = true
 		return view
 	}()

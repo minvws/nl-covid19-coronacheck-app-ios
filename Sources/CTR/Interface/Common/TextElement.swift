@@ -19,9 +19,9 @@ class TextElement: UITextView, UITextViewDelegate {
     ///  Initializes the TextView with the given attributed string
     init(
         attributedText: NSAttributedString,
-        font: UIFont = Theme.fonts.body,
-        textColor: UIColor = Theme.colors.dark,
-        boldTextColor: UIColor = Theme.colors.dark
+        font: UIFont = Fonts.body,
+        textColor: UIColor = C.black()!,
+        boldTextColor: UIColor = C.black()!
     ) {
         super.init(frame: .zero, textContainer: nil)
         setup()
@@ -47,7 +47,7 @@ class TextElement: UITextView, UITextViewDelegate {
         isAccessibilityElement = true
         delegate = self
         
-        font = Theme.fonts.body
+        font = Fonts.body
         isScrollEnabled = false
         isEditable = false
         isSelectable = false
@@ -56,8 +56,8 @@ class TextElement: UITextView, UITextViewDelegate {
         textContainer.lineFragmentPadding = 0
         textContainerInset = .zero
         linkTextAttributes = [
-            .foregroundColor: Theme.colors.primary,
-            .underlineColor: Theme.colors.primary
+            .foregroundColor: C.primaryBlue()!,
+            .underlineColor: C.primaryBlue()!
         ]
     }
 	

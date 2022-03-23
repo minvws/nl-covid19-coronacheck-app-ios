@@ -8,15 +8,6 @@
 import Foundation
 import Security
 
-protocol CertificateProvider {
-
-	func getHostNames() -> [String]
-
-	func getSSLCertificate() -> Data?
-
-	func getSigningCertificate() -> SigningCertificate?
-}
-
 /// The security strategy
 enum SecurityStrategy {
 
@@ -31,44 +22,52 @@ struct SecurityCheckerFactory {
 	static func getSecurityChecker(
 		_ strategy: SecurityStrategy,
 		networkConfiguration: NetworkConfiguration,
-		challenge: URLAuthenticationChallenge,
+		challenge: URLAuthenticationChallenge?,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> SecurityCheckerProtocol {
 
 		if case SecurityStrategy.none = strategy {
 			return SecurityCheckerNone(
-				checkForAuthorityKeyIdentifierAndNameAndSuffix: false,
 				challenge: challenge,
 				completionHandler: completionHandler
 			)
 		}
+		// Default for .config
 		var trustedNames = [TrustConfiguration.commonNameContent]
-		var trustedCertificates = [TrustConfiguration.sdNEVRootCA]
-		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate]
-		var checkForAuthorityKeyIdentifierAndNameAndSuffix = true
+		var trustedCertificates = [Data]()
+		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate, TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate]
 
 		if case SecurityStrategy.data = strategy {
-			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
-			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
+			trustedCertificates = []
+			trustedSigners = []
+			for tlsCertificate in Current.remoteConfigManager.storedConfiguration.getTLSCertificates() {
+				trustedCertificates.append(tlsCertificate)
+			}
 		}
 
 		if case let .provider(provider) = strategy {
-
 			trustedNames = [] // No trusted name check.
-			if let sslCertificate = provider.getSSLCertificate() {
-				trustedCertificates.append(sslCertificate)
+			trustedCertificates = [] // Only trust provided certificates
+			trustedSigners = []
+			for tlsCertificate in provider.getTLSCertificates() {
+				trustedCertificates.append(tlsCertificate)
 			}
-			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
-			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
-			trustedSigners.append(TrustConfiguration.sdNRootCAG3Certificate)
-			trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
-			checkForAuthorityKeyIdentifierAndNameAndSuffix = false
+			let openSSL = OpenSSL()
+			for cmsCertificate in provider.getCMSCertificates() {
+				if let commonName = openSSL.getCommonName(forCertificate: cmsCertificate),
+				   let authKey = openSSL.getAuthorityKeyIdentifier(forCertificate: cmsCertificate) {
+					for trustedCert in [TrustConfiguration.sdNEVRootCACertificate, TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate] {
+						var copy = trustedCert
+						copy.authorityKeyIdentifier = authKey
+						copy.commonName = commonName
+						trustedSigners.append(copy)
+					}
+				}
+			}
 		}
-
 		return SecurityChecker(
 			trustedCertificates: trustedCertificates,
 			trustedNames: trustedNames,
 			trustedSigners: trustedSigners,
-			checkForAuthorityKeyIdentifierAndNameAndSuffix: checkForAuthorityKeyIdentifierAndNameAndSuffix,
 			challenge: challenge,
 			completionHandler: completionHandler
 		)
@@ -129,29 +128,24 @@ class SecurityCheckerNone: SecurityChecker {
 /// Security check for backend communication
 class SecurityChecker: SecurityCheckerProtocol, Logging {
 
-	var loggingCategory: String = "SecurityCheckerConfig"
-
 	var trustedCertificates: [Data]
-	var challenge: URLAuthenticationChallenge
+	var challenge: URLAuthenticationChallenge?
 	var completionHandler: (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
 	var trustedNames: [String]
 	var trustedSigners: [SigningCertificate]
 	var openssl = OpenSSL()
-	var checkForAuthorityKeyIdentifierAndNameAndSuffix: Bool
 
 	init(
 		trustedCertificates: [Data] = [],
 		trustedNames: [String] = [],
 		trustedSigners: [SigningCertificate] = [],
-		checkForAuthorityKeyIdentifierAndNameAndSuffix: Bool,
-		challenge: URLAuthenticationChallenge,
+		challenge: URLAuthenticationChallenge?,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
 		self.trustedCertificates = trustedCertificates
 		self.trustedSigners = trustedSigners
 		self.trustedNames = trustedNames
 		self.challenge = challenge
-		self.checkForAuthorityKeyIdentifierAndNameAndSuffix = checkForAuthorityKeyIdentifierAndNameAndSuffix
 		self.completionHandler = completionHandler
 	}
 
@@ -160,7 +154,12 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	// later (as we need to work with this data; which otherwise would be untrusted).
 	//
 	func checkATS(serverTrust: SecTrust) -> Bool {
-		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
+		
+		guard let host = challenge?.protectionSpace.host else {
+			return false
+		}
+		
+		let policies = [SecPolicyCreateSSL(true, host as CFString)]
 
 		return SecurityCheckerWorker().checkATS(
 			serverTrust: serverTrust,
@@ -171,20 +170,20 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	/// Check the SSL Connection
 	func checkSSL() {
 
-		guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-			  let serverTrust = challenge.protectionSpace.serverTrust else {
+		guard challenge?.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+			  let serverTrust = challenge?.protectionSpace.serverTrust, let host = challenge?.protectionSpace.host else {
 
 			logWarning("SecurityChecker: invalid authenticationMethod")
 			completionHandler(.performDefaultHandling, nil)
 			return
 		}
-		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
+		let policies = [SecPolicyCreateSSL(true, host as CFString)]
 
 		if SecurityCheckerWorker().checkSSL(
 			serverTrust: serverTrust,
 			policies: policies,
 			trustedCertificates: trustedCertificates,
-			hostname: challenge.protectionSpace.host,
+			hostname: host,
 			trustedNames: trustedNames) {
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 			return
@@ -200,9 +199,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	///   - content: the signed content
 	/// - Returns: True if the signature is a valid PKCS7 Signature
 	func validate(signature: Data, content: Data) -> Bool {
-
-		//		logDebug("Security Strategy: there are \(trustedSigners.count) trusted signers for \(Unmanaged.passUnretained(self).toOpaque())")
-
+  
 		for signer in trustedSigners {
 
 			let certificateData = signer.getCertificateData()
@@ -223,8 +220,8 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 				signature,
 				contentData: content,
 				certificateData: certificateData,
-				authorityKeyIdentifier: !checkForAuthorityKeyIdentifierAndNameAndSuffix ? nil : signer.authorityKeyIdentifier,
-				requiredCommonNameContent: !checkForAuthorityKeyIdentifierAndNameAndSuffix ? "" : signer.commonName ?? "") {
+				authorityKeyIdentifier: signer.authorityKeyIdentifier,
+				requiredCommonNameContent: signer.commonName ?? "") {
 				return true
 			}
 		}

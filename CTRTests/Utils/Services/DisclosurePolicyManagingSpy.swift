@@ -53,4 +53,14 @@ class DisclosurePolicyManagingSpy: DisclosurePolicyManaging {
 		invokedSetDisclosurePolicyUpdateHasBeenSeen = true
 		invokedSetDisclosurePolicyUpdateHasBeenSeenCount += 1
 	}
+
+	var invokedGetDisclosurePolicies = false
+	var invokedGetDisclosurePoliciesCount = 0
+	var stubbedGetDisclosurePoliciesResult: [String]! = []
+
+	func getDisclosurePolicies() -> [String] {
+		invokedGetDisclosurePolicies = true
+		invokedGetDisclosurePoliciesCount += 1
+		return stubbedGetDisclosurePoliciesResult
+	}
 }

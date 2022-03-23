@@ -17,8 +17,8 @@ class ScanInstructionsViewController: BaseViewController {
 		let button = UIButton(type: .custom)
 		button.setTitle(L.verifierScaninstructionsNavigationSkipbuttonTitle(), for: .normal)
 		button.setupLargeContentViewer(title: L.verifierScaninstructionsNavigationSkipbuttonTitle())
-		button.setTitleColor(Theme.colors.primary, for: .normal)
-		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
+		button.setTitleColor(C.primaryBlue(), for: .normal)
+		button.titleLabel?.font = Fonts.bodyBoldFixed
 		button.translatesAutoresizingMaskIntoConstraints = false
 
 		// Add a little spacing between the image and the title, shift the title 5 px right

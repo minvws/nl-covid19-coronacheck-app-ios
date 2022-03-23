@@ -205,17 +205,6 @@ func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void) -> Voi
 	}
 }
 
-func beRecommendToAddYourBoosterCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .recommendToAddYourBooster with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .recommendToAddYourBooster(message2, buttonText, callToActionButtonText, didTapCallToAction) = actual {
-			test(message2, buttonText, callToActionButtonText, didTapCallToAction)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
 func beNewValidityInfoForVaccinationAndRecoveriesCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .beNewValidityInfoForVaccinationAndRecoveriesCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),

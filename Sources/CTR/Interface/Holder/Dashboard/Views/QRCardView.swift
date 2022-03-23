@@ -319,6 +319,7 @@ class QRCardView: BaseView {
 			validityText.lines.forEach { text in
 				let label = Label(body: text)
 				label.numberOfLines = 0
+				label.textColor = C.black()
 				verticalLabelsStackView.addArrangedSubview(label)
 			}
 
@@ -333,6 +334,7 @@ class QRCardView: BaseView {
 				if !enabledState && originDesiresToShowAutomaticallyBecomesValidFooter {
 					let becomesValidLabel = Label(bodyBold: L.holderDashboardQrValidityDateAutomaticallyBecomesValidOn())
 					becomesValidLabel.numberOfLines = 0
+					becomesValidLabel.textColor = C.black()
 
 					verticalLabelsStackView.addArrangedSubview(becomesValidLabel)
 					verticalLabelsStackView.setCustomSpacing(22, after: becomesValidLabel)
@@ -349,6 +351,7 @@ class QRCardView: BaseView {
 		if let expiryEvaluator = expiryEvaluator {
 			let expiryLabel = Label(bodyBold: expiryEvaluator(Date()))
 			expiryLabel.numberOfLines = 0
+			expiryLabel.textColor = C.black()
 
 			if let text = expiryEvaluator(Date()) {
 				expiryLabel.isHidden = false
@@ -387,7 +390,7 @@ class QRCardView: BaseView {
 	/// Create the shadow around a view
 	private func createShadow(view: UIView, hasSquashedViews: Bool) {
 		// Shadow
-		view.layer.shadowColor = UIColor.black.cgColor
+		view.layer.shadowColor = C.shadow()?.cgColor
 
 		// If there is a stack of squashed views, then halve the shadow opacity on the main `hostView`:
 		view.layer.shadowOpacity = hasSquashedViews ? ViewTraits.shadowOpacity / 2 : ViewTraits.shadowOpacity
@@ -401,7 +404,7 @@ class QRCardView: BaseView {
 
 	private func createShadow(view: UIView, forSquashedViewIndex squashedViewIndex: Int, forTotalSquashedViewCount totalSquashedViewCount: Int) {
 		// Shadow
-		view.layer.shadowColor = UIColor.black.cgColor
+		view.layer.shadowColor = C.shadow()?.cgColor
 
 		// Fade the shadow in (in 0.05 increments) across the stacked views (they don't all need the same shadow opacity).
 		let index = (squashedViewIndex - totalSquashedViewCount) * -1
@@ -460,7 +463,7 @@ class QRCardView: BaseView {
 
 	var viewQRButtonTitle: String? {
 		didSet {
-			viewQRButton.titleLabel?.font = Theme.fonts.bodySemiBold
+			viewQRButton.titleLabel?.font = Fonts.bodySemiBold
 			viewQRButton.setTitle(viewQRButtonTitle, for: .normal)
 		}
 	}
@@ -530,7 +533,7 @@ private final class ThisCertificateIsNotUsedOverlayView: BaseView {
 	
 	private let label: Label = {
 		let label = Label(body: L.holder_dashboard_domesticQRCard_3G_inactive_label())
-		label.textColor = C.darkColor()
+		label.textColor = C.black()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.numberOfLines = 0
 		return label
@@ -577,7 +580,7 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 	}()
 
 	private let label: Label = {
-		let label = Label(title3: "", textColor: Theme.colors.primary, montserrat: true)
+		let label = Label(title3: "", textColor: C.primaryBlue()!, montserrat: true)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.lineBreakMode = .byTruncatingTail
 		label.setContentCompressionResistancePriority(.required, for: .vertical)

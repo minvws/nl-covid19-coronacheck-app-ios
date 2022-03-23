@@ -30,16 +30,6 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedIsLuhnCheckEnabledResult
 	}
 
-	var invokedIsNewValidityInfoBannerEnabled = false
-	var invokedIsNewValidityInfoBannerEnabledCount = 0
-	var stubbedIsNewValidityInfoBannerEnabledResult: Bool! = false
-
-	func isNewValidityInfoBannerEnabled() -> Bool {
-		invokedIsNewValidityInfoBannerEnabled = true
-		invokedIsNewValidityInfoBannerEnabledCount += 1
-		return stubbedIsNewValidityInfoBannerEnabledResult
-	}
-
 	var invokedIsVisitorPassEnabled = false
 	var invokedIsVisitorPassEnabledCount = 0
 	var stubbedIsVisitorPassEnabledResult: Bool! = false

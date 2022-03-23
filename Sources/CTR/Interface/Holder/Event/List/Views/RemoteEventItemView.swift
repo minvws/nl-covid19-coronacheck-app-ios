@@ -68,8 +68,8 @@ class RemoteEventItemView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		view?.backgroundColor = Theme.colors.viewControllerBackground
-		linkLabel.textColor = Theme.colors.primary
+		view?.backgroundColor = C.white()
+		linkLabel.textColor = C.primaryBlue()
 		backgroundButton.addTarget(
 			self,
 			action: #selector(disclaimerButtonTapped),
@@ -176,8 +176,8 @@ class RemoteEventItemView: BaseView {
 				label.attributedText = .makeFromHtml(
 					text: detail,
 					style: NSAttributedString.HTMLStyle(
-						font: Theme.fonts.subhead,
-						textColor: Theme.colors.secondaryText,
+						font: Fonts.subhead,
+						textColor: C.secondaryText()!,
 						lineHeight: ViewTraits.Message.lineHeight,
 						kern: ViewTraits.Message.kerning
 					)
@@ -192,7 +192,7 @@ class RemoteEventItemView: BaseView {
 			linkLabel.attributedText = link?.setLineHeight(
 				ViewTraits.Link.lineHeight,
 				kerning: ViewTraits.Link.kerning,
-				textColor: Theme.colors.primary
+				textColor: C.primaryBlue()!
 			)
 			backgroundButton.accessibilityLabel = link
 		}

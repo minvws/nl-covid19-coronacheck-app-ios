@@ -22,7 +22,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	
 	// MARK: Test lifecycle
 	override func setUp() {
-		
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = AboutThisAppViewModelCoordinatorSpy()

@@ -52,7 +52,7 @@ extension String {
 
 		let underlineRange = (self as NSString).range(of: underlined)
 		let attributes: [NSAttributedString.Key: Any] = [
-			.foregroundColor: Theme.colors.primary,
+			.foregroundColor: C.primaryBlue()!,
 			.underlineStyle: NSUnderlineStyle.single.rawValue
 		]
 		let attributedText = NSMutableAttributedString(
@@ -87,7 +87,7 @@ extension String {
 		_ lineHeight: CGFloat = 22.0,
 		alignment: NSTextAlignment = .left,
 		kerning: CGFloat = 0.0,
-		textColor: UIColor = Theme.colors.dark) -> NSAttributedString {
+		textColor: UIColor = C.black()!) -> NSAttributedString {
 
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byWordWrapping

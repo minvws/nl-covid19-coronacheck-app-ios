@@ -122,16 +122,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 	private func styleUI() {
 		
 		// Custom navigation bar appearance
-		let color = Theme.colors.dark
+		let color = C.black()!
 		UINavigationBar.appearance().titleTextAttributes = [
 			NSAttributedString.Key.foregroundColor: color,
-			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
+			NSAttributedString.Key.font: Fonts.bodyMontserratFixed
 		]
 		UINavigationBar.appearance().tintColor = color
-		UINavigationBar.appearance().barTintColor = Theme.colors.viewControllerBackground
+		UINavigationBar.appearance().barTintColor = C.white()
 		
 		// Tint default buttons of UIAlertController
-		UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = Theme.colors.primary
+		UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = C.primaryBlue()
 		
 		if #available(iOS 15.0, *) {
 			// By default iOS 15 has no shadow bottom separator

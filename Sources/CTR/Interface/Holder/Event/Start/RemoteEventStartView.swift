@@ -54,7 +54,7 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		stackView.distribution = .equalSpacing
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 		primaryButton.style = .roundedBlueImage

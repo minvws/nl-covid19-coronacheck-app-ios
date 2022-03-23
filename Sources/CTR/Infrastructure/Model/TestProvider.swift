@@ -20,19 +20,23 @@ struct TestProvider: Codable, CertificateProvider, Equatable {
 	let resultURLString: String
 
 	/// The public key of the provider
-	let publicKey: String
+	var cmsCertificates: [String]
 
 	/// The ssl certificate of the provider
-	let certificate: String
+	var tlsCertificates: [String]
+	
+	/// Where can we use this provider for?
+	var usages: [EventFlow.ProviderUsage]
 
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
 
-		case identifier = "provider_identifier"
+		case identifier
 		case name
-		case resultURLString = "result_url"
-		case publicKey = "public_key"
-		case certificate = "ssl_cert"
+		case resultURLString = "url"
+		case cmsCertificates = "cms"
+		case tlsCertificates = "tls"
+		case usages = "usage"
 	}
 
 	var resultURL: URL? {
@@ -43,26 +47,5 @@ struct TestProvider: Codable, CertificateProvider, Equatable {
 	func getHostNames() -> [String] {
 
 		[resultURL?.host].compactMap { $0 }
-	}
-
-	func getSSLCertificate() -> Data? {
-
-		certificate.base64Decoded().map {
-			Data($0.utf8)
-		}
-	}
-
-	func getSigningCertificate() -> SigningCertificate? {
-
-		publicKey.base64Decoded().map {
-			SigningCertificate(
-				name: "TestProvider",
-				certificate: $0,
-				commonName: nil,
-				authorityKeyIdentifier: nil,
-				subjectKeyIdentifier: nil,
-				rootSerial: nil
-			)
-		}
 	}
 }

@@ -49,7 +49,7 @@ final class HolderDashboardView: BaseView {
 		let scrollView = ScrolledStackView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		scrollView.stackView.spacing = ViewTraits.Spacing.stackView
-		scrollView.backgroundColor = Theme.colors.viewControllerBackground
+		scrollView.backgroundColor = C.white()
 		return scrollView
 	}()
 	
@@ -58,7 +58,7 @@ final class HolderDashboardView: BaseView {
 		let scrollView = ScrolledStackView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		scrollView.stackView.spacing = ViewTraits.Spacing.stackView
-		scrollView.backgroundColor = Theme.colors.viewControllerBackground
+		scrollView.backgroundColor = C.white()
 		return scrollView
 	}()
 	
@@ -80,7 +80,7 @@ final class HolderDashboardView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = C.white()
 		
 		tabBar.delegate = self
 		scrollView.delegate = self
@@ -210,6 +210,7 @@ final class HolderDashboardView: BaseView {
 
 	/// Updates selected tab position
 	func updateScrollPosition() {
+		guard shouldShowTabBar else { return }
 		let selectedTab = tabBar.selectedTab.rawValue
 		scrollView.contentOffset = CGPoint(x: scrollView.bounds.width * CGFloat(selectedTab), y: 0)
 	}
