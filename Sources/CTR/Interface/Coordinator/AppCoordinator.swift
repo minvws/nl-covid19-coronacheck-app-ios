@@ -253,20 +253,20 @@ class AppCoordinator: Coordinator, Logging {
 		}
 		let updateController = AppStatusViewController(viewModel: viewModel)
 		
-		guard !(topController is AppStatusViewController) else {
+		if topController is AppStatusViewController {
 			// The presented VC is a AppStatusViewController. Compare the viewModels.
-			guard viewModel != (topController as? AppStatusViewController)?.viewModel else {
-				// incoming viewModel equals presented ViewModel. Do nothing
-				return
+			if viewModel != (topController as? AppStatusViewController)?.viewModel {
+				// incoming viewModel does not equals presented ViewModel. Dismis modally presented VC, reload.
+				topController.dismiss(animated: false) {
+					self.navigateToAppUpdate(with: viewModel)
+				}
 			}
-			// incoming viewModel does not equals presented ViewModel. Dismis modally presented VC, reload.
-			topController.dismiss(animated: false) {
-				self.navigateToAppUpdate(with: viewModel)
-			}
+			// Do nothing.
 			return
 		}
+		
 		// Present updateController
-
+		
 		if topController is UINavigationController {
 			(topController as? UINavigationController)?.viewControllers.last?.present(updateController, animated: true)
 		} else {
