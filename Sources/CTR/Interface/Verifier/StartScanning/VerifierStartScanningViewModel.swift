@@ -187,7 +187,7 @@ class VerifierStartScanningViewModel: Logging {
 		
 		// Pass current states in immediately to configure `self.mode`:
 		lockStateDidChange(lockState: Current.scanLockManager.state)
-		verificationPolicyDidChange(verificationPolicy: Current.riskLevelManager.state)
+		verificationPolicyDidChange(verificationPolicy: Current.verificationPolicyManager.state)
 		
 		// Then observe for changes:
 		scanLockObserverToken = Current.scanLockManager.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }

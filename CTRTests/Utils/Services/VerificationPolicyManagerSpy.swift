@@ -8,7 +8,7 @@
 import XCTest
 @testable import CTR
 
-class RiskLevelManagerSpy: VerificationPolicyManaging {
+class VerificationPolicyManagerSpy: VerificationPolicyManaging {
 
 	var invokedStateGetter = false
 	var invokedStateGetterCount = 0

@@ -18,7 +18,7 @@ final class RiskSettingUnselectedViewControllerTests: XCTestCase {
 	
 	/// The coordinator spy
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var verificationPolicyManagerSpy: RiskLevelManagerSpy!
+	private var verificationPolicyManagerSpy: VerificationPolicyManagerSpy!
 	private var viewModel: RiskSettingUnselectedViewModel!
 	
 	var window = UIWindow()
@@ -27,7 +27,7 @@ final class RiskSettingUnselectedViewControllerTests: XCTestCase {
 		super.setUp()
 		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		verificationPolicyManagerSpy = RiskLevelManagerSpy()
+		verificationPolicyManagerSpy = VerificationPolicyManagerSpy()
 		
 		viewModel = RiskSettingUnselectedViewModel(
 			coordinator: coordinatorSpy,

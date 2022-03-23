@@ -17,13 +17,13 @@ final class RiskSettingUnselectedViewModelTests: XCTestCase {
 	
 	/// The coordinator spy
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var verificationPolicyManagerSpy: RiskLevelManagerSpy!
+	private var verificationPolicyManagerSpy: VerificationPolicyManagerSpy!
 	
 	override func setUp() {
 		super.setUp()
 		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		verificationPolicyManagerSpy = RiskLevelManagerSpy()
+		verificationPolicyManagerSpy = VerificationPolicyManagerSpy()
 		
 		sut = RiskSettingUnselectedViewModel(
 			coordinator: coordinatorSpy,

@@ -47,7 +47,7 @@ class ScanInstructionsViewModel {
 		self.currentPage = 0
 
 		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
-			shouldShowRiskSetting = riskLevelManager.state == nil
+			shouldShowRiskSetting = verificationPolicyManager.state == nil
 		}
 		
 		hasScanLock = scanLockManager.state != .unlocked

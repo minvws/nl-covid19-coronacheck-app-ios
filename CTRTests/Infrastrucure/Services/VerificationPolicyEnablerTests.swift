@@ -15,7 +15,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 	
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
 	private var userSettingsSpy: UserSettingsSpy!
-	private var verificationPolicyManagerSpy: RiskLevelManagerSpy!
+	private var verificationPolicyManagerSpy: VerificationPolicyManagerSpy!
 	private var scanLockManagerSpy: ScanLockManagerSpy!
 	private var scanLogManagerSpy: ScanLogManagingSpy!
  
@@ -24,7 +24,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 
 		remoteConfigSpy = RemoteConfigManagingSpy()
 		userSettingsSpy = UserSettingsSpy()
-		verificationPolicyManagerSpy = RiskLevelManagerSpy()
+		verificationPolicyManagerSpy = VerificationPolicyManagerSpy()
 		scanLockManagerSpy = ScanLockManagerSpy()
 		scanLogManagerSpy = ScanLogManagingSpy()
 		
