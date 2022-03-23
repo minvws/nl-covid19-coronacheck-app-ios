@@ -12,7 +12,7 @@ class VaccinationAround18Test: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -21,7 +21,7 @@ class VaccinationAround18Test: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -31,7 +31,7 @@ class VaccinationAround18Test: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilDate: person.vacUntilDate)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_around18Is18y2mWithP2LastDose3M() {
@@ -39,8 +39,8 @@ class VaccinationAround18Test: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_around18Is18y2mWithP2LastDose9M() {
@@ -50,7 +50,7 @@ class VaccinationAround18Test: BaseTest {
 		assertCertificateIsOnlyValidInternationally()
 		
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_around18Is17y8mWithJ1LastDose1M() {
@@ -58,7 +58,7 @@ class VaccinationAround18Test: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -67,7 +67,7 @@ class VaccinationAround18Test: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -77,7 +77,7 @@ class VaccinationAround18Test: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilDate: person.vacUntilDate)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_around18Is18y2mWithJ1LastDose3M() {
@@ -86,7 +86,7 @@ class VaccinationAround18Test: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilDate: person.vacUntilDate)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_around18Is18y2mWithJ1LastDose9M() {
@@ -96,6 +96,6 @@ class VaccinationAround18Test: BaseTest {
 		assertCertificateIsOnlyValidInternationally()
 		
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 }

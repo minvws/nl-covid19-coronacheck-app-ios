@@ -53,7 +53,7 @@ class NegativeSmoke: BaseTest {
 		addTestCertificateFromGGD(for: TestData.negPrematurePcr)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffset: person.testFrom)
+		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffsetInDays: person.testFrom)
 		assertCertificateIsNotValidInternationally(ofType: .test)
 	}
 }

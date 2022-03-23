@@ -17,7 +17,7 @@ class DifferentPersonTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
-		assertValidDutchVaccinationCertificate(doses: person1.dose, validUntilOffset: person1.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person1.dose, validUntilOffsetInDays: person1.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person1.doseIntl)
 	}
 	
@@ -45,7 +45,7 @@ class DifferentPersonTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
-		assertValidDutchVaccinationCertificate(doses: person1.dose, validUntilOffset: person1.vacUntil)
+		assertValidDutchVaccinationCertificate(doses: person1.dose, validUntilOffsetInDays: person1.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person1.doseIntl)
 	}
 	
@@ -59,7 +59,7 @@ class DifferentPersonTest: BaseTest {
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
 		
-		assertValidDutchRecoveryCertificate(validUntilOffset: person2.recUntil)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: person2.recUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person2.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person2.recUntil)
 	}
 }

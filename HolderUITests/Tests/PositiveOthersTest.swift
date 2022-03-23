@@ -16,11 +16,11 @@ class PositiveOthersTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
 	func test_posPcrBeforeP2() {
@@ -30,11 +30,11 @@ class PositiveOthersTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
 	func test_posPcrBeforeJ1() {
@@ -44,11 +44,11 @@ class PositiveOthersTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
 	func test_posPcrBeforeM2() {
@@ -58,11 +58,11 @@ class PositiveOthersTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
 	// MARK: Positive tests - breathalyzer
@@ -79,7 +79,7 @@ class PositiveOthersTest: BaseTest {
 		assertCertificateIsOnlyValidInternationally()
 		
 		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	// MARK: Positive tests - older than a year
@@ -98,8 +98,8 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffset: person.recFrom, validUntilOffset: person.recUntil)
-		assertInternationalCertificateIsNotYetValid(ofType: .recovery, validFromOffset: person.recFrom, validUntilOffset: person.recUntil)
+		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
+		assertInternationalCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
 	}
 	
 	func test_posPrematureRat() {
@@ -107,7 +107,7 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffset: person.recFrom, validUntilOffset: person.recUntil)
+		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -116,7 +116,7 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffset: person.recFrom, validUntilOffset: person.recUntil)
+		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -127,8 +127,8 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
 	func test_posPcrDifferentLastName() {
@@ -136,8 +136,8 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
 	func test_posPcrDifferentBirthdate() {
@@ -145,8 +145,8 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
 	func test_posPcrDifferentBirthDay() {
@@ -154,8 +154,8 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
 	func test_posPcrDifferentBirthMonth() {
@@ -163,7 +163,27 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
-		assertValidInternationalRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
+	}
+	
+	// MARK: Positive tests - multiples
+	
+	func test_posPcr2Recent() {
+		let person = TestData.posPcr2Recent
+		addRecoveryCertificate(for: person)
+		addRetrievedCertificateToApp()
+		
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
+	}
+	
+	func test_posPcr2Old() {
+		let person = TestData.posPcr2Old
+		addRecoveryCertificate(for: person)
+		addRetrievedCertificateToApp()
+		
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 }

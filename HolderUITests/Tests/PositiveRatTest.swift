@@ -16,10 +16,10 @@ class PositiveRatTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -32,10 +32,10 @@ class PositiveRatTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -48,10 +48,10 @@ class PositiveRatTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -64,10 +64,10 @@ class PositiveRatTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -80,10 +80,10 @@ class PositiveRatTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffset: person.vacUntil)
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -96,10 +96,10 @@ class PositiveRatTest: BaseTest {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffset: person.vacFrom)
-		assertValidDutchRecoveryCertificate(validUntilOffset: person.recUntil)
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 }

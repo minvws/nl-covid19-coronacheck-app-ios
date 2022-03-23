@@ -19,17 +19,28 @@ class ShowQRScreenshotBlockingView: BaseView {
 		case headerImageWidth = 73
 		case labelHorizontalPadding = 24
 		case titleLabelBottomPadding = 8
+		
+		enum Title {
+			static let lineHeight: CGFloat = 22
+		}
+		enum Subtitle {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
+		enum Countdown {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+		}
 	}
 
 	// MARK: - Private properties
 
 	private let titleLabel: UILabel = {
-		let label = Label(nil, font: Fonts.headlineBoldMontserrat, textColor: C.black()!)
-		label.translatesAutoresizingMaskIntoConstraints = false
-		label.textAlignment = .center
+		let label = Label(nil, font: Fonts.headlineBoldMontserrat)
 		label.numberOfLines = 2
 		label.adjustsFontSizeToFitWidth = true
-		label.text = L.holderShowqrScreenshotwarningTitle()
+		label.attributedText = L.holderShowqrScreenshotwarningTitle().setLineHeight(ViewTraits.Title.lineHeight,
+																					alignment: .center)
 		label.setContentHuggingPriority(.required, for: .vertical)
 		label.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
         label.header()
@@ -38,12 +49,12 @@ class ShowQRScreenshotBlockingView: BaseView {
 	}()
 
 	private let subtitleLabel: UILabel = {
-		let label = Label(nil, font: Fonts.body, textColor: C.black()!)
-		label.translatesAutoresizingMaskIntoConstraints = false
-		label.textAlignment = .center
+		let label = Label(nil, font: Fonts.body)
 		label.numberOfLines = 2
 		label.adjustsFontSizeToFitWidth = true
-		label.text = L.holderShowqrScreenshotwarningSubtitle()
+		label.attributedText = L.holderShowqrScreenshotwarningSubtitle().setLineHeight(ViewTraits.Subtitle.lineHeight,
+																					   alignment: .center,
+																					   kerning: ViewTraits.Subtitle.kerning)
 		label.setContentHuggingPriority(.required, for: .vertical)
 		label.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
 
@@ -51,12 +62,13 @@ class ShowQRScreenshotBlockingView: BaseView {
 	}()
 
 	private let countdownLabel: UILabel = {
-		let label = Label(nil, font: Fonts.subhead, textColor: C.grey2()!)
-		label.translatesAutoresizingMaskIntoConstraints = false
-		label.textAlignment = .center
+		let label = Label(nil, font: Fonts.subhead)
 		label.numberOfLines = 1
 		label.adjustsFontSizeToFitWidth = true
-		label.text = L.holderShowqrScreenshotwarningMessage("-")
+		label.attributedText = L.holderShowqrScreenshotwarningMessage("-").setLineHeight(ViewTraits.Countdown.lineHeight,
+																						 alignment: .center,
+																						 kerning: ViewTraits.Countdown.kerning,
+																						 textColor: C.secondaryText()!)
 		label.setContentHuggingPriority(.required, for: .vertical)
 		label.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
 		label.accessibilityTraits = .updatesFrequently
@@ -135,20 +147,28 @@ class ShowQRScreenshotBlockingView: BaseView {
 
 	// MARK: - External setters
 
+	/// Only used for testing
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 alignment: .center)
 		}
 	}
 
+	/// Only used for testing
 	var subtitle: String? {
 		didSet {
-			subtitleLabel.text = subtitle
+			subtitleLabel.attributedText = subtitle?.setLineHeight(ViewTraits.Subtitle.lineHeight,
+																   alignment: .center,
+																   kerning: ViewTraits.Subtitle.kerning)
 		}
 	}
 
 	func setCountdown(text: String?, voiceoverText: String?) {
 		countdownLabel.accessibilityValue = voiceoverText
-		countdownLabel.text = text
+		countdownLabel.attributedText = text?.setLineHeight(ViewTraits.Countdown.lineHeight,
+															alignment: .center,
+															kerning: ViewTraits.Countdown.kerning,
+															textColor: C.secondaryText()!)
 	}
 }

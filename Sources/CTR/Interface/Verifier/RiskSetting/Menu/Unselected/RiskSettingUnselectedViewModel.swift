@@ -12,7 +12,7 @@ final class RiskSettingUnselectedViewModel: Logging {
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
-	private let riskLevelManager: RiskLevelManaging
+	private let riskLevelManager: VerificationPolicyManaging
 	
 	/// The title of the scene
 	@Bindable private(set) var title = L.verifier_risksetting_firsttimeuse_title()
@@ -34,7 +34,7 @@ final class RiskSettingUnselectedViewModel: Logging {
 	
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
-		riskLevelManager: RiskLevelManaging = Current.riskLevelManager
+		riskLevelManager: VerificationPolicyManaging = Current.riskLevelManager
 	) {
 		
 		self.coordinator = coordinator

@@ -64,11 +64,11 @@ extension SecurityAnimation {
 
 	static let domesticAnimation = SecurityAnimation(
 		name: "domesticAnimation",
-		fileName: "domestic_winter_animation"
+		fileName: "domestic_summer_animation"
 	)
 
 	static let internationalAnimation = SecurityAnimation(
 		name: "internationalAnimation",
-		fileName: "international_winter_animation"
+		fileName: "international_summer_animation"
 	)
 }

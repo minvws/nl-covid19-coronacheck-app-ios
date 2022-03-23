@@ -128,6 +128,14 @@ final class VerifierScanView: BaseView {
 
 final class RiskLevelIndicator: BaseView {
 	
+	private enum ViewTraits {
+		
+		enum Title {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+		}
+	}
+	
 	var verificationPolicy: VerificationPolicy? {
 		didSet { updateForVerificationPolicy() }
 	}
@@ -182,7 +190,8 @@ final class RiskLevelIndicator: BaseView {
 		isHidden = false
 
 		if let policy = verificationPolicy {
-			titleLabel.text = L.verifier_scanner_policy_indication(policy.localization)
+			titleLabel.attributedText = L.verifier_scanner_policy_indication(policy.localization).setLineHeight(ViewTraits.Title.lineHeight,
+																												kerning: ViewTraits.Title.kerning)
 			accessibilityLabel = L.verifier_scanner_policy_indication(policy.localization)
 		}
 		

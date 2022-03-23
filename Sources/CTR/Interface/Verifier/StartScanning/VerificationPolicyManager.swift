@@ -7,17 +7,19 @@
 
 import Foundation
 
-protocol RiskLevelManaging: AnyObject {
+protocol VerificationPolicyManaging: AnyObject {
 	var state: VerificationPolicy? { get }
 	
 	func update(verificationPolicy: VerificationPolicy?)
-	func appendObserver(_ observer: @escaping (VerificationPolicy?) -> Void) -> RiskLevelManager.ObserverToken
-	func removeObserver(token: RiskLevelManager.ObserverToken)
+	func appendObserver(_ observer: @escaping (VerificationPolicy?) -> Void) -> VerificationPolicyManager.ObserverToken
+	func removeObserver(token: VerificationPolicyManager.ObserverToken)
 	func wipeScanMode()
 	func wipePersistedData()
 }
 
-final class RiskLevelManager: RiskLevelManaging {
+/// Distributes changes to the current "risk level" to observers
+/// RiskLevel == VerificationPolicy
+final class VerificationPolicyManager: VerificationPolicyManaging {
 	typealias ObserverToken = UUID
 	
 	// MARK: - Vars
@@ -32,7 +34,7 @@ final class RiskLevelManager: RiskLevelManaging {
 		}
 	}
 	
-	fileprivate var keychainVerificationPolicy: VerificationPolicy? {
+	private var keychainVerificationPolicy: VerificationPolicy? {
 		get { secureUserSettings.verificationPolicy }
 		set { secureUserSettings.verificationPolicy = newValue }
 	}
@@ -86,13 +88,13 @@ final class RiskLevelManager: RiskLevelManaging {
 }
 
 #if DEBUG
-extension RiskLevelManaging {
+extension VerificationPolicyManaging {
 	
 	/// LLDB:
 	/// `e import CTR`
 	/// `Current.riskLevelManager.set(VerificationPolicy: .policy3G)`
 	func set(verificationPolicy: VerificationPolicy) {
-		let casted = self as! RiskLevelManager // swiftlint:disable:this force_cast
+		let casted = self as! VerificationPolicyManager // swiftlint:disable:this force_cast
 		casted.state = verificationPolicy
 	}
 }

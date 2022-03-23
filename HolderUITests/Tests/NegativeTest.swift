@@ -21,7 +21,7 @@ class NegativeTest: BaseTest {
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		
 		assertValidInternationalTestCertificate(testType: .pcr)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_negRatP1() {
@@ -36,7 +36,7 @@ class NegativeTest: BaseTest {
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		
 		assertValidInternationalTestCertificate(testType: .rat)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	func test_negAgobP1() {
@@ -53,7 +53,7 @@ class NegativeTest: BaseTest {
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		
 		assertCertificateIsNotValidInternationally(ofType: .test)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, dateOffset: person.vacOffset)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
 	// MARK: Negative tests - 30 days old
@@ -79,7 +79,7 @@ class NegativeTest: BaseTest {
 		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffset: person.testFrom)
+		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffsetInDays: person.testFrom)
 		assertCertificateIsNotValidInternationally(ofType: .test)
 	}
 	
@@ -88,7 +88,7 @@ class NegativeTest: BaseTest {
 		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffset: person.testFrom)
+		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffsetInDays: person.testFrom)
 	}
 	
 	// MARK: Negative tests - event matching

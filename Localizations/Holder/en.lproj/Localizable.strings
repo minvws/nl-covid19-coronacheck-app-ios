@@ -596,7 +596,6 @@
 "holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>You can add a certificate if you're vaccinated, if you've had coronavirus or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>.</p>";
 "holder_dashboard_filledState_international_0G_message" = "Travelling to a country where a coronavirus pass is required? Always check before departure if you have the right certificate.";
 "holder_dashboard_international_0G_action_certificateNeeded" = "Is a certificate needed where I'm heading?";
-"holder_dashboard_international_0G_url" = "https://coronacheck.nl/traveladvices";
 "holder_dashboard_intro_domestic_3Gand1Gaccess" = "<p>Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G or 1G access</a>. Also show your proof of identity at the entrance.</p>";
 "holder_dashboard_intro_domestic_only1Gaccess" = "<p>Show a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/1g-access\">1G access</a> in the Netherlands if a coronavirus pass is required. Also show your proof of identity.</p>";
 "holder_dashboard_intro_domestic_only3Gaccess" = "Visiting a venue within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance.";

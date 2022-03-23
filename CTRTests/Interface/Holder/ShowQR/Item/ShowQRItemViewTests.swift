@@ -34,7 +34,7 @@ class ShowQRItemViewTests: XCTestCase {
 		let sut = ShowQRItemView()
 		sut.visibilityState = .screenshotBlocking(timeRemainingText: "0:02", voiceoverTimeRemainingText: "in twee seconden")
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-		sut.assertImage()
+		sut.assertImage(precision: 0.98)
 	}
 
 	func testVisible() {

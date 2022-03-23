@@ -23,7 +23,7 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 	private let remoteConfigManager: RemoteConfigManaging
 	private let userSettings: UserSettingsProtocol
 	private var remoteConfigManagerObserverToken: UUID?
-	private let riskLevelManager: RiskLevelManaging
+	private let riskLevelManager: VerificationPolicyManaging
 	private let scanLockManager: ScanLockManaging
 	private let scanLogManager: ScanLogManaging
 	
@@ -31,7 +31,7 @@ final class VerificationPolicyEnabler: VerificationPolicyEnablable {
 	init(
 		remoteConfigManager: RemoteConfigManaging,
 		userSettings: UserSettingsProtocol,
-		riskLevelManager: RiskLevelManaging,
+		riskLevelManager: VerificationPolicyManaging,
 		scanLockManager: ScanLockManaging,
 		scanLogManager: ScanLogManaging
 	) {

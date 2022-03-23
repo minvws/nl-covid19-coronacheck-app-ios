@@ -14,6 +14,11 @@ class FakeNavigationBarView: BaseView {
 
 		// Dimensions
 		static let margin: CGFloat = 20
+		
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
+		}
 	}
 	
 	let titleLabel: Label = {
@@ -113,7 +118,8 @@ class FakeNavigationBarView: BaseView {
 	
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
+															 kerning: ViewTraits.Title.kerning)
 			setupLargeContentViewer(title: title)
 		}
 	}
