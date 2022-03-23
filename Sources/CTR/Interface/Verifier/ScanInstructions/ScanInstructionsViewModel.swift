@@ -30,7 +30,7 @@ class ScanInstructionsViewModel {
 	private let scanLockManager: ScanLockManaging = Current.scanLockManager
 	private var shouldShowRiskSetting = false
 	private var hasScanLock = false
-	private var scanLockObserverToken: ScanLockManager.ObserverToken?
+	private var scanLockObserverToken: Observatory.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:
@@ -53,7 +53,7 @@ class ScanInstructionsViewModel {
 		hasScanLock = scanLockManager.state != .unlocked
 		updateState()
 		
-		scanLockObserverToken = scanLockManager.appendObserver { [weak self] lockState in
+		scanLockObserverToken = scanLockManager.observatory.append { [weak self] lockState in
 			self?.hasScanLock = lockState != .unlocked
 			self?.updateState()
 		}

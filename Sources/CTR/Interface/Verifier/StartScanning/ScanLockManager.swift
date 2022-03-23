@@ -9,10 +9,9 @@ import UIKit
 
 protocol ScanLockManaging {
 	var state: ScanLockManager.State { get }
+	var observatory: Observatory<ScanLockManager.State> { get }
 	
 	func lock()
-	func appendObserver(_ observer: @escaping (ScanLockManager.State) -> Void) -> ScanLockManager.ObserverToken
-	func removeObserver(token: ScanLockManager.ObserverToken)
 	func wipeScanMode()
 	func wipePersistedData()
 
@@ -20,7 +19,6 @@ protocol ScanLockManaging {
 }
 
 final class ScanLockManager: ScanLockManaging {
-	typealias ObserverToken = UUID
 	
 	// MARK: - Types
 
@@ -38,8 +36,11 @@ final class ScanLockManager: ScanLockManaging {
 	
 	// MARK: - Vars
 	
+	// Mechanism for registering for external state change notifications:
+	let observatory: Observatory<ScanLockManager.State>
+	private let notifyObservers: (ScanLockManager.State) -> Void
+	
 	@Atomic<State> fileprivate(set) var state: State = .unlocked
-	private var observers = [ObserverToken: (State) -> Void]()
 	private var recheckTimer: Timeable?
 	private var keychainScanLockUntil: Date {
 		get {
@@ -76,6 +77,7 @@ final class ScanLockManager: ScanLockManaging {
 		self.notificationCenter = notificationCenter
 		self.secureUserSettings = secureUserSettings
 		self.vendTimer = vendTimer
+		(self.observatory, self.notifyObservers) = Observatory<State>.create()
 		
 		// Set the correct value of state:
 		if keychainScanLockUntil > now() {
@@ -95,10 +97,10 @@ final class ScanLockManager: ScanLockManaging {
 				self.keychainScanLockUntil = until
 			}
 			
-			self.notifyObservers()
+			self.notifyObservers(self.state)
 		}
 
-		setupNotificationObservers()
+		setupNotificationCenterObservation()
 	}
 	
 	deinit {
@@ -113,7 +115,7 @@ final class ScanLockManager: ScanLockManaging {
 		recheck()
 	}
 	
-	func setupNotificationObservers() {
+	func setupNotificationCenterObservation() {
 		notificationCenter.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
 			// Timers aren't reliable in the background. Just remove it, we'll re-add it if/when we return:
 			self?.recheckTimer?.invalidate()
@@ -152,24 +154,6 @@ final class ScanLockManager: ScanLockManaging {
 			self?.recheck()
 		}
 	}
-
-	/// Be careful to use weak references to your observers within the closure, and
-	/// to unregister your observer using the returned `ObserverToken`.
-	func appendObserver(_ observer: @escaping (State) -> Void) -> ObserverToken {
-		let newToken = ObserverToken()
-		observers[newToken] = observer
-		return newToken
-	}
-
-	func removeObserver(token: ObserverToken) {
-		observers[token] = nil
-	}
-
-	private func notifyObservers() {
-		observers.values.forEach { callback in
-			callback(state)
-		}
-	}
 	
 	func wipeScanMode() {
 		
@@ -179,7 +163,7 @@ final class ScanLockManager: ScanLockManaging {
 
 	func wipePersistedData() {
 		
-		observers = [:]
+		observatory.removeAll()
 		wipeScanMode()
 	}
 }
