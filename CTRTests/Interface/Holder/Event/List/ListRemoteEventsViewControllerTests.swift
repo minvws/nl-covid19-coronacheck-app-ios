@@ -94,6 +94,28 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 		sut.assertImage(containedInNavigationController: true)
 	}
 	
+	func test_viewStateEvents_vaccination_positiveTest() {
+		
+		// Given
+		setupSut(
+			eventMode: .vaccinationAndPositiveTest,
+			remoteEvents: [
+				FakeRemoteEvent.fakeRemoteEventVaccination,
+				FakeRemoteEvent.fakeRemoteEventBooster,
+				FakeRemoteEvent.fakeRemoteEventPositiveTest
+			]
+		)
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.holder_listRemoteEvents_title()
+		expect(self.sut.sceneView.message) == L.holder_listRemoteEvents_vaccination_message()
+
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
 	func test_viewStateLoading() {
 
 		// Given
