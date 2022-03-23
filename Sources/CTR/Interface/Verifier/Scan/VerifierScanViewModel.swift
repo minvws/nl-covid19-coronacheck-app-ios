@@ -16,7 +16,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 	weak var scanLogManager: ScanLogManaging? = Current.scanLogManager
 	
-	weak var riskLevelManager: RiskLevelManaging? = Current.riskLevelManager
+	weak var riskLevelManager: VerificationPolicyManaging? = Current.riskLevelManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
@@ -38,7 +38,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	
 	@Bindable private(set) var verificationPolicy: VerificationPolicy?
 	
-	private var riskLevelObserverToken: RiskLevelManager.ObserverToken?
+	private var riskLevelObserverToken: VerificationPolicyManager.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:

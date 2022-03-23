@@ -38,6 +38,7 @@ class ScanLockManagerTests: XCTestCase {
 			notificationCenter: notificationCenterSpy,
 			secureUserSettings: secureUserSettingsSpy
 		)
+		_ = sut.appendObserver(observerVCR.recordEvents)
 		
 		// Act
 
@@ -96,7 +97,6 @@ class ScanLockManagerTests: XCTestCase {
 		secureUserSettingsSpy.stubbedScanLockUntil = lockuntil
 		
 		var timer1: TimerSpy?
-		var timer2: TimerSpy?
 		
 		// Arrange
 		sut = ScanLockManager(
@@ -133,7 +133,6 @@ class ScanLockManagerTests: XCTestCase {
 		expect(self.observerVCR.values.last).toEventually(equal(.unlocked))
 		
 		expect(timer1?.invokedInvalidate) == true
-		expect(timer2).to(beNil())
 	}
 	
 	func test_foregroundNotification_doesTriggerNewTimerInstatiation() throws {

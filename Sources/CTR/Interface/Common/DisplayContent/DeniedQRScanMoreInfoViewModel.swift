@@ -13,7 +13,7 @@ class DeniedQRScanMoreInfoViewModel {
 	/// Coordination Delegate
 	weak var coordinator: (Dismissable)?
 	
-	weak var riskLevelManager: RiskLevelManaging? = Current.riskLevelManager
+	weak var riskLevelManager: VerificationPolicyManaging? = Current.riskLevelManager
 
 	/// The title of the scene
 	@Bindable private(set) var title: String

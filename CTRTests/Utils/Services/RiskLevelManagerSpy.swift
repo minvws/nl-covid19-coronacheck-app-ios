@@ -8,7 +8,7 @@
 import XCTest
 @testable import CTR
 
-class RiskLevelManagerSpy: RiskLevelManaging {
+class RiskLevelManagerSpy: VerificationPolicyManaging {
 
 	var invokedStateGetter = false
 	var invokedStateGetterCount = 0
@@ -35,9 +35,9 @@ class RiskLevelManagerSpy: RiskLevelManaging {
 	var invokedAppendObserver = false
 	var invokedAppendObserverCount = 0
 	var stubbedAppendObserverObserverResult: (VerificationPolicy?, Void)?
-	var stubbedAppendObserverResult: RiskLevelManager.ObserverToken!
+	var stubbedAppendObserverResult: VerificationPolicyManager.ObserverToken!
 
-	func appendObserver(_ observer: @escaping (VerificationPolicy?) -> Void) -> RiskLevelManager.ObserverToken {
+	func appendObserver(_ observer: @escaping (VerificationPolicy?) -> Void) -> VerificationPolicyManager.ObserverToken {
 		invokedAppendObserver = true
 		invokedAppendObserverCount += 1
 		if let result = stubbedAppendObserverObserverResult {
@@ -48,10 +48,10 @@ class RiskLevelManagerSpy: RiskLevelManaging {
 
 	var invokedRemoveObserver = false
 	var invokedRemoveObserverCount = 0
-	var invokedRemoveObserverParameters: (token: RiskLevelManager.ObserverToken, Void)?
-	var invokedRemoveObserverParametersList = [(token: RiskLevelManager.ObserverToken, Void)]()
+	var invokedRemoveObserverParameters: (token: VerificationPolicyManager.ObserverToken, Void)?
+	var invokedRemoveObserverParametersList = [(token: VerificationPolicyManager.ObserverToken, Void)]()
 
-	func removeObserver(token: RiskLevelManager.ObserverToken) {
+	func removeObserver(token: VerificationPolicyManager.ObserverToken) {
 		invokedRemoveObserver = true
 		invokedRemoveObserverCount += 1
 		invokedRemoveObserverParameters = (token, ())
