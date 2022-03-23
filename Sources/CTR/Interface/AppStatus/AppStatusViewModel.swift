@@ -102,3 +102,13 @@ class InternetRequiredViewModel: AppStatusViewModel {
 		coordinator?.retry()
 	}
 }
+
+extension AppStatusViewModel: Equatable {
+	static func == (lhs: AppStatusViewModel, rhs: AppStatusViewModel) -> Bool {
+		return lhs.title == rhs.title &&
+		lhs.message == rhs.message &&
+		lhs.updateURL == rhs.updateURL &&
+		lhs.actionTitle == rhs.actionTitle &&
+		lhs.image == rhs.image
+	}
+}

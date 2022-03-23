@@ -20,7 +20,7 @@
 "scan_log_message" = "<p>The scan setting log keeps track of the type of access used during scanning. A civil enforcement officer may request access to this log.</p><p>For privacy reasons, only scan settings used in the last %li minutes are saved on this phone. No personal information is saved. You can read more about this in the <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">frequently asked questions</a>.</p>";
 "scan_log_title" = "Scan setting log";
 "scan_qr_description_1G" = "Scan your visitors' QR codes. Is the QR code valid for your location, and are the details the same as on the proof of identity? Then you can give the visitor access.";
-"updateApp.content" = "To continue, install the latest version of the app";
+"updateApp.content" = "To continue, install the latest version of the app.";
 "verification_policy_selection_error_message" = "Choose a setting to continue";
 /* Koptekst in de over de app pagina */
 "verifier.about.readmore" = "Read more:";

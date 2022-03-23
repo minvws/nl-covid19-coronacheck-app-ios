@@ -99,12 +99,16 @@ class AppCoordinator: Coordinator, Logging {
 		navigationController.viewControllers = [destination]
 	}
 	
+	private func registerTriggers() {
+		Current.remoteConfigManager.registerTriggers()
+		Current.cryptoLibUtility.registerTriggers()
+	}
+	
 	/// Start the real application
 	private func startApplication() {
 		
 		// Start listeners after launching is done (willEnterForegroundNotification will mess up launch)
-		Current.remoteConfigManager.registerTriggers()
-		Current.cryptoLibUtility.registerTriggers()
+		registerTriggers()
 		
 		switch flavor {
 			case .holder:
@@ -221,6 +225,22 @@ class AppCoordinator: Coordinator, Logging {
 		)
 		window.rootViewController?.present(alertController, animated: true)
 	}
+
+	/// Pop any existing presented viewControllers (AppUpdate / AppDeactivated)
+	private func popPresentedViewController() {
+		
+		guard var topController = window.rootViewController else { return }
+		
+		while let newTopController = topController.presentedViewController {
+			topController = newTopController
+		}
+		
+		guard !(topController is UINavigationController) else {
+			return
+		}
+		
+		topController.dismiss(animated: true)
+	}
 	
 	/// Show the Action Required View
 	/// - Parameter versionInformation: the version information
@@ -231,8 +251,21 @@ class AppCoordinator: Coordinator, Logging {
 		while let newTopController = topController.presentedViewController {
 			topController = newTopController
 		}
-		guard !(topController is AppStatusViewController) else { return }
 		let updateController = AppStatusViewController(viewModel: viewModel)
+		
+		if topController is AppStatusViewController {
+			// The presented VC is a AppStatusViewController. Compare the viewModels.
+			if viewModel != (topController as? AppStatusViewController)?.viewModel {
+				// incoming viewModel does not equals presented ViewModel. Dismis modally presented VC, reload.
+				topController.dismiss(animated: false) {
+					self.navigateToAppUpdate(with: viewModel)
+				}
+			}
+			// Do nothing.
+			return
+		}
+		
+		// Present updateController
 		
 		if topController is UINavigationController {
 			(topController as? UINavigationController)?.viewControllers.last?.present(updateController, animated: true)
@@ -244,6 +277,7 @@ class AppCoordinator: Coordinator, Logging {
 	// MARK: - Universal Link handling
 	
 	/// If set, this should be handled at the first opportunity:
+
 	internal var unhandledUniversalLink: UniversalLink?
 	
 	func consume(universalLink: UniversalLink) -> Bool {
@@ -268,6 +302,7 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func appIsDeactivated() {
 		
+		registerTriggers()
 		let urlString: String = flavor == .holder ? L.holder_deactivation_url() : L.verifier_deactivation_url()
 		
 		navigateToAppUpdate(
@@ -280,6 +315,7 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func applicationShouldStart() {
 		
+		popPresentedViewController()
 		startApplication()
 	}
 	
@@ -297,6 +333,7 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func updateIsRequired(appStoreUrl: URL) {
 		
+		registerTriggers()
 		navigateToAppUpdate(
 			with: AppStatusViewModel(
 				coordinator: self,

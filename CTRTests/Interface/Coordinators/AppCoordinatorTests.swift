@@ -176,8 +176,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
 	}
 	
 	func test_handleLaunchState_finished_endOfLife() {
@@ -194,8 +194,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
 	}
 	
 	func test_handleLaunchState_withinTTL_updateRequired() throws {
@@ -216,8 +216,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
 	}
 	
 	func test_handleLaunchState_withinTTL_updateRequired_endOfLife() throws {
@@ -238,8 +238,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
 	}
 	
 	func test_handleLaunchState_finished_updateRequired() throws {
@@ -260,8 +260,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
 	}
 	
 	func test_handleLaunchState_finished_updateRequired_endOfLife() throws {
@@ -282,8 +282,8 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(viewControllerSpy.presentCalled) == true
 		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
 	}
 
 	func test_handleLaunchState_finished_holder_updateRecommended() throws {
