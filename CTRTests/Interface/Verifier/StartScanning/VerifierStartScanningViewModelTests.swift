@@ -65,7 +65,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 		// Given
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
@@ -82,7 +82,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 		// Given
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
 
 		// When
@@ -96,7 +96,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_locked_verificationPolicyEnabled() {
 		
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
@@ -111,7 +111,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_locked_verificationPolicyDisabled() {
 		
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date().addingTimeInterval(10 * minute))
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
 		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)

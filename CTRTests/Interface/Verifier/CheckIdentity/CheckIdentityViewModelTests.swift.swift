@@ -77,7 +77,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenVerified_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy1G]
 		sut = CheckIdentityViewModel(
@@ -95,7 +95,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenDemo_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy1G]
 		let details = MobilecoreVerificationDetails()
@@ -115,7 +115,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy3G]
 		sut = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
@@ -132,7 +132,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 	
 	func test_showVerifiedAccess_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerifiedAccess() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy3G]
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"

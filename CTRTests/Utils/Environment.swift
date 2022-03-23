@@ -120,7 +120,7 @@ final class EnvironmentSpies {
 		return spy
 	}()
 	
-	var riskLevelManagerSpy: RiskLevelManagerSpy = {
+	var verificationPolicyManagerSpy: RiskLevelManagerSpy = {
 		let spy = RiskLevelManagerSpy()
 		spy.stubbedAppendObserverResult = UUID()
 		spy.stubbedState = .policy1G
@@ -191,7 +191,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		onboardingManager: spies.onboardingManagerSpy,
 		openIdManager: spies.openIdManagerSpy,
 		remoteConfigManager: spies.remoteConfigManagerSpy,
-		riskLevelManager: spies.riskLevelManagerSpy,
+		riskLevelManager: spies.verificationPolicyManagerSpy,
 		scanLockManager: spies.scanLockManagerSpy,
 		scanLogManager: spies.scanLogManagerSpy,
 		secureUserSettings: spies.secureUserSettingsSpy,

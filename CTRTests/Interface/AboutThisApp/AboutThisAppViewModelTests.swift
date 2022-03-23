@@ -307,7 +307,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == false
 		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == false
-		expect(self.environmentSpies.riskLevelManagerSpy.invokedWipePersistedData) == false
+		expect(self.environmentSpies.verificationPolicyManagerSpy.invokedWipePersistedData) == false
 		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
@@ -333,7 +333,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == true
-		expect(self.environmentSpies.riskLevelManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.verificationPolicyManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}

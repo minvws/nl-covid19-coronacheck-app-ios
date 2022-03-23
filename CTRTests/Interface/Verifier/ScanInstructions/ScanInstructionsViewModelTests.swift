@@ -28,7 +28,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		sut = ScanInstructionsViewModel(
 			coordinator: coordinatorSpy,
@@ -51,7 +51,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = false
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		sut = ScanInstructionsViewModel(
@@ -75,7 +75,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = false
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
 		sut = ScanInstructionsViewModel(
 			coordinator: coordinatorSpy,
@@ -98,7 +98,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
 		sut = ScanInstructionsViewModel(
 			coordinator: coordinatorSpy,
@@ -201,7 +201,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 	func test_nextButtonTitleChangesOnLastPage() {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		let pages = [
 			ScanInstructionsItem(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
@@ -226,7 +226,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	
 	func test_nextButtonTitleChangesOnLastPage_whenScanLockIsEnabled() {
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date())
 		let pages = [
 			ScanInstructionsItem(

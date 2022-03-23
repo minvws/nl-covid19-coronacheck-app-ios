@@ -17,17 +17,17 @@ final class RiskSettingUnselectedViewModelTests: XCTestCase {
 	
 	/// The coordinator spy
 	private var coordinatorSpy: VerifierCoordinatorDelegateSpy!
-	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var verificationPolicyManagerSpy: RiskLevelManagerSpy!
 	
 	override func setUp() {
 		super.setUp()
 		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
-		riskLevelManagerSpy = RiskLevelManagerSpy()
+		verificationPolicyManagerSpy = RiskLevelManagerSpy()
 		
 		sut = RiskSettingUnselectedViewModel(
 			coordinator: coordinatorSpy,
-			verificationPolicyManager: riskLevelManagerSpy
+			verificationPolicyManager: verificationPolicyManagerSpy
 		)
 	}
 	
@@ -58,7 +58,7 @@ final class RiskSettingUnselectedViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.shouldDisplayNotSetError) == true
-		expect(self.riskLevelManagerSpy.invokedUpdate) == false
+		expect(self.verificationPolicyManagerSpy.invokedUpdate) == false
 		expect(self.coordinatorSpy.invokedNavigateToVerifierWelcome) == false
 	}
 	
@@ -71,7 +71,7 @@ final class RiskSettingUnselectedViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.shouldDisplayNotSetError) == false
-		expect(self.riskLevelManagerSpy.invokedUpdateParameters?.verificationPolicy) == .policy1G
+		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy) == .policy1G
 		expect(self.coordinatorSpy.invokedNavigateToVerifierWelcome) == true
 	}
 	

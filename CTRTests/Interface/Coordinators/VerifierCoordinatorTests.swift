@@ -95,7 +95,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://coronacheck.nl"))
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "coronacheck.nl", name: "CoronaCheck")]
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		
 		// When
 		let consumed = sut.consume(universalLink: universalLink)
@@ -113,7 +113,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://coronacheck.nl"))
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "coronacheck.nl", name: "CoronaCheck")]
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date())
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		
 		// When
 		let consumed = sut.consume(universalLink: universalLink)
@@ -129,7 +129,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://coronacheck.nl"))
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "coronacheck.nl", name: "CoronaCheck")]
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		
 		// When
 		let consumed = sut.consume(universalLink: universalLink)

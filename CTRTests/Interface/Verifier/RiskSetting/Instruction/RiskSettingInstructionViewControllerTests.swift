@@ -39,7 +39,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	func test_bindings() {
 		// Given
 		
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		viewModel = RiskSettingInstructionViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingInstructionViewController(viewModel: viewModel)
 		loadView()
@@ -65,7 +65,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_riskSetting_low() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		viewModel = RiskSettingInstructionViewModel(coordinator: coordinatorSpy)
 		
 		sut = RiskSettingInstructionViewController(viewModel: viewModel)
@@ -82,7 +82,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 	
 	func test_riskSetting_high() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		viewModel = RiskSettingInstructionViewModel(
 			coordinator: coordinatorSpy
 		)
