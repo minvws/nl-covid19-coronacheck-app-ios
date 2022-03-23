@@ -9,9 +9,9 @@ import XCTest
 
 extension BaseTest {
 	
-	private func offsetDateWithDays(offset: Int) -> Date {
+	private func offsetDateWithDays(offset: Int, component: Calendar.Component) -> Date {
 		let today = Date()
-		let offsetDate = Calendar.current.date(byAdding: .day, value: offset, to: today)!
+		let offsetDate = Calendar.current.date(byAdding: component, value: offset, to: today)!
 		return offsetDate
 	}
 	
@@ -26,8 +26,8 @@ extension BaseTest {
 		return formattedDate
 	}
 	
-	func formattedOffsetDate(with offset: Int, withYear: Bool = true, withDay: Bool = false, short: Bool = false) -> String {
-		let calculatedDate = offsetDateWithDays(offset: offset)
+	func formattedOffsetDate(with offset: Int, component: Calendar.Component = .day, withYear: Bool = true, withDay: Bool = false, short: Bool = false) -> String {
+		let calculatedDate = offsetDateWithDays(offset: offset, component: component)
 		return formatDate(of: calculatedDate, withYear: withYear, withDay: withDay, short: short)
 	}
 	
