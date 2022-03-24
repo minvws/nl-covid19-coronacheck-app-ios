@@ -8,12 +8,12 @@
 import Foundation
 import Security
 
-protocol SignatureValidationFactoryProtocol {
-	
-	static func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidator
-}
+//protocol SignatureValidationFactoryProtocol {
+//	
+//	static func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidator
+//}
 
-struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
+struct SignatureValidationFactory {
 	
 	static func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidator {
 		

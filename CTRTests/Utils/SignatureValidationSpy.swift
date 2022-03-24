@@ -7,15 +7,7 @@
 
 @testable import CTR
 
-class SecurityCheckerProtocolSpy: SecurityCheckerProtocol {
-
-	var invokedCheckSSL = false
-	var invokedCheckSSLCount = 0
-
-	func checkSSL() {
-		invokedCheckSSL = true
-		invokedCheckSSLCount += 1
-	}
+class SignatureValidationSpy: SignatureValidation {
 
 	var invokedValidate = false
 	var invokedValidateCount = 0
@@ -31,3 +23,4 @@ class SecurityCheckerProtocolSpy: SecurityCheckerProtocol {
 		return stubbedValidateResult
 	}
 }
+

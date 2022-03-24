@@ -324,99 +324,99 @@ class NetworkManagerUnomiTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 	
-	func test_fetchEventInformation_signedResponse_invalidSignature() {
-		
-		// Given
-		let expectation = self.expectation(description: "test_fetchEventInformation_signedResponse_invalidSignature")
-		let securityCheckerProtocolSpy = SecurityCheckerProtocolSpy()
-		securityCheckerProtocolSpy.stubbedValidateResult = false
-		sut.securityChecker = securityCheckerProtocolSpy
-		
-		stub(condition: isPath(path)) { _ in
-			// Return valid tokens
-			return HTTPStubsResponse(
-				jsonObject: [
-					"payload": "test",
-					"signature": "test"
-				],
-				statusCode: 200,
-				headers: nil
-			)
-		}
-		
-		// When
-		sut.fetchEventInformation(provider: provider) { result in
-			
-			// Then
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)
-			expectation.fulfill()
-		}
-		
-		waitForExpectations(timeout: 10, handler: nil)
-	}
-	
-	func test_fetchEventInformation_signedResponse_invalidContent() {
-		
-		// Given
-		let expectation = self.expectation(description: "test_fetchEventInformation_signedResponse_invalidContent")
-		let securityCheckerProtocolSpy = SecurityCheckerProtocolSpy()
-		securityCheckerProtocolSpy.stubbedValidateResult = true
-		sut.securityChecker = securityCheckerProtocolSpy
-		
-		stub(condition: isPath(path)) { _ in
-			// Return valid tokens
-			return HTTPStubsResponse(
-				jsonObject: [
-					"payload": "test",
-					"signature": "test"
-				],
-				statusCode: 200,
-				headers: nil
-			)
-		}
-		
-		// When
-		sut.fetchEventInformation(provider: provider) { result in
-			
-			// Then
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
-			expectation.fulfill()
-		}
-		
-		waitForExpectations(timeout: 10, handler: nil)
-	}
-
-	func test_fetchEventInformation_validContent() {
-		
-		// Given
-		let expectation = self.expectation(description: "test_fetchEventInformation_validContent")
-		let securityCheckerProtocolSpy = SecurityCheckerProtocolSpy()
-		securityCheckerProtocolSpy.stubbedValidateResult = true
-		sut.securityChecker = securityCheckerProtocolSpy
-		
-		stub(condition: isPath(path)) { _ in
-			// Return valid tokens
-			return HTTPStubsResponse(
-				jsonObject: [
-					"payload": "eyJwcm92aWRlcklkZW50aWZpZXIiOiJDQyIsICJwcm90b2NvbFZlcnNpb24iOiIzLjAiLCAiaW5mb3JtYXRpb25BdmFpbGFibGUiOiB0cnVlfQ==",
-					"signature": "test"
-				],
-				statusCode: 200,
-				headers: nil
-			)
-		}
-		
-		// When
-		sut.fetchEventInformation(provider: provider) { result in
-			
-			// Then
-			expect(result.isSuccess) == true
-			expect(result.successValue) == EventFlow.EventInformationAvailable(providerIdentifier: "CC", protocolVersion: "3.0", informationAvailable: true)
-			expectation.fulfill()
-		}
-		
-		waitForExpectations(timeout: 10, handler: nil)
-	}
+//	func test_fetchEventInformation_signedResponse_invalidSignature() {
+//		
+//		// Given
+//		let expectation = self.expectation(description: "test_fetchEventInformation_signedResponse_invalidSignature")
+//		let securityCheckerProtocolSpy = SecurityCheckerProtocolSpy()
+//		securityCheckerProtocolSpy.stubbedValidateResult = false
+//		sut.securityChecker = securityCheckerProtocolSpy
+//		
+//		stub(condition: isPath(path)) { _ in
+//			// Return valid tokens
+//			return HTTPStubsResponse(
+//				jsonObject: [
+//					"payload": "test",
+//					"signature": "test"
+//				],
+//				statusCode: 200,
+//				headers: nil
+//			)
+//		}
+//		
+//		// When
+//		sut.fetchEventInformation(provider: provider) { result in
+//			
+//			// Then
+//			expect(result.isFailure) == true
+//			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)
+//			expectation.fulfill()
+//		}
+//		
+//		waitForExpectations(timeout: 10, handler: nil)
+//	}
+//	
+//	func test_fetchEventInformation_signedResponse_invalidContent() {
+//		
+//		// Given
+//		let expectation = self.expectation(description: "test_fetchEventInformation_signedResponse_invalidContent")
+//		let securityCheckerProtocolSpy = SecurityCheckerProtocolSpy()
+//		securityCheckerProtocolSpy.stubbedValidateResult = true
+//		sut.securityChecker = securityCheckerProtocolSpy
+//		
+//		stub(condition: isPath(path)) { _ in
+//			// Return valid tokens
+//			return HTTPStubsResponse(
+//				jsonObject: [
+//					"payload": "test",
+//					"signature": "test"
+//				],
+//				statusCode: 200,
+//				headers: nil
+//			)
+//		}
+//		
+//		// When
+//		sut.fetchEventInformation(provider: provider) { result in
+//			
+//			// Then
+//			expect(result.isFailure) == true
+//			expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
+//			expectation.fulfill()
+//		}
+//		
+//		waitForExpectations(timeout: 10, handler: nil)
+//	}
+//
+//	func test_fetchEventInformation_validContent() {
+//		
+//		// Given
+//		let expectation = self.expectation(description: "test_fetchEventInformation_validContent")
+//		let securityCheckerProtocolSpy = SecurityCheckerProtocolSpy()
+//		securityCheckerProtocolSpy.stubbedValidateResult = true
+//		sut.securityChecker = securityCheckerProtocolSpy
+//		
+//		stub(condition: isPath(path)) { _ in
+//			// Return valid tokens
+//			return HTTPStubsResponse(
+//				jsonObject: [
+//					"payload": "eyJwcm92aWRlcklkZW50aWZpZXIiOiJDQyIsICJwcm90b2NvbFZlcnNpb24iOiIzLjAiLCAiaW5mb3JtYXRpb25BdmFpbGFibGUiOiB0cnVlfQ==",
+//					"signature": "test"
+//				],
+//				statusCode: 200,
+//				headers: nil
+//			)
+//		}
+//		
+//		// When
+//		sut.fetchEventInformation(provider: provider) { result in
+//			
+//			// Then
+//			expect(result.isSuccess) == true
+//			expect(result.successValue) == EventFlow.EventInformationAvailable(providerIdentifier: "CC", protocolVersion: "3.0", informationAvailable: true)
+//			expectation.fulfill()
+//		}
+//		
+//		waitForExpectations(timeout: 10, handler: nil)
+//	}
 }
