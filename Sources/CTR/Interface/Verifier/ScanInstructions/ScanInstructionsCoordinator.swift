@@ -37,7 +37,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 	private let pages: [ScanInstructionsItem]
 	private let isOpenedFromMenu: Bool
 	private let allowSkipInstruction: Bool
-	private let riskLevelManager: VerificationPolicyManaging
+	private let verificationPolicyManager: VerificationPolicyManaging
 	private let userSettings: UserSettingsProtocol
 
 	init(
@@ -46,7 +46,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		isOpenedFromMenu: Bool,
 		allowSkipInstruction: Bool,
 		userSettings: UserSettingsProtocol = UserSettings(),
-		riskLevelManager: VerificationPolicyManaging = Current.riskLevelManager
+		verificationPolicyManager: VerificationPolicyManaging = Current.verificationPolicyManager
 	) {
 
 		self.navigationController = navigationController
@@ -54,7 +54,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		self.isOpenedFromMenu = isOpenedFromMenu
 		self.allowSkipInstruction = allowSkipInstruction
 		self.userSettings = userSettings
-		self.riskLevelManager = riskLevelManager
+		self.verificationPolicyManager = verificationPolicyManager
 
 		pages = pagesFactory.create()
 	}

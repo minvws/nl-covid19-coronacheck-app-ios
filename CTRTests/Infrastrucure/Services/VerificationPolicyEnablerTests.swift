@@ -15,7 +15,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 	
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
 	private var userSettingsSpy: UserSettingsSpy!
-	private var riskLevelManagerSpy: RiskLevelManagerSpy!
+	private var verificationPolicyManagerSpy: VerificationPolicyManagerSpy!
 	private var scanLockManagerSpy: ScanLockManagerSpy!
 	private var scanLogManagerSpy: ScanLogManagingSpy!
  
@@ -24,14 +24,14 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 
 		remoteConfigSpy = RemoteConfigManagingSpy()
 		userSettingsSpy = UserSettingsSpy()
-		riskLevelManagerSpy = RiskLevelManagerSpy()
+		verificationPolicyManagerSpy = VerificationPolicyManagerSpy()
 		scanLockManagerSpy = ScanLockManagerSpy()
 		scanLogManagerSpy = ScanLogManagingSpy()
 		
 		sut = VerificationPolicyEnabler(
 			remoteConfigManager: remoteConfigSpy,
 			userSettings: userSettingsSpy,
-			riskLevelManager: riskLevelManagerSpy,
+			verificationPolicyManager: verificationPolicyManagerSpy,
 			scanLockManager: scanLockManagerSpy,
 			scanLogManager: scanLogManagerSpy
 		)
@@ -54,7 +54,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		sut.enable(verificationPolicies: ["1G"])
 		
 		// Then
-		expect(self.riskLevelManagerSpy.invokedWipeScanMode) == true
+		expect(self.verificationPolicyManagerSpy.invokedWipeScanMode) == true
 		expect(self.scanLockManagerSpy.invokedWipeScanMode) == true
 		expect(self.scanLogManagerSpy.invokedWipePersistedData) == true
 		expect(self.userSettingsSpy.invokedPolicyInformationShown) == false
@@ -69,7 +69,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		sut.enable(verificationPolicies: ["1G"])
 		
 		// Then
-		expect(self.riskLevelManagerSpy.invokedWipeScanMode) == false
+		expect(self.verificationPolicyManagerSpy.invokedWipeScanMode) == false
 		expect(self.scanLockManagerSpy.invokedWipeScanMode) == false
 		expect(self.scanLogManagerSpy.invokedWipePersistedData) == false
 		expect(self.userSettingsSpy.invokedPolicyInformationShown).to(beNil())
@@ -81,7 +81,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		
 		// Then
 		expect(self.userSettingsSpy.invokedConfigVerificationPolicies) == [VerificationPolicy.policy3G, VerificationPolicy.policy1G]
-		expect(self.riskLevelManagerSpy.invokedUpdate) == false
+		expect(self.verificationPolicyManagerSpy.invokedUpdate) == false
 	}
 	
 	func test_enableVerificationPolicies_shouldEnable3GPolicy() {
@@ -90,8 +90,8 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		
 		// Then
 		expect(self.userSettingsSpy.invokedConfigVerificationPolicies) == [VerificationPolicy.policy3G]
-		expect(self.riskLevelManagerSpy.invokedUpdateCount) == 1
-		expect(self.riskLevelManagerSpy.invokedUpdateParameters?.verificationPolicy).to(beNil())
+		expect(self.verificationPolicyManagerSpy.invokedUpdateCount) == 1
+		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy).to(beNil())
 	}
 	
 	func test_enableVerificationPolicies_shouldEnable1GPolicy() {
@@ -100,8 +100,8 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		
 		// Then
 		expect(self.userSettingsSpy.invokedConfigVerificationPolicies) == [VerificationPolicy.policy1G]
-		expect(self.riskLevelManagerSpy.invokedUpdateCount) == 1
-		expect(self.riskLevelManagerSpy.invokedUpdateParameters?.verificationPolicy) == VerificationPolicy.policy1G
+		expect(self.verificationPolicyManagerSpy.invokedUpdateCount) == 1
+		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy) == VerificationPolicy.policy1G
 	}
 	
 	func test_enableVerificationPolicies_whenPoliciesAreEmpty_shouldEnable3GPolicy() {
@@ -110,8 +110,8 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		
 		// Then
 		expect(self.userSettingsSpy.invokedConfigVerificationPolicies) == [VerificationPolicy.policy3G]
-		expect(self.riskLevelManagerSpy.invokedUpdateCount) == 1
-		expect(self.riskLevelManagerSpy.invokedUpdateParameters?.verificationPolicy).to(beNil())
+		expect(self.verificationPolicyManagerSpy.invokedUpdateCount) == 1
+		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy).to(beNil())
 	}
 	
 	func test_wipePersistedData_shouldEnableDefaultPolicy() {
@@ -120,7 +120,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		
 		// Then
 		expect(self.userSettingsSpy.invokedConfigVerificationPolicies) == [VerificationPolicy.policy3G]
-		expect(self.riskLevelManagerSpy.invokedUpdateCount) == 1
-		expect(self.riskLevelManagerSpy.invokedUpdateParameters?.verificationPolicy).to(beNil())
+		expect(self.verificationPolicyManagerSpy.invokedUpdateCount) == 1
+		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy).to(beNil())
 	}
 }

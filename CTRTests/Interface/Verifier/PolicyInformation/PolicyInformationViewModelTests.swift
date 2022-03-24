@@ -25,7 +25,7 @@ final class PolicyInformationViewModelTests: XCTestCase {
 	func test_bindings_whenPolicyStateIsNilAndMultiplePoliciesAreEnabled() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// When
@@ -41,7 +41,7 @@ final class PolicyInformationViewModelTests: XCTestCase {
 	func test_bindings_whenPolicyStateIsSetAndMultiplePoliciesAreEnabled() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// When
@@ -57,7 +57,7 @@ final class PolicyInformationViewModelTests: XCTestCase {
 	func test_bindings_whenPolicyStateIsSetAndMultiplePoliciesAreDisabled() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// When
@@ -73,7 +73,7 @@ final class PolicyInformationViewModelTests: XCTestCase {
 	func test_bindings_whenPolicyStateIsNilAndMultiplePoliciesAreDisabled() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// When
@@ -89,7 +89,7 @@ final class PolicyInformationViewModelTests: XCTestCase {
 	func test_finish_whenPolicyStateIsNilAndMultiplePoliciesAreEnabled_shouldShowRiskSetting() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// When
@@ -103,7 +103,7 @@ final class PolicyInformationViewModelTests: XCTestCase {
 	func test_finish_whenPolicyStateIsSetAndMultiplePoliciesAreEnabled_shouldInvokeCoordinatorComplete() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// When
@@ -117,7 +117,7 @@ final class PolicyInformationViewModelTests: XCTestCase {
 	func test_finish_whenPolicyStateIsSetAndMultiplePoliciesAreDisabled_shouldInvokeCoordinatorComplete() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// When
@@ -131,7 +131,7 @@ final class PolicyInformationViewModelTests: XCTestCase {
 	func test_finish_whenPolicyStateIsNilAndMultiplePoliciesAreDisabled_shouldInvokeCoordinatorComplete() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = .init(coordinator: coordinatorSpy)
 		
 		// When

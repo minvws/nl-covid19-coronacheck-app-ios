@@ -80,7 +80,7 @@ class VerifierCoordinator: SharedCoordinator {
 				}
 				
 				// Is the user currently permitted to scan?
-				guard Current.scanLockManager.state == .unlocked && Current.riskLevelManager.state != nil
+				guard Current.scanLockManager.state == .unlocked && Current.verificationPolicyManager.state != nil
 				else { return true } // handled (but ignored)
 				
 				thirdPartyScannerApp = (name: matchingMetadata.name, returnURL: returnURL)

@@ -42,7 +42,7 @@ final class RiskSettingSelectedViewModel: Logging {
 		highRiskTitle = title1G
 		highRiskAccessibilityLabel = "\(title1G), \(L.verifier_risksetting_subtitle_1G())"
 		
-		let selectedVerificationPolicy = Current.riskLevelManager.state
+		let selectedVerificationPolicy = Current.verificationPolicyManager.state
 		verificationPolicy = selectedVerificationPolicy
 		selectVerificationPolicy = selectedVerificationPolicy
 
@@ -84,7 +84,7 @@ private extension RiskSettingSelectedViewModel {
 		if enablingLock {
 			Current.scanLockManager.lock()
 		}
-		Current.riskLevelManager.update(verificationPolicy: selectVerificationPolicy)
+		Current.verificationPolicyManager.update(verificationPolicy: selectVerificationPolicy)
 		coordinator?.navigateToVerifierWelcome()
 	}
 }

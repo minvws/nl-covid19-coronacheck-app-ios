@@ -25,7 +25,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 	}
 
 	// MARK: - Tests
@@ -90,12 +90,12 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		sut.confirmSetting()
 		
 		// When
-		expect(self.environmentSpies.riskLevelManagerSpy.invokedStateGetter) == true
+		expect(self.environmentSpies.verificationPolicyManagerSpy.invokedStateGetter) == true
 	}
 	
 	func test_changingLevelWithinTimeWindow_enablesLock() {
 		// Arrange
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = true
 		
 		sut = RiskSettingSelectedViewModel(
@@ -116,7 +116,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 	
 	func test_changingLevelOutsideOfTimeWindow_doesNotEnableLock() {
 		// Arrange
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = false
 		
 		sut = RiskSettingSelectedViewModel(

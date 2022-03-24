@@ -26,7 +26,7 @@ class ScanInstructionsViewModel {
 	}
 
 	private let userSettings: UserSettingsProtocol = Current.userSettings
-	private let riskLevelManager: VerificationPolicyManaging = Current.riskLevelManager
+	private let verificationPolicyManager: VerificationPolicyManaging = Current.verificationPolicyManager
 	private let scanLockManager: ScanLockManaging = Current.scanLockManager
 	private var shouldShowRiskSetting = false
 	private var hasScanLock = false
@@ -47,7 +47,7 @@ class ScanInstructionsViewModel {
 		self.currentPage = 0
 
 		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
-			shouldShowRiskSetting = riskLevelManager.state == nil
+			shouldShowRiskSetting = verificationPolicyManager.state == nil
 		}
 		
 		hasScanLock = scanLockManager.state != .unlocked

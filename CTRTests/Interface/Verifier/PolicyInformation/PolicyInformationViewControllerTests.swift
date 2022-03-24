@@ -37,7 +37,7 @@ final class PolicyInformationViewControllerTests: XCTestCase {
 	func test_view_whenMultipleVerificationPoliciesAreEnabled() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = PolicyInformationViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
@@ -59,7 +59,7 @@ final class PolicyInformationViewControllerTests: XCTestCase {
 	func test_view_whenPolicyStateIsSetAndMultiplePoliciesAreEnabled() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		sut = PolicyInformationViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
@@ -81,7 +81,7 @@ final class PolicyInformationViewControllerTests: XCTestCase {
 	func test_view_whenMultipleVerificationPoliciesAreDisabled() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = PolicyInformationViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
@@ -103,7 +103,7 @@ final class PolicyInformationViewControllerTests: XCTestCase {
 	func test_view_whenPolicyStateIsSetAndMultiplePoliciesAreDisabled() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		sut = PolicyInformationViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
@@ -125,7 +125,7 @@ final class PolicyInformationViewControllerTests: XCTestCase {
 	func test_primaryButtonTitle_whenPolicyStateIsNilAndMultiplePoliciesAreEnabled_shouldDisplayNext() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = PolicyInformationViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
@@ -142,7 +142,7 @@ final class PolicyInformationViewControllerTests: XCTestCase {
 	func test_primaryButtonTitle_whenPolicyStateIsSetAndMultiplePoliciesAreEnabled_shouldDisplayStartScanning() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		sut = PolicyInformationViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
@@ -159,7 +159,7 @@ final class PolicyInformationViewControllerTests: XCTestCase {
 	func test_primaryButtonTitle_whenOnlyPolicyStateIsSetAndMultiplePoliciesAreDisabled_shouldDisplayStartScanning() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		sut = PolicyInformationViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
@@ -176,7 +176,7 @@ final class PolicyInformationViewControllerTests: XCTestCase {
 	func test_primaryButtonTitle_whenPolicyStateIsNilAndMultiplePoliciesAreDisabled_shouldDisplayStartScanning() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = PolicyInformationViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
