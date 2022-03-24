@@ -155,7 +155,7 @@ class VerifierStartScanningViewModel: Logging {
 	// MARK: - Observer tokens
 	
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
-	private var scanLockObserverToken: ScanLockManager.ObserverToken?
+	private var scanLockObserverToken: Observatory.ObserverToken?
 	private var riskLevelObserverToken: VerificationPolicyManager.ObserverToken?
 
 	// MARK: - Dependencies
@@ -190,7 +190,7 @@ class VerifierStartScanningViewModel: Logging {
 		verificationPolicyDidChange(verificationPolicy: Current.riskLevelManager.state)
 		
 		// Then observe for changes:
-		scanLockObserverToken = Current.scanLockManager.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
+		scanLockObserverToken = Current.scanLockManager.observatory.append { [weak self] in self?.lockStateDidChange(lockState: $0) }
 		riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
 		
 		lockLabelCountdownTimer.fire()
