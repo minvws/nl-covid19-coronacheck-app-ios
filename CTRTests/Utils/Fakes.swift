@@ -180,6 +180,15 @@ extension EventFlow.EventResultWrapper {
 		result: nil,
 		events: [EventFlow.Event.vaccinationEvent]
 	)
+	
+	static var fakeBoosterResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.boosterEvent]
+	)
 
 	static var fakeRecoveryResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
@@ -993,6 +1002,32 @@ extension EventFlow.Event {
 			vaccinationAssessment: nil
 		)
 	}
+	
+	static var boosterEvent: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccination",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: EventFlow.VaccinationEvent(
+				dateString: "2022-01-08",
+				hpkCode: nil,
+				type: nil,
+				manufacturer: "ORG-100030215",
+				brand: "EU/1/20/1528",
+				doseNumber: 3,
+				totalDoses: 2,
+				country: "NLD",
+				completedByMedicalStatement: nil,
+				completedByPersonalStatement: nil,
+				completionReason: nil
+			),
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil,
+			vaccinationAssessment: nil
+		)
+	}
 
 	static var recoveryEvent: EventFlow.Event {
 		EventFlow.Event(
@@ -1238,6 +1273,13 @@ struct FakeRemoteEvent {
 	static var fakeRemoteEventVaccination: RemoteEvent {
 		RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventBooster: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeBoosterResultWrapper,
 			signedResponse: SignedResponse.fakeResponse
 		)
 	}
