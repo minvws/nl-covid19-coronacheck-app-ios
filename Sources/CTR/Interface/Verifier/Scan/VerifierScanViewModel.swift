@@ -56,7 +56,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 		super.init(coordinator: coordinator)
 		
-		riskLevelObserverToken = Current.verificationPolicyManager.appendObserver { [weak self] updatedPolicy in
+		riskLevelObserverToken = Current.verificationPolicyManager.observatory.append { [weak self] updatedPolicy in
 			
 			guard self?.verificationPolicy != updatedPolicy else { return }
 			self?.dismiss()

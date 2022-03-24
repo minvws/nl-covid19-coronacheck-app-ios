@@ -9,10 +9,9 @@ import Foundation
 
 protocol VerificationPolicyManaging: AnyObject {
 	var state: VerificationPolicy? { get }
-	
+	var observatory: Observatory<VerificationPolicy?> { get }
+
 	func update(verificationPolicy: VerificationPolicy?)
-	func appendObserver(_ observer: @escaping (VerificationPolicy?) -> Void) -> VerificationPolicyManager.ObserverToken
-	func removeObserver(token: VerificationPolicyManager.ObserverToken)
 	func wipeScanMode()
 	func wipePersistedData()
 }
@@ -30,50 +29,32 @@ final class VerificationPolicyManager: VerificationPolicyManaging {
 		}
 		set {
 			keychainVerificationPolicy = newValue
-			notifyObservers()
+			notifyObservers(newValue)
 		}
 	}
 	
+	// Mechanism for registering for external state change notifications:
+	let observatory: Observatory<VerificationPolicy?>
+	private let notifyObservers: (VerificationPolicy?) -> Void
+
 	private var keychainVerificationPolicy: VerificationPolicy? {
 		get { secureUserSettings.verificationPolicy }
 		set { secureUserSettings.verificationPolicy = newValue }
 	}
 
-	private var observers = [ObserverToken: (VerificationPolicy?) -> Void]()
-	
 	// MARK: - Dependencies
 	
 	private let secureUserSettings: SecureUserSettingsProtocol
 	
 	required init(secureUserSettings: SecureUserSettingsProtocol) {
 		self.secureUserSettings = secureUserSettings
+		(self.observatory, self.notifyObservers) = Observatory<VerificationPolicy?>.create()
 	}
 	
 	func update(verificationPolicy: VerificationPolicy?) {
 		state = verificationPolicy
 	}
 	
-	// MARK: - Observer notifications
-	
-	/// Be careful to use weak references to your observers within the closure, and
-	/// to unregister your observer using the returned `ObserverToken`.
-	func appendObserver(_ observer: @escaping (VerificationPolicy?) -> Void) -> ObserverToken {
-		let newToken = ObserverToken()
-		observers[newToken] = observer
-		return newToken
-	}
-
-	func removeObserver(token: ObserverToken) {
-		observers[token] = nil
-	}
-
-	private func notifyObservers() {
-		let newState = state
-		observers.values.forEach { callback in
-			callback(newState)
-		}
-	}
-
 	func wipeScanMode() {
 		
 		keychainVerificationPolicy = .none
@@ -82,7 +63,7 @@ final class VerificationPolicyManager: VerificationPolicyManaging {
 	
 	func wipePersistedData() {
 
-		observers = [:]
+		observatory.removeAll()
 		wipeScanMode()
 	}
 }
