@@ -130,7 +130,7 @@ final class EnvironmentSpies {
 	var scanLockManagerSpy: ScanLockManagerSpy = {
 		let spy = ScanLockManagerSpy()
 		spy.stubbedState = .unlocked
-		spy.stubbedAppendObserverResult = UUID()
+		(spy.stubbedObservatory, _) = Observatory<ScanLockManager.State>.create()
 		return spy
 	}()
 	

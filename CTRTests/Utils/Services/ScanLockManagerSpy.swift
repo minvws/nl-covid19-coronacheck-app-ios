@@ -26,38 +26,22 @@ class ScanLockManagerSpy: ScanLockManaging {
 		return stubbedState
 	}
 
+	var invokedObservatoryGetter = false
+	var invokedObservatoryGetterCount = 0
+	var stubbedObservatory: Observatory<ScanLockManager.State>!
+
+	var observatory: Observatory<ScanLockManager.State> {
+		invokedObservatoryGetter = true
+		invokedObservatoryGetterCount += 1
+		return stubbedObservatory
+	}
+
 	var invokedLock = false
 	var invokedLockCount = 0
 
 	func lock() {
 		invokedLock = true
 		invokedLockCount += 1
-	}
-
-	var invokedAppendObserver = false
-	var invokedAppendObserverCount = 0
-	var stubbedAppendObserverObserverResult: (ScanLockManager.State, Void)?
-	var stubbedAppendObserverResult: ScanLockManager.ObserverToken!
-
-	func appendObserver(_ observer: @escaping (ScanLockManager.State) -> Void) -> ScanLockManager.ObserverToken {
-		invokedAppendObserver = true
-		invokedAppendObserverCount += 1
-		if let result = stubbedAppendObserverObserverResult {
-			observer(result.0)
-		}
-		return stubbedAppendObserverResult
-	}
-
-	var invokedRemoveObserver = false
-	var invokedRemoveObserverCount = 0
-	var invokedRemoveObserverParameters: (token: ScanLockManager.ObserverToken, Void)?
-	var invokedRemoveObserverParametersList = [(token: ScanLockManager.ObserverToken, Void)]()
-
-	func removeObserver(token: ScanLockManager.ObserverToken) {
-		invokedRemoveObserver = true
-		invokedRemoveObserverCount += 1
-		invokedRemoveObserverParameters = (token, ())
-		invokedRemoveObserverParametersList.append((token, ()))
 	}
 
 	var invokedWipeScanMode = false

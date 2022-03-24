@@ -38,7 +38,7 @@ class ScanLockManagerTests: XCTestCase {
 			notificationCenter: notificationCenterSpy,
 			secureUserSettings: secureUserSettingsSpy
 		)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		
 		// Act
 
@@ -59,7 +59,7 @@ class ScanLockManagerTests: XCTestCase {
 			notificationCenter: notificationCenterSpy,
 			secureUserSettings: secureUserSettingsSpy
 		)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 
 		// Assert
 		expect(self.sut.state) == .locked(until: lockedUntil)
@@ -73,7 +73,7 @@ class ScanLockManagerTests: XCTestCase {
 			notificationCenter: notificationCenterSpy,
 			secureUserSettings: secureUserSettingsSpy
 		)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 
 		// Act
 		let lockDuration = TimeInterval(environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.scanLockSeconds!)
@@ -112,7 +112,7 @@ class ScanLockManagerTests: XCTestCase {
 				return timer1!
 			}
 		)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		expect(self.sut.state) == .locked(until: lockuntil)
 
 		// Go fishing for the Foreground Notification observer:
@@ -160,7 +160,7 @@ class ScanLockManagerTests: XCTestCase {
 				return TimerSpy()
 			}
 		)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		expect(self.sut.state) == .locked(until: lockuntil)
 
 		// Go fishing for the Foreground Notification observer:
@@ -202,7 +202,7 @@ class ScanLockManagerTests: XCTestCase {
 				return timer1!
 			}
 		)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		expect(self.sut.state) == .locked(until: lockuntil)
 
 		// Go fishing for the Background Notification registered observer:
@@ -228,7 +228,7 @@ class ScanLockManagerTests: XCTestCase {
 			notificationCenter: notificationCenterSpy,
 			secureUserSettings: secureUserSettingsSpy
 		)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 
 		// Act
 		sut.wipePersistedData()
