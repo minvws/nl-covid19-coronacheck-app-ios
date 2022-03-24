@@ -8,14 +8,14 @@
 import Foundation
 import Security
 
-//protocol SignatureValidationFactoryProtocol {
-//	
-//	static func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidator
-//}
-
-struct SignatureValidationFactory {
+protocol SignatureValidationFactoryProtocol {
 	
-	static func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidator {
+	func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidation
+}
+
+struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
+	
+	func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidation {
 		
 		if case SecurityStrategy.none = strategy {
 			return SignatureValidatorAlwaysAllow()

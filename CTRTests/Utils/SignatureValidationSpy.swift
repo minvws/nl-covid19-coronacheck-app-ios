@@ -23,4 +23,3 @@ class SignatureValidationSpy: SignatureValidation {
 		return stubbedValidateResult
 	}
 }
-

@@ -24,7 +24,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 	func test_securityCheckerNone_validate() {
 
 		// Given
-		let sut = SignatureValidationFactory.getSignatureValidator(.none)
+		let sut = SignatureValidationFactory().getSignatureValidator(.none)
 
 		// When
 		let result = sut.validate(signature: Data(), content: Data())
@@ -38,7 +38,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 	func test_securityCheckerConfig_validate_emptyData() {
 
 		// Given
-		let sut = SignatureValidationFactory.getSignatureValidator(.config)
+		let sut = SignatureValidationFactory().getSignatureValidator(.config)
 
 		// When
 		let result = sut.validate(signature: Data(), content: Data())
@@ -50,7 +50,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 	func test_securityCheckerConfig_validate_untrustedSigner() {
 
 		// Given
-		let sut = SignatureValidationFactory.getSignatureValidator(.config)
+		let sut = SignatureValidationFactory().getSignatureValidator(.config)
 
 		// When
 		let result = sut.validate(signature: OpenSSLData.signaturePKCS, content: OpenSSLData.payload)
@@ -62,7 +62,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 	func test_securityCheckerConfig_validate_trustedSigner() {
 
 		// Given
-		let sut = SignatureValidationFactory.getSignatureValidator(.config)
+		let sut = SignatureValidationFactory().getSignatureValidator(.config)
 
 		// When
 		let result = sut.validate(signature: OpenSSLData.remoteConfigSignature, content: OpenSSLData.remoteConfigPayload)
@@ -77,7 +77,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 
 		// Given
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.backendTLSCertificates = []
-		let sut = SignatureValidationFactory.getSignatureValidator(.data)
+		let sut = SignatureValidationFactory().getSignatureValidator(.data)
 
 		// When
 		let result = sut.validate(signature: Data(), content: Data())
@@ -90,7 +90,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 
 		// Given
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.backendTLSCertificates = []
-		let sut = SignatureValidationFactory.getSignatureValidator(.data)
+		let sut = SignatureValidationFactory().getSignatureValidator(.data)
 
 		// When
 		let result = sut.validate(signature: OpenSSLData.signaturePKCS, content: OpenSSLData.payload)
@@ -117,7 +117,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 			usages: [.vaccination]
 		)
 
-		let sut = SignatureValidationFactory.getSignatureValidator(.provider(provider))
+		let sut = SignatureValidationFactory().getSignatureValidator(.provider(provider))
 
 		// When
 		let result = sut.validate(signature: Data(), content: Data())
@@ -142,7 +142,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 			usages: [.vaccination]
 		)
 
-		let sut = SignatureValidationFactory.getSignatureValidator(.provider(provider))
+		let sut = SignatureValidationFactory().getSignatureValidator(.provider(provider))
 
 		// When
 		let result = sut.validate(signature: OpenSSLData.signaturePKCS, content: OpenSSLData.payload)
@@ -167,7 +167,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 			usages: [.vaccination]
 		)
 
-		let sut = SignatureValidationFactory.getSignatureValidator(.provider(provider))
+		let sut = SignatureValidationFactory().getSignatureValidator(.provider(provider))
 
 		// When
 		let result = sut.validate(signature: OpenSSLData.providerSignature, content: OpenSSLData.providerPayload)
