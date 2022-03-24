@@ -10,16 +10,12 @@ import Security
 
 final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate {
 
-	/// The network configuration
-	private let networkConfiguration: NetworkConfiguration
-
 	/// The security strategy
 	private (set) var securityStrategy: SecurityStrategy
 
 	/// Initialise session delegate with certificate used for SSL pinning
-	init(_ configuration: NetworkConfiguration, strategy: SecurityStrategy) {
+	init(strategy: SecurityStrategy) {
 
-		self.networkConfiguration = configuration
 		self.securityStrategy = strategy
 	}
 
@@ -38,7 +34,6 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate {
 
 		checker = SecurityCheckerFactory.getSecurityChecker(
 			securityStrategy,
-			networkConfiguration: networkConfiguration,
 			challenge: challenge,
 			completionHandler: completionHandler
 		)

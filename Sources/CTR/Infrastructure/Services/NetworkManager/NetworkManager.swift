@@ -11,7 +11,6 @@ class NetworkManager: Logging {
 
 	private(set) var loggingCategory: String = "Network"
 	private(set) var networkConfiguration: NetworkConfiguration
-	var securityChecker: SecurityCheckerProtocol?
 
 	/// Initializer
 	/// - Parameters:
@@ -101,30 +100,23 @@ class NetworkManager: Logging {
 								completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)))
 								return
 							}
-							var checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker
-							if ProcessInfo.processInfo.isTesting {
-								checker = self.securityChecker
-							}
 
-							if let checker = checker {
-								// Validate signature (on the base64 payload)
-								checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
-									if valid {
-
-										self.decodeToObject(
-											decodedPayloadData,
-											proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
-											signedResponse: signedResponse,
-											urlResponse: networkResponse.urlResponse,
-											completion: completion
-										)
-									} else {
-										self.logError("We got an invalid signature!")
-										completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
-									}
+							let signatureValidator = SignatureValidationFactory.getSignatureValidator(strategy)
+							// Validate signature (on the base64 payload)
+							signatureValidator.validate(data: decodedPayloadData, signature: signatureData) { valid in
+								if valid {
+									
+									self.decodeToObject(
+										decodedPayloadData,
+										proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
+										signedResponse: signedResponse,
+										urlResponse: networkResponse.urlResponse,
+										completion: completion
+									)
+								} else {
+									self.logError("We got an invalid signature!")
+									completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
 								}
-							} else {
-								self.logError("No signature checker")
 							}
 						case let .failure(decodeError):
 							if let networkError = NetworkError.inspect(response: networkResponse.urlResponse) {
@@ -308,7 +300,7 @@ class NetworkManager: Logging {
 
 		return URLSession(
 			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: strategy),
+			delegate: NetworkManagerURLSessionDelegate(strategy: strategy),
 			delegateQueue: nil
 		)
 	}
