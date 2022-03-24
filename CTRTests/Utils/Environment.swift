@@ -122,8 +122,8 @@ final class EnvironmentSpies {
 	
 	var verificationPolicyManagerSpy: VerificationPolicyManagerSpy = {
 		let spy = VerificationPolicyManagerSpy()
-		spy.stubbedAppendObserverResult = UUID()
 		spy.stubbedState = .policy1G
+		(spy.stubbedObservatory, _) = Observatory<VerificationPolicy?>.create()
 		return spy
 	}()
 	
