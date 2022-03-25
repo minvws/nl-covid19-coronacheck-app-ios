@@ -35,8 +35,9 @@ extension XCUIElement {
 	}
 	
 	func tapElement(type: ElementType, _ label: String) {
-		let elementQuery = self.descendants(matching: type)
-		let element = elementQuery.element(matching: type, identifier: label).firstMatch
+		let elementQuery = self.descendants(matching: type).matching(identifier: label)
+		let predicate = NSPredicate(format: "isEnabled == true")
+		let element = elementQuery.element(matching: predicate)
 		element.waitAndTap()
 	}
 	
