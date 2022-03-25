@@ -88,8 +88,17 @@ extension BaseTest {
 	}
 	
 	func addRetrievedCertificateToApp() {
-		app.textExists("Kloppen de gegevens?")
 		makeScreenShot(name: "Back in app")
+		app.textExists("Kloppen de gegevens?")
+		waitUntilSpinnerIsGone()
+		makeScreenShot(name: "Data retrieval screen")
 		app.tapText("Maak bewijs")
+	}
+	
+	private func waitUntilSpinnerIsGone() {
+		let element = app.descendants(matching: .activityIndicator).firstMatch
+		let predicate = NSPredicate(format: "exists == false")
+		self.expectation(for: predicate, evaluatedWith: element, handler: nil)
+		self.waitForExpectations(timeout: self.loginTimeout, handler: nil)
 	}
 }
