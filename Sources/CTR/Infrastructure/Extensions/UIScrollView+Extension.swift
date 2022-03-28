@@ -14,8 +14,11 @@ extension UIScrollView {
 		return contentOffset.y - (contentSize.height - bounds.height)
 	}
 	
-	/// Scroll to bottom. Is animated.
-	func scrollToBottom() {
+	/// Scroll to bottom if content is not completely visible. Is animated.
+	func scrollToBottomIfNotCompletelyVisible() {
+		// Only scroll when content is scrollable
+		guard contentSize.height > bounds.height else { return }
+		
 		// https://stackoverflow.com/a/952768/443270
 		let bottomOffset = CGPoint(
 			x: 0,
