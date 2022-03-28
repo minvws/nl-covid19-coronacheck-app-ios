@@ -74,11 +74,6 @@ final class RiskSettingUnselectedViewController: BaseViewController {
 		// Only scroll when not completely visible
 		guard !scrollView.bounds.contains(sceneView.errorView.frame) else { return }
 
-		// https://stackoverflow.com/a/952768/443270
-		let bottomOffset = CGPoint(
-			x: 0,
-			y: scrollView.contentSize.height - scrollView.bounds.height + scrollView.contentInset.bottom
-		)
-		scrollView.setContentOffset(bottomOffset, animated: true)
+		scrollView.scrollToBottom()
 	}
 }

@@ -13,4 +13,14 @@ extension UIScrollView {
 	var translatedBottomScrollOffset: CGFloat {
 		return contentOffset.y - (contentSize.height - bounds.height)
 	}
+	
+	/// Scroll to bottom. Is animated.
+	func scrollToBottom() {
+		// https://stackoverflow.com/a/952768/443270
+		let bottomOffset = CGPoint(
+			x: 0,
+			y: contentSize.height - bounds.height + contentInset.bottom
+		)
+		setContentOffset(bottomOffset, animated: true)
+	}
 }

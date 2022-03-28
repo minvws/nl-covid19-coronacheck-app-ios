@@ -186,12 +186,7 @@ class PaperProofInputCouplingCodeViewController: BaseViewController {
 		// Only scroll when content is scrollable
 		guard scrollView.contentSize.height > scrollView.bounds.height else { return }
 		
-		// https://stackoverflow.com/a/952768/443270
-		let bottomOffset = CGPoint(
-			x: 0,
-			y: scrollView.contentSize.height - scrollView.bounds.height + scrollView.contentInset.bottom
-		)
-		scrollView.setContentOffset(bottomOffset, animated: true)
+		scrollView.scrollToBottom()
 	}
 }
 
