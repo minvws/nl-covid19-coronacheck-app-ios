@@ -476,9 +476,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeVaccinationOrigin: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "vaccination",
-			eventTime: Current.now(),
-			expirationTime: Current.now().addingTimeInterval(300 * days),
-			validFrom: Current.now(),
+			eventTime: now,
+			expirationTime: now.addingTimeInterval(300 * days),
+			validFrom: now,
 			doseNumber: 1
 		)
 	}
@@ -486,9 +486,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeVaccinationOriginExpiringIn30Days: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "vaccination",
-			eventTime: Current.now(),
-			expirationTime: Current.now().addingTimeInterval(30 * days),
-			validFrom: Current.now(),
+			eventTime: now,
+			expirationTime: now.addingTimeInterval(30 * days),
+			validFrom: now,
 			doseNumber: 1
 		)
 	}
@@ -496,9 +496,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeRecoveryOriginExpiringIn30Days: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "recovery",
-			eventTime: Current.now(),
-			expirationTime: Current.now().addingTimeInterval(30 * days),
-			validFrom: Current.now(),
+			eventTime: now,
+			expirationTime: now.addingTimeInterval(30 * days),
+			validFrom: now,
 			doseNumber: nil
 		)
 	}
@@ -506,9 +506,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeRecoveryOriginExpiringIn30DaysEvent30DaysAgo: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "recovery",
-			eventTime: Current.now().addingTimeInterval(30 * days * ago),
-			expirationTime: Current.now().addingTimeInterval(30 * days),
-			validFrom: Current.now(),
+			eventTime: now.addingTimeInterval(30 * days * ago),
+			expirationTime: now.addingTimeInterval(30 * days),
+			validFrom: now,
 			doseNumber: nil
 		)
 	}
@@ -516,9 +516,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeVaccinationAssessmentOriginExpiringIn14Days: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "vaccinationassessment",
-			eventTime: Current.now(),
-			expirationTime: Current.now().addingTimeInterval(14 * days),
-			validFrom: Current.now(),
+			eventTime: now,
+			expirationTime: now.addingTimeInterval(14 * days),
+			validFrom: now,
 			doseNumber: nil
 		)
 	}
@@ -526,9 +526,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeTesttOriginExpiringIn1Day: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "test",
-			eventTime: Current.now(),
-			expirationTime: Current.now().addingTimeInterval(1 * days),
-			validFrom: Current.now(),
+			eventTime: now,
+			expirationTime: now.addingTimeInterval(1 * days),
+			validFrom: now,
 			doseNumber: nil
 		)
 	}
@@ -828,9 +828,9 @@ extension RemoteGreenCards.Response {
 					RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days,
 					RemoteGreenCards.Origin(
 						type: "recovery",
-						eventTime: Current.now().addingTimeInterval(400 * days * ago),
-						expirationTime: Current.now().addingTimeInterval(30 * days * ago),
-						validFrom: Current.now().addingTimeInterval(400 * days * ago),
+						eventTime: now.addingTimeInterval(400 * days * ago),
+						expirationTime: now.addingTimeInterval(30 * days * ago),
+						validFrom: now.addingTimeInterval(400 * days * ago),
 						doseNumber: nil
 					)
 				],
@@ -847,9 +847,9 @@ extension RemoteGreenCards.Response {
 					origins: [
 						RemoteGreenCards.Origin(
 							type: "recovery",
-							eventTime: Current.now().addingTimeInterval(400 * days * ago),
-							expirationTime: Current.now().addingTimeInterval(30 * days * ago),
-							validFrom: Current.now().addingTimeInterval(400 * days * ago),
+							eventTime: now.addingTimeInterval(400 * days * ago),
+							expirationTime: now.addingTimeInterval(30 * days * ago),
+							validFrom: now.addingTimeInterval(400 * days * ago),
 							doseNumber: nil
 						)
 					],
@@ -1214,8 +1214,8 @@ extension EuCredentialAttributes {
 		EuCredentialAttributes(
 			credentialVersion: 1,
 			digitalCovidCertificate: dcc,
-			expirationTime: Current.now().timeIntervalSince1970 + 3600,
-			issuedAt: Current.now().timeIntervalSince1970,
+			expirationTime: now.timeIntervalSince1970 + 3600,
+			issuedAt: now.timeIntervalSince1970,
 			issuer: "NL"
 		)
 	}
