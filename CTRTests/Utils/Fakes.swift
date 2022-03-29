@@ -486,9 +486,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeVaccinationOriginExpiringIn30Days: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "vaccination",
-			eventTime: Date(),
-			expirationTime: Date().addingTimeInterval(30 * days),
-			validFrom: Date(),
+			eventTime: Current.now(),
+			expirationTime: Current.now().addingTimeInterval(30 * days),
+			validFrom: Current.now(),
 			doseNumber: 1
 		)
 	}
@@ -496,9 +496,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeRecoveryOriginExpiringIn30Days: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "recovery",
-			eventTime: Date(),
-			expirationTime: Date().addingTimeInterval(30 * days),
-			validFrom: Date(),
+			eventTime: Current.now(),
+			expirationTime: Current.now().addingTimeInterval(30 * days),
+			validFrom: Current.now(),
 			doseNumber: nil
 		)
 	}
@@ -506,9 +506,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeRecoveryOriginExpiringIn30DaysEvent30DaysAgo: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "recovery",
-			eventTime: Date().addingTimeInterval(30 * days * ago),
-			expirationTime: Date().addingTimeInterval(30 * days),
-			validFrom: Date(),
+			eventTime: Current.now().addingTimeInterval(30 * days * ago),
+			expirationTime: Current.now().addingTimeInterval(30 * days),
+			validFrom: Current.now(),
 			doseNumber: nil
 		)
 	}
@@ -516,9 +516,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeVaccinationAssessmentOriginExpiringIn14Days: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "vaccinationassessment",
-			eventTime: Date(),
-			expirationTime: Date().addingTimeInterval(14 * days),
-			validFrom: Date(),
+			eventTime: Current.now(),
+			expirationTime: Current.now().addingTimeInterval(14 * days),
+			validFrom: Current.now(),
 			doseNumber: nil
 		)
 	}
@@ -526,9 +526,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeTesttOriginExpiringIn1Day: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "test",
-			eventTime: Date(),
-			expirationTime: Date().addingTimeInterval(1 * days),
-			validFrom: Date(),
+			eventTime: Current.now(),
+			expirationTime: Current.now().addingTimeInterval(1 * days),
+			validFrom: Current.now(),
 			doseNumber: nil
 		)
 	}
@@ -818,31 +818,6 @@ extension RemoteGreenCards.Response {
 				createCredentialMessages: "test"
 			),
 			euGreenCards: []
-		)
-	}
-
-	static var domesticAndInternationalExpiredRecovery: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin(
-						type: "recovery",
-						eventTime: Date().addingTimeInterval(400 * days * ago),
-						expirationTime: Date().addingTimeInterval(300 * days * ago),
-						validFrom: Date().addingTimeInterval(400 * days * ago),
-						doseNumber: nil
-					)
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
-					],
-					credential: "test credential"
-				)
-			]
 		)
 	}
 
@@ -1239,8 +1214,8 @@ extension EuCredentialAttributes {
 		EuCredentialAttributes(
 			credentialVersion: 1,
 			digitalCovidCertificate: dcc,
-			expirationTime: Date().timeIntervalSince1970 + 3600,
-			issuedAt: Date().timeIntervalSince1970,
+			expirationTime: Current.now().timeIntervalSince1970 + 3600,
+			issuedAt: Current.now().timeIntervalSince1970,
 			issuer: "NL"
 		)
 	}
