@@ -50,7 +50,7 @@ final class RiskSettingInstructionViewController: BaseViewController {
 		viewModel.$shouldDisplayNotSetError.binding = { [weak self] in
 			self?.sceneView.hasErrorState = $0
 			if $0 {
-				self?.scrollToBottomIfNotCompletelyVisible()
+				self?.sceneView.scrollView.scrollToBottomIfNotCompletelyVisible()
 				
 				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 					UIAccessibility.post(notification: .announcement, argument: self?.viewModel.errorMessage)
@@ -72,20 +72,5 @@ final class RiskSettingInstructionViewController: BaseViewController {
 		}
 		
 		addBackButton()
-	}
-
-	func scrollToBottomIfNotCompletelyVisible() {
-
-		let scrollView = sceneView.scrollView
-
-		// Only scroll when not completely visible
-		guard !scrollView.bounds.contains(sceneView.errorView.frame) else { return }
-
-		// https://stackoverflow.com/a/952768/443270
-		let bottomOffset = CGPoint(
-			x: 0,
-			y: scrollView.contentSize.height - scrollView.bounds.height + scrollView.contentInset.bottom
-		)
-		scrollView.setContentOffset(bottomOffset, animated: true)
 	}
 }
