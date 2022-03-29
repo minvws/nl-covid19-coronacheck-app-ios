@@ -115,7 +115,7 @@ final class EnvironmentSpies {
 		spy.stubbedStoredConfiguration.configTTL = 3600
 		spy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
 		spy.stubbedAppendReloadObserverResult = UUID()
-		spy.stubbedAppendReloadObserverObserverResult = (.default, Data(), URLResponse())
+		spy.stubbedAppendReloadObserverObserverResult = (Result<RemoteConfigManager.ConfigNotification, ServerError>.success((RemoteConfiguration.default, Data(), URLResponse())), ())
 		spy.stubbedAppendUpdateObserverResult = UUID()
 		return spy
 	}()
