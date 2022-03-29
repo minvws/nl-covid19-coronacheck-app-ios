@@ -28,7 +28,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.holderScannerMessage()
 		expect(self.sut.torchLabels) == [L.holderTokenscanTorchEnable(), L.holderTokenscanTorchDisable()]
 		
-		PaperProofScanViewController(viewModel: sut).assertImage()
+		PaperProofScanViewController(viewModel: sut).assertImage(containedInNavigationController: true)
 	}
 	
 	func test_parseQRMessage_whenDomesticQRIsUppercased_shouldInvokeAlert() {
