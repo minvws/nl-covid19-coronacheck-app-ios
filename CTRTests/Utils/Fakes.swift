@@ -476,9 +476,9 @@ extension RemoteGreenCards.Origin {
 	static var fakeVaccinationOrigin: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "vaccination",
-			eventTime: Date(),
-			expirationTime: Date(),
-			validFrom: Date(),
+			eventTime: Current.now(),
+			expirationTime: Current.now().addingTimeInterval(300 * days),
+			validFrom: Current.now(),
 			doseNumber: 1
 		)
 	}
