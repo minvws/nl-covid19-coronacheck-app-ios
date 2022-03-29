@@ -68,7 +68,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.primaryButtonIcon).toNot(beNil())
 		
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 	
 	func test_verified_noDeepLink() throws {
@@ -105,7 +105,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.primaryButtonIcon).to(beNil())
 		
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 	
 	func test_verified_DCC() throws {
@@ -141,7 +141,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.lastName) == "C"
 		
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 	
 	func test_verified_DCC_withoutFlag() throws {
@@ -177,7 +177,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.lastName) == "C"
 		
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 	
 	func test_primaryButtonTapped_whenVerified_shouldNavigateToVerfiedInfo() {
