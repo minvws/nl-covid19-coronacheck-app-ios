@@ -17,7 +17,7 @@ extension HolderDashboardViewModelTests {
 	func test_registersForRemoteConfigChanges_affectingStrippenRefresher() {
 
 		// Arrange
-		environmentSpies.remoteConfigManagerSpy.stubbedAppendUpdateObserverObserverResult = (RemoteConfiguration.default, Data(), URLResponse())
+		environmentSpies.remoteConfigManagerSpy.stubbedAppendUpdateObserverObserverResult = ((RemoteConfiguration.default, Data(), URLResponse()), ())
 
 		// Act
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
