@@ -68,9 +68,9 @@ class ShowQRView: BaseView {
 	}()
 
 	/// The info button
-	let nextButton: UIButton = {
+	let nextButton: TappableButton = {
 
-		let button = UIButton()
+		let button = TappableButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.pageIndicatorNext(), for: .normal)
 		button.setupLargeContentViewer(title: L.holderShowqrNextbutton())
@@ -78,9 +78,9 @@ class ShowQRView: BaseView {
 	}()
 
 	/// The info button
-	let previousButton: UIButton = {
+	let previousButton: TappableButton = {
 
-		let button = UIButton()
+		let button = TappableButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.pageIndicatorBack(), for: .normal)
 		button.setupLargeContentViewer(title: L.holderShowqrPreviousbutton())
