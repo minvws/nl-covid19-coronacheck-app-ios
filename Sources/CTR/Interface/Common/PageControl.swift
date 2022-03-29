@@ -82,11 +82,11 @@ final class PageControl: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		let previousButton = UIButton()
+		let previousButton = TappableButton()
 		previousButton.addTarget(self, action: #selector(navigateToPreviousPage), for: .touchUpInside)
 		previousButton.isAccessibilityElement = false
 		buttonStackView.addArrangedSubview(previousButton)
-		let nextButton = UIButton()
+		let nextButton = TappableButton()
 		nextButton.addTarget(self, action: #selector(navigateToNextPage), for: .touchUpInside)
 		nextButton.isAccessibilityElement = false
 		buttonStackView.addArrangedSubview(nextButton)
