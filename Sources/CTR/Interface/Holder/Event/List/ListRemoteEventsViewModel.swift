@@ -192,7 +192,8 @@ class ListRemoteEventsViewModel: Logging {
 				// No special states for the paper flow
 				return true
 			case .vaccinationAndPositiveTest:
-				return areThereOrigins(remoteResponse: remoteResponse, forEventMode: .vaccination) || areThereOrigins(remoteResponse: remoteResponse, forEventMode: .recovery)
+				return areThereValidOrigins(remoteResponse: remoteResponse, forEventMode: .vaccination, now: Current.now()) ||
+				areThereValidOrigins(remoteResponse: remoteResponse, forEventMode: .recovery, now: Current.now())
 			case .recovery:
 				if let recoveryExpirationDays = self.remoteConfigManager.storedConfiguration.recoveryExpirationDays,
 				   let event = remoteEvents.first?.wrapper.events?.first, event.hasPositiveTest,
@@ -202,22 +203,26 @@ class ListRemoteEventsViewModel: Logging {
 					// End State 7
 					return true
 				}
-				return areThereOrigins(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
+				return areThereValidOrigins(remoteResponse: remoteResponse, forEventMode: expandedEventMode, now: Current.now())
 			case .test, .vaccination:
-				return areThereOrigins(remoteResponse: remoteResponse, forEventMode: expandedEventMode)
+				return areThereValidOrigins(remoteResponse: remoteResponse, forEventMode: expandedEventMode, now: Current.now())
 			case .vaccinationassessment:
 				// no origins to check.
 				return true
 		}
 	}
 	
-	private func areThereOrigins(remoteResponse: RemoteGreenCards.Response, forEventMode: EventMode ) -> Bool {
+	private func areThereValidOrigins(remoteResponse: RemoteGreenCards.Response, forEventMode: EventMode, now: Date) -> Bool {
+		
+		func validate(origins: [RemoteGreenCards.Origin]) -> Bool {
+			origins.contains(where: { $0.expirationTime > now })
+		}
 		
 		if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
-			return remoteResponse.hasInternationalOrigins(ofType: forEventMode.rawValue)
+			let result = validate(origins: remoteResponse.getInternationalOrigins(ofType: forEventMode.rawValue))
+			return result
 		} else {
-			return remoteResponse.hasInternationalOrigins(ofType: forEventMode.rawValue) ||
-			remoteResponse.hasDomesticOrigins(ofType: forEventMode.rawValue)
+			return validate(origins: remoteResponse.getOrigins(ofType: forEventMode.rawValue))
 		}
 	}
 	
@@ -549,17 +554,11 @@ class ListRemoteEventsViewModel: Logging {
 		onVaccinationOriginOnly: (() -> Void)?,
 		onRecoveryOriginOnly: (() -> Void)?,
 		onNoOrigins: (() -> Void)?) {
+			
+		let hasVaccinationOrigins = areThereValidOrigins(remoteResponse: greencardResponse, forEventMode: .vaccination, now: Current.now())
+		let hasRecoveryOrigins = areThereValidOrigins(remoteResponse: greencardResponse, forEventMode: .recovery, now: Current.now())
 
-		let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
-		let hasInternationalVaccinationOrigins = greencardResponse.hasInternationalOrigins(ofType: OriginType.vaccination.rawValue)
-		let hasVaccinationOrigins = hasDomesticVaccinationOrigins || hasInternationalVaccinationOrigins
-		let domesticRecoveryOrigins = greencardResponse.getDomesticOrigins(ofType: OriginType.recovery.rawValue)
-		var hasValidDomesticRecoveryOrigin = false
-		for origin in domesticRecoveryOrigins where origin.expirationTime > Date() {
-			hasValidDomesticRecoveryOrigin = true
-		}
-
-		switch (hasVaccinationOrigins, hasValidDomesticRecoveryOrigin ) {
+		switch (hasVaccinationOrigins, hasRecoveryOrigins ) {
 
 			case (true, true): onBothVaccinationAndRecoveryOrigins?()
 			case (true, false): onVaccinationOriginOnly?()
