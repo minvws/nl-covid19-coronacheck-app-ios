@@ -135,17 +135,23 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
 		}]
 		
-		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver {[weak self] _, _, urlResponse in
-
-			// Mark remote config loaded
-			Current.cryptoLibUtility.checkFile(.remoteConfiguration)
-			
-			// Update the server Date handlers
-			self?.updateServerDate(urlResponse)
-			
-			// Recheck the config
-			self?.checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
-				self?.startApplication()
+		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver { [weak self] result in
+ 
+			switch result {
+				case .failure(let error):
+					self?.delegate?.errorWhileLoading(errors: [error])
+					
+				case .success(let (_, _, urlResponse)):
+					// Mark remote config loaded
+					Current.cryptoLibUtility.checkFile(.remoteConfiguration)
+					
+					// Update the server Date handlers
+					self?.updateServerDate(urlResponse)
+					
+					// Recheck the config
+					self?.checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+						self?.startApplication()
+					}
 			}
 		}]
 	}

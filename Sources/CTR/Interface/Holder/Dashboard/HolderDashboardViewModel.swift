@@ -302,9 +302,11 @@ final class HolderDashboardViewModel: Logging {
 	func setupConfigNotificationManager() {
 
 		registerForConfigAlmostOutOfDateUpdate()
-		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.appendReloadObserver { [weak self] config, _, _ in
+		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.appendReloadObserver { [weak self] result in
 
-			guard let self = self else { return }
+			guard let self = self,
+				  case let .success(config, _, _) = result
+			else { return }
 
 			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
 				now: Current.now(),
