@@ -226,7 +226,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// Given
 		let expectation = self.expectation(description: "test_fetchEventAccessTokens_authenticationCancelled")
-		let token = "test_fetchEventAccessTokens_unknownError"
+		let token = "test_fetchEventAccessTokens_authenticationCancelled"
 		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
