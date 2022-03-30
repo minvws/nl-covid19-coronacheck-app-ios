@@ -16,10 +16,11 @@ protocol SignatureValidationFactoryProtocol {
 struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
 	
 	func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidation {
-		
+#if DEBUG
 		if case SecurityStrategy.none = strategy {
 			return SignatureValidatorAlwaysAllow()
 		}
+#endif
 		// Default for .config
 		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate, TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate]
 		
@@ -74,6 +75,7 @@ extension SignatureValidation {
 	}
 }
 
+#if DEBUG
 /// Check nothing. Allow every connection. Used for testing.
 class SignatureValidatorAlwaysAllow: SignatureValidator {
 	
@@ -87,6 +89,7 @@ class SignatureValidatorAlwaysAllow: SignatureValidator {
 		return true
 	}
 }
+#endif
 
 /// Security check for backend communication
 class SignatureValidator: SignatureValidation, Logging {
