@@ -227,19 +227,23 @@ class AppCoordinator: Coordinator, Logging {
 	}
 
 	/// Pop any existing presented viewControllers (AppUpdate / AppDeactivated)
-	private func popPresentedViewController() {
+	private func popPresentedViewController(completion: @escaping () -> Void) {
 		
-		guard var topController = window.rootViewController else { return }
+		guard var topController = window.rootViewController else {
+			completion()
+			return
+		}
 		
 		while let newTopController = topController.presentedViewController {
 			topController = newTopController
 		}
 		
 		guard !(topController is UINavigationController) else {
+			completion()
 			return
 		}
 		
-		topController.dismiss(animated: true)
+		topController.dismiss(animated: true, completion: completion)
 	}
 	
 	/// Show the Action Required View
@@ -315,8 +319,9 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func applicationShouldStart() {
 		
-		popPresentedViewController()
-		startApplication()
+		popPresentedViewController {
+			self.startApplication()
+		}
 	}
 	
 	func cryptoLibDidNotInitialize() {

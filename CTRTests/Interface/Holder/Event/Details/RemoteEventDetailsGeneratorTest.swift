@@ -33,7 +33,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details).to(haveCount(10))
 		expect(details[0].value).to(beNil())
 		expect(details[1].value) == "Check, Corona"
-		expect(details[2].value) == "16 mei 2021"
+		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == "Sneltest (RAT)"
 		expect(details[4].value) == "Antigen Test"
 		expect(details[5].value) == "donderdag 1 juli 15:42"
@@ -74,7 +74,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details).to(haveCount(10))
 		expect(details[0].value).to(beNil())
 		expect(details[1].value) == "Check, Corona"
-		expect(details[2].value) == "16 mei 2021"
+		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == "Sneltest (RAT)"
 		expect(details[4].value) == "Antigen Test"
 		expect(details[5].value) == "donderdag 1 juli 2021 17:49"
@@ -101,7 +101,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details).to(haveCount(13))
 		expect(details[0].value).to(beNil())
 		expect(details[1].value) == "Check, Corona"
-		expect(details[2].value) == "16 mei 2021"
+		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == L.holderDccTestPathogenvalue()
 		expect(details[4].value) == "Sneltest (RAT)"
 		expect(details[5].value) == "fake negativeTest"
@@ -131,7 +131,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details).to(haveCount(12))
 		expect(details[0].value).to(beNil())
 		expect(details[1].value) == "Check, Corona"
-		expect(details[2].value) == "16 mei 2021"
+		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == L.holderEventAboutVaccinationPathogenvalue()
 		expect(details[4].value) == "Pfizer (Comirnaty)"
 		expect(details[5].value) == "SARS-CoV-2 mRNA vaccine"
@@ -157,7 +157,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details).to(haveCount(6))
 		expect(details[0].value).to(beNil())
 		expect(details[1].value) == "Check, Corona"
-		expect(details[2].value) == "16 mei 2021"
+		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == "woensdag 5 januari 13:42"
 		expect(details[4].value) == "NL"
 		expect(details[5].value) == "1234"
@@ -177,7 +177,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details).to(haveCount(5))
 		expect(details[0].value).to(beNil())
 		expect(details[1].value) == "Check, Corona"
-		expect(details[2].value) == "16 mei 2021"
+		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == "woensdag 5 januari 13:42"
 		expect(details[4].value) == "1234"
 	}
@@ -200,7 +200,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details).to(haveCount(12))
 		expect(details[0].value).to(beNil())
 		expect(details[1].value) == "Check, Corona"
-		expect(details[2].value) == "16 mei 2021"
+		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == L.holderEventAboutVaccinationPathogenvalue()
 		expect(details[4].value) == "Pfizer (Comirnaty)"
 		expect(details[5].value) == "SARS-CoV-2 mRNA vaccine"
@@ -225,7 +225,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details).to(haveCount(7))
 		expect(details[0].value).to(beNil())
 		expect(details[1].value) == "Check, Corona"
-		expect(details[2].value) == "16 mei 2021"
+		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == "1 juli 2021"
 		expect(details[4].value) == "12 juli 2021"
 		expect(details[5].value) == "31 december 2022"
@@ -247,7 +247,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details).to(haveCount(9))
 		expect(details[0].value).to(beNil())
 		expect(details[1].value) == "Check, Corona"
-		expect(details[2].value) == "16 mei 2021"
+		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == "1 juli 2021"
 		expect(details[4].value) == "NL"
 		expect(details[5].value) == "Facility approved by the State of The Netherlands"

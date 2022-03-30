@@ -10,5 +10,6 @@ import Foundation
 /// Used in ScanLockManager
 protocol Timeable {
 	func invalidate()
+	func fire()
 }
 extension Timer: Timeable {}
