@@ -258,6 +258,28 @@ class NetworkManagerCredentialsTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 	
+	func test_fetchGreencards_authenticationCancelled() {
+		
+		// Given
+		let expectation = self.expectation(description: "test_fetchGreencards_authenticationCancelled")
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
+		
+		stub(condition: isPath(path)) { _ in
+			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
+			return HTTPStubsResponse(error: notConnectedError)
+		}
+		
+		// When
+		sut.fetchGreencards(dictionary: testDictionary) { result in
+			expect(result.isFailure) == true
+			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .authenticationCancelled)
+			expectation.fulfill()
+		}
+		
+		// Then
+		waitForExpectations(timeout: 10, handler: nil)
+	}
+	
 	func test_fetchGreencards_serverErrorMessage() {
 		
 		// Given
