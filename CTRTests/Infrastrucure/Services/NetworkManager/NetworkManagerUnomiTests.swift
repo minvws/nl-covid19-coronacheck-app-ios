@@ -111,7 +111,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -130,7 +130,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -150,7 +150,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -170,7 +170,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -190,7 +190,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -210,7 +210,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -230,7 +230,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -260,7 +260,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -287,7 +287,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -314,7 +314,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -347,7 +347,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -380,7 +380,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -413,7 +413,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: provider) { result in
+			self.sut.fetchEventInformation(provider: self.provider) { result in
 				
 				// Then
 				expect(result.isSuccess) == true
