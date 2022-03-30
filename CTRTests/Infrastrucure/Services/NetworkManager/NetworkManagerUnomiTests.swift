@@ -212,13 +212,13 @@ class NetworkManagerUnomiTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	func test_fetchEventInformation_unknownError() {
+	func test_fetchEventInformation_cancelled() {
 
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventInformation_unknownError")
+		let expectation = self.expectation(description: "test_fetchEventInformation_cancelled")
 
 		stub(condition: isPath(path)) { _ in
-			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.unknown.rawValue)
+			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
 
@@ -227,10 +227,32 @@ class NetworkManagerUnomiTests: XCTestCase {
 
 			// Then
 			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)
+			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .authenticationCancelled)
 			expectation.fulfill()
 		}
 
+		waitForExpectations(timeout: 10, handler: nil)
+	}
+	
+	func test_fetchEventInformation_unknownError() {
+		
+		// Given
+		let expectation = self.expectation(description: "test_fetchEventInformation_unknownError")
+		
+		stub(condition: isPath(path)) { _ in
+			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.unknown.rawValue)
+			return HTTPStubsResponse(error: notConnectedError)
+		}
+		
+		// When
+		sut.fetchEventInformation(provider: provider) { result in
+			
+			// Then
+			expect(result.isFailure) == true
+			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)
+			expectation.fulfill()
+		}
+		
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 	
