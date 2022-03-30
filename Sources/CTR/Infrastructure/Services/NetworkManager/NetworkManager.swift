@@ -9,16 +9,18 @@ import Foundation
 
 class NetworkManager: Logging {
 
-	private(set) var loggingCategory: String = "Network"
-	private(set) var networkConfiguration: NetworkConfiguration
-	var signatureValidationFactory: SignatureValidationFactoryProtocol = SignatureValidationFactory()
+	internal let networkConfiguration: NetworkConfiguration
+	private let signatureValidationFactory: SignatureValidationFactoryProtocol
 
 	/// Initializer
 	/// - Parameters:
 	///   - configuration: the network configuration
-	required init(configuration: NetworkConfiguration) {
+	required init(
+		configuration: NetworkConfiguration,
+		signatureValidationFactory: SignatureValidationFactoryProtocol = SignatureValidationFactory()) {
 
 		self.networkConfiguration = configuration
+		self.signatureValidationFactory = signatureValidationFactory
 	}
 	
 	// MARK: - Construct Request
