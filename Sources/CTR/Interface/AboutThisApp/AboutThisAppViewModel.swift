@@ -17,6 +17,8 @@ enum AboutThisAppMenuIdentifier: String {
 	case colophon
 
 	case reset
+    
+    case storedEvents
 	
 	case deeplink
 
@@ -99,7 +101,7 @@ class AboutThisAppViewModel: Logging {
 			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
-			AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle())
+			AboutThisAppMenuOption(identifier: .storedEvents, name: L.holder_menu_storedEvents())
 		]
 		if Configuration().getEnvironment() != "production" {
 			list.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
@@ -158,6 +160,8 @@ class AboutThisAppViewModel: Logging {
 				openUrlString(L.holderUrlColophon())
 			case .reset:
 				showClearDataAlert()
+			case .storedEvents:
+				(coordinator as? HolderCoordinatorDelegate)?.userWishesToSeeStoredEvents()
 			case .deeplink:
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
 			case .scanlog:

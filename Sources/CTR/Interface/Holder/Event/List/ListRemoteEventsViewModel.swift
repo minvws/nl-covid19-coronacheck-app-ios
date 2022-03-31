@@ -41,10 +41,6 @@ class ListRemoteEventsViewModel: Logging {
 
 	private let screenCaptureDetector = ScreenCaptureDetector()
 
-	private let prefetchingGroup = DispatchGroup()
-	private let hasEventInformationFetchingGroup = DispatchGroup()
-	private let eventFetchingGroup = DispatchGroup()
-
 	private let hasExistingDomesticVaccination: Bool
 
 	init(
