@@ -55,17 +55,17 @@ class ListStoredEventsViewController: BaseViewController {
 			self?.sceneView.shouldShowLoadingSpinner = $0
 		}
 
-//		viewModel.$viewState.binding = { [weak self] in
-//
-//			switch $0 {
-//				case let .feedback(content):
-//					self?.setForFeedback(content)
-//				case let .loading(content):
-//					self?.setForLoadingState(content)
-//				case let .listEvents(content, rows):
-//					self?.setForListEvents(content, rows: rows)
-//			}
-//		}
+		viewModel.$viewState.binding = { [weak self] in
+
+			switch $0 {
+				case let .feedback(content):
+					self?.setForFeedback(content)
+				case let .loading(content):
+					self?.setForLoadingState(content)
+				case let .listEvents(content, rows):
+					self?.setForListEvents(content, rows: rows)
+			}
+		}
 
 		viewModel.$alert.binding = { [weak self] in
 			self?.showAlert($0)
@@ -92,19 +92,19 @@ class ListStoredEventsViewController: BaseViewController {
 			.forEach { $0.removeFromSuperview()
 		}
 	}
-//
-//	private func setForListEvents(_ content: Content, rows: [Row]) {
-//
-//		sceneView.shouldShowLoadingSpinner = false
-//		displayContent(content)
-//		sceneView.setEventStackVisibility(ishidden: false)
-//
-//		// Remove previously added rows:
-//		removeExistingRows()
-//
-//		sceneView.addSeparator()
-//
-//		// Add new rows:
+
+	private func setForListEvents(_ content: Content, rows: [Row]) {
+
+		sceneView.shouldShowLoadingSpinner = false
+		displayContent(content)
+		sceneView.setEventStackVisibility(ishidden: false)
+
+		// Remove previously added rows:
+		removeExistingRows()
+
+		sceneView.addSeparator()
+
+		// Add new rows:
 //		rows
 //			.map { rowModel -> RemoteEventItemView in
 //				RemoteEventItemView.makeView(
@@ -114,17 +114,17 @@ class ListStoredEventsViewController: BaseViewController {
 //				)
 //			}
 //			.forEach(self.sceneView.addEventItemView)
-//	}
-//
-//	private func setForFeedback(_ content: Content) {
+	}
+
+	private func setForFeedback(_ content: Content) {
 //
 //		sceneView.shouldShowLoadingSpinner = false
 //		sceneView.setEventStackVisibility(ishidden: true)
 //		displayContent(content)
 //		removeExistingRows()
 //		navigationItem.leftBarButtonItem = nil
-//	}
-//
+	}
+
 	private func displayContent(_ content: Content) {
 
 		// Texts
@@ -137,16 +137,16 @@ class ListStoredEventsViewController: BaseViewController {
 		}
 
 		// Button
-		if let actionTitle = content.primaryActionTitle {
-			sceneView.primaryTitle = actionTitle
-			sceneView.footerButtonView.isHidden = false
-		} else {
-			sceneView.primaryTitle = nil
-			sceneView.footerButtonView.isHidden = true
-		}
-		sceneView.primaryButtonTappedCommand = content.primaryAction
-		sceneView.somethingIsWrongTappedCommand = content.secondaryAction
-		sceneView.somethingIsWrongButtonTitle = content.secondaryActionTitle
+//		if let actionTitle = content.primaryActionTitle {
+//			sceneView.primaryTitle = actionTitle
+//			sceneView.footerButtonView.isHidden = false
+//		} else {
+//			sceneView.primaryTitle = nil
+//			sceneView.footerButtonView.isHidden = true
+//		}
+//		sceneView.primaryButtonTappedCommand = content.primaryAction
+		sceneView.secondaryButtonTappedCommand = content.secondaryAction
+		sceneView.secondaryButtonTitle = content.secondaryActionTitle
 
 		UIAccessibility.post(
 			notification: .screenChanged,

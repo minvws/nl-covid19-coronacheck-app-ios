@@ -9,7 +9,7 @@ import Foundation
 
 class ListStoredEventsViewModel: Logging {
 
-	weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
+	weak var coordinator: (Restartable & OpenUrlProtocol)?
 
 //	private let walletManager: WalletManaging = Current.walletManager
 //	let remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
@@ -34,24 +34,65 @@ class ListStoredEventsViewModel: Logging {
 	private let screenCaptureDetector = ScreenCaptureDetector()
 
 	init(
-		coordinator: HolderCoordinatorDelegate & OpenUrlProtocol
+		coordinator: Restartable & OpenUrlProtocol
 //		greenCardLoader: GreenCardLoading
 	) {
 
 		self.coordinator = coordinator
 //		self.greenCardLoader = greenCardLoader
 
-        viewState = .loading(content: Content(title: "Todo"))
+		viewState = .loading(content: Content(title: L.holder_storedEvents_title()))
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
 		}
 
 //		viewState = getViewState(from: remoteEvents)
+		viewState = getViewState()
 	}
 
 	func openUrl(_ url: URL) {
 
 		coordinator?.openUrl(url, inApp: true)
+	}
+	
+	private func getViewState() -> ListStoredEventsViewController.State {
+	
+		return ListStoredEventsViewController.State.listEvents(
+			content: Content(
+				title: L.holder_storedEvents_title(),
+				body: L.holder_storedEvents_message(),
+				primaryActionTitle: L.holder_storedEvents_button_removeAllEvents(),
+				primaryAction: { [weak self] in
+					self?.showClearDataAlert()
+				},
+				secondaryActionTitle: L.holder_storedEvents_button_handleData(),
+				secondaryAction: { [weak self] in
+					guard let url = URL(string: L.holder_storedEvents_url()) else { return }
+					self?.coordinator?.openUrl(url, inApp: true)
+				}),
+			rows: []
+		)
+	}
+	
+	private func showClearDataAlert() {
+
+		alert = AlertContent(
+			title: L.holderCleardataAlertTitle(),
+			subTitle: L.holderCleardataAlertSubtitle(),
+			cancelAction: nil,
+			cancelTitle: L.generalCancel(),
+			okAction: { [weak self] _ in
+				self?.wipePersistedData()
+			},
+			okTitle: L.holderCleardataAlertRemove(),
+			okActionIsDestructive: true
+		)
+	}
+	
+	private func wipePersistedData() {
+		
+		Current.wipePersistedData(flavor: .holder)
+		self.coordinator?.restart()
 	}
 }

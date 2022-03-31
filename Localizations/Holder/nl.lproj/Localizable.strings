@@ -766,3 +766,9 @@
 "visitorpass_token_next" = "Volgende";
 
 "holder_menu_storedEvents" = "Mijn gegevens";
+"holder_storedEvents_title" = "Mijn opgeslagen gegevens";
+"holder_storedEvents_message" = "De gegevens hieronder staan opgeslagen op je telefoon en gebruikt CoronaCheck om je coronabewijs te maken.";
+"holder_storedEvents_button_handleData" = "Hoe gaat CoronaCheck met gegevens om?";
+"holder_storedEvents_url" = "https://coronacheck.nl";
+"holder_storedEvents_button_removeAllEvents" = "Alle gegevens wissen";
+"holder_storedEvents_list_noEvents" = "Geen gegevens";

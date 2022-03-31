@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ListStoredEventsView: ScrolledStackWithButtonView {
+class ListStoredEventsView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -18,8 +18,8 @@ class ListStoredEventsView: ScrolledStackWithButtonView {
 			static let kerning: CGFloat = -0.26
 		}
 
-		enum Message {
-			static let spacing: CGFloat = 32
+		enum List {
+			static let spacing: CGFloat = 40
 		}
 
 		enum Button {
@@ -81,7 +81,7 @@ class ListStoredEventsView: ScrolledStackWithButtonView {
 		}
 	}
 
-	let somethingIsWrongButton: Button = {
+	let secondaryButton: Button = {
 
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -94,7 +94,7 @@ class ListStoredEventsView: ScrolledStackWithButtonView {
 
 		super.setupViews()
 		backgroundColor = C.white()
-		somethingIsWrongButton.touchUpInside(self, action: #selector(somethingIsWrongButtonTapped))
+		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 		stackView.distribution = .fill
 	}
 
@@ -107,9 +107,10 @@ class ListStoredEventsView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(titleLabel)
 		stackView.setCustomSpacing(ViewTraits.Title.spacing, after: titleLabel)
 		stackView.addArrangedSubview(contentTextView)
-		stackView.setCustomSpacing(ViewTraits.Message.spacing, after: contentTextView)
+		stackView.setCustomSpacing(ViewTraits.Button.spacing, after: contentTextView)
+		stackView.addArrangedSubview(secondaryButton)
+		stackView.setCustomSpacing(ViewTraits.List.spacing, after: secondaryButton)
 		stackView.addArrangedSubview(eventStackView)
-		stackView.addArrangedSubview(somethingIsWrongButton)
 	}
 
 	/// Setup the constraints
@@ -131,9 +132,9 @@ class ListStoredEventsView: ScrolledStackWithButtonView {
 		return view
 	}
 
-	@objc func somethingIsWrongButtonTapped() {
+	@objc func secondaryButtonTapped() {
 
-		somethingIsWrongTappedCommand?()
+		secondaryButtonTappedCommand?()
 	}
 
 	// MARK: Public Access
@@ -161,12 +162,12 @@ class ListStoredEventsView: ScrolledStackWithButtonView {
 		}
 	}
 
-	var somethingIsWrongTappedCommand: (() -> Void)?
+	var secondaryButtonTappedCommand: (() -> Void)?
 
-	var somethingIsWrongButtonTitle: String? {
+	var secondaryButtonTitle: String? {
 		didSet {
-			somethingIsWrongButton.setTitle(somethingIsWrongButtonTitle, for: .normal)
-			somethingIsWrongButton.isHidden = somethingIsWrongButtonTitle?.isEmpty ?? true
+			secondaryButton.setTitle(secondaryButtonTitle, for: .normal)
+			secondaryButton.isHidden = secondaryButtonTitle?.isEmpty ?? true
 		}
 	}
 
