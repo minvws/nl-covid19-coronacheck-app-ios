@@ -8,7 +8,7 @@
 import Foundation
 @testable import CTR
 
-final class VerificationPolicyEnablerSpy: VerificationPolicyEnablable {
+final class VerificationPolicyEnablerSpy: VerificationPolicyEnableable {
 
 	var invokedEnable = false
 	var invokedEnableCount = 0

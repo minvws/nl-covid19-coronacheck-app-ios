@@ -36,7 +36,7 @@ struct Environment {
 	var secureUserSettings: SecureUserSettingsProtocol
 	var userSettings: UserSettingsProtocol
 	var walletManager: WalletManaging
-	var verificationPolicyEnabler: VerificationPolicyEnablable
+	var verificationPolicyEnabler: VerificationPolicyEnableable
 	
 	init(
 		now: @escaping () -> Date,
@@ -63,7 +63,7 @@ struct Environment {
 		secureUserSettings: SecureUserSettingsProtocol,
 		userSettings: UserSettingsProtocol,
 		walletManager: WalletManaging,
-		verificationPolicyEnabler: VerificationPolicyEnablable
+		verificationPolicyEnabler: VerificationPolicyEnableable
 	) {
 		self.now = now
 		self.appInstalledSinceManager = appInstalledSinceManager

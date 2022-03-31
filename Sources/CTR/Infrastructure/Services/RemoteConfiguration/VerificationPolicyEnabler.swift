@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol VerificationPolicyEnablable: AnyObject {
+protocol VerificationPolicyEnableable: AnyObject {
 	
 	typealias ObserverToken = UUID
 	
@@ -17,7 +17,7 @@ protocol VerificationPolicyEnablable: AnyObject {
 	func wipePersistedData()
 }
 
-final class VerificationPolicyEnabler: VerificationPolicyEnablable {
+final class VerificationPolicyEnabler: VerificationPolicyEnableable {
 	
 	private var observers = [ObserverToken: () -> Void]()
 	private let remoteConfigManager: RemoteConfigManaging
