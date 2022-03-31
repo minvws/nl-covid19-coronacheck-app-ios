@@ -72,7 +72,7 @@ extension SecurityAnimation {
 	
 	/// Show default animation from 21 March - 20 December
 	/// Show winter animation from 21 December - 20 March
-	private static var isWithinWinterPeriod: Bool {
+	static var isWithinWinterPeriod: Bool {
 		let calendar = Calendar.autoupdatingCurrent
 		let components = calendar.dateComponents([.day, .month], from: Current.now())
 
