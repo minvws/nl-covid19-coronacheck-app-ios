@@ -19,7 +19,7 @@ class SecurityAnimationTests: XCTestCase {
 		environmentalSpies = setupEnvironmentSpies()
 	}
 	
-	func testSeasonalBoundaries() {
+	func testDomesticSeasonalBoundaries() {
 		
 		// Winter
 		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 12, day: 21).date! }
@@ -34,5 +34,22 @@ class SecurityAnimationTests: XCTestCase {
 		
 		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 12, day: 20).date! }
 		expect(SecurityAnimation.domesticAnimation.name) == "domesticSummerAnimation"
+	}
+	
+	func testInternationalSeasonalBoundaries() {
+		
+		// Winter
+		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 12, day: 21).date! }
+		expect(SecurityAnimation.internationalAnimation.name) == "internationalWinterAnimation"
+		
+		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 3, day: 20).date! }
+		expect(SecurityAnimation.internationalAnimation.name) == "internationalWinterAnimation"
+		
+		// Summer
+		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 3, day: 21).date! }
+		expect(SecurityAnimation.internationalAnimation.name) == "internationalSummerAnimation"
+		
+		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 12, day: 20).date! }
+		expect(SecurityAnimation.internationalAnimation.name) == "internationalSummerAnimation"
 	}
 }

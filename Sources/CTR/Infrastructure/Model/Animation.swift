@@ -67,7 +67,7 @@ extension SecurityAnimation {
 	}
 
 	static var internationalAnimation: SecurityAnimation {
-		return isWithinWinterPeriod ? .domesticWinterAnimation : .domesticSummerAnimation
+		return isWithinWinterPeriod ? .internationalWinterAnimation : .internationalSummerAnimation
 	}
 	
 	/// Show default animation from 21 March - 20 December
