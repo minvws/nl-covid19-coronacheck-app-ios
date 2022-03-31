@@ -114,6 +114,12 @@ class ListStoredEventsViewController: BaseViewController {
 //				)
 //			}
 //			.forEach(self.sceneView.addEventItemView)
+		
+		if let actionTitle = content.primaryActionTitle {
+			sceneView.setEventStackVisibility(ishidden: true)
+			let button = RedDisclosureButton.makeRedButton(title: actionTitle, command: content.primaryAction)
+			sceneView.eventStackView.addArrangedSubview(button)
+		}
 	}
 
 	private func setForFeedback(_ content: Content) {
@@ -132,19 +138,9 @@ class ListStoredEventsViewController: BaseViewController {
 		sceneView.message = content.body
 
 		sceneView.contentTextView.linkTouched { [weak self] url in
-
 			self?.viewModel.openUrl(url)
 		}
 
-		// Button
-//		if let actionTitle = content.primaryActionTitle {
-//			sceneView.primaryTitle = actionTitle
-//			sceneView.footerButtonView.isHidden = false
-//		} else {
-//			sceneView.primaryTitle = nil
-//			sceneView.footerButtonView.isHidden = true
-//		}
-//		sceneView.primaryButtonTappedCommand = content.primaryAction
 		sceneView.secondaryButtonTappedCommand = content.secondaryAction
 		sceneView.secondaryButtonTitle = content.secondaryActionTitle
 
@@ -155,25 +151,21 @@ class ListStoredEventsViewController: BaseViewController {
 	}
 }
 
-//extension RemoteEventItemView {
-//
-//	/// Create a event item view
-//	/// - Parameters:
-//	///   - title: the title of the view
-//	///   - subTitle: the sub title of the view
-//	///   - command: the command to execute when tapped
-//	/// - Returns: an event item view
-//	fileprivate static func makeView(
-//		title: String,
-//		details: [String],
-//		command: (() -> Void)? ) -> RemoteEventItemView {
-//
-//		let view = RemoteEventItemView()
-//		view.isUserInteractionEnabled = true
-//		view.title = title
-//		view.details = details
-//		view.link = L.holderEventDetails()
-//		view.disclaimerButtonTappedCommand = command
-//		return view
-//	}
-//}
+extension RedDisclosureButton {
+
+	/// Create a simple disclosure button with subtitle
+	/// - Parameters:
+	///   - title: the title of the button
+	///   - command: the command to execute when tapped
+	/// - Returns: A disclosure button
+	static func makeRedButton(
+		title: String,
+		command: (() -> Void)? ) -> RedDisclosureButton {
+
+			let button = RedDisclosureButton()
+			button.isUserInteractionEnabled = true
+			button.title = title
+			button.primaryButtonTappedCommand = command
+			return button
+		}
+}
