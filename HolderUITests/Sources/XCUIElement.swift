@@ -56,10 +56,6 @@ extension XCUIElement {
 		}
 	}
 	
-	func linkExists(_ label: String) {
-		_ = self.links[label].assertExistence()
-	}
-	
 	func containsText(_ text: String) {
 		let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
 		let elementQuery = self.descendants(matching: .any)
