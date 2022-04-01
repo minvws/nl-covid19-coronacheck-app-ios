@@ -241,10 +241,7 @@ class ListStoredEventsView: ScrolledStackView {
 		}
 	}
 
-	func setEventStackVisibility(ishidden: Bool) {
+	func setListStackVisibility(ishidden: Bool) {
 		listStackView.isHidden = ishidden
-		if ishidden {
-			stackView.setCustomSpacing(ViewTraits.Button.spacing, after: contentTextView)
-		}
 	}
 }

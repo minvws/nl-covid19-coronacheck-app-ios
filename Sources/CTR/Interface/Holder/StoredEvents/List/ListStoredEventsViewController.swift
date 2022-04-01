@@ -81,6 +81,7 @@ class ListStoredEventsViewController: BaseViewController {
 	private func setForLoadingState(_ content: Content) {
 
 		sceneView.shouldShowLoadingSpinner = true
+		sceneView.backgroundColor = C.white()
 		displayContent(content)
 
 		removeExistingRows()
@@ -96,8 +97,9 @@ class ListStoredEventsViewController: BaseViewController {
 	private func setForListEvents(_ content: Content, rows: [Row]) {
 
 		sceneView.shouldShowLoadingSpinner = false
+		sceneView.backgroundColor = C.grey5()
 		displayContent(content)
-		sceneView.setEventStackVisibility(ishidden: false)
+		sceneView.setListStackVisibility(ishidden: false)
 
 		// Remove previously added rows:
 		removeExistingRows()
@@ -115,20 +117,16 @@ class ListStoredEventsViewController: BaseViewController {
 //			}
 //			.forEach(self.sceneView.addEventItemView)
 		
-//		if let actionTitle = content.primaryActionTitle {
-//			sceneView.setEventStackVisibility(ishidden: true)
-//			let button = RedDisclosureButton.makeRedButton(title: actionTitle, command: content.primaryAction)
-//			let view = UIView()
-//			view.backgroundColor = C.white()
-//			button.embed(in: view, insets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
-//			sceneView.listStackView.addArrangedSubview(view)
-//		}
+		if rows.isEmpty {
+			let view = ListStoredEventTitleView.makeView(title: L.holder_storedEvents_list_noEvents())
+			sceneView.listStackView.addArrangedSubview(view)
+		}
 	}
 
 	private func setForFeedback(_ content: Content) {
 //
 //		sceneView.shouldShowLoadingSpinner = false
-//		sceneView.setEventStackVisibility(ishidden: true)
+//		sceneView.setListStackVisibility(ishidden: true)
 //		displayContent(content)
 //		removeExistingRows()
 //		navigationItem.leftBarButtonItem = nil
@@ -171,4 +169,13 @@ extension RedDisclosureButton {
 			button.primaryButtonTappedCommand = command
 			return button
 		}
+}
+
+extension ListStoredEventTitleView {
+	static func makeView(title: String) -> ListStoredEventTitleView {
+		
+		let view = ListStoredEventTitleView()
+		view.title = title
+		return view
+	}
 }
