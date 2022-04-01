@@ -57,7 +57,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.menuStackView.arrangedSubviews)
 			.to(haveCount(2))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(6))
+			.to(haveCount(7))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(6))
 		expect(self.sut.sceneView.appVersion).toNot(beNil())
@@ -143,6 +143,27 @@ class AboutThisAppViewControllerTests: XCTestCase {
 				.cancel(L.generalCancel())
 			]
 		)
+	}
+
+	func test_resetData_holder() throws {
+		
+		// Given
+		let alertVerifier = AlertVerifier()
+		loadView()
+		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[5] as? SimpleDisclosureButton)?.primaryButtonTapped()
+		
+		// When
+		try alertVerifier.executeAction(forButton: L.holderCleardataAlertRemove())
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
+		expect(self.coordinatorSpy.invokedRestart) == true
 	}
 	
 	func test_resetData_verifier() throws {

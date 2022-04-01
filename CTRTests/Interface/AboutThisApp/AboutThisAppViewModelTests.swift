@@ -61,12 +61,13 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.holderAboutText()
 		expect(self.sut.menu).to(haveCount(2))
 		expect(self.sut.menu[0].key) == L.holderAboutReadmore()
-		expect(self.sut.menu[0].value).to(haveCount(5))
+		expect(self.sut.menu[0].value).to(haveCount(6))
 		expect(self.sut.menu[0].value[0].identifier) == .privacyStatement
 		expect(self.sut.menu[0].value[1].identifier) == AboutThisAppMenuIdentifier.accessibility
 		expect(self.sut.menu[0].value[2].identifier) == .colophon
 		expect(self.sut.menu[0].value[3].identifier) == .storedEvents
-		expect(self.sut.menu[0].value[4].identifier) == .deeplink
+		expect(self.sut.menu[0].value[4].identifier) == .reset
+		expect(self.sut.menu[0].value[5].identifier) == .deeplink
 		
 		expect(self.sut.menu[1].value[0].identifier) == .useNoDisclosurePolicy
 		expect(self.sut.menu[1].value[1].identifier) == .use1GDisclosurePolicy
@@ -258,6 +259,24 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.sut.configVersion) == "Configuratie hereisa, 15-07-2021 17:02"
 	}
 	
+	func test_menuOptionSelected_clearData_forHolder() {
+
+		// Given
+		sut = AboutThisAppViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
+			flavor: AppFlavor.holder
+		)
+		// When
+		sut.menuOptionSelected(.reset)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == false
+		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert?.title) == L.holderCleardataAlertTitle()
+		expect(self.sut.alert?.subTitle) == L.holderCleardataAlertSubtitle()
+	}
+	
 	func test_menuOptionSelected_storedEvents_forHolder() {
 		
 		// Given
@@ -289,12 +308,33 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString.contains("scanner-test")) == true
 	}
 	
+	func test_resetData_holder() {
+
+		// Given
+		
+		// When
+		sut.wipePersistedData()
+
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.scanLogManagerSpy.invokedWipePersistedData) == false
+		expect(self.environmentSpies.scanLockManagerSpy.invokedWipePersistedData) == false
+		expect(self.environmentSpies.verificationPolicyManagerSpy.invokedWipePersistedData) == false
+		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
+		expect(self.coordinatorSpy.invokedRestart) == true
+	}
+	
 	func test_resetData_verifier() {
 
 		// Given
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
-			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
 			flavor: AppFlavor.verifier
 		)
 
@@ -319,7 +359,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		
 		sut = AboutThisAppViewModel(
 			coordinator: coordinatorSpy,
-			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifie"),
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
 			flavor: AppFlavor.verifier
 		)
 		// When
