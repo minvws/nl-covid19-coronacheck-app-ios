@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import UIKit
 
@@ -52,7 +52,7 @@ final class DCCQRDetailsView: BaseView {
 	
 	/// The stack view to add all labels to
 	private let stackView: UIStackView = {
-
+		
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
@@ -71,7 +71,7 @@ final class DCCQRDetailsView: BaseView {
 		
 		stackView.embed(
 			in: safeAreaLayoutGuide,
-            insets: .bottom(ViewTraits.margin) + .leftRight(ViewTraits.margin)
+			insets: .bottom(ViewTraits.margin) + .leftRight(ViewTraits.margin)
 		)
 	}
 	
@@ -156,7 +156,7 @@ private extension DCCQRDetailsView {
 				  let field = labelView.field,
 				  let value = labelView.value else { return }
 			
-			if UIAccessibility.isVoiceOverRunning {
+			if UIAccessibility.isVoiceOverRunning || CommandLine.arguments.contains("-showAccessibilityLabels")	{
 				// Show labels for VoiceOver
 				labelView.accessibilityLabel = [field, value].joined(separator: ",")
 			} else {

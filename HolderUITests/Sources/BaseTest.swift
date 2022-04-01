@@ -19,6 +19,7 @@ class BaseTest: XCTestCase {
 		try super.setUpWithError()
 		app.launchArguments.append(contentsOf: ["-resetOnStart"])
 		app.launchArguments.append(contentsOf: ["-skipOnboarding"])
+		app.launchArguments.append(contentsOf: ["-showAccessibilityLabels"])
 		app.launchArguments.append(contentsOf: [disclosureMode.rawValue])
 		app.launch()
 		XCTAssertTrue(app.waitForExistence(timeout: 10.0), "App did not start")

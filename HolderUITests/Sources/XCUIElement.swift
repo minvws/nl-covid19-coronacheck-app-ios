@@ -42,18 +42,8 @@ extension XCUIElement {
 	}
 	
 	func labelValuePairExist(label: String, value: String) {
-		let texts = self.staticTexts.allElementsBoundByIndex
-		
-		var checkNext = false
-		for text in texts {
-			if checkNext {
-				XCTAssertEqual(text.label, value)
-				break
-			}
-			if text.label == label {
-				checkNext = true
-			}
-		}
+		let elementLabel = [label, value].joined(separator: ",")
+		_ = self.otherElements[elementLabel].assertExistence()
 	}
 	
 	func containsText(_ text: String) {

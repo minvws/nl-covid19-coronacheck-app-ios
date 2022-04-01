@@ -263,7 +263,7 @@ extension BaseTest {
 	
 	private func openQRDetails(for person: TestPerson) {
 		app.tapButton("InformationButton")
-		app.labelValuePairExist(label: "Naam / Name: ", value: person.name)
+		app.labelValuePairExist(label: "Naam / Name:", value: person.name)
 		app.labelValuePairExist(label: "Geboortedatum / Date of birth*:", value: formattedDate(of: person.birthDate, short: true))
 	}
 	
