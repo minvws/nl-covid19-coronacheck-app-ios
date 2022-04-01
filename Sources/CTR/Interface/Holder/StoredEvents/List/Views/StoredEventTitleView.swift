@@ -7,14 +7,13 @@
 
 import UIKit
 
-class ListStoredEventTitleView: BaseView {
+class StoredEventTitleView: BaseView {
 	
 	/// The display constants
 	fileprivate struct ViewTraits {
 		
 		// Dimensions
 		static let lineHeight: CGFloat = 22
-		static let disclosureHeight: CGFloat = 12
 		static let kerning: CGFloat = -0.41
 		
 		// Margins
@@ -53,7 +52,7 @@ class ListStoredEventTitleView: BaseView {
 		backgroundColor = C.white()
 		titleLabel.textColor = C.secondaryText()
 		topLineView.backgroundColor = C.grey4()
-		bottomLineView.tintColor = C.grey4()
+		bottomLineView.backgroundColor = C.grey4()
 	}
 	
 	/// Setup the hierarchy
@@ -118,6 +117,43 @@ class ListStoredEventTitleView: BaseView {
 				ViewTraits.lineHeight,
 				kerning: ViewTraits.kerning,
 				textColor: C.secondaryText()!
+			)
+		}
+	}
+}
+
+class StoredEventHeaderView: StoredEventTitleView {
+	
+	/// The display constants
+	private struct ViewTraits {
+		
+		enum Title {
+			static let lineHeight: CGFloat = 16
+		}
+		enum View {
+			static let topMargin: CGFloat = 13.0
+			static let bottomMargin: CGFloat = 13.0
+		}
+	}
+	
+	override func setupViews() {
+		
+		super.setupViews()
+		titleLabel.font = Fonts.caption1
+	}
+	
+	override func setupViewConstraints() {
+		
+		super.setupViewConstraints()
+		titleTopMarginConstraint?.constant = StoredEventHeaderView.ViewTraits.View.topMargin
+		titleBottomMarginConstraint?.constant = -StoredEventHeaderView.ViewTraits.View.bottomMargin
+	}
+	
+	/// The  title
+	override var title: String? {
+		didSet {
+			titleLabel.attributedText = title?.setLineHeight(
+				StoredEventHeaderView.ViewTraits.Title.lineHeight
 			)
 		}
 	}

@@ -69,7 +69,24 @@ class ListStoredEventsViewModel: Logging {
 					guard let url = URL(string: L.holder_storedEvents_url()) else { return }
 					self?.coordinator?.openUrl(url, inApp: true)
 				}),
-			rows: []
+//			groups: []
+			groups: [
+				ListStoredEventsViewController.Group(
+					header: ListStoredEventsViewController.Header(title: "Header 1"),
+					rows: [
+						ListStoredEventsViewController.Row(title: "Row 1.1", details: "Details 1.1", action: nil)
+					],
+					action: ListStoredEventsViewController.Action(title: "Action 1", action: nil)
+				),
+				ListStoredEventsViewController.Group(
+					header: ListStoredEventsViewController.Header(title: "Header 2"),
+					rows: [
+						ListStoredEventsViewController.Row(title: "Row 2.1", details: "Details 2.1", action: nil),
+						ListStoredEventsViewController.Row(title: "Row 2.2", details: "Details 2,2", action: nil)
+					],
+					action: ListStoredEventsViewController.Action(title: "Action 2", action: nil)
+				)
+			]
 		)
 	}
 }

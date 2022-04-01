@@ -228,11 +228,10 @@ class ListStoredEventsView: ScrolledStackView {
 			separator.heightAnchor.constraint(equalToConstant: 1)
 		])
 	}
+	
+	func addGroupStackView(_ groupView: UIStackView) {
 
-	func addEventItemView(_ eventView: RemoteEventItemView) {
-
-		listStackView.addArrangedSubview(eventView)
-		addSeparator()
+		listStackView.addArrangedSubview(groupView)
 	}
 
 	var hideForCapture: Bool = false {
