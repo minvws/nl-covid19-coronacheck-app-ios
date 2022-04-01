@@ -156,7 +156,7 @@ private extension DCCQRDetailsView {
 				  let field = labelView.field,
 				  let value = labelView.value else { return }
 			
-			if UIAccessibility.isVoiceOverRunning || CommandLine.arguments.contains("-showAccessibilityLabels")	{
+			if UIAccessibility.isVoiceOverRunning || CommandLine.arguments.contains("-showAccessibilityLabels") {
 				// Show labels for VoiceOver
 				labelView.accessibilityLabel = [field, value].joined(separator: ",")
 			} else {
