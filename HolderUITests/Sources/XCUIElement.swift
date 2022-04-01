@@ -30,27 +30,11 @@ extension XCUIElement {
 		return self
 	}
 	
-	private func waitAndTap() {
-		self.assertExistence().tap()
-	}
-	
-	func tapElement(type: ElementType, _ label: String) {
-		let elementQuery = self.descendants(matching: type).matching(identifier: label)
-		let predicate = NSPredicate(format: "isEnabled == true")
-		let element = elementQuery.element(matching: predicate)
-		element.waitAndTap()
-	}
-	
 	func tapButton(_ label: String) {
-		tapElement(type: .button, label)
-	}
-	
-	func tapText(_ label: String) {
-		tapElement(type: .staticText, label)
-	}
-	
-	func tapOther(_ label: String) {
-		tapElement(type: .other, label)
+		let elementQuery = self.descendants(matching: .button).matching(identifier: label)
+		let predicate = NSPredicate(format: "isEnabled == true")
+		let element = elementQuery.element(matching: predicate).firstMatch
+		element.assertExistence().tap()
 	}
 	
 	func textExists(_ label: String) {

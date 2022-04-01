@@ -17,7 +17,7 @@ extension BaseTest {
 	// MARK: - Certificate retrieval
 	
 	private func returnToCertificateOverview() {
-		app.tapText("Naar mijn bewijzen")
+		app.tapButton("Naar mijn bewijzen")
 	}
 	
 	func assertSomethingWentWrong() {
