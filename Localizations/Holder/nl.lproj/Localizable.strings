@@ -772,4 +772,4 @@
 "holder_storedEvents_button_handleData" = "Hoe gaat CoronaCheck met gegevens om?";
 "holder_storedEvents_url" = "https://coronacheck.nl";
 "holder_storedEvents_button_removeAllEvents" = "Alle gegevens wissen";
-"holder_storedEvents_list_noEvents" = "Geen gegevens";
+"holder_storedEvents_list_noEvents" = "Geen gegeven opgeslagen";

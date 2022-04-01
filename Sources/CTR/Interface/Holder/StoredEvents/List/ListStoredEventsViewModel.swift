@@ -62,10 +62,8 @@ class ListStoredEventsViewModel: Logging {
 			content: Content(
 				title: L.holder_storedEvents_title(),
 				body: L.holder_storedEvents_message(),
-				primaryActionTitle: L.holder_storedEvents_button_removeAllEvents(),
-				primaryAction: { [weak self] in
-					self?.showClearDataAlert()
-				},
+				primaryActionTitle: nil,
+				primaryAction: nil,
 				secondaryActionTitle: L.holder_storedEvents_button_handleData(),
 				secondaryAction: { [weak self] in
 					guard let url = URL(string: L.holder_storedEvents_url()) else { return }
@@ -73,26 +71,5 @@ class ListStoredEventsViewModel: Logging {
 				}),
 			rows: []
 		)
-	}
-	
-	private func showClearDataAlert() {
-
-		alert = AlertContent(
-			title: L.holderCleardataAlertTitle(),
-			subTitle: L.holderCleardataAlertSubtitle(),
-			cancelAction: nil,
-			cancelTitle: L.generalCancel(),
-			okAction: { [weak self] _ in
-				self?.wipePersistedData()
-			},
-			okTitle: L.holderCleardataAlertRemove(),
-			okActionIsDestructive: true
-		)
-	}
-	
-	private func wipePersistedData() {
-		
-		Current.wipePersistedData(flavor: .holder)
-		self.coordinator?.restart()
 	}
 }

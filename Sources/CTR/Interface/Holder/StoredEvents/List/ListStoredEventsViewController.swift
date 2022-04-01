@@ -115,14 +115,14 @@ class ListStoredEventsViewController: BaseViewController {
 //			}
 //			.forEach(self.sceneView.addEventItemView)
 		
-		if let actionTitle = content.primaryActionTitle {
-			sceneView.setEventStackVisibility(ishidden: true)
-			let button = RedDisclosureButton.makeRedButton(title: actionTitle, command: content.primaryAction)
-			let view = UIView()
-			view.backgroundColor = C.white()
-			button.embed(in: view, insets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
-			sceneView.listStackView.addArrangedSubview(view)
-		}
+//		if let actionTitle = content.primaryActionTitle {
+//			sceneView.setEventStackVisibility(ishidden: true)
+//			let button = RedDisclosureButton.makeRedButton(title: actionTitle, command: content.primaryAction)
+//			let view = UIView()
+//			view.backgroundColor = C.white()
+//			button.embed(in: view, insets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
+//			sceneView.listStackView.addArrangedSubview(view)
+//		}
 	}
 
 	private func setForFeedback(_ content: Content) {
