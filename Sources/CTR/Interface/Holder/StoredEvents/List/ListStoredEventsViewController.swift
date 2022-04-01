@@ -88,7 +88,7 @@ class ListStoredEventsViewController: BaseViewController {
 
 	private func removeExistingRows() {
 		// Remove previously added rows:
-		sceneView.eventStackView.subviews
+		sceneView.listStackView.subviews
 			.forEach { $0.removeFromSuperview()
 		}
 	}
@@ -118,7 +118,10 @@ class ListStoredEventsViewController: BaseViewController {
 		if let actionTitle = content.primaryActionTitle {
 			sceneView.setEventStackVisibility(ishidden: true)
 			let button = RedDisclosureButton.makeRedButton(title: actionTitle, command: content.primaryAction)
-			sceneView.eventStackView.addArrangedSubview(button)
+			let view = UIView()
+			view.backgroundColor = C.white()
+			button.embed(in: view, insets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
+			sceneView.listStackView.addArrangedSubview(view)
 		}
 	}
 

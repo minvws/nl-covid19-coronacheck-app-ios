@@ -11,6 +11,10 @@ class ListStoredEventsView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {
+		
+		enum TopView {
+			static let inset: UIEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 24, right: 20)
+		}
 
 		enum Title {
 			static let spacing: CGFloat = 24
@@ -26,7 +30,23 @@ class ListStoredEventsView: ScrolledStackView {
 			static let spacing: CGFloat = 8
 		}
 	}
+	
+	private let navigationBackgroundView: UIView = {
+		
+		let view = UIView()
+		view.backgroundColor = C.white()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
 
+	private let topView: UIView = {
+		
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = C.white()
+		return view
+	}()
+	
 	/// The title label
 	private let titleLabel: Label = {
 
@@ -40,8 +60,8 @@ class ListStoredEventsView: ScrolledStackView {
 		return view
 	}()
 
-	/// The stack view for the event
-	let eventStackView: UIStackView = {
+	/// The stack view for the intro and title
+	let topStackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -49,6 +69,18 @@ class ListStoredEventsView: ScrolledStackView {
 		view.alignment = .fill
 		view.distribution = .fill
 		view.spacing = 0
+		return view
+	}()
+	
+	/// The stack view for the event groups
+	let listStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .fill
+		view.distribution = .fill
+		view.spacing = 40
 		return view
 	}()
 
@@ -93,35 +125,51 @@ class ListStoredEventsView: ScrolledStackView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = C.white()
-		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
+		backgroundColor = C.grey5()
+		
+		stackViewInset = .zero
+		stackView.spacing = 0
 		stackView.distribution = .fill
+		stackView.shouldGroupAccessibilityChildren = true
+		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
+		scrollView.bounces = false
 	}
 
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
 
+		addSubview(navigationBackgroundView)
 		addSubview(spinner)
-
-		stackView.addArrangedSubview(titleLabel)
-		stackView.setCustomSpacing(ViewTraits.Title.spacing, after: titleLabel)
-		stackView.addArrangedSubview(contentTextView)
-		stackView.setCustomSpacing(ViewTraits.Button.spacing, after: contentTextView)
-		stackView.addArrangedSubview(secondaryButton)
-		stackView.setCustomSpacing(ViewTraits.List.spacing, after: secondaryButton)
-		stackView.addArrangedSubview(eventStackView)
+		
+		topStackView.embed(in: topView, insets: ViewTraits.TopView.inset)
+		
+		topStackView.addArrangedSubview(titleLabel)
+		topStackView.setCustomSpacing(ViewTraits.Title.spacing, after: titleLabel)
+		topStackView.addArrangedSubview(contentTextView)
+		topStackView.setCustomSpacing(ViewTraits.Button.spacing, after: contentTextView)
+		topStackView.addArrangedSubview(secondaryButton)
+		
+		stackView.addArrangedSubview(topView)
+		stackView.addArrangedSubview(listStackView)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-
-		NSLayoutConstraint.activate([
-			spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
-			spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
-		])
+		
+		var constraints = [NSLayoutConstraint]()
+		
+		constraints += [navigationBackgroundView.leftAnchor.constraint(equalTo: leftAnchor)]
+		constraints += [navigationBackgroundView.rightAnchor.constraint(equalTo: rightAnchor)]
+		constraints += [navigationBackgroundView.topAnchor.constraint(equalTo: topAnchor)]
+		constraints += [navigationBackgroundView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor)]
+		
+		constraints += [spinner.centerYAnchor.constraint(equalTo: centerYAnchor)]
+		constraints += [spinner.centerXAnchor.constraint(equalTo: centerXAnchor)]
+		
+		NSLayoutConstraint.activate(constraints)
 	}
 
 	private func createSeparatorView() -> UIView {
@@ -174,7 +222,7 @@ class ListStoredEventsView: ScrolledStackView {
 	func addSeparator() {
 
 		let separator = createSeparatorView()
-		eventStackView.addArrangedSubview(separator)
+		listStackView.addArrangedSubview(separator)
 
 		NSLayoutConstraint.activate([
 			separator.heightAnchor.constraint(equalToConstant: 1)
@@ -183,18 +231,18 @@ class ListStoredEventsView: ScrolledStackView {
 
 	func addEventItemView(_ eventView: RemoteEventItemView) {
 
-		eventStackView.addArrangedSubview(eventView)
+		listStackView.addArrangedSubview(eventView)
 		addSeparator()
 	}
 
 	var hideForCapture: Bool = false {
 		didSet {
-			eventStackView.isHidden = hideForCapture
+			listStackView.isHidden = hideForCapture
 		}
 	}
 
 	func setEventStackVisibility(ishidden: Bool) {
-		eventStackView.isHidden = ishidden
+		listStackView.isHidden = ishidden
 		if ishidden {
 			stackView.setCustomSpacing(ViewTraits.Button.spacing, after: contentTextView)
 		}
