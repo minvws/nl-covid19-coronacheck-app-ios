@@ -56,7 +56,8 @@ final class DCCQRLabelMessageView: BaseView {
 	
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(text: message, style: .bodyDark)
+			messageTextView.attributedText = .makeFromHtml(text: message,
+														   style: .init(font: Fonts.subhead, textColor: C.black()!))
 		}
 	}
 }
