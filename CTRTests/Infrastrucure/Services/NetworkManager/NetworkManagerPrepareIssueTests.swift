@@ -211,6 +211,28 @@ class NetworkManagerPrepareIssueTests: XCTestCase {
 
 		waitForExpectations(timeout: 10, handler: nil)
 	}
+	
+	func test_prepareIssue_authenticationCancelled() {
+		
+		// Given
+		let expectation = self.expectation(description: "test_prepareIssue_authenticationCancelled")
+		
+		stub(condition: isPath(path)) { _ in
+			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
+			return HTTPStubsResponse(error: notConnectedError)
+		}
+		
+		// When
+		sut.prepareIssue { result in
+			
+			// Then
+			expect(result.isFailure) == true
+			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .authenticationCancelled)
+			expectation.fulfill()
+		}
+		
+		waitForExpectations(timeout: 10, handler: nil)
+	}
 
 	func test_prepareIssue_serverErrorMessage() {
 

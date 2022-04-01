@@ -221,6 +221,29 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 
 		waitForExpectations(timeout: 10, handler: nil)
 	}
+	
+	func test_fetchEventAccessTokens_authenticationCancelled() {
+		
+		// Given
+		let expectation = self.expectation(description: "test_fetchEventAccessTokens_authenticationCancelled")
+		let token = "test_fetchEventAccessTokens_unknownError"
+		
+		stub(condition: isPath(path)) { _ in
+			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
+			return HTTPStubsResponse(error: notConnectedError)
+		}
+		
+		// When
+		sut.fetchEventAccessTokens(tvsToken: token) { result in
+			
+			// Then
+			expect(result.isFailure) == true
+			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .authenticationCancelled)
+			expectation.fulfill()
+		}
+		
+		waitForExpectations(timeout: 10, handler: nil)
+	}
 
 	func test_fetchEventAccessTokens_serverErrorMessage() {
 

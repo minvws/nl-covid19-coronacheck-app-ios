@@ -22,28 +22,28 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 
 	var invokedAppendUpdateObserver = false
 	var invokedAppendUpdateObserverCount = 0
-	var stubbedAppendUpdateObserverObserverResult: (RemoteConfiguration, Data, URLResponse)?
+	var stubbedAppendUpdateObserverObserverResult: (RemoteConfigManager.ConfigNotification, Void)?
 	var stubbedAppendUpdateObserverResult: ObserverToken!
 
-	func appendUpdateObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken {
+	func appendUpdateObserver(_ observer: @escaping (RemoteConfigManager.ConfigNotification) -> Void) -> ObserverToken {
 		invokedAppendUpdateObserver = true
 		invokedAppendUpdateObserverCount += 1
 		if let result = stubbedAppendUpdateObserverObserverResult {
-			observer(result.0, result.1, result.2)
+			observer(result.0)
 		}
 		return stubbedAppendUpdateObserverResult
 	}
 
 	var invokedAppendReloadObserver = false
 	var invokedAppendReloadObserverCount = 0
-	var stubbedAppendReloadObserverObserverResult: (RemoteConfiguration, Data, URLResponse)?
+	var stubbedAppendReloadObserverObserverResult: (Result<RemoteConfigManager.ConfigNotification, ServerError>, Void)?
 	var stubbedAppendReloadObserverResult: ObserverToken!
 
-	func appendReloadObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken {
+	func appendReloadObserver(_ observer: @escaping (Result<RemoteConfigManager.ConfigNotification, ServerError>) -> Void) -> ObserverToken {
 		invokedAppendReloadObserver = true
 		invokedAppendReloadObserverCount += 1
 		if let result = stubbedAppendReloadObserverObserverResult {
-			observer(result.0, result.1, result.2)
+			observer(result.0)
 		}
 		return stubbedAppendReloadObserverResult
 	}

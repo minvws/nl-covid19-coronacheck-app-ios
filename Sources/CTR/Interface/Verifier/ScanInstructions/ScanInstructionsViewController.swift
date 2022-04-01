@@ -13,8 +13,8 @@ class ScanInstructionsViewController: BaseViewController {
 	private let viewModel: ScanInstructionsViewModel
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 
-	private let skipButton: UIButton = {
-		let button = UIButton(type: .custom)
+	private let skipButton: TappableButton = {
+		let button = TappableButton(type: .custom)
 		button.setTitle(L.verifierScaninstructionsNavigationSkipbuttonTitle(), for: .normal)
 		button.setupLargeContentViewer(title: L.verifierScaninstructionsNavigationSkipbuttonTitle())
 		button.setTitleColor(C.primaryBlue(), for: .normal)

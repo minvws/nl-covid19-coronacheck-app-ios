@@ -8,7 +8,7 @@
 import UIKit
 
 /// A styled UIButton subclass
-class Button: UIButton {
+class Button: TappableButton {
 	
     enum ButtonType {
 		/// Rounded, blue background, white text
