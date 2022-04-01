@@ -106,7 +106,7 @@ final class DCCQRDetailsView: BaseView {
 	}
 	
 	/// The dcc details
-	var details: [(field: String, value: String)]? {
+	var details: [(field: String, value: String, message: String?)]? {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details)
@@ -129,17 +129,25 @@ final class DCCQRDetailsView: BaseView {
 
 private extension DCCQRDetailsView {
 	
-	func loadDetails(_ details: [(field: String, value: String)]) {
+	func loadDetails(_ details: [(field: String, value: String, message: String?)]) {
 		
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(descriptionLabel)
 		
 		details.forEach { detail in
 			
-			let labelView = DCCQRLabelView()
-			labelView.field = detail.field
-			labelView.value = detail.value
-			stackView.addArrangedSubview(labelView)
+			if let message = detail.message {
+				let labelView = DCCQRLabelMessageView()
+				labelView.labelView.field = detail.field
+				labelView.labelView.value = detail.value
+				labelView.message = message
+				stackView.addArrangedSubview(labelView)
+			} else {
+				let labelView = DCCQRLabelView()
+				labelView.field = detail.field
+				labelView.value = detail.value
+				stackView.addArrangedSubview(labelView)
+			}
 		}
 		
 		stackView.addArrangedSubview(dateInformationLabel)
