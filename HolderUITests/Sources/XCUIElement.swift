@@ -47,8 +47,8 @@ extension XCUIElement {
 	}
 	
 	func containsText(_ text: String) {
-		let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
 		let elementQuery = self.descendants(matching: .any)
+		let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
 		let element = elementQuery.element(matching: predicate)
 		_ = element.assertExistence()
 	}
