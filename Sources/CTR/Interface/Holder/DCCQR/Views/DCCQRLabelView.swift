@@ -18,16 +18,12 @@ final class DCCQRLabelView: BaseView {
 	
 	/// The field label
 	private let fieldLabel: Label = {
-		let label = Label(subhead: "").multiline()
-		label.textColor = C.black()
-		return label
+		return Label(subhead: "").multiline()
 	}()
 	
 	/// The value label
 	private let valueLabel: Label = {
-		let label = Label(bodyBold: "").multiline()
-		label.textColor = C.black()
-		return label
+		return Label(bodyBold: "").multiline()
 	}()
 	
 	override func setupViews() {
