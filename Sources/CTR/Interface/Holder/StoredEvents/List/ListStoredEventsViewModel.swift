@@ -11,7 +11,6 @@ class ListStoredEventsViewModel: Logging {
 
 	weak var coordinator: (Restartable & OpenUrlProtocol)?
 
-//	private let walletManager: WalletManaging = Current.walletManager
 //	let remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
 //	private let greenCardLoader: GreenCardLoading
 //	let mappingManager: MappingManaging = Current.mappingManager
@@ -69,24 +68,82 @@ class ListStoredEventsViewModel: Logging {
 					guard let url = URL(string: L.holder_storedEvents_url()) else { return }
 					self?.coordinator?.openUrl(url, inApp: true)
 				}),
-//			groups: []
-			groups: [
-				ListStoredEventsViewController.Group(
-					header: ListStoredEventsViewController.Header(title: "Header 1"),
-					rows: [
-						ListStoredEventsViewController.Row(title: "Row 1.1", details: "Details 1.1", action: nil)
-					],
-					action: ListStoredEventsViewController.Action(title: "Action 1", action: nil)
-				),
-				ListStoredEventsViewController.Group(
-					header: ListStoredEventsViewController.Header(title: "Header 2"),
-					rows: [
-						ListStoredEventsViewController.Row(title: "Row 2.1", details: "Details 2.1", action: nil),
-						ListStoredEventsViewController.Row(title: "Row 2.2", details: "Details 2,2", action: nil)
-					],
-					action: ListStoredEventsViewController.Action(title: "Action 2", action: nil)
-				)
-			]
+			groups: getEventGroups()
 		)
+	}
+	
+	private func getEventGroups() -> [ListStoredEventsViewController.Group] {
+		
+		var result = [ListStoredEventsViewController.Group]()
+		let events = Current.walletManager.listEventGroups()
+		events.forEach { eventGroup in
+			result.append(ListStoredEventsViewController.Group(
+				header: ListStoredEventsViewController.Header(title: "Opgehaald bij \(eventGroup.providerIdentifier)"),
+				rows: getEventRows(eventGroup),
+				action: ListStoredEventsViewController.Action(title: "Gegevens wissen", action: {
+					self.logDebug("We should show popup for delete eventGroup \(eventGroup.objectID)")
+				})))
+		}
+		return result
+	}
+	
+	private func getEventRows(_ storedEvent: EventGroup) -> [ListStoredEventsViewController.Row] {
+		
+		var result = [ListStoredEventsViewController.Row]()
+		
+		if let jsonData = storedEvent.jsonData {
+			if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
+			   let decodedPayloadData = Data(base64Encoded: object.payload),
+			   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
+				
+				wrapper.events?.forEach { event in
+					
+					if let date = event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) {
+						let dateString = ListRemoteEventsViewModel.printDateFormatter.string(from: date)
+						result.append(
+							ListStoredEventsViewController.Row(
+								title: event.type,
+								details: dateString,
+								action: { [weak self] in
+									self?.showEventDetails(event)
+								}
+							)
+						)
+					}
+				}
+
+			} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
+				if let credentialData = object.credential.data(using: .utf8),
+				   let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) {
+					// Todo Rec + Negative Test
+					self.logDebug("todo, extract details from: \(euCredentialAttributes)")
+					euCredentialAttributes.digitalCovidCertificate.vaccinations?.forEach { vaccination in
+						
+						let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
+							.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? vaccination.dateOfVaccination
+						result.append(
+							ListStoredEventsViewController.Row(
+								title: "DCC Vaccination",
+								details: formattedVaccinationDate,
+								action: { [weak self] in
+									self?.showEventDetails(euCredentialAttributes)
+								}
+							)
+						)
+					}
+				}
+			}
+		}
+		return result
+	}
+	
+	private func showEventDetails(_ event: EventFlow.Event) {
+		
+		self.logDebug("We should show details for \(event)")
+	}
+	
+	private func showEventDetails(_ event: EuCredentialAttributes) {
+		
+		self.logDebug("We should show details for \(event)")
 	}
 }

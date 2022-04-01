@@ -104,9 +104,7 @@ class ListStoredEventsViewController: BaseViewController {
 
 	private func removeExistingRows() {
 		// Remove previously added rows:
-		sceneView.listStackView.subviews
-			.forEach { $0.removeFromSuperview()
-		}
+		sceneView.listStackView.removeArrangedSubviews()
 	}
 
 	private func setForListEvents(_ content: Content, groups: [Group]) {
