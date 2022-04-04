@@ -20,7 +20,7 @@ final class DCCQRLabelMessageView: BaseView {
 		return view
 	}()
 	
-	private let messageTextView: TextView = {
+	let messageTextView: TextView = {
 		let textView = TextView()
 		textView.translatesAutoresizingMaskIntoConstraints = false
 		return textView

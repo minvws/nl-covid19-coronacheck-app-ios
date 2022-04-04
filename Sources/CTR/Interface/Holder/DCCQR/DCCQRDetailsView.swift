@@ -106,7 +106,7 @@ final class DCCQRDetailsView: BaseView {
 	}
 	
 	/// The dcc details
-	var details: [(field: String, value: String, message: String?)]? {
+	var details: [(field: String, value: String, dosageMessage: String?)]? {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details)
@@ -125,22 +125,27 @@ final class DCCQRDetailsView: BaseView {
 	func handleScreenCapture(shouldHide: Bool) {
 		stackView.isHidden = shouldHide
 	}
+	
+	var dosageLinkTouchedCommand: ((URL) -> Void)?
 }
 
 private extension DCCQRDetailsView {
 	
-	func loadDetails(_ details: [(field: String, value: String, message: String?)]) {
+	func loadDetails(_ details: [(field: String, value: String, dosageMessage: String?)]) {
 		
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(descriptionLabel)
 		
 		details.forEach { detail in
 			
-			if let message = detail.message {
+			if let dosageMessage = detail.dosageMessage {
 				let labelView = DCCQRLabelMessageView()
 				labelView.labelView.field = detail.field
 				labelView.labelView.value = detail.value
-				labelView.message = message
+				labelView.message = dosageMessage
+				labelView.messageTextView.linkTouched { [weak self] url in
+					self?.dosageLinkTouchedCommand?(url)
+				}
 				stackView.addArrangedSubview(labelView)
 			} else {
 				let labelView = DCCQRLabelView()
