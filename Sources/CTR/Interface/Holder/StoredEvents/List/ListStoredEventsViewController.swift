@@ -83,14 +83,7 @@ class ListStoredEventsViewController: BaseViewController {
 		sceneView.shouldShowLoadingSpinner = true
 		displayContent(content)
 
-		removeExistingRows()
-	}
-
-	private func removeExistingRows() {
-		// Remove previously added rows:
-		sceneView.listStackView.subviews
-			.forEach { $0.removeFromSuperview()
-		}
+		sceneView.removeExistingRows()
 	}
 
 	private func setForListEvents(_ content: Content, rows: [Row]) {
@@ -100,7 +93,7 @@ class ListStoredEventsViewController: BaseViewController {
 		sceneView.setEventStackVisibility(ishidden: false)
 
 		// Remove previously added rows:
-		removeExistingRows()
+		sceneView.removeExistingRows()
 
 		sceneView.addSeparator()
 
@@ -130,7 +123,7 @@ class ListStoredEventsViewController: BaseViewController {
 //		sceneView.shouldShowLoadingSpinner = false
 //		sceneView.setEventStackVisibility(ishidden: true)
 //		displayContent(content)
-//		removeExistingRows()
+//		sceneView.removeExistingRows()
 //		navigationItem.leftBarButtonItem = nil
 	}
 
@@ -140,7 +133,7 @@ class ListStoredEventsViewController: BaseViewController {
 		sceneView.title = content.title
 		sceneView.message = content.body
 
-		sceneView.contentTextView.linkTouched { [weak self] url in
+		sceneView.messageLinkTapHandler = { [weak self] url in
 			self?.viewModel.openUrl(url)
 		}
 

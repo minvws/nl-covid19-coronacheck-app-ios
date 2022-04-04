@@ -11,11 +11,6 @@ class ListStoredEventsViewModel: Logging {
 
 	weak var coordinator: (Restartable & OpenUrlProtocol)?
 
-//	private let walletManager: WalletManaging = Current.walletManager
-//	let remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
-//	private let greenCardLoader: GreenCardLoading
-//	let mappingManager: MappingManaging = Current.mappingManager
-
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
 			// Do not increment/decrement progress within this closure
@@ -35,11 +30,9 @@ class ListStoredEventsViewModel: Logging {
 
 	init(
 		coordinator: Restartable & OpenUrlProtocol
-//		greenCardLoader: GreenCardLoading
 	) {
 
 		self.coordinator = coordinator
-//		self.greenCardLoader = greenCardLoader
 
 		viewState = .loading(content: Content(title: L.holder_storedEvents_title()))
 
@@ -47,7 +40,6 @@ class ListStoredEventsViewModel: Logging {
 			self?.hideForCapture = isBeingCaptured
 		}
 
-//		viewState = getViewState(from: remoteEvents)
 		viewState = getViewState()
 	}
 
