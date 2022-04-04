@@ -75,7 +75,20 @@ final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 	/// Set up labels to support SwitchControl accessibility
 	func updateAccessibilityStatus() {
 		
+		guard let field = field, let value = value else { return }
+		
 		fieldLabel.setupForVoiceAndSwitchControlAccessibility()
 		valueLabel.setupForVoiceAndSwitchControlAccessibility()
+		
+		if UIAccessibility.isVoiceOverRunning || CommandLine.arguments.contains("-showAccessibilityLabels") {
+			// Show labels for VoiceOver
+			accessibilityLabel = [field, value].joined(separator: ",")
+		} else {
+			// Hide labels for VoiceControl
+			accessibilityLabel = nil
+		}
+		
+		// Disabled as interactive element for SwitchControl
+		isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
 	}
 }

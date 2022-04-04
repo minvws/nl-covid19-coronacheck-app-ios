@@ -14,7 +14,7 @@ final class DCCQRLabelMessageView: BaseView, DCCQRLabelViewable {
 		static let spacing: CGFloat = 1
 	}
 	
-	let labelView: DCCQRLabelView = {
+	private let labelView: DCCQRLabelView = {
 		let view = DCCQRLabelView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view

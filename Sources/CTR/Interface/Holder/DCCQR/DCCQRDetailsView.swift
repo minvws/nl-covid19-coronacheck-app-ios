@@ -165,20 +165,7 @@ private extension DCCQRDetailsView {
 		dateInformationLabel.setupForVoiceAndSwitchControlAccessibility()
 		
 		stackView.subviews.forEach { view in
-			guard let labelView = view as? (BaseView & DCCQRLabelViewable),
-				  let field = labelView.field,
-				  let value = labelView.value else { return }
-			
-			if UIAccessibility.isVoiceOverRunning || CommandLine.arguments.contains("-showAccessibilityLabels") {
-				// Show labels for VoiceOver
-				labelView.accessibilityLabel = [field, value].joined(separator: ",")
-			} else {
-				// Hide labels for VoiceControl
-				labelView.accessibilityLabel = nil
-			}
-			
-			// Disabled as interactive element for SwitchControl
-			labelView.isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
+			guard let labelView = view as? (BaseView & DCCQRLabelViewable) else { return }
 			
 			labelView.updateAccessibilityStatus()
 		}
