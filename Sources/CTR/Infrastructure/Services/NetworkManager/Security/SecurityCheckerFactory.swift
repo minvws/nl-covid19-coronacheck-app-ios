@@ -15,12 +15,14 @@ struct SecurityCheckerFactory {
 		challenge: URLAuthenticationChallenge?,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> SecurityCheckerProtocol {
 			
+#if DEBUG
 		if case SecurityStrategy.none = strategy {
 			return SecurityCheckerNone(
 				challenge: challenge,
 				completionHandler: completionHandler
 			)
 		}
+#endif
 		// Default for .config
 		var trustedNames = [TrustConfiguration.commonNameContent]
 		var trustedCertificates = [Data]()
@@ -54,6 +56,7 @@ protocol SecurityCheckerProtocol {
 	func checkSSL()
 }
 
+#if DEBUG
 /// Check nothing. Allow every connection. Used for testing.
 class SecurityCheckerNone: SecurityChecker {
 	
@@ -63,6 +66,7 @@ class SecurityCheckerNone: SecurityChecker {
 		completionHandler(.performDefaultHandling, nil)
 	}
 }
+#endif
 
 /// Security check for backend communication
 class SecurityChecker: SecurityCheckerProtocol, Logging {

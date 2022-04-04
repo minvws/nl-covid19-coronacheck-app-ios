@@ -41,7 +41,7 @@ final class FileStorage: FileStorageProtocol, Logging {
 		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
 		
 		try fileManager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
-		try data.write(to: fileUrl)
+		try data.write(to: fileUrl, options: .atomic)
 	}
 	
 	func read(fileName: String) -> Data? {

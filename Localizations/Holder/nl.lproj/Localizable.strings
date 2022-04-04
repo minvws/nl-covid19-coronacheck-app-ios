@@ -261,8 +261,8 @@
 "holder.errorstate.nosession.action" = "Begin opnieuw";
 "holder.errorstate.nosession.message" = "Je hebt te lang gewacht. Voor de veiligheid ben je daarom uitgelogd. Log opnieuw in met DigiD om je gegevens op te halen.";
 "holder.errorstate.nosession.title" = "Je sessie is gestopt";
-"holder.errorstate.server.message" = "<p>We zijn hard bezig om dit probleem op te lossen. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
-"holder.errorstate.server.messages" = "<p>We zijn hard bezig om dit probleem op te lossen. Wil je het later nog eens proberen?</p><p><b>Foutcodes:</b><br />%@</p>";
+"holder.errorstate.server.message" = "<p>We zijn bezig met een oplossing. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
+"holder.errorstate.server.messages" = "<p>We zijn bezig met een oplossing. Wil je het later nog eens proberen?</p><p><b>Foutcodes:</b><br />%@</p>";
 "holder.errorstate.someresult.message" = "Door een storing of drukte zijn mogelijk niet al jouw gegevens opgehaald. Mist er een vaccinatie? Kom later terug en haal opnieuw je gegevens op.";
 "holder.errorstate.someresult.title" = "Zijn dit al je vaccinaties?";
 "holder.errorstate.test.message" = "<p>Er gaat iets mis bij de testlocatie. Daardoor kunnen jouw gegevens niet worden opgehaald.</p><p><b>Wat nu?</b><br />Neem contact op met je testlocatie en geef de volgende foutcode door:</p><p><b>Foutcode:</b><br />%@</p>";
@@ -582,8 +582,6 @@
 "holder_dashboard_3Gand1GaccessBanner_title" = "De Nederlandse toegangsregels zijn veranderd. Er zijn nu aparte bewijzen voor plekken die 3G-toegang en 1G-toegang geven.";
 "holder_dashboard_accessibility_access" = "Toegangsbewijs";
 "holder_dashboard_accessibility_notification" = "Notificatie";
-"holder_dashboard_addBoosterBanner_button_addBooster" = "Boostervaccinatie toevoegen";
-"holder_dashboard_addBoosterBanner_title" = "Heb je een boostervaccinatie gehad? Haal opnieuw je gegevens op als je deze aan je bewijs wilt toevoegen";
 "holder_dashboard_addCard_title" = "Nieuwe vaccinatie of test toevoegen";
 "holder_dashboard_domesticQRCard_1G_label" = "1G";
 "holder_dashboard_domesticQRCard_1G_title" = "Bewijs voor 1G-toegang";
@@ -599,9 +597,6 @@
 "holder_dashboard_intro_domestic_3Gand1Gaccess" = "<p>Check vooraf of je een bewijs voor <a href=\"https://coronacheck.nl/toegangsregels/3g-1g-toegang\">3G- of 1G toegang</a> nodig hebt. Laat ook je identiteitsbewijs zien.</p>";
 "holder_dashboard_intro_domestic_only1Gaccess" = "<p>Laat in Nederland een bewijs voor <a href=\"https://coronacheck.nl/toegangsregels/1g-toegang\">1G-toegang</a> zien als om een coronabewijs wordt gevraagd. Laat ook je identiteitsbewijs zien.</p>";
 "holder_dashboard_intro_domestic_only3Gaccess" = "Bezoek je een plek in Nederland? Laat je Nederlandse QR-code en je identiteitsbewijs zien bij de ingang.";
-"holder_dashboard_newvaliditybanner_action" = "Lees meer op Rijksoverheid.nl";
-"holder_dashboard_newvaliditybanner_title" = "De geldigheid van coronabewijzen wordt aangepast";
-"holder_dashboard_newvaliditybanner_url" = "https://www.rijksoverheid.nl/coronabewijs";
 "holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "Lees meer";
 "holder_dashboard_noDomesticCertificatesBanner_0G_title" = "In Nederland wordt het coronabewijs niet meer gebruikt. Daarom staan er alleen nog internationale bewijzen in de app.";
 "holder_dashboard_noDomesticCertificatesBanner_url" = "https://coronacheck.nl/alleen-internationaal";
