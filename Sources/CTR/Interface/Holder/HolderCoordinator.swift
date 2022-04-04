@@ -80,7 +80,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	
-	private var disclosurePolicyUpdateObserverToken: DisclosurePolicyManager.ObserverToken?
+	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
 	
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
@@ -124,7 +124,7 @@ class HolderCoordinator: SharedCoordinator {
 				navigateToHolderStart {
 					
 					self.handleDisclosurePolicyUpdates()
-					self.disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
+					self.disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
 						self?.handleDisclosurePolicyUpdates()
 					}
 				}
@@ -136,7 +136,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
-		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.removeObserver)
+		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
 	}
 	
 	// MARK: - Listeners
