@@ -36,7 +36,7 @@ protocol LaunchStateManagerDelegate: AnyObject {
 final class LaunchStateManager: LaunchStateManaging, Logging {
 	
 	private var remoteConfigManagerUpdateObserverToken: Observatory<RemoteConfigManager.ConfigNotification>.ObserverToken?
-	private var remoteConfigManagerReloadObserverToken: UUID?
+	private var remoteConfigManagerReloadObserverToken: Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>.ObserverToken?
 	
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 	private var applicationHasStarted = false
