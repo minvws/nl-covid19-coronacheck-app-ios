@@ -160,6 +160,70 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[5].value) == "Test"
 		expect(self.sut.details[6].field) == "Dosis / Number in series of doses:"
 		expect(self.sut.details[6].value) == "2 / 2"
+		expect(self.sut.details[6].dosageMessage).to(beNil())
+		expect(self.sut.details[7].field) == "Vaccinatiedatum / Date of vaccination*:"
+		expect(self.sut.details[7].value) == "01-06-2021"
+		expect(self.sut.details[8].field) == "Gevaccineerd in / Member state of vaccination:"
+		expect(self.sut.details[8].value) == "Nederland / The Netherlands"
+		expect(self.sut.details[9].field) == "Afgever certificaat / Certificate issuer:"
+		expect(self.sut.details[9].value) == "Test"
+		expect(self.sut.details[10].field) == "Uniek certificaatnummer / Unique certificate identifier:"
+		expect(self.sut.details[10].value) == "1234"
+	}
+	
+	func test_vaccination_whenDosageNumberIsHigherThanTotalDosage() {
+		
+		// Given
+		let doseNumber = 3
+		let totalDose = 2
+		let vaccination = EuCredentialAttributes.Vaccination(
+			certificateIdentifier: "1234",
+			country: "NLD",
+			diseaseAgentTargeted: "840539006",
+			doseNumber: doseNumber,
+			dateOfVaccination: "2021-06-01",
+			issuer: "Test",
+			marketingAuthorizationHolder: "Test",
+			medicalProduct: "Test",
+			totalDose: totalDose,
+			vaccineOrProphylaxis: "test"
+		)
+		environmentSpies.mappingManagerSpy.stubbedGetBiLingualDisplayCountryResult = "Nederland / The Netherlands"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Test"
+		let details = VaccinationQRDetailsGenerator.getDetails(
+			euCredentialAttributes: EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: doseNumber, totalDose: totalDose)),
+			vaccination: vaccination
+		)
+		
+		// When
+		sut = DCCQRDetailsViewModel(
+			coordinator: coordinatorSpy,
+			title: "title",
+			description: "body",
+			details: details,
+			dateInformation: "information"
+		)
+		
+		// Then
+		expect(self.sut.title) == "title"
+		expect(self.sut.description) == "body"
+		expect(self.sut.dateInformation) == "information"
+		expect(self.sut.details).to(haveCount(11))
+		expect(self.sut.details[0].field) == "Naam / Name:"
+		expect(self.sut.details[0].value) == "Corona, Check"
+		expect(self.sut.details[1].field) == "Geboortedatum / Date of birth*:"
+		expect(self.sut.details[1].value) == "01-06-2021"
+		expect(self.sut.details[2].field) == "Ziekteverwekker / Disease targeted:"
+		expect(self.sut.details[2].value) == "COVID-19"
+		expect(self.sut.details[3].field) == "Vaccin / Vaccine:"
+		expect(self.sut.details[3].value) == "Test"
+		expect(self.sut.details[4].field) == "Type vaccin / Vaccine medicinal product:"
+		expect(self.sut.details[4].value) == "test"
+		expect(self.sut.details[5].field) == "Producent / Vaccine manufacturer:"
+		expect(self.sut.details[5].value) == "Test"
+		expect(self.sut.details[6].field) == "Dosis / Number in series of doses:"
+		expect(self.sut.details[6].value) == "3 / 2"
+		expect(self.sut.details[6].dosageMessage) == L.holder_showqr_eu_about_vaccination_dosage_message()
 		expect(self.sut.details[7].field) == "Vaccinatiedatum / Date of vaccination*:"
 		expect(self.sut.details[7].value) == "01-06-2021"
 		expect(self.sut.details[8].field) == "Gevaccineerd in / Member state of vaccination:"
