@@ -35,7 +35,9 @@ protocol LaunchStateManagerDelegate: AnyObject {
 
 final class LaunchStateManager: LaunchStateManaging, Logging {
 	
-	private var remoteConfigManagerObserverTokens = [RemoteConfigManager.ObserverToken]()
+	private var remoteConfigManagerUpdateObserverToken: Observatory<RemoteConfigManager.ConfigNotification>.ObserverToken?
+	private var remoteConfigManagerReloadObserverToken: UUID?
+	
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 	private var applicationHasStarted = false
 	weak var delegate: LaunchStateManagerDelegate?
@@ -46,9 +48,8 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 	}
 	
 	deinit {
-		remoteConfigManagerObserverTokens.forEach {
-			Current.remoteConfigManager.removeObserver(token: $0)
-		}
+		remoteConfigManagerUpdateObserverToken.map(Current.remoteConfigManager.observatoryForUpdates.remove)
+		remoteConfigManagerReloadObserverToken.map(Current.remoteConfigManager.observatoryForReloads.remove)
 	}
 	
 	// MARK: - Launch State -
@@ -129,13 +130,13 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 		// Attach behaviours that we want the RemoteConfigManager to perform
 		// each time it refreshes the config in future:
 		
-		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendUpdateObserver { _, rawData, _ in
+		remoteConfigManagerUpdateObserverToken = Current.remoteConfigManager.observatoryForUpdates.append { _, rawData, _ in
 
 			// Update the remote config for the crypto library
 			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
-		}]
+		}
 		
-		remoteConfigManagerObserverTokens += [Current.remoteConfigManager.appendReloadObserver { [weak self] result in
+		remoteConfigManagerReloadObserverToken = Current.remoteConfigManager.observatoryForReloads.append { [weak self] result in
  
 			switch result {
 				case .failure(let error):
@@ -153,7 +154,7 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 						self?.startApplication()
 					}
 			}
-		}]
+		}
 	}
 	
 	// Update the  managers with the values from the actual http response
