@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DCCQRLabelMessageView: BaseView {
+final class DCCQRLabelMessageView: BaseView, DCCQRLabelViewable {
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -52,6 +52,33 @@ final class DCCQRLabelMessageView: BaseView {
 			messageTextView.rightAnchor.constraint(equalTo: rightAnchor),
 			messageTextView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
+	}
+	
+	// MARK: Public Access
+	
+	/// The dcc field
+	var field: String? {
+		get {
+			return labelView.field
+		}
+		set {
+			labelView.field = newValue
+		}
+	}
+	
+	/// The dcc value
+	var value: String? {
+		get {
+			return labelView.value
+		}
+		set {
+			labelView.value = newValue
+		}
+	}
+	
+	/// Set up labels to support SwitchControl accessibility
+	func updateAccessibilityStatus() {
+		labelView.updateAccessibilityStatus()
 	}
 	
 	var message: String? {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DCCQRLabelView: BaseView {
+final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 	
 	/// The display constants
 	private enum ViewTraits {

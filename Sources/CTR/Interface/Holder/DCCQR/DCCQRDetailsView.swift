@@ -140,8 +140,8 @@ private extension DCCQRDetailsView {
 			
 			if let dosageMessage = detail.dosageMessage {
 				let labelView = DCCQRLabelMessageView()
-				labelView.labelView.field = detail.field
-				labelView.labelView.value = detail.value
+				labelView.field = detail.field
+				labelView.value = detail.value
 				labelView.message = dosageMessage
 				labelView.messageTextView.linkTouched { [weak self] url in
 					self?.dosageLinkTouchedCommand?(url)
@@ -165,7 +165,7 @@ private extension DCCQRDetailsView {
 		dateInformationLabel.setupForVoiceAndSwitchControlAccessibility()
 		
 		stackView.subviews.forEach { view in
-			guard let labelView = view as? DCCQRLabelView,
+			guard let labelView = view as? (BaseView & DCCQRLabelViewable),
 				  let field = labelView.field,
 				  let value = labelView.value else { return }
 			
