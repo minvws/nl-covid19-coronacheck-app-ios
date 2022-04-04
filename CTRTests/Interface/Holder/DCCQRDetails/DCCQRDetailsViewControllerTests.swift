@@ -67,6 +67,6 @@ final class DCCQRDetailsViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
+		expect(self.coordinatorDelegateSpy.invokedOpenUrlParameters?.0) == url
 	}
 }
