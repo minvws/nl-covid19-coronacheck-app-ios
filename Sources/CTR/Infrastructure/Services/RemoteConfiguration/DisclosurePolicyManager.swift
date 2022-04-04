@@ -8,36 +8,35 @@
 import Foundation
 
 protocol DisclosurePolicyManaging {
-	
-	typealias ObserverToken = UUID
-	
-	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken
-	func removeObserver(token: ObserverToken)
 	func setDisclosurePolicyUpdateHasBeenSeen()
 	func getDisclosurePolicies() -> [String]
 	
+	var observatory: Observatory<Void> { get }
 	var hasChanges: Bool { get }
 }
 
-class DisclosurePolicyManager: Logging {
+class DisclosurePolicyManager: Logging, DisclosurePolicyManaging {
+	// Mechanism for registering for external state change notifications:
+	let observatory: Observatory<Void>
+	private let notifyObservers: (Void) -> Void
 	
-	private var remoteConfigManagerObserverToken: RemoteConfigManager.ObserverToken?
+	private var remoteConfigManagerObserverToken: Observatory.ObserverToken?
 	private var remoteConfigManager: RemoteConfigManaging
-	private var observers = [ObserverToken: () -> Void]()
 	
 	/// Initiializer
 	init(remoteConfigManager: RemoteConfigManaging) {
 		self.remoteConfigManager = remoteConfigManager
+		(self.observatory, self.notifyObservers) = Observatory<()>.create()
 		configureRemoteConfigManager()
 	}
 	
 	deinit {
-		remoteConfigManagerObserverToken.map(Current.remoteConfigManager.removeObserver)
+		remoteConfigManagerObserverToken.map(Current.remoteConfigManager.observatoryForUpdates.remove)
 	}
 	
 	private func configureRemoteConfigManager() {
 		
-		remoteConfigManagerObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
+		remoteConfigManagerObserverToken = remoteConfigManager.observatoryForUpdates.append { [weak self] _, _, _ in
 			self?.detectPolicyChange()
 		}
 	}
@@ -52,7 +51,7 @@ class DisclosurePolicyManager: Logging {
 		logDebug("DisclosurePolicyManager: policy changed detected")
 
 		// - Update the observers
-		notifyObservers()
+		notifyObservers(())
 	}
 	
 	func setDisclosurePolicyUpdateHasBeenSeen() {
@@ -77,28 +76,5 @@ class DisclosurePolicyManager: Logging {
 			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
 		}
 		return disclosurePolicies
-	}
-}
-
-// MARK: - DisclosurePolicyManaging
-
-extension DisclosurePolicyManager: DisclosurePolicyManaging {
-	
-	/// Be careful to use weak references to your observers within the closure, and
-	/// to unregister your observer using the returned `ObserverToken`.
-	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken {
-		let newToken = ObserverToken()
-		observers[newToken] = observer
-		return newToken
-	}
-	
-	func removeObserver(token: ObserverToken) {
-		observers[token] = nil
-	}
-	
-	func notifyObservers() {
-		observers.values.forEach { callback in
-			callback()
-		}
 	}
 }

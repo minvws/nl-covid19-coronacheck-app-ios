@@ -58,7 +58,7 @@ final class EnvironmentSpies {
 	
 	var disclosurePolicyManagingSpy: DisclosurePolicyManagingSpy = {
 		let spy = DisclosurePolicyManagingSpy()
-		spy.stubbedAppendPolicyChangedObserverResult = UUID()
+		(spy.stubbedObservatory, _) = Observatory<Void>.create()
 		return spy
 	}()
 	

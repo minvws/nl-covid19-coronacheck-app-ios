@@ -176,11 +176,11 @@ final class HolderDashboardViewModel: Logging {
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
 
 	// Observation tokens:
-	private var disclosurePolicyUpdateObserverToken: DisclosurePolicyManager.ObserverToken?
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: Observatory.ObserverToken?
 	private var remoteConfigManagerUpdateObserverToken: Observatory.ObserverToken?
+	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
 
 	// Dependencies:
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
@@ -256,7 +256,7 @@ final class HolderDashboardViewModel: Logging {
 			self?.strippenRefresher.load()
 		}
 
-		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
+		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
 			// Disclosure Policy has been updated
 			// - Reset any dismissed banners
 			Current.userSettings.lastDismissedDisclosurePolicy = []
@@ -269,8 +269,8 @@ final class HolderDashboardViewModel: Logging {
 
 	deinit {
 		notificationCenter.removeObserver(self)
-		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.removeObserver)
 		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
+		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
 		remoteConfigUpdateObserverToken.map(Current.remoteConfigManager.observatoryForUpdates.remove)
 		remoteConfigUpdatesConfigurationWarningToken.map(Current.remoteConfigManager.observatoryForReloads.remove)
 	}
