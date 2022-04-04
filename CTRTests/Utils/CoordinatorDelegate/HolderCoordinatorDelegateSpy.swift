@@ -43,6 +43,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
 	}
 
+	var invokedUserWishesToSeeEventDetails = false
+	var invokedUserWishesToSeeEventDetailsCount = 0
+	var invokedUserWishesToSeeEventDetailsParameters: (title: String, details: [EventDetails])?
+	var invokedUserWishesToSeeEventDetailsParametersList = [(title: String, details: [EventDetails])]()
+
+	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails]) {
+		invokedUserWishesToSeeEventDetails = true
+		invokedUserWishesToSeeEventDetailsCount += 1
+		invokedUserWishesToSeeEventDetailsParameters = (title, details)
+		invokedUserWishesToSeeEventDetailsParametersList.append((title, details))
+	}
+
 	var invokedUserWishesToOpenTheMenu = false
 	var invokedUserWishesToOpenTheMenuCount = 0
 

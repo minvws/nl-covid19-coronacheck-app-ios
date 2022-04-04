@@ -98,6 +98,7 @@ class StoredEventItemView: BaseView {
 		addSubview(detailsStackView)
 		addSubview(disclosureView)
 		addSubview(lineView)
+		bringSubviewToFront(backgroundButton)
 	}
 	
 	/// Setup the constraints

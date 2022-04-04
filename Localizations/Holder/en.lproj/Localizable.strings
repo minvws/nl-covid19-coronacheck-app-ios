@@ -52,7 +52,6 @@
 "general.testtype" = "Test type";
 "general.uptoandincluding" = "until";
 "general.url.link" = "Link";
-"general.vaccination" = "vaccination";
 "general.vaccinationdate" = "Vaccination date";
 "general_menu" = "Menu";
 "general_newintheapp" = "New in the app";
@@ -65,6 +64,7 @@
 "general_testcertificate" = "test certificate";
 "general_testcertificate_0G" = "International test certificate";
 "general_toMyOverview" = "To my certificates";
+"general_vaccination" = "vaccination";
 "general_vaccinationAssessment" = "vaccination approval";
 "general_vaccinationcertificate" = "vaccination certificate";
 "general_vaccinationcertificate_0G" = "International vaccination certificate";
@@ -261,8 +261,8 @@
 "holder.errorstate.nosession.action" = "Start over";
 "holder.errorstate.nosession.message" = "You’ve waited too long. For safety reasons, you were logged out. Login again with your DigiD to retrieve your details.";
 "holder.errorstate.nosession.title" = "Your session has expired";
-"holder.errorstate.server.message" = "<p>We are working to solve the problem. Do you want to try again later?</p><p><b>Error code:</b><br />%@</p>";
-"holder.errorstate.server.messages" = "<p>We are working hard to solve this problem. Could you please try again later?</p><p><b>Error codes:</b><br />%@</p>";
+"holder.errorstate.server.message" = "<p>We are working on a resolution. Do you want to try again later?</p><p><b>Error code:</b><br />%@</p>";
+"holder.errorstate.server.messages" = "<p>We are working on a resolution. Could you please try again later?</p><p><b>Error codes:</b><br />%@</p>";
 "holder.errorstate.someresult.message" = "Due to increased traffic or an outage, some of your details may be missing. Are you missing a vaccination? Please come back later and retrieve your details again.";
 "holder.errorstate.someresult.title" = "Are these all your vaccinations?";
 "holder.errorstate.test.message" = "<p>Something is going wrong at the test location. Therefore, your details can’t be retrieved.</p><p><b>What's next?</b><br />Contact the test location and give them the following error code:</p><p><b>Error code:</b><br />%@</p>";
@@ -582,8 +582,6 @@
 "holder_dashboard_3Gand1GaccessBanner_title" = "The access rules in the Netherlands have changed. There are now separate certificates for venues with 3G access and 1G access.";
 "holder_dashboard_accessibility_access" = "Coronavirus pass";
 "holder_dashboard_accessibility_notification" = "Notification";
-"holder_dashboard_addBoosterBanner_button_addBooster" = "Add booster vaccination";
-"holder_dashboard_addBoosterBanner_title" = "Did you receive a booster vaccination? Please retrieve your details again if you want to add it to your certificate";
 "holder_dashboard_addCard_title" = "Add new vaccination or test";
 "holder_dashboard_domesticQRCard_1G_label" = "1G";
 "holder_dashboard_domesticQRCard_1G_title" = "Certificate for 1G access";
@@ -599,9 +597,6 @@
 "holder_dashboard_intro_domestic_3Gand1Gaccess" = "<p>Check in advance whether you need a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/3g-1g-access\">3G or 1G access</a>. Also show your proof of identity at the entrance.</p>";
 "holder_dashboard_intro_domestic_only1Gaccess" = "<p>Show a certificate for <a href=\"https://coronacheck.nl/en/accesspolicy/1g-access\">1G access</a> in the Netherlands if a coronavirus pass is required. Also show your proof of identity.</p>";
 "holder_dashboard_intro_domestic_only3Gaccess" = "Visiting a venue within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance.";
-"holder_dashboard_newvaliditybanner_action" = "Read more on Government.nl";
-"holder_dashboard_newvaliditybanner_title" = "The validity of coronavirus passes will be adjusted";
-"holder_dashboard_newvaliditybanner_url" = "https://www.government.nl/covid-certificate";
 "holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid" = "Read more";
 "holder_dashboard_noDomesticCertificatesBanner_0G_title" = "The coronavirus pass is no longer used in the Netherlands. That is why there are only international certificates in the app.";
 "holder_dashboard_noDomesticCertificatesBanner_url" = "https://coronacheck.nl/only-international";

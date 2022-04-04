@@ -51,6 +51,7 @@ class MappingManager: MappingManaging, Logging {
 	required init(remoteConfigManager: RemoteConfigManaging) {
 
 		self.remoteConfigManager = remoteConfigManager
+		self.providerIdentifiers = remoteConfigManager.storedConfiguration.providerIdentifiers ?? []
 	}
 
 	func setEventProviders(_ providers: [EventFlow.EventProvider]) {
