@@ -89,7 +89,7 @@ class ListStoredEventsViewModel: Logging {
 			return ""
 		}
 		
-		if "dcc" == provider.lowercased() {
+		if EventFlow.paperproofIdentier.lowercased() == provider.lowercased() {
 			return L.holder_storedEvents_listHeader_paperFlow()
 		}
 
