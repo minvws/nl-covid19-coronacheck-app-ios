@@ -19,8 +19,6 @@ protocol VerificationPolicyManaging: AnyObject {
 /// Distributes changes to the current "risk level" to observers
 /// RiskLevel == VerificationPolicy
 final class VerificationPolicyManager: VerificationPolicyManaging {
-	typealias ObserverToken = UUID
-	
 	// MARK: - Vars
 	
 	fileprivate(set) var state: VerificationPolicy? {

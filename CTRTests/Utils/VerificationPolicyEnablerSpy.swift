@@ -10,6 +10,16 @@ import Foundation
 
 final class VerificationPolicyEnablerSpy: VerificationPolicyEnableable {
 
+	var invokedObservatoryGetter = false
+	var invokedObservatoryGetterCount = 0
+	var stubbedObservatory: Observatory<[VerificationPolicy]>!
+
+	var observatory: Observatory<[VerificationPolicy]> {
+		invokedObservatoryGetter = true
+		invokedObservatoryGetterCount += 1
+		return stubbedObservatory
+	}
+
 	var invokedEnable = false
 	var invokedEnableCount = 0
 	var invokedEnableParameters: (verificationPolicies: [String], Void)?
@@ -20,40 +30,6 @@ final class VerificationPolicyEnablerSpy: VerificationPolicyEnableable {
 		invokedEnableCount += 1
 		invokedEnableParameters = (verificationPolicies, ())
 		invokedEnableParametersList.append((verificationPolicies, ()))
-	}
-
-	var invokedConfigureDefaultPolicy = false
-	var invokedConfigureDefaultPolicyCount = 0
-
-	func configureDefaultPolicy() {
-		invokedConfigureDefaultPolicy = true
-		invokedConfigureDefaultPolicyCount += 1
-	}
-
-	var invokedAppendPolicyChangedObserver = false
-	var invokedAppendPolicyChangedObserverCount = 0
-	var shouldInvokeAppendPolicyChangedObserverObserver = false
-	var stubbedAppendPolicyChangedObserverResult: ObserverToken!
-
-	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken {
-		invokedAppendPolicyChangedObserver = true
-		invokedAppendPolicyChangedObserverCount += 1
-		if shouldInvokeAppendPolicyChangedObserverObserver {
-			observer()
-		}
-		return stubbedAppendPolicyChangedObserverResult
-	}
-
-	var invokedRemoveObserver = false
-	var invokedRemoveObserverCount = 0
-	var invokedRemoveObserverParameters: (token: ObserverToken, Void)?
-	var invokedRemoveObserverParametersList = [(token: ObserverToken, Void)]()
-
-	func removeObserver(token: ObserverToken) {
-		invokedRemoveObserver = true
-		invokedRemoveObserverCount += 1
-		invokedRemoveObserverParameters = (token, ())
-		invokedRemoveObserverParametersList.append((token, ()))
 	}
 
 	var invokedWipePersistedData = false

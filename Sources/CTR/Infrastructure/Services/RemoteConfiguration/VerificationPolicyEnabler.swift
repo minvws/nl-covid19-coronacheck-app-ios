@@ -8,18 +8,18 @@
 import Foundation
 
 protocol VerificationPolicyEnableable: AnyObject {
-	
-	typealias ObserverToken = UUID
+	var observatory: Observatory<[VerificationPolicy]> { get }
 	
 	func enable(verificationPolicies: [String])
-	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken
-	func removeObserver(token: ObserverToken)
 	func wipePersistedData()
 }
 
 final class VerificationPolicyEnabler: VerificationPolicyEnableable {
 	
-	private var observers = [ObserverToken: () -> Void]()
+	// Mechanism for registering for external state change notifications:
+	let observatory: Observatory<[VerificationPolicy]>
+	private let notifyObservers: ([VerificationPolicy]) -> Void
+	
 	private let remoteConfigManager: RemoteConfigManaging
 	private let userSettings: UserSettingsProtocol
 	private var remoteConfigManagerObserverToken: UUID?
@@ -40,6 +40,7 @@ final class VerificationPolicyEnabler: VerificationPolicyEnableable {
 		self.verificationPolicyManager = verificationPolicyManager
 		self.scanLockManager = scanLockManager
 		self.scanLogManager = scanLogManager
+		(self.observatory, self.notifyObservers) = Observatory<[VerificationPolicy]>.create()
 		
 		guard AppFlavor.flavor == .verifier else { return }
 		
@@ -48,12 +49,12 @@ final class VerificationPolicyEnabler: VerificationPolicyEnableable {
 	}
 	
 	deinit {
-		remoteConfigManagerObserverToken.map(remoteConfigManager.removeObserver)
+		remoteConfigManagerObserverToken.map(remoteConfigManager.observatoryForUpdates.remove)
 	}
 	
 	private func configureRemoteConfigManager() {
 		
-		remoteConfigManagerObserverToken = remoteConfigManager.appendUpdateObserver { [weak self] remoteConfiguration, _, _ in
+		remoteConfigManagerObserverToken = remoteConfigManager.observatoryForUpdates.append { [weak self] remoteConfiguration, _, _ in
 			guard let policies = remoteConfiguration.verificationPolicies else {
 				// No feature flag available, enable default policy
 				self?.enable(verificationPolicies: [])
@@ -75,7 +76,7 @@ final class VerificationPolicyEnabler: VerificationPolicyEnableable {
 				userSettings.policyInformationShown = false
 			}
 			// Reset navigation
-			notifyObservers()
+			notifyObservers(knownPolicies) // TODO: is this correct?
 		}
 		
 		// Set policies that are not set via the scan settings scenes
@@ -95,36 +96,13 @@ final class VerificationPolicyEnabler: VerificationPolicyEnableable {
 	
 	func wipePersistedData() {
 
-		observers = [:]
+		observatory.removeAll()
 		userSettings.configVerificationPolicies = [VerificationPolicy.policy3G]
 		verificationPolicyManager.update(verificationPolicy: nil)
 	}
 	
-	// MARK: - Observer notifications
-	
-	/// Be careful to use weak references to your observers within the closure, and
-	/// to unregister your observer using the returned `ObserverToken`.
-	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken {
-		let newToken = ObserverToken()
-		observers[newToken] = observer
-		return newToken
-	}
-
-	func removeObserver(token: ObserverToken) {
-		observers[token] = nil
-	}
-}
-
-private extension VerificationPolicyEnabler {
-	
-	func notifyObservers() {
-		observers.values.forEach { callback in
-			callback()
-		}
-	}
-	
 	/// Reset verifier scan mode, including risk setting, scan lock and scan log
-	func wipeScanMode() {
+	private func wipeScanMode() {
 		// Scan lock and risk level observers are not wiped
 		// in case this method is called after setting the observers in VerifierStartScanningViewModel
 		verificationPolicyManager.wipeScanMode()
