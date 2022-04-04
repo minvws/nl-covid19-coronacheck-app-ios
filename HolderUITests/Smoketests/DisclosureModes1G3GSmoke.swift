@@ -30,6 +30,7 @@ class DisclosureMode1GWith3GSmoke: BaseTest {
 		let person = TestData.vacP3
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
+		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
