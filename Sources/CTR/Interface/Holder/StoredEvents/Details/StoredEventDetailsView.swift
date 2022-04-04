@@ -23,31 +23,17 @@ final class StoredEventDetailsView: ScrolledStackView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
-//	/// The stack view to add all labels to
-//	private let stackView: UIStackView = {
-//
-//		let view = UIStackView()
-//		view.translatesAutoresizingMaskIntoConstraints = false
-//		view.axis = .vertical
-//		view.spacing = 0
-//		return view
-//	}()
-
-	/// The footer text
-	private let footerTextView: TextView = {
-
-		return TextView()
-	}()
-	
 	override func setupViews() {
-		super.setupViews()
-		view?.backgroundColor = C.white()
 		
+		super.setupViews()
+		stackView.distribution = .fill
+		stackView.spacing = 0
+		view?.backgroundColor = C.white()
 	}
 	
 	override func setupViewHierarchy() {
-		super.setupViewHierarchy()
 		
+		super.setupViewHierarchy()
 		stackView.addArrangedSubview(titleLabel)
 	}
 	
@@ -64,8 +50,10 @@ final class StoredEventDetailsView: ScrolledStackView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight,
-															 kerning: ViewTraits.titleKerning)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning
+			)
 			stackView.setCustomSpacing(ViewTraits.spacing, after: titleLabel)
 		}
 	}
@@ -75,20 +63,12 @@ final class StoredEventDetailsView: ScrolledStackView {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details)
-			stackView.addArrangedSubview(footerTextView)
 			updateAccessibilityStatus()
 		}
 	}
 	
 	func handleScreenCapture(shouldHide: Bool) {
 		stackView.isHidden = shouldHide
-	}
-
-	/// The message
-	var footer: String? {
-		didSet {
-			footerTextView.attributedText = .makeFromHtml(text: footer, style: .bodyDark)
-		}
 	}
 }
 

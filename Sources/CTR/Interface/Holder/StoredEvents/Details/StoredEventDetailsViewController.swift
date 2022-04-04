@@ -7,13 +7,13 @@
 
 import UIKit
 
-final class RemoteEventDetailsViewController: BaseViewController {
+final class StoredEventDetailsViewController: BaseViewController {
 	
 	/// The model
 	internal let viewModel: RemoteEventDetailsViewModel
 
 	/// The view
-	let sceneView = RemoteEventDetailsView()
+	let sceneView = StoredEventDetailsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
@@ -38,12 +38,12 @@ final class RemoteEventDetailsViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+		
+		addBackButton()
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		
 		viewModel.$details.binding = { [weak self] in self?.sceneView.details = $0 }
-
-		viewModel.$footer.binding = { [weak self] in self?.sceneView.footer = $0 }
 
 		viewModel.$hideForCapture.binding = { [weak self] in self?.sceneView.handleScreenCapture(shouldHide: $0) }
 	}
