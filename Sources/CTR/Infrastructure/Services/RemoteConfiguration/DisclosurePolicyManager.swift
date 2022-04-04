@@ -18,7 +18,7 @@ protocol DisclosurePolicyManaging {
 class DisclosurePolicyManager: Logging, DisclosurePolicyManaging {
 	// Mechanism for registering for external state change notifications:
 	let observatory: Observatory<Void>
-	private let notifyObservers: (Void) -> Void
+	private let notifyObservers: (()) -> Void
 	
 	private var remoteConfigManagerObserverToken: Observatory.ObserverToken?
 	private var remoteConfigManager: RemoteConfigManaging

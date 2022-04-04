@@ -76,7 +76,7 @@ final class VerificationPolicyEnabler: VerificationPolicyEnableable {
 				userSettings.policyInformationShown = false
 			}
 			// Reset navigation
-			notifyObservers(knownPolicies) // TODO: is this correct?
+			notifyObservers(knownPolicies)
 		}
 		
 		// Set policies that are not set via the scan settings scenes
