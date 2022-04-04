@@ -25,9 +25,7 @@ final class EnvironmentSpies {
 	var clockDeviationManagerSpy: ClockDeviationManagerSpy = {
 		let spy = ClockDeviationManagerSpy()
 		spy.stubbedHasSignificantDeviation = false
-		spy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
-		spy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
-		
+		(spy.stubbedObservatory, _) = Observatory<Bool>.create()
 		return spy
 	}()
 	
