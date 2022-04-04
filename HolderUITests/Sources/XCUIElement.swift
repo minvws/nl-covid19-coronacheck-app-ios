@@ -9,7 +9,7 @@ import XCTest
 
 extension XCUIElement {
 	
-	private static let timeout = 5.0
+	private static let timeout = 15.0
 	
 	func clearText() {
 		guard let stringValue = self.value as? String else {
