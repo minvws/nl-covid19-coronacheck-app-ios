@@ -403,7 +403,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 	
 	private func assertSutLockedWithNilPolicy() {
 		expect(self.sut.title) == L.verifierStartTitle()
-		expect(self.sut.header).toEventually(equal(L.verifier_home_countdown_title("00:29")))
+		expect(self.sut.header).toEventually(equal(L.verifier_home_countdown_title("00:29")), timeout: .seconds(3))
 		expect(self.sut.headerMode).toEventually(beNil())
 		expect(self.sut.message).toEventually(equal(L.verifier_home_countdown_subtitle(1)))
 		expect(self.sut.primaryButtonTitle).toEventually(equal(L.verifierStartButtonTitle()))
@@ -417,7 +417,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 	
 	private func assertSutLockedWith3GPolicy() {
 		expect(self.sut.title) == L.verifierStartTitle()
-		expect(self.sut.header).toEventually(equal(L.verifier_home_countdown_title("00:29")))
+		expect(self.sut.header).toEventually(equal(L.verifier_home_countdown_title("00:29")), timeout: .seconds(3))
 		expect(self.sut.headerMode).toEventually(equal(.animation("switch_to_green_animation")))
 		expect(self.sut.message).toEventually(equal(L.verifier_home_countdown_subtitle(1)))
 		expect(self.sut.primaryButtonTitle).toEventually(equal(L.verifierStartButtonTitle()))
@@ -431,7 +431,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 	
 	private func assertSutLockedWith1GPolicy() {
 		expect(self.sut.title) == L.verifierStartTitle()
-		expect(self.sut.header).toEventually(equal(L.verifier_home_countdown_title("00:29")))
+		expect(self.sut.header).toEventually(equal(L.verifier_home_countdown_title("00:29")), timeout: .seconds(3))
 		expect(self.sut.headerMode).toEventually(equal(.animation("switch_to_blue_animation")))
 		expect(self.sut.message).toEventually(equal(L.verifier_home_countdown_subtitle(1)))
 		expect(self.sut.primaryButtonTitle).toEventually(equal(L.verifierStartButtonTitle()))
