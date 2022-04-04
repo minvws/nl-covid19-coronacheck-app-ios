@@ -17,8 +17,8 @@ enum AboutThisAppMenuIdentifier: String {
 	case colophon
 
 	case reset
-    
-    case storedEvents
+	
+	case storedEvents
 	
 	case deeplink
 

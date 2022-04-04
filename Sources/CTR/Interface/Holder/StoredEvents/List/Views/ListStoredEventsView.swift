@@ -27,7 +27,7 @@ class ListStoredEventsView: ScrolledStackView {
 		}
 
 		enum Button {
-			static let spacing: CGFloat = 8
+			static let spacing: CGFloat = 24
 		}
 	}
 	
@@ -53,7 +53,7 @@ class ListStoredEventsView: ScrolledStackView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
-	let contentTextView: TextView = {
+	private let contentTextView: TextView = {
 
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -61,7 +61,7 @@ class ListStoredEventsView: ScrolledStackView {
 	}()
 
 	/// The stack view for the intro and title
-	let topStackView: UIStackView = {
+	private let topStackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -73,14 +73,14 @@ class ListStoredEventsView: ScrolledStackView {
 	}()
 	
 	/// The stack view for the event groups
-	let listStackView: UIStackView = {
+	private let listStackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
 		view.alignment = .fill
 		view.distribution = .fill
-		view.spacing = 40
+		view.spacing = ViewTraits.List.spacing
 		return view
 	}()
 
@@ -113,7 +113,7 @@ class ListStoredEventsView: ScrolledStackView {
 		}
 	}
 
-	let secondaryButton: Button = {
+	private let secondaryButton: Button = {
 
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -209,6 +209,13 @@ class ListStoredEventsView: ScrolledStackView {
 			contentTextView.attributedText?.string
 		}
 	}
+	
+	var messageLinkTapHandler: ((URL) -> Void)? {
+		didSet {
+			guard let linkTapHandler = messageLinkTapHandler else { return }
+			contentTextView.linkTouched(handler: linkTapHandler)
+		}
+	}
 
 	var secondaryButtonTappedCommand: (() -> Void)?
 
@@ -242,5 +249,14 @@ class ListStoredEventsView: ScrolledStackView {
 
 	func setListStackVisibility(ishidden: Bool) {
 		listStackView.isHidden = ishidden
+	}
+	
+	func removeExistingRows() {
+		// Remove previously added rows:
+		listStackView.removeArrangedSubviews()
+	}
+	
+	func addToListStackView(_ view: UIView) {
+		listStackView.addArrangedSubview(view)
 	}
 }
