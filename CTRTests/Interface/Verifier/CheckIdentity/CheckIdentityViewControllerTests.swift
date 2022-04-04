@@ -68,7 +68,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.primaryButtonIcon).toNot(beNil())
 		
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 	
 	func test_verified_noDeepLink() throws {
@@ -105,7 +105,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.primaryButtonIcon).to(beNil())
 		
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 	
 	func test_verified_DCC() throws {
@@ -141,7 +141,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.lastName) == "C"
 		
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 	
 	func test_verified_DCC_withoutFlag() throws {
@@ -177,12 +177,12 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.lastName) == "C"
 		
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 	
 	func test_primaryButtonTapped_whenVerified_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy1G]
 		viewModel = CheckIdentityViewModel(
@@ -203,7 +203,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	
 	func test_primaryButtonTapped_whenDemo_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy1G]
 		let details = MobilecoreVerificationDetails()
@@ -226,7 +226,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	
 	func test_primaryButtonTapped_whenVerifiedAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy3G]
 		viewModel = CheckIdentityViewModel(
 			coordinator: verifierCoordinatorDelegateSpy,
@@ -246,7 +246,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 	
 	func test_primaryButtonTapped_whenDemoAndFeatureFlagDisabled_shouldNavigateToVerfiedInfo() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		environmentSpies.userSettingsSpy.stubbedConfigVerificationPolicies = [VerificationPolicy.policy3G]
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"

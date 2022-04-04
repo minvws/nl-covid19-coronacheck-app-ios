@@ -29,11 +29,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 	}
 	
 	func test_fetchEventAccessTokens_validResponse() {
-
+		
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_validResponse")
 		let token = "test_fetchEventAccessTokens_validResponse"
-
+		
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
@@ -47,200 +46,214 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 				headers: nil
 			)
 		}
-
+		
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
-
-			// Then
-			expect(result.isSuccess) == true
-			expect(result.successValue).to(haveCount(2))
-			expect(result.successValue?[0].providerIdentifier) == "ZZZ"
-			expect(result.successValue?[1].providerIdentifier) == "GGD"
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+				
+				// Then
+				expect(result.isSuccess) == true
+				expect(result.successValue).to(haveCount(2))
+				expect(result.successValue?[0].providerIdentifier) == "ZZZ"
+				expect(result.successValue?[1].providerIdentifier) == "GGD"
+				done()
+			}
 		}
-
-		waitForExpectations(timeout: 10, handler: nil)
 	}
-
+	
 	func test_fetchEventAccessTokens_invalidResponse() {
-
+		
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_invalidResponse")
 		let token = "test_fetchEventAccessTokens_invalidResponse"
-
+		
 		stub(condition: isPath(path)) { _ in
 			// Return status accepted
 			return HTTPStubsResponse(jsonObject: ["this": "isWrong"], statusCode: 200, headers: nil)
 		}
-
+		
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
-
-			// Then
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
+				done()
+			}
 		}
-
-		waitForExpectations(timeout: 10, handler: nil)
 	}
-
+	
 	func test_fetchEventAccessTokens_noInternet() {
-
+		
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_noInternet")
 		let token = "test_fetchEventAccessTokens_noInternet"
-
+		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.notConnectedToInternet.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
-
-			// Then
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)
+				done()
+			}
 		}
-
-		waitForExpectations(timeout: 10, handler: nil)
 	}
-
+	
 	func test_fetchEventAccessTokens_serverBusy() {
-
+		
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_serverBusy")
 		let token = "test_fetchEventAccessTokens_serverBusy"
-
+		
 		stub(condition: isPath(path)) { _ in
 			return HTTPStubsResponse(data: Data(), statusCode: 429, headers: nil)
 		}
-
+		
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
-
-			// Then
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: 429, response: nil, error: .serverBusy)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: 429, response: nil, error: .serverBusy)
+				done()
+			}
 		}
-
-		waitForExpectations(timeout: 10, handler: nil)
 	}
-
+	
 	func test_fetchEventAccessTokens_timeOut() {
-
+		
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_timeOut")
 		let token = "test_fetchEventAccessTokens_timeOut"
-
+		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.timedOut.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
-
-			// Then
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)
+				done()
+			}
 		}
-
-		waitForExpectations(timeout: 10, handler: nil)
 	}
-
+	
 	func test_fetchEventAccessTokens_invalidHost() {
-
+		
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_invalidHost")
 		let token = "test_fetchEventAccessTokens_invalidHost"
-
+		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cannotFindHost.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
-
-			// Then
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)
+				done()
+			}
 		}
-
-		waitForExpectations(timeout: 10, handler: nil)
 	}
-
+	
 	func test_fetchEventAccessTokens_networkConnectionLost() {
-
+		
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_networkConnectionLost")
 		let token = "test_fetchEventAccessTokens_networkConnectionLost"
-
+		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.networkConnectionLost.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
-
-			// Then
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)
+				done()
+			}
 		}
-
-		waitForExpectations(timeout: 10, handler: nil)
 	}
-
+	
 	func test_fetchEventAccessTokens_unknownError() {
-
+		
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_unknownError")
 		let token = "test_fetchEventAccessTokens_unknownError"
-
+		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.unknown.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
-
-			// Then
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)
+				done()
+			}
 		}
-
-		waitForExpectations(timeout: 10, handler: nil)
 	}
-
-	func test_fetchEventAccessTokens_serverErrorMessage() {
-
+	
+	func test_fetchEventAccessTokens_authenticationCancelled() {
+		
 		// Given
-		let expectation = self.expectation(description: "test_fetchEventAccessTokens_serverErrorMessage")
+		let token = "test_fetchEventAccessTokens_authenticationCancelled"
+		
+		stub(condition: isPath(path)) { _ in
+			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
+			return HTTPStubsResponse(error: notConnectedError)
+		}
+		
+		// When
+		waitUntil { done in
+			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .authenticationCancelled)
+				done()
+			}
+		}
+	}
+	
+	func test_fetchEventAccessTokens_serverErrorMessage() {
+		
+		// Given
 		let token = "test_fetchEventAccessTokens_serverErrorMessage"
-
+		
 		stub(condition: isPath(path)) { _ in
 			return HTTPStubsResponse(jsonObject: ["status": "error", "code": 99702], statusCode: 500, headers: nil)
 		}
-
+		
 		// When
-		sut.fetchEventAccessTokens(tvsToken: token) { result in
-
-			// Then
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99702), error: .serverError)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99702), error: .serverError)
+				done()
+			}
 		}
-
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 }

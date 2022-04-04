@@ -56,7 +56,7 @@ class VerifierScanViewModelTests: XCTestCase {
 		
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
@@ -69,7 +69,7 @@ class VerifierScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_shouldAddScanLogEntry_lowRisk_verification_policyDisabled() {
 
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
@@ -81,7 +81,7 @@ class VerifierScanViewModelTests: XCTestCase {
 
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
@@ -94,7 +94,7 @@ class VerifierScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_shouldAddScanLogEntry_highRisk_verification_policyDisabled() {
 
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 
 		// When
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")

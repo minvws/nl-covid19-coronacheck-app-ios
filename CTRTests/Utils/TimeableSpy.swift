@@ -17,4 +17,12 @@ class TimerSpy: Timeable {
 		invokedInvalidate = true
 		invokedInvalidateCount += 1
 	}
+
+	var invokedFire = false
+	var invokedFireCount = 0
+
+	func fire() {
+		invokedFire = true
+		invokedFireCount += 1
+	}
 }

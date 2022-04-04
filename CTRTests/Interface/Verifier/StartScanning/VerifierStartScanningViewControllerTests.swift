@@ -79,7 +79,7 @@ class VerifierStartScanningViewControllerTests: XCTestCase {
 		// Given
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		loadView()
 
 		// When
@@ -97,7 +97,7 @@ class VerifierStartScanningViewControllerTests: XCTestCase {
 		let alertVerifier = AlertVerifier()
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		loadView()
 
 		// When

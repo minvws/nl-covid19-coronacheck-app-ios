@@ -39,7 +39,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	func test_bindings() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		
 		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
@@ -61,7 +61,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_low() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
@@ -77,7 +77,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	
 	func test_riskSetting_high() {
 		// Given
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
@@ -94,7 +94,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	func test_warning() {
 		// Given
 		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy1G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy1G
 		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)
 		loadView()
@@ -111,7 +111,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	func test_warningHidden() {
 		// Given
 		environmentSpies.scanLogManagerSpy.stubbedDidWeScanQRsResult = false
-		environmentSpies.riskLevelManagerSpy.stubbedState = .policy3G
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 
 		viewModel = RiskSettingSelectedViewModel(coordinator: coordinatorSpy)
 		sut = RiskSettingSelectedViewController(viewModel: viewModel)

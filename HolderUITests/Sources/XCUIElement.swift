@@ -9,7 +9,7 @@ import XCTest
 
 extension XCUIElement {
 	
-	private static let timeout = 30.0
+	private static let timeout = 15.0
 	
 	func clearText() {
 		guard let stringValue = self.value as? String else {
@@ -30,26 +30,11 @@ extension XCUIElement {
 		return self
 	}
 	
-	private func waitAndTap() {
-		self.assertExistence().tap()
-	}
-	
-	func tapElement(type: ElementType, _ label: String) {
-		let elementQuery = self.descendants(matching: type)
-		let element = elementQuery.element(matching: type, identifier: label).firstMatch
-		element.waitAndTap()
-	}
-	
 	func tapButton(_ label: String) {
-		tapElement(type: .button, label)
-	}
-	
-	func tapText(_ label: String) {
-		tapElement(type: .staticText, label)
-	}
-	
-	func tapOther(_ label: String) {
-		tapElement(type: .other, label)
+		let elementQuery = self.descendants(matching: .button).matching(identifier: label)
+		let predicate = NSPredicate(format: "isEnabled == true")
+		let element = elementQuery.element(matching: predicate).firstMatch
+		element.assertExistence().tap()
 	}
 	
 	func textExists(_ label: String) {
@@ -57,27 +42,13 @@ extension XCUIElement {
 	}
 	
 	func labelValuePairExist(label: String, value: String) {
-		let texts = self.staticTexts.allElementsBoundByIndex
-		
-		var checkNext = false
-		for text in texts {
-			if checkNext {
-				XCTAssertEqual(text.label, value)
-				break
-			}
-			if text.label == label {
-				checkNext = true
-			}
-		}
-	}
-	
-	func linkExists(_ label: String) {
-		_ = self.links[label].assertExistence()
+		let elementLabel = [label, value].joined(separator: ",")
+		_ = self.otherElements[elementLabel].assertExistence()
 	}
 	
 	func containsText(_ text: String) {
-		let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
 		let elementQuery = self.descendants(matching: .any)
+		let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
 		let element = elementQuery.element(matching: predicate)
 		_ = element.assertExistence()
 	}

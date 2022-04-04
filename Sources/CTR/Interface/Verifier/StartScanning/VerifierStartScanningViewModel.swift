@@ -35,7 +35,7 @@ class VerifierStartScanningViewModel: Logging {
 			switch self {
 				case .locked(_, let timeRemaining, _):
 					let timeRemainingString = Mode.timeFormatter.string(from: timeRemaining) ?? "-"
-					return L.verifier_home_countdown_title(timeRemainingString, preferredLanguages: nil)
+					return L.verifier_home_countdown_title(timeRemainingString)
 				default:
 					return nil
 			}
@@ -144,20 +144,23 @@ class VerifierStartScanningViewModel: Logging {
 	@Atomic<Mode>
 	private var mode = .noLevelSet // swiftlint:disable:this let_var_whitespace
 	
-	private lazy var lockLabelCountdownTimer: Timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-		guard let self = self,
-			  case let .locked(mode, timeRemaining, totalDuration) = self.mode,
-			  timeRemaining > 0
-		else { return }
-		self.mode = .locked(mode: mode, timeRemaining: timeRemaining - 1, totalDuration: totalDuration)
-	}
+	private lazy var lockLabelCountdownTimer: Timeable = {
+		return vendTimer(TimeInterval(1), true) { [weak self] in
+			guard let self = self,
+				  case let .locked(mode, timeRemaining, totalDuration) = self.mode,
+				  timeRemaining > 0
+			else { return }
+			self.mode = .locked(mode: mode, timeRemaining: timeRemaining - 1, totalDuration: totalDuration)
+		}
+	}()
 
 	// MARK: - Observer tokens
 	
-	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
-	private var scanLockObserverToken: ScanLockManager.ObserverToken?
-	private var riskLevelObserverToken: VerificationPolicyManager.ObserverToken?
-
+	private var clockDeviationObserverToken: Observatory.ObserverToken?
+	private var scanLockObserverToken: Observatory.ObserverToken?
+	private var verificationPolicyObserverToken: Observatory.ObserverToken?
+	private let vendTimer: (TimeInterval, Bool, @escaping () -> Void) -> Timeable
+	
 	// MARK: - Dependencies
 	
 	private weak var coordinator: VerifierCoordinatorDelegate?
@@ -165,10 +168,15 @@ class VerifierStartScanningViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: VerifierCoordinatorDelegate) {
+	init(coordinator: VerifierCoordinatorDelegate,
+		 vendTimer: @escaping (TimeInterval, Bool, @escaping () -> Void) -> Timeable = { interval, repeats, action in // swiftlint:disable:this vertical_parameter_alignment
+			 return Timer.scheduledTimer(withTimeInterval: interval, repeats: repeats) { _ in action() }
+		 }
+	) {
 
 		self.coordinator = coordinator
-
+		self.vendTimer = vendTimer
+		
 		// Add a `didSet` callback to the Atomic<Mode>:
 		$mode.projectedValue.didSet = { [weak self] atomic in
 			guard let self = self else { return }
@@ -180,24 +188,24 @@ class VerifierStartScanningViewModel: Logging {
 		reloadUI(forMode: mode, hasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false)
 		
 		// Add an observer for when Clock Deviation is detected/undetected:
-		clockDeviationObserverToken = Current.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+		clockDeviationObserverToken = Current.clockDeviationManager.observatory.append { [weak self] hasClockDeviation in
 			guard let self = self else { return }
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
 		
 		// Pass current states in immediately to configure `self.mode`:
 		lockStateDidChange(lockState: Current.scanLockManager.state)
-		verificationPolicyDidChange(verificationPolicy: Current.riskLevelManager.state)
+		verificationPolicyDidChange(verificationPolicy: Current.verificationPolicyManager.state)
 		
 		// Then observe for changes:
-		scanLockObserverToken = Current.scanLockManager.appendObserver { [weak self] in self?.lockStateDidChange(lockState: $0) }
-		riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
+		scanLockObserverToken = Current.scanLockManager.observatory.append { [weak self] in self?.lockStateDidChange(lockState: $0) }
+		verificationPolicyObserverToken = Current.verificationPolicyManager.observatory.append { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
 		
 		lockLabelCountdownTimer.fire()
 	}
 	
 	deinit {
-		clockDeviationObserverToken.map(Current.clockDeviationManager.removeDeviationChangeObserver)
+		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
 		lockLabelCountdownTimer.invalidate()
 	}
 	
@@ -220,7 +228,6 @@ class VerifierStartScanningViewModel: Logging {
 	}
 	
 	private func lockStateDidChange(lockState: ScanLockManager.State) {
-		
 		// Update mode with the new lockState:
 		self.$mode.projectedValue.mutate { (mode: inout Mode) in
 			switch (mode, lockState) {
@@ -228,12 +235,12 @@ class VerifierStartScanningViewModel: Logging {
 				// We're already locked, but maybe the `until` time has changed?
 				case let (.locked(prelockMode, _, _), .locked(until)):
 					let totalDuration = type(of: Current.scanLockManager).configScanLockDuration
-					mode = .locked(mode: prelockMode, timeRemaining: until.timeIntervalSinceNow, totalDuration: totalDuration)
+					mode = .locked(mode: prelockMode, timeRemaining: until.timeIntervalSince(Current.now()), totalDuration: totalDuration)
 
 				// We're not already locked, but must now lock:
 				case (_, .locked(let until)):
 					let totalDuration = type(of: Current.scanLockManager).configScanLockDuration
-					mode = .locked(mode: mode, timeRemaining: until.timeIntervalSinceNow, totalDuration: totalDuration)
+					mode = .locked(mode: mode, timeRemaining: until.timeIntervalSince(Current.now()), totalDuration: totalDuration)
 
 				// We're locked, but must unlock:
 				case let (.locked(prelockMode, _, _), .unlocked):
@@ -287,7 +294,7 @@ extension VerifierStartScanningViewModel {
 		
 		if !Current.userSettings.scanInstructionShown ||
 			(!Current.userSettings.policyInformationShown && Current.featureFlagManager.is1GVerificationPolicyEnabled()) ||
-			(Current.riskLevelManager.state == nil && Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
+			(Current.verificationPolicyManager.state == nil && Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
 			// Show the scan instructions the first time no matter what link was tapped
 			coordinator?.didFinish(.userTappedProceedToInstructionsOrRiskSetting)
 		} else {

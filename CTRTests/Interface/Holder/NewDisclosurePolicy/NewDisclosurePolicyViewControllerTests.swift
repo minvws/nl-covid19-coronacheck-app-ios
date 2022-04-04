@@ -37,7 +37,7 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 	func test_view_0G() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = NewDisclosurePolicyViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
@@ -59,7 +59,7 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 	func test_view_1G() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = NewDisclosurePolicyViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
@@ -81,7 +81,7 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 	func test_view_3G() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = NewDisclosurePolicyViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy
@@ -103,7 +103,7 @@ final class NewDisclosurePolicyViewControllerTests: XCTestCase {
 	func test_view_1GWith3G() {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = true
-		environmentSpies.riskLevelManagerSpy.stubbedState = nil
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = nil
 		sut = NewDisclosurePolicyViewController(
 			viewModel: .init(
 				coordinator: coordinatorSpy

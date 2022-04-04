@@ -24,6 +24,12 @@ enum RemoteFileValidity {
 		guard let lastFetchedTimestamp = lastFetchedTimestamp else {
 			return .neverFetched
 		}
+		
+		guard lastFetchedTimestamp < now().timeIntervalSince1970 else {
+			// prevent someone putting device way into the future to get a far-distant `lastFetchedTimestamp`
+			// (which would prevent the config from being updated)
+			return .refreshNeeded
+		}
 
 		let ttlThreshold = (now().timeIntervalSince1970 - TimeInterval(configuration.configTTL ?? 0))
 		let fileValidity: RemoteFileValidity = lastFetchedTimestamp > ttlThreshold ? .withinTTL : .refreshNeeded

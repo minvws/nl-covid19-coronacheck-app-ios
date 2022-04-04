@@ -30,13 +30,13 @@ struct Environment {
 	var onboardingManager: OnboardingManaging
 	var openIdManager: OpenIdManaging
 	var remoteConfigManager: RemoteConfigManaging
-	var riskLevelManager: VerificationPolicyManaging
+	var verificationPolicyManager: VerificationPolicyManaging
 	var scanLockManager: ScanLockManaging
 	var scanLogManager: ScanLogManaging
 	var secureUserSettings: SecureUserSettingsProtocol
 	var userSettings: UserSettingsProtocol
 	var walletManager: WalletManaging
-	var verificationPolicyEnabler: VerificationPolicyEnablable
+	var verificationPolicyEnabler: VerificationPolicyEnableable
 	
 	init(
 		now: @escaping () -> Date,
@@ -57,13 +57,13 @@ struct Environment {
 		onboardingManager: OnboardingManaging,
 		openIdManager: OpenIdManaging,
 		remoteConfigManager: RemoteConfigManaging,
-		riskLevelManager: VerificationPolicyManaging,
+		verificationPolicyManager: VerificationPolicyManaging,
 		scanLockManager: ScanLockManaging,
 		scanLogManager: ScanLogManaging,
 		secureUserSettings: SecureUserSettingsProtocol,
 		userSettings: UserSettingsProtocol,
 		walletManager: WalletManaging,
-		verificationPolicyEnabler: VerificationPolicyEnablable
+		verificationPolicyEnabler: VerificationPolicyEnableable
 	) {
 		self.now = now
 		self.appInstalledSinceManager = appInstalledSinceManager
@@ -83,7 +83,7 @@ struct Environment {
 		self.onboardingManager = onboardingManager
 		self.openIdManager = openIdManager
 		self.remoteConfigManager = remoteConfigManager
-		self.riskLevelManager = riskLevelManager
+		self.verificationPolicyManager = verificationPolicyManager
 		self.scanLockManager = scanLockManager
 		self.scanLogManager = scanLogManager
 		self.secureUserSettings = secureUserSettings
@@ -114,7 +114,7 @@ private let couplingManager = CouplingManager(cryptoManager: cryptoManager, netw
 private let cryptoManager = CryptoManager(
 	secureUserSettings: secureUserSettings,
 	cryptoLibUtility: cryptoLibUtility,
-	riskLevelManager: riskLevelManager,
+	verificationPolicyManager: verificationPolicyManager,
 	featureFlagManager: featureFlagManager
 )
 private let datastoreManager: DataStoreManager = {
@@ -174,7 +174,7 @@ private let remoteConfigManager = RemoteConfigManager(
 	networkManager: networkManager,
 	secureUserSettings: secureUserSettings
 )
-private let riskLevelManager = VerificationPolicyManager(secureUserSettings: secureUserSettings)
+private let verificationPolicyManager = VerificationPolicyManager(secureUserSettings: secureUserSettings)
 private let scanLockManager = ScanLockManager(now: now, secureUserSettings: secureUserSettings)
 private let scanLogManager = ScanLogManager(dataStoreManager: datastoreManager)
 private let secureUserSettings = SecureUserSettings()
@@ -183,7 +183,7 @@ private let walletManager = WalletManager(dataStoreManager: datastoreManager)
 private let verificationPolicyEnabler = VerificationPolicyEnabler(
 	remoteConfigManager: remoteConfigManager,
 	userSettings: userSettings,
-	riskLevelManager: riskLevelManager,
+	verificationPolicyManager: verificationPolicyManager,
 	scanLockManager: scanLockManager,
 	scanLogManager: scanLogManager
 )
@@ -215,7 +215,7 @@ private let environment: () -> Environment = {
 		onboardingManager: onboardingManager,
 		openIdManager: openIdManager,
 		remoteConfigManager: remoteConfigManager,
-		riskLevelManager: riskLevelManager,
+		verificationPolicyManager: verificationPolicyManager,
 		scanLockManager: scanLockManager,
 		scanLogManager: scanLogManager,
 		secureUserSettings: secureUserSettings,

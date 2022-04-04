@@ -26,11 +26,11 @@ class ScanInstructionsViewModel {
 	}
 
 	private let userSettings: UserSettingsProtocol = Current.userSettings
-	private let riskLevelManager: VerificationPolicyManaging = Current.riskLevelManager
+	private let verificationPolicyManager: VerificationPolicyManaging = Current.verificationPolicyManager
 	private let scanLockManager: ScanLockManaging = Current.scanLockManager
 	private var shouldShowRiskSetting = false
 	private var hasScanLock = false
-	private var scanLockObserverToken: ScanLockManager.ObserverToken?
+	private var scanLockObserverToken: Observatory.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:
@@ -47,13 +47,13 @@ class ScanInstructionsViewModel {
 		self.currentPage = 0
 
 		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
-			shouldShowRiskSetting = riskLevelManager.state == nil
+			shouldShowRiskSetting = verificationPolicyManager.state == nil
 		}
 		
 		hasScanLock = scanLockManager.state != .unlocked
 		updateState()
 		
-		scanLockObserverToken = scanLockManager.appendObserver { [weak self] lockState in
+		scanLockObserverToken = scanLockManager.observatory.append { [weak self] lockState in
 			self?.hasScanLock = lockState != .unlocked
 			self?.updateState()
 		}

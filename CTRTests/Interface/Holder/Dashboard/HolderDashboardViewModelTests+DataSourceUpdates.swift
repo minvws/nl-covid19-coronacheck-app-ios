@@ -18,9 +18,6 @@ extension HolderDashboardViewModelTests {
 	func test_didBecomeActiveNotification_triggersDatasourceReload() {
 		// Arrange
 		
-		// remove this default value because otherwise this tangentially triggers a reload:
-		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = nil
-		
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		expect(self.datasourceSpy.invokedReload) == false
 
@@ -33,9 +30,6 @@ extension HolderDashboardViewModelTests {
 	
 	func test_viewWillAppear_triggersDatasourceReload() {
 		// Arrange
-		
-		// remove this default value because otherwise this tangentially triggers a reload:
-		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = nil
 		
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		expect(self.datasourceSpy.invokedReload) == false

@@ -16,7 +16,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 	weak var scanLogManager: ScanLogManaging? = Current.scanLogManager
 	
-	weak var riskLevelManager: VerificationPolicyManaging? = Current.riskLevelManager
+	weak var verificationPolicyManager: VerificationPolicyManaging? = Current.verificationPolicyManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
@@ -38,7 +38,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	
 	@Bindable private(set) var verificationPolicy: VerificationPolicy?
 	
-	private var riskLevelObserverToken: VerificationPolicyManager.ObserverToken?
+	private var riskLevelObserverToken: Observatory.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:
@@ -52,11 +52,11 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.title = L.verifierScanTitle()
 		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
-		self.verificationPolicy = riskLevelManager?.state
+		self.verificationPolicy = verificationPolicyManager?.state
 
 		super.init(coordinator: coordinator)
 		
-		riskLevelObserverToken = Current.riskLevelManager.appendObserver { [weak self] updatedPolicy in
+		riskLevelObserverToken = Current.verificationPolicyManager.observatory.append { [weak self] updatedPolicy in
 			
 			guard self?.verificationPolicy != updatedPolicy else { return }
 			self?.dismiss()
@@ -69,7 +69,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 
-			guard let currentVerificationPolicy = riskLevelManager?.state else {
+			guard let currentVerificationPolicy = verificationPolicyManager?.state else {
 				assertionFailure("Risk level should be set")
 				handleScanError(.noRiskSetting)
 				return

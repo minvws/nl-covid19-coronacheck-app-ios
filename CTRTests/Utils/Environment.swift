@@ -25,9 +25,7 @@ final class EnvironmentSpies {
 	var clockDeviationManagerSpy: ClockDeviationManagerSpy = {
 		let spy = ClockDeviationManagerSpy()
 		spy.stubbedHasSignificantDeviation = false
-		spy.stubbedAppendDeviationChangeObserverObserverResult = (false, ())
-		spy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
-		
+		(spy.stubbedObservatory, _) = Observatory<Bool>.create()
 		return spy
 	}()
 	
@@ -60,7 +58,7 @@ final class EnvironmentSpies {
 	
 	var disclosurePolicyManagingSpy: DisclosurePolicyManagingSpy = {
 		let spy = DisclosurePolicyManagingSpy()
-		spy.stubbedAppendPolicyChangedObserverResult = UUID()
+		(spy.stubbedObservatory, _) = Observatory<Void>.create()
 		return spy
 	}()
 	
@@ -114,23 +112,22 @@ final class EnvironmentSpies {
 		spy.stubbedStoredConfiguration.scanLockSeconds = 300
 		spy.stubbedStoredConfiguration.configTTL = 3600
 		spy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
-		spy.stubbedAppendReloadObserverResult = UUID()
-		spy.stubbedAppendReloadObserverObserverResult = (.default, Data(), URLResponse())
-		spy.stubbedAppendUpdateObserverResult = UUID()
+		(spy.stubbedObservatoryForReloads, _) = Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>.create()
+		(spy.stubbedObservatoryForUpdates, _) = Observatory<RemoteConfigManager.ConfigNotification>.create()
 		return spy
 	}()
 	
-	var riskLevelManagerSpy: RiskLevelManagerSpy = {
-		let spy = RiskLevelManagerSpy()
-		spy.stubbedAppendObserverResult = UUID()
+	var verificationPolicyManagerSpy: VerificationPolicyManagerSpy = {
+		let spy = VerificationPolicyManagerSpy()
 		spy.stubbedState = .policy1G
+		(spy.stubbedObservatory, _) = Observatory<VerificationPolicy?>.create()
 		return spy
 	}()
 	
 	var scanLockManagerSpy: ScanLockManagerSpy = {
 		let spy = ScanLockManagerSpy()
 		spy.stubbedState = .unlocked
-		spy.stubbedAppendObserverResult = UUID()
+		(spy.stubbedObservatory, _) = Observatory<ScanLockManager.State>.create()
 		return spy
 	}()
 	
@@ -163,7 +160,7 @@ final class EnvironmentSpies {
 	
 	var verificationPolicyEnablerSpy: VerificationPolicyEnablerSpy = {
 		let spy = VerificationPolicyEnablerSpy()
-		spy.stubbedAppendPolicyChangedObserverResult = UUID()
+		(spy.stubbedObservatory, _) = Observatory<[VerificationPolicy]>.create()
 		return spy
 	}()
 }
@@ -191,7 +188,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		onboardingManager: spies.onboardingManagerSpy,
 		openIdManager: spies.openIdManagerSpy,
 		remoteConfigManager: spies.remoteConfigManagerSpy,
-		riskLevelManager: spies.riskLevelManagerSpy,
+		verificationPolicyManager: spies.verificationPolicyManagerSpy,
 		scanLockManager: spies.scanLockManagerSpy,
 		scanLogManager: spies.scanLogManagerSpy,
 		secureUserSettings: spies.secureUserSettingsSpy,

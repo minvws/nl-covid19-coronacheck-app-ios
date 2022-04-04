@@ -17,7 +17,7 @@ extension BaseTest {
 	// MARK: - Certificate retrieval
 	
 	private func returnToCertificateOverview() {
-		app.tapText("Naar mijn bewijzen")
+		app.tapButton("Naar mijn bewijzen")
 	}
 	
 	func assertSomethingWentWrong() {
@@ -84,11 +84,9 @@ extension BaseTest {
 				app.containsText("Op dit moment geeft een Nederlands bewijs 3G-toegang.")
 			case .mode1G:
 				tapOnTheNetherlandsTab()
-				app.linkExists("In Nederland krijg je alleen toegang met een testbewijs op plekken waar om een coronabewijs wordt gevraagd (1G-toegang).")
 				app.textExists("Je kunt een bewijs voor 1G-toegang toevoegen wanneer je negatief getest bent")
 			case .mode1GWith3G:
 				tapOnTheNetherlandsTab()
-				app.linkExists("Bezoek je een plek in Nederland? Check vooraf of je een bewijs voor 3G- of 1G toegang nodig hebt.")
 				app.textExists("De Nederlandse toegangsregels zijn veranderd. Er zijn nu aparte bewijzen voor plekken die 3G-toegang en 1G-toegang geven.")
 		}
 	}
@@ -108,11 +106,12 @@ extension BaseTest {
 	func assertNoValidDutchCertificate(ofType certificateType: CertificateType) {
 		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
-		app.textExists("Je hebt geen Nederlands " + certificateType.rawValue.lowercased())
+		app.containsText("Je hebt geen Nederlands \(certificateType.rawValue.lowercased())")
 	}
 	
 	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffsetInDays: Int? = nil, validUntilOffsetInDays: Int? = nil, validUntilDate: String? = nil) {
 		guard disclosureMode != .mode0G else { return }
+		guard disclosureMode == .mode0G else { assertNoValidDutchCertificate(ofType: .vaccination); return }
 		tapOnTheNetherlandsTab()
 		card3G().containsText(CertificateType.vaccination.rawValue)
 		card3G().containsText(amountOfDoses(for: doses))
@@ -130,6 +129,7 @@ extension BaseTest {
 	
 	func assertValidDutchRecoveryCertificate(validUntilOffsetInDays: Int) {
 		guard disclosureMode != .mode0G else { return }
+		guard disclosureMode == .mode0G else { assertNoValidDutchCertificate(ofType: .recovery); return }
 		tapOnTheNetherlandsTab()
 		card3G().containsText(CertificateType.recovery.rawValue)
 		card3G().containsText("geldig tot " + formattedOffsetDate(with: validUntilOffsetInDays))
@@ -138,6 +138,7 @@ extension BaseTest {
 	
 	func assertValidDutchTestCertificate(validUntilOffsetInHours: Int = 24, combinedWithOther: Bool = false) {
 		guard disclosureMode != .mode0G else { return }
+		guard disclosureMode == .mode0G else { assertNoValidDutchCertificate(ofType: .test); return }
 		tapOnTheNetherlandsTab()
 		for card in cardsToCheck(for: .test, combinedWithOther) {
 			card.containsText(CertificateType.test.rawValue)
@@ -262,7 +263,7 @@ extension BaseTest {
 	
 	private func openQRDetails(for person: TestPerson) {
 		app.tapButton("InformationButton")
-		app.labelValuePairExist(label: "Naam / Name: ", value: person.name)
+		app.labelValuePairExist(label: "Naam / Name:", value: person.name)
 		app.labelValuePairExist(label: "Geboortedatum / Date of birth*:", value: formattedDate(of: person.birthDate, short: true))
 	}
 	

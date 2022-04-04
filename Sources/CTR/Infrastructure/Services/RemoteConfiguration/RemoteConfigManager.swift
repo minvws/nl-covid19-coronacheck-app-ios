@@ -10,14 +10,11 @@ import Reachability
 import UIKit
 
 protocol RemoteConfigManaging: AnyObject {
-	typealias ObserverToken = RemoteConfigManager.ObserverToken
-
 	var storedConfiguration: RemoteConfiguration { get }
 
-	func appendUpdateObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
-	func appendReloadObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken
+	var observatoryForUpdates: Observatory<RemoteConfigManager.ConfigNotification> { get }
+	var observatoryForReloads: Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>> { get }
 
-	func removeObserver(token: ObserverToken)
 	func update(
 		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: @escaping () -> Void,
@@ -30,8 +27,8 @@ protocol RemoteConfigManaging: AnyObject {
 
 /// The remote configuration manager
 class RemoteConfigManager: RemoteConfigManaging, Logging {
-	typealias ObserverToken = UUID
-
+	typealias ConfigNotification = (RemoteConfiguration, Data, URLResponse)
+	
 	// MARK: - Vars
 
 	private(set) var isLoading = false
@@ -40,9 +37,13 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		get { secureUserSettings.storedConfiguration }
 		set { secureUserSettings.storedConfiguration = newValue }
 	}
-	private var configUpdateObservers = [ObserverToken: (RemoteConfiguration, Data, URLResponse) -> Void]()
-	private var configReloadObservers = [ObserverToken: (RemoteConfiguration, Data, URLResponse) -> Void]()
 
+	let observatoryForUpdates: Observatory<RemoteConfigManager.ConfigNotification>
+	private let notifyUpdateObservers: (RemoteConfigManager.ConfigNotification) -> Void
+	
+	let observatoryForReloads: Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>
+	private let notifyReloadObservers: (Result<RemoteConfigManager.ConfigNotification, ServerError>) -> Void
+	
 	// MARK: - Dependencies
 
 	private let now: () -> Date
@@ -72,6 +73,8 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		self.secureUserSettings = secureUserSettings
 		self.appVersionSupplier = appVersionSupplier
 		self.fileStorage = fileStorage
+		(self.observatoryForUpdates, self.notifyUpdateObservers) = Observatory<RemoteConfigManager.ConfigNotification>.create()
+		(self.observatoryForReloads, self.notifyReloadObservers) = Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>.create()
 		
 		if let configFromStoredData = fetchConfigFromStoredConfigData(), configFromStoredData != storedConfiguration {
 			logInfo("Updating from stored json")
@@ -101,41 +104,6 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 	deinit {
 		NotificationCenter.default.removeObserver(self)
-	}
-
-	// MARK: - External Observers
-
-	/// Be careful to use weak references to your observers within the closure, and
-	/// to unregister your observer using the returned `ObserverToken`.
-	func appendUpdateObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken {
-		let newToken = ObserverToken()
-		configUpdateObservers[newToken] = observer
-		return newToken
-	}
-
-	func appendReloadObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken {
-		let newToken = ObserverToken()
-		configReloadObservers[newToken] = observer
-		return newToken
-	}
-
-	func removeObserver(token: ObserverToken) {
-		configUpdateObservers[token] = nil
-		configReloadObservers[token] = nil
-	}
-
-	private func notifyUpdateObservers(remoteConfiguration: RemoteConfiguration, data: Data, response: URLResponse) {
-
-		configUpdateObservers.values.forEach { callback in
-			callback(remoteConfiguration, data, response)
-		}
-	}
-
-	private func notifyReloadObservers(remoteConfiguration: RemoteConfiguration, data: Data, response: URLResponse) {
-
-		configReloadObservers.values.forEach { callback in
-			callback(remoteConfiguration, data, response)
-		}
 	}
 
 	// MARK: -
@@ -204,6 +172,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	) {
 		switch resultWrapper {
 			case let .failure(serverError):
+				notifyReloadObservers(Result.failure(serverError))
 				completion(.failure(serverError))
 
 			case let .success((remoteConfiguration, data, urlResponse)):
@@ -228,7 +197,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 				storedConfiguration = remoteConfiguration
 
 				// Some observers want to know whenever the config is reloaded (regardless if data changed since last time):
-				self.notifyReloadObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
+				self.notifyReloadObservers(Result.success((remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)))
 	
 				// Is the newly fetched config hash the same as the existing one?
 				// Use the hash, as not all of the config values are mapping in the remoteconfig object.
@@ -236,7 +205,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 					completion(.success((false, remoteConfiguration)))
 				} else {
 					// Inform the observers that only wish to know when config has changed:
-					notifyUpdateObservers(remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)
+					notifyUpdateObservers((remoteConfiguration: remoteConfiguration, data: data, response: urlResponse))
 					completion(.success((true, remoteConfiguration)))
 				}
 		}

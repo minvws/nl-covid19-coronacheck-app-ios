@@ -31,7 +31,6 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 	func test_checkCouplingStatus_invalidInput() throws {
 		
 		// Given
-		let expectation = self.expectation(description: "test_checkCouplingStatus_invalidInput")
 		// This will not serialize into a valid JSONObject
 		let bogusStr = try XCTUnwrap(String(bytes: [0xD8, 0x00] as [UInt8], encoding: String.Encoding.utf16BigEndian))
 		let testDictionary: [String: AnyObject] = ["test": bogusStr as AnyObject]
@@ -41,20 +40,20 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		}
 		
 		// When
-		sut.checkCouplingStatus(dictionary: testDictionary) { result in
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .cannotSerialize)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .cannotSerialize)
+				done()
+			}
 		}
-		
-		// Then
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 	
 	func test_checkCouplingStatus_validResponse() {
 		
 		// Given
-		let expectation = self.expectation(description: "test_checkCouplingStatus_validResponse")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -63,20 +62,20 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		}
 		
 		// When
-		sut.checkCouplingStatus(dictionary: testDictionary) { result in
-			expect(result.isSuccess) == true
-			expect(result.successValue?.status) == DccCoupling.CouplingState.accepted
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isSuccess) == true
+				expect(result.successValue?.status) == DccCoupling.CouplingState.accepted
+				done()
+			}
 		}
-		
-		// Then
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 	
 	func test_checkCouplingStatus_invalidResponse() {
 		
 		// Given
-		let expectation = self.expectation(description: "test_checkCouplingStatus_invalidResponse")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -85,20 +84,20 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		}
 		
 		// When
-		sut.checkCouplingStatus(dictionary: testDictionary) { result in
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
+				done()
+			}
 		}
-		
-		// Then
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 	
 	func test_checkCouplingStatus_noInternet() {
 		
 		// Given
-		let expectation = self.expectation(description: "test_checkCouplingStatus_noInternet")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -107,20 +106,20 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		}
 		
 		// When
-		sut.checkCouplingStatus(dictionary: testDictionary) { result in
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)
+				done()
+			}
 		}
-		
-		// Then
-		waitForExpectations(timeout: 10, handler: nil)
 	}
-
+	
 	func test_checkCouplingStatus_serverBusy() {
 		
 		// Given
-		let expectation = self.expectation(description: "test_checkCouplingStatus_serverBusy")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -128,20 +127,20 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		}
 		
 		// When
-		sut.checkCouplingStatus(dictionary: testDictionary) { result in
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: 429, response: nil, error: .serverBusy)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: 429, response: nil, error: .serverBusy)
+				done()
+			}
 		}
-		
-		// Then
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 	
 	func test_checkCouplingStatus_timeOut() {
 		
 		// Given
-		let expectation = self.expectation(description: "test_checkCouplingStatus_timeOut")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -150,20 +149,20 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		}
 		
 		// When
-		sut.checkCouplingStatus(dictionary: testDictionary) { result in
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)
+				done()
+			}
 		}
-		
-		// Then
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 	
 	func test_checkCouplingStatus_invalidHost() {
 		
 		// Given
-		let expectation = self.expectation(description: "test_checkCouplingStatus_invalidHost")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -172,20 +171,20 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		}
 		
 		// When
-		sut.checkCouplingStatus(dictionary: testDictionary) { result in
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)
+				done()
+			}
 		}
-		
-		// Then
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 	
 	func test_checkCouplingStatus_networkConnectionLost() {
 		
 		// Given
-		let expectation = self.expectation(description: "test_checkCouplingStatus_networkConnectionLost")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -194,20 +193,20 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		}
 		
 		// When
-		sut.checkCouplingStatus(dictionary: testDictionary) { result in
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)
+				done()
+			}
 		}
-		
-		// Then
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 	
 	func test_checkCouplingStatus_unknownError() {
 		
 		// Given
-		let expectation = self.expectation(description: "test_checkCouplingStatus_unknownError")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -216,20 +215,42 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		}
 		
 		// When
-		sut.checkCouplingStatus(dictionary: testDictionary) { result in
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)
+				done()
+			}
+		}
+	}
+	
+	func test_checkCouplingStatus_authenticationCancelled() {
+		
+		// Given
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
+		
+		stub(condition: isPath(path)) { _ in
+			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
+			return HTTPStubsResponse(error: notConnectedError)
 		}
 		
-		// Then
-		waitForExpectations(timeout: 10, handler: nil)
+		// When
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .authenticationCancelled)
+				done()
+			}
+		}
 	}
 	
 	func test_checkCouplingStatus_serverErrorMessage() {
 		
 		// Given
-		let expectation = self.expectation(description: "test_checkCouplingStatus_serverErrorMessage")
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
@@ -237,13 +258,14 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		}
 		
 		// When
-		sut.checkCouplingStatus(dictionary: testDictionary) { result in
-			expect(result.isFailure) == true
-			expect(result.failureError) == ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99702), error: .serverError)
-			expectation.fulfill()
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99702), error: .serverError)
+				done()
+			}
 		}
-		
-		// Then
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 }

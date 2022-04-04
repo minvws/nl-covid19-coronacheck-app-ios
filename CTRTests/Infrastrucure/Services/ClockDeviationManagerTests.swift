@@ -20,8 +20,8 @@ class ClockDeviationManagerTests: XCTestCase {
 		super.setUp()
 		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
-		remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
-		remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
+		(remoteConfigManagerSpy.stubbedObservatoryForReloads, _) = Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>.create()
+		(remoteConfigManagerSpy.stubbedObservatoryForUpdates, _) = Observatory<RemoteConfigManager.ConfigNotification>.create()
 		
 		sut = ClockDeviationManager(
 			remoteConfigManager: remoteConfigManagerSpy,
@@ -74,7 +74,7 @@ class ClockDeviationManagerTests: XCTestCase {
 	func test_deviationchange_notification() {
 		// Arrange
 		var receivedValue: Bool?
-		_ = sut.appendDeviationChangeObserver { hasDeviation in
+		_ = sut.observatory.append { hasDeviation in
 			receivedValue = hasDeviation
 		}
 
@@ -88,7 +88,7 @@ class ClockDeviationManagerTests: XCTestCase {
 	func test_reactsToSystemDateChange() {
 		// Arrange
 		var receivedCount = 0
-		_ = sut.appendDeviationChangeObserver { _ in
+		_ = sut.observatory.append { hasDeviation in
 			receivedCount += 1
 		}
 

@@ -10,6 +10,16 @@ import XCTest
 
 class DisclosurePolicyManagingSpy: DisclosurePolicyManaging {
 
+	var invokedObservatoryGetter = false
+	var invokedObservatoryGetterCount = 0
+	var stubbedObservatory: Observatory<Void>!
+
+	var observatory: Observatory<Void> {
+		invokedObservatoryGetter = true
+		invokedObservatoryGetterCount += 1
+		return stubbedObservatory
+	}
+
 	var invokedHasChangesGetter = false
 	var invokedHasChangesGetterCount = 0
 	var stubbedHasChanges: Bool! = false
@@ -18,32 +28,6 @@ class DisclosurePolicyManagingSpy: DisclosurePolicyManaging {
 		invokedHasChangesGetter = true
 		invokedHasChangesGetterCount += 1
 		return stubbedHasChanges
-	}
-
-	var invokedAppendPolicyChangedObserver = false
-	var invokedAppendPolicyChangedObserverCount = 0
-	var shouldInvokeAppendPolicyChangedObserverObserver = false
-	var stubbedAppendPolicyChangedObserverResult: ObserverToken!
-
-	func appendPolicyChangedObserver(_ observer: @escaping () -> Void) -> ObserverToken {
-		invokedAppendPolicyChangedObserver = true
-		invokedAppendPolicyChangedObserverCount += 1
-		if shouldInvokeAppendPolicyChangedObserverObserver {
-			observer()
-		}
-		return stubbedAppendPolicyChangedObserverResult
-	}
-
-	var invokedRemoveObserver = false
-	var invokedRemoveObserverCount = 0
-	var invokedRemoveObserverParameters: (token: ObserverToken, Void)?
-	var invokedRemoveObserverParametersList = [(token: ObserverToken, Void)]()
-
-	func removeObserver(token: ObserverToken) {
-		invokedRemoveObserver = true
-		invokedRemoveObserverCount += 1
-		invokedRemoveObserverParameters = (token, ())
-		invokedRemoveObserverParametersList.append((token, ()))
 	}
 
 	var invokedSetDisclosurePolicyUpdateHasBeenSeen = false

@@ -75,7 +75,7 @@ class PaperProofInputCouplingCodeViewController: BaseViewController {
 					UIAccessibility.post(notification: .layoutChanged, argument: self?.sceneView.errorView)
 				}
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-					self?.scrollToBottomIfNotCompletelyVisible()
+					self?.sceneView.scrollView.scrollToBottomIfNotCompletelyVisible()
 				}
 			}
 		}
@@ -177,21 +177,6 @@ class PaperProofInputCouplingCodeViewController: BaseViewController {
 
 		// Start the animation
 		animator.startAnimation()
-	}
-	
-	private func scrollToBottomIfNotCompletelyVisible() {
-
-		let scrollView = sceneView.scrollView
-
-		// Only scroll when content is scrollable
-		guard scrollView.contentSize.height > scrollView.bounds.height else { return }
-		
-		// https://stackoverflow.com/a/952768/443270
-		let bottomOffset = CGPoint(
-			x: 0,
-			y: scrollView.contentSize.height - scrollView.bounds.height + scrollView.contentInset.bottom
-		)
-		scrollView.setContentOffset(bottomOffset, animated: true)
 	}
 }
 

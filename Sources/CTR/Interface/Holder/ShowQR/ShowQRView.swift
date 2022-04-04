@@ -20,9 +20,15 @@ class ShowQRView: BaseView {
 		enum Margin {
 			static let edge: CGFloat = 10
 			static let infoEdge: CGFloat = 20
-			static let domesticSecurity: CGFloat = 56
-			static let internationalSecurity: CGFloat = 52
-            static let internationalSecurityExtraSafeAreaInset: CGFloat = 20
+			static var domesticSecurity: CGFloat {
+				SecurityAnimation.isWithinWinterPeriod ? 57 : 56
+			}
+			static var internationalSecurity: CGFloat {
+				SecurityAnimation.isWithinWinterPeriod ? 90 : 52
+			}
+            static var internationalSecurityExtraSafeAreaInset: CGFloat {
+				SecurityAnimation.isWithinWinterPeriod ? 60 : 20
+			}
 			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
 		enum Spacing {
@@ -68,9 +74,9 @@ class ShowQRView: BaseView {
 	}()
 
 	/// The info button
-	let nextButton: UIButton = {
+	let nextButton: TappableButton = {
 
-		let button = UIButton()
+		let button = TappableButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.pageIndicatorNext(), for: .normal)
 		button.setupLargeContentViewer(title: L.holderShowqrNextbutton())
@@ -78,9 +84,9 @@ class ShowQRView: BaseView {
 	}()
 
 	/// The info button
-	let previousButton: UIButton = {
+	let previousButton: TappableButton = {
 
-		let button = UIButton()
+		let button = TappableButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(I.pageIndicatorBack(), for: .normal)
 		button.setupLargeContentViewer(title: L.holderShowqrPreviousbutton())

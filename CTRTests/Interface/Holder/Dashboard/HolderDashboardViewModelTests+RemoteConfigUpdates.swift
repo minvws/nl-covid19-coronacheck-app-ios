@@ -17,10 +17,13 @@ extension HolderDashboardViewModelTests {
 	func test_registersForRemoteConfigChanges_affectingStrippenRefresher() {
 
 		// Arrange
-		environmentSpies.remoteConfigManagerSpy.stubbedAppendUpdateObserverObserverResult = (RemoteConfiguration.default, Data(), URLResponse())
+		var sendUpdate: ((RemoteConfigManager.ConfigNotification) -> Void)?
+		(environmentSpies.remoteConfigManagerSpy.stubbedObservatoryForUpdates, sendUpdate) = Observatory<RemoteConfigManager.ConfigNotification>.create()
 
-		// Act
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
+		
+		// Act
+		sendUpdate?((RemoteConfiguration.default, Data(), URLResponse()))
 
 		// Assert
 
@@ -33,10 +36,13 @@ extension HolderDashboardViewModelTests {
 
 		// Arrange
 		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
+		var sendConfigReload: ((Result<RemoteConfigManager.ConfigNotification, ServerError>) -> Void)?
+		(environmentSpies.remoteConfigManagerSpy.stubbedObservatoryForReloads, sendConfigReload) = Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>.create()
 
 		// Act
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-
+		sendConfigReload?(.success((RemoteConfiguration.default, Data(), URLResponse())))
+		
 		// Assert
 		expect(self.sut.domesticCards[1]).to(beConfigurationAlmostOutOfDateCard())
 		expect(self.sut.internationalCards[1]).to(beConfigurationAlmostOutOfDateCard())

@@ -20,44 +20,24 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 		return stubbedStoredConfiguration
 	}
 
-	var invokedAppendUpdateObserver = false
-	var invokedAppendUpdateObserverCount = 0
-	var stubbedAppendUpdateObserverObserverResult: (RemoteConfiguration, Data, URLResponse)?
-	var stubbedAppendUpdateObserverResult: ObserverToken!
+	var invokedObservatoryForUpdatesGetter = false
+	var invokedObservatoryForUpdatesGetterCount = 0
+	var stubbedObservatoryForUpdates: Observatory<RemoteConfigManager.ConfigNotification>!
 
-	func appendUpdateObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken {
-		invokedAppendUpdateObserver = true
-		invokedAppendUpdateObserverCount += 1
-		if let result = stubbedAppendUpdateObserverObserverResult {
-			observer(result.0, result.1, result.2)
-		}
-		return stubbedAppendUpdateObserverResult
+	var observatoryForUpdates: Observatory<RemoteConfigManager.ConfigNotification> {
+		invokedObservatoryForUpdatesGetter = true
+		invokedObservatoryForUpdatesGetterCount += 1
+		return stubbedObservatoryForUpdates
 	}
 
-	var invokedAppendReloadObserver = false
-	var invokedAppendReloadObserverCount = 0
-	var stubbedAppendReloadObserverObserverResult: (RemoteConfiguration, Data, URLResponse)?
-	var stubbedAppendReloadObserverResult: ObserverToken!
+	var invokedObservatoryForReloadsGetter = false
+	var invokedObservatoryForReloadsGetterCount = 0
+	var stubbedObservatoryForReloads: Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>!
 
-	func appendReloadObserver(_ observer: @escaping (RemoteConfiguration, Data, URLResponse) -> Void) -> ObserverToken {
-		invokedAppendReloadObserver = true
-		invokedAppendReloadObserverCount += 1
-		if let result = stubbedAppendReloadObserverObserverResult {
-			observer(result.0, result.1, result.2)
-		}
-		return stubbedAppendReloadObserverResult
-	}
-
-	var invokedRemoveObserver = false
-	var invokedRemoveObserverCount = 0
-	var invokedRemoveObserverParameters: (token: ObserverToken, Void)?
-	var invokedRemoveObserverParametersList = [(token: ObserverToken, Void)]()
-
-	func removeObserver(token: ObserverToken) {
-		invokedRemoveObserver = true
-		invokedRemoveObserverCount += 1
-		invokedRemoveObserverParameters = (token, ())
-		invokedRemoveObserverParametersList.append((token, ()))
+	var observatoryForReloads: Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>> {
+		invokedObservatoryForReloadsGetter = true
+		invokedObservatoryForReloadsGetterCount += 1
+		return stubbedObservatoryForReloads
 	}
 
 	var invokedUpdate = false

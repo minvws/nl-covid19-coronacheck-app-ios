@@ -27,7 +27,7 @@ class VerificationPolicyManagerTests: XCTestCase {
 		
 		// Arrange
 		sut = VerificationPolicyManager(secureUserSettings: secureUserSettingsSpy)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		
 		// Act
 		// Assert
@@ -40,7 +40,7 @@ class VerificationPolicyManagerTests: XCTestCase {
 		// Arrange
 		secureUserSettingsSpy.stubbedVerificationPolicy = .policy3G
 		sut = VerificationPolicyManager(secureUserSettings: secureUserSettingsSpy)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		
 		// Act
 		// Assert
@@ -52,7 +52,7 @@ class VerificationPolicyManagerTests: XCTestCase {
 		// Arrange
 		secureUserSettingsSpy.stubbedVerificationPolicy = .policy3G
 		sut = VerificationPolicyManager(secureUserSettings: secureUserSettingsSpy)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		
 		// Act
 		secureUserSettingsSpy.stubbedVerificationPolicy = .policy1G
@@ -68,7 +68,7 @@ class VerificationPolicyManagerTests: XCTestCase {
 		// Arrange
 		secureUserSettingsSpy.stubbedVerificationPolicy = .policy3G
 		sut = VerificationPolicyManager(secureUserSettings: secureUserSettingsSpy)
-		_ = sut.appendObserver(observerVCR.recordEvents)
+		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		
 		// Act
 		secureUserSettingsSpy.stubbedVerificationPolicy = nil
