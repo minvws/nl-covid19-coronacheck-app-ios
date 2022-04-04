@@ -219,10 +219,14 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 		
 		// Arrange
 		environmentSpies.clockDeviationManagerSpy.stubbedHasSignificantDeviation = true
-		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (true, ())
 		
+		var sendUpdate: ((Bool) -> Void)?
+		(environmentSpies.clockDeviationManagerSpy.stubbedObservatory, sendUpdate) = Observatory<Bool>.create()
+
 		// Act
 		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
+		
+		sendUpdate?(true)
 		
 		// Assert
 		expect(self.sut.shouldShowClockDeviationWarning) == true
@@ -259,14 +263,15 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 		
 		// Arrange
 		environmentSpies.clockDeviationManagerSpy.stubbedHasSignificantDeviation = false
-		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = (true, ())
-		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverResult = ClockDeviationManager.ObserverToken()
+
+		var sendUpdate: ((Bool) -> Void)?
+		(environmentSpies.clockDeviationManagerSpy.stubbedObservatory, sendUpdate) = Observatory<Bool>.create()
 		
 		// Act
 		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
+		sendUpdate?(true)
 		
 		// Assert
-		expect(self.environmentSpies.clockDeviationManagerSpy.invokedAppendDeviationChangeObserverCount) == 1
 		expect(self.sut.shouldShowClockDeviationWarning) == true
 	}
 	

@@ -177,10 +177,10 @@ final class HolderDashboardViewModel: Logging {
 
 	// Observation tokens:
 	private var remoteConfigUpdateObserverToken: RemoteConfigManager.ObserverToken?
-	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
 	private var remoteConfigManagerUpdateObserverToken: RemoteConfigManager.ObserverToken?
 	private var disclosurePolicyUpdateObserverToken: DisclosurePolicyManager.ObserverToken?
+	private var clockDeviationObserverToken: Observatory.ObserverToken?
 
 	// Dependencies:
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
@@ -246,7 +246,7 @@ final class HolderDashboardViewModel: Logging {
 	private func setupObservers() {
 	
 		// Observers
-		clockDeviationObserverToken = Current.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+		clockDeviationObserverToken = Current.clockDeviationManager.observatory.append { [weak self] hasClockDeviation in
 			self?.state.deviceHasClockDeviation = hasClockDeviation
 			self?.datasource.reload() // this could cause some QR code states to change, so reload.
 		}
@@ -269,10 +269,10 @@ final class HolderDashboardViewModel: Logging {
 
 	deinit {
 		notificationCenter.removeObserver(self)
-		clockDeviationObserverToken.map(Current.clockDeviationManager.removeDeviationChangeObserver)
 		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.removeObserver)
 		remoteConfigUpdateObserverToken.map(Current.remoteConfigManager.removeObserver)
 		remoteConfigUpdatesConfigurationWarningToken.map(Current.remoteConfigManager.removeObserver)
+		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
 	}
 
 	// MARK: - Setup

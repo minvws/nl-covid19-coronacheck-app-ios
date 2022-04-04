@@ -156,7 +156,7 @@ class VerifierStartScanningViewModel: Logging {
 
 	// MARK: - Observer tokens
 	
-	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
+	private var clockDeviationObserverToken: Observatory.ObserverToken?
 	private var scanLockObserverToken: Observatory.ObserverToken?
 	private var riskLevelObserverToken: VerificationPolicyManager.ObserverToken?
 	private let vendTimer: (TimeInterval, Bool, @escaping () -> Void) -> Timeable
@@ -188,7 +188,7 @@ class VerifierStartScanningViewModel: Logging {
 		reloadUI(forMode: mode, hasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false)
 		
 		// Add an observer for when Clock Deviation is detected/undetected:
-		clockDeviationObserverToken = Current.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+		clockDeviationObserverToken = Current.clockDeviationManager.observatory.append { [weak self] hasClockDeviation in
 			guard let self = self else { return }
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
@@ -199,13 +199,13 @@ class VerifierStartScanningViewModel: Logging {
 		
 		// Then observe for changes:
 		scanLockObserverToken = Current.scanLockManager.observatory.append { [weak self] in self?.lockStateDidChange(lockState: $0) }
-		riskLevelObserverToken = Current.verificationPolicyManager.observatory.append { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
+		verificationPolicyObserverToken = Current.verificationPolicyManager.observatory.append { [weak self] in self?.verificationPolicyDidChange(verificationPolicy: $0) }
 		
 		lockLabelCountdownTimer.fire()
 	}
 	
 	deinit {
-		clockDeviationObserverToken.map(Current.clockDeviationManager.removeDeviationChangeObserver)
+		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
 		lockLabelCountdownTimer.invalidate()
 	}
 	

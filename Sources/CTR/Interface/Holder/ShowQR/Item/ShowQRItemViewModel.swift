@@ -56,7 +56,7 @@ class ShowQRItemViewModel: Logging {
 
 	@Bindable private(set) var visibilityState: ShowQRItemView.VisibilityState = .loading
 
-	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
+	private var clockDeviationObserverToken: Observatory.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:
@@ -109,7 +109,7 @@ class ShowQRItemViewModel: Logging {
 			}
 		}
 
-		clockDeviationObserverToken = Current.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+		clockDeviationObserverToken = Current.clockDeviationManager.observatory.append { [weak self] hasClockDeviation in
 			self?.validityTimer?.fire()
 		}
 
@@ -117,7 +117,7 @@ class ShowQRItemViewModel: Logging {
 	}
 
 	deinit {
-		clockDeviationObserverToken.map(Current.clockDeviationManager.removeDeviationChangeObserver)
+		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
 	}
 
 	func updateQRVisibility() {
