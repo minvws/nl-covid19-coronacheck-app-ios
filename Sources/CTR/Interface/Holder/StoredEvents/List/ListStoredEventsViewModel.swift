@@ -278,9 +278,4 @@ class ListStoredEventsViewModel: Logging {
 			}
 		)
 	}
-	
-	private func showEventDetails(_ event: EventFlow.Event) {
-		
-		self.logDebug("We should show details for \(event)")
-	}
 }
