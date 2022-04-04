@@ -55,4 +55,18 @@ final class DCCQRDetailsViewControllerTests: XCTestCase {
 		
 		sut.assertImage()
 	}
+	
+	func test_dosageLinkTouchedCommand_shouldOpenUrl() throws {
+		
+		// Given
+		loadView()
+		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
+		
+		// When
+		sut.sceneView.dosageLinkTouchedCommand?(url)
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
+	}
 }

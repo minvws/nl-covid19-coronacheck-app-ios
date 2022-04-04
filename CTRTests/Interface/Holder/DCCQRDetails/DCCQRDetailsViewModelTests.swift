@@ -191,4 +191,27 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[0].field) == "Naam / Name:"
 		expect(self.sut.details[0].value) == "Corona, Check"
 	}
+	
+	func test_openUrl_shouldOpenUrl() throws {
+
+		// Given
+		sut = DCCQRDetailsViewModel(
+			coordinator: coordinatorSpy,
+			title: "title",
+			description: "body",
+			details: [
+				DCCQRDetails(field: DCCQRDetailsTest.name, value: "Corona, Check"),
+				DCCQRDetails(field: DCCQRDetailsTest.pathogen, value: nil)
+			],
+			dateInformation: "information"
+		)
+		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
+
+		// When
+		sut.openUrl(url)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
+	}
 }
