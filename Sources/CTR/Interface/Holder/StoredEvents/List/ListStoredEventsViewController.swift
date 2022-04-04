@@ -99,12 +99,7 @@ class ListStoredEventsViewController: BaseViewController {
 		sceneView.backgroundColor = C.white()
 		displayContent(content)
 
-		removeExistingRows()
-	}
-
-	private func removeExistingRows() {
-		// Remove previously added rows:
-		sceneView.listStackView.removeArrangedSubviews()
+		sceneView.removeExistingRows()
 	}
 
 	private func setForListEvents(_ content: Content, groups: [Group]) {
@@ -114,13 +109,12 @@ class ListStoredEventsViewController: BaseViewController {
 		displayContent(content)
 		sceneView.setListStackVisibility(ishidden: false)
 
-		// Remove previously added rows:
-		removeExistingRows()
+		sceneView.removeExistingRows()
 		sceneView.addSeparator()
 		
 		if groups.isEmpty {
 			let view = StoredEventTitleView.makeView(title: L.holder_storedEvents_list_noEvents())
-			sceneView.listStackView.addArrangedSubview(view)
+			sceneView.addToListStackView(view)
 		} else {
 			groups.map { group in
 				let groupStack = createGroupStackView()
@@ -149,7 +143,7 @@ class ListStoredEventsViewController: BaseViewController {
 //		sceneView.shouldShowLoadingSpinner = false
 //		sceneView.setListStackVisibility(ishidden: true)
 //		displayContent(content)
-//		removeExistingRows()
+//		sceneView.removeExistingRows()
 //		navigationItem.leftBarButtonItem = nil
 	}
 
@@ -159,7 +153,7 @@ class ListStoredEventsViewController: BaseViewController {
 		sceneView.title = content.title
 		sceneView.message = content.body
 
-		sceneView.contentTextView.linkTouched { [weak self] url in
+		sceneView.messageLinkTapHandler = { [weak self] url in
 			self?.viewModel.openUrl(url)
 		}
 

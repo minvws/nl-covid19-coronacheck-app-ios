@@ -193,7 +193,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedRestart) == true
 	}
 	
-	func test_storedEvent_holder() {
+	func test_storedEventsOptionTapped_forHolder() {
 		
 		// Given
 		loadView()
