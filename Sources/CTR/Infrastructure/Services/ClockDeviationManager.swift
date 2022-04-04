@@ -9,16 +9,13 @@ import Foundation
 
 protocol ClockDeviationManaging: AnyObject {
 	var hasSignificantDeviation: Bool? { get }
+	var observatory: Observatory<Bool> { get }
 
 	func update(serverHeaderDate: String, ageHeader: String?)
 	func update(serverResponseDateTime: Date, localResponseDateTime: Date, localResponseSystemUptime: __darwin_time_t)
-
-	func appendDeviationChangeObserver(_ observer: @escaping (Bool) -> Void) -> ClockDeviationManager.ObserverToken
-	func removeDeviationChangeObserver(token: ClockDeviationManager.ObserverToken)
 }
 
 class ClockDeviationManager: ClockDeviationManaging, Logging {
-	typealias ObserverToken = UUID
 
 	var hasSignificantDeviation: Bool? {
 		guard let serverResponseDateTime = serverResponseDateTime,
@@ -40,6 +37,10 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 		return result
 	}
 
+	// Mechanism for registering for external state change notifications:
+	let observatory: Observatory<Bool>
+	private let notifyObservers: (Bool) -> Void
+	
 	private var serverResponseDateTime: Date?
 	private var localResponseDateTime: Date?
 	private var localResponseSystemUptime: __darwin_time_t?
@@ -50,7 +51,6 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 	private let remoteConfigManager: RemoteConfigManaging
 	private let currentSystemUptime: () -> __darwin_time_t?
 	private let now: () -> Date
-	private var deviationChangeObservers = [ObserverToken: (Bool) -> Void]()
 	private lazy var serverHeaderDateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
 		dateFormatter.locale = Locale(identifier: "en_GB") // because the server date contains day name
@@ -66,7 +66,8 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 		self.remoteConfigManager = remoteConfigManager
 		self.currentSystemUptime = currentSystemUptime
 		self.now = now
-
+		(self.observatory, self.notifyObservers) = Observatory<Bool>.create()
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(systemClockDidChange), name: .NSSystemClockDidChange, object: nil)
 	}
 
@@ -78,7 +79,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 	@objc func systemClockDidChange() {
 		logDebug("📣 System clock did change")
 
-		notifyObservers()
+		notifyObservers(hasSignificantDeviation ?? false)
 	}
 
 	/// Update using the Server Response Header string
@@ -106,27 +107,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 		self.serverResponseDateTime = serverResponseDateTime
 		self.localResponseDateTime = localResponseDateTime
 		self.localResponseSystemUptime = localResponseSystemUptime
-		notifyObservers()
-	}
-
-	/// Be careful to use weak references to your observers within the closure, and
-	/// to unregister your observer using the returned `ObserverToken`.
-	func appendDeviationChangeObserver(_ observer: @escaping (Bool) -> Void) -> ObserverToken {
-		let newToken = ObserverToken()
-		deviationChangeObservers[newToken] = observer
-		return newToken
-	}
-
-	func removeDeviationChangeObserver(token: ObserverToken) {
-		deviationChangeObservers[token] = nil
-	}
-
-	private func notifyObservers() {
-		guard let hasDeviation = self.hasSignificantDeviation else { return }
-
-		deviationChangeObservers.values.forEach { callback in
-			callback(hasDeviation)
-		}
+		notifyObservers(hasSignificantDeviation ?? false)
 	}
 
 	/// Does the server time have a significant deviation from the local time?

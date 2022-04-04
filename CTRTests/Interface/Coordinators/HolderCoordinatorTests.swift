@@ -62,10 +62,6 @@ class HolderCoordinatorTests: XCTestCase {
 
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
 
-		environmentSpies.remoteConfigManagerSpy.stubbedAppendUpdateObserverResult = UUID()
-		environmentSpies.remoteConfigManagerSpy.stubbedAppendReloadObserverResult = UUID()
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = .default
-
 		sut.childCoordinators = [
 			NewFeaturesCoordinator(
 				navigationController: navigationSpy,
