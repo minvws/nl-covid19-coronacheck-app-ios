@@ -5,29 +5,30 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-class DifferentPersonTest: BaseTest {
+class DifferentCredentialsTest: BaseTest {
+	
+	let setup = TestData.vacJ1DifferentFullNameReplaces
+	
+	override func setUpWithError() throws {
+		try super.setUpWithError()
+		
+		addVaccinationCertificate(for: setup)
+		addRetrievedCertificateToApp()
+	}
 	
 	func test_existingVaccinationAndNegativeTestOfDifferentPerson_IsNotReplaced() {
-		let person1 = TestData.vacJ1DifferentFullNameReplaces
-		addVaccinationCertificate(for: person1)
-		addRetrievedCertificateToApp()
-		
-		let person2 = TestData.negPcr
-		addTestCertificateFromGGD(for: person2)
+		let person = TestData.negPcr
+		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
-		assertValidDutchVaccinationCertificate(doses: person1.dose, validUntilOffsetInDays: person1.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: person1.doseIntl)
+		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffsetInDays: setup.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl)
 	}
 	
 	func test_existingVaccinationAndNegativeTestOfDifferentPerson_IsReplaced() {
-		let person1 = TestData.vacJ1DifferentFullNameReplaces
-		addVaccinationCertificate(for: person1)
-		addRetrievedCertificateToApp()
-		
-		let person2 = TestData.negPcr
-		addTestCertificateFromGGD(for: person2)
+		let person = TestData.negPcr
+		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
 		
@@ -36,30 +37,22 @@ class DifferentPersonTest: BaseTest {
 	}
 	
 	func test_existingVaccinationAndRecoveryOfDifferentPerson_IsNotReplaced() {
-		let person1 = TestData.vacJ1DifferentFullNameReplaces
-		addVaccinationCertificate(for: person1)
-		addRetrievedCertificateToApp()
-		
-		let person2 = TestData.posPcr
-		addRecoveryCertificate(for: person2)
+		let person = TestData.posPcr
+		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
-		assertValidDutchVaccinationCertificate(doses: person1.dose, validUntilOffsetInDays: person1.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: person1.doseIntl)
+		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffsetInDays: setup.vacUntil)
+		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl)
 	}
 	
 	func test_existingVaccinationAndRecoveryOfDifferentPerson_IsReplaced() {
-		let person1 = TestData.vacJ1DifferentFullNameReplaces
-		addVaccinationCertificate(for: person1)
-		addRetrievedCertificateToApp()
-		
-		let person2 = TestData.posPcr
-		addRecoveryCertificate(for: person2)
+		let person = TestData.posPcr
+		addRecoveryCertificate(for: person)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person2.recUntil)
-		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person2.recUntil)
+		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
+		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 }
