@@ -158,7 +158,7 @@ class VerifierStartScanningViewModel: Logging {
 	
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
 	private var scanLockObserverToken: Observatory.ObserverToken?
-	private var riskLevelObserverToken: VerificationPolicyManager.ObserverToken?
+	private var verificationPolicyObserverToken: Observatory.ObserverToken?
 	private let vendTimer: (TimeInterval, Bool, @escaping () -> Void) -> Timeable
 	
 	// MARK: - Dependencies
