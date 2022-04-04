@@ -110,7 +110,11 @@ class ListStoredEventsViewModel: Logging {
 			   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData),
 			   let identity = wrapper.identity {
 				
-				wrapper.events?.forEach { event in
+				let sortedEvents = wrapper.events?.sorted(by: { lhs, rhs in
+					lhs.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) ?? .distantFuture > rhs.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) ?? .distantFuture
+				})
+				
+				sortedEvents?.forEach { event in
 					
 					if let date = event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) {
 						let dateString = ListRemoteEventsViewModel.printDateFormatter.string(from: date)
