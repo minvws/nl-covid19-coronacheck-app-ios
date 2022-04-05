@@ -41,7 +41,7 @@ final class DCCQRDetailsViewModel {
 			guard let value = $0.value else {
 				return nil
 			}
-			return (field: $0.field.displayTitle, value: value, dosageMessage: $0.message)
+			return (field: $0.field.displayTitle, value: value, dosageMessage: $0.dosageMessage)
 		}
 		
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
