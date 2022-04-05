@@ -12,22 +12,13 @@ class ListStoredEventsViewController: BaseViewController {
 	enum State {
 		case loading(content: Content)
 		case listEvents(content: Content, groups: [Group])
-		case feedback(content: Content)
 	}
 	
 	struct Group {
-		let header: Header
+		let header: String
 		let rows: [Row]
-		let action: Action
-	}
-
-	struct Header {
-		let title: String
-	}
-
-	struct Action {
-		let title: String
 		let action: (() -> Void)?
+		let actionTitle: String
 	}
 	
 	struct Row {
@@ -73,8 +64,6 @@ class ListStoredEventsViewController: BaseViewController {
 		viewModel.$viewState.binding = { [weak self] in
 
 			switch $0 {
-				case let .feedback(content):
-					self?.setForFeedback(content)
 				case let .loading(content):
 					self?.setForLoadingState(content)
 				case let .listEvents(content, groups):
@@ -119,7 +108,7 @@ class ListStoredEventsViewController: BaseViewController {
 			groups.map { group in
 				let groupStack = createGroupStackView()
 				groupStack.addArrangedSubview(
-					StoredEventHeaderView.makeHeaderView(title: group.header.title)
+					StoredEventHeaderView.makeHeaderView(title: group.header)
 				)
 				group.rows.map { row in
 					StoredEventItemView.makeView(
@@ -130,21 +119,12 @@ class ListStoredEventsViewController: BaseViewController {
 				}.forEach(groupStack.addArrangedSubview)
 				
 				groupStack.addArrangedSubview(
-					RedDisclosureButton.makeRedButton(title: group.action.title, command: group.action.action)
+					RedDisclosureButton.makeRedButton(title: group.actionTitle, command: group.action)
 				)
 				return groupStack
 			}
 			.forEach(self.sceneView.addGroupStackView)
 		}
-	}
-
-	private func setForFeedback(_ content: Content) {
-//
-//		sceneView.shouldShowLoadingSpinner = false
-//		sceneView.setListStackVisibility(ishidden: true)
-//		displayContent(content)
-//		sceneView.removeExistingRows()
-//		navigationItem.leftBarButtonItem = nil
 	}
 
 	private func displayContent(_ content: Content) {

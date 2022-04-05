@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import CryptoKit
 
 class EventGroupModel {
 
@@ -31,5 +32,21 @@ class EventGroupModel {
 		object.wallet = wallet
 
 		return object
+	}
+	
+	class func delete(_ objectID: NSManagedObjectID) -> Result<Bool, Error> {
+
+		let managedContext = Current.dataStoreManager.managedObjectContext()
+		do {
+			if let eventGroup = try managedContext.existingObject(with: objectID) as? EventGroup {
+				managedContext.delete(eventGroup)
+				Current.dataStoreManager.save(managedContext)
+				return .success(true)
+			} else {
+				return .success(false)
+			}
+		} catch let error {
+			return .failure(error)
+		}
 	}
 }

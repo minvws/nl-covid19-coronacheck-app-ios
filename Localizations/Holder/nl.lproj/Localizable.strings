@@ -723,8 +723,9 @@
 "holder_storedEvent_alert_removeEvents_title" = "Deze gegevens verwijderen?";
 "holder_storedEvents_button_handleData" = "Hoe gaat CoronaCheck met gegevens om?";
 "holder_storedEvents_button_removeEvents" = "Wis deze gegevens";
+"holder_storedEvents_eraseEvents_title" = "Deze gegevens wissen";
 "holder_storedEvents_listHeader_fetchedFromProvider" = "Opgehaald bij %@";
-"holder_storedEvents_listHeader_paperFlow" = "Ingescande bewijzen";
+"holder_storedEvents_listHeader_paperFlow" = "Ingescand bewijs";
 "holder_storedEvents_list_noEvents" = "Geen gegevens opgeslagen";
 "holder_storedEvents_message" = "De gegevens hieronder staan opgeslagen op je telefoon en gebruikt CoronaCheck om je coronabewijs te maken.";
 "holder_storedEvents_title" = "Mijn opgeslagen gegevens";
