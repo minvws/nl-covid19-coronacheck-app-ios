@@ -27,8 +27,9 @@ final class DCCQRDetailsViewControllerTests: XCTestCase {
 			title: "title",
 			description: "body",
 			details: [
-				DCCQRDetails(field: DCCQRDetailsTest.name, value: "Corona, Check"),
-				DCCQRDetails(field: DCCQRDetailsTest.dateOfBirth, value: "1970-01-01")
+				DCCQRDetails(field: DCCQRDetailsVaccination.name, value: "Corona, Check"),
+				DCCQRDetails(field: DCCQRDetailsVaccination.dateOfBirth, value: "1970-01-01"),
+				DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: "3 / 2", message: L.holder_showqr_eu_about_vaccination_dosage_message())
 			],
 			dateInformation: "information"
 		)
