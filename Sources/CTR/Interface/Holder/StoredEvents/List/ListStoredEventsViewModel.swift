@@ -29,9 +29,7 @@ class ListStoredEventsViewModel: Logging {
 
 	private let screenCaptureDetector = ScreenCaptureDetector()
 
-	init(
-		coordinator: HolderCoordinatorDelegate & OpenUrlProtocol
-	) {
+	init(coordinator: HolderCoordinatorDelegate & OpenUrlProtocol) {
 
 		self.coordinator = coordinator
 
@@ -49,7 +47,7 @@ class ListStoredEventsViewModel: Logging {
 		coordinator?.openUrl(url, inApp: true)
 	}
 	
-	private func getEventGroupListViewState() -> ListStoredEventsViewController.State {
+	fileprivate func getEventGroupListViewState() -> ListStoredEventsViewController.State {
 	
 		return ListStoredEventsViewController.State.listEvents(
 			content: Content(
@@ -79,7 +77,6 @@ class ListStoredEventsViewModel: Logging {
 				header: getListHeader(providerIdentifier: eventGroup.providerIdentifier),
 				rows: getEventRows(eventGroup),
 				action: { [weak self] in
-					self?.logDebug("We should show popup for delete eventGroup \(eventGroup.objectID)")
 					self?.showRemovalConfirmationAlert(objectID: eventGroup.objectID)
 				},
 				actionTitle: L.holder_storedEvents_button_removeEvents()))
@@ -311,12 +308,18 @@ class ListStoredEventsViewModel: Logging {
 				if success {
 					sendEventsToTheSigner()
 				} else {
-					handleClientSideError(clientCode: .coreDataFetchError, for: .removeEventGroups)
+					handleCoreDataError()
 				}
 			case .failure(let error):
 				logError("Failed to remove event groups: \(error)")
-				handleClientSideError(clientCode: .coreDataFetchError, for: .removeEventGroups)
+				handleCoreDataError()
 		}
+	}
+	
+	private func handleCoreDataError() {
+		
+		let errorCode = ErrorCode(flow: .walletDebug, step: .removeEventGroups, clientCode: .coreDataFetchError)
+		onError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}
 	
 	private func sendEventsToTheSigner() {
@@ -324,115 +327,54 @@ class ListStoredEventsViewModel: Logging {
 		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: nil) { result in
 			// Result<RemoteGreenCards.Response, Error>
 			
-			self.logDebug("Sign result: \(result)")
-
-			switch result {
-				case .success:
-					self.viewState = self.getEventGroupListViewState()
-
-				case .failure(GreenCardLoader.Error.didNotEvaluate):
-					// Can not occur as we are not passing a response evaluator in this flow
-					self.viewState = self.getEventGroupListViewState()
-
-				case .failure(GreenCardLoader.Error.noEvents):
-					// No more stored events. Remove existing greencards.
-					Current.walletManager.removeExistingGreenCards()
-					self.viewState = self.getEventGroupListViewState()
-
-				case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
-					self.handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce)
-
-				case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
-					self.handleServerError(serverError, for: .nonce)
-
-				case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
-					self.handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce)
-
-				case .failure(GreenCardLoader.Error.credentials(let serverError)):
-					self.handleServerError(serverError, for: .signer)
-
-				case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
-					self.handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials)
-
-				case .failure(let error):
-					self.logError("storeAndSign - unhandled: \(error)")
-					self.handleClientSideError(clientCode: .unhandled, for: .signer)
-			}
+			let helper = GreenCardResponseHelper(delegate: self)
+			helper.handleResult(result)
 		}
 	}
-	
-	private func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step) {
+}
 
-		let errorCode = ErrorCode(flow: .walletDebug, step: step, clientCode: clientCode)
+// MARK: - GreenCardResponseHelperDelegateProtocol
+
+extension ListStoredEventsViewModel: GreenCardResponseHelperDelegateProtocol {
+	
+	func onSuccess() {
 		
-		logDebug("errorCode: \(errorCode)")
-		displayClientErrorCode(errorCode)
+		viewState = getEventGroupListViewState()
 	}
 	
-	private func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step) {
-
-		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
-			self.logDebug("handleServerError \(serverError)")
-
-			switch error {
-				case .serverBusy:
-					showServerBusy(ErrorCode(flow: .walletDebug, step: step, errorCode: "429"))
-
-				case .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
-					showServerUnreachable(ErrorCode(flow: .walletDebug, step: step, clientCode: error.getClientErrorCode() ?? .unhandled))
-
-				case .noInternetConnection:
-					showNoInternet()
-
-				case .responseCached, .redirection, .resourceNotFound, .serverError:
-					// 304, 3xx, 4xx, 5xx
-					let errorCode = ErrorCode(
-						flow: .walletDebug,
-						step: step,
-						provider: nil,
-						errorCode: "\(statusCode ?? 000)",
-						detailedCode: serverResponse?.code
-					)
-					logDebug("errorCode: \(errorCode)")
-					displayServerErrorCode(errorCode)
-
-				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
-					// Client side
-					let errorCode = ErrorCode(
-						flow: .walletDebug,
-						step: step,
-						provider: nil,
-						clientCode: error.getClientErrorCode() ?? .unhandled,
-						detailedCode: serverResponse?.code
-					)
-					logDebug("errorCode: \(errorCode)")
-					displayClientErrorCode(errorCode)
-			}
-		}
-	}
-
-	private func showServerUnreachable(_ errorCode: ErrorCode) {
-
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.generalErrorServerUnreachableErrorCode("\(errorCode)"))
+	func onNoInternet() {
+		
+		alert = AlertContent(
+			title: L.generalErrorNointernetTitle(),
+			subTitle: L.generalErrorNointernetText(),
+			cancelAction: { [weak self] _ in
+				guard let self = self else { return }
+				self.viewState = self.getEventGroupListViewState()
+			},
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in
+				self?.sendEventsToTheSigner()
+			},
+			okTitle: L.generalRetry(),
+			okActionIsPreferred: true
+		)
 	}
 	
-	private func showServerBusy(_ errorCode: ErrorCode) {
-
-		displayErrorCode(title: L.generalNetworkwasbusyTitle(), message: L.generalNetworkwasbusyErrorcode("\(errorCode)"))
-	}
-
-	private func displayClientErrorCode(_ errorCode: ErrorCode) {
-
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
-	}
-
-	private func displayServerErrorCode(_ errorCode: ErrorCode) {
-
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateServerMessage("\(errorCode)"))
+	func onDidNotEvaluate() {
+		
+		// Can not occur as we are not passing a response evaluator in this flow
+		viewState = getEventGroupListViewState()
 	}
 	
-	private func displayErrorCode(title: String, message: String) {
-
+	func onNoEventsToBeSend() {
+		
+		// No more stored events. Remove existing greencards.
+		Current.walletManager.removeExistingGreenCards()
+		viewState = getEventGroupListViewState()
+	}
+	
+	func onError(title: String, message: String) {
+		
 		let content = Content(
 			title: title,
 			body: message,
@@ -451,32 +393,21 @@ class ListStoredEventsViewModel: Logging {
 		}
 	}
 	
-	private func showNoInternet() {
-
-		// this is a retry-able situation
-		alert = AlertContent(
-			title: L.generalErrorNointernetTitle(),
-			subTitle: L.generalErrorNointernetText(),
-			cancelAction: { [weak self] _ in
-				guard let self = self else { return }
-				self.viewState = self.getEventGroupListViewState()
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				self?.sendEventsToTheSigner()
-			},
-			okTitle: L.generalRetry(),
-			okActionIsPreferred: true
-		)
+	func getFlow() -> ErrorCode.Flow {
+		
+		return ErrorCode.Flow.walletDebug
 	}
 }
+
+// MARK: - ErrorCode.Flow
 
 extension ErrorCode.Flow {
 
 	static let walletDebug = ErrorCode.Flow(value: "11")
 }
 
-// MARK: ErrorCode.Step (Scan log flow)
+// MARK: - ErrorCode.Step
+
 extension ErrorCode.Step {
 
 	static let removeEventGroups = ErrorCode.Step(value: "10")
