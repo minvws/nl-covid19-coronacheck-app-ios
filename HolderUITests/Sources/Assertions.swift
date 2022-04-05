@@ -47,8 +47,8 @@ extension BaseTest {
 	}
 	
 	func assertCertificateIsOnlyValidInternationally() {
-		guard disclosureMode != .mode0G else { return }
 		guard ctbInUse else { return }
+		guard disclosureMode != .mode0G else { return }
 		app.textExists("Er is alleen een internationaal bewijs gemaakt")
 		returnToCertificateOverview()
 	}
@@ -111,8 +111,8 @@ extension BaseTest {
 	}
 	
 	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffsetInDays: Int? = nil, validUntilOffsetInDays: Int? = nil, validUntilDate: String? = nil) {
-		guard disclosureMode != .mode0G else { return }
 		guard ctbInUse else { return }
+		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		card3G().containsText(CertificateType.vaccination.rawValue)
 		card3G().containsText(amountOfDoses(for: doses))
@@ -129,8 +129,8 @@ extension BaseTest {
 	}
 	
 	func assertValidDutchRecoveryCertificate(validUntilOffsetInDays: Int) {
-		guard disclosureMode != .mode0G else { return }
 		guard ctbInUse else { return }
+		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		card3G().containsText(CertificateType.recovery.rawValue)
 		card3G().containsText("geldig tot " + formattedOffsetDate(with: validUntilOffsetInDays))
@@ -138,8 +138,8 @@ extension BaseTest {
 	}
 	
 	func assertValidDutchTestCertificate(validUntilOffsetInHours: Int = 24, combinedWithOther: Bool = false) {
-		guard disclosureMode != .mode0G else { return }
 		guard ctbInUse else { return }
+		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		for card in cardsToCheck(for: .test, combinedWithOther) {
 			card.containsText(CertificateType.test.rawValue)
