@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DCCQRLabelView: BaseView {
+final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -18,16 +18,12 @@ final class DCCQRLabelView: BaseView {
 	
 	/// The field label
 	private let fieldLabel: Label = {
-		let label = Label(subhead: "").multiline()
-		label.textColor = C.black()
-		return label
+		return Label(subhead: "").multiline()
 	}()
 	
 	/// The value label
 	private let valueLabel: Label = {
-		let label = Label(bodyBold: "").multiline()
-		label.textColor = C.black()
-		return label
+		return Label(bodyBold: "").multiline()
 	}()
 	
 	override func setupViews() {
@@ -79,7 +75,20 @@ final class DCCQRLabelView: BaseView {
 	/// Set up labels to support SwitchControl accessibility
 	func updateAccessibilityStatus() {
 		
+		guard let field = field, let value = value else { return }
+		
 		fieldLabel.setupForVoiceAndSwitchControlAccessibility()
 		valueLabel.setupForVoiceAndSwitchControlAccessibility()
+		
+		if UIAccessibility.isVoiceOverRunning || CommandLine.arguments.contains("-showAccessibilityLabels") {
+			// Show labels for VoiceOver
+			accessibilityLabel = [field, value].joined(separator: ",")
+		} else {
+			// Hide labels for VoiceControl
+			accessibilityLabel = nil
+		}
+		
+		// Disabled as interactive element for SwitchControl
+		isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
 	}
 }

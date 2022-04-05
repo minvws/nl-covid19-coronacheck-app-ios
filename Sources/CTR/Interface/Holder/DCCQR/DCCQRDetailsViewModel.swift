@@ -8,7 +8,7 @@
 final class DCCQRDetailsViewModel {
 	
 	/// Dismissable Delegate
-	weak var coordinator: Dismissable?
+	weak var coordinator: (Dismissable & OpenUrlProtocol)?
 	
 	// MARK: - Bindable
 	
@@ -17,7 +17,7 @@ final class DCCQRDetailsViewModel {
 	
 	@Bindable private(set) var description: String
 	
-	@Bindable private(set) var details: [(field: String, value: String)]
+	@Bindable private(set) var details: [(field: String, value: String, dosageMessage: String?)]
 	
 	@Bindable private(set) var dateInformation: String
 	
@@ -26,7 +26,7 @@ final class DCCQRDetailsViewModel {
 	private let screenCaptureDetector = ScreenCaptureDetector()
 	
 	init(
-		coordinator: Dismissable,
+		coordinator: Dismissable & OpenUrlProtocol,
 		title: String,
 		description: String,
 		details: [DCCQRDetails],
@@ -41,11 +41,16 @@ final class DCCQRDetailsViewModel {
 			guard let value = $0.value else {
 				return nil
 			}
-			return (field: $0.field.displayTitle, value: value)
+			return (field: $0.field.displayTitle, value: value, dosageMessage: $0.dosageMessage)
 		}
 		
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
 		}
+	}
+	
+	func openUrl(_ url: URL) {
+
+		coordinator?.openUrl(url, inApp: true)
 	}
 }
