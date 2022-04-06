@@ -11,10 +11,9 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrBeforeP1() {
 		let person = TestData.posPcrBeforeP1
-		addRecoveryCertificate(for: person)
+		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
+		assertCombinedVaccinationAndRecoveryRetrieval()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -25,10 +24,9 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrBeforeP2() {
 		let person = TestData.posPcrBeforeP2
-		addRecoveryCertificate(for: person)
+		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
+		assertCombinedVaccinationAndRecoveryRetrieval()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -39,10 +37,9 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrBeforeJ1() {
 		let person = TestData.posPcrBeforeJ1
-		addRecoveryCertificate(for: person)
+		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
+		assertCombinedVaccinationAndRecoveryRetrieval()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -53,10 +50,9 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrBeforeM2() {
 		let person = TestData.posPcrBeforeM2
-		addRecoveryCertificate(for: person)
+		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
+		assertCombinedVaccinationAndRecoveryRetrieval()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
