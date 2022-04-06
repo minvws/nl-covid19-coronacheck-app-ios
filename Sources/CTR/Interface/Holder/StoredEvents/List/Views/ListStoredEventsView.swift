@@ -125,7 +125,7 @@ class ListStoredEventsView: ScrolledStackView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = C.grey5()
+		backgroundColor = C.primaryBlue5()
 		
 		stackViewInset = .zero
 		stackView.spacing = 0
