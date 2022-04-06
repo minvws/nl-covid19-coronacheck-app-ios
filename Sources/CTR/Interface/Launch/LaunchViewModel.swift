@@ -36,7 +36,8 @@ class LaunchViewModel: Logging {
 	init(
 		coordinator: AppCoordinatorDelegate,
 		versionSupplier: AppVersionSupplierProtocol?,
-		flavor: AppFlavor) {
+		flavor: AppFlavor
+	) {
 
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
@@ -44,7 +45,7 @@ class LaunchViewModel: Logging {
 
 		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
 		message = flavor == .holder ? L.holderLaunchText() : L.verifierLaunchText()
-		appIcon = flavor == .holder ? I.holderAppIcon() : I.verifierAppIcon()
+		appIcon = flavor == .holder ? I.launch.holderAppIcon() : I.launch.verifierAppIcon()
 
 		version = flavor == .holder
 			? L.holderLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")

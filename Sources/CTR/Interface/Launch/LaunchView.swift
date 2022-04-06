@@ -42,7 +42,7 @@ class LaunchView: BaseView {
 	/// The government ribbon
 	private let ribbonVWSView: UIImageView = {
 
-		let view = UIImageView(image: I.ribbonvws())
+		let view = UIImageView(image: I.launch.ribbonvws())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
 		return view
@@ -51,7 +51,7 @@ class LaunchView: BaseView {
 	/// The app icon
 	private let appIconView: UIImageView = {
 
-		let view = UIImageView(image: I.ribbonvws())
+		let view = UIImageView(image: I.launch.ribbonvws())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
 		return view
