@@ -14,6 +14,7 @@ class BaseTest: XCTestCase {
 	let loginTimeout = 15.0
 	
 	var disclosureMode = DisclosureMode.mode0G
+	let ctbInUse = false
 	
 	override func setUpWithError() throws {
 		try super.setUpWithError()

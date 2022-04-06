@@ -10,6 +10,7 @@ import Foundation
 struct DCCQRDetails {
 	let field: DCCQRDetailable
 	let value: String?
+	var dosageMessage: String?
 }
 
 protocol DCCQRDetailable {
