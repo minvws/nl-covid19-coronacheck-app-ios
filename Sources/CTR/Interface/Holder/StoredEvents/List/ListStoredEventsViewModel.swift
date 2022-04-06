@@ -220,7 +220,7 @@ class ListStoredEventsViewModel: Logging {
 			details: date,
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
-					L.general_vaccination().capitalizingFirstLetter(),
+					L.general_vaccinationAssessment().capitalizingFirstLetter(),
 					details: VaccinationAssessementDetailsGenerator.getDetails(identity: identity, event: event)
 				)
 			}
