@@ -318,7 +318,7 @@ class ListStoredEventsViewModel: Logging {
 	
 	private func handleCoreDataError() {
 		
-		let errorCode = ErrorCode(flow: .walletDebug, step: .removeEventGroups, clientCode: .coreDataFetchError)
+		let errorCode = ErrorCode(flow: .clearEvents, step: .removeEventGroups, clientCode: .coreDataFetchError)
 		onError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}
 	
@@ -395,7 +395,7 @@ extension ListStoredEventsViewModel: GreenCardResponseParserDelegate {
 	
 	func getFlow() -> ErrorCode.Flow {
 		
-		return ErrorCode.Flow.walletDebug
+		return ErrorCode.Flow.clearEvents
 	}
 }
 
@@ -403,7 +403,7 @@ extension ListStoredEventsViewModel: GreenCardResponseParserDelegate {
 
 extension ErrorCode.Flow {
 
-	static let walletDebug = ErrorCode.Flow(value: "11")
+	static let clearEvents = ErrorCode.Flow(value: "11")
 }
 
 // MARK: - ErrorCode.Step
