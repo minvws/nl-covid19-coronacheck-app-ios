@@ -140,7 +140,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 			animated: true,
 			actions: [
 				.destructive(L.holderCleardataAlertRemove()),
-				.cancel(L.generalCancel())
+				.cancel(L.general_cancel())
 			]
 		)
 	}
