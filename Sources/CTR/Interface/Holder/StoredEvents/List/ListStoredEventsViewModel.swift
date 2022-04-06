@@ -288,7 +288,7 @@ class ListStoredEventsViewModel: Logging {
 			title: L.holder_storedEvent_alert_removeEvents_title(),
 			subTitle: L.holder_storedEvent_alert_removeEvents_message(),
 			cancelAction: nil,
-			cancelTitle: L.generalCancel(),
+			cancelTitle: L.general_cancel(),
 			cancelActionIsPreferred: true,
 			okAction: { [weak self] _ in
 				
