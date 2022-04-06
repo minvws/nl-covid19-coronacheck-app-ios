@@ -94,7 +94,7 @@ class ListStoredEventsViewController: BaseViewController {
 	private func setForListEvents(_ content: Content, groups: [Group]) {
 
 		sceneView.shouldShowLoadingSpinner = false
-		sceneView.backgroundColor = C.grey5()
+		sceneView.backgroundColor = C.primaryBlue5()
 		displayContent(content)
 		sceneView.setListStackVisibility(ishidden: false)
 
