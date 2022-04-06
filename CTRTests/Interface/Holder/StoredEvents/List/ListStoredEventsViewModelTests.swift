@@ -30,6 +30,8 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		sut = ListStoredEventsViewModel(coordinator: coordinatorSpy)
 	}
 	
+	// MARK: Content
+	
 	func test_content_noEvents() {
 		
 		// Given
@@ -346,6 +348,24 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		expect(row.details) == "5 januari 2022"
 	}
 	
+	// MARK: - Open URL
+
+	func test_openUrl() throws {
+
+		// Given
+		setupSut()
+		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
+
+		// When
+		sut.openUrl(url)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
+	}
+	
+	// MARK: - Helpers
+	
 	private func createEventGroup(wrapper: EventFlow.EventResultWrapper) -> EventGroup? {
 
 		var eventGroup: EventGroup?
@@ -366,9 +386,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 					)
 				}
 			}
-//			environmentSpies.dataStoreManager.save(context)
 		}
-		
 		return eventGroup
 	}
 	
