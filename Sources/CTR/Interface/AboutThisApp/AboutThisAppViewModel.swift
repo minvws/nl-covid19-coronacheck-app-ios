@@ -213,7 +213,7 @@ class AboutThisAppViewModel: Logging {
 			title: L.holderCleardataAlertTitle(),
 			subTitle: L.holderCleardataAlertSubtitle(),
 			cancelAction: nil,
-			cancelTitle: L.generalCancel(),
+			cancelTitle: L.general_cancel(),
 			okAction: { [weak self] _ in
 				self?.wipePersistedData()
 			},
