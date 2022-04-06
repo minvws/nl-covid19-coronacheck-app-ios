@@ -57,10 +57,6 @@ class ListStoredEventsViewController: BaseViewController {
 		// Show back button in navigation push
 		addBackButton()
 
-		viewModel.$shouldShowProgress.binding = { [weak self] in
-			self?.sceneView.shouldShowLoadingSpinner = $0
-		}
-
 		viewModel.$viewState.binding = { [weak self] in
 
 			switch $0 {
