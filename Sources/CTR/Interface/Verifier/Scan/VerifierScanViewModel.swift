@@ -38,7 +38,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	
 	@Bindable private(set) var verificationPolicy: VerificationPolicy?
 	
-	private var riskLevelObserverToken: VerificationPolicyManager.ObserverToken?
+	private var riskLevelObserverToken: Observatory.ObserverToken?
 
 	/// Initializer
 	/// - Parameters:

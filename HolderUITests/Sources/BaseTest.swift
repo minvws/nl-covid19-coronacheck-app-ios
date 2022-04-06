@@ -11,17 +11,19 @@ class BaseTest: XCTestCase {
 	
 	let app = XCUIApplication()
 	let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
-	let loginTimeout = 30.0
+	let loginTimeout = 15.0
 	
 	var disclosureMode = DisclosureMode.mode0G
+	let ctbInUse = false
 	
 	override func setUpWithError() throws {
 		try super.setUpWithError()
 		app.launchArguments.append(contentsOf: ["-resetOnStart"])
 		app.launchArguments.append(contentsOf: ["-skipOnboarding"])
+		app.launchArguments.append(contentsOf: ["-showAccessibilityLabels"])
 		app.launchArguments.append(contentsOf: [disclosureMode.rawValue])
 		app.launch()
-		XCTAssertTrue(app.waitForExistence(timeout: 10.0), "App did not start")
+		XCTAssertTrue(app.waitForExistence(timeout: loginTimeout), "App did not start")
 		
 		continueAfterFailure = false
 	}

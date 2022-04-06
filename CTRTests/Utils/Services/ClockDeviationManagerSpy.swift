@@ -20,6 +20,16 @@ class ClockDeviationManagerSpy: ClockDeviationManaging {
 		return stubbedHasSignificantDeviation
 	}
 
+	var invokedObservatoryGetter = false
+	var invokedObservatoryGetterCount = 0
+	var stubbedObservatory: Observatory<Bool>!
+
+	var observatory: Observatory<Bool> {
+		invokedObservatoryGetter = true
+		invokedObservatoryGetterCount += 1
+		return stubbedObservatory
+	}
+
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
 	var invokedUpdateParameters: (serverHeaderDate: String, ageHeader: String?)?
@@ -42,31 +52,5 @@ class ClockDeviationManagerSpy: ClockDeviationManaging {
 		invokedUpdateServerResponseDateTimeCount += 1
 		invokedUpdateServerResponseDateTimeParameters = (serverResponseDateTime, localResponseDateTime, localResponseSystemUptime)
 		invokedUpdateServerResponseDateTimeParametersList.append((serverResponseDateTime, localResponseDateTime, localResponseSystemUptime))
-	}
-
-	var invokedAppendDeviationChangeObserver = false
-	var invokedAppendDeviationChangeObserverCount = 0
-	var stubbedAppendDeviationChangeObserverObserverResult: (Bool, Void)?
-	var stubbedAppendDeviationChangeObserverResult: ClockDeviationManager.ObserverToken!
-
-	func appendDeviationChangeObserver(_ observer: @escaping (Bool) -> Void) -> ClockDeviationManager.ObserverToken {
-		invokedAppendDeviationChangeObserver = true
-		invokedAppendDeviationChangeObserverCount += 1
-		if let result = stubbedAppendDeviationChangeObserverObserverResult {
-			observer(result.0)
-		}
-		return stubbedAppendDeviationChangeObserverResult
-	}
-
-	var invokedRemoveDeviationChangeObserver = false
-	var invokedRemoveDeviationChangeObserverCount = 0
-	var invokedRemoveDeviationChangeObserverParameters: (token: ClockDeviationManager.ObserverToken, Void)?
-	var invokedRemoveDeviationChangeObserverParametersList = [(token: ClockDeviationManager.ObserverToken, Void)]()
-
-	func removeDeviationChangeObserver(token: ClockDeviationManager.ObserverToken) {
-		invokedRemoveDeviationChangeObserver = true
-		invokedRemoveDeviationChangeObserverCount += 1
-		invokedRemoveDeviationChangeObserverParameters = (token, ())
-		invokedRemoveDeviationChangeObserverParametersList.append((token, ()))
 	}
 }

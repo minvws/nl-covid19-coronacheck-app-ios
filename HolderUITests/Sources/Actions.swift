@@ -17,14 +17,14 @@ extension BaseTest {
 	func addVaccinationCertificate(for person: TestPerson) {
 		addEvent()
 		app.tapButton("Vaccinatie. Ik heb een (booster)vaccinatie gehad")
-		app.tapText("Log in met DigiD")
+		app.tapButton("Log in met DigiD")
 		retrieveCertificateFromServer(for: person)
 	}
 	
 	func addRecoveryCertificate(for person: TestPerson) {
 		addEvent()
 		app.tapButton("Positieve test. Uit de test blijkt dat ik corona heb gehad")
-		app.tapText("Log in met DigiD")
+		app.tapButton("Log in met DigiD")
 		retrieveCertificateFromServer(for: person)
 	}
 	
@@ -32,7 +32,7 @@ extension BaseTest {
 		addEvent()
 		app.tapButton("Negatieve test. Uit de test blijkt dat ik geen corona heb")
 		app.tapButton("GGD")
-		app.tapText("Log in met DigiD")
+		app.tapButton("Log in met DigiD")
 		retrieveCertificateFromServer(for: person)
 	}
 	
@@ -88,8 +88,17 @@ extension BaseTest {
 	}
 	
 	func addRetrievedCertificateToApp() {
-		app.textExists("Kloppen de gegevens?")
 		makeScreenShot(name: "Back in app")
-		app.tapText("Maak bewijs")
+		app.textExists("Kloppen de gegevens?")
+		waitUntilSpinnerIsGone()
+		makeScreenShot(name: "Data retrieval screen")
+		app.tapButton("Maak bewijs")
+	}
+	
+	private func waitUntilSpinnerIsGone() {
+		let element = app.descendants(matching: .activityIndicator).firstMatch
+		let predicate = NSPredicate(format: "exists == false")
+		self.expectation(for: predicate, evaluatedWith: element, handler: nil)
+		self.waitForExpectations(timeout: self.loginTimeout, handler: nil)
 	}
 }
