@@ -760,3 +760,12 @@
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
 "visitorpass_token_next" = "Volgende";
+
+"holder_menu_resetApp" = "App opnieuw instellen";
+"holder_menu_storedEvents" = "Opgeslagen gegevens";
+"holder_storedEvents_title" = "Mijn opgeslagen gegevens";
+"holder_storedEvents_message" = "De gegevens hieronder staan opgeslagen op je telefoon en gebruikt CoronaCheck om je coronabewijs te maken.";
+"holder_storedEvents_button_handleData" = "Hoe gaat CoronaCheck met gegevens om?";
+"holder_storedEvents_url" = "https://coronacheck.nl";
+"holder_storedEvents_button_removeAllEvents" = "Alle gegevens wissen";
+"holder_storedEvents_list_noEvents" = "Geen gegeven opgeslagen";

@@ -267,6 +267,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount += 1
 	}
 
+	var invokedUserWishesToSeeStoredEvents = false
+	var invokedUserWishesToSeeStoredEventsCount = 0
+
+	func userWishesToSeeStoredEvents() {
+		invokedUserWishesToSeeStoredEvents = true
+		invokedUserWishesToSeeStoredEventsCount += 1
+	}
+
 	var invokedDismiss = false
 	var invokedDismissCount = 0
 

@@ -18,6 +18,8 @@ enum AboutThisAppMenuIdentifier: String {
 
 	case reset
 	
+	case storedEvents
+	
 	case deeplink
 
 	case scanlog
@@ -99,7 +101,8 @@ class AboutThisAppViewModel: Logging {
 			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
-			AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle())
+			AboutThisAppMenuOption(identifier: .storedEvents, name: L.holder_menu_storedEvents()),
+			AboutThisAppMenuOption(identifier: .reset, name: L.holder_menu_resetApp())
 		]
 		if Configuration().getEnvironment() != "production" {
 			list.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
@@ -131,7 +134,7 @@ class AboutThisAppViewModel: Logging {
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]
 		if Configuration().getEnvironment() != "production" {
-			topList.append(AboutThisAppMenuOption(identifier: .reset, name: L.holderCleardataMenuTitle()))
+			topList.append(AboutThisAppMenuOption(identifier: .reset, name: L.holder_menu_resetApp()))
 		}
 		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			menu = [
@@ -158,6 +161,8 @@ class AboutThisAppViewModel: Logging {
 				openUrlString(L.holderUrlColophon())
 			case .reset:
 				showClearDataAlert()
+			case .storedEvents:
+				(coordinator as? HolderCoordinatorDelegate)?.userWishesToSeeStoredEvents()
 			case .deeplink:
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
 			case .scanlog:
