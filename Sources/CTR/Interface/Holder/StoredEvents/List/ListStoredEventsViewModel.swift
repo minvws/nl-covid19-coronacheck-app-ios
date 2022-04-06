@@ -327,7 +327,7 @@ class ListStoredEventsViewModel: Logging {
 		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: nil) { result in
 			// Result<RemoteGreenCards.Response, Error>
 			
-			let helper = GreenCardResponseHelper(delegate: self)
+			let helper = GreenCardResponseParser(delegate: self)
 			helper.handleResult(result)
 		}
 	}
@@ -335,7 +335,7 @@ class ListStoredEventsViewModel: Logging {
 
 // MARK: - GreenCardResponseHelperDelegateProtocol
 
-extension ListStoredEventsViewModel: GreenCardResponseHelperDelegateProtocol {
+extension ListStoredEventsViewModel: GreenCardResponseParserDelegate {
 	
 	func onSuccess() {
 		

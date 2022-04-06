@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol GreenCardResponseHelperDelegateProtocol: AnyObject {
+protocol GreenCardResponseParserDelegate: AnyObject {
 	
 	/// The GreenCardLoader was succesful
 	func onSuccess()
@@ -32,11 +32,11 @@ protocol GreenCardResponseHelperDelegateProtocol: AnyObject {
 	func getFlow() -> ErrorCode.Flow
 }
 
-class GreenCardResponseHelper: Logging {
+class GreenCardResponseParser: Logging {
 	
-	weak private var delegate: GreenCardResponseHelperDelegateProtocol?
+	weak private var delegate: GreenCardResponseParserDelegate?
 	
-	init(delegate: GreenCardResponseHelperDelegateProtocol) {
+	init(delegate: GreenCardResponseParserDelegate) {
 		self.delegate = delegate
 	}
 	
@@ -86,7 +86,7 @@ class GreenCardResponseHelper: Logging {
 		guard let flow = delegate?.getFlow() else { return }
 		
 		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
-			self.logDebug("handleServerError \(serverError)")
+			self.logDebug("GreenCardResponseParser = handleServerError \(serverError)")
 			
 			switch error {
 				case .serverBusy:
@@ -125,25 +125,25 @@ class GreenCardResponseHelper: Logging {
 	
 	private func showServerUnreachable(_ errorCode: ErrorCode) {
 		
-		logDebug("showServerUnreachable - errorCode: \(errorCode)")
+		logDebug("GreenCardResponseParser - showServerUnreachable - errorCode: \(errorCode)")
 		displayErrorCode(title: L.holderErrorstateTitle(), message: L.generalErrorServerUnreachableErrorCode("\(errorCode)"))
 	}
 	
 	private func showServerBusy(_ errorCode: ErrorCode) {
 		
-		logDebug("showServerBusy - errorCode: \(errorCode)")
+		logDebug("GreenCardResponseParser - showServerBusy - errorCode: \(errorCode)")
 		displayErrorCode(title: L.generalNetworkwasbusyTitle(), message: L.generalNetworkwasbusyErrorcode("\(errorCode)"))
 	}
 	
 	private func displayClientErrorCode(_ errorCode: ErrorCode) {
 		
-		logDebug("displayClientErrorCode - errorCode: \(errorCode)")
+		logDebug("GreenCardResponseParser - displayClientErrorCode - errorCode: \(errorCode)")
 		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}
 	
 	private func displayServerErrorCode(_ errorCode: ErrorCode) {
 		
-		logDebug("displayServerErrorCode - errorCode: \(errorCode)")
+		logDebug("GreenCardResponseParser - displayServerErrorCode - errorCode: \(errorCode)")
 		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateServerMessage("\(errorCode)"))
 	}
 	
