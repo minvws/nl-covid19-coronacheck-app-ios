@@ -17,12 +17,6 @@ class SnapshotViewModel: Logging {
 
 	var willEnterForegroundObserver: NSObjectProtocol?
 
-	/// The title of the launch page
-	@Bindable private(set) var title: String
-
-	/// The version of the launch page
-	@Bindable private(set) var version: String
-
 	/// The version of the launch page
 	@Bindable private(set) var dismiss: Bool = false
 
@@ -39,12 +33,7 @@ class SnapshotViewModel: Logging {
 
 		self.versionSupplier = versionSupplier
 
-		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
 		appIcon = flavor == .holder ? I.launch.holderAppIcon() : I.launch.verifierAppIcon()
-
-		version = flavor == .holder
-			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
-			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
 
 		willEnterForegroundObserver = NotificationCenter.default.addObserver(
 			forName: UIApplication.willEnterForegroundNotification,

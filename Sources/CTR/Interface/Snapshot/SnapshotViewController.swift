@@ -42,8 +42,6 @@ class SnapshotViewController: BaseViewController {
 		super.viewDidLoad()
 
 		// Bindings
-		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$version.binding = { [weak self] in self?.sceneView.version = $0 }
 		viewModel.$appIcon.binding = { [weak self] in self?.sceneView.appIcon = $0 }
 		viewModel.$dismiss.binding = { [weak self] in
 			if $0 {

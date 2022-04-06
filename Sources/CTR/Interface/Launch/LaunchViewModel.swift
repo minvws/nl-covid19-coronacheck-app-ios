@@ -21,9 +21,7 @@ class LaunchViewModel: Logging {
 	var configStatus: LaunchState?
 	var issuerPublicKeysStatus: LaunchState?
 
-	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
-	@Bindable private(set) var version: String
 	@Bindable private(set) var appIcon: UIImage?
 	@Bindable private(set) var alert: AlertContent?
 
@@ -43,13 +41,8 @@ class LaunchViewModel: Logging {
 		self.versionSupplier = versionSupplier
 		self.flavor = flavor
 
-		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
 		message = flavor == .holder ? L.holderLaunchText() : L.verifierLaunchText()
 		appIcon = flavor == .holder ? I.launch.holderAppIcon() : I.launch.verifierAppIcon()
-
-		version = flavor == .holder
-			? L.holderLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
-			: L.verifierLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 
 		walletManager = flavor == .holder ? Current.walletManager : nil
 		startChecks()

@@ -13,60 +13,32 @@ class LaunchView: BaseView {
 	private struct ViewTraits {
 
 		enum Icon {
-			static let size: CGFloat = 64
-			static let margin: CGFloat = 32
-		}
-		enum Ribbon {
-			static let height: CGFloat = 101
-			static let width: CGFloat = 153
-			static let heightOffset: CGFloat = 10.0
-			static let centerOffset: CGFloat = 53.0
-		}
-		enum Title {
-			static let lineHeight: CGFloat = 32
-			static let kerning: CGFloat = -0.26
+			static let size: CGFloat = 80
 		}
 		enum Message {
 			static let lineHeight: CGFloat = 22
 			static let kerning: CGFloat = -0.41
 			static let spinnerMargin: CGFloat = 5
-		}
-		enum Version {
-			static let lineHeight: CGFloat = 18
-			static let kerning: CGFloat = -0.24
-			static let bottomMargin: CGFloat = 32
-			static let margin: CGFloat = 20.0
+			static let messageToIconSpacingMultiplier: CGFloat = 1.2
+			static let margin: CGFloat = 32
 		}
 	}
-
-	/// The government ribbon
-	private let ribbonVWSView: UIImageView = {
-
-		let view = UIImageView(image: I.launch.ribbonvws())
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.contentMode = .scaleAspectFit
-		return view
-	}()
 
 	/// The app icon
 	private let appIconView: UIImageView = {
 
-		let view = UIImageView(image: I.launch.ribbonvws())
+		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
 		return view
-	}()
-
-	/// The title label
-	let titleLabel: Label = {
-
-        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The message label
 	let messageLabel: Label = {
 
-		return Label(body: nil).multiline()
+		let label = Label(body: nil).multiline()
+		label.maximumContentSizeCategory = .accessibilityMedium
+		return label
 	}()
 
 	/// The spinner
@@ -77,29 +49,16 @@ class LaunchView: BaseView {
 		return view
 	}()
 
-	/// A containter for the spinner and message label
-	let messageContainer: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
 	/// A stackview to center the message label between the title and the version
 	private let stackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.axis = .vertical
+		view.axis = .horizontal
 		view.alignment = .center
 		view.distribution = .fill
+		view.spacing = ViewTraits.Message.spinnerMargin
 		return view
-	}()
-
-	/// The version label
-	let versionLabel: Label = {
-
-		return Label(subhead: nil).multiline()
 	}()
 
 	/// setup the views
@@ -114,16 +73,11 @@ class LaunchView: BaseView {
 
 		super.setupViewHierarchy()
 
-		addSubview(ribbonVWSView)
 		addSubview(appIconView)
-		addSubview(titleLabel)
-
-		messageContainer.addSubview(spinner)
-		messageContainer.addSubview(messageLabel)
-		stackView.addArrangedSubview(messageContainer)
-
 		addSubview(stackView)
-		addSubview(versionLabel)
+
+		stackView.addArrangedSubview(spinner)
+		stackView.addArrangedSubview(messageLabel)
 	}
 
 	/// Setup the constraints
@@ -136,82 +90,25 @@ class LaunchView: BaseView {
 			appIconView.widthAnchor.constraint(equalToConstant: ViewTraits.Icon.size),
 			appIconView.heightAnchor.constraint(equalToConstant: ViewTraits.Icon.size),
 			appIconView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			appIconView.bottomAnchor.constraint(
-				equalTo: titleLabel.topAnchor,
-				constant: -ViewTraits.Icon.margin
-			),
-
-			// Title
-			titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-			titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-			titleLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
+			appIconView.centerYAnchor.constraint(equalTo: centerYAnchor),
 			
-			// Version
-			versionLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-			versionLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
-			versionLabel.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.Version.bottomMargin
+			// Spacing is dynamic and based on screen size
+			NSLayoutConstraint(
+				item: stackView,
+				attribute: .top,
+				relatedBy: .equal,
+				toItem: appIconView,
+				attribute: .bottom,
+				multiplier: ViewTraits.Message.messageToIconSpacingMultiplier,
+				constant: 0
 			),
-			versionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Version.margin)
-		])
-		
-		setupRibbonViewContraints()
-		setupStackViewViewConstraints()
-	}
-	
-	private func setupRibbonViewContraints() {
-		
-		NSLayoutConstraint.activate([
-			
-			ribbonVWSView.topAnchor.constraint(
-				equalTo: topAnchor,
-				constant: -ViewTraits.Ribbon.heightOffset
-			),
-			ribbonVWSView.centerXAnchor.constraint(
-				equalTo: centerXAnchor,
-				constant: ViewTraits.Ribbon.centerOffset
-			),
-			ribbonVWSView.widthAnchor.constraint(equalToConstant: ViewTraits.Ribbon.width),
-			ribbonVWSView.heightAnchor.constraint(equalToConstant: ViewTraits.Ribbon.height)
-		])
-	}
-	
-	private func setupStackViewViewConstraints() {
-		
-		NSLayoutConstraint.activate([
-			
-			// stackView
 			stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-			stackView.bottomAnchor.constraint(equalTo: versionLabel.topAnchor),
-			
-			// Spinner
-			spinner.leadingAnchor.constraint(equalTo: messageContainer.leadingAnchor),
-			spinner.trailingAnchor.constraint(
-				equalTo: messageLabel.leadingAnchor,
-				constant: -ViewTraits.Message.spinnerMargin
-			),
-			spinner.centerYAnchor.constraint(equalTo: messageContainer.centerYAnchor),
-			
-			// Message
-			messageLabel.centerYAnchor.constraint(equalTo: messageContainer.centerYAnchor),
-			messageLabel.trailingAnchor.constraint(equalTo: messageContainer.trailingAnchor),
-			messageLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor)
+			stackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: ViewTraits.Message.margin),
+			stackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -ViewTraits.Message.margin)
 		])
 	}
 
 	// MARK: Public Access
-	
-	/// The title
-	var title: String? {
-		didSet {
-			titleLabel.attributedText = title?.setLineHeight(
-				ViewTraits.Title.lineHeight,
-				alignment: .center,
-				kerning: ViewTraits.Title.kerning)
-		}
-	}
 	
 	/// The message
 	var message: String? {
@@ -223,33 +120,9 @@ class LaunchView: BaseView {
 		}
 	}
 	
-	/// The version
-	var version: String? {
-		didSet {
-			versionLabel.attributedText = version?.setLineHeight(
-				ViewTraits.Version.lineHeight,
-				alignment: .center,
-				kerning: ViewTraits.Version.kerning,
-				textColor: C.grey1()!)
-		}
-	}
-	
 	var appIcon: UIImage? {
 		didSet {
 			appIconView.image = appIcon
 		}
-	}
-
-	/// Hide the header image
-	func hideImage() {
-
-		appIconView.isHidden = true
-
-	}
-
-	/// Show the header image
-	func showImage() {
-
-		appIconView.isHidden = false
 	}
 }
