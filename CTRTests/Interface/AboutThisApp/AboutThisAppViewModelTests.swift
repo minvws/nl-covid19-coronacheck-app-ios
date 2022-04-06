@@ -738,13 +738,13 @@ class AboutThisAppViewModelCoordinatorSpy: OpenUrlProtocol, Restartable, Verifie
 	var invokedDisplayErrorParametersList = [(content: Content, Void)]()
 	var shouldInvokeDisplayErrorBackAction = false
 
-	func displayError(content: Content, backAction: @escaping () -> Void) {
+	func displayError(content: Content, backAction: (() -> Void)?) {
 		invokedDisplayError = true
 		invokedDisplayErrorCount += 1
 		invokedDisplayErrorParameters = (content, ())
 		invokedDisplayErrorParametersList.append((content, ()))
 		if shouldInvokeDisplayErrorBackAction {
-			backAction()
+			backAction?()
 		}
 	}
 
