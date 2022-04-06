@@ -147,7 +147,7 @@ final class TestData {
 	
 	// Positive tests (and combinations)
 	static let posPcr = TestPerson(bsn: "999993033", recFrom: -19, recUntil: 150) // Positive PCR (NAAT)
-	static let posPcrP1 = TestPerson(bsn: "999991346", doseIntl: ["1/2"], vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 1 pfizer
+	static let posPcrP1 = TestPerson(bsn: "999991346", doseIntl: ["1/2"], vacOffset: -60, recFrom: -19, recUntil: 150) // Positive PCR (NAAT) + 1 pfizer
 	static let posPcrP2 = TestPerson(bsn: "999991358", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -60, vacUntil: 210, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 2 pfizer
 	static let posPcrP3 = TestPerson(bsn: "999991383", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacFrom: -60, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 3 pfizer
 	static let posPcrJ1 = TestPerson(bsn: "999991395", dose: 1, doseIntl: ["1/1"], vacFrom: -2, vacUntil: 210, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 1 janssen
