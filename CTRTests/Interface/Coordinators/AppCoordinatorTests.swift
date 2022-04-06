@@ -25,7 +25,6 @@ class AppCoordinatorTests: XCTestCase {
 		
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.cryptoLibUtilitySpy.stubbedIsInitialized = true
-		environmentSpies.remoteConfigManagerSpy.stubbedAppendReloadObserverObserverResult = nil
 		navigationSpy = NavigationControllerSpy()
 		sut = AppCoordinator(
 			navigationController: navigationSpy

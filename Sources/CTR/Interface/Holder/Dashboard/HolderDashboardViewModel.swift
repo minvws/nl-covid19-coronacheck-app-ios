@@ -176,11 +176,11 @@ final class HolderDashboardViewModel: Logging {
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
 
 	// Observation tokens:
-	private var remoteConfigUpdateObserverToken: RemoteConfigManager.ObserverToken?
-	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
-	private var remoteConfigUpdatesConfigurationWarningToken: RemoteConfigManager.ObserverToken?
-	private var remoteConfigManagerUpdateObserverToken: RemoteConfigManager.ObserverToken?
-	private var disclosurePolicyUpdateObserverToken: DisclosurePolicyManager.ObserverToken?
+	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
+	private var clockDeviationObserverToken: Observatory.ObserverToken?
+	private var remoteConfigUpdatesConfigurationWarningToken: Observatory.ObserverToken?
+	private var remoteConfigManagerUpdateObserverToken: Observatory.ObserverToken?
+	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
 
 	// Dependencies:
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
@@ -246,17 +246,17 @@ final class HolderDashboardViewModel: Logging {
 	private func setupObservers() {
 	
 		// Observers
-		clockDeviationObserverToken = Current.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+		clockDeviationObserverToken = Current.clockDeviationManager.observatory.append { [weak self] hasClockDeviation in
 			self?.state.deviceHasClockDeviation = hasClockDeviation
 			self?.datasource.reload() // this could cause some QR code states to change, so reload.
 		}
 		
 		// If the config ever changes, reload dependencies:
-		remoteConfigUpdateObserverToken = Current.remoteConfigManager.appendUpdateObserver { [weak self] _, _, _ in
+		remoteConfigUpdateObserverToken = Current.remoteConfigManager.observatoryForUpdates.append { [weak self] _, _, _ in
 			self?.strippenRefresher.load()
 		}
 
-		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.appendPolicyChangedObserver { [weak self] in
+		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
 			// Disclosure Policy has been updated
 			// - Reset any dismissed banners
 			Current.userSettings.lastDismissedDisclosurePolicy = []
@@ -269,10 +269,10 @@ final class HolderDashboardViewModel: Logging {
 
 	deinit {
 		notificationCenter.removeObserver(self)
-		clockDeviationObserverToken.map(Current.clockDeviationManager.removeDeviationChangeObserver)
-		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.removeObserver)
-		remoteConfigUpdateObserverToken.map(Current.remoteConfigManager.removeObserver)
-		remoteConfigUpdatesConfigurationWarningToken.map(Current.remoteConfigManager.removeObserver)
+		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
+		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
+		remoteConfigUpdateObserverToken.map(Current.remoteConfigManager.observatoryForUpdates.remove)
+		remoteConfigUpdatesConfigurationWarningToken.map(Current.remoteConfigManager.observatoryForReloads.remove)
 	}
 
 	// MARK: - Setup
@@ -302,7 +302,7 @@ final class HolderDashboardViewModel: Logging {
 	func setupConfigNotificationManager() {
 
 		registerForConfigAlmostOutOfDateUpdate()
-		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.appendReloadObserver { [weak self] result in
+		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.observatoryForReloads.append { [weak self] result in
 
 			guard let self = self,
 				  case let .success((config, _, _)) = result

@@ -27,8 +27,9 @@ final class DCCQRDetailsViewControllerTests: XCTestCase {
 			title: "title",
 			description: "body",
 			details: [
-				DCCQRDetails(field: DCCQRDetailsTest.name, value: "Corona, Check"),
-				DCCQRDetails(field: DCCQRDetailsTest.dateOfBirth, value: "1970-01-01")
+				DCCQRDetails(field: DCCQRDetailsVaccination.name, value: "Corona, Check"),
+				DCCQRDetails(field: DCCQRDetailsVaccination.dateOfBirth, value: "1970-01-01"),
+				DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: "3 / 2", dosageMessage: L.holder_showqr_eu_about_vaccination_dosage_message())
 			],
 			dateInformation: "information"
 		)
@@ -54,5 +55,19 @@ final class DCCQRDetailsViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.dateInformation) == "information"
 		
 		sut.assertImage()
+	}
+	
+	func test_dosageLinkTouchedCommand_shouldOpenUrl() throws {
+		
+		// Given
+		loadView()
+		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
+		
+		// When
+		sut.sceneView.dosageLinkTouchedCommand?(url)
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedOpenUrl) == true
+		expect(self.coordinatorDelegateSpy.invokedOpenUrlParameters?.0) == url
 	}
 }

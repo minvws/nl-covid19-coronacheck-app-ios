@@ -248,10 +248,10 @@ class RemoteConfigManagerTests: XCTestCase {
 		var reloadObserverReceivedConfiguration: RemoteConfiguration?
 		var updateObserverReceivedConfiguration: RemoteConfiguration?
 
-		_ = sut.appendReloadObserver { result in
+		_ = sut.observatoryForReloads.append { result in
 			reloadObserverReceivedConfiguration = result.successValue?.0
 		}
-		_ = sut.appendUpdateObserver { remoteConfiguration, _, _ in
+		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _ in
 			updateObserverReceivedConfiguration = remoteConfiguration
 		}
 
@@ -297,10 +297,10 @@ class RemoteConfigManagerTests: XCTestCase {
 		var reloadObserverReceivedConfiguration: RemoteConfiguration?
 		var updateObserverReceivedConfiguration: RemoteConfiguration?
 
-		_ = sut.appendReloadObserver { result in
+		_ = sut.observatoryForReloads.append { result in
 			reloadObserverReceivedConfiguration = result.successValue?.0
 		}
-		_ = sut.appendUpdateObserver { remoteConfiguration, _, _ in
+		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _ in
 			updateObserverReceivedConfiguration = remoteConfiguration
 		}
 
@@ -389,10 +389,10 @@ class RemoteConfigManagerTests: XCTestCase {
 		var reloadObserverReceivedConfiguration: RemoteConfiguration?
 		var updateObserverReceivedConfiguration: RemoteConfiguration?
 
-		_ = sut.appendReloadObserver { result in
+		_ = sut.observatoryForReloads.append { result in
 			reloadObserverReceivedConfiguration = result.successValue?.0
 		}
-		_ = sut.appendUpdateObserver { remoteConfiguration, _, _ in
+		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _ in
 			updateObserverReceivedConfiguration = remoteConfiguration
 		}
 
@@ -427,10 +427,10 @@ class RemoteConfigManagerTests: XCTestCase {
 		var reloadObserverReceivedConfiguration: RemoteConfiguration?
 		var updateObserverReceivedConfiguration: RemoteConfiguration?
 
-		_ = sut.appendReloadObserver { result in
+		_ = sut.observatoryForReloads.append { result in
 			reloadObserverReceivedConfiguration = result.successValue?.0
 		}
-		_ = sut.appendUpdateObserver { remoteConfiguration, _, _ in
+		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _ in
 			updateObserverReceivedConfiguration = remoteConfiguration
 		}
 

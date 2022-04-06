@@ -15,8 +15,6 @@ extension HolderDashboardViewModelTests {
 	// MARK: - Strippen Loading
 
 	func test_strippen_stopsLoading_shouldTriggerDatasourceReload() {
-		// remove this default value because otherwise this tangentially triggers a reload:
-		environmentSpies.clockDeviationManagerSpy.stubbedAppendDeviationChangeObserverObserverResult = nil
 		
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 

@@ -80,8 +80,13 @@ class VaccinationQRDetailsGenerator {
 		let mappingManager: MappingManaging = Current.mappingManager
 
 		var dosage: String?
+		var dosageMessage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
 			dosage = "\(doseNumber) / \(totalDose)"
+			
+			if doseNumber > totalDose {
+				dosageMessage = L.holder_showqr_eu_about_vaccination_dosage_message()
+			}
 		}
 
 		let vaccineType = mappingManager.getVaccinationType(vaccination.vaccineOrProphylaxis) ?? vaccination.vaccineOrProphylaxis
@@ -101,7 +106,7 @@ class VaccinationQRDetailsGenerator {
 			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineBrand, value: vaccineBrand),
 			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineType, value: vaccineType),
 			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
-			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: dosage),
+			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: dosage, dosageMessage: dosageMessage),
 			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: formattedVaccinationDate),
 			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: mappingManager.getBiLingualDisplayCountry(vaccination.country)),
 			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: mappingManager.getDisplayIssuer(vaccination.issuer)),

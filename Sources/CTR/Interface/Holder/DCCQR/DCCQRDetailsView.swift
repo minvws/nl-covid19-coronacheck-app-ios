@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import UIKit
 
@@ -52,7 +52,7 @@ final class DCCQRDetailsView: BaseView {
 	
 	/// The stack view to add all labels to
 	private let stackView: UIStackView = {
-
+		
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
@@ -71,7 +71,7 @@ final class DCCQRDetailsView: BaseView {
 		
 		stackView.embed(
 			in: safeAreaLayoutGuide,
-            insets: .bottom(ViewTraits.margin) + .leftRight(ViewTraits.margin)
+			insets: .bottom(ViewTraits.margin) + .leftRight(ViewTraits.margin)
 		)
 	}
 	
@@ -106,7 +106,7 @@ final class DCCQRDetailsView: BaseView {
 	}
 	
 	/// The dcc details
-	var details: [(field: String, value: String)]? {
+	var details: [(field: String, value: String, dosageMessage: String?)]? {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details)
@@ -125,21 +125,34 @@ final class DCCQRDetailsView: BaseView {
 	func handleScreenCapture(shouldHide: Bool) {
 		stackView.isHidden = shouldHide
 	}
+	
+	var dosageLinkTouchedCommand: ((URL) -> Void)?
 }
 
 private extension DCCQRDetailsView {
 	
-	func loadDetails(_ details: [(field: String, value: String)]) {
+	func loadDetails(_ details: [(field: String, value: String, dosageMessage: String?)]) {
 		
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(descriptionLabel)
 		
 		details.forEach { detail in
 			
-			let labelView = DCCQRLabelView()
-			labelView.field = detail.field
-			labelView.value = detail.value
-			stackView.addArrangedSubview(labelView)
+			if let dosageMessage = detail.dosageMessage {
+				let labelView = DCCQRLabelMessageView()
+				labelView.field = detail.field
+				labelView.value = detail.value
+				labelView.message = dosageMessage
+				labelView.messageTextView.linkTouched { [weak self] url in
+					self?.dosageLinkTouchedCommand?(url)
+				}
+				stackView.addArrangedSubview(labelView)
+			} else {
+				let labelView = DCCQRLabelView()
+				labelView.field = detail.field
+				labelView.value = detail.value
+				stackView.addArrangedSubview(labelView)
+			}
 		}
 		
 		stackView.addArrangedSubview(dateInformationLabel)
@@ -152,20 +165,7 @@ private extension DCCQRDetailsView {
 		dateInformationLabel.setupForVoiceAndSwitchControlAccessibility()
 		
 		stackView.subviews.forEach { view in
-			guard let labelView = view as? DCCQRLabelView,
-				  let field = labelView.field,
-				  let value = labelView.value else { return }
-			
-			if UIAccessibility.isVoiceOverRunning {
-				// Show labels for VoiceOver
-				labelView.accessibilityLabel = [field, value].joined(separator: ",")
-			} else {
-				// Hide labels for VoiceControl
-				labelView.accessibilityLabel = nil
-			}
-			
-			// Disabled as interactive element for SwitchControl
-			labelView.isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
+			guard let labelView = view as? (BaseView & DCCQRLabelViewable) else { return }
 			
 			labelView.updateAccessibilityStatus()
 		}

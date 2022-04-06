@@ -29,7 +29,7 @@ class PositivePcrSmoke: BaseTest {
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
-		assertInternationalVaccinationQRDetails(for: person)
+		assertInternationalVaccinationQRDetails(for: person, vaccinationDateOffsetInDays: person.vacOffset)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertInternationalRecoveryQRDetails(for: person)
 	}

@@ -10,8 +10,9 @@ import Security
 
 /// The security strategy
 enum SecurityStrategy {
-	
+#if DEBUG
 	case none
+#endif
 	case config // 1.3
 	case data // 1.4
 	case provider(CertificateProvider) // 1.5

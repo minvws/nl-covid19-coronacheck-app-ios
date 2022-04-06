@@ -7,27 +7,21 @@
 
 class NegativeSupervisedTest: BaseTest {
 	
-	override func setUpWithError() throws {
-		self.disclosureMode = DisclosureMode.mode1GWith3G
-		
-		try super.setUpWithError()
-	}
-	
 	func test_negPcrSupervisedSelftest() {
 		let person = TestData.negPcrSupervisedSelftest
 		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreated()
 		
-		assertValidDutchTestCertificate(validUntilOffsetInHours: 12)
-		assertCertificateIsNotValidInternationally(ofType: .test)
+		assertNoCertificateRetrieved()
 	}
 	
 	func test_negRatSupervisedSelftest() {
 		let person = TestData.negRatSupervisedSelftest
 		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
+		assertNoCertificateCouldBeCreated()
 		
-		assertValidDutchTestCertificate(validUntilOffsetInHours: 12)
-		assertCertificateIsNotValidInternationally(ofType: .test)
+		assertNoCertificateRetrieved()
 	}
 }

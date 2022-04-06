@@ -62,13 +62,47 @@ struct SecurityAnimation: NamedAnimationProtocol, Equatable {
 
 extension SecurityAnimation {
 
-	static let domesticAnimation = SecurityAnimation(
-		name: "domesticAnimation",
+	static var domesticAnimation: SecurityAnimation {
+		return isWithinWinterPeriod ? .domesticWinterAnimation : .domesticSummerAnimation
+	}
+
+	static var internationalAnimation: SecurityAnimation {
+		return isWithinWinterPeriod ? .internationalWinterAnimation : .internationalSummerAnimation
+	}
+	
+	/// Show default animation from 21 March - 20 December
+	/// Show winter animation from 21 December - 20 March
+	static var isWithinWinterPeriod: Bool {
+		let calendar = Calendar.autoupdatingCurrent
+		let components = calendar.dateComponents([.day, .month], from: Current.now())
+
+		switch (components.month, components.day) {
+			case ((1...2)?, _), // all of Jan & Feb
+				 (3, (0...20)?), // <= March 20th
+				 (12, (21...31)?): // >= December 21
+				return true
+			default:
+				return false
+		}
+	}
+
+	private static let internationalSummerAnimation = SecurityAnimation(
+		name: "internationalSummerAnimation",
+		fileName: "international_summer_animation"
+	)
+	
+	private static let domesticSummerAnimation = SecurityAnimation(
+		name: "domesticSummerAnimation",
 		fileName: "domestic_summer_animation"
 	)
+ 
+	private static let internationalWinterAnimation = SecurityAnimation(
+		name: "internationalWinterAnimation",
+		fileName: "international_winter_animation"
+	)
 
-	static let internationalAnimation = SecurityAnimation(
-		name: "internationalAnimation",
-		fileName: "international_summer_animation"
+	private static let domesticWinterAnimation = SecurityAnimation(
+		name: "domesticWinterAnimation",
+		fileName: "domestic_winter_animation"
 	)
 }
