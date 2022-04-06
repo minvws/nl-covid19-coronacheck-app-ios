@@ -6,8 +6,6 @@
 "general.add" = "Add";
 "general.back" = "Back";
 /* MARK: - General */
-"general.cancel" = "Cancel";
-/* MARK: - General */
 "general.close" = "Close";
 "general.done" = "Done";
 "general.dose" = "dose";
@@ -53,18 +51,24 @@
 "general.uptoandincluding" = "until";
 "general.url.link" = "Link";
 "general.vaccinationdate" = "Vaccination date";
+/* MARK: - General */
+"general_cancel" = "Cancel";
+"general_delete" = "Clear data";
 "general_menu" = "Menu";
+"general_negativeTest" = "Negative test result";
 "general_newintheapp" = "New in the app";
 "general_newpolicy" = "New policy";
 "general_notification" = "Watch out!";
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
+/* Positieve test */
+"general_positiveTest" = "Positive test result";
 "general_readmore" = "Read more";
 "general_recoverycertificate" = "recovery certificate";
 "general_recoverycertificate_0G" = "International recovery certificate";
 "general_testcertificate" = "test certificate";
 "general_testcertificate_0G" = "International test certificate";
 "general_toMyOverview" = "To my certificates";
-"general_vaccination" = "vaccination";
+"general_vaccination" = "Vaccination";
 "general_vaccinationAssessment" = "vaccination approval";
 "general_vaccinationcertificate" = "vaccination certificate";
 "general_vaccinationcertificate_0G" = "International vaccination certificate";
@@ -103,10 +107,10 @@
 "holder.chooseqrcodetype.option.vaccine.title" = "Vaccination";
 /* MARK: - Choose QR Code Type */
 "holder.chooseqrcodetype.title" = "What would you like to add?";
-"holder.cleardata.alert.remove" = "Clear data";
-"holder.cleardata.alert.subtitle" = "Clearing will delete all data and certificates from the app and return you to the start screen.";
-"holder.cleardata.alert.title" = "Clear all data?";
-"holder.cleardata.menu.title" = "Clear data";
+"holder.cleardata.alert.remove" = "Reset app";
+"holder.cleardata.alert.subtitle" = "Resetting will delete all data and certificates from the app and return you to the start screen.";
+"holder.cleardata.alert.title" = "Want to reset the app?";
+"holder.cleardata.menu.title" = "Reset app";
 "holder.clockDeviationDetected.message" = "<p>In order to properly use the CoronaCheck app, it is important that the time on your phone is set correctly. For example, if the clock on your phone is a few minutes ahead, an error might occur while verifying your coronavirus pass.</p><p><a href=\"%@\">Go to your phone's settings</a> and set the date and time to 'set automatically'.</p>";
 "holder.clockDeviationDetected.title" = "Check your phone’s time settings";
 "holder.consent.action" = "Get started";
@@ -679,6 +683,8 @@
 "holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_listRemoteEvents_vaccination_message" = "If the details are correct you can create a certificate.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
+"holder_menu_resetApp" = "Reset the app";
+"holder_menu_storedEvents" = "Stored data";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";
 "holder_negativetest_ggd_message" = "Is your result in? Log in with DigiD to retrieve your test result from the GGD.";
@@ -710,8 +716,20 @@
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Dutch QR code";
+"holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/en/dosis-faq\">Read more about the dose</a>";
 /* Voice Over Details Button International QR */
 "holder_showqr_international_accessibility_button_details" = "Details international QR code";
+"holder_storedEvent_alert_removeEvents_message" = "Clearing this data will possibly remove certificates with QR codes from the app.";
+"holder_storedEvent_alert_removeEvents_title" = "Clear this data?";
+"holder_storedEvents_button_handleData" = "how does Coronacheck handle my data?";
+"holder_storedEvents_button_removeEvents" = "Clear this data";
+"holder_storedEvents_eraseEvents_title" = "Clearing data";
+"holder_storedEvents_listHeader_fetchedFromProvider" = "Retrieved at %@";
+"holder_storedEvents_listHeader_paperFlow" = "Scanned certificate";
+"holder_storedEvents_list_noEvents" = "No stored data";
+"holder_storedEvents_message" = "The data below is stored on your phone and is used by CoronaCheck to create your coronavirus pass.";
+"holder_storedEvents_title" = "My stored data";
+"holder_storedEvents_url" = "https://coronacheck.nl/en/privacy";
 "holder_test_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_vaccination_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your details again later.";
 /* MARK: - Internet Required */
