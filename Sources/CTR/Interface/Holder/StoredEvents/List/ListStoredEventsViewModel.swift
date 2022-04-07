@@ -118,24 +118,25 @@ class ListStoredEventsViewModel: Logging {
 			})
 			
 			guard let sortedEvents = sortedEvents else { return result }
-			for event in sortedEvents {
+			result.append(contentsOf: sortedEvents.compactMap { event in
 				guard let date = event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) else {
-					continue
+					return nil
 				}
 				let dateString = ListRemoteEventsViewModel.printDateFormatter.string(from: date)
 				
 				if event.hasNegativeTest {
-					result.append(getRowFromNegativeTestEvent(event, date: dateString, identity: identity))
+					return getRowFromNegativeTestEvent(event, date: dateString, identity: identity)
 				} else if event.hasPositiveTest {
-					result.append(getRowFromPositiveTestEvent(event, date: dateString, identity: identity))
+					return getRowFromPositiveTestEvent(event, date: dateString, identity: identity)
 				} else if event.hasRecovery {
-					result.append(getRowFromRecoveryEvent(event, date: dateString, identity: identity))
+					return getRowFromRecoveryEvent(event, date: dateString, identity: identity)
 				} else if event.hasVaccination {
-					result.append(getRowFromVaccinationEvent(event, date: dateString, identity: identity, providerName: wrapper.providerIdentifier))
+					return getRowFromVaccinationEvent(event, date: dateString, identity: identity, providerName: wrapper.providerIdentifier)
 				} else if event.hasVaccinationAssessment {
-					result.append( getRowFromAssessementEvent(event, date: dateString, identity: identity))
+					return getRowFromAssessementEvent(event, date: dateString, identity: identity)
 				}
-			}
+				return nil
+			})
 			
 		} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
 			// Scanned DCC Event
