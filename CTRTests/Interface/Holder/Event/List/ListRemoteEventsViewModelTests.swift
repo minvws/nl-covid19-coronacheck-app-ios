@@ -580,7 +580,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 260 CC 056")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 260 000 056")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -618,7 +618,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 360 CC 056")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 360 000 056")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -655,7 +655,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 160 CC 056")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 160 000 056")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -692,7 +692,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 960 CC 056")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 960 000 056")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -732,7 +732,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 003")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 000 003")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -897,7 +897,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 020")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 000 020")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -939,7 +939,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateServerMessage("i 270 CC 500 99857")
+		expect(feedback.body) == L.holderErrorstateServerMessage("i 270 000 500 99857")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -984,7 +984,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 CC 003")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 000 003")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1163,7 +1163,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 CC 020")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 000 020")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1209,7 +1209,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 CC 010")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 000 010")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1255,7 +1255,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateServerMessage("i 280 CC 500 99857")
+		expect(feedback.body) == L.holderErrorstateServerMessage("i 280 000 500 99857")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1391,7 +1391,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 290 CC 055")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 290 000 055")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1702,7 +1702,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 020")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 000 020")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
@@ -1736,7 +1736,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 053")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 000 053")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
@@ -1770,7 +1770,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 054")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 000 054")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
