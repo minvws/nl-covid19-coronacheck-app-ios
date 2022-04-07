@@ -364,6 +364,24 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
 	}
 	
+	func test_openURL_throughAction() {
+		
+		// Given
+		setupSut()
+		guard case let .listEvents(content: content, groups: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		expect(content.secondaryAction).toNot(beNil())
+		
+		// When
+		content.secondaryAction?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == URL(string: L.holder_storedEvents_url())
+	}
+	
 	// MARK: - Helpers
 	
 	private func createEventGroup(wrapper: EventFlow.EventResultWrapper) -> EventGroup? {

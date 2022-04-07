@@ -298,7 +298,7 @@ class ListStoredEventsViewModel: Logging {
 	
 	private func removeEventGroup(objectID: NSManagedObjectID ) {
 		
-		let removalResult = EventGroupModel.delete(objectID)
+		let removalResult = Current.walletManager.removeEventGroup(objectID)
 		switch removalResult {
 			case .success(let success):
 				if success {
