@@ -105,51 +105,56 @@ class ListStoredEventsViewModel: Logging {
 		
 		var result = [ListStoredEventsViewController.Row]()
 		
-		if let jsonData = storedEvent.jsonData {
-			if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
-			   let decodedPayloadData = Data(base64Encoded: object.payload),
-			   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData),
-			   let identity = wrapper.identity {
-				
-				let sortedEvents = wrapper.events?.sorted(by: { lhs, rhs in
-					lhs.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) ?? .distantFuture > rhs.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) ?? .distantFuture
-				})
-				
-				sortedEvents?.forEach { event in
-					
-					if let date = event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) {
-						let dateString = ListRemoteEventsViewModel.printDateFormatter.string(from: date)
-						
-						if event.hasNegativeTest {
-							result.append(getRowFromNegativeTestEvent(event, date: dateString, identity: identity))
-						} else if event.hasPositiveTest {
-							result.append(getRowFromPositiveTestEvent(event, date: dateString, identity: identity))
-						} else if event.hasRecovery {
-							result.append(getRowFromRecoveryEvent(event, date: dateString, identity: identity))
-						} else if event.hasVaccination {
-							result.append(getRowFromVaccinationEvent(event, date: dateString, identity: identity, providerName: wrapper.providerIdentifier))
-						} else if event.hasVaccinationAssessment {
-							result.append( getRowFromAssessementEvent(event, date: dateString, identity: identity))
-						}
-					}
+		guard let jsonData = storedEvent.jsonData else {
+			return result
+		}
+		
+		if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
+		   let decodedPayloadData = Data(base64Encoded: object.payload),
+		   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData),
+		   let identity = wrapper.identity {
+			
+			let sortedEvents = wrapper.events?.sorted(by: { lhs, rhs in
+				lhs.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) ?? .distantFuture > rhs.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) ?? .distantFuture
+			})
+			
+			guard let sortedEvents = sortedEvents else { return result }
+			result.append(contentsOf: sortedEvents.compactMap { event in
+				guard let date = event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) else {
+					return nil
 				}
-
-			} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
-				// Scanned DCC Event
-
-				if let credentialData = object.credential.data(using: .utf8),
-				   let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) {
-					
-					euCredentialAttributes.digitalCovidCertificate.vaccinations?.forEach { vaccination in
-						result.append(getRowFromVaccinationDCC(vaccination, identity: euCredentialAttributes.identity))
-					}
-					euCredentialAttributes.digitalCovidCertificate.recoveries?.forEach { recovery in
-						result.append(getRowFromRecoveryDCC(recovery, identity: euCredentialAttributes.identity))
-					}
-					euCredentialAttributes.digitalCovidCertificate.tests?.forEach { test in
-						result.append(getRowFromNegativeTestDCC(test, identity: euCredentialAttributes.identity))
-					}
+				let dateString = ListRemoteEventsViewModel.printDateFormatter.string(from: date)
+				
+				if event.hasNegativeTest {
+					return getRowFromNegativeTestEvent(event, date: dateString, identity: identity)
+				} else if event.hasPositiveTest {
+					return getRowFromPositiveTestEvent(event, date: dateString, identity: identity)
+				} else if event.hasRecovery {
+					return getRowFromRecoveryEvent(event, date: dateString, identity: identity)
+				} else if event.hasVaccination {
+					return getRowFromVaccinationEvent(event, date: dateString, identity: identity, providerName: wrapper.providerIdentifier)
+				} else if event.hasVaccinationAssessment {
+					return getRowFromAssessementEvent(event, date: dateString, identity: identity)
 				}
+				return nil
+			})
+			
+		} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
+			// Scanned DCC Event
+			
+			guard let credentialData = object.credential.data(using: .utf8),
+				  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) else {
+				return result
+			}
+			
+			euCredentialAttributes.digitalCovidCertificate.vaccinations?.forEach { vaccination in
+				result.append(getRowFromVaccinationDCC(vaccination, identity: euCredentialAttributes.identity))
+			}
+			euCredentialAttributes.digitalCovidCertificate.recoveries?.forEach { recovery in
+				result.append(getRowFromRecoveryDCC(recovery, identity: euCredentialAttributes.identity))
+			}
+			euCredentialAttributes.digitalCovidCertificate.tests?.forEach { test in
+				result.append(getRowFromNegativeTestDCC(test, identity: euCredentialAttributes.identity))
 			}
 		}
 		return result
