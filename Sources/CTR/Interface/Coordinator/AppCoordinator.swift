@@ -88,7 +88,6 @@ class AppCoordinator: Coordinator, Logging {
 		let destination = LaunchViewController(
 			viewModel: LaunchViewModel(
 				coordinator: self,
-				versionSupplier: versionSupplier,
 				flavor: flavor
 			)
 		)
@@ -473,7 +472,6 @@ extension AppCoordinator {
 		
 		let shapshotViewController = SnapshotViewController(
 			viewModel: SnapshotViewModel(
-				versionSupplier: versionSupplier,
 				flavor: flavor
 			)
 		)
