@@ -12,9 +12,6 @@ class SnapshotViewModel: Logging {
 	/// The logging Category
 	var loggingCategory: String = "SnapshotViewModel"
 
-	/// The current app version supplier
-	var versionSupplier: AppVersionSupplierProtocol
-
 	var willEnterForegroundObserver: NSObjectProtocol?
 
 	/// The version of the launch page
@@ -25,13 +22,8 @@ class SnapshotViewModel: Logging {
 
 	/// Initializer
 	/// - Parameters:
-	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor (holder or verifier)
-	init(
-		versionSupplier: AppVersionSupplierProtocol,
-		flavor: AppFlavor) {
-
-		self.versionSupplier = versionSupplier
+	init(flavor: AppFlavor) {
 
 		appIcon = flavor == .holder ? I.launch.holderAppIcon() : I.launch.verifierAppIcon()
 

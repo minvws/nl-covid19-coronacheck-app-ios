@@ -12,7 +12,6 @@ class LaunchViewModel: Logging {
 
 	private weak var coordinator: AppCoordinatorDelegate?
 	private var walletManager: WalletManaging?
-	private var versionSupplier: AppVersionSupplierProtocol?
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
@@ -28,17 +27,13 @@ class LaunchViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor (holder or verifier)
-	///   - userSettings: the settings used for storing if the user has seen the jail break warning (if device is jailbroken)
 	init(
 		coordinator: AppCoordinatorDelegate,
-		versionSupplier: AppVersionSupplierProtocol?,
 		flavor: AppFlavor
 	) {
 
 		self.coordinator = coordinator
-		self.versionSupplier = versionSupplier
 		self.flavor = flavor
 
 		message = flavor == .holder ? L.holderLaunchText() : L.verifierLaunchText()

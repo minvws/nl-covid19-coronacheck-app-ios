@@ -13,7 +13,6 @@ class LaunchViewModelTests: XCTestCase {
 
 	private var sut: LaunchViewModel!
 	private var appCoordinatorSpy: AppCoordinatorSpy!
-	private var versionSupplierSpy: AppVersionSupplierSpy!
 	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
@@ -21,7 +20,6 @@ class LaunchViewModelTests: XCTestCase {
 
 		environmentSpies = setupEnvironmentSpies()
 		appCoordinatorSpy = AppCoordinatorSpy()
-		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
 	}
 
 	let remoteConfig = RemoteConfiguration.default
@@ -35,14 +33,12 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
 		// Then
-		expect(self.sut.title) == L.holderLaunchTitle()
 		expect(self.sut.message) == L.holderLaunchText()
-		expect(self.sut.appIcon) == I.holderAppIcon()
+		expect(self.sut.appIcon) == I.launch.holderAppIcon()
 	}
 
 	func test_initializeVerifier() {
@@ -52,14 +48,12 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.verifier
 		)
 
 		// Then
-		expect(self.sut.title) == L.verifierLaunchTitle()
 		expect(self.sut.message) == L.verifierLaunchText()
-		expect(self.sut.appIcon) == I.verifierAppIcon()
+		expect(self.sut.appIcon) == I.launch.verifierAppIcon()
 	}
 
 	func test_launchState_finished() {
@@ -73,7 +67,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -98,7 +91,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -123,7 +115,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -151,7 +142,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -178,7 +168,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -204,7 +193,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -229,7 +217,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -252,7 +239,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.verifier
 		)
 
@@ -274,7 +260,6 @@ class LaunchViewModelTests: XCTestCase {
 		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = true
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -297,7 +282,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -324,7 +308,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -351,7 +334,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.verifier
 		)
 
@@ -377,7 +359,6 @@ class LaunchViewModelTests: XCTestCase {
 		// When
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -399,7 +380,6 @@ class LaunchViewModelTests: XCTestCase {
 		environmentSpies.jailBreakDetectorSpy.stubbedIsJailBrokenResult = false
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 

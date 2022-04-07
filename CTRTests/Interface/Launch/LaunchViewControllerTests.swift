@@ -16,7 +16,6 @@ class LaunchViewControllerTests: XCTestCase {
 	// MARK: Subject under test
 	private var sut: LaunchViewController!
 	private var appCoordinatorSpy: AppCoordinatorSpy!
-	private var versionSupplierSpy: AppVersionSupplierSpy!
 	private var environmentSpies: EnvironmentSpies!
 	
 	var window = UIWindow()
@@ -28,11 +27,9 @@ class LaunchViewControllerTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		
 		appCoordinatorSpy = AppCoordinatorSpy()
-		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
@@ -57,10 +54,7 @@ class LaunchViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == L.holderLaunchTitle()
 		expect(self.sut.sceneView.message) == L.holderLaunchText()
-		expect(self.sut.sceneView.version).toNot(beNil(), description: "Version should not be nil")
-		expect(self.sut.sceneView.version).toNot(beNil(), description: "AppIcon should not be nil")
 
 		sut.assertImage()
 	}
@@ -75,7 +69,6 @@ class LaunchViewControllerTests: XCTestCase {
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 		sut = LaunchViewController(viewModel: viewModel)
@@ -109,7 +102,6 @@ class LaunchViewControllerTests: XCTestCase {
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 		sut = LaunchViewController(viewModel: viewModel)
@@ -134,7 +126,6 @@ class LaunchViewControllerTests: XCTestCase {
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 		sut = LaunchViewController(viewModel: viewModel)
@@ -168,7 +159,6 @@ class LaunchViewControllerTests: XCTestCase {
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 		sut = LaunchViewController(viewModel: viewModel)
