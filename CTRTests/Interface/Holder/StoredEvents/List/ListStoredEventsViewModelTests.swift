@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import XCTest
 import Nimble
@@ -84,6 +85,13 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_negativeTest().capitalizingFirstLetter()
 		expect(row.details) == "1 juli 2021"
+		
+		// When
+		row.action?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetails) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetailsParameters?.title) == L.general_negativeTest().capitalizingFirstLetter()
 	}
 
 	func test_content_negativeTestDCCEvent() throws {
@@ -117,6 +125,13 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_negativeTest().capitalizingFirstLetter()
 		expect(row.details) == "31 juli 2021"
+		
+		// When
+		row.action?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetails) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetailsParameters?.title) == L.general_negativeTest().capitalizingFirstLetter()
 	}
 	
 	func test_content_positiveTestEvent() throws {
@@ -149,6 +164,13 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_positiveTest().capitalizingFirstLetter()
 		expect(row.details) == "1 juli 2021"
+		
+		// When
+		row.action?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetails) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetailsParameters?.title) == L.general_positiveTest().capitalizingFirstLetter()
 	}
 	
 	func test_content_recoveryEvent() throws {
@@ -181,6 +203,13 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_recoverycertificate().capitalizingFirstLetter()
 		expect(row.details) == "1 juli 2021"
+		
+		// When
+		row.action?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetails) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetailsParameters?.title) == L.general_recoverycertificate().capitalizingFirstLetter()
 	}
 	
 	func test_content_recoveryDCCEvent() throws {
@@ -214,6 +243,13 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_recoverycertificate().capitalizingFirstLetter()
 		expect(row.details) == "31 juli 2021"
+		
+		// When
+		row.action?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetails) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetailsParameters?.title) == L.general_recoverycertificate().capitalizingFirstLetter()
 	}
 
 	func test_content_vaccinationEvent() throws {
@@ -246,6 +282,13 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_vaccination().capitalizingFirstLetter()
 		expect(row.details) == "16 mei 2021"
+		
+		// When
+		row.action?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetails) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetailsParameters?.title) == L.general_vaccination().capitalizingFirstLetter()
 	}
 	
 	func test_content_multipleVaccinationEvent() throws {
@@ -314,6 +357,13 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_vaccination().capitalizingFirstLetter()
 		expect(row.details) == "1 juni 2021"
+		
+		// When
+		row.action?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetails) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetailsParameters?.title) == L.general_vaccination().capitalizingFirstLetter()
 	}
 	
 	func test_content_vaccinationAssessmentEvent() throws {
@@ -346,6 +396,13 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_vaccinationAssessment().capitalizingFirstLetter()
 		expect(row.details) == "5 januari 2022"
+		
+		// When
+		row.action?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetails) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetailsParameters?.title) == L.general_vaccinationAssessment().capitalizingFirstLetter()
 	}
 	
 	// MARK: - Open URL
