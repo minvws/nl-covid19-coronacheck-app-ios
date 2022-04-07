@@ -84,10 +84,10 @@ class ListStoredEventsViewModel: Logging {
 		return result
 	}
 	
-	private func getListHeader(providerIdentifier: String?) -> String {
+	private func getListHeader(providerIdentifier: String?) -> String? {
 		
 		guard let provider = providerIdentifier else {
-			return ""
+			return nil
 		}
 		
 		if EventFlow.paperproofIdentier.lowercased() == provider.lowercased() {
