@@ -141,21 +141,6 @@ extension ListRemoteEventsViewModel {
 		}
 	}
 
-	func determineErrorCodeProvider(remoteEvents: [RemoteEvent]) -> String? {
-
-		var identifiers = [String]()
-		remoteEvents.forEach { remoteEvent in
-			if !identifiers.contains(remoteEvent.wrapper.providerIdentifier) {
-				identifiers.append(remoteEvent.wrapper.providerIdentifier)
-			}
-		}
-		if identifiers.count == 1 {
-			return identifiers.first
-		} else {
-			return nil
-		}
-	}
-
 	func displaySomeResultsMightBeMissing() {
 
 		alert = AlertContent(
