@@ -125,7 +125,7 @@ class ListStoredEventsView: ScrolledStackView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = C.grey5()
+		backgroundColor = C.primaryBlue5()
 		
 		stackViewInset = .zero
 		stackView.spacing = 0
@@ -235,11 +235,10 @@ class ListStoredEventsView: ScrolledStackView {
 			separator.heightAnchor.constraint(equalToConstant: 1)
 		])
 	}
+	
+	func addGroupStackView(_ groupView: UIStackView) {
 
-	func addEventItemView(_ eventView: RemoteEventItemView) {
-
-		listStackView.addArrangedSubview(eventView)
-		addSeparator()
+		listStackView.addArrangedSubview(groupView)
 	}
 
 	var hideForCapture: Bool = false {
@@ -248,15 +247,16 @@ class ListStoredEventsView: ScrolledStackView {
 		}
 	}
 
-	func setEventStackVisibility(ishidden: Bool) {
+	func setListStackVisibility(ishidden: Bool) {
 		listStackView.isHidden = ishidden
-		stackView.setCustomSpacing(ishidden ? ViewTraits.Button.spacing : ViewTraits.List.spacing, after: contentTextView)
 	}
 	
 	func removeExistingRows() {
 		// Remove previously added rows:
-		listStackView.subviews
-			.forEach { $0.removeFromSuperview()
-		}
+		listStackView.removeArrangedSubviews()
+	}
+	
+	func addToListStackView(_ view: UIView) {
+		listStackView.addArrangedSubview(view)
 	}
 }

@@ -6,8 +6,6 @@
 "general.add" = "Toevoegen";
 "general.back" = "Terug";
 /* MARK: - General */
-"general.cancel" = "Annuleer";
-/* MARK: - General */
 "general.close" = "Sluiten";
 "general.done" = "Klaar";
 "general.dose" = "dosis";
@@ -52,19 +50,25 @@
 "general.testtype" = "Type test";
 "general.uptoandincluding" = "tot";
 "general.url.link" = "Link";
-"general.vaccination" = "vaccinatie";
 "general.vaccinationdate" = "Vaccinatiedatum";
+/* MARK: - General */
+"general_cancel" = "Annuleer";
+"general_delete" = "Wis gegevens";
 "general_menu" = "Menu";
+"general_negativeTest" = "Negatieve testuitslag";
 "general_newintheapp" = "Nieuw in de app";
 "general_newpolicy" = "Nieuwe regels";
 "general_notification" = "Let op!";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
+/* Positieve test */
+"general_positiveTest" = "Positieve testuitslag";
 "general_readmore" = "Lees meer";
 "general_recoverycertificate" = "herstelbewijs";
 "general_recoverycertificate_0G" = "Internationaal herstelbewijs";
 "general_testcertificate" = "testbewijs";
 "general_testcertificate_0G" = "Internationaal testbewijs";
 "general_toMyOverview" = "Naar mijn bewijzen";
+"general_vaccination" = "vaccinatie";
 "general_vaccinationAssessment" = "vaccinatiebeoordeling";
 "general_vaccinationcertificate" = "vaccinatiebewijs";
 "general_vaccinationcertificate_0G" = "Internationaal vaccinatiebewijs";
@@ -103,10 +107,10 @@
 "holder.chooseqrcodetype.option.vaccine.title" = "Vaccinatie";
 /* MARK: - Choose QR Code Type */
 "holder.chooseqrcodetype.title" = "Wat wil je toevoegen?";
-"holder.cleardata.alert.remove" = "Wis gegevens";
-"holder.cleardata.alert.subtitle" = "Bij het wissen worden alle gegevens en bewijzen uit de app verwijderd en ga je terug naar het startscherm.";
-"holder.cleardata.alert.title" = "Alle gegevens wissen?";
-"holder.cleardata.menu.title" = "Wis gegevens";
+"holder.cleardata.alert.remove" = "Reset app";
+"holder.cleardata.alert.subtitle" = "Bij het resetten worden alle gegevens en bewijzen uit de app verwijderd en ga je terug naar het startscherm.";
+"holder.cleardata.alert.title" = "Wil je de app resetten?";
+"holder.cleardata.menu.title" = "Reset app";
 "holder.clockDeviationDetected.message" = "<p>Om de CoronaCheck-app goed te kunnen gebruiken, is het belangrijk dat de tijd op je telefoon goed staat ingesteld. Loopt je telefoon bijvoorbeeld een paar minuten voor? Dan kan er een fout ontstaan tijdens de controle van je coronabewijs.</p><p><a href=\"%@\">Ga naar de instellingen van je telefoon</a> en zet de datum en tijd op 'automatisch instellen'.</p>";
 "holder.clockDeviationDetected.title" = "Controleer de tijd van je telefoon";
 "holder.consent.action" = "Aan de slag";
@@ -679,6 +683,8 @@
 "holder_listRemoteEvents_vaccinationAssessment_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
+"holder_menu_resetApp" = "App resetten";
+"holder_menu_storedEvents" = "Opgeslagen gegevens";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs toevoegen";
 "holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";
@@ -710,9 +716,20 @@
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Nederlandse QR-code";
-"holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees meer over mijn dosis</a>";
+"holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/nl/dosis-faq\">Lees meer over de dosis</a>";
 /* Voice Over Details Button International QR */
 "holder_showqr_international_accessibility_button_details" = "Details internationale QR-code";
+"holder_storedEvent_alert_removeEvents_message" = "Bij het wissen van deze gegevens worden er mogelijk bewijzen met QR-codes uit de app verwijderd.";
+"holder_storedEvent_alert_removeEvents_title" = "Deze gegevens wissen?";
+"holder_storedEvents_button_handleData" = "Hoe gaat CoronaCheck met gegevens om?";
+"holder_storedEvents_button_removeEvents" = "Deze gegevens wissen";
+"holder_storedEvents_eraseEvents_title" = "Gegevens wissen";
+"holder_storedEvents_listHeader_fetchedFromProvider" = "Opgehaald bij %@";
+"holder_storedEvents_listHeader_paperFlow" = "Ingescand bewijs";
+"holder_storedEvents_list_noEvents" = "Geen gegevens opgeslagen";
+"holder_storedEvents_message" = "De gegevens hieronder staan opgeslagen op je telefoon en worden gebruikt door CoronaCheck om je coronabewijs te maken.";
+"holder_storedEvents_title" = "Mijn opgeslagen gegevens";
+"holder_storedEvents_url" = "https://coronacheck.nl/nl/privacy";
 "holder_test_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_vaccination_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";
 /* MARK: - Internet Required */
@@ -760,12 +777,3 @@
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
 "visitorpass_token_next" = "Volgende";
-
-"holder_menu_resetApp" = "App opnieuw instellen";
-"holder_menu_storedEvents" = "Opgeslagen gegevens";
-"holder_storedEvents_title" = "Mijn opgeslagen gegevens";
-"holder_storedEvents_message" = "De gegevens hieronder staan opgeslagen op je telefoon en gebruikt CoronaCheck om je coronabewijs te maken.";
-"holder_storedEvents_button_handleData" = "Hoe gaat CoronaCheck met gegevens om?";
-"holder_storedEvents_url" = "https://coronacheck.nl";
-"holder_storedEvents_button_removeAllEvents" = "Alle gegevens wissen";
-"holder_storedEvents_list_noEvents" = "Geen gegeven opgeslagen";

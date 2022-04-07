@@ -98,6 +98,8 @@ struct RemoteConfiguration: Codable, Equatable {
 	var euTestNames: [Mapping]? = []
 
 	var euTestManufacturers: [Mapping]? = []
+	
+	var providerIdentifiers: [Mapping]? = []
 
 	/// Restricts access to GGD test provider login
 	var isGGDEnabled: Bool?
@@ -173,6 +175,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case verificationPolicies = "verificationPolicies"
 		case disclosurePolicies = "disclosurePolicies"
 		case backendTLSCertificates = "backendTLSCertificates"
+		case providerIdentifiers = "providerIdentifiers"
 	}
 	
 	init(minVersion: String) {

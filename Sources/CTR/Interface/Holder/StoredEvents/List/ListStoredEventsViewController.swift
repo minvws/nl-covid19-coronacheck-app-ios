@@ -11,12 +11,27 @@ class ListStoredEventsViewController: BaseViewController {
 
 	enum State {
 		case loading(content: Content)
-		case listEvents(content: Content, rows: [Row])
+		case listEvents(content: Content, groups: [Group])
 		case feedback(content: Content)
 	}
+	
+	struct Group {
+		let header: Header
+		let rows: [Row]
+		let action: Action
+	}
 
+	struct Header {
+		let title: String
+	}
+
+	struct Action {
+		let title: String
+		let action: (() -> Void)?
+	}
+	
 	struct Row {
-		let title: String?
+		let title: String
 		let details: String
 		let action: (() -> Void)?
 	}
@@ -62,8 +77,8 @@ class ListStoredEventsViewController: BaseViewController {
 					self?.setForFeedback(content)
 				case let .loading(content):
 					self?.setForLoadingState(content)
-				case let .listEvents(content, rows):
-					self?.setForListEvents(content, rows: rows)
+				case let .listEvents(content, groups):
+					self?.setForListEvents(content, groups: groups)
 			}
 		}
 
@@ -81,47 +96,52 @@ class ListStoredEventsViewController: BaseViewController {
 	private func setForLoadingState(_ content: Content) {
 
 		sceneView.shouldShowLoadingSpinner = true
+		sceneView.backgroundColor = C.white()
 		displayContent(content)
 
 		sceneView.removeExistingRows()
 	}
 
-	private func setForListEvents(_ content: Content, rows: [Row]) {
+	private func setForListEvents(_ content: Content, groups: [Group]) {
 
 		sceneView.shouldShowLoadingSpinner = false
+		sceneView.backgroundColor = C.primaryBlue5()
 		displayContent(content)
-		sceneView.setEventStackVisibility(ishidden: false)
+		sceneView.setListStackVisibility(ishidden: false)
 
-		// Remove previously added rows:
 		sceneView.removeExistingRows()
-
 		sceneView.addSeparator()
-
-		// Add new rows:
-//		rows
-//			.map { rowModel -> RemoteEventItemView in
-//				RemoteEventItemView.makeView(
-//					title: rowModel.title,
-//					details: rowModel.details,
-//					command: rowModel.action
-//				)
-//			}
-//			.forEach(self.sceneView.addEventItemView)
 		
-//		if let actionTitle = content.primaryActionTitle {
-//			sceneView.setEventStackVisibility(ishidden: true)
-//			let button = RedDisclosureButton.makeRedButton(title: actionTitle, command: content.primaryAction)
-//			let view = UIView()
-//			view.backgroundColor = C.white()
-//			button.embed(in: view, insets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
-//			sceneView.listStackView.addArrangedSubview(view)
-//		}
+		if groups.isEmpty {
+			let view = StoredEventTitleView.makeView(title: L.holder_storedEvents_list_noEvents())
+			sceneView.addToListStackView(view)
+		} else {
+			groups.map { group in
+				let groupStack = createGroupStackView()
+				groupStack.addArrangedSubview(
+					StoredEventHeaderView.makeHeaderView(title: group.header.title)
+				)
+				group.rows.map { row in
+					StoredEventItemView.makeView(
+						title: row.title,
+						details: [row.details],
+						command: row.action
+					)
+				}.forEach(groupStack.addArrangedSubview)
+				
+				groupStack.addArrangedSubview(
+					RedDisclosureButton.makeRedButton(title: group.action.title, command: group.action.action)
+				)
+				return groupStack
+			}
+			.forEach(self.sceneView.addGroupStackView)
+		}
 	}
 
 	private func setForFeedback(_ content: Content) {
 //
 //		sceneView.shouldShowLoadingSpinner = false
-//		sceneView.setEventStackVisibility(ishidden: true)
+//		sceneView.setListStackVisibility(ishidden: true)
 //		displayContent(content)
 //		sceneView.removeExistingRows()
 //		navigationItem.leftBarButtonItem = nil
@@ -145,16 +165,22 @@ class ListStoredEventsViewController: BaseViewController {
 			argument: [sceneView.title, sceneView.message].compactMap { $0 }.joined(separator: ". ")
 		)
 	}
+	
+	func createGroupStackView() -> UIStackView {
+
+			let view = UIStackView()
+			view.translatesAutoresizingMaskIntoConstraints = false
+			view.axis = .vertical
+			view.alignment = .fill
+			view.distribution = .fill
+			view.spacing = 0
+			return view
+	}
 }
 
 extension RedDisclosureButton {
 
-	/// Create a simple disclosure button with subtitle
-	/// - Parameters:
-	///   - title: the title of the button
-	///   - command: the command to execute when tapped
-	/// - Returns: A disclosure button
-	static func makeRedButton(
+	fileprivate static func makeRedButton(
 		title: String,
 		command: (() -> Void)? ) -> RedDisclosureButton {
 
@@ -164,4 +190,40 @@ extension RedDisclosureButton {
 			button.primaryButtonTappedCommand = command
 			return button
 		}
+}
+
+extension StoredEventTitleView {
+	
+	fileprivate static func makeView(title: String) -> StoredEventTitleView {
+		
+		let view = StoredEventTitleView()
+		view.title = title
+		return view
+	}
+}
+
+extension StoredEventHeaderView {
+	
+	fileprivate static func makeHeaderView(title: String) -> StoredEventHeaderView {
+		
+		let view = StoredEventHeaderView()
+		view.title = title
+		return view
+	}
+}
+
+extension StoredEventItemView {
+	
+	fileprivate static func makeView(
+		title: String,
+		details: [String],
+		command: (() -> Void)? ) -> StoredEventItemView {
+
+		let view = StoredEventItemView()
+		view.isUserInteractionEnabled = true
+		view.title = title
+		view.details = details
+		view.viewTappedCommand = command
+		return view
+	}
 }

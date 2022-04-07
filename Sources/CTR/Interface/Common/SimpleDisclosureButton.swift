@@ -26,6 +26,8 @@ class SimpleDisclosureButton: BaseView {
 	
 	fileprivate var titleTopMarginConstraint: NSLayoutConstraint?
 	fileprivate var titleBottomMarginConstraint: NSLayoutConstraint?
+	fileprivate var titleLeadingConstraint: NSLayoutConstraint?
+	fileprivate var disclosureTrailingConstraint: NSLayoutConstraint?
 	
 	fileprivate let titleLabel: Label = {
 
@@ -98,8 +100,11 @@ class SimpleDisclosureButton: BaseView {
 				titleBottomMarginConstraint = constraint
 				return constraint
 			}(),
-			
-			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			{
+				let constraint = titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor)
+				titleLeadingConstraint = constraint
+				return constraint
+			}(),
 			titleLabel.trailingAnchor.constraint(equalTo: disclosureView.leadingAnchor),
 			titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.lineHeight),
 
@@ -109,7 +114,11 @@ class SimpleDisclosureButton: BaseView {
 			lineView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			lineView.heightAnchor.constraint(equalToConstant: 1),
 
-			disclosureView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			{
+				let constraint = disclosureView.trailingAnchor.constraint(equalTo: trailingAnchor)
+				disclosureTrailingConstraint = constraint
+				return constraint
+			}(),
 			disclosureView.heightAnchor.constraint(equalToConstant: ViewTraits.disclosureHeight),
 			disclosureView.centerYAnchor.constraint(equalTo: centerYAnchor)
 		])
@@ -149,6 +158,7 @@ class RedDisclosureButton: SimpleDisclosureButton {
 	private struct ViewTraits {
 		
 		// Margins
+		static let inset: CGFloat = 20
 		static let topMargin: CGFloat = 24.0
 		static let bottomMargin: CGFloat = 24.0
 	}
@@ -164,6 +174,8 @@ class RedDisclosureButton: SimpleDisclosureButton {
 		super.setupViewConstraints()
 		titleTopMarginConstraint?.constant = RedDisclosureButton.ViewTraits.topMargin
 		titleBottomMarginConstraint?.constant = -RedDisclosureButton.ViewTraits.bottomMargin
+		titleLeadingConstraint?.constant = RedDisclosureButton.ViewTraits.inset
+		disclosureTrailingConstraint?.constant = -RedDisclosureButton.ViewTraits.inset
 	}
 	
 	/// The  title
