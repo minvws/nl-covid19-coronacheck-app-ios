@@ -14,9 +14,10 @@ extension BaseTest {
 		app.tapButton("Vaccinatie of test toevoegen")
 	}
 	
-	func addVaccinationCertificate(for person: TestPerson) {
+	func addVaccinationCertificate(for person: TestPerson, combinedWithPositiveTest: Bool = false) {
 		addEvent()
 		app.tapButton("Vaccinatie. Ik heb een (booster)vaccinatie gehad")
+		if combinedWithPositiveTest { app.enableSwitch("Haal ook mijn positieve testuitslag op") }
 		app.tapButton("Log in met DigiD")
 		retrieveCertificateFromServer(for: person)
 	}

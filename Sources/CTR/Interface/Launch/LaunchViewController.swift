@@ -44,12 +44,10 @@ class LaunchViewController: BaseViewController {
 		setupTranslucentNavigationBar()
 
 		// Bindings
-		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in
             self?.sceneView.message = $0
             UIAccessibility.post(notification: .announcement, argument: $0)
         }
-		viewModel.$version.binding = { [weak self] in self?.sceneView.version = $0 }
 		viewModel.$appIcon.binding = { [weak self] in self?.sceneView.appIcon = $0 }
 	}
 
@@ -57,7 +55,6 @@ class LaunchViewController: BaseViewController {
 
 		super.viewWillAppear(animated)
 		sceneView.spinner.startAnimating()
-		layoutForOrientation()
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -67,27 +64,5 @@ class LaunchViewController: BaseViewController {
 		// We can't start this on viewDidLoad.
 		// It could present the dialog while the view is not yet on screen, resulting in an error
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
-	}
-
-	// Rotation
-
-	override func willTransition(
-		to newCollection: UITraitCollection,
-		with coordinator: UIViewControllerTransitionCoordinator) {
-
-		coordinator.animate { [weak self] _ in
-			self?.layoutForOrientation()
-			self?.sceneView.setNeedsLayout()
-		}
-	}
-
-	/// Layout for different orientations
-	func layoutForOrientation() {
-
-		if traitCollection.verticalSizeClass == .compact {
-			sceneView.hideImage()
-		} else {
-			sceneView.showImage()
-		}
 	}
 }

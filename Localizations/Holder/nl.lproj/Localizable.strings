@@ -716,7 +716,7 @@
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Nederlandse QR-code";
-"holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/nl/dosis-faq\">Lees meer over de dosis</a>";
+"holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/nl/dosis\">Lees meer over de dosis</a>";
 /* Voice Over Details Button International QR */
 "holder_showqr_international_accessibility_button_details" = "Details internationale QR-code";
 "holder_storedEvent_alert_removeEvents_message" = "Bij het wissen van deze gegevens worden er mogelijk bewijzen met QR-codes uit de app verwijderd.";
