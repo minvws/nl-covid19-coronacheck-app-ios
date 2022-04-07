@@ -15,7 +15,7 @@ class ListStoredEventsViewController: BaseViewController {
 	}
 	
 	struct Group {
-		let header: String
+		let header: String?
 		let rows: [Row]
 		let action: (() -> Void)?
 		let actionTitle: String
@@ -103,9 +103,11 @@ class ListStoredEventsViewController: BaseViewController {
 		} else {
 			groups.map { group in
 				let groupStack = createGroupStackView()
-				groupStack.addArrangedSubview(
-					StoredEventHeaderView.makeHeaderView(title: group.header)
-				)
+				if let header = group.header {
+					groupStack.addArrangedSubview(
+						StoredEventHeaderView.makeHeaderView(title: header)
+					)
+				}
 				group.rows.map { row in
 					StoredEventItemView.makeView(
 						title: row.title,
