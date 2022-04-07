@@ -18,10 +18,10 @@ class MiscTest: BaseTest {
 	
 	func test_miscP2PosPcrNegPcr() {
 		let person = TestData.miscP2PosPcrNegPcr
-		addRecoveryCertificate(for: person)
+		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
+		assertCombinedVaccinationAndRecoveryRetrieval()
+		
 		addTestCertificateFromGGD(for: person)
 		addRetrievedCertificateToApp()
 		

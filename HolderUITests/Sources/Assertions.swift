@@ -63,6 +63,11 @@ extension BaseTest {
 		app.tapButton(replace ? "Vervang" : "Stoppen")
 	}
 	
+	func assertCombinedVaccinationAndRecoveryRetrieval() {
+		app.textExists("Vaccinatiebewijs en herstelbewijs gemaakt")
+		returnToCertificateOverview()
+	}
+	
 	func assertRetrievedCertificate(for person: TestPerson) {
 		app.textExists("Kloppen de gegevens?")
 		app.containsText("Naam: " + person.name)
