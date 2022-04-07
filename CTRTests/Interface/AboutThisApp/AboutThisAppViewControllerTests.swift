@@ -57,11 +57,11 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.menuStackView.arrangedSubviews)
 			.to(haveCount(2))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(6))
+			.to(haveCount(7))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(6))
 		expect(self.sut.sceneView.appVersion).toNot(beNil())
-		
+
 		sut.assertImage()
 	}
 	
@@ -118,9 +118,15 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 	
-	func test_alertDialog() {
+	func test_resetAlertDialog_verifier() {
 		
 		// Given
+		let viewModel = AboutThisAppViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
+			flavor: AppFlavor.verifier
+		)
+		sut = AboutThisAppViewController(viewModel: viewModel)
 		let alertVerifier = AlertVerifier()
 		loadView()
 		
@@ -134,17 +140,17 @@ class AboutThisAppViewControllerTests: XCTestCase {
 			animated: true,
 			actions: [
 				.destructive(L.holderCleardataAlertRemove()),
-				.cancel(L.generalCancel())
+				.cancel(L.general_cancel())
 			]
 		)
 	}
-	
-	func test_resetData() throws {
+
+	func test_resetData_holder() throws {
 		
 		// Given
 		let alertVerifier = AlertVerifier()
 		loadView()
-		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[4] as? SimpleDisclosureButton)?.primaryButtonTapped()
+		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[5] as? SimpleDisclosureButton)?.primaryButtonTapped()
 		
 		// When
 		try alertVerifier.executeAction(forButton: L.holderCleardataAlertRemove())
@@ -158,5 +164,44 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
 		expect(self.coordinatorSpy.invokedRestart) == true
+	}
+	
+	func test_resetData_verifier() throws {
+		
+		// Given
+		let viewModel = AboutThisAppViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
+			flavor: AppFlavor.verifier
+		)
+		sut = AboutThisAppViewController(viewModel: viewModel)
+		let alertVerifier = AlertVerifier()
+		loadView()
+		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[4] as? SimpleDisclosureButton)?.primaryButtonTapped()
+		
+		// When
+		try alertVerifier.executeAction(forButton: L.holderCleardataAlertRemove())
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
+		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
+		expect(self.coordinatorSpy.invokedRestart) == true
+	}
+	
+	func test_storedEventsOptionTapped_forHolder() {
+		
+		// Given
+		loadView()
+		
+		// When
+		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[4] as? SimpleDisclosureButton)?.primaryButtonTapped()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToSeeStoredEvents) == true
 	}
 }

@@ -53,7 +53,7 @@ final class DCCQRDetailsViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.title) == "title"
 		expect(self.sut.sceneView.detailsDescription) == "body"
 		expect(self.sut.sceneView.dateInformation) == "information"
-		
+
 		sut.assertImage()
 	}
 	

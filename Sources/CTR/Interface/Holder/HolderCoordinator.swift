@@ -25,6 +25,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
+	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails])
+	
 	func userWishesToOpenTheMenu()
 	
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
@@ -72,6 +74,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutNoTestToken()
 	
 	func userWishesMoreInfoAboutNoVisitorPassToken()
+	
+	func userWishesToSeeStoredEvents()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -627,6 +631,29 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			hideBodyForScreenCapture: false,
 			openURLsInApp: true
 		)
+	}
+	
+	func userWishesToSeeStoredEvents() {
+		
+		let viewController = ListStoredEventsViewController(
+			viewModel: ListStoredEventsViewModel(coordinator: self)
+		)
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails]) {
+		
+//		let viewController = RemoteEventDetailsViewController(
+//			viewModel: RemoteEventDetailsViewModel(
+//				coordinator: self,
+//				title: title,
+//				details: details,
+//				footer: footer,
+//				hideBodyForScreenCapture: true,
+//				displayFullScreen: true
+//			)
+//		)
+//		navigationController.pushViewController(viewController, animated: true)
 	}
 }
 

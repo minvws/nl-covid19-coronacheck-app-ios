@@ -30,7 +30,7 @@ final class LocalizedCopyTests: XCTestCase {
 		expect(self.copyValues(key: "general.recoverydate"))
 			== [ .nl: "hersteldatum", .en: "recovery date" ]
 
-		expect(self.copyValues(key: "general.vaccination"))
+		expect(self.copyValues(key: "general_vaccination"))
 			== [ .nl: "vaccinatie", .en: "vaccination" ]
 
 		expect(self.copyValues(key: "general_vaccinationcertificate"))
