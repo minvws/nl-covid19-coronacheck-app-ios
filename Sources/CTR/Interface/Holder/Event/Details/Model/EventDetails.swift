@@ -69,7 +69,7 @@ enum EventDetailsVaccination: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth: return true
+			case .subtitle, .dateOfBirth, .country: return true
 			default: return false
 		}
 	}
@@ -108,7 +108,7 @@ enum EventDetailsVaccinationAssessment: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth: return true
+			case .subtitle, .dateOfBirth, .country: return true
 			default: return false
 		}
 	}
@@ -151,7 +151,7 @@ enum EventDetailsTest: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth: return true
+			case .subtitle, .dateOfBirth, .manufacturer: return true
 			default: return false
 		}
 	}
@@ -238,7 +238,7 @@ enum EventDetailsDCCVaccination: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth: return true
+			case .subtitle, .dateOfBirth, .issuer: return true
 			default: return false
 		}
 	}
@@ -287,7 +287,7 @@ enum EventDetailsDCCTest: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth: return true
+			case .subtitle, .dateOfBirth, .issuer: return true
 			default: return false
 		}
 	}
@@ -330,7 +330,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth: return true
+			case .subtitle, .dateOfBirth, .issuer: return true
 			default: return false
 		}
 	}

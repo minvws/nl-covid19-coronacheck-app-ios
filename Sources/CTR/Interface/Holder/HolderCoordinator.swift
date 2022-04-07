@@ -643,17 +643,16 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails]) {
 		
-//		let viewController = RemoteEventDetailsViewController(
-//			viewModel: RemoteEventDetailsViewModel(
-//				coordinator: self,
-//				title: title,
-//				details: details,
-//				footer: footer,
-//				hideBodyForScreenCapture: true,
-//				displayFullScreen: true
-//			)
-//		)
-//		navigationController.pushViewController(viewController, animated: true)
+		let viewController = StoredEventDetailsViewController(
+			viewModel: RemoteEventDetailsViewModel(
+				coordinator: self,
+				title: title,
+				details: details,
+				footer: nil,
+				hideBodyForScreenCapture: true
+			)
+		)
+		navigationController.pushViewController(viewController, animated: true)
 	}
 }
 
