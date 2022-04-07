@@ -12,7 +12,6 @@ class LaunchViewModel: Logging {
 
 	private weak var coordinator: AppCoordinatorDelegate?
 	private var walletManager: WalletManaging?
-	private var versionSupplier: AppVersionSupplierProtocol?
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
@@ -21,34 +20,24 @@ class LaunchViewModel: Logging {
 	var configStatus: LaunchState?
 	var issuerPublicKeysStatus: LaunchState?
 
-	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
-	@Bindable private(set) var version: String
 	@Bindable private(set) var appIcon: UIImage?
 	@Bindable private(set) var alert: AlertContent?
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor (holder or verifier)
-	///   - userSettings: the settings used for storing if the user has seen the jail break warning (if device is jailbroken)
 	init(
 		coordinator: AppCoordinatorDelegate,
-		versionSupplier: AppVersionSupplierProtocol?,
-		flavor: AppFlavor) {
+		flavor: AppFlavor
+	) {
 
 		self.coordinator = coordinator
-		self.versionSupplier = versionSupplier
 		self.flavor = flavor
 
-		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
 		message = flavor == .holder ? L.holderLaunchText() : L.verifierLaunchText()
-		appIcon = flavor == .holder ? I.holderAppIcon() : I.verifierAppIcon()
-
-		version = flavor == .holder
-			? L.holderLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
-			: L.verifierLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
+		appIcon = flavor == .holder ? I.launch.holderAppIcon() : I.launch.verifierAppIcon()
 
 		walletManager = flavor == .holder ? Current.walletManager : nil
 		startChecks()

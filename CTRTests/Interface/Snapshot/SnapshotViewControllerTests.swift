@@ -13,8 +13,6 @@ class SnapshotViewControllerTests: XCTestCase {
 	// MARK: Subject under test
 	var sut: SnapshotViewController?
 
-	var versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0", build: "test")
-
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
@@ -22,10 +20,8 @@ class SnapshotViewControllerTests: XCTestCase {
 
 		super.setUp()
 
-		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0", build: "test")
 		sut = SnapshotViewController(
 			viewModel: SnapshotViewModel(
-				versionSupplier: versionSupplierSpy,
 				flavor: AppFlavor.holder
 			)
 		)
@@ -57,7 +53,6 @@ class SnapshotViewControllerTests: XCTestCase {
 
 		// Then
 		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.sceneView.title, L.holderLaunchTitle(), "Title should match")
-		XCTAssertEqual(strongSut.sceneView.appIcon, I.holderAppIcon(), "Icon should match")
+		XCTAssertEqual(strongSut.sceneView.appIcon, I.launch.holderAppIcon(), "Icon should match")
 	}
 }
