@@ -588,7 +588,7 @@ class ListRemoteEventsViewModel: Logging {
 		let errorCode = ErrorCode(
 			flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
 			step: step,
-			provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
+			provider: nil,
 			errorCode: clientCode.value
 		)
 		logDebug("errorCode: \(errorCode)")
@@ -619,7 +619,7 @@ class ListRemoteEventsViewModel: Logging {
 					let errorCode = ErrorCode(
 						flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
 						step: step,
-						provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
+						provider: nil,
 						errorCode: "\(statusCode ?? 000)",
 						detailedCode: serverResponse?.code
 					)
@@ -632,7 +632,7 @@ class ListRemoteEventsViewModel: Logging {
 					let errorCode = ErrorCode(
 						flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
 						step: step,
-						provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
+						provider: nil,
 						clientCode: error.getClientErrorCode() ?? .unhandled,
 						detailedCode: serverResponse?.code
 					)
