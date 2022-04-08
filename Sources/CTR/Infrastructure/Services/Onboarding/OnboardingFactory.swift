@@ -7,16 +7,6 @@
 
 import UIKit
 
-/// The steps of the onboarding
-enum OnboardingStep: Int {
-
-	case step1
-	case step2
-	case step3
-	case step4
-	case step5
-}
-
 struct OnboardingPage {
 
 	/// The title of the onboarding page
@@ -29,7 +19,7 @@ struct OnboardingPage {
 	let image: UIImage?
 
 	/// The step of the onboarding page
-	let step: OnboardingStep
+	let step: Int
 }
 
 protocol OnboardingFactoryProtocol {
@@ -79,7 +69,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 		if let policyPage = getDisclosurePolicyPage() {
 			pages.append(policyPage)
 		}
-		return pages.sorted { $0.step.rawValue < $1.step.rawValue }
+		return pages.sorted { $0.step < $1.step }
 	}
 	
 	private func getOnboardingPagesForZeroDisclosurePolicies() -> [OnboardingPage] {
@@ -89,19 +79,19 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.holder_onboarding_content_TravelSafe_0G_title(),
 				message: L.holder_onboarding_content_TravelSafe_0G_message(),
 				image: I.onboarding.zeroGInternational(),
-				step: .step1
+				step: 1
 			),
 			OnboardingPage(
 				title: L.holderOnboardingTitleYourqr(),
 				message: L.holderOnboardingMessageYourqr(),
 				image: I.onboarding.yourQR(),
-				step: .step2
+				step: 2
 			),
 			OnboardingPage(
 				title: L.holder_onboarding_content_onlyInternationalQR_0G_title(),
 				message: L.holder_onboarding_content_onlyInternationalQR_0G_message(),
 				image: I.onboarding.validity(),
-				step: .step3
+				step: 3
 			)
 		]
 	}
@@ -113,25 +103,25 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.holderOnboardingTitleSafely(),
 				message: L.holderOnboardingMessageSafely(),
 				image: I.onboarding.safely(),
-				step: .step1
+				step: 1
 			),
 			OnboardingPage(
 				title: L.holderOnboardingTitleYourqr(),
 				message: L.holderOnboardingMessageYourqr(),
 				image: I.onboarding.yourQR(),
-				step: .step2
+				step: 2
 			),
 			OnboardingPage(
 				title: L.holderOnboardingTitleValidity(),
 				message: L.holderOnboardingMessageValidity(),
 				image: I.onboarding.validity(),
-				step: .step3
+				step: 3
 			),
 			OnboardingPage(
 				title: L.holderOnboardingTitlePrivacy(),
 				message: L.holderOnboardingMessagePrivacy(),
 				image: I.onboarding.international(),
-				step: .step4
+				step: 4
 			)
 		]
 	}
@@ -143,21 +133,21 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_title(),
 				message: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				step: .step5
+				step: 5
 			)
 		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
 			return OnboardingPage(
 				title: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_title(),
 				message: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				step: .step5
+				step: 5
 			)
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
 			return OnboardingPage(
 				title: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_title(),
 				message: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				step: .step5
+				step: 5
 			)
 		}
 		// No disclosure page for zero G
@@ -221,11 +211,11 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.verifierOnboardingTitleSafely(),
 				message: L.verifierOnboardingMessageSafely(),
 				image: I.onboarding.safely(),
-				step: .step1
+				step: 1
 			)
 		]
 
-		return pages.sorted { $0.step.rawValue < $1.step.rawValue }
+		return pages.sorted { $0.step < $1.step }
 	}
 
 	/// Get the Consent Title
