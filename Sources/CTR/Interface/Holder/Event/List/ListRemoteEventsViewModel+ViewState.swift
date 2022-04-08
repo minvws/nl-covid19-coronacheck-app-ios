@@ -53,7 +53,7 @@ extension ListRemoteEventsViewModel {
 				}
 			}
 		} else {
-			return listEventsState(event30DataSource, remoteEvents: remoteEvents)
+			return listEventsState(event30DataSource)
 		}
 
 		return emptyEventsState()
@@ -92,9 +92,7 @@ extension ListRemoteEventsViewModel {
 
 	// MARK: List State
 
-	private func listEventsState(
-		_ dataSource: [EventDataTuple],
-		remoteEvents: [RemoteEvent]) -> ListRemoteEventsViewController.State {
+	private func listEventsState(_ dataSource: [EventDataTuple]) -> ListRemoteEventsViewController.State {
 
 		let rows = getSortedRowsFromEvents(dataSource)
 		guard !rows.isEmpty else {
@@ -107,9 +105,9 @@ extension ListRemoteEventsViewModel {
 				body: Strings.listMessage(forEventMode: eventMode),
 				primaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListAction() : L.holderDccListAction(),
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
+					self?.userWantsToMakeQR { [weak self] success in
 						if !success {
-							self?.showEventError(remoteEvents: remoteEvents)
+							self?.showEventError()
 						}
 					}
 				},
@@ -704,9 +702,9 @@ private extension ListRemoteEventsViewModel {
 				body: L.holderTestresultsResultsText(),
 				primaryActionTitle: L.holderTestresultsResultsButton(),
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR(remoteEvents: [remoteEvent]) { [weak self] success in
+					self?.userWantsToMakeQR { [weak self] success in
 						if !success {
-							self?.showEventError(remoteEvents: [remoteEvent])
+							self?.showEventError()
 						}
 					}
 				},

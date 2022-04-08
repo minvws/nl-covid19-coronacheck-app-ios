@@ -29,7 +29,7 @@ extension ListRemoteEventsViewModel {
 		)
 	}
 
-	internal func showEventError(remoteEvents: [RemoteEvent]) {
+	internal func showEventError() {
 
 		alert = AlertContent(
 			title: L.generalErrorTitle(),
@@ -37,9 +37,9 @@ extension ListRemoteEventsViewModel {
 			cancelAction: nil,
 			cancelTitle: L.holderVaccinationErrorClose(),
 			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
+				self?.userWantsToMakeQR { [weak self] success in
 					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
+						self?.showEventError()
 					}
 				}
 			},
@@ -64,7 +64,7 @@ extension ListRemoteEventsViewModel {
 		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
-	internal func showNoInternet(remoteEvents: [RemoteEvent]) {
+	internal func showNoInternet() {
 
 		// this is a retry-able situation
 		alert = AlertContent(
@@ -73,9 +73,9 @@ extension ListRemoteEventsViewModel {
 			cancelAction: nil,
 			cancelTitle: L.generalClose(),
 			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
+				self?.userWantsToMakeQR { [weak self] success in
 					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
+						self?.showEventError()
 					}
 				}
 			},
@@ -120,7 +120,7 @@ extension ListRemoteEventsViewModel {
 		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
-	func determineErrorCodeFlow(remoteEvents: [RemoteEvent]) -> ErrorCode.Flow {
+	func determineErrorCodeFlow() -> ErrorCode.Flow {
 
 		switch eventMode {
 			case .vaccinationassessment: return ErrorCode.Flow.visitorPass
