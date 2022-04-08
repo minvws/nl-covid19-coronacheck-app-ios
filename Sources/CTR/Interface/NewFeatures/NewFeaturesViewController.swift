@@ -10,7 +10,7 @@ import UIKit
 final class NewFeaturesViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: NewFeaturesViewModel
+	private let viewModel: PagedAnnouncementViewModel
 	
 	/// The view
 	let sceneView = NewFeaturesView()
@@ -20,7 +20,7 @@ final class NewFeaturesViewController: BaseViewController {
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: NewFeaturesViewModel) {
+	init(viewModel: PagedAnnouncementViewModel) {
 		
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -50,7 +50,7 @@ final class NewFeaturesViewController: BaseViewController {
 			}
 			
 			self.pageViewController.pages = $0.compactMap { page in
-				guard let viewController = self.viewModel.getNewFeatureStep(page) as? PagedAnnouncementItemViewController else { return nil }
+				guard let viewController = self.viewModel.getStep(page) as? PagedAnnouncementItemViewController else { return nil }
 				self.sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)
 				return viewController
 			}
@@ -88,7 +88,7 @@ final class NewFeaturesViewController: BaseViewController {
 		
 		if pageViewController.isLastPage {
 			// We tapped on the last page
-			viewModel.finish(.updateItemViewed)
+			viewModel.finish()
 		} else {
 			// Move to the next page
 			pageViewController.nextPage()
