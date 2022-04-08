@@ -1,154 +1,138 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import Foundation
 
-protocol GreenCardResponseParserDelegate: AnyObject {
+enum GreenCardResponseError: Error {
 	
-	/// The GreenCardLoader was succesful
-	func onSuccess()
-	
-	/// There seems to be no internet connection
-	func onNoInternet()
-	
-	/// The origins did not evaluate (mismatch state)
-	func onDidNotEvaluate()
-	
-	/// There seems to be no signed events to be send
-	func onNoEventsToBeSend()
-	
-	/// An error occured
-	/// - Parameters:
-	///   - title: the title of the error
-	///   - message: the body of the error
-	func onError(title: String, message: String)
-	
-	/// Get the flow for the error states
-	/// - Returns: Flow.
-	func getFlow() -> ErrorCode.Flow
+	case noInternet
+	case noEventToBeSend
+	case didNotEvaluate
+	case customError(title: String, message: String)
 }
 
-class GreenCardResponseParser: Logging {
+class GreenCardResponseErrorParser: Logging {
 	
-	weak private var delegate: GreenCardResponseParserDelegate?
+	private var flow: ErrorCode.Flow
 	
-	init(delegate: GreenCardResponseParserDelegate) {
-		self.delegate = delegate
+	init(flow: ErrorCode.Flow) {
+		self.flow = flow
 	}
 	
-	func handleResult(_ result: Result<RemoteGreenCards.Response, Error>) {
+	func parse(_ error: Error) -> GreenCardResponseError {
 		
-		switch result {
-			case .success:
-				delegate?.onSuccess()
-
-			case .failure(GreenCardLoader.Error.didNotEvaluate):
-				delegate?.onDidNotEvaluate()
-
-			case .failure(GreenCardLoader.Error.noEvents):
-				delegate?.onNoEventsToBeSend()
-
-			case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
-				self.handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce)
-
-			case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
-				self.handleServerError(serverError, for: .nonce)
-
-			case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
-				self.handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce)
-
-			case .failure(GreenCardLoader.Error.credentials(let serverError)):
-				self.handleServerError(serverError, for: .signer)
-
-			case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
-				self.handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials)
-
-			case .failure(let error):
+		switch error {
+			case GreenCardLoader.Error.didNotEvaluate:
+				return .didNotEvaluate
+				
+			case GreenCardLoader.Error.noEvents:
+				return .noEventToBeSend
+				
+			case GreenCardLoader.Error.failedToParsePrepareIssue:
+				return handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce)
+				
+			case GreenCardLoader.Error.preparingIssue(let serverError):
+				return handleServerError(serverError, for: .nonce)
+				
+			case GreenCardLoader.Error.failedToGenerateCommitmentMessage:
+				return handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce)
+				
+			case GreenCardLoader.Error.credentials(let serverError):
+				return self.handleServerError(serverError, for: .signer)
+				
+			case GreenCardLoader.Error.failedToSaveGreenCards:
+				return handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials)
+				
+			default:
 				self.logError("GreenCardResponseHelper - handleResult - unhandled: \(error)")
-				self.handleClientSideError(clientCode: .unhandled, for: .signer)
+				return handleClientSideError(clientCode: .unhandled, for: .signer)
 		}
 	}
 	
-	private func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step) {
-		
-		guard let flow = delegate?.getFlow() else { return }
+	private func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step) -> GreenCardResponseError {
 		
 		let errorCode = ErrorCode(flow: flow, step: step, clientCode: clientCode)
-		displayClientErrorCode(errorCode)
+		return customErrorForClientErrorCode(errorCode)
 	}
 	
-	private func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step) {
+	private func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step) -> GreenCardResponseError {
 		
-		guard let flow = delegate?.getFlow() else { return }
-		
-		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
-			self.logDebug("GreenCardResponseParser = handleServerError \(serverError)")
-			
-			switch error {
-				case .serverBusy:
-					showServerBusy(ErrorCode(flow: flow, step: step, errorCode: "429"))
-					
-				case .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
-					showServerUnreachable(ErrorCode(flow: flow, step: step, clientCode: error.getClientErrorCode() ?? .unhandled))
-					
-				case .noInternetConnection:
-					delegate?.onNoInternet()
-					
-				case .responseCached, .redirection, .resourceNotFound, .serverError:
-					// 304, 3xx, 4xx, 5xx
-					let errorCode = ErrorCode(
-						flow: flow,
-						step: step,
-						provider: nil,
-						errorCode: "\(statusCode ?? 000)",
-						detailedCode: serverResponse?.code
-					)
-					displayServerErrorCode(errorCode)
-					
-				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
-					// Client side
-					let errorCode = ErrorCode(
-						flow: flow,
-						step: step,
-						provider: nil,
-						clientCode: error.getClientErrorCode() ?? .unhandled,
-						detailedCode: serverResponse?.code
-					)
-					displayClientErrorCode(errorCode)
-			}
+		switch serverError {
+			case .error(let statusCode, let serverResponse, let error), .provider(_, let statusCode, let serverResponse, let error):
+				self.logDebug("GreenCardResponseParser = handleServerError \(serverError)")
+				
+				switch error {
+					case .serverBusy:
+						return customErrorForServerBusy(ErrorCode(flow: flow, step: step, errorCode: "429"))
+						
+					case .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
+						return customErrorForServerUnreachable(ErrorCode(flow: flow, step: step, clientCode: error.getClientErrorCode() ?? .unhandled))
+						
+					case .noInternetConnection:
+						return .noInternet
+						
+					case .responseCached, .redirection, .resourceNotFound, .serverError:
+						// 304, 3xx, 4xx, 5xx
+						let errorCode = ErrorCode(
+							flow: flow,
+							step: step,
+							provider: nil,
+							errorCode: "\(statusCode ?? 000)",
+							detailedCode: serverResponse?.code
+						)
+						return customErrorForServerErrorCode(errorCode)
+						
+					case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
+						// Client side
+						let errorCode = ErrorCode(
+							flow: flow,
+							step: step,
+							provider: nil,
+							clientCode: error.getClientErrorCode() ?? .unhandled,
+							detailedCode: serverResponse?.code
+						)
+						return customErrorForClientErrorCode(errorCode)
+				}
 		}
 	}
 	
-	private func showServerUnreachable(_ errorCode: ErrorCode) {
+	private func customErrorForServerUnreachable(_ errorCode: ErrorCode) -> GreenCardResponseError {
 		
 		logDebug("GreenCardResponseParser - showServerUnreachable - errorCode: \(errorCode)")
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.generalErrorServerUnreachableErrorCode("\(errorCode)"))
+		return GreenCardResponseError.customError(
+			title: L.holderErrorstateTitle(),
+			message: L.generalErrorServerUnreachableErrorCode("\(errorCode)")
+		)
 	}
 	
-	private func showServerBusy(_ errorCode: ErrorCode) {
+	private func customErrorForServerBusy(_ errorCode: ErrorCode) -> GreenCardResponseError {
 		
 		logDebug("GreenCardResponseParser - showServerBusy - errorCode: \(errorCode)")
-		displayErrorCode(title: L.generalNetworkwasbusyTitle(), message: L.generalNetworkwasbusyErrorcode("\(errorCode)"))
+		return GreenCardResponseError.customError(
+			title: L.generalNetworkwasbusyTitle(),
+			message: L.generalNetworkwasbusyErrorcode("\(errorCode)")
+		)
 	}
 	
-	private func displayClientErrorCode(_ errorCode: ErrorCode) {
+	private func customErrorForClientErrorCode(_ errorCode: ErrorCode) -> GreenCardResponseError {
 		
 		logDebug("GreenCardResponseParser - displayClientErrorCode - errorCode: \(errorCode)")
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
+		return GreenCardResponseError.customError(
+			title: L.holderErrorstateTitle(),
+			message: L.holderErrorstateClientMessage("\(errorCode)")
+		)
 	}
 	
-	private func displayServerErrorCode(_ errorCode: ErrorCode) {
+	private func customErrorForServerErrorCode(_ errorCode: ErrorCode) -> GreenCardResponseError {
 		
 		logDebug("GreenCardResponseParser - displayServerErrorCode - errorCode: \(errorCode)")
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateServerMessage("\(errorCode)"))
-	}
-	
-	private func displayErrorCode(title: String, message: String) {
-		
-		delegate?.onError(title: title, message: message)
+		return GreenCardResponseError.customError(
+			title: L.holderErrorstateTitle(),
+			message: L.holderErrorstateServerMessage("\(errorCode)")
+		)
 	}
 }
