@@ -84,7 +84,12 @@ class HolderCoordinator: SharedCoordinator {
 	
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	
-	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
+	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken? {
+		willSet {
+			// Remove any existing observation:
+			disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
+		}
+	}
 	
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
