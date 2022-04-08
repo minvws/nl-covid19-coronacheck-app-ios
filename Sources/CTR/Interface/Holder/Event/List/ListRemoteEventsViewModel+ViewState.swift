@@ -105,11 +105,7 @@ extension ListRemoteEventsViewModel {
 				body: Strings.listMessage(forEventMode: eventMode),
 				primaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListAction() : L.holderDccListAction(),
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR { [weak self] success in
-						if !success {
-							self?.showEventError()
-						}
-					}
+					self?.userWantsToMakeQR()
 				},
 				// No secondary action for scanned paperflow, that is moved to the body of the details.
 				secondaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListWrong() : nil,
@@ -702,11 +698,7 @@ private extension ListRemoteEventsViewModel {
 				body: L.holderTestresultsResultsText(),
 				primaryActionTitle: L.holderTestresultsResultsButton(),
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR { [weak self] success in
-						if !success {
-							self?.showEventError()
-						}
-					}
+					self?.userWantsToMakeQR()
 				},
 				secondaryActionTitle: L.holderVaccinationListWrong(),
 				secondaryAction: { [weak self] in

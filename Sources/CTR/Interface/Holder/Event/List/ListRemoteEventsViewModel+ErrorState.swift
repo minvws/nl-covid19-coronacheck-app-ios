@@ -37,31 +37,11 @@ extension ListRemoteEventsViewModel {
 			cancelAction: nil,
 			cancelTitle: L.holderVaccinationErrorClose(),
 			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR { [weak self] success in
-					if !success {
-						self?.showEventError()
-					}
-				}
+				self?.userWantsToMakeQR()
 			},
 			okTitle: L.holderVaccinationErrorAgain(),
 			okActionIsPreferred: true
 		)
-	}
-
-	internal func showServerTooBusyError(errorCode: ErrorCode) {
-
-		let content = Content(
-			title: L.generalNetworkwasbusyTitle(),
-			body: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
-			primaryActionTitle: L.general_toMyOverview(),
-			primaryAction: { [weak self] in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			secondaryActionTitle: nil,
-			secondaryAction: nil
-		)
-
-		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	internal func showNoInternet() {
@@ -73,51 +53,17 @@ extension ListRemoteEventsViewModel {
 			cancelAction: nil,
 			cancelTitle: L.generalClose(),
 			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR { [weak self] success in
-					if !success {
-						self?.showEventError()
-					}
-				}
+				self?.userWantsToMakeQR()
 			},
 			okTitle: L.generalRetry(),
 			okActionIsPreferred: true
 		)
 	}
-
-	internal func showServerUnreachable(_ errorCode: ErrorCode) {
-
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.generalErrorServerUnreachableErrorCode("\(errorCode)"))
-	}
-
-	internal func displayClientErrorCode(_ errorCode: ErrorCode) {
-
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
-	}
-
-	internal func displayServerErrorCode(_ errorCode: ErrorCode) {
-
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateServerMessage("\(errorCode)"))
-	}
-
-	private func displayErrorCode(title: String, message: String) {
-
-		let content = Content(
-			title: title,
-			body: message,
-			primaryActionTitle: L.general_toMyOverview(),
-			primaryAction: { [weak self] in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-			secondaryAction: { [weak self] in
-				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-					return
-				}
-
-				self?.coordinator?.openUrl(url, inApp: true)
-			}
-		)
-		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
+	
+	internal func handleStorageError() {
+		
+		let errorCode = ErrorCode(flow: determineErrorCodeFlow(), step: .storingEvents, clientCode: .storingEvents)
+		onError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}
 
 	func determineErrorCodeFlow() -> ErrorCode.Flow {

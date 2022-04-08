@@ -818,7 +818,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.title) == L.generalNetworkwasbusyTitle()
 		expect(feedback.body) == L.generalNetworkwasbusyErrorcode("i 270 000 429")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 	
 	func test_makeQR_saveEventGroupNoError_prepareIssueError_noInternet() throws {
@@ -1119,7 +1119,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.title) == L.generalNetworkwasbusyTitle()
 		expect(feedback.body) == L.generalNetworkwasbusyErrorcode("i 280 000 429")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_invalidSignature() throws {

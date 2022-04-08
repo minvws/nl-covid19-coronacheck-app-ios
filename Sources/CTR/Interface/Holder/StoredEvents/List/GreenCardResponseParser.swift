@@ -10,7 +10,7 @@ import Foundation
 protocol GreenCardResponseParserDelegate: AnyObject {
 	
 	/// The GreenCardLoader was succesful
-	func onSuccess()
+	func onSuccess(_ response: RemoteGreenCards.Response)
 	
 	/// There seems to be no internet connection
 	func onNoInternet()
@@ -43,8 +43,8 @@ class GreenCardResponseParser: Logging {
 	func handleResult(_ result: Result<RemoteGreenCards.Response, Error>) {
 		
 		switch result {
-			case .success:
-				delegate?.onSuccess()
+			case let .success(response):
+				delegate?.onSuccess(response)
 
 			case .failure(GreenCardLoader.Error.didNotEvaluate):
 				delegate?.onDidNotEvaluate()

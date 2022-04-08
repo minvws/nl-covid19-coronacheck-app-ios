@@ -333,8 +333,7 @@ class ListStoredEventsViewModel: Logging {
 
 extension ListStoredEventsViewModel: GreenCardResponseParserDelegate {
 	
-	func onSuccess() {
-		
+	func onSuccess(_ response: RemoteGreenCards.Response) {
 		viewState = getEventGroupListViewState()
 	}
 	

@@ -119,19 +119,19 @@ class ListRemoteEventsViewModel: Logging {
 
 	// MARK: Sign the events
 
-	internal func userWantsToMakeQR(completion: @escaping (Bool) -> Void) {
+	internal func userWantsToMakeQR() {
 
 		if identityChecker.compare(eventGroups: walletManager.listEventGroups(), with: remoteEvents) {
-			storeAndSign(replaceExistingEventGroups: false, completion: completion)
+			storeAndSign(replaceExistingEventGroups: false)
 		} else {
 			showIdentityMismatch {
 				// Replace the stored eventgroups
-				self.storeAndSign(replaceExistingEventGroups: true, completion: completion)
+				self.storeAndSign(replaceExistingEventGroups: true)
 			}
 		}
 	}
 
-	private func storeAndSign(replaceExistingEventGroups: Bool, completion: @escaping (Bool) -> Void) {
+	private func storeAndSign(replaceExistingEventGroups: Bool) {
 
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
@@ -145,7 +145,7 @@ class ListRemoteEventsViewModel: Logging {
 			guard saved else {
 				self.progressIndicationCounter.decrement()
 				self.shouldPrimaryButtonBeEnabled = true
-				self.handleClientSideError(clientCode: .storingEvents, for: .storingEvents)
+				self.handleStorageError()
 				return
 			}
 
@@ -158,9 +158,7 @@ class ListRemoteEventsViewModel: Logging {
 			}, completion: { result in
 				self.progressIndicationCounter.decrement()
 				self.handleGreenCardResult(
-					result,
-					expandedEventMode: expandedEventMode,
-					completion: completion
+					result
 				)
 			})
 		}
@@ -258,45 +256,14 @@ class ListRemoteEventsViewModel: Logging {
 		return storageEventMode
 	}
 
-	private func handleGreenCardResult(
-		_ result: Result<RemoteGreenCards.Response, Error>,
-		expandedEventMode: EventMode,
-		completion: @escaping (Bool) -> Void) {
-			
-		switch result {
-			case let .success(greencardResponse):
-				self.handleSuccess(greencardResponse, expandedEventMode: expandedEventMode)
-
-			case .failure(GreenCardLoader.Error.didNotEvaluate):
-				// End state 3
-				self.viewState = self.originMismatchState(flow: determineErrorCodeFlow())
-				self.shouldPrimaryButtonBeEnabled = true
-
-			case .failure(GreenCardLoader.Error.noEvents):
-				self.shouldPrimaryButtonBeEnabled = true
-				completion(false)
-
-			case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
-				self.handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce)
-
-			case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
-				self.handleServerError(serverError, for: .nonce)
-
-			case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
-				self.handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce)
-
-			case .failure(GreenCardLoader.Error.credentials(let serverError)):
-				self.handleServerError(serverError, for: .signer)
-
-			case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
-				self.handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials)
-
-			case .failure(let error):
-				self.logError("storeAndSign - unhandled: \(error)")
-				self.handleClientSideError(clientCode: .unhandled, for: .signer)
-		}
+	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, Error>) {
+		
+		let parser = GreenCardResponseParser(delegate: self)
+		parser.handleResult(result)
 	}
 
+	// MARK: - Success Handling
+	
 	private func handleSuccess(_ greencardResponse: RemoteGreenCards.Response, expandedEventMode: EventMode) {
 
 		guard eventMode != .paperflow else {
@@ -580,64 +547,7 @@ class ListRemoteEventsViewModel: Logging {
 		}
 	}
 
-	private func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step) {
-
-		let errorCode = ErrorCode(
-			flow: determineErrorCodeFlow(),
-			step: step,
-			errorCode: clientCode.value
-		)
-		logDebug("errorCode: \(errorCode)")
-		displayClientErrorCode(errorCode)
-		shouldPrimaryButtonBeEnabled = true
-	}
-
-	private func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step) {
-
-		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
-			self.logDebug("handleServerError \(serverError)")
-
-			switch error {
-				case .serverBusy:
-					showServerTooBusyError(errorCode: ErrorCode(flow: determineErrorCodeFlow(), step: step, errorCode: "429"))
-					shouldPrimaryButtonBeEnabled = true
-
-				case .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
-					showServerUnreachable(ErrorCode(flow: determineErrorCodeFlow(), step: step, clientCode: error.getClientErrorCode() ?? .unhandled))
-					shouldPrimaryButtonBeEnabled = true
-
-				case .noInternetConnection:
-					showNoInternet()
-					shouldPrimaryButtonBeEnabled = true
-
-				case .responseCached, .redirection, .resourceNotFound, .serverError:
-					// 304, 3xx, 4xx, 5xx
-					let errorCode = ErrorCode(
-						flow: determineErrorCodeFlow(),
-						step: step,
-						errorCode: "\(statusCode ?? 000)",
-						detailedCode: serverResponse?.code
-					)
-					logDebug("errorCode: \(errorCode)")
-					displayServerErrorCode(errorCode)
-					shouldPrimaryButtonBeEnabled = true
-
-				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
-					// Client side
-					let errorCode = ErrorCode(
-						flow: determineErrorCodeFlow(),
-						step: step,
-						clientCode: error.getClientErrorCode() ?? .unhandled,
-						detailedCode: serverResponse?.code
-					)
-					logDebug("errorCode: \(errorCode)")
-					displayClientErrorCode(errorCode)
-					shouldPrimaryButtonBeEnabled = true
-			}
-		}
-	}
-
-	// MARK: Store events
+	// MARK: - Store events
 
 	private func storeEvent(
 		replaceExistingEventGroups: Bool,
@@ -742,6 +652,59 @@ class ListRemoteEventsViewModel: Logging {
 				}
 			}
 		return maxIssuedAt
+	}
+}
+
+extension ListRemoteEventsViewModel: GreenCardResponseParserDelegate {
+	
+	func onSuccess(_ response: RemoteGreenCards.Response) {
+		
+		handleSuccess(response, expandedEventMode: expandEventMode())
+	}
+	
+	func onNoInternet() {
+		
+		showNoInternet()
+		shouldPrimaryButtonBeEnabled = true
+	}
+	
+	func onDidNotEvaluate() {
+		
+		// End state 3
+		viewState = originMismatchState(flow: determineErrorCodeFlow())
+		shouldPrimaryButtonBeEnabled = true
+	}
+	
+	func onNoEventsToBeSend() {
+		
+		showEventError()
+		shouldPrimaryButtonBeEnabled = true
+	}
+	
+	func onError(title: String, message: String) {
+		
+		let content = Content(
+			title: title,
+			body: message,
+			primaryActionTitle: L.general_toMyOverview(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.listEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+				
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
+		)
+		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
+	}
+	
+	func getFlow() -> ErrorCode.Flow {
+	
+		return determineErrorCodeFlow()
 	}
 }
 
