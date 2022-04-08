@@ -206,8 +206,6 @@ extension SharedCoordinator: OnboardingDelegate {
 
 		// Mark as complete
 		onboardingManager.consentGiven()
-		// Also mark as complete for new feature information
-		newFeaturesManager.consentGiven()
 
 		// Remove child coordinator
 		if let onboardingCoorinator = childCoordinators.first {

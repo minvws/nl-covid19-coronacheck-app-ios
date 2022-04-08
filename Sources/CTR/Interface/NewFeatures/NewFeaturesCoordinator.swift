@@ -109,7 +109,6 @@ extension NewFeaturesCoordinator: NewFeaturesCoordinatorDelegate, OpenUrlProtoco
 				logVerbose("NewFeaturesCoordinator: Consent was viewed")
 		}
 		
-		newFeaturesManager.consentGiven()
 		delegate?.finishNewFeatures()
 	}
 
