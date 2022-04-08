@@ -9,18 +9,17 @@ import UIKit
 
 class PagedAnnouncementViewModel {
 	
-	/// Coordination Delegate
-	weak var coordinator: OnboardingCoordinatorDelegate?
+	weak var delegate: PagedAnnouncementDelegate?
 	
 	/// The pages for onboarding
 	@Bindable private(set) var pages: [NewFeatureItem]
 	@Bindable private(set) var enabled: Bool
 	
 	init(
-		coordinator: OnboardingCoordinatorDelegate,
+		delegate: PagedAnnouncementDelegate,
 		pages: [NewFeatureItem]) {
 		
-		self.coordinator = coordinator
+		self.delegate = delegate
 		self.pages = pages
 		self.enabled = true
 	}
@@ -39,6 +38,6 @@ class PagedAnnouncementViewModel {
 	/// User has finished viewing the finished the pages
 	func finish() {
 		
-		coordinator?.finishOnboarding()
+		delegate?.didFinishPagedAnnouncement()
 	}
 }
