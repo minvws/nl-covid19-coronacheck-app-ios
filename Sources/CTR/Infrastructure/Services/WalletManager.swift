@@ -550,7 +550,7 @@ class WalletManager: WalletManaging, Logging {
 
 					// Optional extra check:
 					if let originType = originType {
-                        return origin.type == originType.rawValue
+						return origin.type == originType.rawValue
 					}
 
 					return true

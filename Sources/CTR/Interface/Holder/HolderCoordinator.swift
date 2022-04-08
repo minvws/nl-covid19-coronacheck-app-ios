@@ -69,7 +69,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesToLaunchThirdPartyTicketApp()
 	
-	func displayError(content: Content, backAction: @escaping () -> Void)
+	func displayError(content: Content, backAction: (() -> Void)?)
 	
 	func userWishesMoreInfoAboutNoTestToken()
 	
@@ -602,7 +602,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
 	}
 	
-	func displayError(content: Content, backAction: @escaping () -> Void) {
+	func displayError(content: Content, backAction: (() -> Void)?) {
 		
 		let viewController = ErrorStateViewController(
 			viewModel: ErrorStateViewModel(

@@ -6,7 +6,7 @@
 */
 
 import Foundation
-import CryptoKit
+import CoreData
 
 class ListStoredEventsViewModel: Logging {
 
@@ -29,9 +29,7 @@ class ListStoredEventsViewModel: Logging {
 
 	private let screenCaptureDetector = ScreenCaptureDetector()
 
-	init(
-		coordinator: HolderCoordinatorDelegate & OpenUrlProtocol
-	) {
+	init(coordinator: HolderCoordinatorDelegate & OpenUrlProtocol) {
 
 		self.coordinator = coordinator
 
@@ -41,7 +39,7 @@ class ListStoredEventsViewModel: Logging {
 			self?.hideForCapture = isBeingCaptured
 		}
 
-		viewState = getViewState()
+		viewState = getEventGroupListViewState()
 	}
 
 	func openUrl(_ url: URL) {
@@ -49,7 +47,7 @@ class ListStoredEventsViewModel: Logging {
 		coordinator?.openUrl(url, inApp: true)
 	}
 	
-	private func getViewState() -> ListStoredEventsViewController.State {
+	fileprivate func getEventGroupListViewState() -> ListStoredEventsViewController.State {
 	
 		return ListStoredEventsViewController.State.listEvents(
 			content: Content(
@@ -66,6 +64,8 @@ class ListStoredEventsViewModel: Logging {
 		)
 	}
 	
+	// MARK: - Event Group Overview
+	
 	private func getEventGroups() -> [ListStoredEventsViewController.Group] {
 		
 		var result = [ListStoredEventsViewController.Group]()
@@ -74,19 +74,20 @@ class ListStoredEventsViewModel: Logging {
 		}
 		events.forEach { eventGroup in
 			result.append(ListStoredEventsViewController.Group(
-				header: ListStoredEventsViewController.Header(title: getListHeader(providerIdentifier: eventGroup.providerIdentifier)),
+				header: getListHeader(providerIdentifier: eventGroup.providerIdentifier),
 				rows: getEventRows(eventGroup),
-				action: ListStoredEventsViewController.Action(title: L.holder_storedEvents_button_removeEvents(), action: {
-					self.logDebug("We should show popup for delete eventGroup \(eventGroup.objectID)")
-				})))
+				action: { [weak self] in
+					self?.showRemovalConfirmationAlert(objectID: eventGroup.objectID)
+				},
+				actionTitle: L.holder_storedEvents_button_removeEvents()))
 		}
 		return result
 	}
 	
-	private func getListHeader(providerIdentifier: String?) -> String {
+	private func getListHeader(providerIdentifier: String?) -> String? {
 		
 		guard let provider = providerIdentifier else {
-			return ""
+			return nil
 		}
 		
 		if EventFlow.paperproofIdentier.lowercased() == provider.lowercased() {
@@ -283,4 +284,131 @@ class ListStoredEventsViewModel: Logging {
 			}
 		)
 	}
+	
+	// MARK: - Remove Event Groups
+	
+	private func showRemovalConfirmationAlert(objectID: NSManagedObjectID) {
+		
+		alert = AlertContent(
+			title: L.holder_storedEvent_alert_removeEvents_title(),
+			subTitle: L.holder_storedEvent_alert_removeEvents_message(),
+			cancelAction: nil,
+			cancelTitle: L.general_cancel(),
+			cancelActionIsPreferred: true,
+			okAction: { [weak self] _ in
+				
+				self?.viewState = .loading(content: Content(title: L.holder_storedEvents_eraseEvents_title()))
+				self?.removeEventGroup(objectID: objectID)
+			},
+			okTitle: L.general_delete(),
+			okActionIsDestructive: true
+		)
+	}
+	
+	private func removeEventGroup(objectID: NSManagedObjectID ) {
+		
+		let removalResult = EventGroupModel.delete(objectID)
+		switch removalResult {
+			case .success(let success):
+				if success {
+					sendEventsToTheSigner()
+				} else {
+					handleCoreDataError()
+				}
+			case .failure(let error):
+				logError("Failed to remove event groups: \(error)")
+				handleCoreDataError()
+		}
+	}
+	
+	private func handleCoreDataError() {
+		
+		let errorCode = ErrorCode(flow: .clearEvents, step: .removeEventGroups, clientCode: .coreDataFetchError)
+		displayError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
+	}
+	
+	private func sendEventsToTheSigner() {
+		
+		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: nil) { [weak self] result in
+			// Result<RemoteGreenCards.Response, Error>
+			
+			guard let self = self else { return }
+			switch result {
+				case .success:
+					self.viewState = self.getEventGroupListViewState()
+					
+				case let .failure(greenCardError):
+					let parser = GreenCardResponseErrorParser(flow: ErrorCode.Flow.clearEvents)
+					switch parser.parse(greenCardError) {
+						case .noInternet:
+							self.displayNoInternet()
+							
+						case .didNotEvaluate:
+							// Can not occur as we are not passing a response evaluator in this flow
+							self.viewState = self.getEventGroupListViewState()
+							
+						case .noEventToBeSend:
+							
+							// No more stored events. Remove existing greencards.
+							Current.walletManager.removeExistingGreenCards()
+							self.viewState = self.getEventGroupListViewState()
+							
+						case let .customError(title: title, message: message):
+							self.displayError(title: title, message: message)
+					}
+			}
+		}
+	}
+	
+	func displayNoInternet() {
+		
+		alert = AlertContent(
+			title: L.generalErrorNointernetTitle(),
+			subTitle: L.generalErrorNointernetText(),
+			cancelAction: { [weak self] _ in
+				guard let self = self else { return }
+				self.viewState = self.getEventGroupListViewState()
+			},
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in
+				self?.sendEventsToTheSigner()
+			},
+			okTitle: L.generalRetry(),
+			okActionIsPreferred: true
+		)
+	}
+	
+	func displayError(title: String, message: String) {
+		
+		let content = Content(
+			title: title,
+			body: message,
+			primaryActionTitle: L.general_toMyOverview(),
+			primaryAction: {[weak self] in
+				self?.coordinator?.navigateBackToStart()
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else { return }
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
+		)
+		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
+			self.coordinator?.displayError(content: content, backAction: nil)
+		}
+	}
+}
+
+// MARK: - ErrorCode.Flow
+
+extension ErrorCode.Flow {
+
+	static let clearEvents = ErrorCode.Flow(value: "11")
+}
+
+// MARK: - ErrorCode.Step
+
+extension ErrorCode.Step {
+
+	static let removeEventGroups = ErrorCode.Step(value: "10")
 }
