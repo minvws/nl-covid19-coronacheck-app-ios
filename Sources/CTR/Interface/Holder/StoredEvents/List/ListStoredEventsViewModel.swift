@@ -324,30 +324,43 @@ class ListStoredEventsViewModel: Logging {
 	private func handleCoreDataError() {
 		
 		let errorCode = ErrorCode(flow: .clearEvents, step: .removeEventGroups, clientCode: .coreDataFetchError)
-		onError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
+		displayError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}
 	
 	private func sendEventsToTheSigner() {
 		
-		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: nil) { result in
+		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: nil) { [weak self] result in
 			// Result<RemoteGreenCards.Response, Error>
 			
-			let helper = GreenCardResponseParser(delegate: self)
-			helper.handleResult(result)
+			guard let self = self else { return }
+			switch result {
+				case .success:
+					self.viewState = self.getEventGroupListViewState()
+					
+				case let .failure(greenCardError):
+					let parser = GreenCardResponseErrorParser(flow: ErrorCode.Flow.clearEvents)
+					switch parser.parse(greenCardError) {
+						case .noInternet:
+							self.displayNoInternet()
+							
+						case .didNotEvaluate:
+							// Can not occur as we are not passing a response evaluator in this flow
+							self.viewState = self.getEventGroupListViewState()
+							
+						case .noEventToBeSend:
+							
+							// No more stored events. Remove existing greencards.
+							Current.walletManager.removeExistingGreenCards()
+							self.viewState = self.getEventGroupListViewState()
+							
+						case let .customError(title: title, message: message):
+							self.displayError(title: title, message: message)
+					}
+			}
 		}
 	}
-}
-
-// MARK: - GreenCardResponseHelperDelegateProtocol
-
-extension ListStoredEventsViewModel: GreenCardResponseParserDelegate {
 	
-	func onSuccess() {
-		
-		viewState = getEventGroupListViewState()
-	}
-	
-	func onNoInternet() {
+	func displayNoInternet() {
 		
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
@@ -365,20 +378,7 @@ extension ListStoredEventsViewModel: GreenCardResponseParserDelegate {
 		)
 	}
 	
-	func onDidNotEvaluate() {
-		
-		// Can not occur as we are not passing a response evaluator in this flow
-		viewState = getEventGroupListViewState()
-	}
-	
-	func onNoEventsToBeSend() {
-		
-		// No more stored events. Remove existing greencards.
-		Current.walletManager.removeExistingGreenCards()
-		viewState = getEventGroupListViewState()
-	}
-	
-	func onError(title: String, message: String) {
+	func displayError(title: String, message: String) {
 		
 		let content = Content(
 			title: title,
@@ -396,11 +396,6 @@ extension ListStoredEventsViewModel: GreenCardResponseParserDelegate {
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
 			self.coordinator?.displayError(content: content, backAction: nil)
 		}
-	}
-	
-	func getFlow() -> ErrorCode.Flow {
-		
-		return ErrorCode.Flow.clearEvents
 	}
 }
 
