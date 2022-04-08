@@ -7,13 +7,13 @@
 
 import UIKit
 
-class OnboardingViewController: BaseViewController {
+class PagedAnnouncementViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: OnboardingViewModel
+	private let viewModel: PagedAnnouncementViewModel
 	
 	/// The view
-	let sceneView = OnboardingView()
+	let sceneView = PagedAnnouncementView()
 	
 	/// The page controller
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -23,7 +23,7 @@ class OnboardingViewController: BaseViewController {
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: OnboardingViewModel) {
+	init(viewModel: PagedAnnouncementViewModel) {
 		
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -58,7 +58,7 @@ class OnboardingViewController: BaseViewController {
 			}
 			
 			self.pageViewController.pages = $0.compactMap { page in
-				guard let onboardingPageViewController = self.viewModel.getOnboardingStep(page) as? OnboardingItemViewController else { return nil }
+				guard let onboardingPageViewController = self.viewModel.getOnboardingStep(page) as? PagedAnnouncementItemViewController else { return nil }
 				onboardingPageViewController.delegate = self
 				return onboardingPageViewController
 			}
@@ -121,11 +121,11 @@ class OnboardingViewController: BaseViewController {
 	}
 }
 
-private extension OnboardingViewController {
+private extension PagedAnnouncementViewController {
 	
 	func updateFooterView(for pageIndex: Int) {
 		guard let pages = pageViewController.pages, !pages.isEmpty else { return }
-		guard let viewController = pages[pageIndex] as? OnboardingItemViewController else {
+		guard let viewController = pages[pageIndex] as? PagedAnnouncementItemViewController else {
 			assertionFailure("View controller should be of type OnboardingPageViewController")
 			return
 		}
@@ -135,7 +135,7 @@ private extension OnboardingViewController {
 
 // MARK: - PageViewControllerDelegate
 
-extension OnboardingViewController: PageViewControllerDelegate {
+extension PagedAnnouncementViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
 		sceneView.pageControl.update(for: index)
@@ -147,7 +147,7 @@ extension OnboardingViewController: PageViewControllerDelegate {
 
 // MARK: - OnboardingPageViewControllerDelegate
 
-extension OnboardingViewController: OnboardingItemViewControllerDelegate {
+extension PagedAnnouncementViewController: PagedAnnouncementItemViewControllerDelegate {
     
     /// Enables swipe to navigate behaviour for assistive technologies
     func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
@@ -164,7 +164,7 @@ extension OnboardingViewController: OnboardingItemViewControllerDelegate {
 
 // MARK: - PageControlDelegate
 
-extension OnboardingViewController: PageControlDelegate {
+extension PagedAnnouncementViewController: PageControlDelegate {
 	
 	func pageControl(_ pageControl: PageControl, didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int) {
 		if currentPageIndex > previousPageIndex {

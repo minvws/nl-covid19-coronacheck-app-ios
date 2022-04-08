@@ -75,11 +75,11 @@ class OnboardingCoordinator: Coordinator, Logging {
 	// Designated starter method
 	func start() {
 		
-		let viewModel = OnboardingViewModel(
+		let viewModel = PagedAnnouncementViewModel(
 			coordinator: self,
 			pages: onboardingPages
 		)
-		let viewController = OnboardingViewController(viewModel: viewModel)
+		let viewController = PagedAnnouncementViewController(viewModel: viewModel)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
