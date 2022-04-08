@@ -19,7 +19,7 @@ class PagedAnnouncementItemViewController: BaseViewController {
 	private let viewModel: PagedAnnouncementItemViewModel
 	
 	/// The view
-	let sceneView = PagedAnnouncementItemView()
+	let sceneView: PagedAnnouncementItemView
     
     /// The delegate
     weak var delegate: PagedAnnouncementItemViewControllerDelegate?
@@ -29,9 +29,10 @@ class PagedAnnouncementItemViewController: BaseViewController {
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementItemViewModel) {
+	init(viewModel: PagedAnnouncementItemViewModel, shouldShowWithFullWidthHeaderImage: Bool = false) {
 		
 		self.viewModel = viewModel
+		self.sceneView = PagedAnnouncementItemView(shouldShowWithFullWidthHeaderImage: shouldShowWithFullWidthHeaderImage)
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -57,6 +58,7 @@ class PagedAnnouncementItemViewController: BaseViewController {
 		super.viewDidLoad()
 		
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$tagline.binding = { [weak self] in self?.sceneView.tagline = $0 }
 		viewModel.$content.binding = { [weak self] in self?.sceneView.content = $0 }
 		viewModel.$image.binding = { [weak self] in self?.sceneView.image = $0 }
 	}

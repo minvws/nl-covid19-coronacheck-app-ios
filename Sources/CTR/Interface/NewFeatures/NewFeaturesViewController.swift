@@ -50,7 +50,7 @@ final class NewFeaturesViewController: BaseViewController {
 			}
 			
 			self.pageViewController.pages = $0.compactMap { page in
-				guard let viewController = self.viewModel.getNewFeatureStep(page) as? NewFeaturesItemViewController else { return nil }
+				guard let viewController = self.viewModel.getNewFeatureStep(page) as? PagedAnnouncementItemViewController else { return nil }
 				self.sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)
 				return viewController
 			}

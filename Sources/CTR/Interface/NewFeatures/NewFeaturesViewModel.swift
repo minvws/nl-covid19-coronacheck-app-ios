@@ -25,7 +25,7 @@ final class NewFeaturesViewModel {
 	
 	func getNewFeatureStep(_ info: NewFeatureItem) -> UIViewController {
 		
-		let viewController = NewFeaturesItemViewController(
+		let viewController = PagedAnnouncementItemViewController(
 			viewModel: PagedAnnouncementItemViewModel(newFeatureItem: info)
 		)
 		viewController.isAccessibilityElement = true
