@@ -258,8 +258,31 @@ class ListRemoteEventsViewModel: Logging {
 
 	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, Error>) {
 		
-		let parser = GreenCardResponseParser(delegate: self)
-		parser.handleResult(result)
+		switch result {
+			case let .success(response):
+				handleSuccess(response, expandedEventMode: expandEventMode())
+				
+			case let .failure(greenCardError):
+				let parser = GreenCardResponseErrorParser(flow: determineErrorCodeFlow())
+				switch parser.parse(greenCardError) {
+					case .noInternet:
+						showNoInternet()
+						shouldPrimaryButtonBeEnabled = true
+						
+					case .didNotEvaluate:
+						// End state 3
+						viewState = originMismatchState(flow: determineErrorCodeFlow())
+						shouldPrimaryButtonBeEnabled = true
+						
+					case .noEventToBeSend:
+						
+						showEventError()
+						shouldPrimaryButtonBeEnabled = true
+						
+					case let .customError(title: title, message: message):
+						displayError(title: title, message: message)
+				}
+		}
 	}
 
 	// MARK: - Success Handling
@@ -652,59 +675,6 @@ class ListRemoteEventsViewModel: Logging {
 				}
 			}
 		return maxIssuedAt
-	}
-}
-
-extension ListRemoteEventsViewModel: GreenCardResponseParserDelegate {
-	
-	func onSuccess(_ response: RemoteGreenCards.Response) {
-		
-		handleSuccess(response, expandedEventMode: expandEventMode())
-	}
-	
-	func onNoInternet() {
-		
-		showNoInternet()
-		shouldPrimaryButtonBeEnabled = true
-	}
-	
-	func onDidNotEvaluate() {
-		
-		// End state 3
-		viewState = originMismatchState(flow: determineErrorCodeFlow())
-		shouldPrimaryButtonBeEnabled = true
-	}
-	
-	func onNoEventsToBeSend() {
-		
-		showEventError()
-		shouldPrimaryButtonBeEnabled = true
-	}
-	
-	func onError(title: String, message: String) {
-		
-		let content = Content(
-			title: title,
-			body: message,
-			primaryActionTitle: L.general_toMyOverview(),
-			primaryAction: { [weak self] in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-			secondaryAction: { [weak self] in
-				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-					return
-				}
-				
-				self?.coordinator?.openUrl(url, inApp: true)
-			}
-		)
-		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
-	}
-	
-	func getFlow() -> ErrorCode.Flow {
-	
-		return determineErrorCodeFlow()
 	}
 }
 

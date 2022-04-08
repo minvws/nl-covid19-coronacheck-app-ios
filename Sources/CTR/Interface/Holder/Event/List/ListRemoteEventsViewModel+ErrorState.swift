@@ -63,7 +63,28 @@ extension ListRemoteEventsViewModel {
 	internal func handleStorageError() {
 		
 		let errorCode = ErrorCode(flow: determineErrorCodeFlow(), step: .storingEvents, clientCode: .storingEvents)
-		onError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
+		displayError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
+	}
+	
+	internal func displayError(title: String, message: String) {
+		
+		let content = Content(
+			title: title,
+			body: message,
+			primaryActionTitle: L.general_toMyOverview(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.listEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+				
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
+		)
+		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	func determineErrorCodeFlow() -> ErrorCode.Flow {
