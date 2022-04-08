@@ -16,11 +16,6 @@ class PagedAnnouncementViewModel {
 	@Bindable private(set) var pages: [NewFeatureItem]
 	@Bindable private(set) var enabled: Bool
 	
-	/// Initializer
-	/// - Parameters:
-	///   - coordinator: the coordinator delegate
-	///   - onboardingInfo: the container with onboarding info
-	///   - numberOfPages: the total number of pages
 	init(
 		coordinator: OnboardingCoordinatorDelegate,
 		pages: [NewFeatureItem]) {
@@ -32,17 +27,17 @@ class PagedAnnouncementViewModel {
 	
 	/// Add an onboarding step
 	/// - Parameter info: the info for the onboarding step
-	func getOnboardingStep(_ info: NewFeatureItem) -> UIViewController {
+	func getStep(_ item: NewFeatureItem) -> UIViewController {
 		
 		let viewController = PagedAnnouncementItemViewController(
-			viewModel: PagedAnnouncementItemViewModel(newFeatureItem: info)
+			viewModel: PagedAnnouncementItemViewModel(item: item)
 		)
 		viewController.isAccessibilityElement = true
 		return viewController
 	}
 	
-	/// We have finished the onboarding
-	func finishOnboarding() {
+	/// User has finished viewing the finished the pages
+	func finish() {
 		
 		coordinator?.finishOnboarding()
 	}

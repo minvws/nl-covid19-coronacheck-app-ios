@@ -17,11 +17,11 @@ class PagedAnnouncementItemViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - newFeatureItem: the container with new feature info
-	init(newFeatureItem: NewFeatureItem) {
+	init(item: NewFeatureItem) {
 		
-		image = newFeatureItem.image
-		tagline = newFeatureItem.tagline
-		title = newFeatureItem.title
-		content = newFeatureItem.content
+		image = item.image
+		tagline = item.tagline
+		title = item.title
+		content = item.content
 	}
 }

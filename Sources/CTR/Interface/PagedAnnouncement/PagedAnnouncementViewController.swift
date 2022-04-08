@@ -58,7 +58,7 @@ class PagedAnnouncementViewController: BaseViewController {
 			}
 			
 			self.pageViewController.pages = $0.compactMap { page in
-				guard let onboardingPageViewController = self.viewModel.getOnboardingStep(page) as? PagedAnnouncementItemViewController else { return nil }
+				guard let onboardingPageViewController = self.viewModel.getStep(page) as? PagedAnnouncementItemViewController else { return nil }
 				onboardingPageViewController.delegate = self
 				return onboardingPageViewController
 			}
@@ -113,7 +113,7 @@ class PagedAnnouncementViewController: BaseViewController {
 		
 		if pageViewController.isLastPage {
 			// We tapped on the last page
-			viewModel.finishOnboarding()
+			viewModel.finish()
 		} else {
 			// Move to the next page
 			pageViewController.nextPage()
