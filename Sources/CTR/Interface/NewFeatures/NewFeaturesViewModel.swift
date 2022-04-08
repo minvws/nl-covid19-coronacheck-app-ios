@@ -26,10 +26,7 @@ final class NewFeaturesViewModel {
 	func getNewFeatureStep(_ info: NewFeatureItem) -> UIViewController {
 		
 		let viewController = NewFeaturesItemViewController(
-			viewModel: NewFeaturesItemViewModel(
-				coordinator: coordinator!,
-				newFeatureItem: info
-			)
+			viewModel: NewFeaturesItemViewModel(newFeatureItem: info)
 		)
 		viewController.isAccessibilityElement = true
 		return viewController
