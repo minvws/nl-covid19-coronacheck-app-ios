@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OnboardingViewModel {
+class PagedAnnouncementViewModel {
 	
 	/// Coordination Delegate
 	weak var coordinator: OnboardingCoordinatorDelegate?
@@ -34,8 +34,8 @@ class OnboardingViewModel {
 	/// - Parameter info: the info for the onboarding step
 	func getOnboardingStep(_ info: OnboardingPage) -> UIViewController {
 		
-		let viewController = OnboardingItemViewController(
-			viewModel: OnboardingItemViewModel(
+		let viewController = PagedAnnouncementItemViewController(
+			viewModel: PagedAnnouncementItemViewModel(
 				coordinator: self.coordinator!,
 				onboardingInfo: info
 			)

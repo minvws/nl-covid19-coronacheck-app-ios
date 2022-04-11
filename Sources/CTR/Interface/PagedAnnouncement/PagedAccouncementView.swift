@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OnboardingView: BaseView {
+class PagedAnnouncementView: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {

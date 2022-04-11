@@ -55,12 +55,12 @@ class NewFeaturesManagerTests: XCTestCase {
 		expect(self.sut.needsUpdating) == false
 	}
 	
-	func testConsentGiven() {
+	func testUserHasViewedNewFeatureIntro() {
 		
 		// Given
 		
 		// When
-		sut.consentGiven()
+		sut.userHasViewedNewFeatureIntro()
 		
 		// Then
 		expect(self.secureUserSettingsSpy.invokedForcedInformationData?.lastSeenVersion) == sut.factory?.information.version

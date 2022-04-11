@@ -8,10 +8,10 @@
 import XCTest
 @testable import CTR
 
-class OnboardingItemViewControllerTests: XCTestCase {
+class PagedAnnouncementItemViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: OnboardingItemViewController?
+	var sut: PagedAnnouncementItemViewController?
 
 	var coordinatorSpy = OnboardingCoordinatorSpy()
 
@@ -30,8 +30,8 @@ class OnboardingItemViewControllerTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = OnboardingCoordinatorSpy()
-		sut = OnboardingItemViewController(
-			viewModel: OnboardingItemViewModel(
+		sut = PagedAnnouncementItemViewController(
+			viewModel: PagedAnnouncementItemViewModel(
 				coordinator: coordinatorSpy,
 				onboardingInfo: page
 			)

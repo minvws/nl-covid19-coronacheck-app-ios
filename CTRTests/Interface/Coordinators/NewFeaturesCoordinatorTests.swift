@@ -39,7 +39,7 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 	func test_start_shouldInvokeFinishNewFeatures() {
 		
 		// Given
-		newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(
+		newFeaturesManagerSpy.stubbedGetNewFeatureItemResult = NewFeatureItem(
 			image: nil,
 			tagline: "test",
 			title: "test",
@@ -58,7 +58,7 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 	func test_start_withoutUpdatePage() {
 		
 		// Given
-		newFeaturesManagerSpy.stubbedGetUpdatePageResult = nil
+		newFeaturesManagerSpy.stubbedGetNewFeatureItemResult = nil
 		
 		// When
 		sut.start()
@@ -67,46 +67,18 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers).to(beEmpty())
 		expect(self.delegateSpy.invokedFinishNewFeatures) == true
 	}
-	
+
 	/// Test the start method without consent content
 	func testStartWithoutConsent() {
-		
+
 		// Given
-		newFeaturesManagerSpy.stubbedGetConsentResult = nil
-		
+		newFeaturesManagerSpy.stubbedGetNewFeatureItemResult = nil
+
 		// When
 		sut.start()
-		
+
 		// Then
 		expect(self.navigationSpy.viewControllers).to(beEmpty())
-		expect(self.delegateSpy.invokedFinishNewFeatures) == true
-	}
-	
-	/// Test the did finish method with consent agreed
-	func testDidFinishConsentAgreed() {
-		
-		// Given
-		let result = NewFeaturesScreenResult.consentAgreed
-		
-		// When
-		sut.didFinish(result)
-		
-		// Then
-		expect(self.newFeaturesManagerSpy.invokedConsentGiven) == true
-		expect(self.delegateSpy.invokedFinishNewFeatures) == true
-	}
-	
-	/// Test the did finish method with consent viewed
-	func testDidFinishConsentViewed() {
-		
-		// Given
-		let result = NewFeaturesScreenResult.consentViewed
-		
-		// When
-		sut.didFinish(result)
-		
-		// Then
-		expect(self.newFeaturesManagerSpy.invokedConsentGiven) == true
 		expect(self.delegateSpy.invokedFinishNewFeatures) == true
 	}
 }

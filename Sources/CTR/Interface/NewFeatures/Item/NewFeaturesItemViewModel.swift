@@ -9,9 +9,6 @@ import UIKit
 
 final class NewFeaturesItemViewModel {
 	
-	/// Coordination Delegate
-	weak var coordinator: NewFeaturesCoordinatorDelegate?
-	
 	@Bindable private(set) var image: UIImage?
 	@Bindable private(set) var tagline: String
 	@Bindable private(set) var title: String
@@ -19,13 +16,9 @@ final class NewFeaturesItemViewModel {
 	
 	/// Initializer
 	/// - Parameters:
-	///   - coordinator: the coordinator delegate
 	///   - newFeatureItem: the container with new feature info
-	init(
-		coordinator: NewFeaturesCoordinatorDelegate,
-		newFeatureItem: NewFeatureItem) {
+	init( newFeatureItem: NewFeatureItem) {
 		
-		self.coordinator = coordinator
 		image = newFeatureItem.image
 		tagline = newFeatureItem.tagline
 		title = newFeatureItem.title
