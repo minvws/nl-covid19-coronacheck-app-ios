@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class StoredEventDetailsView: ScrolledStackView, EventDetailsViewProtocol {
+final class StoredEventDetailsView: ScrolledStackView, EventDetailsViewable {
 	
 	/// The display constants
 	private enum ViewTraits {

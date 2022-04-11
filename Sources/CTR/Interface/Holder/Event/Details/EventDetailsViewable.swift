@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol EventDetailsViewProtocol {
+protocol EventDetailsViewable {
 	
 	var stackView: UIStackView { get }
 	
@@ -16,7 +16,7 @@ protocol EventDetailsViewProtocol {
 	func updateAccessibilityStatus()
 }
 
-extension EventDetailsViewProtocol {
+extension EventDetailsViewable {
 	
 	func createLabel(for detail: NSAttributedString) -> AccessibleBodyLabelView {
 		
