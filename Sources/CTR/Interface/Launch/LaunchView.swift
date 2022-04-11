@@ -108,6 +108,9 @@ class LaunchView: BaseView {
 			stackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: ViewTraits.Message.margin),
 			stackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -ViewTraits.Message.margin)
 		])
+        
+        messageLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        spinner.setContentHuggingPriority(.required, for: .horizontal)
 	}
 
 	// MARK: Public Access
