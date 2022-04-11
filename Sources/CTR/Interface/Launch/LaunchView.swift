@@ -37,7 +37,9 @@ class LaunchView: BaseView {
 	let messageLabel: Label = {
 
 		let label = Label(body: nil).multiline()
-		label.maximumContentSizeCategory = .accessibilityMedium
+		if #available(iOS 15.0, *) {
+			label.maximumContentSizeCategory = .accessibilityMedium
+		}
 		return label
 	}()
 
