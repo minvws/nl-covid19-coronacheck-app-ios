@@ -35,10 +35,7 @@ class PagedAnnouncementViewModel {
 	func getOnboardingStep(_ info: OnboardingPage) -> UIViewController {
 		
 		let viewController = PagedAnnouncementItemViewController(
-			viewModel: PagedAnnouncementItemViewModel(
-				coordinator: self.coordinator!,
-				onboardingInfo: info
-			)
+			viewModel: PagedAnnouncementItemViewModel(onboardingInfo: info)
 		)
 		viewController.isAccessibilityElement = true
 		return viewController

@@ -19,7 +19,7 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 		title: "Onboarding Title",
 		message: "Onboarding Message",
 		image: I.onboarding.safely(),
-		step: .step1
+		step: 1
 	)
 
 	var window = UIWindow()
