@@ -24,7 +24,6 @@ class AppStatusViewControllerTests: XCTestCase {
 		
 		appCoordinatorSpy = AppCoordinatorSpy()
 		window = UIWindow()
-		
 		try super.setUpWithError()
 	}
 
@@ -47,7 +46,8 @@ class AppStatusViewControllerTests: XCTestCase {
 		// Given
 		let viewModel = AppStatusViewModel(
 			coordinator: appCoordinatorSpy,
-			appStoreUrl: nil
+			appStoreUrl: nil,
+			flavor: .holder
 		)
 		sut = AppStatusViewController(viewModel: viewModel)
 		let alertVerifier = AlertVerifier()
@@ -73,7 +73,8 @@ class AppStatusViewControllerTests: XCTestCase {
 		// Given
 		let viewModel = AppStatusViewModel(
 			coordinator: appCoordinatorSpy,
-			appStoreUrl: nil
+			appStoreUrl: nil,
+			flavor: .holder
 		)
 		sut = AppStatusViewController(viewModel: viewModel)
 
@@ -89,12 +90,13 @@ class AppStatusViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
-	func test_endOfLife() {
+	func test_holder_endOfLife() {
 
 		// Given
 		let viewModel = AppDeactivatedViewModel(
 			coordinator: appCoordinatorSpy,
-			appStoreUrl: nil
+			appStoreUrl: nil,
+			flavor: .holder
 		)
 		sut = AppStatusViewController(viewModel: viewModel)
 
@@ -102,9 +104,31 @@ class AppStatusViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == L.endOfLifeTitle()
-		expect(self.sut.sceneView.message) == L.endOfLifeDescription()
-		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.endOfLifeButton()
+		expect(self.sut.sceneView.title) == L.holder_endOfLife_title()
+		expect(self.sut.sceneView.message) == L.holder_endOfLife_description()
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.holder_endOfLife_button()
+		expect(self.sut.sceneView.image) == I.endOfLife()
+
+		sut.assertImage()
+	}
+	
+	func test_verifier_endOfLife() {
+
+		// Given
+		let viewModel = AppDeactivatedViewModel(
+			coordinator: appCoordinatorSpy,
+			appStoreUrl: nil,
+			flavor: .verifier
+		)
+		sut = AppStatusViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == L.verifier_endOfLife_title()
+		expect(self.sut.sceneView.message) == L.verifier_endOfLife_description()
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.verifier_endOfLife_button()
 		expect(self.sut.sceneView.image) == I.endOfLife()
 
 		sut.assertImage()
@@ -113,7 +137,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	func test_noInternet() {
 
 		// Given
-		let viewModel = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
+		let viewModel = InternetRequiredViewModel(coordinator: appCoordinatorSpy, flavor: .holder)
 		sut = AppStatusViewController(viewModel: viewModel)
 
 		// When

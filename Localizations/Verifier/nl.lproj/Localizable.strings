@@ -158,3 +158,8 @@
 "verifier_scan_instructions_back_to_start" = "Terug naar start";
 "verifier_scanner_policy_indication" = "%@-toegang";
 "verifier_start_scan_qr_policy_indication" = "<b>%@</b>-toegang ingesteld";
+
+"verifier_endOfLife_button" = "Naar CoronaCheck.nl";
+"verifier_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
+"verifier_endOfLife_errorMessage" = "De website kan niet geopend worden.";
+"verifier_endOfLife_title" = "App niet in gebruik";

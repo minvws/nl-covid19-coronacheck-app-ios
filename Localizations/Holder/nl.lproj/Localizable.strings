@@ -1,8 +1,7 @@
-"endOfLife.button" = "Naar CoronaCheck.nl";
-"endOfLife.description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
-/* MARK: - EndOfLife */
-"endOfLife.error.message" = "De website kan niet geopend worden.";
-"endOfLife.title" = "App niet in gebruik";
+"holder_endOfLife_button" = "Naar CoronaCheck.nl";
+"holder_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
+"holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
+"holder_endOfLife_title" = "App niet in gebruik";
 "general.add" = "Toevoegen";
 "general.back" = "Terug";
 /* MARK: - General */
