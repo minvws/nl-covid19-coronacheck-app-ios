@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class RemoteEventDetailsView: BaseView, DetailsViewProtocol {
+final class RemoteEventDetailsView: BaseView, EventDetailsViewProtocol {
 	
 	/// The display constants
 	private enum ViewTraits {
