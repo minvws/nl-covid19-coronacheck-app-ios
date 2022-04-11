@@ -1,8 +1,3 @@
-"endOfLife.button" = "Go to CoronaCheck.nl";
-"endOfLife.description" = "The app is not in use at the moment. For more information, go to CoronaCheck.nl";
-/* MARK: - EndOfLife */
-"endOfLife.error.message" = "Can't open website.";
-"endOfLife.title" = "App not in use";
 "general.add" = "Add";
 "general.back" = "Back";
 /* MARK: - General */
@@ -622,6 +617,10 @@
 "holder_dashboard_visitorpassincompletebanner_title" = "Your vaccination approval has been added. Complete your visitor pass with your negative test result";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
 "holder_deactivation_url" = "https://coronacheck.nl/app/not-in-use";
+"holder_endOfLife_button" = "Go to CoronaCheck.nl";
+"holder_endOfLife_description" = "The app is not in use at the moment. For more information, go to CoronaCheck.nl";
+"holder_endOfLife_errorMessage" = "Can't open website.";
+"holder_endOfLife_title" = "App not in use";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Your negative test result was successfully added. Add your vaccination approval to complete your visitor pass.</p><p>To this end, you've received an approval code from the desk that reviewed your vaccination. You’ve received this code on paper.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Complete certificate";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negative test result added";
@@ -731,6 +730,10 @@
 "holder_storedEvents_title" = "My stored data";
 "holder_storedEvents_url" = "https://coronacheck.nl/en/privacy";
 "holder_test_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
+"holder_updateApp_button" = "Install update";
+"holder_updateApp_content" = "To continue, install the latest version of the app.";
+"holder_updateApp_errorMessage" = "Can't open App Store";
+"holder_updateApp_title" = "Time for an update";
 "holder_vaccination_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your details again later.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Try again";
@@ -754,11 +757,6 @@
 "recommended.updateApp.title" = "Update your app in advance";
 "recommended_update_card_action" = "Update now";
 "recommended_update_card_description" = "You can update your app to a newer version now";
-"updateApp.button" = "Install update";
-"updateApp.content" = "To continue, install the latest version of the app.";
-/* MARK: - Update App */
-"updateApp.error.message" = "Can't open App Store";
-"updateApp.title" = "Time for an update";
 "visitorpass_code_description" = "Enter your approval code. You received this code from the desk that reviewed your vaccination.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Enter your verification code. You will receive this via text or email.";

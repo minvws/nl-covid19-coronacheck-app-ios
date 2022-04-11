@@ -1,8 +1,3 @@
-"endOfLife.button" = "Naar CoronaCheck.nl";
-"endOfLife.description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
-/* MARK: - EndOfLife */
-"endOfLife.error.message" = "De website kan niet geopend worden.";
-"endOfLife.title" = "App niet in gebruik";
 "general.add" = "Toevoegen";
 "general.back" = "Terug";
 /* MARK: - General */
@@ -622,6 +617,10 @@
 "holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatiebeoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve coronatestuitslag";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder_deactivation_url" = "https://coronacheck.nl/app/niet-in-gebruik";
+"holder_endOfLife_button" = "Naar CoronaCheck.nl";
+"holder_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
+"holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
+"holder_endOfLife_title" = "App niet in gebruik";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Je negatieve testuitslag is succesvol toegevoegd. Maak je bezoekersbewijs compleet met je vaccinatiebeoordeling.</p><p>Hiervoor heb je een beoordelingscode gekregen van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negatieve testuitslag toegevoegd";
@@ -731,6 +730,10 @@
 "holder_storedEvents_title" = "Mijn opgeslagen gegevens";
 "holder_storedEvents_url" = "https://coronacheck.nl/nl/privacy";
 "holder_test_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
+"holder_updateApp_button" = "Installeer update";
+"holder_updateApp_content" = "Download de laatste versie van de app om verder te gaan.";
+"holder_updateApp_errorMessage" = "De App Store kan niet geopend worden.";
+"holder_updateApp_title" = "Tijd voor een update";
 "holder_vaccination_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";
@@ -754,11 +757,6 @@
 "recommended.updateApp.title" = "Update alvast je app";
 "recommended_update_card_action" = "Nu updaten";
 "recommended_update_card_description" = "Je kunt de app al naar een nieuwere versie updaten";
-"updateApp.button" = "Installeer update";
-"updateApp.content" = "Download de laatste versie van de app om verder te gaan.";
-/* MARK: - Update App */
-"updateApp.error.message" = "De App Store kan niet geopend worden.";
-"updateApp.title" = "Tijd voor een update";
 "visitorpass_code_description" = "Vul je beoordelingscode in. Deze heb je van de balie gekregen waar jouw vaccinatie werd beoordeeld.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Vul je verificatiecode in. Deze krijg je via sms of e-mail.";

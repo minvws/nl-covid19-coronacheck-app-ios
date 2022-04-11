@@ -20,7 +20,6 @@
 "scan_log_message" = "<p>The scan setting log keeps track of the type of access used during scanning. A civil enforcement officer may request access to this log.</p><p>For privacy reasons, only scan settings used in the last %li minutes are saved on this phone. No personal information is saved. You can read more about this in the <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">frequently asked questions</a>.</p>";
 "scan_log_title" = "Scan setting log";
 "scan_qr_description_1G" = "Scan your visitors' QR codes. Is the QR code valid for your location, and are the details the same as on the proof of identity? Then you can give the visitor access.";
-"updateApp.content" = "To continue, install the latest version of the app.";
 "verification_policy_selection_error_message" = "Choose a setting to continue";
 /* Koptekst in de over de app pagina */
 "verifier.about.readmore" = "Read more:";
@@ -129,6 +128,10 @@
 "verifier_about_this_app_law_enforcement" = "For enforcement:";
 "verifier_about_this_app_scan_log" = "Scan setting log";
 "verifier_deactivation_url" = "https://coronacheck.nl/scanner/not-in-use";
+"verifier_endOfLife_button" = "Go to CoronaCheck.nl";
+"verifier_endOfLife_description" = "The app is not in use at the moment. For more information, go to CoronaCheck.nl";
+"verifier_endOfLife_errorMessage" = "Can't open website.";
+"verifier_endOfLife_title" = "App not in use";
 "verifier_home_countdown_subtitle" = "You have to wait for %li minutes because you changed your scan settings while scanning.";
 "verifier_home_countdown_title" = "You can scan again in %@";
 "verifier_menu_risksetting" = "Scan setting";
@@ -158,3 +161,7 @@
 "verifier_scan_instructions_back_to_start" = "Back to start";
 "verifier_scanner_policy_indication" = "%@ access";
 "verifier_start_scan_qr_policy_indication" = "Set to <b>%@</b> access";
+"verifier_updateApp_button" = "Install update";
+"verifier_updateApp_content" = "To continue, install the latest version of the app.";
+"verifier_updateApp_errorMessage" = "Can't open App Store";
+"verifier_updateApp_title" = "Time for an update";
