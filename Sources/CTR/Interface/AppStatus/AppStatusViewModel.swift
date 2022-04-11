@@ -41,12 +41,12 @@ class AppStatusViewModel {
 	init(coordinator: AppCoordinatorDelegate, appStoreUrl: URL?, flavor: AppFlavor) {
 
 		self.coordinator = coordinator
-		title = L.updateAppTitle()
-		message = L.updateAppContent()
-		actionTitle = L.updateAppButton()
+		title = flavor == .holder ? L.holder_updateApp_title() : L.verifier_updateApp_title()
+		message = flavor == .holder ? L.holder_updateApp_content() : L.verifier_updateApp_content()
+		actionTitle = flavor == .holder ? L.holder_updateApp_button() : L.verifier_updateApp_button()
 		updateURL = appStoreUrl
 		showCannotOpenAlert = false
-		errorMessage = L.updateAppErrorMessage()
+		errorMessage = flavor == .holder ? L.holder_updateApp_errorMessage() : L.verifier_updateApp_errorMessage()
 		self.image = I.updateRequired()
 	}
 

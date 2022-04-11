@@ -41,7 +41,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	// MARK: Test
 
 	/// Test showing the alert (should happen if no url is provided)
-	func test_alert() {
+	func test_holder_alert() {
 
 		// Given
 		let viewModel = AppStatusViewModel(
@@ -59,7 +59,7 @@ class AppStatusViewControllerTests: XCTestCase {
 		// Then
 		alertVerifier.verify(
 			title: L.generalErrorTitle(),
-			message: L.updateAppErrorMessage(),
+			message: L.holder_updateApp_errorMessage(),
 			animated: true,
 			actions: [
 				.default(L.generalOk())
@@ -68,7 +68,35 @@ class AppStatusViewControllerTests: XCTestCase {
 		)
 	}
 
-	func test_updateRequired() {
+	/// Test showing the alert (should happen if no url is provided)
+	func test_verifier_alert() {
+
+		// Given
+		let viewModel = AppStatusViewModel(
+			coordinator: appCoordinatorSpy,
+			appStoreUrl: nil,
+			flavor: .verifier
+		)
+		sut = AppStatusViewController(viewModel: viewModel)
+		let alertVerifier = AlertVerifier()
+		loadView()
+
+		// When
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
+
+		// Then
+		alertVerifier.verify(
+			title: L.generalErrorTitle(),
+			message: L.verifier_updateApp_errorMessage(),
+			animated: true,
+			actions: [
+				.default(L.generalOk())
+			],
+			presentingViewController: sut
+		)
+	}
+	
+	func test_holder_updateRequired() {
 
 		// Given
 		let viewModel = AppStatusViewModel(
@@ -82,9 +110,31 @@ class AppStatusViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == L.updateAppTitle()
-		expect(self.sut.sceneView.message) == L.updateAppContent()
-		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.updateAppButton()
+		expect(self.sut.sceneView.title) == L.holder_updateApp_title()
+		expect(self.sut.sceneView.message) == L.holder_updateApp_content()
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.holder_updateApp_button()
+		expect(self.sut.sceneView.image) == I.updateRequired()
+
+		sut.assertImage()
+	}
+	
+	func test_verifier_updateRequired() {
+
+		// Given
+		let viewModel = AppStatusViewModel(
+			coordinator: appCoordinatorSpy,
+			appStoreUrl: nil,
+			flavor: .verifier
+		)
+		sut = AppStatusViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == L.verifier_updateApp_title()
+		expect(self.sut.sceneView.message) == L.verifier_updateApp_content()
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.verifier_updateApp_button()
 		expect(self.sut.sceneView.image) == I.updateRequired()
 
 		sut.assertImage()

@@ -17,32 +17,48 @@ class AppStatusViewModelTests: XCTestCase {
 
 	// MARK: Test lifecycle
 	
-	override func setUpWithError() throws {
+	override func setUp() {
 
+		super.setUp()
 		appCoordinatorSpy = AppCoordinatorSpy()
-		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL, flavor: .holder)
-		try super.setUpWithError()
 	}
 
 	// MARK: Tests
 
 	/// Test the initializer
-	func testInitializer() {
+	func test_holder_initializer() throws {
 
 		// Given
+		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
 
 		// When
+		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL, flavor: .holder)
 
 		// Then
 		expect(self.sut.showCannotOpenAlert) == false
-		expect(self.sut.message) == L.updateAppContent()
+		expect(self.sut.message) == L.holder_updateApp_content()
+	}
+	
+	/// Test the initializer
+	func test_verifier_initializer() throws {
+
+		// Given
+		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
+		
+		// When
+		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL, flavor: .verifier)
+
+		// Then
+		expect(self.sut.showCannotOpenAlert) == false
+		expect(self.sut.message) == L.verifier_updateApp_content()
 	}
 
 	/// Test the update button tapped method with an url
-	func testUpdateButtonTappedWithUrl() {
+	func testUpdateButtonTappedWithUrl() throws {
 
 		// Given
+		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
+		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL, flavor: .holder)
 
 		// When
 		sut.actionButtonTapped()
