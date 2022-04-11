@@ -109,6 +109,7 @@ class LaunchView: BaseView {
 			stackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -ViewTraits.Message.margin)
 		])
 
+		// Needed for <iOS 14
 		messageLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 		spinner.setContentHuggingPriority(.required, for: .horizontal)
 	}
