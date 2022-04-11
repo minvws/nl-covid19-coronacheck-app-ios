@@ -48,7 +48,7 @@ jobs:
           bundle exec fastlane ios smoketest_ui
 
       - name: Archive test artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-output
