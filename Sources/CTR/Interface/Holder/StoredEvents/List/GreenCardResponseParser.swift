@@ -10,7 +10,7 @@ import Foundation
 enum GreenCardResponseError: Error {
 
 	case noInternet
-	case noEventToBeSend
+	case noSignedEvents
 	case didNotEvaluate
 	case customError(title: String, message: String)
 }
@@ -29,8 +29,8 @@ class GreenCardResponseErrorParser: Logging {
 			case GreenCardLoader.Error.didNotEvaluate:
 				return .didNotEvaluate
 				
-			case GreenCardLoader.Error.noEvents:
-				return .noEventToBeSend
+			case GreenCardLoader.Error.noSignedEvents:
+				return .noSignedEvents
 				
 			case GreenCardLoader.Error.failedToParsePrepareIssue:
 				return handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce)

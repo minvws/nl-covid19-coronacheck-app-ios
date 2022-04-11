@@ -274,7 +274,7 @@ class ListRemoteEventsViewModel: Logging {
 						viewState = originMismatchState(flow: determineErrorCodeFlow())
 						shouldPrimaryButtonBeEnabled = true
 						
-					case .noEventToBeSend:
+					case .noSignedEvents:
 						
 						showEventError()
 						shouldPrimaryButtonBeEnabled = true

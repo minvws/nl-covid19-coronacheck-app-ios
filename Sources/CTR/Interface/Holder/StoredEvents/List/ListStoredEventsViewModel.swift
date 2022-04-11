@@ -338,7 +338,7 @@ class ListStoredEventsViewModel: Logging {
 							// Can not occur as we are not passing a response evaluator in this flow
 							self.viewState = self.getEventGroupListViewState()
 							
-						case .noEventToBeSend:
+						case .noSignedEvents:
 							
 							// No more stored events. Remove existing greencards.
 							Current.walletManager.removeExistingGreenCards()
