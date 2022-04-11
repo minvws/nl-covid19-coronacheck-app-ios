@@ -10,6 +10,7 @@ import UIKit
 class PagedAnnouncementViewModel {
 	
 	weak var delegate: PagedAnnouncementDelegate?
+	private let itemsShouldShowWithFullWidthHeaderImage: Bool
 	
 	/// The pages for onboarding
 	@Bindable private(set) var pages: [NewFeatureItem]
@@ -17,11 +18,13 @@ class PagedAnnouncementViewModel {
 	
 	init(
 		delegate: PagedAnnouncementDelegate,
-		pages: [NewFeatureItem]) {
+		pages: [NewFeatureItem],
+		itemsShouldShowWithFullWidthHeaderImage: Bool) {
 		
 		self.delegate = delegate
 		self.pages = pages
 		self.enabled = true
+		self.itemsShouldShowWithFullWidthHeaderImage = itemsShouldShowWithFullWidthHeaderImage
 	}
 	
 	/// Add an onboarding step
@@ -29,8 +32,12 @@ class PagedAnnouncementViewModel {
 	func getStep(_ item: NewFeatureItem) -> UIViewController {
 		
 		let viewController = PagedAnnouncementItemViewController(
-			viewModel: PagedAnnouncementItemViewModel(item: item)
+			viewModel: PagedAnnouncementItemViewModel(
+				item: item
+			),
+			shouldShowWithFullWidthHeaderImage: itemsShouldShowWithFullWidthHeaderImage
 		)
+		viewController.sceneView.imageBackgroundColor = item.imageBackgroundColor
 		viewController.isAccessibilityElement = true
 		return viewController
 	}

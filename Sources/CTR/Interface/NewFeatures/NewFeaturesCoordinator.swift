@@ -50,8 +50,13 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 		
 		if let newFeatureItem = newFeaturesManager.getNewFeatureItem() {
 			
-			let viewController = NewFeaturesViewController(
-				viewModel: PagedAnnouncementViewModel(delegate: self, pages: [newFeatureItem, newFeatureItem])
+			let viewController = PagedAnnouncementViewController(
+				viewModel: PagedAnnouncementViewModel(
+					delegate: self,
+					pages: [newFeatureItem],
+					itemsShouldShowWithFullWidthHeaderImage: true
+				),
+				allowsBackButton: false
 			)
 			navigationController.viewControllers = [viewController]
 		} else {

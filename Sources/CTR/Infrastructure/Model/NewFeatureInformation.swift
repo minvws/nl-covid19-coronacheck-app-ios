@@ -19,9 +19,11 @@ struct NewFeatureItem: Equatable {
 	/// The image of a new feature page
 	let image: UIImage?
 
+	let imageBackgroundColor: UIColor?
+
 	/// The tagline of a new feature page
 	let tagline: String?
-	
+ 
 	/// The step of the onboarding page
 	let step: Int
 }

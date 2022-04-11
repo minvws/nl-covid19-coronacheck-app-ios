@@ -29,7 +29,7 @@ class PagedAnnouncementItemViewController: BaseViewController {
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementItemViewModel, shouldShowWithFullWidthHeaderImage: Bool = false) {
+	init(viewModel: PagedAnnouncementItemViewModel, shouldShowWithFullWidthHeaderImage: Bool) {
 		
 		self.viewModel = viewModel
 		self.sceneView = PagedAnnouncementItemView(shouldShowWithFullWidthHeaderImage: shouldShowWithFullWidthHeaderImage)

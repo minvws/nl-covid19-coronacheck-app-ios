@@ -60,6 +60,17 @@ class PagedAnnouncementView: BaseView {
 	
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
+	let shouldShowWithVWSRibbon: Bool
+	
+	init(shouldShowWithVWSRibbon: Bool) {
+		self.shouldShowWithVWSRibbon = shouldShowWithVWSRibbon
+		super.init(frame: .zero)
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError()
+	}
+ 
 	/// setup the views
 	override func setupViews() {
 		
@@ -71,7 +82,10 @@ class PagedAnnouncementView: BaseView {
 	override func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
-		addSubview(ribbonView)
+		
+		if shouldShowWithVWSRibbon {
+			addSubview(ribbonView)
+		}
 		addSubview(containerView)
 		addSubview(footerButtonView)
 		footerButtonView.buttonStackView.insertArrangedSubview(pageControl, at: 0)
@@ -82,17 +96,19 @@ class PagedAnnouncementView: BaseView {
 
 		super.setupViewConstraints()
 		
+		if shouldShowWithVWSRibbon {
+			NSLayoutConstraint.activate([
+				ribbonView.centerXAnchor.constraint(equalTo: centerXAnchor),
+				ribbonView.topAnchor.constraint(
+					equalTo: topAnchor,
+					constant: UIDevice.current.hasNotch ? 0 : -ViewTraits.ribbonOffset
+				)
+			])
+		}
+		
 		NSLayoutConstraint.activate([
-			
-			// Ribbon
-			ribbonView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			ribbonView.topAnchor.constraint(
-				equalTo: topAnchor,
-				constant: UIDevice.current.hasNotch ? 0 : -ViewTraits.ribbonOffset
-			),
-
 			// ImageContainer
-			containerView.topAnchor.constraint(equalTo: ribbonView.bottomAnchor),
+			containerView.topAnchor.constraint(equalTo: shouldShowWithVWSRibbon ? ribbonView.bottomAnchor : topAnchor),
 			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			
@@ -107,9 +123,12 @@ class PagedAnnouncementView: BaseView {
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
-		// Ribbon view
-		ribbonView.isAccessibilityElement = true
-		ribbonView.accessibilityLabel = L.generalGovernmentLogo()
+		
+		if shouldShowWithVWSRibbon {
+			// Ribbon view
+			ribbonView.isAccessibilityElement = true
+			ribbonView.accessibilityLabel = L.generalGovernmentLogo()
+		}
 	}
 	
 	// MARK: - Public Access

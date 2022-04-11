@@ -206,7 +206,7 @@ extension SharedCoordinator: OnboardingDelegate {
 
 		// Mark as complete
 		onboardingManager.consentGiven()
-
+		
 		// Remove child coordinator
 		if let onboardingCoorinator = childCoordinators.first {
 			removeChildCoordinator(onboardingCoorinator)
@@ -226,6 +226,8 @@ extension SharedCoordinator: NewFeaturesDelegate {
 
 		logDebug("SharedCoordinator: finishNewFeatures")
 
+		newFeaturesManager.userHasViewedNewFeatureIntro()
+		
 		// Remove childCoordinator
 		if let newFeaturesCoordinator = childCoordinators.first {
 			removeChildCoordinator(newFeaturesCoordinator)
