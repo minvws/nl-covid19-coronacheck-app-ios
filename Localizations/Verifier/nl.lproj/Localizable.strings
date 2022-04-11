@@ -20,7 +20,6 @@
 "scan_log_message" = "<p>De scan-instelling log houdt bij welk soort toegang is gebruikt tijdens het scannen. Een BOA kan vragen om deze log te bekijken.</p><p>Om privacyredenen worden alleen de scan-instellingen van de laatste %li minuten opgeslagen op deze telefoon. Er worden geen persoonsgegevens opgeslagen. Lees meer in de <a href=\"https://coronacheck.nl/nl/faq-scanner-in-app\">meestgestelde vragen</a>.</p>";
 "scan_log_title" = "Scan-instelling log";
 "scan_qr_description_1G" = "Scan de QR-codes van je bezoekers. Is de QR-code geldig op jouw locatie en zijn de gegevens hetzelfde als op het identiteitsbewijs? Dan mag je de bezoeker toegang geven.";
-
 "verification_policy_selection_error_message" = "Maak een keuze om door te gaan";
 /* Koptekst in de over de app pagina */
 "verifier.about.readmore" = "Lees meer:";
@@ -129,6 +128,10 @@
 "verifier_about_this_app_law_enforcement" = "Voor handhaving:";
 "verifier_about_this_app_scan_log" = "Scan-instelling log";
 "verifier_deactivation_url" = "https://coronacheck.nl/scanner/niet-in-gebruik";
+"verifier_endOfLife_button" = "Naar CoronaCheck.nl";
+"verifier_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
+"verifier_endOfLife_errorMessage" = "De website kan niet geopend worden.";
+"verifier_endOfLife_title" = "App niet in gebruik";
 "verifier_home_countdown_subtitle" = "Je moet %li minuten wachten omdat je tijdens het scannen jouw scan-instelling hebt aangepast.";
 "verifier_home_countdown_title" = "Je kunt weer scannen over %@";
 "verifier_menu_risksetting" = "Scan-instelling";
@@ -158,12 +161,6 @@
 "verifier_scan_instructions_back_to_start" = "Terug naar start";
 "verifier_scanner_policy_indication" = "%@-toegang";
 "verifier_start_scan_qr_policy_indication" = "<b>%@</b>-toegang ingesteld";
-
-"verifier_endOfLife_button" = "Naar CoronaCheck.nl";
-"verifier_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
-"verifier_endOfLife_errorMessage" = "De website kan niet geopend worden.";
-"verifier_endOfLife_title" = "App niet in gebruik";
-
 "verifier_updateApp_button" = "Installeer update";
 "verifier_updateApp_content" = "Je hebt de laatste versie van de app nodig om verder te gaan.";
 "verifier_updateApp_errorMessage" = "De App Store kan niet geopend worden.";
