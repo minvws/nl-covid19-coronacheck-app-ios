@@ -14,7 +14,7 @@ jobs:
         run: "./sigridci/sigridci/sigridci.py --customer vws --system coronacheck-ios --source . --targetquality 3.5"
       - name: "Save Sigrid CI results"
         if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: "sigrid-ci-output/**"
           retention-days: 7
