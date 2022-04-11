@@ -194,7 +194,7 @@ extension BaseTest {
 		tapOnInternationalTab()
 		card(of: .recovery).containsText(CertificateType.recovery.rawValue)
 		card(of: .recovery).containsText("Geldig tot " + formattedOffsetDate(with: validUntilOffsetInDays))
-		card(of: .recovery).textExists("Bekijk QR")
+		card(of: .recovery).containsText("Bekijk QR")
 	}
 	
 	func assertValidInternationalTestCertificate(testType: TestCertificateType, testDateOffsetInDays: Int = 0) {
