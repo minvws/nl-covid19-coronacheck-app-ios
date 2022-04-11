@@ -27,7 +27,7 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.identityCheckerSpy.stubbedCompareResult = true.
+		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 
 		greenCardLoader = GreenCardLoader(
 			now: { now },
