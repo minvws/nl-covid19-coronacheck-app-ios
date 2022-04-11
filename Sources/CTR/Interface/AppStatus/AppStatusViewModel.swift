@@ -38,15 +38,15 @@ class AppStatusViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - appStoreUrl: the store url
-	init(coordinator: AppCoordinatorDelegate, appStoreUrl: URL?) {
+	init(coordinator: AppCoordinatorDelegate, appStoreUrl: URL?, flavor: AppFlavor) {
 
 		self.coordinator = coordinator
-		title = L.updateAppTitle()
-		message = L.updateAppContent()
-		actionTitle = L.updateAppButton()
+		title = flavor == .holder ? L.holder_updateApp_title() : L.verifier_updateApp_title()
+		message = flavor == .holder ? L.holder_updateApp_content() : L.verifier_updateApp_content()
+		actionTitle = flavor == .holder ? L.holder_updateApp_button() : L.verifier_updateApp_button()
 		updateURL = appStoreUrl
 		showCannotOpenAlert = false
-		errorMessage = L.updateAppErrorMessage()
+		errorMessage = flavor == .holder ? L.holder_updateApp_errorMessage() : L.verifier_updateApp_errorMessage()
 		self.image = I.updateRequired()
 	}
 
@@ -68,14 +68,14 @@ class AppDeactivatedViewModel: AppStatusViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - appStoreUrl: the store url
-	override init(coordinator: AppCoordinatorDelegate, appStoreUrl: URL?) {
+	override init(coordinator: AppCoordinatorDelegate, appStoreUrl: URL?, flavor: AppFlavor) {
 
-		super.init(coordinator: coordinator, appStoreUrl: appStoreUrl)
+		super.init(coordinator: coordinator, appStoreUrl: appStoreUrl, flavor: flavor)
 
-		self.title = L.endOfLifeTitle()
-		self.message = L.endOfLifeDescription()
-		self.errorMessage = L.endOfLifeErrorMessage()
-		self.actionTitle = L.endOfLifeButton()
+		self.title = flavor == .holder ? L.holder_endOfLife_title() : L.verifier_endOfLife_title()
+		self.message = flavor == .holder ? L.holder_endOfLife_description() : L.verifier_endOfLife_description()
+		self.errorMessage = flavor == .holder ? L.holder_endOfLife_errorMessage() : L.verifier_endOfLife_errorMessage()
+		self.actionTitle = flavor == .holder ? L.holder_endOfLife_button() : L.verifier_endOfLife_button()
 		self.image = I.endOfLife()
 	}
 }
@@ -86,9 +86,9 @@ class InternetRequiredViewModel: AppStatusViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: AppCoordinatorDelegate) {
+	init(coordinator: AppCoordinatorDelegate, flavor: AppFlavor) {
 
-		super.init(coordinator: coordinator, appStoreUrl: nil)
+		super.init(coordinator: coordinator, appStoreUrl: nil, flavor: flavor)
 
 		self.title = L.internetRequiredTitle()
 		self.message = L.internetRequiredText()

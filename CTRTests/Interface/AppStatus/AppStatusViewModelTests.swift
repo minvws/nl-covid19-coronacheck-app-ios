@@ -17,32 +17,48 @@ class AppStatusViewModelTests: XCTestCase {
 
 	// MARK: Test lifecycle
 	
-	override func setUpWithError() throws {
+	override func setUp() {
 
+		super.setUp()
 		appCoordinatorSpy = AppCoordinatorSpy()
-		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL)
-		try super.setUpWithError()
 	}
 
 	// MARK: Tests
 
 	/// Test the initializer
-	func testInitializer() {
+	func test_holder_initializer() throws {
 
 		// Given
+		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
 
 		// When
+		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL, flavor: .holder)
 
 		// Then
 		expect(self.sut.showCannotOpenAlert) == false
-		expect(self.sut.message) == L.updateAppContent()
+		expect(self.sut.message) == L.holder_updateApp_content()
+	}
+	
+	/// Test the initializer
+	func test_verifier_initializer() throws {
+
+		// Given
+		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
+		
+		// When
+		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL, flavor: .verifier)
+
+		// Then
+		expect(self.sut.showCannotOpenAlert) == false
+		expect(self.sut.message) == L.verifier_updateApp_content()
 	}
 
 	/// Test the update button tapped method with an url
-	func testUpdateButtonTappedWithUrl() {
+	func testUpdateButtonTappedWithUrl() throws {
 
 		// Given
+		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
+		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL, flavor: .holder)
 
 		// When
 		sut.actionButtonTapped()
@@ -55,7 +71,7 @@ class AppStatusViewModelTests: XCTestCase {
 	func testUpdateButtonTappedWithoutUrl() {
 
 		// Given
-		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: nil)
+		sut = AppStatusViewModel(coordinator: appCoordinatorSpy, appStoreUrl: nil, flavor: .holder)
 
 		// When
 		sut.actionButtonTapped()
@@ -66,30 +82,57 @@ class AppStatusViewModelTests: XCTestCase {
 	}
 
 	/// Test the initializer for end of life
-	func testInitializerEndOfLifeNoInformationUrl() {
+	func test_holder_initializerEndOfLifeNoInformationUrl() {
 
 		// Given
 
 		// When
-		sut = AppDeactivatedViewModel(coordinator: appCoordinatorSpy, appStoreUrl: nil)
+		sut = AppDeactivatedViewModel(coordinator: appCoordinatorSpy, appStoreUrl: nil, flavor: .holder)
 
 		// Then
 		expect(self.sut.showCannotOpenAlert) == false
-		expect(self.sut.message) == L.endOfLifeDescription()
+		expect(self.sut.message) == L.holder_endOfLife_description()
+	}
+	
+	/// Test the initializer for end of life
+	func test_verifier_initializerEndOfLifeNoInformationUrl() {
+
+		// Given
+
+		// When
+		sut = AppDeactivatedViewModel(coordinator: appCoordinatorSpy, appStoreUrl: nil, flavor: .verifier)
+
+		// Then
+		expect(self.sut.showCannotOpenAlert) == false
+		expect(self.sut.message) == L.verifier_endOfLife_description()
 	}
 
 	/// Test the initializer for end of life
-	func testInitializerEndOfLifeWithInformationUrl() throws {
+	func test_holder_initializerEndOfLifeWithInformationUrl() throws {
 
 		// Given
 		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
 		
 		// When
-		sut = AppDeactivatedViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL)
+		sut = AppDeactivatedViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL, flavor: .holder)
 
 		// Then
 		expect(self.sut.showCannotOpenAlert) == false
-		expect(self.sut.errorMessage) == L.endOfLifeErrorMessage()
+		expect(self.sut.errorMessage) == L.holder_endOfLife_errorMessage()
+	}
+	
+	/// Test the initializer for end of life
+	func test_verifier_initializerEndOfLifeWithInformationUrl() throws {
+
+		// Given
+		let appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
+		
+		// When
+		sut = AppDeactivatedViewModel(coordinator: appCoordinatorSpy, appStoreUrl: appStoreURL, flavor: .verifier)
+
+		// Then
+		expect(self.sut.showCannotOpenAlert) == false
+		expect(self.sut.errorMessage) == L.verifier_endOfLife_errorMessage()
 	}
 
 	func test_noInternet() {
@@ -97,7 +140,7 @@ class AppStatusViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
+		sut = InternetRequiredViewModel(coordinator: appCoordinatorSpy, flavor: .holder)
 
 		// Then
 		expect(self.sut.title) == L.internetRequiredTitle()
@@ -109,7 +152,7 @@ class AppStatusViewModelTests: XCTestCase {
 	func test_noInternet_actionButtonTapped() {
 
 		// Given
-		sut = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
+		sut = InternetRequiredViewModel(coordinator: appCoordinatorSpy, flavor: .holder)
 
 		// When
 		sut.actionButtonTapped()
