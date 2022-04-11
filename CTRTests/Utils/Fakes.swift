@@ -10,23 +10,6 @@ import Foundation
 @testable import CTR
 import UIKit
 
-extension NewFeatureConsent {
-
-    static var consentWithoutMandatoryConsent = NewFeatureConsent(
-        title: "test title without mandatory consent",
-        highlight: "test highlight without mandatory consent",
-        content: "test content without mandatory consent",
-        consentMandatory: false
-    )
-
-    static var consentWithMandatoryConsent = NewFeatureConsent(
-        title: "test title with mandatory consent",
-        highlight: "test highlight with mandatory consent",
-        content: "test content with mandatory consent",
-        consentMandatory: true
-    )
-}
-
 extension TestProvider {
 
     static var fake: TestProvider {

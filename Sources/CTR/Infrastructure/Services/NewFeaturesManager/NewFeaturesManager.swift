@@ -19,6 +19,9 @@ protocol NewFeaturesManaging {
 	/// - Returns: optional item
 	func getNewFeatureItem() -> NewFeatureItem?
 
+	/// User has seen the intro for the new feature, update the version
+	func userHasViewedNewFeatureIntro()
+
 	/// Reset the manager
 	func wipePersistedData()
 }
@@ -66,6 +69,13 @@ class NewFeaturesManager: NewFeaturesManaging {
 	func getNewFeatureItem() -> NewFeatureItem? {
 
 		return factory?.information.pages.first
+	}
+
+	/// User has seen the intro for the new feature, update the version
+	func userHasViewedNewFeatureIntro() {
+
+		guard let currentVersion = factory?.information.version else { return }
+		forcedInformationData.lastSeenVersion = currentVersion
 	}
 
 	/// Reset the manager, clear all the data

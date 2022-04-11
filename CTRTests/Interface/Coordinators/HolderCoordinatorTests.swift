@@ -39,7 +39,7 @@ class HolderCoordinatorTests: XCTestCase {
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
-		environmentSpies.newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(
+		environmentSpies.newFeaturesManagerSpy.stubbedGetNewFeatureItemResult = NewFeatureItem(
 			image: nil,
 			tagline: "test",
 			title: "test",
