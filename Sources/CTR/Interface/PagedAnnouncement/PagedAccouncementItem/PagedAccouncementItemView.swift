@@ -151,7 +151,7 @@ class PagedAnnouncementItemView: ScrolledStackView {
 		}
 	}
 	
-	// TODO deduplicate one
+	// (this will be merged with content in the next PR..)
 	var message: String? {
 		set {
 			content = newValue
