@@ -276,4 +276,10 @@ extension BaseTest {
 	private func closeQRDetails() {
 		app.tapButton("Sluiten")
 	}
+	
+	// MARK: - Wallet
+	
+	func assertNoCertificatesInWallet() {
+		app.textExists("Geen gegevens opgeslagen")
+	}
 }

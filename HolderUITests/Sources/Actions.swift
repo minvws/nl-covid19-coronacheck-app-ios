@@ -102,4 +102,10 @@ extension BaseTest {
 		self.expectation(for: predicate, evaluatedWith: element, handler: nil)
 		self.waitForExpectations(timeout: self.loginTimeout, handler: nil)
 	}
+	
+	func viewWallet() {
+		app.tapButton("Open menu")
+		app.tapButton("Over deze app")
+		app.tapButton("Opgeslagen gegevens")
+	}
 }
