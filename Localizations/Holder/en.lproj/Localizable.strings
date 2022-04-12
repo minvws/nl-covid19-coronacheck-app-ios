@@ -70,7 +70,7 @@
 "general_visitorPass" = "visitor pass";
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
-"holder.about.readmore" = "Read more:";
+"holder.about.readmore" = "More:";
 "holder.about.text" = "<p>CoronaCheck is created to reopen society step by step during the coronavirus outbreak.</p><p>You can use this app to create a coronavirus pass from your vaccination, negative test result or if you've had coronavirus and are recovered. Your coronavirus pass contains a QR code. Have it scanned for access to places or activities or to travel.</p>";
 /* MARK: - Holder About */
 "holder.about.title" = "About this app";
@@ -320,8 +320,6 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
 "holder.incompletedutchvaccination.title" = "No Dutch vaccination certificate";
 "holder.launch.text" = "We're starting the app...";
-/* MARK: - Holder Launch */
-"holder.launch.title" = "CoronaCheck";
 "holder.launch.version" = "App version %@ (build %@)";
 "holder.location.ggd.subtitle" = "Log in with your DigiD";
 "holder.location.ggd.title" = "GGD";
@@ -691,12 +689,15 @@
 "holder_newintheapp_content_3Gand1G_body" = "The access rules in the Netherlands have changed. You can enter venues with 3G access with a vaccination, recovery, or test certificate. Venues with 1G access you can only enter with a test certificate. The app creates separate certificates for 3G and 1G access.";
 "holder_newintheapp_content_3Gand1G_button_next" = "Next";
 "holder_newintheapp_content_3Gand1G_title" = "Certificates for 3G and 1G access";
+"holder_newintheapp_content_dutchAndInternationalCertificates_body" = "You’ll find certificates for in the Netherlands and abroad in the app. Use your Dutch certificate for access to places and activities in the Netherlands. Are you planning to cross the border or are you abroad? Then use your international certificate.";
+"holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates" = "To my certificates";
+"holder_newintheapp_content_dutchAndInternationalCertificates_title" = "Dutch and international certificates";
 "holder_newintheapp_content_only1G_body" = "The access rules in the Netherlands have changed. 1G access applies anywhere a coronavirus pass is required. This means you can only enter these places with a test certificate. You can still add a vaccination or recovery certificate in the app, but you can only use these certificates abroad.";
 "holder_newintheapp_content_only1G_button_next" = "Next";
 "holder_newintheapp_content_only1G_title" = "1G access only";
-"holder_newintheapp_content_only3G_body" = "The access rules in the Netherlands have changed. 3G access applies anywhere a coronavirus pass is required. This means you can enter with a vaccination, recovery, or test certificate.";
+"holder_newintheapp_content_only3G_body" = "Right now 3G access applies to all places where a coronavirus pass is required. This means you can enter anywhere with a proof of vaccination, recovery, or a negative test.";
 "holder_newintheapp_content_only3G_button_next" = "Next";
-"holder_newintheapp_content_only3G_title" = "3G access only";
+"holder_newintheapp_content_only3G_title" = "3G access in the Netherlands";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "The coronavirus entry pass is no longer used in the Netherlands. Dutch certificates are therefore removed from the app. International certificates can still be made and used for travelling abroad.";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "Only international certificates";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
@@ -735,6 +736,14 @@
 "holder_updateApp_errorMessage" = "Can't open App Store";
 "holder_updateApp_title" = "Time for an update";
 "holder_vaccination_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your details again later.";
+"holder_wasUserTestedAtGGD_body" = "If you were tested before or on %@, you can retrieve the test result via DigiD. Were you tested after this date? Use the retrieval code you got from the test location.";
+"holder_wasUserTestedAtGGD_no_buttonSubtitle" = "Enter retrieval code";
+"holder_wasUserTestedAtGGD_no_buttonTitle" = "No, tested after";
+"holder_wasUserTestedAtGGD_title" = "Were you tested before or on %@?";
+"holder_wasUserTestedAtGGD_yes_buttonSubtitle" = "Log in with DigiD";
+"holder_wasUserTestedAtGGD_yes_buttonTitle" = "Yes, tested before or on %@";
+"holder_whereUserTested_body" = "Indicate where you were tested to create a certificate from your positive or negative test result.";
+"holder_whereUserTested_title" = "Where were you tested?";
 /* MARK: - Internet Required */
 "internet.required.button" = "Try again";
 "internet.required.text" = "To start the app, you need to be connected to the internet.";

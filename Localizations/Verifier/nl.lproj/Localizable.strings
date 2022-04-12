@@ -50,8 +50,6 @@
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Wat kan ik doen?";
 "verifier.launch.text" = "We starten de app voor je op...";
-/* MARK: - Verifier Launch */
-"verifier.launch.title" = "CoronaCheck Scanner";
 "verifier.launch.version" = "App versie %@ (build %@)";
 "verifier.menu.about" = "Over deze app";
 /* Menu item voor Toegankelijkheid */
