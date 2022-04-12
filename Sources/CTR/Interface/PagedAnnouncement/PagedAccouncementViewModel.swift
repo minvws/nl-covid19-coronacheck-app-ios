@@ -13,7 +13,7 @@ class PagedAnnouncementViewModel {
 	weak var coordinator: OnboardingCoordinatorDelegate?
 	
 	/// The pages for onboarding
-	@Bindable private(set) var pages: [OnboardingPage]
+	@Bindable private(set) var pages: [NewFeatureItem]
 	@Bindable private(set) var enabled: Bool
 	
 	/// Initializer
@@ -23,7 +23,7 @@ class PagedAnnouncementViewModel {
 	///   - numberOfPages: the total number of pages
 	init(
 		coordinator: OnboardingCoordinatorDelegate,
-		pages: [OnboardingPage]) {
+		pages: [NewFeatureItem]) {
 		
 		self.coordinator = coordinator
 		self.pages = pages
@@ -32,10 +32,10 @@ class PagedAnnouncementViewModel {
 	
 	/// Add an onboarding step
 	/// - Parameter info: the info for the onboarding step
-	func getOnboardingStep(_ info: OnboardingPage) -> UIViewController {
+	func getOnboardingStep(_ info: NewFeatureItem) -> UIViewController {
 		
 		let viewController = PagedAnnouncementItemViewController(
-			viewModel: PagedAnnouncementItemViewModel(onboardingInfo: info)
+			viewModel: PagedAnnouncementItemViewModel(newFeatureItem: info)
 		)
 		viewController.isAccessibilityElement = true
 		return viewController

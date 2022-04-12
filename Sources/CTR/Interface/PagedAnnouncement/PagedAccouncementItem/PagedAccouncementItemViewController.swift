@@ -57,7 +57,7 @@ class PagedAnnouncementItemViewController: BaseViewController {
 		super.viewDidLoad()
 		
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$content.binding = { [weak self] in self?.sceneView.content = $0 }
 		viewModel.$image.binding = { [weak self] in self?.sceneView.image = $0 }
 	}
 

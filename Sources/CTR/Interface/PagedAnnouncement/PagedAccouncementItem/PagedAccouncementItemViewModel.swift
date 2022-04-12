@@ -9,20 +9,19 @@ import UIKit
 
 class PagedAnnouncementItemViewModel: Logging {
 	
-	var loggingCategory: String = "OnboardingPageViewModel"
-	
-	@Bindable private(set) var title: String
-	@Bindable private(set) var message: String
 	@Bindable private(set) var image: UIImage?
+	@Bindable private(set) var tagline: String?
+	@Bindable private(set) var title: String
+	@Bindable private(set) var content: String
 	
 	/// Initializer
 	/// - Parameters:
-	///   - coordinator: the coordinator delegate
-	///   - onboardingInfo: the container with onboarding info
-	init(onboardingInfo: OnboardingPage) {
+	///   - newFeatureItem: the container with new feature info
+	init(newFeatureItem: NewFeatureItem) {
 		
-		title = onboardingInfo.title
-		message = onboardingInfo.message
-		image = onboardingInfo.image
+		image = newFeatureItem.image
+		tagline = newFeatureItem.tagline
+		title = newFeatureItem.title
+		content = newFeatureItem.content
 	}
 }

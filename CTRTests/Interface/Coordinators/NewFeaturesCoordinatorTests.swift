@@ -39,12 +39,7 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 	func test_start_shouldInvokeFinishNewFeatures() {
 		
 		// Given
-		newFeaturesManagerSpy.stubbedGetNewFeatureItemResult = NewFeatureItem(
-			image: nil,
-			tagline: "test",
-			title: "test",
-			content: "test"
-		)
+		newFeaturesManagerSpy.stubbedGetNewFeatureItemResult = NewFeatureItem(title: "test", content: "test", image: nil, tagline: "test", step: 0)
 		
 		// When
 		sut.start()

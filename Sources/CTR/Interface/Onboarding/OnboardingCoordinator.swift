@@ -70,7 +70,7 @@ class OnboardingCoordinator: Coordinator, Logging {
 	}
 	
 	/// The onboarding pages
-	var onboardingPages: [OnboardingPage] = []
+	var onboardingPages: [NewFeatureItem] = []
 	
 	// Designated starter method
 	func start() {

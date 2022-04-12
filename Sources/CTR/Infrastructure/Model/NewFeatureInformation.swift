@@ -10,17 +10,20 @@ import UIKit
 /// The what's new pages content for the new feature
 struct NewFeatureItem: Equatable {
 
-	/// The image of a new feature page
-	let image: UIImage?
-
-	/// The tagline of a new feature page
-	let tagline: String
-
 	/// The title of a new feature page
 	let title: String
 
 	/// The content of a new feature page
 	let content: String
+
+	/// The image of a new feature page
+	let image: UIImage?
+
+	/// The tagline of a new feature page
+	let tagline: String?
+	
+	/// The step of the onboarding page
+	let step: Int
 }
 
 /// A struct to use for combining all the content needed for new feature
