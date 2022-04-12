@@ -23,14 +23,20 @@ class PagedAnnouncementViewController: BaseViewController {
 	
 	let allowsBackButton: Bool
 	let allowsCloseButton: Bool // TODO refactor
+	let allowsNextButton: Bool // TODO refactor
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementViewModel, allowsBackButton: Bool, allowsCloseButton: Bool) {
+	init(viewModel: PagedAnnouncementViewModel,
+		 allowsBackButton: Bool,
+		 allowsCloseButton: Bool,
+		 allowsNextButton: Bool
+	) {
 		
 		self.viewModel = viewModel
 		self.allowsBackButton = allowsBackButton
 		self.allowsCloseButton = allowsCloseButton
+		self.allowsNextButton = allowsNextButton
 		
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -79,13 +85,15 @@ class PagedAnnouncementViewController: BaseViewController {
 			setupBackButton()
 			setupTranslucentNavigationBar()
 			navigationController?.isNavigationBarHidden = false
-		}
-		else if allowsCloseButton {
+		} else if allowsCloseButton {
 			addCloseButton(action: #selector(closeButtonTapped))
-		}
-		else {
+			setupTranslucentNavigationBar()
+			navigationController?.isNavigationBarHidden = false
+		} else {
 			navigationController?.isNavigationBarHidden = true
 		}
+		
+		sceneView.primaryButton.isHidden = !allowsNextButton
 	}
 	
 	/// Create a custom back button so we can catch the tap on the back button.

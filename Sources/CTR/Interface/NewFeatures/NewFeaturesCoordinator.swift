@@ -57,7 +57,8 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 					itemsShouldShowWithFullWidthHeaderImage: true
 				),
 				allowsBackButton: false,
-				allowsCloseButton: false
+				allowsCloseButton: false,
+				allowsNextButton: true
 			)
 			navigationController.viewControllers = [viewController]
 		} else {
