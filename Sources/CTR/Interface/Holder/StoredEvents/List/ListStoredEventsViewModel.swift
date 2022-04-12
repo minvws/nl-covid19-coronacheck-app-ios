@@ -12,15 +12,6 @@ class ListStoredEventsViewModel: Logging {
 
 	weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
 
-	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
-		ProgressIndicationCounter { [weak self] in
-			// Do not increment/decrement progress within this closure
-			self?.shouldShowProgress = $0
-		}
-	}()
-
-	@Bindable private(set) var shouldShowProgress: Bool = false
-
 	@Bindable internal var viewState: ListStoredEventsViewController.State
 
 	@Bindable internal var alert: AlertContent?
@@ -307,7 +298,7 @@ class ListStoredEventsViewModel: Logging {
 	
 	private func removeEventGroup(objectID: NSManagedObjectID ) {
 		
-		let removalResult = EventGroupModel.delete(objectID)
+		let removalResult = Current.walletManager.removeEventGroup(objectID)
 		switch removalResult {
 			case .success(let success):
 				if success {

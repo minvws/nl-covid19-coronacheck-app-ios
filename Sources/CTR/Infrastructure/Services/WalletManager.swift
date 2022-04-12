@@ -57,6 +57,8 @@ protocol WalletManaging: AnyObject {
 	///   - testValidity: the max validity for test  (in HOURS)
 	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
 	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)
+	
+	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Bool, Error>
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
 	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard]
@@ -190,6 +192,11 @@ class WalletManager: WalletManaging, Logging {
 				dataStoreManager.save(context)
 			}
 		}
+	}
+	
+	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Bool, Error> {
+		
+		return EventGroupModel.delete(objectID)
 	}
 
 	func fetchSignedEvents() -> [String] {

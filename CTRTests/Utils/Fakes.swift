@@ -172,6 +172,15 @@ extension EventFlow.EventResultWrapper {
 		result: nil,
 		events: [EventFlow.Event.boosterEvent]
 	)
+	
+	static var fakeMultipleVaccinationResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.vaccinationEvent, EventFlow.Event.boosterEvent]
+	)
 
 	static var fakeRecoveryResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
@@ -363,14 +372,14 @@ extension EventFlow.EventResultWrapper {
 }
 
 extension RequestToken {
-
-    static var fake: RequestToken {
-        return RequestToken(
-            token: "BBBBBBBBBBBB",
-            protocolVersion: "2",
-            providerIdentifier: "XXX"
-        )
-    }
+	
+	static var fake: RequestToken {
+		return RequestToken(
+			token: "BBBBBBBBBBBB",
+			protocolVersion: "2",
+			providerIdentifier: "XXX"
+		)
+	}
 }
 
 extension EuCredentialAttributes.DigitalCovidCertificate {
@@ -1204,6 +1213,26 @@ extension EuCredentialAttributes {
 	}
 	static func fakeVaccination(dcc: EuCredentialAttributes.DigitalCovidCertificate = .sampleWithVaccine(doseNumber: 1, totalDose: 2)) -> EuCredentialAttributes {
 		fake(dcc: dcc)
+	}
+	
+	static var fakeTest: EuCredentialAttributes {
+		EuCredentialAttributes(
+			credentialVersion: 1,
+			digitalCovidCertificate: .sampleWithTest(),
+			expirationTime: now.timeIntervalSince1970 + 3600,
+			issuedAt: now.timeIntervalSince1970,
+			issuer: "NL"
+		)
+	}
+	
+	static var fakeRecovery: EuCredentialAttributes {
+		EuCredentialAttributes(
+			credentialVersion: 1,
+			digitalCovidCertificate: .sampleWithRecovery(),
+			expirationTime: now.timeIntervalSince1970 + 3600,
+			issuedAt: now.timeIntervalSince1970,
+			issuer: "NL"
+		)
 	}
 }
 
