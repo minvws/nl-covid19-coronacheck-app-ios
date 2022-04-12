@@ -56,7 +56,8 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 					pages: pagedAnnouncementItems,
 					itemsShouldShowWithFullWidthHeaderImage: true
 				),
-				allowsBackButton: false
+				allowsBackButton: false,
+				allowsCloseButton: false
 			)
 			navigationController.viewControllers = [viewController]
 		} else {

@@ -47,4 +47,9 @@ class PagedAnnouncementViewModel {
 		
 		delegate?.didFinishPagedAnnouncement()
 	}
+	
+	func closeButtonTapped() {
+		
+		delegate?.didFinishPagedAnnouncement()
+	}
 }

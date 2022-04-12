@@ -20,14 +20,18 @@ class PagedAnnouncementViewController: BaseViewController {
 	
 	/// Disable swiping to launch screen
 	override var enableSwipeBack: Bool { false }
+	
 	let allowsBackButton: Bool
+	let allowsCloseButton: Bool // TODO refactor
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementViewModel, allowsBackButton: Bool) {
+	init(viewModel: PagedAnnouncementViewModel, allowsBackButton: Bool, allowsCloseButton: Bool) {
 		
 		self.viewModel = viewModel
 		self.allowsBackButton = allowsBackButton
+		self.allowsCloseButton = allowsCloseButton
+		
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -75,7 +79,11 @@ class PagedAnnouncementViewController: BaseViewController {
 			setupBackButton()
 			setupTranslucentNavigationBar()
 			navigationController?.isNavigationBarHidden = false
-		} else {
+		}
+		else if allowsCloseButton {
+			addCloseButton(action: #selector(closeButtonTapped))
+		}
+		else {
 			navigationController?.isNavigationBarHidden = true
 		}
 	}
@@ -92,12 +100,16 @@ class PagedAnnouncementViewController: BaseViewController {
 		backButton = .create(config)
 	}
 	
-	/// The user tapped on the back button
 	@objc func backbuttonTapped() {
 		
 		// Move to the previous page
 		pageViewController.previousPage()
 		sceneView.primaryButton.isEnabled = true
+	}
+	
+	@objc func closeButtonTapped() {
+		
+		viewModel.closeButtonTapped()
 	}
     
 	/// Setup the page controller
