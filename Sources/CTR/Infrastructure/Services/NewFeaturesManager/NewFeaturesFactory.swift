@@ -18,10 +18,11 @@ struct HolderNewFeaturesFactory: NewFeaturesFactory {
 		
 		return .init(
 			pages: [NewFeatureItem(
+				title: L.holderUpdatepageTitleTab(),
+				content: L.holderUpdatepageContentTab(),
 				image: HolderNewFeaturesFactory.isNL ? I.onboarding.tabbarNL() : I.onboarding.tabbarEN(),
 				tagline: L.holderUpdatepageTagline(),
-				title: L.holderUpdatepageTitleTab(),
-				content: L.holderUpdatepageContentTab()
+				step: 0
 			)],
 			version: 4
 		)
@@ -38,10 +39,11 @@ struct VerifierNewFeaturesFactory: NewFeaturesFactory {
 		
 		return .init(
 			pages: [NewFeatureItem(
+				title: L.new_in_app_risksetting_title(),
+				content: L.new_in_app_risksetting_subtitle(),
 				image: I.onboarding.tabbarNL(),
 				tagline: L.new_in_app_subtitle(),
-				title: L.new_in_app_risksetting_title(),
-				content: L.new_in_app_risksetting_subtitle()
+				step: 0
 			)],
 			version: 0 // Disabled
 		)

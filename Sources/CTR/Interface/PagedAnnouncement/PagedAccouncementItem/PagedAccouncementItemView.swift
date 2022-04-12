@@ -151,16 +151,6 @@ class PagedAnnouncementItemView: ScrolledStackView {
 		}
 	}
 	
-	// (this will be merged with content in the next PR..)
-	var message: String? {
-		set {
-			content = newValue
-		}
-		get {
-			content
-		}
-	}
-	
 	/// Hide the image
 	func hideImage() {
 

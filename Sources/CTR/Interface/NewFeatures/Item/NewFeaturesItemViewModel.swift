@@ -10,7 +10,7 @@ import UIKit
 final class NewFeaturesItemViewModel {
 	
 	@Bindable private(set) var image: UIImage?
-	@Bindable private(set) var tagline: String
+	@Bindable private(set) var tagline: String?
 	@Bindable private(set) var title: String
 	@Bindable private(set) var content: String
 	
