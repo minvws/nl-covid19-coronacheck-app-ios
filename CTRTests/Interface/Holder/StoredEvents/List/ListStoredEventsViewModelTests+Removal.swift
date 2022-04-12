@@ -429,7 +429,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
 		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
-		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.noEvents), ())
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.noSignedEvents), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
 			fail("wrong state")

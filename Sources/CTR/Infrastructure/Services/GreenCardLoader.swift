@@ -16,7 +16,7 @@ protocol GreenCardLoading {
 class GreenCardLoader: GreenCardLoading, Logging {
 
 	enum Error: Swift.Error, Equatable, LocalizedError {
-		case noEvents
+		case noSignedEvents
 		case didNotEvaluate
 
 		case preparingIssue(ServerError)
@@ -35,8 +35,8 @@ class GreenCardLoader: GreenCardLoading, Logging {
 					return "preparingIssue/" + networkError.rawValue
 				case .preparingIssue(.provider(_, _, _, let networkError)):
 					return "preparingIssue/provider/" + networkError.rawValue
-				case .noEvents:
-					return "noEvents"
+				case .noSignedEvents:
+					return "noSignedEvents"
 				case .didNotEvaluate:
 					return "didNotEvaluate"
 				case .failedToParsePrepareIssue:
@@ -124,7 +124,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		let signedEvents = walletManager.fetchSignedEvents()
 
 		guard !signedEvents.isEmpty else {
-			onCompletion(.failure(Error.noEvents))
+			onCompletion(.failure(Error.noSignedEvents))
 			return
 		}
 
