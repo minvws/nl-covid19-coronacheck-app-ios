@@ -230,6 +230,8 @@ extension SharedCoordinator: NewFeaturesDelegate {
 		if let newFeaturesCoordinator = childCoordinators.first {
 			removeChildCoordinator(newFeaturesCoordinator)
 		}
+		
+		newFeaturesManager.userHasViewedNewFeatureIntro()
 
 		// Navigate to start
 		start()

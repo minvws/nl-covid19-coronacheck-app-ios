@@ -13,7 +13,7 @@ final class NewFeaturesItemViewController: BaseViewController {
 	private let viewModel: NewFeaturesItemViewModel
 	
 	/// The view
-	let sceneView = NewFeaturesItemView()
+	let sceneView = PagedAnnouncementItemView(shouldShowWithFullWidthHeaderImage: true)
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
@@ -31,7 +31,7 @@ final class NewFeaturesItemViewController: BaseViewController {
 	
 	// MARK: View lifecycle
 	override func loadView() {
-		
+		sceneView.imageBackgroundColor = C.forcedInformationImage()
 		view = sceneView
 	}
 	

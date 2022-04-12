@@ -11,9 +11,6 @@ class PagedAnnouncementItemViewModel: Logging {
 	
 	var loggingCategory: String = "OnboardingPageViewModel"
 	
-	/// Coordination Delegate
-	weak var coordinator: OnboardingCoordinatorDelegate?
-	
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var image: UIImage?
@@ -22,11 +19,8 @@ class PagedAnnouncementItemViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - onboardingInfo: the container with onboarding info
-	init(
-		coordinator: OnboardingCoordinatorDelegate,
-		onboardingInfo: OnboardingPage) {
+	init(onboardingInfo: OnboardingPage) {
 		
-		self.coordinator = coordinator
 		title = onboardingInfo.title
 		message = onboardingInfo.message
 		image = onboardingInfo.image
