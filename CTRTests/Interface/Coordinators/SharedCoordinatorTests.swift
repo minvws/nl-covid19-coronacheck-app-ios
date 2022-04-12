@@ -123,4 +123,17 @@ class SharedCoordinatorTests: XCTestCase {
 		expect(completed) == false
 		expect(self.sut.childCoordinators).toEventually(haveCount(1))
 	}
+	
+	func test_consentGiven_updates_dependents() {
+		
+		// Arrange
+
+		// Act
+		sut.consentGiven()
+
+		// Assert
+		
+		expect(self.environmentSpies.onboardingManagerSpy.invokedConsentGivenCount) == 1
+		expect(self.environmentSpies.newFeaturesManagerSpy.invokedUserHasViewedNewFeatureIntroCount) == 1
+	}
 }
