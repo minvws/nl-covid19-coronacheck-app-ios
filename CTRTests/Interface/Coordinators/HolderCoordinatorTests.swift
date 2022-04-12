@@ -39,7 +39,14 @@ class HolderCoordinatorTests: XCTestCase {
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
-		environmentSpies.newFeaturesManagerSpy.stubbedGetNewFeatureItemResult = NewFeatureItem(title: "test", content: "test", image: nil, tagline: "test", step: 0)
+		environmentSpies.newFeaturesManagerSpy.stubbedGetNewFeatureItemResult = NewFeatureItem(
+			title: "test",
+			content: "test",
+			image: nil,
+			imageBackgroundColor: .white,
+			tagline: "test",
+			step: 0
+		)
 
 		// When
 		sut.start()

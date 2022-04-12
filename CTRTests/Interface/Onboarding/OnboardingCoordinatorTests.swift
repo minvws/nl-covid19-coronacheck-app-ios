@@ -226,7 +226,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		)
 		
 		// When
-		sut?.finishOnboarding()
+		sut?.didFinishPagedAnnouncement()
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
@@ -247,7 +247,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		)
 		
 		// When
-		sut?.finishOnboarding()
+		sut?.didFinishPagedAnnouncement()
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1

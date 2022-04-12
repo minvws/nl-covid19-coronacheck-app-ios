@@ -73,6 +73,7 @@ class NewFeaturesManagerTests: XCTestCase {
 			title: L.holderUpdatepageTitleTab(),
 			content: L.holderUpdatepageContentTab(),
 			image: I.onboarding.tabbarNL(),
+			imageBackgroundColor: C.forcedInformationImage(),
 			tagline: L.holderUpdatepageTagline(),
 			step: 0
 		)
@@ -91,6 +92,7 @@ class NewFeaturesManagerTests: XCTestCase {
 			title: L.new_in_app_risksetting_title(),
 			content: L.new_in_app_risksetting_subtitle(),
 			image: I.onboarding.tabbarNL(),
+			imageBackgroundColor: C.forcedInformationImage(),
 			tagline: L.new_in_app_subtitle(),
 			step: 0
 		)
