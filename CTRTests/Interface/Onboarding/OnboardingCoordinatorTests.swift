@@ -60,19 +60,19 @@ class OnboardingCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.onboardingPages).to(haveCount(4))
 		expect(self.sut.onboardingPages[0].title) == L.holderOnboardingTitleSafely()
-		expect(self.sut.onboardingPages[0].message) == L.holderOnboardingMessageSafely()
+		expect(self.sut.onboardingPages[0].content) == L.holderOnboardingMessageSafely()
 		expect(self.sut.onboardingPages[0].image) == I.onboarding.safely()
 		
 		expect(self.sut.onboardingPages[1].title) == L.holderOnboardingTitleYourqr()
-		expect(self.sut.onboardingPages[1].message) == L.holderOnboardingMessageYourqr()
+		expect(self.sut.onboardingPages[1].content) == L.holderOnboardingMessageYourqr()
 		expect(self.sut.onboardingPages[1].image) == I.onboarding.yourQR()
 		
 		expect(self.sut.onboardingPages[2].title) == L.holderOnboardingTitleValidity()
-		expect(self.sut.onboardingPages[2].message) == L.holderOnboardingMessageValidity()
+		expect(self.sut.onboardingPages[2].content) == L.holderOnboardingMessageValidity()
 		expect(self.sut.onboardingPages[2].image) == I.onboarding.validity()
 		
 		expect(self.sut.onboardingPages[3].title) == L.holderOnboardingTitlePrivacy()
-		expect(self.sut.onboardingPages[3].message) == L.holderOnboardingMessagePrivacy()
+		expect(self.sut.onboardingPages[3].content) == L.holderOnboardingMessagePrivacy()
 		expect(self.sut.onboardingPages[3].image) == I.onboarding.international()
 
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
@@ -93,7 +93,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.onboardingPages).to(haveCount(1))
 		expect(self.sut.onboardingPages[0].title) == L.verifierOnboardingTitleSafely()
-		expect(self.sut.onboardingPages[0].message) == L.verifierOnboardingMessageSafely()
+		expect(self.sut.onboardingPages[0].content) == L.verifierOnboardingMessageSafely()
 		expect(self.sut.onboardingPages[0].image) == I.onboarding.safely()
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
@@ -115,15 +115,15 @@ class OnboardingCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.onboardingPages).to(haveCount(3))
 		expect(self.sut.onboardingPages[0].title) == L.holder_onboarding_content_TravelSafe_0G_title()
-		expect(self.sut.onboardingPages[0].message) == L.holder_onboarding_content_TravelSafe_0G_message()
+		expect(self.sut.onboardingPages[0].content) == L.holder_onboarding_content_TravelSafe_0G_message()
 		expect(self.sut.onboardingPages[0].image) == I.onboarding.zeroGInternational()
 		
 		expect(self.sut.onboardingPages[1].title) == L.holderOnboardingTitleYourqr()
-		expect(self.sut.onboardingPages[1].message) == L.holderOnboardingMessageYourqr()
+		expect(self.sut.onboardingPages[1].content) == L.holderOnboardingMessageYourqr()
 		expect(self.sut.onboardingPages[1].image) == I.onboarding.yourQR()
 		
 		expect(self.sut.onboardingPages[2].title) == L.holder_onboarding_content_onlyInternationalQR_0G_title()
-		expect(self.sut.onboardingPages[2].message) == L.holder_onboarding_content_onlyInternationalQR_0G_message()
+		expect(self.sut.onboardingPages[2].content) == L.holder_onboarding_content_onlyInternationalQR_0G_message()
 		expect(self.sut.onboardingPages[2].image) == I.onboarding.validity()
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
@@ -145,7 +145,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.onboardingPages).to(haveCount(5))
 		expect(self.sut.onboardingPages[4].title) == L.holder_onboarding_disclosurePolicyChanged_only1GAccess_title()
-		expect(self.sut.onboardingPages[4].message) == L.holder_onboarding_disclosurePolicyChanged_only1GAccess_message()
+		expect(self.sut.onboardingPages[4].content) == L.holder_onboarding_disclosurePolicyChanged_only1GAccess_message()
 		expect(self.sut.onboardingPages[4].image) == I.onboarding.disclosurePolicy()
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
@@ -167,7 +167,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.onboardingPages).to(haveCount(5))
 		expect(self.sut.onboardingPages[4].title) == L.holder_onboarding_disclosurePolicyChanged_only3GAccess_title()
-		expect(self.sut.onboardingPages[4].message) == L.holder_onboarding_disclosurePolicyChanged_only3GAccess_message()
+		expect(self.sut.onboardingPages[4].content) == L.holder_onboarding_disclosurePolicyChanged_only3GAccess_message()
 		expect(self.sut.onboardingPages[4].image) == I.onboarding.disclosurePolicy()
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
@@ -189,7 +189,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.onboardingPages).to(haveCount(5))
 		expect(self.sut.onboardingPages[4].title) == L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_title()
-		expect(self.sut.onboardingPages[4].message) == L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message()
+		expect(self.sut.onboardingPages[4].content) == L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message()
 		expect(self.sut.onboardingPages[4].image) == I.onboarding.disclosurePolicy()
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.onboardingDelegateSpy.consentGivenCalled) == false

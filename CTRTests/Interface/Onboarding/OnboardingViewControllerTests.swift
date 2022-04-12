@@ -8,18 +8,19 @@
 import XCTest
 @testable import CTR
 
-class OnboardingViewControllerTests: XCTestCase {
+class PagedAnnouncementViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: OnboardingViewController!
+	var sut: PagedAnnouncementViewController!
 
 	var coordinatorSpy: OnboardingCoordinatorSpy!
 
-	let page = OnboardingPage(
+	let page = NewFeatureItem(
 		title: "Onboarding Title",
-		message: "Onboarding Message",
+		content: "Onboarding Message",
 		image: I.onboarding.safely(),
-		step: .step1
+		tagline: nil,
+		step: 1
 	)
 
 	var window = UIWindow()
@@ -31,8 +32,8 @@ class OnboardingViewControllerTests: XCTestCase {
 
 		coordinatorSpy = OnboardingCoordinatorSpy()
 
-		sut = OnboardingViewController(
-			viewModel: OnboardingViewModel(
+		sut = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
 				coordinator: coordinatorSpy,
 				pages: [page]
 			)
@@ -76,8 +77,8 @@ class OnboardingViewControllerTests: XCTestCase {
 	func testNextTappedWithTwoItems() {
 
 		// Given
-		sut = OnboardingViewController(
-			viewModel: OnboardingViewModel(
+		sut = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
 				coordinator: coordinatorSpy,
 				pages: [page, page]
 			)
@@ -95,8 +96,8 @@ class OnboardingViewControllerTests: XCTestCase {
 	func testWithTwoItemsWhileOnSecondPage() {
 
 		// Given
-		sut = OnboardingViewController(
-			viewModel: OnboardingViewModel(
+		sut = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
 				coordinator: coordinatorSpy,
 				pages: [page, page]
 			)
@@ -114,8 +115,8 @@ class OnboardingViewControllerTests: XCTestCase {
 	func testNextTappedWithTwoItemsWhileOnSecondPage() {
 
 		// Given
-		sut = OnboardingViewController(
-			viewModel: OnboardingViewModel(
+		sut = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
 				coordinator: coordinatorSpy,
 				pages: [page, page]
 			)
@@ -134,8 +135,8 @@ class OnboardingViewControllerTests: XCTestCase {
 	func testBackButtonTappedWithTwoItemsWhileOnSecondPage() {
 
 		// Given
-		sut = OnboardingViewController(
-			viewModel: OnboardingViewModel(
+		sut = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
 				coordinator: coordinatorSpy,
 				pages: [page, page]
 			)

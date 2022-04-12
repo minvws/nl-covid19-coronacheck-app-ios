@@ -223,7 +223,6 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 				eventMode: eventMode,
 				originalMode: originalMode,
 				remoteEvents: remoteEvents,
-				identityChecker: IdentityChecker(),
 				eventsMightBeMissing: eventsMightBeMissing,
 				greenCardLoader: Current.greenCardLoader
 			)

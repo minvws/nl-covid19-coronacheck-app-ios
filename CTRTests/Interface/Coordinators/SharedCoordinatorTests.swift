@@ -26,7 +26,7 @@ class SharedCoordinatorTests: XCTestCase {
 		navigationSpy = NavigationControllerSpy()
 		onboardingFactorySpy = OnboardingFactorySpy()
 		newFeaturesFactorySpy = NewFeaturesFactorySpy()
-		newFeaturesFactorySpy.stubbedInformation = NewFeatureInformation(pages: [], consent: nil, version: 0)
+		newFeaturesFactorySpy.stubbedInformation = NewFeatureInformation(pages: [], version: 0)
 		sut = SharedCoordinator(
 			navigationController: navigationSpy,
 			window: window
@@ -100,7 +100,13 @@ class SharedCoordinatorTests: XCTestCase {
 		
 		// Given
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
-		environmentSpies.newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(image: nil, tagline: "", title: "", content: "")
+		environmentSpies.newFeaturesManagerSpy.stubbedGetNewFeatureItemResult = NewFeatureItem(
+			title: "",
+			content: "",
+			image: nil,
+			tagline: "",
+			step: 0
+		)
 		
 		var completed = false
 

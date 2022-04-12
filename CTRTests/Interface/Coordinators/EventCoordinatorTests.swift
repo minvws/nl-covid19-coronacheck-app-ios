@@ -631,7 +631,6 @@ class EventCoordinatorTests: XCTestCase {
 					coordinator: sut,
 					eventMode: .vaccination,
 					remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-					identityChecker: IdentityCheckerSpy(),
 					greenCardLoader: environmentSpies.greenCardLoaderSpy
 				)
 			)

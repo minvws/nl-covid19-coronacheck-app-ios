@@ -19,7 +19,6 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var greenCardLoader: GreenCardLoader!
 	private var environmentSpies: EnvironmentSpies!
-	private var identityCheckerSpy: IdentityCheckerSpy!
 
 	var window = UIWindow()
 
@@ -28,9 +27,8 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
-		identityCheckerSpy = IdentityCheckerSpy()
-		identityCheckerSpy.stubbedCompareResult = true
-		
+		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
+
 		greenCardLoader = GreenCardLoader(
 			now: { now },
 			networkManager: environmentSpies.networkManagerSpy,
@@ -56,7 +54,6 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: eventMode,
 			remoteEvents: remoteEvents,
-			identityChecker: identityCheckerSpy,
 			greenCardLoader: greenCardLoader
 		)
 		sut = ListRemoteEventsViewController(viewModel: viewModel)

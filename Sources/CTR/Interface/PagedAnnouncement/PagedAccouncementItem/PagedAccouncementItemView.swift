@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewFeaturesItemView: ScrolledStackView {
+class PagedAnnouncementItemView: ScrolledStackView {
 	
 	private enum ViewTraits {
 		
@@ -31,7 +31,6 @@ final class NewFeaturesItemView: ScrolledStackView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
-		view.backgroundColor = C.forcedInformationImage()
 		return view
 	}()
 	
@@ -41,6 +40,8 @@ final class NewFeaturesItemView: ScrolledStackView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
 		view.alignment = .leading
+		view.distribution = .fill
+		// view.spacing = ViewTraits.titleSpacing // is this still needed? from Onboarding
 		return view
 	}()
 	
@@ -60,22 +61,30 @@ final class NewFeaturesItemView: ScrolledStackView {
 		return TextView()
 	}()
 	
+	let shouldShowWithFullWidthHeaderImage: Bool
+	
+	init(shouldShowWithFullWidthHeaderImage: Bool = false) {
+		self.shouldShowWithFullWidthHeaderImage = shouldShowWithFullWidthHeaderImage
+		super.init(frame: .zero)
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError()
+	}
+	
 	/// setup the views
 	override func setupViews() {
 		
 		super.setupViews()
 		backgroundColor = C.white()
 		
-		// No margins on the horizontal sides to display image full width
-		stackViewInset = UIEdgeInsets(top: ViewTraits.topMargin,
-									  left: 0,
-									  bottom: ViewTraits.margin,
-									  right: 0)
-		// Apply side margins for labels
-		bottomStackView.insets(.init(top: 0,
-									 leading: ViewTraits.margin,
-									 bottom: 0,
-									 trailing: ViewTraits.margin))
+		if shouldShowWithFullWidthHeaderImage {
+			// No margins on the horizontal sides to display image full width
+			stackViewInset = UIEdgeInsets(top: ViewTraits.topMargin, left: 0, bottom: ViewTraits.margin, right: 0)
+			
+			// Apply side margins for labels
+			bottomStackView.insets(.init(top: 0, leading: ViewTraits.margin, bottom: 0, trailing: ViewTraits.margin))
+		}
 	}
 	
 	/// Setup the hierarchy
@@ -93,9 +102,27 @@ final class NewFeaturesItemView: ScrolledStackView {
 		stackView.addArrangedSubview(bottomStackView)
 	}
 	
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
+
+		NSLayoutConstraint.activate([
+
+			imageView.heightAnchor.constraint(
+				lessThanOrEqualTo: heightAnchor,
+				multiplier: ViewTraits.imageHeightPercentage
+			)
+		])
+	}
+	
 	var image: UIImage? {
 		didSet {
 			imageView.image = image
+		}
+	}
+	
+	var imageBackgroundColor: UIColor? {
+		didSet {
+			imageView.backgroundColor = imageBackgroundColor
 		}
 	}
 	

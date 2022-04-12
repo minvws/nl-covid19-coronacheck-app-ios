@@ -10,14 +10,14 @@ import UIKit
 final class NewFeaturesItemViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: NewFeaturesItemViewModel
+	private let viewModel: PagedAnnouncementItemViewModel
 	
 	/// The view
-	let sceneView = NewFeaturesItemView()
+	let sceneView = PagedAnnouncementItemView(shouldShowWithFullWidthHeaderImage: true)
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: NewFeaturesItemViewModel) {
+	init(viewModel: PagedAnnouncementItemViewModel) {
 		
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -31,7 +31,7 @@ final class NewFeaturesItemViewController: BaseViewController {
 	
 	// MARK: View lifecycle
 	override func loadView() {
-		
+		sceneView.imageBackgroundColor = C.forcedInformationImage()
 		view = sceneView
 	}
 	

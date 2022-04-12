@@ -18,15 +18,13 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var greenCardLoader: GreenCardLoader!
 	private var environmentSpies: EnvironmentSpies!
-	private var identityCheckerSpy: IdentityCheckerSpy!
 	
 	override func setUp() {
 
 		super.setUp()
 
 		environmentSpies = setupEnvironmentSpies()
-		identityCheckerSpy = IdentityCheckerSpy()
-		identityCheckerSpy.stubbedCompareResult = true
+		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 		
 		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
 		/// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
@@ -47,7 +45,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [],
-			identityChecker: identityCheckerSpy,
 			greenCardLoader: greenCardLoader
 		)
 	}
@@ -1779,12 +1776,11 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	func test_identityMismatched() {
 		
 		// Given
-		identityCheckerSpy.stubbedCompareResult = false
+		environmentSpies.identityCheckerSpy.stubbedCompareResult = false
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			identityChecker: identityCheckerSpy,
 			greenCardLoader: environmentSpies.greenCardLoaderSpy
 		)
 		

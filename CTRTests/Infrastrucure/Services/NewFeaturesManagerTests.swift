@@ -55,12 +55,12 @@ class NewFeaturesManagerTests: XCTestCase {
 		expect(self.sut.needsUpdating) == false
 	}
 	
-	func testConsentGiven() {
+	func testUserHasViewedNewFeatureIntro() {
 		
 		// Given
 		
 		// When
-		sut.consentGiven()
+		sut.userHasViewedNewFeatureIntro()
 		
 		// Then
 		expect(self.secureUserSettingsSpy.invokedForcedInformationData?.lastSeenVersion) == sut.factory?.information.version
@@ -70,10 +70,11 @@ class NewFeaturesManagerTests: XCTestCase {
 		
 		// Given
 		let expectedPage = NewFeatureItem(
+			title: L.holderUpdatepageTitleTab(),
+			content: L.holderUpdatepageContentTab(),
 			image: I.onboarding.tabbarNL(),
 			tagline: L.holderUpdatepageTagline(),
-			title: L.holderUpdatepageTitleTab(),
-			content: L.holderUpdatepageContentTab()
+			step: 0
 		)
 		
 		// When
@@ -87,10 +88,11 @@ class NewFeaturesManagerTests: XCTestCase {
 		
 		// Given
 		let expectedPage = NewFeatureItem(
+			title: L.new_in_app_risksetting_title(),
+			content: L.new_in_app_risksetting_subtitle(),
 			image: I.onboarding.tabbarNL(),
 			tagline: L.new_in_app_subtitle(),
-			title: L.new_in_app_risksetting_title(),
-			content: L.new_in_app_risksetting_subtitle()
+			step: 0
 		)
 		sut.factory = VerifierNewFeaturesFactory()
 		
