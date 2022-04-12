@@ -23,6 +23,7 @@ struct Environment {
 	var disclosurePolicyManager: DisclosurePolicyManaging
 	var featureFlagManager: FeatureFlagManaging
 	var greenCardLoader: GreenCardLoading
+	var identityChecker: IdentityCheckerProtocol
 	var jailBreakDetector: JailBreakProtocol
 	var mappingManager: MappingManaging
 	var networkManager: NetworkManaging
@@ -50,6 +51,7 @@ struct Environment {
 		disclosurePolicyManager: DisclosurePolicyManaging,
 		featureFlagManager: FeatureFlagManaging,
 		greenCardLoader: GreenCardLoading,
+		identityChecker: IdentityCheckerProtocol,
 		jailBreakDetector: JailBreakProtocol,
 		mappingManager: MappingManaging,
 		networkManager: NetworkManaging,
@@ -76,6 +78,7 @@ struct Environment {
 		self.disclosurePolicyManager = disclosurePolicyManager
 		self.featureFlagManager = featureFlagManager
 		self.greenCardLoader = greenCardLoader
+		self.identityChecker = identityChecker
 		self.jailBreakDetector = jailBreakDetector
 		self.mappingManager = mappingManager
 		self.networkManager = networkManager
@@ -140,6 +143,7 @@ private let greenCardLoader = GreenCardLoader(
 	remoteConfigManager: remoteConfigManager,
 	userSettings: userSettings
 )
+private let identityChecker = IdentityChecker()
 private let jailBreakDetector = JailBreakDetector()
 private let mappingManager = MappingManager(remoteConfigManager: remoteConfigManager)
 private let onboardingManager = OnboardingManager(secureUserSettings: secureUserSettings)
@@ -208,6 +212,7 @@ private let environment: () -> Environment = {
 		disclosurePolicyManager: disclosurePolicyManager,
 		featureFlagManager: featureFlagManager,
 		greenCardLoader: greenCardLoader,
+		identityChecker: identityChecker,
 		jailBreakDetector: jailBreakDetector,
 		mappingManager: mappingManager,
 		networkManager: networkManager,

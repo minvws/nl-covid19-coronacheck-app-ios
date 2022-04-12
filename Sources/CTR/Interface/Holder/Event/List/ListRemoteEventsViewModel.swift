@@ -17,7 +17,6 @@ class ListRemoteEventsViewModel: Logging {
 	private let greenCardLoader: GreenCardLoading
 	let cryptoManager: CryptoManaging? = Current.cryptoManager
 	let mappingManager: MappingManaging = Current.mappingManager
-	private let identityChecker: IdentityCheckerProtocol
 
 	var eventMode: EventMode
 	var originalEventMode: EventMode?
@@ -48,7 +47,6 @@ class ListRemoteEventsViewModel: Logging {
 		eventMode: EventMode,
 		originalMode: EventMode? = nil,
 		remoteEvents: [RemoteEvent],
-		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
 		eventsMightBeMissing: Bool = false,
 		greenCardLoader: GreenCardLoading
 	) {
@@ -56,7 +54,6 @@ class ListRemoteEventsViewModel: Logging {
 		self.coordinator = coordinator
 		self.greenCardLoader = greenCardLoader
 		self.eventMode = eventMode
-		self.identityChecker = identityChecker
 		self.originalEventMode = originalMode
 		
 		viewState = .loading(content: Content(title: Strings.title(forEventMode: eventMode)))
@@ -119,7 +116,7 @@ class ListRemoteEventsViewModel: Logging {
 
 	internal func userWantsToMakeQR(remoteEvents: [RemoteEvent], completion: @escaping (Bool) -> Void) {
 
-		if identityChecker.compare(eventGroups: walletManager.listEventGroups(), with: remoteEvents) {
+		if Current.identityChecker.compare(eventGroups: walletManager.listEventGroups(), with: remoteEvents) {
 			storeAndSign(remoteEvents: remoteEvents, replaceExistingEventGroups: false, completion: completion)
 		} else {
 			showIdentityMismatch {
