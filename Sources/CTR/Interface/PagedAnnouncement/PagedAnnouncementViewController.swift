@@ -13,19 +13,21 @@ class PagedAnnouncementViewController: BaseViewController {
 	private let viewModel: PagedAnnouncementViewModel
 	
 	/// The view
-	let sceneView = PagedAnnouncementView()
+	let sceneView = PagedAnnouncementView(shouldShowWithVWSRibbon: false)
 	
 	/// The page controller
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 	
 	/// Disable swiping to launch screen
 	override var enableSwipeBack: Bool { false }
+	let allowsBackButton: Bool
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementViewModel) {
+	init(viewModel: PagedAnnouncementViewModel, allowsBackButton: Bool) {
 		
 		self.viewModel = viewModel
+		self.allowsBackButton = allowsBackButton
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -48,19 +50,16 @@ class PagedAnnouncementViewController: BaseViewController {
 		
 		super.viewDidLoad()
 		
-		setupTranslucentNavigationBar()
-		
 		setupPageController()
+		
 		viewModel.$pages.binding = { [weak self] in
-
-			guard let self = self else {
-				return
-			}
+			guard let self = self else { return }
 			
 			self.pageViewController.pages = $0.compactMap { page in
-				guard let onboardingPageViewController = self.viewModel.getOnboardingStep(page) as? PagedAnnouncementItemViewController else { return nil }
-				onboardingPageViewController.delegate = self
-				return onboardingPageViewController
+				guard let viewController = self.viewModel.getStep(page) as? PagedAnnouncementItemViewController else { return nil }
+				self.sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)
+				viewController.delegate = self
+				return viewController
 			}
 			
 			self.sceneView.pageControl.numberOfPages = $0.count
@@ -72,7 +71,13 @@ class PagedAnnouncementViewController: BaseViewController {
 		
 		viewModel.$enabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 		
-		setupBackButton()
+		if allowsBackButton {
+			setupBackButton()
+			setupTranslucentNavigationBar()
+			navigationController?.isNavigationBarHidden = false
+		} else {
+			navigationController?.isNavigationBarHidden = true
+		}
 	}
 	
 	/// Create a custom back button so we can catch the tap on the back button.
@@ -113,7 +118,7 @@ class PagedAnnouncementViewController: BaseViewController {
 		
 		if pageViewController.isLastPage {
 			// We tapped on the last page
-			viewModel.finishOnboarding()
+			viewModel.finish()
 		} else {
 			// Move to the next page
 			pageViewController.nextPage()
@@ -126,7 +131,7 @@ private extension PagedAnnouncementViewController {
 	func updateFooterView(for pageIndex: Int) {
 		guard let pages = pageViewController.pages, !pages.isEmpty else { return }
 		guard let viewController = pages[pageIndex] as? PagedAnnouncementItemViewController else {
-			assertionFailure("View controller should be of type OnboardingPageViewController")
+			assertionFailure("View controller should be of type PagedAnnouncementItemViewController")
 			return
 		}
 		sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)

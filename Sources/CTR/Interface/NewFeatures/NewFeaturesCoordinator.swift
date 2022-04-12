@@ -8,26 +8,6 @@
 import UIKit
 import SafariServices
 
-/// The resulting actions in this scene
-enum NewFeaturesScreenResult {
-	
-	/// The user viewed the update page
-	case updateItemViewed
-
-	/// The user gave consent
-	case consentAgreed
-
-	/// The user viewed the content
-	case consentViewed
-}
-
-protocol NewFeaturesCoordinatorDelegate: AnyObject {
-
-	/// The user did finish the consent scene
-	/// - Parameter result: the result of the scene
-	func didFinish(_ result: NewFeaturesScreenResult)
-}
-
 protocol NewFeaturesDelegate: AnyObject {
 
 	/// The new feature information flow is finished
@@ -70,10 +50,14 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 		
 		if let newFeatureItem = newFeaturesManager.getNewFeatureItem() {
 			
-			let viewController = NewFeaturesViewController(
-				viewModel: NewFeaturesViewModel(
-					coordinator: self,
-					pages: [newFeatureItem]))
+			let viewController = PagedAnnouncementViewController(
+				viewModel: PagedAnnouncementViewModel(
+					delegate: self,
+					pages: [newFeatureItem],
+					itemsShouldShowWithFullWidthHeaderImage: true
+				),
+				allowsBackButton: false
+			)
 			navigationController.viewControllers = [viewController]
 		} else {
 
@@ -90,39 +74,12 @@ class NewFeaturesCoordinator: Coordinator, Logging {
     }
 }
 
-// MARK: - NewFeaturesCoordinatorDelegate & OpenUrlProtocol
+// MARK: - PagedAnnouncementDelegate
 
-extension NewFeaturesCoordinator: NewFeaturesCoordinatorDelegate, OpenUrlProtocol {
-
-	/// The user did finish the consent scene
-	/// - Parameter result: the result of the scene
-	func didFinish(_ result: NewFeaturesScreenResult) {
-
-		switch result {
-			case .updateItemViewed:
-				logVerbose("NewFeaturesCoordinator: Update page was viewed")
-				
-			case .consentAgreed:
-				logVerbose("NewFeaturesCoordinator: Consent was given")
-
-			case .consentViewed:
-				logVerbose("NewFeaturesCoordinator: Consent was viewed")
-		}
+extension NewFeaturesCoordinator: PagedAnnouncementDelegate {
+	
+	func didFinishPagedAnnouncement() {
 		
 		delegate?.finishNewFeatures()
-	}
-
-	/// Open a url
-	/// - Parameters:
-	///   - url: The url to open
-	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
-	func openUrl(_ url: URL, inApp: Bool) {
-
-		if inApp {
-			let safariController = SFSafariViewController(url: url)
-			navigationController.present(safariController, animated: true)
-		} else {
-			UIApplication.shared.open(url)
-		}
 	}
 }

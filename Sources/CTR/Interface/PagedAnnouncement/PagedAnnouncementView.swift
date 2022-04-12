@@ -7,23 +7,38 @@
 
 import UIKit
 
-final class NewFeaturesView: BaseView {
+class PagedAnnouncementView: BaseView {
 	
 	/// The display constants
-	private enum ViewTraits {
-		
-		// Dimensions
-		static let buttonHeight: CGFloat = 52
+	private struct ViewTraits {
 		
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let pageControlMargin: CGFloat = 12.0
+		static let ribbonOffset: CGFloat = 15.0
+		static let pageControlSpacing: CGFloat = 16.0
+		static let pageControlSpacingSmallScreen: CGFloat = 8.0
 	}
-	
+
+	/// The government ribbon
+	let ribbonView: UIImageView = {
+		
+		let view = UIImageView(image: I.onboarding.rijkslint())
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	/// The container for the the onboarding views
 	let containerView: UIView = {
 
 		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
+	/// The control buttons
+	let pageControl: PageControl = {
+		
+		let view = PageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -38,11 +53,24 @@ final class NewFeaturesView: BaseView {
 		let footerView = FooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false
 		footerView.buttonStackView.alignment = .center
+		footerView.buttonStackView.spacing = UIDevice.current.isSmallScreen ? ViewTraits.pageControlSpacingSmallScreen : ViewTraits.pageControlSpacing
+		footerView.topButtonConstraint?.constant = 0
 		return footerView
 	}()
 	
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
 	
+	let shouldShowWithVWSRibbon: Bool
+	
+	init(shouldShowWithVWSRibbon: Bool) {
+		self.shouldShowWithVWSRibbon = shouldShowWithVWSRibbon
+		super.init(frame: .zero)
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError()
+	}
+ 
 	/// setup the views
 	override func setupViews() {
 		
@@ -54,8 +82,13 @@ final class NewFeaturesView: BaseView {
 	override func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
+		
+		if shouldShowWithVWSRibbon {
+			addSubview(ribbonView)
+		}
 		addSubview(containerView)
 		addSubview(footerButtonView)
+		footerButtonView.buttonStackView.insertArrangedSubview(pageControl, at: 0)
 	}
 	
 	/// Setup the constraints
@@ -63,10 +96,19 @@ final class NewFeaturesView: BaseView {
 
 		super.setupViewConstraints()
 		
+		if shouldShowWithVWSRibbon {
+			NSLayoutConstraint.activate([
+				ribbonView.centerXAnchor.constraint(equalTo: centerXAnchor),
+				ribbonView.topAnchor.constraint(
+					equalTo: topAnchor,
+					constant: UIDevice.current.hasNotch ? 0 : -ViewTraits.ribbonOffset
+				)
+			])
+		}
+		
 		NSLayoutConstraint.activate([
-
 			// ImageContainer
-			containerView.topAnchor.constraint(equalTo: topAnchor),
+			containerView.topAnchor.constraint(equalTo: shouldShowWithVWSRibbon ? ribbonView.bottomAnchor : topAnchor),
 			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			
@@ -75,6 +117,18 @@ final class NewFeaturesView: BaseView {
 			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
+	}
+
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		
+		if shouldShowWithVWSRibbon {
+			// Ribbon view
+			ribbonView.isAccessibilityElement = true
+			ribbonView.accessibilityLabel = L.generalGovernmentLogo()
+		}
 	}
 	
 	// MARK: - Public Access

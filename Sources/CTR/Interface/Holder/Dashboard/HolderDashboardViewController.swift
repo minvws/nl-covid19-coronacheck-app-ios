@@ -103,6 +103,8 @@ class HolderDashboardViewController: BaseViewController {
 			self?.viewModel.userTappedMenuButton()
 		}
 		
+		navigationController?.setNavigationBarHidden(false, animated: false)
+		
 		// Forces VoiceOver focus on menu button instead of tab bar on start up
 		UIAccessibility.post(notification: .screenChanged, argument: navigationItem.leftBarButtonItem)
 	}

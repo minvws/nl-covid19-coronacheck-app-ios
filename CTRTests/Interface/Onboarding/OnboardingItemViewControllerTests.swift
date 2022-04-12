@@ -19,6 +19,7 @@ class PagedAnnouncementItemViewControllerTests: XCTestCase {
 		title: "Onboarding Title",
 		content: "Onboarding Message",
 		image: I.onboarding.safely(),
+		imageBackgroundColor: .white,
 		tagline: nil,
 		step: 1
 	)
@@ -33,8 +34,9 @@ class PagedAnnouncementItemViewControllerTests: XCTestCase {
 		coordinatorSpy = OnboardingCoordinatorSpy()
 		sut = PagedAnnouncementItemViewController(
 			viewModel: PagedAnnouncementItemViewModel(
-				newFeatureItem: page
-			)
+				item: page
+			),
+			shouldShowWithFullWidthHeaderImage: false
 		)
 		window = UIWindow()
 	}

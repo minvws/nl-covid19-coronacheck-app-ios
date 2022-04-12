@@ -104,6 +104,7 @@ class SharedCoordinatorTests: XCTestCase {
 			title: "",
 			content: "",
 			image: nil,
+			imageBackgroundColor: .white,
 			tagline: "",
 			step: 0
 		)
