@@ -236,8 +236,6 @@ extension SharedCoordinator: NewFeaturesDelegate {
 			removeChildCoordinator(newFeaturesCoordinator)
 		}
 		
-		newFeaturesManager.userHasViewedNewFeatureIntro()
-
 		// Navigate to start
 		start()
 	}
