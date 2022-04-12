@@ -15,10 +15,11 @@ class PagedAnnouncementItemViewControllerTests: XCTestCase {
 
 	var coordinatorSpy = OnboardingCoordinatorSpy()
 
-	let page = OnboardingPage(
+	let page = NewFeatureItem(
 		title: "Onboarding Title",
-		message: "Onboarding Message",
+		content: "Onboarding Message",
 		image: I.onboarding.safely(),
+		tagline: nil,
 		step: 1
 	)
 
@@ -32,7 +33,7 @@ class PagedAnnouncementItemViewControllerTests: XCTestCase {
 		coordinatorSpy = OnboardingCoordinatorSpy()
 		sut = PagedAnnouncementItemViewController(
 			viewModel: PagedAnnouncementItemViewModel(
-				onboardingInfo: page
+				newFeatureItem: page
 			)
 		)
 		window = UIWindow()
@@ -64,7 +65,7 @@ class PagedAnnouncementItemViewControllerTests: XCTestCase {
 		// Then
 		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, page.title, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, page.message, "Message should match")
+		XCTAssertEqual(strongSut.sceneView.content, page.content, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.image, page.image, "Image should match")
 	}
 }
