@@ -17,7 +17,7 @@ protocol NewFeaturesManaging {
 	
 	/// Get a new feature item
 	/// - Returns: optional item
-	func getNewFeatureItem() -> NewFeatureItem?
+	func pagedAnnouncementItem() -> PagedAnnoucementItem?
 
 	/// User has seen the intro for the new feature, update the version
 	func userHasViewedNewFeatureIntro()
@@ -66,7 +66,7 @@ class NewFeaturesManager: NewFeaturesManaging {
 		return forcedInformationData.lastSeenVersion < currentVersion
 	}
 	
-	func getNewFeatureItem() -> NewFeatureItem? {
+	func pagedAnnouncementItem() -> PagedAnnoucementItem? {
 
 		return factory?.information.pages.first
 	}

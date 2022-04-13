@@ -13,12 +13,12 @@ class PagedAnnouncementViewModel {
 	private let itemsShouldShowWithFullWidthHeaderImage: Bool
 	
 	/// The pages for onboarding
-	@Bindable private(set) var pages: [NewFeatureItem]
+	@Bindable private(set) var pages: [PagedAnnoucementItem]
 	@Bindable private(set) var enabled: Bool
 	
 	init(
 		delegate: PagedAnnouncementDelegate,
-		pages: [NewFeatureItem],
+		pages: [PagedAnnoucementItem],
 		itemsShouldShowWithFullWidthHeaderImage: Bool) {
 		
 		self.delegate = delegate
@@ -29,7 +29,7 @@ class PagedAnnouncementViewModel {
 	
 	/// Add an onboarding step
 	/// - Parameter info: the info for the onboarding step
-	func getStep(_ item: NewFeatureItem) -> UIViewController {
+	func getStep(_ item: PagedAnnoucementItem) -> UIViewController {
 		
 		let viewController = PagedAnnouncementItemViewController(
 			viewModel: PagedAnnouncementItemViewModel(

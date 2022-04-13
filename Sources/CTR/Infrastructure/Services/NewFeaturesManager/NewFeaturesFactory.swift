@@ -17,7 +17,7 @@ struct HolderNewFeaturesFactory: NewFeaturesFactory {
 	var information: NewFeatureInformation {
 		
 		return .init(
-			pages: [NewFeatureItem(
+			pages: [PagedAnnoucementItem(
 				title: L.holderUpdatepageTitleTab(),
 				content: L.holderUpdatepageContentTab(),
 				image: HolderNewFeaturesFactory.isNL ? I.onboarding.tabbarNL() : I.onboarding.tabbarEN(),
@@ -39,7 +39,7 @@ struct VerifierNewFeaturesFactory: NewFeaturesFactory {
 	var information: NewFeatureInformation {
 		
 		return .init(
-			pages: [NewFeatureItem(
+			pages: [PagedAnnoucementItem(
 				title: L.new_in_app_risksetting_title(),
 				content: L.new_in_app_risksetting_subtitle(),
 				image: I.onboarding.tabbarNL(),

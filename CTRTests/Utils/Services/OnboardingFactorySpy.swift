@@ -12,9 +12,9 @@ class OnboardingFactorySpy: OnboardingFactoryProtocol {
 
 	var invokedCreate = false
 	var invokedCreateCount = 0
-	var stubbedCreateResult: [NewFeatureItem]! = []
+	var stubbedCreateResult: [PagedAnnoucementItem]! = []
 
-	func create() -> [NewFeatureItem] {
+	func create() -> [PagedAnnoucementItem] {
 		invokedCreate = true
 		invokedCreateCount += 1
 		return stubbedCreateResult

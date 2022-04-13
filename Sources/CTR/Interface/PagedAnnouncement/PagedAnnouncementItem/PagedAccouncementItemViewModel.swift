@@ -17,7 +17,7 @@ class PagedAnnouncementItemViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - newFeatureItem: the container with new feature info
-	init(item: NewFeatureItem) {
+	init(item: PagedAnnoucementItem) {
 		
 		image = item.image
 		tagline = item.tagline

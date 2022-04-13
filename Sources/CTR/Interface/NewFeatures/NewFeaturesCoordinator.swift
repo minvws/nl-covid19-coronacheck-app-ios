@@ -48,7 +48,7 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 
 		logVerbose("Starting New Features Information Flow")
 		
-		if let newFeatureItem = newFeaturesManager.getNewFeatureItem() {
+		if let newFeatureItem = newFeaturesManager.pagedAnnouncementItem() {
 			
 			let viewController = PagedAnnouncementViewController(
 				viewModel: PagedAnnouncementViewModel(
