@@ -79,10 +79,10 @@ class NewFeaturesManagerTests: XCTestCase {
 		)
 		
 		// When
-		let actualPage = sut.pagedAnnouncementItem()
+		let actualPage = sut.pagedAnnouncementItems()
 		
 		// Then
-		expect(actualPage) == expectedPage
+		expect(actualPage) == [expectedPage]
 	}
 	
 	func test_getUpdatePage_verifier() {
@@ -99,9 +99,9 @@ class NewFeaturesManagerTests: XCTestCase {
 		sut.factory = VerifierNewFeaturesFactory()
 		
 		// When
-		let actualPage = sut.pagedAnnouncementItem()
+		let actualPage = sut.pagedAnnouncementItems()
 		
 		// Then
-		expect(actualPage) == expectedPage
+		expect(actualPage) == [expectedPage]
 	}
 }

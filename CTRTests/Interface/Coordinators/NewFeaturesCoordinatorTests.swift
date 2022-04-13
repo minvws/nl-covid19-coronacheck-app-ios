@@ -39,14 +39,14 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 	func test_start_shouldInvokeFinishNewFeatures() {
 		
 		// Given
-		newFeaturesManagerSpy.stubbedPagedAnnouncementItemResult = PagedAnnoucementItem(
+		newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = [PagedAnnoucementItem(
 			title: "test",
 			content: "test",
 			image: nil,
 			imageBackgroundColor: .white,
 			tagline: "test",
 			step: 0
-		)
+		)]
 		
 		// When
 		sut.start()
@@ -60,7 +60,7 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 	func test_start_withoutUpdatePage() {
 		
 		// Given
-		newFeaturesManagerSpy.stubbedPagedAnnouncementItemResult = nil
+		newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = nil
 		
 		// When
 		sut.start()
@@ -74,7 +74,7 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 	func testStartWithoutConsent() {
 
 		// Given
-		newFeaturesManagerSpy.stubbedPagedAnnouncementItemResult = nil
+		newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = nil
 
 		// When
 		sut.start()
