@@ -258,7 +258,7 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 			   let jsonData = try? JSONEncoder().encode(EventFlow.DccEvent(credential: "test", couplingCode: "test")) {
 				eventGroup = EventGroupModel.create(
 					type: EventMode.recovery,
-					providerIdentifier: "CoronaCheck",
+					providerIdentifier: "DCC",
 					maxIssuedAt: Date(),
 					jsonData: jsonData,
 					wallet: wallet,

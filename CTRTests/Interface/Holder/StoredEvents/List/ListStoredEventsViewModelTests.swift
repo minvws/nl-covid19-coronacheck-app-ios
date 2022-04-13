@@ -117,7 +117,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
-		expect(group.header) == "Opgehaald bij CoronaCheck"
+		expect(group.header) == "ngescand bewijs"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
 		expect(group.action).toNot(beNil())
 		expect(group.rows).to(haveCount(1))
@@ -235,7 +235,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
-		expect(group.header) == "Opgehaald bij CoronaCheck"
+		expect(group.header) == "ngescand bewijs"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
 		expect(group.action).toNot(beNil())
 		expect(group.rows).to(haveCount(1))
@@ -349,7 +349,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
-		expect(group.header) == "Opgehaald bij CoronaCheck"
+		expect(group.header) == "ngescand bewijs"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
 		expect(group.action).toNot(beNil())
 		expect(group.rows).to(haveCount(1))
@@ -473,7 +473,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 			   let jsonData = try? JSONEncoder().encode(EventFlow.DccEvent(credential: "test", couplingCode: "test")) {
 				eventGroup = EventGroupModel.create(
 					type: EventMode.recovery,
-					providerIdentifier: "CoronaCheck",
+					providerIdentifier: "DCC",
 					maxIssuedAt: Date(),
 					jsonData: jsonData,
 					wallet: wallet,
