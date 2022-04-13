@@ -10,6 +10,16 @@ import XCTest
 
 class DisclosurePolicyManagingSpy: DisclosurePolicyManaging {
 
+	var invokedFactoryGetter = false
+	var invokedFactoryGetterCount = 0
+	var stubbedFactory: NewDisclosurePolicyFactory!
+
+	var factory: NewDisclosurePolicyFactory {
+		invokedFactoryGetter = true
+		invokedFactoryGetterCount += 1
+		return stubbedFactory
+	}
+
 	var invokedObservatoryGetter = false
 	var invokedObservatoryGetterCount = 0
 	var stubbedObservatory: Observatory<Void>!

@@ -48,9 +48,12 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 			viewModel: PagedAnnouncementViewModel(
 				delegate: delegateSpy,
 				pages: [page],
-				itemsShouldShowWithFullWidthHeaderImage: false
+				itemsShouldShowWithFullWidthHeaderImage: false,
+				shouldShowWithVWSRibbon: true
 			),
-			allowsBackButton: false
+			allowsBackButton: false,
+			allowsCloseButton: false,
+			allowsNextButton: false
 		)
 		window = UIWindow()
 	}
@@ -95,9 +98,12 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 			viewModel: PagedAnnouncementViewModel(
 				delegate: delegateSpy,
 				pages: [page, page],
-				itemsShouldShowWithFullWidthHeaderImage: false
+				itemsShouldShowWithFullWidthHeaderImage: false,
+				shouldShowWithVWSRibbon: true
 			),
-			allowsBackButton: false
+			allowsBackButton: false,
+			allowsCloseButton: false,
+			allowsNextButton: false
 		)
 		
 		loadView()
@@ -117,9 +123,12 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 			viewModel: PagedAnnouncementViewModel(
 				delegate: delegateSpy,
 				pages: [page, page],
-				itemsShouldShowWithFullWidthHeaderImage: false
+				itemsShouldShowWithFullWidthHeaderImage: false,
+				shouldShowWithVWSRibbon: true
 			),
-			allowsBackButton: true
+			allowsBackButton: true,
+			allowsCloseButton: false,
+			allowsNextButton: false
 		)
 		loadView()
 
@@ -138,9 +147,12 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 			viewModel: PagedAnnouncementViewModel(
 				delegate: delegateSpy,
 				pages: [page, page],
-				itemsShouldShowWithFullWidthHeaderImage: false
+				itemsShouldShowWithFullWidthHeaderImage: false,
+				shouldShowWithVWSRibbon: true
 			),
-			allowsBackButton: false
+			allowsBackButton: false,
+			allowsCloseButton: false,
+			allowsNextButton: false
 		)
 		loadView()
 		sut.primaryButtonTapped()
@@ -160,9 +172,12 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 			viewModel: PagedAnnouncementViewModel(
 				delegate: delegateSpy,
 				pages: [page, page],
-				itemsShouldShowWithFullWidthHeaderImage: false
+				itemsShouldShowWithFullWidthHeaderImage: false,
+				shouldShowWithVWSRibbon: true
 			),
-			allowsBackButton: false
+			allowsBackButton: false,
+			allowsCloseButton: false,
+			allowsNextButton: false
 		)
 		loadView()
 		sut.primaryButtonTapped()
