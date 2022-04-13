@@ -15,7 +15,7 @@ class PagedAnnouncementItemViewControllerTests: XCTestCase {
 
 	var coordinatorSpy = OnboardingCoordinatorSpy()
 
-	let page = NewFeatureItem(
+	let page = PagedAnnoucementItem(
 		title: "Onboarding Title",
 		content: "Onboarding Message",
 		image: I.onboarding.safely(),

@@ -100,7 +100,7 @@ class SharedCoordinatorTests: XCTestCase {
 		
 		// Given
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
-		environmentSpies.newFeaturesManagerSpy.stubbedGetNewFeatureItemResult = NewFeatureItem(
+		environmentSpies.newFeaturesManagerSpy.stubbedPagedAnnouncementItemResult = PagedAnnoucementItem(
 			title: "",
 			content: "",
 			image: nil,

@@ -67,7 +67,7 @@ class OnboardingCoordinator: Coordinator, Logging {
 	}
 	
 	/// The onboarding pages
-	var onboardingPages: [NewFeatureItem] = []
+	var onboardingPages: [PagedAnnoucementItem] = []
 	
 	// Designated starter method
 	func start() {
