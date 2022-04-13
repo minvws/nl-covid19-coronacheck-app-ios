@@ -150,9 +150,9 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 	func test_content_multipleVaccinationEvent() throws {
 		
 		// Given
-		let eventGroup = try XCTUnwrap(createDCCEventGroup())
+		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeMultipleVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+		
 		setupSut()
 
 		// When
@@ -169,8 +169,9 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 	func test_content_vaccinationDCCEvent() throws {
 		
 		// Given
-		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeMultipleVaccinationResultWrapper))
+		let eventGroup = try XCTUnwrap(createDCCEventGroup())
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		setupSut()
 
 		// When
