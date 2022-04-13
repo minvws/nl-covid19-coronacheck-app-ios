@@ -54,7 +54,8 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 				viewModel: PagedAnnouncementViewModel(
 					delegate: self,
 					pages: pagedAnnouncementItems,
-					itemsShouldShowWithFullWidthHeaderImage: true
+					itemsShouldShowWithFullWidthHeaderImage: true,
+					shouldShowWithVWSRibbon: false
 				),
 				allowsBackButton: false,
 				allowsCloseButton: false,

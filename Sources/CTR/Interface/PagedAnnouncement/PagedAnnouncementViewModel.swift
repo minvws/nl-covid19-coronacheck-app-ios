@@ -10,6 +10,8 @@ import UIKit
 class PagedAnnouncementViewModel {
 	
 	weak var delegate: PagedAnnouncementDelegate?
+	
+	let shouldShowWithVWSRibbon: Bool
 	private let itemsShouldShowWithFullWidthHeaderImage: Bool
 	
 	/// The pages for onboarding
@@ -19,11 +21,14 @@ class PagedAnnouncementViewModel {
 	init(
 		delegate: PagedAnnouncementDelegate,
 		pages: [PagedAnnoucementItem],
-		itemsShouldShowWithFullWidthHeaderImage: Bool) {
+		itemsShouldShowWithFullWidthHeaderImage: Bool,
+		shouldShowWithVWSRibbon: Bool
+	) {
 		
 		self.delegate = delegate
 		self.pages = pages
 		self.enabled = true
+		self.shouldShowWithVWSRibbon = shouldShowWithVWSRibbon
 		self.itemsShouldShowWithFullWidthHeaderImage = itemsShouldShowWithFullWidthHeaderImage
 	}
 	

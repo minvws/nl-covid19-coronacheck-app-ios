@@ -13,7 +13,7 @@ class PagedAnnouncementViewController: BaseViewController {
 	private let viewModel: PagedAnnouncementViewModel
 	
 	/// The view
-	let sceneView = PagedAnnouncementView(shouldShowWithVWSRibbon: false)
+	lazy var sceneView = PagedAnnouncementView(shouldShowWithVWSRibbon: viewModel.shouldShowWithVWSRibbon)
 	
 	/// The page controller
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -28,9 +28,9 @@ class PagedAnnouncementViewController: BaseViewController {
 	/// Initializer
 	/// - Parameter viewModel: view model
 	init(viewModel: PagedAnnouncementViewModel,
-		 allowsBackButton: Bool,
-		 allowsCloseButton: Bool,
-		 allowsNextButton: Bool
+		allowsBackButton: Bool,
+		allowsCloseButton: Bool,
+		allowsNextButton: Bool
 	) {
 		
 		self.viewModel = viewModel
