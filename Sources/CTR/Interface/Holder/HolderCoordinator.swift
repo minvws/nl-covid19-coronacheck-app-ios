@@ -707,37 +707,41 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 	}
 }
 
-extension HolderCoordinator {
+extension HolderCoordinator: NewDisclosurePolicyDelegate {
 	
-	func showNewDisclosurePolicy() {
-		guard navigationController.presentedViewController == nil else { return }
-		guard let viewModel = NewDisclosurePolicyViewModel(coordinator: self) else { return }
-		
-		let destination = NavigationController(
-			rootViewController: NewDisclosurePolicyViewController(viewModel: viewModel)
+	func showNewDisclosurePolicy(pagedAnnouncmentItems: [NewFeatureItem]) {
+		let coordinator = NewDisclosurePolicyCoordinator(
+			navigationController: navigationController,
+			pagedAnnouncmentItems: pagedAnnouncmentItems,
+			delegate: self
 		)
-		destination.modalPresentationStyle = .fullScreen
-		navigationController.present(destination, animated: true) {
-			Current.disclosurePolicyManager.setDisclosurePolicyUpdateHasBeenSeen()
-		}
+		startChildCoordinator(coordinator)
+	}
+	
+	func finishNewDisclosurePolicy() {
+		removeChildCoordinator()
 	}
 	
 	func handleDisclosurePolicyUpdates() {
-		
+ 
 		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
-			// No Disclosre Policy modal if we still need to finish onboarding
-			return
-		}
-		
-		guard Current.disclosurePolicyManager.hasChanges else {
+			// No Disclosure Policy modal if we still need to finish onboarding
 			return
 		}
 		
 		guard Current.remoteConfigManager.storedConfiguration.disclosurePolicies != nil else {
 			return
 		}
+
+		guard Current.disclosurePolicyManager.hasChanges else {
+			return
+		}
 		
-		showNewDisclosurePolicy()
+		guard let pagedAnnouncementItems = Current.disclosurePolicyManager.factory.create() else {
+			return
+		}
+		
+		showNewDisclosurePolicy(pagedAnnouncmentItems: pagedAnnouncementItems)
 	}
 }
 
