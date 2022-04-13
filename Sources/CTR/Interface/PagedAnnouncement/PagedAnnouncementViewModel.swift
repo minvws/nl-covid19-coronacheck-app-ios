@@ -47,6 +47,10 @@ class PagedAnnouncementViewModel {
 		return viewController
 	}
 	
+	func primaryButtonTitle(forStep step: Int) -> String {
+		return pages[step].nextButtonTitle ?? L.generalNext()
+	}
+	
 	/// User has finished viewing the finished the pages
 	func finish() {
 		

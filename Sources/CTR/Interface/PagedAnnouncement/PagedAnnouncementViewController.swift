@@ -76,7 +76,6 @@ class PagedAnnouncementViewController: BaseViewController {
 			self.updateFooterView(for: 0)
 		}
 		
-		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		
 		viewModel.$enabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
@@ -155,6 +154,8 @@ private extension PagedAnnouncementViewController {
 			return
 		}
 		sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)
+		
+		sceneView.primaryButton.setTitle(viewModel.primaryButtonTitle(forStep: pageIndex), for: .normal)
 	}
 }
 

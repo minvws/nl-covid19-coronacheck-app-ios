@@ -30,9 +30,9 @@ struct NewDisclosurePolicyFactory: NewDisclosurePolicyFactoryProtocol {
 			)]
 		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
 			
-			// Special case: 0G -> 3G
 			if Current.userSettings.lastKnownConfigDisclosurePolicy == [] {
 				
+				// Special case: 0G -> 3G
 				return [
 					NewFeatureItem(
 						title: L.holder_newintheapp_content_only3G_title(),
@@ -48,11 +48,11 @@ struct NewDisclosurePolicyFactory: NewDisclosurePolicyFactoryProtocol {
 						image: I.disclosurePolicy.dutchAndInternationalQRCards(),
 						imageBackgroundColor: nil,
 						tagline: L.general_newintheapp(),
-						step: 0
+						step: 0,
+						nextButtonTitle: L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
 					)
 				]
-			}
-			else {
+			} else {
 				
 				return [NewFeatureItem(
 					title: L.holder_newintheapp_content_only3G_title(),
