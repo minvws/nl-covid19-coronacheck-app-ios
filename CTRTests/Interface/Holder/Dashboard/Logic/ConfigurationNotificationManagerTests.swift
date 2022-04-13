@@ -16,12 +16,16 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 	var sut: ConfigurationNotificationManager!
 
 	private var userSettingsSpy: UserSettingsSpy!
+	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
 
 	override func setUp() {
 		super.setUp()
 
-		userSettingsSpy = UserSettingsSpy()
-		sut = ConfigurationNotificationManager(userSettings: userSettingsSpy)
+		let spies = setupEnvironmentSpies()
+		userSettingsSpy = spies.userSettingsSpy
+		remoteConfigManagerSpy = spies.remoteConfigManagerSpy
+		
+		sut = ConfigurationNotificationManager(userSettings: userSettingsSpy, remoteConfigManager: remoteConfigManagerSpy, now: { now })
 	}
 
 	override func tearDown() {
@@ -33,13 +37,9 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 
 		// Given
 		userSettingsSpy.stubbedConfigFetchedTimestamp = nil
-		let configuration = RemoteConfiguration.default
 
 		// When
-		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner(
-			now: now,
-			remoteConfiguration: configuration
-		)
+		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
 		expect(shouldShowAlmostOutOfDateBanner) == false
@@ -53,10 +53,7 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 		configuration.configAlmostOutOfDateWarningSeconds = nil
 
 		// When
-		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner(
-			now: now,
-			remoteConfiguration: configuration
-		)
+		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
 		expect(shouldShowAlmostOutOfDateBanner) == false
@@ -69,12 +66,26 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 		var configuration = RemoteConfiguration.default
 		configuration.configAlmostOutOfDateWarningSeconds = 60
 		configuration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
 
 		// When
-		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner(
-			now: now,
-			remoteConfiguration: configuration
-		)
+		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
+
+		// Then
+		expect(shouldShowAlmostOutOfDateBanner) == false
+	}
+
+	func test_shouldShowAlmostOutOfDateBanner_configIsAlmostOutOfDate_oldbehavior_should_not_show_banner() {
+
+		// Given
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(2 * minutes * ago).timeIntervalSince1970
+		var configuration = RemoteConfiguration.default
+		configuration.configAlmostOutOfDateWarningSeconds = 60
+		configuration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
+
+		// When
+		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
 		expect(shouldShowAlmostOutOfDateBanner) == false
@@ -83,16 +94,14 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 	func test_shouldShowAlmostOutOfDateBanner_configIsAlmostOutOfDate() {
 
 		// Given
-		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(2 * minutes * ago).timeIntervalSince1970
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval((3600 - 59) * seconds * ago).timeIntervalSince1970
 		var configuration = RemoteConfiguration.default
 		configuration.configAlmostOutOfDateWarningSeconds = 60
 		configuration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
 
 		// When
-		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner(
-			now: now,
-			remoteConfiguration: configuration
-		)
+		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
 		expect(shouldShowAlmostOutOfDateBanner) == true
@@ -105,12 +114,10 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 		var configuration = RemoteConfiguration.default
 		configuration.configAlmostOutOfDateWarningSeconds = 60
 		configuration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
 
 		// When
-		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner(
-			now: now,
-			remoteConfiguration: configuration
-		)
+		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
 		expect(shouldShowAlmostOutOfDateBanner) == true

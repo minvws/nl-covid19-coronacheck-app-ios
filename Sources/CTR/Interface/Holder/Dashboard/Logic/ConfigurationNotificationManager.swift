@@ -33,34 +33,37 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 	}
 
 	var shouldShowAlmostOutOfDateBanner: Bool {
-
-		logVerbose("ConfigurationNotificationManager Now: \(now())")
-		guard let almostOutOfDateTimestamp = almostOutOfDateTimeStamp else { return false }
-		
-		// The config should be older the minimum config interval
-		return almostOutOfDateTimestamp < now().timeIntervalSince1970
+		guard let configBecomesAlmostOutOfDateAt = configBecomesAlmostOutOfDateAt else { return false }
+		return configBecomesAlmostOutOfDateAt < now()
 	}
 
-	private var almostOutOfDateTimeStamp: TimeInterval? {
+	private var configBecomesAlmostOutOfDateAt: Date? {
 
 		guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
-			  let configAlmostOutOfDateWarningSeconds = remoteConfigManager.storedConfiguration.configAlmostOutOfDateWarningSeconds else {
-				  return nil
-			  }
+			  let configTTLSeconds = remoteConfigManager.storedConfiguration.configTTL,
+			  let configAlmostOutOfDateWarningSeconds = remoteConfigManager.storedConfiguration.configAlmostOutOfDateWarningSeconds
+		else {
+			return nil
+		}
 
-		logVerbose("ConfigurationNotificationManager configFetchedTimestamp: \(Date(timeIntervalSince1970: configFetchedTimestamp))")
-		logVerbose("ConfigurationNotificationManager configAlmostOutOfDateWarningSeconds: \(configAlmostOutOfDateWarningSeconds)")
-
-		return configFetchedTimestamp + TimeInterval(configAlmostOutOfDateWarningSeconds)
+		let configFetchedDate = Date(timeIntervalSince1970: configFetchedTimestamp)
+		
+		guard let configExpiryDate = Calendar.current.date(byAdding: .second, value: configTTLSeconds, to: configFetchedDate),
+			  let configAlmostExpiredDate = Calendar.current.date(byAdding: .second, value: -1 * configAlmostOutOfDateWarningSeconds, to: configExpiryDate)
+		else {
+			return nil
+		}
+		
+		return configAlmostExpiredDate
 	}
 
 	func registerForAlmostOutOfDateUpdate(callback: @escaping () -> Void) {
 
 		timer?.invalidate()
 		
-		guard let almostOutOfDateTimestamp = almostOutOfDateTimeStamp else { return }
+		guard let configBecomesAlmostOutOfDateAt = configBecomesAlmostOutOfDateAt else { return }
 
-		let timeBeforeConfigAlmostOutOfDateWarning = almostOutOfDateTimestamp - now().timeIntervalSince1970
+		let timeBeforeConfigAlmostOutOfDateWarning = configBecomesAlmostOutOfDateAt.timeIntervalSince1970 - now().timeIntervalSince1970
 		logVerbose("Starting a timer with \(timeBeforeConfigAlmostOutOfDateWarning) seconds before the config is almost out of date")
 
 		guard timeBeforeConfigAlmostOutOfDateWarning > 0 else {
