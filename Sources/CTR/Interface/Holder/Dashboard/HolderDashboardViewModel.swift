@@ -309,7 +309,7 @@ final class HolderDashboardViewModel: Logging {
 
 	private func registerForConfigAlmostOutOfDateUpdate() {
 
-		configurationNotificationManager.registerForAlmostOutOfDateUpdate() { [weak self] in
+		configurationNotificationManager.registerForAlmostOutOfDateUpdate { [weak self] in
 			guard let self = self else { return }
 			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner
 		}
