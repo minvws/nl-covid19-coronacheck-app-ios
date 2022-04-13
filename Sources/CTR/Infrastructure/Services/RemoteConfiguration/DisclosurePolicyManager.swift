@@ -11,14 +11,14 @@ protocol DisclosurePolicyManaging {
 	func setDisclosurePolicyUpdateHasBeenSeen()
 	func getDisclosurePolicies() -> [String]
 	
-	var factory: NewDisclosurePolicyFactory { get }
+	var factory: UpdatedDisclosurePolicyFactory { get }
 	var observatory: Observatory<Void> { get }
 	var hasChanges: Bool { get }
 }
 
 class DisclosurePolicyManager: Logging, DisclosurePolicyManaging {
 	
-	let factory: NewDisclosurePolicyFactory = NewDisclosurePolicyFactory()
+	let factory: UpdatedDisclosurePolicyFactory = UpdatedDisclosurePolicyFactory()
 	
 	// Mechanism for registering for external state change notifications:
 	let observatory: Observatory<Void>

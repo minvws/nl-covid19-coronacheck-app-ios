@@ -8,13 +8,12 @@
 import UIKit
 import SafariServices
 
-protocol NewDisclosurePolicyDelegate: AnyObject {
+protocol UpdatedDisclosurePolicyDelegate: AnyObject {
 
 	func finishNewDisclosurePolicy()
 }
 
-// TODO: rename "..announcement"
-class NewDisclosurePolicyCoordinator: Coordinator, Logging {
+class UpdatedDisclosurePolicyCoordinator: Coordinator, Logging {
 
 	/// The child coordinators
 	var childCoordinators: [Coordinator] = []
@@ -24,7 +23,7 @@ class NewDisclosurePolicyCoordinator: Coordinator, Logging {
 
 	let pagedAnnouncmentItems: [NewFeatureItem]
 	
-	weak var delegate: NewDisclosurePolicyDelegate?
+	weak var delegate: UpdatedDisclosurePolicyDelegate?
 
 	/// Initializer
 	/// - Parameters:
@@ -33,7 +32,7 @@ class NewDisclosurePolicyCoordinator: Coordinator, Logging {
 	init(
 		navigationController: UINavigationController,
 		pagedAnnouncmentItems: [NewFeatureItem],
-		delegate: NewDisclosurePolicyDelegate) {
+		delegate: UpdatedDisclosurePolicyDelegate) {
 
 		self.navigationController = navigationController
 		self.pagedAnnouncmentItems = pagedAnnouncmentItems
@@ -43,7 +42,7 @@ class NewDisclosurePolicyCoordinator: Coordinator, Logging {
 	/// Start the scene
 	func start() {
 
-		logVerbose("Starting NewDisclosurePolicy Flow")
+		logVerbose("Starting UpdatedDisclosurePolicy Flow")
 		
 		let multipaneMode: Bool = pagedAnnouncmentItems.count > 1
 		
@@ -76,7 +75,7 @@ class NewDisclosurePolicyCoordinator: Coordinator, Logging {
 
 // MARK: - PagedAnnouncementDelegate
 
-extension NewDisclosurePolicyCoordinator: PagedAnnouncementDelegate {
+extension UpdatedDisclosurePolicyCoordinator: PagedAnnouncementDelegate {
 	
 	func didFinishPagedAnnouncement() {
 		navigationController.dismiss(animated: true) {

@@ -7,13 +7,13 @@
 
 import Foundation
 
-protocol NewDisclosurePolicyFactoryProtocol {
+protocol UpdatedDisclosurePolicyFactoryProtocol {
 
 	/// Generate an array of `NewFeatureItem` for New Disclosure Policy screens
 	func create() -> [NewFeatureItem]?
 }
 
-struct NewDisclosurePolicyFactory: NewDisclosurePolicyFactoryProtocol {
+struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 
 	/// Generate an array of `NewFeatureItem` for New Disclosure Policy screens
 	func create() -> [NewFeatureItem]? {

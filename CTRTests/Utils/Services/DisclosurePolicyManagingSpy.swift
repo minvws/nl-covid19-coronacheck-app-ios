@@ -12,9 +12,9 @@ class DisclosurePolicyManagingSpy: DisclosurePolicyManaging {
 
 	var invokedFactoryGetter = false
 	var invokedFactoryGetterCount = 0
-	var stubbedFactory: NewDisclosurePolicyFactory!
+	var stubbedFactory: UpdatedDisclosurePolicyFactory!
 
-	var factory: NewDisclosurePolicyFactory {
+	var factory: UpdatedDisclosurePolicyFactory {
 		invokedFactoryGetter = true
 		invokedFactoryGetterCount += 1
 		return stubbedFactory
