@@ -14,9 +14,6 @@ class PagedAnnouncementItemViewModel: Logging {
 	@Bindable private(set) var title: String
 	@Bindable private(set) var content: String
 	
-	/// Initializer
-	/// - Parameters:
-	///   - newFeatureItem: the container with new feature info
 	init(item: PagedAnnoucementItem) {
 		
 		image = item.image

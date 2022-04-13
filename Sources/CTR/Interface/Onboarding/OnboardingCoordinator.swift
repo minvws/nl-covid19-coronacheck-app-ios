@@ -72,8 +72,18 @@ class OnboardingCoordinator: Coordinator, Logging {
 	// Designated starter method
 	func start() {
 		
-		let viewModel = PagedAnnouncementViewModel(delegate: self, pages: onboardingPages, itemsShouldShowWithFullWidthHeaderImage: false)
-		let viewController = PagedAnnouncementViewController(viewModel: viewModel, allowsBackButton: true)
+		let viewModel = PagedAnnouncementViewModel(
+			delegate: self,
+			pages: onboardingPages,
+			itemsShouldShowWithFullWidthHeaderImage: false,
+			shouldShowWithVWSRibbon: true
+		)
+		let viewController = PagedAnnouncementViewController(
+			viewModel: viewModel,
+			allowsBackButton: true,
+			allowsCloseButton: false,
+			allowsNextButton: true
+		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 

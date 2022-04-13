@@ -48,15 +48,18 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 
 		logVerbose("Starting New Features Information Flow")
 		
-		if let newFeatureItem = newFeaturesManager.pagedAnnouncementItem() {
+		if let pagedAnnouncementItems = newFeaturesManager.pagedAnnouncementItems() {
 			
 			let viewController = PagedAnnouncementViewController(
 				viewModel: PagedAnnouncementViewModel(
 					delegate: self,
-					pages: [newFeatureItem],
-					itemsShouldShowWithFullWidthHeaderImage: true
+					pages: pagedAnnouncementItems,
+					itemsShouldShowWithFullWidthHeaderImage: true,
+					shouldShowWithVWSRibbon: false
 				),
-				allowsBackButton: false
+				allowsBackButton: false,
+				allowsCloseButton: false,
+				allowsNextButton: true
 			)
 			navigationController.viewControllers = [viewController]
 		} else {

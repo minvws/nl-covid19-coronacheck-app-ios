@@ -13,21 +13,27 @@ class PagedAnnouncementViewController: BaseViewController {
 	private let viewModel: PagedAnnouncementViewModel
 	
 	/// The view
-	let sceneView = PagedAnnouncementView(shouldShowWithVWSRibbon: false)
+	lazy var sceneView = PagedAnnouncementView(shouldShowWithVWSRibbon: viewModel.shouldShowWithVWSRibbon)
 	
 	/// The page controller
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 	
 	/// Disable swiping to launch screen
 	override var enableSwipeBack: Bool { false }
+	
 	let allowsBackButton: Bool
+	let allowsCloseButton: Bool
+	let allowsNextButton: Bool
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementViewModel, allowsBackButton: Bool) {
+	init(viewModel: PagedAnnouncementViewModel, allowsBackButton: Bool, allowsCloseButton: Bool, allowsNextButton: Bool) {
 		
 		self.viewModel = viewModel
 		self.allowsBackButton = allowsBackButton
+		self.allowsCloseButton = allowsCloseButton
+		self.allowsNextButton = allowsNextButton
+		
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -66,7 +72,6 @@ class PagedAnnouncementViewController: BaseViewController {
 			self.updateFooterView(for: 0)
 		}
 		
-		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		
 		viewModel.$enabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
@@ -75,9 +80,15 @@ class PagedAnnouncementViewController: BaseViewController {
 			setupBackButton()
 			setupTranslucentNavigationBar()
 			navigationController?.isNavigationBarHidden = false
+		} else if allowsCloseButton {
+			addCloseButton(action: #selector(closeButtonTapped))
+			setupTranslucentNavigationBar()
+			navigationController?.isNavigationBarHidden = false
 		} else {
 			navigationController?.isNavigationBarHidden = true
 		}
+		
+		sceneView.primaryButton.isHidden = !allowsNextButton
 	}
 	
 	/// Create a custom back button so we can catch the tap on the back button.
@@ -92,12 +103,16 @@ class PagedAnnouncementViewController: BaseViewController {
 		backButton = .create(config)
 	}
 	
-	/// The user tapped on the back button
 	@objc func backbuttonTapped() {
 		
 		// Move to the previous page
 		pageViewController.previousPage()
 		sceneView.primaryButton.isEnabled = true
+	}
+	
+	@objc func closeButtonTapped() {
+		
+		viewModel.closeButtonTapped()
 	}
     
 	/// Setup the page controller
@@ -135,6 +150,8 @@ private extension PagedAnnouncementViewController {
 			return
 		}
 		sceneView.updateFooterView(mainScrollView: viewController.sceneView.scrollView)
+		
+		sceneView.primaryButton.setTitle(viewModel.primaryButtonTitle(forStep: pageIndex), for: .normal)
 	}
 }
 

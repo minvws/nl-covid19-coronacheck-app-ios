@@ -42,14 +42,14 @@ class NewFeaturesManagerSpy: NewFeaturesManaging {
 		return stubbedNeedsUpdating
 	}
 
-	var invokedPagedAnnouncementItem = false
-	var invokedPagedAnnouncementItemCount = 0
-	var stubbedPagedAnnouncementItemResult: PagedAnnoucementItem!
+	var invokedPagedAnnouncementItems = false
+	var invokedPagedAnnouncementItemsCount = 0
+	var stubbedPagedAnnouncementItemsResult: [PagedAnnoucementItem]!
 
-	func pagedAnnouncementItem() -> PagedAnnoucementItem? {
-		invokedPagedAnnouncementItem = true
-		invokedPagedAnnouncementItemCount += 1
-		return stubbedPagedAnnouncementItemResult
+	func pagedAnnouncementItems() -> [PagedAnnoucementItem]? {
+		invokedPagedAnnouncementItems = true
+		invokedPagedAnnouncementItemsCount += 1
+		return stubbedPagedAnnouncementItemsResult
 	}
 
 	var invokedUserHasViewedNewFeatureIntro = false

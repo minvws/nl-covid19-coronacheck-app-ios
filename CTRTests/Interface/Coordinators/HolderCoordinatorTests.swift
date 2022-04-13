@@ -39,14 +39,14 @@ class HolderCoordinatorTests: XCTestCase {
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
-		environmentSpies.newFeaturesManagerSpy.stubbedPagedAnnouncementItemResult = PagedAnnoucementItem(
+		environmentSpies.newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = [PagedAnnoucementItem(
 			title: "test",
 			content: "test",
 			image: nil,
 			imageBackgroundColor: .white,
 			tagline: "test",
 			step: 0
-		)
+		)]
 
 		// When
 		sut.start()
