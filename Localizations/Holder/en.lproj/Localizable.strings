@@ -88,7 +88,7 @@
 "holder.banner.newqr.title" = "Your QR code has been made";
 "holder.checkdcc.blocked.message" = "<p>For safety reasons, you won't be able to add this QR code to the app temporarily.</p><p>You can try again after 24 hours.</p>";
 "holder.checkdcc.blocked.title" = "Too many attempts";
-"holder.checkdcc.expired.message" = "<p>This paper certificate is no longer valid. This may have various causes:</p><ul><li>Your vaccination or recovery certificate is still valid, but the paper certificate isn’t. Please request a new paper coronavirus pass from the healthcare provider who vaccinated or tested you.</li><li>Your vaccination or recovery has expired.</li></ul>";
+"holder.checkdcc.expired.message" = "<p>This paper certificate is no longer valid. This may have various causes:</p><ul><li>Your vaccination or recovery certificate is still valid, but the paper certificate isn’t. In that case, please request a new paper certificate.</li><li>Your vaccination or recovery has expired.</li></ul>";
 "holder.checkdcc.expired.title" = "This paper certificate has expired";
 "holder.checkdcc.rejected.actionTitle" = "Try again";
 "holder.checkdcc.rejected.message" = "This letter combination and QR code don't belong together.";

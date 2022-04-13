@@ -88,7 +88,7 @@
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
 "holder.checkdcc.blocked.message" = "<p>Voor de veiligheid kun je deze QR-code tijdelijk niet meer in de app zetten.</p><p>Je kunt het over 24 uur weer proberen.</p>";
 "holder.checkdcc.blocked.title" = "Te vaak geprobeerd";
-"holder.checkdcc.expired.message" = "<p>Dit papieren bewijs is niet meer geldig. Dit kan verschillende oorzaken hebben:</p><ul><li>Je vaccinatie of herstel is nog geldig, maar het papieren bewijs niet. Vraag een nieuw papieren coronabewijs aan bij de zorgverlener waar je gevaccineerd of getest bent.</li><li>Je vaccinatie of herstel is verlopen.</li></ul>";
+"holder.checkdcc.expired.message" = "<p>Dit papieren bewijs is niet meer geldig. Dit kan verschillende oorzaken hebben:</p><ul><li>Je vaccinatie of herstel is nog geldig, maar het papieren bewijs niet. Vraag dan opnieuw je papieren bewijs aan.</li><li>Je vaccinatie of herstel is verlopen.</li></ul>";
 "holder.checkdcc.expired.title" = "Dit papieren bewijs is verlopen";
 "holder.checkdcc.rejected.actionTitle" = "Probeer opnieuw";
 "holder.checkdcc.rejected.message" = "Deze lettercombinatie en QR-code horen niet bij elkaar.";
