@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -213,10 +212,7 @@ final class HolderDashboardViewModel: Logging {
 			expiredGreenCards: [],
 			isRefreshingStrippen: false,
 			deviceHasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false,
-			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
-				now: Current.now(),
-				remoteConfiguration: Current.remoteConfigManager.storedConfiguration
-			),
+			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner,
 			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now()),
 			activeDisclosurePolicyMode: {
 				if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
@@ -303,15 +299,9 @@ final class HolderDashboardViewModel: Logging {
 
 		registerForConfigAlmostOutOfDateUpdate()
 		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.observatoryForReloads.append { [weak self] result in
+			guard let self = self, case .success = result else { return }
 
-			guard let self = self,
-				  case let .success((config, _, _)) = result
-			else { return }
-
-			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
-				now: Current.now(),
-				remoteConfiguration: config
-			)
+			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner
 			self.registerForConfigAlmostOutOfDateUpdate()
 			self.setupRecommendedVersion()
 		}
@@ -319,16 +309,9 @@ final class HolderDashboardViewModel: Logging {
 
 	private func registerForConfigAlmostOutOfDateUpdate() {
 
-		configurationNotificationManager.registerForAlmostOutOfDateUpdate(
-			now: Current.now(),
-			remoteConfiguration: Current.remoteConfigManager.storedConfiguration) { [weak self] in
-
+		configurationNotificationManager.registerForAlmostOutOfDateUpdate() { [weak self] in
 			guard let self = self else { return }
-
-			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner(
-				now: Current.now(),
-				remoteConfiguration: Current.remoteConfigManager.storedConfiguration
-			)
+			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner
 		}
 	}
 	
