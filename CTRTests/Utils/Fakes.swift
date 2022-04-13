@@ -12,8 +12,8 @@ import UIKit
 
 extension TestProvider {
 
-    static var fake: TestProvider {
-        TestProvider(
+	static var fake: TestProvider {
+		TestProvider(
 			identifier: "xxx",
 			name: "Fake Test Provider",
 			resultURLString: "https://coronacheck.nl/test",
@@ -21,7 +21,7 @@ extension TestProvider {
 			tlsCertificates: [],
 			usages: [.negativeTest]
 		)
-    }
+	}
 }
 
 extension EventFlow.EventProvider {
