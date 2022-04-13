@@ -26,4 +26,7 @@ struct PagedAnnoucementItem: Equatable {
  
 	/// The step of the onboarding page
 	let step: Int
+
+	/// The title of the primary "next" button (or `nil` for default)
+	var nextButtonTitle: String?
 }

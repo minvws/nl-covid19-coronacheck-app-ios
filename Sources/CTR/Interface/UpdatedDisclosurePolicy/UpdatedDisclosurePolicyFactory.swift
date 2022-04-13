@@ -9,18 +9,18 @@ import Foundation
 
 protocol UpdatedDisclosurePolicyFactoryProtocol {
 
-	/// Generate an array of `NewFeatureItem` for New Disclosure Policy screens
-	func create() -> [NewFeatureItem]?
+	/// Generate an array of `PagedAnnoucementItem` for New Disclosure Policy screens
+	func create() -> [PagedAnnoucementItem]?
 }
 
 struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 
-	/// Generate an array of `NewFeatureItem` for New Disclosure Policy screens
-	func create() -> [NewFeatureItem]? {
+	/// Generate an array of `PagedAnnoucementItem` for New Disclosure Policy screens
+	func create() -> [PagedAnnoucementItem]? {
 		
 		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
 			
-			return [NewFeatureItem(
+			return [PagedAnnoucementItem(
 				title: L.holder_newintheapp_content_only1G_title(),
 				content: L.holder_newintheapp_content_only1G_body(),
 				image: I.disclosurePolicy.newInTheApp(),
@@ -34,7 +34,7 @@ struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 				
 				// Special case: 0G -> 3G
 				return [
-					NewFeatureItem(
+					PagedAnnoucementItem(
 						title: L.holder_newintheapp_content_only3G_title(),
 						content: L.holder_newintheapp_content_only3G_body(),
 						image: I.disclosurePolicy.newInTheApp(),
@@ -42,7 +42,7 @@ struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 						tagline: L.general_newpolicy(),
 						step: 0
 					),
-					NewFeatureItem(
+					PagedAnnoucementItem(
 						title: L.holder_newintheapp_content_dutchAndInternationalCertificates_title(),
 						content: L.holder_newintheapp_content_dutchAndInternationalCertificates_body(),
 						image: I.disclosurePolicy.dutchAndInternationalQRCards(),
@@ -54,7 +54,7 @@ struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 				]
 			} else {
 				
-				return [NewFeatureItem(
+				return [PagedAnnoucementItem(
 					title: L.holder_newintheapp_content_only3G_title(),
 					content: L.holder_newintheapp_content_only3G_body(),
 					image: I.disclosurePolicy.newInTheApp(),
@@ -65,7 +65,7 @@ struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 			}
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
 			
-			return [NewFeatureItem(
+			return [PagedAnnoucementItem(
 				title: L.holder_newintheapp_content_3Gand1G_title(),
 				content: L.holder_newintheapp_content_3Gand1G_body(),
 				image: I.disclosurePolicy.newInTheApp(),
@@ -75,7 +75,7 @@ struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 			)]
 		} else if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
 			
-			return [NewFeatureItem(
+			return [PagedAnnoucementItem(
 				title: L.holder_newintheapp_content_onlyInternationalCertificates_0G_title(),
 				content: L.holder_newintheapp_content_onlyInternationalCertificates_0G_body(),
 				image: I.onboarding.validity(),

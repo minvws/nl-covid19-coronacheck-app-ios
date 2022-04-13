@@ -709,7 +709,7 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 
 extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 	
-	func showNewDisclosurePolicy(pagedAnnouncmentItems: [NewFeatureItem]) {
+	func showNewDisclosurePolicy(pagedAnnouncmentItems: [PagedAnnoucementItem]) {
 		let coordinator = UpdatedDisclosurePolicyCoordinator(
 			navigationController: navigationController,
 			pagedAnnouncmentItems: pagedAnnouncmentItems,

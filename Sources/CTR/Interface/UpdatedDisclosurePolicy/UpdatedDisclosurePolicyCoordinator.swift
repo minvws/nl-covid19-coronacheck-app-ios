@@ -21,7 +21,7 @@ class UpdatedDisclosurePolicyCoordinator: Coordinator, Logging {
 	/// The navigation controller
 	var navigationController: UINavigationController
 
-	let pagedAnnouncmentItems: [NewFeatureItem]
+	let pagedAnnouncmentItems: [PagedAnnoucementItem]
 	
 	weak var delegate: UpdatedDisclosurePolicyDelegate?
 
@@ -31,7 +31,7 @@ class UpdatedDisclosurePolicyCoordinator: Coordinator, Logging {
 	///   - delegate: the new feature information delegate
 	init(
 		navigationController: UINavigationController,
-		pagedAnnouncmentItems: [NewFeatureItem],
+		pagedAnnouncmentItems: [PagedAnnoucementItem],
 		delegate: UpdatedDisclosurePolicyDelegate) {
 
 		self.navigationController = navigationController
