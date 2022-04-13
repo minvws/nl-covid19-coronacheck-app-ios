@@ -9,58 +9,61 @@ import Foundation
 
 protocol ConfigurationNotificationManagerProtocol {
 
-	func shouldShowAlmostOutOfDateBanner(now: Date, remoteConfiguration: RemoteConfiguration) -> Bool
-
-	func getAlmostOutOfDateTimeStamp(remoteConfiguration: RemoteConfiguration) -> TimeInterval?
-
-	func registerForAlmostOutOfDateUpdate(now: Date, remoteConfiguration: RemoteConfiguration, callback: (() -> Void)?)
+	var shouldShowAlmostOutOfDateBanner: Bool { get }
+	
+	func registerForAlmostOutOfDateUpdate(callback: @escaping () -> Void)
 }
 
 final class ConfigurationNotificationManager: ConfigurationNotificationManagerProtocol, Logging {
 
 	private let userSettings: UserSettingsProtocol
+	private let remoteConfigManager: RemoteConfigManaging
+	private let now: () -> Date
 	private var timer: Timer?
 	private var callback: (() -> Void)?
 
-	init(userSettings: UserSettingsProtocol) {
+	init(userSettings: UserSettingsProtocol, remoteConfigManager: RemoteConfigManaging, now: @escaping () -> Date) {
 		self.userSettings = userSettings
+		self.remoteConfigManager = remoteConfigManager
+		self.now = now
 	}
 
 	deinit {
 		stopTimer()
 	}
 
-	func shouldShowAlmostOutOfDateBanner(now: Date, remoteConfiguration: RemoteConfiguration) -> Bool {
-
-		logVerbose("ConfigurationNotificationManager Now: \(now)")
-		guard let almostOutOfDateTimestamp = getAlmostOutOfDateTimeStamp(remoteConfiguration: remoteConfiguration) else {
-			return false
-		}
-		// The config should be older the minimum config interval
-		return almostOutOfDateTimestamp < now.timeIntervalSince1970
+	var shouldShowAlmostOutOfDateBanner: Bool {
+		guard let configBecomesAlmostOutOfDateAt = configBecomesAlmostOutOfDateAt else { return false }
+		return configBecomesAlmostOutOfDateAt < now()
 	}
 
-	func getAlmostOutOfDateTimeStamp(remoteConfiguration: RemoteConfiguration) -> TimeInterval? {
+	private var configBecomesAlmostOutOfDateAt: Date? {
 
 		guard let configFetchedTimestamp = userSettings.configFetchedTimestamp,
-			  let configAlmostOutOfDateWarningSeconds = remoteConfiguration.configAlmostOutOfDateWarningSeconds else {
-				  return nil
-			  }
-
-		logVerbose("ConfigurationNotificationManager configFetchedTimestamp: \(Date(timeIntervalSince1970: configFetchedTimestamp))")
-		logVerbose("ConfigurationNotificationManager configAlmostOutOfDateWarningSeconds: \(configAlmostOutOfDateWarningSeconds)")
-
-		return configFetchedTimestamp + TimeInterval(configAlmostOutOfDateWarningSeconds)
-	}
-
-	func registerForAlmostOutOfDateUpdate(now: Date, remoteConfiguration: RemoteConfiguration, callback: (() -> Void)?) {
-
-		timer?.invalidate()
-		guard let almostOutOfDateTimestamp = getAlmostOutOfDateTimeStamp(remoteConfiguration: remoteConfiguration) else {
-			return
+			  let configTTLSeconds = remoteConfigManager.storedConfiguration.configTTL,
+			  let configAlmostOutOfDateWarningSeconds = remoteConfigManager.storedConfiguration.configAlmostOutOfDateWarningSeconds
+		else {
+			return nil
 		}
 
-		let timeBeforeConfigAlmostOutOfDateWarning = almostOutOfDateTimestamp - now.timeIntervalSince1970
+		let configFetchedDate = Date(timeIntervalSince1970: configFetchedTimestamp)
+		
+		guard let configExpiryDate = Calendar.current.date(byAdding: .second, value: configTTLSeconds, to: configFetchedDate),
+			  let configAlmostExpiredDate = Calendar.current.date(byAdding: .second, value: -1 * configAlmostOutOfDateWarningSeconds, to: configExpiryDate)
+		else {
+			return nil
+		}
+		
+		return configAlmostExpiredDate
+	}
+
+	func registerForAlmostOutOfDateUpdate(callback: @escaping () -> Void) {
+
+		timer?.invalidate()
+		
+		guard let configBecomesAlmostOutOfDateAt = configBecomesAlmostOutOfDateAt else { return }
+
+		let timeBeforeConfigAlmostOutOfDateWarning = configBecomesAlmostOutOfDateAt.timeIntervalSince1970 - now().timeIntervalSince1970
 		logVerbose("Starting a timer with \(timeBeforeConfigAlmostOutOfDateWarning) seconds before the config is almost out of date")
 
 		guard timeBeforeConfigAlmostOutOfDateWarning > 0 else {
@@ -70,7 +73,7 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 		timer = Timer.scheduledTimer(withTimeInterval: timeBeforeConfigAlmostOutOfDateWarning, repeats: false) { [weak self] _ in
 
 			DispatchQueue.main.async {
-				callback?()
+				callback()
 				self?.stopTimer()
 			}
 		}

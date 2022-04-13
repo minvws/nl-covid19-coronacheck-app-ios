@@ -325,7 +325,7 @@ class HolderCoordinator: SharedCoordinator {
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
 					reachability: try? Reachability()
 				),
-				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings),
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
 				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
 				versionSupplier: versionSupplier
 			)
