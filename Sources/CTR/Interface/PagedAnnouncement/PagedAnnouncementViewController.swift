@@ -22,16 +22,12 @@ class PagedAnnouncementViewController: BaseViewController {
 	override var enableSwipeBack: Bool { false }
 	
 	let allowsBackButton: Bool
-	let allowsCloseButton: Bool // TODO refactor
-	let allowsNextButton: Bool // TODO refactor
+	let allowsCloseButton: Bool
+	let allowsNextButton: Bool
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementViewModel,
-		allowsBackButton: Bool,
-		allowsCloseButton: Bool,
-		allowsNextButton: Bool
-	) {
+	init(viewModel: PagedAnnouncementViewModel, allowsBackButton: Bool, allowsCloseButton: Bool, allowsNextButton: Bool) {
 		
 		self.viewModel = viewModel
 		self.allowsBackButton = allowsBackButton
