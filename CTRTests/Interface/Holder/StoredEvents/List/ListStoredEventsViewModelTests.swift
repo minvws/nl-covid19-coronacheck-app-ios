@@ -47,7 +47,6 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.body) == L.holder_storedEvents_message()
 		expect(content.primaryActionTitle).to(beNil())
 		expect(content.primaryAction).to(beNil())
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
