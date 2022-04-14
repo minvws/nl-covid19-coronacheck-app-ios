@@ -149,6 +149,11 @@ class StoredEventHeaderView: StoredEventTitleView {
 		titleBottomMarginConstraint?.constant = -StoredEventHeaderView.ViewTraits.View.bottomMargin
 	}
 	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		titleLabel.accessibilityTraits = .header
+	}
+	
 	/// The  title
 	override var title: String? {
 		didSet {

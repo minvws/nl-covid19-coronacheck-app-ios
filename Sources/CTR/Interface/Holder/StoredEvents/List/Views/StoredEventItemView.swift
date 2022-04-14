@@ -35,7 +35,7 @@ class StoredEventItemView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 		
-		return Label(bodyBold: nil).multiline().header()
+		return Label(bodyBold: nil).multiline()
 	}()
 	
 	/// The stack view for the details
@@ -70,7 +70,7 @@ class StoredEventItemView: BaseView {
 		let button = UIButton()
 		button.backgroundColor = .clear
 		button.translatesAutoresizingMaskIntoConstraints = false
-		
+		button.accessibilityLabel = L.holderEventDetails()
 		return button
 	}()
 	
