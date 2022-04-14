@@ -35,7 +35,7 @@ class StoredEventItemView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 		
-		return Label(bodyBold: nil).multiline().header()
+		return Label(bodyBold: nil).multiline()
 	}()
 	
 	/// The stack view for the details
