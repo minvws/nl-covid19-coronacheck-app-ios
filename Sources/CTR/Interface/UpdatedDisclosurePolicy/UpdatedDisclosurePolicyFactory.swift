@@ -10,13 +10,13 @@ import Foundation
 protocol UpdatedDisclosurePolicyFactoryProtocol {
 
 	/// Generate an array of `PagedAnnoucementItem` for New Disclosure Policy screens
-	func create() -> [PagedAnnoucementItem]?
+	func create() -> [PagedAnnoucementItem]
 }
 
 struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 
 	/// Generate an array of `PagedAnnoucementItem` for New Disclosure Policy screens
-	func create() -> [PagedAnnoucementItem]? {
+	func create() -> [PagedAnnoucementItem] {
 		
 		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
 			
@@ -48,7 +48,7 @@ struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 						image: I.disclosurePolicy.dutchAndInternationalQRCards(),
 						imageBackgroundColor: nil,
 						tagline: L.general_newintheapp(),
-						step: 0,
+						step: 1,
 						nextButtonTitle: L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
 					)
 				]
@@ -85,7 +85,7 @@ struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 			)]
 		} else {
 			
-			return nil
+			return []
 		}
 	}
 }
