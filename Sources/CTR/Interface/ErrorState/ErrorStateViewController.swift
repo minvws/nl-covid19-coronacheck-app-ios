@@ -36,8 +36,13 @@ class ErrorStateViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		addBackButton(customAction: #selector(backButtonTapped))
-
+		viewModel.$showBackButton.binding = { [weak self] in
+			guard let self = self else { return }
+			if $0 {
+				self.addBackButton(customAction: #selector(self.backButtonTapped))
+			}
+		}
+		
 		viewModel.$content.binding = { [weak self] in
 			self?.displayContent($0)
 		}

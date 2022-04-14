@@ -58,6 +58,7 @@ final class EnvironmentSpies {
 	
 	var disclosurePolicyManagingSpy: DisclosurePolicyManagingSpy = {
 		let spy = DisclosurePolicyManagingSpy()
+		spy.stubbedFactory = UpdatedDisclosurePolicyFactory()
 		(spy.stubbedObservatory, _) = Observatory<Void>.create()
 		return spy
 	}()
@@ -75,6 +76,11 @@ final class EnvironmentSpies {
 	
 	var greenCardLoaderSpy: GreenCardLoaderSpy = {
 		let spy = GreenCardLoaderSpy()
+		return spy
+	}()
+
+	var identityCheckerSpy: IdentityCheckerSpy = {
+		let spy = IdentityCheckerSpy()
 		return spy
 	}()
 	
@@ -181,6 +187,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		disclosurePolicyManager: spies.disclosurePolicyManagingSpy,
 		featureFlagManager: spies.featureFlagManagerSpy,
 		greenCardLoader: spies.greenCardLoaderSpy,
+		identityChecker: spies.identityCheckerSpy,
 		jailBreakDetector: spies.jailBreakDetectorSpy,
 		mappingManager: spies.mappingManagerSpy,
 		networkManager: spies.networkManagerSpy,

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="X17-KI-UCD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="X17-KI-UCD">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,37 +16,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CoronaCheck Scanner" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8GP-o5-PgT">
-                                <rect key="frame" x="12.5" y="267" width="295" height="34"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
-                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pGD-4d-99s">
-                                <rect key="frame" x="128" y="171" width="64" height="64"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="VerifierAppLaunchIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="pGD-4d-99s">
+                                <rect key="frame" x="120" y="244" width="80" height="80"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="64" id="Qxp-e1-TyN"/>
-                                    <constraint firstAttribute="height" constant="64" id="qzh-0G-Bqo"/>
-                                </constraints>
-                                <variation key="heightClass=regular-widthClass=compact" image="verifier_logo.png"/>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ribbonvws" translatesAutoresizingMaskIntoConstraints="NO" id="fdL-Qm-Bzu">
-                                <rect key="frame" x="136.5" y="-6" width="153" height="101"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="101" id="VHz-3S-vYN"/>
-                                    <constraint firstAttribute="width" constant="153" id="XJ8-G2-ecX"/>
+                                    <constraint firstAttribute="width" constant="80" id="Qxp-e1-TyN"/>
+                                    <constraint firstAttribute="height" constant="80" id="qzh-0G-Bqo"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="3Zd-dG-8Ux"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="8GP-o5-PgT" firstAttribute="centerY" secondItem="hlJ-YS-jHY" secondAttribute="centerY" id="7oH-bc-OxZ"/>
                             <constraint firstItem="pGD-4d-99s" firstAttribute="centerX" secondItem="hlJ-YS-jHY" secondAttribute="centerX" id="9VB-3L-1uF"/>
-                            <constraint firstItem="fdL-Qm-Bzu" firstAttribute="centerX" secondItem="hlJ-YS-jHY" secondAttribute="centerX" constant="53" id="c9k-Xc-Qt8"/>
-                            <constraint firstItem="8GP-o5-PgT" firstAttribute="centerX" secondItem="hlJ-YS-jHY" secondAttribute="centerX" id="p1c-DI-9ju"/>
-                            <constraint firstItem="fdL-Qm-Bzu" firstAttribute="top" secondItem="hlJ-YS-jHY" secondAttribute="top" constant="-6" id="qMP-5E-CqR"/>
-                            <constraint firstItem="8GP-o5-PgT" firstAttribute="top" secondItem="pGD-4d-99s" secondAttribute="bottom" constant="32" id="twp-WS-b49"/>
+                            <constraint firstItem="pGD-4d-99s" firstAttribute="centerY" secondItem="hlJ-YS-jHY" secondAttribute="centerY" id="pK8-Mi-XJb"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -56,7 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ribbonvws" width="153" height="90"/>
-        <image name="verifier_logo.png" width="192" height="192"/>
+        <image name="VerifierAppLaunchIcon.png" width="80" height="80"/>
     </resources>
 </document>

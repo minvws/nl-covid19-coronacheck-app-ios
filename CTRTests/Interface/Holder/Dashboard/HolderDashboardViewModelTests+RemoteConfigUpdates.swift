@@ -35,7 +35,7 @@ extension HolderDashboardViewModelTests {
 	func test_configIsAlmostOutOfDate() {
 
 		// Arrange
-		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
+		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBanner = true
 		var sendConfigReload: ((Result<RemoteConfigManager.ConfigNotification, ServerError>) -> Void)?
 		(environmentSpies.remoteConfigManagerSpy.stubbedObservatoryForReloads, sendConfigReload) = Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>.create()
 
@@ -48,13 +48,13 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards[1]).to(beConfigurationAlmostOutOfDateCard())
 
 		// only during .init
-		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerCount) == 2
+		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerGetterCount) == 2
 	}
 
 	func test_configIsAlmostOutOfDate_userTappedOnCard_domesticTab() {
 
 		// Arrange
-		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
+		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBanner = true
 		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
@@ -70,7 +70,7 @@ extension HolderDashboardViewModelTests {
 	func test_configIsAlmostOutOfDate_userTappedOnCard_internationalTab() {
 
 		// Arrange
-		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBannerResult = true
+		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBanner = true
 		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 

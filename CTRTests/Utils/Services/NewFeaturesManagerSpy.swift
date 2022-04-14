@@ -42,32 +42,22 @@ class NewFeaturesManagerSpy: NewFeaturesManaging {
 		return stubbedNeedsUpdating
 	}
 
-	var invokedGetUpdatePage = false
-	var invokedGetUpdatePageCount = 0
-	var stubbedGetUpdatePageResult: NewFeatureItem!
+	var invokedPagedAnnouncementItems = false
+	var invokedPagedAnnouncementItemsCount = 0
+	var stubbedPagedAnnouncementItemsResult: [PagedAnnoucementItem]!
 
-	func getNewFeatureItem() -> NewFeatureItem? {
-		invokedGetUpdatePage = true
-		invokedGetUpdatePageCount += 1
-		return stubbedGetUpdatePageResult
+	func pagedAnnouncementItems() -> [PagedAnnoucementItem]? {
+		invokedPagedAnnouncementItems = true
+		invokedPagedAnnouncementItemsCount += 1
+		return stubbedPagedAnnouncementItemsResult
 	}
 
-	var invokedGetConsent = false
-	var invokedGetConsentCount = 0
-	var stubbedGetConsentResult: NewFeatureConsent!
+	var invokedUserHasViewedNewFeatureIntro = false
+	var invokedUserHasViewedNewFeatureIntroCount = 0
 
-	func getConsent() -> NewFeatureConsent? {
-		invokedGetConsent = true
-		invokedGetConsentCount += 1
-		return stubbedGetConsentResult
-	}
-
-	var invokedConsentGiven = false
-	var invokedConsentGivenCount = 0
-
-	func consentGiven() {
-		invokedConsentGiven = true
-		invokedConsentGivenCount += 1
+	func userHasViewedNewFeatureIntro() {
+		invokedUserHasViewedNewFeatureIntro = true
+		invokedUserHasViewedNewFeatureIntroCount += 1
 	}
 
 	var invokedWipePersistedData = false

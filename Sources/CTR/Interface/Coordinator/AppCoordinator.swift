@@ -88,7 +88,6 @@ class AppCoordinator: Coordinator, Logging {
 		let destination = LaunchViewController(
 			viewModel: LaunchViewModel(
 				coordinator: self,
-				versionSupplier: versionSupplier,
 				flavor: flavor
 			)
 		)
@@ -157,7 +156,7 @@ class AppCoordinator: Coordinator, Logging {
 	/// Show the Internet Required View
 	private func showInternetRequired() {
 		
-		let viewModel = InternetRequiredViewModel(coordinator: self)
+		let viewModel = InternetRequiredViewModel(coordinator: self, flavor: flavor)
 		navigateToAppUpdate(with: viewModel)
 	}
 	
@@ -312,7 +311,8 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 		navigateToAppUpdate(
 			with: AppDeactivatedViewModel(
 				coordinator: self,
-				appStoreUrl: URL(string: urlString)
+				appStoreUrl: URL(string: urlString),
+				flavor: flavor
 			)
 		)
 	}
@@ -342,7 +342,8 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 		navigateToAppUpdate(
 			with: AppStatusViewModel(
 				coordinator: self,
-				appStoreUrl: appStoreUrl
+				appStoreUrl: appStoreUrl,
+				flavor: flavor
 			)
 		)
 	}
@@ -473,7 +474,6 @@ extension AppCoordinator {
 		
 		let shapshotViewController = SnapshotViewController(
 			viewModel: SnapshotViewModel(
-				versionSupplier: versionSupplier,
 				flavor: flavor
 			)
 		)

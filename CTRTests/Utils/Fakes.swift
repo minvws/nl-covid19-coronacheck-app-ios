@@ -10,27 +10,10 @@ import Foundation
 @testable import CTR
 import UIKit
 
-extension NewFeatureConsent {
-
-    static var consentWithoutMandatoryConsent = NewFeatureConsent(
-        title: "test title without mandatory consent",
-        highlight: "test highlight without mandatory consent",
-        content: "test content without mandatory consent",
-        consentMandatory: false
-    )
-
-    static var consentWithMandatoryConsent = NewFeatureConsent(
-        title: "test title with mandatory consent",
-        highlight: "test highlight with mandatory consent",
-        content: "test content with mandatory consent",
-        consentMandatory: true
-    )
-}
-
 extension TestProvider {
 
-    static var fake: TestProvider {
-        TestProvider(
+	static var fake: TestProvider {
+		TestProvider(
 			identifier: "xxx",
 			name: "Fake Test Provider",
 			resultURLString: "https://coronacheck.nl/test",
@@ -38,7 +21,7 @@ extension TestProvider {
 			tlsCertificates: [],
 			usages: [.negativeTest]
 		)
-    }
+	}
 }
 
 extension EventFlow.EventProvider {
@@ -188,6 +171,15 @@ extension EventFlow.EventResultWrapper {
 		status: .complete,
 		result: nil,
 		events: [EventFlow.Event.boosterEvent]
+	)
+	
+	static var fakeMultipleVaccinationResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		result: nil,
+		events: [EventFlow.Event.vaccinationEvent, EventFlow.Event.boosterEvent]
 	)
 
 	static var fakeRecoveryResultWrapper = EventFlow.EventResultWrapper(
@@ -380,14 +372,14 @@ extension EventFlow.EventResultWrapper {
 }
 
 extension RequestToken {
-
-    static var fake: RequestToken {
-        return RequestToken(
-            token: "BBBBBBBBBBBB",
-            protocolVersion: "2",
-            providerIdentifier: "XXX"
-        )
-    }
+	
+	static var fake: RequestToken {
+		return RequestToken(
+			token: "BBBBBBBBBBBB",
+			protocolVersion: "2",
+			providerIdentifier: "XXX"
+		)
+	}
 }
 
 extension EuCredentialAttributes.DigitalCovidCertificate {
@@ -1221,6 +1213,26 @@ extension EuCredentialAttributes {
 	}
 	static func fakeVaccination(dcc: EuCredentialAttributes.DigitalCovidCertificate = .sampleWithVaccine(doseNumber: 1, totalDose: 2)) -> EuCredentialAttributes {
 		fake(dcc: dcc)
+	}
+	
+	static var fakeTest: EuCredentialAttributes {
+		EuCredentialAttributes(
+			credentialVersion: 1,
+			digitalCovidCertificate: .sampleWithTest(),
+			expirationTime: now.timeIntervalSince1970 + 3600,
+			issuedAt: now.timeIntervalSince1970,
+			issuer: "NL"
+		)
+	}
+	
+	static var fakeRecovery: EuCredentialAttributes {
+		EuCredentialAttributes(
+			credentialVersion: 1,
+			digitalCovidCertificate: .sampleWithRecovery(),
+			expirationTime: now.timeIntervalSince1970 + 3600,
+			issuedAt: now.timeIntervalSince1970,
+			issuer: "NL"
+		)
 	}
 }
 

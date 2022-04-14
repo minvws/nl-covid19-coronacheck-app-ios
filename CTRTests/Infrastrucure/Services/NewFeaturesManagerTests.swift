@@ -55,12 +55,12 @@ class NewFeaturesManagerTests: XCTestCase {
 		expect(self.sut.needsUpdating) == false
 	}
 	
-	func testConsentGiven() {
+	func testUserHasViewedNewFeatureIntro() {
 		
 		// Given
 		
 		// When
-		sut.consentGiven()
+		sut.userHasViewedNewFeatureIntro()
 		
 		// Then
 		expect(self.secureUserSettingsSpy.invokedForcedInformationData?.lastSeenVersion) == sut.factory?.information.version
@@ -69,35 +69,39 @@ class NewFeaturesManagerTests: XCTestCase {
 	func test_getUpdatePage_holder() {
 		
 		// Given
-		let expectedPage = NewFeatureItem(
-			image: I.onboarding.tabbarNL(),
-			tagline: L.holderUpdatepageTagline(),
+		let expectedPage = PagedAnnoucementItem(
 			title: L.holderUpdatepageTitleTab(),
-			content: L.holderUpdatepageContentTab()
+			content: L.holderUpdatepageContentTab(),
+			image: I.onboarding.tabbarNL(),
+			imageBackgroundColor: C.forcedInformationImage(),
+			tagline: L.holderUpdatepageTagline(),
+			step: 0
 		)
 		
 		// When
-		let actualPage = sut.getNewFeatureItem()
+		let actualPage = sut.pagedAnnouncementItems()
 		
 		// Then
-		expect(actualPage) == expectedPage
+		expect(actualPage) == [expectedPage]
 	}
 	
 	func test_getUpdatePage_verifier() {
 		
 		// Given
-		let expectedPage = NewFeatureItem(
-			image: I.onboarding.tabbarNL(),
-			tagline: L.new_in_app_subtitle(),
+		let expectedPage = PagedAnnoucementItem(
 			title: L.new_in_app_risksetting_title(),
-			content: L.new_in_app_risksetting_subtitle()
+			content: L.new_in_app_risksetting_subtitle(),
+			image: I.onboarding.tabbarNL(),
+			imageBackgroundColor: C.forcedInformationImage(),
+			tagline: L.new_in_app_subtitle(),
+			step: 0
 		)
 		sut.factory = VerifierNewFeaturesFactory()
 		
 		// When
-		let actualPage = sut.getNewFeatureItem()
+		let actualPage = sut.pagedAnnouncementItems()
 		
 		// Then
-		expect(actualPage) == expectedPage
+		expect(actualPage) == [expectedPage]
 	}
 }

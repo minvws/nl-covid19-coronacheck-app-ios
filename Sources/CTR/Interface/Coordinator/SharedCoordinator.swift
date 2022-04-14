@@ -206,9 +206,10 @@ extension SharedCoordinator: OnboardingDelegate {
 
 		// Mark as complete
 		onboardingManager.consentGiven()
-		// Also mark as complete for new feature information
-		newFeaturesManager.consentGiven()
-
+		
+		// Preemtively mark the "new features" as seen too, so that the user doesn't see a modal after the onboarding:
+		newFeaturesManager.userHasViewedNewFeatureIntro()
+		
 		// Remove child coordinator
 		if let onboardingCoorinator = childCoordinators.first {
 			removeChildCoordinator(onboardingCoorinator)
@@ -228,11 +229,13 @@ extension SharedCoordinator: NewFeaturesDelegate {
 
 		logDebug("SharedCoordinator: finishNewFeatures")
 
+		newFeaturesManager.userHasViewedNewFeatureIntro()
+		
 		// Remove childCoordinator
 		if let newFeaturesCoordinator = childCoordinators.first {
 			removeChildCoordinator(newFeaturesCoordinator)
 		}
-
+		
 		// Navigate to start
 		start()
 	}

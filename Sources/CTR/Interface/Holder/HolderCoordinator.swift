@@ -25,6 +25,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
+	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails])
+	
 	func userWishesToOpenTheMenu()
 	
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
@@ -67,11 +69,13 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesToLaunchThirdPartyTicketApp()
 	
-	func displayError(content: Content, backAction: @escaping () -> Void)
+	func displayError(content: Content, backAction: (() -> Void)?)
 	
 	func userWishesMoreInfoAboutNoTestToken()
 	
 	func userWishesMoreInfoAboutNoVisitorPassToken()
+	
+	func userWishesToSeeStoredEvents()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -80,7 +84,12 @@ class HolderCoordinator: SharedCoordinator {
 	
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	
-	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
+	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken? {
+		willSet {
+			// Remove any existing observation:
+			disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
+		}
+	}
 	
 	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
 	///	display a "return to Ticket App" button on the ShowQR screen
@@ -316,7 +325,7 @@ class HolderCoordinator: SharedCoordinator {
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
 					reachability: try? Reachability()
 				),
-				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings),
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
 				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
 				versionSupplier: versionSupplier
 			)
@@ -598,7 +607,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
 	}
 	
-	func displayError(content: Content, backAction: @escaping () -> Void) {
+	func displayError(content: Content, backAction: (() -> Void)?) {
 		
 		let viewController = ErrorStateViewController(
 			viewModel: ErrorStateViewModel(
@@ -627,6 +636,28 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			hideBodyForScreenCapture: false,
 			openURLsInApp: true
 		)
+	}
+	
+	func userWishesToSeeStoredEvents() {
+		
+		let viewController = ListStoredEventsViewController(
+			viewModel: ListStoredEventsViewModel(coordinator: self)
+		)
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails]) {
+		
+		let viewController = StoredEventDetailsViewController(
+			viewModel: RemoteEventDetailsViewModel(
+				coordinator: self,
+				title: title,
+				details: details,
+				footer: nil,
+				hideBodyForScreenCapture: true
+			)
+		)
+		navigationController.pushViewController(viewController, animated: true)
 	}
 }
 
@@ -676,37 +707,42 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 	}
 }
 
-extension HolderCoordinator {
+extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 	
-	func showNewDisclosurePolicy() {
-		guard navigationController.presentedViewController == nil else { return }
-		guard let viewModel = NewDisclosurePolicyViewModel(coordinator: self) else { return }
-		
-		let destination = NavigationController(
-			rootViewController: NewDisclosurePolicyViewController(viewModel: viewModel)
+	func showNewDisclosurePolicy(pagedAnnouncmentItems: [PagedAnnoucementItem]) {
+		let coordinator = UpdatedDisclosurePolicyCoordinator(
+			navigationController: navigationController,
+			pagedAnnouncmentItems: pagedAnnouncmentItems,
+			delegate: self
 		)
-		destination.modalPresentationStyle = .fullScreen
-		navigationController.present(destination, animated: true) {
-			Current.disclosurePolicyManager.setDisclosurePolicyUpdateHasBeenSeen()
-		}
+		startChildCoordinator(coordinator)
+	}
+	
+	func finishNewDisclosurePolicy() {
+		removeChildCoordinator()
 	}
 	
 	func handleDisclosurePolicyUpdates() {
-		
+ 
 		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
-			// No Disclosre Policy modal if we still need to finish onboarding
-			return
-		}
-		
-		guard Current.disclosurePolicyManager.hasChanges else {
+			// No Disclosure Policy modal if we still need to finish onboarding
 			return
 		}
 		
 		guard Current.remoteConfigManager.storedConfiguration.disclosurePolicies != nil else {
 			return
 		}
+
+		guard Current.disclosurePolicyManager.hasChanges else {
+			return
+		}
 		
-		showNewDisclosurePolicy()
+		let pagedAnnouncementItems = Current.disclosurePolicyManager.factory.create()
+		guard pagedAnnouncementItems.isNotEmpty else {
+			return
+		}
+		
+		showNewDisclosurePolicy(pagedAnnouncmentItems: pagedAnnouncementItems)
 	}
 }
 

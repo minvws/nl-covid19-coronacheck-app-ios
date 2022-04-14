@@ -1,12 +1,5 @@
-"endOfLife.button" = "Naar CoronaCheck.nl";
-"endOfLife.description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
-/* MARK: - EndOfLife */
-"endOfLife.error.message" = "De website kan niet geopend worden.";
-"endOfLife.title" = "App niet in gebruik";
 "general.add" = "Toevoegen";
 "general.back" = "Terug";
-/* MARK: - General */
-"general.cancel" = "Annuleer";
 /* MARK: - General */
 "general.close" = "Sluiten";
 "general.done" = "Klaar";
@@ -52,26 +45,32 @@
 "general.testtype" = "Type test";
 "general.uptoandincluding" = "tot";
 "general.url.link" = "Link";
-"general.vaccination" = "vaccinatie";
 "general.vaccinationdate" = "Vaccinatiedatum";
+/* MARK: - General */
+"general_cancel" = "Annuleer";
+"general_delete" = "Wis gegevens";
 "general_menu" = "Menu";
+"general_negativeTest" = "Negatieve testuitslag";
 "general_newintheapp" = "Nieuw in de app";
 "general_newpolicy" = "Nieuwe regels";
 "general_notification" = "Let op!";
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
+/* Positieve test */
+"general_positiveTest" = "Positieve testuitslag";
 "general_readmore" = "Lees meer";
 "general_recoverycertificate" = "herstelbewijs";
 "general_recoverycertificate_0G" = "Internationaal herstelbewijs";
 "general_testcertificate" = "testbewijs";
 "general_testcertificate_0G" = "Internationaal testbewijs";
 "general_toMyOverview" = "Naar mijn bewijzen";
+"general_vaccination" = "vaccinatie";
 "general_vaccinationAssessment" = "vaccinatiebeoordeling";
 "general_vaccinationcertificate" = "vaccinatiebewijs";
 "general_vaccinationcertificate_0G" = "Internationaal vaccinatiebewijs";
 "general_visitorPass" = "bezoekersbewijs";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
-"holder.about.readmore" = "Lees meer:";
+"holder.about.readmore" = "Meer:";
 "holder.about.text" = "<p>CoronaCheck is ontwikkeld om de samenleving beetje bij beetje veilig te openen in tijden van corona.</p><p>Met de app kun je een coronabewijs maken van je vaccinatie, negatieve testuitslag of als je corona hebt gehad en bent hersteld. Je coronabewijs heeft een QR-code. Laat deze scannen voor toegang tot plekken of activiteiten, of om mee te reizen.</p>";
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
@@ -89,7 +88,7 @@
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
 "holder.checkdcc.blocked.message" = "<p>Voor de veiligheid kun je deze QR-code tijdelijk niet meer in de app zetten.</p><p>Je kunt het over 24 uur weer proberen.</p>";
 "holder.checkdcc.blocked.title" = "Te vaak geprobeerd";
-"holder.checkdcc.expired.message" = "<p>Dit papieren bewijs is niet meer geldig. Dit kan verschillende oorzaken hebben:</p><ul><li>Je vaccinatie of herstel is nog geldig, maar het papieren bewijs niet. Vraag een nieuw papieren coronabewijs aan bij de zorgverlener waar je gevaccineerd of getest bent.</li><li>Je vaccinatie of herstel is verlopen.</li></ul>";
+"holder.checkdcc.expired.message" = "<p>Dit papieren bewijs is niet meer geldig. Dit kan verschillende oorzaken hebben:</p><ul><li>Je vaccinatie of herstel is nog geldig, maar het papieren bewijs niet. Vraag dan opnieuw je papieren bewijs aan.</li><li>Je vaccinatie of herstel is verlopen.</li></ul>";
 "holder.checkdcc.expired.title" = "Dit papieren bewijs is verlopen";
 "holder.checkdcc.rejected.actionTitle" = "Probeer opnieuw";
 "holder.checkdcc.rejected.message" = "Deze lettercombinatie en QR-code horen niet bij elkaar.";
@@ -103,10 +102,10 @@
 "holder.chooseqrcodetype.option.vaccine.title" = "Vaccinatie";
 /* MARK: - Choose QR Code Type */
 "holder.chooseqrcodetype.title" = "Wat wil je toevoegen?";
-"holder.cleardata.alert.remove" = "Wis gegevens";
-"holder.cleardata.alert.subtitle" = "Bij het wissen worden alle gegevens en bewijzen uit de app verwijderd en ga je terug naar het startscherm.";
-"holder.cleardata.alert.title" = "Alle gegevens wissen?";
-"holder.cleardata.menu.title" = "Wis gegevens";
+"holder.cleardata.alert.remove" = "Reset app";
+"holder.cleardata.alert.subtitle" = "Bij het resetten worden alle gegevens en bewijzen uit de app verwijderd en ga je terug naar het startscherm.";
+"holder.cleardata.alert.title" = "Wil je de app resetten?";
+"holder.cleardata.menu.title" = "Reset app";
 "holder.clockDeviationDetected.message" = "<p>Om de CoronaCheck-app goed te kunnen gebruiken, is het belangrijk dat de tijd op je telefoon goed staat ingesteld. Loopt je telefoon bijvoorbeeld een paar minuten voor? Dan kan er een fout ontstaan tijdens de controle van je coronabewijs.</p><p><a href=\"%@\">Ga naar de instellingen van je telefoon</a> en zet de datum en tijd op 'automatisch instellen'.</p>";
 "holder.clockDeviationDetected.title" = "Controleer de tijd van je telefoon";
 "holder.consent.action" = "Aan de slag";
@@ -321,8 +320,6 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Gegevens mogelijk niet compleet";
 "holder.incompletedutchvaccination.title" = "Geen Nederlands vaccinatiebewijs";
 "holder.launch.text" = "We starten de app voor je op...";
-/* MARK: - Holder Launch */
-"holder.launch.title" = "CoronaCheck";
 "holder.launch.version" = "App versie %@ (build %@)";
 "holder.location.ggd.subtitle" = "Log in met je DigiD";
 "holder.location.ggd.title" = "GGD";
@@ -618,6 +615,10 @@
 "holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatiebeoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve coronatestuitslag";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder_deactivation_url" = "https://coronacheck.nl/app/niet-in-gebruik";
+"holder_endOfLife_button" = "Naar CoronaCheck.nl";
+"holder_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
+"holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
+"holder_endOfLife_title" = "App niet in gebruik";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Je negatieve testuitslag is succesvol toegevoegd. Maak je bezoekersbewijs compleet met je vaccinatiebeoordeling.</p><p>Hiervoor heb je een beoordelingscode gekregen van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negatieve testuitslag toegevoegd";
@@ -679,6 +680,8 @@
 "holder_listRemoteEvents_vaccinationAssessment_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
+"holder_menu_resetApp" = "App resetten";
+"holder_menu_storedEvents" = "Opgeslagen gegevens";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs toevoegen";
 "holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";
@@ -686,12 +689,15 @@
 "holder_newintheapp_content_3Gand1G_body" = "De Nederlandse toegangsregels zijn veranderd. Op plekken waar 3G-toegang wordt gegeven kun je naar binnen met een bewijs van vaccinatie, herstel, of een negatieve test. Op plekken waar 1G-toegang wordt gegeven kun je alleen met een testbewijs naar binnen. De app maakt aparte bewijzen voor 3G-toegang en 1G-toegang.";
 "holder_newintheapp_content_3Gand1G_button_next" = "Volgende";
 "holder_newintheapp_content_3Gand1G_title" = "Bewijzen voor 3G- en 1G-toegang";
+"holder_newintheapp_content_dutchAndInternationalCertificates_body" = "Er zijn weer bewijzen voor in Nederland en het buitenland. Gebruik je Nederlandse bewijs voor toegang tot plekken en activiteiten in Nederland. Ga je de grens over of ben je in het buitenland? Gebruik dan je internationale bewijs.";
+"holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates" = "Naar mijn bewijzen";
+"holder_newintheapp_content_dutchAndInternationalCertificates_title" = "Nederlandse en internationale bewijzen";
 "holder_newintheapp_content_only1G_body" = "De Nederlandse toegangsregels zijn veranderd. Er wordt 1G-toegang gegeven op alle plekken waar om een coronabewijs wordt gevraagd. Dit betekent dat je daar alleen naar binnen kunt met een testbewijs. Je kunt nog steeds een bewijs van vaccinatie of herstel toevoegen in de app, maar deze bewijzen kun je alleen gebruiken in het buitenland.";
 "holder_newintheapp_content_only1G_button_next" = "Volgende";
 "holder_newintheapp_content_only1G_title" = "Alleen 1G-toegang";
-"holder_newintheapp_content_only3G_body" = "De Nederlandse toegangsregels zijn veranderd. Er wordt 3G-toegang gegeven op alle plekken waar om een coronabewijs wordt gevraagd. Dit betekent dat je naar binnen kunt met een bewijs van vaccinatie, herstel, of een negatieve test.";
+"holder_newintheapp_content_only3G_body" = "Op dit moment wordt 3G-toegang gegeven op alle plekken waar om een coronabewijs wordt gevraagd. Dit betekent dat je overal naar binnen kunt met een bewijs van vaccinatie, herstel, of een negatieve test.";
 "holder_newintheapp_content_only3G_button_next" = "Volgende";
-"holder_newintheapp_content_only3G_title" = "Alleen 3G-toegang";
+"holder_newintheapp_content_only3G_title" = "3G-toegang in Nederland";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "In Nederland wordt het coronatoegangsbewijs niet meer gebruikt. Nederlandse bewijzen zijn daarom uit de app gehaald. Voor reizen in het buitenland zijn gewoon nog internationale bewijzen te maken en te gebruiken.";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "Alleen internationale bewijzen";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Je bezoekersbewijs is alleen in Nederland geldig. Wil je naar een ander land? Check de regels van het land dat je wilt bezoeken.</p>\n<p><b>Meer weten?</b><br />Lees meer op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
@@ -710,10 +716,34 @@
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Nederlandse QR-code";
+"holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/nl/dosis\">Lees meer over de dosis</a>";
 /* Voice Over Details Button International QR */
 "holder_showqr_international_accessibility_button_details" = "Details internationale QR-code";
+"holder_storedEvent_alert_removeEvents_message" = "Bij het wissen van deze gegevens worden er mogelijk bewijzen met QR-codes uit de app verwijderd.";
+"holder_storedEvent_alert_removeEvents_title" = "Deze gegevens wissen?";
+"holder_storedEvents_button_handleData" = "Hoe gaat CoronaCheck met gegevens om?";
+"holder_storedEvents_button_removeEvents" = "Deze gegevens wissen";
+"holder_storedEvents_eraseEvents_title" = "Gegevens wissen";
+"holder_storedEvents_listHeader_fetchedFromProvider" = "Opgehaald bij %@";
+"holder_storedEvents_listHeader_paperFlow" = "Ingescand bewijs";
+"holder_storedEvents_list_noEvents" = "Geen gegevens opgeslagen";
+"holder_storedEvents_message" = "De gegevens hieronder staan opgeslagen op je telefoon en worden gebruikt door CoronaCheck om je coronabewijs te maken.";
+"holder_storedEvents_title" = "Mijn opgeslagen gegevens";
+"holder_storedEvents_url" = "https://coronacheck.nl/nl/privacy";
 "holder_test_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
+"holder_updateApp_button" = "Installeer update";
+"holder_updateApp_content" = "Download de laatste versie van de app om verder te gaan.";
+"holder_updateApp_errorMessage" = "De App Store kan niet geopend worden.";
+"holder_updateApp_title" = "Tijd voor een update";
 "holder_vaccination_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je gegevens ophalen.";
+"holder_wasUserTestedAtGGD_body" = "Als je voor of op %@ getest bent kun je de testuitslag ophalen via DigiD. Ben je erna getest? Gebruik de ophaalcode die je van de testlocatie hebt gekregen.";
+"holder_wasUserTestedAtGGD_no_buttonSubtitle" = "Vul je ophaalcode in";
+"holder_wasUserTestedAtGGD_no_buttonTitle" = "Nee, erna getest";
+"holder_wasUserTestedAtGGD_title" = "Ben je vóór of op %@ getest?";
+"holder_wasUserTestedAtGGD_yes_buttonSubtitle" = "Log in met DigiD";
+"holder_wasUserTestedAtGGD_yes_buttonTitle" = "Ja, getest voor of op %@";
+"holder_whereUserTested_body" = "Geef aan waar je bent getest om een bewijs te maken van je positieve of negatieve testuitslag.";
+"holder_whereUserTested_title" = "Waar ben je getest?";
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";
 "internet.required.text" = "Om de app op te starten heb je internet nodig.";
@@ -736,11 +766,6 @@
 "recommended.updateApp.title" = "Update alvast je app";
 "recommended_update_card_action" = "Nu updaten";
 "recommended_update_card_description" = "Je kunt de app al naar een nieuwere versie updaten";
-"updateApp.button" = "Installeer update";
-"updateApp.content" = "Download de laatste versie van de app om verder te gaan.";
-/* MARK: - Update App */
-"updateApp.error.message" = "De App Store kan niet geopend worden.";
-"updateApp.title" = "Tijd voor een update";
 "visitorpass_code_description" = "Vul je beoordelingscode in. Deze heb je van de balie gekregen waar jouw vaccinatie werd beoordeeld.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Vul je verificatiecode in. Deze krijg je via sms of e-mail.";

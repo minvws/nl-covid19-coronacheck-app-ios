@@ -1,12 +1,5 @@
-"endOfLife.button" = "Go to CoronaCheck.nl";
-"endOfLife.description" = "The app is not in use at the moment. For more information, go to CoronaCheck.nl";
-/* MARK: - EndOfLife */
-"endOfLife.error.message" = "Can't open website.";
-"endOfLife.title" = "App not in use";
 "general.add" = "Add";
 "general.back" = "Back";
-/* MARK: - General */
-"general.cancel" = "Cancel";
 /* MARK: - General */
 "general.close" = "Close";
 "general.done" = "Done";
@@ -52,26 +45,32 @@
 "general.testtype" = "Test type";
 "general.uptoandincluding" = "until";
 "general.url.link" = "Link";
-"general.vaccination" = "vaccination";
 "general.vaccinationdate" = "Vaccination date";
+/* MARK: - General */
+"general_cancel" = "Cancel";
+"general_delete" = "Clear data";
 "general_menu" = "Menu";
+"general_negativeTest" = "Negative test result";
 "general_newintheapp" = "New in the app";
 "general_newpolicy" = "New policy";
 "general_notification" = "Watch out!";
 "general_pagecontrol_accessibility_value" = "Page %d of %d";
+/* Positieve test */
+"general_positiveTest" = "Positive test result";
 "general_readmore" = "Read more";
 "general_recoverycertificate" = "recovery certificate";
 "general_recoverycertificate_0G" = "International recovery certificate";
 "general_testcertificate" = "test certificate";
 "general_testcertificate_0G" = "International test certificate";
 "general_toMyOverview" = "To my certificates";
+"general_vaccination" = "vaccination";
 "general_vaccinationAssessment" = "vaccination approval";
 "general_vaccinationcertificate" = "vaccination certificate";
 "general_vaccinationcertificate_0G" = "International vaccination certificate";
 "general_visitorPass" = "visitor pass";
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
-"holder.about.readmore" = "Read more:";
+"holder.about.readmore" = "More:";
 "holder.about.text" = "<p>CoronaCheck is created to reopen society step by step during the coronavirus outbreak.</p><p>You can use this app to create a coronavirus pass from your vaccination, negative test result or if you've had coronavirus and are recovered. Your coronavirus pass contains a QR code. Have it scanned for access to places or activities or to travel.</p>";
 /* MARK: - Holder About */
 "holder.about.title" = "About this app";
@@ -89,7 +88,7 @@
 "holder.banner.newqr.title" = "Your QR code has been made";
 "holder.checkdcc.blocked.message" = "<p>For safety reasons, you won't be able to add this QR code to the app temporarily.</p><p>You can try again after 24 hours.</p>";
 "holder.checkdcc.blocked.title" = "Too many attempts";
-"holder.checkdcc.expired.message" = "<p>This paper certificate is no longer valid. This may have various causes:</p><ul><li>Your vaccination or recovery certificate is still valid, but the paper certificate isn’t. Please request a new paper coronavirus pass from the healthcare provider who vaccinated or tested you.</li><li>Your vaccination or recovery has expired.</li></ul>";
+"holder.checkdcc.expired.message" = "<p>This paper certificate is no longer valid. This may have various causes:</p><ul><li>Your vaccination or recovery certificate is still valid, but the paper certificate isn’t. In that case, please request a new paper certificate.</li><li>Your vaccination or recovery has expired.</li></ul>";
 "holder.checkdcc.expired.title" = "This paper certificate has expired";
 "holder.checkdcc.rejected.actionTitle" = "Try again";
 "holder.checkdcc.rejected.message" = "This letter combination and QR code don't belong together.";
@@ -103,10 +102,10 @@
 "holder.chooseqrcodetype.option.vaccine.title" = "Vaccination";
 /* MARK: - Choose QR Code Type */
 "holder.chooseqrcodetype.title" = "What would you like to add?";
-"holder.cleardata.alert.remove" = "Clear data";
-"holder.cleardata.alert.subtitle" = "Clearing will delete all data and certificates from the app and return you to the start screen.";
-"holder.cleardata.alert.title" = "Clear all data?";
-"holder.cleardata.menu.title" = "Clear data";
+"holder.cleardata.alert.remove" = "Reset app";
+"holder.cleardata.alert.subtitle" = "Resetting will delete all data and certificates from the app and return you to the start screen.";
+"holder.cleardata.alert.title" = "Want to reset the app?";
+"holder.cleardata.menu.title" = "Reset app";
 "holder.clockDeviationDetected.message" = "<p>In order to properly use the CoronaCheck app, it is important that the time on your phone is set correctly. For example, if the clock on your phone is a few minutes ahead, an error might occur while verifying your coronavirus pass.</p><p><a href=\"%@\">Go to your phone's settings</a> and set the date and time to 'set automatically'.</p>";
 "holder.clockDeviationDetected.title" = "Check your phone’s time settings";
 "holder.consent.action" = "Get started";
@@ -321,8 +320,6 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
 "holder.incompletedutchvaccination.title" = "No Dutch vaccination certificate";
 "holder.launch.text" = "We're starting the app...";
-/* MARK: - Holder Launch */
-"holder.launch.title" = "CoronaCheck";
 "holder.launch.version" = "App version %@ (build %@)";
 "holder.location.ggd.subtitle" = "Log in with your DigiD";
 "holder.location.ggd.title" = "GGD";
@@ -618,6 +615,10 @@
 "holder_dashboard_visitorpassincompletebanner_title" = "Your vaccination approval has been added. Complete your visitor pass with your negative test result";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
 "holder_deactivation_url" = "https://coronacheck.nl/app/not-in-use";
+"holder_endOfLife_button" = "Go to CoronaCheck.nl";
+"holder_endOfLife_description" = "The app is not in use at the moment. For more information, go to CoronaCheck.nl";
+"holder_endOfLife_errorMessage" = "Can't open website.";
+"holder_endOfLife_title" = "App not in use";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Your negative test result was successfully added. Add your vaccination approval to complete your visitor pass.</p><p>To this end, you've received an approval code from the desk that reviewed your vaccination. You’ve received this code on paper.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Complete certificate";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negative test result added";
@@ -679,6 +680,8 @@
 "holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_listRemoteEvents_vaccination_message" = "If the details are correct you can create a certificate.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
+"holder_menu_resetApp" = "Reset the app";
+"holder_menu_storedEvents" = "Stored data";
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Add visitor pass";
 "holder_negativetest_ggd_message" = "Is your result in? Log in with DigiD to retrieve your test result from the GGD.";
@@ -686,12 +689,15 @@
 "holder_newintheapp_content_3Gand1G_body" = "The access rules in the Netherlands have changed. You can enter venues with 3G access with a vaccination, recovery, or test certificate. Venues with 1G access you can only enter with a test certificate. The app creates separate certificates for 3G and 1G access.";
 "holder_newintheapp_content_3Gand1G_button_next" = "Next";
 "holder_newintheapp_content_3Gand1G_title" = "Certificates for 3G and 1G access";
+"holder_newintheapp_content_dutchAndInternationalCertificates_body" = "You’ll find certificates for in the Netherlands and abroad in the app. Use your Dutch certificate for access to places and activities in the Netherlands. Are you planning to cross the border or are you abroad? Then use your international certificate.";
+"holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates" = "To my certificates";
+"holder_newintheapp_content_dutchAndInternationalCertificates_title" = "Dutch and international certificates";
 "holder_newintheapp_content_only1G_body" = "The access rules in the Netherlands have changed. 1G access applies anywhere a coronavirus pass is required. This means you can only enter these places with a test certificate. You can still add a vaccination or recovery certificate in the app, but you can only use these certificates abroad.";
 "holder_newintheapp_content_only1G_button_next" = "Next";
 "holder_newintheapp_content_only1G_title" = "1G access only";
-"holder_newintheapp_content_only3G_body" = "The access rules in the Netherlands have changed. 3G access applies anywhere a coronavirus pass is required. This means you can enter with a vaccination, recovery, or test certificate.";
+"holder_newintheapp_content_only3G_body" = "Right now 3G access applies to all places where a coronavirus pass is required. This means you can enter anywhere with a proof of vaccination, recovery, or a negative test.";
 "holder_newintheapp_content_only3G_button_next" = "Next";
-"holder_newintheapp_content_only3G_title" = "3G access only";
+"holder_newintheapp_content_only3G_title" = "3G access in the Netherlands";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "The coronavirus entry pass is no longer used in the Netherlands. Dutch certificates are therefore removed from the app. International certificates can still be made and used for travelling abroad.";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "Only international certificates";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
@@ -710,10 +716,34 @@
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Dutch QR code";
+"holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/en/dose\">Read more about the dose</a>";
 /* Voice Over Details Button International QR */
 "holder_showqr_international_accessibility_button_details" = "Details international QR code";
+"holder_storedEvent_alert_removeEvents_message" = "Clearing this data will possibly remove certificates with QR codes from the app.";
+"holder_storedEvent_alert_removeEvents_title" = "Clear this data?";
+"holder_storedEvents_button_handleData" = "how does Coronacheck handle my data?";
+"holder_storedEvents_button_removeEvents" = "Clear this data";
+"holder_storedEvents_eraseEvents_title" = "Clearing data";
+"holder_storedEvents_listHeader_fetchedFromProvider" = "Retrieved at %@";
+"holder_storedEvents_listHeader_paperFlow" = "Scanned certificate";
+"holder_storedEvents_list_noEvents" = "No stored data";
+"holder_storedEvents_message" = "The data below is stored on your phone and is used by CoronaCheck to create your coronavirus pass.";
+"holder_storedEvents_title" = "My stored data";
+"holder_storedEvents_url" = "https://coronacheck.nl/en/privacy";
 "holder_test_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
+"holder_updateApp_button" = "Install update";
+"holder_updateApp_content" = "To continue, install the latest version of the app.";
+"holder_updateApp_errorMessage" = "Can't open App Store";
+"holder_updateApp_title" = "Time for an update";
 "holder_vaccination_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your details again later.";
+"holder_wasUserTestedAtGGD_body" = "If you were tested before or on %@, you can retrieve the test result via DigiD. Were you tested after this date? Use the retrieval code you got from the test location.";
+"holder_wasUserTestedAtGGD_no_buttonSubtitle" = "Enter retrieval code";
+"holder_wasUserTestedAtGGD_no_buttonTitle" = "No, tested after";
+"holder_wasUserTestedAtGGD_title" = "Were you tested before or on %@?";
+"holder_wasUserTestedAtGGD_yes_buttonSubtitle" = "Log in with DigiD";
+"holder_wasUserTestedAtGGD_yes_buttonTitle" = "Yes, tested before or on %@";
+"holder_whereUserTested_body" = "Indicate where you were tested to create a certificate from your positive or negative test result.";
+"holder_whereUserTested_title" = "Where were you tested?";
 /* MARK: - Internet Required */
 "internet.required.button" = "Try again";
 "internet.required.text" = "To start the app, you need to be connected to the internet.";
@@ -736,11 +766,6 @@
 "recommended.updateApp.title" = "Update your app in advance";
 "recommended_update_card_action" = "Update now";
 "recommended_update_card_description" = "You can update your app to a newer version now";
-"updateApp.button" = "Install update";
-"updateApp.content" = "To continue, install the latest version of the app.";
-/* MARK: - Update App */
-"updateApp.error.message" = "Can't open App Store";
-"updateApp.title" = "Time for an update";
 "visitorpass_code_description" = "Enter your approval code. You received this code from the desk that reviewed your vaccination.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Enter your verification code. You will receive this via text or email.";

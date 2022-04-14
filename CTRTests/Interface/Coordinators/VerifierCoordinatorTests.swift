@@ -39,12 +39,14 @@ class VerifierCoordinatorTests: XCTestCase {
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
-		environmentSpies.newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(
-			image: nil,
-			tagline: "test",
+		environmentSpies.newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = [PagedAnnoucementItem(
 			title: "test",
-			content: "test"
-		)
+			content: "test",
+			image: nil,
+			imageBackgroundColor: .white,
+			tagline: "test",
+			step: 0
+		)]
 
 		// When
 		sut.start()

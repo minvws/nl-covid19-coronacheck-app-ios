@@ -14,9 +14,6 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 	
 	/// Dismiss the presented viewController
 	func dismiss()
-	
-	/// The onboarding is finished
-	func finishOnboarding()
 
 	/// Navigate to the consent page
 	func navigateToConsent(shouldHideBackButton: Bool)
@@ -70,16 +67,23 @@ class OnboardingCoordinator: Coordinator, Logging {
 	}
 	
 	/// The onboarding pages
-	var onboardingPages: [OnboardingPage] = []
+	var onboardingPages: [PagedAnnoucementItem] = []
 	
 	// Designated starter method
 	func start() {
 		
-		let viewModel = OnboardingViewModel(
-			coordinator: self,
-			pages: onboardingPages
+		let viewModel = PagedAnnouncementViewModel(
+			delegate: self,
+			pages: onboardingPages,
+			itemsShouldShowWithFullWidthHeaderImage: false,
+			shouldShowWithVWSRibbon: true
 		)
-		let viewController = OnboardingViewController(viewModel: viewModel)
+		let viewController = PagedAnnouncementViewController(
+			viewModel: viewModel,
+			allowsBackButton: true,
+			allowsCloseButton: false,
+			allowsNextButton: true
+		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
@@ -104,6 +108,24 @@ extension OnboardingCoordinator: OpenUrlProtocol {
 		} else {
 			UIApplication.shared.open(url)
 		}
+	}
+}
+
+// MARK: - PagedAnnouncementDelegate
+
+extension OnboardingCoordinator: PagedAnnouncementDelegate {
+	
+	func didFinishPagedAnnouncement() {
+		
+		if appFlavor == .holder {
+			Current.disclosurePolicyManager.setDisclosurePolicyUpdateHasBeenSeen()
+		}
+
+		// Notify that we finished the onboarding
+		onboardingDelegate?.finishOnboarding()
+
+		// Go to consent
+		navigateToConsent(shouldHideBackButton: false)
 	}
 }
 
@@ -133,20 +155,6 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 		
 		presentingViewController?.dismiss(animated: true, completion: nil)
 		presentingViewController = nil
-	}
-	
-	/// The onboarding is finished
-	func finishOnboarding() {
-		
-		if appFlavor == .holder {
-			Current.disclosurePolicyManager.setDisclosurePolicyUpdateHasBeenSeen()
-		}
-
-		// Notify that we finished the onboarding
-		onboardingDelegate?.finishOnboarding()
-
-		// Go to consent
-		navigateToConsent(shouldHideBackButton: false)
 	}
 
 	/// Navigate to the consent page

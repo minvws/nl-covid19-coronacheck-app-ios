@@ -43,6 +43,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
 	}
 
+	var invokedUserWishesToSeeEventDetails = false
+	var invokedUserWishesToSeeEventDetailsCount = 0
+	var invokedUserWishesToSeeEventDetailsParameters: (title: String, details: [EventDetails])?
+	var invokedUserWishesToSeeEventDetailsParametersList = [(title: String, details: [EventDetails])]()
+
+	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails]) {
+		invokedUserWishesToSeeEventDetails = true
+		invokedUserWishesToSeeEventDetailsCount += 1
+		invokedUserWishesToSeeEventDetailsParameters = (title, details)
+		invokedUserWishesToSeeEventDetailsParametersList.append((title, details))
+	}
+
 	var invokedUserWishesToOpenTheMenu = false
 	var invokedUserWishesToOpenTheMenuCount = 0
 
@@ -241,13 +253,13 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	var invokedDisplayErrorParametersList = [(content: Content, Void)]()
 	var shouldInvokeDisplayErrorBackAction = false
 
-	func displayError(content: Content, backAction: @escaping () -> Void) {
+	func displayError(content: Content, backAction: (() -> Void)?) {
 		invokedDisplayError = true
 		invokedDisplayErrorCount += 1
 		invokedDisplayErrorParameters = (content, ())
 		invokedDisplayErrorParametersList.append((content, ()))
 		if shouldInvokeDisplayErrorBackAction {
-			backAction()
+			backAction?()
 		}
 	}
 
@@ -265,6 +277,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesMoreInfoAboutNoVisitorPassToken() {
 		invokedUserWishesMoreInfoAboutNoVisitorPassToken = true
 		invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount += 1
+	}
+
+	var invokedUserWishesToSeeStoredEvents = false
+	var invokedUserWishesToSeeStoredEventsCount = 0
+
+	func userWishesToSeeStoredEvents() {
+		invokedUserWishesToSeeStoredEvents = true
+		invokedUserWishesToSeeStoredEventsCount += 1
 	}
 
 	var invokedDismiss = false

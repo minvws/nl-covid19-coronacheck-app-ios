@@ -18,15 +18,13 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var greenCardLoader: GreenCardLoader!
 	private var environmentSpies: EnvironmentSpies!
-	private var identityCheckerSpy: IdentityCheckerSpy!
 	
 	override func setUp() {
 
 		super.setUp()
 
 		environmentSpies = setupEnvironmentSpies()
-		identityCheckerSpy = IdentityCheckerSpy()
-		identityCheckerSpy.stubbedCompareResult = true
+		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 		
 		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
 		/// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
@@ -47,7 +45,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [],
-			identityChecker: identityCheckerSpy,
 			greenCardLoader: greenCardLoader
 		)
 	}
@@ -580,7 +577,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 260 CC 056")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 260 000 056")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -618,7 +615,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 360 CC 056")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 360 000 056")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -655,7 +652,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 160 CC 056")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 160 000 056")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -692,7 +689,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 960 CC 056")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 960 000 056")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -732,7 +729,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 003")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 000 003")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -818,7 +815,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.title) == L.generalNetworkwasbusyTitle()
 		expect(feedback.body) == L.generalNetworkwasbusyErrorcode("i 270 000 429")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 	
 	func test_makeQR_saveEventGroupNoError_prepareIssueError_noInternet() throws {
@@ -897,7 +894,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 020")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 000 020")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -939,7 +936,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateServerMessage("i 270 CC 500 99857")
+		expect(feedback.body) == L.holderErrorstateServerMessage("i 270 000 500 99857")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -984,7 +981,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 CC 003")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 000 003")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1119,7 +1116,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.title) == L.generalNetworkwasbusyTitle()
 		expect(feedback.body) == L.generalNetworkwasbusyErrorcode("i 280 000 429")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_invalidSignature() throws {
@@ -1163,7 +1160,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 CC 020")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 000 020")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1209,7 +1206,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 CC 010")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 280 000 010")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1255,7 +1252,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateServerMessage("i 280 CC 500 99857")
+		expect(feedback.body) == L.holderErrorstateServerMessage("i 280 000 500 99857")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1391,7 +1388,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 290 CC 055")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 290 000 055")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1702,7 +1699,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 020")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 000 020")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
@@ -1736,7 +1733,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 053")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 000 053")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
@@ -1770,7 +1767,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 
 		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 CC 054")
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 270 000 054")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
@@ -1779,12 +1776,11 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	func test_identityMismatched() {
 		
 		// Given
-		identityCheckerSpy.stubbedCompareResult = false
+		environmentSpies.identityCheckerSpy.stubbedCompareResult = false
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			identityChecker: identityCheckerSpy,
 			greenCardLoader: environmentSpies.greenCardLoaderSpy
 		)
 		

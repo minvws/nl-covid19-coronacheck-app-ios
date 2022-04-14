@@ -48,7 +48,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 	func test_fetchEventInformation_noUrl() {
 		
 		// Given
-		let noUnomitUrlprovider = EventFlow.EventProvider(
+		let noUnomiUrlprovider = EventFlow.EventProvider(
 			identifier: "CC",
 			name: "CoronaCheck",
 			unomiUrl: nil,
@@ -62,7 +62,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: noUnomitUrlprovider) { result in
+			self.sut.fetchEventInformation(provider: noUnomiUrlprovider) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -75,7 +75,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 	func test_fetchEventInformation_noAccessToken() {
 		
 		// Given
-		let noUnomitUrlprovider = EventFlow.EventProvider(
+		let noAccessTokenprovider = EventFlow.EventProvider(
 			identifier: "CC",
 			name: "CoronaCheck",
 			unomiUrl: URL(string: "https://coronacheck.nl/unomi"),
@@ -89,7 +89,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: noUnomitUrlprovider) { result in
+			self.sut.fetchEventInformation(provider: noAccessTokenprovider) { result in
 				
 				// Then
 				expect(result.isFailure) == true

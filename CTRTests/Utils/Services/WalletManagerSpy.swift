@@ -7,6 +7,7 @@
   
 @testable import CTR
 import XCTest
+import CoreData
 
 class WalletManagerSpy: WalletManaging {
 
@@ -156,6 +157,20 @@ class WalletManagerSpy: WalletManaging {
 		invokedExpireEventGroupsVaccinationValidityCount += 1
 		invokedExpireEventGroupsVaccinationValidityParameters = (vaccinationValidity, recoveryValidity, testValidity, vaccinationAssessmentValidity)
 		invokedExpireEventGroupsVaccinationValidityParametersList.append((vaccinationValidity, recoveryValidity, testValidity, vaccinationAssessmentValidity))
+	}
+
+	var invokedRemoveEventGroup = false
+	var invokedRemoveEventGroupCount = 0
+	var invokedRemoveEventGroupParameters: (objectID: NSManagedObjectID, Void)?
+	var invokedRemoveEventGroupParametersList = [(objectID: NSManagedObjectID, Void)]()
+	var stubbedRemoveEventGroupResult: Result<Bool, Error>!
+
+	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Bool, Error> {
+		invokedRemoveEventGroup = true
+		invokedRemoveEventGroupCount += 1
+		invokedRemoveEventGroupParameters = (objectID, ())
+		invokedRemoveEventGroupParametersList.append((objectID, ()))
+		return stubbedRemoveEventGroupResult
 	}
 
 	var invokedGreencardsWithUnexpiredOrigins = false

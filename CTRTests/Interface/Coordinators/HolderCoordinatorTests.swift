@@ -39,12 +39,14 @@ class HolderCoordinatorTests: XCTestCase {
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
-		environmentSpies.newFeaturesManagerSpy.stubbedGetUpdatePageResult = NewFeatureItem(
-			image: nil,
-			tagline: "test",
+		environmentSpies.newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = [PagedAnnoucementItem(
 			title: "test",
-			content: "test"
-		)
+			content: "test",
+			image: nil,
+			imageBackgroundColor: .white,
+			tagline: "test",
+			step: 0
+		)]
 
 		// When
 		sut.start()
@@ -826,6 +828,32 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(viewControllerSpy.presentCalled) == true
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Heb je geen beoordelingscode?"
+	}
+	
+	func test_userWishesToSeeStoredEvents() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToSeeStoredEvents()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ListStoredEventsViewController) == true
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
+	func test_userWishesToSeeEventDetails() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToSeeEventDetails("test_userWishesToSeeEventDetails", details: [])
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is StoredEventDetailsViewController) == true
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	// MARK: - EventFlowDelegate -

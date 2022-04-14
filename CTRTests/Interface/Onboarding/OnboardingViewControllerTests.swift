@@ -8,18 +8,31 @@
 import XCTest
 @testable import CTR
 
-class OnboardingViewControllerTests: XCTestCase {
+class PagedAnnouncementDelegateSpy: PagedAnnouncementDelegate {
+
+	var invokedDidFinishPagedAnnouncement = false
+	var invokedDidFinishPagedAnnouncementCount = 0
+
+	func didFinishPagedAnnouncement() {
+		invokedDidFinishPagedAnnouncement = true
+		invokedDidFinishPagedAnnouncementCount += 1
+	}
+}
+
+class PagedAnnouncementViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: OnboardingViewController!
+	var sut: PagedAnnouncementViewController!
 
-	var coordinatorSpy: OnboardingCoordinatorSpy!
+	var delegateSpy: PagedAnnouncementDelegateSpy!
 
-	let page = OnboardingPage(
+	let page = PagedAnnoucementItem(
 		title: "Onboarding Title",
-		message: "Onboarding Message",
+		content: "Onboarding Message",
 		image: I.onboarding.safely(),
-		step: .step1
+		imageBackgroundColor: .white,
+		tagline: nil,
+		step: 1
 	)
 
 	var window = UIWindow()
@@ -29,13 +42,18 @@ class OnboardingViewControllerTests: XCTestCase {
 
 		super.setUp()
 
-		coordinatorSpy = OnboardingCoordinatorSpy()
+		delegateSpy = PagedAnnouncementDelegateSpy()
 
-		sut = OnboardingViewController(
-			viewModel: OnboardingViewModel(
-				coordinator: coordinatorSpy,
-				pages: [page]
-			)
+		sut = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
+				delegate: delegateSpy,
+				pages: [page],
+				itemsShouldShowWithFullWidthHeaderImage: false,
+				shouldShowWithVWSRibbon: true
+			),
+			allowsBackButton: false,
+			allowsCloseButton: false,
+			allowsNextButton: false
 		)
 		window = UIWindow()
 	}
@@ -69,37 +87,48 @@ class OnboardingViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.invokedFinishOnboarding, "Method should be called")
+		XCTAssertTrue(delegateSpy.invokedDidFinishPagedAnnouncement, "Method should be called")
 	}
 
 	/// Test tap on the next button with two items
 	func testNextTappedWithTwoItems() {
 
 		// Given
-		sut = OnboardingViewController(
-			viewModel: OnboardingViewModel(
-				coordinator: coordinatorSpy,
-				pages: [page, page]
-			)
+		sut = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
+				delegate: delegateSpy,
+				pages: [page, page],
+				itemsShouldShowWithFullWidthHeaderImage: false,
+				shouldShowWithVWSRibbon: true
+			),
+			allowsBackButton: false,
+			allowsCloseButton: false,
+			allowsNextButton: false
 		)
+		
 		loadView()
 
 		// When
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertFalse(coordinatorSpy.invokedFinishOnboarding, "Method should NOT be called")
+		XCTAssertFalse(delegateSpy.invokedDidFinishPagedAnnouncement, "Method should NOT be called")
 	}
 
 	/// Test tap on the next button with two items while on the second page
 	func testWithTwoItemsWhileOnSecondPage() {
 
 		// Given
-		sut = OnboardingViewController(
-			viewModel: OnboardingViewModel(
-				coordinator: coordinatorSpy,
-				pages: [page, page]
-			)
+		sut = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
+				delegate: delegateSpy,
+				pages: [page, page],
+				itemsShouldShowWithFullWidthHeaderImage: false,
+				shouldShowWithVWSRibbon: true
+			),
+			allowsBackButton: true,
+			allowsCloseButton: false,
+			allowsNextButton: false
 		)
 		loadView()
 
@@ -114,11 +143,16 @@ class OnboardingViewControllerTests: XCTestCase {
 	func testNextTappedWithTwoItemsWhileOnSecondPage() {
 
 		// Given
-		sut = OnboardingViewController(
-			viewModel: OnboardingViewModel(
-				coordinator: coordinatorSpy,
-				pages: [page, page]
-			)
+		sut = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
+				delegate: delegateSpy,
+				pages: [page, page],
+				itemsShouldShowWithFullWidthHeaderImage: false,
+				shouldShowWithVWSRibbon: true
+			),
+			allowsBackButton: false,
+			allowsCloseButton: false,
+			allowsNextButton: false
 		)
 		loadView()
 		sut.primaryButtonTapped()
@@ -127,18 +161,23 @@ class OnboardingViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.invokedFinishOnboarding, "Method should be called")
+		XCTAssertTrue(delegateSpy.invokedDidFinishPagedAnnouncement, "Method should be called")
 	}
 
 	/// Test tap on the next button with two items while on the second page
 	func testBackButtonTappedWithTwoItemsWhileOnSecondPage() {
 
 		// Given
-		sut = OnboardingViewController(
-			viewModel: OnboardingViewModel(
-				coordinator: coordinatorSpy,
-				pages: [page, page]
-			)
+		sut = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
+				delegate: delegateSpy,
+				pages: [page, page],
+				itemsShouldShowWithFullWidthHeaderImage: false,
+				shouldShowWithVWSRibbon: true
+			),
+			allowsBackButton: false,
+			allowsCloseButton: false,
+			allowsNextButton: false
 		)
 		loadView()
 		sut.primaryButtonTapped()
@@ -147,7 +186,7 @@ class OnboardingViewControllerTests: XCTestCase {
 		sut.backbuttonTapped()
 
 		// Then
-		XCTAssertFalse(coordinatorSpy.invokedFinishOnboarding, "Method should not be called")
+		XCTAssertFalse(delegateSpy.invokedDidFinishPagedAnnouncement, "Method should not be called")
 		XCTAssertTrue(sut.sceneView.primaryButton.isEnabled)
 	}
 }

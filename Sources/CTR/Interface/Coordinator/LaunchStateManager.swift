@@ -44,7 +44,7 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 	
 	/// Initiializer
 	init() {
-		configureRemoteConfigManager()
+		configureRemoteConfigManagerForUpdate()
 	}
 	
 	deinit {
@@ -57,7 +57,7 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 	func handleLaunchState(_ state: LaunchState) {
 		
 		if CommandLine.arguments.contains("-skipOnboarding") {
-			self.startApplication()
+			startApplication()
 			return
 		}
 		
@@ -86,10 +86,15 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 	
 	private func startApplication() {
 		
-		if !self.applicationHasStarted {
-			self.applicationHasStarted = true
+		if !applicationHasStarted {
 			// Only start once (we will get called multiple times (withinTTL, finished)
-			self.delegate?.applicationShouldStart()
+			applicationHasStarted = true
+			
+			// Only now start listening to remote config changes. Earlier disrupts the launch sequence
+			configureRemoteConfigManagerForReload()
+			
+			// Notify the delegate to start.
+			delegate?.applicationShouldStart()
 		}
 	}
 	
@@ -124,8 +129,8 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 	}
 	
 	// MARK: - Remote Config -
-	
-	private func configureRemoteConfigManager() {
+
+	private func configureRemoteConfigManagerForUpdate() {
 		
 		// Attach behaviours that we want the RemoteConfigManager to perform
 		// each time it refreshes the config in future:
@@ -135,23 +140,44 @@ final class LaunchStateManager: LaunchStateManaging, Logging {
 			// Update the remote config for the crypto library
 			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
 		}
+	}
+	
+	private func configureRemoteConfigManagerForReload() {
+		
+		// Attach behaviours that we want the RemoteConfigManager to perform
+		// each time it refreshes the config in future:
 		
 		remoteConfigManagerReloadObserverToken = Current.remoteConfigManager.observatoryForReloads.append { [weak self] result in
- 
+
+			guard let self = self else { return }
+
 			switch result {
 				case .failure(let error):
-					self?.delegate?.errorWhileLoading(errors: [error])
 					
+					let configValidity = RemoteFileValidity.evaluateIfUpdateNeeded(
+						configuration: Current.remoteConfigManager.storedConfiguration,
+						lastFetchedTimestamp: Current.userSettings.configFetchedTimestamp,
+						isAppLaunching: true,
+						now: Current.now
+					)
+					
+					switch configValidity {
+						case .neverFetched, .refreshNeeded:
+							self.delegate?.errorWhileLoading(errors: [error])
+						case .withinTTL, .withinMinimalInterval:
+							// We are within the TTL. Nothing to do.
+							break
+					}
 				case .success(let (_, _, urlResponse)):
 					// Mark remote config loaded
 					Current.cryptoLibUtility.checkFile(.remoteConfiguration)
 					
 					// Update the server Date handlers
-					self?.updateServerDate(urlResponse)
+					self.updateServerDate(urlResponse)
 					
 					// Recheck the config
-					self?.checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
-						self?.startApplication()
+					self.checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
+						self.startApplication()
 					}
 			}
 		}

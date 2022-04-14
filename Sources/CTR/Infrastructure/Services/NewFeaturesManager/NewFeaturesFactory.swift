@@ -16,14 +16,17 @@ struct HolderNewFeaturesFactory: NewFeaturesFactory {
 	
 	var information: NewFeatureInformation {
 		
-		return .init(pages: [NewFeatureItem(
-			image: HolderNewFeaturesFactory.isNL ? I.onboarding.tabbarNL() : I.onboarding.tabbarEN(),
-			tagline: L.holderUpdatepageTagline(),
-			title: L.holderUpdatepageTitleTab(),
-			content: L.holderUpdatepageContentTab()
-		)],
-					 consent: nil,
-					 version: 4)
+		return .init(
+			pages: [PagedAnnoucementItem(
+				title: L.holderUpdatepageTitleTab(),
+				content: L.holderUpdatepageContentTab(),
+				image: HolderNewFeaturesFactory.isNL ? I.onboarding.tabbarNL() : I.onboarding.tabbarEN(),
+				imageBackgroundColor: C.forcedInformationImage(),
+				tagline: L.holderUpdatepageTagline(),
+				step: 0
+			)],
+			version: 4
+		)
 	}
 	
 	private static var isNL: Bool {
@@ -35,14 +38,16 @@ struct VerifierNewFeaturesFactory: NewFeaturesFactory {
 	
 	var information: NewFeatureInformation {
 		
-		return .init(pages: [NewFeatureItem(
-			image: I.onboarding.tabbarNL(),
-			tagline: L.new_in_app_subtitle(),
-			title: L.new_in_app_risksetting_title(),
-			content: L.new_in_app_risksetting_subtitle()
-		)],
-					 consent: nil,
-					 // Disabled
-					 version: 0)
+		return .init(
+			pages: [PagedAnnoucementItem(
+				title: L.new_in_app_risksetting_title(),
+				content: L.new_in_app_risksetting_subtitle(),
+				image: I.onboarding.tabbarNL(),
+				imageBackgroundColor: C.forcedInformationImage(),
+				tagline: L.new_in_app_subtitle(),
+				step: 0
+			)],
+			version: 0 // Disabled
+		)
 	}
 }

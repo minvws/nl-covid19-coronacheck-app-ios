@@ -48,5 +48,10 @@ final class DCCQRDetailsViewController: BaseViewController {
 		viewModel.$dateInformation.binding = { [weak self] in self?.sceneView.dateInformation = $0 }
 
 		viewModel.$hideForCapture.binding = { [weak self] in self?.sceneView.handleScreenCapture(shouldHide: $0) }
+		
+		sceneView.dosageLinkTouchedCommand = { [weak self] url in
+			
+			self?.viewModel.openUrl(url)
+		}
 	}
 }

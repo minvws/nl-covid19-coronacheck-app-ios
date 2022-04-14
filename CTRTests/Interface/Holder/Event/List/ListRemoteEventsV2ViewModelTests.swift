@@ -22,6 +22,7 @@ class ListRemoteEventsViewModelV2Tests: XCTestCase {
 		super.setUp()
 
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 		
 		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
 		/// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
@@ -42,7 +43,6 @@ class ListRemoteEventsViewModelV2Tests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [],
-			identityChecker: IdentityChecker(),
 			greenCardLoader: greenCardLoader
 		)
 	}

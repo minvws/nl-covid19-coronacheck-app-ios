@@ -7,36 +7,11 @@
 
 import UIKit
 
-/// The steps of the onboarding
-enum OnboardingStep: Int {
-
-	case step1
-	case step2
-	case step3
-	case step4
-	case step5
-}
-
-struct OnboardingPage {
-
-	/// The title of the onboarding page
-	let title: String
-
-	/// The message of the onboarding page
-	let message: String
-
-	/// The image of the onboarding page
-	let image: UIImage?
-
-	/// The step of the onboarding page
-	let step: OnboardingStep
-}
-
 protocol OnboardingFactoryProtocol {
 
 	/// Generate an array of onboarding steps
 	/// - Returns: an array of onboarding steps
-	func create() -> [OnboardingPage]
+	func create() -> [PagedAnnoucementItem]
 
 	/// Get the Consent Title
 	func getConsentTitle() -> String
@@ -67,9 +42,9 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 
 	/// Generate an array of onboarding steps
 	/// - Returns: an array of onboarding steps
-	func create() -> [OnboardingPage] {
+	func create() -> [PagedAnnoucementItem] {
 		
-		var pages = [OnboardingPage]()
+		var pages = [PagedAnnoucementItem]()
 		
 		if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
 			pages = getOnboardingPagesForZeroDisclosurePolicies()
@@ -79,85 +54,105 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 		if let policyPage = getDisclosurePolicyPage() {
 			pages.append(policyPage)
 		}
-		return pages.sorted { $0.step.rawValue < $1.step.rawValue }
+		return pages.sorted { $0.step < $1.step }
 	}
 	
-	private func getOnboardingPagesForZeroDisclosurePolicies() -> [OnboardingPage] {
+	private func getOnboardingPagesForZeroDisclosurePolicies() -> [PagedAnnoucementItem] {
 		
 		return [
-			OnboardingPage(
+			PagedAnnoucementItem(
 				title: L.holder_onboarding_content_TravelSafe_0G_title(),
-				message: L.holder_onboarding_content_TravelSafe_0G_message(),
+				content: L.holder_onboarding_content_TravelSafe_0G_message(),
 				image: I.onboarding.zeroGInternational(),
-				step: .step1
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 1
 			),
-			OnboardingPage(
+			PagedAnnoucementItem(
 				title: L.holderOnboardingTitleYourqr(),
-				message: L.holderOnboardingMessageYourqr(),
+				content: L.holderOnboardingMessageYourqr(),
 				image: I.onboarding.yourQR(),
-				step: .step2
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 2
 			),
-			OnboardingPage(
+			PagedAnnoucementItem(
 				title: L.holder_onboarding_content_onlyInternationalQR_0G_title(),
-				message: L.holder_onboarding_content_onlyInternationalQR_0G_message(),
+				content: L.holder_onboarding_content_onlyInternationalQR_0G_message(),
 				image: I.onboarding.validity(),
-				step: .step3
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 3
 			)
 		]
 	}
 	
-	private func getOnboardingPages() -> [OnboardingPage] {
+	private func getOnboardingPages() -> [PagedAnnoucementItem] {
 		
 		return [
-			OnboardingPage(
+			PagedAnnoucementItem(
 				title: L.holderOnboardingTitleSafely(),
-				message: L.holderOnboardingMessageSafely(),
+				content: L.holderOnboardingMessageSafely(),
 				image: I.onboarding.safely(),
-				step: .step1
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 1
 			),
-			OnboardingPage(
+			PagedAnnoucementItem(
 				title: L.holderOnboardingTitleYourqr(),
-				message: L.holderOnboardingMessageYourqr(),
+				content: L.holderOnboardingMessageYourqr(),
 				image: I.onboarding.yourQR(),
-				step: .step2
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 2
 			),
-			OnboardingPage(
+			PagedAnnoucementItem(
 				title: L.holderOnboardingTitleValidity(),
-				message: L.holderOnboardingMessageValidity(),
+				content: L.holderOnboardingMessageValidity(),
 				image: I.onboarding.validity(),
-				step: .step3
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 3
 			),
-			OnboardingPage(
+			PagedAnnoucementItem(
 				title: L.holderOnboardingTitlePrivacy(),
-				message: L.holderOnboardingMessagePrivacy(),
+				content: L.holderOnboardingMessagePrivacy(),
 				image: I.onboarding.international(),
-				step: .step4
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 4
 			)
 		]
 	}
 	
-	private func getDisclosurePolicyPage() -> OnboardingPage? {
+	private func getDisclosurePolicyPage() -> PagedAnnoucementItem? {
 		
 		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-			return OnboardingPage(
+			return PagedAnnoucementItem(
 				title: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_title(),
-				message: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_message(),
+				content: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				step: .step5
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 5
 			)
 		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
-			return OnboardingPage(
+			return PagedAnnoucementItem(
 				title: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_title(),
-				message: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_message(),
+				content: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				step: .step5
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 5
 			)
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
-			return OnboardingPage(
+			return PagedAnnoucementItem(
 				title: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_title(),
-				message: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message(),
+				content: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				step: .step5
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 5
 			)
 		}
 		// No disclosure page for zero G
@@ -214,18 +209,20 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 
 	/// Generate an array of onboarding steps
 	/// - Returns: an array of onboarding steps
-	func create() -> [OnboardingPage] {
+	func create() -> [PagedAnnoucementItem] {
 
 		let pages = [
-			OnboardingPage(
+			PagedAnnoucementItem(
 				title: L.verifierOnboardingTitleSafely(),
-				message: L.verifierOnboardingMessageSafely(),
+				content: L.verifierOnboardingMessageSafely(),
 				image: I.onboarding.safely(),
-				step: .step1
+				imageBackgroundColor: nil,
+				tagline: nil,
+				step: 1
 			)
 		]
 
-		return pages.sorted { $0.step.rawValue < $1.step.rawValue }
+		return pages.sorted { $0.step < $1.step }
 	}
 
 	/// Get the Consent Title

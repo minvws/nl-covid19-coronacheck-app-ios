@@ -29,7 +29,7 @@ extension ListRemoteEventsViewModel {
 		)
 	}
 
-	internal func showEventError(remoteEvents: [RemoteEvent]) {
+	internal func showEventError() {
 
 		alert = AlertContent(
 			title: L.generalErrorTitle(),
@@ -37,34 +37,14 @@ extension ListRemoteEventsViewModel {
 			cancelAction: nil,
 			cancelTitle: L.holderVaccinationErrorClose(),
 			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
-					}
-				}
+				self?.userWantsToMakeQR()
 			},
 			okTitle: L.holderVaccinationErrorAgain(),
 			okActionIsPreferred: true
 		)
 	}
 
-	internal func showServerTooBusyError(errorCode: ErrorCode) {
-
-		let content = Content(
-			title: L.generalNetworkwasbusyTitle(),
-			body: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
-			primaryActionTitle: L.general_toMyOverview(),
-			primaryAction: { [weak self] in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			secondaryActionTitle: nil,
-			secondaryAction: nil
-		)
-
-		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
-	}
-
-	internal func showNoInternet(remoteEvents: [RemoteEvent]) {
+	internal func showNoInternet() {
 
 		// this is a retry-able situation
 		alert = AlertContent(
@@ -73,34 +53,21 @@ extension ListRemoteEventsViewModel {
 			cancelAction: nil,
 			cancelTitle: L.generalClose(),
 			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
-					}
-				}
+				self?.userWantsToMakeQR()
 			},
 			okTitle: L.generalRetry(),
 			okActionIsPreferred: true
 		)
 	}
-
-	internal func showServerUnreachable(_ errorCode: ErrorCode) {
-
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.generalErrorServerUnreachableErrorCode("\(errorCode)"))
+	
+	internal func handleStorageError() {
+		
+		let errorCode = ErrorCode(flow: determineErrorCodeFlow(), step: .storingEvents, clientCode: .storingEvents)
+		displayError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}
-
-	internal func displayClientErrorCode(_ errorCode: ErrorCode) {
-
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
-	}
-
-	internal func displayServerErrorCode(_ errorCode: ErrorCode) {
-
-		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateServerMessage("\(errorCode)"))
-	}
-
-	private func displayErrorCode(title: String, message: String) {
-
+	
+	internal func displayError(title: String, message: String) {
+		
 		let content = Content(
 			title: title,
 			body: message,
@@ -113,14 +80,14 @@ extension ListRemoteEventsViewModel {
 				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
 					return
 				}
-
+				
 				self?.coordinator?.openUrl(url, inApp: true)
 			}
 		)
 		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
-	func determineErrorCodeFlow(remoteEvents: [RemoteEvent]) -> ErrorCode.Flow {
+	func determineErrorCodeFlow() -> ErrorCode.Flow {
 
 		switch eventMode {
 			case .vaccinationassessment: return ErrorCode.Flow.visitorPass
@@ -138,21 +105,6 @@ extension ListRemoteEventsViewModel {
 					}
 				}
 				return ErrorCode.Flow(value: "")
-		}
-	}
-
-	func determineErrorCodeProvider(remoteEvents: [RemoteEvent]) -> String? {
-
-		var identifiers = [String]()
-		remoteEvents.forEach { remoteEvent in
-			if !identifiers.contains(remoteEvent.wrapper.providerIdentifier) {
-				identifiers.append(remoteEvent.wrapper.providerIdentifier)
-			}
-		}
-		if identifiers.count == 1 {
-			return identifiers.first
-		} else {
-			return nil
 		}
 	}
 

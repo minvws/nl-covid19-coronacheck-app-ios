@@ -37,6 +37,12 @@ extension XCUIElement {
 		element.assertExistence().tap()
 	}
 	
+	func enableSwitch(_ label: String) {
+		let element = self.switches[label]
+		element.assertExistence().tap()
+		XCTAssertTrue(element.isEnabled)
+	}
+	
 	func textExists(_ label: String) {
 		_ = self.staticTexts[label].assertExistence()
 	}

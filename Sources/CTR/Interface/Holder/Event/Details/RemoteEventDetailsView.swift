@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class RemoteEventDetailsView: BaseView {
+final class RemoteEventDetailsView: BaseView, EventDetailsViewable {
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -24,7 +24,7 @@ final class RemoteEventDetailsView: BaseView {
 	}()
 	
 	/// The stack view to add all labels to
-	private let stackView: UIStackView = {
+	private(set) var stackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -97,7 +97,7 @@ final class RemoteEventDetailsView: BaseView {
 	var details: [(detail: NSAttributedString, hasExtraLineBreak: Bool, isSeparator: Bool)]? {
 		didSet {
 			guard let details = details else { return }
-			loadDetails(details)
+			loadDetails(details, spacing: ViewTraits.spacing)
 			stackView.addArrangedSubview(footerTextView)
 			updateAccessibilityStatus()
 		}
@@ -112,83 +112,5 @@ final class RemoteEventDetailsView: BaseView {
 		didSet {
 			footerTextView.attributedText = .makeFromHtml(text: footer, style: .bodyDark)
 		}
-	}
-}
-
-private extension RemoteEventDetailsView {
-	
-	func createLabel(for detail: NSAttributedString) -> AccessibleBodyLabelView {
-		let view = AccessibleBodyLabelView()
-		view.label.attributedText = detail
-		return view
-	}
-
-	func createLineView() -> UIView {
-
-		let view = UIView()
-		view.backgroundColor = C.grey2()
-		return view
-	}
-	
-	func loadDetails(_ details: [(detail: NSAttributedString, hasExtraLineBreak: Bool, isSeparator: Bool)]) {
-		details.forEach {
-			if $0.isSeparator {
-				let spaceView = UIView()
-				let lineView = createLineView()
-				stackView.addArrangedSubview(spaceView)
-				stackView.setCustomSpacing(ViewTraits.spacing, after: spaceView)
-				stackView.addArrangedSubview(lineView)
-				NSLayoutConstraint.activate([
-					// Set height to 1, else it will default to 0.
-					lineView.heightAnchor.constraint(equalToConstant: 1.0)
-				])
-				stackView.setCustomSpacing(ViewTraits.spacing, after: lineView)
-			} else {
-				let label = createLabel(for: $0.detail)
-				stackView.addArrangedSubview(label)
-
-				if $0.hasExtraLineBreak {
-					stackView.setCustomSpacing(ViewTraits.spacing, after: label)
-				}
-			}
-		}
-	}
-	
-	/// Hide voice over labels when VoiceControl or SwitchControl are enabled. Setting it to none allows it to scroll for VoiceControl and SwitchControl
-	func updateAccessibilityStatus() {
-		stackView.subviews.forEach { view in
-			guard let label = view as? AccessibleBodyLabelView else { return }
-			label.updateAccessibilityStatus()
-		}
-	}
-}
-
-/// Hides VoiceControl labels for Label
-private class AccessibleBodyLabelView: BaseView {
-	
-	let label: Label = {
-		let label = Label(body: nil).multiline()
-		label.textColor = C.black()
-		return label
-	}()
-	
-	override func setupViewConstraints() {
-		super.setupViewConstraints()
-		
-		label.embed(in: self)
-		label.setContentHuggingPriority(.required, for: .vertical)
-	}
-	
-	override func setupAccessibility() {
-		super.setupAccessibility()
-		
-		updateAccessibilityStatus()
-	}
-	
-	func updateAccessibilityStatus() {
-		label.setupForVoiceAndSwitchControlAccessibility()
-		
-		isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
-		accessibilityLabel = UIAccessibility.isVoiceOverRunning ? label.text : nil
 	}
 }

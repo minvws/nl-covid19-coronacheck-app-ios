@@ -11,7 +11,7 @@ import UIKit
 class SimpleDisclosureButton: BaseView {
 
 	/// The display constants
-	private struct ViewTraits {
+	fileprivate struct ViewTraits {
 
 		// Dimensions
 		static let lineHeight: CGFloat = 22
@@ -23,8 +23,13 @@ class SimpleDisclosureButton: BaseView {
 		static let topMargin: CGFloat = 12.0
 		static let bottomMargin: CGFloat = 16.0
 	}
-
-	private let titleLabel: Label = {
+	
+	fileprivate var titleTopMarginConstraint: NSLayoutConstraint?
+	fileprivate var titleBottomMarginConstraint: NSLayoutConstraint?
+	fileprivate var titleLeadingConstraint: NSLayoutConstraint?
+	fileprivate var disclosureTrailingConstraint: NSLayoutConstraint?
+	
+	fileprivate let titleLabel: Label = {
 
 		return Label(body: nil).multiline()
 	}()
@@ -44,7 +49,7 @@ class SimpleDisclosureButton: BaseView {
 		return view
 	}()
 
-	private let button: UIButton = {
+	fileprivate let button: UIButton = {
 
 		let button = UIButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -79,16 +84,28 @@ class SimpleDisclosureButton: BaseView {
 		NSLayoutConstraint.activate([
 
 			// Title
-			titleLabel.topAnchor.constraint(
-				equalTo: topAnchor,
-				constant: ViewTraits.topMargin
-			),
-			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			{
+				let constraint = titleLabel.topAnchor.constraint(
+					equalTo: topAnchor,
+					constant: ViewTraits.topMargin
+				)
+				titleTopMarginConstraint = constraint
+				return constraint
+			}(),
+			{
+				let constraint = titleLabel.bottomAnchor.constraint(
+					equalTo: bottomAnchor,
+					constant: -ViewTraits.bottomMargin
+				)
+				titleBottomMarginConstraint = constraint
+				return constraint
+			}(),
+			{
+				let constraint = titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor)
+				titleLeadingConstraint = constraint
+				return constraint
+			}(),
 			titleLabel.trailingAnchor.constraint(equalTo: disclosureView.leadingAnchor),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
-				constant: -ViewTraits.bottomMargin
-			),
 			titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.lineHeight),
 
 			// Line
@@ -97,7 +114,11 @@ class SimpleDisclosureButton: BaseView {
 			lineView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			lineView.heightAnchor.constraint(equalToConstant: 1),
 
-			disclosureView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			{
+				let constraint = disclosureView.trailingAnchor.constraint(equalTo: trailingAnchor)
+				disclosureTrailingConstraint = constraint
+				return constraint
+			}(),
 			disclosureView.heightAnchor.constraint(equalToConstant: ViewTraits.disclosureHeight),
 			disclosureView.centerYAnchor.constraint(equalTo: centerYAnchor)
 		])
@@ -126,6 +147,45 @@ class SimpleDisclosureButton: BaseView {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.lineHeight,
 															 kerning: ViewTraits.kerning)
+			button.accessibilityLabel = title
+		}
+	}
+}
+
+class RedDisclosureButton: SimpleDisclosureButton {
+	
+	/// The display constants
+	private struct ViewTraits {
+		
+		// Margins
+		static let inset: CGFloat = 20
+		static let topMargin: CGFloat = 24.0
+		static let bottomMargin: CGFloat = 24.0
+	}
+	
+	override func setupViews() {
+		
+		super.setupViews()
+		titleLabel.font = Fonts.bodyBold
+	}
+	
+	override func setupViewConstraints() {
+		
+		super.setupViewConstraints()
+		titleTopMarginConstraint?.constant = RedDisclosureButton.ViewTraits.topMargin
+		titleBottomMarginConstraint?.constant = -RedDisclosureButton.ViewTraits.bottomMargin
+		titleLeadingConstraint?.constant = RedDisclosureButton.ViewTraits.inset
+		disclosureTrailingConstraint?.constant = -RedDisclosureButton.ViewTraits.inset
+	}
+	
+	/// The  title
+	override var title: String? {
+		didSet {
+			titleLabel.attributedText = title?.setLineHeight(
+				SimpleDisclosureButton.ViewTraits.lineHeight,
+				kerning: SimpleDisclosureButton.ViewTraits.kerning,
+				textColor: C.error() ?? UIColor.red
+			)
 			button.accessibilityLabel = title
 		}
 	}

@@ -10,17 +10,20 @@ import Foundation
 final class ErrorStateViewModel: Logging {
 
 	@Bindable private(set) var content: Content
+	
+	@Bindable private(set) var showBackButton: Bool
 
-	private var backbuttonAction: () -> Void
+	private var backbuttonAction: (() -> Void)?
 
-	init(content: Content, backAction: @escaping () -> Void) {
+	init(content: Content, backAction: (() -> Void)?) {
 
 		self.content = content
 		self.backbuttonAction = backAction
+		self.showBackButton = backbuttonAction != nil
 	}
 
 	func backButtonTapped() {
 
-		backbuttonAction()
+		backbuttonAction?()
 	}
 }

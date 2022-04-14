@@ -65,7 +65,7 @@ class VaccinationEventMatchingTest: BaseTest {
 		
 		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffsetInDays: setup.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, vaccinationDateOffsetInDays: setup.vacOffset)
-		assertInternationalVaccinationQRDetails(for: setup)
+		assertInternationalVaccinationQRDetails(for: setup, vaccinationDateOffsetInDays: setup.vacOffset)
 	}
 	
 	func test_vacJ1DifferentBirthDay_ReplaceSetup() {
@@ -91,7 +91,7 @@ class VaccinationEventMatchingTest: BaseTest {
 		
 		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffsetInDays: setup.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, vaccinationDateOffsetInDays: setup.vacOffset)
-		assertInternationalVaccinationQRDetails(for: setup)
+		assertInternationalVaccinationQRDetails(for: setup, vaccinationDateOffsetInDays: setup.vacOffset)
 	}
 	
 	func test_vacJ1DifferentBirthMonth_ReplaceSetup() {
@@ -117,7 +117,7 @@ class VaccinationEventMatchingTest: BaseTest {
 		
 		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffsetInDays: setup.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, vaccinationDateOffsetInDays: setup.vacOffset)
-		assertInternationalVaccinationQRDetails(for: setup)
+		assertInternationalVaccinationQRDetails(for: setup, vaccinationDateOffsetInDays: setup.vacOffset)
 	}
 	
 	func test_vacJ1DifferentBirthYear_Replaces() {
@@ -155,6 +155,6 @@ class VaccinationEventMatchingTest: BaseTest {
 		
 		assertValidDutchVaccinationCertificate(doses: setup.dose, validUntilOffsetInDays: setup.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: setup.doseIntl, vaccinationDateOffsetInDays: setup.vacOffset)
-		assertInternationalVaccinationQRDetails(for: setup)
+		assertInternationalVaccinationQRDetails(for: setup, vaccinationDateOffsetInDays: setup.vacOffset)
 	}
 }

@@ -8,18 +8,20 @@
 import XCTest
 @testable import CTR
 
-class OnboardingItemViewControllerTests: XCTestCase {
+class PagedAnnouncementItemViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: OnboardingItemViewController?
+	var sut: PagedAnnouncementItemViewController?
 
 	var coordinatorSpy = OnboardingCoordinatorSpy()
 
-	let page = OnboardingPage(
+	let page = PagedAnnoucementItem(
 		title: "Onboarding Title",
-		message: "Onboarding Message",
+		content: "Onboarding Message",
 		image: I.onboarding.safely(),
-		step: .step1
+		imageBackgroundColor: .white,
+		tagline: nil,
+		step: 1
 	)
 
 	var window = UIWindow()
@@ -30,11 +32,11 @@ class OnboardingItemViewControllerTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = OnboardingCoordinatorSpy()
-		sut = OnboardingItemViewController(
-			viewModel: OnboardingItemViewModel(
-				coordinator: coordinatorSpy,
-				onboardingInfo: page
-			)
+		sut = PagedAnnouncementItemViewController(
+			viewModel: PagedAnnouncementItemViewModel(
+				item: page
+			),
+			shouldShowWithFullWidthHeaderImage: false
 		)
 		window = UIWindow()
 	}
@@ -65,7 +67,7 @@ class OnboardingItemViewControllerTests: XCTestCase {
 		// Then
 		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, page.title, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, page.message, "Message should match")
+		XCTAssertEqual(strongSut.sceneView.content, page.content, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.image, page.image, "Image should match")
 	}
 }

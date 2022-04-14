@@ -12,19 +12,6 @@ class SnapshotViewModelTests: XCTestCase {
 
 	var sut: SnapshotViewModel?
 
-	var versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0", build: "test")
-
-	override func setUp() {
-		super.setUp()
-
-		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0", build: "test")
-
-		sut = SnapshotViewModel(
-			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder
-		)
-	}
-
 	// MARK: Tests
 
 	/// Test the initializer for the holder
@@ -34,16 +21,12 @@ class SnapshotViewModelTests: XCTestCase {
 
 		// When
 		sut = SnapshotViewModel(
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder
 		)
 
 		// Then
 		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.title, L.holderLaunchTitle(), "Title should match")
-		XCTAssertEqual(strongSut.appIcon, I.holderAppIcon(), "Icon should match")
-		XCTAssertTrue(strongSut.version.contains("1.0.0"))
-		XCTAssertTrue(strongSut.version.contains("test"))
+		XCTAssertEqual(strongSut.appIcon, I.launch.holderAppIcon(), "Icon should match")
 	}
 
 	/// Test the initializer for the verifier
@@ -53,13 +36,11 @@ class SnapshotViewModelTests: XCTestCase {
 
 		// When
 		sut = SnapshotViewModel(
-			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.verifier
 		)
 
 		// Then
 		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.title, L.verifierLaunchTitle(), "Title should match")
-		XCTAssertEqual(strongSut.appIcon, I.verifierAppIcon(), "Icon should match")
+		XCTAssertEqual(strongSut.appIcon, I.launch.verifierAppIcon(), "Icon should match")
 	}
 }

@@ -17,14 +17,10 @@ protocol NewFeaturesManaging {
 	
 	/// Get a new feature item
 	/// - Returns: optional item
-	func getNewFeatureItem() -> NewFeatureItem?
+	func pagedAnnouncementItems() -> [PagedAnnoucementItem]?
 
-	/// Get the consent
-	/// - Returns: optional consent
-	func getConsent() -> NewFeatureConsent?
-
-	/// Give consent
-	func consentGiven()
+	/// User has seen the intro for the new feature, update the version
+	func userHasViewedNewFeatureIntro()
 
 	/// Reset the manager
 	func wipePersistedData()
@@ -70,20 +66,13 @@ class NewFeaturesManager: NewFeaturesManaging {
 		return forcedInformationData.lastSeenVersion < currentVersion
 	}
 	
-	func getNewFeatureItem() -> NewFeatureItem? {
+	func pagedAnnouncementItems() -> [PagedAnnoucementItem]? {
 
-		return factory?.information.pages.first
+		return factory?.information.pages
 	}
 
-	/// Is there any consent that needs to be displayed?
-	/// - Returns: optional consent
-	func getConsent() -> NewFeatureConsent? {
-
-		return factory?.information.consent
-	}
-
-	/// User has given consent, update the version
-	func consentGiven() {
+	/// User has seen the intro for the new feature, update the version
+	func userHasViewedNewFeatureIntro() {
 
 		guard let currentVersion = factory?.information.version else { return }
 		forcedInformationData.lastSeenVersion = currentVersion
