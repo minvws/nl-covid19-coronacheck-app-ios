@@ -70,7 +70,6 @@ class StoredEventItemView: BaseView {
 		let button = UIButton()
 		button.backgroundColor = .clear
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.accessibilityLabel = L.holderEventDetails()
 		return button
 	}()
 	
@@ -156,7 +155,16 @@ class StoredEventItemView: BaseView {
 		
 		super.setupAccessibility()
 		backgroundButton.isAccessibilityElement = true
-		accessibilityElements = [titleLabel, detailsStackView, backgroundButton]
+		titleLabel.isAccessibilityElement = false
+		detailsStackView.isAccessibilityElement = false
+		accessibilityElements = [backgroundButton]
+	}
+	
+	private func updateAccessbilityLabel() {
+		
+		guard let title = title, details.isNotEmpty else { return }
+		
+		backgroundButton.accessibilityLabel = title + ", " + details.joined(separator: ", ")
 	}
 	
 	/// User tapped on the primary button
@@ -174,6 +182,7 @@ class StoredEventItemView: BaseView {
 				ViewTraits.Title.lineHeight,
 				kerning: ViewTraits.Title.kerning
 			)
+			updateAccessbilityLabel()
 		}
 	}
 	
@@ -183,6 +192,7 @@ class StoredEventItemView: BaseView {
 			detailsStackView.removeArrangedSubviews()
 			details.forEach { detail in
 				let label = Label(body: nil).multiline()
+				label.isAccessibilityElement = false
 				label.attributedText = .makeFromHtml(
 					text: detail,
 					style: NSAttributedString.HTMLStyle(
@@ -194,6 +204,7 @@ class StoredEventItemView: BaseView {
 				)
 				detailsStackView.addArrangedSubview(label)
 			}
+			updateAccessbilityLabel()
 		}
 	}
 	
