@@ -349,7 +349,22 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func navigateToHolderStart(completion: @escaping () -> Void = {}) {
 		
-		navigateToDashboard(completion: completion)
+		let dashboardViewController = HolderDashboardViewController(
+			viewModel: HolderDashboardViewModel(
+				coordinator: self,
+				datasource: HolderDashboardQRCardDatasource(),
+				strippenRefresher: DashboardStrippenRefresher(
+					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
+					reachability: try? Reachability()
+				),
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
+				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
+				versionSupplier: versionSupplier
+			)
+		)
+		
+		navigationController.setViewControllers([dashboardViewController], animated: false, completion: completion)
+		window.replaceRootViewController(with: navigationController)
 	}
 	
 	/// Navigate to enlarged QR
