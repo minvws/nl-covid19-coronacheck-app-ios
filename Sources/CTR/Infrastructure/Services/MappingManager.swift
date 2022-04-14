@@ -9,8 +9,6 @@ import Foundation
 
 protocol MappingManaging {
 
-	func setEventProviders(_ providers: [EventFlow.EventProvider])
-
 	func getProviderIdentifierMapping(_ code: String? ) -> String?
 
 	func getDisplayIssuer(_ issuer: String) -> String
@@ -52,13 +50,6 @@ class MappingManager: MappingManaging, Logging {
 
 		self.remoteConfigManager = remoteConfigManager
 		self.providerIdentifiers = remoteConfigManager.storedConfiguration.providerIdentifiers ?? []
-	}
-
-	func setEventProviders(_ providers: [EventFlow.EventProvider]) {
-
-		providerIdentifiers.removeAll()
-
-		providers.forEach { providerIdentifiers.append(Mapping(code: $0.identifier, name: $0.name)) }
 	}
 
 	func getProviderIdentifierMapping(_ code: String? ) -> String? {
