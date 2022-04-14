@@ -71,5 +71,5 @@ class CouplingManagerTests: XCTestCase {
 		expect(wrapper?.events?.first?.vaccination).to(beNil())
 		expect(wrapper?.events?.first?.dccEvent?.credential) == "test_convert"
 		expect(wrapper?.events?.first?.dccEvent?.couplingCode) == "test_couplingCode"
-	}	
+	}
 }
