@@ -70,7 +70,7 @@ class StoredEventItemView: BaseView {
 		let button = UIButton()
 		button.backgroundColor = .clear
 		button.translatesAutoresizingMaskIntoConstraints = false
-		
+		button.accessibilityLabel = L.holderEventDetails()
 		return button
 	}()
 	
