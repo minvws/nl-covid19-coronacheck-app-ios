@@ -41,23 +41,12 @@ class BaseViewController: UIViewController {
 	override func viewDidAppear(_ animated: Bool) {
 
 		super.viewDidAppear(animated)
-
-		setupAccessibilityElements()
 		
 		navigationController?.interactivePopGestureRecognizer?.delegate = enableSwipeBack ? self : nil
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = enableSwipeBack
 	}
 
 	// MARK: - Accessibility
-
-	func setupAccessibilityElements() {
-
-		// Fix for Accessibility on older devices.
-		// Explicitly set the content.
-		if let navBar = navigationController?.navigationBar {
-			accessibilityElements = [navBar, view as Any]
-		}
-	}
 	
 	// If the user is has VoiceOver enabled, they can
 	// draw a "Z" shape with two fingers to trigger a navigation pop.
