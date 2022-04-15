@@ -1,0 +1,20 @@
+/*
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
+
+import UIKit
+
+extension UIView {
+	
+	/// Set up view type name as accessibility label for UI tests
+	func setupAccessibleTypeName() {
+		guard CommandLine.arguments.contains("-showAccessibilityLabels") else {
+			return
+		}
+		
+		accessibilityLabel = String(describing: type(of: self))
+	}
+}
