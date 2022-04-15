@@ -5,6 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import XCTest
+
 extension BaseTest {
 	
 	// MARK: General
@@ -281,5 +283,18 @@ extension BaseTest {
 	
 	func assertNoCertificatesInWallet() {
 		app.textExists("Geen gegevens opgeslagen")
+	}
+	
+	func assertWalletItem(ofType eventType: EventType, atIndex: Int = 0, with dataToCheck: Set<String>) {
+		app.tapButton(eventType.rawValue, index: atIndex)
+		let dataShown = app.otherElements["StoredEventDetailsView"].descendants(matching: .other).mapLabelsToSet()
+		makeScreenShot(name: "Wallet item \(eventType.rawValue)@\(atIndex)")
+		XCTAssertTrue(dataToCheck.isSubset(of: dataShown))
+		app.tapButton("BackButton")
+	}
+	
+	func assertAmountOfWalletItems(ofType eventType: EventType, is expectedAmount: Int) {
+		let items = app.descendants(matching: .any).matching(identifier: eventType.rawValue)
+		XCTAssertEqual(items.count, expectedAmount)
 	}
 }
