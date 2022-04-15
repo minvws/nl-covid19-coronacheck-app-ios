@@ -9,18 +9,6 @@
 
 class MappingManagerSpy: MappingManaging {
 
-	var invokedSetEventProviders = false
-	var invokedSetEventProvidersCount = 0
-	var invokedSetEventProvidersParameters: (providers: [EventFlow.EventProvider], Void)?
-	var invokedSetEventProvidersParametersList = [(providers: [EventFlow.EventProvider], Void)]()
-
-	func setEventProviders(_ providers: [EventFlow.EventProvider]) {
-		invokedSetEventProviders = true
-		invokedSetEventProvidersCount += 1
-		invokedSetEventProvidersParameters = (providers, ())
-		invokedSetEventProvidersParametersList.append((providers, ()))
-	}
-
 	var invokedGetProviderIdentifierMapping = false
 	var invokedGetProviderIdentifierMappingCount = 0
 	var invokedGetProviderIdentifierMappingParameters: (code: String?, Void)?

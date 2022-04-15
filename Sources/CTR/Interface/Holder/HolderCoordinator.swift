@@ -752,7 +752,8 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 			return
 		}
 		
-		guard let pagedAnnouncementItems = Current.disclosurePolicyManager.factory.create() else {
+		let pagedAnnouncementItems = Current.disclosurePolicyManager.factory.create()
+		guard pagedAnnouncementItems.isNotEmpty else {
 			return
 		}
 		
