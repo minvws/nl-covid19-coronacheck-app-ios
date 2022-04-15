@@ -116,4 +116,10 @@ extension BaseTest {
 		app.tapButton("CloseButton")
 		return result
 	}
+	
+	func deleteItemFromWallet(atIndex: Int = 0, confirm: Bool = true) {
+		app.tapButton("Deze gegevens wissen", index: atIndex)
+		app.textExists("Deze gegevens wissen?")
+		app.tapButton(confirm ? "Wis gegevens" : "Annuleer")
+	}
 }

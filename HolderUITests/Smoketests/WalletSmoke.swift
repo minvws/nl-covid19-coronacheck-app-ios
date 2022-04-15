@@ -114,4 +114,46 @@ class WalletSmoke: BaseTest {
 		assertAmountOfWalletItems(ofType: .vaccination, is: 1)
 		assertWalletItem(ofType: .vaccination, with: vac)
 	}
+	
+	func test_removeVaccination() {
+		let person = TestData.vacP1
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
+		
+		viewWallet()
+		deleteItemFromWallet()
+		assertNoEventsInWallet()
+	}
+	
+	func test_removePositiveTest() {
+		let person = TestData.posPcr
+		addRecoveryCertificate(for: person)
+		addRetrievedCertificateToApp()
+		
+		viewWallet()
+		deleteItemFromWallet()
+		assertNoEventsInWallet()
+	}
+	
+	func test_removeNegativeTest() {
+		let person = TestData.negPcr
+		addTestCertificateFromGGD(for: person)
+		addRetrievedCertificateToApp()
+		
+		viewWallet()
+		deleteItemFromWallet()
+		assertNoEventsInWallet()
+	}
+	
+	func test_removeSeparateEvents() {
+		let person = TestData.posPcrP1
+		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addRetrievedCertificateToApp()
+		assertCombinedVaccinationAndRecoveryRetrieval()
+		
+		viewWallet()
+		deleteItemFromWallet(atIndex: 0)
+		deleteItemFromWallet(atIndex: 0)
+		assertNoEventsInWallet()
+	}
 }
