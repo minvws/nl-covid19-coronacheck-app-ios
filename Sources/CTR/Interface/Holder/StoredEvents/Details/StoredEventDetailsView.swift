@@ -40,6 +40,8 @@ final class StoredEventDetailsView: ScrolledStackView, EventDetailsViewable {
 	override func setupAccessibility() {
 		super.setupAccessibility()
 		
+		accessibilityLabel = String(describing: StoredEventDetailsView.self)
+		
 		NotificationCenter.default.addObserver(forName: UIAccessibility.voiceOverStatusDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.updateAccessibilityStatus()
 		}

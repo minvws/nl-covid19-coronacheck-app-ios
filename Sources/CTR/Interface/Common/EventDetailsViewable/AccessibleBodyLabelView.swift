@@ -33,6 +33,8 @@ final class AccessibleBodyLabelView: BaseView {
 		label.setupForVoiceAndSwitchControlAccessibility()
 		
 		isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
-		accessibilityLabel = UIAccessibility.isVoiceOverRunning ? label.text : nil
+		
+		let showAccessibilityLabels = UIAccessibility.isVoiceOverRunning || CommandLine.arguments.contains("-showAccessibilityLabels")
+		accessibilityLabel = showAccessibilityLabels ? label.text : nil
 	}
 }
