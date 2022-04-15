@@ -11,10 +11,15 @@ extension UIView {
 	
 	/// Set up view type name as accessibility label for UI tests
 	func setupAccessibleTypeName() {
-		guard CommandLine.arguments.contains("-showAccessibilityLabels") else {
+		guard showAccessibilityLabelsForUITests else {
 			return
 		}
 		
 		accessibilityLabel = String(describing: type(of: self))
+	}
+	
+	/// Check if accessibility labels should be shown for UI tests
+	var showAccessibilityLabelsForUITests: Bool {
+		return CommandLine.arguments.contains("-showAccessibilityLabels")
 	}
 }
