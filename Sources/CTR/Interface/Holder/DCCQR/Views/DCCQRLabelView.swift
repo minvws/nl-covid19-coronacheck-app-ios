@@ -80,7 +80,7 @@ final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 		fieldLabel.setupForVoiceAndSwitchControlAccessibility()
 		valueLabel.setupForVoiceAndSwitchControlAccessibility()
 		
-		if UIAccessibility.isVoiceOverRunning || CommandLine.arguments.contains("-showAccessibilityLabels") {
+		if UIAccessibility.isVoiceOverRunning || showAccessibilityLabelsForUITests {
 			// Show labels for VoiceOver
 			accessibilityLabel = [field, value].joined(separator: ",")
 		} else {

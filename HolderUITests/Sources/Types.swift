@@ -11,6 +11,12 @@ enum CertificateType: String {
 	case test = "Testbewijs"
 }
 
+enum EventType: String {
+	case vaccination = "Vaccinatie"
+	case positive = "Positieve testuitslag"
+	case negative = "Negatieve testuitslag"
+}
+
 enum TestCertificateType: String {
 	case pcr = "PCR (NAAT)"
 	case rat = "Sneltest (RAT)"
