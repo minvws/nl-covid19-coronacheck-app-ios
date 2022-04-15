@@ -128,5 +128,17 @@ extension BaseTest {
 		app.tapButton("Deze gegevens wissen", index: atIndex)
 		app.textExists("Deze gegevens wissen?")
 		app.tapButton(confirm ? "Wis gegevens" : "Annuleer")
+		waitUntilSpinnerIsGone()
+	}
+	
+	func resetApp(confirm: Bool = true) {
+		app.tapButton("Open menu")
+		app.tapButton("Over deze app")
+		app.tapButton("App resetten")
+		app.tapButton(confirm ? "Reset app" : "Annuleer")
+		if !confirm {
+			app.tapButton("BackButton")
+			app.tapButton("BackButton")
+		}
 	}
 }
