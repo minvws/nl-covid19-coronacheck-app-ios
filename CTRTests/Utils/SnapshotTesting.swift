@@ -7,6 +7,15 @@
 
 import SnapshotTesting
 import UIKit
+import XCTest
+
+extension XCTestCase {
+	/// Uncomment to enable global snapshot re-recording:
+//	open override func setUp() {
+//		super.setUp()
+//		isRecording = true
+//	}
+}
 
 internal extension UIViewController {
 	func assertImage(
