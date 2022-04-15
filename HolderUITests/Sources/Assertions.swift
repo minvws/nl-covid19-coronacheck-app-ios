@@ -281,7 +281,7 @@ extension BaseTest {
 	
 	// MARK: - Wallet
 	
-	func assertNoCertificatesInWallet() {
+	func assertNoEventsInWallet() {
 		app.textExists("Geen gegevens opgeslagen")
 	}
 	

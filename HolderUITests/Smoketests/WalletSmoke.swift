@@ -10,7 +10,7 @@ class WalletSmoke: BaseTest {
 	func test_emptyWallet() {
 		viewWallet()
 		
-		assertNoCertificatesInWallet()
+		assertNoEventsInWallet()
 	}
 	
 	func test_vacP1() {
@@ -28,9 +28,9 @@ class WalletSmoke: BaseTest {
 		let person = TestData.vacP3
 		addVaccinationCertificate(for: person)
 		
-		let vac0 = storeRetrievedCertificateDetails(index: 0)
-		let vac1 = storeRetrievedCertificateDetails(index: 1)
-		let vac2 = storeRetrievedCertificateDetails(index: 2)
+		let vac0 = storeRetrievedCertificateDetails(atIndex: 0)
+		let vac1 = storeRetrievedCertificateDetails(atIndex: 1)
+		let vac2 = storeRetrievedCertificateDetails(atIndex: 2)
 		addRetrievedCertificateToApp()
 		
 		viewWallet()
@@ -43,8 +43,8 @@ class WalletSmoke: BaseTest {
 		let person = TestData.posPcrBeforeP1
 		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
 		
-		let vac = storeRetrievedCertificateDetails(index: 0)
-		let pos = storeRetrievedCertificateDetails(index: 1)
+		let vac = storeRetrievedCertificateDetails(atIndex: 0)
+		let pos = storeRetrievedCertificateDetails(atIndex: 1)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -56,9 +56,9 @@ class WalletSmoke: BaseTest {
 	func test_encodingChinese() {
 		let person = TestData.encodingChinese
 		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
-		let vac0 = storeRetrievedCertificateDetails(index: 0)
-		let vac1 = storeRetrievedCertificateDetails(index: 1)
-		let pos = storeRetrievedCertificateDetails(index: 2)
+		let vac0 = storeRetrievedCertificateDetails(atIndex: 0)
+		let vac1 = storeRetrievedCertificateDetails(atIndex: 1)
+		let pos = storeRetrievedCertificateDetails(atIndex: 2)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -89,7 +89,7 @@ class WalletSmoke: BaseTest {
 		assertWalletItem(ofType: .vaccination, with: vac)
 	}
 	
-	func test_vacJ1DifferentEverything_ReplaceSetup() {
+	func test_replaceSetup() {
 		let setup = TestData.vacP2DifferentSetupSituation
 		addVaccinationCertificate(for: setup)
 		addRetrievedCertificateToApp()
