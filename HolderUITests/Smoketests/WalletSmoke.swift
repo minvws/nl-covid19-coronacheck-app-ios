@@ -39,6 +39,16 @@ class WalletSmoke: BaseTest {
 		assertWalletItem(ofType: .vaccination, atIndex: 2, with: vac2)
 	}
 	
+	func test_posPcr() {
+		let person = TestData.posPcrBeforeP1
+		addRecoveryCertificate(for: person)
+		let pos = storeRetrievedCertificateDetails()
+		addRetrievedCertificateToApp()
+		
+		viewWallet()
+		assertWalletItem(ofType: .positive, with: pos)
+	}
+	
 	func test_posPcrBeforeP1() {
 		let person = TestData.posPcrBeforeP1
 		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
