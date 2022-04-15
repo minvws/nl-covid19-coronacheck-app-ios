@@ -108,4 +108,12 @@ extension BaseTest {
 		app.tapButton("Over deze app")
 		app.tapButton("Opgeslagen gegevens")
 	}
+	
+	func storeRetrievedCertificateDetails(index: Int = 0) -> Set<String> {
+		app.tapButton("Details", index: index)
+		makeScreenShot(name: "Details \(index)")
+		let result = app.otherElements["RemoteEventDetailsView"].descendants(matching: .other).mapLabelsToSet()
+		app.tapButton("CloseButton")
+		return result
+	}
 }
