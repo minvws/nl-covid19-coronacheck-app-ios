@@ -115,6 +115,24 @@ class WalletSmoke: BaseTest {
 		assertWalletItem(ofType: .vaccination, with: vac)
 	}
 	
+	func test_keepSetup() {
+		let setup = TestData.vacP2DifferentSetupSituation
+		addVaccinationCertificate(for: setup)
+		let vac0 = storeRetrievedCertificateDetails(atIndex: 0)
+		let vac1 = storeRetrievedCertificateDetails(atIndex: 1)
+		addRetrievedCertificateToApp()
+		
+		let person = TestData.vacJ1DifferentEverythingReplaces
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
+		replaceExistingCertificate(false)
+		
+		viewWallet()
+		assertAmountOfWalletItems(ofType: .vaccination, is: 2)
+		assertWalletItem(ofType: .vaccination, atIndex: 0, with: vac0)
+		assertWalletItem(ofType: .vaccination, atIndex: 1, with: vac1)
+	}
+	
 	func test_removeVaccination() {
 		let person = TestData.vacP1
 		addVaccinationCertificate(for: person)
@@ -123,6 +141,9 @@ class WalletSmoke: BaseTest {
 		viewWallet()
 		deleteItemFromWallet()
 		assertNoEventsInWallet()
+		
+		returnFromWalletToOverview()
+		assertNoCertificateRetrieved()
 	}
 	
 	func test_removePositiveTest() {
@@ -133,6 +154,9 @@ class WalletSmoke: BaseTest {
 		viewWallet()
 		deleteItemFromWallet()
 		assertNoEventsInWallet()
+		
+		returnFromWalletToOverview()
+		assertNoCertificateRetrieved()
 	}
 	
 	func test_removeNegativeTest() {
@@ -143,6 +167,9 @@ class WalletSmoke: BaseTest {
 		viewWallet()
 		deleteItemFromWallet()
 		assertNoEventsInWallet()
+		
+		returnFromWalletToOverview()
+		assertNoCertificateRetrieved()
 	}
 	
 	func test_removeSeparateEvents() {
@@ -152,8 +179,17 @@ class WalletSmoke: BaseTest {
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
 		viewWallet()
-		deleteItemFromWallet(atIndex: 0)
-		deleteItemFromWallet(atIndex: 0)
+		assertAmountOfWalletItems(ofType: .positive, is: 1)
+		assertAmountOfWalletItems(ofType: .vaccination, is: 1)
+		
+		deleteItemFromWallet()
+		assertAmountOfWalletItems(ofType: .positive, is: 0)
+		assertAmountOfWalletItems(ofType: .vaccination, is: 1)
+		
+		deleteItemFromWallet()
 		assertNoEventsInWallet()
+		
+		returnFromWalletToOverview()
+		assertNoCertificateRetrieved()
 	}
 }

@@ -107,6 +107,13 @@ extension BaseTest {
 		app.tapButton("Open menu")
 		app.tapButton("Over deze app")
 		app.tapButton("Opgeslagen gegevens")
+		app.textExists("Mijn opgeslagen gegevens")
+	}
+	
+	func returnFromWalletToOverview() {
+		app.tapButton("BackButton")
+		app.tapButton("BackButton")
+		app.tapButton("BackButton")
 	}
 	
 	func storeRetrievedCertificateDetails(atIndex: Int = 0) -> Set<String> {
