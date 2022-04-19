@@ -11,9 +11,9 @@ extension UILabel {
 	
 	/// Set up when VoiceControl and SwitchControl scrolling issue occur. Setting it to none allows it to scroll for VoiceControl and SwitchControl.
 	/// It also hides VoiceControl labels when VoiceControl is enabled.
-	func setupForVoiceAndSwitchControlAccessibility() {
+	func setupForVoiceAndSwitchControlAccessibility(_ trait: UIAccessibilityTraits = .staticText) {
 		
-		accessibilityTraits = !UIAccessibility.isVoiceOverRunning ? .none : .staticText
+		accessibilityTraits = !UIAccessibility.isVoiceOverRunning ? .none : trait
 		isAccessibilityElement = UIAccessibility.isVoiceOverRunning || UIAccessibility.isSwitchControlRunning
 	}
 }
