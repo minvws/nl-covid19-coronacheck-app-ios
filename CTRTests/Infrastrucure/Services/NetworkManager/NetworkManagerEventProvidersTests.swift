@@ -15,21 +15,6 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 	
 	private var sut: NetworkManager!
 	private let path = "/v8/holder/config_providers"
-//	private let provider = EventFlow.EventProvider(
-//		identifier: "CC",
-//		name: "CoronaCheck",
-//		unomiUrl: URL(string: "https://coronacheck.nl/unomi"),
-//		eventUrl: URL(string: "https://coronacheck.nl/event"),
-//		cmsCertificates: [OpenSSLData.providerCertificate],
-//		tlsCertificates: [OpenSSLData.providerCertificate],
-//		accessToken: EventFlow.AccessToken(
-//			providerIdentifier: "CC",
-//			unomiAccessToken: "accessToken",
-//			eventAccessToken: "eventToken"
-//		),
-//		eventInformationAvailable: nil,
-//		usages: [.vaccination]
-//	)
 	
 	override func setUp() {
 		
@@ -376,10 +361,12 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 				// Then
 				expect(result.isSuccess) == true
 				expect(result.successValue?.first is EventFlow.EventProvider) == true
-				expect(result.successValue?.first.name) == "CC Test Provider"
-				expect(result.successValue?.first.providerIdentifier) == "CTP"
-				expect(result.successValue?.first.unomi) == "CTP"
-				
+				expect(result.successValue?.first?.name) == "CC Test Provider"
+				expect(result.successValue?.first?.identifier) == "CTP"
+				expect(result.successValue?.first?.unomiUrl) == URL(string: "https://coronacheck.nl/api/unomi")
+				expect(result.successValue?.first?.eventUrl) == URL(string: "https://coronacheck.nl/api/event")
+				expect(result.successValue?.first?.cmsCertificates.first) == "test"
+				expect(result.successValue?.first?.tlsCertificates.first) == "test"
 				done()
 			}
 		}
