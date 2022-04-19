@@ -62,6 +62,7 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 				allowsNextButton: true
 			)
 			navigationController.viewControllers = [viewController]
+			navigationController.view.window?.replaceRootViewController(with: navigationController)
 		} else {
 
 			// no update required
