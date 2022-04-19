@@ -160,7 +160,7 @@ private extension DCCQRDetailsView {
 	
 	func updateAccessibilityStatus() {
 		
-		titleLabel.setupForVoiceAndSwitchControlAccessibility()
+		titleLabel.setupForVoiceAndSwitchControlAccessibility(.header)
 		descriptionLabel.setupForVoiceAndSwitchControlAccessibility()
 		dateInformationLabel.setupForVoiceAndSwitchControlAccessibility()
 		
