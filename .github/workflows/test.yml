@@ -7,14 +7,13 @@ on:
   workflow_dispatch:
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_13.3.1.app/Contents/Developer
   FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
   
 jobs:
   swiftlint:
-    runs-on: macos-11
-    
+    runs-on: macos-12
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,7 +28,7 @@ jobs:
           make run_swiftlint
 
   test:
-    runs-on: macos-11
+    runs-on: macos-12
     timeout-minutes: 30
     needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:

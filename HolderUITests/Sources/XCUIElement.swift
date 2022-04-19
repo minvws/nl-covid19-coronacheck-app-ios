@@ -30,10 +30,9 @@ extension XCUIElement {
 		return self
 	}
 	
-	func tapButton(_ label: String) {
-		let elementQuery = self.descendants(matching: .button).matching(identifier: label)
-		let predicate = NSPredicate(format: "isEnabled == true")
-		let element = elementQuery.element(matching: predicate).firstMatch
+	func tapButton(_ label: String, index: Int = 0) {
+		let elementQuery = self.descendants(matching: .any).matching(identifier: label)
+		let element = elementQuery.element(boundBy: index)
 		element.assertExistence().tap()
 	}
 	

@@ -77,6 +77,8 @@ final class RemoteEventDetailsView: BaseView, EventDetailsViewable {
 	override func setupAccessibility() {
 		super.setupAccessibility()
 		
+		setupAccessibleTypeName()
+		
 		NotificationCenter.default.addObserver(forName: UIAccessibility.voiceOverStatusDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.updateAccessibilityStatus()
 		}
