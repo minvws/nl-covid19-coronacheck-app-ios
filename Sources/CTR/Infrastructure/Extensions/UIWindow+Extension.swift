@@ -9,7 +9,7 @@ import UIKit
 
 extension UIWindow {
 	
-	/// Replace UIWindow root view controller.
+	/// Replace UIWindow root view controller with fade animation.
 	/// - Parameters:
 	///   - viewController: The view controller to be shown
 	///   - animated: Display fade animation
@@ -30,6 +30,5 @@ extension UIWindow {
 		} completion: { _ in
 			completion?()
 		}
-
 	}
 }
