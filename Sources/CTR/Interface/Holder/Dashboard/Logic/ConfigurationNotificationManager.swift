@@ -18,7 +18,8 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 	private let remoteConfigManager: RemoteConfigManaging
 	private let now: () -> Date
 	private let notificationCenter: NotificationCenterProtocol
-	private var timer: Timer?
+	private var timer: Timeable?
+	private let vendTimer: (TimeInterval, @escaping () -> Void) -> Timeable
 	private var callback: (() -> Void)?
 	private var remoteConfigManagerReloadObserverToken: UUID?
 	
@@ -57,11 +58,20 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 		return configAlmostExpiredDate
 	}
 
-	init(userSettings: UserSettingsProtocol, remoteConfigManager: RemoteConfigManaging, now: @escaping () -> Date, notificationCenter: NotificationCenterProtocol = NotificationCenter.default) {
+	init(
+		userSettings: UserSettingsProtocol,
+		remoteConfigManager: RemoteConfigManaging,
+		now: @escaping () -> Date,
+		notificationCenter: NotificationCenterProtocol = NotificationCenter.default,
+		vendTimer: @escaping (TimeInterval, @escaping () -> Void) -> Timeable = { interval, action in
+			return Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { _ in action() }
+		}
+	) {
 		self.userSettings = userSettings
 		self.remoteConfigManager = remoteConfigManager
 		self.now = now
 		self.notificationCenter = notificationCenter
+		self.vendTimer = vendTimer
 		(self.almostOutOfDateObservatory, self.almostOutOfDateNotifyObservers) = Observatory<Bool>.create()
 		
 		setupNotificationCenterObservation()
@@ -99,8 +109,8 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 		guard let timeBeforeConfigAlmostOutOfDateWarning = self.timeBeforeConfigAlmostOutOfDateWarning else { return }
 
 		stopTimer()
-	
-		timer = Timer.scheduledTimer(withTimeInterval: timeBeforeConfigAlmostOutOfDateWarning, repeats: false) { [weak self] _ in
+		
+		timer = vendTimer(timeBeforeConfigAlmostOutOfDateWarning) { [weak self] in
 			guard let self = self else { return }
 			
 			DispatchQueue.main.async {
