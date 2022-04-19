@@ -47,6 +47,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
+		configurationNotificationManagerSpy.stubbedAlmostOutOfDateObservatory = Observatory.create().0
 		vaccinationAssessmentNotificationManagerSpy = VaccinationAssessmentNotificationManagerSpy()
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
