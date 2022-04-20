@@ -11,23 +11,27 @@ class MessageCardView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
-
+		
+		enum Shadow {
+			static let radius: CGFloat = 10
+			static let opacity: Float = 0.15
+		}
+		
 		// Dimensions
 		static let cornerRadius: CGFloat = 15
-		static let shadowRadius: CGFloat = 10
-		static let shadowOpacity: Float = 0.15
 		static let closeButtonSize: CGFloat = 16
-        
+		
 		// Margins
 		static let margin: CGFloat = 24
-        static let verticalPadding: CGFloat = 8
-        static let closeButtonTopMargin: CGFloat = 28
-
-		// Label
-		static let lineHeight: CGFloat = 22
-		static let kerning: CGFloat = -0.41
+		static let verticalPadding: CGFloat = 8
+		static let closeButtonTopMargin: CGFloat = 28
+		
+		enum Message {
+			static let lineHeight: CGFloat = 22
+			static let kerning: CGFloat = -0.41
+		}
 	}
-    
+	
 	struct Config {
 		
 		var title: String
@@ -42,8 +46,11 @@ class MessageCardView: BaseView {
     
 	required init(config: Config) {
 		self.config = config
-		titleLabel.attributedText = config.title.setLineHeight(ViewTraits.lineHeight, kerning: ViewTraits.kerning)
-		titleLabel.accessibilityIdentifier = config.accessibilityIdentifier
+		messageLabel.attributedText = config.title.setLineHeight(
+			ViewTraits.Message.lineHeight,
+			kerning: ViewTraits.Message.kerning
+		)
+		messageLabel.accessibilityIdentifier = config.accessibilityIdentifier
 		
 		closeButtonTappedCommand = config.closeButtonCommand
 		
@@ -59,6 +66,7 @@ class MessageCardView: BaseView {
 
 	/// A label for accessibility to announce the role of this message card ("Notification")
 	private let accessibilityRoleView: UIView = {
+		
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.accessibilityLabel = L.holder_dashboard_accessibility_notification()
@@ -68,14 +76,15 @@ class MessageCardView: BaseView {
 		return view
 	}()
 	
-    /// The title label (- within `messageWithCloseButtonStackView`)
-	private let titleLabel: Label = {
-        let titleLabel = Label(body: nil).multiline().header()
+    /// The message label
+	private let messageLabel: Label = {
+		
+        let titleLabel = Label(body: nil).multiline()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         return titleLabel
 	}()
 
-	/// The close button (- within `messageWithCloseButtonStackView`)
+	/// The close button
 	private let closeButton: TappableButton = {
 
 		let button = TappableButton()
@@ -100,7 +109,7 @@ class MessageCardView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		view?.backgroundColor = .white
+		view?.backgroundColor = C.white()
 		layer.cornerRadius = ViewTraits.cornerRadius
 		createShadow()
 
@@ -113,9 +122,9 @@ class MessageCardView: BaseView {
 
 		// Shadow
 		layer.shadowColor = C.shadow()?.cgColor
-		layer.shadowOpacity = ViewTraits.shadowOpacity
+		layer.shadowOpacity = ViewTraits.Shadow.opacity
 		layer.shadowOffset = .zero
-		layer.shadowRadius = ViewTraits.shadowRadius
+		layer.shadowRadius = ViewTraits.Shadow.radius
 		// Cache Shadow
 		layer.shouldRasterize = true
 		layer.rasterizationScale = UIScreen.main.scale
@@ -127,7 +136,7 @@ class MessageCardView: BaseView {
 		super.setupViewHierarchy()
         
 		addSubview(accessibilityRoleView)
-        addSubview(titleLabel)
+        addSubview(messageLabel)
         
         if nil != config.closeButtonCommand {
             addSubview(closeButton)
@@ -148,8 +157,8 @@ class MessageCardView: BaseView {
 		constraints += [accessibilityRoleView.bottomAnchor.constraint(equalTo: bottomAnchor)]
 		constraints += [accessibilityRoleView.leadingAnchor.constraint(equalTo: leadingAnchor)]
 		constraints += [accessibilityRoleView.trailingAnchor.constraint(equalTo: trailingAnchor)]
-        constraints += [titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
-        constraints += [titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
+        constraints += [messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
+        constraints += [messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
         
         if nil != config.closeButtonCommand {
             constraints += [closeButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.closeButtonTopMargin)]
@@ -157,19 +166,19 @@ class MessageCardView: BaseView {
             constraints += [closeButton.heightAnchor.constraint(equalToConstant: ViewTraits.closeButtonSize)]
             constraints += [closeButton.widthAnchor.constraint(equalToConstant: ViewTraits.closeButtonSize)]
             
-            constraints += [titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -ViewTraits.verticalPadding)]
+            constraints += [messageLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -ViewTraits.verticalPadding)]
         } else {
-            constraints += [titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
+            constraints += [messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
         }
         
         if nil != config.ctaButton {
             constraints += [callToActionButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
             constraints += [callToActionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
-            constraints += [callToActionButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewTraits.verticalPadding)]
+            constraints += [callToActionButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: ViewTraits.verticalPadding)]
             constraints += [callToActionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
             
         } else {
-            constraints += [titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
+            constraints += [messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
         }
         
         NSLayoutConstraint.activate(constraints)
