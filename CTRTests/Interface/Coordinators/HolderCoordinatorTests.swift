@@ -43,7 +43,7 @@ class HolderCoordinatorTests: XCTestCase {
 			title: "test",
 			content: "test",
 			image: nil,
-			imageBackgroundColor: .white,
+			imageBackgroundColor: C.white(),
 			tagline: "test",
 			step: 0
 		)]

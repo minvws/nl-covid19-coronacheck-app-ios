@@ -153,10 +153,10 @@ class QRCardView: BaseView {
 		squashedCards.forEach { squashedCardView in
 			squashedCardView.translatesAutoresizingMaskIntoConstraints = false
 			squashedCardView.clipsToBounds = false
-			squashedCardView.backgroundColor = .white
+			squashedCardView.backgroundColor = C.white()
 		}
 
-		hostView.backgroundColor = .white
+		hostView.backgroundColor = C.white()
 		hostView.translatesAutoresizingMaskIntoConstraints = false
 	}
 

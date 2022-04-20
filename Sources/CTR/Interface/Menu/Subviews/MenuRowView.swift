@@ -72,7 +72,7 @@ final class MenuRowView: UIControl {
 	}
 	
 	func setupViews() {
-		backgroundColor = .white
+		backgroundColor = C.white()
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 	}
@@ -128,7 +128,7 @@ final class MenuRowView: UIControl {
 		
 		backgroundColor = isHighlighted || isSelected
 			? C.primaryBlue5()
-			: .white
+			: C.white()
 	}
 	
 	// MARK: - Objc Target-Action callbacks:
