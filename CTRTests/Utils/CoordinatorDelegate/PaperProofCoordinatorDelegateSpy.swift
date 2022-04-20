@@ -10,6 +10,14 @@ import Foundation
 
 class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlProtocol {
 
+	var invokedUserWishesToCancelPaperProofFlow = false
+	var invokedUserWishesToCancelPaperProofFlowCount = 0
+
+	func userWishesToCancelPaperProofFlow() {
+		invokedUserWishesToCancelPaperProofFlow = true
+		invokedUserWishesToCancelPaperProofFlowCount += 1
+	}
+
 	var invokedUserWishesMoreInformationOnSelfPrintedProof = false
 	var invokedUserWishesMoreInformationOnSelfPrintedProofCount = 0
 

@@ -915,7 +915,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_addPaperProofFlowDidFinish() throws {
 		
 		// Given
-		sut.addChildCoordinator(PaperProofCoordinator(delegate: sut))
+		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
 		
 		// When
 		sut.addPaperProofFlowDidFinish()
@@ -928,7 +928,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_switchToAddRegularProof() throws {
 		
 		// Given
-		sut.addChildCoordinator(PaperProofCoordinator(delegate: sut))
+		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
 		
 		// When
 		sut.switchToAddRegularProof()

@@ -43,6 +43,16 @@ final class PaperProofStartViewModel: Logging {
 		]
 	}
 	
+	func backButtonTapped() {
+		
+		coordinator?.userWishesToCancelPaperProofFlow()
+	}
+	
+	func backSwipe() {
+		
+		coordinator?.userWishesToCancelPaperProofFlow()
+	}
+	
 	/// The user tapped the primary button
 	func userTappedNextButton() {
 		

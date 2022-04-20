@@ -36,7 +36,7 @@ final class PaperProofStartViewController: BaseViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		addBackButton(customAction: nil)
+		addBackButton(customAction: #selector(backButtonTapped))
 		setupText()
 		setupButtons()
 		setupItems()
@@ -78,6 +78,11 @@ final class PaperProofStartViewController: BaseViewController {
 				.forEach(self.sceneView.itemStackView.addArrangedSubview)
 		}
 	}
+	
+	@objc func backButtonTapped() {
+
+		viewModel.backButtonTapped()
+	}
 }
 
 extension PaperProofItemView {
@@ -100,4 +105,18 @@ extension PaperProofItemView {
 			view.icon = icon
 			return view
 		}
+}
+
+extension PaperProofStartViewController: UINavigationControllerDelegate {
+	
+	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+
+		if let coordinator = navigationController.topViewController?.transitionCoordinator {
+			coordinator.notifyWhenInteractionChanges { [weak self] context in
+				guard !context.isCancelled else { return }
+				// Clean up coordinator when swiping back
+				self?.viewModel.backSwipe()
+			}
+		}
+	}
 }
