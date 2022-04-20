@@ -12,7 +12,7 @@ import CoreData
 
 extension HolderDashboardViewModelTests {
 	
-	// MARK: Datasource Updating
+	// MARK: Feature Flag-based tests
 	
 	func test_featureflag_shouldShowCoronaMelderRecommendation_enabled_emptystate() {
 		
