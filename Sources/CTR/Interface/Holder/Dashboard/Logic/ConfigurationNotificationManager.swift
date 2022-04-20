@@ -19,6 +19,8 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 	private let now: () -> Date
 	private let notificationCenter: NotificationCenterProtocol
 	private var timer: Timeable?
+	
+	// "vends" a timer from the closure
 	private let vendTimer: (TimeInterval, @escaping () -> Void) -> Timeable
 	private var callback: (() -> Void)?
 	private var remoteConfigManagerReloadObserverToken: UUID?
