@@ -27,7 +27,7 @@ protocol FeatureFlagManaging {
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool
 	func areBothDisclosurePoliciesEnabled() -> Bool
-	func shouldShowCoronaMelderRecommendation() -> Bool 
+	func shouldShowCoronaMelderRecommendation() -> Bool
 }
 
 class FeatureFlagManager: FeatureFlagManaging, Logging {

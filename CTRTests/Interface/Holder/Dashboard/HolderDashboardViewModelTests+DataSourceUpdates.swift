@@ -279,7 +279,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		
 		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard())
