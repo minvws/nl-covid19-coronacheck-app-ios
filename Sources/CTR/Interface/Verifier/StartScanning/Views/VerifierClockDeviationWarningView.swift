@@ -59,7 +59,7 @@ class VerifierClockDeviationWarningView: BaseView {
 
 		super.setupViews()
 
-		backgroundColor = .white
+		backgroundColor = C.white()
 	}
 
 	/// Setup the hierarchy

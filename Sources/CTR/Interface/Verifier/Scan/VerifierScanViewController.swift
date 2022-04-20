@@ -74,7 +74,7 @@ class VerifierScanViewController: ScanViewController {
 		
 		addCloseButton(
 			action: #selector(closeButtonTapped),
-			tintColor: .white
+			tintColor: C.white()!
 		)
 	}
 

@@ -38,7 +38,7 @@ final class EmptyDashboardDescriptionCardView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = .white
+		backgroundColor = C.white()
 		
 		button.addTarget(self, action: #selector(onTap), for: .touchUpInside)
 	}
