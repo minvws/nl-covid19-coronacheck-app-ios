@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -88,11 +89,15 @@ final class HolderDashboardViewModel: Logging {
 		}
 		
 		var shouldShowTabBar: Bool {
-			return activeDisclosurePolicyMode != .zeroG
+			activeDisclosurePolicyMode != .zeroG
 		}
 		
 		var shouldShowOnlyInternationalPane: Bool {
-			return activeDisclosurePolicyMode == .zeroG
+			activeDisclosurePolicyMode == .zeroG
+		}
+		
+		var shouldShowRecommendCoronaMelderCard: Bool {
+			Current.featureFlagManager.shouldShowCoronaMelderRecommendation()
 		}
 		
 		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
