@@ -25,7 +25,7 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventuallyNot(testthis())
+		expect(self.sut.domesticCards).toEventuallyNot(containRecommendCoronaMelderCard())
 		expect(self.sut.internationalCards).toEventuallyNot(containRecommendCoronaMelderCard())
 	}
 	
