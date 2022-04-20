@@ -210,7 +210,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut.start()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.invokedSetViewController) == true
 		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
 	}
 	

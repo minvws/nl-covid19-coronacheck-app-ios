@@ -117,6 +117,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			)
 			
 			navigationController.setViewControllers([dashboardViewController], animated: false)
+			window.replaceRootViewController(with: navigationController)
 		}
 	}
 	
