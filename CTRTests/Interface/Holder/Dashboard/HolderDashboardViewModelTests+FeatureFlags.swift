@@ -25,16 +25,8 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
-		
-		expect(self.sut.domesticCards).toEventuallyNot(containElementSatisfying({ element in
-			if case .recommendCoronaMelder = element { return true }
-			return false
-		}))
-		
-		expect(self.sut.internationalCards).toEventuallyNot(containElementSatisfying({ element in
-			if case .recommendCoronaMelder = element { return true }
-			return false
-		}))
+		expect(self.sut.domesticCards).toEventuallyNot(testthis())
+		expect(self.sut.internationalCards).toEventuallyNot(containRecommendCoronaMelderCard())
 	}
 	
 	func test_featureflag_shouldShowCoronaMelderRecommendation_enabled_nonemptystate() {
@@ -58,15 +50,8 @@ extension HolderDashboardViewModelTests {
 		
 		// Assert
 		
-		expect(self.sut.domesticCards).toEventually(containElementSatisfying({ element in
-			if case .recommendCoronaMelder = element { return true }
-			return false
-		}))
-		
-		expect(self.sut.internationalCards).toEventuallyNot(containElementSatisfying({ element in
-			if case .recommendCoronaMelder = element { return true }
-			return false
-		}))
+		expect(self.sut.domesticCards).toEventually(containRecommendCoronaMelderCard())
+		expect(self.sut.internationalCards).toEventuallyNot(containRecommendCoronaMelderCard())
 	}
 	
 	func test_featureflag_shouldShowCoronaMelderRecommendation_disabled() {
@@ -90,14 +75,14 @@ extension HolderDashboardViewModelTests {
 		
 		// Assert
 		
-		expect(self.sut.domesticCards).toEventuallyNot(containElementSatisfying({ element in
+		expect(self.sut.domesticCards).toEventuallyNot(containRecommendCoronaMelderCard())
+		expect(self.sut.internationalCards).toEventuallyNot(containRecommendCoronaMelderCard())
+	}
+	
+	private func containRecommendCoronaMelderCard() -> _ {
+		containElementSatisfying({ (element: HolderDashboardViewController.Card) in
 			if case .recommendCoronaMelder = element { return true }
 			return false
-		}))
-		
-		expect(self.sut.internationalCards).toEventuallyNot(containElementSatisfying({ element in
-			if case .recommendCoronaMelder = element { return true }
-			return false
-		}))
+		})
 	}
 }
