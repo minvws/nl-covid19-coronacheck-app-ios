@@ -912,6 +912,18 @@ class HolderCoordinatorTests: XCTestCase {
 	
 	// MARK: - PaperProofFlowDelegate -
 	
+	func test_addPaperProofFlowDidCancel() throws {
+		
+		// Given
+		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
+		
+		// When
+		sut.addPaperProofFlowDidCancel()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
 	func test_addPaperProofFlowDidFinish() throws {
 		
 		// Given
