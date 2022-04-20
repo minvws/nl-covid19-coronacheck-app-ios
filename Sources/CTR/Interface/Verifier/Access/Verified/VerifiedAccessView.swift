@@ -127,7 +127,7 @@ extension VerifiedAccess {
 	
 	var tintColor: UIColor? {
 		if case .verified(let verificationPolicy) = self, verificationPolicy == .policy1G {
-			return .white
+			return C.white()
 		} else {
 			return C.black()
 		}

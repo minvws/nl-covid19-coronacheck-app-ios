@@ -19,7 +19,7 @@ class ErrorViewTests: XCTestCase {
 
 		sut = ErrorView()
         sut.frame = CGRect(x: 0, y: 0, width: 390, height: 100)
-		sut.backgroundColor = .white
+		sut.backgroundColor = C.white()
     }
 
 	func test_singleLine() {

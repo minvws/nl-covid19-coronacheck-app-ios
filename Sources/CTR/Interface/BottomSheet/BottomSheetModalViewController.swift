@@ -98,7 +98,7 @@ final class BottomSheetModalViewController: BaseViewController, BottomSheetScrol
 private extension BottomSheetModalViewController {
 	
 	func setupViews() {
-		view.backgroundColor = .white
+		view.backgroundColor = C.white()
 		view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
 		view.layer.cornerRadius = 10
 		view.layer.shadowColor = C.shadow()?.cgColor
