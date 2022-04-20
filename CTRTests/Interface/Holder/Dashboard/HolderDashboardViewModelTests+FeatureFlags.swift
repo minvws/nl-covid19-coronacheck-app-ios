@@ -79,7 +79,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards).toEventuallyNot(containRecommendCoronaMelderCard())
 	}
 	
-	private func containRecommendCoronaMelderCard() -> _ {
+	private func containRecommendCoronaMelderCard() -> Predicate<[HolderDashboardViewController.Card]> {
 		containElementSatisfying({ (element: HolderDashboardViewController.Card) in
 			if case .recommendCoronaMelder = element { return true }
 			return false
