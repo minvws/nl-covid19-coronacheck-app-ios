@@ -41,6 +41,6 @@ final class PaperProofStartScanningViewModel: Logging {
 
 	func userTappedSecondaryButton() {
 
-		coordinator?.userWishesMoreInformationOnInternationalQROnly()
+		coordinator?.userWishesMoreInformationOnWhichProofsCanBeUsed()
 	}
 }

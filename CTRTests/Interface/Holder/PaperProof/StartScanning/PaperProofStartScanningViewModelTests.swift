@@ -41,12 +41,12 @@ final class PaperProofStartScanningViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToScanCertificate) == true
 	}
 
-	func test_internationButtonTapped_shouldInvokeCoordinator() {
+	func test_secondaryButtonTapped_shouldInvokeCoordinator() {
 
 		// When
 		sut.userTappedSecondaryButton()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesMoreInformationOnInternationalQROnly) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesMoreInformationOnWhichProofsCanBeUsed) == true
 	}
 }

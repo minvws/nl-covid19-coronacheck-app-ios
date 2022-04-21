@@ -263,7 +263,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(viewModel.content.body) == L.holderPaperproofNotokenMessage()
 	}
 	
-	func test_userWishesMoreInformationOnInternationalQROnly() {
+	func test_userWishesMoreInformationOnWhichProofsCanBeUsed() {
 		
 		// Given
 		let viewControllerSpy = ViewControllerSpy()
@@ -272,14 +272,14 @@ class PaperProofCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.userWishesMoreInformationOnInternationalQROnly()
+		sut.userWishesMoreInformationOnWhichProofsCanBeUsed()
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
 		let viewModel: ContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel
 		
-		expect(viewModel?.content.title) == L.holderPaperproofInternationalQROnlyTitle()
-		expect(viewModel?.content.body) == L.holderPaperproofInternationalQROnlyMessage()
+		expect(viewModel?.content.title) == L.holder_paperproof_whichProofsCanBeUsed_title()
+		expect(viewModel?.content.body) == L.holder_paperproof_whichProofsCanBeUsed_body()
 	}
 	
 	func test_displayError() throws {

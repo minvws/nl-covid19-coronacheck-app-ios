@@ -18,14 +18,6 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserWishesToCancelPaperProofFlowCount += 1
 	}
 
-	var invokedUserWishesMoreInformationOnSelfPrintedProof = false
-	var invokedUserWishesMoreInformationOnSelfPrintedProofCount = 0
-
-	func userWishesMoreInformationOnSelfPrintedProof() {
-		invokedUserWishesMoreInformationOnSelfPrintedProof = true
-		invokedUserWishesMoreInformationOnSelfPrintedProofCount += 1
-	}
-
 	var invokedUserWishesMoreInformationOnNoInputToken = false
 	var invokedUserWishesMoreInformationOnNoInputTokenCount = 0
 
@@ -34,12 +26,12 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserWishesMoreInformationOnNoInputTokenCount += 1
 	}
 
-	var invokedUserWishesMoreInformationOnInternationalQROnly = false
-	var invokedUserWishesMoreInformationOnInternationalQROnlyCount = 0
+	var invokedUserWishesMoreInformationOnWhichProofsCanBeUsed = false
+	var invokedUserWishesMoreInformationOnWhichProofsCanBeUsedCount = 0
 
-	func userWishesMoreInformationOnInternationalQROnly() {
-		invokedUserWishesMoreInformationOnInternationalQROnly = true
-		invokedUserWishesMoreInformationOnInternationalQROnlyCount += 1
+	func userWishesMoreInformationOnWhichProofsCanBeUsed() {
+		invokedUserWishesMoreInformationOnWhichProofsCanBeUsed = true
+		invokedUserWishesMoreInformationOnWhichProofsCanBeUsedCount += 1
 	}
 
 	var invokedUserDidSubmitPaperProofToken = false

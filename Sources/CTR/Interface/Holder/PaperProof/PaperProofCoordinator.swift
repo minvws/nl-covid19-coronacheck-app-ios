@@ -22,7 +22,7 @@ protocol PaperProofCoordinatorDelegate: AnyObject {
 
 	func userWishesMoreInformationOnNoInputToken()
 
-	func userWishesMoreInformationOnInternationalQROnly()
+	func userWishesMoreInformationOnWhichProofsCanBeUsed()
 
 	func userDidSubmitPaperProofToken(token: String)
 
@@ -109,14 +109,14 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		navigationController.pushViewController(destination, animated: true)
 	}
 
-	func userWishesMoreInformationOnInternationalQROnly() {
+	func userWishesMoreInformationOnWhichProofsCanBeUsed() {
 
 		let viewController = ContentViewController(
 			viewModel: ContentViewModel(
 				coordinator: self,
 				content: Content(
-					title: L.holderPaperproofInternationalQROnlyTitle(),
-					body: L.holderPaperproofInternationalQROnlyMessage()
+					title: L.holder_paperproof_whichProofsCanBeUsed_title(),
+					body: L.holder_paperproof_whichProofsCanBeUsed_body()
 				),
 				linkTapHander: { [weak self] url in
 

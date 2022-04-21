@@ -353,8 +353,6 @@
 "holder.onboarding.title.safely" = "Krijg toegang met je bewijs";
 "holder.onboarding.title.validity" = "Je bewijs heeft een QR-code";
 "holder.onboarding.title.yourqr" = "Bewijs van vaccinatie, herstel of test";
-"holder.paperproof.internationalQROnly.message" = "In je internationale QR-code staan de gegevens die nodig zijn om jouw bewijs in de app te zetten. Heb je ook een papieren bewijs met een Nederlandse QR-code? Dan hoef je deze niet te scannen.";
-"holder.paperproof.internationalQROnly.title" = "Waarom de internationale QR-code?";
 "holder.paperproof.notoken.action" = "Voeg bewijs toe via DigiD";
 "holder.paperproof.notoken.message" = "<p>Het is dan niet mogelijk om je bewijzen op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie als je jouw papieren bewijzen hebt aangevraagd bij je zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je zelf je bewijs geprint?</b><br />Je kunt dan je bewijzen toevoegen aan de app met behulp van DigiD.</p>";
 "holder.paperproof.notoken.title" = "Geen lettercombinatie?";
@@ -776,3 +774,6 @@
 "holder_paperproof_startscanning_button_startScanning" = "Start scannen";
 "holder_paperproof_startscanning_body" = "<p>Je kunt een bestaand bewijs toevoegen aan de CoronaCheck app door ze in te scannen. Bijvoorbeeld bewijzen die je van je zorgverlener hebt gekregen. Of bewijzen die zijn uitgegeven buiten Nederland.</p><p>Scan de <b>internationale QR-code</b> van jouw bewijs. Deze herken je aan een Europese vlag op het bewijs. </p>";
 "holder_paperproof_startscanning_title" = "Een bewijs inscannen met je camera";
+
+"holder_paperproof_whichProofsCanBeUsed_body" = "<p>Ben je getest of gevaccineerd in Nederland? Dan kan jouw zorgverlener  een bewijs voor je uit te printen. Dit bewijs kun je op zichzelf gebruiken of inscannen in de CoronaCheck app.</p><p>Ben je in het buitenland getest of gevaccineerd? Dan heb je in het buitenland een Europees digitaal coronacertificaat(Foreign DCC) gekregen. Of je maakt gebruik van een andere Europese Corona App.<br />De QR-code op dat bewijs kun je inscannen in de CoronaCheck app.</p>";
+"holder_paperproof_whichProofsCanBeUsed_title" = "Welke bewijzen kan ik inscannen?";

@@ -353,8 +353,6 @@
 "holder.onboarding.title.safely" = "Get access with your certificate";
 "holder.onboarding.title.validity" = "Your certificate contains a QR code";
 "holder.onboarding.title.yourqr" = "Certificate of vaccination, recovery or test";
-"holder.paperproof.internationalQROnly.message" = "Your international QR code contains the details needed to get your certificate in the app. Do you also have a certificate with a Dutch QR code? Then you don’t have to scan it.";
-"holder.paperproof.internationalQROnly.title" = "Why the international QR code?";
 "holder.paperproof.notoken.action" = "Add certificate via DigiD";
 "holder.paperproof.notoken.message" = "<p>Then you won't be able to add your certificates to the app this way.</p><p>You only have a letter combination if you requested your paper certificates from your healthcare provider, or had them delivered by mail.</p><p><b>Did you print your certificate yourself?</b><br />Then you can add your certificates to the app using DigiD.</p>";
 "holder.paperproof.notoken.title" = "No letter combination?";
