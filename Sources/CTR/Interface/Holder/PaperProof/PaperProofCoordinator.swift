@@ -91,8 +91,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func userWishesMoreInformationOnNoInputToken() {
 
-		let viewModel = ContentViewModel(
-			coordinator: self,
+		let viewModel = PaperProofContentViewModel(
 			content: Content(
 				title: L.holderPaperproofNotokenTitle(),
 				body: L.holderPaperproofNotokenMessage(),
@@ -100,14 +99,13 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 				primaryAction: nil,
 				secondaryActionTitle: L.holderPaperproofNotokenAction(),
 				secondaryAction: { [weak self] in
-					self?.dismiss()
 					self?.navigationController.popToRootViewController(animated: false)
 					self?.delegate?.switchToAddRegularProof()
 				}
 			)
 		)
-		let viewController = ContentViewController(viewModel: viewModel)
-		presentAsBottomSheet(viewController)
+		let destination = PaperProofContentViewController(viewModel: viewModel)
+		navigationController.pushViewController(destination, animated: true)
 	}
 
 	func userWishesMoreInformationOnWhichProofsCanBeUsed() {

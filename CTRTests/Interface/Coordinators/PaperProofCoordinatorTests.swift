@@ -240,20 +240,16 @@ class PaperProofCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInformationOnNoInputToken() throws {
 
 		// Given
-		let viewControllerSpy = ViewControllerSpy()
-		navigationSpy.viewControllers = [
-			viewControllerSpy
-		]
 
 		// When
 		sut.userWishesMoreInformationOnNoInputToken()
 
 		// Then
-		expect(viewControllerSpy.presentCalled) == true
-		let viewModel: ContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel
-		
-		expect(viewModel?.content.title) == L.holderPaperproofNotokenTitle()
-		expect(viewModel?.content.body) == L.holderPaperproofNotokenMessage()
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel)
+		expect(viewModel.content.title) == L.holderPaperproofNotokenTitle()
+		expect(viewModel.content.body) == L.holderPaperproofNotokenMessage()
 	}
 	
 	func test_userWishesMoreInformationOnWhichProofsCanBeUsed() {
