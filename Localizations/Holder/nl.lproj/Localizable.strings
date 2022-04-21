@@ -335,7 +335,6 @@
 "holder.menu.dashboard" = "Mijn bewijzen";
 "holder.menu.faq" = "Meestgestelde vragen";
 "holder.menu.feedback" = "Geef ons feedback";
-"holder.menu.papercertificate" = "Papieren bewijs toevoegen";
 "holder.menu.privacy" = "Privacyverklaring";
 "holder.menu.proof" = "Bewijs toevoegen";
 "holder.menu.settings" = "Instellingen";
@@ -680,6 +679,8 @@
 "holder_listRemoteEvents_vaccinationAssessment_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
+"holder_menu_paperproof_subTitle" = "Inscannen met je camera";
+"holder_menu_paperproof_title" = "Papieren bewijs toevoegen";
 "holder_menu_resetApp" = "App resetten";
 "holder_menu_storedEvents" = "Opgeslagen gegevens";
 /* Menu item for short stay route */

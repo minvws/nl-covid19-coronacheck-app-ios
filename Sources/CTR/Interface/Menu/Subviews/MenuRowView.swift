@@ -12,20 +12,35 @@ final class MenuRowView: UIControl {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
-		static let margin: CGFloat = 26
-		static let iconTitleSpacing: CGFloat = 16
-		
+		enum Icon {
+			static let margin: CGFloat = 20
+			static let spacing: CGFloat = 16
+		}
+		enum Chevron {
+			static let margin: CGFloat = 22
+		}
 		enum Title {
 			static let lineHeight: CGFloat = 22
 			static let kerning: CGFloat = -0.41
+			static let margin: CGFloat = 25
+		}
+		enum SubTitle {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+			static let margin: CGFloat = 16
+			static let spacing: CGFloat = 4
 		}
 	}
+	
+	var titleLabelTopConstraint: NSLayoutConstraint?
+	
+	var titleLabelBottomConstraint: NSLayoutConstraint?
 	
 	// MARK: - Subviews
 
 	private let iconImageView: UIImageView = {
 		let imageView = UIImageView()
+		imageView.tintColor = C.black()
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		imageView.isAccessibilityElement = false
 		imageView.setContentCompressionResistancePriority(UILayoutPriority.defaultHigh, for: .horizontal)
@@ -34,6 +49,15 @@ final class MenuRowView: UIControl {
 	
 	private let titleLabel: Label = {
 		let label = Label(bodyBold: nil).multiline()
+		label.textColor = C.black()
+		label.adjustsFontForContentSizeCategory = true
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
+		return label
+	}()
+	
+	private let subTitleLabel: Label = {
+		let label = Label(subhead: nil).multiline()
 		label.textColor = C.black()
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
@@ -81,6 +105,7 @@ final class MenuRowView: UIControl {
 		
 		addSubview(iconImageView)
 		addSubview(titleLabel)
+		addSubview(subTitleLabel)
 		addSubview(chevronImageView)
 		addSubview(bottomBorderView)
 	}
@@ -88,17 +113,26 @@ final class MenuRowView: UIControl {
 	func setupViewConstraints() {
 
 		var constraints = [NSLayoutConstraint]()
-		constraints += [iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor)]
-		constraints += [iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
 		
-		constraints += [titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)]
-		constraints += [titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: ViewTraits.iconTitleSpacing)]
-		constraints += [titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: chevronImageView.leadingAnchor, constant: -ViewTraits.margin)]
-		constraints += [titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
-		constraints += [titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
+		constraints += [{
+			let constraint = titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Title.margin)
+			titleLabelTopConstraint = constraint
+			return constraint
+		}()]
+		constraints += [{
+			let constraint = titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Title.margin)
+			titleLabelBottomConstraint = constraint
+			return constraint
+		}()]
+		
+		constraints += [iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor)]
+		constraints += [iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.Icon.margin)]
+		
+		constraints += [titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: ViewTraits.Icon.spacing)]
+		constraints += [titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: chevronImageView.leadingAnchor, constant: -ViewTraits.Title.margin)]
 		
 		constraints += [chevronImageView.centerYAnchor.constraint(equalTo: centerYAnchor)]
-		constraints += [chevronImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
+		constraints += [chevronImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.Chevron.margin)]
 		
 		constraints += [bottomBorderView.leadingAnchor.constraint(equalTo: leadingAnchor)]
 		constraints += [bottomBorderView.bottomAnchor.constraint(equalTo: bottomAnchor)]
@@ -150,9 +184,19 @@ final class MenuRowView: UIControl {
 	
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
-															 kerning: ViewTraits.Title.kerning)
-			accessibilityLabel = title
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
+			)
+		}
+	}
+	
+	var subTitle: String? {
+		didSet {
+			subTitleLabel.attributedText = subTitle?.setLineHeight(
+				ViewTraits.SubTitle.lineHeight,
+				kerning: ViewTraits.SubTitle.kerning
+			)
 		}
 	}
 	
@@ -168,5 +212,20 @@ final class MenuRowView: UIControl {
 		didSet {
 			bottomBorderView.isHidden = !shouldShowBottomBorder
 		}
+	}
+	
+	func showSubTitle(_ subTitle: String) {
+		
+		self.subTitle = subTitle
+		
+		titleLabelTopConstraint?.constant = ViewTraits.SubTitle.margin
+		titleLabelBottomConstraint?.isActive = false
+		
+		var constraints = [NSLayoutConstraint]()
+		constraints += [subTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)]
+		constraints += [subTitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)]
+		constraints += [subTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.SubTitle.margin)]
+		constraints += [subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewTraits.SubTitle.spacing)]
+		NSLayoutConstraint.activate(constraints)
 	}
 }
