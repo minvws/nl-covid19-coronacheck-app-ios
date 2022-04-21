@@ -159,8 +159,8 @@ extension ShowQRViewController {
 
 	func updateControlVisibility() {
 
-		sceneView.nextButton.isHidden = pageViewController.isLastPage
-		sceneView.previousButton.isHidden = pageViewController.currentIndex == 0
+		sceneView.infoView.nextButton.isHidden = pageViewController.isLastPage
+		sceneView.infoView.previousButton.isHidden = pageViewController.currentIndex == 0
 	}
 }
 

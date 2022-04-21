@@ -14,7 +14,6 @@ class ShowQRView: BaseView {
 		
 		enum Dimension {
 			static let titleLineHeight: CGFloat = 22
-			static let pageButton: CGFloat = 60
 		}
 
 		enum Margin {
@@ -32,7 +31,6 @@ class ShowQRView: BaseView {
 			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
 		enum Spacing {
-			static let dosageToButton: CGFloat = 10
 			static let buttonToPageControl: CGFloat = 16
 			static let containerToReturnToThirdPartyAppButton: CGFloat = 24
 		}
@@ -72,31 +70,12 @@ class ShowQRView: BaseView {
 		button.isHidden = true
 		return button
 	}()
-
-	/// The info button
-	let nextButton: TappableButton = {
-
-		let button = TappableButton()
-		button.translatesAutoresizingMaskIntoConstraints = false
-		button.setImage(I.pageIndicatorNext(), for: .normal)
-		button.setupLargeContentViewer(title: L.holderShowqrNextbutton())
-		return button
-	}()
-
-	/// The info button
-	let previousButton: TappableButton = {
-
-		let button = TappableButton()
-		button.translatesAutoresizingMaskIntoConstraints = false
-		button.setImage(I.pageIndicatorBack(), for: .normal)
-		button.setupLargeContentViewer(title: L.holderShowqrPreviousbutton())
-		return button
-	}()
 	
-	/// The title label
-	private let dosageLabel: Label = {
-
-		return Label(headlineBold: nil, montserrat: true).multiline()
+	let infoView: ShowQRInfoView = {
+		
+		let view = ShowQRInfoView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
 	}()
 
 	/// The scrollview
@@ -128,8 +107,8 @@ class ShowQRView: BaseView {
 		backgroundColor = C.white()
 		
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
-		previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
-		nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
+		infoView.previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
+		infoView.nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
 
 		// ScrollView is blocking the Security Animation Reversal
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(scrollViewTapped))
@@ -149,9 +128,7 @@ class ShowQRView: BaseView {
 		addSubview(containerView)
 		addSubview(pageControl)
 		addSubview(returnToThirdPartyAppButton)
-		addSubview(nextButton)
-		addSubview(previousButton)
-		addSubview(dosageLabel)
+		addSubview(infoView)
 		addSubview(scrollView)
 		scrollView.addSubview(scrollContentView)
 	}
@@ -177,7 +154,7 @@ class ShowQRView: BaseView {
 			containerView.heightAnchor.constraint(equalTo: widthAnchor),
 
 			pageControl.topAnchor.constraint(
-				equalTo: dosageLabel.bottomAnchor,
+				equalTo: infoView.bottomAnchor,
 				constant: ViewTraits.Spacing.buttonToPageControl
 			),
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -195,29 +172,16 @@ class ShowQRView: BaseView {
 				equalTo: containerView.leadingAnchor,
 				constant: ViewTraits.Margin.returnToThirdPartyAppButton
 			),
-
-			nextButton.widthAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
-			nextButton.heightAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
-			nextButton.centerYAnchor.constraint(equalTo: dosageLabel.centerYAnchor),
-			nextButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-
-			previousButton.widthAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
-			previousButton.heightAnchor.constraint(equalToConstant: ViewTraits.Dimension.pageButton),
-			previousButton.centerYAnchor.constraint(equalTo: dosageLabel.centerYAnchor),
-			previousButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
 			
-			dosageLabel.topAnchor.constraint(
+			infoView.topAnchor.constraint(
 				equalTo: containerView.bottomAnchor
 			),
-			dosageLabel.leadingAnchor.constraint(
-				greaterThanOrEqualTo: previousButton.trailingAnchor,
-				constant: ViewTraits.Spacing.dosageToButton
+			infoView.leadingAnchor.constraint(
+				greaterThanOrEqualTo: containerView.leadingAnchor
 			),
-			dosageLabel.trailingAnchor.constraint(
-				lessThanOrEqualTo: nextButton.leadingAnchor,
-				constant: -ViewTraits.Spacing.dosageToButton
-			),
-			dosageLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
+			infoView.trailingAnchor.constraint(
+				lessThanOrEqualTo: containerView.trailingAnchor
+			)
 		])
 
 		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
@@ -227,9 +191,7 @@ class ShowQRView: BaseView {
 		securityViewBottomConstraint?.isActive = true
 
 		bringSubviewToFront(containerView)
-		bringSubviewToFront(nextButton)
-		bringSubviewToFront(previousButton)
-		bringSubviewToFront(dosageLabel)
+		bringSubviewToFront(infoView)
 
 		setupScrollViewConstraints()
 	}
@@ -247,7 +209,7 @@ class ShowQRView: BaseView {
 		)
 
 		NSLayoutConstraint.activate([
-			scrollContentView.topAnchor.constraint( equalTo: scrollView.topAnchor),
+			scrollContentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
 			scrollContentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
 			scrollContentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
 			scrollContentView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor),
@@ -268,8 +230,6 @@ class ShowQRView: BaseView {
 		super.setupAccessibility()
         
 		securityView.primaryButton.isAccessibilityElement = false
-		previousButton.accessibilityIdentifier = "BackButton"
-		nextButton.accessibilityIdentifier = "NextButton"
 	}
     
     override func safeAreaInsetsDidChange() {
@@ -298,7 +258,7 @@ class ShowQRView: BaseView {
 	/// The dosage
 	var dosage: String? {
 		didSet {
-			dosageLabel.attributedText = dosage?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
+			infoView.dosageLabel.attributedText = dosage?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
 		}
 	}
 
@@ -319,8 +279,8 @@ class ShowQRView: BaseView {
 	
 	var pageButtonAccessibility: (previous: String, next: String)? {
 		didSet {
-			previousButton.accessibilityLabel = pageButtonAccessibility?.previous
-			nextButton.accessibilityLabel = pageButtonAccessibility?.next
+			infoView.previousButton.accessibilityLabel = pageButtonAccessibility?.previous
+			infoView.nextButton.accessibilityLabel = pageButtonAccessibility?.next
 		}
 	}
 
