@@ -62,6 +62,8 @@ class PaperProofCheckViewController: BaseViewController {
 		viewModel.$alert.binding = { [weak self] in
 			self?.showAlert($0)
 		}
+		
+		addBackButton()
 	}
 
 	private func setForLoadingState(_ content: Content) {

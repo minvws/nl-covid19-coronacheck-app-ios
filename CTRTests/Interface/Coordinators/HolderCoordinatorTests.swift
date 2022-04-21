@@ -370,7 +370,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is PaperProofStartViewController) == true
+		expect(self.navigationSpy.viewControllers.last is PaperProofStartScanningViewController) == true
 		expect(self.sut.childCoordinators).to(haveCount(1))
 	}
 	

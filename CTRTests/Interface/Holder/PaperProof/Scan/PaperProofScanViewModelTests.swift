@@ -24,8 +24,8 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	}
 	
 	func test_initialState() {
-		expect(self.sut.title) == L.holderScannerTitle()
-		expect(self.sut.message) == L.holderScannerMessage()
+		expect(self.sut.title) == L.holder_scanner_title()
+		expect(self.sut.message) == L.holder_scanner_message()
 		expect(self.sut.torchLabels) == [L.holderTokenscanTorchEnable(), L.holderTokenscanTorchDisable()]
 		
 		PaperProofScanViewController(viewModel: sut).assertImage(containedInNavigationController: true)
@@ -79,7 +79,8 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		sut.parseQRMessage(message)
 		
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateACertificate) == true
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateACertificateParameters?.message) == message
+		expect(self.coordinatorDelegateSpy.invokedUserDidScanDCC) == true
+		expect(self.coordinatorDelegateSpy.invokedUserDidScanDCCParameters?.message) == message
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToEnterToken) == true
 	}
 }

@@ -353,25 +353,9 @@
 "holder.onboarding.title.safely" = "Get access with your certificate";
 "holder.onboarding.title.validity" = "Your certificate contains a QR code";
 "holder.onboarding.title.yourqr" = "Certificate of vaccination, recovery or test";
-"holder.paperproof.internationalQROnly.message" = "Your international QR code contains the details needed to get your certificate in the app. Do you also have a certificate with a Dutch QR code? Then you don’t have to scan it.";
-"holder.paperproof.internationalQROnly.title" = "Why the international QR code?";
 "holder.paperproof.notoken.action" = "Add certificate via DigiD";
 "holder.paperproof.notoken.message" = "<p>Then you won't be able to add your certificates to the app this way.</p><p>You only have a letter combination if you requested your paper certificates from your healthcare provider, or had them delivered by mail.</p><p><b>Did you print your certificate yourself?</b><br />Then you can add your certificates to the app using DigiD.</p>";
 "holder.paperproof.notoken.title" = "No letter combination?";
-"holder.paperproof.selfprinted.action" = "Add certificate via DigiD";
-"holder.paperproof.selfprinted.message" = "<p>Then you won't be able to add your certificates to the app this way.</p><p>However, you can add certificates to the app using DigiD.</p>";
-"holder.paperproof.selfprinted.title" = "Printed your certificate yourself?";
-"holder.paperproof.start.mail.message" = "The government has printed your certificates for you and sent them by mail";
-"holder.paperproof.start.mail.title" = "Sent to you by mail";
-"holder.paperproof.start.message" = "You can add paper certificates to the app if you received them in one of the following ways:";
-"holder.paperproof.start.provider.message" = "Your general practitioner or another healthcare provider has printed your certificates for you";
-"holder.paperproof.start.provider.title" = "From your healthcare provider";
-"holder.paperproof.start.selfprinted" = "Printed your certificate yourself?";
-"holder.paperproof.start.title" = "Add paper certificates";
-"holder.paperproof.startscanning.action" = "Start scanning";
-"holder.paperproof.startscanning.international" = "Why the international QR code?";
-"holder.paperproof.startscanning.message" = "<p>Use your phone's camera to scan the <b>international QR code</b> on your paper certificate.</p><p>Do you have multiple international QR codes? Please retake these steps for every QR code you want to add to the app.</p>";
-"holder.paperproof.startscanning.title" = "Scan your international QR code";
 "holder.provider.commercial.title" = "Other test location";
 "holder.provider.ggd.subtitle" = "Log in with your DigiD";
 "holder.provider.ggd.title" = "GGD";
@@ -392,12 +376,11 @@
 "holder.scanner.alert.unknown.message" = "This QR code is not valid. Scan the QR code on your international certificate.";
 /* MARK: - Holder Scanner Alert */
 "holder.scanner.alert.unknown.title" = "Invalid QR code";
-"holder.scanner.message" = "Point your phone at the QR code on the international certificate";
+"holder_scanner_message" = "Point your phone at the QR code";
 "holder.scanner.permission.message" = "The app wants to access your camera to scan the QR code.";
 "holder.scanner.permission.settings" = "To Settings";
 "holder.scanner.permission.title" = "No access to camera";
-/* MARK: - Holder Scanner */
-"holder.scanner.title" = "Scan QR code";
+"holder_scanner_title" = "Scan QR code";
 "holder.showqr.details" = "Details";
 "holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal information. While it states that your certificate is valid, it doesn't specify if you've been tested, recovered or vaccinated.</p><p>The QR code also contains the first letter of your first and last name and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";

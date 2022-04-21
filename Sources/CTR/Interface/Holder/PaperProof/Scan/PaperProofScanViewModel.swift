@@ -37,8 +37,8 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 		
 		self.theCoordinator = coordinator
 		
-		self.title = L.holderScannerTitle()
-		self.message = L.holderScannerMessage()
+		self.title = L.holder_scanner_title()
+		self.message = L.holder_scanner_message()
 		self.torchLabels = [L.holderTokenscanTorchEnable(), L.holderTokenscanTorchDisable()]
 		
 		super.init(coordinator: coordinator)
@@ -55,7 +55,8 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 
 		} else if cryptoManager?.readEuCredentials(Data(message.utf8)) != nil {
 
-			theCoordinator?.userWishesToCreateACertificate(message: message)
+			theCoordinator?.userDidScanDCC(message)
+			theCoordinator?.userWishesToEnterToken()
 
 		} else {
 

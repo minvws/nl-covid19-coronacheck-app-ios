@@ -171,7 +171,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToTokenEntry) == true
+		expect(self.coordinatorDelegateSpy.invokedDismiss) == true
 	}
 
 	func test_alertNoInternet() {

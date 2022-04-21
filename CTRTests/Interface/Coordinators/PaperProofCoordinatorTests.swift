@@ -55,9 +55,23 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedQR).to(beNil())
+		expect(self.sut.scannedDCC).to(beNil())
 	}
 
+	func test_userDidScanDCC() {
+
+		// Given
+
+		// When
+		sut.userDidScanDCC("test")
+
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
+		expect(self.sut.token).to(beNil())
+		expect(self.sut.scannedDCC) == "test"
+	}
+	
 	func test_userDidSubmitPaperProofToken() {
 
 		// Given
@@ -66,17 +80,17 @@ class PaperProofCoordinatorTests: XCTestCase {
 		sut.userDidSubmitPaperProofToken(token: "test")
 
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token) == "test"
-		expect(self.sut.scannedQR).to(beNil())
+		expect(self.sut.scannedDCC).to(beNil())
 	}
 
 	func test_userWantsToGoBackToDashboard() {
 
 		// Given
 		sut.token = "test"
-		sut.scannedQR = "test"
+		sut.scannedDCC = "test"
 
 		// When
 		sut.userWantsToGoBackToDashboard()
@@ -85,7 +99,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
 		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedQR).to(beNil())
+		expect(self.sut.scannedDCC).to(beNil())
 	}
 
 	func test_userWishesToScanCertificate() {
@@ -99,74 +113,49 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedQR).to(beNil())
+		expect(self.sut.scannedDCC).to(beNil())
 	}
 
-	func test_userWishesToCreateACertificate_tokenNil() {
+	func test_userWishesToCreateACertificate_tokenNil_scannedDCCNil() {
 
 		// Given
 		sut.token = nil
+		sut.scannedDCC = nil
 
 		// When
-		sut.userWishesToCreateACertificate(message: "test")
+		sut.userWishesToCreateACertificate()
 
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
-		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedQR) == "test"
 	}
-
-	func test_userWishesToCreateACertificate_TokenNotNil() {
+	
+	func test_userWishesToCreateACertificate_tokenNotNil_scannedDCCNil() {
 
 		// Given
 		sut.token = "test"
+		sut.scannedDCC = nil
 
 		// When
-		sut.userWishesToCreateACertificate(message: "test")
+		sut.userWishesToCreateACertificate()
+
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
+	}
+	
+	func test_userWishesToCreateACertificate_tokenNotNil_scannedDCCNotNil() {
+
+		// Given
+		sut.token = "test"
+		sut.scannedDCC = "test"
+
+		// When
+		sut.userWishesToCreateACertificate()
 
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
-		expect(self.sut.token) == "test"
-		expect(self.sut.scannedQR) == "test"
-	}
-
-	func test_userWantsToGoBackToTokenEntry() {
-
-		// Given
-		navigationSpy.viewControllers = [
-			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
-			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
-			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
-		]
-		sut.scannedQR = "test"
-		sut.token = "test"
-
-		// When
-		sut.userWantsToGoBackToTokenEntry()
-
-		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers).to(haveCount(2))
-		expect(self.sut.scannedQR).to(beNil())
-		expect(self.sut.token) == "test"
-	}
-
-	func test_userWantsToGoBackToTokenEntry_notInStack() {
-
-		// Given
-		navigationSpy.viewControllers = [
-			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut))
-		]
-
-		// When
-		sut.userWantsToGoBackToTokenEntry()
-
-		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.viewControllers).to(haveCount(1))
-		expect(self.sut.scannedQR).to(beNil())
 	}
 
 	func test_userWishesToSeeScannedEvent() {
@@ -194,10 +183,10 @@ class PaperProofCoordinatorTests: XCTestCase {
 
 		// Given
 		sut.token = "test"
-		sut.scannedQR = "test"
+		sut.scannedDCC = "test"
 		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 		navigationSpy.viewControllers = [
-			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
+			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
 			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
 			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
 		]
@@ -208,7 +197,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedQR).to(beNil())
+		expect(self.sut.scannedDCC).to(beNil())
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 		expect(self.navigationSpy.invokedPopToViewController) == true
 		expect(self.navigationSpy.viewControllers).to(haveCount(1))
@@ -218,7 +207,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 
 		// Given
 		sut.token = "test"
-		sut.scannedQR = "test"
+		sut.scannedDCC = "test"
 		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 
 		// When
@@ -227,7 +216,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
 		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedQR).to(beNil())
+		expect(self.sut.scannedDCC).to(beNil())
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 	}
 	
@@ -235,7 +224,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		
 		// Given
 		sut.token = "test"
-		sut.scannedQR = "test"
+		sut.scannedDCC = "test"
 		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
@@ -244,32 +233,17 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
 		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedQR).to(beNil())
+		expect(self.sut.scannedDCC).to(beNil())
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 	}
 	
-	func test_userWishesMoreInformationOnSelfPrintedProof() throws {
-		
-		// Given
-		
-		// When
-		sut.userWishesMoreInformationOnSelfPrintedProof()
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
-		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.holderPaperproofSelfprintedTitle()
-		expect(viewModel.content.body) == L.holderPaperproofSelfprintedMessage()
-	}
-	
 	func test_userWishesMoreInformationOnNoInputToken() throws {
-		
+
 		// Given
-		
+
 		// When
 		sut.userWishesMoreInformationOnNoInputToken()
-		
+
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
@@ -278,7 +252,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(viewModel.content.body) == L.holderPaperproofNotokenMessage()
 	}
 	
-	func test_userWishesMoreInformationOnInternationalQROnly() {
+	func test_userWishesMoreInformationOnWhichProofsCanBeUsed() {
 		
 		// Given
 		let viewControllerSpy = ViewControllerSpy()
@@ -287,14 +261,14 @@ class PaperProofCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.userWishesMoreInformationOnInternationalQROnly()
+		sut.userWishesMoreInformationOnWhichProofsCanBeUsed()
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
 		let viewModel: ContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel
 		
-		expect(viewModel?.content.title) == L.holderPaperproofInternationalQROnlyTitle()
-		expect(viewModel?.content.body) == L.holderPaperproofInternationalQROnlyMessage()
+		expect(viewModel?.content.title) == L.holder_paperproof_whichProofsCanBeUsed_title()
+		expect(viewModel?.content.body) == L.holder_paperproof_whichProofsCanBeUsed_body()
 	}
 	
 	func test_displayError() throws {
@@ -312,23 +286,6 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
 		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
 		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
-	}
-	
-	func test_userWishesToGoBackToScanCertificate() {
-		
-		// Given
-		navigationSpy.viewControllers = [
-			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
-			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut)),
-			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut))
-		]
-		
-		// When
-		sut.userWishesToGoBackToScanCertificate()
-		
-		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers).to(haveCount(2))
 	}
 }
 
