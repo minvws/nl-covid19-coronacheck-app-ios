@@ -71,9 +71,9 @@ class ShowQRView: BaseView {
 		return button
 	}()
 	
-	let infoView: ShowQRInfoView = {
+	let navigationInfoView: ShowQRNavigationInfoView = {
 		
-		let view = ShowQRInfoView()
+		let view = ShowQRNavigationInfoView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -107,8 +107,8 @@ class ShowQRView: BaseView {
 		backgroundColor = C.white()
 		
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
-		infoView.previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
-		infoView.nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
+		navigationInfoView.previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
+		navigationInfoView.nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
 
 		// ScrollView is blocking the Security Animation Reversal
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(scrollViewTapped))
@@ -128,7 +128,7 @@ class ShowQRView: BaseView {
 		addSubview(containerView)
 		addSubview(pageControl)
 		addSubview(returnToThirdPartyAppButton)
-		addSubview(infoView)
+		addSubview(navigationInfoView)
 		addSubview(scrollView)
 		scrollView.addSubview(scrollContentView)
 	}
@@ -154,7 +154,7 @@ class ShowQRView: BaseView {
 			containerView.heightAnchor.constraint(equalTo: widthAnchor),
 
 			pageControl.topAnchor.constraint(
-				equalTo: infoView.bottomAnchor,
+				equalTo: navigationInfoView.bottomAnchor,
 				constant: ViewTraits.Spacing.buttonToPageControl
 			),
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -173,13 +173,13 @@ class ShowQRView: BaseView {
 				constant: ViewTraits.Margin.returnToThirdPartyAppButton
 			),
 			
-			infoView.topAnchor.constraint(
+			navigationInfoView.topAnchor.constraint(
 				equalTo: containerView.bottomAnchor
 			),
-			infoView.leadingAnchor.constraint(
+			navigationInfoView.leadingAnchor.constraint(
 				greaterThanOrEqualTo: containerView.leadingAnchor
 			),
-			infoView.trailingAnchor.constraint(
+			navigationInfoView.trailingAnchor.constraint(
 				lessThanOrEqualTo: containerView.trailingAnchor
 			)
 		])
@@ -191,7 +191,7 @@ class ShowQRView: BaseView {
 		securityViewBottomConstraint?.isActive = true
 
 		bringSubviewToFront(containerView)
-		bringSubviewToFront(infoView)
+		bringSubviewToFront(navigationInfoView)
 
 		setupScrollViewConstraints()
 	}
@@ -258,7 +258,7 @@ class ShowQRView: BaseView {
 	/// The dosage
 	var dosage: String? {
 		didSet {
-			infoView.dosageLabel.attributedText = dosage?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
+			navigationInfoView.dosageLabel.attributedText = dosage?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
 		}
 	}
 
@@ -279,8 +279,8 @@ class ShowQRView: BaseView {
 	
 	var pageButtonAccessibility: (previous: String, next: String)? {
 		didSet {
-			infoView.previousButton.accessibilityLabel = pageButtonAccessibility?.previous
-			infoView.nextButton.accessibilityLabel = pageButtonAccessibility?.next
+			navigationInfoView.previousButton.accessibilityLabel = pageButtonAccessibility?.previous
+			navigationInfoView.nextButton.accessibilityLabel = pageButtonAccessibility?.next
 		}
 	}
 

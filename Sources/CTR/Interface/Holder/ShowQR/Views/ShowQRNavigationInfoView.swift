@@ -8,7 +8,7 @@
 import UIKit
 
 /// Component is to get left to right accessibility VoiceOver focus order
-final class ShowQRInfoView: BaseView {
+final class ShowQRNavigationInfoView: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
