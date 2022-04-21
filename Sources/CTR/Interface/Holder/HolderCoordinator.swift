@@ -292,11 +292,9 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	func navigateToAddPaperProof() {
-		let coordinator = PaperProofCoordinator(delegate: self)
-		let viewController = PaperProofStartViewController(viewModel: .init(coordinator: coordinator))
-		coordinator.navigationController = navigationController
-		navigationController.pushViewController(viewController, animated: true)
-		startChildCoordinator(coordinator)
+		
+		let paperProofCoordinator = PaperProofCoordinator(navigationController: navigationController, delegate: self)
+		startChildCoordinator(paperProofCoordinator)
 	}
 	
 	func navigateToAddVisitorPass() {
@@ -708,6 +706,11 @@ extension HolderCoordinator: EventFlowDelegate {
 }
 
 extension HolderCoordinator: PaperProofFlowDelegate {
+	
+	func addPaperProofFlowDidCancel() {
+		
+		removeChildCoordinator()
+	}
 	
 	func addPaperProofFlowDidFinish() {
 		

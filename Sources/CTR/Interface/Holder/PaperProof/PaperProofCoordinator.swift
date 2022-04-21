@@ -9,12 +9,16 @@ import UIKit
 
 protocol PaperProofFlowDelegate: AnyObject {
 	
+	func addPaperProofFlowDidCancel()
+	
 	func addPaperProofFlowDidFinish()
 
 	func switchToAddRegularProof()
 }
 
 protocol PaperProofCoordinatorDelegate: AnyObject {
+	
+	func userWishesToCancelPaperProofFlow()
 
 	func userWishesMoreInformationOnSelfPrintedProof()
 
@@ -45,25 +49,35 @@ final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 	
-	var navigationController: UINavigationController = NavigationController()
+	var navigationController: UINavigationController
 
 	private weak var delegate: PaperProofFlowDelegate?
 
 	var token: String?
 
 	var scannedQR: String?
-
+	
 	/// Initializer
 	/// - Parameters:
-	///   - delegate: flow delegate
-	init(delegate: PaperProofFlowDelegate) {
-		
+	///   - navigationController: the navigation controller
+	///   - delegate: the vaccination flow delegate
+	init(
+		navigationController: UINavigationController,
+		delegate: PaperProofFlowDelegate) {
+
+		self.navigationController = navigationController
 		self.delegate = delegate
 	}
 	
 	/// Start the scene
 	func start() {
-		// Not implemented. Starts in holder coordinator
+		
+		let destination = PaperProofStartViewController(
+			viewModel: PaperProofStartViewModel(
+				coordinator: self
+			)
+		)
+		navigationController.pushViewController(destination, animated: true)
 	}
 	
 	func consume(universalLink: UniversalLink) -> Bool {
@@ -72,6 +86,12 @@ final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
 }
 
 extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
+	
+	func userWishesToCancelPaperProofFlow() {
+		
+		navigationController.popViewController(animated: true)
+		delegate?.addPaperProofFlowDidCancel()
+	}
 
 	func userWishesMoreInformationOnSelfPrintedProof() {
 
@@ -264,9 +284,9 @@ extension PaperProofCoordinator: EventFlowDelegate {
 		cleanup()
 		delegate?.addPaperProofFlowDidFinish()
 	}
-	
+
 	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
-		
+
 		// Should not happen.
 		eventFlowDidComplete()
 	}
@@ -283,9 +303,9 @@ extension PaperProofCoordinator: EventFlowDelegate {
 			)
 		}
 	}
-	
+
 	func eventFlowDidCancelFromBackSwipe() {
-		
+
 		cleanup()
 	}
 
@@ -294,7 +314,7 @@ extension PaperProofCoordinator: EventFlowDelegate {
 		guard let coordinator = childCoordinators.last else { return }
 		removeChildCoordinator(coordinator)
 	}
-	
+
 	private func cleanup() {
 		removeChildCoordinator()
 		scannedQR = nil

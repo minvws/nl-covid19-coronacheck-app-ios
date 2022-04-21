@@ -23,8 +23,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		flowSpy = PaperProofFlowDelegateSpy()
 		navigationSpy = NavigationControllerSpy()
 
-		sut = PaperProofCoordinator(delegate: flowSpy)
-		sut.navigationController = navigationSpy
+		sut = PaperProofCoordinator(navigationController: navigationSpy, delegate: flowSpy)
 	}
 
 	// MARK: - Tests
@@ -334,6 +333,14 @@ class PaperProofCoordinatorTests: XCTestCase {
 }
 
 class PaperProofFlowDelegateSpy: PaperProofFlowDelegate {
+
+	var invokedAddPaperProofFlowDidCancel = false
+	var invokedAddPaperProofFlowDidCancelCount = 0
+
+	func addPaperProofFlowDidCancel() {
+		invokedAddPaperProofFlowDidCancel = true
+		invokedAddPaperProofFlowDidCancelCount += 1
+	}
 
 	var invokedAddPaperProofFlowDidFinish = false
 	var invokedAddPaperProofFlowDidFinishCount = 0
