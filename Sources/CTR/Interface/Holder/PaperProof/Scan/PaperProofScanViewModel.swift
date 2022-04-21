@@ -55,7 +55,8 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 
 		} else if cryptoManager?.readEuCredentials(Data(message.utf8)) != nil {
 
-			theCoordinator?.userWishesToCreateACertificate(message: message)
+			theCoordinator?.userDidScanDCC(message)
+			theCoordinator?.userWishesToEnterToken()
 
 		} else {
 

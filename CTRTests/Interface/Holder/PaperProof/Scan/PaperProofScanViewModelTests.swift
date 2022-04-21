@@ -79,7 +79,8 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		sut.parseQRMessage(message)
 		
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateACertificate) == true
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateACertificateParameters?.message) == message
+		expect(self.coordinatorDelegateSpy.invokedUserDidScanDCC) == true
+		expect(self.coordinatorDelegateSpy.invokedUserDidScanDCCParameters?.message) == message
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToEnterToken) == true
 	}
 }

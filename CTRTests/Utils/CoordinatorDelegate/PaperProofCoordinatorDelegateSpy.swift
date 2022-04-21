@@ -34,6 +34,34 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserWishesMoreInformationOnWhichProofsCanBeUsedCount += 1
 	}
 
+	var invokedUserWishesToScanCertificate = false
+	var invokedUserWishesToScanCertificateCount = 0
+
+	func userWishesToScanCertificate() {
+		invokedUserWishesToScanCertificate = true
+		invokedUserWishesToScanCertificateCount += 1
+	}
+
+	var invokedUserDidScanDCC = false
+	var invokedUserDidScanDCCCount = 0
+	var invokedUserDidScanDCCParameters: (message: String, Void)?
+	var invokedUserDidScanDCCParametersList = [(message: String, Void)]()
+
+	func userDidScanDCC(_ message: String) {
+		invokedUserDidScanDCC = true
+		invokedUserDidScanDCCCount += 1
+		invokedUserDidScanDCCParameters = (message, ())
+		invokedUserDidScanDCCParametersList.append((message, ()))
+	}
+
+	var invokedUserWishesToEnterToken = false
+	var invokedUserWishesToEnterTokenCount = 0
+
+	func userWishesToEnterToken() {
+		invokedUserWishesToEnterToken = true
+		invokedUserWishesToEnterTokenCount += 1
+	}
+
 	var invokedUserDidSubmitPaperProofToken = false
 	var invokedUserDidSubmitPaperProofTokenCount = 0
 	var invokedUserDidSubmitPaperProofTokenParameters: (token: String, Void)?
@@ -44,6 +72,14 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserDidSubmitPaperProofTokenCount += 1
 		invokedUserDidSubmitPaperProofTokenParameters = (token, ())
 		invokedUserDidSubmitPaperProofTokenParametersList.append((token, ()))
+	}
+
+	var invokedUserWishesToCreateACertificate = false
+	var invokedUserWishesToCreateACertificateCount = 0
+
+	func userWishesToCreateACertificate() {
+		invokedUserWishesToCreateACertificate = true
+		invokedUserWishesToCreateACertificateCount += 1
 	}
 
 	var invokedUserWantsToGoBackToDashboard = false
@@ -72,34 +108,6 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserWishesToSeeScannedEventCount += 1
 		invokedUserWishesToSeeScannedEventParameters = (event, ())
 		invokedUserWishesToSeeScannedEventParametersList.append((event, ()))
-	}
-
-	var invokedUserWishesToEnterToken = false
-	var invokedUserWishesToEnterTokenCount = 0
-
-	func userWishesToEnterToken() {
-		invokedUserWishesToEnterToken = true
-		invokedUserWishesToEnterTokenCount += 1
-	}
-
-	var invokedUserWishesToScanCertificate = false
-	var invokedUserWishesToScanCertificateCount = 0
-
-	func userWishesToScanCertificate() {
-		invokedUserWishesToScanCertificate = true
-		invokedUserWishesToScanCertificateCount += 1
-	}
-
-	var invokedUserWishesToCreateACertificate = false
-	var invokedUserWishesToCreateACertificateCount = 0
-	var invokedUserWishesToCreateACertificateParameters: (message: String, Void)?
-	var invokedUserWishesToCreateACertificateParametersList = [(message: String, Void)]()
-
-	func userWishesToCreateACertificate(message: String) {
-		invokedUserWishesToCreateACertificate = true
-		invokedUserWishesToCreateACertificateCount += 1
-		invokedUserWishesToCreateACertificateParameters = (message, ())
-		invokedUserWishesToCreateACertificateParametersList.append((message, ()))
 	}
 
 	var invokedDisplayError = false
