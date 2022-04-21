@@ -9,10 +9,10 @@ import Foundation
 
 final class PaperProofStartScanningViewModel: Logging {
 	
-	@Bindable private(set) var title: String = L.holderPaperproofStartscanningTitle()
-	@Bindable private(set) var message: String = L.holderPaperproofStartscanningMessage()
-	@Bindable private(set) var nextButtonTitle = L.holderPaperproofStartscanningAction()
-	@Bindable private(set) var internationalTitle = L.holderPaperproofStartscanningInternational()
+	@Bindable private(set) var title: String = L.holder_paperproof_startscanning_title()
+	@Bindable private(set) var message: String = L.holder_paperproof_startscanning_body()
+	@Bindable private(set) var nextButtonTitle = L.holder_paperproof_startscanning_button_startScanning()
+	@Bindable private(set) var secondaryButtonTitle = L.holder_paperproof_startscanning_button_whichProofs()
 	@Bindable private(set) var internationalQROnly = I.internationalQROnly()
 
 	private weak var coordinator: PaperProofCoordinatorDelegate?
@@ -39,7 +39,7 @@ final class PaperProofStartScanningViewModel: Logging {
 		coordinator?.userWishesToScanCertificate()
 	}
 
-	func userTappedInternationalButton() {
+	func userTappedSecondaryButton() {
 
 		coordinator?.userWishesMoreInformationOnInternationalQROnly()
 	}

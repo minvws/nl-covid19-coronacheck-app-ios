@@ -23,10 +23,10 @@ final class PaperProofStartScanningViewModelTests: XCTestCase {
 	}
 
 	func test_initialState() {
-		expect(self.sut.title) == L.holderPaperproofStartscanningTitle()
-		expect(self.sut.message) == L.holderPaperproofStartscanningMessage()
-		expect(self.sut.nextButtonTitle) == L.holderPaperproofStartscanningAction()
-		expect(self.sut.internationalTitle) == L.holderPaperproofStartscanningInternational()
+		expect(self.sut.title) == L.holder_paperproof_startscanning_title()
+		expect(self.sut.message) == L.holder_paperproof_startscanning_body()
+		expect(self.sut.nextButtonTitle) == L.holder_paperproof_startscanning_button_startScanning()
+		expect(self.sut.secondaryButtonTitle) == L.holder_paperproof_startscanning_button_whichProofs()
 		expect(self.sut.internationalQROnly) == I.internationalQROnly()
 		
 		PaperProofStartScanningViewController(viewModel: sut).assertImage()
@@ -44,7 +44,7 @@ final class PaperProofStartScanningViewModelTests: XCTestCase {
 	func test_internationButtonTapped_shouldInvokeCoordinator() {
 
 		// When
-		sut.userTappedInternationalButton()
+		sut.userTappedSecondaryButton()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesMoreInformationOnInternationalQROnly) == true

@@ -358,10 +358,6 @@
 "holder.paperproof.notoken.action" = "Add certificate via DigiD";
 "holder.paperproof.notoken.message" = "<p>Then you won't be able to add your certificates to the app this way.</p><p>You only have a letter combination if you requested your paper certificates from your healthcare provider, or had them delivered by mail.</p><p><b>Did you print your certificate yourself?</b><br />Then you can add your certificates to the app using DigiD.</p>";
 "holder.paperproof.notoken.title" = "No letter combination?";
-"holder.paperproof.startscanning.action" = "Start scanning";
-"holder.paperproof.startscanning.international" = "Why the international QR code?";
-"holder.paperproof.startscanning.message" = "<p>Use your phone's camera to scan the <b>international QR code</b> on your paper certificate.</p><p>Do you have multiple international QR codes? Please retake these steps for every QR code you want to add to the app.</p>";
-"holder.paperproof.startscanning.title" = "Scan your international QR code";
 "holder.provider.commercial.title" = "Other test location";
 "holder.provider.ggd.subtitle" = "Log in with your DigiD";
 "holder.provider.ggd.title" = "GGD";

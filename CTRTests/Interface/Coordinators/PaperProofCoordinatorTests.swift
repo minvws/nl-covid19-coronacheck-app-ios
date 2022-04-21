@@ -247,7 +247,6 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.sut.scannedQR).to(beNil())
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 	}
-
 	
 	func test_userWishesMoreInformationOnNoInputToken() throws {
 		

@@ -358,10 +358,6 @@
 "holder.paperproof.notoken.action" = "Voeg bewijs toe via DigiD";
 "holder.paperproof.notoken.message" = "<p>Het is dan niet mogelijk om je bewijzen op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie als je jouw papieren bewijzen hebt aangevraagd bij je zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je zelf je bewijs geprint?</b><br />Je kunt dan je bewijzen toevoegen aan de app met behulp van DigiD.</p>";
 "holder.paperproof.notoken.title" = "Geen lettercombinatie?";
-"holder.paperproof.startscanning.action" = "Start scannen";
-"holder.paperproof.startscanning.international" = "Waarom de internationale QR-code?";
-"holder.paperproof.startscanning.message" = "<p>Scan met de camera van je telefoon de <b>internationale QR-code</b> op je papieren bewijs.</p><p>Heb je meerdere internationale QR-codes? Doorloop deze stappen straks opnieuw voor elke QR-code die je in de app wilt hebben.</p>";
-"holder.paperproof.startscanning.title" = "Scan je internationale QR-code";
 "holder.provider.commercial.title" = "Andere testlocatie";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
 "holder.provider.ggd.title" = "GGD";
@@ -774,3 +770,9 @@
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
 "visitorpass_token_next" = "Volgende";
+
+
+"holder_paperproof_startscanning_button_whichProofs" = "Welke bewijzen kan ik inscannen?";
+"holder_paperproof_startscanning_button_startScanning" = "Start scannen";
+"holder_paperproof_startscanning_body" = "<p>Je kunt een bestaand bewijs toevoegen aan de CoronaCheck app door ze in te scannen. Bijvoorbeeld bewijzen die je van je zorgverlener hebt gekregen. Of bewijzen die zijn uitgegeven buiten Nederland.</p><p>Scan de <b>internationale QR-code</b> van jouw bewijs. Deze herken je aan een Europese vlag op het bewijs. </p>";
+"holder_paperproof_startscanning_title" = "Een bewijs inscannen met je camera";
