@@ -158,43 +158,6 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 	}
 
-	func test_userWantsToGoBackToTokenEntry() {
-
-		// Given
-		navigationSpy.viewControllers = [
-			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
-			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
-			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
-		]
-		sut.scannedDCC = "test"
-		sut.token = "test"
-
-		// When
-		sut.userWantsToGoBackToTokenEntry()
-
-		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers).to(haveCount(2))
-		expect(self.sut.scannedDCC).to(beNil())
-		expect(self.sut.token) == "test"
-	}
-
-	func test_userWantsToGoBackToTokenEntry_notInStack() {
-
-		// Given
-		navigationSpy.viewControllers = [
-			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut))
-		]
-
-		// When
-		sut.userWantsToGoBackToTokenEntry()
-
-		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.viewControllers).to(haveCount(1))
-		expect(self.sut.scannedDCC).to(beNil())
-	}
-
 	func test_userWishesToSeeScannedEvent() {
 
 		// Given
@@ -327,23 +290,6 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
 		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
 		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
-	}
-	
-	func test_userWishesToGoBackToScanCertificate() {
-		
-		// Given
-		navigationSpy.viewControllers = [
-			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
-			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut)),
-			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut))
-		]
-		
-		// When
-		sut.userWishesToGoBackToScanCertificate()
-		
-		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers).to(haveCount(2))
 	}
 }
 

@@ -9,7 +9,7 @@ import Foundation
 
 class PaperProofCheckViewModel: Logging {
 
-	weak var coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)?
+	weak var coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable)?
 
 	private let couplingManager: CouplingManaging = Current.couplingManager
 
@@ -29,7 +29,7 @@ class PaperProofCheckViewModel: Logging {
 	@Bindable private(set) var alert: AlertContent?
 
 	init(
-		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol),
+		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable),
 		scannedDcc: String,
 		couplingCode: String
 	) {
@@ -122,7 +122,7 @@ class PaperProofCheckViewModel: Logging {
 				body: L.holderCheckdccRejectedMessage(),
 				primaryActionTitle: L.holderCheckdccRejectedActionTitle(),
 				primaryAction: {[weak self] in
-					self?.coordinator?.userWantsToGoBackToTokenEntry()
+					self?.coordinator?.dismiss()
 				},
 				secondaryActionTitle: nil,
 				secondaryAction: nil
@@ -170,7 +170,7 @@ class PaperProofCheckViewModel: Logging {
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
 			self.coordinator?.displayError(content: content) { [weak self] in
-				self?.coordinator?.userWishesToGoBackToScanCertificate()
+				self?.coordinator?.dismiss()
 			}
 		}
 	}
@@ -205,7 +205,7 @@ class PaperProofCheckViewModel: Logging {
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
 			self.coordinator?.displayError(content: content) { [weak self] in
-				self?.coordinator?.userWishesToGoBackToScanCertificate()
+				self?.coordinator?.dismiss()
 			}
 		}
 	}

@@ -8,7 +8,7 @@
 import Foundation
 @testable import CTR
 
-class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlProtocol {
+class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlProtocol, Dismissable {
 
 	var invokedUserWishesToCancelPaperProofFlow = false
 	var invokedUserWishesToCancelPaperProofFlowCount = 0
@@ -90,14 +90,6 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserWantsToGoBackToDashboardCount += 1
 	}
 
-	var invokedUserWantsToGoBackToTokenEntry = false
-	var invokedUserWantsToGoBackToTokenEntryCount = 0
-
-	func userWantsToGoBackToTokenEntry() {
-		invokedUserWantsToGoBackToTokenEntry = true
-		invokedUserWantsToGoBackToTokenEntryCount += 1
-	}
-
 	var invokedUserWishesToSeeScannedEvent = false
 	var invokedUserWishesToSeeScannedEventCount = 0
 	var invokedUserWishesToSeeScannedEventParameters: (event: RemoteEvent, Void)?
@@ -126,14 +118,6 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		}
 	}
 
-	var invokedUserWishesToGoBackToScanCertificate = false
-	var invokedUserWishesToGoBackToScanCertificateCount = 0
-
-	func userWishesToGoBackToScanCertificate() {
-		invokedUserWishesToGoBackToScanCertificate = true
-		invokedUserWishesToGoBackToScanCertificateCount += 1
-	}
-
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
@@ -144,5 +128,13 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedOpenUrlCount += 1
 		invokedOpenUrlParameters = (url, inApp)
 		invokedOpenUrlParametersList.append((url, inApp))
+	}
+
+	var invokedDismiss = false
+	var invokedDismissCount = 0
+
+	func dismiss() {
+		invokedDismiss = true
+		invokedDismissCount += 1
 	}
 }

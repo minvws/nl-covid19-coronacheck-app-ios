@@ -33,18 +33,12 @@ protocol PaperProofCoordinatorDelegate: AnyObject {
 	func userDidSubmitPaperProofToken(token: String)
 	
 	func userWishesToCreateACertificate()
-
-	// MARK: to Check
 	
 	func userWantsToGoBackToDashboard()
-
-	func userWantsToGoBackToTokenEntry()
 
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent)
 
 	func displayError(content: Content, backAction: @escaping () -> Void)
-
-	func userWishesToGoBackToScanCertificate()
 }
 
 final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
@@ -174,19 +168,6 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		delegate?.addPaperProofFlowDidFinish()
 	}
 
-	func userWantsToGoBackToTokenEntry() {
-
-		scannedDCC = nil
-		if let tokenEntryViewController = navigationController.viewControllers
-			.first(where: { $0 is PaperProofInputCouplingCodeViewController }) {
-
-			navigationController.popToViewController(
-				tokenEntryViewController,
-				animated: true
-			)
-		}
-	}
-
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent) {
 
 		let eventCoordinator = EventCoordinator(
@@ -227,18 +208,6 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
-	}
-
-	func userWishesToGoBackToScanCertificate() {
-
-		if let scanViewController = navigationController.viewControllers
-			.first(where: { $0 is PaperProofScanViewController }) {
-
-			navigationController.popToViewController(
-				scanViewController,
-				animated: true
-			)
-		}
 	}
 
 	private func presentAsBottomSheet(_ viewController: UIViewController) {
