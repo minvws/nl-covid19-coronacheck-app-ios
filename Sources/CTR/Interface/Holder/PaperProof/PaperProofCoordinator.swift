@@ -20,8 +20,6 @@ protocol PaperProofCoordinatorDelegate: AnyObject {
 	
 	func userWishesToCancelPaperProofFlow()
 
-	func userWishesMoreInformationOnSelfPrintedProof()
-
 	func userWishesMoreInformationOnNoInputToken()
 
 	func userWishesMoreInformationOnInternationalQROnly()
@@ -72,8 +70,8 @@ final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
 	/// Start the scene
 	func start() {
 		
-		let destination = PaperProofStartViewController(
-			viewModel: PaperProofStartViewModel(
+		let destination = PaperProofStartScanningViewController(
+			viewModel: PaperProofStartScanningViewModel(
 				coordinator: self
 			)
 		)
@@ -91,24 +89,6 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		
 		navigationController.popViewController(animated: true)
 		delegate?.addPaperProofFlowDidCancel()
-	}
-
-	func userWishesMoreInformationOnSelfPrintedProof() {
-
-		let viewModel = PaperProofContentViewModel(
-			content: Content(
-				title: L.holderPaperproofSelfprintedTitle(),
-				body: L.holderPaperproofSelfprintedMessage(),
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: L.holderPaperproofSelfprintedAction(),
-				secondaryAction: { [weak self] in
-					self?.delegate?.switchToAddRegularProof()
-				}
-			)
-		)
-		let destination = PaperProofContentViewController(viewModel: viewModel)
-		navigationController.pushViewController(destination, animated: true)
 	}
 
 	func userWishesMoreInformationOnNoInputToken() {
@@ -295,7 +275,7 @@ extension PaperProofCoordinator: EventFlowDelegate {
 
 		cleanup()
 		if let viewController = navigationController.viewControllers
-			.first(where: { $0 is PaperProofStartViewController }) {
+			.first(where: { $0 is PaperProofStartScanningViewController }) {
 
 			navigationController.popToViewController(
 				viewController,

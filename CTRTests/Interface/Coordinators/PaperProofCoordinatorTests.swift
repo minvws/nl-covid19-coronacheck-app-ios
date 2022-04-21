@@ -136,7 +136,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 
 		// Given
 		navigationSpy.viewControllers = [
-			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
+			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
 			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
 			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
 		]
@@ -157,7 +157,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 
 		// Given
 		navigationSpy.viewControllers = [
-			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut))
+			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut))
 		]
 
 		// When
@@ -197,7 +197,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		sut.scannedQR = "test"
 		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 		navigationSpy.viewControllers = [
-			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
+			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
 			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
 			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
 		]
@@ -247,21 +247,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.sut.scannedQR).to(beNil())
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 	}
-	
-	func test_userWishesMoreInformationOnSelfPrintedProof() throws {
-		
-		// Given
-		
-		// When
-		sut.userWishesMoreInformationOnSelfPrintedProof()
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
-		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.holderPaperproofSelfprintedTitle()
-		expect(viewModel.content.body) == L.holderPaperproofSelfprintedMessage()
-	}
+
 	
 	func test_userWishesMoreInformationOnNoInputToken() throws {
 		
@@ -318,7 +304,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		
 		// Given
 		navigationSpy.viewControllers = [
-			PaperProofStartViewController(viewModel: PaperProofStartViewModel(coordinator: sut)),
+			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
 			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut)),
 			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut))
 		]

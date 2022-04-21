@@ -39,7 +39,7 @@ final class PaperProofStartScanningViewController: BaseViewController {
 
 		viewModel.$internationalQROnly.binding = { [weak self] in self?.sceneView.icon = $0 }
 
-		addBackButton()
+		addBackButton(customAction: #selector(backButtonTapped))
 	}
 
 	func setupText() {
@@ -55,5 +55,24 @@ final class PaperProofStartScanningViewController: BaseViewController {
 
 		viewModel.$internationalTitle.binding = { [weak self] in self?.sceneView.secondaryButton.title = $0 }
 		sceneView.secondaryButtonCommand = { [weak self] in self?.viewModel.userTappedInternationalButton() }
+	}
+	
+	@objc func backButtonTapped() {
+
+		viewModel.backButtonTapped()
+	}
+}
+
+extension PaperProofStartScanningViewController: UINavigationControllerDelegate {
+	
+	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+
+		if let coordinator = navigationController.topViewController?.transitionCoordinator {
+			coordinator.notifyWhenInteractionChanges { [weak self] context in
+				guard !context.isCancelled else { return }
+				// Clean up coordinator when swiping back
+				self?.viewModel.backSwipe()
+			}
+		}
 	}
 }

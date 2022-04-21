@@ -24,6 +24,16 @@ final class PaperProofStartScanningViewModel: Logging {
 		self.coordinator = coordinator
 	}
 	
+	func backButtonTapped() {
+		
+		coordinator?.userWishesToCancelPaperProofFlow()
+	}
+	
+	func backSwipe() {
+		
+		coordinator?.userWishesToCancelPaperProofFlow()
+	}
+	
 	func userTappedNextButton() {
 		
 		coordinator?.userWishesToScanCertificate()

@@ -358,16 +358,6 @@
 "holder.paperproof.notoken.action" = "Voeg bewijs toe via DigiD";
 "holder.paperproof.notoken.message" = "<p>Het is dan niet mogelijk om je bewijzen op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie als je jouw papieren bewijzen hebt aangevraagd bij je zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je zelf je bewijs geprint?</b><br />Je kunt dan je bewijzen toevoegen aan de app met behulp van DigiD.</p>";
 "holder.paperproof.notoken.title" = "Geen lettercombinatie?";
-"holder.paperproof.selfprinted.action" = "Voeg bewijs toe via DigiD";
-"holder.paperproof.selfprinted.message" = "<p>Het is dan niet mogelijk om je bewijzen op deze manier aan de app toe te voegen.</p><p>Je kunt wel bewijzen toevoegen aan de app met behulp van DigiD.</p>";
-"holder.paperproof.selfprinted.title" = "Zelf je bewijs uitgeprint?";
-"holder.paperproof.start.mail.message" = "De overheid heeft je bewijzen voor je geprint en opgestuurd per post";
-"holder.paperproof.start.mail.title" = "Opgestuurd per post";
-"holder.paperproof.start.message" = "Je kunt papieren bewijzen toevoegen aan de app als je die op de volgende manier hebt gekregen:";
-"holder.paperproof.start.provider.message" = "Je huisarts of andere zorgverlener heeft je bewijzen voor je geprint";
-"holder.paperproof.start.provider.title" = "Van je zorgverlener";
-"holder.paperproof.start.selfprinted" = "Zelf je bewijs uitgeprint?";
-"holder.paperproof.start.title" = "Papieren bewijzen toevoegen";
 "holder.paperproof.startscanning.action" = "Start scannen";
 "holder.paperproof.startscanning.international" = "Waarom de internationale QR-code?";
 "holder.paperproof.startscanning.message" = "<p>Scan met de camera van je telefoon de <b>internationale QR-code</b> op je papieren bewijs.</p><p>Heb je meerdere internationale QR-codes? Doorloop deze stappen straks opnieuw voor elke QR-code die je in de app wilt hebben.</p>";
