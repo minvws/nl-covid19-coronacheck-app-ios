@@ -376,12 +376,11 @@
 "holder.scanner.alert.unknown.message" = "Deze QR-code is niet geldig. Scan de QR-code op je internationale bewijs.";
 /* MARK: - Holder Scanner Alert */
 "holder.scanner.alert.unknown.title" = "Ongeldige QR-code";
-"holder.scanner.message" = "Richt je telefoon op de QR-code op je internationale bewijs";
+"holder_scanner_message" = "Richt je telefoon op de QR-code";
 "holder.scanner.permission.message" = "De app wil toegang tot de camera om de QR-code te scannen.";
 "holder.scanner.permission.settings" = "Naar instellingen";
 "holder.scanner.permission.title" = "Geen toegang tot camera";
-/* MARK: - Holder Scanner */
-"holder.scanner.title" = "Scan QR-code";
+"holder_scanner_title" = "Scan QR-code";
 "holder.showqr.details" = "Details";
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. Er staat wel dat je een geldig bewijs hebt, maar niet of je een test hebt gedaan, hersteld of gevaccineerd bent.</p><p>In de QR-code staat ook de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
