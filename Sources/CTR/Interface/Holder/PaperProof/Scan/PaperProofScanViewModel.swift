@@ -14,6 +14,8 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 
 	/// Coordination Delegate
 	weak var theCoordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)?
+	
+	var dccScanner: DCCScannerProtocol
 
 	/// The title of the scene
 	@Bindable private(set) var title: String
@@ -33,9 +35,12 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	init(
-		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)) {
+		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol),
+		scanner: DCCScannerProtocol = DCCScanner()
+	) {
 		
 		self.theCoordinator = coordinator
+		self.dccScanner = scanner
 		
 		self.title = L.holder_scanner_title()
 		self.message = L.holder_scanner_message()
@@ -48,21 +53,44 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 		
-		if message.lowercased().hasPrefix("nl") {
-
-			logWarning("Invalid: Domestic QR-code")
-			displayAlert(title: L.holderScannerAlertDccTitle(), message: L.holderScannerAlertDccMessage())
-
-		} else if cryptoManager?.readEuCredentials(Data(message.utf8)) != nil {
-
-			theCoordinator?.userDidScanDCC(message)
-			theCoordinator?.userWishesToEnterToken()
-
-		} else {
-
-			logWarning("Invalid: Unknown QR-code")
-			displayAlert(title: L.holderScannerAlertUnknownTitle(), message: L.holderScannerAlertUnknownMessage())
+		switch dccScanner.scan(message) {
+			case .ctb:
+				break
+			case let .domesticDCC(dcc: dcc):
+				theCoordinator?.userDidScanDCC(dcc)
+				theCoordinator?.userWishesToEnterToken()
+			case let .foreignDCC(dcc: dcc):
+				theCoordinator?.userDidScanDCC(dcc)
+				// Go to list Event
+			
+			if let wrapper = Current.couplingManager.convert(dcc, couplingCode: "ROLUS") {
+				let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
+				theCoordinator?.userWishesToSeeScannedEvent(remoteEvent)
+			} else {
+				let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: .failedToConvertDCCToV3Event)
+//				displayErrorCode(subTitle: L.holderErrorstateClientMessage("\(errorCode)"))
+				logInfo("Error: \(errorCode)")
+			}
+			
+			case .other:
+				break
 		}
+		
+//		if message.lowercased().hasPrefix("nl") {
+//
+//			logWarning("Invalid: Domestic QR-code")
+//			displayAlert(title: L.holderScannerAlertDccTitle(), message: L.holderScannerAlertDccMessage())
+//
+//		} else if cryptoManager?.readEuCredentials(Data(message.utf8)) != nil {
+//
+//			theCoordinator?.userDidScanDCC(message)
+//			theCoordinator?.userWishesToEnterToken()
+//
+//		} else {
+//
+//			logWarning("Invalid: Unknown QR-code")
+//			displayAlert(title: L.holderScannerAlertUnknownTitle(), message: L.holderScannerAlertUnknownMessage())
+//		}
 	}
 
 	private func displayAlert(title: String, message: String) {
