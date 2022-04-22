@@ -418,7 +418,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			self?.navigateToChooseQRCodeType()
 		})
 		
-		let itemAddPaperCertificate: MenuViewModel.Item = .row(title: L.holderMenuPapercertificate(), icon: I.icon_menu_addpapercertificate()!, action: { [weak self] in
+		let itemAddPaperCertificate: MenuViewModel.Item = .row(title: L.holder_menu_paperproof_title(), icon: I.icon_menu_addpapercertificate()!, action: { [weak self] in
 			self?.navigateToAddPaperProof()
 		})
 		

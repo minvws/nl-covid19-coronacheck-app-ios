@@ -59,28 +59,54 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 					L.holder_scanner_error_title_ctb(),
 					body: L.holder_scanner_error_message_ctb()
 				)
-			case let .domesticDCC(dcc: dcc):
+
+			case let .dutchDCC(dcc: dcc):
 				theCoordinator?.userDidScanDCC(dcc)
 				theCoordinator?.userWishesToEnterToken()
+
 			case let .foreignDCC(dcc: dcc):
 				theCoordinator?.userDidScanDCC(dcc)
 				// Go to list Event
-			
+
 			if let wrapper = Current.couplingManager.convert(dcc, couplingCode: "ROLUS") {
 				let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
 				theCoordinator?.userWishesToSeeScannedEvent(remoteEvent)
 			} else {
-				let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: .failedToConvertDCCToV3Event)
-//				displayErrorCode(subTitle: L.holderErrorstateClientMessage("\(errorCode)"))
-				logInfo("Error: \(errorCode)")
+				displayConvertError()
 			}
-			
+
 			case .unknown:
 				displayContent(
 					L.holder_scanner_error_title_unknown(),
 					body: L.holder_scanner_error_message_unknown()
 				)
 		}
+	}
+	
+	private func displayConvertError() {
+		
+		let errorCode = ErrorCode(flow: .paperproof, step: .scan, clientCode: .failedToConvertDCCToV3Event)
+		logError("errorCode")
+		
+		theCoordinator?.displayError(
+			content: Content(
+				title: L.holderErrorstateTitle(),
+				body: L.holderErrorstateClientMessage("\(errorCode)"),
+				primaryActionTitle: L.general_toMyOverview(),
+				primaryAction: {[weak self] in
+					self?.theCoordinator?.userWantsToGoBackToDashboard()
+				},
+				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+				secondaryAction: { [weak self] in
+					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else { return }
+					self?.theCoordinator?.openUrl(url, inApp: true)
+				}
+			),
+			backAction: { [weak self] in
+				self?.theCoordinator?.dismiss()
+			}
+		)
+		
 	}
 	
 	private func displayContent(_ title: String, body: String) {

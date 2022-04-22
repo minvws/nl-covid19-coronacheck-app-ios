@@ -84,7 +84,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.sut.content.secondaryActionTitle).to(beNil())
 	}
 
-	func test_loadingState_hkviMode() {
+	func test_loadingState_paperproofMode() {
 
 		// Given
 

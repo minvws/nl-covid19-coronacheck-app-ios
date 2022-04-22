@@ -92,7 +92,7 @@ extension ListRemoteEventsViewModel {
 		switch eventMode {
 			case .vaccinationassessment: return ErrorCode.Flow.visitorPass
 			case .vaccination: return ErrorCode.Flow.vaccination
-			case .paperflow: return ErrorCode.Flow.hkvi
+			case .paperflow: return ErrorCode.Flow.paperproof
 			case .vaccinationAndPositiveTest: return ErrorCode.Flow.vaccinationAndPositiveTest
 			case .recovery: return ErrorCode.Flow.recovery
 			case .test:

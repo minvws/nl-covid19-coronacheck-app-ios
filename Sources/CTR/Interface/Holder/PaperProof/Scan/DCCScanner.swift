@@ -9,7 +9,7 @@ import UIKit
 
 enum DCCScanResult {
 	case ctb
-	case domesticDCC(dcc: String)
+	case dutchDCC(dcc: String)
 	case foreignDCC(dcc: String)
 	case unknown
 }
@@ -31,7 +31,7 @@ class DCCScanner: DCCScannerProtocol, Logging {
 		} else if let euCredential = cryptoManager?.readEuCredentials(Data(code.utf8)) {
 			logInfo("Scanned: \(euCredential)")
 			if euCredential.issuer.lowercased() == "nl" {
-				return .domesticDCC(dcc: code)
+				return .dutchDCC(dcc: code)
 			} else {
 				return .foreignDCC(dcc: code)
 			}

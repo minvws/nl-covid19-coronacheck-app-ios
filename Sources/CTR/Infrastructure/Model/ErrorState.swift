@@ -67,7 +67,7 @@ extension ErrorCode.Flow {
 	static let vaccination = ErrorCode.Flow(value: "2")
 	static let recovery = ErrorCode.Flow(value: "3")
 	static let ggdTest = ErrorCode.Flow(value: "4")
-	static let hkvi = ErrorCode.Flow(value: "5")
+	static let paperproof = ErrorCode.Flow(value: "5")
 	static let qr = ErrorCode.Flow(value: "6")
 	static let upgradeEUVaccination = ErrorCode.Flow(value: "7")
 	static let vaccinationAndPositiveTest = ErrorCode.Flow(value: "8")
@@ -115,6 +115,7 @@ extension ErrorCode.Step {
 extension ErrorCode.Step {
 
 	static let coupling = ErrorCode.Step(value: "10")
+	static let scan = ErrorCode.Step(value: "20")
 }
 
 // MARK: ErrorCode.Step (QR flow)
