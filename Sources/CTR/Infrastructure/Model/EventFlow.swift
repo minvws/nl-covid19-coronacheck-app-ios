@@ -217,7 +217,7 @@ struct EventFlow {
 	struct DccEvent: Codable, Equatable {
 
 		let credential: String
-		let couplingCode: String
+		let couplingCode: String?
 
 		enum CodingKeys: String, CodingKey {
 
