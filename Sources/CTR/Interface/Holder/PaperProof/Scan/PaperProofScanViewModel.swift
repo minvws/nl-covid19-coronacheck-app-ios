@@ -68,7 +68,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 				theCoordinator?.userDidScanDCC(dcc)
 				// Go to list Event
 
-			if let wrapper = Current.couplingManager.convert(dcc, couplingCode: "ROLUS") {
+			if let wrapper = Current.couplingManager.convert(dcc, couplingCode: nil) {
 				let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
 				theCoordinator?.userWishesToSeeScannedEvent(remoteEvent)
 			} else {

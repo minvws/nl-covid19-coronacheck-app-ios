@@ -95,7 +95,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 
 		// When
-		let details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest)
+		let details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest, isForeign: false)
 
 		// Then
 		expect(details).to(haveCount(13))
@@ -194,7 +194,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 
 		// When
-		let details = DCCVaccinationDetailsGenerator.getDetails(identity: identity, vaccination: dccVaccination)
+		let details = DCCVaccinationDetailsGenerator.getDetails(identity: identity, vaccination: dccVaccination, isForeign: false)
 
 		// Then
 		expect(details).to(haveCount(12))
@@ -241,7 +241,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 
 		// When
-		let details = DCCRecoveryDetailsGenerator.getDetails(identity: identity, recovery: dccRecovery)
+		let details = DCCRecoveryDetailsGenerator.getDetails(identity: identity, recovery: dccRecovery, isForeign: false)
 
 		// Then
 		expect(details).to(haveCount(9))
