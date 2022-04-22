@@ -11,7 +11,7 @@ enum DCCScanResult {
 	case ctb
 	case domesticDCC(dcc: String)
 	case foreignDCC(dcc: String)
-	case other
+	case unknown
 }
 
 protocol DCCScannerProtocol: AnyObject {
@@ -36,7 +36,7 @@ class DCCScanner: DCCScannerProtocol, Logging {
 				return .foreignDCC(dcc: code)
 			}
 		} else {
-			return .other
+			return .unknown
 		}
 	}
 }

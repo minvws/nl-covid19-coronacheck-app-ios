@@ -13,7 +13,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	weak var cryptoManager: CryptoManaging? = Current.cryptoManager
 
 	/// Coordination Delegate
-	weak var theCoordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)?
+	weak var theCoordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable)?
 	
 	var dccScanner: DCCScannerProtocol
 
@@ -35,7 +35,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	init(
-		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol),
+		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable),
 		scanner: DCCScannerProtocol = DCCScanner()
 	) {
 		
@@ -55,7 +55,10 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 		
 		switch dccScanner.scan(message) {
 			case .ctb:
-				break
+				displayContent(
+					L.holder_scanner_error_title_ctb(),
+					body: L.holder_scanner_error_message_ctb()
+				)
 			case let .domesticDCC(dcc: dcc):
 				theCoordinator?.userDidScanDCC(dcc)
 				theCoordinator?.userWishesToEnterToken()
@@ -72,38 +75,30 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 				logInfo("Error: \(errorCode)")
 			}
 			
-			case .other:
-				break
+			case .unknown:
+				displayContent(
+					L.holder_scanner_error_title_unknown(),
+					body: L.holder_scanner_error_message_unknown()
+				)
 		}
-		
-//		if message.lowercased().hasPrefix("nl") {
-//
-//			logWarning("Invalid: Domestic QR-code")
-//			displayAlert(title: L.holderScannerAlertDccTitle(), message: L.holderScannerAlertDccMessage())
-//
-//		} else if cryptoManager?.readEuCredentials(Data(message.utf8)) != nil {
-//
-//			theCoordinator?.userDidScanDCC(message)
-//			theCoordinator?.userWishesToEnterToken()
-//
-//		} else {
-//
-//			logWarning("Invalid: Unknown QR-code")
-//			displayAlert(title: L.holderScannerAlertUnknownTitle(), message: L.holderScannerAlertUnknownMessage())
-//		}
 	}
-
-	private func displayAlert(title: String, message: String) {
-
-		alert = AlertContent(
-			title: title,
-			subTitle: message,
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.shouldResumeScanning = true
-			},
-			okTitle: L.generalOk()
+	
+	private func displayContent(_ title: String, body: String) {
+		
+		theCoordinator?.displayError(
+			content: Content(
+				title: title,
+				body: body,
+				primaryActionTitle: L.holder_scanner_error_action(),
+				primaryAction: {[weak self] in
+					self?.theCoordinator?.dismiss()
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			),
+			backAction: { [weak self] in
+				self?.theCoordinator?.dismiss()
+			}
 		)
 	}
 }
