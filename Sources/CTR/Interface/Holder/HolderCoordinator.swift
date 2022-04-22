@@ -414,24 +414,24 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToOpenTheMenu() {
 		
-		let itemAddCertificate: MenuViewModel.Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), icon: I.icon_menu_add()!, action: { [weak self] in
+		let itemAddCertificate: MenuViewModel.Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), subTitle: nil, icon: I.icon_menu_add()!, action: { [weak self] in
 			self?.navigateToChooseQRCodeType()
 		})
 		
-		let itemAddPaperCertificate: MenuViewModel.Item = .row(title: L.holderMenuPapercertificate(), icon: I.icon_menu_addpapercertificate()!, action: { [weak self] in
+		let itemAddPaperCertificate: MenuViewModel.Item = .row(title: L.holder_menu_paperproof_title(), subTitle: L.holder_menu_paperproof_subTitle(), icon: I.icon_menu_addpapercertificate()!, action: { [weak self] in
 			self?.navigateToAddPaperProof()
 		})
 		
-		let itemAddVisitorPass: MenuViewModel.Item = .row(title: L.holder_menu_visitorpass(), icon: I.icon_menu_addvisitorpass()!, action: { [weak self] in
+		let itemAddVisitorPass: MenuViewModel.Item = .row(title: L.holder_menu_visitorpass(), subTitle: nil, icon: I.icon_menu_addvisitorpass()!, action: { [weak self] in
 			self?.navigateToAddVisitorPass()
 		})
 		
-		let itemFAQ: MenuViewModel.Item = .row(title: L.holderMenuFaq(), icon: I.icon_menu_faq()!, action: { [weak self] in
+		let itemFAQ: MenuViewModel.Item = .row(title: L.holderMenuFaq(), subTitle: nil, icon: I.icon_menu_faq()!, action: { [weak self] in
 			guard let faqUrl = URL(string: L.holderUrlFaq()) else { return }
 			self?.openUrl(faqUrl, inApp: true)
 		})
 		
-		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
+		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
 			self?.navigateToAboutThisApp()
 		})
 		
