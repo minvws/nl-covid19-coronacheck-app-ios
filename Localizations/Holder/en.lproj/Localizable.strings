@@ -188,8 +188,6 @@
 "holder.dcc.recovery.name" = "Name:";
 "holder.dcc.recovery.pathogen" = "Disease recovered from:";
 "holder.dcc.recovery.pathogenvalue" = "COVID-19";
-/* MARK: - Paper Certificate Recovery Event */
-"holder.dcc.recovery.subtitle" = "These details are in your paper certificate:";
 "holder.dcc.recovery.validfrom" = "Valid from:";
 "holder.dcc.recovery.validuntil" = "Valid to:";
 "holder.dcc.test.country" = "Member state of test:";
@@ -205,8 +203,6 @@
 "holder.dcc.test.pathogen" = "Disease targeted:";
 "holder.dcc.test.pathogenvalue" = "COVID-19";
 "holder.dcc.test.result" = "Test result:";
-/* MARK: - Paper Certificate Test Event */
-"holder.dcc.test.subtitle" = "These details are in your paper certificate:";
 "holder.dcc.test.testname" = "Test name:";
 "holder.dcc.test.type" = "Type of test:";
 "holder.dcc.vaccination.brand" = "Vaccine:";
@@ -223,8 +219,6 @@
 "holder.dcc.vaccination.name" = "Name:";
 "holder.dcc.vaccination.pathogen" = "Pathogen:";
 "holder.dcc.vaccination.pathogenvalue" = "COVID-19";
-/* MARK: - Paper Certificate Vaccination Event */
-"holder.dcc.vaccination.subtitle" = "These details are in your paper certificate:";
 "holder.dcc.vaccination.type" = "Vaccine medicinal product:";
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
@@ -585,6 +579,7 @@
 "holder_dashboard_visitorpassexpired_title" = "Expired visitor pass";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Complete visitor pass";
 "holder_dashboard_visitorpassincompletebanner_title" = "Your vaccination approval has been added. Complete your visitor pass with your negative test result";
+"holder_dccDetails_subtitle" = "These details are in your paper certificate:";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
 "holder_deactivation_url" = "https://coronacheck.nl/app/not-in-use";
 "holder_endOfLife_button" = "Go to CoronaCheck.nl";

@@ -188,8 +188,6 @@
 "holder.dcc.recovery.name" = "Naam:";
 "holder.dcc.recovery.pathogen" = "Ziekte waarvan hersteld:";
 "holder.dcc.recovery.pathogenvalue" = "COVID-19";
-/* MARK: - Paper Certificate Recovery Event */
-"holder.dcc.recovery.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.recovery.validfrom" = "Geldig vanaf:";
 "holder.dcc.recovery.validuntil" = "Geldig tot:";
 "holder.dcc.test.country" = "Getest in:";
@@ -205,8 +203,6 @@
 "holder.dcc.test.pathogen" = "Ziekteverwekker:";
 "holder.dcc.test.pathogenvalue" = "COVID-19";
 "holder.dcc.test.result" = "Testuitslag:";
-/* MARK: - Paper Certificate Test Event */
-"holder.dcc.test.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.test.testname" = "Testnaam:";
 "holder.dcc.test.type" = "Type test:";
 "holder.dcc.vaccination.brand" = "Vaccin:";
@@ -223,8 +219,6 @@
 "holder.dcc.vaccination.name" = "Naam:";
 "holder.dcc.vaccination.pathogen" = "Ziekteverwekker:";
 "holder.dcc.vaccination.pathogenvalue" = "COVID-19";
-/* MARK: - Paper Certificate Vaccination Event */
-"holder.dcc.vaccination.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.vaccination.type" = "Type vaccin:";
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "Geen lettercombinatie?";
@@ -585,6 +579,8 @@
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Maak bewijs compleet";
 "holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatiebeoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve coronatestuitslag";
+"holder_dccDetails_subtitle" = "Deze gegevens staan in je papieren bewijs:";
+"holder_dccDetails_subtitle_foreign" = "Deze gegevens staan in je bewijs:";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder_deactivation_url" = "https://coronacheck.nl/app/niet-in-gebruik";
 "holder_endOfLife_button" = "Naar CoronaCheck.nl";

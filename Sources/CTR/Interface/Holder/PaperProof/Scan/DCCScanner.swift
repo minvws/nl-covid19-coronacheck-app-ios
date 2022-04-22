@@ -30,10 +30,10 @@ class DCCScanner: DCCScannerProtocol, Logging {
 			return .ctb
 		} else if let euCredential = cryptoManager?.readEuCredentials(Data(code.utf8)) {
 			logInfo("Scanned: \(euCredential)")
-			if euCredential.issuer.lowercased() == "nl" {
-				return .dutchDCC(dcc: code)
-			} else {
+			if euCredential.isForeignDCC {
 				return .foreignDCC(dcc: code)
+			} else {
+				return .dutchDCC(dcc: code)
 			}
 		} else {
 			return .unknown
