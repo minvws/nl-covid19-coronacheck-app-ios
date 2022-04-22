@@ -11,7 +11,7 @@ import SnapshotTesting
 import XCTest
 import Nimble
 
-class NewMenuRowViewTests: XCTestCase {
+class MenuRowViewTests: XCTestCase {
 	
 	func testStandard() {
 		// Arrange
@@ -30,6 +30,20 @@ class NewMenuRowViewTests: XCTestCase {
 		// Arrange
 		let sut = MenuRowView()
 		sut.title = "Here is a long title with a very very very long length"
+		sut.icon = I.icon_menu_faq()
+		
+		// Act
+		sut.frame = CGRect(x: 0, y: 0, width: 380, height: 140)
+
+		// Assert
+		sut.assertImage()
+	}
+
+	func testSubtitle() {
+		// Arrange
+		let sut = MenuRowView()
+		sut.title = "Here is a long title with a very very very long length"
+		sut.showSubTitle("And this is the sub title")
 		sut.icon = I.icon_menu_faq()
 		
 		// Act
