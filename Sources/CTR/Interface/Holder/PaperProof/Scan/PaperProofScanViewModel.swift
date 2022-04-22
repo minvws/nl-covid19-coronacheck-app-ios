@@ -59,22 +59,22 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 					L.holder_scanner_error_title_ctb(),
 					body: L.holder_scanner_error_message_ctb()
 				)
-
+				
 			case let .dutchDCC(dcc: dcc):
 				theCoordinator?.userDidScanDCC(dcc)
 				theCoordinator?.userWishesToEnterToken()
-
+				
 			case let .foreignDCC(dcc: dcc):
 				theCoordinator?.userDidScanDCC(dcc)
 				// Go to list Event
-
-			if let wrapper = Current.couplingManager.convert(dcc, couplingCode: nil) {
-				let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
-				theCoordinator?.userWishesToSeeScannedEvent(remoteEvent)
-			} else {
-				displayConvertError()
-			}
-
+				
+				if let wrapper = Current.couplingManager.convert(dcc, couplingCode: nil) {
+					let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
+					theCoordinator?.userWishesToSeeScannedEvent(remoteEvent)
+				} else {
+					displayConvertError()
+				}
+				
 			case .unknown:
 				displayContent(
 					L.holder_scanner_error_title_unknown(),
