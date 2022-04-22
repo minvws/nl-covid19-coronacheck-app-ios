@@ -335,7 +335,6 @@
 "holder.menu.dashboard" = "My certificates";
 "holder.menu.faq" = "Frequently asked questions";
 "holder.menu.feedback" = "Give us feedback";
-"holder.menu.papercertificate" = "Add paper certificate";
 "holder.menu.privacy" = "Privacy statement";
 "holder.menu.proof" = "Add certificate";
 "holder.menu.settings" = "Settings";
@@ -371,8 +370,6 @@
 "holder.recovery.start.title" = "Retrieve recovery details";
 "holder.recovery.vaccinationOnly.message" = "<p>You were tested positive for coronavirus longer too long ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>Because you tested positive before your first vaccination, your test could be recorded into your vaccination certificate.</p>";
 "holder.recovery.vaccinationOnly.title" = "Vaccination certificate instead of recovery certificate";
-"holder_scanner_message" = "Point your phone at the QR code";
-"holder_scanner_title" = "Scan QR code";
 "holder.showqr.details" = "Details";
 "holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal information. While it states that your certificate is valid, it doesn't specify if you've been tested, recovered or vaccinated.</p><p>The QR code also contains the first letter of your first and last name and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
@@ -655,6 +652,7 @@
 "holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_listRemoteEvents_vaccination_message" = "If the details are correct you can create a certificate.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
+"holder_menu_paperproof_title" = "Add paper certificate";
 "holder_menu_resetApp" = "Reset the app";
 "holder_menu_storedEvents" = "Stored data";
 /* Menu item for short stay route */
@@ -689,13 +687,12 @@
 "holder_onboarding_disclosurePolicyChanged_only3GAccess_title" = "3G access in the Netherlands";
 "holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
-"holder_scanner_error_message_ctb" = "Scan the QR code on your international certificate. You don't have to scan the Dutch QR code.";
-"holder_scanner_error_message_unknown" = "This QR code is not valid. Scan the QR code on your international certificate.";
 "holder_scanner_error_title_ctb" = "Scan your international QR code";
-"holder_scanner_error_title_unknown" = "Invalid QR code";
+"holder_scanner_message" = "Point your phone at the QR code";
 "holder_scanner_permission_message" = "The app wants to access your camera to scan the QR code.";
 "holder_scanner_permission_settings" = "To Settings";
 "holder_scanner_permission_title" = "No access to camera";
+"holder_scanner_title" = "Scan QR code";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Dutch QR code";
 "holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/en/dose\">Read more about the dose</a>";
