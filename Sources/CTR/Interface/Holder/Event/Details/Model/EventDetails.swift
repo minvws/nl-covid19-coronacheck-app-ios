@@ -291,7 +291,7 @@ enum EventDetailsDCCTest: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer: return true
+			case .subtitle, .foreignSubtitle, .dateOfBirth, .issuer: return true
 			default: return false
 		}
 	}
@@ -336,7 +336,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer: return true
+			case .subtitle, .foreignSubtitle, .dateOfBirth, .issuer: return true
 			default: return false
 		}
 	}

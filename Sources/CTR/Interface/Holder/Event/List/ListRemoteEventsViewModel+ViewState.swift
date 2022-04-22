@@ -466,7 +466,7 @@ extension ListRemoteEventsViewModel {
 					.showEventDetails(
 						title: L.holderDccRecoveryDetailsTitle(),
 						details: DCCRecoveryDetailsGenerator.getDetails(identity: dataRow.identity, recovery: recovery, isForeign: isForeign),
-						footer: L.holderDccRecoveryFooter()
+						footer: isForeign ? nil : L.holderDccRecoveryFooter()
 					)
 				)
 			}
@@ -493,7 +493,7 @@ extension ListRemoteEventsViewModel {
 					.showEventDetails(
 						title: L.holderDccTestDetailsTitle(),
 						details: DCCTestDetailsGenerator.getDetails(identity: dataRow.identity, test: test, isForeign: isForeign),
-						footer: L.holderDccTestFooter()
+						footer: isForeign ? nil : L.holderDccTestFooter()
 					)
 				)
 			}
