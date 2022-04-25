@@ -42,7 +42,7 @@ extension QRCard {
 					if let euVaccination = dccEvaluator(greencard, now)?.digitalCovidCertificate.vaccinations?.first,
 					   let doseNumber = euVaccination.doseNumber,
 					   let totalDose = euVaccination.totalDose {
-						return validityText_hasBegun_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), validFrom: origin.eventDate)
+						return validityText_hasBegun_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), issuingCountryCode: euVaccination.country, validFrom: origin.eventDate)
 					} else {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
 					}
@@ -128,11 +128,23 @@ private func validityText_isExpired() -> HolderDashboardViewController.ValidityT
 	.init(lines: [], kind: .past)
 }
 
-private func validityText_hasBegun_eu_vaccination(doseNumber: String, totalDoses: String, validFrom: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_eu_vaccination(doseNumber: String, totalDoses: String, issuingCountryCode: String, validFrom: Date) -> HolderDashboardViewController.ValidityText {
 	let formatter = HolderDashboardViewModel.dateWithoutTimeFormatter
+	
+	let dosesAndCountryLine: String = {
+		let doses = L.holderDashboardQrEuVaccinecertificatedoses(doseNumber, totalDoses)
+		
+		// If issued by another country than NL, get the localized name and append to the String:
+		if issuingCountryCode != "NL", let issuingCountry = Locale.autoupdatingCurrent.localizedString(forRegionCode: issuingCountryCode) {
+			return doses + " (\(issuingCountry))"
+		} else {
+			return doses
+		}
+	}()
+	
 	return .init(
 		lines: [
-			L.holderDashboardQrEuVaccinecertificatedoses(doseNumber, totalDoses),
+			dosesAndCountryLine,
 			"\(L.generalVaccinationdate()): \(formatter.string(from: validFrom))"
 		],
 		kind: .current

@@ -26,6 +26,7 @@ final class PageViewController: UIPageViewController {
 		guard let pages = pages else { return false }
 		return pages.count - 1 == currentIndex
 	}
+	var isAccessibilityPageAnnouncementEnabled = true
 	
     private(set) var currentIndex = 0 {
         didSet {
@@ -50,6 +51,7 @@ final class PageViewController: UIPageViewController {
 			self.inProgress = false
 			completion?(completed)
 
+			guard self.isAccessibilityPageAnnouncementEnabled else { return }
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 				if let view = viewControllers?.first?.view {
 					UIAccessibility.post(notification: .screenChanged, argument: view)
