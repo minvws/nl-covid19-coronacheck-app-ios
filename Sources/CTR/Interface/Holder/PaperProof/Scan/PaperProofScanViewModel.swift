@@ -15,7 +15,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	/// Coordination Delegate
 	weak var theCoordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable)?
 	
-	var dccScanner: DCCScannerProtocol
+	var paperProofIdentifier: PaperProofIdentifierProtocol
 
 	/// The title of the scene
 	@Bindable private(set) var title: String
@@ -36,11 +36,11 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	///   - cryptoManager: the crypto manager
 	init(
 		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable),
-		scanner: DCCScannerProtocol = DCCScanner()
+		scanner: PaperProofIdentifierProtocol = PaperProofIdentifier()
 	) {
 		
 		self.theCoordinator = coordinator
-		self.dccScanner = scanner
+		self.paperProofIdentifier = scanner
 		
 		self.title = L.holder_scanner_title()
 		self.message = L.holder_scanner_message()
@@ -53,7 +53,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 		
-		switch dccScanner.scan(message) {
+		switch paperProofIdentifier.identify(message) {
 			case .ctb:
 				displayContent(
 					L.holder_scanner_error_title_ctb(),
@@ -66,8 +66,6 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 				
 			case let .foreignDCC(dcc: dcc):
 				theCoordinator?.userDidScanDCC(dcc)
-				// Go to list Event
-				
 				if let wrapper = Current.couplingManager.convert(dcc, couplingCode: nil) {
 					let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
 					theCoordinator?.userWishesToSeeScannedEvent(remoteEvent)
