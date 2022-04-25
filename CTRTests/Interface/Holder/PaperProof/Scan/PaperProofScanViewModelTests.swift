@@ -15,14 +15,14 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	private var sut: PaperProofScanViewModel!
 	private var environmentSpies: EnvironmentSpies!
 	private var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
-	private var dccScannerSpy: DCCScannerSpy!
+	private var paperProofIdentifierSpy: PaperProofIdentifierSpy!
 	
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
-		dccScannerSpy = DCCScannerSpy()
-		sut = PaperProofScanViewModel(coordinator: coordinatorDelegateSpy, scanner: dccScannerSpy)
+		paperProofIdentifierSpy = PaperProofIdentifierSpy()
+		sut = PaperProofScanViewModel(coordinator: coordinatorDelegateSpy, scanner: paperProofIdentifierSpy)
 	}
 	
 	func test_initialState() {
@@ -42,7 +42,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_whenQRisCTB_shouldShowErrorState() {
 
 		// Given
-		dccScannerSpy.stubbedScanResult = .ctb
+		paperProofIdentifierSpy.stubbedScanResult = .ctb
 		
 		// When
 		sut.parseQRMessage("test")
@@ -56,7 +56,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_whenQRIsUnknown_shouldShowErrorState() {
 
 		// Given
-		dccScannerSpy.stubbedScanResult = .unknown
+		paperProofIdentifierSpy.stubbedScanResult = .unknown
 		
 		// When
 		sut.parseQRMessage("test")
@@ -71,7 +71,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		
 		// Given
 		let code = "test"
-		dccScannerSpy.stubbedScanResult = .dutchDCC(dcc: code )
+		paperProofIdentifierSpy.stubbedScanResult = .dutchDCC(dcc: code )
 		
 		// When
 		sut.parseQRMessage(code)
@@ -86,7 +86,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		
 		// Given
 		let code = "test"
-		dccScannerSpy.stubbedScanResult = .foreignDCC(dcc: code )
+		paperProofIdentifierSpy.stubbedScanResult = .foreignDCC(dcc: code )
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
@@ -108,7 +108,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		
 		// Given
 		let code = "test"
-		dccScannerSpy.stubbedScanResult = .foreignDCC(dcc: code )
+		paperProofIdentifierSpy.stubbedScanResult = .foreignDCC(dcc: code )
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 		
 		// When
@@ -122,15 +122,15 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	}
 }
 
-class DCCScannerSpy: DCCScannerProtocol {
+class PaperProofIdentifierSpy: PaperProofIdentifierProtocol {
 
 	var invokedScan = false
 	var invokedScanCount = 0
 	var invokedScanParameters: (code: String, Void)?
 	var invokedScanParametersList = [(code: String, Void)]()
-	var stubbedScanResult: DCCScanResult!
+	var stubbedScanResult: PaperProofIdentity!
 
-	func scan(_ code: String) -> DCCScanResult {
+	func identify(_ code: String) -> PaperProofIdentity {
 		invokedScan = true
 		invokedScanCount += 1
 		invokedScanParameters = (code, ())
