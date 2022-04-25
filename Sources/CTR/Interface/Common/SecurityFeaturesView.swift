@@ -52,7 +52,7 @@ class SecurityFeaturesView: BaseView {
 		animationView.embed(in: self)
 	}
 
-	/// User tapped
+	/// User tapped to flip security view animation
 	@objc func tapFlipAnimation() {
 
 		animatingLeftToRight.toggle()
