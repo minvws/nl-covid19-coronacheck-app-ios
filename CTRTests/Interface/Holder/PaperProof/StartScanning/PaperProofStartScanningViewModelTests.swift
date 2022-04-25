@@ -28,8 +28,24 @@ final class PaperProofStartScanningViewModelTests: XCTestCase {
 		expect(self.sut.nextButtonTitle) == L.holder_paperproof_startscanning_button_startScanning()
 		expect(self.sut.secondaryButtonTitle) == L.holder_paperproof_startscanning_button_whichProofs()
 		expect(self.sut.internationalQROnly) == I.internationalQROnly()
+	}
+
+	func test_backButtonTapped_shouldInvokeCoordinator() {
+
+		// When
+		sut.backButtonTapped()
 		
-		PaperProofStartScanningViewController(viewModel: sut).assertImage()
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToCancelPaperProofFlow) == true
+	}
+	
+	func test_backSwipe_shouldInvokeCoordinator() {
+
+		// When
+		sut.backSwipe()
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToCancelPaperProofFlow) == true
 	}
 	
 	func test_nextButtonTapped_shouldInvokeCoordinator() {
