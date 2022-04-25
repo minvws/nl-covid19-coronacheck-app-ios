@@ -95,7 +95,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 
 		// When
-		let details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest
+		let details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest)
 
 		// Then
 		expect(details).to(haveCount(13))
