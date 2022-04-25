@@ -100,10 +100,10 @@ extension ListRemoteEventsViewModel {
 		}
 		// No secondary action for scanned paperflow, that is moved to the body of the details.
 		// But do show it for foreign DCC
-		var secondaryActionTitle: String? = L.holderVaccinationListWrong()
-		if eventMode == .paperflow && !containsForeignDCC {
-			secondaryActionTitle = nil
-		}
+		let secondaryActionTitle: String? = {
+			guard !(eventMode == .paperflow && !containsForeignDCC) else { return nil }
+			return L.holderVaccinationListWrong()
+		}()
 
 		return .listEvents(
 			content: Content(
