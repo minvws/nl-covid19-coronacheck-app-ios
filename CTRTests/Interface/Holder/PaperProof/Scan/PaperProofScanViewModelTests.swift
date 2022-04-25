@@ -42,7 +42,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_whenQRisCTB_shouldShowErrorState() {
 
 		// Given
-		paperProofIdentifierSpy.stubbedScanResult = .ctb
+		paperProofIdentifierSpy.stubbedIdentifyResult = .ctb
 		
 		// When
 		sut.parseQRMessage("test")
@@ -56,7 +56,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_whenQRIsUnknown_shouldShowErrorState() {
 
 		// Given
-		paperProofIdentifierSpy.stubbedScanResult = .unknown
+		paperProofIdentifierSpy.stubbedIdentifyResult = .unknown
 		
 		// When
 		sut.parseQRMessage("test")
@@ -71,7 +71,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		
 		// Given
 		let code = "test"
-		paperProofIdentifierSpy.stubbedScanResult = .dutchDCC(dcc: code )
+		paperProofIdentifierSpy.stubbedIdentifyResult = .dutchDCC(dcc: code )
 		
 		// When
 		sut.parseQRMessage(code)
@@ -86,7 +86,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		
 		// Given
 		let code = "test"
-		paperProofIdentifierSpy.stubbedScanResult = .foreignDCC(dcc: code )
+		paperProofIdentifierSpy.stubbedIdentifyResult = .foreignDCC(dcc: code )
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
@@ -108,7 +108,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		
 		// Given
 		let code = "test"
-		paperProofIdentifierSpy.stubbedScanResult = .foreignDCC(dcc: code )
+		paperProofIdentifierSpy.stubbedIdentifyResult = .foreignDCC(dcc: code )
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 		
 		// When
@@ -124,17 +124,17 @@ final class PaperProofScanViewModelTests: XCTestCase {
 
 class PaperProofIdentifierSpy: PaperProofIdentifierProtocol {
 
-	var invokedScan = false
-	var invokedScanCount = 0
-	var invokedScanParameters: (code: String, Void)?
-	var invokedScanParametersList = [(code: String, Void)]()
-	var stubbedScanResult: PaperProofIdentity!
+	var invokedIdentify = false
+	var invokedIdentifyCount = 0
+	var invokedIdentifyParameters: (code: String, Void)?
+	var invokedIdentifyParametersList = [(code: String, Void)]()
+	var stubbedIdentifyResult: PaperProofIdentity!
 
 	func identify(_ code: String) -> PaperProofIdentity {
-		invokedScan = true
-		invokedScanCount += 1
-		invokedScanParameters = (code, ())
-		invokedScanParametersList.append((code, ()))
-		return stubbedScanResult
+		invokedIdentify = true
+		invokedIdentifyCount += 1
+		invokedIdentifyParameters = (code, ())
+		invokedIdentifyParametersList.append((code, ()))
+		return stubbedIdentifyResult
 	}
 }
