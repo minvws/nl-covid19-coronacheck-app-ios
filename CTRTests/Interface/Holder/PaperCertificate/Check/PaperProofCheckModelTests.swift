@@ -466,11 +466,11 @@ class CouplingManagerSpy: CouplingManaging {
 
 	var invokedConvert = false
 	var invokedConvertCount = 0
-	var invokedConvertParameters: (dcc: String, couplingCode: String)?
-	var invokedConvertParametersList = [(dcc: String, couplingCode: String)]()
+	var invokedConvertParameters: (dcc: String, couplingCode: String?)?
+	var invokedConvertParametersList = [(dcc: String, couplingCode: String?)]()
 	var stubbedConvertResult: EventFlow.EventResultWrapper!
 
-	func convert(_ dcc: String, couplingCode: String) -> EventFlow.EventResultWrapper? {
+	func convert(_ dcc: String, couplingCode: String?) -> EventFlow.EventResultWrapper? {
 		invokedConvert = true
 		invokedConvertCount += 1
 		invokedConvertParameters = (dcc, couplingCode)

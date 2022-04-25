@@ -235,11 +235,11 @@ extension ListRemoteEventsViewModel {
 				if let credentialData = currentRow.event.dccEvent?.credential.data(using: .utf8),
 				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
 					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-						rows.append(getRowFromDCCVaccinationEvent(dataRow: currentRow, vaccination: vaccination))
+						rows.append(getRowFromDCCVaccinationEvent(dataRow: currentRow, vaccination: vaccination, isForeign: euCredentialAttributes.isForeignDCC))
 					} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-						rows.append(getRowFromDCCRecoveryEvent(dataRow: currentRow, recovery: recovery))
+						rows.append(getRowFromDCCRecoveryEvent(dataRow: currentRow, recovery: recovery, isForeign: euCredentialAttributes.isForeignDCC))
 					} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-						rows.append(getRowFromDCCTestEvent(dataRow: currentRow, test: test))
+						rows.append(getRowFromDCCTestEvent(dataRow: currentRow, test: test, isForeign: euCredentialAttributes.isForeignDCC))
 					}
 				}
 			}
@@ -412,7 +412,8 @@ extension ListRemoteEventsViewModel {
 
 	private func getRowFromDCCVaccinationEvent(
 		dataRow: EventDataTuple,
-		vaccination: EuCredentialAttributes.Vaccination) -> ListRemoteEventsViewController.Row {
+		vaccination: EuCredentialAttributes.Vaccination,
+		isForeign: Bool) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -435,9 +436,10 @@ extension ListRemoteEventsViewModel {
 						title: L.holderDccVaccinationDetailsTitle(),
 						details: DCCVaccinationDetailsGenerator.getDetails(
 							identity: dataRow.identity,
-							vaccination: vaccination
+							vaccination: vaccination,
+							isForeign: isForeign
 						),
-						footer: L.holderDccVaccinationFooter()
+						footer: isForeign ? nil : L.holderDccVaccinationFooter()
 					)
 				)
 			}
@@ -446,7 +448,8 @@ extension ListRemoteEventsViewModel {
 
 	private func getRowFromDCCRecoveryEvent(
 		dataRow: EventDataTuple,
-		recovery: EuCredentialAttributes.RecoveryEntry) -> ListRemoteEventsViewController.Row {
+		recovery: EuCredentialAttributes.RecoveryEntry,
+		isForeign: Bool) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -462,8 +465,8 @@ extension ListRemoteEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderDccRecoveryDetailsTitle(),
-						details: DCCRecoveryDetailsGenerator.getDetails(identity: dataRow.identity, recovery: recovery),
-						footer: L.holderDccRecoveryFooter()
+						details: DCCRecoveryDetailsGenerator.getDetails(identity: dataRow.identity, recovery: recovery, isForeign: isForeign),
+						footer: isForeign ? nil : L.holderDccRecoveryFooter()
 					)
 				)
 			}
@@ -472,7 +475,8 @@ extension ListRemoteEventsViewModel {
 
 	private func getRowFromDCCTestEvent(
 		dataRow: EventDataTuple,
-		test: EuCredentialAttributes.TestEntry) -> ListRemoteEventsViewController.Row {
+		test: EuCredentialAttributes.TestEntry,
+		isForeign: Bool) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -488,8 +492,8 @@ extension ListRemoteEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderDccTestDetailsTitle(),
-						details: DCCTestDetailsGenerator.getDetails(identity: dataRow.identity, test: test),
-						footer: L.holderDccTestFooter()
+						details: DCCTestDetailsGenerator.getDetails(identity: dataRow.identity, test: test, isForeign: isForeign),
+						footer: isForeign ? nil : L.holderDccTestFooter()
 					)
 				)
 			}

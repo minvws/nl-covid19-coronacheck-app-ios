@@ -157,7 +157,7 @@ class PositiveTestDetailsGenerator {
 
 class DCCTestDetailsGenerator {
 
-	static func getDetails(identity: EventFlow.Identity, test: EuCredentialAttributes.TestEntry) -> [EventDetails] {
+	static func getDetails(identity: EventFlow.Identity, test: EuCredentialAttributes.TestEntry, isForeign: Bool = false) -> [EventDetails] {
 
 		let mappingManager: MappingManaging = Current.mappingManager
 
@@ -179,7 +179,7 @@ class DCCTestDetailsGenerator {
 		}
 
 		return [
-			EventDetails(field: EventDetailsDCCTest.subtitle, value: nil),
+			EventDetails(field: isForeign ? EventDetailsDCCTest.foreignSubtitle: EventDetailsDCCTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsDCCTest.name, value: identity.fullName),
 			EventDetails(field: EventDetailsDCCTest.dateOfBirth, value: formattedBirthDate),
 			EventDetails(field: EventDetailsDCCTest.pathogen, value: L.holderDccTestPathogenvalue()),
@@ -258,7 +258,7 @@ class VaccinationDetailsGenerator {
 
 class DCCVaccinationDetailsGenerator {
 
-	static func getDetails(identity: EventFlow.Identity, vaccination: EuCredentialAttributes.Vaccination) -> [EventDetails] {
+	static func getDetails(identity: EventFlow.Identity, vaccination: EuCredentialAttributes.Vaccination, isForeign: Bool = false) -> [EventDetails] {
 
 		let mappingManager: MappingManaging = Current.mappingManager
 
@@ -281,7 +281,7 @@ class DCCVaccinationDetailsGenerator {
 			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? vaccination.dateOfVaccination
 
 		return [
-			EventDetails(field: EventDetailsDCCVaccination.subtitle, value: nil),
+			EventDetails(field: isForeign ? EventDetailsDCCVaccination.foreignSubtitle: EventDetailsDCCVaccination.subtitle, value: nil),
 			EventDetails(field: EventDetailsDCCVaccination.name, value: identity.fullName),
 			EventDetails(field: EventDetailsDCCVaccination.dateOfBirth, value: formattedBirthDate),
 			EventDetails(field: EventDetailsDCCVaccination.pathogen, value: L.holderDccVaccinationPathogenvalue()),
@@ -357,7 +357,7 @@ class RecoveryDetailsGenerator {
 
 class DCCRecoveryDetailsGenerator {
 
-	static func getDetails(identity: EventFlow.Identity, recovery: EuCredentialAttributes.RecoveryEntry) -> [EventDetails] {
+	static func getDetails(identity: EventFlow.Identity, recovery: EuCredentialAttributes.RecoveryEntry, isForeign: Bool = false) -> [EventDetails] {
 
 		let mappingManager: MappingManaging = Current.mappingManager
 
@@ -372,7 +372,7 @@ class DCCRecoveryDetailsGenerator {
 			.map(RemoteEventDetailsGenerator.printDateFormatter.string) ?? recovery.expiresAt
 
 		return [
-			EventDetails(field: EventDetailsDCCRecovery.subtitle, value: nil),
+			EventDetails(field: isForeign ? EventDetailsDCCRecovery.foreignSubtitle: EventDetailsDCCRecovery.subtitle, value: nil),
 			EventDetails(field: EventDetailsDCCRecovery.name, value: identity.fullName),
 			EventDetails(field: EventDetailsDCCRecovery.dateOfBirth, value: formattedBirthDate),
 			EventDetails(field: EventDetailsDCCRecovery.date, value: formattedFirstPostiveDate),

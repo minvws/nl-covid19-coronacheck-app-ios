@@ -14,7 +14,7 @@ protocol CouplingManaging {
 	///   - dcc: The string representation of a digital covid certificate
 	///   - couplingCode: the coupling code for the dcc
 	/// - Returns: the event wrapper
-	func convert(_ dcc: String, couplingCode: String) -> EventFlow.EventResultWrapper?
+	func convert(_ dcc: String, couplingCode: String?) -> EventFlow.EventResultWrapper?
 
 	/// Check the dcc and the coupling code
 	/// - Parameters:
@@ -43,7 +43,7 @@ class CouplingManager: CouplingManaging, Logging {
 	///   - dcc: The string representation of a digital covid certificate
 	///   - couplingCode: the coupling code for the dcc
 	/// - Returns: the event wrapper
-	func convert(_ dcc: String, couplingCode: String) -> EventFlow.EventResultWrapper? {
+	func convert(_ dcc: String, couplingCode: String?) -> EventFlow.EventResultWrapper? {
 
 		let dccEvent = EventFlow.DccEvent(credential: dcc, couplingCode: couplingCode)
 		if let credentialData = dccEvent.credential.data(using: .utf8),

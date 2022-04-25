@@ -46,7 +46,7 @@ extension EventMode {
 	var flow: ErrorCode.Flow {
 
 		switch self {
-			case .paperflow: return .hkvi
+			case .paperflow: return .paperproof
 			case .vaccinationAndPositiveTest: return .vaccinationAndPositiveTest
 			case .recovery: return .recovery
 			case .test: return .ggdTest

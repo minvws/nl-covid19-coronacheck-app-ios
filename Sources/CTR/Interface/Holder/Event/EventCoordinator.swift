@@ -455,7 +455,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						case .recovery:
 							return L.holderErrorstateLoginMessageRecovery()
 						case .paperflow:
-							return "" // HKVI is not a part of this flow
+							return "" // PaperProof is not a part of this flow
 						case .test:
 							return L.holderErrorstateLoginMessageTest()
 						case .vaccination, .vaccinationAndPositiveTest:

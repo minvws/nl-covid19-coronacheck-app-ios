@@ -84,13 +84,13 @@ class PaperProofScanViewController: ScanViewController {
 	func showPermissionError() {
 
 		let alertController = UIAlertController(
-			title: L.holderScannerPermissionTitle(),
-			message: L.holderScannerAlertDccMessage(),
+			title: L.holder_scanner_permission_title(),
+			message: L.holder_scanner_permission_message(),
 			preferredStyle: .alert
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: L.holderScannerPermissionSettings(),
+				title: L.holder_scanner_permission_settings(),
 				style: .default,
 				handler: { [weak self] _ in
 					self?.viewModel.gotoSettings()
