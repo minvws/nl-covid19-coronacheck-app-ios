@@ -228,7 +228,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut?.sceneView.securityView.primaryButton.sendActions(for: .touchUpInside)
+		sut?.sceneView.securityView.tapFlipAnimation()
 
 		// Then
 		expect(self.sut.sceneView.securityView.currentAnimation) == .domesticAnimation
