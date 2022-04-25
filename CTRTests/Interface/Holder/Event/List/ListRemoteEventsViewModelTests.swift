@@ -302,6 +302,34 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(content.secondaryAction).to(beNil())
 		expect(content.secondaryActionTitle).to(beNil())
 	}
+	
+	func test_somethingIsWrong_foreignDccVaccination() {
+
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.foreignFakeVaccination()
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .paperflow,
+			remoteEvents: [remotePaperFlowEvent],
+			greenCardLoader: greenCardLoader
+		)
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.secondaryAction?()
+
+		// Then
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
+			.moreInformation(
+				title: L.holder_listRemoteEvents_somethingWrong_title(),
+				body: L.holder_listRemoteEvents_somethingWrong_foreignDCC_body(),
+				hideBodyForScreenCapture: false
+			)
+	}
 
 	// MARK: - Event Rows -
 	
