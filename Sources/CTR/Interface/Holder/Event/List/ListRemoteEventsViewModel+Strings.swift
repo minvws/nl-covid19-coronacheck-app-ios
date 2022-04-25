@@ -16,7 +16,7 @@ extension ListRemoteEventsViewModel {
 				case .vaccinationassessment:
 					return L.holder_listRemoteEvents_somethingWrong_vaccinationAssessment_body()
 				case .paperflow:
-					return L.holder_listRemoteEvents_somethingWrong_foreignDCC_body()
+					return nil
 				case .recovery:
 					return L.holder_listRemoteEvents_somethingWrong_recovery_body()
 				case .test:

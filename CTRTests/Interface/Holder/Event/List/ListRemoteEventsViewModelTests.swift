@@ -320,15 +320,10 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		
 		// When
-		content.secondaryAction?()
 
 		// Then
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
-			.moreInformation(
-				title: L.holder_listRemoteEvents_somethingWrong_title(),
-				body: L.holder_listRemoteEvents_somethingWrong_foreignDCC_body(),
-				hideBodyForScreenCapture: false
-			)
+		expect(content.secondaryAction).to(beNil())
+		expect(content.secondaryActionTitle).to(beNil())
 	}
 
 	// MARK: - Event Rows -
