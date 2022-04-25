@@ -384,7 +384,7 @@ extension RequestToken {
 
 extension EuCredentialAttributes.DigitalCovidCertificate {
 
-	static func sampleWithVaccine(doseNumber: Int?, totalDose: Int?) -> EuCredentialAttributes.DigitalCovidCertificate {
+	static func sampleWithVaccine(doseNumber: Int?, totalDose: Int?, country: String = "NL") -> EuCredentialAttributes.DigitalCovidCertificate {
 		EuCredentialAttributes.DigitalCovidCertificate(
 			dateOfBirth: "2021-06-01",
 			name: EuCredentialAttributes.Name(
@@ -397,7 +397,7 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 			vaccinations: [
 				EuCredentialAttributes.Vaccination(
 					certificateIdentifier: "test",
-					country: "Nederland / The Netherlands",
+					country: country,
 					diseaseAgentTargeted: "1234",
 					doseNumber: doseNumber,
 					dateOfVaccination: "2021-06-01",
@@ -411,7 +411,7 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 		)
 	}
 
-	static func sampleWithTest() -> EuCredentialAttributes.DigitalCovidCertificate {
+	static func sampleWithTest(country: String = "NL") -> EuCredentialAttributes.DigitalCovidCertificate {
 		EuCredentialAttributes.DigitalCovidCertificate(
 			dateOfBirth: "2021-06-01",
 			name: EuCredentialAttributes.Name(
@@ -424,7 +424,7 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 			tests: [
 				EuCredentialAttributes.TestEntry(
 					certificateIdentifier: "URN:UCI:01:NL:WMZBJR3MJRHSPGBCNROM42#M",
-					country: "NL",
+					country: country,
 					diseaseAgentTargeted: "840539006",
 					issuer: "Ministry of Health Welfare and Sport",
 					marketingAuthorizationHolder: "",
@@ -438,7 +438,7 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 		)
 	}
 	
-	static func sampleWithRecovery() -> EuCredentialAttributes.DigitalCovidCertificate {
+	static func sampleWithRecovery(country: String = "NL") -> EuCredentialAttributes.DigitalCovidCertificate {
 		EuCredentialAttributes.DigitalCovidCertificate(
 			dateOfBirth: "2021-06-01",
 			name: EuCredentialAttributes.Name(
@@ -451,7 +451,7 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 			recoveries: [
 				EuCredentialAttributes.RecoveryEntry(
 					certificateIdentifier: "URN:UCI:01:NL:WMZBJR3MJRHSPGBCNROM42#M",
-					country: "NL",
+					country: country,
 					diseaseAgentTargeted: "840539006",
 					expiresAt: "2022-07-31T09:50:00+00:00",
 					firstPositiveTestDate: "2021-07-31T09:50:00+00:00",
