@@ -1212,22 +1212,12 @@ extension EuCredentialAttributes {
 		)
 	}
 	
-	static func foreignFake(dcc: EuCredentialAttributes.DigitalCovidCertificate) -> EuCredentialAttributes {
-		EuCredentialAttributes(
-			credentialVersion: 1,
-			digitalCovidCertificate: dcc,
-			expirationTime: now.timeIntervalSince1970 + 3600,
-			issuedAt: now.timeIntervalSince1970,
-			issuer: "BE"
-		)
-	}
-	
 	static func fakeVaccination(dcc: EuCredentialAttributes.DigitalCovidCertificate = .sampleWithVaccine(doseNumber: 1, totalDose: 2)) -> EuCredentialAttributes {
 		fake(dcc: dcc)
 	}
 
 	static func foreignFakeVaccination(dcc: EuCredentialAttributes.DigitalCovidCertificate = .sampleWithVaccine(doseNumber: 1, totalDose: 2)) -> EuCredentialAttributes {
-		foreignFake(dcc: dcc)
+		fake(dcc: dcc, issuer: "BE")
 	}
 	
 	static var fakeTest: EuCredentialAttributes {
