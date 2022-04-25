@@ -18,11 +18,11 @@ struct HolderNewFeaturesFactory: NewFeaturesFactory {
 		
 		return .init(
 			pages: [PagedAnnoucementItem(
-				title: L.holderUpdatepageTitleTab(),
-				content: L.holderUpdatepageContentTab(),
-				image: HolderNewFeaturesFactory.isNL ? I.onboarding.tabbarNL() : I.onboarding.tabbarEN(),
-				imageBackgroundColor: C.forcedInformationImage(),
-				tagline: L.holderUpdatepageTagline(),
+				title: L.holder_newintheapp_foreignproofs_title(),
+				content: L.holder_newintheapp_foreignproofs_body(),
+				image: I.newInTheApp.paperDCC(),
+				imageBackgroundColor: C.white(),
+				tagline: L.holder_newintheapp_foreignproofs_tagline(),
 				step: 0
 			)],
 			version: 4

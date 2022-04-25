@@ -58,8 +58,8 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 					shouldShowWithVWSRibbon: false
 				),
 				allowsBackButton: false,
-				allowsCloseButton: false,
-				allowsNextButton: true
+				allowsCloseButton: pagedAnnouncementItems.count == 1,
+				allowsNextButton: pagedAnnouncementItems.count > 1
 			)
 			navigationController.viewControllers = [viewController]
 			navigationController.view.window?.replaceRootViewController(with: navigationController)
