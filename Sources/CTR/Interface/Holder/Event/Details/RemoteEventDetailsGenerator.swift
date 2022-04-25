@@ -157,7 +157,7 @@ class PositiveTestDetailsGenerator {
 
 class DCCTestDetailsGenerator {
 
-	static func getDetails(identity: EventFlow.Identity, test: EuCredentialAttributes.TestEntry, isForeign: Bool) -> [EventDetails] {
+	static func getDetails(identity: EventFlow.Identity, test: EuCredentialAttributes.TestEntry, isForeign: Bool = false) -> [EventDetails] {
 
 		let mappingManager: MappingManaging = Current.mappingManager
 
@@ -258,7 +258,7 @@ class VaccinationDetailsGenerator {
 
 class DCCVaccinationDetailsGenerator {
 
-	static func getDetails(identity: EventFlow.Identity, vaccination: EuCredentialAttributes.Vaccination, isForeign: Bool) -> [EventDetails] {
+	static func getDetails(identity: EventFlow.Identity, vaccination: EuCredentialAttributes.Vaccination, isForeign: Bool = false) -> [EventDetails] {
 
 		let mappingManager: MappingManaging = Current.mappingManager
 
@@ -357,7 +357,7 @@ class RecoveryDetailsGenerator {
 
 class DCCRecoveryDetailsGenerator {
 
-	static func getDetails(identity: EventFlow.Identity, recovery: EuCredentialAttributes.RecoveryEntry, isForeign: Bool) -> [EventDetails] {
+	static func getDetails(identity: EventFlow.Identity, recovery: EuCredentialAttributes.RecoveryEntry, isForeign: Bool = false) -> [EventDetails] {
 
 		let mappingManager: MappingManaging = Current.mappingManager
 

@@ -70,7 +70,7 @@ class StoredEventDetailsViewControllerTests: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
-		let details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest, isForeign: false)
+		let details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest)
 		viewModel = RemoteEventDetailsViewModel(
 			coordinator: coordinatorSpy,
 			title: L.general_negativeTest().capitalizingFirstLetter(),
@@ -143,7 +143,7 @@ class StoredEventDetailsViewControllerTests: XCTestCase {
 		let dccRecovery = EuCredentialAttributes.RecoveryEntry.recovery
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
-		let details = DCCRecoveryDetailsGenerator.getDetails(identity: identity, recovery: dccRecovery, isForeign: false)
+		let details = DCCRecoveryDetailsGenerator.getDetails(identity: identity, recovery: dccRecovery)
 		viewModel = RemoteEventDetailsViewModel(
 			coordinator: coordinatorSpy,
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
@@ -198,7 +198,7 @@ class StoredEventDetailsViewControllerTests: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
-		let details = DCCVaccinationDetailsGenerator.getDetails(identity: identity, vaccination: dccVaccination, isForeign: false)
+		let details = DCCVaccinationDetailsGenerator.getDetails(identity: identity, vaccination: dccVaccination)
 		viewModel = RemoteEventDetailsViewModel(
 			coordinator: coordinatorSpy,
 			title: L.general_vaccination().capitalizingFirstLetter(),
