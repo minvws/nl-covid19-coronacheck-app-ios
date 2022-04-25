@@ -128,9 +128,9 @@ class PaperProofIdentifierSpy: PaperProofIdentifierProtocol {
 	var invokedIdentifyCount = 0
 	var invokedIdentifyParameters: (code: String, Void)?
 	var invokedIdentifyParametersList = [(code: String, Void)]()
-	var stubbedIdentifyResult: PaperProofIdentity!
+	var stubbedIdentifyResult: PaperProofType!
 
-	func identify(_ code: String) -> PaperProofIdentity {
+	func identify(_ code: String) -> PaperProofType {
 		invokedIdentify = true
 		invokedIdentifyCount += 1
 		invokedIdentifyParameters = (code, ())

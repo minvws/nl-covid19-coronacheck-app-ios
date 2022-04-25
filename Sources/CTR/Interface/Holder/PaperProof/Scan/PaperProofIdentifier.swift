@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum PaperProofIdentity {
+enum PaperProofType {
 	case ctb
 	case dutchDCC(dcc: String)
 	case foreignDCC(dcc: String)
@@ -16,7 +16,7 @@ enum PaperProofIdentity {
 
 protocol PaperProofIdentifierProtocol: AnyObject {
 	
-	func identify(_ code: String) -> PaperProofIdentity
+	func identify(_ code: String) -> PaperProofType
 }
 
 class PaperProofIdentifier: PaperProofIdentifierProtocol {
@@ -24,7 +24,7 @@ class PaperProofIdentifier: PaperProofIdentifierProtocol {
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging? = Current.cryptoManager
 	
-	func identify(_ code: String) -> PaperProofIdentity {
+	func identify(_ code: String) -> PaperProofType {
 		
 		if code.lowercased().hasPrefix("nl") {
 			return .ctb
