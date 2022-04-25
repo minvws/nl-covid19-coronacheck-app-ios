@@ -139,13 +139,13 @@ class ListStoredEventsViewModel: Logging {
 			}
 			
 			euCredentialAttributes.digitalCovidCertificate.vaccinations?.forEach { vaccination in
-				result.append(getRowFromVaccinationDCC(vaccination, identity: euCredentialAttributes.identity, isForeign: euCredentialAttributes.isForeignDCC))
+				result.append(getRowFromVaccinationDCC(vaccination, identity: euCredentialAttributes.identity))
 			}
 			euCredentialAttributes.digitalCovidCertificate.recoveries?.forEach { recovery in
-				result.append(getRowFromRecoveryDCC(recovery, identity: euCredentialAttributes.identity, isForeign: euCredentialAttributes.isForeignDCC))
+				result.append(getRowFromRecoveryDCC(recovery, identity: euCredentialAttributes.identity))
 			}
 			euCredentialAttributes.digitalCovidCertificate.tests?.forEach { test in
-				result.append(getRowFromNegativeTestDCC(test, identity: euCredentialAttributes.identity, isForeign: euCredentialAttributes.isForeignDCC))
+				result.append(getRowFromNegativeTestDCC(test, identity: euCredentialAttributes.identity))
 			}
 		}
 		return result
@@ -225,7 +225,7 @@ class ListStoredEventsViewModel: Logging {
 	
 	// MARK: - DCC Row Helper Methods
 	
-	private func getRowFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination, identity: EventFlow.Identity, isForeign: Bool) -> ListStoredEventsViewController.Row {
+	private func getRowFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
 			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? vaccination.dateOfVaccination
@@ -236,13 +236,13 @@ class ListStoredEventsViewModel: Logging {
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_vaccination().capitalizingFirstLetter(),
-					details: DCCVaccinationDetailsGenerator.getDetails(identity: identity, vaccination: vaccination, isForeign: isForeign)
+					details: DCCVaccinationDetailsGenerator.getDetails(identity: identity, vaccination: vaccination)
 				)
 			}
 		)
 	}
 	
-	private func getRowFromRecoveryDCC(_ recovery: EuCredentialAttributes.RecoveryEntry, identity: EventFlow.Identity, isForeign: Bool) -> ListStoredEventsViewController.Row {
+	private func getRowFromRecoveryDCC(_ recovery: EuCredentialAttributes.RecoveryEntry, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
 			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? recovery.firstPositiveTestDate
@@ -253,13 +253,13 @@ class ListStoredEventsViewModel: Logging {
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_recoverycertificate().capitalizingFirstLetter(),
-					details: DCCRecoveryDetailsGenerator.getDetails(identity: identity, recovery: recovery, isForeign: isForeign)
+					details: DCCRecoveryDetailsGenerator.getDetails(identity: identity, recovery: recovery)
 				)
 			}
 		)
 	}
 	
-	private func getRowFromNegativeTestDCC(_ test: EuCredentialAttributes.TestEntry, identity: EventFlow.Identity, isForeign: Bool) -> ListStoredEventsViewController.Row {
+	private func getRowFromNegativeTestDCC(_ test: EuCredentialAttributes.TestEntry, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
 			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? test.sampleDate
@@ -270,7 +270,7 @@ class ListStoredEventsViewModel: Logging {
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_negativeTest().capitalizingFirstLetter(),
-					details: DCCTestDetailsGenerator.getDetails(identity: identity, test: test, isForeign: isForeign)
+					details: DCCTestDetailsGenerator.getDetails(identity: identity, test: test)
 				)
 			}
 		)

@@ -200,7 +200,6 @@ enum EventDetailsRecovery: EventDetailable {
 
 enum EventDetailsDCCVaccination: EventDetailable {
 	case subtitle
-	case foreignSubtitle
 	case name
 	case dateOfBirth
 	case pathogen
@@ -223,7 +222,6 @@ enum EventDetailsDCCVaccination: EventDetailable {
 	var displayTitle: String {
 		switch self {
 			case .subtitle: return L.holder_dccDetails_subtitle()
-			case .foreignSubtitle: return L.holder_dccDetails_subtitle_foreign()
 			case .name: return L.holderDccVaccinationName()
 			case .dateOfBirth: return L.holderDccVaccinationDateofbirth()
 			case .pathogen: return L.holderDccVaccinationPathogen()
@@ -240,7 +238,7 @@ enum EventDetailsDCCVaccination: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .foreignSubtitle, .dateOfBirth, .issuer: return true
+			case .subtitle, .dateOfBirth, .issuer: return true
 			default: return false
 		}
 	}
@@ -252,7 +250,6 @@ enum EventDetailsDCCVaccination: EventDetailable {
 
 enum EventDetailsDCCTest: EventDetailable {
 	case subtitle
-	case foreignSubtitle
 	case name
 	case dateOfBirth
 	case pathogen
@@ -273,7 +270,6 @@ enum EventDetailsDCCTest: EventDetailable {
 	var displayTitle: String {
 		switch self {
 			case .subtitle: return L.holder_dccDetails_subtitle()
-			case .foreignSubtitle: return L.holder_dccDetails_subtitle_foreign()
 			case .name: return L.holderDccTestName()
 			case .dateOfBirth: return L.holderDccTestDateofbirth()
 			case .pathogen: return L.holderDccTestPathogen()
@@ -291,7 +287,7 @@ enum EventDetailsDCCTest: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .foreignSubtitle, .dateOfBirth, .issuer: return true
+			case .subtitle, .dateOfBirth, .issuer: return true
 			default: return false
 		}
 	}
@@ -303,7 +299,6 @@ enum EventDetailsDCCTest: EventDetailable {
 
 enum EventDetailsDCCRecovery: EventDetailable {
 	case subtitle
-	case foreignSubtitle
 	case name
 	case dateOfBirth
 	case pathogen
@@ -321,7 +316,6 @@ enum EventDetailsDCCRecovery: EventDetailable {
 	var displayTitle: String {
 		switch self {
 			case .subtitle: return L.holder_dccDetails_subtitle()
-			case .foreignSubtitle: return L.holder_dccDetails_subtitle_foreign()
 			case .name: return L.holderDccRecoveryName()
 			case .dateOfBirth: return L.holderDccRecoveryDateofbirth()
 			case .pathogen: return L.holderDccRecoveryPathogen()
@@ -336,7 +330,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .foreignSubtitle, .dateOfBirth, .issuer: return true
+			case .subtitle, .dateOfBirth, .issuer: return true
 			default: return false
 		}
 	}

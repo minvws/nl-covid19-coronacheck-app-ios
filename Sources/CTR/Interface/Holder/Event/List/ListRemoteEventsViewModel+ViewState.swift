@@ -444,8 +444,7 @@ extension ListRemoteEventsViewModel {
 						title: L.holderDccVaccinationDetailsTitle(),
 						details: DCCVaccinationDetailsGenerator.getDetails(
 							identity: dataRow.identity,
-							vaccination: vaccination,
-							isForeign: isForeign
+							vaccination: vaccination
 						),
 						footer: isForeign ? nil : L.holderDccVaccinationFooter()
 					)
@@ -473,7 +472,7 @@ extension ListRemoteEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderDccRecoveryDetailsTitle(),
-						details: DCCRecoveryDetailsGenerator.getDetails(identity: dataRow.identity, recovery: recovery, isForeign: isForeign),
+						details: DCCRecoveryDetailsGenerator.getDetails(identity: dataRow.identity, recovery: recovery),
 						footer: isForeign ? nil : L.holderDccRecoveryFooter()
 					)
 				)
@@ -500,7 +499,7 @@ extension ListRemoteEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(
 						title: L.holderDccTestDetailsTitle(),
-						details: DCCTestDetailsGenerator.getDetails(identity: dataRow.identity, test: test, isForeign: isForeign),
+						details: DCCTestDetailsGenerator.getDetails(identity: dataRow.identity, test: test),
 						footer: isForeign ? nil : L.holderDccTestFooter()
 					)
 				)
