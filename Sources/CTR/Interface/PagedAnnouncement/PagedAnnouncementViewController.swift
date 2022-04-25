@@ -126,6 +126,9 @@ class PagedAnnouncementViewController: BaseViewController {
 		pageViewController.didMove(toParent: self)
 		sceneView.containerView.addSubview(pageViewController.view)
 		sceneView.pageControl.delegate = self
+		
+		// Disable for first page to announce ribbon view
+		pageViewController.isAccessibilityPageAnnouncementEnabled = false
 	}
 	
 	/// User tapped on the button
@@ -161,9 +164,21 @@ extension PagedAnnouncementViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
 		sceneView.pageControl.update(for: index)
-        sceneView.ribbonView.isAccessibilityElement = index == 0
 		navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
 		updateFooterView(for: index)
+		
+		// Announce ribbon view when going back to the first page
+		if index == 0 {
+			sceneView.ribbonView.isAccessibilityElement = true
+			pageViewController.isAccessibilityPageAnnouncementEnabled = false
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+				UIAccessibility.post(notification: .screenChanged, argument: self.sceneView.ribbonView)
+			}
+		} else {
+			sceneView.ribbonView.isAccessibilityElement = false
+			pageViewController.isAccessibilityPageAnnouncementEnabled = true
+		}
 	}
 }
 
