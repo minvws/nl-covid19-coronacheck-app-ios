@@ -580,7 +580,6 @@
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Maak bewijs compleet";
 "holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatiebeoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve coronatestuitslag";
 "holder_dccDetails_subtitle" = "Deze gegevens staan in je papieren bewijs:";
-"holder_dccDetails_subtitle_foreign" = "Deze gegevens staan in je bewijs:";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder_deactivation_url" = "https://coronacheck.nl/app/niet-in-gebruik";
 "holder_endOfLife_button" = "Naar CoronaCheck.nl";
