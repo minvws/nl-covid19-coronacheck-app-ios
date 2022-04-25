@@ -94,14 +94,13 @@ extension ListRemoteEventsViewModel {
 
 	private func listEventsState(_ dataSource: [EventDataTuple]) -> ListRemoteEventsViewController.State {
 
-		let (rows, containsForeignDCC) = getSortedRowsFromEvents(dataSource)
+		let rows = getSortedRowsFromEvents(dataSource)
 		guard !rows.isEmpty else {
 			return emptyEventsState()
 		}
 		// No secondary action for scanned paperflow, that is moved to the body of the details.
-		// But do show it for foreign DCC
 		let secondaryActionTitle: String? = {
-			guard !(eventMode == .paperflow && !containsForeignDCC) else { return nil }
+			guard !(eventMode == .paperflow) else { return nil }
 			return L.holderVaccinationListWrong()
 		}()
 
@@ -184,7 +183,7 @@ extension ListRemoteEventsViewModel {
 		return filteredDataSource
 	}
 
-	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> (rows: [ListRemoteEventsViewController.Row], containsForeignDCC: Bool) {
+	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListRemoteEventsViewController.Row] {
 
 		var sortedDataSource = dataSource.sorted { lhs, rhs in
 			if let lhsDate = lhs.event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter),
@@ -203,7 +202,6 @@ extension ListRemoteEventsViewModel {
 
 		var rows = [ListRemoteEventsViewController.Row]()
 		var counter = 0
-		var containsForeignDCC = false
 
 		while counter <= sortedDataSource.count - 1 {
 			let currentRow = sortedDataSource[counter]
@@ -248,12 +246,11 @@ extension ListRemoteEventsViewModel {
 					} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
 						rows.append(getRowFromDCCTestEvent(dataRow: currentRow, test: test, isForeign: euCredentialAttributes.isForeignDCC))
 					}
-					containsForeignDCC = euCredentialAttributes.isForeignDCC
 				}
 			}
 			counter += 1
 		}
-		return (rows: rows, containsForeignDCC: containsForeignDCC)
+		return rows
 	}
 
 	private func getRowFromNegativeTestEvent(dataRow: EventDataTuple) -> ListRemoteEventsViewController.Row {
@@ -476,7 +473,7 @@ extension ListRemoteEventsViewModel {
 			}
 		)
 	}
-
+	
 	private func getRowFromDCCTestEvent(
 		dataRow: EventDataTuple,
 		test: EuCredentialAttributes.TestEntry,
