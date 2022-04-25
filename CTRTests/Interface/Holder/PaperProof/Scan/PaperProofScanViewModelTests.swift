@@ -72,7 +72,6 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		// Given
 		let code = "test"
 		dccScannerSpy.stubbedScanResult = .dutchDCC(dcc: code )
-//		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		
 		// When
 		sut.parseQRMessage(code)
