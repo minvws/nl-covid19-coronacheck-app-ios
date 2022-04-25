@@ -94,10 +94,16 @@ extension ListRemoteEventsViewModel {
 
 	private func listEventsState(_ dataSource: [EventDataTuple]) -> ListRemoteEventsViewController.State {
 
-		let rows = getSortedRowsFromEvents(dataSource)
+		let (rows, containsForeignDCC) = getSortedRowsFromEvents(dataSource)
 		guard !rows.isEmpty else {
 			return emptyEventsState()
 		}
+		// No secondary action for scanned paperflow, that is moved to the body of the details.
+		// But do show it for foreign DCC
+		let secondaryActionTitle: String? = {
+			guard !(eventMode == .paperflow && !containsForeignDCC) else { return nil }
+			return L.holderVaccinationListWrong()
+		}()
 
 		return .listEvents(
 			content: Content(
@@ -107,9 +113,9 @@ extension ListRemoteEventsViewModel {
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR()
 				},
-				// No secondary action for scanned paperflow, that is moved to the body of the details.
-				secondaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListWrong() : nil,
-				secondaryAction: eventMode != .paperflow ? { [weak self] in
+
+				secondaryActionTitle: secondaryActionTitle,
+				secondaryAction: secondaryActionTitle != nil ? { [weak self] in
 					guard let self = self else { return }
 					guard let body = Strings.somethingIsWrongBody(forEventMode: self.eventMode) else { return }
 					self.coordinator?.listEventsScreenDidFinish(
@@ -178,7 +184,7 @@ extension ListRemoteEventsViewModel {
 		return filteredDataSource
 	}
 
-	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListRemoteEventsViewController.Row] {
+	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> (rows: [ListRemoteEventsViewController.Row], containsForeignDCC: Bool) {
 
 		var sortedDataSource = dataSource.sorted { lhs, rhs in
 			if let lhsDate = lhs.event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter),
@@ -197,6 +203,7 @@ extension ListRemoteEventsViewModel {
 
 		var rows = [ListRemoteEventsViewController.Row]()
 		var counter = 0
+		var containsForeignDCC = false
 
 		while counter <= sortedDataSource.count - 1 {
 			let currentRow = sortedDataSource[counter]
@@ -241,11 +248,12 @@ extension ListRemoteEventsViewModel {
 					} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
 						rows.append(getRowFromDCCTestEvent(dataRow: currentRow, test: test, isForeign: euCredentialAttributes.isForeignDCC))
 					}
+					containsForeignDCC = euCredentialAttributes.isForeignDCC
 				}
 			}
 			counter += 1
 		}
-		return rows
+		return (rows: rows, containsForeignDCC: containsForeignDCC)
 	}
 
 	private func getRowFromNegativeTestEvent(dataRow: EventDataTuple) -> ListRemoteEventsViewController.Row {
