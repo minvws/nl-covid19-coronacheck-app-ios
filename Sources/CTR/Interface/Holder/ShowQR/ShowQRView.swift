@@ -117,7 +117,7 @@ class ShowQRView: BaseView {
 
 	@objc func scrollViewTapped() {
 		// Reverse the security animation
-		securityView.primaryButtonTapped()
+		securityView.tapFlipAnimation()
 	}
 	
 	/// Setup the hierarchy
@@ -222,14 +222,6 @@ class ShowQRView: BaseView {
 			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 		bringSubviewToFront(scrollView)
-	}
-
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-
-		super.setupAccessibility()
-        
-		securityView.primaryButton.isAccessibilityElement = false
 	}
     
     override func safeAreaInsetsDidChange() {
