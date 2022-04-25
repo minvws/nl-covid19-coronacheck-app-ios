@@ -7,24 +7,24 @@
 
 import UIKit
 
-enum DCCScanResult {
+enum PaperProofType {
 	case ctb
 	case dutchDCC(dcc: String)
 	case foreignDCC(dcc: String)
 	case unknown
 }
 
-protocol DCCScannerProtocol: AnyObject {
+protocol PaperProofIdentifierProtocol: AnyObject {
 	
-	func scan(_ code: String) -> DCCScanResult
+	func identify(_ code: String) -> PaperProofType
 }
 
-class DCCScanner: DCCScannerProtocol {
+class PaperProofIdentifier: PaperProofIdentifierProtocol {
 	
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging? = Current.cryptoManager
 	
-	func scan(_ code: String) -> DCCScanResult {
+	func identify(_ code: String) -> PaperProofType {
 		
 		if code.lowercased().hasPrefix("nl") {
 			return .ctb
