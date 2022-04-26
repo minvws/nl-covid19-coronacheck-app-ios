@@ -27,6 +27,14 @@ class TextElement: UITextView, UITextViewDelegate {
         setup()
         
         self.attributedText = attributedText
+		
+		// Improve accessibility by trimming whitespace and newline characters
+		if let mutableAttributedTextForAccessibility = attributedText.mutableCopy() as? NSMutableAttributedString {
+			mutableAttributedTextForAccessibility.stripBullets()
+			mutableAttributedTextForAccessibility.trim()
+			accessibilityAttributedValue = mutableAttributedTextForAccessibility
+		}
+		
 		setupAttributedStringLinks()
     }
     
@@ -62,10 +70,6 @@ class TextElement: UITextView, UITextViewDelegate {
     }
 	
 	private func setupAttributedStringLinks() {
-		// Improve accessibility by trimming whitespace and newline characters
-		if let mutableAttributedText = attributedText.mutableCopy() as? NSMutableAttributedString {
-			accessibilityAttributedValue = mutableAttributedText.trim()
-		}
 		
 		if let linkNSRange = attributedText.rangeOfFirstLink {
 			
@@ -83,12 +87,8 @@ class TextElement: UITextView, UITextViewDelegate {
 			}
 
 			accessibilityTraits = .link
-			isAccessibilityElement = true
 		} else {
-			self.accessibilityLabel = nil
-			self.accessibilityValue = nil
 			self.accessibilityTraits = .staticText
-			self.isAccessibilityElement = false
 		}
 	}
     
