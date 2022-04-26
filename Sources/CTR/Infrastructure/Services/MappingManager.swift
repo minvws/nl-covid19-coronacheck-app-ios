@@ -11,7 +11,7 @@ protocol MappingManaging {
 
 	func getProviderIdentifierMapping(_ code: String? ) -> String?
 
-	func getDisplayIssuer(_ issuer: String) -> String
+	func getDisplayIssuer(_ issuer: String, country: String) -> String
 
 	func getBiLingualDisplayCountry(_ country: String) -> String
 	
@@ -57,8 +57,8 @@ class MappingManager: MappingManaging, Logging {
 		return providerIdentifiers.first(where: { $0.code == code })?.name
 	}
 
-	func getDisplayIssuer(_ issuer: String) -> String {
-		guard issuer == "Ministry of Health Welfare and Sport" else {
+	func getDisplayIssuer(_ issuer: String, country: String) -> String {
+		guard issuer == "Ministry of Health Welfare and Sport", ["NL", "NLD"].contains(country) else {
 			return issuer
 		}
 		return L.holderVaccinationAboutIssuer()
