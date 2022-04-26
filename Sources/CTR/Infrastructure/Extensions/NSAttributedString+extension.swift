@@ -307,7 +307,7 @@ public extension NSMutableAttributedString {
     /// Strip bullets (<li>) so that they're not read out loud
     func stripBullets() {
 		
+		// Removes the bullet
 		mutableString.replaceOccurrences(of: "●", with: "", options: .caseInsensitive, range: NSRange(location: 0, length: length))
-		removeAttribute(.paragraphStyle, range: NSRange(location: 0, length: length))
     }
 }
