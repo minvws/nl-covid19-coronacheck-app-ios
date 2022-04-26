@@ -219,7 +219,6 @@ class StoredEventDetailsViewControllerTests: XCTestCase {
 	func test_content_vaccinationAssessment() {
 		
 		// Given
-		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let event = EventFlow.Event.vaccinationAssessmentEvent
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"

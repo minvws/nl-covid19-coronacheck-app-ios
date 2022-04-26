@@ -81,6 +81,32 @@ class WalletManagerTests: XCTestCase {
 		expect(result) == true
 		expect(wallet?.eventGroups).to(haveCount(1))
 	}
+	
+	func test_storeEventGroup_cantStoreTwice() throws {
+
+		// Given
+		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
+		let json = try XCTUnwrap("test_storeEventGroup_cantStoreTwice".data(using: .utf8))
+
+		// When
+		let result1 = sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "CoronaCheck",
+			jsonData: json,
+			issuedAt: now
+		)
+		let result2 = sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "CoronaCheck",
+			jsonData: json,
+			issuedAt: now
+		)
+
+		// Then
+		expect(result1) == true
+		expect(result2) == true
+		expect(wallet?.eventGroups).to(haveCount(1))
+	}
 
 	func test_removeExistingEventGroups_withProviderIdentifier() {
 

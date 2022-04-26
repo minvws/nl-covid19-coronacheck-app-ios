@@ -90,7 +90,6 @@ class EventGroupModelTests: XCTestCase {
 	func test_delete_twoEvents_deleteOne() throws {
 		
 		// Given
-		// Given
 		var wallet: Wallet?
 		var event1: EventGroup?
 		let context = Current.dataStoreManager.managedObjectContext()
@@ -131,7 +130,6 @@ class EventGroupModelTests: XCTestCase {
 	func test_delete_twoEvents_deleteOneTwice() throws {
 		
 		// Given
-		// Given
 		var wallet: Wallet?
 		var event1: EventGroup?
 		let context = Current.dataStoreManager.managedObjectContext()
@@ -168,5 +166,92 @@ class EventGroupModelTests: XCTestCase {
 		// Then
 		expect(result.isFailure) == true
 		expect(wallet?.eventGroups).toEventually(haveCount(1))
+	}
+	
+	func test_findBy() {
+		
+		// Given
+		var wallet: Wallet?
+		var eventGroup: EventGroup?
+		let context = Current.dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			wallet = WalletModel.createTestWallet(managedContext: context)
+			if let unwrappedWallet = wallet,
+			   let json = "test_findBy".data(using: .utf8) {
+				
+				EventGroupModel.create(
+					type: EventMode.test,
+					providerIdentifier: "CoronaCheck",
+					maxIssuedAt: now,
+					jsonData: json,
+					wallet: unwrappedWallet,
+					managedContext: context
+				)
+				
+				EventGroupModel.create(
+					type: EventMode.test,
+					providerIdentifier: "Other Provider",
+					maxIssuedAt: now,
+					jsonData: json,
+					wallet: unwrappedWallet,
+					managedContext: context
+				)
+
+				// When
+				eventGroup = EventGroupModel.findBy(
+					wallet: unwrappedWallet,
+					type: EventMode.test,
+					providerIdentifier: "CoronaCheck",
+					maxIssuedAt: now,
+					jsonData: json
+				)
+			}
+		}
+		// Then
+		expect(eventGroup).toEventuallyNot(beNil())
+		expect(eventGroup?.providerIdentifier).toEventually(equal("CoronaCheck"))
+	}
+	
+	func test_findBy_nothingFound() {
+		
+		// Given
+		var wallet: Wallet?
+		var eventGroup: EventGroup?
+		let context = Current.dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			wallet = WalletModel.createTestWallet(managedContext: context)
+			if let unwrappedWallet = wallet,
+			   let json = "test_findBy_nothingFound".data(using: .utf8) {
+				
+				EventGroupModel.create(
+					type: EventMode.test,
+					providerIdentifier: "CoronaCheck",
+					maxIssuedAt: now,
+					jsonData: json,
+					wallet: unwrappedWallet,
+					managedContext: context
+				)
+				
+				EventGroupModel.create(
+					type: EventMode.test,
+					providerIdentifier: "Other Provider",
+					maxIssuedAt: now,
+					jsonData: json,
+					wallet: unwrappedWallet,
+					managedContext: context
+				)
+
+				// When
+				eventGroup = EventGroupModel.findBy(
+					wallet: unwrappedWallet,
+					type: EventMode.test,
+					providerIdentifier: "Third Provider",
+					maxIssuedAt: now,
+					jsonData: json
+				)
+			}
+		}
+		// Then
+		expect(eventGroup).toEventually(beNil())
 	}
 }
