@@ -74,7 +74,7 @@ class NewFeaturesManagerTests: XCTestCase {
 			content: L.holder_newintheapp_foreignproofs_body(),
 			image: I.newInTheApp.paperDCC(),
 			imageBackgroundColor: C.white(),
-			tagline: L.holder_newintheapp_foreignproofs_tagline(),
+			tagline: L.general_newintheapp(),
 			step: 0
 		)
 		
