@@ -25,15 +25,15 @@ class MappingManagerSpy: MappingManaging {
 
 	var invokedGetDisplayIssuer = false
 	var invokedGetDisplayIssuerCount = 0
-	var invokedGetDisplayIssuerParameters: (issuer: String, Void)?
-	var invokedGetDisplayIssuerParametersList = [(issuer: String, Void)]()
+	var invokedGetDisplayIssuerParameters: (issuer: String, country: String)?
+	var invokedGetDisplayIssuerParametersList = [(issuer: String, country: String)]()
 	var stubbedGetDisplayIssuerResult: String! = ""
 
-	func getDisplayIssuer(_ issuer: String) -> String {
+	func getDisplayIssuer(_ issuer: String, country: String) -> String {
 		invokedGetDisplayIssuer = true
 		invokedGetDisplayIssuerCount += 1
-		invokedGetDisplayIssuerParameters = (issuer, ())
-		invokedGetDisplayIssuerParametersList.append((issuer, ()))
+		invokedGetDisplayIssuerParameters = (issuer, country)
+		invokedGetDisplayIssuerParametersList.append((issuer, country))
 		return stubbedGetDisplayIssuerResult
 	}
 

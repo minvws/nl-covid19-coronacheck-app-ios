@@ -190,7 +190,7 @@ class DCCTestDetailsGenerator {
 			EventDetails(field: EventDetailsDCCTest.facility, value: mappingManager.getDisplayFacility(test.testCenter)),
 			EventDetails(field: EventDetailsDCCTest.manufacturer, value: manufacturer),
 			EventDetails(field: EventDetailsDCCTest.country, value: mappingManager.getDisplayCountry(test.country)),
-			EventDetails(field: EventDetailsDCCTest.issuer, value: mappingManager.getDisplayIssuer(test.issuer)),
+			EventDetails(field: EventDetailsDCCTest.issuer, value: mappingManager.getDisplayIssuer(test.issuer, country: test.country)),
 			EventDetails(field: EventDetailsDCCTest.certificateIdentifier, value: test.certificateIdentifier)
 		]
 	}
@@ -291,7 +291,7 @@ class DCCVaccinationDetailsGenerator {
 			EventDetails(field: EventDetailsDCCVaccination.dosage, value: dosage),
 			EventDetails(field: EventDetailsDCCVaccination.date, value: formattedVaccinationDate),
 			EventDetails(field: EventDetailsDCCVaccination.country, value: mappingManager.getDisplayCountry(vaccination.country)),
-			EventDetails(field: EventDetailsDCCVaccination.issuer, value: mappingManager.getDisplayIssuer(vaccination.issuer)),
+			EventDetails(field: EventDetailsDCCVaccination.issuer, value: mappingManager.getDisplayIssuer(vaccination.issuer, country: vaccination.country)),
 			EventDetails(field: EventDetailsDCCVaccination.certificateIdentifier, value: vaccination.certificateIdentifier)
 		]
 	}
@@ -377,7 +377,7 @@ class DCCRecoveryDetailsGenerator {
 			EventDetails(field: EventDetailsDCCRecovery.dateOfBirth, value: formattedBirthDate),
 			EventDetails(field: EventDetailsDCCRecovery.date, value: formattedFirstPostiveDate),
 			EventDetails(field: EventDetailsDCCRecovery.country, value: mappingManager.getDisplayCountry(recovery.country)),
-			EventDetails(field: EventDetailsDCCRecovery.issuer, value: mappingManager.getDisplayIssuer(recovery.issuer)),
+			EventDetails(field: EventDetailsDCCRecovery.issuer, value: mappingManager.getDisplayIssuer(recovery.issuer, country: recovery.country)),
 			EventDetails(field: EventDetailsDCCRecovery.validFrom, value: formattedValidFromDate),
 			EventDetails(field: EventDetailsDCCRecovery.validUntil, value: formattedValidUntilDate),
 			EventDetails(field: EventDetailsDCCRecovery.certificateIdentifier, value: recovery.certificateIdentifier)
