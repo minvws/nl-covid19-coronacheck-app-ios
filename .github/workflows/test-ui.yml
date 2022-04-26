@@ -8,14 +8,14 @@ on:
   workflow_dispatch:
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_13.3.1.app/Contents/Developer
   FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
   
 jobs:
   test-ui:
     if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
-    runs-on: macos-11
+    runs-on: macos-12
     timeout-minutes: 180
     steps:
       - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator

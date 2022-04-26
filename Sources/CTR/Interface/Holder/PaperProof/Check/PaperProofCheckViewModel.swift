@@ -9,7 +9,7 @@ import Foundation
 
 class PaperProofCheckViewModel: Logging {
 
-	weak var coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)?
+	weak var coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable)?
 
 	private let couplingManager: CouplingManaging = Current.couplingManager
 
@@ -29,7 +29,7 @@ class PaperProofCheckViewModel: Logging {
 	@Bindable private(set) var alert: AlertContent?
 
 	init(
-		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol),
+		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable),
 		scannedDcc: String,
 		couplingCode: String
 	) {
@@ -77,7 +77,7 @@ class PaperProofCheckViewModel: Logging {
 			let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
 			coordinator?.userWishesToSeeScannedEvent(remoteEvent)
 		} else {
-			let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: .failedToConvertDCCToV3Event)
+			let errorCode = ErrorCode(flow: .paperproof, step: .coupling, clientCode: .failedToConvertDCCToV3Event)
 			displayErrorCode(subTitle: L.holderErrorstateClientMessage("\(errorCode)"))
 		}
 	}
@@ -122,7 +122,7 @@ class PaperProofCheckViewModel: Logging {
 				body: L.holderCheckdccRejectedMessage(),
 				primaryActionTitle: L.holderCheckdccRejectedActionTitle(),
 				primaryAction: {[weak self] in
-					self?.coordinator?.userWantsToGoBackToTokenEntry()
+					self?.coordinator?.dismiss()
 				},
 				secondaryActionTitle: nil,
 				secondaryAction: nil
@@ -136,19 +136,19 @@ class PaperProofCheckViewModel: Logging {
 		if case let .error(statusCode, serverResponse, error) = serverError {
 			switch error {
 				case .serverBusy:
-					showServerTooBusyError(ErrorCode(flow: .hkvi, step: .coupling, errorCode: "429"))
+					showServerTooBusyError(ErrorCode(flow: .paperproof, step: .coupling, errorCode: "429"))
 				case .noInternetConnection:
 					displayNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
 				case .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled)
+					let errorCode = ErrorCode(flow: .paperproof, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled)
 					displayErrorCode(subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"))
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					// 304, 3xx, 4xx, 5xx
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .paperproof, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					displayErrorCode(subTitle: L.holderErrorstateServerMessage("\(errorCode)"))
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
 					// Client side
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .paperproof, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					displayErrorCode(subTitle: L.holderErrorstateClientMessage("\(errorCode)"))
 			}
 		}
@@ -170,7 +170,7 @@ class PaperProofCheckViewModel: Logging {
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
 			self.coordinator?.displayError(content: content) { [weak self] in
-				self?.coordinator?.userWishesToGoBackToScanCertificate()
+				self?.coordinator?.dismiss()
 			}
 		}
 	}
@@ -205,7 +205,7 @@ class PaperProofCheckViewModel: Logging {
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
 			self.coordinator?.displayError(content: content) { [weak self] in
-				self?.coordinator?.userWishesToGoBackToScanCertificate()
+				self?.coordinator?.dismiss()
 			}
 		}
 	}

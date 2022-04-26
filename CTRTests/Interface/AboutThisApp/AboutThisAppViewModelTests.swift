@@ -10,6 +10,7 @@ import XCTest
 import Nimble
 import Clcore
 import CoreData
+import SnapshotTesting
 
 class AboutThisAppViewModelTests: XCTestCase {
 	

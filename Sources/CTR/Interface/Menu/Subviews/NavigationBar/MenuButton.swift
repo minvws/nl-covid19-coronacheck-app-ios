@@ -91,7 +91,7 @@ class MenuButton: UIControl {
 	}
 	
 	func setupViews() {
-		backgroundColor = .white
+		backgroundColor = C.white()
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 		addTarget(self, action: #selector(touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])

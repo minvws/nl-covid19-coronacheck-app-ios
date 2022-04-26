@@ -106,7 +106,7 @@ final class PaperProofScanView: BaseView {
 			messageLabel.attributedText = message?.setLineHeight(
 				ViewTraits.messageLineHeight,
 				alignment: .center,
-				textColor: .white
+				textColor: C.white()!
 			)
 		}
 	}

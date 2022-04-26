@@ -185,7 +185,8 @@ final class HolderDashboardViewModel: Logging {
 	private var remoteConfigUpdatesConfigurationWarningToken: Observatory.ObserverToken?
 	private var remoteConfigManagerUpdateObserverToken: Observatory.ObserverToken?
 	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
-
+	private var configurationAlmostOutOfDateObserverToken: Observatory.ObserverToken?
+	
 	// Dependencies:
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
 	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
@@ -266,6 +267,11 @@ final class HolderDashboardViewModel: Logging {
 			// - Update the disclosure policy information banners
 			self?.recalculateDisclosureBannerState()
 		}
+		
+		configurationAlmostOutOfDateObserverToken = configurationNotificationManager.almostOutOfDateObservatory.append { [weak self] configIsAlmostOutOfDate in
+			guard let self = self else { return }
+			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = configIsAlmostOutOfDate
+		}
 	}
 
 	deinit {
@@ -302,24 +308,12 @@ final class HolderDashboardViewModel: Logging {
 
 	func setupConfigNotificationManager() {
 
-		registerForConfigAlmostOutOfDateUpdate()
 		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.observatoryForReloads.append { [weak self] result in
 			guard let self = self, case .success = result else { return }
-
-			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner
-			self.registerForConfigAlmostOutOfDateUpdate()
 			self.setupRecommendedVersion()
 		}
 	}
 
-	private func registerForConfigAlmostOutOfDateUpdate() {
-
-		configurationNotificationManager.registerForAlmostOutOfDateUpdate { [weak self] in
-			guard let self = self else { return }
-			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = self.configurationNotificationManager.shouldShowAlmostOutOfDateBanner
-		}
-	}
-	
 	// MARK: - View Lifecycle callbacks:
 
 	func viewWillAppear() {

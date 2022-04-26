@@ -292,11 +292,9 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	func navigateToAddPaperProof() {
-		let coordinator = PaperProofCoordinator(delegate: self)
-		let viewController = PaperProofStartViewController(viewModel: .init(coordinator: coordinator))
-		coordinator.navigationController = navigationController
-		navigationController.pushViewController(viewController, animated: true)
-		startChildCoordinator(coordinator)
+		
+		let paperProofCoordinator = PaperProofCoordinator(navigationController: navigationController, delegate: self)
+		startChildCoordinator(paperProofCoordinator)
 	}
 	
 	func navigateToAddVisitorPass() {
@@ -349,7 +347,22 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func navigateToHolderStart(completion: @escaping () -> Void = {}) {
 		
-		navigateToDashboard(completion: completion)
+		let dashboardViewController = HolderDashboardViewController(
+			viewModel: HolderDashboardViewModel(
+				coordinator: self,
+				datasource: HolderDashboardQRCardDatasource(),
+				strippenRefresher: DashboardStrippenRefresher(
+					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
+					reachability: try? Reachability()
+				),
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
+				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
+				versionSupplier: versionSupplier
+			)
+		)
+		
+		navigationController.setViewControllers([dashboardViewController], animated: false, completion: completion)
+		window.replaceRootViewController(with: navigationController)
 	}
 	
 	/// Navigate to enlarged QR
@@ -401,24 +414,24 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToOpenTheMenu() {
 		
-		let itemAddCertificate: MenuViewModel.Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), icon: I.icon_menu_add()!, action: { [weak self] in
+		let itemAddCertificate: MenuViewModel.Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), subTitle: nil, icon: I.icon_menu_add()!, action: { [weak self] in
 			self?.navigateToChooseQRCodeType()
 		})
 		
-		let itemAddPaperCertificate: MenuViewModel.Item = .row(title: L.holderMenuPapercertificate(), icon: I.icon_menu_addpapercertificate()!, action: { [weak self] in
+		let itemAddPaperCertificate: MenuViewModel.Item = .row(title: L.holder_menu_paperproof_title(), subTitle: L.holder_menu_paperproof_subTitle(), icon: I.icon_menu_addpapercertificate()!, action: { [weak self] in
 			self?.navigateToAddPaperProof()
 		})
 		
-		let itemAddVisitorPass: MenuViewModel.Item = .row(title: L.holder_menu_visitorpass(), icon: I.icon_menu_addvisitorpass()!, action: { [weak self] in
+		let itemAddVisitorPass: MenuViewModel.Item = .row(title: L.holder_menu_visitorpass(), subTitle: nil, icon: I.icon_menu_addvisitorpass()!, action: { [weak self] in
 			self?.navigateToAddVisitorPass()
 		})
 		
-		let itemFAQ: MenuViewModel.Item = .row(title: L.holderMenuFaq(), icon: I.icon_menu_faq()!, action: { [weak self] in
+		let itemFAQ: MenuViewModel.Item = .row(title: L.holderMenuFaq(), subTitle: nil, icon: I.icon_menu_faq()!, action: { [weak self] in
 			guard let faqUrl = URL(string: L.holderUrlFaq()) else { return }
 			self?.openUrl(faqUrl, inApp: true)
 		})
 		
-		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
+		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
 			self?.navigateToAboutThisApp()
 		})
 		
@@ -693,6 +706,11 @@ extension HolderCoordinator: EventFlowDelegate {
 }
 
 extension HolderCoordinator: PaperProofFlowDelegate {
+	
+	func addPaperProofFlowDidCancel() {
+		
+		removeChildCoordinator()
+	}
 	
 	func addPaperProofFlowDidFinish() {
 		

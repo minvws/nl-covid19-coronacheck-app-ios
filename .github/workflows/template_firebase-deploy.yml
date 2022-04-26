@@ -24,13 +24,13 @@ on:
         required: true
 
 env: 
-  DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_13.3.1.app/Contents/Developer
   FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
 
 jobs:
   template_firebase-deploy:
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
     - name: Checkout
       uses: actions/checkout@v3

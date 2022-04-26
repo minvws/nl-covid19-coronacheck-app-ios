@@ -40,7 +40,7 @@ class ScanLogManager: ScanLogManaging {
 		notificationCenter.removeObserver(self)
 	}
 	
-	func setupNotificationObservers() {
+	private func setupNotificationObservers() {
 		
 		guard AppFlavor.flavor == .verifier else {
 			// There is no scan log database on the holder

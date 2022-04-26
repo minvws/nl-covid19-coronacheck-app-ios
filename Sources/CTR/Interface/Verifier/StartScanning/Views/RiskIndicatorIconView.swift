@@ -15,7 +15,7 @@ final class RiskIndicatorIconView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		imageView.translatesAutoresizingMaskIntoConstraints = false
-		imageView.tintColor = .white
+		imageView.tintColor = C.white()
 	}
 	
 	/// Setup the view hierarchy

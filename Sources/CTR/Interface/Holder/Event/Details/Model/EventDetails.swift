@@ -221,7 +221,7 @@ enum EventDetailsDCCVaccination: EventDetailable {
 	
 	var displayTitle: String {
 		switch self {
-			case .subtitle: return L.holderDccVaccinationSubtitle()
+			case .subtitle: return L.holder_dccDetails_subtitle()
 			case .name: return L.holderDccVaccinationName()
 			case .dateOfBirth: return L.holderDccVaccinationDateofbirth()
 			case .pathogen: return L.holderDccVaccinationPathogen()
@@ -269,7 +269,7 @@ enum EventDetailsDCCTest: EventDetailable {
 	
 	var displayTitle: String {
 		switch self {
-			case .subtitle: return L.holderDccTestSubtitle()
+			case .subtitle: return L.holder_dccDetails_subtitle()
 			case .name: return L.holderDccTestName()
 			case .dateOfBirth: return L.holderDccTestDateofbirth()
 			case .pathogen: return L.holderDccTestPathogen()
@@ -315,7 +315,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 	
 	var displayTitle: String {
 		switch self {
-			case .subtitle: return L.holderDccRecoverySubtitle()
+			case .subtitle: return L.holder_dccDetails_subtitle()
 			case .name: return L.holderDccRecoveryName()
 			case .dateOfBirth: return L.holderDccRecoveryDateofbirth()
 			case .pathogen: return L.holderDccRecoveryPathogen()

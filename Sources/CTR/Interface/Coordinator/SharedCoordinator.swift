@@ -127,7 +127,7 @@ extension SharedCoordinator {
 				factory: onboardingFactory
 			)
 			addChildCoordinator(coordinator)
-			coordinator.navigateToConsent(shouldHideBackButton: true)
+			coordinator.navigateToConsent()
 			return
 
 		} else if newFeaturesManager.needsUpdating {

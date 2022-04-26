@@ -117,6 +117,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			)
 			
 			navigationController.setViewControllers([dashboardViewController], animated: false)
+			window.replaceRootViewController(with: navigationController)
 		}
 	}
 	
@@ -198,20 +199,20 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	
 	func userWishesToOpenTheMenu() {
 		
-		let itemHowItWorks: MenuViewModel.Item = .row(title: L.verifierMenuScaninstructions(), icon: I.icon_menu_howitworks()!, action: { [weak self] in
+		let itemHowItWorks: MenuViewModel.Item = .row(title: L.verifierMenuScaninstructions(), subTitle: nil, icon: I.icon_menu_howitworks()!, action: { [weak self] in
 			self?.navigateToScanInstruction(allowSkipInstruction: false)
 		})
 		
-		let itemFAQ: MenuViewModel.Item = .row(title: L.verifierMenuSupport(), icon: I.icon_menu_faq()!, action: { [weak self] in
+		let itemFAQ: MenuViewModel.Item = .row(title: L.verifierMenuSupport(), subTitle: nil, icon: I.icon_menu_faq()!, action: { [weak self] in
 			guard let faqUrl = URL(string: L.verifierUrlFaq()) else { return }
 			self?.openUrl(faqUrl, inApp: true)
 		})
 		
-		let itemRiskSetting: MenuViewModel.Item = .row(title: L.verifier_menu_risksetting(), icon: I.icon_menu_risklevel()!, action: { [weak self] in
+		let itemRiskSetting: MenuViewModel.Item = .row(title: L.verifier_menu_risksetting(), subTitle: nil, icon: I.icon_menu_risklevel()!, action: { [weak self] in
 			self?.navigateToOpenRiskLevelSettings()
 		})
 		
-		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.verifierMenuAbout(), icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
+		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.verifierMenuAbout(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
 			 self?.navigateToAboutThisApp()
 		})
 		

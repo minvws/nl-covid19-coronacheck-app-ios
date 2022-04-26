@@ -43,7 +43,7 @@ class HolderCoordinatorTests: XCTestCase {
 			title: "test",
 			content: "test",
 			image: nil,
-			imageBackgroundColor: .white,
+			imageBackgroundColor: C.white(),
 			tagline: "test",
 			step: 0
 		)]
@@ -370,7 +370,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is PaperProofStartViewController) == true
+		expect(self.navigationSpy.viewControllers.last is PaperProofStartScanningViewController) == true
 		expect(self.sut.childCoordinators).to(haveCount(1))
 	}
 	
@@ -912,10 +912,22 @@ class HolderCoordinatorTests: XCTestCase {
 	
 	// MARK: - PaperProofFlowDelegate -
 	
+	func test_addPaperProofFlowDidCancel() throws {
+		
+		// Given
+		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
+		
+		// When
+		sut.addPaperProofFlowDidCancel()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
 	func test_addPaperProofFlowDidFinish() throws {
 		
 		// Given
-		sut.addChildCoordinator(PaperProofCoordinator(delegate: sut))
+		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
 		
 		// When
 		sut.addPaperProofFlowDidFinish()
@@ -928,7 +940,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_switchToAddRegularProof() throws {
 		
 		// Given
-		sut.addChildCoordinator(PaperProofCoordinator(delegate: sut))
+		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
 		
 		// When
 		sut.switchToAddRegularProof()

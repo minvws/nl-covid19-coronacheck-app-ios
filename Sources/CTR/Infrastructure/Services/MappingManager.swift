@@ -74,7 +74,7 @@ class MappingManager: MappingManaging, Logging {
 	func getDisplayCountry(_ country: String) -> String {
 		
 		guard ["NL", "NLD"].contains(country) else {
-			return country
+			return Locale.current.localizedString(forRegionCode: country) ?? country
 		}
 		return L.generalNetherlands()
 	}

@@ -32,23 +32,40 @@ extension HolderDashboardViewModelTests {
 		expect(self.strippenRefresherSpy.invokedLoadCount) == 2
 	}
 
-	func test_configIsAlmostOutOfDate() {
+	func test_configIsAlmostOutOfDate_viaAccessor() {
 
 		// Arrange
 		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBanner = true
-		var sendConfigReload: ((Result<RemoteConfigManager.ConfigNotification, ServerError>) -> Void)?
-		(environmentSpies.remoteConfigManagerSpy.stubbedObservatoryForReloads, sendConfigReload) = Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>.create()
 
 		// Act
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-		sendConfigReload?(.success((RemoteConfiguration.default, Data(), URLResponse())))
 		
 		// Assert
 		expect(self.sut.domesticCards[1]).to(beConfigurationAlmostOutOfDateCard())
 		expect(self.sut.internationalCards[1]).to(beConfigurationAlmostOutOfDateCard())
 
 		// only during .init
-		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerGetterCount) == 2
+		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerGetterCount) == 1
+	}
+	
+	func test_configIsAlmostOutOfDate_viaCallback() {
+
+		// Arrange
+		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBanner = false
+
+		let (almostOutOfDateObservatory, almostOutOfDateObservatoryUpdates) = Observatory<Bool>.create()
+		configurationNotificationManagerSpy.stubbedAlmostOutOfDateObservatory = almostOutOfDateObservatory
+
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
+		almostOutOfDateObservatoryUpdates(true)
+		
+		// Assert
+		expect(self.sut.domesticCards[1]).to(beConfigurationAlmostOutOfDateCard())
+		expect(self.sut.internationalCards[1]).to(beConfigurationAlmostOutOfDateCard())
+
+		// only during .init
+		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerGetterCount) == 1
 	}
 
 	func test_configIsAlmostOutOfDate_userTappedOnCard_domesticTab() {

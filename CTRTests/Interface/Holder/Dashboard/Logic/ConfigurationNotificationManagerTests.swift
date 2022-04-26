@@ -17,15 +17,16 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 
 	private var userSettingsSpy: UserSettingsSpy!
 	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
-
+	private var notificationCenterSpy: NotificationCenterSpy!
+	
 	override func setUp() {
 		super.setUp()
 
 		let spies = setupEnvironmentSpies()
 		userSettingsSpy = spies.userSettingsSpy
 		remoteConfigManagerSpy = spies.remoteConfigManagerSpy
-		
-		sut = ConfigurationNotificationManager(userSettings: userSettingsSpy, remoteConfigManager: remoteConfigManagerSpy, now: { now })
+		notificationCenterSpy = NotificationCenterSpy()
+		notificationCenterSpy.stubbedAddObserverForNameResult = NSObject()
 	}
 
 	override func tearDown() {
@@ -37,8 +38,14 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 
 		// Given
 		userSettingsSpy.stubbedConfigFetchedTimestamp = nil
-
+		
 		// When
+		sut = ConfigurationNotificationManager(
+			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			now: { now },
+			notificationCenter: notificationCenterSpy
+		)
 		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
@@ -53,6 +60,12 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 		configuration.configAlmostOutOfDateWarningSeconds = nil
 
 		// When
+		sut = ConfigurationNotificationManager(
+			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			now: { now },
+			notificationCenter: notificationCenterSpy
+		)
 		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
@@ -69,6 +82,12 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
 
 		// When
+		sut = ConfigurationNotificationManager(
+			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			now: { now },
+			notificationCenter: notificationCenterSpy
+		)
 		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
@@ -85,6 +104,12 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
 
 		// When
+		sut = ConfigurationNotificationManager(
+			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			now: { now },
+			notificationCenter: notificationCenterSpy
+		)
 		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
@@ -101,6 +126,12 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
 
 		// When
+		sut = ConfigurationNotificationManager(
+			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			now: { now },
+			notificationCenter: notificationCenterSpy
+		)
 		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
@@ -117,9 +148,125 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
 
 		// When
+		sut = ConfigurationNotificationManager(
+			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			now: { now },
+			notificationCenter: notificationCenterSpy
+		)
 		let shouldShowAlmostOutOfDateBanner = sut.shouldShowAlmostOutOfDateBanner
 
 		// Then
 		expect(shouldShowAlmostOutOfDateBanner) == true
+	}
+	
+	func test_cancelsTimerWhenAppIsBackgrounded() throws {
+		
+		// Arrange
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval((3600 - 59) * seconds * ago).timeIntervalSince1970
+		var configuration = RemoteConfiguration.default
+		configuration.configAlmostOutOfDateWarningSeconds = 60
+		configuration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
+
+		let timerSpy = TimerSpy()
+		sut = ConfigurationNotificationManager(
+			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			now: { now },
+			notificationCenter: notificationCenterSpy,
+			vendTimer: { interval, action in
+				return timerSpy
+			}
+		)
+		expect(timerSpy.invokedInvalidate) == false
+		
+		// Act
+		// Go fishing for the Background Notification registered observer:
+		let backgroundNotification = try XCTUnwrap(notificationCenterSpy.invokedAddObserverForNameParametersList.first(where: {
+			$0.name == UIApplication.didEnterBackgroundNotification
+		}))
+
+		// Act
+		// Trigger the background observer block:
+		backgroundNotification.block(Notification(name: UIApplication.didEnterBackgroundNotification, object: nil, userInfo: nil))
+
+		// Assert
+		expect(timerSpy.invokedInvalidate).toEventually(beTrue())
+	}
+	
+	func test_withinAlmostExpiredWindow_triggersObservatoryWhenForegrounding() throws {
+		
+		// Arrange
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval((3600 - 59) * seconds * ago).timeIntervalSince1970
+		var configuration = RemoteConfiguration.default
+		configuration.configAlmostOutOfDateWarningSeconds = 60
+		configuration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
+
+		let observerVCR: ObserverCallbackRecorder<Bool> = ObserverCallbackRecorder()
+		let timerSpy = TimerSpy()
+		
+		sut = ConfigurationNotificationManager(
+			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			now: { now },
+			notificationCenter: notificationCenterSpy,
+			vendTimer: { interval, action in
+				return timerSpy
+			}
+		)
+		_ = sut.almostOutOfDateObservatory.append(observer: observerVCR.recordEvents)
+		
+		// Act
+		// Go fishing for the Foreground Notification registered observer:
+		let foregroundingNotification = try XCTUnwrap(notificationCenterSpy.invokedAddObserverForNameParametersList.first(where: {
+			$0.name == UIApplication.willEnterForegroundNotification
+		}))
+
+		// Act
+		// Trigger the foreground observer block:
+		foregroundingNotification.block(Notification(name: UIApplication.willEnterForegroundNotification, object: nil, userInfo: nil))
+
+		// Assert
+		expect(observerVCR.values).toEventually(haveCount(1))
+		expect(observerVCR.values[0]) == true
+	}
+	
+	func test_outsideAlmostExpiredWindow_doesNotTriggerObservatoryWhenForegrounding() throws {
+		
+		// Arrange
+		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(10 * seconds * ago).timeIntervalSince1970
+		var configuration = RemoteConfiguration.default
+		configuration.configAlmostOutOfDateWarningSeconds = 60
+		configuration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration = configuration
+
+		let observerVCR: ObserverCallbackRecorder<Bool> = ObserverCallbackRecorder()
+		let timerSpy = TimerSpy()
+		
+		sut = ConfigurationNotificationManager(
+			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
+			now: { now },
+			notificationCenter: notificationCenterSpy,
+			vendTimer: { interval, action in
+				return timerSpy
+			}
+		)
+		_ = sut.almostOutOfDateObservatory.append(observer: observerVCR.recordEvents)
+		
+		// Act
+		// Go fishing for the Foreground Notification registered observer:
+		let foregroundingNotification = try XCTUnwrap(notificationCenterSpy.invokedAddObserverForNameParametersList.first(where: {
+			$0.name == UIApplication.willEnterForegroundNotification
+		}))
+
+		// Act
+		// Trigger the foreground observer block:
+		foregroundingNotification.block(Notification(name: UIApplication.willEnterForegroundNotification, object: nil, userInfo: nil))
+
+		// Assert
+		expect(observerVCR.values).toEventually(beEmpty())
 	}
 }

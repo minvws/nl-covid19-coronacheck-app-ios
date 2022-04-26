@@ -117,7 +117,7 @@ final class VerifierScanView: BaseView {
 
 			let attributedTitle = moreInformationButtonText.underline(
 				underlined: moreInformationButtonText,
-				with: .white
+				with: C.white()!
 			)
 			moreInformationButton.setAttributedTitle(attributedTitle, for: .normal)
 		}
@@ -174,7 +174,7 @@ final class RiskLevelIndicator: BaseView {
 	
 	override func setupViews() {
 		translatesAutoresizingMaskIntoConstraints = false
-		backgroundColor = .white
+		backgroundColor = C.white()
 		
 		isAccessibilityElement = true
 	}

@@ -96,6 +96,7 @@ final class PaperProofInputCouplingCodeViewModel {
 		}
 
 		coordinator?.userDidSubmitPaperProofToken(token: sanitizedInput)
+		coordinator?.userWishesToCreateACertificate()
 	}
 
 	func userHasNoTokenButtonTapped() {

@@ -19,7 +19,7 @@ class PagedAnnouncementItemViewControllerTests: XCTestCase {
 		title: "Onboarding Title",
 		content: "Onboarding Message",
 		image: I.onboarding.safely(),
-		imageBackgroundColor: .white,
+		imageBackgroundColor: C.white(),
 		tagline: nil,
 		step: 1
 	)

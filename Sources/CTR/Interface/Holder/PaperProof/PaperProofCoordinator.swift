@@ -9,61 +9,71 @@ import UIKit
 
 protocol PaperProofFlowDelegate: AnyObject {
 	
+	func addPaperProofFlowDidCancel()
+	
 	func addPaperProofFlowDidFinish()
 
 	func switchToAddRegularProof()
 }
 
 protocol PaperProofCoordinatorDelegate: AnyObject {
-
-	func userWishesMoreInformationOnSelfPrintedProof()
+	
+	func userWishesToCancelPaperProofFlow()
 
 	func userWishesMoreInformationOnNoInputToken()
 
-	func userWishesMoreInformationOnInternationalQROnly()
+	func userWishesMoreInformationOnWhichProofsCanBeUsed()
 
+	func userWishesToScanCertificate()
+	
+	func userDidScanDCC(_ message: String)
+	
+	func userWishesToEnterToken()
+	
 	func userDidSubmitPaperProofToken(token: String)
-
+	
+	func userWishesToCreateACertificate()
+	
 	func userWantsToGoBackToDashboard()
-
-	func userWantsToGoBackToTokenEntry()
 
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent)
 
-	func userWishesToEnterToken()
-
-	func userWishesToScanCertificate()
-
-	func userWishesToCreateACertificate(message: String)
-
 	func displayError(content: Content, backAction: @escaping () -> Void)
-
-	func userWishesToGoBackToScanCertificate()
 }
 
 final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 	
-	var navigationController: UINavigationController = NavigationController()
+	var navigationController: UINavigationController
 
 	private weak var delegate: PaperProofFlowDelegate?
 
 	var token: String?
 
-	var scannedQR: String?
-
+	var scannedDCC: String?
+	
 	/// Initializer
 	/// - Parameters:
-	///   - delegate: flow delegate
-	init(delegate: PaperProofFlowDelegate) {
-		
+	///   - navigationController: the navigation controller
+	///   - delegate: the vaccination flow delegate
+	init(
+		navigationController: UINavigationController,
+		delegate: PaperProofFlowDelegate) {
+
+		self.navigationController = navigationController
 		self.delegate = delegate
 	}
 	
 	/// Start the scene
 	func start() {
-		// Not implemented. Starts in holder coordinator
+		
+		let destination = PaperProofStartScanningViewController(
+			viewModel: PaperProofStartScanningViewModel(
+				coordinator: self
+			)
+		)
+		navigationController.pushViewController(destination, animated: true)
 	}
 	
 	func consume(universalLink: UniversalLink) -> Bool {
@@ -72,23 +82,11 @@ final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
 }
 
 extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
-
-	func userWishesMoreInformationOnSelfPrintedProof() {
-
-		let viewModel = PaperProofContentViewModel(
-			content: Content(
-				title: L.holderPaperproofSelfprintedTitle(),
-				body: L.holderPaperproofSelfprintedMessage(),
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: L.holderPaperproofSelfprintedAction(),
-				secondaryAction: { [weak self] in
-					self?.delegate?.switchToAddRegularProof()
-				}
-			)
-		)
-		let destination = PaperProofContentViewController(viewModel: viewModel)
-		navigationController.pushViewController(destination, animated: true)
+	
+	func userWishesToCancelPaperProofFlow() {
+		
+		navigationController.popViewController(animated: true)
+		delegate?.addPaperProofFlowDidCancel()
 	}
 
 	func userWishesMoreInformationOnNoInputToken() {
@@ -101,6 +99,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 				primaryAction: nil,
 				secondaryActionTitle: L.holderPaperproofNotokenAction(),
 				secondaryAction: { [weak self] in
+					self?.navigationController.popToRootViewController(animated: false)
 					self?.delegate?.switchToAddRegularProof()
 				}
 			)
@@ -109,14 +108,14 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		navigationController.pushViewController(destination, animated: true)
 	}
 
-	func userWishesMoreInformationOnInternationalQROnly() {
+	func userWishesMoreInformationOnWhichProofsCanBeUsed() {
 
 		let viewController = ContentViewController(
 			viewModel: ContentViewModel(
 				coordinator: self,
 				content: Content(
-					title: L.holderPaperproofInternationalQROnlyTitle(),
-					body: L.holderPaperproofInternationalQROnlyMessage()
+					title: L.holder_paperproof_whichProofsCanBeUsed_title(),
+					body: L.holder_paperproof_whichProofsCanBeUsed_body()
 				),
 				linkTapHander: { [weak self] url in
 
@@ -128,38 +127,43 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		presentAsBottomSheet(viewController)
 	}
 
-	func userDidSubmitPaperProofToken(token: String) {
+	/// Navigate to the scanner
+	func userWishesToScanCertificate() {
 
-		// Store Token
-		self.token = token
+//		userDidScanDCC(CouplingManager.vaccinationDCC)
+//		userWishesToEnterToken()
 
-		// Navigate to About Scan
-		let destination = PaperProofStartScanningViewController(
-			viewModel: PaperProofStartScanningViewModel(
+		let destination = PaperProofScanViewController(
+			viewModel: PaperProofScanViewModel(
 				coordinator: self
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)
 	}
+	
+	func userWishesToEnterToken() {
+
+//		userDidSubmitPaperProofToken(token: "ZKGBKH")
+//		userWishesToCreateACertificate()
+
+		let destination = PaperProofInputCouplingCodeViewController(
+			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
+		)
+
+		navigationController.pushViewController(destination, animated: true)
+	}
+	
+	func userDidSubmitPaperProofToken(token: String) {
+
+		// Store Token
+		self.token = token
+	}
 
 	func userWantsToGoBackToDashboard() {
 
-		scannedQR = nil
+		scannedDCC = nil
 		token = nil
 		delegate?.addPaperProofFlowDidFinish()
-	}
-
-	func userWantsToGoBackToTokenEntry() {
-
-		scannedQR = nil
-		if let tokenEntryViewController = navigationController.viewControllers
-			.first(where: { $0 is PaperProofInputCouplingCodeViewController }) {
-
-			navigationController.popToViewController(
-				tokenEntryViewController,
-				animated: true
-			)
-		}
 	}
 
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent) {
@@ -171,38 +175,17 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		addChildCoordinator(eventCoordinator)
 		eventCoordinator.startWithScannedEvent(event)
 	}
-
-	func userWishesToEnterToken() {
-
-//		userDidSubmitPaperProofToken(token: "ZKGBKH")
-
-		let destination = PaperProofInputCouplingCodeViewController(
-			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
-		)
-
-		navigationController.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to the scanner
-	func userWishesToScanCertificate() {
-
-//		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
-
-		let destination = PaperProofScanViewController(
-			viewModel: PaperProofScanViewModel(
-				coordinator: self
-			)
-		)
-		navigationController.pushViewController(destination, animated: true)
-	}
-
-	func userWishesToCreateACertificate(message: String) {
-
+	
+	func userDidScanDCC(_ message: String) {
+		
 		// Store
-		self.scannedQR = message
+		self.scannedDCC = message
+	}
+
+	func userWishesToCreateACertificate() {
 
 		// Navigate to Check Certificate
-		if let scannedDcc = scannedQR, let couplingCode = token {
+		if let scannedDcc = scannedDCC, let couplingCode = token {
 			let viewController = PaperProofCheckViewController(
 				viewModel: PaperProofCheckViewModel(
 					coordinator: self,
@@ -223,18 +206,6 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
-	}
-
-	func userWishesToGoBackToScanCertificate() {
-
-		if let scanViewController = navigationController.viewControllers
-			.first(where: { $0 is PaperProofScanViewController }) {
-
-			navigationController.popToViewController(
-				scanViewController,
-				animated: true
-			)
-		}
 	}
 
 	private func presentAsBottomSheet(_ viewController: UIViewController) {
@@ -264,9 +235,9 @@ extension PaperProofCoordinator: EventFlowDelegate {
 		cleanup()
 		delegate?.addPaperProofFlowDidFinish()
 	}
-	
+
 	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
-		
+
 		// Should not happen.
 		eventFlowDidComplete()
 	}
@@ -275,7 +246,7 @@ extension PaperProofCoordinator: EventFlowDelegate {
 
 		cleanup()
 		if let viewController = navigationController.viewControllers
-			.first(where: { $0 is PaperProofStartViewController }) {
+			.first(where: { $0 is PaperProofStartScanningViewController }) {
 
 			navigationController.popToViewController(
 				viewController,
@@ -283,9 +254,9 @@ extension PaperProofCoordinator: EventFlowDelegate {
 			)
 		}
 	}
-	
+
 	func eventFlowDidCancelFromBackSwipe() {
-		
+
 		cleanup()
 	}
 
@@ -294,10 +265,10 @@ extension PaperProofCoordinator: EventFlowDelegate {
 		guard let coordinator = childCoordinators.last else { return }
 		removeChildCoordinator(coordinator)
 	}
-	
+
 	private func cleanup() {
 		removeChildCoordinator()
-		scannedQR = nil
+		scannedDCC = nil
 		token = nil
 	}
 }

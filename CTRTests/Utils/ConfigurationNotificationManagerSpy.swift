@@ -20,15 +20,13 @@ class ConfigurationNotificationManagerSpy: ConfigurationNotificationManagerProto
 		return stubbedShouldShowAlmostOutOfDateBanner
 	}
 
-	var invokedRegisterForAlmostOutOfDateUpdate = false
-	var invokedRegisterForAlmostOutOfDateUpdateCount = 0
-	var shouldInvokeRegisterForAlmostOutOfDateUpdateCallback = false
+	var invokedAlmostOutOfDateObservatoryGetter = false
+	var invokedAlmostOutOfDateObservatoryGetterCount = 0
+	var stubbedAlmostOutOfDateObservatory: Observatory<Bool>!
 
-	func registerForAlmostOutOfDateUpdate(callback: @escaping () -> Void) {
-		invokedRegisterForAlmostOutOfDateUpdate = true
-		invokedRegisterForAlmostOutOfDateUpdateCount += 1
-		if shouldInvokeRegisterForAlmostOutOfDateUpdateCallback {
-			callback()
-		}
+	var almostOutOfDateObservatory: Observatory<Bool> {
+		invokedAlmostOutOfDateObservatoryGetter = true
+		invokedAlmostOutOfDateObservatoryGetterCount += 1
+		return stubbedAlmostOutOfDateObservatory
 	}
 }
