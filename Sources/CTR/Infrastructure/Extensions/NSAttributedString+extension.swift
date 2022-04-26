@@ -303,15 +303,16 @@ public extension NSMutableAttributedString {
 		let endTrimRange = NSRange(endLocation ..< string.endIndex, in: string)
 		replaceCharacters(in: endTrimRange, with: "")
 	}
-        let characterSet = CharacterSet.whitespacesAndNewlines.inverted
-        
-        let startRange = string.rangeOfCharacter(from: characterSet)
-        let endRange = string.rangeOfCharacter(from: characterSet, options: .backwards)
-        guard let startLocation = startRange?.lowerBound, let endLocation = endRange?.lowerBound else {
-            return NSAttributedString(string: string)
-        }
 
-        let trimRange = startLocation...endLocation
-        return attributedSubstring(from: NSRange(trimRange, in: string))
+    /// Strip bullets (<li>) so that they're not read out loud
+    func stripBullets() {
+		
+		var range = mutableString.range(of: "●")
+		while range.location != NSNotFound {
+			replaceCharacters(in: range, with: "")
+			range = mutableString.range(of: "●")
+		}
+		
+		removeAttribute(.paragraphStyle, range: NSRange(location: 0, length: length))
     }
 }
