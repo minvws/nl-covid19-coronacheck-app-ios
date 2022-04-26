@@ -25,7 +25,7 @@ struct HolderNewFeaturesFactory: NewFeaturesFactory {
 				tagline: L.holder_newintheapp_foreignproofs_tagline(),
 				step: 0
 			)],
-			version: 4
+			version: 5
 		)
 	}
 	
