@@ -99,4 +99,14 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		invokedAreBothDisclosurePoliciesEnabledCount += 1
 		return stubbedAreBothDisclosurePoliciesEnabledResult
 	}
+
+	var invokedShouldShowCoronaMelderRecommendation = false
+	var invokedShouldShowCoronaMelderRecommendationCount = 0
+	var stubbedShouldShowCoronaMelderRecommendationResult: Bool! = false
+
+	func shouldShowCoronaMelderRecommendation() -> Bool {
+		invokedShouldShowCoronaMelderRecommendation = true
+		invokedShouldShowCoronaMelderRecommendationCount += 1
+		return stubbedShouldShowCoronaMelderRecommendationResult
+	}
 }

@@ -65,6 +65,7 @@ final class EnvironmentSpies {
 	
 	var featureFlagManagerSpy: FeatureFlagManagerSpy = {
 		let spy = FeatureFlagManagerSpy()
+		spy.stubbedShouldShowCoronaMelderRecommendationResult = true
 		return spy
 	}()
 	
