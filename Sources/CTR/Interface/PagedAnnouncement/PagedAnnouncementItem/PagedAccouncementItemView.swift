@@ -41,7 +41,6 @@ class PagedAnnouncementItemView: ScrolledStackView {
 		view.axis = .vertical
 		view.alignment = .leading
 		view.distribution = .fill
-		// view.spacing = ViewTraits.titleSpacing // is this still needed? from Onboarding
 		return view
 	}()
 	
