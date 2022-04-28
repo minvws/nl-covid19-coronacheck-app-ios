@@ -116,10 +116,11 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 			let doseNumber = euVaccination.doseNumber,
 			let totalDose = euVaccination.totalDose,
 			totalDose != doseNumber else {
+			// Total Dose equals doseNumber
 			return false
 		}
 		
-		logDebug("We are \(doseNumber) / \(totalDose) : \(highestFullyVaccinatedGreenCard.totalDose)")
+		logVerbose("We are \(doseNumber) / \(totalDose) : \(highestFullyVaccinatedGreenCard.totalDose)")
 		return doseNumber < highestFullyVaccinatedGreenCard.totalDose
 	}
 	
@@ -130,9 +131,10 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 			  let data = credential.data,
 			  let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
 			  euCredentialAttributes.digitalCovidCertificate.vaccinations != nil else {
+			// Not a vaccination
 			return false
 		}
-		logDebug("expirationTime: \(Date(timeIntervalSince1970: euCredentialAttributes.expirationTime))")
+		logVerbose("expirationTime: \(Date(timeIntervalSince1970: euCredentialAttributes.expirationTime))")
 		return Date(timeIntervalSince1970: euCredentialAttributes.expirationTime) < Current.now()
 	}
 	
