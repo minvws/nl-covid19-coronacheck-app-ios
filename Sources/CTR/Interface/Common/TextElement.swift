@@ -30,7 +30,7 @@ class TextElement: UITextView, UITextViewDelegate {
 		
 		// Improve accessibility by trimming whitespace and newline characters
 		if let mutableAttributedTextForAccessibility = attributedText.mutableCopy() as? NSMutableAttributedString {
-			mutableAttributedTextForAccessibility.stripBullets()
+			mutableAttributedTextForAccessibility.stripParagraphStyle()
 			mutableAttributedTextForAccessibility.trim()
 			accessibilityAttributedValue = mutableAttributedTextForAccessibility
 		}
