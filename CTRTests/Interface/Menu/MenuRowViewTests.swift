@@ -52,6 +52,20 @@ class MenuRowViewTests: XCTestCase {
 		// Assert
 		sut.assertImage()
 	}
+
+	func test_longerSubtitle_smallTitle() {
+		// Arrange
+		let sut = MenuRowView()
+		sut.title = "Title"
+		sut.showSubTitle("And this is the sub title")
+		sut.icon = I.icon_menu_faq()
+		
+		// Act
+		sut.frame = CGRect(x: 0, y: 0, width: 380, height: 140)
+
+		// Assert
+		sut.assertImage()
+	}
 	
 	func testAction() {
 		// Arrange
