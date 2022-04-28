@@ -647,7 +647,8 @@
 "holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_listRemoteEvents_vaccination_message" = "If the details are correct you can create a certificate.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
-"holder_menu_paperproof_title" = "Add paper certificate";
+"holder_menu_paperproof_subTitle" = "Add (paper) certificate";
+"holder_menu_paperproof_title" = "Scan coronavirus pass";
 "holder_menu_resetApp" = "Reset the app";
 "holder_menu_storedEvents" = "Stored data";
 /* Menu item for short stay route */
