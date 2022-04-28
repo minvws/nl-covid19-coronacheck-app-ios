@@ -4,6 +4,7 @@ disabled_rules:
   - unused_closure_parameter
   - large_tuple
   - cyclomatic_complexity
+  - unavailable_condition
 opt_in_rules:
   - empty_count
   - closure_spacing
