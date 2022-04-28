@@ -417,7 +417,6 @@
 "holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
 "holder.showqr.eu.title" = "Internationale QR";
 "holder.showqr.nextbutton" = "Volgende QR-code";
-"holder.showqr.notneeded" = "Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.";
 "holder.showqr.previousbutton" = "Vorige QR-code";
 "holder.showqr.qr.eu.vaccinecertificatedoses" = "Dosis %@/%@";
 "holder.showqr.qrhidden" = "QR-code verborgen";
@@ -648,8 +647,8 @@
 "holder_listRemoteEvents_vaccinationAssessment_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
-"holder_menu_paperproof_subTitle" = "Inscannen met je camera";
-"holder_menu_paperproof_title" = "Papieren bewijs toevoegen";
+"holder_menu_paperproof_subTitle" = "(Papieren) bewijs toevoegen";
+"holder_menu_paperproof_title" = "Coronabewijs inscannen";
 "holder_menu_resetApp" = "App resetten";
 "holder_menu_storedEvents" = "Opgeslagen gegevens";
 /* Menu item for short stay route */
@@ -702,6 +701,8 @@
 "holder_scanner_permission_settings" = "Naar instellingen";
 "holder_scanner_permission_title" = "Geen toegang tot camera";
 "holder_scanner_title" = "Scan QR-code";
+"holder_showQR_label_expiredVaccination" = "Deze vaccinatie is verlopen";
+"holder_showQR_label_newerQRAvailable" = "Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Nederlandse QR-code";
 "holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/nl/dosis\">Lees meer over de dosis</a>";

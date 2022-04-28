@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import CryptoKit
 
 protocol MappingManaging {
 
@@ -66,7 +67,12 @@ class MappingManager: MappingManaging, Logging {
 
 	func getBiLingualDisplayCountry(_ country: String) -> String {
 		guard ["NL", "NLD"].contains(country) else {
-			return country
+			if "nl" == Locale.current.languageCode {
+				return (Locale.current.localizedString(forRegionCode: country) ?? country) + " / "
+				+ (Locale(identifier: "en_GB").localizedString(forRegionCode: country) ?? country)
+			} else {
+				return Locale.current.localizedString(forRegionCode: country) ?? country
+			}
 		}
 		return L.holderVaccinationAboutCountry()
 	}

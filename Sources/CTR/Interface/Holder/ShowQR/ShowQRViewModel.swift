@@ -88,7 +88,7 @@ class ShowQRViewModel: Logging {
 	private var currentPage: Int {
 		didSet {
 			logVerbose("current page set to \(currentPage)")
-			handleVaccinationDosageInformation()
+			displayQRInformation()
 		}
 	}
 
@@ -133,7 +133,7 @@ class ShowQRViewModel: Logging {
 		self.currentPage = mostRelevantPage
 		self.disclosurePolicy = disclosurePolicy
 
-		handleVaccinationDosageInformation()
+		displayQRInformation()
 		setupContent(greenCards: greenCards, thirdPartyTicketAppName: thirdPartyTicketAppName)
 		setupListeners()
 	}
@@ -201,26 +201,38 @@ class ShowQRViewModel: Logging {
 		}
 	}
 
-	func handleVaccinationDosageInformation() {
-
+	private func handleVaccinationDosageInformation(_ euVaccination: EuCredentialAttributes.Vaccination) {
+		
+		if let doseNumber = euVaccination.doseNumber,
+		   let totalDose = euVaccination.totalDose {
+			dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
+		}
+	}
+	
+	private func displayRelevancy(_ greenCard: GreenCard) {
+		
+		if dataSource.isVaccinationExpired(greenCard) {
+			relevancyInformation = L.holder_showQR_label_expiredVaccination()
+		} else  if dataSource.isDosenumberSmallerThanTotalDose(greenCard) {
+			relevancyInformation = L.holder_showQR_label_newerQRAvailable()
+		} else {
+			relevancyInformation = nil
+		}
+	}
+	
+	private func displayQRInformation() {
+		
 		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
 			  let credential = greenCard.getActiveCredential(),
 			  let data = credential.data else {
 			return
 		}
-
-		if greenCard.type == GreenCardType.eu.rawValue {
-			if let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
-			   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
-			   let doseNumber = euVaccination.doseNumber,
-			   let totalDose = euVaccination.totalDose {
-				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
-				if dataSource.shouldGreenCardBeHidden(greenCard) {
-					relevancyInformation = L.holderShowqrNotneeded()
-				} else {
-					relevancyInformation = nil
-				}
-			}
+		if greenCard.type == GreenCardType.eu.rawValue,
+		   let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
+		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
+			
+			handleVaccinationDosageInformation(euVaccination)
+			displayRelevancy(greenCard)
 		}
 	}
 
