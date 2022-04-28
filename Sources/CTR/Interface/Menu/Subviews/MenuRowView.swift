@@ -223,7 +223,7 @@ final class MenuRowView: UIControl {
 		
 		var constraints = [NSLayoutConstraint]()
 		constraints += [subTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)]
-		constraints += [subTitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)]
+		constraints += [subTitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: chevronImageView.leadingAnchor, constant: -ViewTraits.Title.margin)]
 		constraints += [subTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.SubTitle.margin)]
 		constraints += [subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewTraits.SubTitle.spacing)]
 		NSLayoutConstraint.activate(constraints)
