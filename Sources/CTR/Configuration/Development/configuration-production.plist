@@ -10,7 +10,7 @@
 	<key>digid</key>
 	<dict>
 		<key>host</key>
-		<string>https://tvs.coronacheck.nl</string>
+		<string>https://max.coronacheck.nl</string>
 		<key>consumerId</key>
 		<string>cc_app</string>
 		<key>redirectUri</key>
