@@ -532,7 +532,27 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
 		
-		let destination = VisitorPassCompleteCertificateViewController(viewModel: VisitorPassCompleteCertificateViewModel(coordinatorDelegate: self))
+		let viewModel = ContentViewModel(
+			content: Content(
+				title: L.holder_completecertificate_title(),
+				body: L.holder_completecertificate_body(),
+				primaryActionTitle: L.holder_completecertificate_button_fetchnegativetest(),
+				primaryAction: { [weak self] in
+					self?.userWishesToCreateANegativeTestQR()
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			),
+			backAction: { [weak navigationController] in
+				navigationController?.popViewController(animated: true, completion: {})
+			},
+			allowsSwipeBack: true,
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			}
+		)
+
+		let destination = ContentViewController(viewModel: viewModel)
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
