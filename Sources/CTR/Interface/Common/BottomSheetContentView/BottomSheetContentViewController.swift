@@ -7,17 +7,17 @@
 
 import UIKit
 
-class ContentViewController: BaseViewController {
+class BottomSheetContentViewController: BaseViewController {
 
 	/// The model
-	internal let viewModel: ContentViewModel
+	internal let viewModel: BottomSheetContentViewModel
 
 	/// The view
-	let sceneView = ContentView()
+	let sceneView = BottomSheetContentView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: ContentViewModel) {
+	init(viewModel: BottomSheetContentViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
