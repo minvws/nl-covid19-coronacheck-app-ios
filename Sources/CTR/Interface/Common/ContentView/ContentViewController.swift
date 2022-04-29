@@ -36,11 +36,8 @@ class ContentViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$showBackButton.binding = { [weak self] in
-			guard let self = self else { return }
-			if $0 {
-				self.addBackButton(customAction: #selector(self.backButtonTapped))
-			}
+		if viewModel.showBackButton {
+			addBackButton(customAction: #selector(self.backButtonTapped))
 		}
 		
 		viewModel.$content.binding = { [weak self] in
@@ -48,7 +45,10 @@ class ContentViewController: BaseViewController {
 		}
 	}
 	
-	override var enableSwipeBack: Bool { false }
+	override var enableSwipeBack: Bool {
+
+		viewModel.allowsSwipeBack
+	}
 
 	@objc func backButtonTapped() {
 

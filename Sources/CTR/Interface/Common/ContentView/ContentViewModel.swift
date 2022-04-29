@@ -11,15 +11,16 @@ final class ContentViewModel: Logging {
 
 	@Bindable private(set) var content: Content
 	
-	@Bindable private(set) var showBackButton: Bool
-
+	let showBackButton: Bool
+	let allowsSwipeBack: Bool
 	private var backbuttonAction: (() -> Void)?
 
-	init(content: Content, backAction: (() -> Void)?) {
+	init(content: Content, backAction: (() -> Void)?, allowsSwipeBack: Bool) {
 
 		self.content = content
 		self.backbuttonAction = backAction
 		self.showBackButton = backbuttonAction != nil
+		self.allowsSwipeBack = allowsSwipeBack
 	}
 
 	func backButtonTapped() {
