@@ -227,6 +227,7 @@ class ShowQRViewModel: Logging {
 			  let data = credential.data else {
 			return
 		}
+
 		if greenCard.type == GreenCardType.eu.rawValue,
 		   let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
 		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {

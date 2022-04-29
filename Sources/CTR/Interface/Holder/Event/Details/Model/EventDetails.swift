@@ -231,7 +231,7 @@ enum EventDetailsDCCVaccination: EventDetailable {
 			case .dosage: return L.holderDccVaccinationDosage()
 			case .date: return L.holderDccVaccinationDate()
 			case .country: return L.holderDccVaccinationCountry()
-			case .issuer: return L.holderDccVaccinationIssuer()
+			case .issuer: return L.holder_dcc_issuer()
 			case .certificateIdentifier: return L.holderDccVaccinationIdentifier()
 		}
 	}
@@ -280,7 +280,7 @@ enum EventDetailsDCCTest: EventDetailable {
 			case .facility: return L.holderDccTestFacility()
 			case .manufacturer: return L.holderDccTestManufacturer()
 			case .country: return L.holderDccTestCountry()
-			case .issuer: return L.holderDccTestIssuer()
+			case .issuer: return L.holder_dcc_issuer()
 			case .certificateIdentifier: return L.holderDccTestIdentifier()
 		}
 	}
@@ -321,7 +321,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 			case .pathogen: return L.holderDccRecoveryPathogen()
 			case .date: return L.holderDccRecoveryDate()
 			case .country: return L.holderDccRecoveryCountry()
-			case .issuer: return L.holderDccRecoveryIssuer()
+			case .issuer: return L.holder_dcc_issuer()
 			case .validFrom: return L.holderDccRecoveryValidfrom()
 			case .validUntil: return L.holderDccRecoveryValiduntil()
 			case .certificateIdentifier: return L.holderDccRecoveryIdentifier()

@@ -184,7 +184,6 @@
 "holder.dcc.recovery.details.title" = "Details";
 "holder.dcc.recovery.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.dcc.recovery.identifier" = "Uniek testnummer:";
-"holder.dcc.recovery.issuer" = "Afgever certificaat:";
 "holder.dcc.recovery.name" = "Naam:";
 "holder.dcc.recovery.pathogen" = "Ziekte waarvan hersteld:";
 "holder.dcc.recovery.pathogenvalue" = "COVID-19";
@@ -197,7 +196,6 @@
 "holder.dcc.test.facility" = "Testlocatie:";
 "holder.dcc.test.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.dcc.test.identifier" = "Uniek testnummer:";
-"holder.dcc.test.issuer" = "Afgever certificaat:";
 "holder.dcc.test.manufacturer" = "Testproducent:";
 "holder.dcc.test.name" = "Naam:";
 "holder.dcc.test.pathogen" = "Ziekteverwekker:";
@@ -213,7 +211,6 @@
 "holder.dcc.vaccination.dosage" = "Dosis:";
 "holder.dcc.vaccination.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.dcc.vaccination.identifier" = "Uniek vaccinatienummer:";
-"holder.dcc.vaccination.issuer" = "Afgever certificaat:";
 "holder.dcc.vaccination.list.title" = "Vaccinatiebewijs dosis %@/%@";
 "holder.dcc.vaccination.manufacturer" = "Producent:";
 "holder.dcc.vaccination.name" = "Naam:";
@@ -580,6 +577,7 @@
 "holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatiebeoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve coronatestuitslag";
 "holder_dccDetails_subtitle" = "Deze gegevens staan in je bewijs:";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
+"holder_dcc_issuer" = "Afgever certificaat:";
 "holder_deactivation_url" = "https://coronacheck.nl/app/niet-in-gebruik";
 "holder_endOfLife_button" = "Naar CoronaCheck.nl";
 "holder_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";

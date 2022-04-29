@@ -184,7 +184,6 @@
 "holder.dcc.recovery.details.title" = "Details";
 "holder.dcc.recovery.footer" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
 "holder.dcc.recovery.identifier" = "Unique certificate identifier:";
-"holder.dcc.recovery.issuer" = "Certificate issuer:";
 "holder.dcc.recovery.name" = "Name:";
 "holder.dcc.recovery.pathogen" = "Disease recovered from:";
 "holder.dcc.recovery.pathogenvalue" = "COVID-19";
@@ -197,7 +196,6 @@
 "holder.dcc.test.facility" = "Testing centre:";
 "holder.dcc.test.footer" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
 "holder.dcc.test.identifier" = "Unique certificate identifier:";
-"holder.dcc.test.issuer" = "Certificate issuer:";
 "holder.dcc.test.manufacturer" = "Test manufacturer:";
 "holder.dcc.test.name" = "Name:";
 "holder.dcc.test.pathogen" = "Disease targeted:";
@@ -213,7 +211,6 @@
 "holder.dcc.vaccination.dosage" = "Number in series of doses:";
 "holder.dcc.vaccination.footer" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
 "holder.dcc.vaccination.identifier" = "Unique vaccination identifier:";
-"holder.dcc.vaccination.issuer" = "Certificate issuer:";
 "holder.dcc.vaccination.list.title" = "Vaccination certificate dose %@/%@";
 "holder.dcc.vaccination.manufacturer" = "Vaccine manufacturer:";
 "holder.dcc.vaccination.name" = "Name:";
@@ -580,6 +577,7 @@
 "holder_dashboard_visitorpassincompletebanner_title" = "Your vaccination approval has been added. Complete your visitor pass with your negative test result";
 "holder_dccDetails_subtitle" = "These details are in your certificate:";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
+"holder_dcc_issuer" = "Certificate issuer:";
 "holder_deactivation_url" = "https://coronacheck.nl/app/not-in-use";
 "holder_endOfLife_button" = "Go to CoronaCheck.nl";
 "holder_endOfLife_description" = "The app is not in use at the moment. For more information, go to CoronaCheck.nl";
